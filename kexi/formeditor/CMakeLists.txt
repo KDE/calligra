@@ -59,7 +59,7 @@ if(KFD_SIGSLOTS)
   list(APPEND kformdesigner_LIBS kexiextendedwidgets kexidatatable)
 endif()
 
-kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
+add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
 target_link_libraries(kformdesigner ${kformdesigner_LIBS})
 

@@ -11,7 +11,7 @@ set(kplatoimport_PART_SRCS
 )
 
 
-kde4_add_plugin(plankplatoimport ${kplatoimport_PART_SRCS})
+add_library(plankplatoimport MODULE ${kplatoimport_PART_SRCS})
 
 target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 

@@ -16,10 +16,10 @@ set(kexidb_sybasedriver_PART_SRCS
    sybasepreparedstatement.cpp )
 
 
-kde4_add_plugin(kexidb_sybasedriver ${kexidb_sybasedriver_PART_SRCS})
+add_library(kexidb_sybasedriver MODULE ${kexidb_sybasedriver_PART_SRCS})
 
 target_link_libraries(kexidb_sybasedriver ${FreeTDS_LIBRARIES}
- ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
+  ${CALLIGRADB_LIBS} kexidb)
 
 install(TARGETS kexidb_sybasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -47,7 +47,7 @@ if(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
-kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
+add_library(docxexport MODULE ${docxexport_PART_SRCS})
 
 
 

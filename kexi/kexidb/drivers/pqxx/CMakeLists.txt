@@ -16,12 +16,12 @@ set(kexidb_pqxxsqldriver_PART_SRCS
    pqxxpreparedstatement.cpp )
 
 
-kde4_add_plugin(kexidb_pqxxsqldriver ${kexidb_pqxxsqldriver_PART_SRCS})
+add_library(kexidb_pqxxsqldriver MODULE ${kexidb_pqxxsqldriver_PART_SRCS})
 
 
 
 target_link_libraries(kexidb_pqxxsqldriver ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
- ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
+  ${CALLIGRADB_LIBS} kexidb)
 
 install(TARGETS kexidb_pqxxsqldriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

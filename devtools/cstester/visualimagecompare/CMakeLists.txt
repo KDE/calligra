@@ -13,9 +13,9 @@ set(visualimagecompare_SRCS
     CompareView.cpp
     visualimagecompare.cpp)
 
-kde4_add_executable(visualimagecompare ${visualimagecompare_SRCS})
+add_executable(visualimagecompare ${visualimagecompare_SRCS})
 
-target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} Qt5::Core Qt5::Gui)
 
 install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
 

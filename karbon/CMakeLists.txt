@@ -33,7 +33,7 @@ add_subdirectory( templates )
 
 set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
-kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
+add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
 
 target_link_libraries(karbonpart karbonui)
 
@@ -48,7 +48,7 @@ endif()
 set(karbon_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" )
-kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)

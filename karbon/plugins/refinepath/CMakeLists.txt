@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_refinepathplugin_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineCommand.cpp )
 
-kde4_add_plugin(karbon_refinepathplugin ${karbon_refinepathplugin_PART_SRCS})
+add_library(karbon_refinepathplugin MODULE ${karbon_refinepathplugin_PART_SRCS})
 
 target_link_libraries(karbon_refinepathplugin karboncommon)
 

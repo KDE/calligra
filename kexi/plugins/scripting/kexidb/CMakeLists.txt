@@ -11,7 +11,7 @@ set(krossmodulekexidb_PART_SRCS
    kexidbconnection.cpp 
    kexidbdriver.cpp )
 
-kde4_add_plugin(krossmodulekexidb ${krossmodulekexidb_PART_SRCS})
+add_library(krossmodulekexidb MODULE ${krossmodulekexidb_PART_SRCS})
 
-target_link_libraries(krossmodulekexidb ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
+target_link_libraries(krossmodulekexidb  ${CALLIGRADB_LIBS} kexidb)
 install(TARGETS krossmodulekexidb DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -22,7 +22,7 @@ if(SHOULD_BUILD_KARBON)
         CSThumbProviderKarbon.cpp)
 endif()
 
-kde4_add_executable(cstester ${cstester_SRCS})
+add_executable(cstester ${cstester_SRCS})
 
 if(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate karbonui)

@@ -107,7 +107,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
     )
 endif()
 
-kde4_add_ui_files(wordsprivate_LIB_SRCS
+ki18n_wrap_ui(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWRunAroundProperties.ui
     dialogs/KWAnchoringProperties.ui
@@ -122,7 +122,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.ui
 )
 if( SHOULD_BUILD_FEATURE_RDF )
-    kde4_add_ui_files(wordsprivate_LIB_SRCS
+    ki18n_wrap_ui(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
         author/metadata/CAuSectionRdfEditWidget.ui
         author/metadata/CAuActorRdfEditWidget.ui
@@ -130,7 +130,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 
-kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
+add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain kotextlayout)
 if( SHOULD_BUILD_FEATURE_RDF )
@@ -148,11 +148,11 @@ install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 
-kde4_add_plugin(wordspart ${wordspart_PART_SRCS})
+add_library(wordspart MODULE ${wordspart_PART_SRCS})
 
 
 
-target_link_libraries(wordspart ${KDE4_KDECORE_LIBS}  wordsprivate )
+target_link_libraries(wordspart   wordsprivate )
 
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -195,9 +195,9 @@ if (SHOULD_BUILD_APP_AUTHOR)
 
 set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
 
-kde4_add_plugin(authorpart ${authorpart_PART_SRCS})
+add_library(authorpart MODULE ${authorpart_PART_SRCS})
 
-target_link_libraries(authorpart ${KDE4_KDECORE_LIBS}  wordsprivate )
+target_link_libraries(authorpart   wordsprivate )
 
 install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -207,7 +207,7 @@ set(author_KDEINIT_SRCS author/main.cpp )
 
 #kde4_add_app_icon(author_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/author/hi*-app-calligraauthor.png")
 
-kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)

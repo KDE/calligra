@@ -5,7 +5,7 @@ include_directories( ${OKULAR_INCLUDE_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${
 
 set( okularGenerator_odt_SRCS OkularOdtGenerator.cpp )
 
-kde4_add_plugin( okularGenerator_odt ${okularGenerator_odt_SRCS} )
+add_library(okularGenerator_odt MODULE ${okularGenerator_odt_SRCS} )
 
 target_link_libraries( okularGenerator_odt ${OKULAR_LIBRARIES} ${KDE4_KDEUI_LIBS} komain kotextlayout wordsprivate )
 

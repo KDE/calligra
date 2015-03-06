@@ -5,7 +5,7 @@ include_directories( ${OKULAR_INCLUDE_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${
 
 set( okularGenerator_odp_SRCS OkularOdpGenerator.cpp )
 
-kde4_add_plugin( okularGenerator_odp ${okularGenerator_odp_SRCS} )
+add_library(okularGenerator_odp MODULE ${okularGenerator_odp_SRCS} )
 
 target_link_libraries( okularGenerator_odp ${OKULAR_LIBRARIES} ${KDE4_KDEUI_LIBS} komain kopageapp )
 

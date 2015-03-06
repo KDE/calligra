@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_whirlpinchplugin_PART_SRCS WhirlPinchPlugin.cpp KarbonWhirlPinchCommand.cpp )
 
-kde4_add_plugin(karbon_whirlpinchplugin ${karbon_whirlpinchplugin_PART_SRCS})
+add_library(karbon_whirlpinchplugin MODULE ${karbon_whirlpinchplugin_PART_SRCS})
 
 target_link_libraries(karbon_whirlpinchplugin karboncommon)
 

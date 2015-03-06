@@ -12,12 +12,12 @@ set( solver_PART_SRCS
 	SolverDialog.cpp
 )
 
-kde4_add_ui_files( solver_PART_SRCS
+ki18n_wrap_ui( solver_PART_SRCS
 	SolverDetailsWidget.ui
 	SolverMainWidget.ui
 )
 
-kde4_add_plugin( sheetssolver ${solver_PART_SRCS} )
+add_library(sheetssolver MODULE ${solver_PART_SRCS} )
 
 
 

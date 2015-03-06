@@ -81,7 +81,7 @@ set(planprivate_LIB_SRCS
     KPlatoXmlLoader.cpp
 )
 
-kde4_add_ui_files(planprivate_LIB_SRCS
+ki18n_wrap_ui(planprivate_LIB_SRCS
     kptviewlistaddview.ui
     kptviewlisteditview.ui
     kptviewlisteditcategory.ui
@@ -93,11 +93,11 @@ kde4_add_ui_files(planprivate_LIB_SRCS
     kptinsertfilepanel.ui
 )
 
-kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
+kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
-kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
+add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -107,9 +107,9 @@ install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(planpart_PART_SRCS kptfactoryinit.cpp )
 
-kde4_add_plugin(planpart ${planpart_PART_SRCS})
+add_library(planpart MODULE ${planpart_PART_SRCS})
 
-target_link_libraries(planpart ${KDE4_KPARTS_LIBS} planprivate)
+target_link_libraries(planpart KF5::Parts planprivate)
 
 install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -124,7 +124,7 @@ set(calligraplan_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
 
-kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)

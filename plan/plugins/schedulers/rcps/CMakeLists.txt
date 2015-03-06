@@ -10,7 +10,7 @@ set ( RCPSScheduler_SRCS
     KPlatoRCPSScheduler.cpp
 )
 
-kde4_add_plugin( kplatorcpsscheduler ${RCPSScheduler_SRCS} )
+add_library(kplatorcpsscheduler MODULE ${RCPSScheduler_SRCS} )
 
 target_link_libraries(
     kplatorcpsscheduler

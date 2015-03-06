@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 set(keximigrate_txtmigrate_PART_SRCS txtmigrate.cpp )
 
 
-kde4_add_plugin(keximigrate_txt ${keximigrate_txtmigrate_PART_SRCS})
+add_library(keximigrate_txt MODULE ${keximigrate_txtmigrate_PART_SRCS})
 
 
 

@@ -64,7 +64,7 @@ else ()
     KexiPasswordWidget.cpp
     KexiDBPasswordDialog.cpp
   )
-  kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
+  ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui
     kexidbconnectionwidget.ui
     kexidbconnectionwidgetdetails.ui
@@ -73,12 +73,12 @@ else ()
   )
 endif ()
 
-kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
+ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
     KexiDBTitlePage.ui
     KexiProjectSelector.ui
 )
 
-kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
+add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
 target_link_libraries(
     kexiextendedwidgets

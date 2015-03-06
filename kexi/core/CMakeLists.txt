@@ -43,10 +43,10 @@ set(kexicore_LIB_SRCS
    KexiSearchableModel.cpp
 )
 
-kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
+add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore
-  ${KDE4_KIO_LIBS}
+  KF5::KIOWidgets
   ${KDE4_KDEUI_LIBS}
   kexiutils
   kexidb

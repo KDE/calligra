@@ -12,4 +12,4 @@ install( FILES
     DESTINATION ${DATA_INSTALL_DIR}/plan/templates/Simple
 )
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/plan/icons  )
+ecm_install_icons( ${DATA_INSTALL_DIR}/plan/icons  )

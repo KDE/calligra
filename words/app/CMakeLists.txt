@@ -8,7 +8,7 @@ set(words_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
 
-kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)

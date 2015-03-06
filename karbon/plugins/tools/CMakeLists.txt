@@ -39,17 +39,17 @@ set(karbon_tools_PART_SRCS
    filterEffectTool/FilterRegionEditStrategy.cpp
 )
 
-kde4_add_ui_files(karbon_tools_PART_SRCS
+ki18n_wrap_ui(karbon_tools_PART_SRCS
     filterEffectTool/FilterEffectEditWidget.ui
 )
 
-kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
+add_library(karbontools MODULE ${karbon_tools_PART_SRCS})
 
 target_link_libraries(karbontools karboncommon karbonui kowidgets)
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 
 ########### install files ###############
 

@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 set(karbon_flattenpathplugin_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.cpp )
 
 
-kde4_add_plugin(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
+add_library(karbon_flattenpathplugin MODULE ${karbon_flattenpathplugin_PART_SRCS})
 
 
 

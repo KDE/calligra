@@ -10,7 +10,7 @@ set(flowimageexport_PART_SRCS flow_imageexport.cpp flow_imageexportdialog.cpp )
 
 kde4_add_ui3_files(flowimageexport_PART_SRCS flow_imageexportwidget.ui )
 
-kde4_add_plugin(flowimageexport ${flowimageexport_PART_SRCS})
+add_library(flowimageexport MODULE ${flowimageexport_PART_SRCS})
 
 
 

@@ -25,7 +25,7 @@ set (chart_DIR_SRCS
     chart/ChartDialog.cpp
     )
 
-kde4_add_ui_files(chart_DIR_SRCS
+ki18n_wrap_ui(chart_DIR_SRCS
     chart/ChartDatabaseSelector.ui
     )
 
@@ -106,7 +106,7 @@ set (dialogs_DIR_SRCS
     )
 
 
-kde4_add_ui_files(dialogs_DIR_SRCS
+ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/ConsolidateWidget.ui
     dialogs/ConsolidateDetailsWidget.ui
     dialogs/FontWidget.ui
@@ -163,7 +163,7 @@ set (part_DIR_SRCS
     part/dialogs/SheetSelectPage.cpp
 )
 
-kde4_add_ui_files(part_DIR_SRCS
+ki18n_wrap_ui(part_DIR_SRCS
     part/dialogs/FileOptionsWidget.ui
     part/dialogs/InterfaceOptionsWidget.ui
     part/dialogs/PageLayoutSheetPage.ui
@@ -281,7 +281,7 @@ set (calligrasheetsodf_LIB_SRCS
     )
 
 
-kde4_add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
+add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
 
 target_link_libraries(calligrasheetsodf komain)
 target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
@@ -292,12 +292,12 @@ set_target_properties(calligrasheetsodf PROPERTIES
 install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-kde4_add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
+add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 
 target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
-    ${QT_QTSQL_LIBRARY}
+    Qt5::Sql
     ${KDE4_THREADWEAVER_LIBS}
 )
 if(QT_QTDBUS_FOUND)
@@ -305,7 +305,7 @@ if(QT_QTDBUS_FOUND)
 endif()
 
 if(KDE4_KCMUTILS_LIBS)
-    target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
+    target_link_libraries(calligrasheetscommon KF5::KCMUtils )
 else()
     target_link_libraries(calligrasheetscommon ${KDE4_KUTILS_LIBS} )
 endif()
@@ -320,7 +320,7 @@ install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
-kde4_add_plugin(calligrasheetspart ${calligrasheetspart_PART_SRCS})
+add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
 
 
@@ -411,7 +411,7 @@ set (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
 kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
 
-kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)

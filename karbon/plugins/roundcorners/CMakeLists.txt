@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 set(karbon_roundcornersplugin_PART_SRCS RoundCornersPlugin.cpp RoundCornersCommand.cpp )
 
 
-kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
+add_library(karbon_roundcornersplugin MODULE ${karbon_roundcornersplugin_PART_SRCS})
 
 
 

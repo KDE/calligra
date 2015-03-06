@@ -6,7 +6,7 @@ add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 
 set(keximigrate_pqxx_PART_SRCS pqxxmigrate.cpp )
 
-kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
+add_library(keximigrate_pqxx MODULE ${keximigrate_pqxx_PART_SRCS})
 
 
 
@@ -14,7 +14,7 @@ target_link_libraries(
     keximigrate_pqxx 
     ${POSTGRESQL_LIBRARIES} 
     ${PQXX_LIBRARIES} 
-    ${KDE4_KDECORE_LIBS} 
+     
     keximigrate 
     kexidb
     kexiutils

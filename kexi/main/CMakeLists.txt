@@ -39,14 +39,14 @@ startup/KexiPasswordPage.cpp
 
 )
 
-kde4_add_ui_files(keximain_LIB_SRCS
+ki18n_wrap_ui(keximain_LIB_SRCS
   kexifinddialog.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
 )
 
-kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
+add_library(keximain SHARED ${keximain_LIB_SRCS})
 
 target_link_libraries(
     keximain
@@ -59,7 +59,7 @@ target_link_libraries(
     kexiguiutils
     keximigrate
 #TODO:    ${KDE4_KNEWSTUFF_LIBS}
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
     ${KDE4_KFILE_LIBS}
     ${QT_QTUITOOLS_LIBRARY}
 )

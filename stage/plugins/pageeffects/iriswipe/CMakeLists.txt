@@ -16,16 +16,16 @@ set(kpr_pageeffect_iriswipe_SRCS
     miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp
     )
 
-kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})
+add_library(kpr_pageeffect_iriswipe MODULE ${kpr_pageeffect_iriswipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_iriswipe
     calligrastageprivate
     flake
     
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}    
+    
+    Qt5::Core
+    Qt5::Gui    
     )
 
 install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${PLUGIN_INSTALL_DIR})

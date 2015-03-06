@@ -28,7 +28,7 @@ set(kexidatatable_LIB_SRCS
 )
 
 
-kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
+add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
 target_link_libraries(
     kexidatatable
@@ -39,7 +39,7 @@ target_link_libraries(
     ${KOPROPERTY_LIBS}
     kexidb
     ${CALLIGRADB_LIBS}
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
 )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

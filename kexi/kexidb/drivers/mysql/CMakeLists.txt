@@ -16,12 +16,12 @@ set(kexidb_mysqldriver_PART_SRCS
    mysqlpreparedstatement.cpp )
 
 
-kde4_add_plugin(kexidb_mysqldriver ${kexidb_mysqldriver_PART_SRCS})
+add_library(kexidb_mysqldriver MODULE ${kexidb_mysqldriver_PART_SRCS})
 
 
 
 target_link_libraries(kexidb_mysqldriver ${MYSQL_LIBRARIES} 
- ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
+  ${CALLIGRADB_LIBS} kexidb)
 
 install(TARGETS kexidb_mysqldriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

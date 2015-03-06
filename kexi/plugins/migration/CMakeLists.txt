@@ -7,11 +7,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 set(kexihandler_migration_PART_SRCS keximigrationpart.cpp )
 
 
-kde4_add_plugin(kexihandler_migration ${kexihandler_migration_PART_SRCS})
+add_library(kexihandler_migration MODULE ${kexihandler_migration_PART_SRCS})
 
 
 
-target_link_libraries(kexihandler_migration  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
+target_link_libraries(kexihandler_migration   kexicore keximigrate )
 
 install(TARGETS kexihandler_migration  DESTINATION ${PLUGIN_INSTALL_DIR})
 

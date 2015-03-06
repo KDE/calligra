@@ -5,16 +5,16 @@ set(kpr_pageeffect_swapeffect_PART_SRCS Plugin.cpp
     KPrSwapEffectHorizontalStrategy.cpp
 )
 
-kde4_add_plugin(kpr_pageeffect_swapeffect ${kpr_pageeffect_swapeffect_PART_SRCS})
+add_library(kpr_pageeffect_swapeffect MODULE ${kpr_pageeffect_swapeffect_PART_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_swapeffect
     calligrastageprivate
     flake
 
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    
+    Qt5::Core
+    Qt5::Gui
     )
 
 install(TARGETS kpr_pageeffect_swapeffect  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -7,7 +7,7 @@ set(karboncommon_LIB_SRCS
     commands/KarbonBooleanCommand.cpp
 )
 
-kde4_add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
+add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
 
 target_link_libraries(karboncommon komain kowidgets)
 target_link_libraries(karboncommon LINK_INTERFACE_LIBRARIES komain)

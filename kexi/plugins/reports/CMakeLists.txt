@@ -30,14 +30,14 @@ else ()
 endif ()
 
 
-qt4_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+qt5_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
 
-kde4_add_plugin(kexihandler_report ${kexihandler_report_SRCS})
+add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
 
 target_link_libraries(kexihandler_report
     ${KOREPORT_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Gui
     ${QT_QTSCRIPT_LIBRARY}
     kexidb
     ${CALLIGRADB_LIBS}

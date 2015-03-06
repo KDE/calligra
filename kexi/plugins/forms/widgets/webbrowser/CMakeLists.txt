@@ -5,7 +5,7 @@ set(kformdesigner_webbrowser_PART_SRCS
     WebBrowserFactory.cpp)
 
 
-kde4_add_plugin(kformdesigner_webbrowser  ${kformdesigner_webbrowser_PART_SRCS})
+add_library(kformdesigner_webbrowser MODULE  ${kformdesigner_webbrowser_PART_SRCS})
 
 set (QT_USE_QTWEBKIT TRUE)
 
@@ -20,12 +20,12 @@ target_link_libraries(
     kexidataviewcommon
     kexiformutils
     ${KOPROPERTY_LIBS}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::Gui
     ${QT_QTWEBKIT_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    Qt5::Xml
     )
 
 
@@ -36,4 +36,4 @@ install(TARGETS kformdesigner_webbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kformdesigner_webbrowser.desktop DESTINATION
         ${SERVICES_INSTALL_DIR}/calligra)
 
-kde4_install_icons(${DATA_INSTALL_DIR}/kexi/icons)
+ecm_install_icons(${DATA_INSTALL_DIR}/kexi/icons)

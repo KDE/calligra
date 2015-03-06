@@ -16,7 +16,7 @@ set(kexidb_xbasedriver_PART_SRCS
    )
 
 
-kde4_add_plugin(kexidb_xbasedriver ${kexidb_xbasedriver_PART_SRCS})
+add_library(kexidb_xbasedriver MODULE ${kexidb_xbasedriver_PART_SRCS})
 
 target_link_libraries(
     kexidb_xbasedriver
@@ -25,7 +25,7 @@ target_link_libraries(
     kexicore
     ${CALLIGRADB_LIBS}
     ${XBase_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
+    
     )
 
 install(TARGETS kexidb_xbasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})

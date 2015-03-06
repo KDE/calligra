@@ -19,9 +19,9 @@ set(calligrastagetoolanimation_PART_SRCS
     )
 
 
-#kde4_add_ui_files(calligrastagetoolanimation_PART_SRCS wdg_tool_crop.ui)
+#ki18n_wrap_ui(calligrastagetoolanimation_PART_SRCS wdg_tool_crop.ui)
 
-kde4_add_plugin(calligrastagetoolanimation ${calligrastagetoolanimation_PART_SRCS})
+add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_SRCS})
 
 
 
@@ -38,5 +38,5 @@ install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  calligrastagetoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 

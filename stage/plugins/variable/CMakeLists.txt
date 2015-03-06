@@ -6,14 +6,14 @@ set(kprvariables_PART_SRCS
     Plugin.cpp
    )
 
-kde4_add_plugin(kprvariables ${kprvariables_PART_SRCS})
+add_library(kprvariables MODULE ${kprvariables_PART_SRCS})
 
 target_link_libraries(
     kprvariables
     kotextlayout
     calligrastageprivate
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
+    
+    Qt5::Core
     )
 
 install(TARGETS kprvariables  DESTINATION ${PLUGIN_INSTALL_DIR})

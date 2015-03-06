@@ -12,7 +12,7 @@ set(calligrastageeventactions_PART_SRCS
     Plugin.cpp
 )
 
-kde4_add_plugin(calligrastageeventactions ${calligrastageeventactions_PART_SRCS})
+add_library(calligrastageeventactions MODULE ${calligrastageeventactions_PART_SRCS})
 
 target_link_libraries(
     calligrastageeventactions
@@ -20,7 +20,7 @@ target_link_libraries(
     flake
     ${KDE4_KIO_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Gui
     )
 
 install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR})

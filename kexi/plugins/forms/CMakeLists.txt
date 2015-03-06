@@ -19,7 +19,7 @@ endif()
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 
-kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
+add_library(kexihandler_form MODULE ${kexihandler_form_PART_SRCS})
 
 target_link_libraries(
     kexihandler_form
@@ -30,7 +30,7 @@ target_link_libraries(
     kformdesigner
     ${KOPROPERTY_LIBS}
     kexiformutils
-    ${KDE4_KDECORE_LIBS}
+    
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -40,7 +40,7 @@ install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kformdesigner_kexidbwidgets_PART_SRCS kexidbfactory.cpp )
 
-kde4_add_plugin(kformdesigner_kexidbwidgets ${kformdesigner_kexidbwidgets_PART_SRCS})
+add_library(kformdesigner_kexidbwidgets MODULE ${kformdesigner_kexidbwidgets_PART_SRCS})
 
 
 
@@ -55,9 +55,9 @@ target_link_libraries(
     kexidataviewcommon
 	kexidatatable
 	kexiextendedwidgets
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Gui
     )
 
 install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -98,7 +98,7 @@ set(kexiformutils_LIB_SRCS
     #obsolete	widgets/kexidbdoublespinbox.cpp
     #obsolete	widgets/kexidbintspinbox.cpp
 
-kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
+add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
 target_link_libraries(
     kexiformutils
@@ -112,10 +112,10 @@ target_link_libraries(
     kexidatatable
     kexiguiutils
     ${KOPROPERTY_LIBS}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    Qt5::Gui
+    Qt5::Xml
     )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

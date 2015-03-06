@@ -42,7 +42,7 @@ set(keximigrate_LIB_SRCS AlterSchemaTableModel.cpp
    importoptionsdlg.cpp
    AlterSchemaWidget.cpp)
 
-kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
+add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 
 target_link_libraries(
     keximigrate
@@ -51,9 +51,9 @@ target_link_libraries(
     kexiextendedwidgets
     kexiutils
     ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Gui
     )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

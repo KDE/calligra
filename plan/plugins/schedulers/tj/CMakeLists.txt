@@ -34,7 +34,7 @@ set ( TJScheduler_SRCS
     taskjuggler/Interval.cpp
 )
 
-kde4_add_plugin( plantjscheduler SHARED ${TJScheduler_SRCS} )
+add_library(plantjscheduler MODULE SHARED ${TJScheduler_SRCS} )
 
 target_link_libraries(
     plantjscheduler

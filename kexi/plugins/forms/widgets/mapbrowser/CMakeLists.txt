@@ -14,7 +14,7 @@ set(kformdesigner_mapbrowser_PART_SRCS
     MapBrowserFactory.cpp)
 
 
-kde4_add_plugin(kformdesigner_mapbrowser  ${kformdesigner_mapbrowser_PART_SRCS})
+add_library(kformdesigner_mapbrowser MODULE  ${kformdesigner_mapbrowser_PART_SRCS})
 
 
 
@@ -28,11 +28,11 @@ target_link_libraries(
     kexiformutils
     kexidataviewcommon
     ${MARBLE_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Xml
     )
 
 install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -42,4 +42,4 @@ install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kformdesigner_mapbrowser.desktop DESTINATION
         ${SERVICES_INSTALL_DIR}/calligra)
 
-kde4_install_icons(${DATA_INSTALL_DIR}/kexi/icons)
+ecm_install_icons(${DATA_INSTALL_DIR}/kexi/icons)

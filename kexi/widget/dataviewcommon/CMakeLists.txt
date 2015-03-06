@@ -14,7 +14,7 @@ set(kexidataviewcommon_LIB_SRCS
 )
 
 
-kde4_add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
+add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
 
 target_link_libraries(
     kexidataviewcommon
@@ -25,7 +25,7 @@ target_link_libraries(
     kexidb
     ${CALLIGRADB_LIBS}
     ${CALLIGRADB_LIBS}
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

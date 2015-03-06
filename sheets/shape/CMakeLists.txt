@@ -17,8 +17,8 @@ set (tableshape_LIB_SRCS
     SheetsEditor.cpp
    )
 
-kde4_add_plugin(calligra_shape_spreadsheet-deferred ${tableshape_LIB_SRCS})
-kde4_add_plugin(calligra_shape_spreadsheet TableShapeFactory.cpp)
+add_library(calligra_shape_spreadsheet-deferred MODULE ${tableshape_LIB_SRCS})
+add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
 
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
 target_link_libraries(calligra_shape_spreadsheet flake)
@@ -30,4 +30,4 @@ install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES calligra_shape_spreadsheet-deferred.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES calligra_shape_spreadsheet.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

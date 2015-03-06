@@ -58,4 +58,4 @@ set(TestFormulaParser_SRCS
 )
 
 kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} Qt5::Test)

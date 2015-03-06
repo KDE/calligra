@@ -33,16 +33,16 @@ set(kpr_pageeffect_edgewipe_SRCS
     barnzigzagwipe/BarnZigZagWipeStrategy.cpp
     )
 
-kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})
+add_library(kpr_pageeffect_edgewipe MODULE ${kpr_pageeffect_edgewipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_edgewipe
     calligrastageprivate
     flake
     
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}    
+    
+    Qt5::Core
+    Qt5::Gui    
     )
 
 install(TARGETS kpr_pageeffect_edgewipe  DESTINATION ${PLUGIN_INSTALL_DIR})

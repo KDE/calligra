@@ -19,7 +19,7 @@ set(kspread2tex_PART_SRCS
    table.cc 
    xmlparser.cc )
 
-kde4_add_ui_files(kspread2tex_PART_SRCS latexexportwidget.ui )
+ki18n_wrap_ui(kspread2tex_PART_SRCS latexexportwidget.ui )
 
 kde4_add_plugin(calligra_filter_kspread2tex ${kspread2tex_PART_SRCS})
 

@@ -89,7 +89,7 @@ set(kplatoui_LIB_SRCS
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
 )
-kde4_add_ui_files(kplatoui_LIB_SRCS
+ki18n_wrap_ui(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
     reports/reportexportpanel.ui
@@ -135,10 +135,10 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     locale/localemon.ui
 )
 
-kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
+add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
 set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
-target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} calligrakdgantt ${KDE4_KHTML_LIBS} )
+target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} calligrakdgantt KF5::KHtml )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

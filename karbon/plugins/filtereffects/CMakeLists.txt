@@ -38,7 +38,7 @@ set(karbonfiltereffects_PART_SRCS
     MatrixDataModel.cpp
     )
 
-kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
+add_library(karbonfiltereffects MODULE ${karbonfiltereffects_PART_SRCS})
 
 target_link_libraries(karbonfiltereffects flake kowidgets)
 

@@ -9,7 +9,7 @@ set(ascii2words_PART_SRCS
     AsciiImport.cpp
     ImportDialog.cc
 )
-kde4_add_ui_files(ascii2words_PART_SRCS ImportDialogUI.ui )
+ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
 kde4_add_plugin(calligra_filter_ascii2words ${ascii2words_PART_SRCS})
 target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate)
 install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR})

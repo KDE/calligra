@@ -11,9 +11,9 @@ set(kexidb_LIB_SRCS
    alter.cpp
 )
 
-kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
+add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb kexiutils ${CALLIGRADB_LIBS}
-   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS})
+    KF5::KIOWidgets)
 
 set_target_properties(kexidb PROPERTIES
                       VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

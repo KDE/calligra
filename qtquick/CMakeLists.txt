@@ -77,8 +77,8 @@ include_directories(
 automoc4_add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
 
 target_link_libraries(calligraqtquickcomponentsplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTOPENGL_LIBRARY}
+    Qt5::Declarative
+    Qt5::OpenGL
     ${QT_LIBRARIES}
     komain
     kotextlayout

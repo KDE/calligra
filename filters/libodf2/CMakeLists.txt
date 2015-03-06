@@ -50,10 +50,10 @@ set(koodf2_LIB_SRCS
     chart/KoOdfChartWriter.cpp
 )
 
-kde4_add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
+add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
 
-target_link_libraries(koodf2 koodf mso ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
-target_link_libraries(koodf2 LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
+target_link_libraries(koodf2 koodf mso KF5::KIOWidgets Qt5::Xml)
+target_link_libraries(koodf2 LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
 
 set_target_properties(koodf2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

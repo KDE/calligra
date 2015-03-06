@@ -22,15 +22,15 @@ set(krossmoduleplan_PART_SRCS
     ScriptingWidgets.cpp
 )
 
-kde4_add_ui_files(krossmoduleplan_PART_SRCS
+ki18n_wrap_ui(krossmoduleplan_PART_SRCS
     ScriptingDataQueryView.ui
 )
 
 
-qt4_wrap_cpp(krossmoduleplan_PART_SRCS
+qt5_wrap_cpp(krossmoduleplan_PART_SRCS
 )
 
-kde4_add_plugin(krossmoduleplan SHARED ${krossmoduleplan_PART_SRCS})
+add_library(krossmoduleplan MODULE SHARED ${krossmoduleplan_PART_SRCS})
 
 target_link_libraries(
     krossmoduleplan

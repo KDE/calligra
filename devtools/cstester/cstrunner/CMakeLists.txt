@@ -6,9 +6,9 @@ set(cstrunner_SRCS
     CSTProcessRunner.cpp
     cstrunner.cpp)
 
-kde4_add_executable(cstrunner ${cstrunner_SRCS})
+add_executable(cstrunner ${cstrunner_SRCS})
 
-target_link_libraries(cstrunner ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(cstrunner Qt5::Core Qt5::Gui)
 
 install(TARGETS cstrunner ${INSTALL_TARGETS_DEFAULT_ARGS})
 

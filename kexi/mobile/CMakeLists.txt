@@ -28,7 +28,7 @@ qt4_automoc(${KexiMobile_SRCS})
 
 add_executable(keximobile ${KexiMobile_SRCS})
 
-target_link_libraries(keximobile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+target_link_libraries(keximobile Qt5::Core Qt5::Gui
 	${CALLIGRADB_LIBS}
 	kexiextendedwidgets
 	kexicore

@@ -15,12 +15,12 @@ set(flowdockers_SRCS
     stencilboxdocker/StencilShapeFactory.cpp
 )
 
-kde4_add_plugin(flowdockersplugin ${flowdockers_SRCS})
+add_library(flowdockersplugin MODULE ${flowdockers_SRCS})
 
 target_link_libraries(flowdockersplugin komain kowidgets)
 
 if(GHNS)
-    target_link_libraries(flowdockersplugin ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(flowdockersplugin KF5::NewStuff)
 endif()
 
 install(TARGETS flowdockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})

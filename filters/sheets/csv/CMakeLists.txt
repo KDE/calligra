@@ -22,7 +22,7 @@ if(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
 
 set(sheets2csv_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
-kde4_add_ui_files(sheets2csv_PART_SRCS exportdialogui.ui )
+ki18n_wrap_ui(sheets2csv_PART_SRCS exportdialogui.ui )
 
 kde4_add_plugin(calligra_filter_sheets2csv ${sheets2csv_PART_SRCS})
 

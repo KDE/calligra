@@ -18,7 +18,7 @@ endforeach(it)
 #  
 # kde4_add_unit_test(InsertFileTester TESTNAME Plan-InsertFileTester  ${InsertFileTester_SRCS})
 #  
-# target_link_libraries(InsertFileTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+# target_link_libraries(InsertFileTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} Qt5::Test)
  
 
 ########## next target ###############
@@ -27,6 +27,6 @@ set(InsertProjectTester_SRCS InsertProjectTester.cpp)
  
 kde4_add_unit_test(InsertProjectTester TESTNAME Plan-InsertProjectTester  ${InsertProjectTester_SRCS})
 
-target_link_libraries(InsertProjectTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(InsertProjectTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} Qt5::Test)
 
 ########## next target ###############

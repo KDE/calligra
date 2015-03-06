@@ -12,7 +12,7 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsvexport.cpp
 )
 
-kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART_SRCS})
+add_library(kexihandler_csv_importexport MODULE ${kexihandler_csv_importexport_PART_SRCS})
 
 target_link_libraries(
     kexihandler_csv_importexport
@@ -23,10 +23,10 @@ target_link_libraries(
     kexiutils
     kexiextendedwidgets
     keximain
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KFILE_LIBS}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Gui
     )
 
 if(MSVC)

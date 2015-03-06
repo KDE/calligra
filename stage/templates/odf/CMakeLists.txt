@@ -74,4 +74,4 @@ install( FILES ${otp_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/
 install( FILES ${thumbnail_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/.thumbnail)
 install( FILES .directory DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/)
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/stage/icons )
+ecm_install_icons( ${DATA_INSTALL_DIR}/stage/icons )

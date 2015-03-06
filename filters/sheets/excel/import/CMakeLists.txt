@@ -44,7 +44,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(excelimport ${excelimport_PART_SRCS})
+add_library(excelimport MODULE ${excelimport_PART_SRCS})
 
 
 target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})

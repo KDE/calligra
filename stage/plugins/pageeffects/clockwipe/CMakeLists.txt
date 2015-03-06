@@ -22,16 +22,16 @@ set(kpr_pageeffect_clockwipe_SRCS
     windshieldwipe/KPrWindShieldWipeStrategy.cpp
     )
 
-kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})
+add_library(kpr_pageeffect_clockwipe MODULE ${kpr_pageeffect_clockwipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_clockwipe 
     calligrastageprivate 
     flake
     
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    
+    Qt5::Core
+    Qt5::Gui
     )
 
 install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -9,7 +9,7 @@ set(kexihandler_table_PART_SRCS kexitablepart.cpp kexitabledesignerview.cpp
   kexitabledesignerview_p.cpp kexilookupcolumnpage.cpp )
 
 
-kde4_add_plugin(kexihandler_table ${kexihandler_table_PART_SRCS})
+add_library(kexihandler_table MODULE ${kexihandler_table_PART_SRCS})
 
 
 
@@ -23,10 +23,10 @@ target_link_libraries(
     kexiextendedwidgets
     ${KOPROPERTY_LIBS}
     kexiutils
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::Gui
     )
 
 install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})

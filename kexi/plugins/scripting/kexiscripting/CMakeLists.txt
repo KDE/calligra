@@ -10,8 +10,8 @@ include_directories(
 ########### next target ###############
 
 set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
-qt4_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
-kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
+qt5_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
+add_library(kexihandler_script MODULE ${kexihandler_script_PART_SRCS})
 target_link_libraries(
     kexihandler_script
     kexiextendedwidgets
@@ -21,10 +21,10 @@ target_link_libraries(
     kexiutils
     kexidb
     ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${QT_QTGUI_LIBRARY}
+    KF5::KIOWidgets
+    Qt5::Gui
     )
 install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
 

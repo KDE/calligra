@@ -37,7 +37,7 @@ mdbtools/libmdb/write.c
 )
 
 
-kde4_add_plugin(keximigrate_mdb ${keximigrate_mdbmigrate_PART_SRCS})
+add_library(keximigrate_mdb MODULE ${keximigrate_mdbmigrate_PART_SRCS})
 
 
 

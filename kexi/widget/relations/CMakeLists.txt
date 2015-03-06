@@ -14,7 +14,7 @@ set(kexirelationsview_LIB_SRCS
 )
 
 
-kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
+add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 
 target_link_libraries(
     kexirelationsview
@@ -23,10 +23,10 @@ target_link_libraries(
     kexidb
     kexiutils
     ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::Gui
     )
 
 set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

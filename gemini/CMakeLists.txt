@@ -62,7 +62,7 @@ endif ()
 # Thumbnail helper application
 # =============================================================================
 
-kde4_add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
+add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
@@ -73,10 +73,10 @@ target_link_libraries(calligrageminithumbnailhelper
 # Calligra Gemini application
 # =============================================================================
 
-kde4_add_executable(calligragemini ${calligragemini_SRCS})
+add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_QTOPENGL_LIBRARIES}

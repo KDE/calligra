@@ -10,7 +10,7 @@ set(kexihandler_query_PART_SRCS
    kexiquerydesignerguieditor.cpp 
    kexiqueryview.cpp )
 
-kde4_add_plugin(kexihandler_query ${kexihandler_query_PART_SRCS})
+add_library(kexihandler_query MODULE ${kexihandler_query_PART_SRCS})
 
 
 
@@ -25,10 +25,10 @@ target_link_libraries(
     kexirelationsview
     ${KOPROPERTY_LIBS}
     kexiutils
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    Qt5::Gui
+    Qt5::Xml
     )
 
 install(TARGETS kexihandler_query  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -38,12 +38,12 @@ set(karbonui_SRCS
     widgets/KarbonConfigInterfacePage.cpp
 )
 
-kde4_add_ui_files(karbonui_SRCS
+ki18n_wrap_ui(karbonui_SRCS
     widgets/KarbonPatternOptionsWidget.ui
 )
 
 
-kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
+add_library( karbonui SHARED ${karbonui_SRCS} )
 
 target_link_libraries(karbonui karboncommon kowidgets koodf)
 target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)

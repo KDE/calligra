@@ -4,11 +4,11 @@ include_directories( ${FreeTDS_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCL
 
 set(keximigrate_sybase_PART_SRCS sybasemigrate.cpp )
 
-kde4_add_plugin(keximigrate_sybase ${keximigrate_sybase_PART_SRCS})
+add_library(keximigrate_sybase MODULE ${keximigrate_sybase_PART_SRCS})
 
 
 
-target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES} ${KDE4_KDECORE_LIBS}
+target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES} 
                       kexiutils kexidb keximigrate ${CALLIGRADB_LIBS})
 
 install(TARGETS keximigrate_sybase  DESTINATION ${PLUGIN_INSTALL_DIR})
