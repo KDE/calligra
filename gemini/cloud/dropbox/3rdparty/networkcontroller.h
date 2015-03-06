@@ -30,8 +30,8 @@
 
 #include "droprestapi.h"
 
-#include "libs/folderitem.h"
-#include "libs/filetransferitem.h"
+#include "folderitem.h"
+#include "filetransferitem.h"
 
 
 class NetworkController : public QObject
