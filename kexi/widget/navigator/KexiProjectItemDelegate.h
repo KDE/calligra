@@ -21,7 +21,6 @@
 
 #include <QStyledItemDelegate>
 
-class KexiProjectModelItem;
 class KexiProject;
 
 //! @short Item delegate for the Kexi navigator tree view

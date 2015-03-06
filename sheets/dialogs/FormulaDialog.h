@@ -74,7 +74,7 @@ private:
      */
     QString createFormula();
 
-private slots:
+private Q_SLOTS:
     /**
      * Called by the Ok button.
      */

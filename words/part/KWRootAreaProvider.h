@@ -30,7 +30,6 @@
 class KoShape;
 class KoTextShapeData;
 class KWTextFrameSet;
-class KWFrame;
 class KWPage;
 
 class KWRootAreaPage

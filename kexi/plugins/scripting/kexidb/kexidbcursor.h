@@ -86,7 +86,7 @@ public:
     KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner);
     virtual ~KexiDBCursor();
 
-public slots:
+public Q_SLOTS:
 
     /** Opens the cursor. */
     bool open();

@@ -22,7 +22,6 @@
 
 #include <QDeclarativeItem>
 
-class CQCanvasBase;
 class CQCanvasControllerItem : public QDeclarativeItem
 {
     Q_OBJECT

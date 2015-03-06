@@ -31,7 +31,6 @@
 
 namespace Sonnet
 {
-class ConfigWidget;
 }
 
 namespace Calligra

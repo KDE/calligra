@@ -44,7 +44,7 @@ class AngleDialog : public KDialog
 public:
     AngleDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void slotDefault();
 protected:

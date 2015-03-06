@@ -1,7 +1,7 @@
 # To hide all the warnings from the generated itex2MML code
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-parameter)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 
 include_directories(

@@ -27,8 +27,6 @@
 #include <KoZoomMode.h>
 
 class KoDocument;
-class QGraphicsItem;
-class KoCanvasController;
 class KoCanvasBase;
 class CADocumentController;
 
@@ -73,11 +71,11 @@ public:
     virtual QString nextPageImage() const;
     virtual FlickModes flickMode() const;
 
-public slots:
+public Q_SLOTS:
     virtual void gotoPreviousPage();
     virtual void gotoNextPage();
 
-signals:
+Q_SIGNALS:
     void previousPageImageChanged();
     void nextPageImageChanged();
 

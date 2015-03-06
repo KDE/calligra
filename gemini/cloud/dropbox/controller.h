@@ -65,7 +65,7 @@ private:
 
     QAction* m_uploadMostRecentAction;
 
-signals:
+Q_SIGNALS:
     void needAuthenticateChanged();
     void authenticate_finished(QString email, QString password);
     void network_error(QString error);
@@ -90,7 +90,7 @@ signals:
     void orientation_changed();
     void open_oauth_authorize_page(const QString &oauth_token);
 
-public slots:
+public Q_SLOTS:
     void authenticate(QString, QString);
     void getlistoffolder(QString folder_name = "");
     void getfolder(const QVariantMap&);

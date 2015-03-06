@@ -26,7 +26,6 @@
 
 #include <QVariantList>
 
-class PlanTJScheduler;
 
 namespace KPlato
 {
@@ -54,15 +53,15 @@ public:
     /// Return the scheduling granularity in milliseconds
     ulong currentGranularity() const;
 
-signals:
+Q_SIGNALS:
     void sigCalculationStarted(Project*, ScheduleManager*);
     void sigCalculationFinished(Project*, ScheduleManager*);
 
-public slots:
+public Q_SLOTS:
     void stopAllCalculations();
     void stopCalculation( SchedulerThread *sch );
 
-protected slots:
+protected Q_SLOTS:
     void slotStarted( SchedulerThread *job );
     void slotFinished( SchedulerThread *job );
 };

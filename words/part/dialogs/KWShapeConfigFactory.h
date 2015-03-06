@@ -48,7 +48,7 @@ public:
     }
     void setKeepAspectRatio(bool on);
 
-signals:
+Q_SIGNALS:
     void keepAspectRatioChanged(bool keep);
 
 private:

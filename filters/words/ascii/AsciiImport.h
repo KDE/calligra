@@ -25,10 +25,7 @@
 #include <QVariantList>
 
 class QByteArray;
-class QTextStream;
 
-class KoGenStyles;
-class KoXmlWriter;
 
 class AsciiImport : public KoFilter
 {

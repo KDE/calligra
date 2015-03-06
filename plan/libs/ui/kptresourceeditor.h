@@ -55,7 +55,7 @@ public:
     QList<ResourceGroup*> selectedGroups() const;
     QList<Resource*> selectedResources() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 
@@ -83,21 +83,21 @@ public:
     
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void addResource( ResourceGroup* );
     void deleteObjectList( const QObjectList& );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled(  bool on = true );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSplitView();
     

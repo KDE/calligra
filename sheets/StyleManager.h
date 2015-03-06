@@ -38,7 +38,6 @@ namespace Sheets
 {
 class Conditions;
 class Map;
-class StyleDialog;
 class ValueParser;
 
 /**

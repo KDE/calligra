@@ -25,7 +25,6 @@
 
 #include "stage_export.h"
 
-class KprAnimationStep;
 
 class STAGE_EXPORT KPrPageData
 {

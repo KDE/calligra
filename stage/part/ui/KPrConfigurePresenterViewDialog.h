@@ -35,7 +35,7 @@ public:
     int presentationMonitor();
     bool presenterViewEnabled();
 
-private slots:
+private Q_SLOTS:
 
 private:
     Ui::KPrConfigurePresenterView ui;

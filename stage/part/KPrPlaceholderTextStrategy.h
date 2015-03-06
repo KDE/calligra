@@ -23,7 +23,6 @@
 #include "KPrPlaceholderStrategy.h"
 
 class KoShape;
-class KoParagraphStyle;
 
 class KPrPlaceholderTextStrategy : public KPrPlaceholderStrategy
 {

@@ -32,9 +32,7 @@
 
 #include <KoXmlReader.h>
 
-class QColor;
 class QDomDocument;
-class QFont;
 class QString;
 class KoGenStyle;
 

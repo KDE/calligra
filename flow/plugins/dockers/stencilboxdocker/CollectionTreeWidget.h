@@ -69,7 +69,7 @@ private:
     void saveOptions();
     void loadOptions();
 
-private slots:
+private Q_SLOTS:
     void handleMousePress(QTreeWidgetItem* item);
     void slotListMode();
     void slotIconMode();

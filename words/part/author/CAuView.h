@@ -38,7 +38,7 @@ public:
     QPair<QString, QByteArray> getCurrentCoverImage();
     void setCurrentCoverImage(QPair<QString, QByteArray> img);
 
-private slots:
+private Q_SLOTS:
     void selectCoverImage();
 
 private:

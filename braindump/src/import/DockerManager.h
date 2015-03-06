@@ -38,7 +38,7 @@ public:
     explicit DockerManager(MainWindow* mainWindow);
     ~DockerManager();
 
-public slots:
+public Q_SLOTS:
     //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.

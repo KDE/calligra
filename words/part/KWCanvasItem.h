@@ -31,10 +31,7 @@
 class QRect;
 class QPainter;
 
-class KWGui;
 class KWView;
-class KoToolProxy;
-class KoShape;
 
 /**
  * This class is responsible for the rendering of the frames to
@@ -88,14 +85,14 @@ public:
 
     virtual void setCursor(const QCursor &cursor);
 
-public slots:
+public Q_SLOTS:
     /**
      * sets the document offset in the scrollArea
      * @param offset the offset, in pixels.
      */
     void setDocumentOffset(const QPoint &offset);
 
-signals:
+Q_SIGNALS:
     /**
      * emitted when the contentsSize changes.
      * @see KWViewMode::contentsSize
@@ -141,7 +138,7 @@ protected: //QGraphicsWidget
     /// reimplemented method from superclass
     virtual void updateCanvasInternal(const QRectF &clip) { update(clip); }
 
-private slots:
+private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.
     void pageSetupChanged();
 };

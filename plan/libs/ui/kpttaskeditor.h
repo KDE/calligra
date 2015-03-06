@@ -72,10 +72,10 @@ public:
     Project *project() const { return baseModel()->project(); }
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
-signals:
+Q_SIGNALS:
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
 
-protected slots:
+protected Q_SLOTS:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 
@@ -93,10 +93,10 @@ public:
     Project *project() const { return baseModel()->project(); }
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
-signals:
+Q_SIGNALS:
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
 
-protected slots:
+protected Q_SLOTS:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 
@@ -130,7 +130,7 @@ public:
 
     void setTaskModules( const QStringList &files );
 
-signals:
+Q_SIGNALS:
     void taskSelected( Task *task );
     void openNode();
     void addTask();
@@ -147,7 +147,7 @@ signals:
     void saveTaskModule( const KUrl &url, Project *project );
     void removeTaskModule( const KUrl &url );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -158,10 +158,10 @@ protected:
     int selectedRowCount() const;
     QModelIndexList selectedRows() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
-private slots:
+private Q_SLOTS:
     void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
@@ -229,10 +229,10 @@ public:
 
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void openNode();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -242,10 +242,10 @@ protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
-private slots:
+private Q_SLOTS:
     void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
@@ -277,10 +277,10 @@ public:
 
     ScheduleManager *scheduleManager() const { return baseModel()->manager(); }
 
-signals:
+Q_SIGNALS:
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
 
-protected slots:
+protected Q_SLOTS:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 protected:
     WorkPackageProxyModel *m;
@@ -312,12 +312,12 @@ public:
 
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void mailWorkpackage( Node *n, Resource *r = 0 );
     void mailWorkpackages( const QList<Node*> &nodes, Resource *r );
     void checkForWorkPackages();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotRefreshView();
@@ -327,12 +327,12 @@ protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
     void slotMailWorkpackage();
     void slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource );
 
-private slots:
+private Q_SLOTS:
     void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );

@@ -26,7 +26,6 @@ class KoFilterEffect;
 class CompositeEffect;
 class KDoubleNumInput;
 class KComboBox;
-class QStackedWidget;
 
 class CompositeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -37,7 +36,7 @@ public:
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
-private slots:
+private Q_SLOTS:
     void valueChanged();
     void operationChanged(int index);
 

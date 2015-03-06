@@ -52,7 +52,7 @@ public:
 
     KUndo2Command *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotChanged( bool );
 
 private:
@@ -71,10 +71,10 @@ public:
 
     QSize sizeHint() const;
 
-signals:
+Q_SIGNALS:
     void changed( bool );
 
-public slots:
+public Q_SLOTS:
     void slotChanged();
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
@@ -89,7 +89,7 @@ public slots:
 
     void slotEditmodeChanged( int );
 
-protected slots:
+protected Q_SLOTS:
     void slotCalculateEffort();
     
 protected:

@@ -40,7 +40,6 @@
 
 
 class QToolButton;
-class QPushButton;
 class QString;
 class QHBoxLayout;
 
@@ -107,7 +106,7 @@ public:
 
     void restoreResource(KoResource* resource);
 
-public slots:
+public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
@@ -132,7 +131,7 @@ private:
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveActivePreset();
     void slotUpdatePreset();

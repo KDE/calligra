@@ -16,7 +16,7 @@ class TestTextFrameSorting : public QObject
 public:
     TestTextFrameSorting();
 
-private slots:
+private Q_SLOTS:
     // tests
     void testSimpleSorting();
     void testSimpleSorting2();

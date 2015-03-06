@@ -51,7 +51,7 @@ public:
 
     Sheet* sheet;
 
-public slots:
+public Q_SLOTS:
     virtual void slotButtonClicked(int button);
 
 protected:

@@ -48,7 +48,7 @@ public:
     virtual QVariant data(int role) const = 0;
 //    virtual QHash<int, QByteArray> roleNames() const = 0;
 
-signals:
+Q_SIGNALS:
     void dataChanged();
 };
 
@@ -79,10 +79,10 @@ public:
   int getCount() { return this->rowCount();}
   Q_INVOKABLE QVariantMap get(int row) const;
 
-private slots:
+private Q_SLOTS:
   void handleItemChange();
 
-signals:
+Q_SIGNALS:
   void countChanged();
 
 private:

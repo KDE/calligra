@@ -47,7 +47,7 @@ Q_OBJECT
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     void addSlideView(SlideView* slideview);
-private slots:
+private Q_SLOTS:
     void slotSetView(qreal zoomFactor, int h, int v);
     void slotHandleOoOdp(const QString& path);
     void slotHandleOoPng(const QString& path);

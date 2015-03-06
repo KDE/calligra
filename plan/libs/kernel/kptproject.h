@@ -510,7 +510,7 @@ public:
     void emitDocumentRemoved( Node*, Document*, int index );
     void emitDocumentChanged( Node*, Document*, int index );
 
-public slots:
+public Q_SLOTS:
     /// Sets m_progress to @p progress and emits signal sigProgress()
     /// If @p sm is not 0, progress is also set for the schedule manager
     void setProgress( int progress, ScheduleManager *sm = 0 );
@@ -518,7 +518,7 @@ public slots:
     /// If @p sm is not 0, max progress is also set for the schedule manager
     void setMaxProgress( int max, ScheduleManager *sm = 0 );
 
-signals:
+Q_SIGNALS:
     /// Emitted when anything in the project is changed (use with care)
     void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.

@@ -51,7 +51,7 @@ class ClickableLogoArea : public QAbstractButton
     Q_OBJECT
 public:
     explicit ClickableLogoArea(QWidget *parent = 0);
-protected slots:
+protected Q_SLOTS:
     void slotClicked();
 protected:
     virtual void paintEvent(QPaintEvent*);

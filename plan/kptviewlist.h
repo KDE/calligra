@@ -103,12 +103,12 @@ protected:
     /// If modified by the drop, emit modified
     void dropEvent( QDropEvent *event );
 
-signals:
+Q_SIGNALS:
     void activated( QTreeWidgetItem* );
     void updateViewInfo( ViewListItem *itm );
     void modified();
 
-private slots:
+private Q_SLOTS:
     void handleMousePress( QTreeWidgetItem *item );
 };
 
@@ -161,7 +161,7 @@ public:
 
     ScheduleManager *selectedSchedule() const;
 
-signals:
+Q_SIGNALS:
     void activated( ViewListItem*, ViewListItem* );
     void createView();
     void viewListItemRemoved( ViewListItem *item );
@@ -173,12 +173,12 @@ signals:
 
     void modified();
 
-public slots:
+public Q_SLOTS:
     void setProject( Project *project );
     void setSelectedSchedule( ScheduleManager *sm );
     void setModified();
 
-protected slots:
+protected Q_SLOTS:
     void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
     void slotItemChanged( QTreeWidgetItem *item, int col );
     void renameCategory();

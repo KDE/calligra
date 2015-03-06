@@ -3,18 +3,18 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-missing-format-attribute)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-parameter)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 
 include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/migration/mdb/src/mdbtools/include )
 
-INCLUDE(FindIconv)
+include(FindIconv)
 if(ICONV_FOUND)
     add_definitions(-DHAVE_ICONV=1)
     include_directories(${ICONV_INCLUDE_DIR})
-else(ICONV_FOUND)
+else()
     message(FATAL_ERROR "Could not find library with iconv and iconv headers. Required for MS Access import plugin.")
-endif(ICONV_FOUND)
+endif()
 
 ########### mdb migrate target ###############
 

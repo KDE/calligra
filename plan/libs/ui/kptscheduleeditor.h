@@ -58,12 +58,12 @@ public:
 
     QModelIndexList selectedRows() const;
 
-signals:
+Q_SIGNALS:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     void selectionChanged( const QModelIndexList& );
 
-protected slots:
+protected Q_SLOTS:
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
@@ -91,7 +91,7 @@ public:
     
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void calculateSchedule( Project*, ScheduleManager* );
     void baselineSchedule( Project*, ScheduleManager* );
     void addScheduleManager( Project* );
@@ -106,14 +106,14 @@ signals:
     
     void moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent, int index );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 
     void slotSelectionChanged( const QModelIndexList& );
@@ -158,17 +158,17 @@ public:
     void setFilterWildcard( const QString &filter );
     QRegExp filterRegExp() const;
 
-signals:
+Q_SIGNALS:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     void selectionChanged( const QModelIndexList& );
 
     void contextMenuRequested( const QModelIndex&, const QPoint& );
 
-public slots:
+public Q_SLOTS:
     void slotEditCopy();
 
-protected slots:
+protected Q_SLOTS:
     void contextMenuEvent ( QContextMenuEvent *e );
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -203,20 +203,20 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
-signals:
+Q_SIGNALS:
     void editNode( Node *node );
     void editResource( Resource *resource );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotEditCopy();
     void slotEdit();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotScheduleSelectionChanged( ScheduleManager *sm );
 
@@ -247,16 +247,16 @@ public:
     /// Always returns this (if we are called, we are hit)
     virtual ViewBase *hitView( const QPoint &glpos );
 
-signals:
+Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager* );
     void editNode( Node *node );
     void editResource( Resource *resource );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     /// Noop, we handle subviews ourselves
     virtual void slotGuiActivated( ViewBase *v, bool active );
     virtual void currentTabChanged( int i );

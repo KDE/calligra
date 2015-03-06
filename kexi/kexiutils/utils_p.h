@@ -34,7 +34,7 @@ public:
     void start(bool noDelay);
     void stop();
     bool startedOrActive; //!< true if ounting started or the cursor is active
-protected slots:
+protected Q_SLOTS:
     void show();
 protected:
     QTimer timer;
@@ -46,7 +46,7 @@ class KexiDBDebugTreeWidget : public QTreeWidget
     Q_OBJECT
 public:
     explicit KexiDBDebugTreeWidget(QWidget *parent = 0);
-public slots:
+public Q_SLOTS:
     void copy();
 };
 

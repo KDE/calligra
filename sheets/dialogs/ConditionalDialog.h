@@ -36,7 +36,6 @@ namespace Calligra
 namespace Sheets
 {
 class Selection;
-class Style;
 
 /**
  * \ingroup UI
@@ -65,7 +64,7 @@ public:
     KLineEdit * m_firstValue_3;
     KLineEdit * m_secondValue_3;
 
-public slots:
+public Q_SLOTS:
     void slotTextChanged1(const QString &);
     void slotTextChanged2(const QString &);
     void slotTextChanged3(const QString &);
@@ -84,7 +83,7 @@ public:
 
     void init();
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 
 protected:

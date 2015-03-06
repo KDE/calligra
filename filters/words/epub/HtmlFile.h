@@ -28,7 +28,6 @@
 
 
 class QString;
-class QByteArray;
 
 class KoStore;
 

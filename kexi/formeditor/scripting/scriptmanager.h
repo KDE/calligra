@@ -59,7 +59,7 @@ public:
         return m_manager;
     }
 
-public slots:
+public Q_SLOTS:
     /*! Called when a form is deleted. It is removed from the dict. */
     void slotFormDeleted(KFormDesigner::Form *form);
     /*! \return A new FormScript object associated to the Form \a form.  */

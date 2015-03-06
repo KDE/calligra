@@ -34,7 +34,6 @@ class KLocale;
 namespace KPlato
 {
 
-class MainDocument;
 class MacroCommand;
 
 class KPLATOUI_EXPORT LocaleConfigMoney : public QWidget, Ui::LocaleConfigMoney

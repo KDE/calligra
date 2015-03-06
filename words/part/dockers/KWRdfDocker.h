@@ -26,7 +26,6 @@
 #include <KoDocumentRdf.h>
 #include <KoCanvasObserverBase.h>
 
-class QTimer;
 class QTextDocument;
 class KoSelection;
 class KWDocument;
@@ -52,7 +51,7 @@ public:
     
     KoCanvasBase *canvas();
 
-private slots:
+private Q_SLOTS:
     void updateDataForced();
     void updateData();
     void showSemanticViewContextMenu(const QPoint &);

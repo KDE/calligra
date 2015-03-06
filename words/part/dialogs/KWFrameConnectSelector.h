@@ -27,9 +27,7 @@
 
 #include <QList>
 
-class KWTextFrame;
 class KWFrameSet;
-class KWDocument;
 
 /// A widget that is shown for 1 textframe to connect it to a frameset
 class KWFrameConnectSelector : public KoShapeConfigWidgetBase
@@ -51,7 +49,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void frameSetSelected();
     void nameChanged(const QString &text);
 

@@ -43,7 +43,7 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void doSetMagic();
     void doGetMagic();

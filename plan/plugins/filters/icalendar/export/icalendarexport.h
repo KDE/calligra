@@ -30,7 +30,6 @@
 
 class QFile;
 class QByteArray;
-class QStringList;
 
 namespace KPlato
 {

@@ -28,14 +28,9 @@
 #include "CQCanvasBase.h"
 
 class KWDocument;
-class CQTextDocumentModel;
-class KoFindText;
 class KoDocument;
-class KoZoomController;
 class KoCanvasController;
 class KoCanvasBase;
-class KoPart;
-class KUrl;
 class KoFindMatch;
 
 class CQTextDocumentCanvas : public CQCanvasBase

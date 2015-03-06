@@ -41,14 +41,14 @@ public:
     void setEditable(bool value);
     void updateDocumentSize(QSize sz, bool recalculateCenter);
 
-signals:
+Q_SIGNALS:
     void koCanvasChanged();
     void editableChanged();
 
 protected:
     virtual bool eventFilter(QObject* o, QEvent* e);
 
-private slots:
+private Q_SLOTS:
     void resetShouldIgnoreGeometryChange();
     void resizeToCanvas();
 

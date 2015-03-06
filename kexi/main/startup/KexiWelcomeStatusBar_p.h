@@ -32,10 +32,10 @@ public:
     KexiWelcomeStatusBarGuiUpdater();
     ~KexiWelcomeStatusBarGuiUpdater();
 
-public slots:
+public Q_SLOTS:
     void update();
 
-private slots:
+private Q_SLOTS:
     void slotRedirectLoaded();
     void sendRequestListFilesFinished(KJob* job);
     void filesCopyFinished(KJob* job);

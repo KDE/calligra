@@ -50,10 +50,10 @@ public:
     QModelIndexList selectedRows() const;
     
     using QTreeView::selectionChanged;
-signals:
+Q_SIGNALS:
     void selectionChanged( const QModelIndexList& );
     
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged( const QItemSelection &selected );
 };
 
@@ -81,23 +81,23 @@ public:
     
     DocumentTreeView *view() const { return m_view; }
     
-signals:
+Q_SIGNALS:
     void addDocument();
     void deleteDocumentList( const QList<Document*>& );
     void editDocument( Document *doc );
     void viewDocument( Document *doc );
     
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled(  bool on = true );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     

@@ -28,11 +28,9 @@
 #include <QCheckBox>
 
 class KWFrameConnectSelector;
-class KWFrameGeometry;
 class KWRunAroundProperties;
 class KWAnchoringProperties;
 class KWFrame;
-class KWFrameSet;
 class KWDocument;
 class FrameConfigSharedState;
 class KWCanvas;
@@ -57,7 +55,7 @@ public:
      */
     static QList<KoShapeConfigFactoryBase *> panels(KWDocument *document);
 
-private slots:
+private Q_SLOTS:
     void okClicked();
     void cancelClicked();
 

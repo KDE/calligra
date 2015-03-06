@@ -39,7 +39,6 @@
 class QRect;
 class QPainter;
 
-class KWGui;
 class KoToolProxy;
 class KoShape;
 class KoViewConverter;

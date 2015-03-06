@@ -26,7 +26,6 @@
 
 #include "XlsxXmlCommonReader.h"
 
-class XlsxImport;
 
 class XlsxXmlSharedStringsReaderContext : public MSOOXML::MsooXmlReaderContext
 {

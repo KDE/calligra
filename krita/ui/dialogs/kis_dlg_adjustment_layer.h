@@ -23,11 +23,8 @@
 #include <QLabel>
 
 class KisFilter;
-class QListWidgetItem;
 class QLabel;
 class KisFilterConfiguration;
-class QGroupBox;
-class KisConfigWidget;
 class KisNodeFilterInterface;
 class KisViewManager;
 #include "kis_types.h"
@@ -63,7 +60,7 @@ public:
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotNameChanged(const QString &);
     void slotConfigChanged();

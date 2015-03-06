@@ -23,17 +23,14 @@
 #include <QWidget>
 #include "Headers.h"
 
-class QLabel;
 class QRubberBand;
 
-class KoCanvasBase;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class Canvas;
-class Selection;
 class View;
 
 /**
@@ -52,7 +49,7 @@ public:
     virtual void scroll(qreal dx, qreal dy) { QWidget::scroll(dx, dy); }
     virtual QPalette palette() const { return QWidget::palette(); }
     virtual void update() { QWidget::update(); }
-private slots:
+private Q_SLOTS:
     void slotAutoScroll(const QPoint& distance);
 
 protected:
@@ -91,7 +88,7 @@ public:
     virtual void scroll(qreal dx, qreal dy) { QWidget::scroll(dx, dy); }
     virtual QPalette palette() const { return QWidget::palette(); }
     virtual void update() { QWidget::update(); }
-private slots:
+private Q_SLOTS:
     void slotAutoScroll(const QPoint& distance);
 
 protected:

@@ -43,7 +43,7 @@ install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-IF(FALSE) # not implemented yet
+if(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
@@ -60,7 +60,7 @@ target_link_libraries(
 
 install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF(FALSE)
+endif()
 
 ########### next target ###############
 
@@ -73,9 +73,9 @@ install( FILES
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
     install( FILES libokularGenerator_docx_calligra.desktop okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
     install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
-endif(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
+endif()

@@ -37,7 +37,7 @@ public:
 
     tristate run(bool &closeAppRequested);
 
-protected slots:
+protected Q_SLOTS:
     void slotFinishedCopying(QNetworkOperation*);
 
 private:

@@ -58,7 +58,7 @@ public:
     //! data->password is modified only when user provided the password.
     static tristate getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotButtonClicked(int button);
     void slotShowConnectionDetails();
 

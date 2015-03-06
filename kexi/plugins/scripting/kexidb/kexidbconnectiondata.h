@@ -43,7 +43,7 @@ public:
         return m_data;
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Return the connection name. */
     const QString caption() const;

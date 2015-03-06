@@ -25,7 +25,6 @@
 #include <kis_types.h>
 
 class KisFilter;
-class KisFilterConfiguration;
 class KisViewManager;
 class KisFilterManager;
 
@@ -42,7 +41,7 @@ public:
 
     void setFilter(KisFilterSP f);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotOnAccept();
     void slotOnReject();

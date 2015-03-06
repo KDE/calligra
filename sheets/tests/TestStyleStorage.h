@@ -30,7 +30,7 @@ namespace Sheets
 class TestStyleStorage : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testGarbageCollection();
 };
 

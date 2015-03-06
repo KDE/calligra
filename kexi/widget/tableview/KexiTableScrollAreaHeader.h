@@ -62,7 +62,7 @@ public:
     //! @return scroll area (parent) of this header.
     KexiTableScrollArea* scrollArea() const;
 
-public slots:
+public Q_SLOTS:
     //! Updates the section specified by the given \a logicalIndex.
     //! Made public for use in the scroll view.
     void updateSection(int logicalIndex);

@@ -108,7 +108,7 @@ public:
     /*! \return true if this window is in the User Mode. */
     virtual bool userMode() const = 0;
 
-// signals:
+// Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     virtual void acceptProjectClosingRequested(bool& cancel) = 0;
@@ -120,7 +120,7 @@ public:
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
 
-// public slots:
+// public Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
@@ -270,7 +270,7 @@ public:
     //! Sets reasonable dialog size based on main window size, that is 80% of its size.
     virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
-protected: // slots:
+protected: // Q_SLOTS:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
 };

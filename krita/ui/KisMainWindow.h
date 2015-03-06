@@ -38,13 +38,10 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 class KisDocument;
-class KisPart;
 class KisView;
 class KisPrintJob;
 class KoDockFactoryBase;
-class KRecentFilesAction;
 class QDockWidget;
-class KisViewManager;
 class KisView;
 
 
@@ -142,7 +139,7 @@ public:
 
     int viewCount() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted if the document has been saved successfully.
@@ -164,7 +161,7 @@ signals:
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Slot for eMailing the document using KMail
@@ -234,7 +231,7 @@ public slots:
     void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
 
 
-private slots:
+private Q_SLOTS:
     /**
      * Save the list of recent files.
      */

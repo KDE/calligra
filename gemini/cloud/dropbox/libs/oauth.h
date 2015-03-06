@@ -23,7 +23,7 @@
 #include <QPair>
 #include <QString>
 
-#include <QtNetwork/QNetworkRequest>
+#include <QNetworkRequest>
 
 class QUrl;
 

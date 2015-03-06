@@ -51,14 +51,14 @@ public:
     QList<TimeInterval*> intervals() const;
     void setIntervals(const QList<TimeInterval*> &intervals);
 
-protected slots:
+protected Q_SLOTS:
     void slotClearClicked();
     void slotAddIntervalClicked();
     void slotRemoveIntervalClicked();
     void slotIntervalSelectionChanged();
     void enableButtons();
 
-signals:
+Q_SIGNALS:
     void changed();
 };
 
@@ -80,7 +80,7 @@ public:
     MacroCommand *buildCommand();
     QList<TimeInterval*> intervals() const { return m_panel->intervals(); }
     
-protected slots:
+protected Q_SLOTS:
     void slotChanged();
     void slotCalendarRemoved( const Calendar *cal );
 

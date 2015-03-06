@@ -47,7 +47,7 @@ public:
     explicit KexiDBModule(QObject* parent = 0);
     virtual ~KexiDBModule();
 
-public slots:
+public Q_SLOTS:
 
     /** Returns the version number the KexiDB module defines. */
     int version();

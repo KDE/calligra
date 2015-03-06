@@ -100,7 +100,7 @@ public:
 
     bool isRolledUp();
 
-public slots:
+public Q_SLOTS:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
     void showMainMenu(const char* actionName = 0);
@@ -114,7 +114,7 @@ protected:
     virtual void leaveEvent(QEvent* event);
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
-protected slots:
+protected Q_SLOTS:
     void slotCurrentChanged(int index);
     void slotDelayedTabRaise();
     void slotSettingsChanged(int category);
@@ -199,7 +199,7 @@ public:
     , m_duration(duration)
     {
     }
-public slots:
+public Q_SLOTS:
     void start() { KFadeWidgetEffect::start(m_duration); }
 private:
     int m_duration;
@@ -336,11 +336,11 @@ public:
         m_selectFirstItem = true;
     }
 
-signals:
+Q_SIGNALS:
     void contentAreaPressed();
     void hideContentsRequested();
 
-protected slots:
+protected Q_SLOTS:
     void contentWidgetDestroyed();
 
 protected:
@@ -444,7 +444,7 @@ public:
     KToolBar *createToolBar(const char *name, const QString& caption);
     int tabIndex;
 
-public slots:
+public Q_SLOTS:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void hideContentsOrMainMenu();
@@ -1361,9 +1361,9 @@ public:
     }
 protected:
     virtual bool queryClose();
-protected slots:
+protected Q_SLOTS:
     void slotCurrentTabIndexChanged(int index);
-signals:
+Q_SIGNALS:
     void currentTabIndexChanged(int index);
 
 private:
@@ -1435,7 +1435,7 @@ public:
 protected:
     virtual void paintEvent(QPaintEvent *pe);
 
-protected slots:
+protected Q_SLOTS:
     void slotCloseClicked();
 
 private:
@@ -1958,7 +1958,7 @@ class KexiMainMenuActionShortcut : public QShortcut
 public:
     KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
 
-protected slots:
+protected Q_SLOTS:
     //! Triggers associated action only when this action is enabled
     void slotActivated();
 

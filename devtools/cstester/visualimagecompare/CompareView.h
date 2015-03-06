@@ -47,7 +47,7 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *event);
 
-protected slots:
+protected Q_SLOTS:
     void currentChanged(int currentIndex);
 
 private:

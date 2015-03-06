@@ -28,9 +28,9 @@ class Options : public QObject
 public:
     explicit Options(QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
     bool is_transfers_auto() const;
     int screen_orientation() const;
     bool is_push_notification() const;

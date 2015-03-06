@@ -104,7 +104,7 @@ public:
 
     void setCaptionRequired(bool set);
 
-public slots:
+public Q_SLOTS:
     /*! Clears both name and caption. */
     virtual void clear();
 
@@ -113,7 +113,7 @@ public slots:
      If not, warning message is shown and false is returned. */
     bool checkValidity();
 
-signals:
+Q_SIGNALS:
     /*! Emitted whenever return key is pressed on name or caption label. */
     void returnPressed();
 
@@ -123,7 +123,7 @@ signals:
     /*! Emitted whenever the message changes */
     void messageChanged();
 
-protected slots:
+protected Q_SLOTS:
     void slotNameTextChanged(const QString&);
     void slotCaptionTextChanged(const QString&);
 

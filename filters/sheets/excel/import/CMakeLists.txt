@@ -67,5 +67,5 @@ install( FILES  calligra_filter_xls2ods.desktop  DESTINATION ${SERVICES_INSTALL_
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 

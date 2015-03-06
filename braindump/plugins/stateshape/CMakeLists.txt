@@ -2,7 +2,7 @@ include_directories (${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (stateshape_LIB_SRCS
+set (stateshape_LIB_SRCS
     CategorizedItemDelegate.cpp
     StatesModel.cpp
     StateShape.cpp

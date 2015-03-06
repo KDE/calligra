@@ -28,7 +28,7 @@ namespace KPlato
 class DurationTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void add();
     void subtract();
     void divide();

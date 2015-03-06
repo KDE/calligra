@@ -49,7 +49,6 @@
 
 class QDomElement;
 class QDomDocument;
-class QFont;
 class QRect;
 class QPoint;
 
@@ -57,7 +56,6 @@ class KLocale;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
-class KoOdfLoadingContext;
 class KoShapeLoadingContext;
 
 namespace Calligra

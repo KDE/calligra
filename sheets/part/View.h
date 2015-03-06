@@ -41,13 +41,10 @@
 #include <KoPart.h>
 #include <sheets/calligra_sheets_export.h>
 
-class QAction;
 class QKeyEvent;
-class QResizeEvent;
 class QScrollBar;
 
 class KoCanvasController;
-class KoDocumentEntry;
 class KoZoomHandler;
 
 namespace Calligra
@@ -325,11 +322,11 @@ public Q_SLOTS:
      */
     void calcStatusBarOp();
 
-protected slots:
+protected Q_SLOTS:
     /** Renames the active sheet. */
     void slotRename();
 
-public slots:
+public Q_SLOTS:
     /** Reacts on selection changes. */
     void slotChangeSelection(const Region&);
 

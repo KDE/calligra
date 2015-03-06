@@ -20,9 +20,9 @@
 #ifndef NETWORKCONTROLLER_H
 #define NETWORKCONTROLLER_H
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QObject>
 #include <QFile>
 #include <QTime>
@@ -115,7 +115,7 @@ private:
     bool recheck_token_and_secret();
     void save_token_and_secret();
 
-signals:
+Q_SIGNALS:
     void authenticate_finished();
     void network_error(QString error);
     void getfolder_finished(const QVariantMap&);
@@ -143,13 +143,13 @@ signals:
     void open_oauth_authorize_page(const QString &oauth_token);
 
 
-public slots:
+public Q_SLOTS:
     void uploadProgress(qint64 sent, qint64 total);
     void downloadProgress(qint64 received,qint64 total);
     void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 
 
-private slots:
+private Q_SLOTS:
     void finished(QNetworkReply*);
     void readyRead();
     void file_transfer_finished(QNetworkReply*);

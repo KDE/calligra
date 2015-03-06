@@ -47,7 +47,7 @@ public:
     enum Type { Column, Row };
     ShowColRow(QWidget* parent, Selection* selection, Type _type);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void slotDoubleClicked(QListWidgetItem *);
 

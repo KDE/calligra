@@ -26,13 +26,10 @@
 #include <QPixmap>
 #include <KoCanvasObserverBase.h>
 
-class QComboBox;
 class KUndo2Command;
 class KoPAViewBase;
 class KoCanvasBase;
-class QCheckBox;
 class KPrSoundCollection;
-class KoEventActionWidget;
 
 /**
  * This is the click action docker widget that let's you choose a click action for your shapes
@@ -45,10 +42,10 @@ public:
 
     void setView( KoPAViewBase* view );
 
-public slots:
+public Q_SLOTS:
     void addCommand( KUndo2Command * command );
 
-private slots:
+private Q_SLOTS:
     /// selection has changed
     void selectionChanged();
 

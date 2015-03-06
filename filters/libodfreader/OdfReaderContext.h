@@ -31,9 +31,7 @@
 #include "koodfreader_export.h"
 
 
-class QByteArray;
 class QSizeF;
-class QStringList;
 class KoStore;
 class KoOdfStyleManager;
 

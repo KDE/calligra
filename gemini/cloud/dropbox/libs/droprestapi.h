@@ -22,8 +22,8 @@
 
 #include "oauth.h"
 
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QByteArray>
 #include <QUrl>
 

@@ -49,10 +49,10 @@ public:
     
     void setNode( Node *node ) { model()->setNode( node ); }
     Relation *currentRelation() const { return model()->relation( selectionModel()->currentIndex() ); }
-signals:
+Q_SIGNALS:
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     
-protected slots:
+protected Q_SLOTS:
     void slotCurrentChanged(const QModelIndex &curr, const QModelIndex& );
 };
 
@@ -81,22 +81,22 @@ public:
     
     KoPrintJob *createPrintJob();
 
-signals:
+Q_SIGNALS:
     void openNode();
     void addRelation();
     void deleteRelation( Relation * );
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
 
-private slots:
+private Q_SLOTS:
     void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );

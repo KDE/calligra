@@ -144,7 +144,7 @@ public:
         and pop up a menu when right-clicking. */
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-public slots:
+public Q_SLOTS:
     /*! Sets \a selected to be the selected widget of this container
       (and so of the Form). See Form::WidgetSelectionFlags description
       for exmplanation of possible combination of @a flags flags.
@@ -169,7 +169,7 @@ public slots:
     //! Used by handler-based resizing.
     void setGeometryPropertyForSelectedWidget(const QRect &newGeometry);
 
-protected slots:
+protected Q_SLOTS:
     /*! This slot is called when the watched widget is deleted. Deletes the Container too. */
     void widgetDeleted();
 

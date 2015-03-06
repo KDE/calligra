@@ -28,7 +28,6 @@
 
 class KoShape;
 class KarbonDocument;
-class QDomElement;
 
 class SvgImport : public KoFilter
 {

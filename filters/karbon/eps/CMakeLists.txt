@@ -18,4 +18,4 @@ install(FILES
     DESTINATION ${SERVICES_INSTALL_DIR}/calligra
 )
 
-endif (PSTOEDIT_SVG_PLUGIN_FOUND)
+endif ()

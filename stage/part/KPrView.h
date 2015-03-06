@@ -35,7 +35,6 @@ class KPrViewAdaptor;
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
 class KPrViewModePresentation;
-class KPrViewModePresenterView;
 class KActionMenu;
 class KoPAPageBase;
 
@@ -114,7 +113,7 @@ public:
      */
     KoZoomMode::Mode zoomMode();
 
-public slots:
+public Q_SLOTS:
     /**
      * Activate the presentation view mode
      */
@@ -142,7 +141,7 @@ protected:
     void initActions();
     virtual bool event(QEvent* event);
 
-protected slots:
+protected Q_SLOTS:
     void createAnimation();
     void showNotes();
     void showSlidesSorter();

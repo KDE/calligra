@@ -56,7 +56,7 @@ public:
 
     Q_INVOKABLE CATextDocumentModel *paTextDocumentModel() const;
 
-public slots:
+public Q_SLOTS:
     void updateCanvas();
     void resizeCanvas (const QSizeF& canvasSize);
 
@@ -65,10 +65,10 @@ public slots:
     void copy();
     void gotoPage(int pageNumber);
 
-signals:
+Q_SIGNALS:
     void searchStringChanged();
 
-private slots:
+private Q_SLOTS:
     void findMatchFound(const KoFindMatch& match);
     void findNoMatchFound();
 

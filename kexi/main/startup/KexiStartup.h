@@ -85,7 +85,7 @@ public:
     */
     KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
 
-protected slots:
+protected Q_SLOTS:
     void slotSaveShortcutFileChanges();
 
     //! Reaction to application's quit, needed because it is safer to destroy filewidget-related GUIs before

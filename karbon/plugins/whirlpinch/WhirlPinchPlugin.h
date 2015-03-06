@@ -30,7 +30,6 @@
 #include <QPointF>
 #include <QVariantList>
 
-class KarbonView;
 class WhirlPinchDlg;
 
 class WhirlPinchPlugin : public QObject, public KXMLGUIClient
@@ -40,7 +39,7 @@ public:
     WhirlPinchPlugin(QObject *parent, const QVariantList &);
     virtual ~WhirlPinchPlugin() {}
 
-private slots:
+private Q_SLOTS:
     void slotWhirlPinch();
 
 private:

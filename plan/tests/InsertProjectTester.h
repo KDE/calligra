@@ -36,7 +36,7 @@ class Calendar;
 class InsertProjectTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testAccount();
     void testCalendar();
     void testDefaultCalendar();
