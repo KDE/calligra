@@ -80,8 +80,7 @@ void CAuOutlinerWidget::initLayout()
 void CAuOutlinerWidget::sectionClicked(QModelIndex idx)
 {
     if (idx.column() == 0) {
-        int position = static_cast<KoSection *>(
-            m_sectionTree->model()->data(idx, Qt::UserRole + 1).value<void *>())->bounds().first;
+        int position = m_sectionTree->model()->data(idx, Qt::UserRole + 1).value<KoSection *>()->bounds().first;
 
         KoTextDocument(m_document).textEditor()->setPosition(position); // placing cursor
         m_canvas->view()->setFocus(); // passing focus
@@ -153,7 +152,7 @@ void CAuOutlinerWidget::updateSelection()
         QModelIndexList lst = m_sectionTree->model()->match(
             m_sectionTree->model()->index(0,0),
             Qt::UserRole + 1,
-            qVariantFromValue(static_cast<void *>(sec)),
+            qVariantFromValue(sec),
             1,
             Qt::MatchRecursive
         );
@@ -169,9 +168,8 @@ void CAuOutlinerWidget::updateSelection()
 
 void CAuOutlinerWidget::sectionEditClicked()
 {
-    KoSection *sec = static_cast<KoSection *>(
-        m_sectionTree->model()->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<void *>()
-    );
+    KoSection *sec = m_sectionTree->model()
+        ->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<KoSection *>();
 
     CAuDocument *caudoc = dynamic_cast<CAuDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
     caudoc->metaManager()->callEditor(sec);
