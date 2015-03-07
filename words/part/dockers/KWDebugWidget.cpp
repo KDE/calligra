@@ -62,8 +62,13 @@ void KWDebugWidget::updateData()
         return;
     }
 
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    if (!editor) {
+    KoTextEditor *editor = 0;
+    if (m_canvas) {
+        editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+        if (!editor) {
+            return;
+        }
+    } else {
         return;
     }
 
