@@ -27,7 +27,6 @@ namespace wvWare
 {
 
 class Parser;
-class OLEStorage;
 
 class WV2_EXPORT ParserFactory
 {

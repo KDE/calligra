@@ -90,7 +90,7 @@ public:
     */
     virtual ~ScriptingReader() {}
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Start the reading. This let's the reader run over the defined sheets and there ranges
@@ -278,7 +278,7 @@ public slots:
     }
 
 
-signals:
+Q_SIGNALS:
 
     /**
     * This signal is emitted once the reading started with the \a start() method

@@ -108,11 +108,11 @@ public:
     /// Fetch project data from RCPS structure
     void kplatoFromRCPS();
 
-signals:
+Q_SIGNALS:
     void sigCalculationStarted( Project*, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
 
-public slots:
+public Q_SLOTS:
     void solve();
 
 protected:

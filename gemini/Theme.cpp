@@ -19,17 +19,17 @@
 
 #include "Theme.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QFontDatabase>
-#include <QtGui/QApplication>
-#include <QtGui/QWidget>
-#include <QtDeclarative/QDeclarativeComponent>
+#include <QStringList>
+#include <QUrl>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
+#include <QColor>
+#include <QFont>
+#include <QFontDatabase>
+#include <QApplication>
+#include <QWidget>
+#include <QDeclarativeComponent>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -246,7 +246,7 @@ QFont Theme::font(const QString& name)
         QDir fontDir(d->basePath + '/' + d->fontPath);
         QStringList entries = fontDir.entryList(QDir::Files);
         QFontDatabase db;
-        Q_FOREACH(QString entry, entries) {
+        Q_FOREACH(const QString &entry, entries) {
             d->addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
         }
         d->fontsAdded = true;

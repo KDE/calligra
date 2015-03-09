@@ -68,7 +68,7 @@ class KexiCompletionModel;
 class KexiCompleterPrivate
 {
 public:
-    KexiCompleterPrivate(KexiCompleter *q);
+    explicit KexiCompleterPrivate(KexiCompleter *q);
     ~KexiCompleterPrivate() { delete popup; }
     void init(QAbstractItemModel *model = 0);
 
@@ -105,7 +105,7 @@ class KexiIndexMapper
 public:
     KexiIndexMapper() : v(false), f(0), t(-1) { }
     KexiIndexMapper(int f, int t) : v(false), f(f), t(t) { }
-    KexiIndexMapper(QVector<int> vec) : v(true), vector(vec), f(-1), t(-1) { }
+    explicit KexiIndexMapper(QVector<int> vec) : v(true), vector(vec), f(-1), t(-1) { }
 
     inline int count() const { return v ? vector.count() : t - f + 1; }
     inline int operator[] (int index) const { return v ? vector[index] : f + index; }
@@ -141,7 +141,7 @@ public:
     typedef QMap<QString, KexiMatchData> CacheItem;
     typedef QMap<QModelIndex, CacheItem> Cache;
 
-    KexiCompletionEngine(KexiCompleterPrivate *c) : c(c), curRow(-1), cost(0) { }
+    explicit KexiCompletionEngine(KexiCompleterPrivate *c) : c(c), curRow(-1), cost(0) { }
     virtual ~KexiCompletionEngine() { }
 
     void filter(const QStringList &parts);
@@ -170,7 +170,7 @@ public:
 class QSortedModelEngine : public KexiCompletionEngine
 {
 public:
-    QSortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
+    explicit QSortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
     KexiMatchData filter(const QString&, const QModelIndex&, int);
     KexiIndexMapper indexHint(QString, const QModelIndex&, Qt::SortOrder);
     Qt::SortOrder sortOrder(const QModelIndex&) const;
@@ -179,7 +179,7 @@ public:
 class QUnsortedModelEngine : public KexiCompletionEngine
 {
 public:
-    QUnsortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
+    explicit QUnsortedModelEngine(KexiCompleterPrivate *c) : KexiCompletionEngine(c) { }
 
     void filterOnDemand(int);
     KexiMatchData filter(const QString&, const QModelIndex&, int);
@@ -191,7 +191,7 @@ private:
 class KexiCompleterItemDelegate : public QItemDelegate
 {
 public:
-    KexiCompleterItemDelegate(QAbstractItemView *view)
+    explicit KexiCompleterItemDelegate(QAbstractItemView *view)
         : QItemDelegate(view), view(view) { }
     void paint(QPainter *p, const QStyleOptionViewItem& opt, const QModelIndex& idx) const {
         QStyleOptionViewItem optCopy = opt;
@@ -239,7 +239,7 @@ public:
     QScopedPointer<KexiCompletionEngine> engine;
     bool showAll;
 
-signals:
+Q_SIGNALS:
     void rowsAdded();
 
 public Q_SLOTS:
@@ -252,7 +252,7 @@ private:
 
 class KexiCompletionModelPrivate : public KexiAbstractItemModelPrivate
 {
-    KexiCompletionModelPrivate(KexiCompletionModel *q);
+    explicit KexiCompletionModelPrivate(KexiCompletionModel *q);
     virtual ~KexiCompletionModelPrivate() {  }
     virtual void _q_sourceModelDestroyed();
     KexiCompletionModel * const q;

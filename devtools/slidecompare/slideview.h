@@ -45,14 +45,14 @@ private:
     void layout();
     bool eventFilter(QObject *obj, QEvent *event);
     void toggleSlideZoom(const GraphicsSlideItem* slide);
-private slots:
+private Q_SLOTS:
     void slotUpdateSlides();
     void slotViewChanged();
 public:
     explicit SlideView(SlideLoader* loader, QWidget* parent = 0);
-public slots:
+public Q_SLOTS:
     void setView(qreal zoomFactor, int h, int v);
-signals:
+Q_SIGNALS:
     void viewChanged(qreal zoomFactor, int h, int v);
 };
 

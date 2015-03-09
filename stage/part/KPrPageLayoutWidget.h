@@ -36,7 +36,7 @@ public:
 
     void setView( KPrView* view );
 
-public slots:
+public Q_SLOTS:
     void slotActivePageChanged();
     void slotItemPressed( QListWidgetItem * item );
     void slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous );

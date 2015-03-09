@@ -67,7 +67,7 @@ public:
         Right = QTextCursor::Right //!< Move right one character.
     };
 
-public slots:
+public Q_SLOTS:
 
     /** Return the position the cursor is on. */
     int position() const;

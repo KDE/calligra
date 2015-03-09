@@ -458,10 +458,6 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
         QDomText valueE;
 
         if (meta.isFlagType()) {
-            /* js: it's simpler in Qt4:
-            QStringList list = QStringList::fromStrList(meta.enumerator().valueToKeys(value.toInt()));
-            type = parent.createElement("set");
-            valueE = parent.createTextNode(list.join("|"));*/
             type = parent.createElement("set");
             valueE = parent.createTextNode(
                          meta.enumerator().valueToKeys(value.toInt()));

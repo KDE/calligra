@@ -51,10 +51,10 @@ public:
     searchTypeValue searchType() const;
     searchDirectionValue searchDirection() const;
 
-private slots:
+private Q_SLOTS:
     void slotMoreOptions();
 
-signals:
+Q_SIGNALS:
     void adjustSize();
 
 private:
@@ -89,7 +89,7 @@ public:
         return m_findOptions->searchDirection();
     }
 
-private slots:
+private Q_SLOTS:
     void slotAjustSize();
 private:
     FindOption *m_findOptions;
@@ -117,7 +117,7 @@ public:
         return m_findOptions->searchType();
     }
 
-private slots:
+private Q_SLOTS:
     void slotAjustSize();
 private:
     FindOption *m_findOptions;

@@ -115,10 +115,10 @@ public:
 
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void openNode();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -126,13 +126,13 @@ public slots:
 
     virtual void slotRefreshView();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotSplitView();
@@ -151,11 +151,11 @@ class TaskStatusViewSettingsPanel : public QWidget, public Ui::TaskStatusViewSet
 public:
     explicit TaskStatusViewSettingsPanel( TaskStatusTreeView *view, QWidget *parent = 0 );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void setDefault();
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:
@@ -282,7 +282,7 @@ public:
 
     void setNodes( const QList<Node*> &nodes );
 
-public slots:
+public Q_SLOTS:
     void refreshChart();
 
 protected:
@@ -293,7 +293,7 @@ protected:
     void setEffortValuesVisible( bool visible );
     void setCostValuesVisible( bool visible );
 
-protected slots:
+protected Q_SLOTS:
     void slotUpdate();
     void slotLocaleChanged();
 
@@ -356,7 +356,7 @@ public:
 
     KoPrintJob *createPrintJob();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -365,7 +365,7 @@ public slots:
 protected:
     void updateActionsEnabled( bool on );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 private:
@@ -395,7 +395,7 @@ public:
     
     KoPrintJob *createPrintJob( ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
     void resizeSplitters();
 
@@ -425,19 +425,19 @@ public:
 
     KoPrintJob *createPrintJob();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
     void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 
@@ -453,14 +453,14 @@ class PerformanceStatusViewSettingsPanel : public QWidget, public Ui::Performanc
 public:
     explicit PerformanceStatusViewSettingsPanel( PerformanceStatusBase *view, QWidget *parent = 0 );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void setDefault();
 
-signals:
+Q_SIGNALS:
     void changed();
 
-protected slots:
+protected Q_SLOTS:
     void switchStackWidget();
 
 private:
@@ -481,7 +481,7 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 public:
     explicit ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
 private:

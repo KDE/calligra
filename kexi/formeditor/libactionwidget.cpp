@@ -32,7 +32,7 @@ using namespace KFormDesigner;
 class LibActionWidget::Private
 {
 public:
-    Private(WidgetInfo *w);
+    explicit Private(WidgetInfo *w);
     ~Private();
 
     QByteArray className;

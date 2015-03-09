@@ -72,7 +72,7 @@ public:
 
     void unsetCanvas();
     
-public slots:
+public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
     void linesDisplayChanged(int);

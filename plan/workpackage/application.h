@@ -38,16 +38,11 @@
 class KPlatoWork_MainWindow;
 
 namespace KPlatoWork {
-    class Part;
 }
 namespace KPlato {
     class Document;
 }
 
-class KComponentData;
-class QSplitter;
-class KoDocumentEntry;
-class KoView;
 
 class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {

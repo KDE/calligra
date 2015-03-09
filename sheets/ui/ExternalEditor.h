@@ -62,7 +62,7 @@ protected:
     void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
 
-private slots:
+private Q_SLOTS:
     void slotTextChanged();
     void slotCursorPositionChanged();
 

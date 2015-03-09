@@ -25,7 +25,6 @@
 #include <kexi_export.h>
 
 class QTextCharFormat;
-class QActionGroup;
 
 namespace KFormDesigner
 {
@@ -42,7 +41,7 @@ public:
 
     QString text() const;
 
-public slots:
+public Q_SLOTS:
     void changeFont(const QString &);
     void changeColor(const QColor&);
     void slotActionTriggered(QAction* action);

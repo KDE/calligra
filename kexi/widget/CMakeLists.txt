@@ -2,11 +2,11 @@ add_subdirectory( utils )
 add_subdirectory( dataviewcommon )
 add_subdirectory( relations )
   
-IF(KEXI_MOBILE)
+if(KEXI_MOBILE)
 
-ELSE(KEXI_MOBILE)
+else()
   add_subdirectory( tableview )
-ENDIF(KEXI_MOBILE)
+endif()
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
 
@@ -49,14 +49,13 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiStartupFileHandler.cpp
   )
 
-IF (KEXI_MOBILE)
+if (KEXI_MOBILE)
 
-ELSE (KEXI_MOBILE)
-  LIST(APPEND kexiextendedwidgets_LIB_SRCS
+else ()
+  list(APPEND kexiextendedwidgets_LIB_SRCS
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
     kexidbconnectionwidget.cpp 
-  #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp
@@ -72,7 +71,7 @@ ELSE (KEXI_MOBILE)
     kexiprjtypeselector.ui
     KexiPasswordWidget.ui
   )
-ENDIF (KEXI_MOBILE)
+endif ()
 
 kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiDBTitlePage.ui
@@ -94,14 +93,14 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
 )
 
-IF (KEXI_MOBILE)
+if (KEXI_MOBILE)
 
-ELSE(KEXI_MOBILE)
+else()
   target_link_libraries(
     kexiextendedwidgets
     ${KDE4_KFILE_LIBS}
     )
-ENDIF(KEXI_MOBILE)
+endif()
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiextendedwidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

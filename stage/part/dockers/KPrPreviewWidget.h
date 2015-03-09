@@ -59,7 +59,7 @@ protected:
     void resizeEvent( QResizeEvent* event );
     void mousePressEvent( QMouseEvent* event );
 
-protected slots:
+protected Q_SLOTS:
     void animate();
 
 private:

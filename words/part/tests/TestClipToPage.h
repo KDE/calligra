@@ -7,7 +7,7 @@
 class TestClipToPage : public QObject
 {
     Q_OBJECT
-private slots: // tests
+private Q_SLOTS: // tests
     void testClipToPage();
 };
 

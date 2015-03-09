@@ -28,7 +28,6 @@
 
 #include <QWidget>
 
-class KoView;
 
 namespace KPlato
 {
@@ -48,12 +47,12 @@ class ViewListDialog : public KDialog
 public:
     ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
     void slotViewListItemRemoved( ViewListItem * );
 
-signals:
+Q_SIGNALS:
     void viewCreated( ViewBase *view );
 
 private:
@@ -70,11 +69,11 @@ public:
 
     Ui::AddViewPanel widget;
 
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
     void viewCreated( ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     void changed();
     void viewtypeChanged( int idx );
     void categoryChanged();
@@ -98,7 +97,7 @@ class ViewListEditViewDialog : public KDialog
 public:
     ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
     void slotViewListItemRemoved( ViewListItem * );
@@ -117,10 +116,10 @@ public:
 
     Ui::EditViewPanel widget;
 
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
 
-protected slots:
+protected Q_SLOTS:
     void changed();
     void categoryChanged();
     void fillAfter( ViewListItem *cat );
@@ -137,7 +136,7 @@ class ViewListEditCategoryDialog : public KDialog
 public:
     ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
     void slotViewListItemRemoved( ViewListItem * );
@@ -156,10 +155,10 @@ public:
 
     Ui::EditCategoryPanel widget;
 
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
 
-protected slots:
+protected Q_SLOTS:
     void changed();
     void fillAfter();
 
@@ -175,12 +174,12 @@ class ViewListReportsDialog : public KDialog
 public:
     ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
     void slotViewListItemRemoved( ViewListItem * );
 
-signals:
+Q_SIGNALS:
     void viewCreated( ViewBase *view );
 
 private:
@@ -197,11 +196,11 @@ public:
 
     Ui::AddViewPanel widget;
 
-signals:
+Q_SIGNALS:
     void enableButtonOk( bool );
     void viewCreated( ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     void changed();
     void viewtypeChanged( int idx );
     void categoryChanged();

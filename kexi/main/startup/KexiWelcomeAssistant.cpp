@@ -112,7 +112,7 @@ void KexiMainWelcomePage::updateRecentProjects()
 class KexiWelcomeAssistant::Private
 {
 public:
-    Private(KexiWelcomeAssistant *qq)
+    explicit Private(KexiWelcomeAssistant *qq)
      : q(qq)
     {
     }

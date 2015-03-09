@@ -45,7 +45,7 @@ class AccountseditorConfigDialog : public KPageDialog {
 public:
     AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *parent );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 
 private:
@@ -70,14 +70,14 @@ public:
     Account *selectedAccount() const;
     QList<Account*> selectedAccounts() const;
     
-signals:
+Q_SIGNALS:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     void selectionChanged( const QModelIndexList& );
 
     void contextMenuRequested( const QModelIndex&, const QPoint& );
     
-protected slots:
+protected Q_SLOTS:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
@@ -106,11 +106,11 @@ public:
     
     KoPrintJob *createPrintJob();
     
-signals:
+Q_SIGNALS:
     void addAccount( Account *account );
     void deleteAccounts( const QList<Account*>& );
     
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
@@ -118,10 +118,10 @@ protected:
     void updateActionsEnabled( bool on );
     void insertAccount( Account *account, Account *parent, int row );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
     
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
 

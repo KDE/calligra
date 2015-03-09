@@ -37,7 +37,7 @@ public:
 
     tristate run();
 
-public slots:
+public Q_SLOTS:
     void processExited(KProcess*);
     void receivedStderr(KProcess*, char*, int);
     void cancelClicked();

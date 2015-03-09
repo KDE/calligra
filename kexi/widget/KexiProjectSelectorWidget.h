@@ -40,9 +40,9 @@ public:
     information about database driver and connection columns are added.
     \a prj_set may be NULL - you can assign a set later with setProjectSet().
     */
-    KexiProjectSelectorWidget(QWidget* parent = 0,
-                              KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
-                              bool showConnectionColumns = true);
+    explicit KexiProjectSelectorWidget(QWidget* parent = 0,
+                                       KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
+                                       bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorWidget();
 
@@ -70,11 +70,11 @@ public:
 
     QTreeWidget* list() const;
     
-signals:
+Q_SIGNALS:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
 
-protected slots:
+protected Q_SLOTS:
     void slotItemExecuted(QTreeWidgetItem*);
     void slotItemExecuted();
     void slotItemSelected();
@@ -112,7 +112,7 @@ public:
 
     virtual void showEvent(QShowEvent * event);
 
-protected slots:
+protected Q_SLOTS:
     void slotProjectExecuted(KexiProjectData*);
     void slotProjectSelectionChanged(KexiProjectData*);
 

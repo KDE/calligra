@@ -24,7 +24,6 @@
 #include <kexiutils/multivalidator.h>
 #include <db/validator.h>
 
-class QWidget;
 
 namespace KexiDB
 {

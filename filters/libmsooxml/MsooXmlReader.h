@@ -36,7 +36,6 @@
 #include <KoFilter.h>
 #include <KoOdfExporter.h>
 
-class KoCharacterStyle;
 
 namespace MSOOXML
 {

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@
 class KexiWindow::Private
 {
 public:
-    Private(KexiWindow *window)
+    explicit Private(KexiWindow *window)
             : win(window)
             , schemaData(0)
             , schemaDataOwned(false)
@@ -468,7 +468,11 @@ tristate KexiWindow::switchToViewMode(
             }
         }
         if (!designModePreloadedForTextModeHack) {
+            const bool wasDirty = view->isDirty(); // remember and restore the flag if the view was clean
             res = view->beforeSwitchTo(newViewMode, dontStore);
+            if (!wasDirty) {
+                view->setDirty(false);
+            }
         }
         if (~res || !res)
             return res;
@@ -513,7 +517,11 @@ tristate KexiWindow::switchToViewMode(
     if (designModePreloadedForTextModeHack) {
         d->currentViewMode = Kexi::NoViewMode; //SAFE?
     }
+    bool wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
     res = newView->beforeSwitchTo(newViewMode, dontStore);
+    if (!wasDirty) {
+        newView->setDirty(false);
+    }
     proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
@@ -528,8 +536,12 @@ tristate KexiWindow::switchToViewMode(
     if (prevViewMode == Kexi::NoViewMode)
         d->newlySelectedView->setDirty(false);
 
+    wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
     res = newView->afterSwitchFrom(
               designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
+    if (!wasDirty) {
+        newView->setDirty(false);
+    }
     proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
@@ -653,12 +665,17 @@ void KexiWindow::dirtyChanged(KexiView* view)
     emit dirtyChanged(this);
 }
 
+//static
+QString KexiWindow::windowTitleForItem(const KexiPart::Item &item)
+{
+    return item.name();
+}
+
 void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    //! @todo use d->item->captionOrName() if defined in settings
-    QString fullCapt(d->item->name());
+    const QString fullCapt(windowTitleForItem(*d->item));
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 

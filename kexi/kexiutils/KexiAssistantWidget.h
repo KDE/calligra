@@ -38,14 +38,14 @@ public:
 
     KexiAssistantPage* currentPage() const;
 
-public slots:
+public Q_SLOTS:
     void setCurrentPage(KexiAssistantPage* page);
 
     virtual void nextPageRequested(KexiAssistantPage* page);
 
     virtual void cancelRequested(KexiAssistantPage* page);
 
-private slots:
+private Q_SLOTS:
     virtual void previousPageRequested(KexiAssistantPage* page);
 
 private:

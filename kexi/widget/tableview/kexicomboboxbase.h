@@ -83,7 +83,7 @@ public:
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    //! Used to select row item for an user-entered value \a v.
+    //! Used to select row item for a user-entered value \a v.
     //! Only for "lookup table" mode.
     KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
 

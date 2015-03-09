@@ -109,7 +109,7 @@ public:
 
     void abort();
 
-signals:
+Q_SIGNALS:
     void pushCompleted();
     void pullCompleted();
     void transferProgress(int progress);

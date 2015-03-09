@@ -64,7 +64,7 @@ QString typeToPartClass(const QString& type)
 class KexiLookupColumnPage::Private
 {
 public:
-    Private(KexiLookupColumnPage *that)
+    explicit Private(KexiLookupColumnPage *that)
             : q(that)
             , currentFieldUid(-1)
             , insideClearRowSourceSelection(false)
@@ -208,8 +208,6 @@ void KexiLookupColumnPage::setProject(KexiProject *prj)
 
 void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 {
-    if (!d->hasPropertySet() && !propertySet)
-        return;
     if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
         return; //already assigned
 

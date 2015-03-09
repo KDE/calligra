@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include <QDropEvent>
 #include <QSet>
 #include <QVBoxLayout>
+#include <QStyleOptionComboBox>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,9 +47,10 @@
 #include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <kexitableview.h>
+#include <kexiinternalpart.h>
 #include <kexidragobjects.h>
-#include <kexidatatable.h>
+#include <widget/tableview/KexiTableScrollArea.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include <kexi.h>
 #include <kexisectionheader.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -82,10 +84,12 @@
 class KexiQueryDesignerGuiEditor::Private
 {
 public:
-    Private()
+    Private(KexiQueryDesignerGuiEditor *p)
+     : q(p)
     {
         droppedNewRecord = 0;
         slotTableAdded_enabled = true;
+        sortColumnPreferredWidth = 0;
     }
 
     bool changeSingleCellValue(KexiDB::RecordData &record, int columnNumber,
@@ -100,8 +104,9 @@ public:
         return true;
     }
 
+    KexiQueryDesignerGuiEditor *q;
     KexiDB::TableViewData *data;
-    KexiDataTable *dataTable;
+    KexiDataTableView *dataTable;
     QPointer<KexiDB::Connection> conn;
 
     KexiRelationsView *relations;
@@ -124,6 +129,18 @@ public:
     void addFieldColumnIdentifier(const QString& id)
     {
         fieldColumnIdentifiers.insert(id.toLower());
+    }
+
+    int comboArrowWidth;
+    int sortColumnPreferredWidth;
+
+    void initSortColumnPreferredWidth(const QVector<QString> &items)
+    {
+        int maxw = -1;
+        foreach (const QString &text, items) {
+            maxw = qMax(maxw, q->fontMetrics().width(text + " "));
+        }
+        sortColumnPreferredWidth = maxw + KexiUtils::comboBoxArrowSize(q->style()).width();
     }
 
     KexiDataAwarePropertySet* sets;
@@ -150,7 +167,7 @@ static bool sortingAllowed(const QString& fieldName, const QString& tableName)
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     QWidget *parent)
         : KexiView(parent)
-        , d(new Private())
+        , d(new Private(this))
 {
     d->conn = KexiMainWindowIface::global()->project()->dbConnection();
 
@@ -168,10 +185,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
     d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
     d->spl->addWidget(d->head);
-    d->dataTable = new KexiDataTable(d->head, false);
+    d->dataTable = new KexiDataTableView(d->head, false);
     d->head->setWidget(d->dataTable);
     d->dataTable->setObjectName("guieditor_dataTable");
-    d->dataTable->dataAwareObject()->setSpreadSheetMode();
+    d->dataTable->dataAwareObject()->setSpreadSheetMode(true);
 
     d->data = new KexiDB::TableViewData(); //just empty data
     d->sets = new KexiDataAwarePropertySet(this, d->dataTable->dataAwareObject());
@@ -185,7 +202,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
     if (d->dataTable->tableView()/*sanity*/) {
         d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_VISIBLE);
-        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_SORTING);
+        d->dataTable->tableView()->setColumnWidth(COLUMN_ID_SORTING, d->sortColumnPreferredWidth);
+        d->dataTable->tableView()->setStretchLastColumn(true);
         d->dataTable->tableView()->maximizeColumnsWidth(c);
         d->dataTable->tableView()->setDropsAtRowEnabled(true);
         connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiDB::RecordData*,int,QDragMoveEvent*)),
@@ -264,6 +282,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     sortTypes.append(i18n("Descending"));
     col5->field()->setEnumHints(sortTypes);
     d->data->addColumn(col5);
+    d->initSortColumnPreferredWidth(sortTypes);
 
     KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
             i18n("Describes the criteria for a given field or expression."));
@@ -493,7 +512,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                 }
             }
         } else {//!set
-            kDebug() << (**it)[COLUMN_ID_TABLE].toString();
+            //kDebug() << (**it)[COLUMN_ID_TABLE].toString();
         }
     }
     if (!fieldsFound) {
@@ -626,7 +645,6 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    const bool was_dirty = isDirty();
     if (mode == Kexi::NoViewMode || (mode == Kexi::DataViewMode && !tempData()->query())) {
         //this is not a SWITCH but a fresh opening in this view mode
         if (!window()->neverSaved()) {
@@ -688,10 +706,12 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             d->dataTable->dataAwareObject()->setCursorPosition(0, 0);
         }
     }
+    if (d->sets->size() > 0) {
+        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_COLUMN);
+        d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_TABLE);
+    }
     tempData()->setQueryChangedInPreviousView(false);
     setFocus(); //to allow shared actions proper update
-    if (!was_dirty)
-        setDirty(false);
     return true;
 }
 
@@ -1289,27 +1309,46 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     //1. get token
     token = 0;
     //2-char-long tokens
-    if (str.startsWith(QLatin1String(">=")))
+    if (str.startsWith(QLatin1String(">="))) {
         token = GREATER_OR_EQUAL;
-    else if (str.startsWith(QLatin1String("<=")))
-        token = LESS_OR_EQUAL;
-    else if (str.startsWith(QLatin1String("<>")))
-        token = NOT_EQUAL;
-    else if (str.startsWith(QLatin1String("!=")))
-        token = NOT_EQUAL2;
-    else if (str.startsWith(QLatin1String("==")))
-        token = '=';
-
-    if (token != 0)
         len = 2;
-    else if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
+    } else if (str.startsWith(QLatin1String("<="))) {
+        token = LESS_OR_EQUAL;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("<>"))) {
+        token = NOT_EQUAL;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("!="))) {
+        token = NOT_EQUAL2;
+        len = 2;
+    } else if (str.startsWith(QLatin1String("=="))) {
+        token = '=';
+        len = 2;
+    } else if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
+        token = LIKE;
+        len = 5;
+    }
+    else if (str.startsWith(QLatin1String("NOT "),  Qt::CaseInsensitive)) {
+        str = str.mid(4).trimmed();
+        if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
+            token = NOT_LIKE;
+            len = 5;
+        }
+        else {
+            return 0;
+        }
+    }
+    else {
+        if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
              || str.startsWith(QLatin1Char('<'))
-             || str.startsWith(QLatin1Char('>'))) {
-        token = str[0].toLatin1();
-        len = 1;
-    } else {
-        if (allowRelationalOperator)
-            token = '=';
+             || str.startsWith(QLatin1Char('>')))
+        {
+            token = str[0].toLatin1();
+            len = 1;
+        } else {
+            if (allowRelationalOperator)
+                token = '=';
+        }
     }
 
     if (!allowRelationalOperator && token != 0)

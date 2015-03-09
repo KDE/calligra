@@ -39,7 +39,7 @@ public:
 
     void apply();
 
-public slots:
+public Q_SLOTS:
     void slotDefault();
 
 private:

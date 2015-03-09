@@ -47,7 +47,7 @@ public:
 
     ~KexiSharedActionHostPrivate();
 
-public slots:
+public Q_SLOTS:
     void slotAction(const QString& act_id);
 
 public:

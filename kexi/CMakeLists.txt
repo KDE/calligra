@@ -1,10 +1,10 @@
 project(kexi)
 
-INCLUDE(CheckFunctionExists)
+include(CheckFunctionExists)
 
-SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
+set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
-option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
@@ -14,15 +14,14 @@ option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to 
 
 # Experimental:
 option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
-option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" ON)
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF)
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
-ADD_DEFINITIONS(
+add_definitions(
   -DKEXI_NO_CURSOR_PROPERTY
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-# temporary for 2.x:
   -DKEXI_NO_AUTOFIELD_WIDGET
 )
 
@@ -39,12 +38,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/libs
 )
 
-IF(KEXI_MOBILE)
-  add_definitions(-DKEXI_MOBILE)
-ELSE(KEXI_MOBILE)
-  add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-ENDIF(KEXI_MOBILE)
-
 add_subdirectory( kexiutils )
 
 macro_optional_find_package(MySQL)
@@ -58,13 +51,13 @@ macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface
 
 pkg_check_modules (PQXX libpqxx)
 
-IF (POSTGRESQL_FOUND AND PQXX_FOUND)
-   IF (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
+if (POSTGRESQL_FOUND AND PQXX_FOUND)
+   if (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
       macro_log_feature(PQXX_FOUND "libpqxx" "Official C++ client API for PostgreSQL" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL driver")
-   ELSE (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
+   else ()
       macro_log_feature(FALSE "libpqxx" "Official C++ client API for PostgreSQL, version >= ${PQXX_MIN_VERSION} and older than ${PQXX_MAX_VERSION}" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL driver")
-   ENDIF (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
-ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
+   endif ()
+endif ()
 
 macro_optional_find_package(FreeTDS)
 macro_log_feature(FREETDS_FOUND "FreeTDS" "Open source implementation of the TDS (Tabular Data Stream) protocol" "http://www.freetds.org" FALSE "" "Required by Kexi Sybase driver")
@@ -80,19 +73,19 @@ add_subdirectory( pics )
 add_subdirectory( plugins )
 add_subdirectory( tests )
 
-IF(KEXI_MOBILE)
+if(KEXI_MOBILE)
 
-ELSE(KEXI_MOBILE)
+else()
   add_subdirectory( main )
   add_subdirectory( formeditor )
   add_subdirectory( migration )
-ENDIF(KEXI_MOBILE)
+endif()
 
 ########### next target ###############
 
-IF(KEXI_MOBILE)
+if(KEXI_MOBILE)
   add_subdirectory( mobile )
-ELSE(KEXI_MOBILE)
+else()
   set(kexi_SRCS main.cpp )
   kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
@@ -103,11 +96,11 @@ ELSE(KEXI_MOBILE)
     kexicore
   )
   install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
-ENDIF(KEXI_MOBILE)
+endif()
 
 ########### install files ###############
 
-install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES kexi.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )

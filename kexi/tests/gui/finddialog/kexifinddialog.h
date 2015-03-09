@@ -53,7 +53,7 @@ public:
 
 #endif
 
-public slots:
+public Q_SLOTS:
     /*! Sets or clears replace mode.
      For replace mode 'prompt or replace' option is visible.
     */

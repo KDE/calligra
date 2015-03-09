@@ -49,7 +49,7 @@ public:
     KTabWidget* tabWidget;
     KexiConnectionSelectorWidget* fileSelector;
     KexiConnectionSelectorWidget* connSelector;
-private slots:
+private Q_SLOTS:
     void init();
     void tabChanged(int index);
 private:
@@ -84,17 +84,17 @@ public:
     explicit KexiOpenProjectAssistant(QWidget* parent = 0);
     ~KexiOpenProjectAssistant();
 
-public slots:
+public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
-signals:
+Q_SIGNALS:
     void openProject(const KexiProjectData& data);
     void openProject(const QString& fileName);
 
-private slots:
+private Q_SLOTS:
     void slotOpenProject(KexiProjectData* data);
 
 protected:

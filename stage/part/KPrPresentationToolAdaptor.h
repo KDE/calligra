@@ -37,7 +37,7 @@ public:
     explicit KPrPresentationToolAdaptor(KPrPresentationTool *tool);
     virtual ~KPrPresentationToolAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
 
     /**
      * Blank the presentation.

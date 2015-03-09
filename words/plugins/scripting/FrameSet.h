@@ -64,7 +64,7 @@ public:
             : QObject(module), m_frameset(frameset) {}
     virtual ~FrameSet() {}
 
-public slots:
+public Q_SLOTS:
 
     /** Return this framesets name. */
     const QString name() {

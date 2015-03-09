@@ -39,12 +39,10 @@
 
 class KUndo2QStack;
 
-class KoView;
 class KoStore;
 
 class KProcess;
 
-class QAction;
 class QFileSystemWatcher;
 
 namespace KPlato
@@ -60,7 +58,6 @@ using namespace KPlato;
 namespace KPlatoWork
 {
 
-class View;
 class Part;
 class WorkPackage;
 
@@ -105,14 +102,14 @@ public:
     
     bool saveToStore( KoStore *store );
 
-signals:
+Q_SIGNALS:
     void modified( bool );
     void fileModified( bool );
     
-public slots:
+public Q_SLOTS:
     void setModified( bool mod );
     
-protected slots:
+protected Q_SLOTS:
     void slotEditFinished( int,  QProcess::ExitStatus );
     void slotEditError( QProcess::ProcessError status );
     
@@ -213,7 +210,7 @@ public:
     KUndo2QStack *undoStack() const { return m_undostack; }
     int commandIndex() const { return m_undostack->index(); }
 
-public slots:
+public Q_SLOTS:
     /**
      * Called by the undo stack when the document is saved or all changes has been undone
      * @param clean if the document's undo stack is clean or not
@@ -227,7 +224,7 @@ public slots:
 
     void viewWorkpackageDocument( Document *doc );
 
-signals:
+Q_SIGNALS:
     void changed();
     void workPackageAdded( WorkPackage *package, int index );
     void workPackageRemoved( WorkPackage *wp, int index );

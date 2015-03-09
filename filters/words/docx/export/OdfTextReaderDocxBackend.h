@@ -28,12 +28,7 @@
 
 
 
-class QByteArray;
-class QSizeF;
-class QStringList;
-class KoStore;
 class KoOdfStyleProperties;
-class KoOdfStyleManager;
 class OdfReaderContext;
 class OdfReaderDocxContext;
 

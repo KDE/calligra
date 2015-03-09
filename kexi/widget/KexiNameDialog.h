@@ -79,7 +79,7 @@ public:
     //! Previous validator is removed. 0 an be passed.
     void setValidator(KexiNameDialogValidator *validator);
 
-protected slots:
+protected Q_SLOTS:
     void slotTextChanged();
     virtual void accept();
     void updateSize();

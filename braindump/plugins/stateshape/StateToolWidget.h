@@ -35,7 +35,7 @@ class StateToolWidget : public QWidget
     Q_OBJECT
 public:
     explicit StateToolWidget(StateTool*);
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void open(StateShape *shape);
     /// reimplemented

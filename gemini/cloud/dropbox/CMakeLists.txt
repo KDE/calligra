@@ -1,12 +1,12 @@
 set(dropbox_lib_SRCS
-    libs/droprestapi.cc
-    libs/filetransferitem.cc
-    libs/folderitem.cc
-    libs/json.cc
-    libs/listmodel.cc
-    libs/networkcontroller.cc
-    libs/oauth.cc
-    libs/options.cc
+    3rdparty/droprestapi.cc
+    3rdparty/filetransferitem.cc
+    3rdparty/folderitem.cc
+    3rdparty/json.cc
+    3rdparty/listmodel.cc
+    3rdparty/networkcontroller.cc
+    3rdparty/oauth.cc
+    3rdparty/options.cc
 )
 
 set(dropbox_plugin_SRCS

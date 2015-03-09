@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010-2011 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,7 +44,9 @@ public:
     KexiProject* project() const;
     void setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages);
     QString itemsPartClass() const;
-    
+    //! @return number of objects
+    int objectsCount() const;
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -87,20 +89,20 @@ public:
     bool renameItem(KexiPart::Item *item, const QString& newName);
     bool setItemCaption(KexiPart::Item *item, const QString& newCaption);
 
-public slots:
+public Q_SLOTS:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
 
-signals:
+Q_SIGNALS:
     void renameItem(KexiPart::Item *item, const QString& newName, bool &succes);
     void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool &succes);
     void highlightSearchedItem(const QModelIndex &index);
     void activateSearchedItem(const QModelIndex &index);
 
 private:
-    KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
-    KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info,
-                                  KexiProjectModelItem*) const;
+    KexiProjectModelItem* addGroup(KexiPart::Info *info, KexiProjectModelItem *parent) const;
+    KexiProjectModelItem* addItem(KexiPart::Info *info, KexiPart::Item *item,
+                                  KexiProjectModelItem *parent) const;
 
     //! @return index of first part item within children of parentIndex (recursively)
     QModelIndex firstChildPartItem(const QModelIndex &parentIndex) const;

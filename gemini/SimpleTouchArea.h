@@ -25,7 +25,7 @@ class SimpleTouchArea : public QDeclarativeItem
 {
     Q_OBJECT
 public:
-    SimpleTouchArea(QDeclarativeItem* parent = 0);
+    explicit SimpleTouchArea(QDeclarativeItem* parent = 0);
     virtual ~SimpleTouchArea();
 
 Q_SIGNALS:

@@ -100,7 +100,7 @@ public:
 
     bool isRolledUp();
 
-public slots:
+public Q_SLOTS:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
     void showMainMenu(const char* actionName = 0);
@@ -114,7 +114,7 @@ protected:
     virtual void leaveEvent(QEvent* event);
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
-protected slots:
+protected Q_SLOTS:
     void slotCurrentChanged(int index);
     void slotDelayedTabRaise();
     void slotSettingsChanged(int category);
@@ -199,7 +199,7 @@ public:
     , m_duration(duration)
     {
     }
-public slots:
+public Q_SLOTS:
     void start() { KFadeWidgetEffect::start(m_duration); }
 private:
     int m_duration;
@@ -336,11 +336,11 @@ public:
         m_selectFirstItem = true;
     }
 
-signals:
+Q_SIGNALS:
     void contentAreaPressed();
     void hideContentsRequested();
 
-protected slots:
+protected Q_SLOTS:
     void contentWidgetDestroyed();
 
 protected:
@@ -444,7 +444,7 @@ public:
     KToolBar *createToolBar(const char *name, const QString& caption);
     int tabIndex;
 
-public slots:
+public Q_SLOTS:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void hideContentsOrMainMenu();
@@ -1361,9 +1361,9 @@ public:
     }
 protected:
     virtual bool queryClose();
-protected slots:
+protected Q_SLOTS:
     void slotCurrentTabIndexChanged(int index);
-signals:
+Q_SIGNALS:
     void currentTabIndexChanged(int index);
 
 private:
@@ -1417,6 +1417,34 @@ void KexiMainWidget::slotCurrentTabIndexChanged(int index)
 
 //------------------------------------------
 
+//! @internal Dock widget with floating disabled but still collapsible
+class KexiDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    KexiDockWidget(const QString &title, QWidget *parent);
+
+    virtual ~KexiDockWidget();
+
+    virtual void setSizeHint(const QSize& hint);
+
+    virtual QSize sizeHint() const;
+
+    QToolButton* closeButton() const;
+
+protected:
+    virtual void paintEvent(QPaintEvent *pe);
+
+protected Q_SLOTS:
+    void slotCloseClicked();
+
+private:
+    class Private;
+    Private * const d;
+};
+
+//------------------------------------------
+
 //! @internal safer dictionary
 typedef QMap< int, KexiWindow* > KexiWindowDict;
 
@@ -1424,7 +1452,7 @@ typedef QMap< int, KexiWindow* > KexiWindowDict;
 class KexiMainWindow::Private
 {
 public:
-    Private(KexiMainWindow* w)
+    explicit Private(KexiMainWindow* w)
             : wnd(w) {
         actionCollection = new KActionCollection(w);
         propEditor = 0;
@@ -1453,7 +1481,6 @@ public:
 #ifndef KEXI_NO_PENDING_DIALOGS
         actionToExecuteWhenPendingJobsAreFinished = NoAction;
 #endif
-        showImportantInfoOnStartup = true;
         propEditorDockSeparatorPos = -1;
         navDockSeparatorPos = -1;
         wasAutoOpen = false;
@@ -1642,16 +1669,7 @@ public:
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
                           KexiDockWidget *dockWidget, bool visible) 
     {
-        KMultiTabBar::KMultiTabBarPosition realPosition = position;
-        if (QApplication::isRightToLeft()) {
-            if (position == KMultiTabBar::Left) {
-                realPosition = KMultiTabBar::Right;
-            }
-            else if (position == KMultiTabBar::Right) {
-                realPosition = KMultiTabBar::Left;
-            }
-        }
-        KMultiTabBar *mtbar = multiTabBars.value(realPosition);
+        KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
             mtbar->removeTab(id);
         }
@@ -1883,10 +1901,6 @@ public:
     QMap<int, int> pageSetupWindowItemID2dataItemID_map;
 #endif
 
-    //! Used in several places to show info dialog at startup (only once per session)
-    //! before displaying other stuff
-    bool showImportantInfoOnStartup;
-
     //! Indicates if project is started in User Mode
     bool userMode;
 
@@ -1944,7 +1958,7 @@ class KexiMainMenuActionShortcut : public QShortcut
 public:
     KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
 
-protected slots:
+protected Q_SLOTS:
     //! Triggers associated action only when this action is enabled
     void slotActivated();
 

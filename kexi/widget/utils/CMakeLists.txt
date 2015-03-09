@@ -4,7 +4,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ut
 
 set(kexiguiutils_LIB_SRCS 
    kexisharedactionclient.cpp 
-   kexirecordmarker.cpp 
    kexidisplayutils.cpp 
    kexitooltip.cpp
    kexicontextmenuutils.cpp
@@ -14,13 +13,13 @@ set(kexiguiutils_LIB_SRCS
    KexiDockableWidget.cpp
 )
 
-IF (KEXI_MOBILE)
+if (KEXI_MOBILE)
 
-ELSE (KEXI_MOBILE)
-    LIST(APPEND kexiguiutils_LIB_SRCS
+else ()
+    list(APPEND kexiguiutils_LIB_SRCS
         kexirecordnavigator.cpp 
     )
-ENDIF (KEXI_MOBILE)
+endif ()
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 
@@ -28,14 +27,6 @@ target_link_libraries(kexiguiutils
 kexicore
 kexiutils ${KDE4_KIO_LIBS}
 )
-
-IF (KEXI_MOBILE)
-
-ELSE (KEXI_MOBILE)
-  target_link_libraries(kexiguiutils
-  ${QT_QT3SUPPORT_LIBRARY}
-  )
-ENDIF (KEXI_MOBILE)
 
 set_target_properties(kexiguiutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiguiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})

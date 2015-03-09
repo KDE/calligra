@@ -32,10 +32,7 @@
 #include <KWCanvas.h>
 #include <KoTextDocumentLayout.h>
 
-class QTextDocument;
-class QToolButton;
 class KoCanvasResourceManager;
-class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
@@ -58,10 +55,10 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void navigationClicked(QModelIndex idx);
 
-public slots:
+public Q_SLOTS:
     void updateData();
 
 private:

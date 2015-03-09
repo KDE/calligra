@@ -112,7 +112,7 @@ bool ToolDocker::hasOptionWidget()
     return !d->currentWidgetList.isEmpty();
 }
 
-void ToolDocker::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->recreateLayout(optionWidgetList);
 }

@@ -60,7 +60,7 @@ public:
     void emitDataChanged(const QRect& range);
     void emitChanged(const Region& region);
 
-signals:
+Q_SIGNALS:
     void changed(const Region& region);
 
 private:

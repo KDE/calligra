@@ -195,7 +195,7 @@ QString WidgetTreeWidgetItem::customSortingKey() const
 class WidgetTreeWidget::Private
 {
 public:
-    Private(Options o);
+    explicit Private(Options o);
     ~Private();
 
     Form *form;
@@ -430,8 +430,10 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
         //kDebug() << "RemovePageCommand";
     }
     WidgetTreeWidgetItem *it = findItem(item->name());
-    QTreeWidgetItem *root = invisibleRootItem();
-    root->takeChild(root->indexOfChild(it));
+
+    QTreeWidgetItem * parent = it->parent();
+    parent->takeChild(parent->indexOfChild(it));
+
     delete it;
 }
 

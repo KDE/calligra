@@ -60,14 +60,14 @@ public:
 
     void objectRenamed(const QString &mime, const QString& name, const QString& newName);
 
-signals:
+Q_SIGNALS:
     void tableAdded(KexiDB::TableSchema& t);
     void tableHidden(KexiDB::TableSchema& t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
     void appendFields(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
-public slots:
+public Q_SLOTS:
     /*! Adds a table \a t to the area. This changes only visual representation.
      If \a rect is valid, table widget rgeometry will be initialized.
      */
@@ -87,7 +87,7 @@ public slots:
     /*! Hides all tables except \a tables. */
     void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
 
-protected slots:
+protected Q_SLOTS:
     void slotAddTable();
     void tableViewGotFocus();
     void connectionViewGotFocus();

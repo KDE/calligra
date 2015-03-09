@@ -108,7 +108,7 @@ public:
     /*! \return true if this window is in the User Mode. */
     virtual bool userMode() const = 0;
 
-// signals:
+// Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     virtual void acceptProjectClosingRequested(bool& cancel) = 0;
@@ -120,7 +120,7 @@ public:
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
 
-// public slots:
+// public Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
@@ -152,7 +152,7 @@ public:
      set before call, previously selected item will be preselected
      in the editor (if found). */
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, 
+                                     bool preservePrevSelection = true,
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray()) = 0;
 
@@ -187,6 +187,9 @@ public:
     /*! Find window for a given \a item.
      \return 0 if no windows found. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+
+    /*! Parametrs for query with given id. */
+    virtual QList<QVariant> currentParametersForQuery(int queryId) const = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.
@@ -232,7 +235,7 @@ public:
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
-    /*! Appends widget @a widget to tabbed toolbar declared as @a name. 
+    /*! Appends widget @a widget to tabbed toolbar declared as @a name.
      @a widget will be reparented but the ownership is not taken. */
     virtual void appendWidgetToToolbar(const QString& name, QWidget* widget) = 0;
 
@@ -255,10 +258,10 @@ public:
      hidden. */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. */
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
-    
+
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
 
     //! Interface to the migrate manager
@@ -267,7 +270,7 @@ public:
     //! Sets reasonable dialog size based on main window size, that is 80% of its size.
     virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
-protected: // slots:
+protected: // Q_SLOTS:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
 };

@@ -52,7 +52,7 @@
 
 class KexiFormManagerPrivate {
 public:
-    KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
+    explicit KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
         , q(qq)
     {
         features = KFormDesigner::Form::NoFeatures;

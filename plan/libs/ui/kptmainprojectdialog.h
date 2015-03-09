@@ -40,7 +40,7 @@ public:
 
     MacroCommand *buildCommand();
     
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
 private:

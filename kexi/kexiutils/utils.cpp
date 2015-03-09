@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,11 +33,12 @@
 #include <QLayout>
 #include <KMessageBox>
 #include <QFileInfo>
+#include <QClipboard>
+
 #include <KUrl>
 #include <KRun>
 #include <KToolInvocation>
 #include <KLocalizedString>
-
 #include <kdebug.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
@@ -285,11 +286,12 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
     return c2;
 }
 
-QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
+QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette,
+                                         QPalette::ColorRole role)
 {
     QPixmap pm(
         KIconEffect().apply(icon, KIconEffect::Colorize, 1.0f,
-                            palette.color(QPalette::Active, QPalette::ButtonText), false));
+                            palette.color(role), false));
     KIconEffect::semiTransparent(pm);
     return QIcon(pm);
 }
@@ -629,6 +631,30 @@ bool KexiUtils::isLightColorScheme()
     return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
 }
 
+int KexiUtils::dimmedAlpha()
+{
+    return 150;
+}
+
+QPalette KexiUtils::paletteWithDimmedColor(const QPalette &pal, QPalette::ColorGroup group,
+                                           QPalette::ColorRole role)
+{
+    QPalette result(pal);
+    QColor color(result.color(group, role));
+    color.setAlpha(dimmedAlpha());
+    result.setColor(group, role, color);
+    return result;
+}
+
+QPalette KexiUtils::paletteWithDimmedColor(const QPalette &pal, QPalette::ColorRole role)
+{
+    QPalette result(pal);
+    QColor color(result.color(role));
+    color.setAlpha(dimmedAlpha());
+    result.setColor(role, color);
+    return result;
+}
+
 QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
 {
     QPalette p(palette);
@@ -743,6 +769,38 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
             KToolInvocation::invokeMailer(url);
             break;
     }
+}
+
+// ----
+
+KexiDBDebugTreeWidget::KexiDBDebugTreeWidget(QWidget *parent)
+ : QTreeWidget(parent)
+{
+}
+
+void KexiDBDebugTreeWidget::copy()
+{
+    if (currentItem()) {
+        qApp->clipboard()->setText(currentItem()->text(0));
+    }
+}
+
+// ----
+
+DebugWindow::DebugWindow(QWidget * parent)
+    : QWidget(parent, Qt::Window)
+{
+}
+
+// ----
+
+QSize KexiUtils::comboBoxArrowSize(QStyle *style)
+{
+    if (!style) {
+        style = QApplication::style();
+    }
+    QStyleOptionComboBox cbOption;
+    return style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxArrow).size();
 }
 
 #include "moc_utils.cpp"

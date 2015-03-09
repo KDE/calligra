@@ -30,9 +30,9 @@
 class KEXIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 public:
-    KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
-    KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
-    KexiFlowLayout(int margin = 0, int spacing = -1);
+    explicit KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
+    explicit KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
+    explicit KexiFlowLayout(int margin = 0, int spacing = -1);
 
     virtual ~KexiFlowLayout();
 

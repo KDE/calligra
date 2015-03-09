@@ -19,7 +19,7 @@
 #ifndef CALLIGRAGEMINI_PROGRESSPROXY_H
 #define CALLIGRAGEMINI_PROGRESSPROXY_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KoProgressProxy.h>
 
 class ProgressProxy : public QObject, public KoProgressProxy
@@ -28,7 +28,7 @@ class ProgressProxy : public QObject, public KoProgressProxy
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
 
 public:
-    ProgressProxy(QObject* parent = 0);
+    explicit ProgressProxy(QObject* parent = 0);
     virtual ~ProgressProxy();
 
     QString taskName() const;

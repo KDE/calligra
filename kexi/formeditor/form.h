@@ -407,7 +407,11 @@ public:
     //! @return class name of currently edited widget's
     QByteArray editedWidgetClass() const;
 
-public slots:
+    //! @return true if we're within redo(). Useful to check if command is being executed
+    //! in response of a redo or it is caused by some other event.
+    bool isRedoing() const;
+
+public Q_SLOTS:
     /*! Called when the user presses a widget item of the toolbox. 
       The form enters into "widget inserting" state.
       Prepares all form's widgets for creation of a new widget 
@@ -548,7 +552,7 @@ public slots:
     */
     void disableFilter(QWidget *w, Container *container);
 
-protected slots:
+protected Q_SLOTS:
     /*! This slot is called when the toplevel widget of this Form is deleted
     (ie the window closed) so that the Form gets deleted at the same time.
      */
@@ -584,7 +588,7 @@ protected slots:
 
     void widgetDestroyed();
 
-signals:
+Q_SIGNALS:
     /*! This signal is emitted by selectWidget() when user selects a new widget,
      to update both the Property Editor and the Object Tree View.
      \a w is the newly selected widget.

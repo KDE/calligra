@@ -24,7 +24,6 @@
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
 #include <db/utils.h>
-#include <kexi_global.h>
 
 #include <KoIcon.h>
 
@@ -60,16 +59,7 @@ public:
             , templPageWidgetItem_CreateFromTemplate(0)
     {
         result = -1;
-        QString iconname(KexiDB::defaultFileBasedDriverIconName());
-        kexi_sqlite_icon = KIcon(iconname);
-        const char shortcutMimeTypeName[] = "application/x-kexiproject-shortcut";
-        KMimeType::Ptr mime(KMimeType::mimeType(shortcutMimeTypeName));
-        if (mime.isNull()) {
-            KexiDBWarn << QString("'%1' mimetype not installed!").arg(shortcutMimeTypeName);
-            iconname.clear();
-        } else
-            iconname = mime->iconName();
-        kexi_shortcut_icon = KIcon(iconname); // TODO: no longer used?
+        kexi_sqlite_icon = Kexi::defaultFileBasedDriverIcon();
         chkDoNotShow = 0;
         openExistingConnWidget = 0;
         templatesWidget = 0;
@@ -94,7 +84,6 @@ public:
     int result;
 
     KIcon kexi_sqlite_icon;
-    KIcon kexi_shortcut_icon;
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;
@@ -171,12 +160,6 @@ KexiStartupDialog::KexiStartupDialog(
 KexiStartupDialog::~KexiStartupDialog()
 {
     delete d;
-}
-
-bool KexiStartupDialog::shouldBeShown()
-{
-    KConfigGroup group = KGlobal::config()->group("Startup");
-    return group.readEntry("ShowStartupDialog", true);
 }
 
 void KexiStartupDialog::showEvent(QShowEvent *e)
@@ -305,7 +288,7 @@ void KexiStartupDialog::setupPageTemplates()
                                             i18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         i18n("Import Existing Database as New Database Project"));
-    d->templPageWidgetItem_ImportExisting->setIcon(koIcon("document_import_database"));
+    d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_import = new QLabel(
@@ -334,7 +317,7 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
     }
 #ifdef KEXI_PROJECT_TEMPLATES
     else if (current == d->templPageWidgetItem_CreateFromTemplate) {
-        d->viewTemplates->populate();
+        //! @todo d->viewTemplates->populate();
     }
 #endif
     updateDialogOKButton(d->pageTemplates);
@@ -355,7 +338,8 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
         enable =
             currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
             || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting
-            || (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate && !d->viewTemplates->selectedFileName().isEmpty());
+            || (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate
+                /*! @todo && !d->viewTemplates->selectedFileName().isEmpty()*/);
 #else
         enable = currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
                  || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
@@ -437,8 +421,9 @@ QString KexiStartupDialog::selectedFileName() const
     if (d->result == OpenExistingResult)
         return d->openExistingFileWidget->highlightedFile();
 #ifdef KEXI_PROJECT_TEMPLATES
+    /*! @todo
     else if (d->result == CreateFromTemplateResult && d->viewTemplates)
-        return d->viewTemplates->selectedFileName();
+        return d->viewTemplates->selectedFileName();*/
 #endif
     else
         return QString();
@@ -495,12 +480,14 @@ void KexiStartupDialog::templateSelected(const QString& fileName)
 }
 
 #ifdef KEXI_PROJECT_TEMPLATES
-const KexiProjectData::AutoOpenObjects& KexiStartupDialog::autoopenObjects() const
+KexiProjectData::AutoOpenObjects KexiStartupDialog::autoopenObjects() const
 {
-    if (d->result != CreateFromTemplateResult || !d->viewTemplates)
-        KexiProjectData::AutoOpenObjects();
+    /*! @todo if (d->result != CreateFromTemplateResult || !d->viewTemplates)
+                  KexiProjectData::AutoOpenObjects();
 
-    return d->viewTemplates->autoopenObjectsForSelectedTemplate();
+              return d->viewTemplates->autoopenObjectsForSelectedTemplate();
+    */
+    return KexiProjectData::AutoOpenObjects();
 }
 #endif
 

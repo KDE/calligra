@@ -67,7 +67,7 @@ public:
     KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
     virtual ~KexiDBConnection();
 
-public slots:
+public Q_SLOTS:
 
     /** Return true if there was an error during last operation on the database. */
     bool hadError() const;

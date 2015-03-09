@@ -49,7 +49,7 @@ public:
     virtual KoPADocument* kopaDocument() const;
     virtual KoPACanvasBase* kopaCanvas() const;
 
-public slots:
+public Q_SLOTS:
     void connectToZoomController();
 
 private:
@@ -58,7 +58,7 @@ private:
     KPrDocument* m_prDocument;
     KoPAPageBase* m_page;
 
-private slots:
+private Q_SLOTS:
     void slotZoomChanged (KoZoomMode::Mode mode, qreal zoom);
 };
 

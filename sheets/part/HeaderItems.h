@@ -25,18 +25,13 @@
 
 #include "calligra_sheets_export.h"
 
-class QLabel;
-class QRubberBand;
 
-class KoCanvasBase;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class CanvasItem;
-class Selection;
-class View;
 
 /**
  * The widget above the cells showing the column headers.
@@ -51,7 +46,7 @@ public:
     void updateColumns(int from, int to);
     virtual void update() { QGraphicsWidget::update(); }
 
-private slots:
+private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:
@@ -90,7 +85,7 @@ public:
     void updateRows(int from, int to);
     virtual void update() { QGraphicsWidget::update(); }
 
-private slots:
+private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:

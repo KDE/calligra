@@ -85,7 +85,7 @@ public:
 
     bool isPreviewing() const;
 
-public slots:
+public Q_SLOTS:
     void setAutoTabStops(bool set);
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
@@ -107,7 +107,7 @@ public slots:
         QWidget::resize(s);
     }
 
-signals:
+Q_SIGNALS:
     void handleDragMoveEvent(QDragMoveEvent *e);
     void handleDropEvent(QDropEvent *e);
 

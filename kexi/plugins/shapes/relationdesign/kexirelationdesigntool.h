@@ -32,7 +32,7 @@ class KexiRelationDesignTool : public KoToolBase
     Q_OBJECT
 public:
 
-    KexiRelationDesignTool(KoCanvasBase *canvas);
+    explicit KexiRelationDesignTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -61,7 +61,7 @@ private:
     void updateCombo();
     QStringList queryList();
 
-private slots:
+private Q_SLOTS:
     void changeUrlPressed();
     void relationSelected(const QString &);
 };

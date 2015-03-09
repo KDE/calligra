@@ -2,7 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/ViewPlugin
 Comment=GUI functionality for Karbon
-Comment[bs]=GUI funkcionalnost za Karbon
+Comment[bs]=GUI funkcionalnosti za Karbon
 Comment[ca]=Funcionalitat d'IGU per al Karbon
 Comment[ca@valencia]=Funcionalitat d'IGU per al Karbon
 Comment[cs]=Funkcionalita GUI pro Karbon

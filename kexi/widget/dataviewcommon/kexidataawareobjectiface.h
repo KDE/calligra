@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -33,20 +33,17 @@
 
 #include <kdebug.h>
 #include <core/kexisearchandreplaceiface.h>
+#include <core/kexidataiteminterface.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <db/tableviewdata.h>
 
-class QObject;
+class QHeaderView;
 class QScrollBar;
 class KMenu;
-class KexiRecordMarker;
-class KexiTableViewHeader;
 class KexiRecordNavigatorIface;
-#include <core/kexidataiteminterface.h>
 
 namespace KexiDB
 {
-class RowEditBuffer;
 class RecordData;
 class TableViewData;
 }
@@ -55,7 +52,7 @@ class TableViewData;
 #define KEXI_DEFAULT_DATA_COLUMN_WIDTH 120
 
 //! \brief The KexiDataAwareObjectInterface is an interface for record-based data object.
-/** This interface is implemented by KexiTableView and KexiFormView
+/** This interface is implemented by KexiTableScrollArea and KexiFormView
  and used by KexiDataAwareView. If yu're implementing this interface,
  add KEXI_DATAAWAREOBJECTINTERFACE convenience macro just after Q_OBJECT.
 
@@ -108,16 +105,14 @@ public:
     }
 
     /*! \return number of rows in this view. */
-    int rows() const;
+    int rowCount() const;
 
     /*! \return number of visible columns in this view.
      By default returns dataColumns(), what is proper table view.
      In case of form view, there can be a number of duplicated columns defined
-     (data-aware widgets, see KexiFormScrollView::columns()),
-     so columns() can return greater number than dataColumns(). */
-    virtual int columns() const {
-        return dataColumns();
-    }
+     (data-aware widgets, see KexiFormScrollView::columnCount()),
+     so columnCount() can return greater number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! Helper function.
      \return number of columns of data. */
@@ -148,9 +143,10 @@ public:
         return m_isSortingEnabled;
     }
 
-    /*! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
-     this will do not work if sorting is disabled with setSortingEnabled() */
-    virtual void setSorting(int col, bool ascending = true);
+    /*! Sets sorting order on column @a column to @a order.
+     This method do not work if sorting is disabled using setSortingEnabled(false).
+     @a column may be -1, what means "no sorting". */
+    virtual void setSorting(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
     /*! Enables or disables sorting for this object
       This method is different that setSorting() because it prevents both user
@@ -159,17 +155,17 @@ public:
     */
     virtual void setSortingEnabled(bool set);
 
-    /*! \return sorted column number or -1 if no column is sorted within data.
+    /*! \return sorted column number or -1 if no column is sorted within data or there
+     is no data assigned at all.
      This does not mean that any sorting has been performed within GUI of this object,
      because the data could be changed in the meantime outside of this GUI object. */
-    int dataSortedColumn() const;
+    int dataSortColumn() const;
 
-    /*! \return 1 if ascending order for data sorting data is set, -1 for descending,
-     0 for no sorting.
-     This does not mean that any sorting has been performed within GUI of this objetct,
-     because the data could be changed in the meantime outside of this GUI object.
-    */
-    int dataSortingOrder() const;
+    /*! \return sort order for data. This information does not mean that any sorting
+     has been performed within GUI of this object, because the data could be changed
+     in the meantime outside of this GUI object.
+     dataSortColumn() should be checked first to see if sorting is enabled (and if there's data). */
+    Qt::SortOrder dataSortOrder() const;
 
     /*! Sorts all rows by column selected with setSorting().
      If there is currently row edited, it is accepted.
@@ -226,13 +222,13 @@ public:
         return m_isFilteringEnabled;
     }
 
-    /*! Added for convenience: configure this object
-     to behave more like spreadsheet (it's used for things like alter-table view).
+    /*! Added for convenience: if @a set is true, this object
+     will behave more like a spreadsheet (it's used for things like table designer view):
      - hides navigator
      - disables sorting, inserting and filtering
      - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
      - enables inserting empty row; see setEmptyRowInsertingEnabled() */
-    virtual void setSpreadSheetMode();
+    virtual void setSpreadSheetMode(bool set);
 
     /*! \return true id "spreadSheetMode" is enabled. It's false by default. */
     bool spreadSheetMode() const {
@@ -313,19 +309,37 @@ public:
     virtual void selectLastRow();
     virtual void addNewRecordRequested();
 
+
     /*! Clears current selection. Current row and column will be now unspecified:
      currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
     virtual void clearSelection();
 
+    //! Flags for setCursorPosition()
+    enum CursorPositionFlag {
+        NoCursorPositionFlags = 0,  //!< Default flag
+        ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
+                                    //!< differ from actual position.
+        DontEnsureCursorVisibleIfPositionUnchanged = 2 //!< Don't call ensureCellVisible()
+                                                       //!< when position is unchanged and
+                                                       //!< ForceSetCursorPosition is off.
+    };
+    Q_DECLARE_FLAGS(CursorPositionFlags, CursorPositionFlag)
+
     /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
      If forceSet is true, cursor position is updated even if \a row and \a col doesn't
      differ from actual position. */
-    virtual void setCursorPosition(int row, int col = -1, bool forceSet = false);
+    virtual void setCursorPosition(int row, int col = -1,
+                                   CursorPositionFlags flags = NoCursorPositionFlags);
 
     /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col (if not -1) must
-     be between 0 and rows() (or cols() accordingly). */
+     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
+     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int row, int col) = 0;
+
+    /*! Ensures that column \a col is visible.
+     If \a col is -1, current column number is used. \a col, if not -1, must be between
+     0 and columnCount()-1. */
+    virtual void ensureColumnVisible(int col) = 0;
 
     /*! Specifies, if this object automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit
@@ -385,9 +399,17 @@ public:
     //! \return true on success or false on failure (e.g. when editor does not exist or there is data validation error)
     virtual bool acceptEditor();
 
+    //! Flags for use in createEditor()
+    enum CreateEditorFlag {
+        ReplaceOldValue = 1,      //!< Remove old value replacing it with a new one
+        EnsureCellVisible = 2,    //!< Ensure the cell behind the editor is visible
+        DefaultCreateEditorFlags = EnsureCellVisible //!< Default flags.
+    };
+    Q_DECLARE_FLAGS(CreateEditorFlags, CreateEditorFlag)
+
     //! Creates editors and shows it, what usually means the beginning of a cell editing
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false) = 0;
+                              CreateEditorFlags flags = DefaultCreateEditorFlags) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
      or "+" navigator's button is clicked.
@@ -395,7 +417,8 @@ public:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString());
+    virtual void startEditCurrentCell(const QString& setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     /*! Deletes currently selected cell's contents, if allowed.
      In most cases delete is not accepted immediately but "record editing" mode is just started. */
@@ -436,9 +459,8 @@ public:
     /*! Redraws the current cell. To be implemented. */
     virtual void updateCurrentCell() = 0;
 
-    inline KexiRecordMarker* verticalHeader() const {
-        return m_verticalHeader;
-    }
+    //! @return height of the horizontal header, 0 by default.
+    virtual int horizontalHeaderHeight() const;
 
     //! signals
     virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
@@ -606,17 +628,13 @@ protected:
     virtual void clearColumnsInternal(bool repaint) = 0;
 
     /*! @internal for implementation
-     This should append another section within horizontal header or any sort of caption
-     for a field using provided names. \a width is a hint for new field's width. */
-    virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIcon& icon, int size) = 0;
-
-    /*! @internal for implementation
-     \return sorting order (within GUI): -1: descending, 1: ascending, 0: no sorting.
-     This does not mean that any sorting has been performed within GUI of this object,
+     \return sorting order (within GUI).
+     currentLocalSortColumn() should be also checked, and if it returns -1, no particular
+     sorting is set up.
+     Even this does not mean that any sorting has been performed within GUI of this object,
      because the data could be changed in the meantime outside of this GUI object.
-     @see dataSortingOrder()*/
-    virtual int currentLocalSortingOrder() const = 0;
+     @see dataSortOrder() currentLocalSortColumn() */
+    virtual Qt::SortOrder currentLocalSortOrder() const = 0;
 
     /*! @internal for implementation
      \return sorted column number for this widget or -1 if no column
@@ -624,15 +642,14 @@ protected:
      This does not mean that the same sorting is performed within data member
      which is used by this widget, because the data could be changed in the meantime
      outside of this GUI widget.
-     @see dataSortedColumn() */
+     @see dataSortColumn() currentLocalSortOrder() */
     virtual int currentLocalSortColumn() const = 0;
 
     /*! @internal for implementation
-     Shows sorting indicator order within GUI: -1: descending, 1: ascending,
-     0: no sorting. This should not perform any sorting within data member
-     which is used by this object.
-     col = -1 should mean "no sorting" as well. */
-    virtual void setLocalSortingOrder(int col, int order) = 0;
+     Shows sorting indicator order in the GUI for column @a column.
+     This should not perform any sorting in data assigned to this object.
+     @a column may be -1, what means "no sorting". */
+    virtual void setLocalSortOrder(int column, Qt::SortOrder order) = 0;
 
     /*! @internal Sets order for \a column: -1: descending, 1: ascending,
      0: invert order */
@@ -644,7 +661,7 @@ protected:
      is visible to avoid user confusion. For exaple, in KexiTableView
      implementation, current cell is centered (if possible)
      and updateContents() is called. */
-    virtual void updateGUIAfterSorting() = 0;
+    virtual void updateGUIAfterSorting(int previousRow) = 0;
 
     /*! Emitted in initActions() to force reload actions
      You should remove existing actions and add them again.
@@ -658,7 +675,7 @@ protected:
     virtual void itemSelected(KexiDB::RecordData *) = 0;
 
     /*! for implementation as a signal */
-    virtual void cellSelected(int col, int row) = 0;
+    virtual void cellSelected(int row, int col) = 0;
 
     /*! for implementation as a signal */
     virtual void sortedColumnChanged(int col) = 0;
@@ -700,10 +717,6 @@ protected:
     /*! Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize() = 0;
 
-    /*! Updates scrollbars of the widget.
-     QScrollView::updateScrollbars() will be usually called here. */
-    virtual void updateWidgetScrollBars() = 0;
-
     /*! @internal
      Updates row appearance after canceling row edit.
      Used by cancelRowEdit(). By default just calls updateRow(m_curRow).
@@ -731,6 +744,14 @@ protected:
     //! Handles TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint);
 
+    virtual void beginInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void endInsertItem(KexiDB::RecordData *newRecord, int pos);
+
+    virtual void beginRemoveItem(KexiDB::RecordData *record, int pos);
+
+    virtual void endRemoveItem(int pos);
+
     //! Like above, not db-aware version
     virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint);
 
@@ -739,9 +760,8 @@ protected:
     //! for sanity checks (return true if m_data is present; else: outputs warning)
     inline bool hasData() const;
 
-    /*! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition()
-     if cursor's position is really changed. */
-    virtual void selectCellInternal() {}
+    /*! Used by setCursorPosition() if cursor's position changed. */
+    virtual void selectCellInternal(int previousRow, int previousColumn);
 
     /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
      to repaint tow \a row and all visible below.
@@ -750,6 +770,9 @@ protected:
         Q_UNUSED(row);
     }
 
+    /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc. */
+    virtual QRect viewportGeometry() const = 0;
+
     //! Call this from the subclass. */
     virtual void focusOutEvent(QFocusEvent* e);
 
@@ -757,9 +780,6 @@ protected:
      Called when vscrollbar's value has been changed.
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
-
-    /*! @return height of horizontal header, if there is any. By default returns 0. */
-    virtual int horizontalHeaderHeight() const;
 
     /*! Changes 'row editing' flag, true if currently selected row is edited.
      * Can be reimplemented with calling superclass setRowEditing()
@@ -795,6 +815,15 @@ protected:
      Called whenever columns definition changes, i.e. in setData() and clearColumns().
      @see find() */
     void updateIndicesForVisibleValues();
+
+    //! @return horizontal header, 0 by default.
+    virtual QHeaderView* horizontalHeader() const;
+
+    //! @return vertical header, 0 by default.
+    virtual QHeaderView* verticalHeader() const;
+
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section) = 0;
 
     //! data structure displayed for this object
     KexiDB::TableViewData *m_data;
@@ -882,23 +911,12 @@ protected:
 
     DeletionPolicy m_deletionPolicy;
 
-//! @todo make generic interface out of KexiRecordMarker
-    KexiRecordMarker *m_verticalHeader;
-
-//! @todo make generic interface out of KexiTableViewHeader
-    KexiTableViewHeader *m_horizontalHeader;
-
     KexiDataItemInterface *m_editor;
 
     /*! Navigation panel, used if navigationPanelEnabled is true. */
     KexiRecordNavigatorIface *m_navPanel; //!< main navigation widget
 
     bool m_navPanelEnabled;
-
-    /*! true, if certical header shouldn't be increased in
-     KexiTableView::slotRowInserted() because it was already done
-     in KexiTableView::createEditor(). */
-    bool m_verticalHeaderAlreadyAdded;
 
     /*! Row number that over which user drags a mouse pointer.
      Used to indicate dropping possibility for that row.
@@ -966,7 +984,13 @@ private:
     bool m_rowEditing;
 
     bool m_lengthExceededMessageVisible;
+
+    //! true if acceptRowEdit() should be called in setCursorPosition() (true by default)
+    bool m_acceptRowEdit_in_setCursorPosition_enabled;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CreateEditorFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {

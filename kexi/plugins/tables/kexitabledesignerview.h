@@ -24,7 +24,7 @@
 #include <kexidb/alter.h>
 #include <core/kexitabledesignerinterface.h>
 
-#include <kexidatatable.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 
 namespace KexiDB
@@ -61,13 +61,13 @@ class Command;
  Saving changes made to table containing data requires use of the AlterTableHandler
  functionality.
 */
-class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInterface
+class KexiTableDesignerView : public KexiDataTableView, public KexiTableDesignerInterface
 {
     Q_OBJECT
 
 public:
     /*! Creates a new alter table dialog. */
-    KexiTableDesignerView(QWidget *parent);
+    explicit KexiTableDesignerView(QWidget *parent);
 
     virtual ~KexiTableDesignerView();
 
@@ -125,13 +125,13 @@ public:
      A case when debugTarget is not 0 is true for the alter table test suite. */
     virtual tristate simulateAlterTableExecution(QString *debugTarget);
 
-public slots:
+public Q_SLOTS:
     /*! Real execution of the Alter Table. For debugging of the real alter table.
      \return true on success, false on failure and cancelled if user has cancelled
      execution. */
     virtual tristate executeRealAlterTable();
 
-protected slots:
+protected Q_SLOTS:
     /*! Equivalent to updateActions(false). Called on row insert/delete
      in a KexiDataAwarePropertySet. */
     void updateActions();

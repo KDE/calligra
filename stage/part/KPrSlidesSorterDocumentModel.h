@@ -122,7 +122,7 @@ public:
      */
     bool moveSlides(const QList<KoPAPageBase *> &slides, KoPAPageBase *pageAfter);
 
-public slots:
+public Q_SLOTS:
     /** emit signals indicating a change in the model layout or items */
     void update();
 

@@ -143,12 +143,14 @@ Item {
             model: filesTransferModel
             delegate: Item {
                 width: downloadStatus.width
-                height: childrenRect.height;
+                height: is_finished ? 0 : childrenRect.height;
+                clip: true;
 
                 Column {
                     id:rec_main
-                    anchors.fill: parent
                     spacing: Constants.DefaultMargin;
+                    height: childrenRect.height;
+                    width: parent.width;
 
                     Image {
                         id: i_fstatus
@@ -366,6 +368,7 @@ Item {
                 var filePath = controllerMIT.dropboxFolder() + "/" + page.fileName;
                 var docClass = Settings.mimeTypeToDocumentClass(page.fileMimetype);
                 if(docClass !== DocumentListModel.UnknownType) {
+                    pageStack.pop();
                     openFile(filePath, controllerMIT.uploadMostRecentAction());
                 }
                 else {

@@ -177,7 +177,7 @@ public:
      This method is called by KexiMainWindow. */
     void createGUIClients();
 
-signals:
+Q_SIGNALS:
     void newObjectRequest(KexiPart::Info *info);
 
 protected:

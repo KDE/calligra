@@ -47,7 +47,7 @@ public:
       if the refcount reaches a value less than 1 the manager is freed */
     void decRefCount();
 
-protected slots:
+protected Q_SLOTS:
     /*! Used to destroy all drivers on QApplication quit, so even if there are
      DriverManager's static instances that are destroyed on program
      "static destruction", drivers are not kept after QApplication death.

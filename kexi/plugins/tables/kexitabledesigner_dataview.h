@@ -20,10 +20,10 @@
 #ifndef KEXITABLEDESIGNERDATAVIEW_H
 #define KEXITABLEDESIGNERDATAVIEW_H
 
-#include <kexidatatable.h>
+#include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 
-class KexiTableDesigner_DataView : public KexiDataTable
+class KexiTableDesigner_DataView : public KexiDataTableView
 {
     Q_OBJECT
 

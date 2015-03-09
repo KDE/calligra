@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,10 +25,8 @@
 #include <kexi_export.h>
 
 class QToolButton;
-class QIntValidator;
 class QAbstractScrollArea;
 class QScrollBar;
-class QLabel;
 class QEvent;
 class QPaintEvent;
 class KGuiItem;
@@ -62,10 +60,8 @@ public:
         ButtonNew
     };
 
-    KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView);
+    explicit KexiRecordNavigator(QAbstractScrollArea &parentView, QWidget *parent = 0);
     virtual ~KexiRecordNavigator();
-
-    void setParentView(QAbstractScrollArea *view);
 
     /*! Sets record navigator handler. This allows to react
      on actions performed within navigator and vice versa. */
@@ -108,7 +104,22 @@ public:
         static const KGuiItem& moveToNewRecord();
     };
 
-public slots:
+    /*! @return pixmap with a "pen" icon appropriate to indicate "editing" state for a row.
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap penPixmap(const QPalette &palette);
+
+    /*! @return pixmap with a "plus" icon appropriate to indicate "adding" state for a row
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap plusPixmap(const QPalette &palette);
+
+    /*! @return pixmap with a "pointer" icon appropriate to indicate "current" state for a row
+     Can be reused elsewhere for consistency.
+     Foreground color from @a palette palette is used to colorize the icon. */
+    static QPixmap pointerPixmap(const QPalette &palette);
+
+public Q_SLOTS:
     /*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
     void setInsertingEnabled(bool set);
 
@@ -130,15 +141,13 @@ public slots:
     /*! Sets current record number for this navigator,
      i.e. a value that will be displayed in the 'record number' text box.
      This can also affect button's enabling and disabling.
-     If @p r is 0, 'record number' text box's content is cleared. */
+     @p r is counted from 1; if it is 0 'record number' text box's content is cleared. */
     virtual void setCurrentRecordNumber(uint r);
 
     /*! Sets record count for this navigator.
      This can also affect button's enabling and disabling.
      By default count is 0. */
     virtual void setRecordCount(uint count);
-
-    virtual void setLeftMargin(int leftMargin);
 
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Record:" text. */
@@ -148,11 +157,7 @@ public slots:
     void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
     void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
 
-    /*! Inserts the record navigator aside of the horizontal scroll bar of the @a area scroll area.
-     Once the navigator is inserted, subsequent calls of this method will do nothing. */
-    void insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area);
-
-signals:
+Q_SIGNALS:
     void prevButtonClicked();
     void nextButtonClicked();
     void lastButtonClicked();
@@ -160,7 +165,7 @@ signals:
     void newButtonClicked();
     void recordNumberEntered(uint r);
 
-protected slots:
+protected Q_SLOTS:
     void slotPrevButtonClicked();
     void slotNextButtonClicked();
     void slotLastButtonClicked();
@@ -172,6 +177,8 @@ protected:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     virtual void wheelEvent(QWheelEvent *e);
+
+    virtual void resizeEvent(QResizeEvent *e);
 
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);

@@ -15,8 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef SKETCHDECLARATIVEVIEW_H
-#define SKETCHDECLARATIVEVIEW_H
+
+#ifndef TOUCHDECLARATIVEVIEW_H
+#define TOUCHDECLARATIVEVIEW_H
 
 #include <QDeclarativeView>
 #include <QPointer>
@@ -32,7 +33,7 @@ class TouchDeclarativeView : public QDeclarativeView
     Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
-    TouchDeclarativeView(QWidget *parent = 0);
+    explicit TouchDeclarativeView(QWidget *parent = 0);
     TouchDeclarativeView(const QUrl &url, QWidget *parent = 0);
     virtual ~TouchDeclarativeView();
 
@@ -42,7 +43,7 @@ public:
     bool drawCanvas() const;
     void setDrawCanvas(bool drawCanvas);
 
-signals:
+Q_SIGNALS:
     void canvasWidgetChanged();
     void drawCanvasChanged();
 

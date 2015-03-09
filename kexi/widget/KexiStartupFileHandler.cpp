@@ -277,8 +277,6 @@ void KexiStartupFileHandler::updateFilters()
 /*TODO
 QString KexiStartupFileDialog::selectedFile() const
 {
-//Qt4 setResult( QDialog::Accepted ); // selectedURL tests for it
-
 #ifdef Q_WS_WIN
 // QString path = selectedFile();
   //js @todo
@@ -324,7 +322,6 @@ QString KexiStartupFileDialog::selectedFile() const
           defaultExtension = filters.first().trimmed().mid(2); //first one
         path += (QString(".")+defaultExtension);
         kDebug() << "KexiStartupFileDialog::checkURL(): append extension, " << path;
-//Qt4    setSelection( path );
       }
     }
   }

@@ -35,7 +35,6 @@
 
 class KoStore;
 class KoOdfLoadingContext;
-class KoEmbeddedDocumentSaver;
 class KoStyleManager;
 class KoDocumentResourceManager;
 
@@ -46,7 +45,6 @@ class QDomDocument;
 class KUndo2Command;
 
 class KoXmlWriter;
-class KoGenStyles;
 class KoOasisSettings;
 
 namespace Calligra

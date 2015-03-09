@@ -25,10 +25,7 @@
 #include <kcategorydrawer.h>
 #include <kcategorizedview.h>
 
-class QModelIndex;
 class QAbstractItemModel;
-class QRect;
-class QMouseEvent;
 
 typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
 
@@ -43,7 +40,7 @@ public:
 class KEXIUTILS_EXPORT KexiCategorySingleSelectionModel : public QItemSelectionModel
 {
 public:
-    KexiCategorySingleSelectionModel(QAbstractItemModel* model);
+    explicit KexiCategorySingleSelectionModel(QAbstractItemModel* model);
     
     using QItemSelectionModel::select;
     

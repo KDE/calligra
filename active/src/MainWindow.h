@@ -42,7 +42,7 @@ private:
     KDeclarative kdeclarative;
     QString documentPath;
 
-private slots:
+private Q_SLOTS:
     void adjustWindowSize (QSize size);
     void checkForAndOpenDocument();
 

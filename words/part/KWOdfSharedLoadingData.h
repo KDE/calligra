@@ -35,6 +35,8 @@ class KWOdfSharedLoadingData : public KoTextSharedLoadingData
 public:
     explicit KWOdfSharedLoadingData(KWOdfLoader *loader);
 
+    void connectFlowingTextShapes();
+
 protected:
     virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -46,7 +48,8 @@ private:
     bool fillFrameProperties(KWFrame *frame, const KoXmlElement &style);
 
     KWOdfLoader *m_loader;
-    QHash<QString, KWFrame*> m_nextFrames; // store the 'chain-next-name' property to the frame it was found on
+    QHash<KoShape *, QString> m_nextShapeNames; // store the 'chain-next-name' 
+    QList<KoShape *> m_shapesToProcess;
 };
 
 #endif

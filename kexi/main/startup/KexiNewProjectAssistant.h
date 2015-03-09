@@ -47,7 +47,7 @@ public:
     QString selectedTemplate;
     QString selectedCategory;
     
-protected slots:
+protected Q_SLOTS:
     void slotItemClicked(const QModelIndex& index);
 private:
     KexiCategorizedView* m_templatesList;
@@ -62,7 +62,7 @@ public:
     virtual ~KexiProjectStorageTypeSelectionPage();
     
     bool fileTypeSelected() const { return m_fileTypeSelected; }
-private slots:
+private Q_SLOTS:
     void buttonClicked();
 
 private:
@@ -84,7 +84,7 @@ public:
     KexiDBTitlePage* contents;
     KexiStartupFileHandler *fileHandler;
     QPointer<KexiContextMessageWidget> messageWidget;
-private slots:    
+private Q_SLOTS:    
     void titleTextChanged(const QString & text);
     void askForOverwriting(const KexiContextMessage& message);
 private:
@@ -136,7 +136,7 @@ public:
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
 
-private slots:
+private Q_SLOTS:
     void slotTitleChanged(const QString &capt);
     void slotNameChanged(const QString &);
     void overwriteActionTriggered();
@@ -165,14 +165,14 @@ public:
     explicit KexiNewProjectAssistant(QWidget* parent = 0);
     ~KexiNewProjectAssistant();
 
-public slots:
+public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
-signals:
-    void createProject(KexiProjectData* data);
+Q_SIGNALS:
+    void createProject(const KexiProjectData &data);
 
 protected:
     virtual QWidget* calloutWidget() const;

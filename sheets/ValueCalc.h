@@ -41,7 +41,6 @@ namespace Calligra
 namespace Sheets
 {
 class Cell;
-class Doc;
 class ValueCalc;
 class ValueConverter;
 

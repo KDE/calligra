@@ -33,18 +33,11 @@
 #include <QMap>
 #include <QAction>
 
-class KoReportData;
-class ORPreRender;
-class ORODocument;
 class ReportSectionDetailGroup;
-class ReportViewPageSelect;
-class RecordNavigator;
-class ScriptAdaptor;
 class KoReportDesigner;
 
 class KToolBar;
 
-class QScrollArea;
 class QDomElement;
 class QActionGroup;
 
@@ -71,10 +64,10 @@ public:
 
     QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
 
-signals:
+Q_SIGNALS:
     void insertItem( const QString &name );
 
-public slots:
+public Q_SLOTS:
     void slotPropertySetChanged();
     void slotInsertAction();
     
@@ -101,7 +94,7 @@ public:
     void clear();
     void setData( KoReportDesigner *designer, ReportData *rd );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged(const QItemSelection &sel );
     void slotAddRow();
     void slotRemoveRows();

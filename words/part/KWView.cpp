@@ -37,7 +37,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWConfigureDialog.h"
-#include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
 #include "gemini/ViewModeSwitchEvent.h"
@@ -138,7 +137,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
-    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
+    connect(m_document->annotationLayoutManager(), SIGNAL(hasAnnotationsChanged(bool)), this, SLOT(hasNotes(bool)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -286,10 +285,6 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
-    action = new KAction(i18n("Select All Shapes"), this);
-    actionCollection()->addAction("edit_selectallframes", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
-
     action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
@@ -369,9 +364,10 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
     tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
     tAction->setToolTip(i18n("Set view in distraction free mode"));
-    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionCollection()->addAction("view_distractionfreemode", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
@@ -393,17 +389,14 @@ void KWView::setupActions()
     }
 #endif
 
-    // -------------- Frame menu
-    action  = new KAction(i18n("Create Linked Copy"), this);
-    actionCollection()->addAction("create_linked_frame", action);
-    action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
-    action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
-    connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
-
     // -------------- Settings menu
     action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    action->setMenuRole(QAction::PreferencesRole);
 
     // -------------- Page tool
     action = new KAction(i18n("Page Layout..."), this);
@@ -465,15 +458,9 @@ void KWView::setupActions()
     */
 }
 
-QList<KWFrame*> KWView::selectedFrames() const
+QList<KoShape *> KWView::selectedShapes() const
 {
-    QList<KWFrame*> frames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes()) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        frames.append(frame);
-    }
-    return frames;
+    return canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
 }
 
 KoShape* KWView::selectedShape() const
@@ -502,13 +489,20 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showNotes(bool doShow)
+void KWView::showNotes(bool show)
 {
-    m_canvas->setShowAnnotations(doShow);
+    m_canvas->setShowAnnotations(show);
+    m_canvas->updateSize();
+}
+
+void KWView::hasNotes(bool has)
+{
+    m_canvas->setShowAnnotations(has);
     m_canvas->updateSize();
 
     KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
-    action->setChecked(doShow);
+    action->setEnabled(has);
+    action->setChecked(has);
 }
 
 void KWView::showWordCountInStatusBar(bool doShow)
@@ -519,7 +513,7 @@ void KWView::showWordCountInStatusBar(bool doShow)
 
 void KWView::editFrameProperties()
 {
-    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
+    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedShapes(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -639,31 +633,6 @@ void KWView::showRulers(bool visible)
     m_gui->updateRulers();
 }
 
-void KWView::createLinkedFrame()
-{
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    QList<KoShape*> oldSelection = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (oldSelection.count() == 0)
-        return;
-    selection->deselectAll();
-
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Create Linked Copy"));
-    foreach (KoShape *shape, oldSelection) {
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-        Q_ASSERT(frame);
-        KWCopyShape *copy = new KWCopyShape(frame->shape(), m_document->pageManager());
-        copy->setPosition(frame->shape()->position());
-        QPointF offset(40, 40);
-        canvasBase()->clipToDocument(copy, offset);
-        copy->setPosition(frame->shape()->position() + offset);
-        copy->setZIndex(frame->shape()->zIndex() + 1);
-        KWFrame *newFrame = new KWFrame(copy, frame->frameSet());
-        new KWFrameCreateCommand(m_document, newFrame, cmd);
-        selection->select(copy);
-    }
-    m_document->addCommand(cmd);
-}
-
 void KWView::showStatusBar(bool toggled)
 {
     if (statusBar()) statusBar()->setVisible(toggled);
@@ -766,17 +735,6 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void KWView::editSelectAllFrames()
-{
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        foreach (KWFrame *frame, fs->frames()) {
-            if (frame->shape()->isVisible())
-                selection->select(frame->shape());
-        }
-    }
-}
-
 void KWView::editDeleteSelection()
 {
     canvasBase()->toolProxy()->deleteSelection();
@@ -821,23 +779,18 @@ void KWView::selectionChanged()
 {
     KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
 
-    m_actionFormatFrameSet->setEnabled(shape != 0);
-    // actions that need at least one shape selected
-    QAction *action = actionCollection()->action("create_linked_frame");
-    if (action) action->setEnabled(shape);
-    action = actionCollection()->action("anchor");
-    if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
-
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        QVariant variant;
-        variant.setValue<void*>(frame);
-        m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
-        variant.setValue<void*>(frame->frameSet());
-        m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
-        break;
+    if (shape) {
+        // Disallow shape properties action for auto-generated frames.
+        const KWFrame *frame = kwdocument()->frameOfShape(shape);
+        const bool enableAction = !frame || !Words::isAutoGenerated(KWFrameSet::from(frame->shape()));
+        m_actionFormatFrameSet->setEnabled(enableAction);
+        m_actionFormatFrameSet->setVisible(enableAction);
     }
+
+    // actions that need at least one shape selected
+    QAction *action = actionCollection()->action("anchor");
+    if (action)
+        action->setEnabled(shape && kwdocument()->mainFrameSet());
 }
 
 void KWView::setCurrentPage(const KWPage &currentPage)
@@ -863,7 +816,7 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
 
     // Since we move _up_ calculate the position where a frame would _start_ if
     // we were scrolled to the _first_ page
-    QPointF pos = currentFrameSet->frames().first()->shape()->absoluteTransformation(0).map(QPointF(0, 5));
+    QPointF pos = currentFrameSet->shapes().first()->absoluteTransformation(0).map(QPointF(0, 5));
 
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
 
@@ -873,10 +826,10 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
     foreach (KoShape* shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
-            foreach (KWFrame *frame, currentFrameSet->frames()) {
-                if (frame->shape() == shape) {
+            foreach (KoShape *s, currentFrameSet->shapes()) {
+                if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
-                     pos += QPointF(0.0, textShapeData->documentOffset());
+                    pos += QPointF(0.0, textShapeData->documentOffset());
 
                     int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
                     KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
@@ -898,7 +851,7 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
 
     // Since we move _down_ calculate the position where a frame would _end_ if
     // we were scrolled to the _lasst_ page
-    KoShape *shape = currentFrameSet->frames().last()->shape();
+    KoShape *shape = currentFrameSet->shapes().last();
     QPointF pos = shape->absoluteTransformation(0).map(QPointF(0, shape->size().height() - 5));
     pos.setY(pos.y() - m_document->pageManager()->page(qreal(pos.y())).rect().bottom());
 
@@ -910,8 +863,8 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
     foreach (KoShape* shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
         if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
-            foreach (KWFrame *frame, currentFrameSet->frames()) {
-                if (frame->shape() == shape) {
+            foreach (KoShape *s, currentFrameSet->shapes()) {
+                if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 

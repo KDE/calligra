@@ -323,8 +323,8 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
         KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -1211,6 +1211,10 @@ void KarbonView::initActions()
     d->configureAction  = new KAction(koIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", d->configureAction);
     connect(d->configureAction, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    d->configureAction->setMenuRole(QAction::PreferencesRole);
 
     KAction *actionPageLayout  = new KAction(i18n("Page &Layout..."), this);
     actionCollection()->addAction("page_layout", actionPageLayout);

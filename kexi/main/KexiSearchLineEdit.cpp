@@ -155,7 +155,7 @@ void KexiSearchLineEditCompleterPopupModel::addSearchableModel(KexiSearchableMod
 class KexiSearchLineEditCompleter : public KexiCompleter
 {
 public:
-    KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
+    explicit KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
         setCompletionRole(Qt::DisplayRole);
     }
 

@@ -65,10 +65,10 @@ public:
 
     void setStartValues();
 
-signals:
+Q_SIGNALS:
     void changed(bool enable);
     
-protected slots:
+protected Q_SLOTS:
     void slotChanged();
     void slotSelectionChanged();
     void slotRemoveBtnClicked();

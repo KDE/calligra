@@ -78,8 +78,8 @@ public:
 
     /*! \return number of visible columns in this view.
      There can be a number of duplicated columns defined,
-     so columns() can return greater or smaller number than dataColumns(). */
-    virtual int columns() const;
+     so columnCount() can return greater or smaller number than dataColumns(). */
+    virtual int columnCount() const;
 
     /*! \return column information for column number \a col.
      Reimplemented for KexiDataAwareObjectInterface:
@@ -117,7 +117,6 @@ public:
     void setOuterAreaIndicatorVisible(bool visible);
 
     void refreshContentsSizeLater();
-    void updateNavPanelGeometry();
 
     KexiRecordNavigator* recordNavigator() const;
 
@@ -142,13 +141,20 @@ public:
     //! temporary
     void updateScrollBars() {}
 
-public slots:
+    /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc.
+     Implementation for KexiDataAwareObjectInterface. */
+    virtual QRect viewportGeometry() const;
+
+public Q_SLOTS:
     //! Implementation for KexiDataAwareObjectInterface
     //! \return arbitraty value of 10.
     virtual int rowsPerPage() const;
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void ensureCellVisible(int row, int col);
+
+    //! Implementation for KexiDataAwareObjectInterface
+    virtual void ensureColumnVisible(int col);
 
     virtual void moveToRecordRequested(uint r);
     virtual void moveToLastRecordRequested();
@@ -164,7 +170,7 @@ public slots:
      \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelEditor();
 
-public slots:
+public Q_SLOTS:
     /*! Clear command history right after final resize. */
     void refreshContentsSize();
 
@@ -175,7 +181,7 @@ public slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-signals:
+Q_SIGNALS:
     void itemChanged(KexiDB::RecordData*, int row, int col);
     void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
     void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
@@ -184,7 +190,7 @@ signals:
     void dataRefreshed();
     void dataSet(KexiDB::TableViewData *data);
     void itemSelected(KexiDB::RecordData*);
-    void cellSelected(int col, int row);
+    void cellSelected(int row, int col);
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
     void rowEditTerminated(int row);
@@ -194,7 +200,7 @@ signals:
     //! Emitted when the main widget area is being interactively resized.
     bool resized();
 
-protected slots:
+protected Q_SLOTS:
     //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
@@ -240,27 +246,23 @@ protected:
     virtual void clearColumnsInternal(bool repaint);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIcon& icon, int width);
-
-    //! Implementation for KexiDataAwareObjectInterface
-    virtual int currentLocalSortingOrder() const;
+    virtual Qt::SortOrder currentLocalSortOrder() const;
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual int currentLocalSortColumn() const;
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void setLocalSortingOrder(int col, int order);
+    virtual void setLocalSortOrder(int column, Qt::SortOrder order);
 
     //! Implementation for KexiDataAwareObjectInterface
     void sortColumnInternal(int col, int order = 0);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void updateGUIAfterSorting();
+    virtual void updateGUIAfterSorting(int previousRow);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void createEditor(int row, int col, const QString& addText = QString(),
-                              bool removeOld = false);
+                              CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);
@@ -288,17 +290,12 @@ protected:
      Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize();
 
-    /*! Implementation for KexiDataAwareObjectInterface
-     Updates scrollbars of the widget.
-     QScrollView::updateScrollbars() will be usually called here. */
-    virtual void updateWidgetScrollBars();
-
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Reimplemented from KexiFormDataProvider.
      \return information whether we're currently at new record or not.
-     This can be used e.g. by data-aware widgets to determine if "(autonumber)"
+     This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
 
@@ -311,7 +308,7 @@ protected:
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()
     //! if cursor's position is really changed.
-    inline virtual void selectCellInternal();
+    virtual void selectCellInternal(int previousRow, int previousColumn);
 
     /*! Reimplementation: used to refresh "editing indicator" visibility. */
     virtual void initDataContents();
@@ -338,6 +335,9 @@ protected:
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
 
     const QTimer *delayedResizeTimer() const;
+
+    //! Update section of vertical header
+    virtual void updateVerticalHeaderSection(int section);
 
 private:
     class Private;

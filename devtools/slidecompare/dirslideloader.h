@@ -101,7 +101,7 @@ Q_OBJECT
         }
         return size;
     }
-private slots:
+private Q_SLOTS:
     void slotDirectoryChanged(const QString &) {
         if (!fileSystemDelay.isActive()) {
             fileSystemDelay.setSingleShot(true);

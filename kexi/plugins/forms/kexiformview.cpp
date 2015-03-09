@@ -667,10 +667,10 @@ void KexiFormView::initDataSource()
             /*! @todo add expression support */
             QString fieldName((*it).toLower());
             //remove "tablename." if it was prepended
-            if (tableSchema && fieldName.startsWith(tableSchema->name().toLower() + "."))
+            if (tableSchema && fieldName.startsWith(tableSchema->name() + QLatin1Char('.'), Qt::CaseInsensitive))
                 fieldName.remove(0, tableSchema->name().length() + 1);
             //remove "queryname." if it was prepended
-            if (!tableSchema && fieldName.startsWith(d->query->name().toLower() + "."))
+            if (!tableSchema && fieldName.startsWith(d->query->name() + QLatin1Char('.'), Qt::CaseInsensitive))
                 fieldName.remove(0, d->query->name().length() + 1);
             KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
             if (!f) {
@@ -999,7 +999,6 @@ KexiFormView::resizeEvent(QResizeEvent *e)
         d->scrollView->refreshContentsSizeLater();
     }
     KexiView::resizeEvent(e);
-    d->scrollView->updateNavPanelGeometry();
     if (d->delayedFormContentsResizeOnShow > 0) {
         d->delayedFormContentsResizeOnShow--;
         d->dbform->resize(e->size() - QSize(30, 30));

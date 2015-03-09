@@ -44,7 +44,7 @@ public:
     
     QString format() const;
 
-public slots:
+public Q_SLOTS:
     void setLink(const QString& link);
     
     void setLinkText(const QString& linkText);

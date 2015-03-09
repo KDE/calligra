@@ -42,7 +42,6 @@ class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
-class KoFindStyle;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
@@ -125,10 +124,10 @@ public:
     void viewMouseMoveEvent(QMouseEvent *e);
 
 
-signals:
+Q_SIGNALS:
     void shownPagesChanged();
 
-public slots:
+public Q_SLOTS:
     void offsetInDocumentMoved(int yOffset);
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -159,11 +158,11 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
+    /// loops over the selected shapes and returns the top level shapes.
+    QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
-private slots:
+private Q_SLOTS:
     /// create a template from document
     void createTemplate();
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -182,12 +181,8 @@ private slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// shows or hides the rulers
     void showRulers(bool visible);
-    /// creates a copy of the current frame
-    void createLinkedFrame();
     /// shows or hides the status bar
     void showStatusBar(bool);
-    /// selects all frames
-    void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
@@ -210,8 +205,10 @@ private slots:
     void pasteRequested();
     /// Call when the user want to show/hide the WordsCount in the statusbar
     void showWordCountInStatusBar(bool doShow);
-    /// Show annotations ("notes" in the UI) on the canvas
-    void showNotes(bool doShow);
+    /// Show annotations ("notes" in the UI) on the canvas - this is the user view menu visibility change
+    void showNotes(bool show);
+    /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
+    void hasNotes(bool has);
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.

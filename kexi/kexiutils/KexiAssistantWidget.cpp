@@ -31,7 +31,7 @@
 class KexiAssistantWidget::Private
 {
 public:
-    Private(KexiAssistantWidget *qq)
+    explicit Private(KexiAssistantWidget *qq)
         : q(qq)
     {
     }

@@ -22,11 +22,11 @@
 
 #include <kpagedialog.h>
 
+#include <kexi_global.h>
 #include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
 
 class KexiProjectData;
-class KexiProjectSet;
 class KexiDBConnectionSet;
 class ConnectionDataLVItem;
 class QEvent;
@@ -82,10 +82,6 @@ public:
 
     ~KexiStartupDialog();
 
-    /*! \return true if startup dialog should be shown (info is taken from kexi config)
-    */
-    static bool shouldBeShown();
-
     /*! Executes dialog.
     \return one of Result values. Use this after dialog is closed. */
     int result() const;
@@ -106,7 +102,7 @@ public:
 #ifdef KEXI_PROJECT_TEMPLATES
     /*! \return "autoopen" objects defined for selected template.
     Only makes sense if template was used. */
-    const KexiProjectData::AutoOpenObjects& autoopenObjects() const;
+    KexiProjectData::AutoOpenObjects autoopenObjects() const;
 #endif
 
     /*! \return a pointer to selected Kexi connection data.
@@ -115,11 +111,11 @@ public:
     */
     KexiDB::ConnectionData* selectedExistingConnection() const;
 
-public slots:
+public Q_SLOTS:
     virtual void done(int r);
     virtual void reject();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
 
     //! slot activated when one of the top-level tabs is shown

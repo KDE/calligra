@@ -43,7 +43,7 @@ class PasteInsertDialog : public KDialog
 public:
     PasteInsertDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 private:
     Selection* m_selection;

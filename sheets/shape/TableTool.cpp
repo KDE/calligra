@@ -237,7 +237,7 @@ void TableTool::sheetsBtnClicked()
     delete dialog;
 }
 
-QList<QWidget*> TableTool::createOptionWidgets()
+QList<QPointer<QWidget> > TableTool::createOptionWidgets()
 {
     QWidget* optionWidget = new QWidget();
     optionWidget->setObjectName(QLatin1String("TableTool/Table Options"));
@@ -306,7 +306,7 @@ QList<QWidget*> TableTool::createOptionWidgets()
     tb->addAction(action("import"));
     tb->addAction(action("export"));
 
-    QList<QWidget*> ow = CellToolBase::createOptionWidgets();
+    QList<QPointer<QWidget> > ow = CellToolBase::createOptionWidgets();
     optionWidget->setWindowTitle(i18n("Table Options"));
     ow.append(optionWidget);
     return ow;

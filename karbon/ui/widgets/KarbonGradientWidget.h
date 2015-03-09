@@ -65,7 +65,7 @@ public:
      */
     QGradientStops stops() const;
 
-signals:
+Q_SIGNALS:
     /// Is emitted as soon as a color stop was changed/added/removed
     void changed();
 

@@ -51,12 +51,12 @@ public:
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;
 
-signals:
+Q_SIGNALS:
     /*! Emitted when a field is double clicked */
     void fieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
                             const QString& fieldName);
 
-protected slots:
+protected Q_SLOTS:
     void slotDoubleClicked(const QModelIndex &idx);
 
 protected:

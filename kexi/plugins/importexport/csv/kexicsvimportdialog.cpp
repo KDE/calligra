@@ -699,7 +699,7 @@ void KexiCSVImportDialog::createTableNamePage()
 
     QSplitter *page2 = new QSplitter(m_tableNameWidget);
     QWidget *tableDetailsWidget = new QWidget(page2);
-    m_tablesList = new KexiProjectNavigator(page2, KexiProjectNavigator::NoFeatures);
+    m_tablesList = new KexiProjectNavigator(page2, KexiProjectNavigator::Borders);
     QString errorString;
     m_tablesList->setProject(KexiMainWindowIface::global()->project(), "org.kexi-project.table", &errorString, false);
     connect (m_tablesList, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)),
@@ -1760,12 +1760,14 @@ void KexiCSVImportDialog::import()
         int msgboxResult;
         if (   m_primaryKeyColumn == -1
            && KMessageBox::No != (msgboxResult = KMessageBox::questionYesNoCancel(this,
-                  i18n("No Primary Key (autonumber) has been defined.\n"
-                       "Should it be automatically defined on import (recommended)?\n\n"
-                       "Note: An imported table without a Primary Key may not be editable (depending on database type)."),
+                  i18nc("@info",
+                        "<para>No primary key (autonumber) has been defined.</para>"
+                        "<para>Should it be automatically defined on import (recommended)?</para>"
+                        "<para><note>An imported table without a primary key may not be "
+                        "editable (depending on database type).</note></para>"),
                    QString(),
-                   KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), koIconName("key")),
-                   KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
+                   KGuiItem(i18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
+                   KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()))))
         {
             if (msgboxResult == KMessageBox::Cancel) {
                 raiseErrorInAccept(project, m_partItemForSavedTable);

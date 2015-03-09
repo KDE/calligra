@@ -63,16 +63,16 @@ public:
     */
     void showCompletion(const QStringList &choices);
 
-public slots:
+public Q_SLOTS:
     /**
     * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
     */
     void doneCompletion();
 
-private slots:
+private Q_SLOTS:
     void itemSelected(QListWidgetItem* item = 0);
 
-signals:
+Q_SIGNALS:
     /**
     * Emitted, if the user selects a function name from the list.
     */

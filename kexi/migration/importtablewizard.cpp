@@ -30,6 +30,7 @@
 #include <QListWidget>
 #include <QStringList>
 #include <QProgressBar>
+#include <QCheckBox>
 
 #include <kpushbutton.h>
 #include <kdebug.h>
@@ -54,13 +55,16 @@
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiFileWidget.h>
+#include <widget/KexiNameWidget.h>
+
 
 using namespace KexiMigration;
 
 #define ROWS_FOR_PREVIEW 3
 
-ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, Qt::WFlags flags )
-    : KAssistantDialog ( parent, flags )
+ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, QMap<QString, QString>* args, Qt::WFlags flags)
+    : KAssistantDialog ( parent, flags ),
+      m_args(args)
 {
     m_currentDatabase = curDB;
     m_migrateDriver = 0;
@@ -98,30 +102,38 @@ void ImportTableWizard::back() {
 
 void ImportTableWizard::next() {
     if (currentPage() == m_srcConnPageItem) {
-      if (fileBasedSrcSelected()) {
-          setAppropriate(m_srcDBPageItem, false);
-      } else {  
-          setAppropriate(m_srcDBPageItem, true);
-      }
+        if (fileBasedSrcSelected()) {
+            setAppropriate(m_srcDBPageItem, false);
+        } else {
+            setAppropriate(m_srcDBPageItem, true);
+        }
     } else if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
             return;
         }
     } else if (currentPage() == m_alterTablePageItem) {
-      if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
+        if (m_alterSchemaWidget->nameExists(m_alterSchemaWidget->nameWidget()->nameText())) {
             KMessageBox::information(this,
-                i18n("<resource>%1</resource> name is already used by an existing object. "
-                     "Enter different table name to continue.", m_alterSchemaWidget->newSchema()->name()),
-                i18n("Name Already Used"));
+                                     i18n("<resource>%1</resource> name is already used by an existing table. "
+                                          "Enter different table name to continue.", m_alterSchemaWidget->nameWidget()->nameText()),
+                                     i18n("Name Already Used"));
             return;
-      }
-    }  
-        
+        }
+    }
+
     KAssistantDialog::next();
 }
 
 void ImportTableWizard::accept() {
+    if (m_args) {
+        if (m_finishCheckBox->isChecked()) {
+            m_args->insert("destinationTableName",m_alterSchemaWidget->nameWidget()->nameText());
+        } else {
+            m_args->remove("destinationTableName");
+        }
+    }
+
     QDialog::accept();
 }
 
@@ -277,6 +289,10 @@ void ImportTableWizard::setupFinishPage()
     m_finishLbl->setWordWrap(true);
 
     vbox->addWidget(m_finishLbl);
+    m_finishCheckBox = new QCheckBox(i18n("Open imported table"),
+                                     m_finishPageWidget);
+    vbox->addSpacing(KDialog::spacingHint());
+    vbox->addWidget(m_finishCheckBox);
     vbox->addStretch(1);
 
     m_finishPageItem = new KPageWidgetItem(m_finishPageWidget, i18n("Success"));
@@ -293,9 +309,11 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
     } else if (curPage == m_srcDBPageItem) {
         arriveSrcDBPage();
     } else if (curPage == m_tablesPageItem) {
-        arriveTableSelectPage();
+        arriveTableSelectPage(prevPage);
     } else if (curPage == m_alterTablePageItem) {
-        arriveAlterTablePage();
+        if (prevPage == m_tablesPageItem) {
+            arriveAlterTablePage();
+        }
     } else if (curPage == m_importingPageItem) {
         arriveImportingPage();
     } else if (curPage == m_finishPageItem) {
@@ -329,34 +347,44 @@ void ImportTableWizard::arriveSrcDBPage()
     }
 }
 
-void ImportTableWizard::arriveTableSelectPage()
+void ImportTableWizard::arriveTableSelectPage(KPageWidgetItem *prevPage)
 {
-    Kexi::ObjectStatus result;
-    KexiUtils::WaitCursor wait;
-    m_tableListWidget->clear();
-    m_migrateDriver = prepareImport(result);
-
-    if (m_migrateDriver) {
-        if (!m_migrateDriver->connectSource()) {
-            kWarning() << "unable to connect to database";
-            return;
-        }
-        
-        QStringList tableNames;
-        if (m_migrateDriver->tableNames(tableNames)) {
-            m_tableListWidget->addItems(tableNames);
-        }
-        if (m_tableListWidget->item(0)) {
-            m_tableListWidget->item(0)->setSelected(true);
+    if (prevPage == m_alterTablePageItem) {
+        if (m_tableListWidget->count() == 1) { //we was skiping it before
+            back();
         }
     } else {
-        kWarning() << "No driver for selected source";
-        QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
-        QString errDescription = result.description.isEmpty() ? errMessage : result.description;
-        KMessageBox::error(this, errMessage, errDescription);
-        setValid(m_tablesPageItem, false);
+        Kexi::ObjectStatus result;
+        KexiUtils::WaitCursor wait;
+        m_tableListWidget->clear();
+        m_migrateDriver = prepareImport(result);
+
+        if (m_migrateDriver) {
+            if (!m_migrateDriver->connectSource()) {
+                kWarning() << "unable to connect to database";
+                return;
+            }
+
+            QStringList tableNames;
+            if (m_migrateDriver->tableNames(tableNames)) {
+                m_tableListWidget->addItems(tableNames);
+            }
+            if (m_tableListWidget->item(0)) {
+                m_tableListWidget->item(0)->setSelected(true);
+                if (m_tableListWidget->count() == 1) {
+                    KexiUtils::removeWaitCursor();
+                    next();
+                }
+            }
+        } else {
+            kWarning() << "No driver for selected source";
+            QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+            QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+            KMessageBox::error(this, errMessage, errDescription);
+            setValid(m_tablesPageItem, false);
+        }
+        KexiUtils::removeWaitCursor();
     }
-    KexiUtils::removeWaitCursor();
 }
 
 void ImportTableWizard::arriveAlterTablePage()
@@ -364,7 +392,6 @@ void ImportTableWizard::arriveAlterTablePage()
 //! @todo handle errors
     if (m_tableListWidget->selectedItems().isEmpty())
         return;
-
 //! @todo (js) support multiple tables?
 #if 0
     foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
@@ -381,14 +408,30 @@ void ImportTableWizard::arriveAlterTablePage()
     }
 
     kDebug() << ts->fieldCount();
-    
+
     setValid(m_alterTablePageItem, ts->fieldCount() > 0);
+    if (isValid(m_alterTablePageItem)) {
+       connect(m_alterSchemaWidget->nameWidget(), SIGNAL(textChanged()), this, SLOT(slotNameChanged()), Qt::UniqueConnection);
+    }
     
-    m_alterSchemaWidget->setTableSchema(ts);
+    QString baseName;
+    if (fileBasedSrcSelected()) {
+        baseName = QFileInfo(m_srcConnSel->selectedFileName()).baseName();
+    } else {
+        baseName = m_srcDBName->selectedProjectData()->databaseName();
+    }
+
+    QString suggestedCaption = i18nc("<basename-filename> <tablename>", "%1 %2", baseName, m_importTableName);
+    m_alterSchemaWidget->setTableSchema(ts, suggestedCaption);
 
     if (!m_migrateDriver->readFromTable(m_importTableName))
         return;
-    m_migrateDriver->moveFirst();
+
+    if (!m_migrateDriver->moveFirst()) {
+        back();
+        KMessageBox::information(this,i18n("No data has been found in table <resource>%1</resource>. Select different table or cancel importing.",
+                                           m_importTableName));
+    }
     QList<KexiDB::RecordData> data;
     for (uint i = 0; i < ROWS_FOR_PREVIEW; ++i) {
         KexiDB::RecordData row;
@@ -397,7 +440,10 @@ void ImportTableWizard::arriveAlterTablePage()
             row[j] = m_migrateDriver->value(j);
         }
         data.append(row);
-        m_migrateDriver->moveNext();
+        if (!m_migrateDriver->moveNext()) { // rowCount < 3 (3 is default)
+            m_alterSchemaWidget->model()->setRowCount(i+1);
+            break;
+        }
     }
     m_alterSchemaWidget->setData(data);
 }
@@ -417,13 +463,10 @@ void ImportTableWizard::arriveImportingPage()
 
     QString txt;
 
-    txt = i18n("<para>All required information has now "
-               "been gathered. Click <interface>Next</interface> button to start importing.</para>"
-               "<para>Depending on size of the tables this may take some time.</para>"
-               "<para>You have chosen to import the following table:</para>");
+    txt = i18nc("@info Table import wizard, final message", "<para>All required information has now been gathered. "
+                   "Click <interface>Next</interface> button to start importing table <resource>%1</resource>.</para>"
+                   "<note>Depending on size of the table this may take some time.</note>", m_alterSchemaWidget->nameWidget()->nameText());
 
-    txt += m_importTableName;
-    
     m_lblImportingTxt->setText(txt);
     
     //temp. hack for MS Access driver only
@@ -451,6 +494,11 @@ void ImportTableWizard::arriveImportingPage()
 
 void ImportTableWizard::arriveFinishPage()
 {
+    m_finishLbl->setText(i18n("Table <resource>%1</resource> has been imported.",
+               m_alterSchemaWidget->nameWidget()->nameText()));
+
+    enableButton(KDialog::User3, false);
+    enableButton(KDialog::Cancel, false);
 }
 
 bool ImportTableWizard::fileBasedSrcSelected() const
@@ -568,7 +616,7 @@ bool ImportTableWizard::doImport()
         msg.showErrorMessage(i18n("No table was selected to import."));
         return false;
     }
-    
+
     KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), m_alterSchemaWidget->newSchema()->name());
     if (!partItemForSavedTable) {
         msg.showErrorMessage(project);
@@ -586,6 +634,11 @@ bool ImportTableWizard::doImport()
     QApplication::setOverrideCursor(Qt::BusyCursor);
     QList<QVariant> row;
     m_migrateDriver->moveFirst();
+    KexiDB::TransactionGuard tg(*m_currentDatabase);
+    if (m_currentDatabase->error()) {
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
     do  {
         for (unsigned int i = 0; i < m_alterSchemaWidget->newSchema()->fieldCount(); ++i) {
             row.append(m_migrateDriver->value(i));
@@ -593,8 +646,12 @@ bool ImportTableWizard::doImport()
         m_currentDatabase->insertRecord(*(m_alterSchemaWidget->newSchema()), row);
         row.clear();
     } while (m_migrateDriver->moveNext());
+    if (!tg.commit()) {
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
     QApplication::restoreOverrideCursor();
-    
+
     //Done so save part and update gui
     partItemForSavedTable->setIdentifier(m_alterSchemaWidget->newSchema()->id());
     project->addStoredItem(part->info(), partItemForSavedTable);
@@ -610,4 +667,9 @@ void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
 void ImportTableWizard::slotTableListWidgetSelectionChanged()
 {
     setValid(m_tablesPageItem, !m_tableListWidget->selectedItems().isEmpty());
+}
+
+void ImportTableWizard::slotNameChanged()
+{
+    setValid(m_alterTablePageItem, !m_alterSchemaWidget->nameWidget()->captionText().isEmpty());
 }

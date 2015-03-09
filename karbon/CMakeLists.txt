@@ -1,14 +1,14 @@
 project(karbon)
 
 #Set the correct compiler options
-IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
    # 32 bit
-   MESSAGE(STATUS "Karbon detected that you use a 32 bit processor.")
-ELSE(CMAKE_SIZEOF_VOID_P EQUAL 4)
+   message(STATUS "Karbon detected that you use a 32 bit processor.")
+else()
    # 64 bit (well, anything else than 32 bit, but someone use something else than 32 or 64 bit ?)
    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-   MESSAGE(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
-ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+   message(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
+endif()
 
 include_directories(
     ${QT_INCLUDES}
@@ -43,7 +43,7 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 if(NOT RELEASE_BUILD)
     add_definitions(-DMAINTANER_WANTED_SPLASH)
-endif(NOT RELEASE_BUILD)
+endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
@@ -54,7 +54,7 @@ if (Q_WS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_karbon karbonui)
 

@@ -19,7 +19,7 @@ add_subdirectory( functions )
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
 ########### next target ###############
-SET (chart_DIR_SRCS
+set (chart_DIR_SRCS
     chart/ChartDatabaseSelectorFactory.cpp
     chart/ChartDatabaseSelector.cpp
     chart/ChartDialog.cpp
@@ -29,7 +29,7 @@ kde4_add_ui_files(chart_DIR_SRCS
     chart/ChartDatabaseSelector.ui
     )
 
-SET (commands_DIR_SRCS
+set (commands_DIR_SRCS
     commands/AbstractRegionCommand.cpp
     commands/ApplyFilterCommand.cpp
     commands/AutoFillCommand.cpp
@@ -57,7 +57,7 @@ SET (commands_DIR_SRCS
     commands/ValidityCommand.cpp
     )
 
-SET (database_DIR_SRCS
+set (database_DIR_SRCS
     #database/Database.cpp
     #database/DatabaseManager.cpp
     database/DatabaseSource.cpp
@@ -68,7 +68,7 @@ SET (database_DIR_SRCS
     database/FilterPopup.cpp
     )
 
-SET (dialogs_DIR_SRCS
+set (dialogs_DIR_SRCS
     dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
@@ -125,19 +125,19 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 
     )
 
-SET (functions_DIR_SRCS
+set (functions_DIR_SRCS
     functions/helper.cpp
     )
 
 if(QT_QTDBUS_FOUND)
-SET (interfaces_DIR_SRCS
+set (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
     interfaces/ViewAdaptor.cpp
     )
 endif()
 
-SET (part_DIR_SRCS
+set (part_DIR_SRCS
     part/CanvasBase.cpp
     part/Canvas.cpp
     part/CanvasItem.cpp
@@ -171,7 +171,7 @@ kde4_add_ui_files(part_DIR_SRCS
     part/dialogs/SheetSelectWidget.ui
 )
 
-SET (ui_DIR_SRCS
+set (ui_DIR_SRCS
     ui/AbstractSelectionStrategy.cpp
     ui/ActionOptionWidget.cpp
     ui/AutoFillStrategy.cpp
@@ -198,7 +198,7 @@ SET (ui_DIR_SRCS
     ui/SheetView.cpp
 )
 
-SET (calligrasheetscommon_LIB_SRCS
+set (calligrasheetscommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
@@ -318,7 +318,7 @@ set_target_properties(calligrasheetscommon PROPERTIES
 install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
 
-SET (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
+set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
 kde4_add_plugin(calligrasheetspart ${calligrasheetspart_PART_SRCS})
 
@@ -401,13 +401,13 @@ install( FILES
 
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
-endif (SHOULD_BUILD_PART_SHEETS)
+endif ()
 
 ########### APP ###############
 
 if (SHOULD_BUILD_APP_SHEETS)
 
-SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
+set (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
 kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
 
@@ -417,7 +417,7 @@ if (Q_WS_MAC)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.sheets")
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligrasheets komain )
 
@@ -426,7 +426,7 @@ install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES sheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
-endif (SHOULD_BUILD_APP_SHEETS)
+endif ()
