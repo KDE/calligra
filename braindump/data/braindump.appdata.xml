@@ -25,6 +25,7 @@
   <name xml:lang="tr">Braindump</name>
   <name xml:lang="uk">Braindump</name>
   <name xml:lang="x-test">xxBraindumpxx</name>
+  <name xml:lang="zh-CN">脑图</name>
   <description>
     <p>
       Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
@@ -47,6 +48,7 @@
     <p xml:lang="tr">Braindump, aklınızdaki içerikleri (fikirler, çizimler, resimler, metinler...) bilgisayarına dökmenize ve organize etmenize yardımcı olan bir araçtır. Metin, resim, çizelge, çizimler, vb. ekleyebileceğiniz sonsuz tuval olan beyaz tahtalar oluşturul düzenlemenize izin vererek çalışır.</p>
     <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>
     <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
+    <p xml:lang="zh-CN">脑图是一个在计算机中记录和组织大脑内容的工具。可以创建和编辑白板，有无限的大小，可以添加文字、图片、图表和绘画等。</p>
   </description>
   <url type="homepage">http://www.calligra.org/braindump/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=braindump</url>
