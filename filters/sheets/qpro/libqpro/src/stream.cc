@@ -51,7 +51,7 @@ QpIStream::~QpIStream()
 #else
 #include <string>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 // For IRIX
 namespace std {}
@@ -79,8 +79,7 @@ QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
         , cOffset(0L)
         , cStreamBuf(0)
 {
-    cStreamBuf = new std::strstreambuf(pBuffer, pLen);
-
+    cStreamBuf = new std::stringbuf(string(reinterpret_cast<char *>(pBuffer)), ios::in);
     cIn = new istream(cStreamBuf);
 }
 
