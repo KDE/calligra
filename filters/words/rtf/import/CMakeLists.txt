@@ -1,7 +1,7 @@
-add_subdirectory(rtf-qt)
+add_subdirectory(3rdparty)
 
 include_directories(
-    ./rtf-qt/src/
+    3rdparty/rtf-qt/src/
 )
 
 set(rtf2odt_PART_SRCS rtfimport.cpp )

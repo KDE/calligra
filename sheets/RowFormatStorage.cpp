@@ -20,7 +20,7 @@
 #include "RowFormatStorage.h"
 
 #include "calligra_sheets_limits.h"
-#include "mdds/flat_segment_tree.hpp"
+#include "3rdparty/mdds/flat_segment_tree.hpp"
 
 #include "Map.h"
 #include "RowColumnFormat.h"

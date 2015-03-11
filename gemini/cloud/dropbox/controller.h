@@ -22,11 +22,11 @@
 
 #include <QObject>
 
-#include "libs/networkcontroller.h"
-#include "libs/listmodel.h"
-#include "libs/folderitem.h"
-#include "libs/filetransferitem.h"
-#include "libs/options.h"
+#include "3rdparty/networkcontroller.h"
+#include "3rdparty/listmodel.h"
+#include "3rdparty/folderitem.h"
+#include "3rdparty/filetransferitem.h"
+#include "3rdparty/options.h"
 
 class QAction;
 
