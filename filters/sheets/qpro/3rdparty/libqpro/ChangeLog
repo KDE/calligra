@@ -1,0 +1,119 @@
+2001-04-30  gshort  <gshort@playroom.ssl.co.uk>
+
+	* /cvsroot/libqpro/libqpro/libqpro.lsm: Added QP_DEBUG macro
+
+2001-04-22  gshort  <gshort@playroom.ssl.co.uk>
+
+	* /cvsroot/libqpro/libqpro/Makefile.in: Update version number to 0.2
+
+	* /cvsroot/libqpro/libqpro/src/record.cc, /cvsroot/libqpro/libqpro/src/record_factory.cc, /cvsroot/libqpro/libqpro/src/stream.cc, /cvsroot/libqpro/libqpro/src/tablenames.cc:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/src/record.cc, /cvsroot/libqpro/libqpro/src/record_factory.cc, /cvsroot/libqpro/libqpro/src/stream.cc, /cvsroot/libqpro/libqpro/src/tablenames.cc:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/src/formula.cc:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/src/formula.cc: New file.
+
+	* /cvsroot/libqpro/libqpro/src/Makefile.am, /cvsroot/libqpro/libqpro/src/Makefile.in:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/src/Makefile.am, /cvsroot/libqpro/libqpro/src/Makefile.in:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/qpro/stream.h, /cvsroot/libqpro/libqpro/qpro/tablenames.h:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/qpro/stream.h, /cvsroot/libqpro/libqpro/qpro/tablenames.h:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/qpro/record_factory.h, /cvsroot/libqpro/libqpro/qpro/record.h:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/qpro/record_factory.h, /cvsroot/libqpro/libqpro/qpro/record.h:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/qpro/formula.h:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/qpro/formula.h: New file.
+
+	* /cvsroot/libqpro/libqpro/qpro/Makefile.am, /cvsroot/libqpro/libqpro/qpro/Makefile.in:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/qpro/Makefile.am, /cvsroot/libqpro/libqpro/qpro/Makefile.in:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/config/missing, /cvsroot/libqpro/libqpro/config/mkinstalldirs:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/missing, /cvsroot/libqpro/libqpro/config/mkinstalldirs:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/config/ltmain.sh:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/ltmain.sh: New file.
+
+	* /cvsroot/libqpro/libqpro/config/ltconfig:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/ltconfig: New file.
+
+	* /cvsroot/libqpro/libqpro/config/install-sh:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/install-sh: New file.
+
+	* /cvsroot/libqpro/libqpro/config/config.sub:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/config.sub: New file.
+
+	* /cvsroot/libqpro/libqpro/config/config.guess:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/config/config.guess: New file.
+
+	* /cvsroot/libqpro/libqpro/bootstrap, /cvsroot/libqpro/libqpro/configure, /cvsroot/libqpro/libqpro/configure.in, /cvsroot/libqpro/libqpro/libqpro.lsm:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/bootstrap, /cvsroot/libqpro/libqpro/configure, /cvsroot/libqpro/libqpro/configure.in, /cvsroot/libqpro/libqpro/libqpro.lsm:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/aclocal.m4, /cvsroot/libqpro/libqpro/config.h.in:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/aclocal.m4, /cvsroot/libqpro/libqpro/config.h.in:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/acinclude.m4:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/acinclude.m4: New file.
+
+	* /cvsroot/libqpro/libqpro/INSTALL, /cvsroot/libqpro/libqpro/Makefile.am, /cvsroot/libqpro/libqpro/NEWS, /cvsroot/libqpro/libqpro/TODO:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/INSTALL, /cvsroot/libqpro/libqpro/Makefile.am, /cvsroot/libqpro/libqpro/NEWS, /cvsroot/libqpro/libqpro/TODO:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/ChangeLog, /cvsroot/libqpro/libqpro/COPYING:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/ChangeLog, /cvsroot/libqpro/libqpro/COPYING:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/AUTHORS, /cvsroot/libqpro/libqpro/README, /cvsroot/libqpro/libqpro/stamp-h.in:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/AUTHORS, /cvsroot/libqpro/libqpro/README, /cvsroot/libqpro/libqpro/stamp-h.in:
+	New file.
+
+	* /cvsroot/libqpro/libqpro/Makefile.in:
+	libqpro library.  C++ libray for reading & writing Quattro Pro spreadsheet files.
+
+	* /cvsroot/libqpro/libqpro/Makefile.in: New file.
+
