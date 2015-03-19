@@ -1,8 +1,8 @@
 
-set(LIBRCPS_INCLUDE_DIR libs/src)
+set(LIBRCPS_INCLUDE_DIR 3rdparty/LibRCPS/src)
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel ${KDE4_INCLUDES} )
 
-add_subdirectory( libs )
+add_subdirectory( 3rdparty )
 add_subdirectory( tests )
 
 set ( RCPSScheduler_SRCS
