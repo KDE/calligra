@@ -7,11 +7,9 @@ include_directories( .. ../taskjuggler ${KPLATO_INCLUDES} ${KOSTORE_INCLUDES})
 set(TJTester_SRCS TaskJuggler.cpp)
  
  
-add_executable(TJTesterNAME Plan-TJTester  ${TJTester_SRCS})
-add_test(TJTester TJTester)
-ecm_mark_as_test(TJTester)
+kde4_add_unit_test(TJTester TESTNAME Plan-TJTester  ${TJTester_SRCS})
  
-target_link_libraries(TJTester   plantjscheduler planprivate kplatokernel  Qt5::Core Qt5::Test)
+target_link_libraries(TJTester  ${KDE4_KDECORE_LIBS} plantjscheduler planprivate kplatokernel  ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############
@@ -19,8 +17,6 @@ target_link_libraries(TJTester   plantjscheduler planprivate kplatokernel  Qt5::
 set(SchedulerTester_SRCS SchedulerTester.cpp)
 
 
-add_executable(SchedulerTesterNAME Plan-TJ-SchedulerTester  ${SchedulerTester_SRCS})
-add_test(SchedulerTester SchedulerTester)
-ecm_mark_as_test(SchedulerTester)
+kde4_add_unit_test(SchedulerTester TESTNAME Plan-TJ-SchedulerTester  ${SchedulerTester_SRCS})
 
-target_link_libraries(SchedulerTester   plantjscheduler planprivate kplatokernel koodf  Qt5::Core Qt5::Test)
+target_link_libraries(SchedulerTester  ${KDE4_KDECORE_LIBS} plantjscheduler planprivate kplatokernel koodf  ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})

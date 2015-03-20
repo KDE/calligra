@@ -7,18 +7,16 @@ add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
 set (ScriptingTester_SRCS ScriptingTester.cpp TestResult.cpp)
 
-add_executable(ScriptingTesterNAME Plan-ScriptingTester  ${ScriptingTester_SRCS})
-add_test(ScriptingTester ScriptingTester)
-ecm_mark_as_test(ScriptingTester)
+kde4_add_unit_test(ScriptingTester TESTNAME Plan-ScriptingTester  ${ScriptingTester_SRCS})
 
 target_link_libraries(ScriptingTester 
         krossmoduleplan
         planprivate
         kplatokernel
         kokross
-        
-        Qt5::Gui
-        Qt5::Test
+        ${KDE4_KDECORE_LIBS}
+        ${QT_QTGUI_LIBRARY}
+        ${QT_QTTEST_LIBRARY}
 )
 
 

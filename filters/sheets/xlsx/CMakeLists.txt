@@ -24,7 +24,7 @@ set(xlsx2ods_PART_SRCS
     FormulaParser.cpp
 )
 
-add_library(calligra_filter_xlsx2ods MODULE ${xlsx2ods_PART_SRCS})
+kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_xlsx2ods
@@ -57,7 +57,5 @@ set(TestFormulaParser_SRCS
     TestFormulaParser.cpp
 )
 
-add_executable(TestFormulaParserNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-add_test(TestFormulaParser TestFormulaParser)
-ecm_mark_as_test(TestFormulaParser)
-target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon  Qt5::Test)
+kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
+target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

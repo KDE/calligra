@@ -1,6 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-include_directories(${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${KOTEXT_INCLUDES} 
+include_directories(${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/libs/flake/tests
         ${CMAKE_BINARY_DIR}/libs/main
         ${CMAKE_SOURCE_DIR}/libs/kotext/tests
@@ -11,68 +11,54 @@ include_directories(${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${KOTEXT_INCLUDES}
 
 set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp ModelTest.cpp)
 
-add_executable(TestShapeAnimationsNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
-add_test(TestShapeAnimations TestShapeAnimations)
-ecm_mark_as_test(TestShapeAnimations)
+kde4_add_unit_test(TestShapeAnimations TESTNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
 
-target_link_libraries(TestShapeAnimations calligrastageprivate Qt5::Test)
+target_link_libraries(TestShapeAnimations calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestCustomSlideShows_test_SRCS TestCustomSlideShows.cpp )
 
-add_executable(TestCustomSlideShowsNAME stage-part-TestCustomSlideShows  ${TestCustomSlideShows_test_SRCS})
-add_test(TestCustomSlideShows TestCustomSlideShows)
-ecm_mark_as_test(TestCustomSlideShows)
+kde4_add_unit_test(TestCustomSlideShows TESTNAME stage-part-TestCustomSlideShows  ${TestCustomSlideShows_test_SRCS})
 
-target_link_libraries(TestCustomSlideShows calligrastageprivate Qt5::Test)
+target_link_libraries(TestCustomSlideShows calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestEditCustomSlideShowsCommand_test_SRCS TestEditCustomSlideShowsCommand.cpp )
 
-add_executable(TestEditCustomSlideShowsCommandNAME stage-part-TestEditCustomSlideShowsCommand  ${TestEditCustomSlideShowsCommand_test_SRCS})
-add_test(TestEditCustomSlideShowsCommand TestEditCustomSlideShowsCommand)
-ecm_mark_as_test(TestEditCustomSlideShowsCommand)
+kde4_add_unit_test(TestEditCustomSlideShowsCommand TESTNAME stage-part-TestEditCustomSlideShowsCommand  ${TestEditCustomSlideShowsCommand_test_SRCS})
 
-target_link_libraries(TestEditCustomSlideShowsCommand calligrastageprivate Qt5::Test)
+target_link_libraries(TestEditCustomSlideShowsCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestAddCustomSlideShowCommand_test_SRCS TestAddCustomSlideShowCommand.cpp )
 
-add_executable(TestAddCustomSlideShowCommandNAME stage-part-TestAddCustomSlideShowCommand  ${TestAddCustomSlideShowCommand_test_SRCS})
-add_test(TestAddCustomSlideShowCommand TestAddCustomSlideShowCommand)
-ecm_mark_as_test(TestAddCustomSlideShowCommand)
+kde4_add_unit_test(TestAddCustomSlideShowCommand TESTNAME stage-part-TestAddCustomSlideShowCommand  ${TestAddCustomSlideShowCommand_test_SRCS})
 
-target_link_libraries(TestAddCustomSlideShowCommand calligrastageprivate Qt5::Test)
+target_link_libraries(TestAddCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestDelCustomSlideShowCommand_test_SRCS TestDelCustomSlideShowCommand.cpp )
 
-add_executable(TestDelCustomSlideShowCommandNAME stage-part-TestDelCustomSlideShowCommand  ${TestDelCustomSlideShowCommand_test_SRCS})
-add_test(TestDelCustomSlideShowCommand TestDelCustomSlideShowCommand)
-ecm_mark_as_test(TestDelCustomSlideShowCommand)
+kde4_add_unit_test(TestDelCustomSlideShowCommand TESTNAME stage-part-TestDelCustomSlideShowCommand  ${TestDelCustomSlideShowCommand_test_SRCS})
 
-target_link_libraries(TestDelCustomSlideShowCommand calligrastageprivate Qt5::Test)
+target_link_libraries(TestDelCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestRenameCustomSlideShowCommand_test_SRCS TestRenameCustomSlideShowCommand.cpp )
 
-add_executable(TestRenameCustomSlideShowCommandNAME stage-part-TestRenameCustomSlideShowCommand  ${TestRenameCustomSlideShowCommand_test_SRCS})
-add_test(TestRenameCustomSlideShowCommand TestRenameCustomSlideShowCommand)
-ecm_mark_as_test(TestRenameCustomSlideShowCommand)
+kde4_add_unit_test(TestRenameCustomSlideShowCommand TESTNAME stage-part-TestRenameCustomSlideShowCommand  ${TestRenameCustomSlideShowCommand_test_SRCS})
 
-target_link_libraries(TestRenameCustomSlideShowCommand calligrastageprivate Qt5::Test)
+target_link_libraries(TestRenameCustomSlideShowCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestDeleteSlidesCommand_test_SRCS TestDeleteSlidesCommand.cpp )
 
-add_executable(TestDeleteSlidesCommandNAME stage-part-TestDeleteSlidesCommand  ${TestDeleteSlidesCommand_test_SRCS})
-add_test(TestDeleteSlidesCommand TestDeleteSlidesCommand)
-ecm_mark_as_test(TestDeleteSlidesCommand)
+kde4_add_unit_test(TestDeleteSlidesCommand TESTNAME stage-part-TestDeleteSlidesCommand  ${TestDeleteSlidesCommand_test_SRCS})
 
-target_link_libraries(TestDeleteSlidesCommand calligrastageprivate Qt5::Test)
+target_link_libraries(TestDeleteSlidesCommand calligrastageprivate ${QT_QTTEST_LIBRARY})
