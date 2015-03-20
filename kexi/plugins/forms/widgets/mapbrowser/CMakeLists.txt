@@ -5,7 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs
     ${CMAKE_SOURCE_DIR}/libs/main
     ${MARBLE_INCLUDE_DIR}
-    ${KDE4_INCLUDES}
+    
 )
 
 
@@ -29,7 +29,7 @@ target_link_libraries(
     kexidataviewcommon
     ${MARBLE_LIBRARIES}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Core
     Qt5::Gui
     Qt5::Xml

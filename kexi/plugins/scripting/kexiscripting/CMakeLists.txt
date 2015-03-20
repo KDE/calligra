@@ -3,7 +3,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/widget
-    ${KDE4_INCLUDES}
+    
     ${KOKROSS_INCLUDES}
 )
 
@@ -22,7 +22,7 @@ target_link_libraries(
     kexidb
     ${CALLIGRADB_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     KF5::KIOWidgets
     Qt5::Gui
     )

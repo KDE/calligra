@@ -18,9 +18,9 @@ set(doc2odt_PART_SRCS
    drawclient.cpp
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
-kde4_add_plugin(calligra_filter_doc2odt ${doc2odt_PART_SRCS})
+add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
 
 #TODO cause of NumberFormatParser we depend on komsooxml. Fix that!
 #target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES})

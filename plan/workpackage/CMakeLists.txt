@@ -102,7 +102,7 @@ target_link_libraries(
     kdeinit_calligraplanwork
     planworkapp
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Core
     Qt5::Gui
     KF5::Parts

@@ -39,11 +39,11 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
 set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(calligra_filter_sheets2xls ${sheets2xls_SRCS})
+add_library(calligra_filter_sheets2xls MODULE ${sheets2xls_SRCS})
 
 
 target_link_libraries(calligra_filter_sheets2xls

@@ -9,7 +9,7 @@ set(wmf2svg_PART_SRCS
     WmfImportParser.cpp
 )
 
-kde4_add_plugin(calligra_filter_wmf2svg ${wmf2svg_PART_SRCS})
+add_library(calligra_filter_wmf2svg MODULE ${wmf2svg_PART_SRCS})
 
 target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 
@@ -30,7 +30,7 @@ if(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
 
 set(karbon2wmf_PART_SRCS WmfExport.cpp)
 
-kde4_add_plugin(calligra_filter_karbon2wmf ${karbon2wmf_PART_SRCS})
+add_library(calligra_filter_karbon2wmf MODULE ${karbon2wmf_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_karbon2wmf

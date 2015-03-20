@@ -301,13 +301,13 @@ target_link_libraries(calligrasheetscommon
     ${KDE4_THREADWEAVER_LIBS}
 )
 if(QT_QTDBUS_FOUND)
-    target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
+    target_link_libraries(calligrasheetscommon KF5::NotifyConfig )
 endif()
 
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon KF5::KCMUtils )
 else()
-    target_link_libraries(calligrasheetscommon ${KDE4_KUTILS_LIBS} )
+    target_link_libraries(calligrasheetscommon  )
 endif()
 
 target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
@@ -409,7 +409,8 @@ if (SHOULD_BUILD_APP_SHEETS)
 
 set (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
+ecm_add_app_icon(calligrasheets_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 

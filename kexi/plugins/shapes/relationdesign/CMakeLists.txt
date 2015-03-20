@@ -19,7 +19,7 @@ kexicore
 keximain
 komain
 
-${KDE4_KDEUI_LIBS}
+
 Qt5::Core
 Qt5::Gui
 )

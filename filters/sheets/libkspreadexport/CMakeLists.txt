@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread   )
 
 
 ########### next target ###############

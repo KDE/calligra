@@ -10,7 +10,7 @@ endif()
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  ${CMAKE_SOURCE_DIR}/kexi/kexidb )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs   ${CMAKE_SOURCE_DIR}/kexi/kexidb )
 
 
 ########### next target ###############
@@ -90,7 +90,7 @@ target_link_libraries(
     kexidb
     ${CALLIGRADB_LIBS}
     ${KOPROPERTY_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    
 )
 
 if (KEXI_MOBILE)
@@ -98,7 +98,7 @@ if (KEXI_MOBILE)
 else()
   target_link_libraries(
     kexiextendedwidgets
-    ${KDE4_KFILE_LIBS}
+    
     )
 endif()
 

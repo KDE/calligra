@@ -1,6 +1,6 @@
 include_directories( 
-        ${KDE4_INCLUDE_DIR} 
-        ${QT_INCLUDES} 
+         
+         
         ${KOODF_INCLUDES}
         ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/

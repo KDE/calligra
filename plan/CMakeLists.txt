@@ -97,7 +97,7 @@ kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml KF5::AkonadiContact  komain)
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -122,7 +122,8 @@ endif()
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
+ecm_add_app_icon(calligraplan_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 

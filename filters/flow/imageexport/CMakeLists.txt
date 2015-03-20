@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/flow/flowpart ${CMAKE_SOURCE_DIR}/flow/flowpart/flowsdk ${CMAKE_SOURCE_DIR}/flow/flowpart/config ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/flow/flowpart ${CMAKE_SOURCE_DIR}/flow/flowpart/flowsdk ${CMAKE_SOURCE_DIR}/flow/flowpart/config   )
 
 
 ########### next target ###############

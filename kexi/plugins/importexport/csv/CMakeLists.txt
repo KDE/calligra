@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/kexi/kexiDB ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/kexi/kexiDB   )
 
 ########### next target ###############
 
@@ -24,8 +24,8 @@ target_link_libraries(
     kexiextendedwidgets
     keximain
     
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
+    
+    
     Qt5::Gui
     )
 

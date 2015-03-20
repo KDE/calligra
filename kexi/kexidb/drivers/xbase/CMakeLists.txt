@@ -1,6 +1,6 @@
 
 
-include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
+include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb   )
 
 add_definitions( -D__KEXIDB__= )
 

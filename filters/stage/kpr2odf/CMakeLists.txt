@@ -5,7 +5,7 @@ include_directories(
 
 set(kpr2odp_PART_SRCS Filterkpr2odf.cpp )
 
-kde4_add_plugin(calligra_filter_kpr2odp ${kpr2odp_PART_SRCS})
+add_library(calligra_filter_kpr2odp MODULE ${kpr2odp_PART_SRCS})
 
 target_link_libraries(calligra_filter_kpr2odp komain)
 

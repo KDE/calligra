@@ -13,7 +13,7 @@ set(vsdx2odg_PART_SRCS
     ../../../outputhelper/OutputFileHelper.cxx
 )
 
-kde4_add_plugin(calligra_filter_vsdx2odg ${vsdx2odg_PART_SRCS})
+add_library(calligra_filter_vsdx2odg MODULE ${vsdx2odg_PART_SRCS})
 
 target_link_libraries(calligra_filter_vsdx2odg komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBVISIO_LIBRARIES})
 

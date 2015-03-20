@@ -14,7 +14,7 @@ set(wpd2odt_PART_SRCS
     ../../../outputhelper/OutputFileHelper.cxx
 )
 
-kde4_add_plugin(calligra_filter_wpd2odt ${wpd2odt_PART_SRCS})
+add_library(calligra_filter_wpd2odt MODULE ${wpd2odt_PART_SRCS})
 
 target_link_libraries(calligra_filter_wpd2odt
     komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})

@@ -1,6 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
   ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-  ${KDE4_INCLUDES}
+  
 )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
@@ -52,7 +52,7 @@ target_link_libraries(
     kexiutils
     ${CALLIGRADB_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Gui
     )
 

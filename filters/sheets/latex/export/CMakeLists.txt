@@ -21,7 +21,7 @@ set(kspread2tex_PART_SRCS
 
 ki18n_wrap_ui(kspread2tex_PART_SRCS latexexportwidget.ui )
 
-kde4_add_plugin(calligra_filter_kspread2tex ${kspread2tex_PART_SRCS})
+add_library(calligra_filter_kspread2tex MODULE ${kspread2tex_PART_SRCS})
 
 
 

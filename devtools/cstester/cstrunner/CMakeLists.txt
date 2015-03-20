@@ -1,5 +1,5 @@
 include_directories(
-    ${QT_INCLUDES}
+    
 )
 
 set(cstrunner_SRCS

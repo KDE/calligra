@@ -27,7 +27,7 @@ set(docx2odt_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
+add_library(calligra_filter_docx2odt MODULE ${docx2odt_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_docx2odt

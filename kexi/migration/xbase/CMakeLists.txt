@@ -1,4 +1,4 @@
-include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
 
 ########### next target ###############
 

@@ -21,7 +21,7 @@ set(pptx2odp_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
+add_library(calligra_filter_pptx2odp MODULE ${pptx2odp_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_pptx2odp

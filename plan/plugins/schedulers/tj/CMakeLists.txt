@@ -1,6 +1,6 @@
 
 set(LIBTJ_INCLUDE_DIR taskjuggler)
-include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel ${KDE4_INCLUDES} )
+include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
 
 #add_subdirectory( taskjuggler )
 add_subdirectory( tests )

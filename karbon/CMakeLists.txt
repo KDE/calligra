@@ -11,8 +11,8 @@ else()
 endif()
 
 include_directories(
-    ${QT_INCLUDES}
-    ${KDE4_INCLUDE_DIR}
+    
+    
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -47,7 +47,7 @@ endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" )
+ecm_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" ICONS )
 kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_WS_MAC)

@@ -16,17 +16,21 @@ endforeach(it)
 # NOTE: .kplato files is no longer native, so need some magic to run this test 
 # set(InsertFileTester_SRCS InsertFileTester.cpp)
 #  
-# kde4_add_unit_test(InsertFileTester TESTNAME Plan-InsertFileTester  ${InsertFileTester_SRCS})
+# add_executable(InsertFileTesterNAME Plan-InsertFileTester  ${InsertFileTester_SRCS})
+add_test(InsertFileTester InsertFileTester)
+ecm_mark_as_test(InsertFileTester)
 #  
-# target_link_libraries(InsertFileTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} Qt5::Test)
+# target_link_libraries(InsertFileTester  planprivate kplatokernel komain  Qt5::Test)
  
 
 ########## next target ###############
 
 set(InsertProjectTester_SRCS InsertProjectTester.cpp)
  
-kde4_add_unit_test(InsertProjectTester TESTNAME Plan-InsertProjectTester  ${InsertProjectTester_SRCS})
+add_executable(InsertProjectTesterNAME Plan-InsertProjectTester  ${InsertProjectTester_SRCS})
+add_test(InsertProjectTester InsertProjectTester)
+ecm_mark_as_test(InsertProjectTester)
 
-target_link_libraries(InsertProjectTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} Qt5::Test)
+target_link_libraries(InsertProjectTester  planprivate kplatokernel komain  Qt5::Test)
 
 ########## next target ###############

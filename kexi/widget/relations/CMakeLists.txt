@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core   )
 
 
 ########### next target ###############
@@ -24,7 +24,7 @@ target_link_libraries(
     kexiutils
     ${CALLIGRADB_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Core
     Qt5::Gui
     )

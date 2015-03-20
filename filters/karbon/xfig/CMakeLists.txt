@@ -6,7 +6,7 @@ set( xfig2odg_PLUGIN_SRCS
     XFigImportFilter.cpp
 )
 
-kde4_add_plugin( calligra_filter_xfig2odg ${xfig2odg_PLUGIN_SRCS} )
+add_library(calligra_filter_xfig2odg MODULE ${xfig2odg_PLUGIN_SRCS} )
 
 target_link_libraries( calligra_filter_xfig2odg
     komain

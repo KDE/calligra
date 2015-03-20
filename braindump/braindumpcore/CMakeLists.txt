@@ -5,7 +5,7 @@ set(braindumpcore_LIB_SRCS
 )
 
 add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
-target_link_libraries(braindumpcore Qt5::Core Qt5::Xml Qt5::Svg ${KDE4_KDECORE_LIBRARY})
+target_link_libraries(braindumpcore Qt5::Core Qt5::Xml Qt5::Svg )
 
 target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES Qt5::Core)
 

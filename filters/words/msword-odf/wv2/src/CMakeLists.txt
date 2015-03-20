@@ -83,7 +83,7 @@ set( wv2_HEADERS
 
 add_definitions("-DMAKE_WV2_LIB")
 add_library( kowv2 SHARED ${wv2_SOURCES} ${wv2_HEADERS} ${wv2_GENERATED} )
-include_directories( ${KDE4_INCLUDE_DIR} ../../../../libmso)
+include_directories(  ../../../../libmso)
 target_link_libraries( kowv2 mso ${ZLIB_LIBRARIES} ${ICONV_LIBRARIES}  )
 set_target_properties( kowv2 PROPERTIES
                   SOVERSION ${LT_VERSION_CURRENT}

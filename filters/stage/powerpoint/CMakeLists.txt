@@ -19,7 +19,7 @@ target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)
 
-kde4_add_plugin(calligra_filter_ppt2odp PowerPointImport.cpp)
+add_library(calligra_filter_ppt2odp MODULE PowerPointImport.cpp)
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
 install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR})

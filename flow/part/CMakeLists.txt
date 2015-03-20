@@ -35,7 +35,8 @@ install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(flow_KDEINIT_SRCS "../pics/hi*-app-calligraflow.png")
+file(GLOB ICONS_SRCS "../pics/hi*-app-calligraflow.png")
+ecm_add_app_icon(flow_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 

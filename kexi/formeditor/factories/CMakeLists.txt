@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main   )
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
@@ -16,7 +16,7 @@ target_link_libraries(
     kformdesigner
     kundo2
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Core
     Qt5::Gui
     Qt5::Xml
@@ -38,7 +38,7 @@ target_link_libraries(
     kformdesigner
     ${KOPROPERTY_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Gui
     Qt5::Xml
     )

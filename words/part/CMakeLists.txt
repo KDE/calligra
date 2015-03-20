@@ -215,7 +215,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
 endif ()
 
-target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_calligraauthor   komain )
 
 install(TARGETS kdeinit_calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -18,8 +18,8 @@ target_link_libraries(
     calligrastageeventactions
     calligrastageprivate
     flake
-    ${KDE4_KIO_LIBRARY}
-    ${KDE4_PHONON_LIBRARY}
+    KF5::KIOCore
+    Phonon::phonon4qt5
     Qt5::Gui
     )
 

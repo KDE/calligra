@@ -10,7 +10,7 @@ set(ascii2words_PART_SRCS
     ImportDialog.cc
 )
 ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
-kde4_add_plugin(calligra_filter_ascii2words ${ascii2words_PART_SRCS})
+add_library(calligra_filter_ascii2words MODULE ${ascii2words_PART_SRCS})
 target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate)
 install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES calligra_filter_ascii2words.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
@@ -30,7 +30,7 @@ set(odt2ascii_PART_SRCS
     OdtReaderAsciiBackend.cpp
     OdfReaderAsciiContext.cpp
 )
-kde4_add_plugin(calligra_filter_odt2ascii ${odt2ascii_PART_SRCS})
+add_library(calligra_filter_odt2ascii MODULE ${odt2ascii_PART_SRCS})
 target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2)
 install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR})
 

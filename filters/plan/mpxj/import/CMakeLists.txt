@@ -11,7 +11,7 @@ set(mpxj2plan_PART_SRCS
 )
 
 
-kde4_add_plugin(calligra_filter_mpxj2plan ${mpxj2plan_PART_SRCS})
+add_library(calligra_filter_mpxj2plan MODULE ${mpxj2plan_PART_SRCS})
 
 target_link_libraries(calligra_filter_mpxj2plan komain)
 # Note: no need to link to ${JNI_LIBRARIES} currently, JNI not used,

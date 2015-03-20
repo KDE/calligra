@@ -13,7 +13,7 @@ set(key2odp_PART_SRCS
     ../../../outputhelper/OutputFileHelper.cxx
 )
 
-kde4_add_plugin(calligra_filter_key2odp ${key2odp_PART_SRCS})
+add_library(calligra_filter_key2odp MODULE ${key2odp_PART_SRCS})
 
 target_link_libraries(calligra_filter_key2odp komain ${LIBREVENGE_LIBRARIES} ${LIBODFGEN_LIBRARIES} ${LIBETONYEK_LIBRARIES})
 

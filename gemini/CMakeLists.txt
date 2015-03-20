@@ -56,7 +56,8 @@ set(thumbnailhelper_SRCS
 if (WIN32)
     set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
 else ()
-    kde4_add_app_icon(calligragemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
+    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
+    ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Thumbnail helper application
@@ -64,8 +65,8 @@ endif ()
 
 add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     komain
 )
@@ -77,8 +78,8 @@ add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_QTOPENGL_LIBRARIES}
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}

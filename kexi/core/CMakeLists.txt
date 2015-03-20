@@ -1,6 +1,6 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44020)
 
-include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi   )
 
 ########### next target ###############
 
@@ -47,7 +47,7 @@ add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore
   KF5::KIOWidgets
-  ${KDE4_KDEUI_LIBS}
+  
   kexiutils
   kexidb
   ${CALLIGRADB_LIBS}

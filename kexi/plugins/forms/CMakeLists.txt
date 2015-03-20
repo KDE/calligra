@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib  ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 
@@ -56,7 +56,7 @@ target_link_libraries(
 	kexidatatable
 	kexiextendedwidgets
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Gui
     )
 
@@ -113,7 +113,7 @@ target_link_libraries(
     kexiguiutils
     ${KOPROPERTY_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Gui
     Qt5::Xml
     )

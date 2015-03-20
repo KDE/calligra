@@ -16,7 +16,7 @@ set(odt2epub2_PART_SRCS
     FileCollector.cpp
 )
 
-kde4_add_plugin(calligra_filter_odt2epub2 ${odt2epub2_PART_SRCS})
+add_library(calligra_filter_odt2epub2 MODULE ${odt2epub2_PART_SRCS})
 
 target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain)
 
@@ -37,7 +37,7 @@ set(odt2html_PART_SRCS
     FileCollector.cpp
 )
 
-kde4_add_plugin(calligra_filter_odt2html ${odt2html_PART_SRCS})
+add_library(calligra_filter_odt2html MODULE ${odt2html_PART_SRCS})
 
 target_link_libraries(calligra_filter_odt2html kovectorimage komain)
 

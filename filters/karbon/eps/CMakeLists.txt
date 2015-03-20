@@ -6,7 +6,7 @@ if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
 set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
-kde4_add_plugin(calligra_filter_eps2svgai ${eps2svgai_PART_SRCS})
+add_library(calligra_filter_eps2svgai MODULE ${eps2svgai_PART_SRCS})
 
 target_link_libraries(calligra_filter_eps2svgai komain)
 

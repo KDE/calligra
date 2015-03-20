@@ -1,7 +1,7 @@
 
 
 include_directories( ${MYSQL_INCLUDE_DIR} 
-${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb   )
 
 add_definitions( -D__KEXIDB__= )
 

@@ -1,7 +1,7 @@
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/karbon/common
-    ${KDE4_INCLUDES}
+    
 )
 
 ########### next target ###############
@@ -9,7 +9,7 @@ include_directories(
 set(karbon1x2karbon_PART_SRCS Karbon1xImport.cpp)
 
 
-kde4_add_plugin(calligra_filter_karbon1x2karbon ${karbon1x2karbon_PART_SRCS})
+add_library(calligra_filter_karbon1x2karbon MODULE ${karbon1x2karbon_PART_SRCS})
 
 target_link_libraries(calligra_filter_karbon1x2karbon karboncommon)
 

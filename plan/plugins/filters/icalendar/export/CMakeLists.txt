@@ -14,7 +14,7 @@ set(icalendarexport_PART_SRCS
 
 add_library(planicalexport MODULE ${icalendarexport_PART_SRCS})
 
-target_link_libraries(planicalexport planprivate kplatokernel komain ${KDEPIMLIBS_KCALCORE_LIBS})
+target_link_libraries(planicalexport planprivate kplatokernel komain KF5::CalendarCore)
 
 install(TARGETS planicalexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

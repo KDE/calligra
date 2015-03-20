@@ -1,4 +1,4 @@
-include_directories(    ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/forms/widgets/webbrowser ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main ${KDE4_INCLUDES}  )
+include_directories(    ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/forms/widgets/webbrowser ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main   )
 
 set(kformdesigner_webbrowser_PART_SRCS 
     WebBrowserWidget.cpp
@@ -21,10 +21,10 @@ target_link_libraries(
     kexiformutils
     ${KOPROPERTY_LIBS}
     
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Core
     Qt5::Gui
-    ${QT_QTWEBKIT_LIBRARY}
+    Qt5::WebKitWidgets
     Qt5::Xml
     )
 

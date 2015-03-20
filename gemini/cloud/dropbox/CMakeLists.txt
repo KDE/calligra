@@ -17,8 +17,8 @@ automoc4_add_library(calligrageminidropboxplugin MODULE ${dropbox_plugin_SRCS} $
 
 target_link_libraries(calligrageminidropboxplugin
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_QTNETWORK_LIBRARIES}
 )
 

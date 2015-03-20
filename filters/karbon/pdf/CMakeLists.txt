@@ -6,7 +6,7 @@ macro_optional_find_package(JPEG)
 
 set(pdf2svg_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
 
-kde4_add_plugin(calligra_filter_pdf2svg ${pdf2svg_PART_SRCS})
+add_library(calligra_filter_pdf2svg MODULE ${pdf2svg_PART_SRCS})
 
 target_link_libraries(calligra_filter_pdf2svg komain ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY})
 if(JPEG_FOUND)

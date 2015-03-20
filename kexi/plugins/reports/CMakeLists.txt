@@ -6,7 +6,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
     ${KOREPORT_INCLUDES}
-    ${KDE4_INCLUDES}
+    
 )
 
 #build a shared library
@@ -36,15 +36,15 @@ add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
 
 target_link_libraries(kexihandler_report
     ${KOREPORT_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    
     Qt5::Gui
-    ${QT_QTSCRIPT_LIBRARY}
+    Qt5::Script
     kexidb
     ${CALLIGRADB_LIBS}
     kexicore
     ${KOPROPERTY_LIBS}
     kexiguiutils
-    ${KDE4_KROSSCORE_LIBS}
+    KF5::KrossCore
 )
 
 if (KEXI_MOBILE)

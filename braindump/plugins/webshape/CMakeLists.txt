@@ -21,7 +21,7 @@ target_link_libraries(
     braindump_shape_web
     flake
     Qt5::Core
-    ${QT_QTWEBKIT_LIBRARY}
+    Qt5::WebKitWidgets
     )
 install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR})
 

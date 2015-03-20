@@ -1,6 +1,6 @@
 project(flowdockersplugin)
 
-include_directories(${KDE4_INCLUDE_DIR}
+include_directories(
      ${FLAKE_INCLUDES}
      ${KOPAGEAPP_INCLUDES}
 )

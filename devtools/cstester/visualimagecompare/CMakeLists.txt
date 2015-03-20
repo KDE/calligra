@@ -2,7 +2,7 @@ if (POPPLER_FOUND)
     add_definitions(-DHAS_POPPLER)
 
 include_directories(
-    ${QT_INCLUDES}
+    
     ${POPPLER_INCLUDE_DIR}
 )
 

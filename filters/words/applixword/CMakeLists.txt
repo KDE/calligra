@@ -3,7 +3,7 @@
 set(applixword2odt_PART_SRCS applixwordimport.cc )
 
 
-kde4_add_plugin(calligra_filter_applixword2odt ${applixword2odt_PART_SRCS})
+add_library(calligra_filter_applixword2odt MODULE ${applixword2odt_PART_SRCS})
 
 
 

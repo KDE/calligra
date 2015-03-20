@@ -6,7 +6,9 @@ include_directories( .. ../../kernel ${KOODF_INCLUDES} ${KUNDO2_INCLUDES})
 set(ResourceModelTester_SRCS ResourceModelTester.cpp )
  
  
-kde4_add_unit_test(ResourceModelTester TESTNAME Plan-ResourceModelTester  ${ResourceModelTester_SRCS})
+add_executable(ResourceModelTesterNAME Plan-ResourceModelTester  ${ResourceModelTester_SRCS})
+add_test(ResourceModelTester ResourceModelTester)
+ecm_mark_as_test(ResourceModelTester)
  
 target_link_libraries(ResourceModelTester   kplatomodels kplatokernel Qt5::Test)
  
@@ -16,9 +18,11 @@ target_link_libraries(ResourceModelTester   kplatomodels kplatokernel Qt5::Test)
 set(FlatProxyModelTester_SRCS FlatProxyModelTester.cpp)
  
  
-kde4_add_unit_test(FlatProxyModelTester TESTNAME Plan-FlatProxyModelTester  ${FlatProxyModelTester_SRCS})
+add_executable(FlatProxyModelTesterNAME Plan-FlatProxyModelTester  ${FlatProxyModelTester_SRCS})
+add_test(FlatProxyModelTester FlatProxyModelTester)
+ecm_mark_as_test(FlatProxyModelTester)
  
-target_link_libraries(FlatProxyModelTester  ${KDE4_KDEUI_LIBS} kplatomodels Qt5::Test)
+target_link_libraries(FlatProxyModelTester   kplatomodels Qt5::Test)
  
 
 ########## next target ###############
@@ -26,9 +30,11 @@ target_link_libraries(FlatProxyModelTester  ${KDE4_KDEUI_LIBS} kplatomodels Qt5:
 set(WorkPackageProxyModelTester_SRCS WorkPackageProxyModelTester.cpp)
  
  
-kde4_add_unit_test(WorkPackageProxyModelTester TESTNAME Plan-WorkPackageProxyModelTester  ${WorkPackageProxyModelTester_SRCS})
+add_executable(WorkPackageProxyModelTesterNAME Plan-WorkPackageProxyModelTester  ${WorkPackageProxyModelTester_SRCS})
+add_test(WorkPackageProxyModelTester WorkPackageProxyModelTester)
+ecm_mark_as_test(WorkPackageProxyModelTester)
  
-target_link_libraries(WorkPackageProxyModelTester  ${KDE4_KDEUI_LIBS} kplatomodels kplatokernel kundo2 Qt5::Test)
+target_link_libraries(WorkPackageProxyModelTester   kplatomodels kplatokernel kundo2 Qt5::Test)
  
 
 ########## next target ###############
