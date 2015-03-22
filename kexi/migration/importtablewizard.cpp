@@ -66,11 +66,12 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     : KAssistantDialog ( parent, flags ),
       m_args(args)
 {
-    m_currentDatabase = curDB;
+    m_connection = curDB;
     m_migrateDriver = 0;
     m_prjSet = 0;
     m_migrateManager = new MigrateManager();
     m_importComplete = false;
+    m_importWasCanceled = false;
 
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 
@@ -80,7 +81,9 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupTableSelectPage();
     setupAlterTablePage();
     setupImportingPage();
+    setupProgressPage();
     setupFinishPage();
+
     setValid(m_srcConnPageItem, false);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
@@ -106,11 +109,6 @@ void ImportTableWizard::next() {
             setAppropriate(m_srcDBPageItem, false);
         } else {
             setAppropriate(m_srcDBPageItem, true);
-        }
-    } else if (currentPage() == m_importingPageItem) {
-        if (doImport()) {
-            KAssistantDialog::next();
-            return;
         }
     } else if (currentPage() == m_alterTablePageItem) {
         if (m_alterSchemaWidget->nameExists(m_alterSchemaWidget->nameWidget()->nameText())) {
@@ -237,10 +235,6 @@ void ImportTableWizard::setupImportingPage()
     m_lblImportingErrTxt->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_lblImportingErrTxt->setWordWrap(true);
 
-    m_progressBar = new QProgressBar(m_importingPageWidget);
-    m_progressBar->setRange(0, 100);
-    m_progressBar->hide();
-
     vbox->addWidget(m_lblImportingTxt);
     vbox->addWidget(m_lblImportingErrTxt);
     vbox->addStretch(1);
@@ -254,8 +248,6 @@ void ImportTableWizard::setupImportingPage()
     options_vbox->addWidget(m_importOptionsButton);
     options_vbox->addStretch(1);
 
-    vbox->addWidget(m_progressBar);
-    vbox->addStretch(2);
     m_importingPageWidget->show();
 
     m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, i18n("Importing"));
@@ -276,6 +268,32 @@ void ImportTableWizard::setupAlterTablePage()
 
     m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Table Design"));
     addPage(m_alterTablePageItem);
+}
+
+void ImportTableWizard::setupProgressPage()
+{
+    m_progressPageWidget = new QWidget(this);
+    m_progressPageWidget->hide();
+    QVBoxLayout *vbox = new QVBoxLayout(m_progressPageWidget);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
+    m_progressPageWidget->setLayout(vbox);
+    m_progressLbl = new QLabel(m_progressPageWidget);
+    m_progressLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_progressLbl->setWordWrap(true);
+    m_rowsImportedLbl = new QLabel(m_progressPageWidget);
+
+    m_importingProgressBar = new QProgressBar(m_progressPageWidget);
+    m_importingProgressBar->setMinimum(0);
+    m_importingProgressBar->setMaximum(0);
+    m_importingProgressBar->setValue(0);
+
+    vbox->addWidget(m_progressLbl);
+    vbox->addWidget(m_rowsImportedLbl);
+    vbox->addWidget(m_importingProgressBar);
+    vbox->addStretch(1);
+
+    m_progressPageItem = new KPageWidgetItem(m_progressPageWidget, i18n("Processing Import"));
+    addPage(m_progressPageItem);
 }
 
 void ImportTableWizard::setupFinishPage()
@@ -316,6 +334,8 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
         }
     } else if (curPage == m_importingPageItem) {
         arriveImportingPage();
+    } else if (curPage == m_progressPageItem) {
+        arriveProgressPage();
     } else if (curPage == m_finishPageItem) {
         arriveFinishPage();
     }
@@ -492,11 +512,37 @@ void ImportTableWizard::arriveImportingPage()
     m_importingPageWidget->show();
 }
 
+void ImportTableWizard::arriveProgressPage()
+{
+    m_progressLbl->setText(i18nc("@info", "Please wait while the table is imported."));
+
+    enableButton(KDialog::User1, false);
+    enableButton(KDialog::User2, false);
+    enableButton(KDialog::User3, false);
+
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()));
+
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+    m_importComplete = doImport();
+    QApplication::restoreOverrideCursor();
+
+    disconnect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()));
+
+    next();
+}
+
 void ImportTableWizard::arriveFinishPage()
 {
-    m_finishLbl->setText(i18n("Table <resource>%1</resource> has been imported.",
-               m_alterSchemaWidget->nameWidget()->nameText()));
+    if (m_importComplete) {
+        m_finishLbl->setText(i18n("Table <resource>%1</resource> has been imported.",
+                                  m_alterSchemaWidget->nameWidget()->nameText()));
+    } else {
+        m_finishCheckBox->setEnabled(false);
+        m_finishLbl->setText(i18n("An error occured.",
+                                  m_alterSchemaWidget->nameWidget()->nameText()));
+    }
 
+    enableButton(KDialog::User2, false);
     enableButton(KDialog::User3, false);
     enableButton(KDialog::Cancel, false);
 }
@@ -597,7 +643,6 @@ QString ImportTableWizard::driverNameForSelectedSource()
 
 bool ImportTableWizard::doImport()
 {
-    m_importComplete = true;
     KexiGUIMessageHandler msg;
 
     KexiProject* project = KexiMainWindowIface::global()->project();
@@ -612,38 +657,49 @@ bool ImportTableWizard::doImport()
         return false;
     }
 
-    if (!m_alterSchemaWidget->newSchema()) {
+    KexiDB::TableSchema* newSchema = m_alterSchemaWidget->newSchema();
+    if (!newSchema) {
         msg.showErrorMessage(i18n("No table was selected to import."));
         return false;
     }
+    newSchema->setName(m_alterSchemaWidget->nameWidget()->nameText());
+    newSchema->setCaption(m_alterSchemaWidget->nameWidget()->captionText());
 
-    KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), m_alterSchemaWidget->newSchema()->name());
+    KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), newSchema->name());
     if (!partItemForSavedTable) {
         msg.showErrorMessage(project);
         return false;
     }
 
     //Create the table
-    if (!m_currentDatabase->createTable(m_alterSchemaWidget->newSchema(), true)) {
+    if (!m_connection->createTable(newSchema, true)) {
         msg.showErrorMessage(i18n("Unable to create table <resource>%1</resource>.",
-                                  m_alterSchemaWidget->newSchema()->name()));
+                                  newSchema->name()));
         return false;
     }
+    m_alterSchemaWidget->takeTableSchema(); //m_connection takes ownership of the TableSchema object
 
     //Import the data
     QApplication::setOverrideCursor(Qt::BusyCursor);
     QList<QVariant> row;
+    unsigned int fieldCount = newSchema->fieldCount();
     m_migrateDriver->moveFirst();
-    KexiDB::TransactionGuard tg(*m_currentDatabase);
-    if (m_currentDatabase->error()) {
+    KexiDB::TransactionGuard tg(*m_connection);
+    if (m_connection->error()) {
         QApplication::restoreOverrideCursor();
         return false;
     }
     do  {
-        for (unsigned int i = 0; i < m_alterSchemaWidget->newSchema()->fieldCount(); ++i) {
+        for (unsigned int i = 0; i < fieldCount; ++i) {
+            if (m_importWasCanceled) {
+                return false;
+            }
+            if (i % 100 == 0) {
+                QApplication::processEvents();
+            }
             row.append(m_migrateDriver->value(i));
         }
-        m_currentDatabase->insertRecord(*(m_alterSchemaWidget->newSchema()), row);
+        m_connection->insertRecord(*newSchema, row);
         row.clear();
     } while (m_migrateDriver->moveNext());
     if (!tg.commit()) {
@@ -653,7 +709,7 @@ bool ImportTableWizard::doImport()
     QApplication::restoreOverrideCursor();
 
     //Done so save part and update gui
-    partItemForSavedTable->setIdentifier(m_alterSchemaWidget->newSchema()->id());
+    partItemForSavedTable->setIdentifier(newSchema->id());
     project->addStoredItem(part->info(), partItemForSavedTable);
 
     return true;
@@ -672,4 +728,9 @@ void ImportTableWizard::slotTableListWidgetSelectionChanged()
 void ImportTableWizard::slotNameChanged()
 {
     setValid(m_alterTablePageItem, !m_alterSchemaWidget->nameWidget()->captionText().isEmpty());
+}
+
+void ImportTableWizard::slotCancelClicked()
+{
+    m_importWasCanceled = true;
 }
