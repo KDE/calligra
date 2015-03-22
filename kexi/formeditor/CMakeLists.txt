@@ -44,11 +44,11 @@ set(kformdesigner_LIB_SRCS
 )
 
 set(kformdesigner_LIBS
-  ${KOPROPERTY_LIBS}
   kexiutils
   kexicore
   kexiextendedwidgets
   ${CALLIGRADB_LIBS}
+  KProperty
 )
 
 if(KFD_SIGSLOTS)

@@ -89,8 +89,7 @@ target_link_libraries(
     ktexteditor
     kexidb
     ${CALLIGRADB_LIBS}
-    ${KOPROPERTY_LIBS}
-    
+    KProperty
 )
 
 if (KEXI_MOBILE)

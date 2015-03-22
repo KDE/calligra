@@ -42,7 +42,9 @@ target_link_libraries(kexihandler_report
     kexidb
     ${CALLIGRADB_LIBS}
     kexicore
-    ${KOPROPERTY_LIBS}
+
+    KProperty
+
     kexiguiutils
     KF5::KrossCore
 )

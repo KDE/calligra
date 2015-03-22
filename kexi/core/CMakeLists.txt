@@ -51,10 +51,10 @@ target_link_libraries(kexicore
   kexiutils
   kexidb
   ${CALLIGRADB_LIBS}
-  ${KOPROPERTY_LIBS}
   kowidgetutils
+  KProperty
 )
-target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb ${KOPROPERTY_LIBS})
+target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb)
 
 set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
