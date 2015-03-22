@@ -61,6 +61,7 @@ class KProgressDialog;
 class QProgressBar;
 class KPageWidgetItem;
 
+class KexiCSVCommentWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
@@ -71,6 +72,7 @@ class KexiCommandLinkButton;
 class KexiNameWidget;
 class KexiProjectNavigator;
 class KexiFieldListModel;
+
 
 namespace KexiPart {
 class Item;
@@ -123,6 +125,7 @@ private:
     KexiCSVImportDialogModel *m_table;
     QTableView *m_tableView;
     KexiCSVDelimiterWidget* m_delimiterWidget;
+    KexiCSVCommentWidget* m_commentWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
                             //!< (true by default, set to false if user sets delimiter)
     QLabel* m_formatLabel;
@@ -220,10 +223,12 @@ private:
     //! Updates size of m_columnNames and m_changedColumnNames if needed
     void updateColumnVectorSize();
 
+    bool m_parseComments;
     bool m_cancelled;
     bool m_adjustRows;
     int m_startline;
     QChar m_textquote;
+    QChar m_commentSymbol;
     QString m_clipboardData;
     QByteArray m_fileArray;
     Mode m_mode;
@@ -293,6 +298,7 @@ private Q_SLOTS:
     void initLater();
     void formatChanged(int id);
     void delimiterChanged(const QString& delimiter);
+    void commentSymbolChanged(const QString& commentSymbol);
     void startlineSelected(int line);
     void textquoteSelected(int);
     void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);
