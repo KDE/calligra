@@ -144,31 +144,12 @@ The following matrix lists the packages and dependencies.
                            Dependencies:
                                libqt4-webkit or libQtWebKit4 (provides QtWebKit)
  ------------------------------------------------------------------------
- calligra-reports-web-element Description: Web element for Calligra Reports
-                           Contents:
-                               koreport_webplugin.so
-                               koreport_webplugin.desktop
-                           Translation File:
-                               koreport_webplugin.mo
-                           Dependencies:
-                               libqt4-webkit or libQtWebKit4 (provides QtWebKit)
- ------------------------------------------------------------------------
  kexi-map-form-widget      Description: Kexi map form widget
                            Contents:
                                kformdesigner_mapbrowser.so
                                kformdesigner_mapbrowser.desktop
                            Translation File:
                                kformdesigner_mapbrowser.mo
-                           Dependencies:
-                               libmarble4-kde4 or marble
-                                                      (provides libmarblewidget)
- ------------------------------------------------------------------------
- calligra-reports-map-element Description: Map element for Calligra Reports
-                           Contents:
-                               koreport_mapsplugin.so
-                               koreport_mapsplugin.desktop
-                           Translation File:
-                               koreport_mapsplugin.mo
                            Dependencies:
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
@@ -270,7 +251,6 @@ flake
 kokross                                                                NO
 kopageapp
 koplugin                                                               NO
-koreports                                  Kexi, Plan                  NO
 kotext
 komain
 koodf
