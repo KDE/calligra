@@ -28,8 +28,6 @@ set( KPLATO_INCLUDES
 
     ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
-
-    ${KOREPORT_INCLUDES}
 )
 
 add_subdirectory( libs )

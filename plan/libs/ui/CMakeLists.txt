@@ -9,8 +9,6 @@ include_directories(
 
     ${KOODF_INCLUDES}
 
-    ${KOREPORT_INCLUDES}
-
     ${KOPROPERTIES_INCLUDES}
 
     ${KOMAIN_INCLUDES}
@@ -133,7 +131,7 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
-set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} KProperty)
+set(KPLATO_REPORTS_LIBS KProperty KReport)
 target_link_libraries(kplatoui KF5::AkonadiContact ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels KChart KGantt KF5::KHtml )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

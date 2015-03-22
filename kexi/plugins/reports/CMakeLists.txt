@@ -5,8 +5,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
-    ${KOREPORT_INCLUDES}
-    
 )
 
 #build a shared library
@@ -35,8 +33,6 @@ qt5_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadapto
 add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
 
 target_link_libraries(kexihandler_report
-    ${KOREPORT_LIBS}
-    
     Qt5::Gui
     Qt5::Script
     kexidb
@@ -44,6 +40,7 @@ target_link_libraries(kexihandler_report
     kexicore
 
     KProperty
+    KReport
 
     kexiguiutils
     KF5::KrossCore
