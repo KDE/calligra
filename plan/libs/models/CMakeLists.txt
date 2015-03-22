@@ -6,7 +6,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
     ${KOODF_INCLUDES}
     ${KUNDO2_INCLUDES}
-    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
     
     ${KDEPIMLIBS_INCLUDE_DIR}
@@ -45,7 +44,7 @@ set(kplatomodels_LIB_SRCS
 
 add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
-target_link_libraries(kplatomodels kplatokernel koodf ${KDCHART_LIBS} calligrakdgantt  KF5::KIOWidgets Qt5::Core Qt5::Gui ${KDE4_KABC_LIBS})
+target_link_libraries(kplatomodels kplatokernel koodf ${KDCHART_LIBS} KGantt  KF5::KIOWidgets Qt5::Core Qt5::Gui ${KDE4_KABC_LIBS})
 target_link_libraries(kplatomodels kundo2)
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

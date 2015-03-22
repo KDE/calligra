@@ -2,7 +2,6 @@
 
 include_directories(
     ${KDCHART_INCLUDES}
-    ${KDGANTT_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
@@ -138,7 +137,7 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
 set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
-target_link_libraries(kplatoui KF5::AkonadiContact ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} calligrakdgantt KF5::KHtml )
+target_link_libraries(kplatoui KF5::AkonadiContact ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} KGantt KF5::KHtml )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

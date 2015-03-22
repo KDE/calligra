@@ -26,7 +26,6 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
 
-    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
 
     ${KOMAIN_INCLUDES}
@@ -95,7 +94,7 @@ ki18n_wrap_ui(planprivate_LIB_SRCS
 
 kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
-add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
+add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 
 target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml KF5::AkonadiContact  komain)
 

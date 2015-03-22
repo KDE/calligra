@@ -44,7 +44,7 @@ target_link_libraries(
     kplatoui
     planprivate
     komain
-    calligrakdgantt
+    KGantt
     KF5::Parts
     )
 
