@@ -53,12 +53,13 @@ target_link_libraries(
     kexidb
     kexicore
     kexiutils
-    ${KOPROPERTY_LIBS}
     ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
     keximigrate
 #TODO:    ${KDE4_KNEWSTUFF_LIBS}
+    KProperty
+
     KF5::KIOWidgets
     
     Qt5::UiTools

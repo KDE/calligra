@@ -19,14 +19,14 @@ target_link_libraries(
     kformdesigner
     kexidataviewcommon
     kexiformutils
-    ${KOPROPERTY_LIBS}
-    
-    
+
+    KProperty
+
     Qt5::Core
     Qt5::Gui
     Qt5::WebKitWidgets
     Qt5::Xml
-    )
+)
 
 
 install(TARGETS kformdesigner_webbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})

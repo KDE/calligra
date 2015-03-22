@@ -21,13 +21,13 @@ target_link_libraries(
     kexidataviewcommon
     kexidatatable
     kexiextendedwidgets
-    ${KOPROPERTY_LIBS}
     kexiutils
-    
-    
+
+    KProperty
+
     Qt5::Core
     Qt5::Gui
-    )
+)
 
 install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
 

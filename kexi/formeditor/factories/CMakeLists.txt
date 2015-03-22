@@ -36,12 +36,12 @@ add_library(kformdesigner_stdwidgets MODULE ${kformdesigner_stdwidgets_PART_SRCS
 target_link_libraries(
     kformdesigner_stdwidgets
     kformdesigner
-    ${KOPROPERTY_LIBS}
-    
-    
+
+    KProperty
+
     Qt5::Gui
     Qt5::Xml
-    )
+)
 
 install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 

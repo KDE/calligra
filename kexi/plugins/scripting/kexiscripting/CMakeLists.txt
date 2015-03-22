@@ -15,17 +15,17 @@ add_library(kexihandler_script MODULE ${kexihandler_script_PART_SRCS})
 target_link_libraries(
     kexihandler_script
     kexiextendedwidgets
-    ${KOPROPERTY_LIBS}
     kokross
     kexicore
     kexiutils
     kexidb
     ${CALLIGRADB_LIBS}
-    
-    
+
+    KProperty
+
     KF5::KIOWidgets
     Qt5::Gui
-    )
+)
 install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

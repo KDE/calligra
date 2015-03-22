@@ -36,9 +36,11 @@ target_link_libraries(
     kexicore
     kexiutils
     kexiguiutils
-    ${KOPROPERTY_LIBS}
     kexidb
     ${CALLIGRADB_LIBS}
+
+    KProperty
+
     KF5::KIOWidgets
 )
 
