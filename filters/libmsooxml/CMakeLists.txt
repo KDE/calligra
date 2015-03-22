@@ -1,8 +1,7 @@
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
 
-if(QCA2_FOUND)
+if(Qca-qt5_FOUND)
     add_definitions( -DHAVE_QCA2 )
-    include_directories(${QCA2_INCLUDE_DIR})
 endif()
 
 include_directories(
@@ -43,8 +42,8 @@ set(msooxml_LIB_SRCS
 add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 
 target_link_libraries(komsooxml mso koodf2 koodf komain)
-if(QCA2_FOUND)
-   target_link_libraries(komsooxml ${QCA2_LIBRARIES})
+if(Qca-qt5_FOUND)
+   target_link_libraries(komsooxml qca-qt5)
 endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
