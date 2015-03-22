@@ -34,21 +34,20 @@
 #include <QClipboard>
 #include <QBuffer>
 #include <QCache>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
-#include <kmimetype.h>
-#include <kservice.h>
 #include <klocale.h>
-#include <kio/job.h>
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <kmenu.h>
-#include <kstdaccel.h>
+#include <kurl.h>
 
 #include <kexiutils/utils.h>
 #include <widget/utils/kexidropdownbutton.h>
 #include <widget/utils/kexicontextmenuutils.h>
+
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
 
 struct PixmapAndPos {
     QPixmap pixmap;
@@ -260,7 +259,7 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
 
     //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(QIODevice::ReadOnly)) {
         //! @todo err msg
         return;
     }
@@ -288,7 +287,7 @@ void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString
 void KexiBlobTableEdit::handleSaveAsAction(const QString& fileName)
 {
     QFile f(fileName);
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         //! @todo err msg
         return;
     }
@@ -371,7 +370,8 @@ void KexiBlobTableEdit::resize(int w, int h)
         d->button->resize(h, h);
     m_rightMarginWhenFocused = m_rightMargin + addWidth;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
-    r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
+    r.translate(qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
+                qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->verticalScrollBar()->value());
     updateFocus(r);
 /*! @todo
     if (d->menu) {
@@ -420,7 +420,7 @@ bool KexiBlobTableEdit::handleKeyPress(QKeyEvent* ke, bool editorActive)
     const int k = ke->key();
     if (!d->readOnly) {
         if ((ke->modifiers() == Qt::NoButton && k == Qt::Key_F4)
-                || (ke->modifiers() == Qt::AltButton && k == Qt::Key_Down)) {
+                || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Down)) {
             d->button->animateClick();
             QMouseEvent me(QEvent::MouseButtonPress, QPoint(2, 2), Qt::LeftButton, Qt::NoButton,
                            Qt::NoModifier);
@@ -464,7 +464,7 @@ bool KexiBlobTableEdit::eventFilter(QObject *o, QEvent *e)
         const int mods = ke->modifiers();
         const int k = ke->key();
         if ((mods == Qt::NoButton && (k == Qt::Key_Tab || k == Qt::Key_Left || k == Qt::Key_Right))
-                || (mods == Qt::ShiftButton && k == Qt::Key_Backtab)
+                || (mods == Qt::ShiftModifier && k == Qt::Key_Backtab)
            ) {
             d->menu->hide();
             QApplication::sendEvent(this, ke);   //re-send to move cursor

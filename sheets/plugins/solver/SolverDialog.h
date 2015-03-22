@@ -25,7 +25,6 @@
 #include "ui_SolverMainWidget.h"
 #include "ui_SolverDetailsWidget.h"
 
-class QCloseEvent;
 class QWidget;
 
 namespace Calligra

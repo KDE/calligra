@@ -48,7 +48,7 @@ public:
 
     MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotButtonClicked(int button);
     void slotTaskRemoved( Node *node );
 

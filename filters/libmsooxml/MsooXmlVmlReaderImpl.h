@@ -342,7 +342,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }
     }
-#ifdef DOCXXMLDOCREADER_H
+#ifdef DOCXXMLDOCUMENTREADER_H
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
             if (m_headerActive || m_footerActive) {
@@ -1615,7 +1615,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
                 if (index > 0) {
                     QString first = focusposition.left(index);
                     doPrependCheck(first);
-                    focusposition = focusposition.mid(index + 1);
+                    focusposition.remove(0, index + 1);
                     doPrependCheck(focusposition);
                     qreal fx = first.toDouble() * 100;
                     qreal fy = focusposition.toDouble() * 100;
@@ -1655,7 +1655,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
                 bool lastRound = false;
                 while (index > 0 || lastRound) {
                     QString gradientString = colors.left(index);
-                    colors = colors.mid(index + 1);
+                    colors.remove(0, index + 1);
                     int spaceLocation = gradientString.indexOf(' ');
                     QString pos = gradientString.left(spaceLocation);
                     if (pos.right(1) == "f") {
@@ -1793,7 +1793,7 @@ static QString getNumber(QString& source)
             break;
         }
     }
-    source = source.mid(index);
+    source.remove(0, index);
     return number;
 }
 
@@ -1801,7 +1801,7 @@ static QString getArgument(QString& source, bool commaMeansZero, bool& wasComman
 {
     wasCommand = false;
     if (source.at(0) == ',') {
-        source = source.mid(1);
+        source.remove(0, 1);
         if (commaMeansZero) {
             return "0";
         }
@@ -1812,18 +1812,18 @@ static QString getArgument(QString& source, bool commaMeansZero, bool& wasComman
         return getNumber(source);
     }
     if (source.at(0) == '-') { //negative number
-        source = source.mid(1);
+        source.remove(0, 1);
         return QString("-%1").arg(getNumber(source));
     }
     if (source.at(0) == ',') { // case of 1,,2
         return "0";
     }
     if (source.at(0) == '#') {
-        source = source.mid(1);
+        source.remove(0, 1);
         return QString("$%1").arg(getNumber(source));
     }
     if (source.at(0) == '@') {
-        source = source.mid(1);
+        source.remove(0, 1);
         return QString("?f%1").arg(getNumber(source));
     }
 
@@ -1857,7 +1857,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
         switch (state) {
         case CommandExpected:
             command = parsedString.at(0);
-            parsedString = parsedString.mid(1);
+            parsedString.remove(0, 1);
             state = ArgumentExpected;
             if (command == 'm') {
                 lastCommand = MoveCommand;
@@ -1884,7 +1884,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
             }
             else if (command == 'q') {
                 QChar subcommand = parsedString.at(0);
-                parsedString = parsedString.mid(1);
+                parsedString.remove(0, 1);
                 if (subcommand == 'x') {
                     lastCommand = QuadEllipXCommand;
                     returnedString += " X";
@@ -1896,7 +1896,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
             }
             else if (command == 'a') {
                 QChar subcommand = parsedString.at(0);
-                parsedString = parsedString.mid(1);
+                parsedString.remove(0, 1);
                 if (subcommand == 'r') {
                     lastCommand = ArcCommand;
                     returnedString += " B";
@@ -1916,7 +1916,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
             }
             else if (command == 'w') {
                 QChar subcommand = parsedString.at(0);
-                parsedString = parsedString.mid(1);
+                parsedString.remove(0, 1);
                 if (subcommand == 'r') {
                     lastCommand = ArcCommandClock;
                     returnedString += " V";
@@ -1928,7 +1928,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
             }
             else if (command == 'n') {
                 QChar subcommand = parsedString.at(0);
-                parsedString = parsedString.mid(1);
+                parsedString.remove(0, 1);
                 if (subcommand == 'f') {
                     returnedString += " F";
                 }
@@ -2312,7 +2312,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         eqn.replace("ycenter", "(height/2)");
         int commandIndex = eqn.indexOf(' ');
         QString command = eqn.left(commandIndex);
-        eqn = eqn.mid(commandIndex + 1);
+        eqn.remove(0, commandIndex + 1);
         QList<QString> parameters;
         while (true) {
             commandIndex = eqn.indexOf(' ');
@@ -2321,7 +2321,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
                 break;
             }
             parameters.append(eqn.left(commandIndex));
-            eqn = eqn.mid(commandIndex + 1);
+            eqn.remove(0, commandIndex + 1);
         }
         if (command == "val") {
             m_currentVMLProperties.normalFormulas += parameters.at(0);
@@ -2437,7 +2437,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     TRY_READ_ATTR_WITHOUT_NS(type)
     if (!type.isEmpty()) {
-        type = type.mid(1); // removes extra # from the start
+        type.remove(0, 1); // removes extra # from the start
         // Inheriting all values from the template shape, except for group values
         // since it is possible that the template was declared outside the group
         bool _insideGroup = m_currentVMLProperties.insideGroup;
@@ -2687,7 +2687,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
                 }
                 oldProperties.internalMarginLeft = str;
             }
-            inset = inset.mid(index + 1);
+            inset.remove(0, index + 1);
             doPrependCheck(inset);
             index = inset.indexOf(',');
             if (index > 0) {
@@ -2698,7 +2698,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
                     }
                     oldProperties.internalMarginTop = str;
                 }
-                inset = inset.mid(index + 1);
+                inset.remove(0, index + 1);
                 doPrependCheck(inset);
                 index = inset.indexOf(',');
                 if (index > 0) {

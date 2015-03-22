@@ -29,7 +29,6 @@
 class KarbonDocument;
 class KoShape;
 class KoShapeStrokeModel;
-class QPainterPath;
 
 class WmfExport : public KoFilter
 {

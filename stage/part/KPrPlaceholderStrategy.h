@@ -27,15 +27,12 @@ class QRectF;
 class QPainter;
 #include "KoXmlReaderForward.h"
 class KoShape;
-class KoDataCenterBase;
-class KoShapeBasedDocumentBase;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeUserData;
 class KoViewConverter;
 class PlaceholderData;
 class KoDocumentResourceManager;
-class KoCanvasBase;
 class KoShapePaintingContext;
 
 class KPrPlaceholderStrategy

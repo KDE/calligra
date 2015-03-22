@@ -42,13 +42,8 @@
 #include <QHeaderView>
 
 #include <kaction.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kactioncollection.h>
-#include <ksystemtimezone.h>
-#include <ktimezone.h>
 #include <kmenu.h>
 
 #include <KoDocument.h>

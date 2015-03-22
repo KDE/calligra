@@ -318,7 +318,7 @@ void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
     unsigned width = record->width();
     bool hidden = record->isHidden();
 
-    for (unsigned i = firstColumn; i <= lastColumn; i++) {
+    for (unsigned i = firstColumn; i <= lastColumn; ++i) {
         Column* column = d->sheet->column(i, true);
         if (column) {
             column->setWidth( Column::columnUnitsToPts((double)width) );
@@ -398,7 +398,7 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         len = footer.indexOf("&C") - pos;
         if (len > 0) {
             left = footer.mid(pos, len);
-            footer = footer.mid(pos + len, footer.length());
+            footer.remove(0, pos + len);
         } else {
             left = footer.mid(pos);
         }
@@ -411,7 +411,7 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         len = footer.indexOf("&R") - pos;
         if (len > 0) {
             center = footer.mid(pos, len);
-            footer = footer.mid(pos + len, footer.length());
+            footer.remove(0, pos + len);
         } else {
             center = footer.mid(pos);
         }
@@ -531,7 +531,7 @@ void WorksheetSubStreamHandler::handleMergedCells(MergedCellsRecord* record)
     if (!record) return;
     if (!d->sheet) return;
 
-    for (unsigned i = 0; i < record->count(); i++) {
+    for (unsigned i = 0; i < record->count(); ++i) {
         unsigned firstRow = record->firstRow(i);
         unsigned lastRow = record->lastRow(i);
         unsigned firstColumn = record->firstColumn(i);
@@ -542,8 +542,8 @@ void WorksheetSubStreamHandler::handleMergedCells(MergedCellsRecord* record)
             cell->setColumnSpan(lastColumn - firstColumn + 1);
             cell->setRowSpan(lastRow - firstRow + 1);
         }
-        for (unsigned row = firstRow; row <= lastRow; row++)
-            for (unsigned col = firstColumn; col <= lastColumn; col++) {
+        for (unsigned row = firstRow; row <= lastRow; ++row)
+            for (unsigned col = firstColumn; col <= lastColumn; ++col) {
                 if (row != firstRow || col != firstColumn) {
                     d->sheet->cell(col, row, true)->setCovered(true);
                 }
@@ -560,7 +560,7 @@ void WorksheetSubStreamHandler::handleMulBlank(MulBlankRecord* record)
     unsigned lastColumn = record->lastColumn();
     unsigned row = record->row();
 
-    for (unsigned column = firstColumn; column <= lastColumn; column++) {
+    for (unsigned column = firstColumn; column <= lastColumn; ++column) {
         Cell* cell = d->sheet->cell(column, row, true);
         if (cell) {
             cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));

@@ -28,9 +28,7 @@
 
 #include <kmessagebox.h>
 #include <ktimezone.h>
-#include <ksystemtimezone.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 
 #include <QDateTime>
 

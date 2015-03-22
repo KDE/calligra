@@ -423,7 +423,7 @@ bool AlterTableTester::getTableDataDump(KexiWindow* window, QString& dataString)
     args["textQuote"] = "\"";
     args["itemId"] = QString::number(
                          prj->dbConnection()->tableSchema(window->partItem()->name())->id());
-    if (!KexiInternalPart::executeCommand("csv_importexport", win, "KexiCSVExport", &args)) {
+    if (!KexiInternalPart::executeCommand("org.kexi-project.importexport.csv", win, "KexiCSVExport", &args)) {
         showError("Error exporting table contents.");
         return false;
     }
@@ -669,7 +669,6 @@ int main(int argc, char *argv[])
     newArgc = 2;
     newArgv = new char*[newArgc];
     newArgv[0] = qstrdup(argv[0]);
-    newArgv[1] = qstrdup("--skip-startup-dialog");
 
     KAboutData aboutdata;
     aboutdata.setProgramName("Kexi Alter Table Test");

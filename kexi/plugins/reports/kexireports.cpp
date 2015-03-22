@@ -18,6 +18,4 @@
 
 #include "kexireportpart.h"
 
-#include <kpluginfactory.h>
-
-K_EXPORT_KEXI_PLUGIN(KexiReportPart, report)
+K_EXPORT_KEXIPART_PLUGIN(KexiReportPart, report)

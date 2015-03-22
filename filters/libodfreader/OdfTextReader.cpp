@@ -31,11 +31,8 @@
 #include <klocalizedstring.h>
 
 // Calligra
-#include <KoStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
-#include <KoOdfReadStore.h>
 
 // Reader library
 #include "OdfTextReaderBackend.h"
@@ -179,7 +176,7 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     //          <text:change-start> 5.5.7.2
     //   [done] <text:h> 5.1.2
     //          <text:illustration-index> 8.4
-    //          <text:list> 5.3.1
+    //   [done] <text:list> 5.3.1
     //          <text:numbered-paragraph> 5.3.6
     //          <text:object-index> 8.6
     //   [done] <text:p> 5.1.3
@@ -191,12 +188,14 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
         
-    // FIXME: Only paragraphs are handled right now.
     if (tagName == "text:h") {
         readElementTextH(reader);
     }
     else if (tagName == "text:p") {
         readElementTextP(reader);
+    }
+    else if (tagName == "text:list") {
+        readElementTextList(reader);
     }
     else if (tagName == "table:table") {
         readElementTableTable(reader);
@@ -246,6 +245,37 @@ void OdfTextReader::readElementTextP(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextList(reader, m_context);
+
+    // <text:list> has the following children in ODF 1.2:
+    //   [done] <text:list-header> 5.3.3
+    //   [done] <text:list-item> 5.3.4
+
+    m_context->setIsInsideParagraph(true);
+    while (reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
+
+        QString tagName = reader.qualifiedName().toString();
+        //kDebug() << "list child:" << tagName;
+        if (tagName == "text:list-item") {
+            readElementTextListItem(reader);
+        }
+        else if (tagName == "text:list-header") {
+            readElementTextListHeader(reader);
+        }
+        else {
+            readUnknownElement(reader);
+        }
+        DEBUG_READING("loop-end");
+    }
+    m_context->setIsInsideParagraph(false);
+
+    m_backend->elementTextList(reader, m_context);
+    DEBUGEND();
+}
 
 // ----------------------------------------------------------------
 //                             Tables
@@ -661,7 +691,6 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-
 void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -671,7 +700,7 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
     //   [done] <dc:creator> 4.3.2.7
     //   [done] <dc:date> 4.3.2.10
     //          <meta:date-string> 14.3
-    //          <text:list> 5.3.1
+    //   [done] <text:list> 5.3.1
     //   [done] <text:p> 5.1.3
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
@@ -684,9 +713,10 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
         }
         else if (tagName == "meta:date-string") {
             // FIXME: NYI
+            reader.skipCurrentElement();
         }
         else if (tagName == "text:list") {
-            // FIXME: NYI
+            readElementTextList(reader);
         }
         else if (tagName == "text:p") {
             readElementTextP(reader);
@@ -788,6 +818,95 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+
+// ----------------------------------------------------------------
+//                        List level functions
+
+
+void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextListHeader(reader, m_context);
+
+    // <text:list-header> has the following children in ODF 1.2:
+    //   [done] <text:h> 5.1.2
+    //   [done] <text:p> 5.1.3
+    //   [done] <text:list> 5.3.1
+    //   [done] <text:soft-page-break> 5.6
+    //          <text:number> 6.1.10
+    while(reader.readNextStartElement()) {
+	DEBUG_READING("loop-start");
+
+	QString tagName = reader.qualifiedName().toString();
+	if (tagName == "text:h") {
+	    readElementTextH(reader);
+	}
+	else if (tagName == "text:p") {
+	    readElementTextP(reader);
+	}
+	else if (tagName == "text:list") {
+	    readElementTextList(reader);
+	}
+        else if (tagName == "text:soft-page-break") {
+	    readElementTextSoftPageBreak(reader);
+        }
+        else if (tagName == "text:number") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+	else {
+	    readUnknownElement(reader);
+	}
+
+	DEBUG_READING("loop-end");
+    }
+
+    m_backend->elementTextListHeader(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextListItem(reader, m_context);
+
+    // <text:list-item> has the following children in ODF 1.2:
+    //   [done] <text:h> 5.1.2
+    //   [done] <text:p> 5.1.3
+    //   [done] <text:list> 5.3.1
+    //   [done] <text:soft-page-break> 5.6
+    //          <text:number> 6.1.10
+    while(reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
+
+        QString tagName = reader.qualifiedName().toString();
+        kDebug() <<tagName;
+	if (tagName == "text:h") {
+	    readElementTextH(reader);
+	}
+	else if (tagName == "text:p") {
+	    readElementTextP(reader);
+	}
+        else if (tagName == "text:list") {
+            readElementTextList(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+	    readElementTextSoftPageBreak(reader);
+        }
+        else if (tagName == "text:number") {
+            //FIXME
+            reader.skipCurrentElement();
+        }
+        else {
+            readUnknownElement(reader);
+        }
+
+	DEBUG_READING("loop-end");
+    }
+
+    m_backend->elementTextListItem(reader, m_context);
+    DEBUGEND();
+}
 
 // ----------------------------------------------------------------
 //                             Other functions

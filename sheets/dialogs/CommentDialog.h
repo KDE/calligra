@@ -44,7 +44,7 @@ class CommentDialog : public KDialog
 public:
     CommentDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void slotTextChanged();
 protected:

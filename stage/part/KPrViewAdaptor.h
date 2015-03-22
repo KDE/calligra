@@ -4,7 +4,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +23,7 @@
 #ifndef QT_NO_DBUS
 
 #include <KoViewAdaptor.h>
+#include <QStringList>
 
 class KPrView;
 
@@ -35,7 +36,7 @@ public:
     explicit KPrViewAdaptor( KPrView* view );
     virtual ~KPrViewAdaptor();
 
-public slots:
+public Q_SLOTS:
 
     // custom slideshows
 
@@ -131,7 +132,7 @@ public slots:
     int numStepsInPresentationPage() const;
     int numPresentationPages() const;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the active custom slide show changes.
      *
@@ -171,7 +172,7 @@ signals:
      */
     void presentationStepChanged( int step );
 
-private slots:
+private Q_SLOTS:
     /**
      * Fired when the presentation is activated.
      */

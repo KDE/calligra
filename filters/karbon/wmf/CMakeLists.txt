@@ -21,9 +21,9 @@ install(FILES  calligra_filter_wmf2svg.desktop
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES  karbon_wmf_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
-endif(SHOULD_BUILD_FILTER_WMF_TO_SVG)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
@@ -45,4 +45,4 @@ install(TARGETS calligra_filter_karbon2wmf
 install(FILES  calligra_filter_karbon2wmf.desktop
         DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
+endif()

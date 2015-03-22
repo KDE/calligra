@@ -30,7 +30,6 @@
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <kmimetype.h>
 #include <kio/global.h>
 
 #include <kexi_global.h>

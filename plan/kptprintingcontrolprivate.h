@@ -16,7 +16,7 @@ class PrintingControlPrivate : public QObject
 public:
     PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia );
     ~PrintingControlPrivate() {}
-public slots:
+public Q_SLOTS:
     void slotChanged();
 private:
     PrintingDialog *m_job;

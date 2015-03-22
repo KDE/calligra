@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      */
-    KexiScriptEditor(QWidget *parent);
+    explicit KexiScriptEditor(QWidget *parent);
 
     /**
      * Destructor.
@@ -64,7 +64,7 @@ public:
      */
     void initialize(Kross::Action* scriptaction);
 
-public slots:
+public Q_SLOTS:
     void slotTextChanged();
     void setLineNo(long);
 

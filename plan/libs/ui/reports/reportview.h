@@ -38,11 +38,8 @@ class KoShape;
 struct KoPageLayout;
 
 class KoReportPage;
-class KoReportData;
 class KoReportPreRenderer;
 class ORODocument;
-class ReportViewPageSelect;
-class ScriptAdaptor;
 class KoReportDesigner;
 class KoReportRendererBase;
 
@@ -52,17 +49,13 @@ namespace KoProperty
     class Set;
 }
 
-class KTabWidget;
-
 class QGraphicsView;
 class QGraphicsScene;
 class QDomElement;
-class QDockWidget;
 class QStackedWidget;
 class QDomElement;
 class QScrollArea;
 class QStandardItemModel;
-class QActionGroup;
 class KUndo2Command;
 
 namespace KPlato
@@ -76,7 +69,6 @@ class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
 class ReportDesignPanel;
-class ReportSourceModel;
 class GroupSectionEditor;
 
 class ReportPrintingDialog : public KoPrintingDialog
@@ -95,7 +87,7 @@ public:
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
-public slots:
+public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
@@ -128,15 +120,15 @@ public:
     QDomDocument document() const;
     QList<ReportData*> reportDataModels() const;
 
-public slots:
+public Q_SLOTS:
     void setGuiActive( bool active );
     void setScheduleManager( ScheduleManager *sm );
 
-private slots:
+private Q_SLOTS:
     void slotEditReport();
     void slotViewReport();
 
-signals:
+Q_SIGNALS:
     void editReportDesign( ReportWidget* );
 
 private:
@@ -149,7 +141,7 @@ class KPLATOUI_EXPORT ReportWidget : public ViewBase
 public:
     ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent);
 
-public slots:
+public Q_SLOTS:
     void setGuiActive( bool active );
     
     void renderPage( int page );
@@ -171,17 +163,17 @@ public slots:
     void setReportDataModels( const QList<ReportData*> &models );
     QList<ReportData*> reportDataModels() const { return m_reportdatamodels; }
 
-signals:
+Q_SIGNALS:
     void editReportDesign();
 
-public slots:
+public Q_SLOTS:
     /// refresh display
     void slotRefreshView();
 
 protected:
     void setupGui();
 
-private slots:
+private Q_SLOTS:
     void nextPage();
     void prevPage();
     void firstPage();
@@ -221,10 +213,10 @@ public:
     explicit ReportNavigator(QWidget *parent = 0);
     void setCurrentPage( int page );
     
-public slots:
+public Q_SLOTS:
     void setMaximum( int );
     
-protected slots:
+protected Q_SLOTS:
     void slotMaxChanged( int );
     void setButtonsEnabled();
 };
@@ -239,14 +231,14 @@ public:
 
     QDomDocument document() const;
 
-signals:
+Q_SIGNALS:
     void createReportView( ReportDesignDialog *dlg );
     void modifyReportDefinition( KUndo2Command *cmd );
 
-public slots:
+public Q_SLOTS:
     void slotViewCreated( ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     void slotSaveToFile();
     void slotSaveToView();
     virtual void slotButtonClicked(int button);
@@ -291,10 +283,10 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
-public slots:
+public Q_SLOTS:
     void setReportData( const QString &tag );
 
-signals:
+Q_SIGNALS:
     void viewReport();
     void resetButtonState( bool );
     void raiseClicked();
@@ -310,7 +302,7 @@ protected:
     QStandardItemModel *createSourceModel( QObject *parent ) const;
     void setData();
 
-protected slots:
+protected Q_SLOTS:
     void slotPropertySetChanged();
     void slotInsertAction();
     void slotItemInserted( const QString & );

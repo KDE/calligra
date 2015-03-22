@@ -32,6 +32,7 @@
 #include <KoSelection.h>
 #include <KoShape.h>
 #include <KoIcon.h>
+#include <KoTextDocumentLayout.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
@@ -52,10 +53,16 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
           m_charsWithSpace(0),
           m_charsWithoutSpace(0),
           m_lines(0),
-          m_paragraphs(0)
+          m_paragraphs(0),
+          m_running(false)
 {
     this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
+    // Three seconds being the Human Moment, we're going to be slightly quicker than that
+    // This means we're waiting long enough to let people start typing again, but not long
+    // enough that they think something is wrong (which would happen if we waited longer)
+    m_timer->setInterval(2500);
+    m_timer->setSingleShot(true);
     initUi();
     initLayout();
     //All kind of stuff related to the option menu, unnecessary stuff in short version
@@ -243,8 +250,17 @@ void KWStatisticsWidget::initLayout()
 void KWStatisticsWidget::updateData()
 {
     if (!isVisible()) {
+        // rather than returning, schedule another update - this means we don't have to capture
+        // the visible change signal and update then. This does mean we will have up to 2500 ms
+        // before the update is done after showing the bar, but it's better than not updating
+        // at all, and results in less code
+        m_timer->start();
         return;
     }
+    if (m_running) {
+        return;
+    }
+    m_running = true;
     m_charsWithSpace = 0;
     m_charsWithoutSpace = 0;
     m_words = 0;
@@ -275,11 +291,14 @@ void KWStatisticsWidget::updateData()
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
+            // Don't be so heavy on large documents...
+            qApp->processEvents();
             m_paragraphs += 1;
             m_charsWithSpace += block.text().length();
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
-            if (block.layout())
+            if (block.layout()) {
                 m_lines += block.layout()->lineCount();
+            }
             m_cjkChars += countCJKChars(block.text());
 
             QString s = block.text();
@@ -309,26 +328,31 @@ void KWStatisticsWidget::updateData()
                 QStringList syls = word.split(re, QString::SkipEmptyParts);
                 int word_syllables = 0;
                 for (QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
-                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables--;
+                    }
                 }
                 for (QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
-                    if (word.indexOf(re) != -1)
+                    if (word.indexOf(re) != -1) {
                         word_syllables--;
+                    }
                 }
                 for (QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
-                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables++;
+                    }
                 }
                 for (QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
-                    if (word.indexOf(re) != -1)
+                    if (word.indexOf(re) != -1) {
                         word_syllables++;
+                    }
                 }
                 word_syllables += syls.count();
-                if (word_syllables == 0)
+                if (word_syllables == 0) {
                     word_syllables = 1;
+                }
                 m_syllables += word_syllables;
             }
             re.setCaseSensitivity(Qt::CaseSensitive);
@@ -338,8 +362,9 @@ void KWStatisticsWidget::updateData()
             // Sentence count
             // Clean up for better result, destroys the original text but we only want to count
             s = s.trimmed();
-            if (s.isEmpty())
+            if (s.isEmpty()) {
                 continue;
+            }
             QChar lastchar = s.at(s.length() - 1);
             if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
                 s = s + '.';
@@ -350,14 +375,16 @@ void KWStatisticsWidget::updateData()
             s.replace(re, "0,0");
             re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
             s.replace(re, "*");
-                for (int i = 0 ; i < s.length(); ++i) {
-                    QChar ch = s[i];
-                    if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
-                        ++m_sentences;
+            for (int i = 0 ; i < s.length(); ++i) {
+                QChar ch = s[i];
+                if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
+                    ++m_sentences;
+                }
             }
         }
     }
     updateDataUi();
+    m_running = false;
 }
 
 void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
@@ -371,10 +398,18 @@ void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection 
 
 void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
 {
+    if (!canvas) {
+        return;
+    }
     m_resourceManager = canvas->resourceManager();
     m_selection = canvas->shapeManager()->selection();
     m_document = canvas->document();
-    m_timer->start(2500);
+    // It is apparently possible to have a document which lacks a main frameset...
+    // so let's handle that and avoid crashes.
+    if (m_document->mainFrameSet()) {
+        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
+    }
+    m_timer->start();
 }
 
 void KWStatisticsWidget::unsetCanvas()
@@ -389,8 +424,9 @@ void KWStatisticsWidget::updateDataUi()
 {
     // calculate Flesch reading ease score:
     float flesch_score = 0;
-    if (m_words > 0 && m_sentences > 0)
+    if (m_words > 0 && m_sentences > 0) {
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
+    }
     QString flesch = KGlobal::locale()->formatNumber(flesch_score);
     QString newText[8];
     newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
@@ -421,17 +457,17 @@ void KWStatisticsWidget::updateDataUi()
 
 void KWStatisticsWidget::selectionChanged()
 {
-    if (m_selection->count() != 1)
+    if (m_selection->count() != 1) {
         return;
+    }
 
     KoShape *shape = m_selection->firstSelectedShape();
     if (!shape) return;
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (!frame) return; // you can have embedded shapes selected, in that case it surely is no text frameset.
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
     if (fs) {
-        if (m_textDocument)
+        if (m_textDocument) {
             disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+        }
         m_textDocument = fs->document();
     }
 }

@@ -67,7 +67,7 @@ public:
     virtual bool cursorAtEnd();
     virtual void clear();
 
-public slots:
+public Q_SLOTS:
     virtual void setEnabled(bool enabled);
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);

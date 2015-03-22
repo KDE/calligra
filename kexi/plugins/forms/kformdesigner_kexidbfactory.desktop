@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Widgets Plugin for Kexi Forms
-Name[bs]=plugin dodataka za Kexi Forme
+Name[bs]=Plugin dodataka za Kexi Forme
 Name[ca]=Connector d'estris per a formularis del Kexi
 Name[ca@valencia]=Connector d'estris per a formularis del Kexi
 Name[da]=Kontrolplugin til Kexi-formularer
@@ -21,7 +21,7 @@ Name[ja]=Kexi フォームのためのウィジェットプラグイン
 Name[kk]=Kexi пішінінің виджет плагині
 Name[nb]=Skjermelement programtillegg for Kexi-former
 Name[nl]=Widgetsplugin voor Kexi Forms
-Name[pl]=Wtyczka elementu interfejsu dla formularzy Kexi
+Name[pl]=Wtyczka widżetów dla formularzy Kexi
 Name[pt]='Plugin' de Elementos para os Formulários do Kexi
 Name[pt_BR]=Plugin de elementos para formulários do Kexi
 Name[ru]=Модуль виджетов для форм Kexi

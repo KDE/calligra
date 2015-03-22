@@ -93,7 +93,7 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     // define columns
     QFontMetrics fm(font);
-    for (int i = 0; i < dbase.fields.count(); i++) {
+    for (int i = 0; i < dbase.fields.count(); ++i) {
         int mw = qMax((int)dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
         double w = POINT_TO_MM(fm.maxWidth() * mw);
         root += "<column column=\"" + QString::number(i + 1) + "\"";
@@ -102,13 +102,13 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     // define rows
     double h = POINT_TO_MM(5 + fm.height() + fm.leading());
-    for (unsigned j = 0; j < dbase.recordCount(); j++) {
+    for (unsigned j = 0; j < dbase.recordCount(); ++j) {
         root += "<row row=\"" + QString::number(j + 1) + "\""
                 " height=\"" + QString::number(h) + "\" ><format/></row>\n";
     }
 
     // field names come as first row
-    for (int i = 0; i < dbase.fields.count(); i++) {
+    for (int i = 0; i < dbase.fields.count(); ++i) {
         root += "<cell row=\"1\" column=\"" + QString::number(i + 1) + "\" >\n"
                 "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />"
                 "<font family=\"" + font.family() + "\"" +
@@ -120,11 +120,11 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     // process all records
     unsigned row = 1;
-    for (unsigned j = 0; j < dbase.recordCount(); j++) {
+    for (unsigned j = 0; j < dbase.recordCount(); ++j) {
         QStringList rec = dbase.readRecord(j);
         if (rec.count()) {
             row++;
-            for (int i = 0; i < rec.count(); i++) {
+            for (int i = 0; i < rec.count(); ++i) {
                 root += "<cell row=\"" + QString::number(row) + "\""
                         "column=\"" + QString::number(i + 1) + "\" >\n"
                         "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />"

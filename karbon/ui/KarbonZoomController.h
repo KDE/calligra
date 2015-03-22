@@ -54,7 +54,7 @@ public:
      */
     void setZoomMode(KoZoomMode::Mode mode);
 
-signals:
+Q_SIGNALS:
     /**
     * Signal is triggered when the user clicks the zoom to selection button.
     * Nothing else happens except that this signal is emitted.
@@ -67,7 +67,7 @@ signals:
     */
     void zoomedToAll();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Set the zoom and the zoom mode for this zoom Controller.
@@ -97,7 +97,7 @@ public slots:
      */
     void setPageSize(const QSizeF &pageSize);
 
-private slots:
+private Q_SLOTS:
     /// so we know when the canvasController changes size
     void setAvailableSize();
 

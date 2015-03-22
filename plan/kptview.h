@@ -36,7 +36,6 @@
 #include <QPrintDialog>
 
 #include <kconfigdialog.h>
-#include <kparts/event.h>
 
 class QStackedWidget;
 class QSplitter;
@@ -61,7 +60,6 @@ struct ViewInfo;
 class AccountsView;
 class GanttView;
 class PertEditor;
-class ResourceView;
 class AccountsEditor;
 class TaskEditor;
 class CalendarEditor;
@@ -70,7 +68,6 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
-class TaskModuleModel;
 class Calendar;
 class MainDocument;
 class Part;
@@ -86,7 +83,6 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
-class ReportWidget;
 
 class ReportDesignDialog;
 
@@ -98,7 +94,7 @@ class ConfigDialog : public KConfigDialog
 public:
     ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
 
-protected slots:
+protected Q_SLOTS:
     /// Return true if any widget has changed
     virtual bool hasChanged();
     /**
@@ -205,10 +201,10 @@ public:
         return 0;
     }
 
-signals:
+Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager *sm );
 
-public slots:
+public Q_SLOTS:
     void slotUpdate();
     void slotCreateTemplate();
     void slotCreateNewProject();
@@ -248,7 +244,7 @@ public slots:
     void addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index );
     void removeViewListItem( const ViewListItem *item );
 
-protected slots:
+protected Q_SLOTS:
     void slotGuiActivated( ViewBase *view, bool );
     void slotViewActivated( ViewListItem*, ViewListItem* );
     void slotPlugScheduleActions();
@@ -322,7 +318,7 @@ protected:
 
     ViewBase *createWelcomeView();
 
-private slots:
+private Q_SLOTS:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
     void slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );

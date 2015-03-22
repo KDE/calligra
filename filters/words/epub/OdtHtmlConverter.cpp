@@ -36,7 +36,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoOdfReadStore.h>
 #include <KoUnit.h>
 
 // EPUB filter
@@ -74,7 +73,7 @@ OdtHtmlConverter::~OdtHtmlConverter()
 //                         HTML conversion
 
 
-OdtHtmlConverter::ConversionOptions defaultOptions = {
+const OdtHtmlConverter::ConversionOptions defaultOptions = {
     true,                       // Put styles into styles.css
     true,                        // Do break the output into chapters
     false                       // It doesn't use Mobi convention

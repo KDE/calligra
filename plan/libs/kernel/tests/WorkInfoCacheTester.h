@@ -22,15 +22,13 @@
 
 #include <QtTest>
 
-#include <ktempdir.h>
-
 namespace KPlato
 {
 
 class WorkInfoCacheTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

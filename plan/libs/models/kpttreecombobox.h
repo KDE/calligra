@@ -52,17 +52,17 @@ public:
 
     void showPopup();
 
-signals:
+Q_SIGNALS:
     void changed();
 
-public slots:
+public Q_SLOTS:
     void setCurrentIndexes( const QModelIndexList &lst );
     void setCurrentIndexes( const QList<QPersistentModelIndex> &lst );
 
 protected:
     void paintEvent( QPaintEvent *event );
     
-protected slots:
+protected Q_SLOTS:
     void updateCurrentIndexes( const QModelIndexList &lst );
     void slotSelectionChanged();
 

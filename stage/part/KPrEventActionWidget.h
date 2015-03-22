@@ -44,7 +44,7 @@ public:
      */
     virtual void setData(KPrEventActionData *eventActionData) = 0;
 
-signals:
+Q_SIGNALS:
     /**
      * Send signal to add the created command to the command history
      */

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Export Filter
-Name[bs]=Words ASCII unosni Filter
+Name[bs]=Words ASCII Izvozni Filter
 Name[ca]=Filtre d'exportació ASCII per al Words
 Name[ca@valencia]=Filtre d'exportació ASCII per al Words
 Name[cs]=Exportní filtr formátu ASCII pro Words
@@ -12,7 +12,7 @@ Name[en_GB]=Words ASCII Export Filter
 Name[es]=Filtro de Words de exportación de ASCII
 Name[et]=Wordsi ASCII ekspordifilter
 Name[eu]=Words-en ASCII esportazio-iragazkia
-Name[fi]=ASCII-vientisuodin Wordsiin
+Name[fi]=Wordsin ASCII-vientisuodatin
 Name[fr]=Filtre d'exportation ASCII de Words
 Name[gl]=Filtro para Words de exportación de ASCII
 Name[hu]=Words ASCII exportszűrő

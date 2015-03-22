@@ -29,9 +29,7 @@ class KoCanvasControllerWidget;
 class Canvas;
 class MainWindow;
 class KAction;
-class KToggleAction;
 class KoZoomAction;
-class KoViewConverter;
 class KoZoomController;
 class RootSection;
 class Section;
@@ -83,7 +81,7 @@ private:
     /// creates the actions (called from the constructor)
     void initActions();
     void loadExtensions();
-protected slots:
+protected Q_SLOTS:
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
     void editPaste();
@@ -97,7 +95,7 @@ protected slots:
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
 
-private slots:
+private Q_SLOTS:
     void canvasReceivedFocus();
     void documentRectChanged(const QRectF& rect);
     void selectionDuplicate();

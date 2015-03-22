@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef DOCXXMLDOCREADER_H
-#define DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
+#define DOCXXMLDOCUMENTREADER_H
 
 #include <QBuffer>
 #include <QString>
@@ -89,6 +89,7 @@ protected:
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_ind();
     KoFilter::ConversionStatus read_outline();
+    KoFilter::ConversionStatus read_outlineLvl();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
     KoFilter::ConversionStatus read_control();
@@ -449,4 +450,4 @@ public:
 private:
 };
 
-#endif //DOCXXMLDOCREADER_H
+#endif //DOCXXMLDOCUMENTREADER_H

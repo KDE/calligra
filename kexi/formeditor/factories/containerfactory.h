@@ -103,7 +103,7 @@ public:
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
     virtual void dropEvent(QDropEvent *e);
 
-signals:
+Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 
@@ -119,7 +119,7 @@ Q_OBJECT
 public:
     AddTabAction(KFormDesigner::Container *container,
                  TabWidgetBase *receiver, QObject *parent);
-public slots:
+public Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
@@ -134,7 +134,7 @@ Q_OBJECT
 public:
     RemoveTabAction(KFormDesigner::Container *container,
                     TabWidgetBase *receiver, QObject *parent);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
@@ -149,7 +149,7 @@ Q_OBJECT
 public:
     RenameTabAction(KFormDesigner::Container *container,
                     TabWidgetBase *receiver, QObject *parent);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
@@ -164,7 +164,7 @@ Q_OBJECT
 public:
     AddStackPageAction(KFormDesigner::Container *container,
                        QWidget *receiver, QObject *parent);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
@@ -179,7 +179,7 @@ Q_OBJECT
 public:
     RemoveStackPageAction(KFormDesigner::Container *container,
                           QWidget *receiver, QObject *parent);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
@@ -198,7 +198,7 @@ public:
     };
     GoToStackPageAction(Direction direction, KFormDesigner::Container *container,
                         QWidget *receiver, QObject *parent);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     int nextWidgetIndex() const;
@@ -227,7 +227,7 @@ public:
 
     KFormDesigner::Container *container() const { return m_container; }
     
-signals:
+Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 
@@ -255,7 +255,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-signals:
+Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 
@@ -321,7 +321,7 @@ protected:
                                   const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
-public slots:
+public Q_SLOTS:
     void reorderTabs(int oldpos, int newpos);
 };
 

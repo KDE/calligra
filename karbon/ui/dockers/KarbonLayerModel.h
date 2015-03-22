@@ -28,7 +28,6 @@ class KarbonDocument;
 class KoShape;
 class KoShapeContainer;
 class QAbstractItemModel;
-class KoViewConverter;
 
 class KarbonLayerModel : public KoDocumentSectionModel
 {
@@ -54,7 +53,7 @@ public:
     virtual QMimeData * mimeData(const QModelIndexList & indexes) const;
     virtual bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
 
-public slots:
+public Q_SLOTS:
     /// Triggers an update of the complete model
     void update();
 

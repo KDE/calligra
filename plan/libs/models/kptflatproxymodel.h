@@ -79,7 +79,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 
-public slots:
+public Q_SLOTS:
     void sourceDataChanged(const QModelIndex &source_top_left,
                            const QModelIndex &source_bottom_right);
     void sourceHeaderDataChanged(Qt::Orientation orientation, int start, int end);
@@ -107,7 +107,7 @@ protected:
     int mapFromSourceRow( const QModelIndex & sourceIndex ) const;
     int mapToSourceRow( const  QModelIndex & sourceIndex ) const;
 
-private slots:
+private Q_SLOTS:
     void initiateMaps( const QModelIndex &sourceParent = QModelIndex() );
     void sourceModelDestroyed();
     

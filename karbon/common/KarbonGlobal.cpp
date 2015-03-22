@@ -57,7 +57,7 @@ qreal KarbonGlobal::factorialLn(unsigned n)
 
 qreal KarbonGlobal::gammaLn(qreal x)
 {
-    static qreal coeff[ 6 ] = {
+    static const qreal coeff[ 6 ] = {
         76.18009172947146,
         -86.50532032941677,
         24.01409824083091,

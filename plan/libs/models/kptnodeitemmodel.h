@@ -326,16 +326,16 @@ public:
     /// Return the sortorder to be used for @p column
     virtual int sortRole( int column ) const;
 
-signals:
+Q_SIGNALS:
     void nodeInserted( Node *node );
     void projectShownChanged( bool );
 
-public slots:
+public Q_SLOTS:
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
     void setShowProject( bool on );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotWbsDefinitionChanged();
     virtual void slotNodeChanged( Node* );
     virtual void slotNodeToBeInserted( Node *node, int row );
@@ -438,11 +438,11 @@ public:
 
     QList<Node*> mileStones() const;
     
-public slots:
+public Q_SLOTS:
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
     void slotNodeInserted( Node *node );
@@ -502,10 +502,10 @@ public:
 
     bool importProject( const KUrl &url, bool emitsignal = true );
 
-public slots:
+public Q_SLOTS:
     void loadTaskModules( const QStringList &files );
 
-signals:
+Q_SIGNALS:
     void executeCommand( KUndo2Command *cmd );
     void saveTaskModule( const KUrl &url, Project *project );
     void removeTaskModule( const KUrl &url );

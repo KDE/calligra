@@ -20,8 +20,15 @@
 */
 
 #include "kexi_version.h"
-
+#include <calligragitversion.h>
 #include <QString>
+
+static const char FULL_VERSION[]
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    = KEXI_VERSION_STRING " (git " CALLIGRA_GIT_SHA1_STRING " " CALLIGRA_GIT_BRANCH_STRING ")";
+#else
+    = KEXI_VERSION_STRING;
+#endif
 
 KEXICORE_EXPORT unsigned int Kexi::version()
 {
@@ -46,6 +53,11 @@ KEXICORE_EXPORT unsigned int Kexi::versionRelease()
 KEXICORE_EXPORT const char *Kexi::versionString()
 {
     return KEXI_VERSION_STRING;
+}
+
+KEXICORE_EXPORT const char *Kexi::fullVersionString()
+{
+    return FULL_VERSION;
 }
 
 KEXICORE_EXPORT unsigned int Kexi::stableVersionMajor()

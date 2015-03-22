@@ -26,7 +26,6 @@
 #include <QVariantList>
 
 class QByteArray;
-class QTextStream;
 
 
 class DocxExport : public KoFilter

@@ -28,13 +28,14 @@ class QTableView;
 class QComboBox;
 class QCheckBox;
 class QLabel;
+class KexiNameWidget;
 
 namespace KexiDB {
 class TableSchema;
 }
 
 namespace KexiMigration {
-    
+
 class AlterSchemaWidget : public QWidget
 {
     Q_OBJECT
@@ -42,19 +43,23 @@ class AlterSchemaWidget : public QWidget
         explicit AlterSchemaWidget(QWidget* parent = 0);
         ~AlterSchemaWidget();
 
-        void setTableSchema(KexiDB::TableSchema *schema);
+        void setTableSchema(KexiDB::TableSchema *schema, const QString &suggestedCaption = QString());
         void setData(const QList<KexiDB::RecordData>& data);
 
         KexiDB::TableSchema* newSchema();
 
+        KexiNameWidget* nameWidget();
+        bool nameExists(const QString &name) const;
+
+        AlterSchemaTableModel* model();
     private:
 
         QGridLayout *m_layout;
         QTableView *m_table;
         QComboBox *m_columnType;
         QCheckBox *m_columnPKey;
-        QLineEdit *m_tableName;
-        
+        KexiNameWidget *m_tableNameWidget;
+
         QStringList m_types;
 
         AlterSchemaTableModel *m_model;
@@ -62,24 +67,19 @@ class AlterSchemaWidget : public QWidget
         QLabel *m_columnNumLabel;
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
-        QLabel *m_tableNameLabel;
-        QLabel *m_nameUsedLabel;
-        
+
         KexiDB::TableSchema *m_originalSchema;
         KexiDB::TableSchema *m_newSchema;
 
         int m_selectedColumn;
 
         //! @todo Something like this could go in kexi utils/project?
-        QString suggestedItemName(const QString& baseName);
-        
-        bool nameExists(const QString& tableName);
-        
-    private slots:
+        QString suggestedItemCaption(const QString& baseCaption);
+
+    private Q_SLOTS:
         void tableClicked(const QModelIndex& idx);
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);
-        void nameChanged(const QString& tableName);
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

@@ -84,14 +84,6 @@ public:
     }
 
     /**
-     * @return the MIME type of KSpread document
-     */
-    virtual QByteArray mimeType() const {
-        return SHEETS_MIME_TYPE;
-    }
-
-
-    /**
      * @return the Map that belongs to this Document
      */
     Map *map() const;

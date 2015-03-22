@@ -24,7 +24,6 @@
 #include "kptcommand.h"
 
 
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
 

@@ -22,7 +22,6 @@
 
 #include <QWidget>
 
-class QUrl;
 
 //! Status sidebar for the welcome page
 class KexiWelcomeStatusBar : public QWidget
@@ -35,10 +34,11 @@ public:
     QPixmap userProgressPixmap();
     QPixmap externalLinkPixmap();
 
-private slots:
+private Q_SLOTS:
     void showContributionHelp();
     void showShareUsageInfo();
     void showContributionDetails();
+    void showDonation();
     void slotShareFeedback();
     void slotCancelled();
     //! Used for async show for speeding up the message displaying

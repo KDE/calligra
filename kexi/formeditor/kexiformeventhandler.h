@@ -91,7 +91,7 @@ public:
                         const QString& objectName, const QString& actionOption);
     virtual ~KexiFormEventAction();
 
-public slots:
+public Q_SLOTS:
     //! Activates the action. If the object supports executing (macro, script),
     //! it is executed; otherwise (table, query, form,...) it is opened in its data view.
     void slotTrigger();

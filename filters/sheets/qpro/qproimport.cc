@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qproimport.h>
+
 #include <sstream>
 
 #include <kdebug.h>
@@ -30,8 +32,6 @@
 #include <sheets/Cell.h>
 #include <sheets/Value.h>
 #include <sheets/Map.h>
-
-#include <qproimport.h>
 
 #include <qproformula.h>
 #include <qpro/stream.h>

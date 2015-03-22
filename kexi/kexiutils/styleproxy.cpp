@@ -42,6 +42,7 @@ void StyleProxy::setParentStyle(QStyle* style)
     m_style = QStyleFactory::create(style->objectName());
     if (!m_style)
         m_style = style;
+    setObjectName(m_style->objectName()); // useful for testing style name
 }
 
 QStyle* StyleProxy::parentStyle() const
@@ -59,3 +60,4 @@ QStyle* StyleProxy::parentStyle(int methodIndex) const
     return m_style;
 }
 
+#include "styleproxy.moc"

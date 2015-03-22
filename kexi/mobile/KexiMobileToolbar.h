@@ -23,8 +23,6 @@
 
 #include <QToolBar>
 
-class QVBoxLayout;
-class QPushButton;
 class KexiRecordNavigatorHandler;
 
 class KexiMobileToolbar : public QToolBar
@@ -47,7 +45,7 @@ private:
     
     void updatePage();
 
-private slots:
+private Q_SLOTS:
   void openFileClicked();
   void gotoNavigatorClicked();
   
@@ -55,7 +53,7 @@ private slots:
   void recordPrevious();
   void recordNext();
   
-signals:
+Q_SIGNALS:
     void pageOpenFile();
     void pageNavigator();
     void pageItem();

@@ -60,6 +60,7 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 
 QString KoOdfStyleProperties::attribute(const QString &property) const
 {
+    kDebug() << d->attributes;
     return d->attributes.value(property, QString());
 }
 

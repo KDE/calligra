@@ -52,7 +52,7 @@ private:
 class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:
-    KexiTemplatesProxyModel(QObject *parent = 0);
+    explicit KexiTemplatesProxyModel(QObject *parent = 0);
 };
 
 #endif

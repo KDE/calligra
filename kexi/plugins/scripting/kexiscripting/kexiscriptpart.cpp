@@ -35,11 +35,9 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KoIcon.h>
-#include <kxmlguiclient.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kpluginfactory.h>
 
 #include <QMetaObject>
 #include <QMenu>
@@ -119,9 +117,9 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
         bool exec = (dontask == "yes");
         if (!exec && dontask != "no") {
             exec = KMessageBox::warningContinueCancel(0,
-                    i18n("Do you want to execute the script \"%1\"?\n\n"
-                         "Scripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
-                    i18n("Execute Script?"), KGuiItem(i18n("Execute"), koIconName("system-run")),
+                    futureI18n("Do you want to execute the script \"%1\"?\n\n"
+                         "Scripts obtained from unknown sources can contain dangerous code.", scriptaction->text()),
+                    futureI18n("Execute Script?"), KGuiItem(futureI18n("Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
                                                      ) == KMessageBox::Continue;
         }
@@ -231,13 +229,13 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 KLocalizedString KexiScriptPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of script \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Script \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of script <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
 
-K_EXPORT_KEXI_PLUGIN( KexiScriptPart, script )
+K_EXPORT_KEXIPART_PLUGIN( KexiScriptPart, script )
 
 #include "kexiscriptpart.moc"

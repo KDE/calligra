@@ -95,7 +95,7 @@ KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 class HorizontalWidgetList::LessThan
 {
 public:
-    LessThan(QWidget *topLevelWidget)
+    explicit LessThan(QWidget *topLevelWidget)
      : m_topLevelWidget(topLevelWidget)
     {
     }
@@ -134,7 +134,7 @@ void HorizontalWidgetList::sort()
 class VerticalWidgetList::LessThan
 {
 public:
-    LessThan(QWidget *topLevelWidget)
+    explicit LessThan(QWidget *topLevelWidget)
      : m_topLevelWidget(topLevelWidget)
     {
     }

@@ -34,7 +34,7 @@ class KWPageStylePrivate;
 class KoShapeBackground;
 class KoOdfLoadingContext;
 class KoDocumentResourceManager;
-class KoColumns;
+struct KoColumns;
 
 /**
  * A page style represents a set of all the properties that change the layout and size
@@ -58,7 +58,7 @@ class KoColumns;
  * Q_ASSERT(style2.headerPolicy() == Words::HFTypeEvenOdd); // the other changes too
  * @endcode
  */
-class WORDS_TEST_EXPORT KWPageStyle
+class WORDS_EXPORT KWPageStyle
 {
 public:
     /**

@@ -68,7 +68,7 @@ typedef struct {
     Action action;
 } Transition;
 
-static Transition transitions[] = {
+static const Transition transitions[] = {
     { State_Comment, '\n', State_Start, Action_Output},
     { State_Comment, '\r', State_Start, Action_Output},
     { State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
@@ -234,8 +234,8 @@ uchar PSCommentLexer::decode()
 
 /* StringBuffer implementation */
 
-int initialSize = 20;
-int addSize = 10;
+const int initialSize = 20;
+const int addSize = 10;
 
 StringBuffer::StringBuffer()
 {

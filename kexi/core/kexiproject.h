@@ -350,7 +350,7 @@ protected:
     /*! \return Kexi part for \a item. */
     KexiPart::Part *findPartFor(const KexiPart::Item& item);
 
-signals:
+Q_SIGNALS:
     /** signal emitted on error */
     void error(const QString &title, KexiDB::Object *obj);
 

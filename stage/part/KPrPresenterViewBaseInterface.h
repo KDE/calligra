@@ -36,14 +36,14 @@ class KPrPresenterViewBaseInterface : public QWidget
 public:
     explicit KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
-public slots:
+public Q_SLOTS:
     /// set the active page to @p page
     void setActivePage( KoPAPageBase *page );
 
     /// set the active page number to @p pageIndex
     virtual void setActivePage( int pageIndex );
 
-signals:
+Q_SIGNALS:
     void activeSlideChanged( KoPAPageBase *page );
 
 protected:

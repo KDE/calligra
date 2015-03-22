@@ -31,8 +31,8 @@ class SybaseCursorData;
 class SybaseCursor: public Cursor
 {
 public:
-    SybaseCursor(Connection* conn, const QString& statement = QString(),
-                 uint cursor_options = NoOptions);
+    explicit SybaseCursor(Connection* conn, const QString& statement = QString(),
+                          uint cursor_options = NoOptions);
     SybaseCursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
     virtual ~SybaseCursor();
     virtual bool drv_open();

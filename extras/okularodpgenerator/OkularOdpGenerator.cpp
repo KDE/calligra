@@ -24,6 +24,8 @@
 #include <QImage>
 #include <QPainter>
 
+#include <calligraversion.h>
+
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KoPADocument.h>
@@ -33,20 +35,17 @@
 
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 
 #include <okular/core/page.h>
-#include <okular/core/version.h>
 
 static KAboutData createAboutData()
 {
     KAboutData aboutData(
          "okular_odp",
-         "okular_odp",
+         "okularGenerator_odp",
          ki18n( "ODP Backend" ),
-         "0.1",
+         CALLIGRA_VERSION_STRING,
          ki18n( "ODP file renderer" ),
          KAboutData::License_GPL,
          ki18n( "© 2010 Sven Langkamp" )
@@ -173,7 +172,16 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
     signalPixmapRequestDone( request );
 }
 
+#if OKULAR_IS_VERSION(0, 20, 60)
+Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+{
+    Q_UNUSED(keys);
+
+    return m_documentInfo;
+}
+#else
 const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
 {
     return &m_documentInfo;
 }
+#endif

@@ -25,8 +25,6 @@
 #include "kptitemmodelbase.h"
 #include "kptnodeitemmodel.h"
 
-class KAction;
-
 namespace KPlato
 {
 
@@ -92,11 +90,11 @@ public:
     /// Return the sortorder to be used for @p column
     virtual int sortRole( int column ) const;
 
-public slots:
+public Q_SLOTS:
     virtual void setScheduleManager( ScheduleManager *sm );
     virtual void refresh();
 
-protected slots:
+protected Q_SLOTS:
     void slotAboutToBeReset();
     void slotReset();
 

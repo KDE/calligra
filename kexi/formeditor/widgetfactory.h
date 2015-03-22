@@ -26,6 +26,8 @@
 #include <QVariant>
 #include "WidgetInfo.h"
 
+#include <db/pluginloader.h>
+
 class QWidget;
 class QListWidget;
 class QMenu;
@@ -154,7 +156,7 @@ public:
     };
     Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
-    WidgetFactory(QObject *parent, const char *name);
+    explicit WidgetFactory(QObject *parent, const char *name = 0);
     virtual ~WidgetFactory();
 
     /*! Adds a new class described by \a w. */
@@ -356,7 +358,7 @@ protected:
 
     void setLibrary(WidgetLibrary* library);
 
-public slots:
+public Q_SLOTS:
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
 
@@ -378,10 +380,9 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
 
 //! Implementation of a form designer-compatible widget factory
-#define K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN( class_name, internal_name ) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("kformdesigner_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KFORMDESIGNER_VERSION, 0, 0))
+#define K_EXPORT_KEXIFORMWIDGETS_PLUGIN( class_name, internal_name ) \
+    KEXI_EXPORT_PLUGIN("formwidgets", class_name, internal_name, \
+                       KFORMDESIGNER_VERSION, 0, 0)
 
 }
 #endif

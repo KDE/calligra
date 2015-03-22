@@ -48,7 +48,7 @@ public:
     double inWeek() const { return m_week; }
     double inDay() const { return m_day; }
     
-private slots:
+private Q_SLOTS:
     void slotCheckAllFieldsFilled();
     void slotEnableButtonOk(bool on);
 
@@ -57,7 +57,7 @@ private slots:
     void slotWeekChanged(double);
     void slotDayChanged(double);
 
-signals:
+Q_SIGNALS:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
 
@@ -76,7 +76,7 @@ public:
     
     MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
     
 private:

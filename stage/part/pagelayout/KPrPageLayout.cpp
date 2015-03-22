@@ -29,12 +29,11 @@
 #include <KoGenStyles.h>
 #include <KoPASavingContext.h>
 #include "KPrPlaceholder.h"
+#include <KoIcon.h>
 
-#include <KoPAView.h>
 #include <QSize>
 #include <QPainter>
 #include <QPixmap>
-#include <kiconloader.h>
 #include <QSvgRenderer>
 
 KPrPageLayout::KPrPageLayout()
@@ -140,7 +139,7 @@ QPixmap KPrPageLayout::thumbnail() const
     pic.fill();
     QPainter p( &pic );
 
-    QString file = loader->iconPath( "layout-elements", KIconLoader::User );
+    QString file = loader->iconPath( koIconName("layout-elements"), KIconLoader::User );
     if ( renderer.load( file ) ) {
         QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
         for ( ; it != m_placeholders.end(); ++it ) {

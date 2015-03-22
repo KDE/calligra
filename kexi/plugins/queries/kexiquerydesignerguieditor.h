@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,7 +64,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
 
 protected:
@@ -111,7 +111,7 @@ protected:
 
     void updatePropertiesVisibility(KoProperty::Set& buf);
 
-protected slots:
+protected Q_SLOTS:
     void slotDragOverTableRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
     void slotDroppedAtRow(KexiDB::RecordData *record, int row,
                           QDropEvent *ev, KexiDB::RecordData*& newRecord);

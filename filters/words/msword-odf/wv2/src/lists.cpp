@@ -16,8 +16,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "../../msdoc.h"
 #include "lists.h"
+
+#include "../../msdoc.h"
 #include "olestream.h"
 #include "word97_generated.h"
 #include "word_helper.h"

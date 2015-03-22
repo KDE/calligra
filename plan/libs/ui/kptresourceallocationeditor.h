@@ -58,7 +58,7 @@ public:
     const QMap<const Resource*, ResourceRequest*> &resourceCache() const { return model()->resourceCache(); }
     const QMap<const ResourceGroup*, ResourceGroupRequest*> &groupCache() const { return model()->groupCache(); }
 
-signals:
+Q_SIGNALS:
     void dataChanged();
 
 };
@@ -87,17 +87,17 @@ public:
     
     KoPrintJob *createPrintJob();
 
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled(  bool on = true );
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSplitView();
 

@@ -39,6 +39,8 @@ public:
     virtual bool validate(KexiNameDialog *dialog) const = 0;
 };
 
+//! A dialog displaying object's name and caption and allowing editing.
+//! @see KexiNameWidget
 class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public KDialog
 {
     Q_OBJECT
@@ -77,7 +79,7 @@ public:
     //! Previous validator is removed. 0 an be passed.
     void setValidator(KexiNameDialogValidator *validator);
 
-protected slots:
+protected Q_SLOTS:
     void slotTextChanged();
     virtual void accept();
     void updateSize();

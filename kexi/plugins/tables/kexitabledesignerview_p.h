@@ -101,7 +101,7 @@ public:
 
     KexiTableDesignerView* designerView;
 
-    KexiTableView *view; //!< helper
+    KexiTableScrollArea *view; //!< helper
 
     KexiDB::TableViewData *data;
 

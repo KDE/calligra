@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 #include <QMap>
 
 #include <kexi_global.h>
-#include <kmainwindow.h>
 #include <db/tristate.h>
 
 #include "KexiMigrateManagerInterface.h"
@@ -36,15 +35,15 @@
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
 class KexiMigrateManagerInterface;
 namespace KexiPart
 {
 class Item;
+class Info;
 }
+class KToolBar;
 
 /**
  * @short Kexi's main window interface
@@ -91,46 +90,6 @@ public:
 #endif
     virtual QWidget* focusWidget() const = 0;
 
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
-#else
-#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
-#endif
-#endif
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) = 0;
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const = 0;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const = 0; )
-#endif
-#endif
-    virtual KXMLGUIClient* guiClient() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name) = 0;
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name) = 0; )
-#endif
-#endif
-    virtual void unplugActionList(const QString &name) = 0;
-
-    //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
-#endif
-#endif
-    virtual KXMLGUIFactory * guiFactory() = 0;
-
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
 
@@ -149,7 +108,7 @@ public:
     /*! \return true if this window is in the User Mode. */
     virtual bool userMode() const = 0;
 
-// signals:
+// Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     virtual void acceptProjectClosingRequested(bool& cancel) = 0;
@@ -161,7 +120,7 @@ public:
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
 
-// public slots:
+// public Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
@@ -193,7 +152,7 @@ public:
      set before call, previously selected item will be preselected
      in the editor (if found). */
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, 
+                                     bool preservePrevSelection = true,
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray()) = 0;
 
@@ -228,6 +187,9 @@ public:
     /*! Find window for a given \a item.
      \return 0 if no windows found. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+
+    /*! Parametrs for query with given id. */
+    virtual QList<QVariant> currentParametersForQuery(int queryId) const = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.
@@ -273,7 +235,7 @@ public:
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
-    /*! Appends widget @a widget to tabbed toolbar declared as @a name. 
+    /*! Appends widget @a widget to tabbed toolbar declared as @a name.
      @a widget will be reparented but the ownership is not taken. */
     virtual void appendWidgetToToolbar(const QString& name, QWidget* widget) = 0;
 
@@ -296,16 +258,19 @@ public:
      hidden. */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. */
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
-    
+
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
 
     //! Interface to the migrate manager
     virtual KexiMigrateManagerInterface* migrateManager() = 0;
 
-protected: // slots:
+    //! Sets reasonable dialog size based on main window size, that is 80% of its size.
+    virtual void setReasonableDialogSize(QDialog *dialog) = 0;
+
+protected: // Q_SLOTS:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
 };

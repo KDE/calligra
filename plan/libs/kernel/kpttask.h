@@ -54,7 +54,7 @@ public:
             class KPLATOKERNEL_EXPORT ActualEffort : public QPair<Duration, Duration>
             {
                 public:
-                    explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration oe = Duration::zeroDuration )
+                    explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration &oe = Duration::zeroDuration )
                         : QPair<Duration, Duration>( ne, oe )
                     {}
                     ActualEffort( const ActualEffort &e )
@@ -214,7 +214,7 @@ public:
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
     const ResourceUsedEffortMap &usedEffortMap() const { return m_usedEffort; }
     
-    void changed( int propert = -1 );
+    void changed( int property = -1 );
     Node *node() const { return m_node; }
     void setNode( Node *node ) { m_node = node; }
     
@@ -592,7 +592,7 @@ public:
     /// Copy intervals from parent schedule in the range @p start, @p end
     void copyAppointments( const DateTime &start, const DateTime &end = DateTime() );
 
-signals:
+Q_SIGNALS:
     void workPackageToBeAdded( Node *node, int row );
     void workPackageAdded( Node *node );
     void workPackageToBeRemoved( Node *node, int row );

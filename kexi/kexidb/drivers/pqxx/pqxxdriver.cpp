@@ -21,6 +21,7 @@
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 #include <string>
@@ -29,7 +30,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, "pqxxsql")
+K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, pqxxsql)
 
 //==================================================================================
 //
@@ -118,7 +119,9 @@ bool pqxxSqlDriver::drv_isSystemFieldName(const QString&) const
 //
 bool pqxxSqlDriver::isSystemDatabaseName(const QString& n) const
 {
-    return n.toLower() == "template1" || n.toLower() == "template0";
+    return     n.compare("template1", Qt::CaseInsensitive) == 0
+            || n.compare("postgres", Qt::CaseInsensitive) == 0
+            || n.compare("template0", Qt::CaseInsensitive) == 0;
 }
 
 //==================================================================================

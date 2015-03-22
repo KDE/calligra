@@ -56,7 +56,7 @@ public:
     class TempData : public KexiWindowData
     {
     public:
-        TempData(QObject* parent);
+        explicit TempData(QObject* parent);
         QDomElement reportDefinition;
         QDomElement connectionDefinition;
 
@@ -69,7 +69,7 @@ public:
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
 
-private slots:
+private Q_SLOTS:
     void slotToolboxActionTriggered(bool checked);
     //! Unchecks toolbox action for @a entity after it is used.
     void slotItemInserted(const QString& entity);

@@ -1,6 +1,6 @@
 add_subdirectory(wv2)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
     ../../libmso
     ../../libmsooxml
@@ -33,9 +33,9 @@ install( FILES  calligra_filter_doc2odt.desktop  DESTINATION ${SERVICES_INSTALL_
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
-endif(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
+    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif()

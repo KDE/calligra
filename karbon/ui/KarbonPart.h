@@ -36,7 +36,6 @@
 
 #include "karbonui_export.h"
 
-class QGraphicsItem;
 class KoView;
 class KoDocument;
 
@@ -58,12 +57,12 @@ public:
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
 
-protected slots:
+protected Q_SLOTS:
 
     /// reimplemented
     virtual void openTemplate(const KUrl& url);
 
-private slots:
+private Q_SLOTS:
 
     void applyCanvasConfiguration(KarbonCanvas *canvas);
 };

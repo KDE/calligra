@@ -28,7 +28,7 @@
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
 #ifndef QT_NO_DBUS
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 #include "calligra_sheets_export.h"
 #include <QString>
 
@@ -38,7 +38,6 @@ namespace Sheets
 {
 class Damage;
 class Sheet;
-class CellProxy;
 
 class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {

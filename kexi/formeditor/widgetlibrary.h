@@ -66,8 +66,8 @@ public:
      By default (when supportedFactoryGroups is empty) only factories having empty
      "X-KFormDesigner-FactoryGroup" field will be loaded.
      Factory group names are case-insensitive. */
-    WidgetLibrary(QObject *parent = 0, 
-                  const QStringList& supportedFactoryGroups = QStringList());
+    explicit WidgetLibrary(QObject *parent = 0,
+                           const QStringList& supportedFactoryGroups = QStringList());
 
     virtual ~WidgetLibrary();
 
@@ -174,7 +174,7 @@ public:
     //! See WidgetFactory::selectableItem(ObjectTreeItem*).
     ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
-signals:
+Q_SIGNALS:
     void widgetActionToggled(const QByteArray& _class);
 
     //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop

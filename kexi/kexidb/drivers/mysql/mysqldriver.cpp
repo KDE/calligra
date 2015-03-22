@@ -37,7 +37,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(MySqlDriver, "mysql")
+K_EXPORT_KEXIDB_DRIVER(MySqlDriver, mysql)
 
 /*! @todo Implement buffered/unbuffered, rather than buffer everything.
           Each MYSQL connection can only handle at most one unbuffered cursor,
@@ -104,7 +104,7 @@ bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
     return QString::compare(n, "mysql", Qt::CaseInsensitive) == 0
         || QString::compare(n, "information_schema", Qt::CaseInsensitive) == 0
-        || Driver::isSystemObjectName(n);
+        || QString::compare(n, "performance_schema", Qt::CaseInsensitive) == 0;
 }
 
 bool MySqlDriver::drv_isSystemFieldName(const QString&) const

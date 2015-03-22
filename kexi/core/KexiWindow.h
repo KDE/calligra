@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -176,7 +176,12 @@ public:
      Selected view (if present) is also informed about deactivation. */
     void deactivate();
 
-public slots:
+    //! Helper, returns consistent window title for \a item.
+    //! Used both for setting window's title and tab names in the main window.
+    //! @todo Use Item::captionOrName() if this is defined in settings?
+    static QString windowTitleForItem(const KexiPart::Item &item);
+
+public Q_SLOTS:
     virtual void setFocus();
 
     void updateCaption();
@@ -225,7 +230,7 @@ public slots:
         @see KexiView::saveSettings() */
     bool saveSettings();
 
-signals:
+Q_SIGNALS:
     void updateContextHelp();
 
     //! emitted when the window is about to close
@@ -235,7 +240,7 @@ signals:
      Activated by KexiView::setDirty(). */
     void dirtyChanged(KexiWindow*);
 
-protected slots:
+protected Q_SLOTS:
     /*!  Sets 'dirty' flag on every dialog's view. */
     void setDirty(bool dirty);
 
@@ -290,7 +295,7 @@ protected:
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
 
-private slots:
+private Q_SLOTS:
     /*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()
      to get error handling and reporting as well on main window level. */
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);

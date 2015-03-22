@@ -25,8 +25,6 @@
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 
-#include <kpluginfactory.h>
-
 KexiMigrationPart::KexiMigrationPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
@@ -45,7 +43,7 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
         w = new KexiMigration::ImportWizard(parent, args);
     }
     else if (QString(widgetClass) == "importtable") {
-        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
+        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent, args);
     }
     else
         return 0;
@@ -54,4 +52,4 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     return w;
 }
 
-K_EXPORT_KEXI_PLUGIN( KexiMigrationPart, migration )
+K_EXPORT_KEXIPART_PLUGIN( KexiMigrationPart, migration )

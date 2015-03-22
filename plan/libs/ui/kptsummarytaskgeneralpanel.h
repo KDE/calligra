@@ -43,10 +43,10 @@ public:
 
     void setStartValues(Task &task);
 
-signals:
+Q_SIGNALS:
     void obligatedFieldsFilled(bool);
 
-public slots:
+public Q_SLOTS:
     void slotObligatedFieldsFilled();
     void slotChooseResponsible();
     

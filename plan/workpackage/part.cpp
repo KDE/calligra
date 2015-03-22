@@ -39,8 +39,6 @@
 #include <KoZoomHandler.h>
 #include <KoXmlReader.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentInfo.h>
 
 #include <QPainter>
@@ -53,7 +51,6 @@
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -68,7 +65,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
-#include <KoGlobal.h>
 #include <KoMainWindow.h>
 
 #include "debugarea.h"

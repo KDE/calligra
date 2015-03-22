@@ -5,11 +5,11 @@ include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DI
 if(KDE4_BUILD_TESTS)
     # only with this definition will the STAGE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 if (!WIN32) ## Disable tests in Windows whilst they break builds
 	add_subdirectory(tests)
-endif(!WIN32)
+endif()
 add_subdirectory(tools)
 
 ### calligrastageprivate ###

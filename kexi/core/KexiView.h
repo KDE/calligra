@@ -27,7 +27,6 @@
 #include "kexiactionproxy.h"
 
 class KexiWindow;
-class KexiRecordNavigatorHandler;
 
 namespace KoProperty
 {
@@ -94,7 +93,7 @@ public:
     virtual bool isDirty() const;
 
     /*! @return true if data editing is in progress. This is useful to indicate
-     * to the master window that the view should save the before switching to 
+     * to the master window that the view should save the before switching to
      * other view. This information is used in KexiWindow::switchToViewMode().
      * Implement this in view that supports data editing, typically
      * of mode Kexi::DataViewMode. If you do this, also implement
@@ -143,9 +142,12 @@ public:
 
     void setDefaultIconName(const QString& iconName);
 
+    /*! For KexiQueryView */
+    virtual QList<QVariant> currentParameters() const;
+
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
 
     /*! Call this in your view's implementation whenever current property set
@@ -167,7 +169,7 @@ public slots:
     /*! Equal to setDirty(true). */
     void setDirty();
 
-signals:
+Q_SIGNALS:
     //! emitted when the view is about to close
     void closing(bool *cancel);
 
@@ -345,7 +347,7 @@ protected:
     //! Sets properties in the Property Editor to be sorted if @a set is true.
     void setSortedProperties(bool set);
 
-private slots:
+private Q_SLOTS:
     void slotSwitchToViewModeInternal(Kexi::ViewMode mode);
     void slotSwitchToDataViewModeInternal(bool);
     void slotSwitchToDesignViewModeInternal(bool);

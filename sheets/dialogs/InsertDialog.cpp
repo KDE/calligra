@@ -34,7 +34,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include "ui/Selection.h"
 #include "Sheet.h"

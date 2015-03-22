@@ -21,8 +21,6 @@
 #include "kexiquerypart.h"
 
 #include <kdebug.h>
-#include <ktoggleaction.h>
-#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -59,9 +57,9 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>")
-                               .arg(window->part()->info()->instanceCaption())
-                               .arg(window->partItem()->name());
+    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>",
+                                     window->part()->info()->instanceCaption(),
+                                     window->partItem()->name());
     return data;
 }
 
@@ -156,10 +154,10 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
 
 KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of query \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Query \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of query <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Query <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }
@@ -250,6 +248,6 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 
 //----------------
 
-K_EXPORT_KEXI_PLUGIN( KexiQueryPart, query )
+K_EXPORT_KEXIPART_PLUGIN( KexiQueryPart, query )
 
 #include "kexiquerypart.moc"

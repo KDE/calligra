@@ -68,7 +68,7 @@ public:
     virtual void setInvalidState(const QString& displayText);
 
     virtual bool isReadOnly() const;
-public slots:
+public Q_SLOTS:
     //! action string for "on click" event
     //! @see KexiFormPart::slotAssignAction()
     //! @see KexiFormEventAction::ActionData

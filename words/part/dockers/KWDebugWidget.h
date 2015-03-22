@@ -42,7 +42,7 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 private:

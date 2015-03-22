@@ -21,4 +21,4 @@ if(OOOSDK_FOUND)
 		${QT_QTOPENGL_LIBRARY} komain kopageapp ppttoodplib)
 	# it would be nice if this explicit depencency was not needed
 	add_dependencies(slidecompare _oooheaders)
-endif(OOOSDK_FOUND)
+endif()

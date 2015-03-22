@@ -9,9 +9,9 @@ include_directories(
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -KPIC")
-else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+else()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
-endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+endif()
 
 kde4_add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
 target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
@@ -27,9 +27,9 @@ install( FILES  calligra_filter_ppt2odp.desktop  DESTINATION ${SERVICES_INSTALL_
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 if(SHOULD_BUILD_OKULARGENERATOR_PPT)
     install( FILES libokularGenerator_powerpoint_calligra.desktop okularPowerpoint_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
-endif(SHOULD_BUILD_OKULARGENERATOR_PPT)
+    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif()

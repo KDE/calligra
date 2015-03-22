@@ -49,7 +49,7 @@ public:
         const QString& forcedTabPageName = QString());
 
     //! For TabStopDialog
-    WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
+    explicit WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
         const QString& forcedTabPageName = QString());
     virtual ~WidgetTreeWidgetItem();
@@ -98,7 +98,7 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
+    explicit WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
 
     virtual ~WidgetTreeWidget();
 
@@ -111,7 +111,7 @@ public:
     //! @see ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem*)
     ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
-public slots:
+public Q_SLOTS:
     /*! Sets \a form as the current Form in the list. The list will automatically
      be filled with an item for each widget in the Form, and selection will be synced.
      Nothing happens if \a form is already the current Form.
@@ -132,7 +132,7 @@ public slots:
     /*! Renames the list item from \a oldname to \a newname. */
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
-protected slots:
+protected Q_SLOTS:
     /*! The selected list item has changed. */
     void slotSelectionChanged();
 

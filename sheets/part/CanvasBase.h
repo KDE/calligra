@@ -33,7 +33,7 @@
 #define CALLIGRA_SHEETS_CANVASBASE
 
 #include <QList>
-
+#include <QSizeF>
 #include <KoCanvasBase.h>
 
 #include "../calligra_sheets_export.h"
@@ -41,6 +41,8 @@
 
 class QFocusEvent;
 class QKeyEvent;
+class QInputMethodEvent;
+class QTabletEvent;
 class QMimeData;
 class QPainter;
 class KoPointerEvent;
@@ -139,9 +141,9 @@ protected:
     void focusIn(QFocusEvent*);
 
     bool dragEnter(const QMimeData* mimeData);
-    bool dragMove(const QMimeData* mimeData, const QPointF& eventPos);
+    bool dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source);
     void dragLeave();
-    bool drop(const QMimeData* mimeData, const QPointF& eventPos);
+    bool drop(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     void inputMethodEvent(QInputMethodEvent *event);

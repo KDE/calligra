@@ -34,45 +34,6 @@ class Form;
 class ResizeHandleSet;
 
 /**
-* a single widget which represents a dot for resizing a widget
-* @author Joseph Wenninger
-*/
-class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
-{
-    Q_OBJECT
-
-public:
-    enum HandlePos {
-        TopLeftCorner = 1,
-        TopCenter = 2,
-        TopRightCorner = 4,
-        LeftCenter = 8,
-        RightCenter = 16,
-        BottomLeftCorner = 32,
-        BottomCenter = 64,
-        BottomRightCorner = 128
-    };
-    ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing = false);
-    virtual ~ResizeHandle();
-    void setEditingMode(bool editing);
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *ev);
-    virtual void mouseMoveEvent(QMouseEvent *ev);
-    virtual void mouseReleaseEvent(QMouseEvent *ev);
-    virtual void paintEvent(QPaintEvent *ev);
-
-protected slots:
-    bool eventFilter(QObject *obj, QEvent *ev);
-    void updatePos();
-
-private:
-    class Private;
-
-    Private* const d;
-};
-
-/**
 * a set of resize handles (for resizing widgets)
 * @author Joseph Wenninger
 */
@@ -83,19 +44,23 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 public:
     typedef QHash<QString, ResizeHandleSet*> Hash;
 
-    ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
+    ResizeHandleSet(QWidget *modify, Form *form);
 
     ~ResizeHandleSet();
 
     QWidget *widget() const;
 
-    void setWidget(QWidget *modify, bool editing = false);
+    void setWidget(QWidget *modify);
     
     void raise();
     
     void setEditingMode(bool editing);
     
     Form *form() const;
+
+Q_SIGNALS:
+    void geometryChangeStarted();
+    void geometryChanged(const QRect &newGeometry);
 
 protected:
     void resizeStarted();

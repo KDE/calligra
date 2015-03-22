@@ -30,7 +30,7 @@ class TestCustomSlideShows : public QObject
 private:
     void populateDoc(MockDocument &doc, QList<KoPAPageBase*> &slideList1, QList<KoPAPageBase*> &slideList2,
                      QString &customShowName1, QString &customShowName2);
-private slots:
+private Q_SLOTS:
     void insertCustomSlideShow();
     void removeCustomSlideShow();
     void updateCustomSlideShow();

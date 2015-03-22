@@ -24,7 +24,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KoDocumentRdf;
-class KoTextEditor;
 
 /**
  * @short A custom QTree subclass that allows D&D

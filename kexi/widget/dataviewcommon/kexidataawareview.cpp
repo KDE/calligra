@@ -183,7 +183,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     const bool emptyInserting = d->dataAwareObject->isEmptyRowInsertingEnabled();
     const bool editing = isDataEditingInProgress();
     const bool sorting = d->dataAwareObject->isSortingEnabled();
-    const int rows = d->dataAwareObject->rows();
+    const int rows = d->dataAwareObject->rowCount();
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
 
     setAvailable("edit_cut", !ro && !insertRowFocusedWithoutEditing);
@@ -332,11 +332,12 @@ void KexiDataAwareView::reloadActions()
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
     setAvailable("data_sort_za", d->dataAwareObject->isSortingEnabled());
 
-    slotCellSelected(d->dataAwareObject->currentColumn(), d->dataAwareObject->currentRow());
+    slotCellSelected(d->dataAwareObject->currentRow(), d->dataAwareObject->currentColumn());
 }
 
-void KexiDataAwareView::slotCellSelected(int /*col*/, int row)
+void KexiDataAwareView::slotCellSelected(int row, int col)
 {
+    Q_UNUSED(col);
     slotUpdateRowActions(row);
 }
 

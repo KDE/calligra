@@ -1,8 +1,12 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main ${KDE4_INCLUDES}  )
-
-find_package(Marble REQUIRED)
-
-include_directories(${MARBLE_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/kexi
+    ${CMAKE_SOURCE_DIR}/kexi/formeditor
+    ${CMAKE_SOURCE_DIR}/kexi/core
+    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs/main
+    ${MARBLE_INCLUDE_DIR}
+    ${KDE4_INCLUDES}
+)
 
 
 set(kformdesigner_mapbrowser_PART_SRCS 
@@ -36,6 +40,6 @@ install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kformdesigner_mapbrowser.desktop DESTINATION
-        ${SERVICES_INSTALL_DIR}/calligra/kformdesigner)
+        ${SERVICES_INSTALL_DIR}/calligra)
 
 kde4_install_icons(${DATA_INSTALL_DIR}/kexi/icons)

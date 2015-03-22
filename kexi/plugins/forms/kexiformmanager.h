@@ -57,7 +57,7 @@ public:
 
     virtual ~KexiFormManager();
 
-public slots:
+public Q_SLOTS:
     //! Receives signal from KexiDataSourcePage about changed form's data source
     void setFormDataSource(const QString& mime, const QString& name);
 
@@ -78,7 +78,7 @@ public slots:
      shows a text window containing contents of .ui XML definition of the current form. */
     void showFormUICode();
 
-protected slots:
+protected Q_SLOTS:
     void slotHistoryCommandExecuted(KFormDesigner::Command *command);
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
     void slotWidgetActionToggled(const QByteArray& action);

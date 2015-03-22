@@ -31,11 +31,13 @@
 #include <QByteArray>
 #include <QPointer>
 
-class KexiProject;
 namespace Kexi
 {
 class ObjectStatus;
 }
+
+//! Empty for now
+#define KEXIMIGRATION_DRIVER
 
 /*! KexiMigration implementation version.
  It is altered after every change:
@@ -164,12 +166,12 @@ public:
     //!Read the data at the given row/field
     QVariant value(uint i);
 
-signals:
+Q_SIGNALS:
     void progressPercent(int percent);
 
 protected:
     //! Used by MigrateManager.
-    KexiMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KexiMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     //! Connect to source database (driver specific)
     virtual bool drv_connect() = 0;

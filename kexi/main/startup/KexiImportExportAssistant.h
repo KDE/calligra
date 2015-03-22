@@ -51,11 +51,11 @@ public:
     const KAction *action_project_import_export_send;
     const KAction *action_import_project;
 
-public slots:
+public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
 
-signals:
+Q_SIGNALS:
     void importProject();
 
 private:

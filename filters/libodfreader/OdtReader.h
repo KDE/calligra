@@ -32,10 +32,6 @@
 #include "koodfreader_export.h"
 
 
-class QSizeF;
-
-class KoXmlWriter;
-class KoStore;
 
 class OdtReaderBackend;
 class OdfReaderContext;

@@ -32,16 +32,59 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
+#include <koproperty/Set.h>
+
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10
 
 using namespace KFormDesigner;
 
+namespace KFormDesigner {
+/**
+* A single widget which represents a small rectangle for resizing a form widget.
+*/
+class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
+{
+public:
+    enum HandlePos {
+        TopLeftCorner = 1,
+        TopCenter = 2,
+        TopRightCorner = 4,
+        LeftCenter = 8,
+        RightCenter = 16,
+        BottomLeftCorner = 32,
+        BottomCenter = 64,
+        BottomRightCorner = 128
+    };
+
+    ResizeHandle(ResizeHandleSet *set, HandlePos pos);
+
+    virtual ~ResizeHandle();
+
+    void setEditingMode(bool editing);
+
+protected:
+    virtual void mousePressEvent(QMouseEvent *ev);
+    virtual void mouseMoveEvent(QMouseEvent *ev);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
+    virtual void paintEvent(QPaintEvent *ev);
+
+protected slots:
+    bool eventFilter(QObject *obj, QEvent *ev);
+    void updatePos();
+
+private:
+    class Private;
+    Private* const d;
+};
+
 class ResizeHandle::Private
 {
 public:
-    Private(ResizeHandleSet* set_, HandlePos pos_);
-    ~Private();
+    Private(ResizeHandleSet* set_, HandlePos pos_)
+        : set(set_), pos(pos_), dragging(false)
+    {}
+    ~Private() {}
 
     ResizeHandleSet *set;
     HandlePos pos;
@@ -49,26 +92,16 @@ public:
     int x;
     int y;
 };
-
-ResizeHandle::Private::Private(ResizeHandleSet *set_, HandlePos pos_) : set(set_), pos(pos_), dragging(false)
-{
-
 }
 
-ResizeHandle::Private::~Private()
-{
-
-}
-
-ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
+ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos)
     : QWidget(set->widget()->parentWidget()), d(new Private(set, pos))
 {
-    setEditingMode(editing);
     setFixedSize(6, 6);
     d->set->widget()->installEventFilter(this);
     setAutoFillBackground(true);
-
     updatePos();
+    setEditingMode(false);
     show();
 }
 
@@ -142,6 +175,7 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
     if (startDragging) {
         d->set->resizeStarted();
         d->set->form()->resetInlineEditor();
+        emit d->set->geometryChangeStarted();
     }
 }
 
@@ -205,7 +239,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
         break;
     }
 
-    // Not move the top-left corner further than the bottom-right corner
+    // Do not move the top-left corner further than the bottom-right corner
     if (tmpx >= d->set->widget()->x() + d->set->widget()->width()) {
         tmpx = d->set->widget()->x() + d->set->widget()->width() - MINIMUM_WIDTH;
         tmpw = MINIMUM_WIDTH;
@@ -243,13 +277,10 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
         // Keep a QSize(10, 10) minimum size
         tmpw = (tmpw < MINIMUM_WIDTH) ? MINIMUM_WIDTH : tmpw;
         tmph = (tmph < MINIMUM_HEIGHT) ? MINIMUM_HEIGHT : tmph;
-        d->set->widget()->resize(tmpw, tmph);
     }
 
-    // Move the widget if necessary
-    if (shouldBeMoved) {
-        d->set->widget()->move(tmpx, tmpy);
-    }
+    //kDebug() << "geometry: OLD" << d->set->widget()->geometry() << "NEW" << QRect(tmpx, tmpy, tmpw, tmph);
+    emit d->set->geometryChanged(QRect(tmpx, tmpy, tmpw, tmph));
 
     if (shouldBeMoved && shouldBeResized) {
         d->set->widget()->show();
@@ -283,14 +314,13 @@ public:
 
 ResizeHandleSet::Private::Private() : widget(0)
 {
-
 }
 
-ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
+ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form)
     : QObject(modify->parentWidget()), d(new Private)
 {
     d->form = form;
-    setWidget(modify, editing);
+    setWidget(modify);
 }
 
 ResizeHandleSet::~ResizeHandleSet()
@@ -301,7 +331,7 @@ ResizeHandleSet::~ResizeHandleSet()
 }
 
 void
-ResizeHandleSet::setWidget(QWidget *modify, bool editing)
+ResizeHandleSet::setWidget(QWidget *modify)
 {
     if (modify == d->widget)
         return;
@@ -313,14 +343,14 @@ ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 
     d->widget = modify;
 
-    d->handles[0] = new ResizeHandle(this, ResizeHandle::TopLeftCorner, editing);
-    d->handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
-    d->handles[2] = new ResizeHandle(this, ResizeHandle::TopRightCorner, editing);
-    d->handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
-    d->handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
-    d->handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeftCorner, editing);
-    d->handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
-    d->handles[7] = new ResizeHandle(this, ResizeHandle::BottomRightCorner, editing);
+    d->handles[0] = new ResizeHandle(this, ResizeHandle::TopLeftCorner);
+    d->handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter);
+    d->handles[2] = new ResizeHandle(this, ResizeHandle::TopRightCorner);
+    d->handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter);
+    d->handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter);
+    d->handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeftCorner);
+    d->handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter);
+    d->handles[7] = new ResizeHandle(this, ResizeHandle::BottomRightCorner);
 }
 
 void
@@ -344,9 +374,7 @@ void ResizeHandleSet::resizeStarted()
 void ResizeHandleSet::resizeFinished()
 {
     if (d->widget) {
-        kDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
-        d->form->addPropertyCommand(d->widget->objectName().toLatin1(), d->origWidgetRect,
-                                   d->widget->geometry(), "geometry", Form::DontExecuteCommand);
+        //kDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
     }
 }
 

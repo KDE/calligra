@@ -32,15 +32,8 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
-#include <kactionmenu.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
-#include <kactioncollection.h>
 
 #include <kdganttglobal.h>
 

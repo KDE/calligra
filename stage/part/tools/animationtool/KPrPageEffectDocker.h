@@ -23,16 +23,12 @@
 #include <QWidget>
 #include <QPixmap>
 
-class QLabel;
 class QComboBox;
 class QDoubleSpinBox;
 class QPushButton;
-class QTimer;
 class KPrPageEffect;
-class KPrPageEffectRunner;
 class KPrPageEffectFactory;
 class KoPAViewBase;
-class KoPAPageBase;
 class KPrViewModePreviewPageEffect;
 class KUndo2Command;
 
@@ -48,7 +44,7 @@ public:
 
     void setView( KoPAViewBase* view );
 
-public slots:
+public Q_SLOTS:
     void slotActivePageChanged();
     void slotApplyToAllSlides();
     void slotEffectChanged( int index );
@@ -58,7 +54,7 @@ protected:
     KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
     KUndo2Command * applyToAllSlidesCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotSubTypeChanged( int index );
     void slotDurationChanged( double duration );
 

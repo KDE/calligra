@@ -50,7 +50,6 @@
 #include <QMenu>
 #include <QPixmap>
 #include <QResizeEvent>
-#include <QTimer>
 #include <QToolButton>
 #ifndef QT_NO_SQL
 #include <QSqlDatabase>
@@ -62,38 +61,30 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <ktoolinvocation.h>
-#include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoGlobal.h>
-#include <KoDpi.h>
+#include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoStore.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
-#include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoXmlNS.h>
 #include <KoZoomAction.h>
@@ -162,7 +153,6 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
 #include <knotifyconfigwidget.h>
-#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;
@@ -754,8 +744,8 @@ void View::initView()
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1855,60 +1845,49 @@ void View::calcStatusBarOp()
     Sheet * sheet = activeSheet();
     ValueCalc* calc = doc()->map()->calc();
     Value val;
+    QString prefix = "";
+
     MethodOfCalc tmpMethod = doc()->map()->settings()->getTypeOfCalc();
     if (sheet && tmpMethod != NoneCalc) {
         Value range = sheet->cellStorage()->valueRegion(*d->selection);
         switch (tmpMethod) {
         case SumOfNumber:
             val = calc->sum(range);
+            prefix = i18n("Sum: ");
             break;
         case Average:
             val = calc->avg(range);
+            prefix = i18n("Average: ");
             break;
         case Min:
             val = calc->min(range);
+            prefix = i18n("Min: ");
             break;
         case Max:
             val = calc->max(range);
+            prefix = i18n("Max: ");
             break;
         case CountA:
             val = Value(calc->count(range));
+            prefix = i18n("Count: ");
             break;
         case Count:
             val = Value(calc->count(range, false));
+            prefix = i18n("CountA: ");
         case NoneCalc:
             break;
         default:
             break;
         }
-
+        if ((range.columns() > 1) || (range.rows() > 1)) {
+            QString size = i18n("%1x%2").arg(range.columns()).arg(range.rows());
+            prefix = prefix.size() ? size + ", " + prefix : size;
+        }
     }
 
     QString res = doc()->map()->converter()->asString(val).asString();
     QString tmp;
-    switch (tmpMethod) {
-    case SumOfNumber:
-        tmp = i18n("Sum: ") + res;
-        break;
-    case Average:
-        tmp = i18n("Average: ") + res;
-        break;
-    case Min:
-        tmp = i18n("Min: ") + res;
-        break;
-    case Max:
-        tmp = i18n("Max: ") + res;
-        break;
-    case Count:
-        tmp = i18n("Count: ") + res;
-        break;
-    case CountA:
-        tmp = i18n("CountA: ") + res;
-        break;
-    case NoneCalc:
-        tmp = "";
-        break;
-    }
+    if (res.length()) tmp = prefix + res;
 
     if (d->calcLabel)
         d->calcLabel->setText(QString(' ') + tmp + ' ');

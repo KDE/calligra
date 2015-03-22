@@ -20,15 +20,15 @@ set(cstester_SRCS
 if(SHOULD_BUILD_KARBON)
     set(cstester_SRCS ${cstester_SRCS}
         CSThumbProviderKarbon.cpp)
-endif(SHOULD_BUILD_KARBON)
+endif()
 
 kde4_add_executable(cstester ${cstester_SRCS})
 
 if(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate karbonui)
-else(SHOULD_BUILD_KARBON)
+else()
     target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate)
-endif(SHOULD_BUILD_KARBON)
+endif()
 
 install(TARGETS cstester  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

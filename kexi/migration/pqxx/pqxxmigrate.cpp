@@ -19,7 +19,15 @@
 */
 
 #include "pqxxmigrate.h"
-#include "pg_type.h"
+#include <migration/keximigrate_p.h>
+
+#ifndef _MSC_VER
+#  define _MSC_VER 0 // avoid warning in server/c.h
+#  include <postgres.h>
+#  undef _MSC_VER
+#else
+#  include <postgres.h>
+#endif
 
 #include <QString>
 #include <kdebug.h>

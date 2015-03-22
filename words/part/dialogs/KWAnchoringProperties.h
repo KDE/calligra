@@ -30,7 +30,6 @@
 #include <QList>
 #include <QPointF>
 
-class KWFrame;
 class KoShape;
 class KWCanvas;
 
@@ -42,9 +41,9 @@ public:
     /// constructor
     explicit KWAnchoringProperties(FrameConfigSharedState *state);
 
-    /// load all info from the argument frames into this widget
-    /// returns true if at least one frame was accepted
-    bool open(const QList<KWFrame*> &frames);
+    /// load all info from the argument shapes into this widget
+    /// returns true if at least one shape was accepted
+    bool open(const QList<KoShape *> &shapes);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -57,7 +56,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void anchorTypeChanged(int anchorType);
     void vertPosChanged(int verticalAlign, QPointF offset = QPointF());
     void vertRelChanged(int index);
@@ -76,8 +75,7 @@ private:
     QButtonGroup *m_anchorTypeGroup;
     QButtonGroup *m_vertPosGroup;
     QButtonGroup *m_horizPosGroup;
-    QList<KWFrame*> m_frames;
-    KoShape *m_shape;
+    QList<KoShape *> m_shapes;
     int m_anchorType;
     int m_vertPos;
     int m_horizPos;

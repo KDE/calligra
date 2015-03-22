@@ -1,3 +1,6 @@
+All tests should be run from {BUILDDIR}/kexi/tests/newapi/ directory because binaries
+are not installed during build.
+
 1. kexidbtest
 -------------
 
@@ -11,19 +14,19 @@ Usage: run 'kexidbtest --help' for usage details.
 ----------
 
 Script for easier executing 'parser' subtest within kexidbtest.
-Usage: run './sqltest' without arguments for usage details.
+Usage: run 'path/to/sqltest' without arguments for usage details.
 
-There is also sqltest_int script accepting interactive mode.
-Usage: run './sqltest_int' without arguments for usage details.
+There is also sqltest_int script accepting interactive mode, asking for statement in a loop.
+Usage: run 'path/to/sqltest_int' without arguments for usage details.
 
 
 3. Important documents
 ----------------------
--Kexi API Documentation in html
-http://calligra.org/developer/apidocs/kexi/html
+* API Documentation in html
+  http://api.kde.org/bundled-apps-api/calligra-apidocs/libs/db/html/index.html
 
--KexiDB Drivers section of KexiWiki Web Page
-http://www.kexi-project.org/wiki/wikiview/index.php@KexiDBDrivers.html
+* KexiDB section on the wiki
+  https://community.kde.org/Kexi/KexiDB
 
 
 
@@ -52,8 +55,4 @@ behaviour), or
 - that the documentation is not correct or not enough detailed, or
 - whatever like that,
 
-..please contact:
-
-KexiDB maintainer
-Jarosław Staniek; staniek at kde.org, irc://irc.freenode.net #kexi
-
+..please contact authors: https://community.kde.org/Kexi/Contact

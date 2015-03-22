@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QString>
 
-#include <kde_file.h>
-
 #include <db/tristate.h>
 
 class KProcess;
@@ -39,7 +37,7 @@ public:
 
     tristate run();
 
-public slots:
+public Q_SLOTS:
     void processExited(KProcess*);
     void receivedStderr(KProcess*, char*, int);
     void cancelClicked();

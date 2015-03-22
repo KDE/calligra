@@ -25,10 +25,7 @@
 #include <QPointer>
 
 class KoPathShape;
-class KoShapeGroup;
-class KoPathPoint;
 class KarbonCalligraphicShape;
-class KarbonCalligraphyOptionWidget;
 
 class KarbonCalligraphyTool : public KoToolBase
 {
@@ -43,15 +40,15 @@ public:
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
 
-    QList<QWidget *> createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets();
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-signals:
+Q_SIGNALS:
     void pathSelectedChanged(bool selection);
 
-private slots:
+private Q_SLOTS:
     void setUsePath(bool usePath);
     void setUsePressure(bool usePressure);
     void setUseAngle(bool useAngle);

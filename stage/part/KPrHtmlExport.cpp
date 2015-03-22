@@ -20,6 +20,7 @@
 
 #include "KPrHtmlExport.h"
 
+#include <QTextStream>
 #include <QDir>
 #include <kio/copyjob.h>
 #include <ktempdir.h>
@@ -28,7 +29,6 @@
 #include <krun.h>
 #include <kzip.h>
 
-#include <KoPADocument.h>
 #include "KPrHtmlExportUiDelegate.h"
 #include "KPrView.h"
 #include "KPrPage.h"

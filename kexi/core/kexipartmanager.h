@@ -21,23 +21,18 @@
 #ifndef KEXIPARTMANAGER_H
 #define KEXIPARTMANAGER_H
 
-#include <QObject>
-
-#include <kservice.h>
-
 #include <db/object.h>
-#include <kexi_export.h>
+#include "kexistaticpart.h"
+#include "kexiinternalpart.h"
 
 namespace KexiDB
 {
-class Connection;
 }
 
 namespace KexiPart
 {
 class Info;
 class Part;
-class StaticPart;
 
 typedef QHash<QString, Info*> PartInfoDict;
 typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
@@ -88,13 +83,16 @@ public:
      */
     PartInfoList* infoList();
 
-signals:
+Q_SIGNALS:
     void partLoaded(KexiPart::Part*);
     void newObjectRequested(KexiPart::Info *info);
 
 protected:
     //! Used by StaticPart
     void insertStaticPart(KexiPart::StaticPart* part);
+
+    //! Used by KexiInternalPart
+    KexiInternalPart* internalPartForClass(const QString& className);
 
 private:
     /**
@@ -109,7 +107,8 @@ private:
 
     Private* const d;
 
-    friend class StaticPart;
+    friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
+    friend KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler*, const QString&);
 };
 
 }

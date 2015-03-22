@@ -38,10 +38,8 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kio/job.h>

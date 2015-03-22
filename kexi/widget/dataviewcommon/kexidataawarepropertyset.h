@@ -85,7 +85,7 @@ public:
      If no such row has been found, -1 is returned. */
     int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
-signals:
+Q_SIGNALS:
     /*! Emitted when row is deleted.
      KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
      KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
@@ -99,7 +99,7 @@ signals:
     /*! Emitted when the value of @a property is changed in @a set.*/
     void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-public slots:
+public Q_SLOTS:
     void eraseCurrentPropertySet();
 
     void clear();
@@ -121,7 +121,7 @@ public slots:
     /*! Deletes a property set at \a row position without removing the row. */
     void eraseAt(uint row);
 
-protected slots:
+protected Q_SLOTS:
     /*! Handles table view's data source changes. */
     void slotDataSet(KexiDB::TableViewData *data);
 
@@ -135,7 +135,7 @@ protected slots:
     void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
 
     //! Called on selecting another cell in a tableview.
-    void slotCellSelected(int, int row);
+    void slotCellSelected(int row, int col);
 
     //! Called on clearing tableview's data: just clears all property sets.
     void slotReloadRequested();

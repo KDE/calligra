@@ -98,6 +98,7 @@ protected:
 
     CellStorage* m_cellStorage; // temporary
     QHash<Cell, Style> m_styles; // temporary
+    QHash<Cell, QString> m_formulas; // temporary; encoded formulas
 };
 
 } // namespace Sheets

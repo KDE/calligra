@@ -53,7 +53,6 @@
 #ifndef QT_NO_COMPLETER
 
 class QAbstractItemView;
-class QAbstractProxyModel;
 class QWidget;
 class QItemSelection;
 
@@ -85,10 +84,10 @@ public:
         CaseInsensitivelySortedModel
     };
 
-    KexiCompleter(QObject *parent = 0);
-    KexiCompleter(QAbstractItemModel *model, QObject *parent = 0);
+    explicit KexiCompleter(QObject *parent = 0);
+    explicit KexiCompleter(QAbstractItemModel *model, QObject *parent = 0);
 #ifndef QT_NO_STRINGLISTMODEL
-    KexiCompleter(const QStringList& completions, QObject *parent = 0);
+    explicit KexiCompleter(const QStringList& completions, QObject *parent = 0);
 #endif
     ~KexiCompleter();
 

@@ -75,22 +75,14 @@
 #include <QWidget>
 
 // KDE
-#include <kcursor.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kmimetype.h>
-#include <ksharedptr.h>
-#include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
-#include <KoStore.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 
@@ -190,6 +182,14 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         kDebug() << "newEvent->globalPos():" << event->globalPos();
     }
 
+#if 0  // This is disabled for now as per irc, as it blocks resize.
+    // If the celltool is not active and we initiate a click on something that is not a flake element, we need
+    // to reactivate the cell tool. THis is a temporary solution, pending the flake updates.
+    if (KoToolManager::instance()->activeToolId() != "KSpreadCellToolId")
+        if (!shapeManager()->shapeAt (documentPosition, KoFlake::ShapeOnTop))
+            KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+#endif
+
     // flake
     if(d->toolProxy) {
         d->toolProxy->mousePressEvent(event, documentPosition);
@@ -281,12 +281,25 @@ void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
+        // If the celltool is not active and the double click is on something that is not a flake element, we need
+        // to reactivate the cell tool. Normally flake would handle this, but the main app is not a shape, so we have to.
+        // TODO: figure out a way to make the flake's functionality work. It'd likely require turning the main app
+        // widget into a KoShape or something along those lines.
+        if (KoToolManager::instance()->activeToolId() != "KSpreadCellToolId") {
+            if (!shapeManager()->shapeAt (documentPosition, KoFlake::ShapeOnTop)) {
+                KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+                return;
+            }
+        }
+
         d->toolProxy->mouseDoubleClickEvent(event, documentPosition);
+    }
 
     if (layoutDirection() == Qt::RightToLeft) {
        // delete event;
     }
+
 }
 
 bool Canvas::event(QEvent *e)
@@ -313,7 +326,7 @@ void Canvas::dragEnterEvent(QDragEnterEvent* event)
 
 void Canvas::dragMoveEvent(QDragMoveEvent* event)
 {
-    if (CanvasBase::dragMove(event->mimeData(), event->pos())) {
+    if (CanvasBase::dragMove(event->mimeData(), event->pos(), event->source())) {
         event->acceptProposedAction();
     } else {
         event->ignore();
@@ -327,7 +340,7 @@ void Canvas::dragLeaveEvent(QDragLeaveEvent*)
 
 void Canvas::dropEvent(QDropEvent *event)
 {
-    if (CanvasBase::drop(event->mimeData(), event->pos())) {
+    if (CanvasBase::drop(event->mimeData(), event->pos(), event->source())) {
         event->setAccepted(true);
     } else {
         event->ignore();

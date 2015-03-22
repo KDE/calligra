@@ -21,13 +21,14 @@
 
 #include <QString>
 #include <db/queryschema.h>
-#include <KoXmlWriter.h>
+
+class KoXmlWriter;
 
 class SimpleField
 {
 public:
     SimpleField();
-    SimpleField(KexiDB::QueryColumnInfo *);
+    explicit SimpleField(KexiDB::QueryColumnInfo *);
     void save(KoXmlWriter &writer);
 
     QString name;

@@ -22,8 +22,6 @@
 #include <kdebug.h>
 #include <ktar.h>
 #include <QDir>
-#include <kaction.h>
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 
@@ -77,3 +75,4 @@ KexiNewStuff::createUploadFile(const QString &)
 }
 
 #endif
+#warning noi18n # added to disable message extraction in Messages.sh

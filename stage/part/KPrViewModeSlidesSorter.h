@@ -31,7 +31,6 @@ class KoPAPageBase;
 class KoViewItemContextBar;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
-class KPrSelectionManager;
 class KPrCustomSlideShowsModel;
 class KPrCustomSlideShows;
 class QToolButton;
@@ -146,7 +145,7 @@ private:
     QComboBox *m_customSlideShowsList;
     KoViewItemContextBar *m_slidesSorterItemContextBar;
 
-private slots:
+private Q_SLOTS:
     /** Changes the view active page to match the slides sorter current index*/
     void updateActivePageToCurrentIndex();
 

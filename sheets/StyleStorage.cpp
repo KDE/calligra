@@ -228,8 +228,20 @@ Style StyleStorage::contains(const QPoint& point) const
     // not found, lookup in the tree
     QList<SharedSubStyle> subStyles = d->tree.contains(point);
 
-    if (subStyles.isEmpty())
-        return *styleManager()->defaultStyle();
+    if (subStyles.isEmpty()) {
+        Style *style = styleManager()->defaultStyle();
+        // let's try caching empty styles too, the lookup is rather expensive still
+        {
+#ifdef CALLIGRA_SHEETS_MT
+            QMutexLocker ml(&d->cacheMutex);
+#endif
+            // insert style into the cache
+            d->cache.insert(point, style);
+            d->cachedArea += QRect(point, point);
+        }
+
+        return *style;
+    }
     Style* style = new Style();
     (*style) = composeStyle(subStyles);
 

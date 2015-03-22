@@ -31,8 +31,6 @@
 
 #include <kdebug.h>
 
-#include <kconfig.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 
 #include <db/tableschema.h>
@@ -44,7 +42,7 @@
 class KexiFieldListView::Private
 {
 public:
-    Private(KexiFieldListOptions options_)
+    explicit Private(KexiFieldListOptions options_)
       : schema(0)
       , model(0)
       , options(options_)

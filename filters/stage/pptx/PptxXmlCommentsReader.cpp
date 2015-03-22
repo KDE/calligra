@@ -24,7 +24,6 @@
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxCommentsReader
 
-#include <KoXmlWriter.h>
 #include <writeodf/writeodfoffice.h>
 #include <writeodf/writeodfdc.h>
 #include <writeodf/helpers.h>

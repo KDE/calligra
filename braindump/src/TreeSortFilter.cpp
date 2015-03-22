@@ -19,9 +19,9 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QtDebug>
-
 #include "TreeSortFilter.h"
+
+#include <QtDebug>
 
 TreeSortFilter::TreeSortFilter(QObject *p) : QSortFilterProxyModel(p)
 {

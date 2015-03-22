@@ -151,7 +151,7 @@ Value ValueParser::readNumber(const QString& _str, bool *ok) const
             minorVal -= wholePart;
             major = QString("%1").arg(major.toInt() + (int)wholePart);
         }
-        minor = QString::number(minorVal, 'f').mid(2);     // chop off the "0." part
+        minor = QString::number(minorVal, 'f').remove(0, 2);     // chop off the "0." part
         // kDebug() <<"fraction:" << major <<"." << minor;
     } else {
         major = str;

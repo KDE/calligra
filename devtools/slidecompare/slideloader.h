@@ -32,7 +32,7 @@ public:
     virtual QSize slideSize() = 0;
     virtual int slideVersion(int position) = 0;
     virtual QPixmap loadSlide(int number, const QSize& maxsize) = 0;
-signals:
+Q_SIGNALS:
     void slidesChanged();
 };
 

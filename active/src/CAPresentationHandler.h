@@ -73,7 +73,7 @@ public:
 
     Q_INVOKABLE CAPADocumentModel *paDocumentModel() const;
 
-public slots:
+public Q_SLOTS:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
 
     void nextSlide();
@@ -87,7 +87,7 @@ public slots:
     void findNext();
     void findPrevious();
 
-signals:
+Q_SIGNALS:
     void slideshowDelayChanged();
     void slideshowStarted();
     void slideshowStopped();
@@ -98,7 +98,7 @@ signals:
 protected:
     virtual KoDocument* document();
 
-private slots:
+private Q_SLOTS:
     void advanceSlideshow();
     void gotoCurrentSlide();
     void findMatchFound(const KoFindMatch& match);

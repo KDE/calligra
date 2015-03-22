@@ -19,7 +19,7 @@
 */
 
 #include "utilities.h"
-#include <stdio.h>
+#include <QString>
 
 #ifdef _MSC_VER
 
@@ -58,15 +58,15 @@ namespace wvWare
 
     std::string int2string( int i )
     {
-        char buf[ 40 ];
-        snprintf( buf, 40, "%d", i );
-        return std::string( buf );
+        QString s;
+        s.setNum(i);
+        return std::string(s.toLatin1());
     }
 
     std::string uint2string( unsigned int i )
     {
-        char buf[ 40 ];
-        snprintf( buf, 40, "%u", i );
-        return std::string( buf );
+        QString s;
+        s.setNum(i);
+        return std::string(s.toLatin1());
     }
 } // namespace wvWare

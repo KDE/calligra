@@ -25,7 +25,6 @@
 #include <koproperty/Set.h>
 
 class KexiProject;
-class QLabel;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
 /*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does
@@ -42,7 +41,7 @@ public:
     explicit KexiLookupColumnPage(QWidget *parent);
     virtual ~KexiLookupColumnPage();
 
-public slots:
+public Q_SLOTS:
     void setProject(KexiProject *prj);
     void clearRowSourceSelection(bool alsoClearComboBox = true);
     void clearBoundColumnSelection();
@@ -51,11 +50,11 @@ public slots:
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
 
-signals:
+Q_SIGNALS:
     //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
-protected slots:
+protected Q_SLOTS:
     void slotRowSourceTextChanged(const QString & string);
     void slotRowSourceChanged();
     void slotGotoSelectedRowSource();

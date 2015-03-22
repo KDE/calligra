@@ -2,10 +2,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44020)
 
 include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( 
--DKEXI_NO_CTXT_HELP=1
-)
-
 ########### next target ###############
 
 set(kexicore_LIB_SRCS 
@@ -26,7 +22,8 @@ set(kexicore_LIB_SRCS
    kexipartmanager.cpp 
    kexipartinfo.cpp 
    kexipartitem.cpp 
-   kexipart.cpp 
+   kexipartbase.cpp
+   kexipart.cpp
    kexiprojectdata.cpp 
    KexiRecentProjects.cpp 
    kexiinternalpart.cpp 
@@ -63,5 +60,4 @@ set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kexicore  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
+install(FILES kexihandler.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

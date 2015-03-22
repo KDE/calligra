@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,9 +41,6 @@
 #include <QCloseEvent>
 
 #include <kdebug.h>
-#include <kapplication.h>
-#include <ktoolbar.h>
-#include <kactioncollection.h>
 #include <kdialog.h>
 
 //----------------------------------------------------------
@@ -52,7 +49,7 @@
 class KexiWindow::Private
 {
 public:
-    Private(KexiWindow *window)
+    explicit Private(KexiWindow *window)
             : win(window)
             , schemaData(0)
             , schemaDataOwned(false)
@@ -92,7 +89,7 @@ public:
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
                                      i18n("Could not create new object.")
-                                     + win->part()->i18nMessage("Object \"%1\" already exists.", win)
+                                     + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
                                        .subs(sdata->name()).toString());
             return false;
         }
@@ -311,20 +308,24 @@ bool KexiWindow::close(bool force)
 
     //let any view send "closing" signal
     QList<KexiView *> list(findChildren<KexiView*>());
-    foreach(KexiView * view, list) {
-        if (view->parent() == d->stack) {
+    QList< QPointer<KexiView> > listPtr;
+    foreach(KexiView * view, list) { // use QPointers for sanity
+        listPtr.append(QPointer<KexiView>(view));
+    }
+    foreach(QPointer<KexiView> viewPtr, listPtr) {
+        if (viewPtr && viewPtr->parent() == d->stack) {
             bool cancel = false;
-            emit view->closing(&cancel);
+            emit viewPtr->closing(&cancel);
             if (!force && cancel) {
                      return false;
             }
         }
     }
     emit closing();
-    foreach(KexiView * view, list) {
-        if (view->parent() == d->stack) {
-            removeView(view);
-            delete view;
+    foreach(QPointer<KexiView> viewPtr, listPtr) {
+        if (viewPtr && viewPtr->parent() == d->stack) {
+            removeView(viewPtr.data());
+            delete viewPtr.data();
         }
     }
     return true;
@@ -448,9 +449,9 @@ tristate KexiWindow::switchToViewMode(
             cancelItem.setText(i18n("Do Not Switch"));
             const int res = KMessageBox::questionYesNoCancel(
                 selectedView(),
-                i18n("There are unsaved changes in object \"%1\". "
-                     "Do you want to save these changes before switching to other view?")
-                    .arg(partItem()->captionOrName()),
+                i18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
+                     "<para>Do you want to save these changes before switching to other view?</para>",
+                     partItem()->captionOrName()),
                     i18n("Confirm Saving Changes"),
                     saveItem, dontSaveItem, cancelItem
             );
@@ -467,7 +468,11 @@ tristate KexiWindow::switchToViewMode(
             }
         }
         if (!designModePreloadedForTextModeHack) {
+            const bool wasDirty = view->isDirty(); // remember and restore the flag if the view was clean
             res = view->beforeSwitchTo(newViewMode, dontStore);
+            if (!wasDirty) {
+                view->setDirty(false);
+            }
         }
         if (~res || !res)
             return res;
@@ -512,7 +517,11 @@ tristate KexiWindow::switchToViewMode(
     if (designModePreloadedForTextModeHack) {
         d->currentViewMode = Kexi::NoViewMode; //SAFE?
     }
+    bool wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
     res = newView->beforeSwitchTo(newViewMode, dontStore);
+    if (!wasDirty) {
+        newView->setDirty(false);
+    }
     proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
@@ -527,8 +536,12 @@ tristate KexiWindow::switchToViewMode(
     if (prevViewMode == Kexi::NoViewMode)
         d->newlySelectedView->setDirty(false);
 
+    wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
     res = newView->afterSwitchFrom(
               designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
+    if (!wasDirty) {
+        newView->setDirty(false);
+    }
     proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
@@ -621,7 +634,7 @@ KexiWindowData *KexiWindow::data() const
 void KexiWindow::setData(KexiWindowData* data)
 {
     if (data != d->data)
-        delete(KexiWindowData*)d->data;
+        delete d->data;
     d->data = data;
 }
 
@@ -652,12 +665,17 @@ void KexiWindow::dirtyChanged(KexiView* view)
     emit dirtyChanged(this);
 }
 
+//static
+QString KexiWindow::windowTitleForItem(const KexiPart::Item &item)
+{
+    return item.name();
+}
+
 void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    //! @todo use d->item->captionOrName() if defined in settings
-    QString fullCapt(d->item->name());
+    const QString fullCapt(windowTitleForItem(*d->item));
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 

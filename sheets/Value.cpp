@@ -443,10 +443,10 @@ QString Value::asStringWithDoubleQuotes() const
 {
     QString s = asString();
     if (type() == Value::String) {
-        if (!(s.startsWith("\"") && s.endsWith("\""))) {
-            if (s.startsWith("'") && s.endsWith("'"))
+        if (!(s.startsWith(QLatin1Char('\"')) && s.endsWith(QLatin1Char('\"')))) {
+            if (s.startsWith(QLatin1Char('\'')) && s.endsWith(QLatin1Char('\'')))
                 s = s.mid(1, s.length()-2);
-            s = "\"" + s + "\"";
+            s = QLatin1Char('\"') + s + QLatin1Char('\"');
         }
     }
     return s;
