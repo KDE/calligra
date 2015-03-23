@@ -46,9 +46,9 @@ target_link_libraries(keximigrate_mdb
 ${GLIB2_LIBRARIES}
 ${ICONV_LIBRARIES}
 keximigrate
-kexidb
 kexiutils
-${CALLIGRADB_LIBS}
+
+Predicate
 )
 
 install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})

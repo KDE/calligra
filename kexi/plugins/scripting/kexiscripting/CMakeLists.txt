@@ -18,9 +18,8 @@ target_link_libraries(
     kokross
     kexicore
     kexiutils
-    kexidb
-    ${CALLIGRADB_LIBS}
 
+    Predicate
     KProperty
 
     KF5::KIOWidgets

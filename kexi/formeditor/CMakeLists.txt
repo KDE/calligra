@@ -47,7 +47,8 @@ set(kformdesigner_LIBS
   kexiutils
   kexicore
   kexiextendedwidgets
-  ${CALLIGRADB_LIBS}
+
+  Predicate
   KProperty
 )
 

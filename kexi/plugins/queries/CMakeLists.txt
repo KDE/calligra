@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi/kexidb   )
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main)
 
 
 ########### next target ###############
@@ -17,14 +17,13 @@ add_library(kexihandler_query MODULE ${kexihandler_query_PART_SRCS})
 target_link_libraries(
     kexihandler_query
     kexicore
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexidataviewcommon
     kexidatatable
     kexirelationsview
     kexiutils
 
+    Predicate
     KProperty
 
     Qt5::Gui

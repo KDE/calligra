@@ -1,5 +1,5 @@
 
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/kexidb)
+include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
 
 set(kexirelationdesignshape_PART_SRCS  
 kexirelationdesignshape.cpp
@@ -14,11 +14,11 @@ add_library(kexirelationdesignshape MODULE ${kexirelationdesignshape_PART_SRCS})
 
 target_link_libraries(
 kexirelationdesignshape
-${CALLIGRADB_LIBS}
 kexicore
 keximain
 komain
 
+Predicate
 
 Qt5::Core
 Qt5::Gui

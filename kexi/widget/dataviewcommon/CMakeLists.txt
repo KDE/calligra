@@ -21,9 +21,8 @@ target_link_libraries(
     kexicore
     kexiutils
     kexiguiutils
-    kexidb
-    ${CALLIGRADB_LIBS}
 
+    Predicate
     KProperty
 
     KF5::KIOWidgets

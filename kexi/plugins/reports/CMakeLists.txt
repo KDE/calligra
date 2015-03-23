@@ -35,10 +35,9 @@ add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
 target_link_libraries(kexihandler_report
     Qt5::Gui
     Qt5::Script
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexicore
 
+    Predicate
     KProperty
     KReport
 

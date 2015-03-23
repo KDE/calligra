@@ -47,12 +47,11 @@ add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 target_link_libraries(
     keximigrate
     kexicore
-    kexidb
     kexiextendedwidgets
     kexiutils
-    ${CALLIGRADB_LIBS}
-    
-    
+
+    Predicate
+
     Qt5::Gui
     )
 

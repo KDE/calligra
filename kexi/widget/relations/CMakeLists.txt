@@ -20,11 +20,10 @@ target_link_libraries(
     kexirelationsview
     kexicore
     kexiextendedwidgets
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
-    
-    
+
+    Predicate
+
     Qt5::Core
     Qt5::Gui
     )

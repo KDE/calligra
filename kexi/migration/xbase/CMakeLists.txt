@@ -10,11 +10,11 @@ add_library(keximigrate_xbase MODULE ${keximigrate_xbase_PART_SRCS})
 target_link_libraries(
     keximigrate_xbase
     keximigrate
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
-    
-    ${XBase_LIBRARIES} 
+
+    Predicate
+
+    ${XBase_LIBRARIES}
     )
 
 install(TARGETS keximigrate_xbase DESTINATION ${PLUGIN_INSTALL_DIR})

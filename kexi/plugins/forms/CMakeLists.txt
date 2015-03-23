@@ -48,15 +48,14 @@ target_link_libraries(
     kformdesigner_kexidbwidgets
     kformdesigner
     kexiformutils
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexicore
     kexiguiutils
     kexidataviewcommon
 	kexidatatable
 	kexiextendedwidgets
-    
-    
+
+    Predicate
+
     Qt5::Gui
     )
 
@@ -105,13 +104,12 @@ target_link_libraries(
     kexicore
     kexiextendedwidgets
     kformdesigner
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexiutils
     kexidataviewcommon
     kexidatatable
     kexiguiutils
 
+    Predicate
     KProperty
 
     Qt5::Gui

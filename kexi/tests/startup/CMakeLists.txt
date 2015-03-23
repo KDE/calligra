@@ -10,7 +10,7 @@ set(kexistartuptest_SRCS main.cpp )
 
 add_executable(kexistartuptest ${kexistartuptest_SRCS})
 
-target_link_libraries(kexistartuptest   kexidb kexicore )
+target_link_libraries(kexistartuptest kexicore)
 
 install(TARGETS kexistartuptest  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
