@@ -21,7 +21,7 @@
 
 #include <QTimer>
 
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -142,9 +142,9 @@ bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, cons
 
 int main(int argc, char **argv)
 {
-    KAboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
+    K4AboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Converter"),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          ki18n("(c) 2001-2011 Calligra developers"));
     aboutData.addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
     aboutData.addAuthor(ki18n("Nicolas Goutte"), KLocalizedString(), "goutte@kde.org");
