@@ -68,9 +68,7 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 
 KWRootAreaProvider::~KWRootAreaProvider()
 {
-    //FIXME : this code crashes so far, why ?
-    /*foreach (QList<KoTextLayoutRootArea*> areaList, m_rootAreaCache.values())
-        qDeleteAll(areaList);*/
+    qDeleteAll(m_rootAreaCache);
     m_rootAreaCache.clear();
     qDeleteAll(m_pages);
 }
