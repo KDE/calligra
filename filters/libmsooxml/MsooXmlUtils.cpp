@@ -53,6 +53,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 
+#include <QGlobalStatic>
 #include <QDomDocument>
 #include <QColor>
 #include <QBrush>
@@ -568,9 +569,10 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC(ST_HighlightColorMapping, s_ST_HighlightColor_to_QColor)
+
 QBrush Utils::ST_HighlightColor_to_QColor(const QString& colorName)
 {
-    K_GLOBAL_STATIC(ST_HighlightColorMapping, s_ST_HighlightColor_to_QColor)
     const QColor c(s_ST_HighlightColor_to_QColor->value(colorName));
     if (c.isValid())
         return QBrush(c);
@@ -703,9 +705,10 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
+
 QString Utils::ST_PlaceholderType_to_ODF(const QString& ecmaType)
 {
-    K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
     QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType.toLatin1()));
     if (it == s_ST_PlaceholderType_to_ODF->constEnd())
         return QLatin1String("text");
@@ -842,9 +845,11 @@ void Utils::rotateString(const qreal rotation, const qreal width, const qreal he
     yDiff = height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
 }
 
+
+Q_GLOBAL_STATIC(UnderlineStylesHash, s_underLineStyles)
+
 void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties)
 {
-    K_GLOBAL_STATIC(UnderlineStylesHash, s_underLineStyles)
     s_underLineStyles->setup(msooxmlName, textStyleProperties);
 }
 

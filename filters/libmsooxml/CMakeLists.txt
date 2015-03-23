@@ -41,7 +41,7 @@ set(msooxml_LIB_SRCS
 
 add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(komsooxml mso koodf2 koodf komain)
+target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive)
 if(Qca-qt5_FOUND)
    target_link_libraries(komsooxml qca-qt5)
 endif()
