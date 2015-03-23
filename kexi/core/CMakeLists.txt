@@ -47,14 +47,14 @@ add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore
   KF5::KIOWidgets
-  
+
   kexiutils
-  kexidb
-  ${CALLIGRADB_LIBS}
   kowidgetutils
+
+  Predicate
   KProperty
 )
-target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb)
+target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils)
 
 set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

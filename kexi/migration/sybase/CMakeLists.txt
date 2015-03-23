@@ -9,7 +9,7 @@ add_library(keximigrate_sybase MODULE ${keximigrate_sybase_PART_SRCS})
 
 
 target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES} 
-                      kexiutils kexidb keximigrate ${CALLIGRADB_LIBS})
+                      kexiutils keximigrate Predicate)
 
 install(TARGETS keximigrate_sybase  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -10,4 +10,4 @@ set(kexidbdrivercombotest_SRCS kexidbdrivercombotest.cpp )
 
 add_executable(kexidbdrivercombotest ${kexidbdrivercombotest_SRCS})
 
-target_link_libraries(kexidbdrivercombotest   kexidb kexiextendedwidgets )
+target_link_libraries(kexidbdrivercombotest kexiextendedwidgets)

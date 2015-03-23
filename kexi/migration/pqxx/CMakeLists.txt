@@ -11,14 +11,14 @@ add_library(keximigrate_pqxx MODULE ${keximigrate_pqxx_PART_SRCS})
 
 
 target_link_libraries(
-    keximigrate_pqxx 
-    ${POSTGRESQL_LIBRARIES} 
-    ${PQXX_LIBRARIES} 
-     
-    keximigrate 
-    kexidb
+    keximigrate_pqxx
+    ${POSTGRESQL_LIBRARIES}
+    ${PQXX_LIBRARIES}
+
+    keximigrate
     kexiutils
-    ${CALLIGRADB_LIBS}
+
+    Predicate
 )
 
 install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})

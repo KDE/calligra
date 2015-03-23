@@ -13,8 +13,6 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
-    ${CMAKE_SOURCE_DIR}/kexi/kexidb
-    ${CALLIGRADB_LIBS}
 )
 
 set(KexiMobile_SRCS main.cpp
@@ -29,10 +27,11 @@ qt4_automoc(${KexiMobile_SRCS})
 add_executable(keximobile ${KexiMobile_SRCS})
 
 target_link_libraries(keximobile Qt5::Core Qt5::Gui
-	${CALLIGRADB_LIBS}
 	kexiextendedwidgets
 	kexicore
 	kdeui
+
+	Predicate
 )
 
 install(TARGETS keximobile ${INSTALL_TARGETS_DEFAULT_ARGS})

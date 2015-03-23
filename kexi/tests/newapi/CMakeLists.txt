@@ -10,4 +10,4 @@ set(kexidbtest_SRCS main.cpp )
 
 add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
 
-target_link_libraries(kexidbtest  kexidb ${CALLIGRADB_LIBS} kexiextendedwidgets kexidatatable kexicore kexidataviewcommon )
+target_link_libraries(kexidbtest Predicate kexiextendedwidgets kexidatatable kexicore kexidataviewcommon)

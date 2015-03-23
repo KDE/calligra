@@ -50,14 +50,14 @@ add_library(keximain SHARED ${keximain_LIB_SRCS})
 
 target_link_libraries(
     keximain
-    kexidb
     kexicore
     kexiutils
-    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
     keximigrate
 #TODO:    ${KDE4_KNEWSTUFF_LIBS}
+
+    Predicate
     KProperty
 
     KF5::KIOWidgets

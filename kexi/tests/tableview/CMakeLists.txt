@@ -10,7 +10,7 @@ set(kexitableviewtest_SRCS main.cpp )
 
 add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 
-target_link_libraries(kexitableviewtest   kexidb ${CALLIGRADB_LIBS} kexiextendedwidgets )
+target_link_libraries(kexitableviewtest Predicate kexiextendedwidgets)
 
 install(TARGETS kexitableviewtest  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

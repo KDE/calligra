@@ -11,7 +11,7 @@ set(xbasemigrationtest_SRCS main.cpp )
 
 add_executable(xbasemigrationtest NOGUI ${xbasemigrationtest_SRCS})
 
-target_link_libraries(xbasemigrationtest  kexicore kexidb ${CALLIGRADB_LIBS} keximigrate)
+target_link_libraries(xbasemigrationtest kexicore Predicate keximigrate)
 
 ########### next target ###############
 
@@ -19,6 +19,6 @@ set(readertest_SRCS readertest.cpp )
 
 add_executable(readertest ${readertest_SRCS})
 
-target_link_libraries(readertest   keximigrate kexicore kexidb ${CALLIGRADB_LIBS} keximain)
+target_link_libraries(readertest   keximigrate kexicore Predicate keximain)
 
 ########### install files ###############

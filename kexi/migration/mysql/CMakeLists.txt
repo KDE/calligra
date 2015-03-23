@@ -11,10 +11,10 @@ add_library(keximigrate_mysql MODULE ${keximigrate_mysql_PART_SRCS})
 target_link_libraries(
     keximigrate_mysql
     keximigrate
-    kexidb 
     kexiutils
-    ${CALLIGRADB_LIBS}
-    
+
+    Predicate
+
     ${MYSQL_LIBRARIES}
     )
 

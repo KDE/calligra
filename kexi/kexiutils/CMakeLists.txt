@@ -46,7 +46,7 @@ endif ()
 
 add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 
-target_link_libraries(kexiutils  ${CALLIGRADB_LIBS} KF5::KIOWidgets )
+target_link_libraries(kexiutils  Predicate KF5::KIOWidgets)
 target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
 
 set_target_properties(kexiutils PROPERTIES
