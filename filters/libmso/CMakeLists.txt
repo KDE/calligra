@@ -4,7 +4,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-variable)
 endif ()
 
-include_directories(   ${KOODF_INCLUDES})
+include_directories(${KOODF_INCLUDES})
 
 kde_enable_exceptions()
 
