@@ -9,7 +9,7 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif()
 
-if (KDEPIMLIBS_FOUND)
+if (KF5AkonadiContact_FOUND)
     add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
 endif ()
 

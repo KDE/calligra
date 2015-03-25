@@ -4,7 +4,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/plan
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${KOMAIN_INCLUDES}
-    ${KDEPIMLIBS_INCLUDE_DIRS}
 )
 
 set(icalendarexport_PART_SRCS 
