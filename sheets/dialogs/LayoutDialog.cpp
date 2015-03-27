@@ -3389,8 +3389,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     brush10->setPattern(Qt::red, Qt::CrossPattern);
     brush11->setPattern(Qt::red, Qt::BDiagPattern);
     brush12->setPattern(Qt::red, Qt::FDiagPattern);
-    brush13->setPattern(Qt::red, Qt::VerPattern);
-    brush14->setPattern(Qt::red, Qt::DiagCrossPattern);
+    brush13->setPattern(Qt::red, Qt::DiagCrossPattern);
+    brush14->setPattern(Qt::red, Qt::SolidPattern);
     brush15->setPattern(Qt::red, Qt::NoBrush);
 
     current->setPattern(dlg->brushColor, dlg->brushStyle);
@@ -3453,9 +3453,9 @@ void CellFormatPagePattern::init()
         brush11->slotSelect();
     } else if (dlg->brushStyle == Qt::FDiagPattern) {
         brush12->slotSelect();
-    } else if (dlg->brushStyle == Qt::VerPattern) {
-        brush13->slotSelect();
     } else if (dlg->brushStyle == Qt::DiagCrossPattern) {
+        brush13->slotSelect();
+    } else if (dlg->brushStyle == Qt::SolidPattern) {
         brush14->slotSelect();
     } else if (dlg->brushStyle == Qt::NoBrush) {
         brush15->slotSelect();
