@@ -198,7 +198,7 @@ Item										Prio	Status
 
   External apps or shapes or internal objects should work with an abstract
   interface, that provides the model and the cell region name, instead of
-  directly working with the data model. E.g. KChart needs the correct cell
+  directly working with the data model. E.g. KoChart needs the correct cell
   region names in the dialogs even after the source ranges have moved.
 
   Same should be true for the Database's target range, even though the

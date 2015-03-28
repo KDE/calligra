@@ -186,7 +186,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
         resourceManager()->setUndoStack(map->doc()->undoStack());
         QVariant variant;
         variant.setValue<void*>(map->doc()->sheetAccessModel());
-        resourceManager()->setResource(75751149, variant); // duplicated in kchart.
+        resourceManager()->setResource(75751149, variant); // duplicated in kochart.
     }
     d->model = new SheetModel(this);
 

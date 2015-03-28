@@ -36,7 +36,7 @@ namespace Sheets
 
 /**
  * Abstracts read-only access to the ValueStorage.
- * Useful for KChart (or other apps, that want read-only access to KSpread's data).
+ * Useful for KoChart (or other apps, that want read-only access to KSpread's data).
  *
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
