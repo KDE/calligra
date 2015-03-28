@@ -911,26 +911,35 @@ void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenSt
 QList< QExplicitlySharedDataPointer<ConstraintAtom> > LayoutNodeAtom::constraints() const {
     QList< QExplicitlySharedDataPointer<ConstraintAtom> > result;
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children )
-        if ( dynamic_cast< ConstraintAtom* >( atom.data() ) ) {
-            result.append(atom);
+    {
+        ConstraintAtom* constraintAtom = dynamic_cast< ConstraintAtom* >( atom.data() );
+        if ( constraintAtom ) {
+            result.append( QExplicitlySharedDataPointer<ConstraintAtom>(constraintAtom));
         } else if (ListAtom *list = dynamic_cast< ListAtom* >( atom.data() ) ) {
-            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() )
-                if ( dynamic_cast< ConstraintAtom* >( val.data() ) )
-                    result.append(val);
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() ) {
+                constraintAtom =  dynamic_cast< ConstraintAtom* >( val.data() );
+                if ( constraintAtom )
+                    result.append(QExplicitlySharedDataPointer<ConstraintAtom>(constraintAtom));
+            }
         }
+    }
     return result;
 }
 
 QList< QExplicitlySharedDataPointer<ShapeAtom> > LayoutNodeAtom::shapes() const {
     QList< QExplicitlySharedDataPointer<ShapeAtom> > result;
-    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children )
-        if ( dynamic_cast< ShapeAtom* >( atom.data() ) ) {
-            result.append(atom);
+    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children ) {
+        ShapeAtom* shapeAtom = dynamic_cast< ShapeAtom* >( atom.data() );
+        if ( shapeAtom ) {
+            result.append(QExplicitlySharedDataPointer<ShapeAtom>(dynamic_cast< ShapeAtom* >( atom.data() )));
         } else if (ListAtom *list = dynamic_cast< ListAtom* >( atom.data() ) ) {
-            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() )
-                if ( dynamic_cast< ShapeAtom* >( val.data() ) )
-                    result.append(val);
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() ) {
+                shapeAtom = dynamic_cast< ShapeAtom* >( val.data() );
+                if ( shapeAtom )
+                    result.append(QExplicitlySharedDataPointer<ShapeAtom>(shapeAtom));
+            }
         }
+    }
     return result;
 }
 
@@ -1607,14 +1616,18 @@ ShapeAtom* ShapeAtom::clone(Context* context) {
 
 QList< QExplicitlySharedDataPointer<AdjustAtom> > ShapeAtom::adjustments() const {
     QList< QExplicitlySharedDataPointer<AdjustAtom> > result;
-    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children )
-        if ( dynamic_cast< AdjustAtom* >( atom.data() ) ) {
-            result.append(atom);
+    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children ) {
+        AdjustAtom* adjustedAtom = dynamic_cast< AdjustAtom* >( atom.data() );
+        if ( adjustedAtom ) {
+            result.append(QExplicitlySharedDataPointer<AdjustAtom>(adjustedAtom));
         } else if (ListAtom *list = dynamic_cast< ListAtom* >( atom.data() ) ) {
-            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() )
-                if ( dynamic_cast< AdjustAtom* >( val.data() ) )
-                    result.append(val);
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() ) {
+                adjustedAtom = dynamic_cast< AdjustAtom* >( val.data() );
+                if ( adjustedAtom )
+                    result.append(QExplicitlySharedDataPointer<AdjustAtom>(adjustedAtom));
+	    }
         }
+    }
     return result;
 }
 
