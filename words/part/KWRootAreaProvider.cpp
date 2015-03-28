@@ -68,9 +68,7 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 
 KWRootAreaProvider::~KWRootAreaProvider()
 {
-    //FIXME : this code crashes so far, why ?
-    /*foreach (QList<KoTextLayoutRootArea*> areaList, m_rootAreaCache.values())
-        qDeleteAll(areaList);*/
+    qDeleteAll(m_rootAreaCache);
     m_rootAreaCache.clear();
     qDeleteAll(m_pages);
 }
@@ -305,7 +303,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
             return rootArea;
         }
 
-        KWRootAreaPage *rootAreaPage = m_pageHash[rootArea];
+        KWRootAreaPage *rootAreaPage = m_pageHash.value(rootArea);
         Q_ASSERT(rootAreaPage);
 
         if (constraints.visiblePageNumber >= 0)
@@ -323,7 +321,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
             }
             else
             {
-                KWRootAreaPage *previousAreaPage = m_pageHash[m_rootAreaCache[requestedPosition - 1]];
+                KWRootAreaPage *previousAreaPage = m_pageHash.value(m_rootAreaCache[requestedPosition - 1]);
                 reallyNeededPageStyle = previousAreaPage->page.pageStyle().nextStyleName();
                 if (reallyNeededPageStyle.isNull())
                     reallyNeededPageStyle = previousAreaPage->page.pageStyle().name();
@@ -374,14 +372,21 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     if (afterThis) {
         if (!m_pageHash.contains(afterThis))
             return;
-        KWRootAreaPage *page = m_pageHash[afterThis];
+        KWRootAreaPage *page = m_pageHash.value(afterThis);
         afterIndex = m_pages.indexOf(page);
         Q_ASSERT(afterIndex >= 0);
 
         int newSize = m_rootAreaCache.indexOf(afterThis) + 1;
         while (m_rootAreaCache.size() != newSize)
         {
-            m_rootAreaCache.removeLast();
+            KoTextLayoutRootArea *oldArea = m_rootAreaCache.takeLast();
+            if (KoShape *oldAssociatedShape = oldArea->associatedShape())
+            {
+                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(oldAssociatedShape->userData());
+                if (data)
+                    data->setRootArea(0);
+            }
+            delete(oldArea);
         }
     }
 
@@ -411,8 +416,8 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     } else {
         //atLeastOnePageRemoved = !m_pages.isEmpty();
         qDeleteAll(m_pages);
-        m_pages.clear();
         m_pageHash.clear();
+        qDeleteAll(m_rootAreaCache);
 
         /*FIXME that would result in flickering :-/
         for(int i = pageManager->pageCount(); i >= 1; --i)
