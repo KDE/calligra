@@ -22,5 +22,5 @@ CMakeLists.txt.user*
 *.kate-swap
 *.diff
 *.patch
-
+.idea
 
