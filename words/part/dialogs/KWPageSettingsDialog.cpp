@@ -39,7 +39,8 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
         m_pageStyle(page.pageStyle())
 {
     Q_ASSERT(document);
-    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
+// QT5TODO: port to QDialog
+//     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApplyClicked()));
     showUnitchooser(true);
     Q_ASSERT(page.isValid());
@@ -246,6 +247,7 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
     m_columns->setColumns(m_pageStyle.columns());
     m_clonePageStyleButton->setEnabled(pagestyle.isValid());
     m_deletePageStyleButton->setEnabled(pagestyle.isValid() && item->text() != m_document->pageManager()->defaultPageStyle().name());
-    enableButtonOk(pagestyle.isValid());
-    enableButtonApply(pagestyle.isValid());
+// QT5TODO: port to QDialog
+//     enableButtonOk(pagestyle.isValid());
+//     enableButtonApply(pagestyle.isValid());
 }
