@@ -7,7 +7,8 @@ include_directories(
 set(words_KDEINIT_SRCS main.cpp )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
-ecm_add_app_icon(words_KDEINIT_SRCS ICONS ${ICONS_SRCS})
+# needs ECM 1.7.0 for ECMAddAppIcon
+# ecm_add_app_icon(words_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
