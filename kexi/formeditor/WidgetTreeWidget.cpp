@@ -431,6 +431,11 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
     }
     WidgetTreeWidgetItem *it = findItem(item->name());
 
+    if (!it) {
+        kWarning() << "cannot remove item with name" << item->name();
+        return;
+    }
+
     QTreeWidgetItem * parent = it->parent();
     parent->takeChild(parent->indexOfChild(it));
 

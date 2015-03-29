@@ -324,11 +324,11 @@ KexiTableScrollArea* KexiComboBoxPopup::tableView()
 
 void KexiComboBoxPopup::resize(int w, int h)
 {
-    d->tv->horizontalScrollBar()->hide();
-    d->tv->verticalScrollBar()->hide();
+    //d->tv->horizontalScrollBar()->hide();
+    //d->tv->verticalScrollBar()->hide();
     d->tv->move(0, 0);
-    d->tv->resize(w - 1, h - 1);
-    QFrame::resize(w, h);
+    d->tv->resize(w + 1, h - 1);
+    QFrame::resize(d->tv->size() + QSize(1, 1));
     update();
     updateGeometry();
 }
