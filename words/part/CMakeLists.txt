@@ -69,7 +69,10 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWChangePageStyleCommand.cpp
     commands/KWShapeCreateCommand.cpp
+)
 
+if (SHOULD_BUILD_APP_AUTHOR)
+set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 ##calligra author specific additions
     author/CAuFactory.cpp
     author/CAuView.cpp
@@ -78,6 +81,7 @@ set(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.cpp
     author/CAuDocument.cpp
 )
+endif()
 
 if( SHOULD_BUILD_FEATURE_RDF )
 # TODO: depends hard on Soprano
@@ -93,7 +97,10 @@ if( SHOULD_BUILD_FEATURE_RDF )
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+    )
 
+    if (SHOULD_BUILD_APP_AUTHOR)
+    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         author/dockers/CAuOutlinerDocker.cpp
         author/dockers/CAuOutlinerDockerFactory.cpp
         author/dockers/CAuOutlinerWidget.cpp
@@ -108,6 +115,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 
         author/metadata/CAuSemanticItemBase.cpp
     )
+    endif()
 endif()
 
 ki18n_wrap_ui(wordsprivate_LIB_SRCS
