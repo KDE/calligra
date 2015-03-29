@@ -28,8 +28,8 @@
 class QPoint;
 class QAction;
 class QLabel;
+class QStatusBar;
 
-class KStatusBar;
 class KSqueezedTextLabel;
 
 class KoCanvasController;
@@ -52,7 +52,7 @@ public:
     */
     virtual ~KWStatusBar();
 
-    static void addViewControls(KStatusBar *statusBar, KWView *view);
+    static void addViewControls(QStatusBar *statusBar, KWView *view);
 
 public Q_SLOTS:
     void setText(const QString &text);
@@ -88,11 +88,11 @@ private:
     * \param view The Words view instance the statusbar belongs to. Each
     * KWStatusBar instance belongs to exactly one view.
     */
-    KWStatusBar(KStatusBar *statusBar, KWView* view);
+    KWStatusBar(QStatusBar *statusBar, KWView* view);
 
     void setCurrentView(KWView *view);
 
-    KStatusBar *m_statusbar;
+    QStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;
     QMap<KWView*, QWidget*> m_zoomWidgets;
     QPointer<KoCanvasControllerProxyObject> m_controller;

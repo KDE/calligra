@@ -101,6 +101,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
@@ -129,7 +130,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    setComponentData(KWFactory::componentData());
+// QT5TODO: no longer exists, but possibly also not needed. Check it.
+//     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
@@ -266,7 +268,7 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    KAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    QAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 

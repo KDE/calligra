@@ -69,7 +69,10 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWChangePageStyleCommand.cpp
     commands/KWShapeCreateCommand.cpp
+)
 
+if (SHOULD_BUILD_APP_AUTHOR)
+set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 ##calligra author specific additions
     author/CAuFactory.cpp
     author/CAuView.cpp
@@ -78,19 +81,26 @@ set(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.cpp
     author/CAuDocument.cpp
 )
+endif()
 
+if( SHOULD_BUILD_FEATURE_RDF )
+# TODO: depends hard on Soprano
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
     dockers/KWDebugDocker.cpp
     dockers/KWDebugDockerFactory.cpp
     dockers/KWDebugWidget.cpp
 )
+endif()
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+    )
 
+    if (SHOULD_BUILD_APP_AUTHOR)
+    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         author/dockers/CAuOutlinerDocker.cpp
         author/dockers/CAuOutlinerDockerFactory.cpp
         author/dockers/CAuOutlinerWidget.cpp
@@ -105,6 +115,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 
         author/metadata/CAuSemanticItemBase.cpp
     )
+    endif()
 endif()
 
 ki18n_wrap_ui(wordsprivate_LIB_SRCS
@@ -150,7 +161,7 @@ set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 add_library(wordspart MODULE ${wordspart_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(wordspart wordspart.desktop)
 
 target_link_libraries(wordspart   wordsprivate )
 
@@ -160,7 +171,6 @@ install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
-install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES

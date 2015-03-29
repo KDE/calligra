@@ -23,7 +23,8 @@
 #include <kpluginfactory.h>
 #include "words_export.h"
 
-class KAboutData;
+class K4AboutData;
+class KComponentData;
 
 /**
  * Factory for the Words application.
@@ -47,11 +48,11 @@ public:
     static const KComponentData &componentData();
 
     /// Creates a new KAboutData instance
-    static KAboutData *aboutData();
+    static K4AboutData *aboutData();
 
 private:
     static KComponentData *s_instance;
-    static KAboutData *s_aboutData;
+    static K4AboutData *s_aboutData;
 };
 
 #endif

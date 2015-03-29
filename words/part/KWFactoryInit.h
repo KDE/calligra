@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+ * Copyright (C) 2013 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,21 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KWFACTORYINIT_H
+#define KWFACTORYINIT_H
 
-#include "Plugin.h"
-#include "KoPABackgroundToolFactory.h"
+#include "KWFactory.h"
 
-#include <KoToolRegistry.h>
-
-#include <kpluginfactory.h>
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kopabackgroundtool.json",
-                           registerPlugin<Plugin>();)
-
-Plugin::Plugin( QObject* parent, const QVariantList& )
-    : QObject( parent )
+class KWFactoryInit : public KWFactory
 {
-    KoToolRegistry::instance()->add( new KoPABackgroundToolFactory() );
-}
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "wordspart.json")
+    Q_INTERFACES(KPluginFactory)
 
-#include <Plugin.moc>
+public:
+    explicit KWFactoryInit(QObject *parent = 0) : KWFactory(parent) {}
+    virtual ~KWFactoryInit() {}
+
+};
+
+#endif // FLOWFACTORYINIT_H
