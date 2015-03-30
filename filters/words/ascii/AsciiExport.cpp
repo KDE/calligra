@@ -44,7 +44,8 @@
 #include "OdfReaderAsciiContext.h"
 
 
-K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(AsciiExportFactory, "calligra_filter_odt2ascii.json",
+			   registerPlugin<AsciiExport>();)
 
 // Needed to instantiate the plugin factory.
 #include "AsciiExport.moc"
