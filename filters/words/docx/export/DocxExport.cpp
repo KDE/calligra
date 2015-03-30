@@ -46,8 +46,11 @@
 #include "OdfTextReaderDocxBackend.h"
 
 
-K_PLUGIN_FACTORY(DocxExportFactory, registerPlugin<DocxExport>();)
-K_EXPORT_PLUGIN(DocxExportFactory("wordsdocxexportng", "calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(DocxExportFactory, "calligra_filter_odt2docx.json",
+			   registerPlugin<DocxExport>();)
+
+// Needed to instantiate the plugin factory.
+#include "DocxExport.moc"
 
 
 DocxExport::DocxExport(QObject *parent, const QVariantList &)
