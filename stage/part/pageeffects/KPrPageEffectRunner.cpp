@@ -40,8 +40,10 @@ KPrPageEffectRunner::KPrPageEffectRunner( const QPixmap &oldPage, const QPixmap 
         m_data.m_graphicsView->setFrameShape(QFrame::Panel);
         m_data.m_graphicsView->setLineWidth(0);
 
-        m_data.m_oldPageItem = new QGraphicsPixmapItem(m_data.m_oldPage, 0, m_data.m_scene);
-        m_data.m_newPageItem = new QGraphicsPixmapItem(m_data.m_newPage, 0, m_data.m_scene);
+        m_data.m_oldPageItem = new QGraphicsPixmapItem(m_data.m_oldPage, 0);
+        m_data.m_scene->addItem(m_data.m_oldPageItem);
+        m_data.m_newPageItem = new QGraphicsPixmapItem(m_data.m_newPage, 0);
+        m_data.m_scene->addItem(m_data.m_newPageItem);
         m_data.m_oldPageItem->hide();
         m_data.m_newPageItem->hide();
 
