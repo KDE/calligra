@@ -28,7 +28,6 @@ add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_
 target_link_libraries(
     calligrastagetoolanimation
     calligrastageprivate
-    Phonon::phonon4qt5
     )
 
 install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -19,7 +19,7 @@ target_link_libraries(
     calligrastageprivate
     flake
     KF5::KIOCore
-    Phonon::phonon4qt5
+    ${PHONON_LIBS}
     Qt5::Gui
     )
 
