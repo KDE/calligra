@@ -71,6 +71,7 @@ KWRootAreaProvider::~KWRootAreaProvider()
     qDeleteAll(m_rootAreaCache);
     m_rootAreaCache.clear();
     qDeleteAll(m_pages);
+    m_pages.clear();
 }
 
 void KWRootAreaProvider::clearPages(int pageNumber)
@@ -380,12 +381,6 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         while (m_rootAreaCache.size() != newSize)
         {
             KoTextLayoutRootArea *oldArea = m_rootAreaCache.takeLast();
-            if (KoShape *oldAssociatedShape = oldArea->associatedShape())
-            {
-                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(oldAssociatedShape->userData());
-                if (data)
-                    data->setRootArea(0);
-            }
             delete(oldArea);
         }
     }
@@ -416,8 +411,10 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     } else {
         //atLeastOnePageRemoved = !m_pages.isEmpty();
         qDeleteAll(m_pages);
-        m_pageHash.clear();
         qDeleteAll(m_rootAreaCache);
+        m_pages.clear();
+        m_pageHash.clear();
+        m_rootAreaCache.clear();
 
         /*FIXME that would result in flickering :-/
         for(int i = pageManager->pageCount(); i >= 1; --i)
