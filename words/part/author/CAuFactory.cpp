@@ -49,10 +49,10 @@
 #include "pagetool/KWPageToolFactory.h"
 
 KComponentData *CAuFactory::s_instance = 0;
-KAboutData *CAuFactory::s_aboutData = 0;
+K4AboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+        : KPluginFactory(/**aboutData(), parent*/)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
@@ -79,7 +79,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
     return part;
 }
 
-KAboutData *CAuFactory::aboutData()
+K4AboutData *CAuFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newAuthorAboutData();
@@ -92,9 +92,10 @@ const KComponentData &CAuFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-        s_instance->dirs()->addResourceType("words_template",
-                                            "data", "words/templates/");
-        s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
+// QT5TODO: this needs a new approach
+//         s_instance->dirs()->addResourceType("words_template",
+//                                             "data", "words/templates/");
+//         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
 

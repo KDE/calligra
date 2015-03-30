@@ -36,7 +36,8 @@
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
-        setComponentData(CAuFactory::componentData());
+// QT5TODO: no longer exists, but possibly also not needed. Check it.
+//         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
 
         setupActions();
