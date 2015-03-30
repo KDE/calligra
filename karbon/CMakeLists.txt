@@ -24,9 +24,8 @@ include_directories(
 
 add_subdirectory( common )
 add_subdirectory( ui )
-add_subdirectory( plugins )
+#QT5TODO add_subdirectory( plugins )
 add_subdirectory( data )
-add_subdirectory( pics )
 add_subdirectory( templates )
 
 ########### next target ###############
@@ -47,13 +46,19 @@ endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
-ecm_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" ICONS )
+file(GLOB karbon_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/action/*-actions-*.png")
+ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${DATA_INSTALL_DIR}/karbon/icons)
+
+file(GLOB karbon_app_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakarbon.png")
+ecm_add_app_icon(karbon_KDEINIT_SRCS ICONS ${karbon_app_icons})
+ecm_install_icons(ICONS ${karbon_app_icons} DESTINATION ${ICON_INSTALL_DIR})
+
 kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_OS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
-   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
+   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
 endif ()
 
 target_link_libraries(kdeinit_karbon karbonui)
