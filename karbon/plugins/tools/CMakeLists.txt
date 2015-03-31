@@ -1,6 +1,4 @@
 include_directories(
-     
-    
     ${FLAKE_INCLUDES}
     ${CMAKE_SOURCE_DIR}/karbon 
     ${CMAKE_SOURCE_DIR}/karbon/ui
@@ -49,8 +47,8 @@ target_link_libraries(karbontools karboncommon karbonui kowidgets)
 
 install(TARGETS karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ${KDE_INSTALL_DATADIR}/calligra/icons  )
 
 ########### install files ###############
 
-install( FILES karbontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES karbontools.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)

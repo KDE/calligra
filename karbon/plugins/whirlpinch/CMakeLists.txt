@@ -13,6 +13,6 @@ install(TARGETS karbon_whirlpinchplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_D
 
 ########### install files ###############
 
-install( FILES  WhirlPinchPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonwhirlpinchplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  WhirlPinchPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)
+install( FILES  karbonwhirlpinchplugin.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)
 

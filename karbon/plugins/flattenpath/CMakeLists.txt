@@ -17,8 +17,8 @@ install(TARGETS karbon_flattenpathplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_
 
 ########### install files ###############
 
-install( FILES  FlattenPathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonflattenpathplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  FlattenPathPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)
+install( FILES  karbonflattenpathplugin.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)
 
 
 

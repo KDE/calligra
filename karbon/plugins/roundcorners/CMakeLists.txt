@@ -19,5 +19,5 @@ install(TARGETS karbon_roundcornersplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL
 
 ########### install files ###############
 
-install( FILES  RoundCornersPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonroundcornersplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  RoundCornersPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)
+install( FILES  karbonroundcornersplugin.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)

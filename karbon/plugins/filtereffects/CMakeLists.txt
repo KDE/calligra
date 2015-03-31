@@ -44,4 +44,4 @@ target_link_libraries(karbonfiltereffects flake kowidgets)
 
 install(TARGETS karbonfiltereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES karbonfiltereffects.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install( FILES karbonfiltereffects.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra )

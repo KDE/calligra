@@ -13,6 +13,6 @@ install(TARGETS karbon_refinepathplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_D
 
 ########### install files ###############
 
-install( FILES RefinePathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES karbonrefinepathplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES RefinePathPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)
+install( FILES karbonrefinepathplugin.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)
 
