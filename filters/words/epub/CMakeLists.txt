@@ -20,7 +20,7 @@ add_library(calligra_filter_odt2epub2 MODULE ${odt2epub2_PART_SRCS})
 
 target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain)
 
-install(TARGETS calligra_filter_odt2epub2  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2epub2  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_odt2epub2.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
@@ -41,7 +41,7 @@ add_library(calligra_filter_odt2html MODULE ${odt2html_PART_SRCS})
 
 target_link_libraries(calligra_filter_odt2html kovectorimage komain)
 
-install(TARGETS calligra_filter_odt2html  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2html  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_odt2html.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()

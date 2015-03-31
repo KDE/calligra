@@ -9,7 +9,7 @@ add_library(karbon_refinepathplugin MODULE ${karbon_refinepathplugin_PART_SRCS})
 
 target_link_libraries(karbon_refinepathplugin karboncommon)
 
-install(TARGETS karbon_refinepathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_refinepathplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

@@ -20,7 +20,7 @@ add_library(calligra_filter_qpro2sheets MODULE ${qpro2sheets_PART_SRCS})
 
 target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
 
-install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

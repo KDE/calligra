@@ -47,7 +47,7 @@ add_library(karbontools MODULE ${karbon_tools_PART_SRCS})
 
 target_link_libraries(karbontools karboncommon karbonui kowidgets)
 
-install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 

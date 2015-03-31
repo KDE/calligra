@@ -16,7 +16,7 @@ if(OPENJPEG_FOUND)
     target_link_libraries(calligra_filter_pdf2svg ${OPENJPEG_LIBRARIES})
 endif()
 
-install(TARGETS calligra_filter_pdf2svg DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pdf2svg DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

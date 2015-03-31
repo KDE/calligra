@@ -30,7 +30,7 @@ target_link_libraries(
     Qt5::Xml
 )
 
-install(TARGETS kexihandler_query  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_query  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -30,7 +30,7 @@ target_link_libraries(
     calligrastageprivate
     )
 
-install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagetoolanimation  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

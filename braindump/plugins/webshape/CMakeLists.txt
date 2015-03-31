@@ -23,7 +23,7 @@ target_link_libraries(
     Qt5::Core
     Qt5::WebKitWidgets
     )
-install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS braindump_shape_web DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

@@ -169,7 +169,7 @@ kcoreaddons_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagepart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)

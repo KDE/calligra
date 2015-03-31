@@ -15,7 +15,7 @@ add_library(plankplatoimport MODULE ${kplatoimport_PART_SRCS})
 
 target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 
-install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS plankplatoimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

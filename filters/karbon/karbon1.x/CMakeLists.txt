@@ -13,7 +13,7 @@ add_library(calligra_filter_karbon1x2karbon MODULE ${karbon1x2karbon_PART_SRCS})
 
 target_link_libraries(calligra_filter_karbon1x2karbon karboncommon)
 
-install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

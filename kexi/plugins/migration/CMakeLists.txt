@@ -13,7 +13,7 @@ add_library(kexihandler_migration MODULE ${kexihandler_migration_PART_SRCS})
 
 target_link_libraries(kexihandler_migration   kexicore keximigrate )
 
-install(TARGETS kexihandler_migration  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_migration  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

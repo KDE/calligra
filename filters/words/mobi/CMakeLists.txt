@@ -18,7 +18,7 @@ add_library(calligra_filter_odt2mobi MODULE ${odt2mobi_PART_SRCS})
 
 target_link_libraries(calligra_filter_odt2mobi komain)
 
-install(TARGETS calligra_filter_odt2mobi  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 

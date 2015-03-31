@@ -19,7 +19,7 @@ target_link_libraries(keximigrate_txt
     Predicate
 )
 
-install(TARGETS keximigrate_txt  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_txt  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

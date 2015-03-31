@@ -17,7 +17,7 @@ add_library(calligra_filter_key2odp MODULE ${key2odp_PART_SRCS})
 
 target_link_libraries(calligra_filter_key2odp komain ${LIBREVENGE_LIBRARIES} ${LIBODFGEN_LIBRARIES} ${LIBETONYEK_LIBRARIES})
 
-install(TARGETS calligra_filter_key2odp DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_key2odp DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES calligra_filter_key2odp.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)

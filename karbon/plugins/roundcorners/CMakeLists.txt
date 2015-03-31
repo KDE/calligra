@@ -14,7 +14,7 @@ add_library(karbon_roundcornersplugin MODULE ${karbon_roundcornersplugin_PART_SR
 
 target_link_libraries(karbon_roundcornersplugin karboncommon)
 
-install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_roundcornersplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

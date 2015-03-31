@@ -9,7 +9,7 @@ add_library(karbon_whirlpinchplugin MODULE ${karbon_whirlpinchplugin_PART_SRCS})
 
 target_link_libraries(karbon_whirlpinchplugin karboncommon)
 
-install(TARGETS karbon_whirlpinchplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_whirlpinchplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

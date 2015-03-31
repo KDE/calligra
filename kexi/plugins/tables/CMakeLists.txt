@@ -28,7 +28,7 @@ target_link_libraries(
     Qt5::Gui
 )
 
-install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_table  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

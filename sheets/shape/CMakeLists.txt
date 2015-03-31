@@ -23,8 +23,8 @@ add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
 target_link_libraries(calligra_shape_spreadsheet flake)
 
-install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR})
-install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

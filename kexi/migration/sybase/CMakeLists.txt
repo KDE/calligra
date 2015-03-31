@@ -11,7 +11,7 @@ add_library(keximigrate_sybase MODULE ${keximigrate_sybase_PART_SRCS})
 target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES} 
                       kexiutils keximigrate Predicate)
 
-install(TARGETS keximigrate_sybase  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_sybase  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

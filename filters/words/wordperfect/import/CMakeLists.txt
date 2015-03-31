@@ -19,7 +19,7 @@ add_library(calligra_filter_wpd2odt MODULE ${wpd2odt_PART_SRCS})
 target_link_libraries(calligra_filter_wpd2odt
     komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
 
-install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_wpd2odt DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

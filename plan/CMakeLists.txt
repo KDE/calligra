@@ -105,7 +105,7 @@ add_library(planpart MODULE ${planpart_PART_SRCS})
 
 target_link_libraries(planpart KF5::Parts planprivate)
 
-install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS planpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### KPlato executable ###############

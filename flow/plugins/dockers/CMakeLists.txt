@@ -23,7 +23,7 @@ if(GHNS)
     target_link_libraries(flowdockersplugin KF5::NewStuff)
 endif()
 
-install(TARGETS flowdockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS flowdockersplugin DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install(FILES flowdockersplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES stencilboxdocker/flow_stencils.knsrc DESTINATION ${CONFIG_INSTALL_DIR})

@@ -11,7 +11,7 @@ add_library(calligra_filter_csv2sheets MODULE ${csv2sheets_PART_SRCS})
 
 target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
 
-install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_csv2sheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_csv2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
@@ -28,7 +28,7 @@ add_library(calligra_filter_sheets2csv MODULE ${sheets2csv_PART_SRCS})
 
 target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
 
-install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_sheets2csv  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_sheets2csv.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

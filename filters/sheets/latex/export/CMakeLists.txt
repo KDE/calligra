@@ -27,7 +27,7 @@ add_library(calligra_filter_kspread2tex MODULE ${kspread2tex_PART_SRCS})
 
 target_link_libraries(calligra_filter_kspread2tex komain)
 
-install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_kspread2tex  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

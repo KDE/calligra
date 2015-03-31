@@ -43,7 +43,7 @@ target_link_libraries(
 
 set_target_properties(krossmoduleplan PROPERTIES DEFINE_SYMBOL MAKE_KPLATOSCRIPTING_LIB)
 
-install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krossmoduleplan DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES planscripting.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)

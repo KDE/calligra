@@ -6,7 +6,7 @@ add_library(calligra_filter_dbase2kspread MODULE ${dbase2kspread_PART_SRCS})
 
 target_link_libraries(calligra_filter_dbase2kspread komain)
 
-install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  calligra_filter_dbase2kspread.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

@@ -326,7 +326,7 @@ add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

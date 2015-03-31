@@ -22,7 +22,7 @@ target_link_libraries(ppttoodp ppttoodplib)
 add_library(calligra_filter_ppt2odp MODULE PowerPointImport.cpp)
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
-install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_ppt2odp  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_ppt2odp.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)

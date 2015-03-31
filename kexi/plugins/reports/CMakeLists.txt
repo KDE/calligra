@@ -54,5 +54,5 @@ else ()
     )
 endif ()
 
-install(TARGETS kexihandler_report DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_report DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES kexireporthandler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -12,7 +12,7 @@ target_link_libraries( calligra_filter_xfig2odg
     komain
 )
 
-install(TARGETS calligra_filter_xfig2odg  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS calligra_filter_xfig2odg  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
 
 install( FILES  calligra_filter_xfig2odg.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
 

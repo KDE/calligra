@@ -21,7 +21,7 @@ target_link_libraries(
     Predicate
 )
 
-install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -165,7 +165,7 @@ kcoreaddons_desktop_to_json(wordspart wordspart.desktop)
 
 target_link_libraries(wordspart   wordsprivate )
 
-install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wordspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
@@ -209,7 +209,7 @@ add_library(authorpart MODULE ${authorpart_PART_SRCS})
 
 target_link_libraries(authorpart   wordsprivate )
 
-install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS authorpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### Author exe ###############
 

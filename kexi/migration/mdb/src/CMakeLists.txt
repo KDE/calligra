@@ -51,7 +51,7 @@ kexiutils
 Predicate
 )
 
-install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_mdb  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

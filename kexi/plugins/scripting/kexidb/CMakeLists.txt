@@ -14,4 +14,4 @@ set(krossmodulekexidb_PART_SRCS
 add_library(krossmodulekexidb MODULE ${krossmodulekexidb_PART_SRCS})
 
 target_link_libraries(krossmodulekexidb Predicate)
-install(TARGETS krossmodulekexidb DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krossmodulekexidb DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

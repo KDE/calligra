@@ -7,7 +7,7 @@ add_library(calligra_filter_applixspread2kspread MODULE ${applixspread2kspread_P
 
 target_link_libraries(calligra_filter_applixspread2kspread komain calligrasheetscommon)
 
-install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

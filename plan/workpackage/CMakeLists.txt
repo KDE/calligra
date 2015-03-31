@@ -63,7 +63,7 @@ add_library(planworkpart MODULE ${planworkpart_PART_SRCS})
 
 target_link_libraries(planworkpart Qt5::Core KF5::Parts planworkfactory)
 
-install(TARGETS planworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS planworkpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### KPlatoWork application ###############

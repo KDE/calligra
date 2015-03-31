@@ -42,6 +42,6 @@ add_library(karbonfiltereffects MODULE ${karbonfiltereffects_PART_SRCS})
 
 target_link_libraries(karbonfiltereffects flake kowidgets)
 
-install(TARGETS karbonfiltereffects  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbonfiltereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES karbonfiltereffects.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

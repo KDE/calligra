@@ -18,7 +18,7 @@ target_link_libraries(
     ${MYSQL_LIBRARIES}
     )
 
-install(TARGETS keximigrate_mysql  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_mysql  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

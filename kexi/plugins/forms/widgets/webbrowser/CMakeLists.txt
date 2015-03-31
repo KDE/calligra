@@ -29,7 +29,7 @@ target_link_libraries(
 )
 
 
-install(TARGETS kformdesigner_webbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kformdesigner_webbrowser  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

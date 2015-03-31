@@ -37,7 +37,7 @@ add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
 
 target_link_libraries(karbonpart karbonui)
 
-install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbonpart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 

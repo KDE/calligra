@@ -12,7 +12,7 @@ add_library(karbon_flattenpathplugin MODULE ${karbon_flattenpathplugin_PART_SRCS
 
 target_link_libraries(karbon_flattenpathplugin karboncommon)
 
-install(TARGETS karbon_flattenpathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_flattenpathplugin  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -18,7 +18,7 @@ qt5_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
 add_library(krossmodulesheets MODULE ${krossmodulesheets_PART_SRCS})
 
 target_link_libraries(krossmodulesheets   calligrasheetscommon kokross)
-install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krossmodulesheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

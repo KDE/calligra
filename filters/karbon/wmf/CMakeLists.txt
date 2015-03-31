@@ -14,7 +14,7 @@ add_library(calligra_filter_wmf2svg MODULE ${wmf2svg_PART_SRCS})
 target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 
 install(TARGETS calligra_filter_wmf2svg
-        DESTINATION ${PLUGIN_INSTALL_DIR})
+        DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install(FILES  calligra_filter_wmf2svg.desktop
         DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
@@ -40,7 +40,7 @@ target_link_libraries(
 )
 
 install(TARGETS calligra_filter_karbon2wmf
-        DESTINATION ${PLUGIN_INSTALL_DIR})
+        DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install(FILES  calligra_filter_karbon2wmf.desktop
         DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

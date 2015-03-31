@@ -25,7 +25,7 @@ target_link_libraries(
     KF5::KIOWidgets
     Qt5::Gui
 )
-install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_script  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
