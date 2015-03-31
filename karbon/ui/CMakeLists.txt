@@ -44,6 +44,7 @@ ki18n_wrap_ui(karbonui_SRCS
 
 
 add_library( karbonui SHARED ${karbonui_SRCS} )
+generate_export_header(karbonui BASE_NAME karbonui)
 
 target_link_libraries(karbonui karboncommon kowidgets koodf)
 target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
