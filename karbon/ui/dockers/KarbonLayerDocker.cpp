@@ -157,7 +157,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setSortingEnabled(true);
 
     KoDocumentSectionView::DisplayMode mode = KoDocumentSectionView::MinimalMode;
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::karbonConfig();
     if (config->hasGroup("Interface")) {
         QString modeStr = config->group("Interface").readEntry("LayerDockerMode", "minimal");
         if (modeStr == "detailed")
@@ -176,7 +176,7 @@ KarbonLayerDocker::KarbonLayerDocker()
 
 KarbonLayerDocker::~KarbonLayerDocker()
 {
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::karbonConfig();
     QString modeStr;
     switch (m_layerView->displayMode()) {
     case KoDocumentSectionView::MinimalMode:

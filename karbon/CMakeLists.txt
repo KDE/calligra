@@ -11,8 +11,6 @@ else()
 endif()
 
 include_directories(
-    
-    
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -33,6 +31,7 @@ add_subdirectory( templates )
 set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
 add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
+kcoreaddons_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbonpart.desktop")
 
 target_link_libraries(karbonpart karbonui)
 
@@ -59,7 +58,7 @@ if (Q_OS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
-endif ()
+endif()
 
 target_link_libraries(kdeinit_karbon karbonui)
 

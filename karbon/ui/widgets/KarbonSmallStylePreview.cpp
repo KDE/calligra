@@ -41,6 +41,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QtWidgets/qboxlayout.h>
 
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15

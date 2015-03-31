@@ -19,7 +19,7 @@
 #ifndef KARBON_ABOUTDATA_H
 #define KARBON_ABOUTDATA_H
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <KoIcon.h>
 #include <calligraversion.h>
@@ -29,14 +29,14 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.
-KAboutData * newKarbonAboutData()
+K4AboutData * newKarbonAboutData()
 {
-    KAboutData * aboutData = new KAboutData(
+    K4AboutData * aboutData = new K4AboutData(
         "karbon", 0,
         ki18n("Karbon"),
         version,
         ki18n(description),
-        KAboutData::License_LGPL,
+        K4AboutData::License_LGPL,
         ki18n("(c) 2001-2013, The Karbon Developers"),
         ki18n("You are invited to participate in any way."),
         "http://www.calligra.org/karbon/");

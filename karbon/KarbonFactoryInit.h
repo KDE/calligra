@@ -17,5 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonFactoryInit.h"
-#include "moc_KarbonFactoryInit.cpp"
+#ifndef __KARBON_FACTORY_INIT_H__
+#define __KARBON_FACTORY_INIT_H__
+
+#include "ui/KarbonFactory.h"
+
+class KarbonFactoryInit : public KarbonFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "karbonpart.json")
+    Q_INTERFACES(KPluginFactory)
+
+public:
+    explicit KarbonFactoryInit(QObject *parent = 0) : KarbonFactory(parent) {}
+    virtual ~KarbonFactoryInit() {}
+};
+
+#endif

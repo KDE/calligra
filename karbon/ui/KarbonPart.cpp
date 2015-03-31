@@ -57,7 +57,7 @@ KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("karbon_template");
-    setComponentData(KarbonFactory::componentData());
+//QT5TODO    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()

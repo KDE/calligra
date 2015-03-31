@@ -198,7 +198,6 @@ public:
 KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
         : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
-    setComponentData(KarbonFactory::componentData());
     setAcceptDrops(true);
 
     setXMLFile(QString::fromLatin1("karbon.rc"));
@@ -321,7 +320,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
-        KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+        KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
         if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
             d->horizRuler->setVisible(true);
             d->vertRuler->setVisible(true);
@@ -487,7 +486,7 @@ void KarbonView::fileImportGraphic()
     filter.append(imageFilter);
 
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setWindowTitle(i18n("Choose Graphic to Add"));
+    dialog.setCaption(i18n("Choose Graphic to Add"));
     dialog.setMimeTypeFilters(imageFilter);
     QString fname = dialog.url();
 
@@ -1267,7 +1266,7 @@ void KarbonView::showRuler()
         updateRuler();
 
     // this will make the last setting of the ruler visibility persistent
-    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
     if (!showRuler && !interfaceGroup.hasDefault("ShowRulers"))
         interfaceGroup.revertToDefault("ShowRulers");
     else
@@ -1319,7 +1318,7 @@ void KarbonView::showPalette()
     d->colorBar->setVisible(showPalette);
 
     // this will make the last setting of the ruler visibility persistent
-    KConfigGroup interfaceGroup = componentData().config()->group("Interface");
+    KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
     if (showPalette && !interfaceGroup.hasDefault("ShowPalette"))
         interfaceGroup.revertToDefault("ShowPalette");
     else

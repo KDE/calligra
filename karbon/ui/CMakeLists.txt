@@ -1,6 +1,4 @@
-include_directories( 
-         
-         
+include_directories(
         ${KOODF_INCLUDES}
         ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/
