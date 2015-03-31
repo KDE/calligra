@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QImageReader>
+#include <KConfigGroup>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -69,7 +70,7 @@ void ImageEffectConfigWidget::selectImage()
     }
 
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Select image"));
+    dialog.setWindowTitle(i18n("Select image"));
     dialog.setImageFilters();
 
     QString fname = dialog.url();

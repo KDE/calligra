@@ -52,6 +52,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QToolButton>
+#include <KConfigGroup>
 
 enum ButtonIds {
     Button_New,
@@ -218,6 +219,7 @@ void KarbonLayerDocker::unsetCanvas()
     m_model->update();
 }
 
+//Adapt code and connect okbutton or other to new slot. It doesn't exist in qdialog
 void KarbonLayerDocker::slotButtonClicked(int buttonId)
 {
     switch (buttonId) {

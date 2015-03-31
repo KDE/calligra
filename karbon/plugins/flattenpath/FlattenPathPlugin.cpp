@@ -48,6 +48,10 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
 K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
@@ -92,12 +96,16 @@ void FlattenPathPlugin::slotFlattenPath()
 }
 
 FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption(i18n("Flatten Path"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Flatten Path"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
 
     // add input fields on the left:
     QGroupBox* group = new QGroupBox(i18n("Properties"), this);
@@ -112,10 +120,18 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     group->setMinimumWidth(300);
 
     // signals and slots:
-    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 
-    setMainWidget(group);
+    mainLayout->addWidget(group);
+
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    mainLayout->addWidget(buttonBox);
 }
 
 qreal FlattenDlg::flatness() const

@@ -53,6 +53,10 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
 K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
@@ -99,12 +103,16 @@ void WhirlPinchPlugin::slotWhirlPinch()
 }
 
 WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption(i18n("Whirl Pinch"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Whirl Pinch"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
 
     QWidget * mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
@@ -139,13 +147,20 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     layout->addWidget(m_radius, 2, 1);
 
     // signals and slots:
-    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 
     mainLayout->addWidget(info);
     mainLayout->addWidget(group);
 
-    setMainWidget(mainWidget);
+    mainLayout->addWidget(mainWidget);
+
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 }
 
 qreal WhirlPinchDlg::angle() const

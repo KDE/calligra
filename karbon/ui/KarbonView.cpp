@@ -139,6 +139,7 @@
 #include <QImageReader>
 
 #include <unistd.h>
+#include <KConfigGroup>
 
 class KarbonView::Private
 {
@@ -486,7 +487,7 @@ void KarbonView::fileImportGraphic()
     filter.append(imageFilter);
 
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Choose Graphic to Add"));
+    dialog.setWindowTitle(i18n("Choose Graphic to Add"));
     dialog.setMimeTypeFilters(imageFilter);
     QString fname = dialog.url();
 

@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kcombobox.h>
-#include <kdialog.h>
+#include <QDialog>
 
 #include <QGridLayout>
 #include <QLabel>
@@ -33,6 +33,7 @@
 #include <QCheckBox>
 #include <QTableView>
 #include <QHeaderView>
+#include <KConfigGroup>
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -217,15 +218,17 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     m_matrixModel->setMatrix(oldKernel, kernelSize.y(), kernelSize.x());
     connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
 
-    QPointer<KDialog> dlg = new KDialog(this);
+    QPointer<QDialog> dlg = new QDialog(this);
     QTableView * table = new QTableView(dlg);
     table->setModel(m_matrixModel);
     table->horizontalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     table->verticalHeader()->hide();
     table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    dlg->setMainWidget(table);
-    if (dlg->exec() == KDialog::Accepted) {
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    dlg->setLayout(mainLayout);
+    mainLayout->addWidget(table);
+    if (dlg->exec() == QDialog::Accepted) {
         m_effect->setKernel(m_matrixModel->matrix());
         emit filterChanged();
     } else {
