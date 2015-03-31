@@ -8,7 +8,7 @@ include_directories(
 
 set(stage_KDEINIT_SRCS main.cpp )
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrastage.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/*-apps-calligrastage.png")
 ecm_add_app_icon(stage_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
