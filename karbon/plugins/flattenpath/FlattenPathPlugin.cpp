@@ -42,7 +42,7 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kstandarddirs.h>
 
 #include <QGroupBox>
@@ -58,7 +58,7 @@ FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/FlattenPathPlugin.rc"), true);
 
 
-    KAction *actionFlattenPath  = new KAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
+    QAction *actionFlattenPath  = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
