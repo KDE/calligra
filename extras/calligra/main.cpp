@@ -19,7 +19,7 @@
 
 #include <QTextStream>
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -32,6 +32,8 @@
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
+#include <kdeversion.h>
+#include <kurl.h>
 
 #include <calligraversion.h>
 
@@ -173,9 +175,9 @@ static int handleUrls(const KCmdLineArgs *args)
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
+    K4AboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Opener"),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          ki18n("(c) 2010-2011 Calligra developers"));
     aboutData.addAuthor(ki18n("Jarosław Staniek"),KLocalizedString(), "staniek@kde.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
