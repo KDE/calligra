@@ -15,6 +15,8 @@ KPrSlideWipeToTopStrategy.cpp
 
 add_library(kpr_pageeffect_slidewipe MODULE ${kpr_pageeffect_slidewipe_PART_SRCS})
 
+kcoreaddons_desktop_to_json(kpr_pageeffect_slidewipe kpr_pageeffect_slidewipe.desktop)
+
 target_link_libraries(
     kpr_pageeffect_slidewipe
     calligrastageprivate
@@ -26,7 +28,3 @@ target_link_libraries(
     )
 
 install(TARGETS kpr_pageeffect_slidewipe  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_slidewipe.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-

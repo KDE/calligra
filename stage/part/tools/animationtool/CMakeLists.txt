@@ -23,7 +23,7 @@ set(calligrastagetoolanimation_PART_SRCS
 
 add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligrastagetoolanimation calligrastagetoolanimation.desktop)
 
 target_link_libraries(
     calligrastagetoolanimation
@@ -34,8 +34,6 @@ install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-
-install( FILES  calligrastagetoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 

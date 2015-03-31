@@ -24,6 +24,8 @@ set(kpr_pageeffect_clockwipe_SRCS
 
 add_library(kpr_pageeffect_clockwipe MODULE ${kpr_pageeffect_clockwipe_SRCS})
 
+kcoreaddons_desktop_to_json(kpr_pageeffect_clockwipe kpr_pageeffect_clockwipe.desktop)
+
 target_link_libraries(
     kpr_pageeffect_clockwipe 
     calligrastageprivate 
@@ -35,7 +37,3 @@ target_link_libraries(
     )
 
 install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_clockwipe.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-

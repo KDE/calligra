@@ -10,6 +10,8 @@ set(kpr_pageeffect_spacerotation_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_spacerotation MODULE ${kpr_pageeffect_spacerotation_PART_SRCS})
 
+kcoreaddons_desktop_to_json(kpr_pageeffect_spacerotation kpr_pageeffect_spacerotation.desktop)
+
 target_link_libraries(
     kpr_pageeffect_spacerotation
     calligrastageprivate
@@ -21,6 +23,3 @@ target_link_libraries(
     )
 
 install(TARGETS kpr_pageeffect_spacerotation  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_spacerotation.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

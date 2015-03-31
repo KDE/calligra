@@ -14,6 +14,8 @@ set(calligrastageeventactions_PART_SRCS
 
 add_library(calligrastageeventactions MODULE ${calligrastageeventactions_PART_SRCS})
 
+kcoreaddons_desktop_to_json(calligrastageeventactions calligrastageeventactions.desktop)
+
 target_link_libraries(
     calligrastageeventactions
     calligrastageprivate
@@ -24,5 +26,3 @@ target_link_libraries(
     )
 
 install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install(FILES calligrastageeventactions.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

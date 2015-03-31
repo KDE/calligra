@@ -23,8 +23,8 @@
 #include <KoEventActionRegistry.h>
 #include "sound/KPrSoundEventActionFactory.h"
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("KPrEventActions"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligrastageeventactions.json",
+                           registerPlugin<Plugin>();)
 
 Plugin::Plugin( QObject * parent,  const QVariantList & )
 : QObject( parent )
@@ -32,3 +32,4 @@ Plugin::Plugin( QObject * parent,  const QVariantList & )
     KoEventActionRegistry::instance()->addPresentationEventAction( new KPrSoundEventActionFactory() );
 }
 
+#include "Plugin.moc"

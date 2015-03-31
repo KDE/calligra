@@ -22,8 +22,8 @@
 #include <KPrPageEffectRegistry.h>
 #include "KPrSlideWipeEffectFactory.h"
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_slidewipe.json",
+                           registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)

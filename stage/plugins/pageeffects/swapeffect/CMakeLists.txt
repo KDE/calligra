@@ -7,6 +7,8 @@ set(kpr_pageeffect_swapeffect_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_swapeffect MODULE ${kpr_pageeffect_swapeffect_PART_SRCS})
 
+kcoreaddons_desktop_to_json(kpr_pageeffect_swapeffect kpr_pageeffect_swapeffect.desktop)
+
 target_link_libraries(
     kpr_pageeffect_swapeffect
     calligrastageprivate
@@ -18,6 +20,3 @@ target_link_libraries(
     )
 
 install(TARGETS kpr_pageeffect_swapeffect  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_swapeffect.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

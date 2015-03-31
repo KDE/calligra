@@ -10,6 +10,8 @@ set(kpr_pageeffect_barwipe_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_barwipe MODULE ${kpr_pageeffect_barwipe_PART_SRCS})
 
+kcoreaddons_desktop_to_json(kpr_pageeffect_barwipe kpr_pageeffect_barwipe.desktop)
+
 target_link_libraries(
     kpr_pageeffect_barwipe
     calligrastageprivate
@@ -21,7 +23,3 @@ target_link_libraries(
     )
 
 install(TARGETS kpr_pageeffect_barwipe  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_barwipe.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
