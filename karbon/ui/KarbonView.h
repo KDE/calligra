@@ -35,7 +35,6 @@
 #define __KARBON_VIEW__
 
 #include <KoView.h>
-#include <QPointF>
 #include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>

@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <QRect>
 #include <QVector>
-#include <QPainter>
 #include <cmath>
 
 ConvolveMatrixEffect::ConvolveMatrixEffect()

@@ -25,7 +25,6 @@
 #include "KoXmlReader.h"
 #include <klocale.h>
 #include <QRect>
-#include <QPainter>
 #include <cmath>
 
 MorphologyEffect::MorphologyEffect()

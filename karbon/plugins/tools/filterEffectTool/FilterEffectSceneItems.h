@@ -22,7 +22,6 @@
 
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
-#include <QDrag>
 #include <QMimeData>
 
 class KoFilterEffect;

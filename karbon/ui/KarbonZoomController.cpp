@@ -223,4 +223,3 @@ void KarbonZoomController::zoomOutRelative()
     requestZoomBy(sqrt(0.5));
 }
 
-#include "KarbonZoomController.moc"

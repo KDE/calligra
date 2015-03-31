@@ -37,16 +37,10 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-#include <QColor>
 #include <QPushButton>
 #include <QLabel>
-#include <QLayout>
-#include <QPixmap>
-#include <QGridLayout>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QPointF>
-#include <QRectF>
 
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
@@ -245,5 +239,4 @@ void KarbonSmallStylePreview::selectionChanged()
     QWidget::update();
 }
 
-#include "KarbonSmallStylePreview.moc"
 

@@ -27,7 +27,6 @@
 
 #include <QGridLayout>
 #include <QLabel>
-#include <QStackedWidget>
 
 CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

@@ -516,4 +516,3 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     return widgets;
 }
 
-#include "KarbonFilterEffectsTool.moc"

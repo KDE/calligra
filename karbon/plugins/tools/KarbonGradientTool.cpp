@@ -45,7 +45,6 @@
 
 #include <klocale.h>
 
-#include <QGridLayout>
 #include <QPainter>
 
 // helper function
@@ -591,4 +590,3 @@ void KarbonGradientTool::gradientChanged()
     initialize();
 }
 
-#include "KarbonGradientTool.moc"

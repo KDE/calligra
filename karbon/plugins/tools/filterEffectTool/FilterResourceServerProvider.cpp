@@ -23,7 +23,6 @@
 #include "FilterEffectResource.h"
 
 #include <QFileInfo>
-#include <QStringList>
 #include <QDir>
 
 #include <kglobal.h>

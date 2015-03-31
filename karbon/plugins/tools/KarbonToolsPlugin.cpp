@@ -44,4 +44,3 @@ KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
     KoShapeRegistry::instance()->add(new KarbonCalligraphicShapeFactory());
 }
 
-#include "KarbonToolsPlugin.moc"

@@ -36,7 +36,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <knuminput.h>
 #include <kcolorbutton.h>
 
-#include <QLabel>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QFormLayout>
@@ -135,4 +134,3 @@ void KarbonConfigInterfacePage::slotDefault()
     m_showStatusBar->setChecked(true);
 }
 
-#include "KarbonConfigInterfacePage.moc"

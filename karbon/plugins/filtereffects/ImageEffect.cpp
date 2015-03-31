@@ -25,7 +25,6 @@
 #include "KoXmlReader.h"
 #include <klocale.h>
 #include <kmimetype.h>
-#include <QRect>
 #include <QBuffer>
 #include <QPainter>
 

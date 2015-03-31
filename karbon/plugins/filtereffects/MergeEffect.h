@@ -21,7 +21,6 @@
 #define MERGEEFFECT_H
 
 #include "KoFilterEffect.h"
-#include <QPointF>
 
 #define MergeEffectId "feMerge"
 

@@ -132,18 +132,10 @@
 #include <kmimetype.h>
 
 // qt header
-#include <QIcon>
-#include <QApplication>
-#include <QClipboard>
-#include <QPainter>
 #include <QResizeEvent>
-#include <QPixmap>
 #include <QDropEvent>
 #include <QGridLayout>
 #include <QLabel>
-#include <QTimer>
-#include <QEvent>
-#include <QPrinter>
 #include <QImageReader>
 
 #include <unistd.h>
@@ -1534,5 +1526,4 @@ void KarbonView::applyPaletteColor(const KoColor &color)
     }
 }
 
-#include "KarbonView.moc"
 

@@ -102,5 +102,4 @@ const KComponentData &KarbonFactory::componentData()
     return *s_instance;
 }
 
-#include "KarbonFactory.moc"
 

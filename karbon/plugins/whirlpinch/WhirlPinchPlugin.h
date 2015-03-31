@@ -27,7 +27,6 @@
 #include <kdialog.h>
 #include <kxmlguiclient.h>
 
-#include <QPointF>
 #include <QVariantList>
 
 class WhirlPinchDlg;

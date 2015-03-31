@@ -33,10 +33,8 @@
 #include <klocale.h>
 #include <kcolordialog.h>
 
-#include <QLabel>
 #include <QBitmap>
 #include <QPaintEvent>
-#include <QPixmap>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPointF>
@@ -321,4 +319,3 @@ int KarbonGradientWidget::colorStopFromPosition(const QPoint &mousePos)
     return -1;
 }
 
-#include "KarbonGradientWidget.moc"

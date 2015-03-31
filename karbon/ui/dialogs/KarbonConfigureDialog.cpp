@@ -98,4 +98,3 @@ void KarbonConfigureDialog::slotDefault()
         m_defaultDocPage->slotDefault();
 }
 
-#include "KarbonConfigureDialog.moc"

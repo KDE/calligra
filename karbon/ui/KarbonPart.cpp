@@ -114,4 +114,3 @@ void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
 }
 
 
-#include "KarbonPart.moc"

@@ -22,7 +22,6 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include <klocale.h>
-#include <QRect>
 #include <QPainter>
 #include <limits.h>
 

@@ -28,7 +28,6 @@
 
 #include <kglobal.h>
 #include <QPointF>
-#include <QTransform>
 
 // define some often used mathematical constants et al:
 

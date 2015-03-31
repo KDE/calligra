@@ -53,4 +53,3 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QLis
     KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory());
 }
 
-#include "KarbonFilterEffectsPlugin.moc"

@@ -74,4 +74,3 @@ bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelInde
     }
 }
 
-#include "KarbonLayerSortingModel.moc"

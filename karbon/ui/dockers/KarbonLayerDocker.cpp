@@ -485,6 +485,5 @@ void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
     m_viewModeActions[mode]->setChecked(true);
 }
 
-#include "KarbonLayerDocker.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

@@ -85,9 +85,6 @@
 #include <klocale.h>
 #include <kundo2stack.h>
 
-#include <QDomDocument>
-#include <QDomElement>
-#include <QFileInfo>
 #include <QRectF>
 #include <QPainter>
 
