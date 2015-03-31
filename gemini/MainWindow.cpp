@@ -37,10 +37,14 @@
 #include <QFileInfo>
 #include <QGLWidget>
 
+#include <kglobal.h>
+#include <kicon.h>
+#include <kiconloader.h>
 #include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 #include <kaboutdata.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
@@ -65,6 +69,7 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
+#include <KoJsonTrader.h>
 
 #include "PropertyContainer.h"
 #include "TouchDeclarativeView.h"
@@ -582,16 +587,25 @@ void MainWindow::enableAltSaveAction()
 
 void MainWindow::openFile()
 {
+    QStringList mimeFilter;
+
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(WORDS_MIME_TYPE);
-    KService::Ptr service = entry.service();
-    QStringList mimeFilter = KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
-                                                               KoFilterManager::Import,
-                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    if (entry.loader()) {
+        QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+
+        mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
+                                                  KoFilterManager::Import,
+                                                  mimeTypes);
+    }
     entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
-    service = entry.service();
-    mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
-                                              KoFilterManager::Import,
-                                              service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    if (entry.loader()) {
+        QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
+                                                  KoFilterManager::Import,
+                                                  mimeTypes);
+    }
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
