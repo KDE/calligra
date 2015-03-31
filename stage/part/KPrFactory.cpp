@@ -29,12 +29,12 @@
 #include <KoPluginLoader.h>
 
 KComponentData* KPrFactory::s_instance = 0;
-KAboutData* KPrFactory::s_aboutData = 0;
+K4AboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( *aboutData(), parent )
+    : KPluginFactory( /* QT5TODO: what now? *aboutData(), parent*/ )
 {
     (void)componentData();
 
@@ -70,7 +70,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     return part;
 }
 
-KAboutData* KPrFactory::aboutData()
+K4AboutData* KPrFactory::aboutData()
 {
     if( !s_aboutData )
         s_aboutData = newKPresenterAboutData();
@@ -84,9 +84,10 @@ const KComponentData &KPrFactory::componentData()
     {
         s_instance = new KComponentData(aboutData());
 
-        s_instance->dirs()->addResourceType("stage_template", "data", "stage/templates/");
-        s_instance->dirs()->addResourceType("slideshow", "data", "stage/slideshow/");
-        s_instance->dirs()->addResourceType("styles", "data", "stage/styles/");
+// QT5TODO: this needs a new approach
+//         s_instance->dirs()->addResourceType("stage_template", "data", "stage/templates/");
+//         s_instance->dirs()->addResourceType("slideshow", "data", "stage/slideshow/");
+//         s_instance->dirs()->addResourceType("styles", "data", "stage/styles/");
     }
     return *s_instance;
 }
