@@ -28,6 +28,7 @@
 class CalligraQtQuickComponentsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.calligra.CalligraQtQuickComponentsPlugin")
 
 public:
     void registerTypes(const char *uri);
@@ -36,7 +37,5 @@ public:
 private:
 
 };
-
-Q_EXPORT_PLUGIN2(calligraqtquickcomponentsplugin, CalligraQtQuickComponentsPlugin)
 
 #endif // CALLIGRAQTQUICKCOMPONENTSPLUGIN_H
