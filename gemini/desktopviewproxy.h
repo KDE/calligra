@@ -42,7 +42,7 @@ public Q_SLOTS:
     bool fileSaveAs();
     void reload();
     void loadExistingAsNew();
-    void slotFileOpenRecent(const KUrl &url);
+    void slotFileOpenRecent(const QUrl &url);
 
 Q_SIGNALS:
     void documentSaved();
