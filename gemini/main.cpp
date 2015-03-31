@@ -30,7 +30,7 @@
 #include <QDebug>
 
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
@@ -57,12 +57,12 @@ int main( int argc, char** argv )
 #endif
 
 
-    KAboutData aboutData("calligragemini",
+    K4AboutData aboutData("calligragemini",
                          "calligrawords",
                          ki18n("Calligra Gemini"),
                          version.toLatin1(),
                          ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.calligra.org",

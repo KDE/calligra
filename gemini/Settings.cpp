@@ -26,6 +26,7 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <KMimeType>
+#include <kurl.h>
 
 #include "Theme.h"
 #include "PropertyContainer.h"

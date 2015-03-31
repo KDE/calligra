@@ -56,7 +56,7 @@ set(thumbnailhelper_SRCS
 if (WIN32)
     set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
 else ()
-    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
+    file(GLOB ICONS_SRCS "pics/*-apps-calligragemini.png")
     ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
@@ -67,7 +67,6 @@ add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
     Qt5::Gui
     Qt5::Core
-    ${QT_LIBRARIES}
     komain
 )
 
@@ -78,10 +77,9 @@ add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
     Qt5::Declarative
+    Qt5::OpenGL
     Qt5::Gui
     Qt5::Core
-    ${QT_QTOPENGL_LIBRARIES}
-    ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     komain
     wordsprivate
