@@ -7,14 +7,13 @@ set( xfig2odg_PLUGIN_SRCS
 )
 
 add_library(calligra_filter_xfig2odg MODULE ${xfig2odg_PLUGIN_SRCS} )
+kcoreaddons_desktop_to_json(calligra_filter_xfig2odg calligra_filter_xfig2odg.desktop)
 
 target_link_libraries( calligra_filter_xfig2odg
     komain
 )
 
 install(TARGETS calligra_filter_xfig2odg  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
-
-install( FILES  calligra_filter_xfig2odg.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  karbon_xfig_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
