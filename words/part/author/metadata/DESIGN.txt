@@ -1,0 +1,3 @@
+See materials here:
+
+https://community.kde.org/Calligra/Architecture/AuthorRDF
