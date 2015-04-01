@@ -28,6 +28,7 @@ set(docx2odt_PART_SRCS
 )
 
 add_library(calligra_filter_docx2odt MODULE ${docx2odt_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_docx2odt calligra_filter_docx2odt.desktop)
 
 target_link_libraries(
     calligra_filter_docx2odt
@@ -65,11 +66,6 @@ endif()
 ########### next target ###############
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_docx2odt.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
