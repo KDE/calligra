@@ -115,7 +115,7 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
                 }
             }
             if (!scrollArea->isReadOnly() &&
-                    section == scrollArea->currentRow() && scrollArea->rowEditing())
+                    section == scrollArea->currentRow() && scrollArea->currentRow() == scrollArea->rowEditing())
             {
                 return d->penPixmap;
             }
