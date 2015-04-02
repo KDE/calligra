@@ -38,8 +38,8 @@
 
 #include <math.h>
 
-K_PLUGIN_FACTORY(KarbonImportFactory, registerPlugin<KarbonImport>();)
-K_EXPORT_PLUGIN(KarbonImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KarbonImportFactory, "calligra_filter_karbon1x2karbon.json",
+                           registerPlugin<KarbonImport>();)
 
 KarbonImport::KarbonImport(QObject*parent, const QVariantList&)
     : KoFilter(parent), m_svgWriter(0)
@@ -1274,3 +1274,5 @@ QString KarbonImport::makeUnique(const QString &id)
 
     return m_lastId;
 }
+
+#include "Karbon1xImport.moc"
