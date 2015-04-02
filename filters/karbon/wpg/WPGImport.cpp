@@ -18,7 +18,6 @@
 */
 
 #include <WPGImport.h>
-#include <WPGImport.moc>
 
 #include <KoFilterChain.h>
 
@@ -37,8 +36,7 @@
 #include <cassert>
 #include <iostream>
 
-K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
-K_EXPORT_PLUGIN(WPGImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(WPGImportFactory, "calligra_filter_wpg2svg.json", registerPlugin<WPGImport>();)
 
 WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -95,3 +93,5 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
 
     return KoFilter::OK;
 }
+
+#include <WPGImport.moc>
