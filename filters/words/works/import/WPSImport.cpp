@@ -108,8 +108,7 @@ private:
     }
 };
 
-K_PLUGIN_FACTORY(WPSImportFactory, registerPlugin<WPSImport>();)
-K_EXPORT_PLUGIN(WPSImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(WPSImportFactory, "calligra_filter_wps2odt.json", registerPlugin<WPSImport>();)
 
 WPSImport::WPSImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -145,3 +144,4 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
+#include "WPSImport.moc"
