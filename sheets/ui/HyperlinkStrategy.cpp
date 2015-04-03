@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
+#include <kurl.h>
 
 #include <QTimer>
 
@@ -107,7 +108,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                     return;
                 }
             }
-            new KRun(url, tool()->canvas()->canvasWidget(), 0, url.isLocalFile());
+            new KRun(url, tool()->canvas()->canvasWidget(), 0);
         }
     }
 
