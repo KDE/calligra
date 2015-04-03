@@ -27,10 +27,8 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(CalendarToolPluginFactory,
-                 registerPlugin<CalendarToolFactory>();
-                )
-K_EXPORT_PLUGIN(CalendarToolPluginFactory("sheetscalendartool"))
+K_PLUGIN_FACTORY_WITH_JSON(CalendarToolPluginFactory, "kspread_plugin_tool_calendar.json",
+                           registerPlugin<CalendarToolFactory>();)
 
 
 CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList&)
@@ -47,3 +45,5 @@ KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new CalendarTool(canvas);
 }
+
+#include "CalendarToolFactory.moc"
