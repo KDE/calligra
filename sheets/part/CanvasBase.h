@@ -141,9 +141,9 @@ protected:
     void focusIn(QFocusEvent*);
 
     bool dragEnter(const QMimeData* mimeData);
-    bool dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source);
+    bool dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source);
     void dragLeave();
-    bool drop(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source);
+    bool drop(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     void inputMethodEvent(QInputMethodEvent *event);
