@@ -36,7 +36,7 @@
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
-#include "sketch/SketchInputContext.h"
+#include "SketchInputContext.h"
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

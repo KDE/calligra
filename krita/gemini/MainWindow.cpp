@@ -72,11 +72,11 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas_controller.h>
 
-#include "sketch/SketchDeclarativeView.h"
-#include "sketch/RecentFileManager.h"
-#include "sketch/DocumentManager.h"
-#include "sketch/QmlGlobalEngine.h"
-#include "sketch/Settings.h"
+#include "SketchDeclarativeView.h"
+#include "RecentFileManager.h"
+#include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
+#include "Settings.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff

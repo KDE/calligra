@@ -7,7 +7,6 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs)
 endif ()
 
-
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/tests/data/)
 
 macro(macro_add_unittest_definitions)
@@ -17,7 +16,7 @@ macro(macro_add_unittest_definitions)
 endmacro()
 
 #
-# The reason for this mode is that the Debug mode disable inlining
+# The reason for this mode is that the Debug mode disables inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
@@ -92,6 +91,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
     ${CMAKE_SOURCE_DIR}/krita/libbrush
+    ${CMAKE_SOURCE_DIR}/krita/libsketch
     ${CMAKE_SOURCE_DIR}/krita/libcolor
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/canvas
@@ -144,6 +144,10 @@ if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif ()
 
+if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
+    add_subdirectory(libsketch)
+endif ()
+
 set(krita_SRCS main.cc)
 
 if(WIN32 AND USE_BREAKPAD)
@@ -168,7 +172,47 @@ install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
+
+# build kritasketch and kritagemini executables
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
-    add_subdirectory(sketch)
-    add_subdirectory(gemini)
-endif ()
+
+    # Sketch
+    set(kritasketch_SRCS main.cc)
+    
+    if(WIN32 AND USE_BREAKPAD)
+        set(kritasketch_SRCS ${krita_SRCS} kis_crash_handler.cpp)
+        set(BREAKPAD_LIBS breakpad)
+    endif()
+    
+    kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+    
+    kde4_add_executable(kritasketch ${krita_SRCS})
+    target_link_libraries(kritasketch kritaui ${BREAKPAD_LIBS} kritasketchlib)
+    
+    install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+    install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+    install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
+    install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+    
+    # Gemini
+    set(kritagemini_SRCS main.cc)
+
+    if(WIN32 AND USE_BREAKPAD)
+        set(kritagemini_SRCS ${krita_SRCS} kis_crash_handler.cpp)
+        set(BREAKPAD_LIBS breakpad)
+    endif()
+
+    kde4_add_app_icon(kritagemini_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+
+    kde4_add_executable(kritagemini ${krita_SRCS})
+    target_link_libraries(kritagemini kritaui ${BREAKPAD_LIBS} kritasketchlib)
+
+    install(TARGETS kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+    install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+    install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
+    install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+
+
+endif()
