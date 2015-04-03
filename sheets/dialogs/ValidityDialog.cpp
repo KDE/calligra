@@ -59,10 +59,11 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
 {
     setFaceType(Tabbed);
-    setCaption(i18n("Validity"));
+    setWindowTitle(i18n("Validity"));
     setModal(true);
-    setButtons(Ok | Cancel | User1);
-    setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
+    // QT5TODO: port to QDialog
+//     setButtons(Ok | Cancel | User1);
+//     setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
 
     m_selection = selection;
 

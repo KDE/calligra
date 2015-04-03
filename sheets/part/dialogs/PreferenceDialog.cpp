@@ -299,10 +299,11 @@ PreferenceDialog::PreferenceDialog(View* view)
         , d(new Private)
 {
     setObjectName(QLatin1String("PreferenceDialog"));
-    setCaption(i18nc("@title:window", "Configure"));
+    setWindowTitle(i18nc("@title:window", "Configure"));
     setFaceType(List);
-    setButtons(Ok | Cancel | Default | Reset);
-    setDefaultButton(Ok);
+    // QT5TODO: port to QDialog
+//     setButtons(Ok | Cancel | Default | Reset);
+//     setDefaultButton(Ok);
 
     d->view = view;
 

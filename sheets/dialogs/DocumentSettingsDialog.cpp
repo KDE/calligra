@@ -67,10 +67,11 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
         , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
-    setCaption(i18n("Document Settings"));
+    setWindowTitle(i18n("Document Settings"));
 //     setFaceType(List);
-    setButtons(Ok | Cancel/* | Default | Reset*/);
-    setDefaultButton(Ok);
+    // QT5TODO: port to QDialog
+//     setButtons(Ok | Cancel/* | Default | Reset*/);
+//     setDefaultButton(Ok);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
 //     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
