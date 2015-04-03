@@ -272,8 +272,9 @@ Value ValueConverter::asString(const Value &value) const
         val = Value(QString());
         break;
     case Value::Boolean:
-        val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->settings()->locale()) :
-                    ki18n("False").toString(m_parser->settings()->locale()));
+        // QT5TODO: find proper way to get translation from custom language
+        val = Value(value.asBoolean() ? ki18n("True").toString(/*m_parser->settings()->locale()*/) :
+                    ki18n("False").toString(/*m_parser->settings()->locale()*/));
         break;
     case Value::Integer: {
         fmt = value.format();

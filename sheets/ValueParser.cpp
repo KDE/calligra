@@ -98,12 +98,13 @@ Value ValueParser::tryParseBool(const QString& str, bool *ok) const
 
     const QString& lowerStr = str.toLower();
 
+    // QT5TODO: find proper way to get translation from custom language
     if ((lowerStr == "true") ||
-            (lowerStr == ki18n("true").toString(m_settings->locale()).toLower())) {
+            (lowerStr == ki18n("true").toString(/*m_settings->locale()*/).toLower())) {
         val = Value(true);
         if (ok) *ok = true;
     } else if ((lowerStr == "false") ||
-               (lowerStr == ki18n("false").toString(m_settings->locale()).toLower())) {
+               (lowerStr == ki18n("false").toString(/*m_settings->locale()*/).toLower())) {
         val = Value(false);
         if (ok) *ok = true;
     }
@@ -344,8 +345,9 @@ Value ValueParser::tryParseTime(const QString& str, bool *ok) const
         tmpTime = readTime(str, false, &valid);
 
     if (!valid) {
-        const QString stringPm = ki18n("pm").toString(m_settings->locale());
-        const QString stringAm = ki18n("am").toString(m_settings->locale());
+        // QT5TODO: find proper way to get translation from custom language
+        const QString stringPm = ki18n("pm").toString(/*m_settings->locale()*/);
+        const QString stringAm = ki18n("am").toString(/*m_settings->locale()*/);
         int pos = 0;
         if ((pos = str.indexOf(stringPm, 0, Qt::CaseInsensitive)) != -1) {
             // cut off 'PM'
@@ -426,13 +428,14 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
         c = format.at(formatpos++);
         switch (c.toLatin1()) {
         case 'p': {
-            QString s(ki18n("pm").toString(m_settings->locale()).toLower());
+            // QT5TODO: find proper way to get translation from custom language
+            QString s(ki18n("pm").toString(/*m_settings->locale()*/).toLower());
             int len = s.length();
             if (str.mid(strpos, len) == s) {
                 pm = true;
                 strpos += len;
             } else {
-                s = ki18n("am").toString(m_settings->locale()).toLower();
+                s = ki18n("am").toString(/*m_settings->locale()*/).toLower();
                 len = s.length();
                 if (str.mid(strpos, len) == s) {
                     pm = false;
