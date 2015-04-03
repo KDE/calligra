@@ -23,6 +23,7 @@
 
 #include <QHash>
 #include <QMetaType>
+#include <QString>
 
 #include "calligra_sheets_export.h"
 

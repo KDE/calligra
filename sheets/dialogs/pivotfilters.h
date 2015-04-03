@@ -28,6 +28,8 @@
 #include<QString>
 #include<QVector>
 
+class QComboBox;
+
 namespace Calligra{
     namespace Sheets{
 

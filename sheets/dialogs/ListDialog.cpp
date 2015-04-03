@@ -27,6 +27,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
+#include <kglobal.h>
 #include <kcomponentdata.h>
 #include <kconfig.h>
 #include <kdebug.h>

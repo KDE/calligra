@@ -48,6 +48,7 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kmessagebox.h>
 
 #include <KoApplication.h>

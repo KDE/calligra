@@ -44,6 +44,8 @@
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
 
+#include <kglobal.h>
+
 // Qt
 #include <QStyledItemDelegate>
 
