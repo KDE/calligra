@@ -28,6 +28,7 @@
 
 #include <KoCanvasBase.h>
 
+#include <kglobal.h>
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>

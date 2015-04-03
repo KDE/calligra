@@ -25,6 +25,7 @@
 #include <QtTest>
 
 #include <Value.h>
+#include <Cell.h>
 
 namespace Calligra
 {
