@@ -70,6 +70,7 @@
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
+#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 
@@ -439,7 +440,7 @@ void View::Private::initActions()
     actions->preference->setToolTip(i18n("Set various Calligra Sheets options"));
     ac->addAction("preference", actions->preference);
 
-    KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
+    QAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
     ac->addAction("configureNotifications", notifyAction);
 
     // -- calculation actions --
@@ -561,7 +562,8 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-    setComponentData(Factory::global());
+// QT5TODO: no longer exists, but possibly also not needed. Check it.
+//     setComponentData(Factory::global());
     setXMLFile("sheets.rc");
 
     // GUI Initializations
@@ -814,7 +816,7 @@ void View::initView()
     d->viewLayout->setColumnMinimumWidth(2, extent);
     d->viewLayout->setRowMinimumHeight(3, extent);
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel(sb) : 0;
     if (d->calcLabel) {
         d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);

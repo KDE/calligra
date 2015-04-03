@@ -73,6 +73,7 @@
 // KDE
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
+#include <kaction.h>
 
 // Qt
 #include <QApplication>
@@ -181,7 +182,7 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
     // Enable/disable actions.
-    const QList<KAction*> actions = q->actions().values();
+    const QList<QAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
     q->action("insertFormula")->setEnabled(enable);
