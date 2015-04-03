@@ -18,7 +18,7 @@ ki18n_wrap_ui( solver_PART_SRCS
 )
 
 add_library(sheetssolver MODULE ${solver_PART_SRCS} )
-
+kcoreaddons_desktop_to_json(sheetssolver sheetssolver.desktop)
 
 
 target_link_libraries( sheetssolver
@@ -32,7 +32,5 @@ install(TARGETS sheetssolver  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
-install( FILES sheetssolver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
 
 endif()
