@@ -318,6 +318,8 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtsingleapplication.cpp
 
     widgets/kis_url_requester.cpp
+
+#    kis_desktop_view_proxy.cpp
 )
 
 if(WIN32)
@@ -411,6 +413,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgsplash.ui
 	input/wintab/kis_screen_size_choice_dialog.ui
 	forms/wdg_url_requester.ui
+
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
@@ -418,6 +421,7 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
+
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()

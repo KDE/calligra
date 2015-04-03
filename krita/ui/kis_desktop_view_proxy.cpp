@@ -20,7 +20,7 @@
  *
  */
 
-#include "desktopviewproxy.h"
+#include "kis_desktop_view_proxy.h"
 
 #include <QProcess>
 #include <QDir>
@@ -237,4 +237,4 @@ void DesktopViewProxy::updateKeyBindings()
     }
 }
 
-#include "desktopviewproxy.moc"
+#include "kis_desktop_view_proxy.moc"

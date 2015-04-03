@@ -87,7 +87,7 @@
 #include "kis_painting_assistants_decoration.h"
 #include "kis_progress_widget.h"
 
-#include "krita/gemini/ViewModeSwitchEvent.h"
+#include "kis_view_mode_switch_event.h"
 
 
 //static
