@@ -90,6 +90,8 @@ extern "C" int main(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("print", ki18n("Only print and exit"));
+    options.add("sketch", ki18n("Start Krita in sketch mode"));
+    options.add("gemini", ki18n("Start Krita in gemini mode"));
     options.add("template", ki18n("Open a new document with a template"));
     options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
     options.add("export-pdf", ki18n("Only export to PDF and exit"));
