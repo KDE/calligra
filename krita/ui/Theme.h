@@ -23,9 +23,9 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "krita_sketch_export.h"
+#include "krita_export.h"
 
-class KRITA_SKETCH_EXPORT Theme : public QObject
+class KRITAUI_EXPORT Theme : public QObject
 {
     Q_OBJECT
     /**

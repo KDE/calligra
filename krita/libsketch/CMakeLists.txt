@@ -7,22 +7,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 add_subdirectory(draganddrop)
 
-set(kritasketchlib_SRCS
-    DocumentManager.cpp
-    DocumentListModel.cpp
-    KisSelectionExtras.cpp
-    KisSketchView.cpp
-    RecentFileManager.cpp
-    ProgressProxy.cpp
-    PropertyContainer.cpp
-    Settings.cpp
-    SketchDeclarativeView.cpp
-    SketchInputContext.cpp
-    VirtualKeyboardController.cpp
-    Theme.cpp
-    QmlGlobalEngine.cpp
-)
-
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
     ColorSelectorItem.cpp
@@ -35,7 +19,6 @@ set(kritasketchplugin_SRCS
     KritaNamespace.cpp
     MouseTracker.cpp
     PanelConfiguration.cpp
-    PropertyContainer.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
@@ -86,30 +69,7 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
 
-# Krita Sketch library with shared things needed in both plugin and application
-# =============================================================================
-
-kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
-set_target_properties(kritasketchlib
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} DEFINE_SYMBOL MAKE_KRITA_SKETCH_LIB
-)
-
-
-target_link_libraries(kritasketchlib
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
-    ${QT_LIBRARIES}
-    kritaui
-    kowidgets
-    ${KDE4_KFILE_LIBRARY}
-    ${GLEW_LIBRARIES}
-)
-
 include(GNUInstallDirs)
-
-install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Sketch Qt Quick components
 # =============================================================================
@@ -125,7 +85,6 @@ target_link_libraries(kritasketchplugin
     kowidgets
     ${KDE4_KFILE_LIBRARY}
     ${GLEW_LIBRARIES}
-    kritasketchlib
 )
 
 install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)

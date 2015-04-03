@@ -178,3 +178,5 @@ QString RecentFileManager::recentFileName(int index) const
     }
     return QString();
 }
+
+#include <RecentFileManager.moc>

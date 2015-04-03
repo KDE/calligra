@@ -30,7 +30,7 @@
 #include <input/kis_tablet_event.h>
 
 #include "KisSketchView.h"
-#include "krita/gemini/ViewModeSwitchEvent.h"
+#include "kis_view_mode_switch_event.h"
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)

@@ -16,24 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SKETCHINPUTCONTEXT_H
-#define SKETCHINPUTCONTEXT_H
+#ifndef VIRTUALKEYBOARDCONTROLLER_H
+#define VIRTUALKEYBOARDCONTROLLER_H
 
-#include <QInputContext>
+#include <QObject>
 
-#include "krita_sketch_export.h"
+#include "krita_export.h"
 
-class KRITA_SKETCH_EXPORT SketchInputContext : public QInputContext
+class KRITAUI_EXPORT VirtualKeyboardController : public QObject
 {
+    Q_OBJECT
 public:
-    explicit SketchInputContext(QObject* parent = 0);
-    virtual ~SketchInputContext();
+    Q_INVOKABLE void requestShowKeyboard();
+    Q_INVOKABLE void requestHideKeyboard();
 
-    virtual bool isComposing() const;
-    virtual void reset();
-    virtual QString language();
-    virtual QString identifierName();
-    virtual bool filterEvent(const QEvent* event);
+    static VirtualKeyboardController* instance();
+
+Q_SIGNALS:
+    void showKeyboard();
+    void hideKeyboard();
+
+private:
+    explicit VirtualKeyboardController(QObject* parent = 0);
+    virtual ~VirtualKeyboardController();
+
+    static VirtualKeyboardController* sm_instance;
 };
 
-#endif // SKETCHINPUTCONTEXT_H
+#endif // VIRTUALKEYBOARDCONTROLLER_H

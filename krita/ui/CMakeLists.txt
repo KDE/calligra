@@ -320,6 +320,19 @@ set(kritaui_LIB_SRCS
     widgets/kis_url_requester.cpp
 
 #    kis_desktop_view_proxy.cpp
+    DocumentManager.cpp
+    DocumentListModel.cpp
+    KisSelectionExtras.cpp
+    KisSketchView.cpp
+    RecentFileManager.cpp
+    ProgressProxy.cpp
+    PropertyContainer.cpp
+    Settings.cpp
+    SketchDeclarativeView.cpp
+    SketchInputContext.cpp
+    VirtualKeyboardController.cpp
+    Theme.cpp
+    QmlGlobalEngine.cpp
 )
 
 if(WIN32)

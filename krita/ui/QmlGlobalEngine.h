@@ -20,10 +20,10 @@
 #ifndef QMLGLOBALENGINE_H
 #define QMLGLOBALENGINE_H
 
-#include "krita_sketch_export.h"
+#include "krita_export.h"
 
 class QDeclarativeEngine;
-class KRITA_SKETCH_EXPORT QmlGlobalEngine
+class KRITAUI_EXPORT QmlGlobalEngine
 {
 public:
     QDeclarativeEngine* engine() const;
