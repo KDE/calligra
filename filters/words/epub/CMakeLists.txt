@@ -18,10 +18,10 @@ set(odt2epub2_PART_SRCS
 
 add_library(calligra_filter_odt2epub2 MODULE ${odt2epub2_PART_SRCS})
 
-target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain)
+target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2epub2  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install( FILES  calligra_filter_odt2epub2.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+kcoreaddons_desktop_to_json(calligra_filter_odt2epub2 calligra_filter_odt2epub2.desktop)
 
 endif()
 
@@ -43,7 +43,6 @@ target_link_libraries(calligra_filter_odt2html kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2html  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_odt2html calligra_filter_odt2html.desktop)
-install( PROGRAMS  calligra_filter_odt2html.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 endif()
 
