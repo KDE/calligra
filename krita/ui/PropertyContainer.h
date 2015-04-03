@@ -22,14 +22,14 @@
 #include <QObject>
 #include <QVariant>
 #include <kis_cubic_curve.h>
-
+#include "krita_export.h"
 /**
  * The only purpose of this class is to expose the dynamic property
  * system of Qt to QML, so we can set and get properties on a generic
  * object. It is a little bit of a hack, but QML deliberately does
  * not have access to this (according to the developers).
  */
-class PropertyContainer : public QObject
+class KRITAUI_EXPORT PropertyContainer : public QObject
 {
     Q_OBJECT
 public:
