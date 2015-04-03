@@ -105,8 +105,8 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
 
     // (Re-)Create the pages of the sheets.
     int pageCount = 0;
-    const PageManagerMap::Iterator end(pageManagers.constEnd());
-    for (PageManagerMap::Iterator it(pageManagers.constBegin()); it != end; ++it) {
+    const PageManagerMap::ConstIterator end(pageManagers.constEnd());
+    for (PageManagerMap::ConstIterator it(pageManagers.constBegin()); it != end; ++it) {
         SheetPrint *const pageManager = *it;
         PrintSettings settings = *pageManager->settings();
         // Set the print region, if the selection should be painted.
