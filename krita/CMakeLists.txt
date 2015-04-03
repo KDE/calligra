@@ -179,40 +179,64 @@ if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
     # Sketch
     set(kritasketch_SRCS main.cc)
     
+    if (WIN32)
+        option(ENABLE_SKETCH_STARTUP_MAGIC "Enable Sketch's windows startup magic" ON)
+
+        if (ENABLE_SKETCH_STARTUP_MAGIC)
+            add_definitions(-DSKETCH_ENABLE_STARTUP_MAGIC)
+        endif ()
+    endif ()
+
     if(WIN32 AND USE_BREAKPAD)
         set(kritasketch_SRCS ${krita_SRCS} kis_crash_handler.cpp)
         set(BREAKPAD_LIBS breakpad)
     endif()
     
-    kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+    if (WIN32)
+        set(kritasketch_SRCS ${kritasketch_SRCS} sketch/KritaSketchWin.rc)
+    else ()
+        kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-kritasketch.png")
+    endif()
     
     kde4_add_executable(kritasketch ${krita_SRCS})
     target_link_libraries(kritasketch kritaui ${BREAKPAD_LIBS} kritasketchlib)
     
-    install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
-    install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-    install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
-    install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
-    install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+    install(TARGETS  kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/sketch/kritasketch.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+    install(FILES    ${CMAKE_CURRENT_SOURCE_DIR}/sketch/kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+    install(FILES    ${CMAKE_CURRENT_SOURCE_DIR}/sketch/kritasketch.qml     DESTINATION ${DATA_INSTALL_DIR}/krita)
+
     
     # Gemini
     set(kritagemini_SRCS main.cc)
+
+    if (WIN32)
+        option(ENABLE_GEMINI_STARTUP_MAGIC "Enable Gemini's windows startup magic" ON)
+
+        if (ENABLE_GEMINI_STARTUP_MAGIC)
+            add_definitions(-DGEMINI_ENABLE_STARTUP_MAGIC)
+        endif ()
+    endif ()
 
     if(WIN32 AND USE_BREAKPAD)
         set(kritagemini_SRCS ${krita_SRCS} kis_crash_handler.cpp)
         set(BREAKPAD_LIBS breakpad)
     endif()
 
-    kde4_add_app_icon(kritagemini_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+    if (WIN32)
+        set(kritagemini_SRCS ${kritagemini_SRCS} gemini/KritaGeminiWin.rc)
+    else ()
+        kde4_add_app_icon(kritagemini_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-kritagemini.png")
+    endif()
 
     kde4_add_executable(kritagemini ${krita_SRCS})
     target_link_libraries(kritagemini kritaui ${BREAKPAD_LIBS} kritasketchlib)
 
     install(TARGETS kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
-    install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-    install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
-    install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
-    install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+    install(PROGRAMS  ${CMAKE_CURRENT_SOURCE_DIR}/gemini/kritagemini.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+    install(FILES     ${CMAKE_CURRENT_SOURCE_DIR}/gemini/kritageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+    install(FILES     ${CMAKE_CURRENT_SOURCE_DIR}/gemini/kritagemini.qml     DESTINATION ${DATA_INSTALL_DIR}/krita)
+
 
 
 endif()
