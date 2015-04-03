@@ -30,4 +30,11 @@ install(TARGETS calligra_shape_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL
 
 ########### install files ###############
 
-ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons( ICONS
+    22-actions-spreadsheetshape.png
+    22-actions-tool_cellformatting.png
+    32-actions-spreadsheetshape.png
+
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME hicolor
+)
