@@ -224,11 +224,14 @@ set (calligrasheetsodf_LIB_SRCS
     ApplicationSettings.cpp
     Binding.cpp
     BindingManager.cpp
+    BindingModel.cpp
+    BindingStorage.cpp
     CalculationSettings.cpp
     Cell.cpp
     CellStorage.cpp
     Cluster.cpp
     Condition.cpp
+    ConditionsStorage.cpp
     Currency.cpp
     Damages.cpp
     DependencyManager.cpp
@@ -258,6 +261,7 @@ set (calligrasheetsodf_LIB_SRCS
     StyleStorage.cpp
     Util.cpp
     Validity.cpp
+    ValidityStorage.cpp
     Value.cpp
     ValueCalc.cpp
     ValueConverter.cpp
@@ -266,6 +270,7 @@ set (calligrasheetsodf_LIB_SRCS
 
     database/Database.cpp
     database/DatabaseManager.cpp
+    database/DatabaseStorage.cpp
     database/Filter.cpp
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf

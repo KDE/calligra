@@ -279,5 +279,3 @@ void BindingModel::setRegion(const Region& region)
 {
     m_region = region;
 }
-
-#include "BindingModel.moc"

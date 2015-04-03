@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,6 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "RectStorage.h"
+#include "DatabaseStorage.h"
 
 // cmake automoc needs this cpp file

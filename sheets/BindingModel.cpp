@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+    Copyright (C) 2008 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,6 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "RectStorage.h"
+#include "BindingModel.h"
 
-// cmake automoc needs this cpp file
+// QT5TODO: move the rest
