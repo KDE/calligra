@@ -176,6 +176,7 @@ install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 # build kritasketch and kritagemini executables
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
 
+    add_definitions(-DHAVE_SKETCH=1)
     # Sketch
     set(kritasketch_SRCS main.cc)
     
@@ -199,7 +200,7 @@ if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
     endif()
     
     kde4_add_executable(kritasketch ${krita_SRCS})
-    target_link_libraries(kritasketch kritaui ${BREAKPAD_LIBS} kritasketchlib)
+    target_link_libraries(kritasketch kritaui ${BREAKPAD_LIBS})
     
     install(TARGETS  kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
     install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/sketch/kritasketch.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
@@ -230,7 +231,7 @@ if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
     endif()
 
     kde4_add_executable(kritagemini ${krita_SRCS})
-    target_link_libraries(kritagemini kritaui ${BREAKPAD_LIBS} kritasketchlib)
+    target_link_libraries(kritagemini kritaui ${BREAKPAD_LIBS})
 
     install(TARGETS kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
     install(PROGRAMS  ${CMAKE_CURRENT_SOURCE_DIR}/gemini/kritagemini.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
