@@ -34,10 +34,10 @@
 using namespace Calligra::Sheets;
 
 KComponentData* Factory::s_global = 0;
-KAboutData* Factory::s_aboutData = 0;
+K4AboutData* Factory::s_aboutData = 0;
 
 Factory::Factory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+        : KPluginFactory(/**aboutData(), parent*/)
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
@@ -64,7 +64,7 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
     return part;
 }
 
-KAboutData* Factory::aboutData()
+K4AboutData* Factory::aboutData()
 {
     if (!s_aboutData)
         s_aboutData = newAboutData();
@@ -76,10 +76,11 @@ const KComponentData &Factory::global()
     if (!s_global) {
         s_global = new KComponentData(aboutData());
 
-        s_global->dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
-        s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
-        s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
-        s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+// QT5TODO: this needs a new approach
+//         s_global->dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
+//         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
+//         s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
+//         s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);

@@ -45,7 +45,7 @@
 #include <KoConfigAuthorPage.h>
 
 #include <kplugininfo.h>
-#include <kpluginselector.h>
+// #include <kpluginselector.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
 #include <sonnet/configwidget.h>
@@ -91,7 +91,8 @@ public:
     bool oldCreateBackupFile;
 
     // Plugin Options
-    KPluginSelector* pluginSelector;
+    // QT5TODO: port to KJsonTrader
+//     KPluginSelector* pluginSelector;
 
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
@@ -358,6 +359,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->resetOpenSaveOptions(); // initialize values
 
     // Plugin Options Widget
+    /* QT5TODO: port to KJsonTrader
     d->pluginSelector = new KPluginSelector(this);
     const QString serviceType = QLatin1String("CalligraSheets/Plugin");
     const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
@@ -368,14 +370,16 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
-    page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
+    */
+    QWidget *pluginSelectorDummy = new QWidget(this);
+    page = new KPageWidgetItem(pluginSelectorDummy/*d->pluginSelector*/, i18n("Plugins"));
     page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
 
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
-    d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
+    d->spellCheckPage = new Sonnet::ConfigWidget(/* QT5TODO: was sharedConfigPtr.data(),*/ this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
@@ -412,7 +416,7 @@ void PreferenceDialog::slotApply()
     d->applyOpenSaveOptions();
 
     // Plugin Options
-    d->pluginSelector->save();
+//     d->pluginSelector->save();
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     d->spellCheckPage->save();
@@ -433,7 +437,7 @@ void PreferenceDialog::slotDefault()
     } else if (currentPage() == d->page4) {
         d->spellCheckPage->slotDefault();
     } else if (currentPage() == d->pluginPage) {
-        d->pluginSelector->load();
+//         d->pluginSelector->load();
     }
 }
 
@@ -446,7 +450,7 @@ void PreferenceDialog::slotReset()
     } else if (currentPage() == d->page4) {
         // TODO
     } else if (currentPage() == d->pluginPage) {
-        d->pluginSelector->load(); // FIXME
+//         d->pluginSelector->load(); // FIXME
     }
 }
 

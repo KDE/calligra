@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kcomponentdata.h>
 
 #ifndef SHEETS_NO_PLUGINMODULES
 #include <kplugininfo.h>
@@ -64,7 +65,8 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
+    // QT5TODO
+    const KStandardDirs* dirs = KGlobal::/*activeComponent().*/dirs();
     const QString fileName = dirs->findResource("functions", module->descriptionFileName());
     if (fileName.isEmpty()) {
         kDebug(36002) << module->descriptionFileName() << "not found.";

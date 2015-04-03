@@ -24,7 +24,8 @@
 
 #include "calligra_sheets_export.h"
 
-class KAboutData;
+class K4AboutData;
+class KComponentData;
 
 namespace Calligra
 {
@@ -42,12 +43,12 @@ public:
 
     static const KComponentData &global();
 
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+    // _Creates_ a K4AboutData but doesn't keep ownership
+    static K4AboutData* aboutData();
 
 private:
     static KComponentData* s_global;
-    static KAboutData* s_aboutData;
+    static K4AboutData* s_aboutData;
 };
 
 } // namespace Sheets

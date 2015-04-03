@@ -18,6 +18,10 @@ add_subdirectory( functions )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
+if(NOT Qt5Sql_FOUND)
+    add_definitions(-DQT_NO_SQL)
+endif()
+
 ########### next target ###############
 set (chart_DIR_SRCS
     chart/ChartDatabaseSelectorFactory.cpp
@@ -302,21 +306,12 @@ add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
-    ${KDE4_THREADWEAVER_LIBS}
+    KF5::SonnetCore
+    KF5::SonnetUi
+    KF5::NotifyConfig
 )
 if(Qt5Sql_FOUND)
     target_link_libraries(calligrasheetscommon Qt5::Sql)
-else()
-    add_definitions(-DQT_NO_SQL)
-endif()
-if(QT_QTDBUS_FOUND)
-    target_link_libraries(calligrasheetscommon KF5::NotifyConfig )
-endif()
-
-if(KDE4_KCMUTILS_LIBS)
-    target_link_libraries(calligrasheetscommon KF5::KCMUtils )
-else()
-    target_link_libraries(calligrasheetscommon  )
 endif()
 
 target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
@@ -330,8 +325,7 @@ install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
 add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
-
-
+kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
@@ -341,7 +335,6 @@ install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
-install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
