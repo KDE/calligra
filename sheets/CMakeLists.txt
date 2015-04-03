@@ -297,9 +297,13 @@ add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
-    Qt5::Sql
     ${KDE4_THREADWEAVER_LIBS}
 )
+if(Qt5Sql_FOUND)
+    target_link_libraries(calligrasheetscommon Qt5::Sql)
+else()
+    add_definitions(-DQT_NO_SQL)
+endif()
 if(QT_QTDBUS_FOUND)
     target_link_libraries(calligrasheetscommon KF5::NotifyConfig )
 endif()
