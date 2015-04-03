@@ -319,22 +319,22 @@ void TabBarPrivate::layoutButtons()
 
     if (tabbar->isLeftToRight()) {
         scrollFirstButton->setGeometry(0, 0, bw, bw);
-        scrollFirstButton->setIcon(QIcon(arrow_leftmost_xpm));
+        scrollFirstButton->setIcon(QIcon(QPixmap(arrow_leftmost_xpm)));
         scrollBackButton->setGeometry(bw, 0, bw, bw);
-        scrollBackButton->setIcon(QIcon(arrow_left_xpm));
+        scrollBackButton->setIcon(QIcon(QPixmap(arrow_left_xpm)));
         scrollForwardButton->setGeometry(bw*2, 0, bw, bw);
-        scrollForwardButton->setIcon(QIcon(arrow_right_xpm));
+        scrollForwardButton->setIcon(QIcon(QPixmap(arrow_right_xpm)));
         scrollLastButton->setGeometry(bw*3, 0, bw, bw);
-        scrollLastButton->setIcon(QIcon(arrow_rightmost_xpm));
+        scrollLastButton->setIcon(QIcon(QPixmap(arrow_rightmost_xpm)));
     } else {
         scrollFirstButton->setGeometry(w - bw, 0, bw, bw);
-        scrollFirstButton->setIcon(QIcon(arrow_rightmost_xpm));
+        scrollFirstButton->setIcon(QIcon(QPixmap(arrow_rightmost_xpm)));
         scrollBackButton->setGeometry(w - 2*bw, 0, bw, bw);
-        scrollBackButton->setIcon(QIcon(arrow_right_xpm));
+        scrollBackButton->setIcon(QIcon(QPixmap(arrow_right_xpm)));
         scrollForwardButton->setGeometry(w - 3*bw, 0, bw, bw);
-        scrollForwardButton->setIcon(QIcon(arrow_left_xpm));
+        scrollForwardButton->setIcon(QIcon(QPixmap(arrow_left_xpm)));
         scrollLastButton->setGeometry(w - 4*bw, 0, bw, bw);
-        scrollLastButton->setIcon(QIcon(arrow_leftmost_xpm));
+        scrollLastButton->setIcon(QIcon(QPixmap(arrow_leftmost_xpm)));
     }
 }
 
