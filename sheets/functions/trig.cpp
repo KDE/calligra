@@ -56,7 +56,7 @@ Value func_tanh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("trigonometry", TrigonometryModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtrigonometrymodule.json", TrigonometryModule)
 
 
 TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
@@ -274,4 +274,4 @@ Value func_atan2(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->atan2(args[1], args[0]);
 }
 
-#include "TrigonometryModule.moc"
+#include "trig.moc"

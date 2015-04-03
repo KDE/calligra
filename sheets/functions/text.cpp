@@ -79,7 +79,7 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("text", TextModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtextmodule.json", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)
@@ -918,4 +918,4 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(aText);
 }
 
-#include "TextModule.moc"
+#include "text.moc"

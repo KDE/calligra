@@ -129,7 +129,7 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("math", MathModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadmathmodule.json", MathModule)
 
 
 MathModule::MathModule(QObject* parent, const QVariantList&)
@@ -1463,4 +1463,4 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
 */
 
-#include "MathModule.moc"
+#include "math.moc"

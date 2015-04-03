@@ -95,7 +95,7 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("engineering", EngineeringModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadengineeringmodule.json", EngineeringModule)
 
 
 EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
@@ -1520,4 +1520,4 @@ Value func_gestep(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
-#include "EngineeringModule.moc"
+#include "engineering.moc"

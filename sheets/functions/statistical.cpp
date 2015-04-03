@@ -125,7 +125,7 @@ Value func_ztest(valVector args, ValueCalc *calc, FuncExtra *);
 typedef QList<double> List;
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("statistical", StatisticalModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadstatisticalmodule.json", StatisticalModule)
 
 
 StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
@@ -3061,4 +3061,4 @@ Value func_ztest(valVector args, ValueCalc* calc, FuncExtra*)
     return calc->mul(Value(2.0), calc->gauss(calc->abs(z)));
 }
 
-#include "StatisticalModule.moc"
+#include "statistical.moc"

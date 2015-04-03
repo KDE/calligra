@@ -60,7 +60,7 @@ Value func_sheets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("reference", ReferenceModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadreferencemodule.json", ReferenceModule)
 
 
 ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
@@ -679,4 +679,4 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
     return v;
 }
 
-#include "ReferenceModule.moc"
+#include "reference.moc"
