@@ -274,7 +274,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     }
 
     // Add auto completion.
-    searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto);
+    searchFunct->setCompletionMode(KCompletion::CompletionAuto);
     searchFunct->setCompletionObject(&listFunct, true);
 
     if (functions->currentIndex().isValid())
