@@ -18,7 +18,7 @@
 */
 
 #include <dbaseimport.h>
-#include <dbaseimport.moc>
+
 #include <dbase.h>
 
 #include <QFont>
@@ -32,9 +32,11 @@
 #include <KoUnit.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
+#include <klocale.h>
 
-K_PLUGIN_FACTORY(DBaseImportFactory, registerPlugin<DBaseImport>();)
-K_EXPORT_PLUGIN(DBaseImportFactory("calligrafilters"))
+
+K_PLUGIN_FACTORY_WITH_JSON(DBaseImportFactory, "calligra_filter_dbase2kspread.json",
+                           registerPlugin<DBaseImport>();)
 
 
 DBaseImport::DBaseImport(QObject* parent, const QVariantList&)
@@ -164,3 +166,5 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include <dbaseimport.moc>
