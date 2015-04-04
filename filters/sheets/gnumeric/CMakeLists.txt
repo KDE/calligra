@@ -21,9 +21,9 @@ if(SHOULD_BUILD_FILTER_GNUMERIC_TO_SHEETS)
 
 set(gnumeric2sheets_PART_SRCS gnumericimport.cc )
 add_library(calligra_filter_gnumeric2sheets MODULE ${gnumeric2sheets_PART_SRCS})
-target_link_libraries(calligra_filter_gnumeric2sheets calligrasheetscommon kowidgets)
+kcoreaddons_desktop_to_json(calligra_filter_gnumeric2sheets calligra_filter_gnumeric2sheets.desktop)
+target_link_libraries(calligra_filter_gnumeric2sheets calligrasheetscommon kowidgets KF5::Archive)
 install(TARGETS calligra_filter_gnumeric2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  calligra_filter_gnumeric2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
