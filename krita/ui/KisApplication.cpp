@@ -81,6 +81,7 @@
 #include <kis_paintop_registry.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
+#include "SketchInputContext.h"
 
 
 KisApplication* KisApplication::KoApp = 0;
@@ -266,11 +267,17 @@ bool KisApplication::start()
     const QString exportFileName = args->getOption("export-filename");
     const QString profileFileName = args->getOption("profile-filename");
 
+
+    if (args->isSet("vkb")) {
+        setInputContext(new SketchInputContext(this));
+    }
+
+
     KisApplication::ApplicationType applicationType = KisApplication::Desktop;
-    if (args->isSet("sketch") || applicationName() == "kritasketch") {
+    if (args->isSet("sketch") || qAppName().contains("sketch")) {
         applicationType = KisApplication::Sketch;
     }
-    else if (args->isSet("gemini") || applicationName() == "kritagemini") {
+    else if (args->isSet("gemini") || qAppName().contains("gemini")) {
         applicationType = KisApplication::Gemini;
     }
 

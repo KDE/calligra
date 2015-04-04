@@ -18,6 +18,8 @@
 #include "SketchDeclarativeView.h"
 
 #include <opengl/kis_opengl.h>
+#include <opengl/kis_opengl_canvas2.h>
+
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLFramebufferObject>

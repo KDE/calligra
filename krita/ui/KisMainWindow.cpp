@@ -29,14 +29,22 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include <QDeclarativeView>
 #include <QDesktopServices>
 #include <QDesktopWidget>
+#include <QDir>
 #include <QDockWidget>
+#include <QFile>
+#include <QFileInfo>
+#include <QGLWidget>
 #include <QIcon>
 #include <QLabel>
 #include <QLayout>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QMessageBox>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
@@ -44,8 +52,10 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QProgressBar>
+#include <QResizeEvent>
 #include <QSignalMapper>
 #include <QTabBar>
+#include <QTimer>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -129,6 +139,12 @@
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
 
+#include "SketchDeclarativeView.h"
+#include "RecentFileManager.h"
+#include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
+#include "Settings.h"
+
 #include "calligraversion.h"
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -169,7 +185,7 @@ public:
         , printActionPreview(0)
         , exportPdf(0)
         , closeAll(0)
-//        , reloadFile(0)
+        //        , reloadFile(0)
         , importFile(0)
         , exportFile(0)
         , undo(0)
@@ -197,6 +213,7 @@ public:
         , documentMapper(new QSignalMapper(parent))
         , lastExportSpecialOutputFlag(0)
         , applicationType(appType)
+        , sketchDeclarativeView(0)
     {
     }
 
@@ -227,7 +244,7 @@ public:
     KisAction *printActionPreview;
     KisAction *exportPdf;
     KisAction *closeAll;
-//    KisAction *reloadFile;
+    //    KisAction *reloadFile;
     KisAction *importFile;
     KisAction *exportFile;
     KisAction *undo;
@@ -273,12 +290,15 @@ public:
     int lastExportSpecialOutputFlag;
 
     KisApplication::ApplicationType applicationType;
+    SketchDeclarativeView *sketchDeclarativeView;
 };
 
 KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     : KXmlGuiWindow()
     , d(new Private(this, appType))
 {
+
+    qDebug() << "Application type:" << appType;
 
     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
@@ -346,8 +366,16 @@ KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     d->mdiArea->setTabsClosable(true);
 #endif /* QT_VERSION >= 0x040800 */
 
-    setCentralWidget(d->mdiArea);
-    d->mdiArea->show();
+    if (appType == KisApplication::Sketch) {
+
+        createSketch();
+        setCentralWidget(d->sketchDeclarativeView);
+    }
+    else {
+
+        setCentralWidget(d->mdiArea);
+        d->mdiArea->show();
+    }
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -429,27 +457,27 @@ void KisMainWindow::setNoCleanup(bool noCleanup)
 
 KisMainWindow::~KisMainWindow()
 {
-//    foreach(QAction *ac, actionCollection()->actions()) {
-//        KAction *action = qobject_cast<KAction*>(ac);
-//        if (action) {
-//        qDebug() << "<Action"
-//                 << "name=" << action->objectName()
-//                 << "icon=" << action->icon().name()
-//                 << "text="  << action->text().replace("&", "&amp;")
-//                 << "whatsThis="  << action->whatsThis()
-//                 << "toolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
-//                 << "iconText="  << action->iconText().replace("&", "&amp;")
-//                 << "shortcut="  << action->shortcut(KAction::ActiveShortcut).toString()
-//                 << "defaultShortcut="  << action->shortcut(KAction::DefaultShortcut).toString()
-//                 << "isCheckable="  << QString((action->isChecked() ? "true" : "false"))
-//                 << "statusTip=" << action->statusTip()
-//                 << "/>"   ;
-//        }
-//        else {
-//            qDebug() << "Got a QAction:" << ac->objectName();
-//        }
+    //    foreach(QAction *ac, actionCollection()->actions()) {
+    //        KAction *action = qobject_cast<KAction*>(ac);
+    //        if (action) {
+    //        qDebug() << "<Action"
+    //                 << "name=" << action->objectName()
+    //                 << "icon=" << action->icon().name()
+    //                 << "text="  << action->text().replace("&", "&amp;")
+    //                 << "whatsThis="  << action->whatsThis()
+    //                 << "toolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
+    //                 << "iconText="  << action->iconText().replace("&", "&amp;")
+    //                 << "shortcut="  << action->shortcut(KAction::ActiveShortcut).toString()
+    //                 << "defaultShortcut="  << action->shortcut(KAction::DefaultShortcut).toString()
+    //                 << "isCheckable="  << QString((action->isChecked() ? "true" : "false"))
+    //                 << "statusTip=" << action->statusTip()
+    //                 << "/>"   ;
+    //        }
+    //        else {
+    //            qDebug() << "Got a QAction:" << ac->objectName();
+    //        }
 
-//    }
+    //    }
 
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
@@ -545,7 +573,7 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
 {
-//    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
+    //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
 void KisMainWindow::setReadWrite(bool readwrite)
@@ -778,8 +806,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         mimeFilter = mime->patterns();
     else
         mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                 KisImportExportManager::Export,
-                                                 document->extraNativeMimeTypes());
+                                                        KisImportExportManager::Export,
+                                                        document->extraNativeMimeTypes());
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -823,7 +851,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
         KUrl newURL = dialog.url();
 
@@ -2041,10 +2069,10 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
-//    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
-//    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
-//    actionManager->addAction("file_reload_file", d->reloadFile);
-//    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
+    //    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
+    //    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
+    //    actionManager->addAction("file_reload_file", d->reloadFile);
+    //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
     d->importFile  = new KisAction(koIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
     actionManager->addAction("file_import_file", d->importFile);
@@ -2181,5 +2209,58 @@ void KisMainWindow::showDockerTitleBars(bool show)
     cfg.setShowDockerTitleBars(show);
 }
 
+
+void KisMainWindow::createSketch()
+{
+    setWindowTitle(i18n("Krita Sketch"));
+    setWindowIcon(koIcon("kritasketch"));
+
+    KisConfig cfg;
+    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    cfg.setUseOpenGL(true);
+
+    d->mdiArea->setVisible(false);
+
+    d->sketchDeclarativeView = new SketchDeclarativeView();
+    QmlGlobalEngine::instance()->setEngine(d->sketchDeclarativeView->engine());
+    d->sketchDeclarativeView->engine()->rootContext()->setContextProperty("mainWindow", this);
+#ifdef Q_OS_WIN
+    QDir appdir(qApp->applicationDirPath());
+
+    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+    wchar_t buffer[1024];
+    QString absolute = appdir.absolutePath();
+    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    rv = ::GetLongPathName(buffer, buffer, 1024);
+    QString correctedPath((QChar *)buffer);
+    appdir.setPath(correctedPath);
+
+    // for now, the app in bin/ and we still use the env.bat script
+    appdir.cdUp();
+
+    d->sketchDeclarativeView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
+    d->sketchDeclarativeView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
+    QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
+#else
+    d->sketchDeclarativeView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
+#endif
+
+    Q_ASSERT(QFile::exists(mainqml));
+    if (!QFile::exists(mainqml)) {
+        QMessageBox::warning(0, i18nc("@title:window", "No QML found"), mainqml + " doesn't exist.");
+    }
+    QFileInfo fi(mainqml);
+
+    d->sketchDeclarativeView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+    d->sketchDeclarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
+    if (d->sketchDeclarativeView->errors().count() > 0) {
+        foreach(const QDeclarativeError &error, d->sketchDeclarativeView->errors()) {
+            kDebug() << error.toString();
+        }
+    }
+
+}
 
 #include <KisMainWindow.moc>

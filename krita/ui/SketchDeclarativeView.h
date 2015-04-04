@@ -20,9 +20,10 @@
 
 #include <QDeclarativeView>
 #include <QPointer>
-#include <opengl/kis_opengl_canvas2.h>
 
 #include "krita_export.h"
+
+class KisOpenGLCanvas2;
 
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
@@ -60,7 +61,7 @@ private:
     bool m_drawCanvas;
     QPointer<KisOpenGLCanvas2> m_canvasWidget;
     bool m_GLInitialized;
-    QGraphicsItem* m_sketchView;
+    QGraphicsItem *m_sketchView;
     Q_SLOT void resetInitialized();
 };
 

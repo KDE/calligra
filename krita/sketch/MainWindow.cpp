@@ -179,6 +179,7 @@ void MainWindow::setCurrentSketchPage(QString newPage)
     d->currentSketchPage = newPage;
     emit currentSketchPageChanged();
 }
+
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->viewManager) {

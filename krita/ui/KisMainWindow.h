@@ -437,6 +437,7 @@ private:
 
 private slots:
     void initializeGeometry();
+    void createSketch();
 
 private:
     class Private;

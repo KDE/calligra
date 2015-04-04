@@ -98,6 +98,8 @@ extern "C" int main(int argc, char **argv)
     options.add("export", ki18n("Export to the given filename and exit"));
     options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
+    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
+
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
 
     KCmdLineArgs::addCmdLineOptions(options);
