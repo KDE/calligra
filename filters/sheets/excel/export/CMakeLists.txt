@@ -44,6 +44,7 @@ kde_enable_exceptions()
 set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
 add_library(calligra_filter_sheets2xls MODULE ${sheets2xls_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2xls calligra_filter_sheets2xls.desktop)
 
 
 target_link_libraries(calligra_filter_sheets2xls
@@ -56,10 +57,5 @@ set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls 
 
 if(INSTALL_XLS_EXPORT_FILTER)
   install(TARGETS calligra_filter_sheets2xls  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-  install( FILES  calligra_filter_sheets2xls.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif()
 

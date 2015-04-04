@@ -18,7 +18,6 @@
 */
 
 #include <ExcelExport.h>
-#include <ExcelExport.moc>
 
 #include <QFont>
 #include <QFontMetricsF>
@@ -47,8 +46,7 @@
 
 #include <CFBWriter.h>
 
-K_PLUGIN_FACTORY(ExcelExportFactory, registerPlugin<ExcelExport>();)
-K_EXPORT_PLUGIN(ExcelExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExcelExportFactory, "calligra_filter_sheets2xls.json", registerPlugin<ExcelExport>();)
 
 static uint qHash(const QFont& f)
 {
@@ -1150,3 +1148,5 @@ unsigned ExcelExport::Private::fontIndex(const QFont& f, const QColor& c, QHash<
     fontRecords.append(fr);
     return idx;
 }
+
+#include <ExcelExport.moc>
