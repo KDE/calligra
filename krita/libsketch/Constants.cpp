@@ -25,8 +25,14 @@
 Constants::Constants(QObject* parent)
     : QObject(parent)
 {
-    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
-    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    if (qApp && qApp->activeWindow()) {
+        m_gridWidth = qApp->activeWindow()->width() / gridColumns();
+        m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    }
+    else {
+        m_gridHeight = 64;
+        m_gridWidth = 64;
+    }
     m_toolbarButtonSize = m_gridHeight;
 }
 

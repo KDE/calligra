@@ -2240,10 +2240,10 @@ void KisMainWindow::createSketch()
 
     d->sketchDeclarativeView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
     d->sketchDeclarativeView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
-    QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
+    QString mainqml = appdir.canonicalPath() + "/share/apps/krita/kritasketch.qml";
 #else
     d->sketchDeclarativeView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
+    QString mainqml = KGlobal::dirs()->findResource("data", "krita/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
