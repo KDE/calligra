@@ -20,7 +20,6 @@
 */
 
 #include <htmlimport.h>
-#include <htmlimport.moc>
 //#include <exportdialog.h>
 
 #include <QFile>
@@ -49,8 +48,8 @@
 
 //using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
-K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(HTMLImportFactory, "calligra_filter_html2ods.json",
+                           registerPlugin<HTMLImport>();)
 
 HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)
@@ -310,3 +309,5 @@ bool HTMLImport::parseTag(DOM::Element element)
 
     return true;
 }
+
+#include <htmlimport.moc>
