@@ -31,8 +31,8 @@
 #include <kpluginfactory.h>
 #include <sheets/Util.h>
 
-K_PLUGIN_FACTORY(APPLIXSPREADImportFactory, registerPlugin<APPLIXSPREADImport>();)
-K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(APPLIXSPREADImportFactory, "calligra_filter_applixspread2kspread.json",
+                           registerPlugin<APPLIXSPREADImport>();)
 
 
 APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QVariantList&)
