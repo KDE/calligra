@@ -32,7 +32,7 @@
 
 #include "krita_export.h"
 
-#include <KisMainWindow.h>
+#include "KisApplication.h"
 
 namespace KIO {
 }
@@ -41,6 +41,8 @@ class KisDocument;
 class KisView;
 class QGraphicsItem;
 class KisDocument;
+class KisInputManager;
+class KoCanvasResourceManager;
 
 /**
  * Override this class in your application. It's the main entry point that
@@ -71,6 +73,7 @@ private:
     explicit KisPart();
 
 public:
+
     /**
      *  Destructor.
      *
@@ -108,7 +111,7 @@ public:
     /**
      * Create a new main window, but does not add it to the current set of managed main windows.
      */
-    KisMainWindow *createMainWindow();
+    KisMainWindow *createMainWindow(KisApplication::ApplicationType appType);
 
     /**
      * Appends the mainwindow to the list of mainwindows which this part manages.

@@ -58,7 +58,7 @@ public:
         image->initialRefreshGraph();
 
 
-        mainWindow = new KisMainWindow();
+        mainWindow = new KisMainWindow(KisApplication::Desktop);
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 

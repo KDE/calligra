@@ -55,6 +55,7 @@
 #include "kis_perspective_grid_manager.h"
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"
+#include "input/kis_input_manager.h"
 
 //#define DEBUG_REPAINT
 #include <KoCanvasController.h>

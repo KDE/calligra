@@ -57,7 +57,7 @@ public:
 
         m_doc->setCurrentImage(m_image);
 
-        m_mainWindow = KisPart::instance()->createMainWindow();
+        m_mainWindow = KisPart::instance()->createMainWindow(KisApplication::Desktop);
         m_view = new KisView(m_doc, m_mainWindow->resourceManager(), m_mainWindow->actionCollection(), m_mainWindow);
 
         m_image->refreshGraph();

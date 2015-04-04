@@ -253,9 +253,9 @@ void KisPart::removeDocument(KisDocument *document)
     document->deleteLater();
 }
 
-KisMainWindow *KisPart::createMainWindow()
+KisMainWindow *KisPart::createMainWindow(KisApplication::ApplicationType appType)
 {
-    KisMainWindow *mw = new KisMainWindow();
+    KisMainWindow *mw = new KisMainWindow(appType);
     return mw;
 }
 

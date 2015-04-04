@@ -154,7 +154,7 @@ public:
 class KisMainWindow::Private
 {
 public:
-    Private(KisMainWindow *parent)
+    Private(KisMainWindow *parent, KisApplication::ApplicationType appType)
         : viewManager(0)
         , firstTime(true)
         , windowSizeDirty(false)
@@ -196,6 +196,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
         , lastExportSpecialOutputFlag(0)
+        , applicationType(appType)
     {
     }
 
@@ -270,12 +271,15 @@ public:
 
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
+
+    KisApplication::ApplicationType applicationType;
 };
 
-KisMainWindow::KisMainWindow()
+KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     : KXmlGuiWindow()
-    , d(new Private(this))
+    , d(new Private(this, appType))
 {
+
     setComponentData(KisFactory::componentData());
     KGlobal::setActiveComponent(KisFactory::componentData());
 
@@ -1897,7 +1901,7 @@ void KisMainWindow::newView(QObject *document)
 
 void KisMainWindow::newWindow()
 {
-    KisPart::instance()->createMainWindow()->show();
+    KisPart::instance()->createMainWindow(d->applicationType)->show();
 }
 
 void KisMainWindow::closeCurrentWindow()

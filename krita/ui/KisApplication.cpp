@@ -266,6 +266,14 @@ bool KisApplication::start()
     const QString exportFileName = args->getOption("export-filename");
     const QString profileFileName = args->getOption("profile-filename");
 
+    KisApplication::ApplicationType applicationType = KisApplication::Desktop;
+    if (args->isSet("sketch") || applicationName() == "kritasketch") {
+        applicationType = KisApplication::Sketch;
+    }
+    else if (args->isSet("gemini") || applicationName() == "kritagemini") {
+        applicationType = KisApplication::Gemini;
+    }
+
 
     // only show the mainWindow when no command-line mode option is passed
     const bool showmainWindow = (   !(exportAsPdf || exportAs) );
@@ -310,7 +318,7 @@ bool KisApplication::start()
 
     if (!exportAs) {
         // show a mainWindow asap, if we want that
-        mainWindow = KisPart::instance()->createMainWindow();
+        mainWindow = KisPart::instance()->createMainWindow(applicationType);
 
         KisPart::instance()->addMainWindow(mainWindow);
         if (showmainWindow) {

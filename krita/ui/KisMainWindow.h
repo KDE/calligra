@@ -30,6 +30,8 @@
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
+#include "KisApplication.h"
+#include "KisPart.h"
 #include "KisView.h"
 
 class QCloseEvent;
@@ -67,7 +69,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow();
+    explicit KisMainWindow(KisApplication::ApplicationType appType);
 
     /**
      *  Destructor.

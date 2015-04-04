@@ -37,7 +37,7 @@
 void KisActionManagerTest::testUpdateGUI()
 {
     KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow(KisApplication::Desktop);
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
     KisPart::instance()->addView(view, doc);
@@ -71,7 +71,7 @@ void KisActionManagerTest::testUpdateGUI()
 void KisActionManagerTest::testCondition()
 {
     KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow(KisApplication::Desktop);
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
     KisPart::instance()->addView(view, doc);
@@ -115,7 +115,7 @@ void KisActionManagerTest::testCondition()
 void KisActionManagerTest::testTakeAction()
 {
     KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow(KisApplication::Desktop);
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
     KisPart::instance()->addView(view, doc);

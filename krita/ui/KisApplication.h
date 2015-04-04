@@ -50,6 +50,13 @@ class KRITAUI_EXPORT KisApplication : public QtSingleApplication
     Q_OBJECT
 
 public:
+
+    enum ApplicationType {
+        Desktop,
+        Sketch,
+        Gemini
+    };
+
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
