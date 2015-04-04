@@ -42,6 +42,6 @@ kde_enable_exceptions()
 
 add_definitions(-DSWINDER_XLS2RAW)
 
-add_executable(sidewinder TEST ${sidewinder_SRCS})
+add_executable(sidewinder ${sidewinder_SRCS})
 
 target_link_libraries(sidewinder mso calligrasheetsodf Qt5::Core Qt5::Gui ${ZLIB_LIBRARIES} koodf)

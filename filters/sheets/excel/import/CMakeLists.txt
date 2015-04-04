@@ -53,6 +53,7 @@ target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf $
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 add_library(calligra_filter_xls2ods MODULE ${xls2ods_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_xls2ods calligra_filter_xls2ods.desktop)
 target_link_libraries(calligra_filter_xls2ods
                       calligrasheetsodf
                       komsooxml mso
@@ -62,8 +63,6 @@ target_link_libraries(calligra_filter_xls2ods
 install(TARGETS calligra_filter_xls2ods DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
-
-install( FILES  calligra_filter_xls2ods.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
