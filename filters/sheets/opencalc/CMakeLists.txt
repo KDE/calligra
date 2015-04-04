@@ -23,11 +23,10 @@ if(SHOULD_BUILD_FILTER_SHEETS_TO_OPENCALC)
 set(sheets2opencalc_PART_SRCS opencalcexport.cc opencalcstyleexport.cc ${liboofilter_SRCS})
 
 add_library(calligra_filter_sheets2opencalc MODULE ${sheets2opencalc_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2opencalc calligra_filter_sheets2opencalc.desktop)
 
 target_link_libraries(calligra_filter_sheets2opencalc calligrasheetscommon)
 
 install(TARGETS calligra_filter_sheets2opencalc  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_sheets2opencalc.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
