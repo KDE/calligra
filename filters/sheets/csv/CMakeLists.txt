@@ -24,11 +24,10 @@ set(sheets2csv_PART_SRCS csvexport.cc csvexportdialog.cpp )
 ki18n_wrap_ui(sheets2csv_PART_SRCS exportdialogui.ui )
 
 add_library(calligra_filter_sheets2csv MODULE ${sheets2csv_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2csv calligra_filter_sheets2csv.desktop)
 
 target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
 
 install(TARGETS calligra_filter_sheets2csv  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_sheets2csv.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
