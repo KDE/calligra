@@ -10,6 +10,6 @@ INCLUDEPATH += .
 # Input
 HEADERS += CompareView.h CSTCompareView.h
 SOURCES += CompareView.cpp CSTCompareView.cpp visualimagecompare.cpp
-LIBS += -lpoppler-qt4
+LIBS += -lpoppler-qt5
 
 QMAKE_CXXFLAGS += -Wall -g3 -DHAS_POPPLER
