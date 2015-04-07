@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
+#include <klocale.h>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
@@ -25,8 +26,8 @@
 #include <QTextDocument>
 #include <QTextDocumentWriter>
 
-K_PLUGIN_FACTORY(RTFImportFactory, registerPlugin<RTFImport>();)
-K_EXPORT_PLUGIN(RTFImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(RTFImportFactory, "calligra_filter_rtf2odt.json",
+                           registerPlugin<RTFImport>();)
 
 RTFImport::RTFImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)
