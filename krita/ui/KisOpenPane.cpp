@@ -150,7 +150,6 @@ KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, c
    
    connect(d->cancelButton,SIGNAL(clicked()),this,SLOT(close()));
 
-    initRecentDocs();
     initTemplates(templateType);
 
     d->m_freeCustomWidgetIndex = 4;
@@ -196,21 +195,6 @@ KisOpenPane::~KisOpenPane()
     delete d;
 }
 
-void KisOpenPane::initRecentDocs()
-{
-    QString header = i18n("Recent Documents");
-    KisRecentDocumentsPane* recentDocPane = new KisRecentDocumentsPane(this, d->m_componentData, header);
-    connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
-    QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
-    connect(recentDocPane, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-            this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)));
-    connect(this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-            recentDocPane, SLOT(resizeSplitter(KisDetailsPane*, const QList<int>&)));
-
-    if (d->m_componentData.config()->hasGroup("RecentFiles")) {
-        d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
-    }
-}
 
 void KisOpenPane::initTemplates(const QString& templateType)
 {
