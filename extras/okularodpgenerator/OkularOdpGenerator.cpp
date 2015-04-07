@@ -33,6 +33,7 @@
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
 
+#include <kglobal.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kmimetype.h>
@@ -42,13 +43,12 @@
 static KAboutData createAboutData()
 {
     KAboutData aboutData(
-         "okular_odp",
-         "okularGenerator_odp",
-         ki18n( "ODP Backend" ),
-         CALLIGRA_VERSION_STRING,
-         ki18n( "ODP file renderer" ),
-         KAboutData::License_GPL,
-         ki18n( "© 2010 Sven Langkamp" )
+         QStringLiteral("okularGenerator_odp"),
+         i18n( "ODP Backend" ),
+         QStringLiteral(CALLIGRA_VERSION_STRING),
+         i18n( "ODP file renderer" ),
+         KAboutLicense::GPL,
+         i18n( "© 2010 Sven Langkamp" )
     );
 
     // fill the about data
@@ -185,3 +185,5 @@ const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
     return &m_documentInfo;
 }
 #endif
+
+#include "OkularOdpGenerator.moc"
