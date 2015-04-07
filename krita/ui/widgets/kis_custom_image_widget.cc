@@ -87,8 +87,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
 
-    imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-
     sliderOpacity->setRange(0, 100, 0);
     sliderOpacity->setValue(100);
     sliderOpacity->setSuffix("%");

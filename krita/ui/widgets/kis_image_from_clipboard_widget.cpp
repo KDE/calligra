@@ -64,7 +64,6 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
 : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile)
 {
     setObjectName("KisImageFromClipboard");
-    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);  
     disconnect(createButton, SIGNAL(clicked()), 0, 0); //disable normal signal
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
