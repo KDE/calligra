@@ -210,10 +210,6 @@ void KisOpenPane::initTemplates(const QString& templateType)
                 continue;
             }
 
-            if (!d->m_templatesSeparator) {
-                d->m_templatesSeparator = new KoSectionListItem(d->m_sectionList, "", 999);
-            }
-
             KisTemplatesPane* pane = new KisTemplatesPane(this, d->m_componentData, group->name(),
                                                         group, templateTree.defaultTemplate());
             connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
@@ -276,10 +272,6 @@ void KisOpenPane::dropEvent(QDropEvent *event)
 void KisOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, const QString& icon)
 {
     Q_ASSERT(widget);
-
-    if (!d->m_customWidgetsSeparator) {
-        d->m_customWidgetsSeparator = new KoSectionListItem(d->m_sectionList, "", 3);
-    }
 
     QString realtitle = title;
 
