@@ -63,7 +63,6 @@ private Q_SLOTS:
     void heightUnitChanged(int index);
     void heightChanged(double value);
     void resolutionChanged(double value);
-    void clipboardDataChanged();
     void predefinedClicked(int index);
     void saveAsPredefined();
     void switchWidthHeight();
