@@ -65,12 +65,11 @@
 #include "widgets/squeezedcombobox.h"
 
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
 
-    txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
@@ -274,7 +273,11 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
 
-    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
+
+    const QString *descript = new QString("");
+    const QString *newName = new QString(i18n("Unnamed"));
+
+    doc->newImage(*newName, width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), *descript, resolution);
 
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());

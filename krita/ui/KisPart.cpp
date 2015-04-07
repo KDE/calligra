@@ -589,8 +589,7 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     {
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                               i18n("Unnamed"));
+                                               w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile());
 
         item.icon = "application-x-krita";
         widgetList << item;

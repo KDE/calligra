@@ -6,38 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>530</height>
+    <width>692</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Image</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QLabel" name="lblName">
-       <property name="text">
-        <string>&amp;Name:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>txtName</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="txtName">
-       <property name="text">
-        <string>untitled-1</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
@@ -63,7 +39,16 @@
          <layout class="QHBoxLayout">
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -96,7 +81,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -138,7 +132,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -395,26 +398,22 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
           <widget class="KisDoubleSliderSpinBox" name="sliderOpacity" native="true"/>
          </item>
         </layout>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lblDescription">
-        <property name="text">
-         <string>&amp;Description:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-        </property>
-        <property name="buddy">
-         <cstring>txtDescription</cstring>
-        </property>
        </widget>
       </item>
       <item row="0" column="0">
@@ -441,20 +440,20 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="intNumLayers">
+       <widget class="KIntNumInput" name="intNumLayers" native="true">
         <property name="minimumSize">
          <size>
           <width>0</width>
           <height>0</height>
          </size>
         </property>
-        <property name="value">
+        <property name="value" stdset="0">
          <number>2</number>
         </property>
-        <property name="minimum">
+        <property name="minimum" stdset="0">
          <number>1</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>200</number>
         </property>
        </widget>
@@ -476,14 +475,14 @@
         <property name="toolTip">
          <string>Reset the image background color in the Image Properties dialog</string>
         </property>
-        <property name="color">
+        <property name="color" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
           <blue>255</blue>
          </color>
         </property>
-        <property name="defaultColor">
+        <property name="defaultColor" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
@@ -491,9 +490,6 @@
          </color>
         </property>
        </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QTextEdit" name="txtDescription"/>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lblBackgroundStyle">
@@ -533,8 +529,6 @@
      <zorder>lblColor</zorder>
      <zorder>lblOpacity</zorder>
      <zorder>opacityPanel</zorder>
-     <zorder>lblDescription</zorder>
-     <zorder>txtDescription</zorder>
      <zorder>cmbColor</zorder>
      <zorder>label_4</zorder>
      <zorder>intNumLayers</zorder>
@@ -543,7 +537,16 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -606,7 +609,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>createButton</tabstop>
-  <tabstop>txtName</tabstop>
   <tabstop>cmbPredefined</tabstop>
   <tabstop>doubleWidth</tabstop>
   <tabstop>doubleHeight</tabstop>
@@ -623,7 +625,6 @@
   <tabstop>sliderOpacity</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>
   <tabstop>radioBackgroundAsProjection</tabstop>
-  <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>
  <connections/>

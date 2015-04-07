@@ -54,7 +54,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile);
     virtual ~KisCustomImageWidget();
     
 private Q_SLOTS:
