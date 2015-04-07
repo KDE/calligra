@@ -49,6 +49,8 @@ set(RtfReader_LIB_SOURCES
 )
 
 add_library(RtfReader SHARED ${RtfReader_LIB_SOURCES})
+generate_export_header( RtfReader )
+
 target_link_libraries(RtfReader Qt5::Gui)
 
 set_target_properties(RtfReader PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
