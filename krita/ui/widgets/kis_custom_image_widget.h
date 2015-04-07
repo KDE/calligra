@@ -66,11 +66,8 @@ private Q_SLOTS:
     void clipboardDataChanged();
     void predefinedClicked(int index);
     void saveAsPredefined();
-    void setLandscape();
-    void setPortrait();
     void switchWidthHeight();
     void createImage();
-    void switchPortraitLandscape();
 
 Q_SIGNALS:
     /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'

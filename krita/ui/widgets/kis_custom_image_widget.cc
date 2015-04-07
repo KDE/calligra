@@ -107,13 +107,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
-    bnPortrait->setIcon(koIcon("portrait"));
-    connect(bnPortrait, SIGNAL(clicked()), SLOT(setPortrait()));
-    connect(bnLandscape, SIGNAL(clicked()), SLOT(setLandscape()));
-    bnLandscape->setIcon(koIcon("landscape"));
-
-    connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
-    connect(doubleHeight, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
@@ -142,7 +135,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     }
     
     fillPredefined();
-    switchPortraitLandscape();
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *)
@@ -413,20 +405,6 @@ void KisCustomImageWidget::saveAsPredefined()
 
 }
 
-void KisCustomImageWidget::setLandscape()
-{
-    if (doubleWidth->value() < doubleHeight->value()) {
-        switchWidthHeight();
-    }
-}
-
-void KisCustomImageWidget::setPortrait()
-{
-    if (doubleWidth->value() > doubleHeight->value()) {
-        switchWidthHeight();
-    }
-}
-
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
@@ -446,18 +424,9 @@ void KisCustomImageWidget::switchWidthHeight()
     doubleWidth->blockSignals(false);
     cmbWidthUnit->blockSignals(false);
     cmbHeightUnit->blockSignals(false);
-    switchPortraitLandscape();
 
     widthChanged(doubleWidth->value());
     heightChanged(doubleHeight->value());
-}
-
-void KisCustomImageWidget::switchPortraitLandscape()
-{
-    if(doubleWidth->value() > doubleHeight->value())
-        bnLandscape->setChecked(true);
-    else
-        bnPortrait->setChecked(true);
 }
 
 #include "kis_custom_image_widget.moc"
