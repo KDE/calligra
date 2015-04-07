@@ -64,16 +64,7 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
 : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile)
 {
     setObjectName("KisImageFromClipboard");
-    
-    // create clipboard preview and show it   
-    createClipboardPreview();
-    grpClipboard->show();
-    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
-    connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
-    connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-    
+    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);  
     disconnect(createButton, SIGNAL(clicked()), 0, 0); //disable normal signal
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
@@ -105,41 +96,3 @@ void KisImageFromClipboard::createImage()
 
     emit documentSelected(doc);
 }
-
-
-void KisImageFromClipboard::clipboardDataChanged()
-{
-    createClipboardPreview();
-}
-
-
-void KisImageFromClipboard::createClipboardPreview()
-{
-    QClipboard *cb = QApplication::clipboard();
-    QImage qimage = cb->image();
-    const QMimeData *cbData = cb->mimeData();
-    QByteArray mimeType("application/x-krita-selection");
-    
-    if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-        QImage* clipboardImage = new QImage(qimage); // qimage needs to be on the heap
-        QGraphicsPixmapItem *item = new QGraphicsPixmapItem( QPixmap::fromImage(*clipboardImage));
-        
-        QGraphicsScene *clipboardScene = new QGraphicsScene();      
-        clipboardScene->addItem(item);
-        
-        clipPreview->setScene(clipboardScene);
-        clipPreview->show();             
-        createButton->setEnabled(true);
-        
-        doubleWidth->setValue(clipboardImage->width());
-        doubleHeight->setValue(clipboardImage->height());
-    } else {
-        createButton->setEnabled(false);
-        clipPreview->setScene(new QGraphicsScene(this));
-    }
-    
-    
-}
-
-
-

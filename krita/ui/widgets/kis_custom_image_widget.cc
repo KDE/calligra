@@ -88,7 +88,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     doubleResolution->setDecimals(0);
 
     imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    grpClipboard->hide();
 
     sliderOpacity->setRange(0, 100, 0);
     sliderOpacity->setValue(100);

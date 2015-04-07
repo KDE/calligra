@@ -43,10 +43,6 @@ public:
 
 private Q_SLOTS:
     void createImage();
-    void clipboardDataChanged();
-    
-private:   
-    void createClipboardPreview();
 };
 
 #endif

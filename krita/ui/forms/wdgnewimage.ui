@@ -305,34 +305,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="grpClipboard">
-       <property name="title">
-        <string>Clipboard</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QGraphicsView" name="clipPreview">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>300</width>
-            <height>300</height>
-           </size>
-          </property>
-          <property name="interactive">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -596,7 +568,6 @@
   <tabstop>doubleResolution</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>
-  <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>
