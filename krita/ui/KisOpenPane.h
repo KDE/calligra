@@ -72,8 +72,6 @@ protected Q_SLOTS:
     void saveSplitterSizes(KisDetailsPane* sender, const QList<int>& sizes);
 
 private Q_SLOTS:
-    /// when clicked "Open Existing Document" button
-    void openFileDialog();
     
 Q_SIGNALS:
     void openExistingFile(const KUrl&);

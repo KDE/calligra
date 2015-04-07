@@ -137,10 +137,6 @@ KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, c
     d->setupUi(this);
 
     m_mimeFilter = mimeFilter;
-    d->m_openExistingButton->setText(i18n("Open Existing Document"));
-
-    connect(d->m_openExistingButton, SIGNAL(clicked()),
-            this, SLOT(openFileDialog()));
 
     KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);
     d->m_sectionList->setItemDelegate(delegate);
@@ -198,23 +194,6 @@ KisOpenPane::~KisOpenPane()
     }
 
     delete d;
-}
-
-
-
-void KisOpenPane::openFileDialog()
-{
-
-    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
-    dialog.setCaption(i18n("Open Existing Document"));
-    dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                          ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    dialog.setMimeTypeFilters(m_mimeFilter);
-    dialog.setHideNameFilterDetailsOption();
-    foreach(KUrl url, dialog.urls()) {
-        emit openExistingFile(url);
-    }
 }
 
 void KisOpenPane::initRecentDocs()
