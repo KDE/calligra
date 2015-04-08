@@ -3,15 +3,23 @@
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
-      <Action name="file_new"/>
+      
+      <Menu name="new_file_menu">
+          <text>New</text>
+          <Action name="file_customNew"/>
+          <Action name="file_import_file"/>
+      </Menu>
+
+
       <Action name="file_open"/>
       <Action name="file_open_recent"/>
       <Separator/>
       <Action name="file_save"/>
       <Action name="file_save_as"/>
-      <Action name="file_reload_file"/>
+
       <Separator/>
-      <Action name="file_import_file"/>
+      <Action name="file_reload_file"/>
+
       <Action name="file_export_file"/>
       <Action name="file_export_pdf"/>
       <Separator/>
@@ -281,7 +289,7 @@
   </MenuBar>
   <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
     <Text>File</Text>
-    <Action name="file_new"/>
+    <Action name="file_customNew"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
     <!--Separator/>

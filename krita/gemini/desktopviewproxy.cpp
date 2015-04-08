@@ -70,7 +70,7 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent
     closeAction->setVisible(false);
 
     // Concept is simple - simply steal all the actions we require to work differently, and reconnect them to local functions
-    QAction* newAction = d->desktopWindow->actionCollection()->action("file_new");
+    QAction* newAction = d->desktopWindow->actionCollection()->action("file_customNew");
     newAction->disconnect(d->desktopWindow);
     connect(newAction, SIGNAL(triggered(bool)), this, SLOT(fileNew()));
     QAction* openAction = d->desktopWindow->actionCollection()->action("file_open");

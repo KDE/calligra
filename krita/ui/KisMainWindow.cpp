@@ -220,6 +220,7 @@ public:
     bool noCleanup;
 
     KisAction *showDocumentInfo;
+    KisAction *customNew;
     KisAction *saveAction;
     KisAction *saveActionAs;
     KisAction *printAction;
@@ -2000,7 +2001,12 @@ void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->viewManager->actionManager();
 
-    actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
+   d->customNew = new KisAction(i18nc("@action:inmenu", "Custom..."));
+   actionManager->addAction("file_customNew",d->customNew);
+   d->customNew->setIcon(koIcon("document-new"));
+   d->customNew->setShortcut(Qt::CTRL + Qt::Key_N);
+   connect(d->customNew, SIGNAL(triggered()), SLOT(slotFileNew()));
+
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
