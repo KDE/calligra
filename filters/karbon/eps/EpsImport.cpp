@@ -30,8 +30,8 @@
 #include <kshell.h>
 #include <kdebug.h>
 
-K_PLUGIN_FACTORY(EpsImportFactory, registerPlugin<EpsImport>();)
-K_EXPORT_PLUGIN(EpsImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(EpsImportFactory, "calligra_filter_eps2svgai.json",
+                           registerPlugin<EpsImport>();)
 
 EpsImport::EpsImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
