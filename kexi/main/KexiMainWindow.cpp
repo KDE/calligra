@@ -397,6 +397,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
+    setAttribute(Qt::WA_DeleteOnClose);
     kexiTester() << KexiTestObject(this);
 
     if (d->userMode)
