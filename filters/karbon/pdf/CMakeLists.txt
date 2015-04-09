@@ -7,6 +7,7 @@ macro_optional_find_package(JPEG)
 set(pdf2svg_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
 
 add_library(calligra_filter_pdf2svg MODULE ${pdf2svg_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_pdf2svg calligra_filter_pdf2svg.desktop)
 
 target_link_libraries(calligra_filter_pdf2svg komain ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY})
 if(JPEG_FOUND)
@@ -17,7 +18,3 @@ if(OPENJPEG_FOUND)
 endif()
 
 install(TARGETS calligra_filter_pdf2svg DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_filter_pdf2svg.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
