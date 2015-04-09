@@ -40,7 +40,7 @@
 #include "reportsection.h"
 #include "reportsectiondetail.h"
 #include "reportsectiondetailgroup.h"
-#include "koproperty/EditorView.h"
+#include <KPropertyEditorView>
 
 #include "kptglobal.h"
 #include "kptaccountsmodel.h"
@@ -784,7 +784,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     QStandardItemModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
 
-    m_propertyeditor = new KoProperty::EditorView( frame );
+    m_propertyeditor = new KPropertyEditorView( frame );
     l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
@@ -831,7 +831,7 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
     m_sourceeditor->setModel( model );
     m_sourceeditor->setSourceData( element.firstChildElement( "data-source" ) );
 
-    m_propertyeditor = new KoProperty::EditorView( frame );
+    m_propertyeditor = new KPropertyEditorView( frame );
     l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );

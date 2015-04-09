@@ -162,7 +162,7 @@ public:
     QString propertyDescForValue(WidgetInfo *winfo, const QByteArray& name);
 
     /*! Used by Form::createPropertiesForWidget() after creating properties. */
-    void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w);
+    void setPropertyOptions(KPropertySet& set, const WidgetInfo& winfo, QWidget* w);
 
     /*! \return true if property sets should be reloaded for \a property property,
      \a classname class and widget \a w when a given property value changed. */

@@ -22,7 +22,7 @@
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <db/field.h>
 #include <db/utils.h>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 
 class KexiProject;
 
@@ -48,7 +48,7 @@ public Q_SLOTS:
     void clearVisibleColumnSelection();
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
-    void assignPropertySet(KoProperty::Set* propertySet);
+    void assignPropertySet(KPropertySet* propertySet);
 
 Q_SIGNALS:
     //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.

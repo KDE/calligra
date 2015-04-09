@@ -25,11 +25,8 @@
 
 class QVBoxLayout;
 
-namespace KoProperty
-{
-    class EditorView;
-    class Set;
-}
+class KPropertyEditorView;
+class KPropertySet;
 
 class KexiObjectInfoLabel;
 
@@ -54,7 +51,7 @@ public:
      If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
      hidden. */
     void updateInfoLabelForPropertySet(
-        KoProperty::Set* set, const QString& textToDisplayForNullSet = QString());
+        KPropertySet* set, const QString& textToDisplayForNullSet = QString());
 protected:
     //! @return main vertical layout of the pane
     QVBoxLayout* mainLayout() const;

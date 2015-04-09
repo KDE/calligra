@@ -45,8 +45,8 @@
 #include <formeditor/formIO.h>
 #include <formeditor/WidgetTreeWidget.h>
 
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"

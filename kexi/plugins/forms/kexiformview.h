@@ -128,7 +128,7 @@ protected Q_SLOTS:
 protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual KoProperty::Set* propertySet();
+    virtual KPropertySet* propertySet();
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);

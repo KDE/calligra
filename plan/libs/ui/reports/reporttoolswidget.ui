@@ -54,7 +54,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KoProperty::EditorView" name="propertyEditor" native="true">
+    <widget class="KPropertyEditorView" name="propertyEditor" native="true">
      <property name="minimumSize">
       <size>
        <width>40</width>
@@ -67,9 +67,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoProperty::EditorView</class>
+   <class>KPropertyEditorView</class>
    <extends>QWidget</extends>
-   <header>koproperty/EditorView.h</header>
+   <header>KPropertyEditorView</header>
    <container>1</container>
   </customwidget>
   <customwidget>

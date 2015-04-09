@@ -25,8 +25,8 @@
 
 #include <KexiView.h>
 
-#include <koproperty/Set.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KProperty>
 
 // Forward declarations.
 class KexiScriptEditor;
@@ -68,7 +68,7 @@ public:
     /**
      * \return a property set for this view.
      */
-    virtual KoProperty::Set* propertySet();
+    virtual KPropertySet* propertySet();
 
     /**
      * Try to call \a storeData with new data we like to store. On
@@ -103,10 +103,10 @@ private Q_SLOTS:
     /**
      * Handle changes in the property editor.
      */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
     /**
-     * Update the \a KoProperty::Property::Dict propertymap of the
+     * Update the \a KProperty::Dict propertymap of the
      * interpreter-dependent options.
      */
     void updateProperties();

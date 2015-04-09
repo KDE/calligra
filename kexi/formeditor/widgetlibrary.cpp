@@ -618,7 +618,7 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QByteArray&
     return parentFactory->valueDescription(name);
 }
 
-void WidgetLibrary::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w)
+void WidgetLibrary::setPropertyOptions(KPropertySet& set, const WidgetInfo& winfo, QWidget* w)
 {
     if (!winfo.factory())
         return;

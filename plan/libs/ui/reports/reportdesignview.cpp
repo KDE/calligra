@@ -70,7 +70,7 @@ ReportDesignView::ReportDesignView ( QWidget *parent, ReportEntitySelector* r , 
 ReportDesignView::~ReportDesignView() {
 }
 
-KoProperty::Set *ReportDesignView::propertySet() {
+KPropertySet *ReportDesignView::propertySet() {
     return _rd->itemPropertySet();
 }
 

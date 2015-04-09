@@ -35,10 +35,7 @@
 class QTreeWidgetItem;
 class QTreeWidget;
 
-namespace KoProperty
-{
-class Set;
-}
+class KPropertySet;
 
 //! A picture label widget for use within forms
 class KexiPictureLabel : public QLabel, public KFormDesigner::FormWidgetInterface
@@ -92,7 +89,7 @@ public:
     virtual bool readSpecialProperty(const QByteArray &classname, QDomElement &node,
                                      QWidget *w, KFormDesigner::ObjectTreeItem *item);
 
-    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
+    virtual void setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
 
     //! Moved into public for EditRichTextAction
     bool editRichText(QWidget *w, QString &text) const { return KFormDesigner::WidgetFactory::editRichText(w, text); }

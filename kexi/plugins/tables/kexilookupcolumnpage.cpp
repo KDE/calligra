@@ -39,8 +39,8 @@
 #include <db/connection.h>
 #include <kexiproject.h>
 
-#include <koproperty/Property.h>
-#include <koproperty/Utils.h>
+#include <KProperty>
+#include <KPropertyUtils>
 
 QString partClassToType(const QString& partClass)
 {
@@ -77,7 +77,7 @@ public:
         return propertySet;
     }
 
-    void setPropertySet(KoProperty::Set* aPropertySet) {
+    void setPropertySet(KPropertySet* aPropertySet) {
         propertySet = aPropertySet;
     }
 
@@ -110,7 +110,7 @@ public:
 private:
     //! A property set that is displayed on the page.
     //! The set is also updated after any change in this page's data.
-    QPointer<KoProperty::Set> propertySet;
+    QPointer<KPropertySet> propertySet;
 };
 
 //----------------------------------------------
@@ -206,7 +206,7 @@ void KexiLookupColumnPage::setProject(KexiProject *prj)
     d->visibleColumnCombo->setProject(prj);
 }
 
-void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
+void KexiLookupColumnPage::assignPropertySet(KPropertySet* propertySet)
 {
     if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
         return; //already assigned

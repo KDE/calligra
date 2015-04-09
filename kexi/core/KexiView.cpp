@@ -23,7 +23,7 @@
 #include "KexiWindow.h"
 #include "kexiproject.h"
 #include "kexipartinfo.h"
-#include <koproperty/Set.h>
+#include <KPropertySet>
 
 #include <db/connection.h>
 #include <db/utils.h>
@@ -355,7 +355,7 @@ void KexiView::closeEvent(QCloseEvent * e)
     QWidget::closeEvent(e);
 }
 
-KoProperty::Set *KexiView::propertySet()
+KPropertySet *KexiView::propertySet()
 {
     return 0;
 }

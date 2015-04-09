@@ -23,8 +23,8 @@
 #include "widgetfactory.h"
 
 #include <kdebug.h>
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 
 namespace KFormDesigner {
 class WidgetInfo::Private
@@ -247,7 +247,7 @@ QList<QByteArray> WidgetInfo::autoSaveProperties() const
 
 void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int type)
 {
-    if (propertyName.isEmpty() || type == (int)KoProperty::Auto)
+    if (propertyName.isEmpty() || type == (int)KProperty::Auto)
         return;
     if (!d->customTypesForProperty) {
         d->customTypesForProperty = new QHash<QByteArray, int>();
@@ -259,7 +259,7 @@ void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int ty
 int WidgetInfo::customTypeForProperty(const QByteArray& propertyName) const
 {
     if (!d->customTypesForProperty || !d->customTypesForProperty->contains(propertyName))
-        return KoProperty::Auto;
+        return KProperty::Auto;
     return d->customTypesForProperty->value(propertyName);
 }
 

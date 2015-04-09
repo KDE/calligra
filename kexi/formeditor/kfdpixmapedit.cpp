@@ -21,14 +21,14 @@
 
 #include <kdebug.h>
 
-#include <koproperty/Property.h>
+#include <KProperty>
 #include "form.h"
 #include "objecttree.h"
 
 using namespace KFormDesigner;
 
-KFDPixmapEdit::KFDPixmapEdit(KoProperty::Property *property, QWidget *parent)
-        : KoProperty::PixmapEdit(property, parent)
+KFDPixmapEdit::KFDPixmapEdit(KProperty *property, QWidget *parent)
+        : KPropertyPixmapEditor(property, parent)
 {
 }
 
@@ -38,7 +38,7 @@ KFDPixmapEdit::~KFDPixmapEdit()
 void
 KFDPixmapEdit::selectPixmap()
 {
-    KoProperty::PixmapEdit::selectPixmap();
+    KPropertyPixmapEditor::selectPixmap();
 #if 0 //will be reenabled for new image collection
     if (!m_manager->activeForm() || !property())
         return;

@@ -21,14 +21,14 @@
 
 #include <QLineEdit>
 #include <kdebug.h>
-#include <koproperty/Property.h>
+#include <KProperty>
 #include <kexiutils/identifier.h>
 
 //! @todo
 #if 0 //TODO
 KexiImagePropertyEdit::KexiImagePropertyEdit(
-    KoProperty::Property *property, QWidget *parent)
-        : KoProperty::PixmapEdit(property, parent)
+    KProperty *property, QWidget *parent)
+        : KPropertyPixmapEditor(property, parent)
         , m_id(0)
 {
 }
@@ -39,7 +39,7 @@ KexiImagePropertyEdit::~KexiImagePropertyEdit()
 
 void KexiImagePropertyEdit::selectPixmap()
 {
-    QString fileName(KoProperty::PixmapEdit::selectPixmapFileName());
+    QString fileName(KPropertyPixmapEditor::selectPixmapFileName());
     if (fileName.isEmpty())
         return;
     KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(KUrl(fileName)));
@@ -80,7 +80,7 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
 //----------------------------------------------------------------
 
 KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
-        : KoProperty::StringEdit(parent)
+        : KPropertyStringEditor(parent)
 {
     KexiUtils::IdentifierValidator *val = new KexiUtils::IdentifierValidator(this);
     setValidator(val);
@@ -100,7 +100,7 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
     const QString identifier(KexiUtils::stringToIdentifier(value));
     if (identifier != value)
         kDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
-    KoProperty::StringEdit::setValue(identifier);
+    KPropertyStringEditor::setValue(identifier);
 }
 
 #include "KexiCustomPropertyFactory_p.moc"

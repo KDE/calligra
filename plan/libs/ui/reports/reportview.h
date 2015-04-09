@@ -43,11 +43,8 @@ class ORODocument;
 class KoReportDesigner;
 class KoReportRendererBase;
 
-namespace KoProperty
-{
-    class EditorView;
-    class Set;
-}
+class KPropertyEditorView;
+class KPropertySet;
 
 class QGraphicsView;
 class QGraphicsScene;
@@ -314,7 +311,7 @@ private:
     QScrollArea *m_scrollarea;
     KoReportDesigner *m_designer;
     ReportSourceEditor *m_sourceeditor;
-    KoProperty::EditorView *m_propertyeditor;
+    KPropertyEditorView *m_propertyeditor;
     QList<ReportData*> m_reportdatamodels;
     GroupSectionEditor *m_groupsectioneditor;
     QDomDocument m_original;

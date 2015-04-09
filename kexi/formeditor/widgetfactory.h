@@ -35,11 +35,7 @@ class QDomElement;
 class QDomDocument;
 class QVariant;
 class KActionCollection;
-
-namespace KoProperty
-{
-class Set;
-}
+class KPropertySet;
 
 namespace KFormDesigner
 {
@@ -271,7 +267,7 @@ public:
      of a widget \a w, of class defined by \a info.
      Default implementation does nothing.
      Implement this if you need to set options for properties within the set \a set. */
-    virtual void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w);
+    virtual void setPropertyOptions(KPropertySet& set, const WidgetInfo& info, QWidget *w);
 
     /*! \return internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be just provided

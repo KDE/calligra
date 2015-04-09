@@ -23,7 +23,7 @@
 
 #include <core/View.h>
 #include <QDomDocument>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 #include <kexireportpart.h>
 #include "koreport/wrtembed/reportdesigner.h"
 #include "koreportdata.h"
@@ -50,7 +50,7 @@ public:
     virtual tristate beforeSwitchTo(::ViewMode mode, bool &dontStore);
 private:
     ReportDesigner *_rd;
-    KoProperty::Set *_set;
+    KPropertySet *_set;
     ReportPart::TempData* tempData() const;
     QScrollArea * scr;
 
@@ -67,7 +67,7 @@ private:
     ReportEntitySelector* res;
     SourceSelector *srcsel;
 protected:
-    virtual KoProperty::Set *propertySet();
+    virtual KPropertySet *propertySet();
     virtual tristate storeData(bool dontAsk = false);
     virtual DB::SchemaData* storeNewData(const DB::SchemaData& sdata, bool &cancel);
 

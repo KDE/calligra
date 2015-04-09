@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QList>
 #include <QByteArray>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 #include <db/RecordData.h>
 #include <db/tableviewdata.h>
 
@@ -41,7 +41,7 @@ class TableViewData;
 
  It is currently used in KexiAlterTableDialog and KexiQueryDesignerGuiEditor,
  and may be used for similar purposes, when each KexiDataAwareObjectInterface's
- row can be associated with single KoProperty::Set object, and given
+ row can be associated with single KPropertySet object, and given
  KexiDataAwareObjectInterface object has to inform the world about currently
  selected row/property set.
 
@@ -70,15 +70,15 @@ public:
 
     uint size() const;
 
-    KoProperty::Set* currentPropertySet() const;
+    KPropertySet* currentPropertySet() const;
 
     uint currentRow() const;
-    KoProperty::Set* at(uint row) const;
+    KPropertySet* at(uint row) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KoProperty::Set* findPropertySetForItem(const KexiDB::RecordData& record);
+    KPropertySet* findPropertySetForItem(const KexiDB::RecordData& record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
      This is used e.g. in the Table Designer to find a row by field name.
@@ -97,7 +97,7 @@ Q_SIGNALS:
     void rowInserted();
 
     /*! Emitted when the value of @a property is changed in @a set.*/
-    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void propertyChanged(KPropertySet& set, KProperty& property);
 
 public Q_SLOTS:
     void eraseCurrentPropertySet();
@@ -116,7 +116,7 @@ public Q_SLOTS:
      or equal to this KexiDataAwarePropertySet object, otherwise this method
      will fail with a warning.
     */
-    void set(uint row, KoProperty::Set* set, bool newOne = false);
+    void set(uint row, KPropertySet* set, bool newOne = false);
 
     /*! Deletes a property set at \a row position without removing the row. */
     void eraseAt(uint row);

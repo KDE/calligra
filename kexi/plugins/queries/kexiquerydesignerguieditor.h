@@ -35,11 +35,8 @@ namespace KexiPart
 class Item;
 }
 
-namespace KoProperty
-{
-class Property;
-class Set;
-}
+class KProperty;
+class KPropertySet;
 
 namespace KexiDB
 {
@@ -84,9 +81,9 @@ protected:
 
     /*! \return property buffer associated with currently selected row (i.e. field)
      or 0 if current row is empty. */
-    virtual KoProperty::Set *propertySet();
+    virtual KPropertySet *propertySet();
 
-    KoProperty::Set* createPropertySet(int row,
+    KPropertySet* createPropertySet(int row,
                                        const QString& tableName, const QString& fieldName, bool newOne = false);
 
     /*! Builds query schema out of information provided by gui.
@@ -109,7 +106,7 @@ protected:
     /*! @internal generates smallest unique alias */
     QByteArray generateUniqueAlias() const;
 
-    void updatePropertiesVisibility(KoProperty::Set& buf);
+    void updatePropertiesVisibility(KPropertySet& buf);
 
 protected Q_SLOTS:
     void slotDragOverTableRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
@@ -148,7 +145,7 @@ protected Q_SLOTS:
 
     void addConnection(KexiDB::Field *masterField, KexiDB::Field *detailsField);
 
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
     void slotNewItemStored(KexiPart::Item&);
     void slotItemRemoved(const KexiPart::Item& item);

@@ -22,7 +22,7 @@
 
 #include <core/KexiView.h>
 #include <QDomDocument>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 #include <kexireportpart.h>
 #include <koreport/wrtembed/KoReportDesigner.h>
 #include <KoReportData.h>
@@ -50,7 +50,7 @@ Q_SIGNALS:
 
 private:
     KoReportDesigner *m_reportDesigner;
-    KoProperty::Set *m_propertySet;
+    KPropertySet *m_propertySet;
     KexiReportPart::TempData* tempData() const;
     QScrollArea * m_scrollArea;
 
@@ -67,7 +67,7 @@ private:
     KexiSourceSelector *m_sourceSelector;
 
 protected:
-    virtual KoProperty::Set *propertySet();
+    virtual KPropertySet *propertySet();
     virtual tristate storeData(bool dontAsk = false);
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
                                              KexiView::StoreNewDataOptions options,

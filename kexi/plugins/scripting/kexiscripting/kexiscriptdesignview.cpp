@@ -60,8 +60,8 @@ public:
     /// The \a KexiScriptEditor to edit the scripting code.
     KexiScriptEditor* editor;
 
-    /// The \a KoProperty::Set used in the propertyeditor.
-    KoProperty::Set* properties;
+    /// The \a KPropertySet used in the propertyeditor.
+    KPropertySet* properties;
 
     /// Boolean flag to avoid infinite recursion.
     bool updatesProperties;
@@ -178,9 +178,9 @@ KexiScriptDesignView::KexiScriptDesignView(
 
     loadData();
 
-    d->properties = new KoProperty::Set(this, "KexiScripting");
-    connect(d->properties, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    d->properties = new KPropertySet(this, "KexiScripting");
+    connect(d->properties, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
+            this, SLOT(slotPropertyChanged(KPropertySet&,KProperty&)));
 
     // To schedule the initialize fixes a crasher in Kate.
     QTimer::singleShot(50, this, SLOT(initialize()));
@@ -281,14 +281,14 @@ void KexiScriptDesignView::updateProperties()
 
     QStringList types;
     types << "executable" << "module" << "object";
-    KoProperty::Property::ListData* typelist = new KoProperty::Property::ListData(types, types);
-    KoProperty::Property* t = new KoProperty::Property(
+    KProperty::ListData* typelist = new KProperty::ListData(types, types);
+    KProperty* t = new KProperty(
         "type", // name
         typelist, // ListData
         (d->scriptType.isEmpty() ? "executable" : d->scriptType), // value
         i18n("Script Type"), // caption
         i18n("The type of script"), // description
-        KoProperty::List // type
+        KProperty::List // type
     );
     d->properties->addProperty(t);
 
@@ -296,14 +296,14 @@ void KexiScriptDesignView::updateProperties()
 
     kDebug() << interpreters;
 
-    KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
-    KoProperty::Property* prop = new KoProperty::Property(
+    KProperty::ListData* proplist = new KProperty::ListData(interpreters, interpreters);
+    KProperty* prop = new KProperty(
         "language", // name
         proplist, // ListData
         d->scriptaction->interpreter(), // value
         i18n("Interpreter"), // caption
         i18n("The used scripting interpreter."), // description
-        KoProperty::List // type
+        KProperty::List // type
     );
     d->properties->addProperty(prop);
 
@@ -311,12 +311,12 @@ void KexiScriptDesignView::updateProperties()
     Kross::InterpreterInfo::Option::Map::ConstIterator it, end(options.constEnd());
     for (it = options.constBegin(); it != end; ++it) {
         Kross::InterpreterInfo::Option* option = it.value();
-        KoProperty::Property* prop = new KoProperty::Property(
+        KProperty* prop = new KProperty(
             it.key().toLatin1(), // name
             d->scriptaction->option(it.key(), option->value), // value
             it.key(), // caption
             option->comment, // description
-            KoProperty::Auto // type
+            KProperty::Auto // type
         );
         d->properties->addProperty(prop);
     }
@@ -326,12 +326,12 @@ void KexiScriptDesignView::updateProperties()
     d->updatesProperties = false;
 }
 
-KoProperty::Set* KexiScriptDesignView::propertySet()
+KPropertySet* KexiScriptDesignView::propertySet()
 {
     return d->properties;
 }
 
-void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoProperty::Property& property)
+void KexiScriptDesignView::slotPropertyChanged(KPropertySet& /*set*/, KProperty& property)
 {
     kDebug();
 

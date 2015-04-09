@@ -56,8 +56,8 @@
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/relations/KexiRelationsView.h>
 #include <widget/relations/KexiRelationsTableContainer.h>
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 #include "kexiquerypart.h"
 #include "kexiqueryview.h"
 #include <KexiWindow.h>
@@ -192,8 +192,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
     d->data = new KexiDB::TableViewData(); //just empty data
     d->sets = new KexiDataAwarePropertySet(this, d->dataTable->dataAwareObject());
-    connect(d->sets, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    connect(d->sets, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
+            this, SLOT(slotPropertyChanged(KPropertySet&,KProperty&)));
 
     initTableColumns();
     initTableRows();
@@ -315,7 +315,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     //several tables can be hidden now, so remove rows for these tables
     QList<int> rowsToDelete;
     for (int r = 0; r < (int)d->sets->size(); r++) {
-        KoProperty::Set *set = d->sets->at(r);
+        KPropertySet *set = d->sets->at(r);
         if (set) {
             QString tableName = (*set)["table"].value().toString();
             QString fieldName = (*set)["field"].value().toString();
@@ -427,7 +427,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             return false;
         }
 
-        KoProperty::Set *set = d->sets->at(i);
+        KPropertySet *set = d->sets->at(i);
         if (set) {
             QString tableName = (*set)["table"].value().toString().trimmed();
             QString fieldName = (*set)["field"].value().toString();
@@ -544,7 +544,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     it = d->data->constBegin();
     int fieldNumber = -1; //field number (empty rows are omitted)
     for (uint i = 0/*row number*/; i < count && it != d->data->constEnd(); ++it, i++) {
-        KoProperty::Set *set = d->sets->at(i);
+        KPropertySet *set = d->sets->at(i);
         if (!set)
             continue;
         fieldNumber++;
@@ -948,7 +948,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
         //OK, row inserted: create a new set for it
-        KoProperty::Set &set = *createPropertySet(row_num, tableName, fieldName, true/*new one*/);
+        KPropertySet &set = *createPropertySet(row_num, tableName, fieldName, true/*new one*/);
         if (!columnAlias.isEmpty())
             set["alias"].setValue(columnAlias, false);
         if (!criteriaString.isEmpty())
@@ -971,7 +971,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         KexiDB::OrderByColumn* orderByColumn = *orderByColumnIt;
         KexiDB::QueryColumnInfo *column = orderByColumn->column();
         KexiDB::RecordData *record = 0;
-        KoProperty::Set *rowPropertySet = 0;
+        KPropertySet *rowPropertySet = 0;
         if (column) {
             //sorting for visible column
             if (column->visible) {
@@ -1057,7 +1057,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
         //OK, row inserted: create a new set for it
-        KoProperty::Set &set = *createPropertySet(row_num++, tableName, fieldName, true/*new one*/);
+        KPropertySet &set = *createPropertySet(row_num++, tableName, fieldName, true/*new one*/);
 //! @todo  if (!columnAlias.isEmpty())
 //! @todo   set["alias"].setValue(columnAlias, false);
 ////  if (!criteriaString.isEmpty())
@@ -1283,7 +1283,7 @@ QByteArray KexiQueryDesignerGuiEditor::generateUniqueAlias() const
     const int setsSize = d->sets->size();
     for (int r = 0; r < setsSize; r++) {
 //! @todo use iterator here
-        KoProperty::Set *set = d->sets->at(r);
+        KPropertySet *set = d->sets->at(r);
         if (set) {
             const QByteArray a((*set)["alias"].value().toByteArray().toLower());
             if (!a.isEmpty())
@@ -1521,7 +1521,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
         }
     }
     bool saveOldValue = true;
-    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    KPropertySet *set = d->sets->findPropertySetForItem(*record);
     if (!set) {
         saveOldValue = false; // no old val.
         const int row = d->data->indexOf(record);
@@ -1580,7 +1580,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeTableCellChanged(KexiDB::RecordData *
         d->sets->eraseCurrentPropertySet();
     }
     //update property
-    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    KPropertySet *set = d->sets->findPropertySetForItem(*record);
     if (set) {
         if ((*set)["isExpression"].value().toBool() == false) {
             (*set)["table"] = newValue;
@@ -1609,7 +1609,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeVisibleCellChanged(KexiDB::RecordData
 #endif
         propertySetSwitched();
     }
-    KoProperty::Set &set = *propertySet();
+    KPropertySet &set = *propertySet();
     set["visible"].setValue(newValue, saveOldValue);
 }
 
@@ -1631,7 +1631,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KexiDB::RecordData
     QVariant& newValue, KexiDB::ResultInfo* result)
 {
     bool saveOldValue = true;
-    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    KPropertySet *set = d->sets->findPropertySetForItem(*record);
     if (!set) {
         saveOldValue = false;
         set = createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
@@ -1645,7 +1645,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KexiDB::RecordData
     QString table(set->property("table").value().toString());
     QString field(set->property("field").value().toString());
     if (newValue.toInt() == 0 || sortingAllowed(field, table)) {
-        KoProperty::Property &property = set->property("sorting");
+        KProperty &property = set->property("sorting");
         QString key(property.listData()->keysAsStringList()[ newValue.toInt()]);
         kDebug() << "new key=" << key;
         property.setValue(key, saveOldValue);
@@ -1668,7 +1668,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
     const QString str = newValue.toString().trimmed();
     int token;
     QString field, table;
-    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    KPropertySet *set = d->sets->findPropertySetForItem(*record);
     if (set) {
         field = (*set)["field"].value().toString();
         table = (*set)["table"].value().toString();
@@ -1749,12 +1749,12 @@ void KexiQueryDesignerGuiEditor::slotAppendFields(
     d->dataTable->setFocus();
 }
 
-KoProperty::Set *KexiQueryDesignerGuiEditor::propertySet()
+KPropertySet *KexiQueryDesignerGuiEditor::propertySet()
 {
     return d->sets->currentPropertySet();
 }
 
-void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set)
+void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KPropertySet& set)
 {
     const bool asterisk = isAsterisk(
                               set["table"].value().toString(), set["field"].value().toString()
@@ -1769,35 +1769,35 @@ void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set
     propertySetReloaded(true);
 }
 
-KoProperty::Set*
+KPropertySet*
 KexiQueryDesignerGuiEditor::createPropertySet(int row,
         const QString& tableName, const QString& fieldName, bool newOne)
 {
     //const bool asterisk = isAsterisk(tableName, fieldName);
     QString typeName = "KexiQueryDesignerGuiEditor::Column";
-    KoProperty::Set *set = new KoProperty::Set(d->sets, typeName);
-    KoProperty::Property *prop;
+    KPropertySet *set = new KPropertySet(d->sets, typeName);
+    KProperty *prop;
 
     //meta-info for property editor
-    set->addProperty(prop = new KoProperty::Property("this:classString", i18n("Query column")));
+    set->addProperty(prop = new KProperty("this:classString", i18n("Query column")));
     prop->setVisible(false);
 //! \todo add table_field icon (add buff->addProperty(prop = new KexiProperty("this:iconName", "table_field") );
 // prop->setVisible(false);
 
-    set->addProperty(prop = new KoProperty::Property("table", QVariant(tableName)));
+    set->addProperty(prop = new KProperty("table", QVariant(tableName)));
     prop->setVisible(false);//always hidden
 
-    set->addProperty(prop = new KoProperty::Property("field", QVariant(fieldName)));
+    set->addProperty(prop = new KProperty("field", QVariant(fieldName)));
     prop->setVisible(false);//always hidden
 
-    set->addProperty(prop = new KoProperty::Property("caption", QVariant(QString()), i18n("Caption")));
+    set->addProperty(prop = new KProperty("caption", QVariant(QString()), i18n("Caption")));
 #ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
-    set->addProperty(prop = new KoProperty::Property("alias", QVariant(QString()), i18n("Alias")));
+    set->addProperty(prop = new KProperty("alias", QVariant(QString()), i18n("Alias")));
 
-    set->addProperty(prop = new KoProperty::Property("visible", QVariant(true)));
+    set->addProperty(prop = new KProperty("visible", QVariant(true)));
     prop->setVisible(false);
 
     /*! @todo
@@ -1808,14 +1808,14 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     QStringList slist, nlist;
     slist << "nosorting" << "ascending" << "descending";
     nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
-    set->addProperty(prop = new KoProperty::Property("sorting",
+    set->addProperty(prop = new KProperty("sorting",
             slist, nlist, slist[0], i18n("Sorting")));
     prop->setVisible(false);
 
-    set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString())));
+    set->addProperty(prop = new KProperty("criteria", QVariant(QString())));
     prop->setVisible(false);
 
-    set->addProperty(prop = new KoProperty::Property("isExpression", QVariant(false)));
+    set->addProperty(prop = new KProperty("isExpression", QVariant(false)));
     prop->setVisible(false);
 
     d->sets->set(row, set, newOne);
@@ -1829,7 +1829,7 @@ void KexiQueryDesignerGuiEditor::setFocus()
     d->dataTable->setFocus();
 }
 
-void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
+void KexiQueryDesignerGuiEditor::slotPropertyChanged(KPropertySet& set, KProperty& property)
 {
     const QByteArray pname(property.name());
     /*! @todo use KexiProperty::setValidator(QString) when implemented as described in TODO #60
