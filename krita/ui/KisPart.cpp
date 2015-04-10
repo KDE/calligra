@@ -595,26 +595,6 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
         widgetList << item;
     }
 
-    {
-        QSize sz = KisClipboard::instance()->clipSize();
-        if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-            w = sz.width();
-            h = sz.height();
-        }
-
-        KisPart::CustomDocumentWidgetItem item;
-        item.widget = new KisImageFromClipboard(parent,
-                                                w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                                i18n("Unnamed"));
-
-        item.title = i18n("Create from Clipboard");
-        item.icon = "klipper";
-
-        widgetList << item;
-
-
-    }
-
     return widgetList;
 }
 

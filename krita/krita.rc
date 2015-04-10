@@ -7,6 +7,7 @@
       <Menu name="new_file_menu">
           <text>New</text>
           <Action name="file_customNew"/>
+          <Action name="paste_new"/>
           <Action name="file_import_file"/>
       </Menu>
 
@@ -45,7 +46,6 @@
       <Action name="edit_copy"/>
       <Action name="copy_merged"/>
       <Action name="edit_paste"/>
-      <Action name="paste_new"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
