@@ -8,6 +8,7 @@
           <text>New</text>
           <Action name="file_customNew"/>
           <Action name="paste_new"/>
+          <Action name="file_newTemplate"/>
           <Action name="file_import_file"/>
       </Menu>
 

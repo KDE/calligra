@@ -227,6 +227,13 @@ public:
     // ------- startup/openpane etc ---------------
 
     /**
+     *  user can select from a list of template types to start a new document
+     * templates can include multiple layers and content
+     */
+    void createNewDocumentFromTemplate();
+
+
+    /**
      * Template type used. This is used by the start up widget to show
      * the correct templates.
      */

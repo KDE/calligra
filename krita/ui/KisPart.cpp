@@ -598,6 +598,11 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
+void KisPart::createNewDocumentFromTemplate()
+{
+     qDebug() << "file new template not made yet (KisPart)";
+}
+
 void KisPart::setTemplateType(const QString& _templateType)
 {
     d->templateType = _templateType;

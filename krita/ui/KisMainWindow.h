@@ -189,6 +189,12 @@ public Q_SLOTS:
      */
     void slotFileNew();
 
+    /*
+     * Slot for creating a new document based off a template
+     *
+     */
+      void slotFileNewTemplate();
+
     /**
      *  Slot for opening a saved file.
      *

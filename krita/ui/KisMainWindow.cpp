@@ -221,6 +221,7 @@ public:
 
     KisAction *showDocumentInfo;
     KisAction *customNew;
+    KisAction *newTemplate;
     KisAction *saveAction;
     KisAction *saveActionAs;
     KisAction *printAction;
@@ -1117,6 +1118,11 @@ void KisMainWindow::slotFileNew()
     KisPart::instance()->showStartUpWidget(this, true /*Always show widget*/);
 }
 
+void KisMainWindow::slotFileNewTemplate()
+{
+     KisPart::instance()->createNewDocumentFromTemplate();
+}
+
 void KisMainWindow::slotFileOpen()
 {
     QStringList urls;
@@ -2006,6 +2012,11 @@ void KisMainWindow::createActions()
    d->customNew->setIcon(koIcon("document-new"));
    d->customNew->setShortcut(Qt::CTRL + Qt::Key_N);
    connect(d->customNew, SIGNAL(triggered()), SLOT(slotFileNew()));
+
+   d->newTemplate = new KisAction(i18nc("@action:inmenu", "From Template..."));
+   actionManager->addAction("file_newTemplate", d->newTemplate);
+   d->newTemplate->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_N);
+   connect(d->newTemplate, SIGNAL(triggered()), SLOT(slotFileNewTemplate()) );
 
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
 
