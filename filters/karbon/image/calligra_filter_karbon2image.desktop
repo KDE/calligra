@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon JPEG/PNG Export Filter
+X-KDE-ServiceTypes=Calligra/Filter
+X-KDE-Export=image/jpeg,image/png
+X-KDE-Import=application/vnd.oasis.opendocument.graphics
+X-KDE-Library=calligra_filter_karbon2image
+X-KDE-PluginInfo-Name=karbonimagefilter
+X-KDE-Weight=1
