@@ -6,152 +6,183 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>383</width>
-    <height>83</height>
+    <width>530</width>
+    <height>112</height>
    </rect>
   </property>
-  <widget class="QLabel" name="lblColorSpaces">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>493</width>
+    <height>112</height>
+   </size>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>80</width>
-     <height>17</height>
+     <x>0</x>
+     <y>0</y>
+     <width>531</width>
+     <height>111</height>
     </rect>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>0</height>
-    </size>
+   <property name="title">
+    <string>Color</string>
    </property>
-   <property name="text">
-    <string>Model:</string>
+   <property name="flat">
+    <bool>false</bool>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <property name="checkable">
+    <bool>false</bool>
    </property>
-   <property name="buddy">
-    <cstring>cmbColorModels</cstring>
-   </property>
-  </widget>
-  <widget class="KisCmbIDList" name="cmbColorModels">
-   <property name="geometry">
-    <rect>
-     <x>95</x>
-     <y>9</y>
-     <width>151</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblProfiles">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>40</y>
-     <width>80</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="text">
-    <string>Profile:</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-   <property name="buddy">
-    <cstring>cmbProfile</cstring>
-   </property>
-  </widget>
-  <widget class="KisCmbIDList" name="cmbColorDepth">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>10</y>
-     <width>85</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>40</y>
-     <width>279</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="SqueezedComboBox" name="cmbProfile">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="bnInstallProfile">
-      <property name="toolTip">
-       <string>Install a new profile from a file</string>
-      </property>
-      <property name="whatsThis">
-       <string>Install a new profile from a file.</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="bnDownloadProfile">
-      <property name="toolTip">
-       <string>Install a new profile from a file</string>
-      </property>
-      <property name="whatsThis">
-       <string>Install a new profile from a file.</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="bnUploadProfile">
-      <property name="toolTip">
-       <string>Install a new profile from a file</string>
-      </property>
-      <property name="whatsThis">
-       <string>Install a new profile from a file.</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="lblColorSpaces">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Model:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>cmbColorModels</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisCmbIDList" name="cmbColorModels">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisCmbIDList" name="cmbColorDepth">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>511</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblProfiles">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Profile:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>cmbProfile</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="SqueezedComboBox" name="cmbProfile">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnInstallProfile">
+       <property name="toolTip">
+        <string>Install a new profile from a file</string>
+       </property>
+       <property name="whatsThis">
+        <string>Install a new profile from a file.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnDownloadProfile">
+       <property name="toolTip">
+        <string>Install a new profile from a file</string>
+       </property>
+       <property name="whatsThis">
+        <string>Install a new profile from a file.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnUploadProfile">
+       <property name="toolTip">
+        <string>Install a new profile from a file</string>
+       </property>
+       <property name="whatsThis">
+        <string>Install a new profile from a file.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
