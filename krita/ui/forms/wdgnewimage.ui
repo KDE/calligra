@@ -389,7 +389,7 @@
   <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>240</y>
      <width>531</width>
      <height>111</height>
