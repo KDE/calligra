@@ -64,7 +64,7 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
 
     KarbonPart *part = new KarbonPart(parent);
     KarbonDocument* doc = new KarbonDocument(part);
-    part->setDocument(doc);;
+    part->setDocument(doc);
     return part;
 }
 
