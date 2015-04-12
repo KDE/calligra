@@ -27,7 +27,13 @@ DlgImageFromTemplate::DlgImageFromTemplate(QWidget *parent):KDialog(parent),
     m_ui(new WdgImageFromTemplate(parent)) {
     setMainWidget(m_ui);
     setMinimumSize(m_ui->page->sizeHint());
-    this->show();
+    setEscapeButton( KDialog::Cancel );
+    setDefaultButton( KDialog::Ok);
+
+    setButtonText(KDialog::Ok, i18n("Create"));
+
+
+    this->exec();
 }
 
 
@@ -40,11 +46,11 @@ void DlgImageFromTemplate::slotButtonClicked(int button) {
 
 
     if ( button == KDialog::Ok)    {
-        qDebug() << "ok clicked";
+        KDialog::accept();
     }
 
     if ( button == KDialog::Cancel)    {
-         qDebug() << "cancel clicked";
+         KDialog::reject();
     }
 
 }
