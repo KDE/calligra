@@ -230,7 +230,7 @@ public:
      *  user can select from a list of template types to start a new document
      * templates can include multiple layers and content
      */
-    void createNewDocumentFromTemplate();
+    void createNewDocumentFromTemplate(KisMainWindow *parent);
 
 
     /**

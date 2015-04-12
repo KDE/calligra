@@ -70,9 +70,11 @@
 #include "kis_config.h"
 #include "kis_clipboard.h"
 #include "kis_custom_image_widget.h"
+#include "kis_image_from_template_widget.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+
 
 #include "kis_color_manager.h"
 
@@ -598,9 +600,12 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
-void KisPart::createNewDocumentFromTemplate()
+void KisPart::createNewDocumentFromTemplate( KisMainWindow *parent)
 {
-     qDebug() << "file new template not made yet (KisPart)";
+  WdgImageFromTemplate *newFromTemplate = new WdgImageFromTemplate();
+  newFromTemplate->setWindowState(Qt::WindowActive);
+  newFromTemplate->show();
+
 }
 
 void KisPart::setTemplateType(const QString& _templateType)

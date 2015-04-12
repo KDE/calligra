@@ -192,6 +192,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
+    widgets/kis_image_from_template_widget.cpp
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc
@@ -396,6 +397,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
+    forms/wdgnewimagefromtemplate.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui

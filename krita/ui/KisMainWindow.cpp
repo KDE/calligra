@@ -1120,7 +1120,7 @@ void KisMainWindow::slotFileNew()
 
 void KisMainWindow::slotFileNewTemplate()
 {
-     KisPart::instance()->createNewDocumentFromTemplate();
+     KisPart::instance()->createNewDocumentFromTemplate(this);
 }
 
 void KisMainWindow::slotFileOpen()
