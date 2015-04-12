@@ -21,22 +21,37 @@
 
 #include "kis_global.h"
 #include  <ui_wdgnewimagefromtemplate.h>
-/** why does this class exist????????????
- *
-  */
-
-//////////////////////////////////////////////////////////////////////////////// the conversion line  ( bring over stuff from KisTemplateCreateDia.cc file)
-/// look at another UI
 
 
 class WdgImageFromTemplate : public QWidget, public Ui::Wdgnewimagefromtemplate
 {
     Q_OBJECT
 
-public:
-    WdgImageFromTemplate();
-    ~WdgImageFromTemplate();
+    public:
+        WdgImageFromTemplate(QWidget *parent) :QWidget(parent) {
+            setupUi(this);
+        }
 };
+
+
+class DlgImageFromTemplate: public KDialog
+{
+    Q_OBJECT
+
+public:
+    DlgImageFromTemplate(QWidget *parent);
+    ~DlgImageFromTemplate();
+
+public Q_SLOTS:
+    void slotButtonClicked(int button);
+
+private:
+    WdgImageFromTemplate *m_ui;
+
+
+
+};
+
 
 
 

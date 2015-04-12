@@ -6,37 +6,94 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>491</width>
-    <height>270</height>
+    <width>718</width>
+    <height>390</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>718</width>
+    <height>390</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>New Image from Template</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QLabel" name="selectedTemplateLabel">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>60</y>
-     <width>141</width>
-     <height>61</height>
+     <x>240</x>
+     <y>290</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Selected Option</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QTreeView" name="templateTypeTreeView">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>20</y>
+     <x>20</x>
+     <y>10</y>
      <width>201</width>
-     <height>41</height>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStackedWidget" name="selectedTemplateStackedWidget">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>10</y>
+     <width>451</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <widget class="QWidget" name="page"/>
+   <widget class="QWidget" name="page_2"/>
+  </widget>
+  <widget class="QLabel" name="templateSelectionDescrLabel">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>310</y>
+     <width>291</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Create from New Template</string>
+    <string>Description of selection goes here</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>350</y>
+     <width>81</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createButton">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>350</y>
+     <width>71</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create</string>
    </property>
   </widget>
  </widget>

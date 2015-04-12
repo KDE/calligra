@@ -17,17 +17,34 @@
  */
 
 #include "kis_image_from_template_widget.h"
+#include  <ui_wdgnewimagefromtemplate.h>
 #include <QDebug>
+#include <KDialog>
 
 
-WdgImageFromTemplate::WdgImageFromTemplate()  {
 
-    qDebug() << "doing constructor for new dialog";
-
-    setupUi(this);
+DlgImageFromTemplate::DlgImageFromTemplate(QWidget *parent):KDialog(parent),
+    m_ui(new WdgImageFromTemplate(parent)) {
+    setMainWidget(m_ui);
+    setMinimumSize(m_ui->page->sizeHint());
+    this->show();
 }
 
 
-WdgImageFromTemplate::~WdgImageFromTemplate() {
+DlgImageFromTemplate::~DlgImageFromTemplate() {
+
+}
+
+
+void DlgImageFromTemplate::slotButtonClicked(int button) {
+
+
+    if ( button == KDialog::Ok)    {
+        qDebug() << "ok clicked";
+    }
+
+    if ( button == KDialog::Cancel)    {
+         qDebug() << "cancel clicked";
+    }
 
 }

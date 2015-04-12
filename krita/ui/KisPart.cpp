@@ -602,10 +602,8 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
 
 void KisPart::createNewDocumentFromTemplate( KisMainWindow *parent)
 {
-  WdgImageFromTemplate *newFromTemplate = new WdgImageFromTemplate();
-  newFromTemplate->setWindowState(Qt::WindowActive);
-  newFromTemplate->show();
-
+//  WdgImageFromTemplate *newFromTemplate = new WdgImageFromTemplate(parent);
+    DlgImageFromTemplate *newFromTemplate = new DlgImageFromTemplate(parent);
 }
 
 void KisPart::setTemplateType(const QString& _templateType)
