@@ -1856,7 +1856,7 @@ void ScheduleManager::setGranularity( int duration )
     if ( schedulerPlugin() ) {
         schedulerPlugin()->setGranularity( duration );
     }
-    m_project.changed( this );;
+    m_project.changed( this );
 }
 
 void ScheduleManager::incProgress()

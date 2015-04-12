@@ -1857,7 +1857,7 @@ bool Project::setResourceGroupId( ResourceGroup *group )
             return true;
         } else if ( g == 0 ) {
             insertResourceGroupId( group->id(), group );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueResourceGroupId();
@@ -1925,7 +1925,7 @@ bool Project::setResourceId( Resource *resource )
             return true;
         } else if ( r == 0 ) {
             insertResourceId( resource->id(), resource );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueResourceId();
@@ -2281,7 +2281,7 @@ bool Project::setCalendarId( Calendar *calendar )
             return true;
         } else if ( c == 0 ) {
             insertCalendarId( calendar->id(), calendar );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueCalendarId();
@@ -2510,7 +2510,7 @@ QString Project::uniqueScheduleName() const {
     n += " %1";
     int i = 1;
     for ( ; true; ++i ) {
-        unique = findScheduleManagerByName( n.arg( i ) ) == 0;;
+        unique = findScheduleManagerByName( n.arg( i ) ) == 0;
         if ( unique ) {
             break;
         }

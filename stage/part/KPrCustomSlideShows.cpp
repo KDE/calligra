@@ -116,7 +116,7 @@ void KPrCustomSlideShows::addSlideToAll( KoPAPageBase *page, unsigned int positi
 void KPrCustomSlideShows::addSlidesToAll( const QList<KoPAPageBase*> &slideShow, unsigned int position )
 {
     //FIXME: should we allow negative index?
-    //if( position < 0 ) return;;
+    //if( position < 0 ) return;
     for( int i=0; i < slideShow.size(); ++i ) {
         addSlideToAll( slideShow[i], position + i );
     }
