@@ -59,8 +59,8 @@
 #include <QVBoxLayout>
 
 
-K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
-K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(WhirlPinchPluginFactory, "karbon_whirlpinch.json",
+                           registerPlugin<WhirlPinchPlugin>();)
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
 {
@@ -113,9 +113,6 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
-
-    QWidget * mainWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     QGroupBox* info = new QGroupBox(i18n("Info"), mainWidget);
@@ -124,6 +121,10 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     QLabel * infoLabel = new QLabel(infoText, info);
     infoLabel->setWordWrap(true);
     infoLayout->addWidget(infoLabel);
+
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input fields:
     QGroupBox* group = new QGroupBox(i18n("Properties"), mainWidget);
@@ -155,9 +156,6 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
 
     mainLayout->addWidget(mainWidget);
 
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     mainLayout->addWidget(buttonBox);
@@ -198,5 +196,4 @@ void WhirlPinchDlg::setUnit(const KoUnit &unit)
     m_radius->setUnit(unit);
 }
 
-#include "WhirlPinchPlugin.moc"
-
+#include <WhirlPinchPlugin.moc>

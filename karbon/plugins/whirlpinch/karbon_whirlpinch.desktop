@@ -25,5 +25,5 @@ Name[uk]=Додаток вихору для Karbon
 Name[x-test]=xxKarbon Whirl Pinch pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
-X-KDE-Library=karbon_whirlpinchplugin
+X-KDE-Library=karbon_whirlpinch
 X-Karbon-Version=28

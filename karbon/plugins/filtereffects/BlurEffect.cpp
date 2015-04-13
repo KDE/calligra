@@ -24,6 +24,8 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include <klocale.h>
+#include <QColor>
+#include <QImage>
 
 // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 // fixed to handle alpha channel correctly by Zack Rusin

@@ -37,10 +37,10 @@
 #include <KoShapeGroupCommand.h>
 
 #include <kdebug.h>
-#include <kfilterdev.h>
 
 #include <QMimeData>
 #include <QIODevice>
+#include <KArchive/kcompressiondevice.h>
 
 StencilShapeFactory::
 StencilShapeFactory(const QString& id,
@@ -157,11 +157,11 @@ createDefaultShape(KoDocumentResourceManager* documentResources) const
         }
         delete store;
     } else if (ext == ".svg") {
-        in = KFilterDev::deviceForFile(id(), "text/plain");
+        in = new KCompressionDevice(id(), KCompressionDevice::None);
         shape = createFromSvg(in, documentResources);
         delete in;
     } else if (ext == ".svgz") {
-        in = KFilterDev::deviceForFile(id(), "application/x-gzip");
+        in = new KCompressionDevice(id(), KCompressionDevice::GZip);
         shape = createFromSvg(in, documentResources);
         delete in;
     } else {

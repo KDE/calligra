@@ -56,8 +56,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>();)
-K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbon_roundcorners.json",
+                           registerPlugin<RoundCornersPlugin>();)
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
 {
@@ -116,6 +116,10 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
     setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
 
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+
     // add input:
     QGroupBox* group = new QGroupBox(i18n("Properties"), this);
 
@@ -135,9 +139,6 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
 
     mainLayout->addWidget(group);
 
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     //PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
@@ -159,5 +160,4 @@ void RoundCornersDlg::setUnit(const KoUnit &unit)
     m_radius->setUnit(unit);
 }
 
-#include "RoundCornersPlugin.moc"
-
+#include <RoundCornersPlugin.moc>

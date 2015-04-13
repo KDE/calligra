@@ -36,7 +36,7 @@ FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 
 FilterResourceServerProvider::FilterResourceServerProvider()
 {
-    KGlobal::mainComponent().dirs()->addResourceType("ko_effects", "data", "karbon/effects/");
+    KGlobal::dirs()->addResourceType("ko_effects", "data", "karbon/effects/");
 
     m_filterEffectServer = new KoResourceServer<FilterEffectResource>("ko_effects", "*.svg");
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {

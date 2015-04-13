@@ -327,7 +327,7 @@ void KarbonFilterEffectsTool::editFilter()
     QPointer<QDialog> dlg = new QDialog();
     dlg->setWindowTitle(i18n("Filter Effect Editor"));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    QWidget *mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(0);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);

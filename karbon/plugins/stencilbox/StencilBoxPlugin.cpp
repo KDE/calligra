@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,18 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "StencilBoxPlugin.h"
+#include "StencilBoxDockerFactory.h"
 
-#ifndef KARBONFILTEREFFECTSPLUGIN_H
-#define KARBONFILTEREFFECTSPLUGIN_H
+#include <KoDockRegistry.h>
+#include <kpluginfactory.h>
 
-#include <QObject>
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "karbon_stencilbox.json",
+                           registerPlugin<StencilBoxPlugin>();)
 
-class KarbonFilterEffectsPlugin : public QObject
+StencilBoxPlugin::StencilBoxPlugin(QObject *parent, const QVariantList&)
+    : QObject(parent)
 {
-    Q_OBJECT
-public:
-    KarbonFilterEffectsPlugin(QObject * parent, const QList<QVariant>&);
-    ~KarbonFilterEffectsPlugin() {}
-};
-
-#endif // KARBONFILTEREFFECTSPLUGIN_H
+    Q_UNUSED(parent);
+    KoDockRegistry::instance()->add(new StencilBoxDockerFactory());
+}
+#include <StencilBoxPlugin.moc>

@@ -54,8 +54,8 @@
 #include <QVBoxLayout>
 
 
-K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
-K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbon_flattenpath.json",
+                           registerPlugin<FlattenPathPlugin>();)
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
@@ -106,6 +106,10 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
+    
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input fields on the left:
     QGroupBox* group = new QGroupBox(i18n("Properties"), this);
@@ -125,9 +129,6 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
 
     mainLayout->addWidget(group);
 
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
@@ -144,5 +145,5 @@ void FlattenDlg::setFlatness(qreal value)
     m_flatness->setValue(value);
 }
 
-#include "FlattenPathPlugin.moc"
+#include <FlattenPathPlugin.moc>
 

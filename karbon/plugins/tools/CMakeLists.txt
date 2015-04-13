@@ -41,14 +41,12 @@ ki18n_wrap_ui(karbon_tools_PART_SRCS
     filterEffectTool/FilterEffectEditWidget.ui
 )
 
-add_library(karbontools MODULE ${karbon_tools_PART_SRCS})
+add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
 
-target_link_libraries(karbontools karboncommon karbonui kowidgets)
+kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
 
-install(TARGETS karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+target_link_libraries(karbon_tools karboncommon karbonui kowidgets)
+
+install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ecm_install_icons( ${KDE_INSTALL_DATADIR}/calligra/icons  )
-
-########### install files ###############
-
-install( FILES karbontools.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)

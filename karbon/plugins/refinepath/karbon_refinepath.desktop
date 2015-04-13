@@ -26,5 +26,5 @@ Name[uk]=Додаток покращення контурів для Karbon
 Name[x-test]=xxKarbon Refine Path pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
-X-KDE-Library=karbon_refinepathplugin
+X-KDE-Library=karbon_refinepath
 X-Karbon-Version=28

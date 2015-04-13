@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,19 +16,18 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PLUGIN_H
-#define PLUGIN_H
+
+#ifndef KARBONFILTEREFFECTSPLUGIN_H
+#define KARBONFILTEREFFECTSPLUGIN_H
 
 #include <QObject>
-#include <QVariantList>
 
-class Plugin : public QObject {
+class FilterEffectsPlugin : public QObject
+{
     Q_OBJECT
-
 public:
-    Plugin(QObject * parent, const QVariantList & );
-    ~Plugin() {}
+    FilterEffectsPlugin(QObject * parent, const QList<QVariant>&);
+    ~FilterEffectsPlugin() {}
 };
 
-#endif
-
+#endif // KARBONFILTEREFFECTSPLUGIN_H

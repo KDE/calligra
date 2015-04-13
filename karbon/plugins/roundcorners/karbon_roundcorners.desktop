@@ -26,5 +26,5 @@ Name[uk]=Додаток скруглення кутів для Karbon
 Name[x-test]=xxKarbon Round Corners pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
-X-KDE-Library=karbon_roundcornersplugin
+X-KDE-Library=karbon_roundcorners
 X-Karbon-Version=28

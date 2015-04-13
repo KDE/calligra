@@ -27,7 +27,7 @@ class StencilBoxDockerFactory : public KoDockFactoryBase
 {
 public:
     QString id() const {
-        return QString("FlowStencilBoxDocker");
+        return QString("StencilBox");
     }
     QDockWidget* createDockWidget() {
         return new StencilBoxDocker();

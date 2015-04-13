@@ -21,6 +21,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QDebug>
+#include <QMimeData>
 
 StencilListView::StencilListView(QWidget* parent) :
     QListView(parent)
@@ -44,9 +45,9 @@ StencilListView::StencilListView(QWidget* parent) :
 
 void StencilListView::dragEnterEvent(QDragEnterEvent* event)
 {
-    qDebug() << event->mimeData()->formats();
+    //qDebug() << event->mimeData()->formats();
     // TODO
-    if (event->mimeData()->hasFormat("text/plain"))
+    if (event->mimeData()->hasText())
         event->acceptProposedAction();
 }
 

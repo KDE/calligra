@@ -16,19 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "stencilboxdocker/StencilBoxDockerFactory.h"
+#ifndef STENCIL_BOX_PLUGIN_H
+#define STENCIL_BOX_PLUGIN_H
 
-#include <KoDockRegistry.h>
+#include <QObject>
+#include <QVariantList>
 
-#include <kpluginfactory.h>
+class StencilBoxPlugin : public QObject {
+    Q_OBJECT
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("flowdockersplugin"))
+public:
+    StencilBoxPlugin(QObject * parent, const QVariantList & );
+    ~StencilBoxPlugin() {}
+};
 
-Plugin::Plugin(QObject *parent, const QVariantList&)
-    : QObject(parent)
-{
-    Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new StencilBoxDockerFactory());
-}
+#endif
+

@@ -70,7 +70,7 @@ void ImageEffectConfigWidget::selectImage()
     }
 
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setWindowTitle(i18n("Select image"));
+    dialog.setCaption(i18n("Select image"));
     dialog.setImageFilters();
 
     QString fname = dialog.url();

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Karbon Stencil Box plugin
+X-KDE-ServiceTypes=Calligra/Dock
+Type=Service
+X-KDE-PluginInfo-Name=karbon_stencilbox
+X-KDE-Library=karbon_stencilbox
+X-Karbon-Version=28

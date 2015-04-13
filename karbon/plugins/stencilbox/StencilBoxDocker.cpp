@@ -61,6 +61,7 @@
 #include <QPainter>
 #include <QDesktopServices>
 #include <QPixmapCache>
+#include <kglobal.h>
 
 #define StencilShapeId "StencilShape"
 
@@ -116,7 +117,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
     
-    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").empty()) {
+    if(! KGlobal::dirs()->resourceDirs("app_shape_collections").empty()) {
         loadShapeCollections();
     }
 
@@ -130,7 +131,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 #ifdef GHNS
 void StencilBoxDocker::getHotNewStuff()
 {
-    KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
+    KNS3::DownloadDialog dialog("karbon_stencils.knsrc", this);
     dialog.exec();
     if(!dialog.installedEntries().isEmpty()) {
         KMessageBox::information(0, i18n("Stencils successfully installed."));
@@ -143,7 +144,7 @@ void StencilBoxDocker::getHotNewStuff()
 
 void StencilBoxDocker::manageStencilsFolder()
 {
-    QString destination = KStandardDirs::locateLocal("data", "flow/stencils/", true);
+    QString destination = KStandardDirs::locateLocal("data", "karbon/stencils/", true);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "could not open" << destination + "/readme.txt" << "for writing";
@@ -177,7 +178,7 @@ If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry aspect r
 \n\
 foo.png\n\
 \n\
-Should have size 32x32 pixel, if the png file is not included, Flow will render the ODG/SVG file as the icon,\n\
+Should have size 32x32 pixel, if the png file is not included, Karbon will render the ODG/SVG file as the icon,\n\
 but it won't look good under small pixels when the stencil stroke is complicated.\n");
         file.close();
     }
@@ -209,7 +210,7 @@ void StencilBoxDocker::reapplyFilter()
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
 void StencilBoxDocker::loadShapeCollections()
 {
-    QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
+    QStringList dirs = KGlobal::dirs()->resourceDirs("app_shape_collections");
     foreach(const QString& path, dirs)
     {
         qDebug() << path;

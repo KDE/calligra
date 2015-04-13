@@ -17,7 +17,7 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "KarbonFilterEffectsPlugin.h"
+#include "FilterEffectsPlugin.h"
 #include "BlurEffectFactory.h"
 #include "OffsetEffectFactory.h"
 #include "MergeEffectFactory.h"
@@ -34,10 +34,10 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(KarbonFilterEffectsPluginFacory, registerPlugin<KarbonFilterEffectsPlugin>();)
-K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
+K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "karbon_filtereffects.json",
+                           registerPlugin<FilterEffectsPlugin>();)
 
-KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
+FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
         : QObject(parent)
 {
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory());
@@ -52,4 +52,4 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QLis
     KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory());
     KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory());
 }
-
+#include <FilterEffectsPlugin.moc>

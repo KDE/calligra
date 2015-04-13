@@ -55,8 +55,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
-K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(RefinePathPluginFactory, "karbon_refinepath.json",
+                           registerPlugin<RefinePathPlugin>();)
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -110,7 +110,6 @@ RefinePathDlg::RefinePathDlg(QWidget* parent, const char* name)
     mainLayout->addWidget(group);
 
     QHBoxLayout * hbox = new QHBoxLayout(group);
-    mainLayout->addWidget(hbox);
     hbox->addWidget(new QLabel(i18n("Subdivisions:"), group));
 
     m_knots = new KIntSpinBox(group);
@@ -136,5 +135,5 @@ void RefinePathDlg::setKnots(uint value)
     m_knots->setValue(value);
 }
 
-#include "RefinePathPlugin.moc"
+#include <RefinePathPlugin.moc>
 

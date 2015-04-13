@@ -26,6 +26,7 @@
 #include <KoColorBackground.h>
 
 #include <kdebug.h>
+#include <QColor>
 
 #include <cmath>
 #include <cstdlib>
@@ -39,7 +40,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
 {
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
-    setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(Qt::black)));
+    setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(Qt::black))));
     setStroke(0);
 }
 

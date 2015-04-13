@@ -20,6 +20,8 @@
 #ifndef KARBONSIMPLIFYPATH_H
 #define KARBONSIMPLIFYPATH_H
 
+#include <QtGlobal>
+
 class KoPathShape;
 
 
