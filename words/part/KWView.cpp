@@ -831,8 +831,11 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 
-                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
-                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    KoTextLayoutArea *area = textShapeData->rootArea();
+                    if (area) {
+                        int cursorPos = area->hitTest(pos, Qt::FuzzyHit).position;
+                        KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    }
                     return;
                 }
             }
@@ -868,8 +871,11 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
                     pos += QPointF(0.0, textShapeData->documentOffset());
 
-                    int cursorPos = textShapeData->rootArea()->hitTest(pos, Qt::FuzzyHit).position;
-                    KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    KoTextLayoutArea *area = textShapeData->rootArea();
+                    if (area) {
+                        int cursorPos = area->hitTest(pos, Qt::FuzzyHit).position;
+                        KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                    }
                     return;
                 }
             }

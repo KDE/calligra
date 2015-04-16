@@ -1010,7 +1010,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
         KoFilter::ConversionStatus stat = m_context->import->copyFile(sourceName, destinationName, false );
         // In case the file could not be find due to it being external we can at least do draw:image from below
         if (stat == KoFilter::OK) {
