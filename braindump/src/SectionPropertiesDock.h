@@ -36,7 +36,7 @@ public:
     virtual ~SectionPropertiesDock();
     void setRootSection(RootSection* _rootSection);
     void setSection(Section* _section);
-private slots:
+private Q_SLOTS:
     void reload();
     void layoutChanged(int index);
 private:

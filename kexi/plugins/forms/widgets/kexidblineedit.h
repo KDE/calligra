@@ -114,7 +114,7 @@ public:
     //! @return the message set with setClickMessage (equivalent of placeholderText)
     QString clickMessage() const;
 
-public slots:
+public Q_SLOTS:
     void setDataSource(const QString &ds);
 
     void setDataSourcePartClass(const QString &partClass);
@@ -140,7 +140,7 @@ public slots:
     //! the user didn't enter any text. Equivalent of placeholderText. Calls QLineEdit::placeholderText().
     void setClickMessage(const QString &msg);
 
-protected slots:
+protected Q_SLOTS:
     void slotTextChanged(const QString&);
 
     void slotTextEdited(const QString& text);

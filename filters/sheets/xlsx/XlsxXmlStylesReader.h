@@ -30,7 +30,6 @@
 
 #include "XlsxXmlCommonReader.h"
 
-class KoCharacterStyle;
 class KoGenStyle;
 class XlsxImport;
 class XlsxStyles;

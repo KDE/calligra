@@ -42,12 +42,11 @@ class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
-class KoFindStyle;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
-class KoRdfSemanticItem;
-typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
+class KoRdfBasicSemanticItem;
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 #endif
 
 class KToggleAction;
@@ -125,10 +124,10 @@ public:
     void viewMouseMoveEvent(QMouseEvent *e);
 
 
-signals:
+Q_SIGNALS:
     void shownPagesChanged();
 
-public slots:
+public Q_SLOTS:
     void offsetInDocumentMoved(int yOffset);
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -163,7 +162,7 @@ private:
     QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
-private slots:
+private Q_SLOTS:
     /// create a template from document
     void createTemplate();
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -194,7 +193,7 @@ private slots:
     void configure();
 #ifdef SHOULD_BUILD_RDF
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid);
 #endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);

@@ -31,7 +31,6 @@
 
 class QDomElement;
 class QDomDocument;
-class KoGenStyle;
 
 namespace Calligra
 {

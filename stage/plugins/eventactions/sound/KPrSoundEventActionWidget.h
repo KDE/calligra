@@ -26,7 +26,6 @@ class QComboBox;
 class QString;
 class KoShape;
 class KoEventAction;
-class KoEventActionData;
 class KPrEventActionData;
 class KPrSoundCollection;
 
@@ -37,10 +36,10 @@ public:
     explicit KPrSoundEventActionWidget( QWidget * parent = 0 );
     virtual ~KPrSoundEventActionWidget();
 
-public slots:
+public Q_SLOTS:
     void setData( KPrEventActionData *eventActionData );
 
-private slots:
+private Q_SLOTS:
     void soundComboChanged();
 
 private:

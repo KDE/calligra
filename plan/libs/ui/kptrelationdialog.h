@@ -31,7 +31,6 @@ namespace KPlato
 {
 
 class RelationPanel;
-class DurationWidget;
 
 class Relation;
 class Project;
@@ -55,7 +54,7 @@ public:
     virtual MacroCommand *buildCommand();
     int selectedRelationType() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
     void lagChanged();
     void typeClicked(int);
@@ -81,7 +80,7 @@ public:
     virtual MacroCommand *buildCommand();
     bool relationIsDeleted() { return m_deleted; }
 
-protected slots:
+protected Q_SLOTS:
     void slotUser1();
 
     void slotRelationRemoved( Relation *relation );

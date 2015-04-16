@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Karbon</name>
+  <name xml:lang="ast">Karbon</name>
   <name xml:lang="bs">Karbon</name>
   <name xml:lang="ca">Karbon</name>
   <name xml:lang="cs">Karbon</name>
@@ -79,7 +80,7 @@
     <p xml:lang="ja">機能:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
-    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
@@ -174,6 +175,7 @@
       <li xml:lang="en-GB">Advanced path editing tool with great on-canvas editing capabilities</li>
       <li xml:lang="es">Herramienta de edición avanzada de rutas con grandes capacidades de edición en el lienzo</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
+      <li xml:lang="fr">Outil d'édition de chemin avancé avec des capacités d'édition dans les canevas performantes</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
       <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
       <li xml:lang="pl">Zaawansowane narzędzia edytowania ścieżki z szerokimi możliwościami edytowania na płótnie</li>
@@ -191,6 +193,7 @@
       <li xml:lang="en-GB">Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool</li>
       <li xml:lang="es">Varias herramientas de dibujo para crear figuras con rutas, entre otras una herramienta de dibujo de rutas, una herramienta de pincel y una herramienta de dibujo caligráfico.</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
+      <li xml:lang="fr">Outils de dessin variés incluant un outil de création de chemin, un crayon ainsi qu'un outil pour la calligraphie</li>
       <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
       <li xml:lang="nl">Verschillende tekengereedschappen voor het maken van padvormen inclusief een tekenhulpmiddel voor paden, een potloodhulpmiddel evenals een tekengereedschap voor kalligrafie</li>
       <li xml:lang="pl">Różne narzędzia rysownicze do tworzenia kształtów ścieżek uwzględniając w tym: narzędzie rysowania ścieżki, narzędzie ołówka, a także kaligraficzne narzędzia rysownicze </li>
@@ -227,6 +230,7 @@
       <li xml:lang="en-GB">Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)</li>
       <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
+      <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, chemin nodal, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
       <li xml:lang="it">Capacità di alto livello di regolazione per disegno e modifica guidata (ad es. aggancio alla griglia, linee guida, nodi di tracciato, riquadri collegati, posizioni ortgonali, intersezioni di forme di tracciato o estensioni di linee e tracciati)</li>
       <li xml:lang="nl">Excellente vastklik faciliteiten voor geleid tekenen en bewerken (bijv. vastklikken aan raster, gidslijnen, padpunten, begrenzingsvakken, orthogonale posities, kruispunten van padvormen of extensies van lijnen en paden)</li>
       <li xml:lang="pl">Możliwości przyciągania z najwyższej półki rysowania i edytowania ze wspomaganiem (np. przyciąganie do siatki, -prowadnic, węzłów ścieżki, pól ograniczających, prostopadłych położeń, przecięć kształtów ścieżek lub wydłużeń linii i ścieżek)</li>
@@ -281,6 +285,7 @@
       <li xml:lang="en-GB">Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects</li>
       <li xml:lang="es">Operaciones de ruta complejas y efectos como operaciones booleanas con conjuntos, aplanamiento de rutas, redondeo y refinación así como también efectos de arremolinar/apretar</li>
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
+      <li xml:lang="fr">Opérations de chemins complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement</li>
       <li xml:lang="it">Operazioni complesse su tracciati ed effetti del tipo operazioni su insiemi booleani, appiattimento di tracciati, arrotondamento e affinamento così come effetti di vortice/pizzico</li>
       <li xml:lang="nl">Complexe bewerkingen van paden en effecten zoals booleaanse set bewerkingen, afvlakken van paden, afronding en verfijning evenals wervel/put-effecten</li>
       <li xml:lang="pl">Złożone działania i efekty na ścieżce takie jak działania boolean, spłaszczanie ścieżki, zaokrąglanie, a także efekty polepszające wraz z efektami wiru/rozdmuchania</li>
@@ -298,6 +303,7 @@
       <li xml:lang="en-GB">Extensible by writing plugins for new tools, shapes and dockers</li>
       <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y acoplables</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
+      <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="nl">Uit te breiden dor het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pl">Rozszerzalne wtyczki zapisu dla nowych narzędzi, kształtów i dokowań</li>

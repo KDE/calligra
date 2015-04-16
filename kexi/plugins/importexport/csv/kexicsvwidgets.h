@@ -30,6 +30,8 @@ class QFrame;
 #define KEXICSV_DEFAULT_FILE_DELIMITER ","
 #define KEXICSV_DEFAULT_CLIPBOARD_DELIMITER "\t"
 #define KEXICSV_DEFAULT_FILE_DELIMITER_INDEX 0
+#define KEXICSV_DEFAULT_COMMENT_START "None"
+#define KEXICSV_DEFAULT_HASHSIGN "#"
 
 //! \return a list of mimetypes usable for handling CSV format handling
 QStringList csvMimeTypes();
@@ -81,10 +83,10 @@ public:
     QString delimiter() const;
     void setDelimiter(const QString& delimiter);
 
-signals:
+Q_SIGNALS:
     void delimiterChanged(const QString& delimiter);
 
-protected slots:
+protected Q_SLOTS:
     //! only called when a delimiter was set by user directly
     void slotDelimiterChanged(int idx);
     void slotDelimiterChangedInternal(int idx);
@@ -95,6 +97,35 @@ protected:
     class Private;
     Private * const d;
 };
+
+//! @short A combo box widget providing a list of possible delimiters
+//! Used by CSV import and export dialogs
+class KexiCSVCommentWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit KexiCSVCommentWidget(bool lineEditOnBottom, QWidget * parent = 0);
+
+    ~KexiCSVCommentWidget();
+
+    QString commentSymbol() const;
+    void setcommentSymbol(const QString& commentSymbol);
+
+signals:
+    void commentSymbolChanged(const QString& commentSymbol);
+
+protected slots:
+//    //! only called when a delimiter was set by user directly
+    void slotcommentSymbolChanged(int idx);
+    void slotcommentSymbolChangedInternal(int idx);
+
+protected:
+    class Private;
+    Private * const d;
+};
+
+
 
 //! @short A combo box widget providing a list of possible quote characters
 //! Used by CSV import and export dialogs

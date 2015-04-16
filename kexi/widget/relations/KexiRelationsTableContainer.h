@@ -67,18 +67,18 @@ public:
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;
 
-signals:
+Q_SIGNALS:
     void moved(KexiRelationsTableContainer *);
     void endDrag();
     void gotFocus();
     void contextMenuRequest(const QPoint& pos);
     void fieldsDoubleClicked(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
-public slots:
+public Q_SLOTS:
     void setFocus();
     void unsetFocus();
 
-protected slots:
+protected Q_SLOTS:
     void moved();
     void slotContextMenu(const QPoint& p);
     void slotFieldsDoubleClicked(const QModelIndex &idx);

@@ -34,7 +34,6 @@
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"
 
-class KexiRelationViewTable;
 
 namespace KexiDB
 {
@@ -105,7 +104,7 @@ public:
     //! @internal Handles paint event for area widget
     void handlePaintEvent(QPaintEvent *event);
 
-signals:
+Q_SIGNALS:
     void tableContextMenuRequest(const QPoint& pos);
     void connectionContextMenuRequest(const QPoint& pos);
     void emptyAreaContextMenuRequest(const QPoint& pos);
@@ -116,7 +115,7 @@ signals:
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
 
-public slots:
+public Q_SLOTS:
     //! Clears current selection - table/query or connection
     void clearSelection();
 
@@ -133,7 +132,7 @@ public slots:
     //! removes selected table or connection
     void removeSelectedObject();
 
-protected slots:
+protected Q_SLOTS:
     void containerMoved(KexiRelationsTableContainer *c);
     void slotListUpdate(QObject *s);
     void slotTableViewEndDrag();

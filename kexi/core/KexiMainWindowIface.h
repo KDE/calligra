@@ -108,7 +108,7 @@ public:
     /*! \return true if this window is in the User Mode. */
     virtual bool userMode() const = 0;
 
-// signals:
+// Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     virtual void acceptProjectClosingRequested(bool& cancel) = 0;
@@ -120,7 +120,7 @@ public:
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
 
-// public slots:
+// public Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
@@ -184,12 +184,35 @@ public:
      If \a window is 0, the current one will be closed. */
     virtual tristate closeWindow(KexiWindow *window) = 0;
 
+    /*! Find window for a given \a identifier.
+     \return 0 if no windows found. */
+    virtual KexiWindow *openedWindowFor(int identifier) = 0;
+
     /*! Find window for a given \a item.
      \return 0 if no windows found. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
 
     /*! Parametrs for query with given id. */
     virtual QList<QVariant> currentParametersForQuery(int queryId) const = 0;
+
+    //! \return query schema currently unsaved (edited) in a window corresponding to Kexi object identified by \a identifier.
+    /*! For implementation in plugins, default implementation returns 0.
+     * In implementations 0 should be returned if there is no such Kexi object
+     * in the current project or if the object's window is not opened or if
+     * the window contains no edited query at the moment.
+     * If the query is "unsaved" the window displaying the corresponding Kexi object is marked as "dirty".
+     * Currently supported type of Kexi objects are only queries being in data view.
+     * See KexiQueryPart::unsavedQuery(int) for this implementation.
+     * The query schema returned by this method can be used for example by data
+     * exporting routines so users can export result of running unsaved
+     * query without prior saving its design.
+     * The changes to design can be even discarded without consequences this way.
+    @note Returned pointer leads to a temporary query schema object owned by the corresponding view,
+     * so lifetime of the object is limited to the lifetime of the view and its window.
+     * Do not store the pointer after the window is closed to avoid dangling pointers.
+    \see KexiPart::Part::currentQuery(KexiView*) KexiWindow::isDirty()
+    */
+    virtual KexiDB::QuerySchema* unsavedQuery(int identifier) = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.
@@ -270,7 +293,7 @@ public:
     //! Sets reasonable dialog size based on main window size, that is 80% of its size.
     virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
-protected: // slots:
+protected: // Q_SLOTS:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
 };

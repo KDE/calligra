@@ -24,7 +24,6 @@
 
 class DocumentModel;
 class Section;
-class SectionGroup;
 
 class RenameSectionCommand : public KUndo2Command
 {

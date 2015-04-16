@@ -24,7 +24,6 @@
 #include <db/utils.h>
 #include <koproperty/Set.h>
 
-class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;
 class KexiFieldListView;
@@ -41,7 +40,7 @@ public:
     explicit KexiDataSourcePage(QWidget *parent);
     virtual ~KexiDataSourcePage();
 
-public slots:
+public Q_SLOTS:
     void setProject(KexiProject *prj);
     void clearFormDataSourceSelection(bool alsoClearComboBox = true);
     void clearWidgetDataSourceSelection();
@@ -53,7 +52,7 @@ public slots:
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
 
-signals:
+Q_SIGNALS:
     //! Signal emitted when helper button 'go to selected data source' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
@@ -70,7 +69,7 @@ signals:
     void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
-protected slots:
+protected Q_SLOTS:
     void slotFormDataSourceTextChanged(const QString & string);
     void slotFormDataSourceChanged();
     void slotFieldSelected();

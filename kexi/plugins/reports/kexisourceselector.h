@@ -41,10 +41,10 @@ public:
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
-signals:
+Q_SIGNALS:
     void setData(KoReportData*);
 
-private slots:
+private Q_SLOTS:
     void setDataClicked();
 
 private:

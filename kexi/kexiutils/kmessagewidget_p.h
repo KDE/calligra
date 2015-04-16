@@ -69,7 +69,7 @@ public:
     virtual ~ClickableLabel();
     virtual void mousePressEvent(QMouseEvent *ev);
 
-signals:
+Q_SIGNALS:
     void clicked();
 };
 

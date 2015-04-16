@@ -25,13 +25,11 @@
 #include <QSet>
 #include <QMap>
 
-class KoShape;
 class KoFilterEffect;
 class KoFilterEffectStack;
 class QGraphicsItem;
 class EffectItemBase;
 class EffectItem;
-class DefaultInputItem;
 class ConnectionItem;
 
 class ConnectionSource
@@ -90,14 +88,14 @@ public:
     /// Returns list of selected effect items
     QList<ConnectionSource> selectedEffectItems() const;
 
-signals:
+Q_SIGNALS:
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
 
 protected:
     /// reimplemented from QGraphicsScene
     virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
 
-private slots:
+private Q_SLOTS:
     void selectionChanged();
 private:
     void createEffectItems(KoFilterEffect *effect);

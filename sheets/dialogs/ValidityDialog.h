@@ -52,7 +52,7 @@ public:
     ValidityDialog(QWidget* parent, Selection* selection);
     void init();
 
-public slots:
+public Q_SLOTS:
     void OkPressed();
     void clearAllPressed();
     void changeIndexCond(int);

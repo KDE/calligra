@@ -58,7 +58,7 @@ public:
     
     virtual bool isReadOnly() const;
 
-public slots:
+public Q_SLOTS:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);

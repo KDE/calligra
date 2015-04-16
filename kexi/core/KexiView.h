@@ -147,7 +147,7 @@ public:
 
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
 
     /*! Call this in your view's implementation whenever current property set
@@ -169,7 +169,7 @@ public slots:
     /*! Equal to setDirty(true). */
     void setDirty();
 
-signals:
+Q_SIGNALS:
     //! emitted when the view is about to close
     void closing(bool *cancel);
 
@@ -347,7 +347,7 @@ protected:
     //! Sets properties in the Property Editor to be sorted if @a set is true.
     void setSortedProperties(bool set);
 
-private slots:
+private Q_SLOTS:
     void slotSwitchToViewModeInternal(Kexi::ViewMode mode);
     void slotSwitchToDataViewModeInternal(bool);
     void slotSwitchToDesignViewModeInternal(bool);

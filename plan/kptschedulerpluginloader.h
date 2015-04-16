@@ -40,7 +40,7 @@ public:
 
     void loadAllPlugins();
 
-signals:
+Q_SIGNALS:
     void pluginLoaded( const QString &key, SchedulerPlugin *plugin);
 };
 

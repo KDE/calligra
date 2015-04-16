@@ -88,7 +88,7 @@ public:
 Q_SIGNALS:
     void textChanged(const QString &text);
 
-public slots:
+public Q_SLOTS:
     void setText(const QString& text, int cursorPos = -1);
 
     /**
@@ -99,7 +99,7 @@ public slots:
     void setCompleter(QCompleter *c);
     QCompleter *completer() const;
 
-private slots:
+private Q_SLOTS:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();

@@ -28,8 +28,6 @@
 
 #include "kcalendar/kdatetable.h"
 
-class QPoint;
-class QDragMoveEvent;
 class QPainter;
 
 namespace KPlato
@@ -59,7 +57,7 @@ public:
     
 //    CalendarDay *parentDay( const TimeInterval *ti ) const { return m_days.value( const_cast<TimeInterval*>( ti ) ); }
     
-protected slots:
+protected Q_SLOTS:
     void slotCalendarToBeRemoved( const Calendar *calendar );
 
 protected:
@@ -111,7 +109,7 @@ public:
     void removeCalendar( QList<Calendar*> lst );
     void removeCalendar( Calendar *calendar );
     
-protected slots:
+protected Q_SLOTS:
     void slotCalendarChanged( Calendar* );
     void slotCalendarToBeInserted( const Calendar *parent, int row );
     void slotCalendarInserted( const Calendar *calendar );
@@ -168,7 +166,7 @@ public:
     bool isDate( const CalendarDay *day ) const;
     bool isWeekday( const CalendarDay *day ) const;
     
-protected slots:
+protected Q_SLOTS:
     void slotDayChanged( CalendarDay *day );
     void slotTimeIntervalChanged( TimeInterval *ti );
     
@@ -212,10 +210,10 @@ public:
     virtual QVariant weekDayData( int day, int role = Qt::DisplayRole ) const;
     virtual QVariant weekNumberData( int week, int role = Qt::DisplayRole ) const;
 
-public slots:
+public Q_SLOTS:
     void setCalendar( Calendar *calendar );
 
-signals:
+Q_SIGNALS:
     void reset();
     void dataChanged( const QDate &start, const QDate &end );
 

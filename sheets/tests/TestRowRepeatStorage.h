@@ -29,7 +29,7 @@ namespace Sheets
 class TestRowRepeatStorage : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testEmptyStorage();
     void testSimpleSetRowRepeat();
     void testOverlappingRanges_data();

@@ -24,6 +24,7 @@
 #include <KWCanvas.h>
 
 #include <QLabel>
+#include <QPushButton>
 
 /** KWDebugWidget shows some debug info.
  */
@@ -42,8 +43,10 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void updateData();
+    void doSetMagic();
+    void doGetMagic();
 
 private:
     void initUi();
@@ -53,6 +56,8 @@ private:
 
 private:
     QLabel *m_label;
+    QPushButton *m_buttonSet;
+    QPushButton *m_buttonGet;
 
     KWCanvas *m_canvas;
 };

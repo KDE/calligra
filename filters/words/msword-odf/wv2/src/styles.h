@@ -217,7 +217,6 @@ bool operator!=( const STD& lhs, const STD& rhs );
 
 class StyleSheet;
 class ParagraphProperties;
-class ListInfoProvider;
 
 /**
  * The structure to hold the UPE for character styles.

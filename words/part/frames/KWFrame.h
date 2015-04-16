@@ -32,9 +32,6 @@
 #include <KoShapeAnchor.h>
 
 class KWFrameSet;
-class KoViewConverter;
-class KWOutlineShape;
-class KWPage;
 
 /**
  * This class represents a single frame.

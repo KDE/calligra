@@ -80,7 +80,7 @@ public:
     virtual KoDocument* doc();
     QObject* findFrameSet(Words::TextFrameSetType type);
 
-public slots:
+public Q_SLOTS:
 
     /***** Page *****/
 

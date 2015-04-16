@@ -28,7 +28,7 @@ namespace KPlato
 class EstimateTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void expected();
     void optimistic();
     void pessimistic();

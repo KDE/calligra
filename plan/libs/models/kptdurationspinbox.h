@@ -60,15 +60,15 @@ public:
     QString textFromValue ( double value ) const;
     QValidator::State validate ( QString & input, int & pos ) const;
 
-signals:
+Q_SIGNALS:
     void unitChanged( int );
 
-public slots:
+public Q_SLOTS:
     /// Set the current unit.
     /// If unit is outside minimum- or maximum unit, the limit is adjusted.
     void setUnit( Duration::Unit unit);
 
-protected slots:
+protected Q_SLOTS:
     void editorTextChanged( const QString &text );
 
 protected:

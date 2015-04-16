@@ -40,10 +40,10 @@ class TaskCostPanelImpl : public QWidget, public Ui_TaskCostPanelBase {
 public:
     explicit TaskCostPanelImpl(QWidget *parent=0, const char *name=0);
 
-signals:
+Q_SIGNALS:
     void changed();
 
-public slots:
+public Q_SLOTS:
     void slotChanged();
 };
 

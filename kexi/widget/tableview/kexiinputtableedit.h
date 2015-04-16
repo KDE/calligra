@@ -80,7 +80,7 @@ public:
     virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
                                      bool focused);
 
-public slots:
+public Q_SLOTS:
     //! Implemented for KexiDataItemInterface
     virtual void moveCursorToEnd();
 
@@ -93,7 +93,7 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual bool fixup();
 
-protected slots:
+protected Q_SLOTS:
     void setRestrictedCompletion();
     void completed(const QString &);
     void slotTextEdited(const QString&);
@@ -112,7 +112,7 @@ protected:
     QString m_decsym; //! decimal symbol
     KLineEdit *m_lineedit;
 
-signals:
+Q_SIGNALS:
     void hintClicked();
 };
 

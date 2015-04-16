@@ -100,7 +100,7 @@ public:
 
     KWFrame *createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
-signals:
+Q_SIGNALS:
     /**
      * Signal emitted when a frameset is created
      */
@@ -110,7 +110,7 @@ signals:
      */
     void removedFrameSet(KWFrameSet *fs);
 
-private slots:
+private Q_SLOTS:
     // called when a shape from the main text is removed to check if we should clear the page of other auto-created shape
     void mainShapeRemoved(KoShape *shape);
 

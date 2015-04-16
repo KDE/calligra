@@ -44,7 +44,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-signals:
+Q_SIGNALS:
     void shapeChanged(StateShape*);
 protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();

@@ -31,7 +31,6 @@
 #include <QByteArray>
 #include <QPointer>
 
-class KexiProject;
 namespace Kexi
 {
 class ObjectStatus;
@@ -167,7 +166,7 @@ public:
     //!Read the data at the given row/field
     QVariant value(uint i);
 
-signals:
+Q_SIGNALS:
     void progressPercent(int percent);
 
 protected:

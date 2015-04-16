@@ -104,11 +104,11 @@ public:
     Task *taskFromIndex( const QModelIndex &idx ) const;
     QModelIndex indexFromTask( const Node *node ) const;
 
-public slots:
+public Q_SLOTS:
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void sourceDataChanged(const QModelIndex& start, const QModelIndex& end);
     void sourceModelAboutToBeReset();
     void sourceModelReset();

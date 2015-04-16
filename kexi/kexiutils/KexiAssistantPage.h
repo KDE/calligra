@@ -42,18 +42,18 @@ public:
     KexiLinkWidget* nextButton();
     QString title() const;
     QString description() const;
-public slots:
+public Q_SLOTS:
     void setDescription(const QString& text);
     void setBackButtonVisible(bool set);
     void setNextButtonVisible(bool set);
     void back();
     void next();
-signals:
+Q_SIGNALS:
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);
     void cancelled(KexiAssistantPage* page);
 
-private slots:    
+private Q_SLOTS:    
     void slotLinkActivated(const QString& link);
     void slotCancel();
 

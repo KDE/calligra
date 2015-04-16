@@ -64,7 +64,7 @@ public:
 
     QSize documentSize() const;
 
-signals:
+Q_SIGNALS:
     void documentSizeChanged(const QSize &sz);
     void documentPositionChanged(const QPoint &pos);
 

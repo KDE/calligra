@@ -46,6 +46,7 @@ public:
     QString forceDelimiter; //!< Used for "clipboard" mode
     QString textQuote;
     bool addColumnNames;
+    bool useTempQuery;
 };
 
 /*! Exports data. \return false on failure.

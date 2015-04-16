@@ -81,7 +81,7 @@ public:
     Qt::DockWidgetArea location; /// The area the docker should go when visible
     bool editor;                 /// Editor dockers will not be shown in read only mode
 
-public slots:
+public Q_SLOTS:
     void setShown( bool show );
     void setLocation( Qt::DockWidgetArea area );
 
@@ -133,10 +133,10 @@ public:
     void setOptions( const PrintingOptions &options );
     PrintingOptions options() const;
 
-signals:
+Q_SIGNALS:
     void changed(const PrintingOptions&);
 
-protected slots:
+protected Q_SLOTS:
     void slotChanged();
 
 private:
@@ -163,11 +163,11 @@ public:
     QWidget *createPageLayoutWidget() const;
     QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
-signals:
+Q_SIGNALS:
     void changed( const PrintingOptions &opt );
     void changed();
     
-public slots:
+public Q_SLOTS:
     void setPrintingOptions( const PrintingOptions &opt);
     void setPrinterPageLayout( const KoPageLayout &pagelayout );
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
@@ -284,7 +284,7 @@ public:
     QList<DockWidget*> dockers() const;
     DockWidget *findDocker( const QString &id ) const;
 
-public slots:
+public Q_SLOTS:
     void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -299,7 +299,7 @@ public slots:
     
     void setPageLayout( const KoPageLayout &layout );
 
-signals:
+Q_SIGNALS:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
     /// Request for a context menu popup
@@ -311,7 +311,7 @@ signals:
     void projectChanged( Project *project );
     void readWriteChanged( bool );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions() {}
     virtual void slotOptionsFinished( int result );
 
@@ -417,7 +417,7 @@ public:
 
     ItemModelBase *itemModel() const;
 
-signals:
+Q_SIGNALS:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( const QModelIndex&, const QPoint &pos );
     /// Context menu requested from header at global position @p pos
@@ -450,7 +450,7 @@ protected:
     void dropEvent( QDropEvent *e );
     void updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event );
 
-protected slots:
+protected Q_SLOTS:
     /// Close the @p editor, using sender()->endEditHint().
     /// Use @p hint if sender is not of type ItemDelegate.
     virtual void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint);
@@ -590,7 +590,7 @@ public:
             m_rightview->sortByColumn( col, order );
         }
     }
-signals:
+Q_SIGNALS:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( const QModelIndex &index, const QPoint& pos );
     /// Context menu requested from master- or slave header at global position @p pos
@@ -605,11 +605,11 @@ signals:
 
     void dropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 
-public slots:
+public Q_SLOTS:
     void edit( const QModelIndex &index );
     void expandAll();
     
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
     void slotToRightView( const QModelIndex &index );
     void slotToLeftView( const QModelIndex &index );

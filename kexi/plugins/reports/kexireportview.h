@@ -28,9 +28,7 @@
 
 class KoReportPreRenderer;
 class ORODocument;
-class QScrollArea;
 class KoReportPage;
-class KexiReportViewPageSelect;
 class KexiScriptAdaptor;
 class KRScriptFunctions;
 #ifndef KEXI_MOBILE
@@ -84,7 +82,7 @@ private:
     KUrl getExportUrl(const QString &mimetype, const QString &caption,
                       const QString &lastExportPath, const QString &extension);
 
-private slots:
+private Q_SLOTS:
     void slotPrintReport();
     void slotExportAsPdf();
     void slotExportAsSpreadsheet();

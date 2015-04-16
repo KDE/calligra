@@ -62,7 +62,7 @@ public:
     void gotoSheet(int sheetNumber, SearchDirection direction);
     void searchOtherSheets(SearchDirection direction);
 
-public slots:
+public Q_SLOTS:
     void tellZoomControllerToSetDocumentSize(QSize size);
     void updateCanvas();
     void resizeCanvas(const QSizeF &canvasSize);
@@ -72,11 +72,11 @@ public slots:
     void findNext();
     void findPrevious();
 
-private slots:
+private Q_SLOTS:
     void findMatchFound(const KoFindMatch& match);
     void findNoMatchFound();
 
-signals:
+Q_SIGNALS:
     void currentSheetNumChanged();
     void sheetCountChanged();
     void searchStringChanged();

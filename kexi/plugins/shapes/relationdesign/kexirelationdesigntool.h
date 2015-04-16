@@ -61,7 +61,7 @@ private:
     void updateCombo();
     QStringList queryList();
 
-private slots:
+private Q_SLOTS:
     void changeUrlPressed();
     void relationSelected(const QString &);
 };

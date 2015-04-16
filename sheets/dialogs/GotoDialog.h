@@ -45,7 +45,7 @@ class GotoDialog : public KDialog
 public:
     GotoDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void textChanged(const QString &_text);
 

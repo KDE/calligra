@@ -74,7 +74,7 @@ public:
     virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
-protected slots:
+protected Q_SLOTS:
     void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
     void handleInsertFromFileAction(const KUrl& url);

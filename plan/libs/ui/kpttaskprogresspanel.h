@@ -46,10 +46,10 @@ public:
     
     void setYear( int year );
     
-signals:
+Q_SIGNALS:
     void changed();
     
-public slots:
+public Q_SLOTS:
     void slotChanged();
     void slotEditmodeChanged( int idx );
     void slotStartedChanged(bool state);
@@ -63,7 +63,7 @@ public slots:
     void slotPrevWeekBtnClicked();
     void slotNextWeekBtnClicked();
     
-protected slots:
+protected Q_SLOTS:
     void slotCalculateEffort();
     void slotFillWeekNumbers( int year );
     
@@ -92,7 +92,7 @@ public:
     
     static MacroCommand *buildCommand( const Project &project, Completion &org, Completion &curr );
 
-protected slots:
+protected Q_SLOTS:
     void slotWeekNumberChanged( int );
     void slotAddResource();
     void slotEntryAdded( const QDate &date);

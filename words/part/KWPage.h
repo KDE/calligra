@@ -30,8 +30,6 @@
 #include <QRectF>
 #include <QObject>
 
-class KoInlineObject;
-class KoZoomHandler;
 class KWPageManagerPrivate;
 class KoShapeManager;
 

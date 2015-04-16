@@ -34,7 +34,7 @@ public:
     explicit KexiPrjTypeSelector(QWidget* parent = 0);
     ~KexiPrjTypeSelector();
 
-public slots:
+public Q_SLOTS:
     void slotSelectionChanged(QAbstractButton *btn);
 };
 

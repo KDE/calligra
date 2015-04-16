@@ -55,7 +55,6 @@ class ResourceRequest;
 class ResourceGroupRequest;
 class ResourceRequestCollection;
 class Schedule;
-class NodeSchedule;
 class ResourceSchedule;
 class Schedule;
 class XMLLoaderObject;
@@ -521,7 +520,7 @@ public:
     };
     const WorkInfoCache &workInfoCache() const { return m_workinfocache; }
 
-signals:
+Q_SIGNALS:
     void externalAppointmentToBeAdded( Resource *r, int row );
     void externalAppointmentAdded( Resource*, Appointment* );
     void externalAppointmentToBeRemoved( Resource *r, int row );

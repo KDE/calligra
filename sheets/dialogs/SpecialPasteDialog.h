@@ -45,7 +45,7 @@ class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 public:
     explicit SpecialPasteDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void slotToggled(bool);
 

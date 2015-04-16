@@ -47,6 +47,7 @@ class AlterSchemaWidget : public QWidget
         void setData(const QList<KexiDB::RecordData>& data);
 
         KexiDB::TableSchema* newSchema();
+        KexiDB::TableSchema* takeTableSchema();
 
         KexiNameWidget* nameWidget();
         bool nameExists(const QString &name) const;
@@ -68,15 +69,14 @@ class AlterSchemaWidget : public QWidget
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
 
-        KexiDB::TableSchema *m_originalSchema;
-        KexiDB::TableSchema *m_newSchema;
+        KexiDB::TableSchema *m_schema;
 
         int m_selectedColumn;
 
         //! @todo Something like this could go in kexi utils/project?
         QString suggestedItemCaption(const QString& baseCaption);
 
-    private slots:
+    private Q_SLOTS:
         void tableClicked(const QModelIndex& idx);
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);

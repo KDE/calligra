@@ -76,6 +76,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuPart.cpp
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
+    author/CAuDocument.cpp
 )
 
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -89,8 +90,22 @@ if( SHOULD_BUILD_FEATURE_RDF )
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+
+        author/dockers/CAuOutlinerDocker.cpp
+        author/dockers/CAuOutlinerDockerFactory.cpp
+        author/dockers/CAuOutlinerWidget.cpp
+
+        author/metadata/CAuMetaDataManager.cpp
+
+        author/metadata/CAuSectionRdf.cpp
+        author/metadata/CAuSectionSemanticItemFactory.cpp
+
+        author/metadata/CAuActorRdf.cpp
+        author/metadata/CAuActorSemanticItemFactory.cpp
+
+        author/metadata/CAuSemanticItemBase.cpp
     )
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
@@ -109,8 +124,10 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
 if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
+        author/metadata/CAuSectionRdfEditWidget.ui
+        author/metadata/CAuActorRdfEditWidget.ui
     )
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
@@ -118,7 +135,7 @@ kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 target_link_libraries(wordsprivate komain kotextlayout)
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate kordf)
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate
@@ -196,7 +213,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
 
@@ -213,4 +230,4 @@ install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/ca
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
-endif (SHOULD_BUILD_APP_AUTHOR)
+endif ()

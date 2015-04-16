@@ -72,11 +72,11 @@ public:
 
     void setValues( const GanttItemDelegate &del );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void setDefault();
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:
@@ -89,7 +89,7 @@ class GanttViewSettingsDialog : public ItemViewSettupDialog
 public:
     explicit GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
 private:
@@ -124,7 +124,7 @@ public:
     void setSinglePage( bool value )  { value ? ui_singlePage->setChecked( false ) : ui_multiplePages->setChecked( true ); }
     bool singlePage() const { return ui_singlePage->isChecked(); }
 
-public slots:
+public Q_SLOTS:
     void setOptions(const GanttPrintingOptions &opt);
 };
 
@@ -140,7 +140,7 @@ public:
 
     int documentLastPage() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotPrintRowLabelsToogled( bool on );
     void slotSinglePageToogled( bool on );
 
@@ -173,7 +173,7 @@ public:
     virtual bool loadContext( const KoXmlElement &settings );
     virtual void saveContext( QDomElement &settings ) const;
 
-public slots:
+public Q_SLOTS:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
 
 protected:
@@ -219,7 +219,7 @@ public:
     void clearDependencies();
     void createDependencies();
 
-public slots:
+public Q_SLOTS:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
     void slotProjectCalculated( ScheduleManager *sm );
@@ -261,14 +261,14 @@ public:
     void setShowSpecialInfo( bool on ) { m_gantt->model()->setShowSpecial( on ); }
     bool showSpecialInfo() const { return m_gantt->model()->showSpecial(); }
 
-signals:
+Q_SIGNALS:
     void modifyRelation( Relation *rel ) ;
     void addRelation( Node *par, Node *child );
     void modifyRelation( Relation *rel, int linkType ) ;
     void addRelation( Node *par, Node *child, int linkType );
     void itemDoubleClicked();
 
-public slots:
+public Q_SLOTS:
     void setScheduleManager( ScheduleManager *sm );
     void setShowResources( bool on );
     void setShowTaskName( bool on );
@@ -280,7 +280,7 @@ public slots:
     void setShowNoInformation( bool on );
     void setShowAppointments( bool on );
 
-protected slots:
+protected Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
     virtual void slotOptionsFinished( int result );
@@ -301,7 +301,7 @@ class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
 public:
     MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
 
 private:
@@ -320,7 +320,7 @@ public:
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
-public slots:
+public Q_SLOTS:
     void slotProjectCalculated( ScheduleManager *sm );
 
 protected:
@@ -356,10 +356,10 @@ public:
 
     KoPrintJob *createPrintJob();
 
-signals:
+Q_SIGNALS:
     void itemDoubleClicked();
 
-public slots:
+public Q_SLOTS:
     void setScheduleManager( ScheduleManager *sm );
 
     void setShowTaskName( bool on ) { m_showTaskName = on; }
@@ -368,7 +368,7 @@ public slots:
     void setShowCriticalTasks( bool on ) { m_showCriticalTasks = on; }
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
 
-protected slots:
+protected Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
 
@@ -417,13 +417,13 @@ public:
 
     Node *currentNode() const;
 
-signals:
+Q_SIGNALS:
     void itemDoubleClicked();
 
-public slots:
+public Q_SLOTS:
     void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
 

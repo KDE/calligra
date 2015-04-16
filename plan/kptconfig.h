@@ -22,7 +22,6 @@
 
 #include "kptconfigbase.h"
 
-class KPlatoSettings;
 
 namespace KPlato
 {

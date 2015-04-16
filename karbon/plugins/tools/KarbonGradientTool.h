@@ -29,7 +29,6 @@ class GradientStrategy;
 class KarbonGradientEditWidget;
 class KUndo2Command;
 class KoShape;
-class QTableWidgetItem;
 class KoResource;
 
 /**
@@ -56,7 +55,7 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
-public slots:
+public Q_SLOTS:
     virtual void documentResourceChanged(int key, const QVariant & res);
 
 protected:

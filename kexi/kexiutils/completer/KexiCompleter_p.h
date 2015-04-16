@@ -239,7 +239,7 @@ public:
     QScopedPointer<KexiCompletionEngine> engine;
     bool showAll;
 
-signals:
+Q_SIGNALS:
     void rowsAdded();
 
 public Q_SLOTS:

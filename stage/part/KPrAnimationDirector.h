@@ -38,9 +38,7 @@ class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
-class KPrAnimationData;
 class KPrPage;
-class KPrPageData;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
@@ -151,7 +149,7 @@ protected:
     void updatePageAnimation();
     void updateStepAnimation();
 
-protected slots:
+protected Q_SLOTS:
     // update the zoom value
     void updateZoom( const QSize & size );
     // acts on the time line event

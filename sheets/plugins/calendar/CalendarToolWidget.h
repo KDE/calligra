@@ -78,7 +78,7 @@ protected:
      */
     bool buildDatePickerFrame();
 
-protected slots:
+protected Q_SLOTS:
 
     /**
      * Sets the currently active KDatePicker frame to 0.
@@ -92,7 +92,7 @@ protected slots:
      */
     void emitInsertCalendar();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Shows a KDatePicker widget to select the start date.
@@ -132,7 +132,7 @@ public:
      */
     QDate endDate() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the dialog is

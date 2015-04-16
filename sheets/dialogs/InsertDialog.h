@@ -49,7 +49,7 @@ public:
 
     InsertDialog(QWidget* parent, Selection* selection, Mode _mode);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 
 private:

@@ -61,7 +61,7 @@ public:
     KPrPresentationStrategyBase *strategy();
     KPrViewModePresentation & viewModePresentation();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
     void highlightPresentation();

@@ -141,12 +141,12 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a dialog. */
     virtual KexiView* createView(QWidget *parent, KexiWindow *window,
-                                 KexiPart::Item &item, 
-                                 Kexi::ViewMode viewMode = Kexi::DataViewMode, 
+                                 KexiPart::Item &item,
+                                 Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
-    
+
     //virtual void initTabs();
-    
+
     /*! @return i18n'd instance name usable for displaying in gui as object's name,
      e.g. "table".
      The name is valid identifier - contains latin-1 lowercase characters only. */
@@ -172,12 +172,19 @@ public:
 
     const Kexi::ObjectStatus& lastOperationStatus() const;
 
+    /*! \return query schema currently edited in the \a view.
+     * It may be the original/saved query if user has no unsaved changes so far
+     * or a temporary unsaved query if there are unsaved modifications.
+     * The query can be used for example by data exporting routines so user can
+     * export result of a running unsaved query without prior saving it. For implementation in plugins. */
+    virtual KexiDB::QuerySchema *currentQuery(KexiView* view);
+
     /*! @internal
      Creates GUIClients for this part, attached to the main window.
      This method is called by KexiMainWindow. */
     void createGUIClients();
 
-signals:
+Q_SIGNALS:
     void newObjectRequest(KexiPart::Info *info);
 
 protected:
@@ -194,7 +201,7 @@ protected:
      @param whatsThis i18n'd "what's this" string. Example: "Creates new table."
      @param list extra arguments passed to the plugin
     */
-    Part(QObject *parent, 
+    Part(QObject *parent,
         const QString& instanceName,
         const QString& toolTip,
         const QString& whatsThis,

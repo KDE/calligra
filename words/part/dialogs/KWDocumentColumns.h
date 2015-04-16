@@ -42,14 +42,14 @@ public:
     void setShowPreview(bool on);
     void setUnit(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
     void columnsChanged(const KoColumns &columns);
 
-public slots:
+public Q_SLOTS:
     void setTextAreaAvailable(bool available);
     void setColumns(const KoColumns &columns);
 
-private slots:
+private Q_SLOTS:
     void optionsChanged();
 
 private:

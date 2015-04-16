@@ -13,7 +13,7 @@ target_link_libraries(calligra_filter_html2ods komain ${KDE4_KHTML_LIBS})
 install(TARGETS calligra_filter_html2ods  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_html2ods.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_HTML_TO_ODS)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_SHEETS_TO_HTML)
@@ -25,4 +25,4 @@ target_link_libraries(calligra_filter_sheets2html calligrasheetscommon)
 install(TARGETS calligra_filter_sheets2html  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_sheets2html.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_SHEETS_TO_HTML)
+endif()

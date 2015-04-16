@@ -38,7 +38,7 @@ public:
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
-private slots:
+private Q_SLOTS:
     void matrixChanged();
     void saturateChanged(double saturate);
     void hueRotateChanged(double angle);

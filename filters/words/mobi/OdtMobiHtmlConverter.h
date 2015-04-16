@@ -30,7 +30,6 @@
 
 class QByteArray;
 class QSizeF;
-class QStringList;
 class KoXmlWriter;
 class KoStore;
 class FileCollector;

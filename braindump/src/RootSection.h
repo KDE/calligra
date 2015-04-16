@@ -42,10 +42,10 @@ public:
     void createActions(KActionCollection*);
     KUndo2Stack* undoStack(); // TODO remove when it is again possible to hide the undo stack
     void setCurrentSection(Section*);  // TODO when the command statck is hidden again, remove
-signals:
+Q_SIGNALS:
     /// This signal is emitted when a command is executed in the undo stack
     void commandExecuted();
-private slots:
+private Q_SLOTS:
     void undoIndexChanged(int idx);
 private:
     KUndo2Stack* m_undoStack;

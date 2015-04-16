@@ -73,7 +73,7 @@ public:
      * waiting or busy.
      **/
     bool waitingOrBusy(const QString& path);
-signals:
+Q_SIGNALS:
     void toOdpDone(const QString& odppath);
     void toPngDone(const QString& odppath);
 };

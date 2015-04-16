@@ -55,7 +55,7 @@ class KexiMainWindowTabWidget : public KTabWidget
 public:
     KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
     virtual ~KexiMainWindowTabWidget();
-public slots:
+public Q_SLOTS:
     void closeTab();
     tristate closeAllTabs();
 
@@ -173,7 +173,7 @@ public:
     /*! Implemented for KexiMainWindow */
     virtual KexiMigrateManagerInterface* migrateManager();
 
-public slots:
+public Q_SLOTS:
     /*! Implemented for KexiMainWindow */
     virtual tristate closeWindow(KexiWindow *window);
 
@@ -221,10 +221,14 @@ public slots:
                                 SaveObjectOptions options = 0);
 
     /*! Implemented for KexiMainWindowIface. */
+    virtual KexiWindow *openedWindowFor(int identifier);
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
     /*! Implemented for KexiMainWindowIface */
     virtual QList<QVariant> currentParametersForQuery(int queryId) const;
+
+    /*! Implemented for KexiMainWindowIface. */
+    virtual KexiDB::QuerySchema *unsavedQuery(int queryId);
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
@@ -317,7 +321,7 @@ public slots:
      Sets reasonable dialog size based on main window size, that is 80% of its size. */
     virtual void setReasonableDialogSize(QDialog *dialog);
 
-signals:
+Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     void acceptProjectClosingRequested(bool& cancel);
@@ -430,7 +434,7 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
-protected slots:
+protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);
 
     /*! Called once after timeout (after ctors are executed). */
@@ -579,6 +583,16 @@ protected slots:
 
     //! Shows "copy special as data table" dialog for \a item.
     tristate copyItemToClipboardAsDataTable(KexiPart::Item* item);
+
+    bool checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args);
+
+    /*! Shows a question message
+     * "Design of query %1 that you want to export data from is changed and has not yet been saved.
+     * Do you want to use data from the changed query for exporting or from its original (saved) version?"
+    \return true if the user picked the first option,
+     * false if the user picked the second option and cancelled value if user cancelled the export.
+     */
+    tristate askOnExportingChangedQuery(KexiPart::Item* item) const;
 
     //! Shows "print" dialog for \a item.
     //! \return true on success.

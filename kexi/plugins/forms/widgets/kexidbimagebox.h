@@ -142,7 +142,7 @@ public:
      "Internal" means that if there is no data source set, real policy becomes NoFocus. */
     virtual void setFocusPolicy(Qt::FocusPolicy policy);
 
-public slots:
+public Q_SLOTS:
     void setPixmapId(uint id);
 
     void setStoredPixmapId(uint id);
@@ -186,10 +186,10 @@ public slots:
 
     void setMidLineWidth(int w);
 
-signals:
+Q_SIGNALS:
     void idChanged(long id);
 
-protected slots:
+protected Q_SLOTS:
     void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
     void handleInsertFromFileAction(const KUrl& url);

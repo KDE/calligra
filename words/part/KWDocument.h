@@ -49,11 +49,8 @@ class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoShapeAnchor;
-class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-class KLocalizedString;
-class QIODevice;
 class KoAnnotationLayoutManager;
 class KoDocumentInfoDlg;
 
@@ -202,15 +199,9 @@ public:
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
 
-    /// Set cover image data at a QPair<cover mime type, cover data>.
-    void setCoverImage(QPair<QString, QByteArray> cover);
-
-    /// return cover data.
-    QPair<QString, QByteArray> coverImage();
-
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Relayout the pages or frames within the framesets.
      * @param framesets The framesets that should be relayouted. If no framesets are
@@ -233,7 +224,7 @@ public slots:
      */
     void removeFrameSet(KWFrameSet *fs);
 
-signals:
+Q_SIGNALS:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
@@ -246,7 +237,7 @@ signals:
     /// emitted wheneve a resources needs to be set on the canvasResourceManager
     void resourceChanged(int key, const QVariant &value);
 
-private slots:
+private Q_SLOTS:
     /// Shape maintenance on already registered framesets
     void addSequencedShape(KoShape *shape);
     void removeSequencedShape(KoShape *shape);
@@ -292,7 +283,6 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
-    QPair<QString, QByteArray> m_coverImage;
     QList<KoShape*> m_loadedAnnotationShapes;
     KoAnnotationLayoutManager *m_annotationManager;
 };

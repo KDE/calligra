@@ -145,7 +145,7 @@ public:
      Implementation for KexiDataAwareObjectInterface. */
     virtual QRect viewportGeometry() const;
 
-public slots:
+public Q_SLOTS:
     //! Implementation for KexiDataAwareObjectInterface
     //! \return arbitraty value of 10.
     virtual int rowsPerPage() const;
@@ -170,7 +170,7 @@ public slots:
      \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelEditor();
 
-public slots:
+public Q_SLOTS:
     /*! Clear command history right after final resize. */
     void refreshContentsSize();
 
@@ -181,7 +181,7 @@ public slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-signals:
+Q_SIGNALS:
     void itemChanged(KexiDB::RecordData*, int row, int col);
     void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
     void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
@@ -200,7 +200,7 @@ signals:
     //! Emitted when the main widget area is being interactively resized.
     bool resized();
 
-protected slots:
+protected Q_SLOTS:
     //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 

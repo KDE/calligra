@@ -6,7 +6,7 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsv_importexportpart.cpp 
    KexiCSVImportDialogModel.cpp
    kexicsvimportdialog.cpp 
-   kexicsvimportoptionsdlg.cpp 
+   kexicsvimportoptionsdlg.cpp
    kexicsvwidgets.cpp 
    kexicsvexportwizard.cpp
    kexicsvexport.cpp
@@ -32,7 +32,7 @@ target_link_libraries(
 if(MSVC)
    # avoid LNK1169 errors
    set_target_properties(kexihandler_csv_importexport PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
-endif(MSVC)
+endif()
 
 install(TARGETS kexihandler_csv_importexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

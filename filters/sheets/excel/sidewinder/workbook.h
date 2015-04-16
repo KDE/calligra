@@ -169,7 +169,7 @@ public:
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
 #endif
-signals:
+Q_SIGNALS:
     void sigProgress(int value);
 
 private:

@@ -25,12 +25,11 @@
 namespace KPlato
 {
 
-class Part;
 
 class InsertFileTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testVersion_0_6();
     void testProject_stats1();
     void testPert1();

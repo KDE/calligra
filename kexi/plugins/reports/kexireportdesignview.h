@@ -45,7 +45,7 @@ public:
 
     void triggerAction(const QString &);
 
-signals:
+Q_SIGNALS:
     void itemInserted(const QString& entity);
 
 private:
@@ -73,10 +73,10 @@ protected:
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
     
-private slots:
+private Q_SLOTS:
     void slotDesignerPropertySetChanged();
 
-public slots:
+public Q_SLOTS:
     void slotSetData(KoReportData*);
 };
 

@@ -42,7 +42,7 @@ public:
 
     MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotChanged();
     void slotNodeRemoved( Node *node );
 

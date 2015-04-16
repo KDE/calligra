@@ -77,10 +77,10 @@ class KexiNewObjectAction : public KAction
 public:
     KexiNewObjectAction(KexiPart::Info* info, QObject *parent);
 
-signals:
+Q_SIGNALS:
     void newObjectRequested(KexiPart::Info* info);
 
-private slots:
+private Q_SLOTS:
     void slotTriggered();
 
 private:

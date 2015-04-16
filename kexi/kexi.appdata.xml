@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Kexi</name>
+  <name xml:lang="ast">Kexi</name>
   <name xml:lang="bs">Kexi</name>
   <name xml:lang="ca">Kexi</name>
   <name xml:lang="cs">Kexi</name>
@@ -80,7 +81,7 @@
     <p xml:lang="ja">機能:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
-    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>

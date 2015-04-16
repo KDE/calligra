@@ -131,7 +131,7 @@ public:
 
     void setLocalizeValues( bool on );
 
-public slots:
+public Q_SLOTS:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeRemoved( Node *node );
     void slotNodeChanged( Node *node );

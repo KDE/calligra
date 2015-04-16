@@ -61,16 +61,16 @@ public:
     /*! Default maximum number of rows for KexiComboBoxPopup objects. */
     static const int defaultMaxRows;
 
-signals:
+Q_SIGNALS:
     void rowAccepted(KexiDB::RecordData *record, int row);
     void cancelled();
     void hidden();
 
-public slots:
+public Q_SLOTS:
     virtual void resize(int w, int h);
     void updateSize(int minWidth = 0);
 
-protected slots:
+protected Q_SLOTS:
     void slotTVItemAccepted(KexiDB::RecordData *record, int row, int col);
     void slotDataReloadRequested();
 

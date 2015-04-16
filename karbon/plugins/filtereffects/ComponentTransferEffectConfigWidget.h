@@ -38,7 +38,7 @@ public:
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
-private slots:
+private Q_SLOTS:
     void slopeChanged(double slope);
     void interceptChanged(double intercept);
     void amplitudeChanged(double amplitude);

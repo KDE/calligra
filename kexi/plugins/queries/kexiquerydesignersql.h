@@ -59,14 +59,14 @@ protected:
 
     virtual void updateActions(bool activated);
 
-protected slots:
+protected Q_SLOTS:
     /*! Performs query checking (by text parsing). \return true and sets d->parsedQuery
      to the new query schema object on success. */
     bool slotCheckQuery();
     void slotUpdateMode();
     void slotTextChanged();
 
-signals:
+Q_SIGNALS:
     void queryShortcut();
 
 private:

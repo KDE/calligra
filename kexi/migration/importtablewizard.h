@@ -58,12 +58,12 @@ Q_OBJECT
         virtual void accept();
         virtual void reject();
 
-    protected slots:
+    protected Q_SLOTS:
         void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
-        
+
     private:
 
-        KexiDB::Connection* m_currentDatabase;
+        KexiDB::Connection* m_connection;
         KexiConnectionSelectorWidget *m_srcConnSel;
         KexiMigration::MigrateManager *m_migrateManager;
         QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
@@ -73,26 +73,27 @@ Q_OBJECT
         KexiProjectSet* m_prjSet;
         QString m_importTableName;
         QMap<QString, QString>* m_args;
-        
+
         bool fileBasedSrcSelected() const;
         QString driverNameForSelectedSource();
         KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
 
-        QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
-        QProgressBar *m_progressBar;
+        QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_progressLbl, *m_rowsImportedLbl, *m_finishLbl;
+        QProgressBar *m_importingProgressBar;
         QCheckBox *m_finishCheckBox;
         KPushButton* m_importOptionsButton;
         bool m_importComplete;
+        bool m_importWasCanceled;
+        unsigned m_rowCount;
         bool doImport();
-        
+
         //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem,
-                        *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem,
-                        *m_finishPageItem;
-        
+        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_tablesPageItem,
+                        *m_alterTablePageItem, *m_importingPageItem, *m_progressPageItem, *m_finishPageItem;
+
         //Page Widgets
         QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget,
-                *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
+                *m_alterTablePageWidget, *m_importingPageWidget, *m_progressPageWidget, *m_finishPageWidget;
 
         //Page Setup
         void setupIntroPage();
@@ -101,19 +102,22 @@ Q_OBJECT
         void setupTableSelectPage();
         void setupAlterTablePage();
         void setupImportingPage();
+        void setupProgressPage();
         void setupFinishPage();
-        
+
         //Page Arrival
         void arriveSrcConnPage();
         void arriveSrcDBPage();
         void arriveTableSelectPage(KPageWidgetItem *prevPage);
         void arriveAlterTablePage();
         void arriveImportingPage();
+        void arriveProgressPage();
         void arriveFinishPage();
-    private slots:
+    private Q_SLOTS:
         void slotConnPageItemSelected(bool isSelected);
         void slotTableListWidgetSelectionChanged();
         void slotNameChanged();
+        void slotCancelClicked();
 };
 }
 #endif // IMPORTTABLEWIZARD_H

@@ -29,10 +29,10 @@
 #include <QThreadPool>
 #include <QTimer>
 
-#include <KDE/KGlobal>
-#include <KDE/KLocale>
-#include <KDE/KSharedConfig>
-#include <KDE/KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <kfileitem.h>
 

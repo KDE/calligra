@@ -174,7 +174,7 @@ public:
     //! See WidgetFactory::selectableItem(ObjectTreeItem*).
     ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
-signals:
+Q_SIGNALS:
     void widgetActionToggled(const QByteArray& _class);
 
     //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop

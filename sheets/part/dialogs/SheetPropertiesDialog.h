@@ -97,7 +97,7 @@ public:
     bool capitalizeFirstLetter() const;
 
     void setCapitalizeFirstLetter(bool b);
-public slots:
+public Q_SLOTS:
     virtual void slotDefault();
 private:
     SheetPropertiesWidget* m_widget;

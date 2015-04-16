@@ -131,10 +131,10 @@ public:
         return !undefined;
     }
 
-signals:
+Q_SIGNALS:
     void clicked(PatternSelect *_this);
 
-public slots:
+public Q_SLOTS:
     void slotUnselect();
     void slotSelect();
 
@@ -165,7 +165,7 @@ public:
 
     bool apply(CustomStyle * style);
 
-protected slots:
+protected Q_SLOTS:
     void parentChanged(const QString&);
     void styleNameChanged(const QString&);
 
@@ -196,14 +196,14 @@ public:
     void apply(CustomStyle * style);
     void apply(StyleCommand *_obj);
 
-signals:
+Q_SIGNALS:
     /**
      * Connect to this to monitor the font as it as selected if you are
      * not running modal.
      */
     void fontSelected(const QFont &font);
 
-private slots:
+private Q_SLOTS:
 
     void      family_chosen_slot(const QString &);
     void      size_chosen_slot(const QString &);
@@ -236,7 +236,7 @@ public:
     void apply(CustomStyle * style);
     void apply(StyleCommand *_obj);
 
-public slots:
+public Q_SLOTS:
     void slotChangeState();
     void makeformat();
     void updateFormatType();
@@ -290,7 +290,7 @@ public:
     double getSizeWidth() const;
     bool getMergedCellState() const;
 
-public slots:
+public Q_SLOTS:
     void slotChangeHeightState();
     void slotChangeWidthState();
     void slotChangeAngle(int);
@@ -318,7 +318,7 @@ class Border : public QFrame
     Q_OBJECT
 public:
     Border(QWidget *parent, const char *_name, bool _oneCol, bool _oneRow);
-signals:
+Q_SIGNALS:
     void redraw();
     void choosearea(QMouseEvent * _ev);
 protected:
@@ -363,7 +363,7 @@ public:
     }
     void setUndefined();
     void unselect();
-signals:
+Q_SIGNALS:
     void clicked(BorderButton *);
 protected:
     virtual void mousePressEvent(QMouseEvent *_ev);
@@ -388,7 +388,7 @@ public:
     void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(Qt::PenStyle _style);
 
-public slots:
+public Q_SLOTS:
     void changeState(BorderButton *_this);
     void preselect(BorderButton *_this);
     void draw();
@@ -459,10 +459,10 @@ public:
     }
     void setPattern(const QColor &_color, Qt::BrushStyle _style);
 
-signals:
+Q_SIGNALS:
     void clicked(BrushSelect *_this);
 
-public slots:
+public Q_SLOTS:
     void slotUnselect();
     void slotSelect();
 
@@ -490,7 +490,7 @@ public:
     void apply(StyleCommand *_obj);
 
     void init();
-public slots:
+public Q_SLOTS:
     void slotUnselect2(BrushSelect *_select);
     void slotSetColorButton(const QColor &_color);
     void slotSetBackgroundColor(const QColor &_color);
@@ -688,7 +688,7 @@ public:
     int bottom;
 
 
-public slots:
+public Q_SLOTS:
     void slotApply();
 
 protected:

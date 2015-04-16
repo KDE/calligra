@@ -397,6 +397,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
+    setAttribute(Qt::WA_DeleteOnClose);
     kexiTester() << KexiTestObject(this);
 
     if (d->userMode)
@@ -1210,8 +1211,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     if (d->action_tools_data_import)
         d->action_tools_data_import->setEnabled(d->prj && !readOnly);
     d->action_project_export_data_table->setEnabled(
-        currentWindow() && currentWindow()->part()->info()->isDataExportSupported()
-        && !currentWindow()->neverSaved());
+        currentWindow() && currentWindow()->part()->info()->isDataExportSupported());
     if (d->action_edit_paste_special_data_table)
         d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
@@ -2996,9 +2996,24 @@ QWidget* KexiMainWindow::findWindow(QWidget *w)
     return w;
 }
 
+KexiWindow* KexiMainWindow::openedWindowFor(int identifier)
+{
+    return d->openedWindowFor(identifier);
+}
+
 KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item)
 {
-    return item ? d->openedWindowFor(item->identifier()) : 0;
+    return item ? openedWindowFor(item->identifier()) : 0;
+}
+
+KexiDB::QuerySchema* KexiMainWindow::unsavedQuery(int queryId)
+{
+    KexiWindow * queryWindow = openedWindowFor(queryId);
+    if (!queryWindow || !queryWindow->isDirty()) {
+        return 0;
+    }
+
+    return queryWindow->part()->currentQuery(queryWindow->viewForMode(Kexi::DataViewMode));
 }
 
 QList<QVariant> KexiMainWindow::currentParametersForQuery(int queryId) const
@@ -3679,10 +3694,14 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
 {
     if (!item)
         return false;
-//! @todo: check if changes to this are saved, if not: ask for saving
-//! @todo: accept record changes...
 
     QMap<QString, QString> args;
+
+    if (!checkForDirtyFlagOnExport(item, &args)) {
+            return false;
+    }
+
+    //! @todo: accept record changes...
     args.insert("destinationType", "file");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -3692,6 +3711,63 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
     int result = dlg->exec();
     delete dlg;
     return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
+}
+
+bool KexiMainWindow::checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args)
+{
+    //! @todo: handle tables
+    if (item->partClass() != "org.kexi-project.query") {
+        return true;
+    }
+
+    KexiWindow * itemWindow = openedWindowFor(item);
+    if (itemWindow && itemWindow->isDirty()) {
+        tristate result;
+        if (item->neverSaved()) {
+            result = true;
+        } else {
+            int prevWindowId = 0;
+            if (!itemWindow->isVisible()) {
+                prevWindowId = currentWindow()->id();
+                activateWindow(itemWindow->id());
+            }
+            result = askOnExportingChangedQuery(item);
+
+            if (prevWindowId != 0) {
+                activateWindow(prevWindowId);
+            }
+        }
+
+        if (~result) {
+            return false;
+        } else if (true == result) {
+            args->insert("useTempQuery","1");
+        }
+    }
+
+    return true;
+}
+
+tristate KexiMainWindow::askOnExportingChangedQuery(KexiPart::Item *item) const
+{
+    int result = KMessageBox::warningYesNoCancel(const_cast<KexiMainWindow*>(this),
+        i18nc("@info", "Design of query <resource>%1</resource> that you want to export data"
+                                         " from is changed and has not yet been saved. Do you want to use data"
+                                         " from the changed query for exporting or from its original (saved)"
+                                         " version?", item->captionOrName()),
+        QString(),
+        KGuiItem(i18nc("Export query data", "Use the Changed Query")),
+        KGuiItem(i18nc("Export query data", "Use the Original Query")),
+        KStandardGuiItem::cancel(),
+        QString(),
+        KMessageBox::Notify | KMessageBox::Dangerous);
+    if (result == KMessageBox::Yes) {
+        return true;
+    } else if (result == KMessageBox::No) {
+        return false;
+    }
+
+    return cancelled;
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
@@ -3882,6 +3958,11 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
         return false;
 
     QMap<QString, QString> args;
+
+    if (!checkForDirtyFlagOnExport(item, &args)) {
+            return false;
+    }
+
     args.insert("destinationType", "clipboard");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(

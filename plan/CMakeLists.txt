@@ -7,16 +7,16 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KPLATO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 if (KDEPIMLIBS_FOUND)
-    MATH(EXPR KDEPIMLIBS_HEXVERSION "${KDEPIMLIBS_VERSION_MAJOR}*65536 +  ${KDEPIMLIBS_VERSION_MINOR}*256  + ${KDEPIMLIBS_VERSION_PATCH}")
+    math(EXPR KDEPIMLIBS_HEXVERSION "${KDEPIMLIBS_VERSION_MAJOR}*65536 +  ${KDEPIMLIBS_VERSION_MINOR}*256  + ${KDEPIMLIBS_VERSION_PATCH}")
     add_definitions(-DPLAN_KDEPIMLIBS_FOUND -DPLAN_KDEPIMLIBS_HEXVERSION=${KDEPIMLIBS_HEXVERSION})
-endif (KDEPIMLIBS_FOUND)
+endif ()
 
 if (PLANCHARTDEBUG)
     add_definitions(-DPLAN_CHART_DEBUG)
-endif (PLANCHARTDEBUG)
+endif ()
 
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
@@ -118,7 +118,7 @@ install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 if(NOT RELEASE_BUILD)
     add_definitions(-DMAINTANER_WANTED_SPLASH)
-endif(NOT RELEASE_BUILD)
+endif()
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
@@ -130,7 +130,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan")
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligraplan komain)
 

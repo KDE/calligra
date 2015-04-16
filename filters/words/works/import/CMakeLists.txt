@@ -22,4 +22,4 @@ install(FILES calligra_filter_wps2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES words_wps_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()

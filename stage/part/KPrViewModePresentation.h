@@ -28,7 +28,6 @@
 class QWidget;
 class KPrPresentationTool;
 class KPrPresenterViewWidget;
-class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
 class KPrView;
 
@@ -124,7 +123,7 @@ public:
      */
     bool isActivated();
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted when the presentation is activated.
