@@ -11,9 +11,9 @@ set(ascii2words_PART_SRCS
 )
 ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
 add_library(calligra_filter_ascii2words MODULE ${ascii2words_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_ascii2words calligra_filter_ascii2words.desktop)
 target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate)
 install(TARGETS calligra_filter_ascii2words DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install( FILES calligra_filter_ascii2words.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
 
