@@ -17,4 +17,4 @@ install(TARGETS calligra_filter_karbon2image  DESTINATION ${CALLIGRA_PLUGIN_INST
 
 ########### install files ###############
 
-install( FILES  calligra_filter_karbon2png.desktop calligra_filter_karbon2jpg.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  calligra_filter_karbon2image.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

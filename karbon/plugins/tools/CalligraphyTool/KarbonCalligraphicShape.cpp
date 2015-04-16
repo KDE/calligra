@@ -338,9 +338,14 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex,
 {
     QPointF p1 = m_points[index1]->point();
     QPointF p2 = m_points[index2]->point();
-    qreal width = m_points[index2]->width();
 
-    QPointF direction = QLineF(QPointF(0, 0), p2 - p1).unitVector().p2();
+    // TODO: review why spikes can appear with a lower limit
+    QPointF delta = p2 - p1;
+    if (delta.manhattanLength() < 1.0)
+        return;
+
+    QPointF direction = QLineF(QPointF(0, 0), delta).unitVector().p2();
+    qreal width = m_points[index2]->width();
     QPointF p = p2 + direction * m_caps * width;
 
     KoPathPoint * newPoint = new KoPathPoint(this, p);

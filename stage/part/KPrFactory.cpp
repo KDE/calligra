@@ -86,7 +86,6 @@ const KComponentData &KPrFactory::componentData()
 
 // QT5TODO: this needs a new approach
 //         s_instance->dirs()->addResourceType("stage_template", "data", "stage/templates/");
-//         s_instance->dirs()->addResourceType("slideshow", "data", "stage/slideshow/");
 //         s_instance->dirs()->addResourceType("styles", "data", "stage/styles/");
     }
     return *s_instance;

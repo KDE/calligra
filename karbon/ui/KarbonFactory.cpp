@@ -75,11 +75,7 @@ const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
         // Add any application-specific resource directories here
 
         KGlobal::dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-        KGlobal::dirs()->addResourceType("kis_pattern", "data", "krita/patterns/");
-        KGlobal::dirs()->addResourceType("karbon_gradient", "data", "krita/gradients/");
-        KGlobal::dirs()->addResourceType("karbon_clipart", "data", "karbon/cliparts/");
         KGlobal::dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
-        KGlobal::dirs()->addResourceType("karbon_effects", "data", "karbon/effects/");
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 

@@ -78,7 +78,6 @@ const KComponentData &Factory::global()
 
 // QT5TODO: this needs a new approach
 //         s_global->dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
-//         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
 //         s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
 //         s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 
