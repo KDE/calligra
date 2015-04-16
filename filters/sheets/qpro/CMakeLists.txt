@@ -16,14 +16,8 @@ set(qpro2sheets_PART_SRCS
 
 add_library(calligra_filter_qpro2sheets MODULE ${qpro2sheets_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligra_filter_qpro2sheets calligra_filter_qpro2sheets.desktop)
 
 target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
 
 install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  calligra_filter_qpro2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
