@@ -116,7 +116,7 @@ endif()
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/*-apps-calligraplan.png")
 ecm_add_app_icon(calligraplan_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
