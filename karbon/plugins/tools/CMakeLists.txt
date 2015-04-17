@@ -49,4 +49,12 @@ target_link_libraries(karbon_tools karboncommon karbonui kowidgets)
 
 install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-ecm_install_icons( ${KDE_INSTALL_DATADIR}/calligra/icons  )
+ecm_install_icons( ICONS
+    22-actions-calligraphy.png
+    22-actions-gradient.png
+    22-actions-pattern.png
+    32-actions-tool_imageeffects.png
+
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME hicolor
+)
