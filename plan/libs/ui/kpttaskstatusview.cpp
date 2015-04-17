@@ -56,18 +56,18 @@
 #include <klocale.h>
 #include <kcalendarsystem.h>
 
-#include "KDChartChart"
-#include "KDChartAbstractCoordinatePlane"
-#include "KDChartBarDiagram"
-#include "KDChartLineDiagram"
-#include "KDChartCartesianAxis"
-#include "KDChartCartesianCoordinatePlane"
-#include "KDChartLegend"
-#include "KDChartBackgroundAttributes"
-#include "KDChartGridAttributes"
+#include <KChartChart>
+#include <KChartAbstractCoordinatePlane>
+#include <KChartBarDiagram>
+#include <KChartLineDiagram>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartLegend>
+#include <KChartBackgroundAttributes>
+#include <KChartGridAttributes>
 
 
-using namespace KDChart;
+using namespace KChart;
 
 namespace KPlato
 {

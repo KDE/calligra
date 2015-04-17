@@ -31,8 +31,8 @@
 #include <QColor>
 #include <QPen>
 
-#include "KDChartGlobal"
-#include "KDChartPalette"
+#include <KChartGlobal>
+#include <KChartPalette>
 
 
 namespace KPlato
@@ -202,9 +202,9 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
             result = QBrush( Qt::red );
         }
         return result;
-    }  else if ( role == KDChart::DatasetBrushRole ) {
+    }  else if ( role == KChart::DatasetBrushRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
-    }  else if ( role == KDChart::DatasetPenRole ) {
+    }  else if ( role == KChart::DatasetPenRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
     //kDebug(planDbg())<<index<<role<<result;
@@ -277,13 +277,13 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
             }
         }
 #endif
-    }  else if ( role == KDChart::DatasetBrushRole ) {
+    }  else if ( role == KChart::DatasetBrushRole ) {
         if ( orientation == Qt::Horizontal ) {
-            return KDChart::Palette::defaultPalette().getBrush( section );
+            return KChart::Palette::defaultPalette().getBrush( section );
         }
-    }  else if ( role == KDChart::DatasetPenRole ) {
+    }  else if ( role == KChart::DatasetPenRole ) {
         QPen p;
-        p.setBrush( headerData( section, orientation, KDChart::DatasetBrushRole ).value<QBrush>() );
+        p.setBrush( headerData( section, orientation, KChart::DatasetBrushRole ).value<QBrush>() );
         result = p;
         //kDebug(planDbg())<<section<<"DatasetPenRole"<<result;
         return result;

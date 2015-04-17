@@ -33,7 +33,7 @@
 
 #include <QSplitter>
 
-#include "KDChartBarDiagram"
+#include <KChartBarDiagram>
 
 
 class QItemSelection;
@@ -42,7 +42,7 @@ class KoDocument;
 class KoPageLayoutWidget;
 class PrintingHeaderFooter;
 
-namespace KDChart
+namespace KChart
 {
     class CartesianCoordinatePlane;
     class CartesianAxis;
@@ -311,18 +311,18 @@ private:
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     
-        KDChart::CartesianCoordinatePlane *effortplane;
-        KDChart::CartesianCoordinatePlane *costplane;
-        KDChart::AbstractDiagram *effortdiagram;
-        KDChart::AbstractDiagram *costdiagram;
-        KDChart::CartesianAxis *effortaxis;
-        KDChart::CartesianAxis *costaxis;
-        KDChart::CartesianAxis *dateaxis;
+        KChart::CartesianCoordinatePlane *effortplane;
+        KChart::CartesianCoordinatePlane *costplane;
+        KChart::AbstractDiagram *effortdiagram;
+        KChart::AbstractDiagram *costdiagram;
+        KChart::CartesianAxis *effortaxis;
+        KChart::CartesianAxis *costaxis;
+        KChart::CartesianAxis *dateaxis;
 
         ChartProxyModel piproxy;
-        KDChart::CartesianCoordinatePlane *piplane;
-        KDChart::AbstractDiagram *pidiagram;
-        KDChart::CartesianAxis *piaxis;
+        KChart::CartesianCoordinatePlane *piplane;
+        KChart::AbstractDiagram *pidiagram;
+        KChart::CartesianAxis *piaxis;
     };
     void setupChart( ChartContents &cc );
 
@@ -332,8 +332,8 @@ private:
     PerformanceChartInfo m_chartinfo;
 
     ChartItemModel m_chartmodel;
-    KDChart::Legend *m_legend;
-    KDChart::BarDiagram m_legenddiagram;
+    KChart::Legend *m_legend;
+    KChart::BarDiagram m_legenddiagram;
     struct ChartContents m_barchart;
     struct ChartContents m_linechart;
 };

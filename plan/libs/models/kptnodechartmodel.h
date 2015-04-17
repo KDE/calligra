@@ -30,7 +30,7 @@
 
 #include "kptdebug.h"
 
-#include "KDChartGlobal"
+#include <KChartGlobal>
 
 namespace KPlato
 {
