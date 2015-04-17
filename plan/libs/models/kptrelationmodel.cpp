@@ -35,8 +35,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <kdganttglobal.h>
-
 
 namespace KPlato
 {

@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "kdganttglobal.h"
+#include <KGanttGlobal>
 
 
 namespace KPlato
@@ -1935,9 +1935,9 @@ QVariant ResourceAppointmentsGanttModel::data( const ResourceGroup *g, int colum
 {
     Q_UNUSED(column);
     switch( role ) {
-        case KDGantt::ItemTypeRole: return KDGantt::TypeSummary;
-        case KDGantt::StartTimeRole: return g->startTime( id() );
-        case KDGantt::EndTimeRole: return g->endTime( id() );
+        case KGantt::ItemTypeRole: return KGantt::TypeSummary;
+        case KGantt::StartTimeRole: return g->startTime( id() );
+        case KGantt::EndTimeRole: return g->endTime( id() );
     }
     return QVariant();
 }
@@ -1946,9 +1946,9 @@ QVariant ResourceAppointmentsGanttModel::data( const Resource *r, int column, in
 {
     Q_UNUSED(column);
     switch( role ) {
-        case KDGantt::ItemTypeRole: return KDGantt::TypeSummary;
-        case KDGantt::StartTimeRole: return r->startTime( id() );
-        case KDGantt::EndTimeRole: return r->endTime( id() );
+        case KGantt::ItemTypeRole: return KGantt::TypeSummary;
+        case KGantt::StartTimeRole: return r->startTime( id() );
+        case KGantt::EndTimeRole: return r->endTime( id() );
     }
     return QVariant();
 }
@@ -1957,9 +1957,9 @@ QVariant ResourceAppointmentsGanttModel::data( const Appointment *a, int column,
 {
     Q_UNUSED(column);
     switch( role ) {
-        case KDGantt::ItemTypeRole: return KDGantt::TypeMulti;
-        case KDGantt::StartTimeRole: return a->startTime();
-        case KDGantt::EndTimeRole: return a->endTime();
+        case KGantt::ItemTypeRole: return KGantt::TypeMulti;
+        case KGantt::StartTimeRole: return a->startTime();
+        case KGantt::EndTimeRole: return a->endTime();
     }
     return QVariant();
 }
@@ -1968,9 +1968,9 @@ QVariant ResourceAppointmentsGanttModel::data( const AppointmentInterval *a, int
 {
     Q_UNUSED(column);
     switch( role ) {
-        case KDGantt::ItemTypeRole: return KDGantt::TypeTask;
-        case KDGantt::StartTimeRole: return a->startTime();
-        case KDGantt::EndTimeRole: return a->endTime();
+        case KGantt::ItemTypeRole: return KGantt::TypeTask;
+        case KGantt::StartTimeRole: return a->startTime();
+        case KGantt::EndTimeRole: return a->endTime();
     }
     return QVariant();
 }
@@ -1981,10 +1981,10 @@ QVariant ResourceAppointmentsGanttModel::data( const QModelIndex &index, int rol
     if ( m_project == 0 || ! index.isValid() ) {
         return QVariant();
     }
-    if ( role == KDGantt::ItemTypeRole ||
-         role == KDGantt::StartTimeRole ||
-         role == KDGantt::EndTimeRole ||
-         role == KDGantt::TaskCompletionRole )
+    if ( role == KGantt::ItemTypeRole ||
+         role == KGantt::StartTimeRole ||
+         role == KGantt::EndTimeRole ||
+         role == KGantt::TaskCompletionRole )
     {
         if ( ResourceGroup *g = resourcegroup( index ) ) {
             return data( g, index.column(), role );

@@ -971,18 +971,18 @@ void DependencyNodeItem::paintTreeIndicator( bool on )
 void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 {
     m_nodetype = type;
-    m_itemtype = KDGantt::TypeNone;
+    m_itemtype = KGantt::TypeNone;
     QPainterPath p;
     switch ( type ) {
         case Node::Type_Summarytask:
-            m_itemtype = KDGantt::TypeSummary;
+            m_itemtype = KGantt::TypeSummary;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.left() + rect.width() / 2.0, rect.bottom() );
             p.closeSubpath();
             break;
         case Node::Type_Task:
-            m_itemtype = KDGantt::TypeTask;
+            m_itemtype = KGantt::TypeTask;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.bottomRight() );
@@ -990,7 +990,7 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
             p.closeSubpath();
             break;
         case Node::Type_Milestone:
-            m_itemtype = KDGantt::TypeEvent;
+            m_itemtype = KGantt::TypeEvent;
             p.moveTo( rect.left() + ( rect.width() / 2.0 ), rect.top() );
             p.lineTo( rect.right(), rect.top() + ( rect.height() / 2.0 ) );
             p.lineTo( rect.left() + ( rect.width() / 2.0 ), rect.bottom() );

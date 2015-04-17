@@ -34,12 +34,12 @@
 #include "kptresourceappointmentsmodel.h"
 #include "kptdebug.h"
 
-#include <kdganttproxymodel.h>
-#include <kdganttconstraintmodel.h>
-#include <kdganttconstraint.h>
-#include <kdganttdatetimegrid.h>
-#include <kdganttgraphicsview.h>
-#include <kdgantttreeviewrowcontroller.h>
+#include <KGanttProxyModel>
+#include <KGanttConstraintModel>
+#include <KGanttConstraint>
+#include <KGanttDateTimeGrid>
+#include <KGanttGraphicsView>
+#include <KGanttTreeViewRowController>
 
 #include <KoDocument.h>
 #include <KoPageLayoutWidget.h>
@@ -59,8 +59,8 @@
 #include <kglobal.h>
 #include <ktoggleaction.h>
 
-#include "kdganttglobal.h"
-#include "kdganttstyleoptionganttitem.h"
+#include <KGanttGlobal>
+#include <KGanttStyleOptionGanttItem>
 
 
 /// The main namespace
@@ -207,8 +207,9 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     m_gantt( gantt ),
     m_options( 0 )
 {
-    m_headerHeight = gantt->graphicsView()->headerHeight();
-    m_sceneRect = m_gantt->printRect();
+    // QT5TODO
+    m_headerHeight = 0;//gantt->graphicsView()->headerHeight();
+    m_sceneRect = QRectF();//m_gantt->printRect();
     m_horPages = 1;
     qreal c = m_sceneRect.width() - printer().pageRect().width();
     while ( c > 0 ) {
@@ -291,7 +292,8 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
         kDebug(planDbg())<<p<<hor<<vert<<sourceRect;
     }
     painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
-    m_gantt->print( &painter, pageRect, sourceRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
+    // QT5TODO
+//     m_gantt->print( &painter, pageRect, sourceRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
 }
 
 //---------------------
@@ -319,11 +321,11 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 
 //-------------------------------------------
 GanttViewBase::GanttViewBase( QWidget *parent )
-    : KDGantt::View( parent )
+    : KGantt::View( parent )
 {
     const KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
 
         // ISO Week numbering always uses Monday as first day of week
         const int firstWeekDay = (locale->weekNumberSystem() == KLocale::IsoWeekNumber)
@@ -351,15 +353,15 @@ GanttTreeView *GanttViewBase::treeView() const
 
 bool GanttViewBase::loadContext( const KoXmlElement &settings )
 {
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
-    g->setScale( static_cast<KDGantt::DateTimeGrid::Scale>( settings.attribute( "chart-scale", "0" ).toInt() ) );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
+    g->setScale( static_cast<KGantt::DateTimeGrid::Scale>( settings.attribute( "chart-scale", "0" ).toInt() ) );
     g->setDayWidth( settings.attribute( "chart-daywidth", "30" ).toDouble() );
     return true;
 }
 
 void GanttViewBase::saveContext( QDomElement &settings ) const
 {
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     settings.setAttribute( "chart-scale", g->scale() );
     settings.setAttribute( "chart-daywidth", g->dayWidth() );
 }
@@ -377,12 +379,12 @@ NodeGanttViewBase::NodeGanttViewBase( QWidget *parent )
     tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     setLeftView( tv );
-    m_rowController = new KDGantt::TreeViewRowController( tv, ganttProxyModel() );
+    m_rowController = new KGantt::TreeViewRowController( tv, ganttProxyModel() );
     setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
 
     NodeSortFilterProxyModel *m = new NodeSortFilterProxyModel( &m_defaultModel, this );
-    KDGantt::View::setModel( m );
+    KGantt::View::setModel( m );
 }
 
 NodeGanttViewBase::~NodeGanttViewBase()
@@ -392,7 +394,7 @@ NodeGanttViewBase::~NodeGanttViewBase()
 
 NodeSortFilterProxyModel *NodeGanttViewBase::sfModel() const
 {
-    return static_cast<NodeSortFilterProxyModel*>( KDGantt::View::model() );
+    return static_cast<NodeSortFilterProxyModel*>( KGantt::View::model() );
 }
 
 void NodeGanttViewBase::setItemModel( ItemModelBase *model )
@@ -459,11 +461,11 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
 }
 
 //-------------------------------------------
-MyKDGanttView::MyKDGanttView( QWidget *parent )
+MyKGanttView::MyKGanttView( QWidget *parent )
     : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
-    kDebug(planDbg())<<"------------------- create MyKDGanttView -----------------------";
+    kDebug(planDbg())<<"------------------- create MyKGanttView -----------------------";
     GanttItemModel *gm = new GanttItemModel( this );
     setItemModel( gm );
     treeView()->createItemDelegates( gm );
@@ -481,19 +483,19 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
         }
     }
 
-    setConstraintModel( new KDGantt::ConstraintModel( this ) );
-    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
+    setConstraintModel( new KGantt::ConstraintModel( this ) );
+    KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( ganttProxyModel() );
 
-    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
-    m->setRole( KDGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
-    m->setRole( KDGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
+    m->setRole( KGantt::ItemTypeRole, KGantt::ItemTypeRole ); // To provide correct format
+    m->setRole( KGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
+    m->setRole( KGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
 
-    m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
-    m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
-    m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
-    m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
+    m->setColumn( KGantt::ItemTypeRole, NodeModel::NodeType );
+    m->setColumn( KGantt::StartTimeRole, NodeModel::NodeStartTime );
+    m->setColumn( KGantt::EndTimeRole, NodeModel::NodeEndTime );
+    m->setColumn( KGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
     // FIXME: improve/cover all options
     QMap<QString, QString> format;
@@ -501,17 +503,18 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     format.insert( "%k", "H" );
     format.insert( "%I", "HH A" );
     format.insert( "%l", "h a" );
-    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
+    // QT5TODO
+//     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 
     connect( model(), SIGNAL(nodeInserted(Node*)), this, SLOT(slotNodeInserted(Node*)) );
 }
 
-GanttItemModel *MyKDGanttView::model() const
+GanttItemModel *MyKGanttView::model() const
 {
     return static_cast<GanttItemModel*>( NodeGanttViewBase::model() );
 }
 
-void MyKDGanttView::setProject( Project *proj )
+void MyKGanttView::setProject( Project *proj )
 {
     clearDependencies();
     if ( project() ) {
@@ -533,18 +536,18 @@ void MyKDGanttView::setProject( Project *proj )
     createDependencies();
 }
 
-void MyKDGanttView::slotProjectCalculated( ScheduleManager *sm )
+void MyKGanttView::slotProjectCalculated( ScheduleManager *sm )
 {
     if ( m_manager == sm ) {
         setScheduleManager( sm );
     }
 }
 
-void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
+void MyKGanttView::setScheduleManager( ScheduleManager *sm )
 {
     clearDependencies();
     m_manager = sm;
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     if ( sm && project() ) {
         QDateTime start = project()->startTime( sm->scheduleId() ).addDays( -1 );
         if ( g->startDateTime() !=  start ) {
@@ -558,7 +561,7 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
     createDependencies();
 }
 
-void MyKDGanttView::slotNodeInserted( Node *node )
+void MyKGanttView::slotNodeInserted( Node *node )
 {
     foreach( Relation *r, node->dependChildNodes() ) {
         addDependency( r );
@@ -568,14 +571,14 @@ void MyKDGanttView::slotNodeInserted( Node *node )
     }
 }
 
-void MyKDGanttView::addDependency( Relation *rel )
+void MyKGanttView::addDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
 //    kDebug(planDbg())<<"addDependency() "<<model()<<par.model();
     if ( par.isValid() && ch.isValid() ) {
-        KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft,
-                                 static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
+        KGantt::Constraint con( par, ch, KGantt::Constraint::TypeSoft,
+                                 static_cast<KGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
                                );
         if ( ! constraintModel()->hasConstraint( con ) ) {
             constraintModel()->addConstraint( con );
@@ -583,22 +586,22 @@ void MyKDGanttView::addDependency( Relation *rel )
     }
 }
 
-void MyKDGanttView::removeDependency( Relation *rel )
+void MyKGanttView::removeDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
-    KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft,
-                             static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
+    KGantt::Constraint con( par, ch, KGantt::Constraint::TypeSoft,
+                             static_cast<KGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
                            );
     constraintModel()->removeConstraint( con );
 }
 
-void MyKDGanttView::clearDependencies()
+void MyKGanttView::clearDependencies()
 {
     constraintModel()->clear();
 }
 
-void MyKDGanttView::createDependencies()
+void MyKGanttView::createDependencies()
 {
     clearDependencies();
     if ( project() == 0 || m_manager == 0 ) {
@@ -625,7 +628,7 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
     l->addWidget( m_splitter );
     m_splitter->setOrientation( Qt::Vertical );
 
-    m_gantt = new MyKDGanttView( m_splitter );
+    m_gantt = new MyKGanttView( m_splitter );
 
     setupGui();
 
@@ -808,7 +811,7 @@ void GanttView::saveContext( QDomElement &settings ) const
 
 void GanttView::updateReadWrite( bool on )
 {
-    // TODO: KDGanttView needs read/write mode
+    // TODO: KGanttView needs read/write mode
     m_readWrite = on;
 }
 
@@ -839,11 +842,11 @@ void MilestoneGanttViewSettingsDialog::slotOk()
 }
 
 //------------------------
-MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
+MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
-    kDebug(planDbg())<<"------------------- create MilestoneKDGanttView -----------------------";
+    kDebug(planDbg())<<"------------------- create MilestoneKGanttView -----------------------";
     MilestoneItemModel *mm = new MilestoneItemModel( this );
     setItemModel( mm );
     treeView()->createItemDelegates( mm );
@@ -864,18 +867,18 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     }
     treeView()->setRootIsDecorated ( false );
 
-    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
+    KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( ganttProxyModel() );
 
-    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
-    m->setRole( KDGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
-    m->setRole( KDGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
+    m->setRole( KGantt::ItemTypeRole, KGantt::ItemTypeRole ); // To provide correct format
+    m->setRole( KGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
+    m->setRole( KGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
 
-    m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
-    m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
-    m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
-    m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
+    m->setColumn( KGantt::ItemTypeRole, NodeModel::NodeType );
+    m->setColumn( KGantt::StartTimeRole, NodeModel::NodeStartTime );
+    m->setColumn( KGantt::EndTimeRole, NodeModel::NodeEndTime );
+    m->setColumn( KGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
     // FIXME: improve/cover all options
     QMap<QString, QString> format;
@@ -883,15 +886,16 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     format.insert( "%k", "H" );
     format.insert( "%I", "HH A" );
     format.insert( "%l", "h a" );
-    g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
+    // QT5TODO
+//     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 }
 
-MilestoneItemModel *MilestoneKDGanttView::model() const
+MilestoneItemModel *MilestoneKGanttView::model() const
 {
     return static_cast<MilestoneItemModel*>( NodeGanttViewBase::model() );
 }
 
-void MilestoneKDGanttView::setProject( Project *proj )
+void MilestoneKGanttView::setProject( Project *proj )
 {
     if ( project() ) {
         disconnect( project(), SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
@@ -902,19 +906,19 @@ void MilestoneKDGanttView::setProject( Project *proj )
     }
 }
 
-void MilestoneKDGanttView::slotProjectCalculated( ScheduleManager *sm )
+void MilestoneKGanttView::slotProjectCalculated( ScheduleManager *sm )
 {
     if ( m_manager == sm ) {
         setScheduleManager( sm );
     }
 }
 
-void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
+void MilestoneKGanttView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug(planDbg())<<id<<endl;
     model()->setScheduleManager( 0 );
     m_manager = sm;
-    KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     if ( sm && m_project ) {
         QDateTime start;
         foreach ( const Node *n, model()->mileStones() ) {
@@ -958,7 +962,7 @@ MilestoneGanttView::MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *p
 
     setupGui();
 
-    m_gantt = new MilestoneKDGanttView( m_splitter );
+    m_gantt = new MilestoneKGanttView( m_splitter );
 
     m_showTaskName = false; // FIXME
     m_showProgress = false; //FIXME
@@ -1112,16 +1116,16 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     m_gantt->setLeftView( tv );
-    m_rowController = new KDGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() );
+    m_rowController = new KGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() );
     m_gantt->setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
 
 
-    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
-    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
-    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
-    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
-    m->setRole( KDGantt::TaskCompletionRole, KDGantt::TaskCompletionRole );
+    KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
+    m->setRole( KGantt::ItemTypeRole, KGantt::ItemTypeRole );
+    m->setRole( KGantt::StartTimeRole, KGantt::StartTimeRole );
+    m->setRole( KGantt::EndTimeRole, KGantt::EndTimeRole );
+    m->setRole( KGantt::TaskCompletionRole, KGantt::TaskCompletionRole );
 
     m_gantt->setModel( m_model );
 
@@ -1156,7 +1160,7 @@ Project *ResourceAppointmentsGanttView::project() const
 
 void ResourceAppointmentsGanttView::setProject( Project *project )
 {
-    static_cast<KDGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime() );
+    static_cast<KGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime() );
     m_model->setProject( project );
 }
 

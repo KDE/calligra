@@ -31,17 +31,17 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-#include "kdganttglobal.h"
-#include "kdganttstyleoptionganttitem.h"
-#include "kdganttconstraint.h"
-#include "kdganttabstractgrid.h"
+#include <KGanttGlobal>
+#include <KGanttStyleOptionGanttItem>
+#include <KGanttConstraint>
+#include <KGanttAbstractGrid>
 
 /// The main namespace
 namespace KPlato
 {
 
 GanttItemDelegate::GanttItemDelegate( QObject *parent )
-    : KDGantt::ItemDelegate( parent ),
+    : KGantt::ItemDelegate( parent ),
     showResources( false ),
     showTaskName( true ),
     showTaskLinks( true ),
@@ -99,7 +99,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                     data( idx, NodeModel::NodeStatus, Qt::DisplayRole ).toString() );
     }
     // Planned
-    KDGantt::StyleOptionGanttItem opt;
+    KGantt::StyleOptionGanttItem opt;
     int typ = data( idx, NodeModel::NodeType, Qt::EditRole ).toInt();
     switch ( typ ) {
         case Node::Type_Task: {
@@ -235,7 +235,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
     if ( showTaskName ) {
         txt = data( idx, NodeModel::NodeName, Qt::DisplayRole ).toString();
     }
-    if ( type == KDGantt::TypeTask && showResources ) {
+    if ( type == KGantt::TypeTask && showResources ) {
         if ( ! txt.isEmpty() ) {
             txt += ' ';
         }
@@ -245,7 +245,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
     return txt;
 }
 
-QRectF GanttItemDelegate::itemPositiveFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+QRectF GanttItemDelegate::itemPositiveFloatRect( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     QRectF r;
     double fl = data( idx, NodeModel::NodePositiveFloat, Qt::EditRole ).toDouble();
@@ -265,7 +265,7 @@ QRectF GanttItemDelegate::itemPositiveFloatRect( const KDGantt::StyleOptionGantt
     return r;
 }
 
-QRectF GanttItemDelegate::itemNegativeFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+QRectF GanttItemDelegate::itemNegativeFloatRect( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     QRectF r;
     double fl = data( idx, NodeModel::NodeNegativeFloat, Qt::EditRole ).toDouble();
@@ -297,7 +297,7 @@ bool GanttItemDelegate::hasStartConstraint( const QModelIndex& idx ) const
     return false;
 }
 
-QRectF GanttItemDelegate::itemStartConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+QRectF GanttItemDelegate::itemStartConstraintRect( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     QRectF r;
     QDateTime dt;
@@ -331,7 +331,7 @@ bool GanttItemDelegate::hasEndConstraint( const QModelIndex& idx ) const
     return false;
 }
 
-QRectF GanttItemDelegate::itemEndConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+QRectF GanttItemDelegate::itemEndConstraintRect( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     QRectF r;
     QDateTime dt;
@@ -353,15 +353,15 @@ QRectF GanttItemDelegate::itemEndConstraintRect( const KDGantt::StyleOptionGantt
     return r;
 }
 
-KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+KGantt::Span GanttItemDelegate::itemBoundingSpan( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     //kDebug(planDbg())<<opt<<idx;
-    if ( !idx.isValid() ) return KDGantt::Span();
+    if ( !idx.isValid() ) return KGantt::Span();
 
     QRectF optRect = opt.itemRect;
     QRectF itemRect = opt.itemRect;
 
-    int typ = idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt();
+    int typ = idx.model()->data( idx, KGantt::ItemTypeRole ).toInt();
     QString txt = itemText( idx, typ );
     int tw = 0;
     if ( ! txt.isEmpty() ) {
@@ -392,29 +392,29 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     }
     if ( idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt() > 0 ) {
         itemRect = itemRect.united( QRectF( opt.rect.left()-itemRect.height()/4., itemRect.top(), itemRect.height()/2., itemRect.height() ) );
-    } else if (  typ == KDGantt::TypeEvent ) {
+    } else if (  typ == KGantt::TypeEvent ) {
         optRect = QRectF( opt.rect.left()-itemRect.height()/2., itemRect.top(), itemRect.height(), itemRect.height() );
         itemRect = itemRect.united( optRect );
     }
     switch ( opt.displayPosition ) {
-        case KDGantt::StyleOptionGanttItem::Left:
+        case KGantt::StyleOptionGanttItem::Left:
             itemRect = itemRect.united( optRect.adjusted( -tw, 0.0, 0.0, 0.0 ) );
             break;
-        case KDGantt::StyleOptionGanttItem::Right:
+        case KGantt::StyleOptionGanttItem::Right:
             itemRect = itemRect.united( optRect.adjusted( 0.0, 0.0, tw, 0.0 ) );
             break;
-        case KDGantt::StyleOptionGanttItem::Center:
+        case KGantt::StyleOptionGanttItem::Center:
             if ( optRect.width() < tw ) {
                 itemRect = itemRect.united( optRect.adjusted( 0.0, 0.0, tw - optRect.width(), 0.0 ) );
             }
             break;
     }
-    return KDGantt::Span( itemRect.left(), itemRect.width() );
+    return KGantt::Span( itemRect.left(), itemRect.width() );
 }
 
 /*! Paints the gantt item \a idx using \a painter and \a opt
  */
-void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
 {
     if ( !idx.isValid() ) return;
 
@@ -422,7 +422,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
     if ( specialtype > 0 ) {
         return paintSpecialItem( painter, opt, idx, specialtype );
     }
-    const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
+    const KGantt::ItemType typ = static_cast<KGantt::ItemType>( idx.model()->data( idx, KGantt::ItemTypeRole ).toInt() );
 
     QString txt = itemText( idx, typ );
     QRectF itemRect = opt.itemRect;
@@ -438,10 +438,10 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
     if ( ! txt.isEmpty() ) {
         int tw = opt.fontMetrics.width( txt ) + static_cast<int>( itemRect.height()/1.5 );
         switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left:
+            case KGantt::StyleOptionGanttItem::Left:
                 textRect.adjust( -tw, 0.0, 0.0, 0.0 );
                 break;
-            case KDGantt::StyleOptionGanttItem::Right:
+            case KGantt::StyleOptionGanttItem::Right:
                 textRect.adjust( 0.0, 0.0, tw, 0.0 );
                 break;
             default:
@@ -456,7 +456,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 
     qreal pw = painter->pen().width()/2.;
     switch( typ ) {
-    case KDGantt::TypeTask:
+    case KGantt::TypeTask:
         if ( itemRect.isValid() ) {
             pw-=1;
             QRectF r = itemRect;
@@ -516,7 +516,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 
             if ( showProgress ) {
                 bool ok;
-                qreal completion = idx.model()->data( idx, KDGantt::TaskCompletionRole ).toDouble( &ok );
+                qreal completion = idx.model()->data( idx, KGantt::TaskCompletionRole ).toDouble( &ok );
                 if ( ok ) {
                     qreal h = r.height();
                     QRectF cr( r.x(), r.y()+h/4. + 1,
@@ -558,14 +558,14 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             }
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( textRect, ta, txt );
         }
         break;
-    case KDGantt::TypeSummary:
+    case KGantt::TypeSummary:
         if ( opt.itemRect.isValid() ) {
             pw-=1;
             const QRectF r = QRectF( itemRect ).adjusted( -pw, -pw, pw, pw );
@@ -590,14 +590,14 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             painter->restore();
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
         break;
-    case KDGantt::TypeEvent:
+    case KGantt::TypeEvent:
         //kDebug(planDbg()) << opt.boundingRect << opt.itemRect;
         if ( opt.boundingRect.isValid() ) {
             pw-=1;
@@ -705,9 +705,9 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
@@ -720,7 +720,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 
 /*! Paints the gantt item \a idx using \a painter and \a opt
  */
-void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& /*idx*/, int typ )
+void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KGantt::StyleOptionGanttItem& opt, const QModelIndex& /*idx*/, int typ )
 {
     QRectF itemRect = opt.itemRect;
     QRectF boundingRect = opt.boundingRect;
@@ -729,7 +729,7 @@ void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::Styl
 
     painter->save();
 
-    QPen pen = defaultPen( KDGantt::TypeEvent );
+    QPen pen = defaultPen( KGantt::TypeEvent );
     if ( opt.state & QStyle::State_Selected ) pen.setWidth( 2*pen.width() );
     painter->setPen( pen );
 
@@ -807,29 +807,29 @@ void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::Styl
     painter->restore();
 }
 
-void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const  KDGantt::Constraint &constraint )
+void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const  KGantt::Constraint &constraint )
 {
     if ( ! showTaskLinks ) {
         return;
     }
     if ( ! showCriticalPath ) {
-        return KDGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, constraint );
+        return KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, constraint );
     }
-    KDGantt::Constraint c( constraint );
+    KGantt::Constraint c( constraint );
     if ( data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
          data( c.endIndex(), NodeModel::NodeCriticalPath ).toBool() )
     {
         //kDebug(planDbg())<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
         QPen pen( Qt::red );
-        c.setData( KDGantt::Constraint::ValidConstraintPen, pen );
+        c.setData( KGantt::Constraint::ValidConstraintPen, pen );
         // FIXME How to make sure it's not obscured by other constraints?
     }
-    KDGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
+    KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
 }
 
 //------------------------
 ResourceGanttItemDelegate::ResourceGanttItemDelegate( QObject *parent )
-    : KDGantt::ItemDelegate( parent )
+    : KGantt::ItemDelegate( parent )
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
     b.setColorAt( 0., Qt::red );
@@ -850,10 +850,10 @@ QVariant ResourceGanttItemDelegate::data( const QModelIndex& idx, int column, in
 
 /*! Paints the gantt item \a idx using \a painter and \a opt
  */
-void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
 {
     if ( !idx.isValid() ) return;
-    const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
+    const KGantt::ItemType typ = static_cast<KGantt::ItemType>( idx.model()->data( idx, KGantt::ItemTypeRole ).toInt() );
     const QString& txt = opt.text;
     QRectF itemRect = opt.itemRect;
     QRectF boundingRect = opt.boundingRect;
@@ -869,7 +869,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
 
     qreal pw = painter->pen().width()/2.;
     switch( typ ) {
-    case KDGantt::TypeTask:
+    case KGantt::TypeTask:
         if ( itemRect.isValid() ) {
             qreal pw = painter->pen().width()/2.;
             pw-=1;
@@ -888,14 +888,14 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
             painter->restore();
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( boundingRect, ta, txt );
         }
         break;
-    case KDGantt::TypeSummary:
+    case KGantt::TypeSummary:
         if ( idx.data( Role::ObjectType ).toInt() == OT_Resource ) {
             paintResourceItem( painter, opt, idx );
         } else if ( itemRect.isValid() ) {
@@ -920,14 +920,14 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
             painter->restore();
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
         break;
-    case KDGantt::TypeEvent: /* TODO */
+    case KGantt::TypeEvent: /* TODO */
         if ( opt.boundingRect.isValid() ) {
             const qreal pw = painter->pen().width() / 2. - 1;
             const QRectF r = QRectF( opt.rect ).adjusted( -pw, -pw, pw, pw );
@@ -945,9 +945,9 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
             painter->restore();
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
-            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
@@ -958,7 +958,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
     painter->restore();
 }
 
-void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
 {
     if ( ! opt.itemRect.isValid() ) {
         return;
@@ -973,7 +973,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
     r.setHeight( 5.*r.height()/6. );
     painter->setBrushOrigin( opt.itemRect.topLeft() );
 
-    qreal x0 = opt.grid->mapToChart( idx.data( KDGantt::StartTimeRole ).toDateTime() );
+    qreal x0 = opt.grid->mapToChart( idx.data( KGantt::StartTimeRole ).toDateTime() );
 
     Appointment *external = static_cast<Appointment*>( idx.data( Role::ExternalAppointments ).value<void*>() );
     Appointment *internal = static_cast<Appointment*>( idx.data( Role::InternalAppointments ).value<void*>() );
@@ -991,7 +991,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
         } else if ( il < rl ) {
             painter->setBrush( m_underloadBrush );
         } else {
-            painter->setBrush( defaultBrush( KDGantt::TypeTask ) );
+            painter->setBrush( defaultBrush( KGantt::TypeTask ) );
         }
         qreal v1 = opt.grid->mapToChart( i.startTime() );
         qreal v2 = opt.grid->mapToChart( i.endTime() );
@@ -1008,9 +1008,9 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
     painter->restore();
     Qt::Alignment ta;
     switch( opt.displayPosition ) {
-    case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-    case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-    case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+    case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+    case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+    case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
     }
     painter->drawText( boundingRect, ta, opt.text );
 }

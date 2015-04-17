@@ -44,7 +44,8 @@
 #include <krichtextwidget.h>
 #include <kmimetype.h>
 
-#include <kdganttglobal.h>
+#include <KGanttGlobal>
+
 #include <math.h>
 
 
@@ -4229,56 +4230,56 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
         }
         switch ( row ) {
             case 0:  // the task
-                if ( idx.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+                if ( idx.column() == NodeModel::NodeType && role == KGantt::ItemTypeRole ) {
                     switch ( n->type() ) {
-                        case Node::Type_Task: return KDGantt::TypeTask;
+                        case Node::Type_Task: return KGantt::TypeTask;
                         default: break;
                     }
                 }
                 break;
             case 1: { // early start
-                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KGantt::ItemTypeRole ) {
                     return QVariant();
                 }
                 switch ( idx.column() ) {
                     case NodeModel::NodeName: return "Early Start";
-                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeType: return KGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
                     case NodeModel::NodeEndTime: return n->earlyStart( id() );
                     default: break;
                 }
             }
             case 2: { // late finish
-                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KGantt::ItemTypeRole ) {
                     return QVariant();
                 }
                 switch ( idx.column() ) {
                     case NodeModel::NodeName: return "Late Finish";
-                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeType: return KGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
                     case NodeModel::NodeEndTime: return n->lateFinish( id() );
                     default: break;
                 }
             }
             case 3: { // late start
-                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KGantt::ItemTypeRole ) {
                     return QVariant();
                 }
                 switch ( idx.column() ) {
                     case NodeModel::NodeName: return "Late Start";
-                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeType: return KGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
                     case NodeModel::NodeEndTime: return n->lateStart( id() );
                     default: break;
                 }
             }
             case 4: { // early finish
-                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KGantt::ItemTypeRole ) {
                     return QVariant();
                 }
                 switch ( idx.column() ) {
                     case NodeModel::NodeName: return "Early Finish";
-                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeType: return KGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
                     case NodeModel::NodeEndTime: return n->earlyFinish( id() );
                     default: break;
@@ -4291,13 +4292,13 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
         if ( role == SpecialItemTypeRole ) {
             return 0; // task of some type
         }
-        if ( idx.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+        if ( idx.column() == NodeModel::NodeType && role == KGantt::ItemTypeRole ) {
             QVariant result = NodeItemModel::data( idx, Qt::EditRole );
             switch ( result.toInt() ) {
-                case Node::Type_Project: return KDGantt::TypeSummary;
-                case Node::Type_Summarytask: return KDGantt::TypeSummary;
-                case Node::Type_Milestone: return KDGantt::TypeEvent;
-                default: return m_showSpecial ? KDGantt::TypeMulti : KDGantt::TypeTask;
+                case Node::Type_Project: return KGantt::TypeSummary;
+                case Node::Type_Summarytask: return KGantt::TypeSummary;
+                case Node::Type_Milestone: return KGantt::TypeEvent;
+                default: return m_showSpecial ? KGantt::TypeMulti : KGantt::TypeTask;
             }
         }
     }
@@ -4541,12 +4542,12 @@ QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
     }
     Node *n = node( index );
     if ( n != 0 ) {
-        if ( index.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+        if ( index.column() == NodeModel::NodeType && role == KGantt::ItemTypeRole ) {
             result = m_nodemodel.data( n, index.column(), Qt::EditRole );
             switch ( result.toInt() ) {
-                case Node::Type_Summarytask: return KDGantt::TypeSummary;
-                case Node::Type_Milestone: return KDGantt::TypeEvent;
-                default: return KDGantt::TypeTask;
+                case Node::Type_Summarytask: return KGantt::TypeSummary;
+                case Node::Type_Milestone: return KGantt::TypeEvent;
+                default: return KGantt::TypeTask;
             }
             return result;
         }

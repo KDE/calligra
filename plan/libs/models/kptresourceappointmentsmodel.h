@@ -240,7 +240,7 @@ protected:
 };
 
 /**
-    The ResourceAppointmentsGanttModel specialized for use by KDGantt
+    The ResourceAppointmentsGanttModel specialized for use by KGantt
 */
 class KPLATOMODELS_EXPORT ResourceAppointmentsGanttModel : public ResourceAppointmentsRowModel
 {
