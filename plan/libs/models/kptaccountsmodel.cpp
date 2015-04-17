@@ -718,7 +718,7 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
                 int days = startDate().daysInMonth() - startDate().day() + 1;
                 for ( QDate d = startDate(); d < endDate(); d = d.addDays( days ) ) {
                     ++c;
-                    days = qMin( d.daysTo( endDate() ), d.daysInMonth() );
+                    days = qMin( d.daysTo( endDate() ), static_cast<qint64>(d.daysInMonth()) );
                 }
                 break;
             }
