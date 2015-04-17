@@ -1147,15 +1147,15 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
             }
             switch ( log.severity ) {
             case Schedule::Log::Type_Debug:
-                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::darkYellow), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Info:
                 break;
             case Schedule::Log::Type_Warning:
-                itm->setData( Qt::blue, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::blue), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Error:
-                itm->setData( Qt::red, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::red), Qt::ForegroundRole );
                 break;
             default:
                 break;

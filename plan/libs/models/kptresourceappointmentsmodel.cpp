@@ -580,7 +580,7 @@ QVariant ResourceAppointmentsItemModel::name( const Appointment *app, int role )
             return QVariant();
         case Qt::ForegroundRole:
             if ( m_externalEffortMap.contains( app ) ) {
-                return QVariant( Qt::blue );
+                return QColor( Qt::blue );
             }
             break;
     }
@@ -696,7 +696,7 @@ QVariant ResourceAppointmentsItemModel::total( const Appointment *a, int role ) 
             return (int)(Qt::AlignRight|Qt::AlignVCenter);
         case Qt::ForegroundRole:
             if ( m_externalEffortMap.contains( a ) ) {
-                return QVariant( Qt::blue );
+                return QColor( Qt::blue );
             }
             break;
     }
@@ -740,7 +740,7 @@ QVariant ResourceAppointmentsItemModel::assignment( const Appointment *a, const 
             return (int)(Qt::AlignRight|Qt::AlignVCenter);
         case Qt::ForegroundRole:
             if ( m_externalEffortMap.contains( a ) ) {
-                return QVariant( Qt::blue );
+                return QColor( Qt::blue );
             }
             break;
         case Qt::BackgroundRole: {
