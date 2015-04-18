@@ -217,7 +217,8 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     doc->registerView( this );
 
-    setComponentData( Factory::global() );
+    // QT5TODO: perhaps no longer needed
+//     setComponentData( Factory::global() );
     if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else
