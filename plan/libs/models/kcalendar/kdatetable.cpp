@@ -60,6 +60,7 @@
 #include <QHash>
 #include <QApplication>
 #include <QToolTip>
+#include <qdrawutil.h>
 
 #include <assert.h>
 
@@ -1606,5 +1607,4 @@ QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOption
 
 } //namespace KPlato
 
-#include "kdatetable.moc"
-#include "kdatetable_p.moc"
+#include "moc_kdatetable.cpp"

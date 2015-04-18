@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QString>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>

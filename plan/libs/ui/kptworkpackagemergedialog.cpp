@@ -24,6 +24,7 @@
 
 #include <kmessagebox.h>
 #include <kextendableitemdelegate.h>
+#include <kglobal.h>
 
 #include <QTreeView>
 #include <QSortFilterProxyModel>

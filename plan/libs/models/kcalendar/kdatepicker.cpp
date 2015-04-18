@@ -34,6 +34,7 @@
 #include <QDoubleValidator>
 #include <QWidget>
 #include <QPushButton>
+#include <qdrawutil.h>
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
@@ -43,6 +44,7 @@
 #include <klocale.h>
 #include <knotification.h>
 #include <kdeversion.h>
+#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 #include "kptdebug.h"

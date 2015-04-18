@@ -24,6 +24,8 @@
 
 #include "ui_kptrecalculatedialog.h"
 
+#include <kdialog.h>
+
 namespace KPlato
 {
 

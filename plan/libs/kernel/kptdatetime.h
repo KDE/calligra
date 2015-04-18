@@ -24,6 +24,8 @@
 #include "kplatokernel_export.h"
 #include "kptduration.h"
 
+#include <QDateTime>
+
 /// The main namespace.
 namespace KPlato
 {
