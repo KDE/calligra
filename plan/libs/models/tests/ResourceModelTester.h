@@ -27,15 +27,6 @@
 #include "kptproject.h"
 #include "kptdatetime.h"
 
-namespace QTest
-{
-    template<>
-            char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
-}
-
 namespace KPlato
 {
 

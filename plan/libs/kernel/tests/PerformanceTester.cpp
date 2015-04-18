@@ -28,6 +28,20 @@
 
 #include "debug.cpp"
 
+namespace QTest
+{
+    template<>
+    char *toString(const KPlato::DateTime &dt)
+    {
+        return toString( dt.toString() );
+    }
+    template<>
+    char *toString(const KPlato::Duration &d)
+    {
+        return toString( d.toString() );
+    }
+}
+
 namespace KPlato
 {
 
