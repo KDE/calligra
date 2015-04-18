@@ -26,6 +26,7 @@
 
 #include <QWidget>
 
+class KUrl;
 
 namespace KPlato
 {

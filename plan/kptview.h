@@ -46,6 +46,7 @@ class KToggleAction;
 class QLabel;
 class KConfigSkeleton;
 class KConfigSkeletonItem;
+class KUrl;
 
 class KoView;
 
