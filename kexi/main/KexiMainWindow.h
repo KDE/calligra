@@ -434,6 +434,9 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
+    //! Activates design tab when switching to design view, according to \a partClass.
+    void activateDesignTab(const QString &partClass);
+
 protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);
 

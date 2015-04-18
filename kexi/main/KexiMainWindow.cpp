@@ -2633,9 +2633,9 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode,
                              currentWindow()->partItem()->identifier());
     if (viewMode == Kexi::DesignViewMode) {
+        activateDesignTab(currentWindow()->partItem()->partClass());
         // Restore the saved tab to the orig one. restoreDesignTabIfNeeded() saved tools tab probably.
         d->tabsToActivateOnShow.insert(currentWindow()->partItem()->identifier(), origTabToActivate);
-        d->tabbedToolBar->setCurrentTab(origTabToActivate);
     }
 
     return true;
@@ -2708,6 +2708,20 @@ tristate KexiMainWindow::getNewObjectInfo(
         != QDialog::Accepted)
     {
         return cancelled;
+    }
+
+    // close window of object that will be overwritten
+    if (*overwriteNeeded) {
+        KexiPart::Item* overwrittenItem = project()->item(info, d->nameDialog->widget()->nameText());
+        if (overwrittenItem) {
+            KexiWindow * openedWindow = d->openedWindowFor(overwrittenItem->identifier());
+            if (openedWindow) {
+                const tristate res = closeWindow(openedWindow);
+                if (res != true) {
+                    return res;
+                }
+            }
+        }
     }
 
     //update name and caption
@@ -4133,8 +4147,8 @@ void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 {
     d->tabbedToolBar->showTab(tabName);
-    if (   currentWindow() && currentWindow()->partItem()
-        && currentWindow()->partItem()->identifier() > 0)
+    if (currentWindow() && currentWindow()->partItem()
+        && currentWindow()->partItem()->identifier() != 0) // for unstored items id can be < 0
     {
         const QString tabToActivate = d->tabsToActivateOnShow.value(
                                           currentWindow()->partItem()->identifier());
@@ -4170,21 +4184,26 @@ void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::Vi
     }
 }
 
+void KexiMainWindow::activateDesignTab(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType:
+        d->tabbedToolBar->setCurrentTab("form");
+        break;
+    case KexiPart::ReportObjectType:
+        d->tabbedToolBar->setCurrentTab("report");
+        break;
+    default:;
+    }
+}
+
 void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
 {
     const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
     //kDebug() << partClass << viewMode << tabToActivate;
 
     if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
-        switch (d->prj->idForClass(partClass)) {
-        case KexiPart::FormObjectType:
-            d->tabbedToolBar->setCurrentTab("form");
-            break;
-        case KexiPart::ReportObjectType:
-            d->tabbedToolBar->setCurrentTab("report");
-            break;
-        default:;
-        }
+        activateDesignTab(partClass);
     }
     else {
         d->tabbedToolBar->setCurrentTab(tabToActivate);

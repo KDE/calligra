@@ -73,6 +73,7 @@ protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
     void deserializeData(const QVariant& serialized);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     //! Used in slotTextChanged()
