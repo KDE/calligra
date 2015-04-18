@@ -24,7 +24,8 @@
 
 #include <kpluginfactory.h>
 
-class KAboutData;
+class K4AboutData;
+class KComponentData;
 
 namespace KPlato
 {
@@ -41,11 +42,11 @@ public:
     static const KComponentData &global();
 
     // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+    static K4AboutData* aboutData();
 
 private:
     static KComponentData* s_global;
-    static KAboutData* s_aboutData;
+    static K4AboutData* s_aboutData;
 };
 
 } // KPlato namespace

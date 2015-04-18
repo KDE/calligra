@@ -21,7 +21,7 @@
 #ifndef KPLATOWORK_ABOUTDATA
 #define KPLATOWORK_ABOUTDATA
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
 
@@ -31,11 +31,11 @@ namespace KPlatoWork
 static const char PLANWORK_DESCRIPTION[] = I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
 static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newAboutData()
+K4AboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
+    K4AboutData * aboutData=new K4AboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
                                            PLANWORK_VERSION, ki18n(PLANWORK_DESCRIPTION),
-                                           KAboutData::License_GPL,
+                                           K4AboutData::License_GPL,
                                            ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );

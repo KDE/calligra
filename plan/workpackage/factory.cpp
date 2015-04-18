@@ -27,16 +27,17 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 
 namespace KPlatoWork
 {
 
 KComponentData* Factory::s_global = 0L;
-KAboutData* Factory::s_aboutData = 0L;
+K4AboutData* Factory::s_aboutData = 0L;
 
 Factory::Factory( QObject* parent )
-    : KPluginFactory( *aboutData(), parent )
+    : KPluginFactory( /*QT5TODO:was before *aboutData(), parent*/ )
 {
     global();
 }
@@ -59,7 +60,7 @@ QObject* Factory::create( const char* iface, QWidget* parentWidget, QObject *par
     return part;
 }
 
-KAboutData* Factory::aboutData()
+K4AboutData* Factory::aboutData()
 {
     if ( !s_aboutData )
         s_aboutData = newAboutData();
