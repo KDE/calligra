@@ -2937,7 +2937,8 @@ void View::setLabel( ScheduleManager *sm )
 
 void View::slotWorkPackageLoaded()
 {
-    kDebug(planDbg())<<getPart()->workPackages();
+    // QT5TODO: reenable
+//     kDebug(planDbg())<<getPart()->workPackages();
 }
 
 void View::slotMailWorkpackage( Node *node, Resource *resource )
