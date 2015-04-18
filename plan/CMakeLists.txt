@@ -63,6 +63,7 @@ set(planprivate_LIB_SRCS
     kptmaindocument.cpp
     kptview.cpp
 #     KPtViewAdaptor.cpp
+    kptprintingcontrolprivate.cpp
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp

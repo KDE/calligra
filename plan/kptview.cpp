@@ -3160,33 +3160,6 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
-//---------------------------------
-PrintingControlPrivate::PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia )
-    : QObject( dia ),
-    m_job( job ),
-    m_dia( dia )
-{
-    connect(job, SIGNAL(changed()), SLOT(slotChanged()));
-}
-
-void PrintingControlPrivate::slotChanged()
-{
-    if ( ! m_job || ! m_dia ) {
-        return;
-    }
-    QSpinBox *to = m_dia->findChild<QSpinBox*>("to");
-    QSpinBox *from = m_dia->findChild<QSpinBox*>("from");
-    if ( to && from ) {
-        from->setMinimum( m_job->documentFirstPage() );
-        from->setMaximum( m_job->documentLastPage() );
-        from->setValue( from->minimum() );
-        to->setMinimum( from->minimum() );
-        to->setMaximum( from->maximum() );
-        to->setValue( to->maximum() );
-    }
-}
-
-
 }  //KPlato namespace
 
 #include "kptprintingcontrolprivate.moc"
