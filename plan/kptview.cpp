@@ -65,6 +65,7 @@
 #include <krun.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
+#include <khelpclient.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -751,7 +752,7 @@ void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
         return;
     }
     if ( url.protocol() == "help" ) {
-        KToolInvocation::invokeHelp( "", url.fileName() );
+        KHelpClient::invokeHelp( "", url.fileName() );
         return;
     }
     // try to open the url
