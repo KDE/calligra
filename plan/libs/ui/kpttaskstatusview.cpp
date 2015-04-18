@@ -887,7 +887,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
             <<"zero="<<cc.effortproxy.zeroColumns();
         int row = cc.effortproxy.rowCount()-1;
         for ( int i = 0; i < cc.effortproxy.columnCount(); ++i ) {
-            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.effortproxy.index(row,i).data().toString()<<(cc.effortplane->diagram()->isHidden(i)?"hide":"show");;
+            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.effortproxy.index(row,i).data().toString()<<(cc.effortplane->diagram()->isHidden(i)?"hide":"show");
         }
     }
     kDebug(planDbg())<<"Cost:"<<info.showCost;
@@ -897,7 +897,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
             <<"zero="<<cc.costproxy.zeroColumns();
         int row = cc.costproxy.rowCount()-1;
         for ( int i = 0; i < cc.costproxy.columnCount(); ++i ) {
-            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.costproxy.index(row,i).data().toString()<<(cc.costplane->diagram()->isHidden(i)?"hide":"show");;
+            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.costproxy.index(row,i).data().toString()<<(cc.costplane->diagram()->isHidden(i)?"hide":"show");
         }
     }
 

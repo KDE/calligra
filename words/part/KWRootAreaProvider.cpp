@@ -68,11 +68,10 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 
 KWRootAreaProvider::~KWRootAreaProvider()
 {
-    //FIXME : this code crashes so far, why ?
-    /*foreach (QList<KoTextLayoutRootArea*> areaList, m_rootAreaCache.values())
-        qDeleteAll(areaList);*/
+    qDeleteAll(m_rootAreaCache);
     m_rootAreaCache.clear();
     qDeleteAll(m_pages);
+    m_pages.clear();
 }
 
 void KWRootAreaProvider::clearPages(int pageNumber)
@@ -381,7 +380,8 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         int newSize = m_rootAreaCache.indexOf(afterThis) + 1;
         while (m_rootAreaCache.size() != newSize)
         {
-            m_rootAreaCache.removeLast();
+            KoTextLayoutRootArea *oldArea = m_rootAreaCache.takeLast();
+            delete(oldArea);
         }
     }
 
@@ -411,6 +411,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     } else {
         //atLeastOnePageRemoved = !m_pages.isEmpty();
         qDeleteAll(m_pages);
+        qDeleteAll(m_rootAreaCache);
         m_pages.clear();
         m_pageHash.clear();
         m_rootAreaCache.clear();
