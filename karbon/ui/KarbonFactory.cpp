@@ -74,8 +74,8 @@ const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
         s_karbonConfig = KSharedConfig::openConfig(KAboutData::applicationData().componentName() + QLatin1String("rc"));
         // Add any application-specific resource directories here
 
-        KGlobal::dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
         KGlobal::dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
+
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 

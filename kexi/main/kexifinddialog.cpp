@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kaction.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
 
 #include <QCheckBox>
 #include <QLabel>
@@ -40,7 +42,9 @@
 class KexiFindDialog::Private
 {
 public:
-    Private() {
+    Private() :
+        confGroup(KGlobal::config()->group("FindDialog"))
+    {
     }
     ~Private() {
         qDeleteAll(shortcuts);
@@ -79,6 +83,7 @@ public:
     QPointer<KAction> replaceAction;
     QPointer<KAction> replaceallAction;
     QList<QShortcut*> shortcuts;
+    KConfigGroup confGroup;
     bool replaceMode;
 };
 
@@ -118,10 +123,16 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     setReplaceMode(false);
 
     setLookInColumnList(QStringList(), QStringList());
+
+    QRect savedGeometry = d->confGroup.readEntry("Geometry", geometry());
+    if (!savedGeometry.isEmpty()) {
+        setGeometry(savedGeometry);
+    }
 }
 
 KexiFindDialog::~KexiFindDialog()
 {
+    d->confGroup.writeEntry("Geometry", geometry());
     delete d;
 }
 
