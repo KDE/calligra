@@ -25,6 +25,7 @@
 
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include <KoPluginLoader.h>
 
@@ -84,9 +85,8 @@ const KComponentData &KPrFactory::componentData()
     {
         s_instance = new KComponentData(aboutData());
 
-// QT5TODO: this needs a new approach
-//         s_instance->dirs()->addResourceType("stage_template", "data", "stage/templates/");
-//         s_instance->dirs()->addResourceType("styles", "data", "stage/styles/");
+        KGlobal::dirs()->addResourceType("stage_template", "data", "stage/templates/");
+        KGlobal::dirs()->addResourceType("styles", "data", "stage/styles/");
     }
     return *s_instance;
 }

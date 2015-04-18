@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include <KoDockRegistry.h>
 
@@ -76,10 +77,9 @@ const KComponentData &Factory::global()
     if (!s_global) {
         s_global = new KComponentData(aboutData());
 
-// QT5TODO: this needs a new approach
-//         s_global->dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
-//         s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
-//         s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+        KGlobal::dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
+        KGlobal::dirs()->addResourceType("functions", "data", "sheets/functions/");
+        KGlobal::dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);

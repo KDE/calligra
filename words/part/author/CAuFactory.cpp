@@ -92,10 +92,9 @@ const KComponentData &CAuFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-// QT5TODO: this needs a new approach
-//         s_instance->dirs()->addResourceType("words_template",
-//                                             "data", "words/templates/");
-//         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
+        KGlobal::dirs()->addResourceType("words_template",
+                                            "data", "words/templates/");
+        KGlobal::dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
 
