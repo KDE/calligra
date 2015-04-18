@@ -2307,12 +2307,12 @@ void DependencyEditor::setupGui()
     addAction( name, menuAddTask );
 
     actionAddTask  = new KAction( i18n("Add Task..."), this);
-    actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
+    actionAddTask->setShortcut( Qt::CTRL + Qt::Key_I );
     connect( actionAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     menuAddTask->addAction( actionAddTask );
 
     actionAddMilestone  = new KAction( i18n("Add Milestone..."), this );
-    actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
+    actionAddMilestone->setShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I );
     connect( actionAddMilestone, SIGNAL(triggered(bool)), SLOT(slotAddMilestone()) );
     menuAddTask->addAction( actionAddMilestone );
 
@@ -2323,17 +2323,17 @@ void DependencyEditor::setupGui()
     addAction( name, menuAddSubTask );
 
     actionAddSubtask  = new KAction( i18n("Add Sub-Task..."), this );
-    actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    actionAddSubtask->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I );
     connect( actionAddSubtask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     menuAddSubTask->addAction( actionAddSubtask );
 
     actionAddSubMilestone = new KAction( i18n("Add Sub-Milestone..."), this );
-    actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
+    actionAddSubMilestone->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I );
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
     actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
-    actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
+    actionDeleteTask->setShortcut( Qt::Key_Delete );
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     addAction( name, actionDeleteTask );
