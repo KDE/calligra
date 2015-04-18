@@ -55,10 +55,11 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     m_view( view ),
     m_treeview( treeview )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel );
+//     setDefaultButton( Ok );
+//     showButtonSeparator( true );
 
     QTabWidget *tab = new QTabWidget();
 

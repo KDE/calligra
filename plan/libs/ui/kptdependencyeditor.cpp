@@ -1963,10 +1963,11 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     : KPageDialog(p),
     m_view( view )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel );
+//     setDefaultButton( Ok );
+//     showButtonSeparator( true );
 
     QTabWidget *tab = new QTabWidget();
 

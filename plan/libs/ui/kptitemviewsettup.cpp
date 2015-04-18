@@ -139,12 +139,13 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel|Default );
+//     setDefaultButton( Ok );
+//     showButtonSeparator( true );
 
-    button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
+//     button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
     
     m_panel = new ItemViewSettup( treeview, includeColumn0 );
     KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
@@ -211,13 +212,14 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel|Default );
+//     setDefaultButton( Ok );
+//     showButtonSeparator( true );
 
     bool nodef = treeview->masterView()->defaultColumns().isEmpty() || treeview->slaveView()->defaultColumns().isEmpty();
-    button( Default )->setEnabled( ! nodef );
+//     button( Default )->setEnabled( ! nodef );
 
     m_page1 = new ItemViewSettup( treeview->masterView(), true );
     KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );

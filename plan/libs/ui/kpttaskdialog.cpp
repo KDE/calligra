@@ -42,11 +42,13 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     m_project( project ),
     m_node( &task )
 {
-    setCaption( i18n("Task Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    setWindowTitle( i18n("Task Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel );
+//     setDefaultButton( Ok );
     setFaceType( KPageDialog::Tabbed );
-    showButtonSeparator( true );
+    // QT5TODO: port to QDialog
+//     showButtonSeparator( true );
     KVBox *page;
 
     // Create all the tabs.
@@ -72,7 +74,8 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     m_descriptionTab->namefield->hide();
     m_descriptionTab->namelabel->hide();
 
-    enableButtonOk(false);
+    // QT5TODO: port to QDialog
+//     enableButtonOk(false);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
@@ -148,7 +151,8 @@ void TaskDialog::slotButtonClicked(int button) {
             return;
         accept();
     } else {
-        KDialog::slotButtonClicked(button);
+    // QT5TODO: port to QDialog
+//         KDialog::slotButtonClicked(button);
     }
 }
 

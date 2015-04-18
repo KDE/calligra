@@ -41,10 +41,11 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     m_view( view ),
     m_treeview( treeview )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
+    // QT5TODO: port to QDialog
+//     setButtons( Ok|Cancel );
+//     setDefaultButton( Ok );
+//     showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel( this );
     switch ( treeview->startMode() ) {
         case CostBreakdownItemModel::StartMode_Project: 
