@@ -29,6 +29,8 @@
 
 #include <librcps.h>
 
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <QApplication>
 #include <kptschedulerplugin.h>
@@ -44,7 +46,8 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     kDebug(planDbg())<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "planrcpsplugin" );
+        // QT5TODO
+//         locale->insertCatalog( "planrcpsplugin" );
     }
     m_granularities << (long unsigned int) 1 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000

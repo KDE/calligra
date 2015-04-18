@@ -28,6 +28,8 @@
 
 #include "kptdebug.h"
 
+#include <kglobal.h>
+
 #include <QApplication>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin)
@@ -39,7 +41,8 @@ PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
 {
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "plantjplugin" );
+        // QT5TODO: reenable
+//         locale->insertCatalog( "plantjplugin" );
     }
     m_granularities << (long unsigned int) 5 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000

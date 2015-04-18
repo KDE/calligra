@@ -80,11 +80,12 @@ MainDocument::MainDocument(KoPart *part)
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "planlibs" );
-        locale->insertCatalog( "kdgantt" );
-        locale->insertCatalog( "timezones4" );
+        // QT5TODO
+//         locale->insertCatalog( "planlibs" );
+//         locale->insertCatalog( "kdgantt" );
+//         locale->insertCatalog( "timezones4" );
 #ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
+//         locale->insertCatalog( "kabc" );
 #endif
 
         m_config.setLocale( new KLocale( *locale ) );

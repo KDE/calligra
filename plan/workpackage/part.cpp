@@ -49,6 +49,7 @@
 #include <kundo2qstack.h>
 #include <QPointer>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -352,9 +353,10 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "planlibs" );
+        // QT5TODO
+//         locale->insertCatalog( "planlibs" );
 #ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
+//         locale->insertCatalog( "kabc" );
 #endif
     }
     if ( isReadWrite() ) {
