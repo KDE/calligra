@@ -87,7 +87,7 @@ void TaskDescriptionPanel::initDescription( bool readOnly )
                                             KRichTextWidget::SupportAlignment |
                                             KRichTextWidget::SupportFormatPainting );
 
-    descriptionfield->createActions( collection );
+    collection->addActions(descriptionfield->createActions());
 
     toolbar->addAction( collection->action( "format_text_bold" ) );
     toolbar->addAction( collection->action( "format_text_italic" ) );
