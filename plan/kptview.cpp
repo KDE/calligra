@@ -3161,6 +3161,3 @@ QString View::standardTaskStatusReport() const
 }
 
 }  //KPlato namespace
-
-#include "kptprintingcontrolprivate.moc"
-#include "kptview.moc"
