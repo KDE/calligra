@@ -122,7 +122,7 @@ QVariant RelationModel::data( const Relation *r, int property, int role ) const
         case 2: result = type( r, role ); break;
         case 3: result = lag( r, role ); break;
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property<<endl;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property<<endl;
             return result;
     }
     return result;

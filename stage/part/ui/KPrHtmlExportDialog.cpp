@@ -62,7 +62,7 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     this->updateFavoriteButton();
     this->frameToRender = 0;
     this->generateSlidesNames(slides);
-    this->loadTemplatesList();;
+    this->loadTemplatesList();
     this->generatePreview();
 }
 

@@ -381,7 +381,7 @@ Resource::isAvailable(time_t date)
         if (DEBUGRS(6))  {
             qDebug()<<QString("  Resource %1 is busy (%2) at: %3").arg(name).arg(reason).arg(time2ISO(date));
         }
-        return scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;;
+        return scoreboard[sbIdx] < ((SbBooking*) 4) ? 1 : 4;
     }
 
     if (!limits) {

@@ -21,7 +21,7 @@
  *
  */
 
-// This is not a normail heder, *don't* add include guards to it.
+// This is not a normal header, *don't* add include guards to it.
 // This will cause the compiler to get wrong offsets and to corrupt the stack.
 
 // included by DocxXmlDocumentReader and PptxXmlSlideReader
