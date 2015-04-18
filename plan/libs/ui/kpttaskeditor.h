@@ -199,7 +199,7 @@ private:
     KAction *actionIndentTask;
     KAction *actionUnindentTask;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -256,7 +256,7 @@ private Q_SLOTS:
 
 private:
     NodeTreeView *m_view;
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 
 };
 

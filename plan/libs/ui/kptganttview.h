@@ -292,7 +292,7 @@ private:
     MyKGanttView *m_gantt;
     Project *m_project;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
