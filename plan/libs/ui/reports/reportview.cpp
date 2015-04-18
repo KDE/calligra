@@ -1701,4 +1701,3 @@ void GroupSectionEditor::PageBreakItem::setData( const QVariant &value, int role
 } // namespace KPlato
 
 #include "reportview.moc"
-#include "reportview_p.moc"
