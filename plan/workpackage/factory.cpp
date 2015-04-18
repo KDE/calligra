@@ -74,11 +74,12 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
-        s_global->dirs()->addResourceType("projects", "data", "planwork/projects/");
+        // QT5TODO
+        KGlobal::dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
+        KGlobal::dirs()->addResourceType("projects", "data", "planwork/projects/");
 
         // keep this to be able to pick up old ḱplato files
-        s_global->dirs()->addResourceType("kplatoprojects", "data", "kplatowork/projects/");
+        KGlobal::dirs()->addResourceType("kplatoprojects", "data", "kplatowork/projects/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

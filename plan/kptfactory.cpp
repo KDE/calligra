@@ -75,8 +75,9 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("plan_template", "data", "plan/templates/");
-        s_global->dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
+        // QT5TODO
+        KGlobal::dirs()->addResourceType("plan_template", "data", "plan/templates/");
+        KGlobal::dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

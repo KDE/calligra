@@ -898,7 +898,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
-    taskeditor->setTaskModules( Factory::global().dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
+    taskeditor->setTaskModules( KGlobal::dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -3036,7 +3036,7 @@ void View::slotCurrencyConfigFinished( int result )
 void View::saveTaskModule( const KUrl &url, Project *project )
 {
     kDebug(planDbg())<<url<<project;
-    QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
+    QString dir = KGlobal::dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         MainDocument part(getKoPart());

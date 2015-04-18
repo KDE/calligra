@@ -467,8 +467,7 @@ void Part::addWorkPackage( WorkPackage *wp )
 bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = KGlobal::dirs()->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug(planworkDbg())<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
@@ -483,8 +482,7 @@ bool Part::loadWorkPackages()
 bool Part::loadKPlatoWorkPackages()
 {
     m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "planprojects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = KGlobal::dirs()->findAllResources( "planprojects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug(planworkDbg())<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {

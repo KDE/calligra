@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QTimer>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -387,9 +388,8 @@ QString WorkPackage::fileName( const Part *part ) const
         kWarning()<<"No node in this project";
         return QString();
     }
-    KStandardDirs *sd = part->componentData().dirs();
     QString projectName = m_project->name().remove( ' ' );
-    QString path = sd->saveLocation( "projects", projectName + '/' );
+    QString path = KGlobal::dirs()->saveLocation( "projects", projectName + '/' );
     QString wpName = QString( n->name().remove( ' ' ) + '_' + n->id() + ".planwork" );
     return path + wpName;
 }
