@@ -791,7 +791,7 @@ void Part::setModified( bool mod )
     emit captionChanged( QString(), mod );
 }
 
-bool Part::saveAs( const KUrl &/*url*/ )
+bool Part::saveAs( const QUrl &/*url*/ )
 {
     return false;
 }

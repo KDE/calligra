@@ -35,7 +35,7 @@
 
 #include <kmimetype.h>
 #include <kservice.h>
-#include <kparts/part.h>
+#include <kparts/readwritepart.h>
 
 class KUndo2QStack;
 
@@ -150,7 +150,7 @@ public:
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     
-    bool saveAs( const KUrl &url );
+    bool saveAs( const QUrl &url );
     /// Check if we have documents open for editing before saving
     virtual bool completeSaving( KoStore* store );
 
