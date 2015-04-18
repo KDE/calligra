@@ -45,8 +45,8 @@
 #include <kio/job.h>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
+#include <KContacts/Addressee>
+#include <KContacts/VCardConverter>
 #endif
 
 
@@ -1258,10 +1258,10 @@ void ResourceItemModel::slotJobFinished( KJob *job )
 bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-    KABC::VCardConverter vc;
-    KABC::Addressee::List lst = vc.parseVCards( data );
+    KContacts::VCardConverter vc;
+    KContacts::Addressee::List lst = vc.parseVCards( data );
     MacroCommand *m = new MacroCommand( kundo2_i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
-    foreach( const KABC::Addressee &a, lst ) {
+    foreach( const KContacts::Addressee &a, lst ) {
         Resource *r = new Resource();
         QString uid = a.uid();
         if ( ! m_project->findResource( uid ) ) {
