@@ -24,7 +24,6 @@
 
 // please keep it in alphabetical order
 #include <QRegExp>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <math.h>
@@ -463,7 +462,7 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
     else if (decimalPoint == ",")
         thousandsSeparator = '.';
 
-    KLocale l(*KGlobal::locale());
+    KLocale l(*KLocale::global());
     l.setDecimalSymbol(decimalPoint);
     l.setThousandsSeparator(thousandsSeparator);
     l.setPositiveSign("+");

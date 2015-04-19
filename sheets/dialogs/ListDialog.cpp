@@ -27,9 +27,8 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <kglobal.h>
 #include <kcomponentdata.h>
-#include <kconfig.h>
+#include <KSharedConfig>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
@@ -190,7 +189,7 @@ void ListDialog::init()
         i18n("Sun");
     lst.append(sday);
 
-    d->config = KGlobal::activeComponent().config();
+    d->config = KSharedConfig::openConfig();
     const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {

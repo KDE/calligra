@@ -36,7 +36,6 @@
 #include <QVBoxLayout>
 
 #include <kurl.h>
-#include <kglobal.h>
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <klineedit.h>

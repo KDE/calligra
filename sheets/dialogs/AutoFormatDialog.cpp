@@ -32,8 +32,8 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 
-#include <kglobal.h>
 #include <kcombobox.h>
+#include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
