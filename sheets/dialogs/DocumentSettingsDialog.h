@@ -34,7 +34,6 @@
 
 #include <KoUnit.h>
 
-class KSpellConfig;
 class KVBox;
 class QCheckBox;
 class QSpinBox;
@@ -43,7 +42,6 @@ class QPushButton;
 
 namespace Sonnet
 {
-class ConfigWidget;
 }
 
 namespace Calligra
@@ -80,7 +78,7 @@ class parameterLocale :  public QObject
 public:
     parameterLocale(Selection* selection, KVBox *box);
     void apply();
-public slots:
+public Q_SLOTS:
     void updateDefaultSystemConfig();
 protected:
     /**

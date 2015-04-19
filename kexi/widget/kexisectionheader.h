@@ -48,7 +48,7 @@ public:
     void setCaption(const QString& caption);
     QString caption() const;
 
-public slots:
+public Q_SLOTS:
     void slotFocus(bool in);
 
 protected:

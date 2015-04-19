@@ -30,8 +30,6 @@ namespace KPlato
 
 class DateTime;
 class Task;
-class StandardWorktime;
-class MacroCommand;
 
 
 class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
@@ -42,7 +40,7 @@ public:
 
     void initDescription();
 
-public slots:
+public Q_SLOTS:
     virtual void changeLeader();
     void startDateTimeChanged( const QDateTime& );
     void endDateTimeChanged( const QDateTime& );

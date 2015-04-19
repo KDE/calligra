@@ -41,7 +41,7 @@ public:
     bool isOk() const;
     QString message;
 
-public slots:
+public Q_SLOTS:
     void setMessage( const QString &message );
     void setResult( bool ok );
 

@@ -24,7 +24,6 @@
 #include <kfilewidget.h>
 #include <kexi_export.h>
 
-class QEvent;
 
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */
@@ -94,7 +93,7 @@ public:
     This is true by default. */
     void setConfirmOverwrites(bool set);
 
-public slots:
+public Q_SLOTS:
     virtual void showEvent(QShowEvent * event);
     virtual void focusInEvent(QFocusEvent *);
 
@@ -102,13 +101,13 @@ public slots:
     //! handle this case better here.
     virtual void accept();
 
-signals:
+Q_SIGNALS:
     //entered file name is accepted
 //alread avail. in KFileWidget  void accepted();
     void fileHighlighted();
     void rejected();
 
-protected slots:
+protected Q_SLOTS:
     virtual void reject();
     void slotExistingFileHighlighted(const QString& fileName);
 

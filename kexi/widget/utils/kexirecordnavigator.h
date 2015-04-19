@@ -25,10 +25,8 @@
 #include <kexi_export.h>
 
 class QToolButton;
-class QIntValidator;
 class QAbstractScrollArea;
 class QScrollBar;
-class QLabel;
 class QEvent;
 class QPaintEvent;
 class KGuiItem;
@@ -121,7 +119,7 @@ public:
      Foreground color from @a palette palette is used to colorize the icon. */
     static QPixmap pointerPixmap(const QPalette &palette);
 
-public slots:
+public Q_SLOTS:
     /*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
     void setInsertingEnabled(bool set);
 
@@ -159,7 +157,7 @@ public slots:
     void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
     void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
 
-signals:
+Q_SIGNALS:
     void prevButtonClicked();
     void nextButtonClicked();
     void lastButtonClicked();
@@ -167,7 +165,7 @@ signals:
     void newButtonClicked();
     void recordNumberEntered(uint r);
 
-protected slots:
+protected Q_SLOTS:
     void slotPrevButtonClicked();
     void slotNextButtonClicked();
     void slotLastButtonClicked();

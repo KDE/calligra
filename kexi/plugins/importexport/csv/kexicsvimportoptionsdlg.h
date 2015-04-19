@@ -61,7 +61,7 @@ public:
 
     KexiCSVImportOptions options() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void accept();
 
 protected:

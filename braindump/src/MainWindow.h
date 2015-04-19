@@ -46,7 +46,7 @@ private:
 public:
     void activateView(View* view);
     QList<KoCanvasObserverBase*> canvasObservers();
-public slots:
+public Q_SLOTS:
     void forceDockTabFonts();
 private:
     RootSection* m_doc;

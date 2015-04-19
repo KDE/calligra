@@ -35,7 +35,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     virtual void show();
 
 protected:

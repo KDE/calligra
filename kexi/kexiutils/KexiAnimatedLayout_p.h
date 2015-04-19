@@ -35,7 +35,7 @@ public:
     void animateTo(QWidget* destination);
 protected:
     void paintEvent(QPaintEvent* event);
-protected slots:
+protected Q_SLOTS:
     void animationFinished();
 private:
     QPointer<KexiAnimatedLayout> q;

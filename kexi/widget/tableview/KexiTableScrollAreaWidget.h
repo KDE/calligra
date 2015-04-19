@@ -23,7 +23,6 @@
 #include <QWidget>
 
 class QMouseEvent;
-class QKeyEvent;
 class KexiTableScrollArea;
 
 //! A widget displaying contents of KexiTableScrollArea

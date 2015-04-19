@@ -65,7 +65,7 @@ public:
     DatabaseDialog(QWidget* parent, Selection* selection);
     virtual ~DatabaseDialog();
 
-private slots:
+private Q_SLOTS:
     void orBox_clicked();
     void andBox_clicked();
     void startingCell_clicked();

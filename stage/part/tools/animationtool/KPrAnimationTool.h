@@ -27,7 +27,6 @@
 
 class KoPathShape;
 class KoShapeManager;
-class KoSelection;
 class KPrAnimateMotion;
 class KPrShapeAnimationDocker;
 
@@ -52,11 +51,11 @@ public:
 
     void repaintDecorations();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
-private slots:
+private Q_SLOTS:
 
     /**
       * @brief Reload motion path shapes (For all shapes with motion paths on current page)

@@ -181,7 +181,7 @@ public:
     //! @todo Use Item::captionOrName() if this is defined in settings?
     static QString windowTitleForItem(const KexiPart::Item &item);
 
-public slots:
+public Q_SLOTS:
     virtual void setFocus();
 
     void updateCaption();
@@ -230,7 +230,7 @@ public slots:
         @see KexiView::saveSettings() */
     bool saveSettings();
 
-signals:
+Q_SIGNALS:
     void updateContextHelp();
 
     //! emitted when the window is about to close
@@ -240,7 +240,7 @@ signals:
      Activated by KexiView::setDirty(). */
     void dirtyChanged(KexiWindow*);
 
-protected slots:
+protected Q_SLOTS:
     /*!  Sets 'dirty' flag on every dialog's view. */
     void setDirty(bool dirty);
 
@@ -295,7 +295,7 @@ protected:
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
 
-private slots:
+private Q_SLOTS:
     /*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()
      to get error handling and reporting as well on main window level. */
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);

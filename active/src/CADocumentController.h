@@ -48,7 +48,7 @@ public:
     QString documentTypeName() const;
     CAAbstractDocumentHandler* documentHandler();
 
-signals:
+Q_SIGNALS:
     void documentUriChanged();
     void canvasControllerChanged();
     void documentOpened();
@@ -56,7 +56,7 @@ signals:
     void failedToOpenDocument();
     void documentHandlerChanged();
 
-public slots:
+public Q_SLOTS:
     void loadDocument();
 
 private:

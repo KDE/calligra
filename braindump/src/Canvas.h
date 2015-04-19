@@ -72,7 +72,7 @@ public:
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     virtual bool snapToGrid() const;
     virtual void setCursor(const QCursor &cursor);
-public slots:
+public Q_SLOTS:
     /**
      * Update the origin of the document.
      */
@@ -83,7 +83,7 @@ public slots:
 protected:
     virtual void focusInEvent(QFocusEvent * event);
 
-signals:
+Q_SIGNALS:
     void documentRect(const QRectF&);
     void canvasReceivedFocus();
 

@@ -35,7 +35,7 @@ public:
     FlattenPathPlugin(QObject *parent, const QVariantList &);
     virtual ~FlattenPathPlugin() {}
 
-private slots:
+private Q_SLOTS:
     void slotFlattenPath();
 
 private:

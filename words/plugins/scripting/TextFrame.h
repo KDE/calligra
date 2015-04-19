@@ -43,7 +43,7 @@ public:
             : QObject(parent), m_frame(frame) {}
     virtual ~TextFrame() {}
 
-public slots:
+public Q_SLOTS:
 
     /** Return the frame content as plain text. */
     QString text() const {

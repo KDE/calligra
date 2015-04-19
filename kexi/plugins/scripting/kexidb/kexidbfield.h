@@ -42,7 +42,7 @@ public:
         return m_field;
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Returns the type string for this field, e.g. "Integer" for Integer type. */
     const QString type();

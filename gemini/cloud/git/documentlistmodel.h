@@ -94,10 +94,10 @@ public:
 
     static QString prettyTime(QDateTime theTime);
 
-signals:
+Q_SIGNALS:
     void filterChanged();
 
-public slots:
+public Q_SLOTS:
     void rescan();
     void startSearch();
     void stopSearch();
@@ -107,7 +107,7 @@ public slots:
 public:
     Q_INVOKABLE void groupBy(GroupBy role);
 
-private slots:
+private Q_SLOTS:
     void searchFinished();
 
 private:
@@ -137,7 +137,7 @@ public:
 
     void abort() { m_abort = true; }
 
-signals:
+Q_SIGNALS:
     void documentFound(const DocumentListModel::DocumentInfo &);
     void finished();
 

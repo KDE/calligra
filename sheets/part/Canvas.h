@@ -49,18 +49,13 @@ class QEvent;
 class QFocusEvent;
 class QKeyEvent;
 class QMouseEvent;
-class QPainter;
 class QPaintEvent;
-class QPen;
-class QResizeEvent;
-class QScrollBar;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class Cell;
-class CellEditor;
 class Canvas;
 class ColumnHeader;
 class Doc;

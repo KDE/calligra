@@ -45,7 +45,7 @@ public:
      * push a section to save
      */
     void push(Section* _section, PushMode _pushMode = SinglePush);
-public slots:
+public Q_SLOTS:
     void save();
 private:
     void load();

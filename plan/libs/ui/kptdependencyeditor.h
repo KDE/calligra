@@ -389,7 +389,7 @@ public:
 
     void setReadWrite( bool on );
 
-signals:
+Q_SIGNALS:
     void connectorClicked( DependencyConnectorItem *item );
     void connectItems( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void itemDoubleClicked( QGraphicsItem * );
@@ -443,14 +443,14 @@ public:
 
     void setActive( bool activate );
 
-signals:
+Q_SIGNALS:
     void selectionChanged();
     void selectionChanged( QGraphicsItem * );
     void selectionChanged( const QList<QGraphicsItem*>& );
     void makeConnection( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
 
-public slots:
+public Q_SLOTS:
     void slotNodeAdded( Node *node );
     void slotNodeRemoved( Node *node );
     void slotNodeChanged( Node *node );
@@ -460,7 +460,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);    
     void mouseMoveEvent( QMouseEvent *mouseEvent );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectionChanged();
     void slotRelationAdded( Relation* rel );
     void slotRelationRemoved( Relation* rel );
@@ -473,7 +473,7 @@ protected slots:
     void slotDependencyContextMenuRequested( DependencyLinkItem *item, DependencyConnectorItem *connector );
     void slotFocusItemChanged( QGraphicsItem* );
 
-private slots:
+private Q_SLOTS:
     void slotAutoScroll();
 
 private:
@@ -491,7 +491,7 @@ class DependencyeditorConfigDialog : public KPageDialog {
 public:
     DependencyeditorConfigDialog( ViewBase *view, QWidget *parent );
 
-public slots:
+public Q_SLOTS:
     void slotOk();
 
 private:
@@ -524,7 +524,7 @@ public:
     
     DependencyView *view() const { return m_view; }
 
-signals:
+Q_SIGNALS:
     void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
     void editNode( Node *node );
@@ -538,20 +538,20 @@ signals:
     void modifyRelation( Relation*, int );
     void modifyRelation( Relation* );
     
-public slots:
+public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void setScheduleManager( ScheduleManager *sm );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
 
-private slots:
+private Q_SLOTS:
     void slotItemDoubleClicked( QGraphicsItem *item );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotSelectionChanged( const QList<QGraphicsItem*> &lst );

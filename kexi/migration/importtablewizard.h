@@ -58,7 +58,7 @@ Q_OBJECT
         virtual void accept();
         virtual void reject();
 
-    protected slots:
+    protected Q_SLOTS:
         void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
         
     private:
@@ -110,7 +110,7 @@ Q_OBJECT
         void arriveAlterTablePage();
         void arriveImportingPage();
         void arriveFinishPage();
-    private slots:
+    private Q_SLOTS:
         void slotConnPageItemSelected(bool isSelected);
         void slotTableListWidgetSelectionChanged();
         void slotNameChanged();

@@ -274,7 +274,7 @@ public:
 
     KPrShapeAnimation::NodeType triggerEventByIndex(const QModelIndex &index);
 
-public slots:
+public Q_SLOTS:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
 
@@ -284,7 +284,7 @@ public slots:
     /// Notify if an animation set as OnClick has changed of trigger event
     void notifyOnClickEventChanged();
 
-signals:
+Q_SIGNALS:
     void timeScaleModified();
     void onClickEventChanged();
 

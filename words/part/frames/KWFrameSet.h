@@ -113,7 +113,7 @@ public:
     void addCopy(KWCopyShape *copyShape);
     void removeCopy(KWCopyShape *copyShape);
 
-signals:
+Q_SIGNALS:
     /**
      * emitted whenever a shape is added
      * @param shape the shape that has just been added

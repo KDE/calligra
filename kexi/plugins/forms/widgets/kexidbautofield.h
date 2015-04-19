@@ -173,10 +173,10 @@ public:
     /*! Called by the top-level form on key press event to consume widget-specific shortcuts. */
     virtual bool keyPressed(QKeyEvent *ke);
 
-public slots:
+public Q_SLOTS:
     virtual void unsetPalette();
 
-protected slots:
+protected Q_SLOTS:
     virtual void paletteChange(const QPalette& oldPal);
 
     //! Implemented for KexiDataItemInterface

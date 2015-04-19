@@ -5,7 +5,7 @@ include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/
 #add_subdirectory( taskjuggler )
 add_subdirectory( tests )
 
-SET ( TJScheduler_SRCS
+set ( TJScheduler_SRCS
     PlanTJPlugin.cpp
     PlanTJScheduler.cpp
     taskjuggler/Allocation.cpp

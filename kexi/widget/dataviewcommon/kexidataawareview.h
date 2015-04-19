@@ -73,7 +73,7 @@ public:
                                         const QVariant& replacement,
                                         const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
-public slots:
+public Q_SLOTS:
     void deleteAllRows();
     void deleteCurrentRow();
     void deleteAndStartEditCurrentCell();
@@ -105,7 +105,7 @@ public slots:
      * Implemented for KexiView. */
     virtual tristate cancelDataChanges();
 
-protected slots:
+protected Q_SLOTS:
     void slotCellSelected(int row, int col);
     void reloadActions();
     void slotUpdateRowActions(int row);

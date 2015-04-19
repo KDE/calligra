@@ -27,7 +27,6 @@
 
 class QString;
 class KoStore;
-class KoXmlStreamReader;
 class OpcRelSet;
 
 

@@ -42,7 +42,7 @@ public:
         m_fileOut = file;
     }
 
-public slots:
+public Q_SLOTS:
     virtual void reject();
     virtual void accept();
     virtual void addLanguage();

@@ -27,7 +27,6 @@
 #include <core/kexiprojectdata.h>
 
 class KexiProjectData;
-class KexiProjectSet;
 class KexiDBConnectionSet;
 class ConnectionDataLVItem;
 class QEvent;
@@ -112,11 +111,11 @@ public:
     */
     KexiDB::ConnectionData* selectedExistingConnection() const;
 
-public slots:
+public Q_SLOTS:
     virtual void done(int r);
     virtual void reject();
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotOk();
 
     //! slot activated when one of the top-level tabs is shown

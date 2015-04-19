@@ -1493,7 +1493,7 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
             case Type:
             case StartTime:
             case EndTime:
-                return (int)(Qt::AlignLeft|Qt::AlignVCenter);;
+                return (int)(Qt::AlignLeft|Qt::AlignVCenter);
             case Load:
                 return (int)(Qt::AlignRight|Qt::AlignVCenter);
         }

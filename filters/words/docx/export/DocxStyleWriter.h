@@ -25,7 +25,6 @@
 #include <QBuffer>
 
 class QByteArray;
-class QStringList;
 
 class KoXmlWriter;
 class OdfReaderContext;

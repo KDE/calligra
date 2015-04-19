@@ -25,11 +25,8 @@
 
 #include <QStackedWidget>
 
-class QProgressBar;
-class QTabWidget;
 class QPrinter;
 class QPrintDialog;
-class QLabel;
 class QMenu;
 class QActionGroup;
 
@@ -44,25 +41,13 @@ class KPlatoWork_MainWindow;
 namespace KPlato
 {
 
-class ViewBase;
-class AccountsView;
 class Document;
 class GanttView;
-class PertEditor;
-class ResourceView;
-class AccountsEditor;
-class TaskEditor;
-class CalendarEditor;
-class ScheduleEditor;
 class ScheduleManager;
 
 class Node;
-class Project;
-class MainSchedule;
 class Schedule;
 class Resource;
-class ResourceGroup;
-class Relation;
 
 }
 using namespace KPlato;
@@ -109,14 +94,14 @@ public:
     Node *currentNode() const;
     Document *currentDocument() const;
 
-signals:
+Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     void openInternalDocument( KoStore * );
     void sigUpdateReadWrite( bool );
 
     void viewDocument( Document *doc );
 
-public slots:
+public Q_SLOTS:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -128,7 +113,7 @@ public slots:
     void slotTaskProgress();
     void slotTaskCompletion();
 
-protected slots:
+protected Q_SLOTS:
     void slotCurrentChanged( int index );
     void slotProgressChanged( int value );
 

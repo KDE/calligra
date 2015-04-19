@@ -30,7 +30,6 @@
 #include "objecttree.h"
 #include "form.h"
 
-class QRect;
 class QPoint;
 class QStringList;
 class QDomElement;

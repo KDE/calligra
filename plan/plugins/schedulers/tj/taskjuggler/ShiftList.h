@@ -21,7 +21,6 @@ namespace TJ
 {
 
 class Shift;
-class Project;
 
 /**
  * @short Stores a list of Shifts.

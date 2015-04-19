@@ -71,7 +71,7 @@ protected:
     virtual tristate storeData(bool dontAsk = false);
     virtual DB::SchemaData* storeNewData(const DB::SchemaData& sdata, bool &cancel);
 
-private slots:
+private Q_SLOTS:
     void slotDesignerPropertySetChanged();
     void slotLabel(){_rd->slotItem(KRObjectData::EntityLabel);};
     void slotField(){_rd->slotItem(KRObjectData::EntityField);};
@@ -82,7 +82,7 @@ private slots:
     void slotLine(){_rd->slotItem(KRObjectData::EntityLine);};
     void slotCheck(){_rd->slotItem(KRObjectData::EntityCheck);};
 
-    public slots:
+    public Q_SLOTS:
     void slotSetData(KoReportData*);
 
 

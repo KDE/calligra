@@ -1,7 +1,7 @@
-add_subdirectory(rtf-qt)
+add_subdirectory(3rdparty)
 
 include_directories(
-    ./rtf-qt/src/
+    3rdparty/rtf-qt/src/
 )
 
 set(rtf2odt_PART_SRCS rtfimport.cpp )
@@ -13,4 +13,4 @@ install( FILES  calligra_filter_rtf2odt.desktop  DESTINATION ${SERVICES_INSTALL_
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  words_rtf_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()

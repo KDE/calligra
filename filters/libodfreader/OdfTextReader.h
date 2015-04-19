@@ -32,7 +32,6 @@
 #include "koodfreader_export.h"
 
 
-class QSizeF;
 
 class OdfTextReaderBackend;
 class OdfReaderContext;

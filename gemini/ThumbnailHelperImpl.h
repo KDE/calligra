@@ -23,7 +23,7 @@
 #ifndef THUMBNAILHELPERIMPL_H
 #define THUMBNAILHELPERIMPL_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class KoPart;
 class KoDocument;

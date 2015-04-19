@@ -41,7 +41,7 @@ protected:
     void accept();
     void reject();
 
-private slots:
+private Q_SLOTS:
     void slotApplyClicked();
     void setDocumentUnit(const KoUnit &unit);
     void onDocumentUnitChange(const KoUnit &unit);

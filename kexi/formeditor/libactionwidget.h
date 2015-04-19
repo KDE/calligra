@@ -45,13 +45,13 @@ public:
 
     virtual ~LibActionWidget();
 
-signals:
+Q_SIGNALS:
     /**
      * emits a signal containing the class name
      */
     void toggled(const QByteArray &className);
 
-protected slots:
+protected Q_SLOTS:
     /** reimplemented from KToggleAction */
     virtual void slotToggled(bool checked);
 

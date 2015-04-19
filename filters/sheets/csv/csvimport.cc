@@ -83,10 +83,10 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
     Doc *ksdoc = static_cast<Doc *>(document);   // type checked above
 
-    if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
-        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
-        return KoFilter::NotImplemented;
-    }
+//    if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
+//       kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
+//        return KoFilter::NotImplemented;
+//    }
 
     QFile in(file);
     if (!in.open(QIODevice::ReadOnly)) {

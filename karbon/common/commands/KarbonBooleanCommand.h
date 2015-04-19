@@ -25,7 +25,6 @@
 
 class KoShapeBasedDocumentBase;
 class KoPathShape;
-class QPainterPath;
 
 class KARBONCOMMON_EXPORT KarbonBooleanCommand : public KUndo2Command
 {

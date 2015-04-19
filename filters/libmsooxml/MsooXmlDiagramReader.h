@@ -37,7 +37,6 @@ namespace Diagram
 {
     class Context;
     class DataModel;
-    class LayoutNode;
 }
 
 class KOMSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext

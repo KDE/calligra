@@ -37,7 +37,7 @@ public:
     explicit CoverSelectionDialog(CAuView *au, QWidget *parent = 0);
     ~CoverSelectionDialog();
 
-private slots:
+private Q_SLOTS:
     void open();
     void reset();
     void ok();

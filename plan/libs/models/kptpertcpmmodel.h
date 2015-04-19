@@ -30,14 +30,11 @@
 namespace KPlato
 {
 
-class DateTime;
 class Duration;
-class Estimate;
 class Node;
 class Project;
 class ScheduleManager;
 class Task;
-class View;
 
 typedef QList<Node*> NodeList;
 
@@ -69,7 +66,7 @@ public:
     /// Select a proper unit for total path values, dependent on @p duration
     Duration::Unit presentationUnit( const Duration &duration ) const;
     
-protected slots:
+protected Q_SLOTS:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
     void slotNodeInserted( Node *node );
@@ -140,7 +137,7 @@ public:
     void setManager( ScheduleManager *sm );
     ScheduleManager *manager() const { return m_manager; }
     
-protected slots:
+protected Q_SLOTS:
     void slotAboutToBeReset();
     void slotReset();
 

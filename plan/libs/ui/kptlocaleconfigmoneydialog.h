@@ -40,7 +40,7 @@ public:
 
     KUndo2Command *buildCommand( Project &project );
 
-protected slots:
+protected Q_SLOTS:
     void slotChanged();
 
 private:

@@ -33,7 +33,7 @@ class WebToolWidget : public QWidget
     Q_OBJECT
 public:
     explicit WebToolWidget(WebTool* _tool);
-public slots:
+public Q_SLOTS:
     void open(WebShape *shape);
     void save();
 private:

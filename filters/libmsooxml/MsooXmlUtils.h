@@ -38,12 +38,9 @@
 #include <KoGenStyles.h>
 
 class QLocale;
-class QDomElement;
-class QDomDocument;
 class KZip;
 struct KoOdfWriters;
 class KoCharacterStyle;
-class KoStyleStack;
 class KoXmlWriter;
 
 //! Returns from the current block if the result of @a call is not equal to KoFilter::OK

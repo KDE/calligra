@@ -108,7 +108,7 @@ public:
      so it can be copied to the clipboard instead of unreadable \a value. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-public slots:
+public Q_SLOTS:
     //! Implemented for KexiDataItemInterface
     virtual void moveCursorToEnd();
 
@@ -118,7 +118,7 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
-protected slots:
+protected Q_SLOTS:
     void slotButtonClicked();
     void slotRowAccepted(KexiDB::RecordData *record, int row) {
         KexiComboBoxBase::slotRowAccepted(record, row);

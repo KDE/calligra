@@ -173,7 +173,7 @@ public:
      so a different KexiTableEdit object is used to displaying the data. */
     virtual void createInternalEditor(KexiDB::QuerySchema& schema);
 
-signals:
+Q_SIGNALS:
     void editRequested();
     void cancelRequested();
     void acceptRequested();

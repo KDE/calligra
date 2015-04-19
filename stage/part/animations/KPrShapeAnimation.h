@@ -32,7 +32,6 @@ class KoShape;
 class QTextBlockUserData;
 class KoXmlElement;
 class KoShapeLoadingContext;
-class KoShapeSavingContext;
 class KoPASavingContext;
 class KPrAnimationCache;
 class KPrAnimationStep;
@@ -205,7 +204,7 @@ public:
     int subStepIndex() const;
     int animIndex() const;
 
-signals:
+Q_SIGNALS:
     /// Notify if an animation stored property has been changed
     void timeChanged(int begin, int end);
 

@@ -62,11 +62,11 @@ public:
     void setReadOnly( bool ro ) { m_readonly = ro; }
     bool readOnly() const { return m_readonly; }
 
-signals:
+Q_SIGNALS:
     void rowInserted( const QModelIndex& );
     void changed();
 
-public slots:
+public Q_SLOTS:
     bool submit();
     void revert();
 
@@ -94,7 +94,7 @@ public:
 
     UsedEffortItemModel *model() const { return static_cast<UsedEffortItemModel*>( QTableView::model() ); }
 
-signals:
+Q_SIGNALS:
     void changed();
     void resourceAdded();
 
@@ -141,12 +141,12 @@ public:
 
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
 
-signals:
+Q_SIGNALS:
     void rowInserted( const QDate& );
     void rowRemoved( const QDate& );
     void changed();
 
-public slots:
+public Q_SLOTS:
     bool submit();
     void revert();
     void slotDataChanged();
@@ -186,13 +186,13 @@ public:
     CompletionEntryItemModel *model() const { return static_cast<CompletionEntryItemModel*>( QTableView::model() ); }
     void setCompletionModel( CompletionEntryItemModel *m );
 
-signals:
+Q_SIGNALS:
     void changed();
     void rowInserted( const QDate& );
     void rowRemoved( const QDate& );
     void selectionChanged( const QItemSelection&, const QItemSelection& );
 
-public slots:
+public Q_SLOTS:
     void addEntry();
     void removeEntry();
 

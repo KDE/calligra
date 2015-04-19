@@ -31,17 +31,6 @@
 #include <QLabel>
 
 class QLabel;
-class QCheckBox;
-class QRadioButton;
-class QHBoxLayout;
-class QVBoxLayout;
-class QGroupBox;
-class KexiConnectionSelectorWidget;
-class KexiProjectSelectorWidget;
-class KexiProjectSet;
-class KexiDBTitlePage;
-class KexiDBDriverComboBox;
-class KexiPrjTypeSelector;
 class KPageWidgetItem;
 
 namespace Kexi
@@ -51,7 +40,6 @@ class ObjectStatus;
 
 namespace KexiDB
 {
-class ConnectionData;
 }
 
 namespace KexiMigration
@@ -71,10 +59,10 @@ public:
     explicit ImportWizard(QWidget *parent = 0, QMap<QString, QString>* args = 0);
     virtual ~ImportWizard();
 
-public slots:
+public Q_SLOTS:
     void progressUpdated(int percent);
 
-protected slots:
+protected Q_SLOTS:
     virtual void next();
     virtual void back();
     void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);

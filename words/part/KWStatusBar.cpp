@@ -316,7 +316,9 @@ void KWStatusBar::updateCursorPosition()
     KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
     KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
     if (editor) {
-        line = editor->block().firstLineNumber() + 1;
+        line = editor->block().firstLineNumber();
+        int posInDoc = editor->position() - editor->block().position();
+        line += editor->block().layout()->lineForTextPosition(posInDoc).lineNumber() + 1;
     }
     m_lineLabel->m_label->setText(i18nLine.subs(line).toString());
     m_lineLabel->m_edit->setText(QString::number(line));

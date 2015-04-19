@@ -133,7 +133,7 @@ public:
      */
     virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
 
-public slots:
+public Q_SLOTS:
     /**
      *  Notification that the page setup has changed exected when a page has been
      * added or removed or just resized.

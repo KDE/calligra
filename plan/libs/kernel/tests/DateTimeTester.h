@@ -44,7 +44,7 @@ namespace KPlato
 class DateTimeTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void subtractDay();
     void subtractHour();
     void subtractMinute();

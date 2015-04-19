@@ -1154,7 +1154,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
+    QString xmlName = KStandardDirs::locate("data", "sheets/CellToolOptionWidgets.xml");
     kDebug() << xmlName;
     if (xmlName.isEmpty()) {
         kWarning() << "couldn't find CellToolOptionWidgets.xml file";

@@ -42,7 +42,7 @@ public:
 
     void init();
 
-public slots:
+public Q_SLOTS:
     virtual void slotOk();
     void slotDoubleClicked();
     void slotCurrentRowChanged(int row);

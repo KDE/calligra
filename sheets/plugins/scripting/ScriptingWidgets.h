@@ -64,7 +64,7 @@ public:
     enum SelectionType { SingleSelect, MultiSelect };
     enum EditorType { Disabled, Cell, Range };
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Set the selection type to \p selectiontype. This could be either

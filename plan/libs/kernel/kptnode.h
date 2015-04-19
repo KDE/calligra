@@ -51,7 +51,6 @@ class ResourceGroup;
 class Resource;
 class ResourceGroupRequest;
 class Estimate;
-class WBSDefinition;
 class EffortCostMap;
 class EffortCost;
 class Calendar;
@@ -608,7 +607,7 @@ public:
     virtual void changed( int property = -1 ) { changed( this, property ); }
     Duration getmDurationForward(){ return this->m_durationForward;}
 
-public slots:
+public Q_SLOTS:
     void slotStandardWorktimeChanged( StandardWorktime* );
 
 protected:

@@ -19,7 +19,7 @@
 #ifndef CALLIGRAGEMINI_PROGRESSPROXY_H
 #define CALLIGRAGEMINI_PROGRESSPROXY_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KoProgressProxy.h>
 
 class ProgressProxy : public QObject, public KoProgressProxy

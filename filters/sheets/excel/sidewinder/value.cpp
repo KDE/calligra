@@ -393,7 +393,7 @@ void Value::setError(const QString& msg)
         default: break;
     }
     d->type = Error;
-    d->s = new QString(msg);;
+    d->s = new QString(msg);
 }
 
 // get error message

@@ -36,7 +36,7 @@ public:
 
     QString activeCustomSlideShow() const;
 
-private slots:
+private Q_SLOTS:
     void editCustomSlideShow();
 
 private:

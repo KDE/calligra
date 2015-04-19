@@ -77,7 +77,7 @@ protected:
     void writeHtmlFileToTmpDir(const QString &fileName, const QString &htmlBody);
     void copyFromTmpToDest();
 
-private slots:
+private Q_SLOTS:
     void moveResult(KJob *job);
 
 private:

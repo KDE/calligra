@@ -53,10 +53,10 @@ public:
     DocumentItemModel* model() const;
     Document *selectedDocument() const;
     
-signals:
+Q_SIGNALS:
     void changed();
     
-protected slots:
+protected Q_SLOTS:
     void slotAddUrl();
     void slotChangeUrl();
     void slotRemoveUrl();
