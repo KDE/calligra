@@ -443,6 +443,7 @@ KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
 
+    applyToolBarLayout();
 
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
@@ -818,6 +819,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
         QString suggestedFilename = suggestedURL.fileName();
+
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
@@ -850,8 +852,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
-        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+        if (isExporting() && !d->lastExportUrl.isEmpty()) {
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+        }
+        else {
+            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+        }
         dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
         KUrl newURL = dialog.url();
 
@@ -897,7 +903,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                qDebug() << "save to directory: " << newURL.url();
+                //qDebug() << "save to directory: " << newURL.url();
             }
             else if (specialOutputFlag == KisDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
@@ -1418,6 +1424,7 @@ void KisMainWindow::slotConfigureToolbars()
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotNewToolbarConfig()
@@ -1432,6 +1439,7 @@ void KisMainWindow::slotNewToolbarConfig()
         return;
 
     plugActionList("toolbarlist", d->toolbarList);
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -2151,6 +2159,18 @@ void KisMainWindow::createActions()
         d->expandingSpacers[i]->setDefaultWidget(new QWidget(this));
         d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
+    }
+}
+
+void KisMainWindow::applyToolBarLayout()
+{
+    const bool isPlastiqueStyle = style()->objectName() == "plastique";
+
+    Q_FOREACH (KToolBar *toolBar, toolBars()) {
+        toolBar->layout()->setSpacing(4);
+        if (isPlastiqueStyle) {
+            toolBar->setContentsMargins(0, 0, 0, 2);
+        }
     }
 }
 

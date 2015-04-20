@@ -77,7 +77,7 @@
 
 
 
-typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
@@ -207,20 +207,23 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
         slOpacity->setSingleStep(0.05);
-        slOpacity->setMinimumWidth(sliderWidth);
+        slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
+        slOpacity->setFixedHeight(32);
 
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(sliderWidth);
+        slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
+        slFlow->setFixedHeight(32);
 
         slSize->setRange(0, 1000, 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setMinimumWidth(sliderWidth);
         slSize->setSuffix(" px");
+        slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
+        slSize->setFixedHeight(32);
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
@@ -240,11 +243,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
+    baseLayout->setSpacing(4);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
+    m_layout->setSpacing(4);
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget* compositeActions = new QWidget(this);
@@ -253,7 +258,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
 
-    compositeLayout->setContentsMargins(3, 0, 0, 0);
+    compositeLayout->setSpacing(4);
+    compositeLayout->setContentsMargins(0, 0, 0, 0);
 
     compositeLayout->addWidget(m_reloadButton);
 
@@ -297,6 +303,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(hMirrorButton);
     mirrorLayout->addWidget(vMirrorButton);
+    mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
     action = new KAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);
@@ -632,7 +639,9 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         if (!preset) {
             preset = rserver->resourceByName("Basic_tip_default");
         }
-        setCurrentPaintop(preset->paintOp(), preset);
+        if (preset) {
+            setCurrentPaintop(preset->paintOp(), preset);
+        }
     }
     else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
