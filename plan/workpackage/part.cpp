@@ -351,7 +351,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     kDebug(planworkDbg());
     setComponentData( Factory::global() );
     // Add library translation files
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         // QT5TODO
 //         locale->insertCatalog( "planlibs" );

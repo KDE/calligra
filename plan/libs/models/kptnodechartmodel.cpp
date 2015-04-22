@@ -156,7 +156,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         if ( ! m_localizeValues ) {
             return data( index, Qt::EditRole );
         } else {
-            KLocale *l = project() ? project()->locale() : KGlobal::locale();
+            KLocale *l = project() ? project()->locale() : KLocale::global();
             switch ( index.column() ) {
             case BCWSCost: result = l->formatMoney( bcwsCost( index.row() ), 0 ); break;
             case BCWPCost: result = l->formatMoney( bcwpCost( index.row() ), 0 ); break;
@@ -213,7 +213,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
 
 QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
-    KLocale *locale = project() ? project()->locale() : KGlobal::locale();
+    KLocale *locale = project() ? project()->locale() : KLocale::global();
     QVariant result;
     if ( role == Qt::DisplayRole ) {
         if ( orientation == Qt::Horizontal ) {

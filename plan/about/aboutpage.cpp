@@ -201,7 +201,7 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
             "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>."
-        , KGlobal::locale()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
+        , KLocale::global()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
     );
@@ -225,7 +225,7 @@ QString KPlatoAboutPage::tutorial2()
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
             "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>.<p>"
-        , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
+        , KLocale::global()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",
         i18n( "Next: Introduction" )
     );

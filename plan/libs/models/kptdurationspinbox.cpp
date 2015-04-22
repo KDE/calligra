@@ -189,9 +189,9 @@ void DurationSpinBox::editorTextChanged( const QString &text ) {
 
 double DurationSpinBox::valueFromText( const QString & text ) const
 {
-    QString s = extractValue( text ).remove( KGlobal::locale()->thousandsSeparator() );
+    QString s = extractValue( text ).remove( KLocale::global()->thousandsSeparator() );
     bool ok = false;
-    double v = KGlobal::locale()->readNumber( s, &ok );
+    double v = KLocale::global()->readNumber( s, &ok );
     if ( ! ok ) {
         v = QDoubleSpinBox::valueFromText( s );
     }
@@ -200,7 +200,7 @@ double DurationSpinBox::valueFromText( const QString & text ) const
 
 QString DurationSpinBox::textFromValue ( double value ) const
 {
-    QString s = KGlobal::locale()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
+    QString s = KLocale::global()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
     s += Duration::unitToString( m_unit, true );
     //kDebug(planDbg())<<2<<value<<s;
     return s;

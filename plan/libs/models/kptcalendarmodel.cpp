@@ -734,12 +734,12 @@ QVariant CalendarDayItemModel::name( int weekday, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             if ( weekday >= 1 && weekday <= 7 ) {
-                return KGlobal::locale()->calendar()->weekDayName( weekday, KCalendarSystem::ShortDayName );
+                return KLocale::global()->calendar()->weekDayName( weekday, KCalendarSystem::ShortDayName );
             }
             break;
         case Qt::ToolTipRole:
             if ( weekday >= 1 && weekday <= 7 ) {
-                return KGlobal::locale()->calendar()->weekDayName( weekday );
+                return KLocale::global()->calendar()->weekDayName( weekday );
             }
             break;
         case Qt::EditRole:
@@ -798,13 +798,13 @@ QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) 
     switch ( role ) {
         case Qt::DisplayRole: {
             if ( day->state() == CalendarDay::Working ) {
-                return KGlobal::locale()->formatNumber( day->workDuration().toDouble( Duration::Unit_h ), 1 );
+                return KLocale::global()->formatNumber( day->workDuration().toDouble( Duration::Unit_h ), 1 );
             }
             return QVariant();
         }
         case Qt::ToolTipRole: {
             if ( day->state() == CalendarDay::Working ) {
-                KLocale *l = KGlobal::locale();
+                KLocale *l = KLocale::global();
                 QStringList tip;
                 foreach ( TimeInterval *i, day->timeIntervals() ) {
                     tip <<  i18nc( "1=time 2=The number of hours of work duration (non integer)", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
@@ -867,7 +867,7 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
             if ( d->state() == CalendarDay::NonWorking ) {
                 return i18nc( "@info:tooltip", "Non-working" );
             }
-            KLocale *l = KGlobal::locale();
+            KLocale *l = KLocale::global();
             QStringList tip;
             foreach ( TimeInterval *i, d->timeIntervals() ) {
                 tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
@@ -983,7 +983,7 @@ QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int r
             }
             double v;
             v = day->workDuration().toDouble( Duration::Unit_h );
-            return KGlobal::locale()->formatNumber( v, 1 );
+            return KLocale::global()->formatNumber( v, 1 );
         }
         case Qt::TextAlignmentRole:
             return (uint)( Qt::AlignHCenter | Qt::AlignBottom );
@@ -1022,7 +1022,7 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         if ( day->state() == CalendarDay::NonWorking ) {
             return i18nc( "@info:tooltip", "Non-working" );
         }
-        KLocale *l = KGlobal::locale();
+        KLocale *l = KLocale::global();
         QStringList tip;
         foreach ( TimeInterval *i, day->timeIntervals() ) {
             tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
@@ -1091,7 +1091,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
         return r;
     }
     painter->save();
-    //const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    //const KCalendarSystem * calendar = KLocale::global()->calendar();
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );

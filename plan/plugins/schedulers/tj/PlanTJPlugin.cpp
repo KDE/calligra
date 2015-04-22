@@ -39,7 +39,7 @@ using namespace KPlato;
 PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         // QT5TODO: reenable
 //         locale->insertCatalog( "plantjplugin" );

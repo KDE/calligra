@@ -45,7 +45,7 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
     kDebug(planDbg())<<rcps_version();
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         // QT5TODO
 //         locale->insertCatalog( "planrcpsplugin" );

@@ -278,16 +278,16 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom() );
+            return KLocale::global()->formatDateTime( res->availableFrom() );
         case Qt::EditRole:
             return res->availableFrom();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableFrom().isValid() ) {
-                return i18nc( "infor:tooltip", "Available from: %1", KGlobal::locale()->formatDateTime( res->availableFrom(), KLocale::LongDate, KLocale::TimeZone ) );
+                return i18nc( "infor:tooltip", "Available from: %1", KLocale::global()->formatDateTime( res->availableFrom(), KLocale::LongDate, KLocale::TimeZone ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target start time: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "infor:tooltip", "Available from project target start time: %1", KLocale::global()->formatDateTime( m_project->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -300,16 +300,16 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil() );
+            return KLocale::global()->formatDateTime( res->availableUntil() );
         case Qt::EditRole:
             return res->availableUntil();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableUntil().isValid() ) {
-                return i18nc( "infor:tooltip", "Available until: %1", KGlobal::locale()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
+                return i18nc( "infor:tooltip", "Available until: %1", KLocale::global()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target finish time: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "infor:tooltip", "Available from project target finish time: %1", KLocale::global()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:

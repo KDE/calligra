@@ -365,7 +365,7 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
 
     QStringList lst;
     for ( int i = 1; i <= 7; ++i ) {
-        lst << KGlobal::locale()->calendar()->weekDayName( i );
+        lst << KLocale::global()->calendar()->weekDayName( i );
     }
     weekdays->addItems( lst );
     period->setValue( view->period() );
@@ -948,7 +948,7 @@ void PerformanceStatusBase::setProject( Project *project )
 void PerformanceStatusBase::slotLocaleChanged()
 {
     kDebug(planDbg());
-    KLocale *locale = m_project ? m_project->locale() : KGlobal::locale();
+    KLocale *locale = m_project ? m_project->locale() : KLocale::global();
     if ( locale ) {
         m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
         m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );

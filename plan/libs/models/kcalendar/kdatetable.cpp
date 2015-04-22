@@ -292,7 +292,7 @@ KDateValidator::validate(QString& text, int&) const
 QValidator::State
 KDateValidator::date(const QString& text, QDate& d) const
 {
-  QDate tmp = KGlobal::locale()->readDate(text);
+  QDate tmp = KLocale::global()->readDate(text);
   if (!tmp.isNull())
     {
       d = tmp;
@@ -480,12 +480,12 @@ void KDateTable::initAccels()
 
 int KDateTable::posFromDate( const QDate &dt )
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   // ISO Week numbering always uses Monday as first day of week
-  const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+  const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
       ? Qt::Monday
-      : KGlobal::locale()->weekStartDay();
+      : KLocale::global()->weekStartDay();
 
   int pos = calendar->day( dt );
   int offset = (d->firstday - firstWeekDay + 7) % 7;
@@ -498,13 +498,13 @@ int KDateTable::posFromDate( const QDate &dt )
 QDate KDateTable::dateFromPos( int pos )
 {
   QDate pCellDate;
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
   calendar->setDate(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
 
   // ISO Week numbering always uses Monday as first day of week
-  const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+  const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
       ? Qt::Monday
-      : KGlobal::locale()->weekStartDay();
+      : KLocale::global()->weekStartDay();
 
   int offset = (d->firstday - firstWeekDay + 7) % 7;
   // make sure at least one day of the previous month is visible.
@@ -531,9 +531,9 @@ bool KDateTable::event( QEvent *event )
             int col = d->m_paintweeknumbers ? column - 1 : column;
 
             // ISO Week numbering always uses Monday as first day of week
-            const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+            const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
                 ? Qt::Monday
-                : KGlobal::locale()->weekStartDay();
+                : KLocale::global()->weekStartDay();
 
             int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
             if ( d->m_weekDayDelegate )
@@ -547,7 +547,7 @@ bool KDateTable::event( QEvent *event )
             QDate pCellDate = dateFromPos( pos );
             if ( d->m_weekNumberDelegate )
             {
-                const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+                const KCalendarSystem * calendar = KLocale::global()->calendar();
 #if KDE_IS_VERSION(4,7,0)
                 const int weekNumber = calendar->week( pCellDate );
 #else
@@ -607,7 +607,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
 {
   //kDebug(planDbg());
 
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   QSizeF size;
   QString text;
@@ -632,9 +632,9 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     int col = d->m_paintweeknumbers ? column - 1 : column;
 
     // ISO Week numbering always uses Monday as first day of week
-    const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+    const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
         ? Qt::Monday
-        : KGlobal::locale()->weekStartDay();
+        : KLocale::global()->weekStartDay();
 
     int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
     if ( d->m_weekDayDelegate )
@@ -725,13 +725,13 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
 
 void KDateTable::KDateTablePrivate::nextMonth()
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
   q->setDate(calendar->addMonths( mDate, 1 ));
 }
 
 void KDateTable::KDateTablePrivate::previousMonth()
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
   q->setDate(calendar->addMonths( mDate, -1 ));
 }
 
@@ -831,7 +831,7 @@ KDateTable::keyPressEvent( QKeyEvent *e )
             if ( d->m_selectionmode == ExtendedSelection ) {
                 emit aboutToShowContextMenu( menu, d->m_selectedDates );
             } else {
-                menu->addTitle( KGlobal::locale()->formatDate(d->mDate) );
+                menu->addTitle( KLocale::global()->formatDate(d->mDate) );
                 emit aboutToShowContextMenu( menu, d->mDate );
             }
             if ( menu->isEmpty() ) {
@@ -876,7 +876,7 @@ KDateTable::setFontSize(int size)
   d->maxCell.setHeight(0);
   for(count=0; count<7; ++count)
     {
-      rect=metrics.boundingRect(KGlobal::locale()->calendar()
+      rect=metrics.boundingRect(KLocale::global()->calendar()
                                 ->weekDayName(count+1, KCalendarSystem::ShortDayName));
       d->maxCell.setWidth(qMax(d->maxCell.width(), rect.width()));
       d->maxCell.setHeight(qMax(d->maxCell.height(), rect.height()));
@@ -1012,7 +1012,7 @@ KDateTable::mousePressEvent(QMouseEvent *e)
         if ( d->m_selectionmode == ExtendedSelection ) {
             emit aboutToShowContextMenu( menu, d->m_selectedDates );
         } else {
-            menu->addTitle( KGlobal::locale()->formatDate(clickedDate) );
+            menu->addTitle( KLocale::global()->formatDate(clickedDate) );
             emit aboutToShowContextMenu( menu, clickedDate );
         }
         menu->popup(e->globalPos());
@@ -1043,7 +1043,7 @@ KDateTable::setDate(const QDate& date_)
       d->m_selectedDates << date_;
       emit selectionChanged( d->m_selectedDates );
   }
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   calendar->setDate(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
   //temp.setDate(d->mDate.year(), d->mDate.month(), 1);
@@ -1161,7 +1161,7 @@ KDateInternalYearSelector::yearEnteredSlot()
       return;
     }
   //date.setDate(year, 1, 1);
-  KGlobal::locale()->calendar()->setDate(date, year, 1, 1);
+  KLocale::global()->calendar()->setDate(date, year, 1, 1);
   if(!date.isValid())
     {
       KNotification::beep();
@@ -1333,7 +1333,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
 {
     //kDebug(planDbg())<<date;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem * calendar = KLocale::global()->calendar();
     QRectF r;
 
     QPalette palette = option.palette;
@@ -1419,7 +1419,7 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
 {
     //kDebug(planDbg())<<date;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem * calendar = KLocale::global()->calendar();
     QRectF r;
     bool paintRect=true;
     QBrush bg(option.palette.base());
@@ -1520,7 +1520,7 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
 {
     //kDebug(planDbg())<<daynum;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem * calendar = KLocale::global()->calendar();
 
     QPalette palette = option.palette;
     if ( option.state & QStyle::State_Active ) {

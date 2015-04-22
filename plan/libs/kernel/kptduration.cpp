@@ -138,7 +138,7 @@ double Duration::operator/(const Duration &d) const {
 QString Duration::format(Unit unit, int pres, const KLocale *locale) const
 {
     if ( locale == 0 ) {
-        locale = KGlobal::locale();
+        locale = KLocale::global();
     }
     /* FIXME if necessary
     return i18nc( "<duration><unit>", "%1%2", locale->formatNumber(toDouble(unit), pres), unitToString(unit) );*/
@@ -178,7 +178,7 @@ QString Duration::toString(Format format) const {
             result.sprintf("%u %02u:%02u:%02u.%u", (unsigned)days, hours, minutes, seconds, (unsigned)ms);
             break;
         case Format_HourFraction:
-            result = KGlobal::locale()->formatNumber(toDouble(Unit_h), 2);
+            result = KLocale::global()->formatNumber(toDouble(Unit_h), 2);
             break;
         // i18n
         case Format_i18nHour:
@@ -189,16 +189,16 @@ QString Duration::toString(Format format) const {
             result = i18nc("<hours>h:<minutes>m", "%1h:%2m", hours, minutes);
             break;
         case Format_i18nDay:
-            result = KGlobal::locale()->prettyFormatDuration( m_ms );
+            result = KLocale::global()->prettyFormatDuration( m_ms );
             break;
         case Format_i18nWeek:
-            result = this->format( Unit_w, 2, KGlobal::locale() );
+            result = this->format( Unit_w, 2, KLocale::global() );
             break;
         case Format_i18nMonth:
-            result = this->format( Unit_M, 2, KGlobal::locale() );
+            result = this->format( Unit_M, 2, KLocale::global() );
             break;
         case Format_i18nYear:
-            result = this->format( Unit_Y, 2, KGlobal::locale() );
+            result = this->format( Unit_Y, 2, KLocale::global() );
             break;
         case Format_i18nDayTime:
             ms = m_ms;
@@ -217,7 +217,7 @@ QString Duration::toString(Format format) const {
             }
             break;
         case Format_i18nHourFraction:
-            result = KGlobal::locale()->formatNumber(toDouble(Unit_h), 2);
+            result = KLocale::global()->formatNumber(toDouble(Unit_h), 2);
             break;
         default:
             kFatal()<<"Unknown format"<<endl;
@@ -257,7 +257,7 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
         case Format_HourFraction: {
             // should be in double format
             bool res;
-            double f = KGlobal::locale()->readNumber(s, &res);
+            double f = KLocale::global()->readNumber(s, &res);
             if (ok) *ok = res;
             if (res) {
                 return Duration((qint64)(f)*3600*1000);
