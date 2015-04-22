@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 David Faure <faure@kde.org>
+   Copyright (C) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,6 +17,21 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef FACTORYINIT_H
+#define FACTORYINIT_H
+
 #include "factory.h"
 
-#include "moc_factoryinit.cpp"
+class KPlatoWorkFactoryInit : public KPlatoWork::Factory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "planworkpart.json")
+    Q_INTERFACES(KPluginFactory)
+
+public:
+    explicit KPlatoWorkFactoryInit(QObject *parent = 0) : KPlatoWork::Factory(parent) {}
+    virtual ~KPlatoWorkFactoryInit() {}
+
+};
+
+#endif
