@@ -12,13 +12,8 @@ set(icalendarexport_PART_SRCS
 
 
 add_library(planicalexport MODULE ${icalendarexport_PART_SRCS})
+kcoreaddons_desktop_to_json(planicalexport plan_icalendar_export.desktop)
 
 target_link_libraries(planicalexport planprivate kplatokernel komain KF5::CalendarCore)
 
 install(TARGETS planicalexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  plan_icalendar_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

@@ -34,7 +34,8 @@ set ( TJScheduler_SRCS
     taskjuggler/Interval.cpp
 )
 
-add_library(plantjscheduler MODULE SHARED ${TJScheduler_SRCS} )
+add_library(plantjscheduler MODULE ${TJScheduler_SRCS} )
+kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
 
 target_link_libraries(
     plantjscheduler
@@ -45,7 +46,3 @@ target_link_libraries(
 set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )
 
 install( TARGETS plantjscheduler DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
-
-########### install files ###############
-
-install( FILES plantjscheduler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

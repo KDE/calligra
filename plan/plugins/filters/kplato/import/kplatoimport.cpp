@@ -41,8 +41,8 @@
 
 using namespace KPlato;
 
-K_PLUGIN_FACTORY(KPlatoImportFactory, registerPlugin<KPlatoImport>();)
-K_EXPORT_PLUGIN(KPlatoImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KPlatoImportFactory, "plan_kplato_import.json",
+                           registerPlugin<KPlatoImport>();)
 
 KPlatoImport::KPlatoImport(QObject* parent, const QVariantList &)
     : KoFilter(parent)

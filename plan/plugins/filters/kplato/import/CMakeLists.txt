@@ -12,12 +12,8 @@ set(kplatoimport_PART_SRCS
 
 
 add_library(plankplatoimport MODULE ${kplatoimport_PART_SRCS})
+kcoreaddons_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
 
 target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 
 install(TARGETS plankplatoimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  plan_kplato_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
