@@ -54,13 +54,13 @@ public:
     const KHTMLPart &htmlPart() const { return *m_htmlPart; }
 
 Q_SIGNALS:
-    void openUrlRequest( HtmlView*, const KUrl& );
+    void openUrlRequest( HtmlView*, const QUrl& );
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-    void slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
+    void slotOpenUrlRequest(const QUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
 
 protected:
     void updateActionsEnabled(  bool on = true );

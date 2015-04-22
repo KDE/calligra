@@ -752,13 +752,13 @@ ViewInfo View::defaultCategoryInfo( const QString &type ) const
     return vi;
 }
 
-void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
+void View::slotOpenUrlRequest( HtmlView *v, const QUrl &url )
 {
     if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
         getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
     }
-    if ( url.protocol() == "help" ) {
+    if ( url.scheme() == QLatin1String("help") ) {
         KHelpClient::invokeHelp( "", url.fileName() );
         return;
     }
@@ -776,7 +776,7 @@ ViewBase *View::createWelcomeView()
 
     slotOpenUrlRequest( v, KUrl( "about:plan/main" ) );
 
-    connect( v, SIGNAL(openUrlRequest(HtmlView*,KUrl)), SLOT(slotOpenUrlRequest(HtmlView*,KUrl)) );
+    connect( v, SIGNAL(openUrlRequest(HtmlView*,QUrl)), SLOT(slotOpenUrlRequest(HtmlView*,QUrl)) );
 
     m_tab->addWidget( v );
     return v;
