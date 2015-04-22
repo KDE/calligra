@@ -202,9 +202,9 @@ void KexiDataAwareView::slotUpdateSaveCancelActions()
 {
     // 'save row' enabled when editing and there's anything to save
     //const bool editing = isDataEditingInProgress();
-    setAvailable("data_save_row", d->dataAwareObject->rowEditing());
+    setAvailable("data_save_row", d->dataAwareObject->rowEditing() >= 0);
     // 'cancel row changes' enabled when editing
-    setAvailable("data_cancel_row_changes", d->dataAwareObject->rowEditing());
+    setAvailable("data_cancel_row_changes", d->dataAwareObject->rowEditing() >= 0);
 }
 
 QWidget* KexiDataAwareView::mainWidget() const

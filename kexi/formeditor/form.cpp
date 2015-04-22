@@ -1560,11 +1560,15 @@ void Form::createPropertiesForWidget(QWidget *w)
                 }
             }
             else {
+                int realType = subwinfo->customTypeForProperty(propertyName);
+                if (realType == KoProperty::Invalid || realType == KoProperty::Auto) {
+                    realType = meta.type();
+                }
                 newProp = new KoProperty::Property(
                     propertyName,
                     // assign current or older value
                     oldValueExists ? modifiedPropertiesIt.value() : subwidget->property(propertyName),
-                    desc, desc, subwinfo->customTypeForProperty(propertyName)
+                    desc, desc, realType
                 );
                 //now set current value, so the old one is stored as old
                 if (oldValueExists) {
@@ -1575,8 +1579,9 @@ void Form::createPropertiesForWidget(QWidget *w)
             if (!isPropertyVisible(propertyName, isTopLevel))
                 newProp->setVisible(false);
 //! @todo
-            if (newProp->type() == 0) // invalid type == null pixmap ?
-                newProp->setType(KoProperty::Pixmap);
+            if (newProp->type() == KoProperty::Invalid) {
+                newProp->setType(KoProperty::String);
+            }
 
             d->propertySet.addProperty(newProp);
         }
