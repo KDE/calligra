@@ -283,7 +283,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
             d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
         }
     }
-    if (d->origStatement.isEmpty()) {
+    if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
         //no valid query delivered or query has not been modified:
         // just load sql text, no matter if it's valid
         if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
