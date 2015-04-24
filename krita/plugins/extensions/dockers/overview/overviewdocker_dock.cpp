@@ -50,7 +50,7 @@ OverviewDockerDock::OverviewDockerDock( )
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if(m_canvas == canvas)
+    if (m_canvas == canvas)
         return;
 
     setEnabled(canvas != 0);
@@ -69,7 +69,10 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     m_overviewWidget->setCanvas(canvas);
-    if (m_canvas) {
+    if (m_canvas
+            && m_canvas->viewManager()
+            && m_canvas->viewManager()->zoomController()
+            && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
         m_layout->addWidget(m_zoomSlider);
     }
