@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -261,10 +261,13 @@ void KexiFormScrollView::updateGUIAfterSorting(int previousRow)
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
                                       CreateEditorFlags flags)
 {
-    Q_UNUSED(row);
     Q_UNUSED(addText);
     Q_UNUSED(flags);
 
+    if (row < 0) {
+        kWarning() << "ROW NOT SPECIFIED!" << row;
+        return;
+    }
     if (isReadOnly()) {
         kWarning() << "DATA IS READ ONLY!";
         return;
@@ -273,20 +276,22 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
         kWarning() << "COL IS READ ONLY!";
         return;
     }
-
+    if (rowEditing() >= 0 && row != rowEditing()) {
+        if (!acceptRowEdit()) {
+            return;
+        }
+    }
     //! @todo
-    const bool startRowEdit = !rowEditing(); //remember if we're starting record edit
-
-    if (!rowEditing()) {
+    const bool startRowEdit = rowEditing() == -1; //remember if we're starting record edit
+    if (startRowEdit) {
         //we're starting record editing session
         m_data->clearRowEditBuffer();
-
-        setRowEditing(true);
+        setRowEditing(row);
         //indicate on the vheader that we are editing:
         if (verticalHeader()) {
             updateVerticalHeaderSection(currentRow());
         }
-        if (isInsertingEnabled() && m_currentItem == m_insertItem) {
+        if (isInsertingEnabled() && row == rowCount()) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
             //'insert' record editing: show another row after that:
@@ -303,7 +308,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
     if (startRowEdit) {
         recordNavigator()->showEditingIndicator(true);
-        emit rowEditStarted(m_curRow);
+        //emit rowEditStarted(row);
     }
 }
 
