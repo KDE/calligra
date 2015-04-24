@@ -65,9 +65,16 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     showButton(KDialog::Help, false);
 
     QString infoLblFromText;
+    QString captionOrName;
     KexiGUIMessageHandler msgh(this);
-    m_tableOrQuery = new KexiDB::TableOrQuerySchema(
-        KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
+    if (m_options.useTempQuery) {
+        m_tableOrQuery = new KexiDB::TableOrQuerySchema(KexiMainWindowIface::global()->unsavedQuery(options.itemId));
+        captionOrName = KexiMainWindowIface::global()->project()->dbConnection()->querySchema(m_options.itemId)->captionOrName();
+    } else {
+        m_tableOrQuery = new KexiDB::TableOrQuerySchema(
+            KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
+        captionOrName = m_tableOrQuery->captionOrName();
+    }
     if (m_tableOrQuery->table()) {
         if (m_options.mode == KexiCSVExport::Clipboard) {
             setWindowTitle(i18nc("@title:window", "Copy Data From Table to Clipboard"));
@@ -91,7 +98,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         return;
     }
 
-    QString text = "\n" + m_tableOrQuery->captionOrName();
+    QString text = "\n" + captionOrName;
     int m_rowCount = KexiDB::rowCount(*m_tableOrQuery);
     int columns = KexiDB::fieldCount(*m_tableOrQuery);
     text += "\n";
@@ -115,7 +122,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         m_fileSaveWidget->setAdditionalFilters(csvMimeTypes().toSet());
         m_fileSaveWidget->setDefaultExtension("csv");
         m_fileSaveWidget->setLocationText(
-            KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()));
+            KexiUtils::stringToFileName(captionOrName));
         m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
         addPage(m_fileSavePage);
         connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),

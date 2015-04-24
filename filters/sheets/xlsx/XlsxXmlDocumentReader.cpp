@@ -21,7 +21,11 @@
  *
  */
 
+// Own
 #include "XlsxXmlDocumentReader.h"
+
+#include <KoBorder.h>  // needed by DrawingMLMethodso
+
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlCommentsReader.h"
 #include "XlsxImport.h"

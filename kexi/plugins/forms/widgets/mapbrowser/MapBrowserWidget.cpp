@@ -32,8 +32,9 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
 #ifndef Q_CC_MSVC
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
 #endif
-  //Marble::GeoSceneDocument::head()->mapThemeId()
   setMapThemeId("earth/srtm/srtm.dgml");
+  m_defaultZoom = 1200; // with this value "more or less" entire earth fits the window. Please check the MarbleWidget::setZoom documentation for more info.
+  setAnimationsEnabled(true);
   connect( this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this , SLOT(slotMapChanged()));
 }
 
@@ -45,7 +46,7 @@ MapBrowserWidget::~MapBrowserWidget()
 QVariant MapBrowserWidget::value()
 {
     if (dataSource().isEmpty()){
-        return serializeData(0.0, 0.0, 1100);
+        return serializeData(0.0, 0.0, m_defaultZoom);
     }
     return serializeData(centerLatitude(), centerLongitude(), zoom());
 }
@@ -85,6 +86,7 @@ void MapBrowserWidget::clear()
 {
     setCenterLatitude(0.0);
     setCenterLongitude(0.0);
+    setZoom(m_defaultZoom);
 }
 
 bool MapBrowserWidget::cursorAtEnd()
@@ -116,9 +118,11 @@ void MapBrowserWidget::deserializeData(const QVariant& serialized)
     QStringList dataList = serializedData.split(';');
     //kDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
+        setAnimationsEnabled(false);
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
         zoomView(dataList[2].toInt());
+        setAnimationsEnabled(true);
     }
 }
 

@@ -45,8 +45,8 @@ class KoFindText;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
-class KoRdfSemanticItem;
-typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
+class KoRdfBasicSemanticItem;
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 #endif
 
 class KToggleAction;
@@ -193,7 +193,7 @@ private Q_SLOTS:
     void configure();
 #ifdef SHOULD_BUILD_RDF
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid);
 #endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);

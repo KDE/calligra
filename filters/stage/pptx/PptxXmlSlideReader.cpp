@@ -25,7 +25,7 @@
 #include "PptxImport.h"
 
 #include "Charting.h"
-#include "ChartExport.h"
+#include "KoOdfChartWriter.h"
 #include "XlsxXmlChartReader.h"
 #include "PptxXmlCommentsReader.h"
 
@@ -35,7 +35,7 @@
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyle.h>
 #include <MsooXmlDrawingTableStyleReader.h>
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>

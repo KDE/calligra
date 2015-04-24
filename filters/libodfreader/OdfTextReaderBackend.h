@@ -59,39 +59,47 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    virtual void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeAnnotationEnd(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(OfficeAnnotation);
+    DECLARE_BACKEND_FUNCTION(OfficeAnnotationEnd);
+    DECLARE_BACKEND_FUNCTION(DcCreator);
+    DECLARE_BACKEND_FUNCTION(DcDate);
 
-    virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(TextH);
+    DECLARE_BACKEND_FUNCTION(TextP);
+    DECLARE_BACKEND_FUNCTION(TextList);
 
-    virtual void elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableColumn(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableHeaderRows(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableRow(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableCoveredTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(TableTable);
+    DECLARE_BACKEND_FUNCTION(TableTableColumnGroup);
+    DECLARE_BACKEND_FUNCTION(TableTableColumn);
+    DECLARE_BACKEND_FUNCTION(TableTableColumns);
+    DECLARE_BACKEND_FUNCTION(TableTableHeaderColumns);
+    DECLARE_BACKEND_FUNCTION(TableTableHeaderRows);
+    DECLARE_BACKEND_FUNCTION(TableTableRowGroup);
+    DECLARE_BACKEND_FUNCTION(TableTableRow);
+    DECLARE_BACKEND_FUNCTION(TableTableRows);
+    DECLARE_BACKEND_FUNCTION(TableTableCell);
+    DECLARE_BACKEND_FUNCTION(TableCoveredTableCell);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, etc.
     // This includes text content itself.
 
-    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(TextA);
+    DECLARE_BACKEND_FUNCTION(TextLineBreak);
+    DECLARE_BACKEND_FUNCTION(TextSpan);
+    DECLARE_BACKEND_FUNCTION(TextS);
 
     // ----------------------------------------------------------------
     // List level functions: list-header and list-item.
 
-    virtual void elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextSoftPageBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(TextListHeader);
+    DECLARE_BACKEND_FUNCTION(TextListItem);
+    DECLARE_BACKEND_FUNCTION(TextSoftPageBreak);
 
+    // ----------------------------------------------------------------
+    // Some special functions
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void textVariable(const QString &name, const QString &value);
 
  private:
     class Private;

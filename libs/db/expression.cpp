@@ -303,7 +303,7 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
     case KEXIDB_TOKEN_BETWEEN_AND:
     case KEXIDB_TOKEN_NOT_BETWEEN_AND: {
         if (list.count() != 3) {
-            parseInfo.errMsg = i18n("Three arguments required");
+            parseInfo.errMsg = i18n("Incorrect number of arguments");
             parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
             return false;
         }
@@ -1063,40 +1063,40 @@ bool FunctionExpr::validate(ParseInfo& parseInfo)
         }
         const int count = args->args();
         if (count != 2 && count != 3) {
-            parseInfo.errMsg = "Incorrect number of arguments";
-            parseInfo.errDescr = QString("%1() function requires 2 or 3 arguments.").arg(name);
+            parseInfo.errMsg = i18n("Incorrect number of arguments");
+            parseInfo.errDescr = i18nc("@info Number of arguments error", "%1() function requires 2 or 3 arguments.", name);
             return false;
         }
         BaseExpr *textExpr = args->arg(0);
         if (!textExpr->isTextType() && textExpr->type() != Field::Null) {
-            parseInfo.errMsg = "Incorrect type of argument";
-            parseInfo.errDescr = QString("%1() function's first argument should be of type \"%2\". "
-                                                           "Specified argument is of type \"%3\".")
-                                       .arg(name)
-                                       .arg(Field::typeName(Field::Text))
-                                       .arg(Field::typeName(textExpr->type()));
+            parseInfo.errMsg = i18n("Incorrect type of argument");
+            parseInfo.errDescr = i18nc("@info Type error", "%1() function's first argument should be of type \"%2\". "
+                                                           "Specified argument is of type \"%3\".",
+                                       name,
+                                       Field::typeName(Field::Text),
+                                       Field::typeName(textExpr->type()));
             return false;
         }
         BaseExpr *startExpr = args->arg(1);
         if (!startExpr->isIntegerType() && startExpr->type() != Field::Null) {
-            parseInfo.errMsg = "Incorrect type of argument";
-            parseInfo.errDescr = QString("%1() function's second argument should be of type \"%2\". "
-                                                           "Specified argument is of type \"%3\".")
-                                       .arg(name)
-                                       .arg(Field::typeName(Field::Integer))
-                                       .arg(Field::typeName(startExpr->type()));
+            parseInfo.errMsg = i18n("Incorrect type of argument");
+            parseInfo.errDescr = i18nc("@info Type error", "%1() function's second argument should be of type \"%2\". "
+                                                           "Specified argument is of type \"%3\".",
+                                       name,
+                                       Field::typeName(Field::Integer),
+                                       Field::typeName(startExpr->type()));
             return false;
         }
         BaseExpr *lengthExpr = 0;
         if (count == 3) {
             lengthExpr = args->arg(2);
             if (!lengthExpr->isIntegerType() && lengthExpr->type() != Field::Null) {
-                parseInfo.errMsg = "Incorrect type of argument";
-                parseInfo.errDescr = QString("%1() function's third argument should be of type \"%2\". "
-                                             "Specified argument is of type \"%3\".")
-                                           .arg(name)
-                                           .arg(Field::typeName(Field::Integer))
-                                           .arg(Field::typeName(lengthExpr->type()));
+                parseInfo.errMsg = i18n("Incorrect type of argument");
+                parseInfo.errDescr = i18nc("@info Type error", "%1() function's third argument should be of type \"%2\". "
+                                                               "Specified argument is of type \"%3\".",
+                                           name,
+                                           Field::typeName(Field::Integer),
+                                           Field::typeName(lengthExpr->type()));
                 return false;
             }
         }

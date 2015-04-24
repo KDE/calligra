@@ -31,7 +31,7 @@
 
 #include <QStack>
 
-namespace Charting
+namespace KoChart
 {
     class Chart;
     class Series;
@@ -62,19 +62,19 @@ private:
     SubStreamHandler* m_parentHandler;
     Sheet* m_sheet;
     ChartObject* m_chartObject;
-    Charting::Chart* m_chart;
+    KoChart::Chart* m_chart;
 
-    Charting::Series* m_currentSeries;
-    Charting::Obj* m_currentObj;
-    QStack<Charting::Obj*> m_stack;
-    QStack<Charting::Series*> m_seriesStack;
+    KoChart::Series* m_currentSeries;
+    KoChart::Obj* m_currentObj;
+    QStack<KoChart::Obj*> m_stack;
+    QStack<KoChart::Series*> m_seriesStack;
     std::vector<XFRecord> m_xfTable;
 
     class InternalDataCache;
     friend class InternalDataCache;
     InternalDataCache *m_internalDataCache;
 
-    //QMap<Charting::Obj*, int> m_defaultObjects;
+    //QMap<KoChart::Obj*, int> m_defaultObjects;
     int m_defaultTextId;
     int m_axisId;
     

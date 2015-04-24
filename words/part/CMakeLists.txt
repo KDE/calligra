@@ -76,6 +76,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuPart.cpp
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
+    author/CAuDocument.cpp
 )
 
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -89,6 +90,20 @@ if( SHOULD_BUILD_FEATURE_RDF )
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+
+        author/dockers/CAuOutlinerDocker.cpp
+        author/dockers/CAuOutlinerDockerFactory.cpp
+        author/dockers/CAuOutlinerWidget.cpp
+
+        author/metadata/CAuMetaDataManager.cpp
+
+        author/metadata/CAuSectionRdf.cpp
+        author/metadata/CAuSectionSemanticItemFactory.cpp
+
+        author/metadata/CAuActorRdf.cpp
+        author/metadata/CAuActorSemanticItemFactory.cpp
+
+        author/metadata/CAuSemanticItemBase.cpp
     )
 endif()
 
@@ -109,6 +124,8 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
 if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
+        author/metadata/CAuSectionRdfEditWidget.ui
+        author/metadata/CAuActorRdfEditWidget.ui
     )
 endif()
 

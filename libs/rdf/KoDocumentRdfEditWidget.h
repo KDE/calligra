@@ -127,7 +127,7 @@ private Q_SLOTS:
     /**
      * The user edited a semantic item, update the view.
      */
-    void semanticObjectUpdated(hKoRdfSemanticItem item);
+    void semanticObjectUpdated(hKoRdfBasicSemanticItem item);
 
 private:
 

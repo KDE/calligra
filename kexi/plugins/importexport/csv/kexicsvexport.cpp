@@ -63,12 +63,13 @@ bool Options::assign(QMap<QString, QString>& args)
 
     bool ok;
     itemId = args["itemId"].toInt(&ok);
-    if (!ok || itemId <= 0)
+    if (!ok || itemId == 0) //neverSaved items are supported
         return false;
     if (args.contains("forceDelimiter"))
         forceDelimiter = args["forceDelimiter"];
     if (args.contains("addColumnNames"))
         addColumnNames = (args["addColumnNames"] == "1");
+    useTempQuery = (args["useTempQuery"] == "1");
     return true;
 }
 

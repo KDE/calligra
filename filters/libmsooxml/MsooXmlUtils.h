@@ -332,12 +332,6 @@ inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 //! @par colorName named text highlight color like "black", "blue" (17.18.40)
 KOMSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
 
-//! @return QColor value for DefaultIndexColor
-KOMSOOXML_EXPORT QColor defaultIndexedColor( int index );
-
-//! @return QLocale for the give language id
-KOMSOOXML_EXPORT QLocale localeForLangId( int langid );
-
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! Sets @arg ok to true on success.
 KOMSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);

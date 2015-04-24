@@ -16,5 +16,16 @@ if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     endif()
 endif()
 
-add_library(mso STATIC generated/simpleParser.cpp drawstyle.cpp writer.cpp ODrawToOdf.cpp shapes.cpp shapes2.cpp pictures.cpp pole.cpp)
+add_library(mso STATIC
+    generated/simpleParser.cpp
+    drawstyle.cpp
+    writer.cpp
+    ODrawToOdf.cpp
+    shapes.cpp
+    shapes2.cpp
+    pictures.cpp
+    pole.cpp
+    MsoUtils.cpp
+    NumberFormatParser.cpp
+)
 target_link_libraries(mso koodf ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})

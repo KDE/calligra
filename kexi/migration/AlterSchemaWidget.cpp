@@ -42,8 +42,7 @@ using namespace KexiMigration;
 
 AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 {
-    m_originalSchema = 0;
-    m_newSchema = 0;
+    m_schema = 0;
 
     m_layout = new QGridLayout();
     m_table = new QTableView(this);
@@ -84,13 +83,16 @@ AlterSchemaWidget::~AlterSchemaWidget()
 {
     delete m_table;
     delete m_model;
+    delete m_schema;
 }
 
 void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& suggestedCaption)
 {
-    m_originalSchema = ts;
-    m_newSchema = new KexiDB::TableSchema(*ts, false);
-    m_newSchema->setName(m_originalSchema->name());
+    if (!ts) {
+        return;
+    }
+    delete m_schema;
+    m_schema = ts;
 
     m_tableNameWidget->setCaptionText(suggestedItemCaption(suggestedCaption));
     m_tableNameWidget->captionLineEdit()->selectAll();
@@ -98,7 +100,7 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& s
 
     m_model->setRowCount(3); // default
 
-    m_model->setSchema(m_newSchema);
+    m_model->setSchema(m_schema);
     tableClicked(m_model->index(0,0));
 }
 
@@ -111,41 +113,47 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(i18n("Column %1", m_selectedColumn + 1));
-    if (m_newSchema && m_selectedColumn < int(m_newSchema->fieldCount()) && m_newSchema->field(m_selectedColumn)) {
-        kDebug() << m_newSchema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName());
-        m_columnType->setCurrentIndex(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName()));
+    if (m_schema && m_selectedColumn < int(m_schema->fieldCount()) && m_schema->field(m_selectedColumn)) {
+        kDebug() << m_schema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_schema->field(m_selectedColumn)->typeName());
+        m_columnType->setCurrentIndex(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName()));
 
         //Only set the pkey check enabled if the field type is integer
-        m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName())).toInt())));
+        m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName())).toInt())));
 
-        m_columnPKey->setChecked(m_newSchema->field(m_selectedColumn)->isPrimaryKey());
+        m_columnPKey->setChecked(m_schema->field(m_selectedColumn)->isPrimaryKey());
     }
 }
 
 void AlterSchemaWidget::typeActivated(int typ)
 {
-    m_newSchema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
+    m_schema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
 
     //Only set the pkey check enabled if the field type is integer
     m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt())));
 
     //If the field type is not integer, then the field cannot be a pkey
     if (!KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()))) {
-        m_newSchema->field(m_selectedColumn)->setPrimaryKey(false);
+        m_schema->field(m_selectedColumn)->setPrimaryKey(false);
     }
 }
 
-void AlterSchemaWidget::pkeyClicked(bool pkey)
-{
-    m_newSchema->field(m_selectedColumn)->setPrimaryKey(pkey);
-    m_newSchema->field(m_selectedColumn)->setAutoIncrement(pkey);
+void AlterSchemaWidget::pkeyClicked(bool pkey){
+    m_schema->field(m_selectedColumn)->setAutoIncrement(pkey);
+    m_schema->field(m_selectedColumn)->setPrimaryKey(pkey);
 }
 
 KexiDB::TableSchema* AlterSchemaWidget::newSchema()
 {
-    m_newSchema->setName(m_tableNameWidget->nameText());
-    return m_newSchema;
+    return m_schema;
 }
+
+KexiDB::TableSchema* AlterSchemaWidget::takeTableSchema()
+{
+    KexiDB::TableSchema *schema = m_schema;
+    m_schema = 0;
+    return schema;
+}
+
 
 KexiNameWidget* AlterSchemaWidget::nameWidget()
 {

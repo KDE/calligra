@@ -48,6 +48,9 @@ protected:
 class KRITAUI_EXPORT KisPSDLayerStyleCollectionResource : public KoResource
 {
 public:
+    typedef QVector<KisPSDLayerStyleSP> StylesVector;
+
+public:
     explicit KisPSDLayerStyleCollectionResource(const QString &filename);
     virtual ~KisPSDLayerStyleCollectionResource();
 
@@ -59,14 +62,18 @@ public:
 
     virtual QString defaultFileExtension() const;
 
-    QVector<KisPSDLayerStyleSP> layerStyles() const;
+    StylesVector layerStyles() const;
+    void setLayerStyles(StylesVector styles);
+
+    void collectAllLayerStyles(KisNodeSP root);
+    void assignAllLayerStyles(KisNodeSP root);
 
 protected:
 
     virtual QByteArray generateMD5() const;
 
 private:
-    QVector<KisPSDLayerStyleSP> m_layerStyles;
+    StylesVector m_layerStyles;
 
 };
 

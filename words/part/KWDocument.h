@@ -199,12 +199,6 @@ public:
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
 
-    /// Set cover image data at a QPair<cover mime type, cover data>.
-    void setCoverImage(QPair<QString, QByteArray> cover);
-
-    /// return cover data.
-    QPair<QString, QByteArray> coverImage();
-
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 public Q_SLOTS:
@@ -289,7 +283,6 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
-    QPair<QString, QByteArray> m_coverImage;
     QList<KoShape*> m_loadedAnnotationShapes;
     KoAnnotationLayoutManager *m_annotationManager;
 };

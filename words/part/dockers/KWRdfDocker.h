@@ -55,8 +55,8 @@ private Q_SLOTS:
     void updateDataForced();
     void updateData();
     void showSemanticViewContextMenu(const QPoint &);
-    void semanticObjectAdded(hKoRdfSemanticItem item);
-    void semanticObjectUpdated(hKoRdfSemanticItem item);
+    void semanticObjectAdded(hKoRdfBasicSemanticItem item);
+    void semanticObjectUpdated(hKoRdfBasicSemanticItem item);
     void canvasResourceChanged(int key, const QVariant &value);
 
 private:

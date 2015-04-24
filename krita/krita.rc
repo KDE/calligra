@@ -36,6 +36,8 @@
       <Action name="edit_cut"/>
       <Action name="edit_copy"/>
       <Action name="copy_merged"/>
+      <Action name="cut_sharp"/>
+      <Action name="copy_sharp"/>
       <Action name="edit_paste"/>
       <Action name="paste_new"/>
       <Action name="clear"/>

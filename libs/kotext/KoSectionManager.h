@@ -66,7 +66,7 @@ public Q_SLOTS:
     /**
      * Call this to recalc all sections information
      * @param needModel place @c true to it if you need model to use in GUI and @c false otherwise
-     * @return pointer to QStandardItemModel, build according to s*ection tree
+     * @return pointer to QStandardItemModel, build according to section tree
      *         with a pointers to KoSection at Qt::UserRole + 1 and section name
      *         for display role.
      *         NOTE: it is not updated further by KoSectionManager
@@ -79,6 +79,7 @@ public Q_SLOTS:
     void invalidate();
 
     /**
+     *
      * Call this to register new section in manager
      */
     void registerSection(KoSection *section);

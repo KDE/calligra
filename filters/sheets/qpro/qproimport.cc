@@ -32,6 +32,7 @@
 #include <sheets/Cell.h>
 #include <sheets/Value.h>
 #include <sheets/Map.h>
+#include <sheets/LoadingInfo.h>
 
 #include <qproformula.h>
 #include <qpro/stream.h>
@@ -116,7 +117,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     // No need for a dynamic cast here, since we use Qt's moc magic
     Doc *ksdoc = (Doc*)document;
 
-    if (ksdoc->mimeType() != "application/x-kspread") {
+    if (ksdoc->mimeType() != "application/x-ole-storage") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
@@ -245,6 +246,8 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
         delete lRec;
         lRec = 0;
     } while (lIn);
+
+    ksdoc->map()->loadingInfo()->setInitialActiveSheet(table);
 
     emit sigProgress(100);
     if (bSuccess)
