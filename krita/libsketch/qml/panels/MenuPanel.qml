@@ -40,7 +40,7 @@ Item {
         width: Constants.GridWidth * 1.5;
         height: Constants.GridHeight / 2 + 8;
 
-        color: Settings.theme.color("panels/menu/base");
+        //color: Settings.theme.color("panels/menu/base");
         radius: 8;
 
         Label {
@@ -67,7 +67,7 @@ Item {
 
     Rectangle {
         id: background;
-        color: Settings.theme.color("panels/menu/base");
+        //color: Settings.theme.color("panels/menu/base");
         anchors.fill: parent;
 
         MouseArea {
