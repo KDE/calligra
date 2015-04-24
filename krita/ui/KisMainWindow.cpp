@@ -505,11 +505,28 @@ KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     QTimer::singleShot(1000, this, SLOT(checkSanity()));
 
     qDebug() << "KisMainWindow() 26" << t.elapsed();
-}
 
-void KisMainWindow::setNoCleanup(bool noCleanup)
-{
-    d->noCleanup = noCleanup;
+    // Hide everything
+    if (appType == KisApplication::Sketch) {
+
+        statusBar()->setVisible(false);
+
+        foreach(QObject* widget, children()) {
+            if (widget->inherits("QDockWidget")) {
+                QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                dw->hide();
+;            }
+        }
+
+        setWindowState(windowState() | Qt::WindowFullScreen);
+        menuBar()->setVisible(false);
+        QList<QToolBar*> toolBars = findChildren<QToolBar*>();
+        foreach(QToolBar* toolbar, toolBars) {
+            toolbar->setVisible(false);
+        }
+
+    }
+
 }
 
 KisMainWindow::~KisMainWindow()
@@ -1529,8 +1546,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         if (d->activeView && d->activeView->document()) {
             saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
         }
-    } else
+    } else {
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
+    }
 }
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
@@ -2280,7 +2298,9 @@ void KisMainWindow::initializeGeometry()
             setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
-    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    if (d->applicationType != KisApplication::Sketch) {
+        restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    }
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

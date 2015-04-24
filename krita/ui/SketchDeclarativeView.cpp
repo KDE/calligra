@@ -159,7 +159,7 @@ bool SketchDeclarativeView::event( QEvent* event )
             if (m_canvasWidget.data())
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-                //functionality.s
+                //functionality.
                 QList<QGraphicsItem*> items = scene()->items();
                 Q_FOREACH(QGraphicsItem* item, items) {
                     if (item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
@@ -187,7 +187,7 @@ bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
             if (m_canvasWidget.data())
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-                //functionality.s
+                //functionality.
                 KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
                 QList<QGraphicsItem*> items = scene()->items(ev->pos());
                 Q_FOREACH(QGraphicsItem* item, items)

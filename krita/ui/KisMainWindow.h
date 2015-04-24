@@ -82,11 +82,6 @@ public:
      */
     void updateCaption();
 
-
-    // If noCleanup is set, KisMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
-
     /**
      * Add a the given view to the list of views of this mainwindow.
      */
