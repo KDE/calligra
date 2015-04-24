@@ -62,6 +62,7 @@ class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSuperv
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
     Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
 
@@ -150,6 +151,9 @@ public:
     KisViewManager *viewManager() const;
 
     // SKetch/Gemini
+    bool allowClose() const;
+    void setAllowClose(bool allow);
+
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
 
@@ -181,6 +185,7 @@ Q_SIGNALS:
 
 
     // Sketch signals
+    void closeRequested();
     void switchedToSketch();
     void currentSketchPageChanged();
     void sketchKisViewChanged();
@@ -452,6 +457,7 @@ private:
 private slots:
     void initializeGeometry();
     void createSketch();
+    void adjustZoomOnDocumentChangedAndStuff();
 
 private:
     class Private;

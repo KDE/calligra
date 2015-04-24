@@ -216,7 +216,15 @@ public:
         , lastExportSpecialOutputFlag(0)
         , applicationType(appType)
         , sketchDeclarativeView(0)
+        , allowClose(true)
+        , centerer(0)
     {
+        if (applicationType != KisApplication::Desktop) {
+            centerer = new QTimer(parent);
+            centerer->setInterval(10);
+            centerer->setSingleShot(true);
+            connect(centerer, SIGNAL(timeout()), parent, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+        }
     }
 
     ~Private() {
@@ -294,6 +302,7 @@ public:
     KisApplication::ApplicationType applicationType;
     SketchDeclarativeView *sketchDeclarativeView;
 
+    bool allowClose;
     QString currentSketchPage;
     QTimer *centerer;
 
@@ -397,12 +406,10 @@ KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
 #endif /* QT_VERSION >= 0x040800 */
 
     if (appType == KisApplication::Sketch) {
-
         createSketch();
         setCentralWidget(d->sketchDeclarativeView);
     }
     else {
-
         setCentralWidget(d->mdiArea);
         d->mdiArea->show();
     }
@@ -2375,6 +2382,17 @@ void KisMainWindow::createSketch()
 
 }
 
+bool KisMainWindow::allowClose() const
+{
+    return d->allowClose;
+}
+
+void KisMainWindow::setAllowClose(bool allow)
+{
+    d->allowClose = allow;
+}
+
+
 QString KisMainWindow::currentSketchPage() const
 {
     return d->currentSketchPage;
@@ -2405,6 +2423,21 @@ void KisMainWindow::setSketchKisView(QObject* newView)
 }
 
 
+void KisMainWindow::adjustZoomOnDocumentChangedAndStuff()
+{
+    if (d->viewManager
+            && d->viewManager->zoomController()
+            && d->viewManager->canvas()
+            && d->viewManager->canvasBase()
+            && d->viewManager->canvasBase()->canvasController()) {
+        qApp->processEvents();
+        d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        qApp->processEvents();
+        QPoint center = d->viewManager->canvas()->rect().center();
+        static_cast<KoCanvasControllerWidget*>(d->viewManager->canvasBase()->canvasController())->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
+    }
+}
 
 
 #include <KisMainWindow.moc>
