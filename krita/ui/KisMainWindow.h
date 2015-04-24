@@ -62,6 +62,9 @@ class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSuperv
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
+    Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
+
 public:
 
     /**
@@ -146,6 +149,14 @@ public:
 
     KisViewManager *viewManager() const;
 
+    // SKetch/Gemini
+    QString currentSketchPage() const;
+    void setCurrentSketchPage(QString newPage);
+
+    QObject* sketchKisView() const;
+    void setSketchKisView(QObject* newView);
+
+
 Q_SIGNALS:
 
     /**
@@ -167,6 +178,12 @@ Q_SIGNALS:
 
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
+
+
+    // Sketch signals
+    void switchedToSketch();
+    void currentSketchPageChanged();
+    void sketchKisViewChanged();
 
 public Q_SLOTS:
 

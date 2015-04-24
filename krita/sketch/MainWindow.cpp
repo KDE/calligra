@@ -74,7 +74,7 @@ public:
     bool allowClose;
     KisViewManager* viewManager;
     QString currentSketchPage;
-	QTimer *centerer;
+    QTimer *centerer;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags)

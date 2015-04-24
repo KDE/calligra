@@ -293,6 +293,10 @@ public:
 
     KisApplication::ApplicationType applicationType;
     SketchDeclarativeView *sketchDeclarativeView;
+
+    QString currentSketchPage;
+    QTimer *centerer;
+
 };
 
 KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
@@ -304,7 +308,6 @@ KisMainWindow::KisMainWindow(KisApplication::ApplicationType appType)
     t.start();
 
     setComponentData(KisFactory::componentData());
-    KGlobal::setActiveComponent(KisFactory::componentData());
 
     qDebug() << "KisMainWindow() 1" << t.elapsed();
 
@@ -553,9 +556,11 @@ KisMainWindow::~KisMainWindow()
 
     //    }
 
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
-    cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-    cfg.writeEntry("ko_windowstate", saveState().toBase64());
+    if (d->applicationType != KisApplication::Sketch) {
+        KConfigGroup cfg(KGlobal::config(), "MainWindow");
+        cfg.writeEntry(qAppName() + "_geometry", saveGeometry().toBase64());
+        cfg.writeEntry(qAppName() + "_windowstate", saveState().toBase64());
+    }
 
     {
         KConfigGroup group(KGlobal::config(), "theme");
@@ -2299,7 +2304,7 @@ void KisMainWindow::initializeGeometry()
         }
     }
     if (d->applicationType != KisApplication::Sketch) {
-        restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+        restoreWorkspace(QByteArray::fromBase64(cfg.readEntry(qAppName() + "_windowstate", QByteArray())));
     }
 }
 
@@ -2369,5 +2374,37 @@ void KisMainWindow::createSketch()
     }
 
 }
+
+QString KisMainWindow::currentSketchPage() const
+{
+    return d->currentSketchPage;
+}
+
+void KisMainWindow::setCurrentSketchPage(QString newPage)
+{
+    d->currentSketchPage = newPage;
+    emit currentSketchPageChanged();
+}
+
+QObject* KisMainWindow::sketchKisView() const
+{
+    return d->viewManager;
+}
+
+void KisMainWindow::setSketchKisView(QObject* newView)
+{
+    if (d->viewManager)
+        d->viewManager->disconnect(this);
+    if (d->viewManager != newView)
+    {
+        d->viewManager = qobject_cast<KisViewManager*>(newView);
+        connect(d->viewManager, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->centerer->start();
+        emit sketchKisViewChanged();
+    }
+}
+
+
+
 
 #include <KisMainWindow.moc>
