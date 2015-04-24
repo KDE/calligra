@@ -23,7 +23,7 @@
 
 CAuDocument::CAuDocument(KoPart *part)
     : KWDocument(part)
-      //, m_metaManager(new CAuMetaDataManager(this))
+    , m_metaManager(new CAuMetaDataManager(this))
 {
 }
 

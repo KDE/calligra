@@ -28,7 +28,6 @@
 #include <author/CAuDocument.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kiconloader.h>
 
