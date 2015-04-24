@@ -146,7 +146,6 @@ public:
     int docType( const Document *doc ) const;
     
     bool loadWorkPackages();
-    bool loadKPlatoWorkPackages();
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     
