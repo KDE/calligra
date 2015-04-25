@@ -863,31 +863,31 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     KAction *a = 0;
 
     a =  KStandardAction::cut( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCut()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditCut()));
     tb->addAction( a );
 
     a =  KStandardAction::copy( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCopy()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditCopy()));
     tb->addAction( a );
 
     a =  KStandardAction::paste( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditPaste()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditPaste()));
     tb->addAction( a );
 
     const KGuiItem del = KStandardGuiItem::del();
     a = new KAction( del.icon(), del.text(), this );
     a->setToolTip( del.toolTip() );
     a->setShortcut( QKeySequence::Delete );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditDelete()));
     tb->addAction( a );
 
     tb->addSeparator();
 
     a = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotRaiseSelected()));
     tb->addAction( a );
     a = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotLowerSelected()));
     tb->addAction( a );
 
     tb->addSeparator();
@@ -1051,15 +1051,15 @@ void ReportDesigner::setupGui()
     QString name = "edit_copypaste";
 
     a =  KStandardAction::cut( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(cutActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(cutActivated()));
     addAction( name, a );
 
     a =  KStandardAction::copy( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(copyActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(copyActivated()));
     addAction( name, a );
 
     a =  KStandardAction::paste( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(pasteActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(pasteActivated()));
     addAction( name, a );
 
     const KGuiItem del = KStandardGuiItem::del();
@@ -1067,19 +1067,19 @@ void ReportDesigner::setupGui()
     a->setObjectName( "edit_delete" );
     a->setToolTip(del.toolTip());
     a->setShortcut( QKeySequence::Delete );
-    connect(a, SIGNAL(activated()), this, SIGNAL(deleteActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(deleteActivated()));
     addAction( name, a );
 
     name = "reportdesigner_list";
     a = new KAction(koIcon("go-previous-view"), i18n("View report"), this);
     a->setObjectName( "view_report" );
-    connect(a, SIGNAL(activated()), SIGNAL(viewReport()));
+    connect(a, SIGNAL(triggered(bool)), SIGNAL(viewReport()));
     addAction( name, a );
 
     m_undoaction = new KAction(koIcon("edit-undo"), i18n("Undo all changes"), this);
     m_undoaction->setObjectName( "undo_all_changes" );
     m_undoaction->setEnabled( false );
-    connect(m_undoaction, SIGNAL(activated()), SLOT(undoAllChanges()));
+    connect(m_undoaction, SIGNAL(triggered(bool)), SLOT(undoAllChanges()));
     addAction( name, m_undoaction );
     createDockers();
 }

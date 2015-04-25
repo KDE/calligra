@@ -179,12 +179,12 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
     connect ( _rd, SIGNAL(dirty()), this, SLOT(setDirty()) );
 
     //Edit Actions
-    connect ( editCutAction, SIGNAL(activated()), _rd, SLOT(slotEditCut()) );
-    connect ( editCopyAction, SIGNAL(activated()), _rd, SLOT(slotEditCopy()) );
-    connect ( editPasteAction, SIGNAL(activated()), _rd, SLOT(slotEditPaste()) );
-    connect ( editDeleteAction, SIGNAL(activated()), _rd, SLOT(slotEditDelete()) );
+    connect ( editCutAction, SIGNAL(triggered(bool)), _rd, SLOT(slotEditCut()) );
+    connect ( editCopyAction, SIGNAL(triggered(bool)), _rd, SLOT(slotEditCopy()) );
+    connect ( editPasteAction, SIGNAL(triggered(bool)), _rd, SLOT(slotEditPaste()) );
+    connect ( editDeleteAction, SIGNAL(triggered(bool)), _rd, SLOT(slotEditDelete()) );
 
-    connect ( sectionEdit, SIGNAL(activated()), _rd, SLOT(slotSectionEditor()) );
+    connect ( sectionEdit, SIGNAL(triggered(bool)), _rd, SLOT(slotSectionEditor()) );
 
     //Control Actions
     connect ( res->itemLabel, SIGNAL(clicked()), this, SLOT(slotLabel()) );
@@ -198,8 +198,8 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
     connect ( res->itemCheck, SIGNAL(clicked()), this, SLOT(slotCheck()) );
 
     //Raise/Lower
-    connect ( itemRaiseAction, SIGNAL(activated()), _rd, SLOT(slotRaiseSelected()) );
-    connect ( itemLowerAction, SIGNAL(activated()), _rd, SLOT(slotLowerSelected()) );
+    connect ( itemRaiseAction, SIGNAL(triggered(bool)), _rd, SLOT(slotRaiseSelected()) );
+    connect ( itemLowerAction, SIGNAL(triggered(bool)), _rd, SLOT(slotLowerSelected()) );
     return true;
 }
 
