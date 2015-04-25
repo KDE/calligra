@@ -2711,6 +2711,20 @@ tristate KexiMainWindow::getNewObjectInfo(
         return cancelled;
     }
 
+    // close window of object that will be overwritten
+    if (*overwriteNeeded) {
+        KexiPart::Item* overwrittenItem = project()->item(info, d->nameDialog->widget()->nameText());
+        if (overwrittenItem) {
+            KexiWindow * openedWindow = d->openedWindowFor(overwrittenItem->identifier());
+            if (openedWindow) {
+                const tristate res = closeWindow(openedWindow);
+                if (res != true) {
+                    return res;
+                }
+            }
+        }
+    }
+
     //update name and caption
     partItem->setName(d->nameDialog->widget()->nameText());
     partItem->setCaption(d->nameDialog->widget()->captionText());
