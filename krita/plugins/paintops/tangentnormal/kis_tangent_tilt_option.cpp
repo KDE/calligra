@@ -22,15 +22,92 @@
 #include "kis_tangent_tilt_option.h"
 #include <cmath>
 
+#include "ui_wdgtangenttiltoption.h"
+
+class KisTangentTiltOptionWidget: public QWidget, public Ui::WdgTangentTiltOptions
+{
+public:
+    KisTangentTiltOptionWidget(QWidget *parent = 0)
+        : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
 KisTangentTiltOption::KisTangentTiltOption()
 : KisPaintOpOption(i18n("Tangent Tilt"), KisPaintOpOption::generalCategory(), false)
 {
+    m_checkable = false;
+    m_options = new KisTangentTiltOptionWidget();
+    //Setup tangent tilt.
+    m_options->comboRed->setCurrentIndex(0);
+    m_options->comboGreen->setCurrentIndex(2);
+    m_options->comboBlue->setCurrentIndex(4);
+    //m_options->
+    
+    connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    
+    connect(m_options->optionTilt, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->optionDirection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->optionRotation, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    
+    //connect tangent tilt
+    setConfigurationPage(m_options);
 
 }
 KisTangentTiltOption::~KisTangentTiltOption()
 {
-
+    delete m_options;
 }
+
+//options
+int KisTangentTiltOption::redChannel() const
+{
+    return m_options->comboRed->currentIndex(); 
+}
+int KisTangentTiltOption::greenChannel() const
+{
+    return m_options->comboGreen->currentIndex(); 
+}
+int KisTangentTiltOption::blueChannel() const
+{
+    return m_options->comboBlue->currentIndex(); 
+}
+
+int KisTangentTiltOption::directionType() const
+{
+    int type=0;
+    
+    if (m_options->optionTilt->isChecked()==true) {
+        type=0;
+    }
+    else if (m_options->optionDirection->isChecked()==true) {
+        type=1;
+    }
+    else if (m_options->optionRotation->isChecked()==true) {
+        type=2;
+    }
+    else {
+        qWarning()<<"There's something odd with the radio buttons. We'll use Tilt";
+    }
+    
+    return type;
+        
+}
+
+void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue)
+{
+    switch(index) {
+    case 0: *component = horizontal; break;
+    case 1: *component = maxvalue-horizontal; break;
+    case 2: *component = vertical; break;
+    case 3: *component = maxvalue-vertical; break;
+    case 4: *component = depth; break;
+    case 5: *component = maxvalue-depth; break;
+    }
+}
+
 void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint8 *g,quint8 *b)
 {
     //formula based on http://nl.mathworks.com/help/matlab/ref/sph2cart.html
@@ -42,6 +119,13 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     
     //have the azimuth and altitude in degrees.
     qreal direction = KisPaintInformation::tiltDirection(info, true)*360.0;
+    if (directionType()==0) {
+        direction = KisPaintInformation::tiltDirection(info, true)*360.0;
+    } else if (directionType()==1) {
+        direction = (0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0;
+    } else if (directionType()==2) {
+        direction = info.rotation();
+    }
     qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     
     //TODO:subtract/add the rotation of the canvas.
@@ -79,8 +163,36 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     
     //TODO: Allow for swizzle to decide this.(or something...)
     //assign right components to correct axes.
-    *r = horizontal;
+    swizzleAssign(horizontal, vertical, depth, r, redChannel(), maxvalue);
+    swizzleAssign(horizontal, vertical, depth, g, greenChannel(), maxvalue);
+    swizzleAssign(horizontal, vertical, depth, b, blueChannel(), maxvalue);
+    /**r = horizontal;
     *g = vertical;
-    *b = depth;
+    *b = depth;*/
 }
 
+/*settings*/
+void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    setting->setProperty(TANGENT_RED, redChannel());
+    setting->setProperty(TANGENT_GREEN, greenChannel());
+    setting->setProperty(TANGENT_BLUE, blueChannel());
+    setting->setProperty(TANGENT_TYPE, directionType());
+}
+
+void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    m_options->comboRed->setCurrentIndex(setting->getInt(TANGENT_RED));
+    m_options->comboGreen->setCurrentIndex(setting->getInt(TANGENT_GREEN));
+    m_options->comboBlue->setCurrentIndex(setting->getInt(TANGENT_BLUE));
+    
+    if (setting->getInt(TANGENT_TYPE)== 0){
+        m_options->optionTilt->setChecked(true);
+    }
+    else if (setting->getInt(TANGENT_TYPE)== 1) {
+        m_options->optionDirection->setChecked(true);
+    }
+    else if (setting->getInt(TANGENT_TYPE)== 2) {
+        m_options->optionRotation->setChecked(true);
+    }
+}

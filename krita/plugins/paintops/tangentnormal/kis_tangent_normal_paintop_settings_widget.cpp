@@ -36,10 +36,13 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
-    addPaintOpOption(new KisTangentTiltOption());
+    
 
 //    addPaintOpOption(new KisCompositeOpOption(true)); No composite opp... for now.
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    
+    addPaintOpOption(new KisTangentTiltOption());
+    
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPressureSpacingOptionWidget());
     addMirrorOption();

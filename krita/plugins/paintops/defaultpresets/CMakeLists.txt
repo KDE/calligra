@@ -17,6 +17,7 @@ install( FILES
     colorsmudge.kpp
     sketchbrush.kpp
     hatchingbrush.kpp
+    tangenttilt.kpp
     DESTINATION  ${DATA_INSTALL_DIR}/krita/defaultpresets)
 
 

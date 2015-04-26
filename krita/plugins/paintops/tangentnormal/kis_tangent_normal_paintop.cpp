@@ -40,6 +40,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSetti
     
 {
     //Init, read settings, etc//
+    m_tangentTiltOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);

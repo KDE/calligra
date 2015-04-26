@@ -6,8 +6,9 @@ set(kritatangentnormalpaintop_PART_SRCS
 
 )
 
-kde4_add_plugin(kritatangentnormalpaintop ${kritatangentnormalpaintop_PART_SRCS})
+kde4_add_ui_files(kritatangentnormalpaintop_PART_SRCS wdgtangenttiltoption.ui )
 
+kde4_add_plugin(kritatangentnormalpaintop ${kritatangentnormalpaintop_PART_SRCS})
 
 target_link_libraries(kritatangentnormalpaintop kritalibpaintop)
 

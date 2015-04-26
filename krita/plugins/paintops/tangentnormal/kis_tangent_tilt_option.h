@@ -26,18 +26,35 @@
 
 #include <kis_paintop_option.h>
 
+const QString TANGENT_RED = "Tangent/swizzleRed";
+const QString TANGENT_GREEN = "Tangent/swizzleGreen";
+const QString TANGENT_BLUE = "Tangent/swizzleBlue";
+const QString TANGENT_TYPE = "Tangent/directionType";
+
 class KisPropertiesConfiguration;
 class KisPainter;
+class KisTangentTiltOptionWidget;
 
 class KisTangentTiltOption: public KisPaintOpOption//not really//
 {
 public:
     KisTangentTiltOption();
     ~KisTangentTiltOption();
+    /*These three give away which the index of the combobox for a given channel*/
+    int redChannel() const;
+    int greenChannel() const;
+    int blueChannel() const;
+    int directionType() const;
+    /*This assigns the right axis to the component, based on index and maximum value*/
+    void swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue);
     
     //takes the RGB values and will deform them depending on tilt.
     void apply(const KisPaintInformation& info,quint8 *r,quint8 *g,quint8 *b);
+    
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
+    KisTangentTiltOptionWidget * m_options;
 };
 
 #endif // KIS_TANGENT_TILT_OPTION_H
