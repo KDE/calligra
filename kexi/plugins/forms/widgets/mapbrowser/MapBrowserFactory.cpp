@@ -25,6 +25,8 @@
 #include <formeditor/formIO.h>
 
 #include <KoIcon.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
@@ -32,6 +34,8 @@
 
 #include <QVariant>
 #include <QVariantList>
+
+#include <marble/MapThemeManager.h>
 
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "mapbrowser")
@@ -103,7 +107,55 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     Q_UNUSED(widget);
     return true;
 }
-     
+
+void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w)
+{
+    KFormDesigner::WidgetFactory::setPropertyOptions(set, info, w);
+
+    KoProperty::Property *property = &set["latitude"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Latitude"));
+        property->setDescription(i18n("Latitude"));
+        property->setType(KoProperty::Double);
+        property->setOption("precision", 7);
+        property->setOption("min", -90);
+        property->setOption("max", 90);
+        property->setOption("unit", QString::fromUtf8("°"));
+    }
+
+    property = &set["longitude"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Longitude"));
+        property->setDescription(i18n("Longitude"));
+        property->setOption("precision", 7);
+        property->setType(KoProperty::Double);
+        property->setOption("min", -180);
+        property->setOption("max", 180);
+        property->setOption("unit", QString::fromUtf8("°"));
+    }
+
+    property = &set["mapThemeId"];
+    if (!property->isNull()) {
+        Marble::MapThemeManager themeManager;
+        QStringList themes(themeManager.mapThemeIds());
+
+        property->setCaption(i18n("Theme"));
+        property->setDescription(i18n("Theme"));
+        property->setType(KoProperty::List);
+        property->setListData(themes, themes);
+    }
+
+    property = &set["zoom"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Zoom"));
+        property->setDescription(i18n("Zoom"));
+        property->setOption("min", 0);
+        property->setOption("max", 4000);
+        property->setOption("step", 100);
+        property->setOption("slider", true);
+    }
+}
+
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
