@@ -19,8 +19,11 @@
 
 
 #include "MapBrowserWidget.h"
-#include <QPointF>
+#include <kexiutils/utils.h>
+
 #include <kdebug.h>
+
+#include <QPointF>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -131,6 +134,12 @@ void MapBrowserWidget::slotMapChanged()
     if(!m_slotMapChanged_enabled)
         return;
     signalValueChanged();
+}
+
+void MapBrowserWidget::resizeEvent(QResizeEvent *event)
+{
+    KexiUtils::BoolBlocker guard(m_slotMapChanged_enabled, false);
+    Marble::MarbleWidget::resizeEvent(event);
 }
 
 #include "MapBrowserWidget.moc"
