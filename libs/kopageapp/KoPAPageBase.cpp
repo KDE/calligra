@@ -30,9 +30,6 @@
 #include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfGraphicStyles.h>
-#include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoShapeLayer.h>
@@ -278,8 +275,8 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
     QPixmap pm;
     if ( !KoPAPixmapCache::instance()->find( key, size, pm ) ) {
         pm = generateThumbnail( size );
-        KoPAPixmapCache::instance()->insert( key, pm );
-        kDebug(30010) << "create thumbnail" << this;
+        KoPAPixmapCache::instance()->insert( key, pm, size );
+        kDebug(30010) << "create thumbnail" << this << key << size;
     }
     else {
         kDebug(30010) << "thumbnail in cache " << this;

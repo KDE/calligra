@@ -22,12 +22,12 @@
 
 #include "kowidgets_export.h"
 
-#include <KUrl>
 #include <QFileDialog>
 #include <QString>
 #include <QUrl>
 #include <QStringList>
 #include <QList>
+
 
 /**
  * Wrapper around QFileDialog providing native file dialogs
@@ -71,7 +71,7 @@ public:
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir);
+    void setDefaultDir(const QString &defaultDir, bool override = false);
 
     /**
      * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
@@ -119,7 +119,7 @@ public:
 
     QString selectedMimeType() const;
 
-private slots:
+private Q_SLOTS:
 
     void filterSelected(const QString &filter);
 
@@ -131,9 +131,10 @@ private:
      *
      *   The methods takes care of some duplicated extensions, like jpeg and jpg.
      * @param nameFilter the namefilter to be split
+     * @param mimeList a pointer to the list with mimes that shouldn't be added.
      * @return a stringlist of all name filters.
      */
-    QStringList splitNameFilter(const QString &nameFilter);
+    static QStringList splitNameFilter(const QString &nameFilter, QStringList *mimeList);
 
     void createFileDialog();
 

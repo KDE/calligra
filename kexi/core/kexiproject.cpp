@@ -24,7 +24,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kmimetype.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -70,7 +69,7 @@ static QString realPartClass(const QString &partClass, const QString &partMime)
 class KexiProject::Private
 {
 public:
-    Private(KexiProject *qq)
+    explicit Private(KexiProject *qq)
             : q(qq)
             , data(0)
             , tempPartItemID_Counter(-1)
@@ -317,14 +316,14 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
 //<temp>
 //! @todo this is temporary workaround as we have no import driver for SQLite
-            if (/*supported?*/ !d->data->connectionData()->driverName.toLower().startsWith("sqlite")) {
+            if (/*supported?*/ !d->data->connectionData()->driverName.startsWith(QLatin1String("sqlite"), Qt::CaseInsensitive)) {
 //</temp>
                 if (incompatibleWithKexi)
                     *incompatibleWithKexi = true;
             } else {
                 KexiDB::MessageTitle et(this,
-                    i18n("Database project %1 does not appear to have been created using Kexi and cannot be opened."
-                         "<br><br>It is an SQLite file created using other tools.</qt>", d->data->infoString()));
+                    i18n("Database project %1 does not appear to have been created using Kexi and cannot be opened. "
+                         "It is an SQLite file created using other tools.", d->data->infoString()));
                 setError(d->connection);
             }
             closeConnection();
@@ -705,7 +704,7 @@ bool KexiProject::retrieveItems()
         bool ok;
         int partId = cursor->value(3).toInt(&ok);
         if (!ok || partId <= 0) {
-            kWarning() << "object of unknown type: id=" << cursor->value(0)
+            kWarning() << "object of unknown type" << cursor->value(3) << "id=" << cursor->value(0)
                        << "name=" <<  cursor->value(1);
             continue;
         }
@@ -1036,7 +1035,7 @@ KexiDB::Parser* KexiProject::sqlParser()
     return d->sqlParser;
 }
 
-const char* warningNoUndo = I18N_NOOP("Warning: entire project's data will be removed.");
+const char warningNoUndo[] = I18N_NOOP("Warning: entire project's data will be removed.");
 
 /*static*/
 KexiProject*

@@ -6,7 +6,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,7 +28,7 @@
 
 #include "kowidgets_export.h"
 
-class KoResourceTagStore;
+class KoResourceServerBase;
 
 class KOWIDGETS_EXPORT KoResourceFiltering
 {
@@ -42,11 +42,12 @@ public:
     void setTagSetFilenames(const QStringList& filenames);
     void setCurrentTag(const QString& tagSet);
     void rebuildCurrentTagFilenames();
-    void setTagStore(KoResourceTagStore* tagObject);
+    void setResourceServer(KoResourceServerBase *resourceServer);
     void setFilters(const QString& searchString);
     QList<KoResource*> filterResources(QList< KoResource* > resources);
     void setInclusions(const QStringList &inclusions);
     void setExclusions(const QStringList &exclusions);
+
 private:
 
     void setDoneFiltering();
@@ -57,6 +58,7 @@ private:
     void populateIncludeExcludeFilters(const QStringList& filteredNames);
     void sanitizeExclusionList();
     QStringList tokenizeSearchString(const QString& searchString) const;
+
     class Private;
     Private * const d;
 

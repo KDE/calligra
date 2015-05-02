@@ -28,7 +28,7 @@ namespace KPlato
 class ResourceTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testAvailable();
     void testSingleDay();
     void team();

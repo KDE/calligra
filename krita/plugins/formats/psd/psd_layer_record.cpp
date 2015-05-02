@@ -38,9 +38,11 @@
 #include <KoColorSpaceTraits.h>
 
 // Just for pretty debug messages
-QString channelIdToChannelType(int channelId, PSDColorMode colormode)
+QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 {
     switch(channelId) {
+    case -3:
+        return "Real User Supplied Layer Mask (when both a user mask and a vector mask are present";
     case -2:
         return "User Supplied Layer Mask";
     case -1:
@@ -169,6 +171,7 @@ PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
     , layerName("UNINITIALIZED")
     , m_header(header)
 {
+    infoBlocks.m_header = header;
 }
 
 bool PSDLayerRecord::read(QIODevice* io)
@@ -248,26 +251,18 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-//        dbgFile << "\tchannel" << i << "id"
-//                << channelIdToChannelType(info->channelId, m_header.colormode)
-//                << "length" << info->channelDataLength
-//                << "start" << info->channelDataStart
-//                << "offset" << info->channelOffset
-//                << "channelInfoPosition" << info->channelInfoPosition;
+        dbgFile << "\tchannel" << i << "id"
+                << channelIdToChannelType(info->channelId, m_header.colormode)
+                << "length" << info->channelDataLength
+                << "start" << info->channelDataStart
+                << "offset" << info->channelOffset
+                << "channelInfoPosition" << info->channelInfoPosition;
 
         channelInfoRecords << info;
+
     }
 
-    QByteArray b;
-    b = io->read(4);
-    if(b.size() != 4 || QString(b) != "8BIM") {
-        error = QString("Could not read blend mode signature for layer. Got %1.")
-                .arg(QString(b));
-        return false;
-    }
-    dbgFile << "reading blend mode at pos" << io->pos();
-    blendModeKey = QString(io->read(4));
-    if (blendModeKey.size() != 4) {
+    if (!psd_read_blendmode(io, blendModeKey)) {
         error = QString("Could not read blend mode key. Got: %1").arg(blendModeKey);
         return false;
     }
@@ -438,82 +433,15 @@ bool PSDLayerRecord::read(QIODevice* io)
         layerName = io->read(layerNameLength);
         dbgFile << "\tlayer name" << layerName << io->pos();
 
-        QStringList longBlocks;
-        if (m_header.version > 1) {
-            longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
+        if (!infoBlocks.read(io)) {
+            error = infoBlocks.error;
+            return false;
         }
 
-        while(!io->atEnd()) {
-
-            // read all the additional layer info 8BIM blocks
-            QByteArray b;
-            b = io->peek(4);
-            if(b.size() != 4 || QString(b) != "8BIM") {
-                break;
-            }
-            else {
-                io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
-            }
-
-            QString key(io->read(4));
-            if (key.size() != 4) {
-                error = "Could not read key for additional layer info block";
-                return false;
-            }
-            dbgFile << "found info block with key" << key;
-
-            if (infoBlocks.contains(key)) {
-                error = QString("Duplicate layer info block with key %1").arg(key);
-                return false;
-            }
-
-            quint64 size;
-            if (longBlocks.contains(key)) {
-                psdread(io, &size);
-            }
-            else {
-                quint32 _size;
-                psdread(io, &_size);
-                size = _size;
-            }
-
-            LayerInfoBlock* infoBlock = new LayerInfoBlock();
-            infoBlock->data = io->read(size);
-            if (infoBlock->data.size() != (qint64)size) {
-                error = QString("Could not read full info block for key %1 for layer %2").arg(key).arg(layerName);
-                return false;
-            }
-
-            dbgFile << "\tRead layer info block" << key << "for size" << infoBlock->data.size();
-
-            // get the unicode layer name
-            if (key == "luni") {
-                QBuffer buf(&infoBlock->data);
-                buf.open(QBuffer::ReadOnly);
-
-                quint32 stringlen;
-                if (!psdread(&buf, &stringlen)) {
-                    error = "Could not read string length for luni block";
-                    return false;
-                }
-                QString unicodeLayerName;
-
-                for (uint i = 0; i < stringlen; ++i) {
-                    quint16 ch;
-                    psdread(&buf, &ch);
-                    QChar uch(ch);
-                    unicodeLayerName.append(uch);
-                }
-
-                dbgFile << "unicodeLayerName" << unicodeLayerName;
-                if (!unicodeLayerName.isEmpty()) {
-                    layerName = unicodeLayerName;
-                }
-            }
-
-
-            infoBlocks[key] = infoBlock;
+        if (infoBlocks.keys.contains("luni") && !infoBlocks.unicodeLayerName.isEmpty()) {
+            layerName = infoBlocks.unicodeLayerName;
         }
+
     }
 
     return valid();
@@ -630,9 +558,9 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
     dbgFile << "\tnode y" << m_node->y() << "paint device x" << dev->y() << "extent y" << rc.y();
     QVector<quint8* > tmp = dev->readPlanarBytes(rc.x() - m_node->x(), rc.y() -m_node->y(), rc.width(), rc.height());
 
-//    KisPaintDeviceSP dev2 = new KisPaintDevice(dev->colorSpace());
-//    dev2->writePlanarBytes(tmp, 0, 0, rc.width(), rc.height());
-//    dev2->convertToQImage(0).save(layerName + ".png");
+    //    KisPaintDeviceSP dev2 = new KisPaintDevice(dev->colorSpace());
+    //    dev2->writePlanarBytes(tmp, 0, 0, rc.width(), rc.height());
+    //    dev2->convertToQImage(0).save(layerName + ".png");
 
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;
@@ -672,7 +600,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
                 val = reinterpret_cast<quint16*>(planes[channelInfoIndex])[i];
                 val = ntohs(val);
                 if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
-                     val = quint16_MAX - val;
+                    val = quint16_MAX - val;
                 }
                 reinterpret_cast<quint16*>(planes[channelInfoIndex])[i] = val;
             }
@@ -712,7 +640,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
             channelRLESizePos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == size) {
+            if (io->write(compressed) != size) {
                 error = "Could not write image data";
                 return false;
             }
@@ -725,10 +653,10 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
 
             // If the layer's size, and therefore the data, is odd, a pad byte will be inserted
             // at the end of the row. (weirdly enough, that's not true for the image data)
-//            if ((size & 0x01) != 0) {
-//                psdwrite(io, (quint8)0);
-//                size++;
-//            }
+            //            if ((size & 0x01) != 0) {
+            //                psdwrite(io, (quint8)0);
+            //                size++;
+            //            }
 
             channelStartPos += size;
         }
@@ -787,6 +715,81 @@ bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
+bool PSDLayerRecord::readMask(QIODevice */*io*/, KisPaintDeviceSP /*dev*/, ChannelInfo *channelInfo)
+{
+    dbgFile << "Going to read" << channelIdToChannelType(channelInfo->channelId, m_header.colormode) << "mask";
+//    quint64 oldPosition = io->pos();
+//    qint64 width = right - left;
+
+//    if (width <= 0) {
+//        dbgFile << "Empty Channel";
+//        return true;
+//    }
+
+//    int uncompressedLength = width;
+
+//    if (channel->compressionType == Compression::ZIP
+//            || channel->compressionType == Compression::ZIPWithPrediction) {
+
+//        error = "Unsupported Compression mode: zip";
+//        return false;
+//    }
+
+//    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
+//    for (int row = top ; row < bottom; row++)
+//    {
+//        QMap<quint16, QByteArray> channelBytes;
+
+//        foreach(ChannelInfo *channelInfo, colorChannelInfoRecords) {
+//            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+//            if (channelInfo->compressionType == Compression::Uncompressed) {
+//                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+//                channelInfo->channelOffset += uncompressedLength;
+//            }
+//            else if (channelInfo->compressionType == Compression::RLE) {
+//                int rleLength = channelInfo->rleRowLengths[row - top];
+//                QByteArray compressedBytes = io->read(rleLength);
+//                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+//                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+//                channelInfo->channelOffset += rleLength;
+
+//            }
+//            else {
+//                error = "Unsupported Compression mode: " + channelInfo->compressionType;
+//                return false;
+//            }
+//        }
+
+//        for (qint64 col = 0; col < width; col++){
+
+//            if (channelSize == 1) {
+//                readRGBPixel<KoBgrU8Traits>(channelBytes, col, it->rawData());
+//            }
+
+//            else if (channelSize == 2) {
+//                readRGBPixel<KoBgrU16Traits>(channelBytes, col, it->rawData());
+//            }
+//            else {
+//                // Unsupported channel sizes for now
+//                return false;
+//            }
+//            /*
+//            // XXX see implementation Openexr
+//            else if (channelSize == 4) {
+//                // NOT IMPLEMENTED!
+//            }
+//*/
+//            it->nextPixel();
+//        }
+//        it->nextRow();
+//    }
+//    // go back to the old position, because we've been seeking all over the place
+//    io->seek(oldPosition);
+    return true;
+
+}
+
 bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
 {
     Q_UNUSED(dev);
@@ -808,10 +811,9 @@ inline quint16 convertByteOrder<KoBgrU16Traits>(quint16 value) {
     return ntohs(value);
 }
 
-
 template <class Traits>
 void readRGBPixel(const QMap<quint16, QByteArray> &channelBytes,
-               int col, quint8 *dstPtr)
+                  int col, quint8 *dstPtr)
 {
     typedef typename Traits::Pixel Pixel;
     typedef typename Traits::channels_type channels_type;
@@ -971,7 +973,6 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
 
                 delete[] pixel;
             }
-
             else if (channelSize == 2) {
 
                 quint16 opacity = quint16_MAX;
@@ -995,9 +996,6 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
                 KoCmykTraits<quint16>::setK(it->rawData(),K);
 
             }
-
-
-            // XXX see implementation Openexr
             else if (channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);

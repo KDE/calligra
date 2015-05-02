@@ -22,8 +22,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <wv2/src/word97_generated.h>
 #include "tablehandler.h"
+
+#include <wv2/src/word97_generated.h>
 #include "texthandler.h"
 #include "document.h"
 #include "conversion.h"

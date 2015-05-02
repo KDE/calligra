@@ -25,14 +25,14 @@
 
 class QAction;
 
-class KisView2;
+class KisViewManager;
 class KActionCollection;
 
 class KRITAUI_EXPORT KisScriptManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KisScriptManager(KisView2 * view);
+    explicit KisScriptManager(KisViewManager * view);
     ~KisScriptManager();
 
     void setup(KActionCollection * ac);

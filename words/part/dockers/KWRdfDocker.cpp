@@ -31,7 +31,6 @@
 #include <KoTextEditor.h>
 #include <KoShapeController.h>
 #include <KoToolProxy.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 
 #include <KoIcon.h>
@@ -86,10 +85,10 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 
         m_document = newDoc;
         widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
-        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfSemanticItem)),
-                this, SLOT(semanticObjectAdded(hKoRdfSemanticItem)));
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
-                this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
+        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfBasicSemanticItem)),
+                this, SLOT(semanticObjectAdded(hKoRdfBasicSemanticItem)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
+                this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
     connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,const QVariant&)),
@@ -109,14 +108,14 @@ KoCanvasBase* KWRdfDocker::canvas()
 }
 
 
-void KWRdfDocker::semanticObjectAdded(hKoRdfSemanticItem item)
+void KWRdfDocker::semanticObjectAdded(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "new item...";
     updateData();
 }
 
-void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
+void KWRdfDocker::semanticObjectUpdated(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "updated item...";

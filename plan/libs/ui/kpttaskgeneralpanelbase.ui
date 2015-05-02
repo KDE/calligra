@@ -486,12 +486,6 @@ The estimation can be either effort based or duration based. If it is effort bas
   <tabstop>optimisticValue</tabstop>
   <tabstop>pessimisticValue</tabstop>
  </tabstops>
- <includes>
-  <include location="local">klineedit.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">kdatewidget.h</include>
-  <include location="local">ktextedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

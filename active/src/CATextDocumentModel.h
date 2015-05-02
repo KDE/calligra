@@ -24,8 +24,6 @@
 
 #include <KWDocument.h>
 
-class KWPageManager;
-class CADocumentController;
 
 class CATextDocumentModel : public QAbstractListModel
 {
@@ -35,7 +33,7 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-signals:
+Q_SIGNALS:
     void documentControllerChanged();
 
 private:

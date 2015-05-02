@@ -45,7 +45,7 @@ class AddNamedAreaDialog : public KDialog
 public:
     AddNamedAreaDialog(QWidget* parent, Selection* selection);
 
-public slots:
+public Q_SLOTS:
     void slotOk();
     void slotAreaNameChanged(const QString& name);
 

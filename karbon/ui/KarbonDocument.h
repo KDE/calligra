@@ -239,10 +239,10 @@ public:
 
     void addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter);
 
-public slots:
+public Q_SLOTS:
     void slotDocumentRestored();
 
-signals:
+Q_SIGNALS:
     void shapeCountChanged();
     void applyCanvasConfiguration(KarbonCanvas *canvas);
 

@@ -25,7 +25,9 @@
 
 #ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusConnectionInterface>
 #endif
 
 #include "KoPrintJob.h"
@@ -154,7 +156,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
+    if ((applicationName() == "krita" || applicationName() == "calligragemini") && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");

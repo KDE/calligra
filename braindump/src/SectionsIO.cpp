@@ -53,7 +53,7 @@ SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m
     m_timer->start(60 * 1000); // Every minute
     connect(m_timer, SIGNAL(timeout()), SLOT(save()));
     m_directory = KGlobal::dirs()->localkdedir() + "share/apps/braindump/sections/";
-    KGlobal::dirs()->makeDir(m_directory);
+    KStandardDirs::makeDir(m_directory);
 
     // Finally load
     load();
@@ -152,7 +152,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     }
 
     // Save embedded objects
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
     if(!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug() << "save embedded documents failed";
         return false;

@@ -39,7 +39,7 @@ public:
 protected:
     virtual QRectF preparePage(int pageNumber);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<QWidget *> createOptionWidgets() const;
 
 private:
     KarbonView *m_view;

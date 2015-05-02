@@ -57,7 +57,7 @@ private:
     KWStatisticsWidget *m_statisticsWidget;
 
     
-public slots:
+public Q_SLOTS:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
 

@@ -33,7 +33,7 @@ public:
     KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString bookmarkName();
 
-signals:
+Q_SIGNALS:
     void bookmarkNameChanged(const QString &name);
 
 private:
@@ -47,7 +47,7 @@ public:
     KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString newBookmarkName();
 
-private slots:
+private Q_SLOTS:
     void nameChanged(const QString &name);
 
 private:

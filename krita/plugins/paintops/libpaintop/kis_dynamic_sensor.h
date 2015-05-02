@@ -2,14 +2,14 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -45,6 +45,7 @@ const KoID TimeId("time", ki18n("Time")); ///< generate a number that increase w
 const KoID DrawingAngleId("drawingangle", ki18n("Drawing angle")); ///< number depending on the angle
 const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from the device
 const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
+const KoID PressureInId("pressurein", ki18n("PressureIn")); ///< number depending on the pressure
 const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
 const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
 

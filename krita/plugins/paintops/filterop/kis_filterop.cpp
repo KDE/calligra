@@ -47,13 +47,15 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
 
-KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
+KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_filterConfiguration(0)
 {
+    Q_UNUSED(node);
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
+
     m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
@@ -73,22 +75,22 @@ KisFilterOp::~KisFilterOp()
 KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
     if (!m_filter) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
     if (!source()) {
-        return 1.0;
+        return KisSpacingInformation(1.0);
     }
 
-    KisBrushSP brush = m_brush;;
-    if (!brush) return 1.0;
+    KisBrushSP brush = m_brush;
+    if (!brush) return KisSpacingInformation(1.0);
 
     if (! brush->canPaintFor(info))
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -107,7 +109,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
+    if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
     QRect dabRect = dab->bounds();
 
@@ -139,5 +141,5 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return effectiveSpacing(dabRect.width(), dabRect.height());
+    return effectiveSpacing(scale, rotation);
 }

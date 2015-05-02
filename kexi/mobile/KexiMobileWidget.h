@@ -24,7 +24,6 @@
 #include <QStackedWidget>
 #include <core/kexiproject.h>
 
-class KexiMobileOpenFileWidget;
 class KexiMobileNavigator;
 class KexiProject;
 
@@ -40,7 +39,7 @@ public:
     void setActiveObject(KexiWindow* win);
     KexiWindow* activeObject();
 
-public slots:
+public Q_SLOTS:
     void showNavigator();
 
 private:

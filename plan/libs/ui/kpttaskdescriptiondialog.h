@@ -42,10 +42,10 @@ class TaskDescriptionPanelImpl : public QWidget, public Ui_TaskDescriptionPanelB
 public:
     TaskDescriptionPanelImpl( Node &node, QWidget *parent );
         
-public slots:
+public Q_SLOTS:
     virtual void slotChanged();
 
-signals:
+Q_SIGNALS:
     void textChanged( bool );
 
 protected:
@@ -81,7 +81,7 @@ public:
 
     MacroCommand *buildCommand();
 
-protected slots:
+protected Q_SLOTS:
     void slotButtonClicked( int button );
 
 protected:

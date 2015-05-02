@@ -82,7 +82,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
                     QString value = e.text();
                     if(type == "bytearray")
                     {
-                        d->properties[name] = QVariant(QByteArray::fromBase64(value.toAscii()));
+                        d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
                     }
                     else
                         d->properties[name] = value;
@@ -93,7 +93,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
         }
         n = n.nextSibling();
     }
-    dump();
+    //dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -122,7 +122,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
         } else if(v.type() == QVariant::ByteArray ) {
-            text = doc.createTextNode(QString::fromAscii(v.toByteArray().toBase64())); // Arbitary Data
+            text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitary Data
             type = "bytearray";
         } else {
             text = doc.createTextNode(v.toString());
@@ -281,6 +281,11 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
     return d->properties;
 }
 
+void KisPropertiesConfiguration::removeProperty(const QString & name)
+{
+    d->properties.remove(name);
+}
+
 // --- factory ---
 
 struct KisPropertiesConfigurationFactory::Private {
@@ -306,3 +311,4 @@ KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QD
     pc->fromXML(e);
     return pc;
 }
+

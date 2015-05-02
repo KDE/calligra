@@ -49,11 +49,11 @@ public:
     /// Returns the current palette
     KoColorSet *palette() const;
 
-public slots:
+public Q_SLOTS:
     void scrollForward();
     void scrollBackward();
 
-signals:
+Q_SIGNALS:
     /// Emitted whenever a color was clicked
     void colorSelected(const KoColor &color);
 

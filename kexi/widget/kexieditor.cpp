@@ -189,6 +189,8 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
+    if (!d->doc)
+        return;
     QString n = highlightmodename;
     if (n == "javascript" || n == "qtscript")
         n = "JavaScript";

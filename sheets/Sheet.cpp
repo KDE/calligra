@@ -35,11 +35,6 @@
 
 #include <kdebug.h>
 #include <kcodecs.h>
-#include <kfind.h>
-#include <kfinddialog.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
-#include <kurl.h>
 
 #include <KoDocumentInfo.h>
 #include <KoOdfLoadingContext.h>
@@ -49,7 +44,6 @@
 #include <KoShape.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>

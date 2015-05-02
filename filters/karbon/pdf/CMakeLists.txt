@@ -11,10 +11,10 @@ kde4_add_plugin(calligra_filter_pdf2svg ${pdf2svg_PART_SRCS})
 target_link_libraries(calligra_filter_pdf2svg komain ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY})
 if(JPEG_FOUND)
     target_link_libraries(calligra_filter_pdf2svg jpeg)
-endif(JPEG_FOUND)
+endif()
 if(OPENJPEG_FOUND)
     target_link_libraries(calligra_filter_pdf2svg ${OPENJPEG_LIBRARIES})
-endif(OPENJPEG_FOUND)
+endif()
 
 install(TARGETS calligra_filter_pdf2svg DESTINATION ${PLUGIN_INSTALL_DIR})
 

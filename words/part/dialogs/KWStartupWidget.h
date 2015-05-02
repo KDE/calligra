@@ -48,13 +48,13 @@ public:
      */
     KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns);
 
-private slots:
+private Q_SLOTS:
     void sizeUpdated(const KoPageLayout &layout);
     void columnsUpdated(const KoColumns &columns);
     void buttonClicked();
     void unitChanged(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();
 

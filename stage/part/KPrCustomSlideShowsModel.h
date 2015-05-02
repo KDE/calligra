@@ -177,14 +177,14 @@ public:
 
     QStringList namesByPage(KoPAPageBase *page);
 
-signals:
+Q_SIGNALS:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
 
     /** Notify a need of page slection after coping or moving pages */
     void selectPages(int start, int number);
 
-private slots:
+private Q_SLOTS:
     /** emit signals indicating a change in the model layout or items */
     void updateModel();
 

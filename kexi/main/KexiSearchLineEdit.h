@@ -56,10 +56,10 @@ public:
      @see highlightMatchingSubstrings() */
     void setHighlightMatchingSubstrings(bool highlight);
 
-public slots:
+public Q_SLOTS:
     void setFocus();
 
-private slots:
+private Q_SLOTS:
     void slotCompletionHighlighted(const QString &newText);
     void slotCompletionHighlighted(const QModelIndex &index);
     void slotCompletionActivated(const QModelIndex &index);

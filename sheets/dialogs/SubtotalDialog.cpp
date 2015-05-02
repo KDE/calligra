@@ -31,7 +31,6 @@
 #include <QVector>
 
 // KDE
-#include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>

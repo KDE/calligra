@@ -39,8 +39,6 @@
 #include <KoZoomHandler.h>
 #include <KoXmlReader.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentInfo.h>
 
 #include <QPainter>
@@ -53,7 +51,6 @@
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -68,7 +65,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
-#include <KoGlobal.h>
 #include <KoMainWindow.h>
 
 #include "debugarea.h"
@@ -482,21 +478,6 @@ bool Part::loadWorkPackages()
     m_loadingFromProjectStore = false;
     return true;
 
-}
-
-bool Part::loadKPlatoWorkPackages()
-{
-    m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "planprojects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
-    //kDebug(planworkDbg())<<lst;
-    foreach ( const QString &file, lst ) {
-        if ( ! loadNativeFormatFromStore( file ) ) {
-            KMessageBox::information( 0, i18n( "Failed to load file:<br>%1" , file ) );
-        }
-    }
-    m_loadingFromProjectStore = false;
-    return true;
 }
 
 bool Part::loadNativeFormatFromStore(const QString& file)

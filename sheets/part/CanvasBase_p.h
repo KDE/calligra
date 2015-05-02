@@ -33,7 +33,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class View;
 
 class CanvasBase::Private
 {

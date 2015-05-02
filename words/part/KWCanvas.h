@@ -33,11 +33,9 @@
 #include <QWidget>
 
 class QRect;
-class QPainter;
 
 class KWGui;
 class KWView;
-class KoToolProxy;
 
 
 /**
@@ -86,14 +84,14 @@ public:
 
     virtual void setCursor(const QCursor &cursor);
 
-public slots:
+public Q_SLOTS:
     /**
      * sets the document offset in the scrollArea
      * @param offset the offset, in pixels.
      */
     void setDocumentOffset(const QPoint &offset);
 
-signals:
+Q_SIGNALS:
     /**
      * emitted when the contentsSize changes.
      * @see KWViewMode::contentsSize
@@ -133,7 +131,7 @@ protected: // QWidget
     /// reimplemented method from superclass
     virtual void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); }
 
-private slots:
+private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.
     void pageSetupChanged();
 

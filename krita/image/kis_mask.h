@@ -25,6 +25,7 @@
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kis_global.h"
+#include "kis_indirect_painting_support.h"
 
 #include <krita_export.h>
 
@@ -63,7 +64,7 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisNode
+class KRITAIMAGE_EXPORT KisMask : public KisNode, KisIndirectPaintingSupport
 {
 
     Q_OBJECT
@@ -81,6 +82,8 @@ public:
     KisMask(const KisMask& rhs);
 
     virtual ~KisMask();
+
+    bool allowAsChild(KisNodeSP node) const;
 
     /**
      * @brief initSelection initializes the selection for the mask from
@@ -127,6 +130,8 @@ public:
      * @return the same as paintDevice()
      */
     KisPaintDeviceSP projection() const;
+
+    KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
      * Change the selection to the specified selection object. The
@@ -176,10 +181,14 @@ protected:
      * Apply the effect the projection using the mask as a selection.
      * Made public in KisEffectMask
      */
-    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
+    void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos) const;
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
-                               const QRect & rc) const;
+                               const QRect & rc,
+                               PositionToFilthy maskPos) const;
+
+private:
+    friend class KisMaskProjectionPlane;
 
 private:
 

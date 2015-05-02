@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QPointer>
 
 class MainWindow;
 
@@ -37,12 +38,12 @@ public:
     explicit DockerManager(MainWindow* mainWindow);
     ~DockerManager();
 
-public slots:
+public Q_SLOTS:
     //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QWidget*> & optionWidgetMap);
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetMap);
 
 
 private:

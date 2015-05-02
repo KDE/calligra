@@ -19,19 +19,29 @@
 
 #include "kis_gmic_command.h"
 #include <kis_debug.h>
+#include <kis_processing_visitor.h>
+#include <KoUpdater.h>
 
 #include <QString>
 #include <QFile>
 #include <QTimer>
 #include <QTime>
 
-KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands):
+KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, KisGmicDataSP data, const QByteArray &customCommands):
     m_gmicCommandString(gmicCommandString),
     m_images(images),
+    m_data(data),
     m_customCommands(customCommands),
-    m_firstRedo(true)
+    m_firstRedo(true),
+    m_isSuccessfullyDone(false)
 {
 }
+
+KisGmicCommand::~KisGmicCommand()
+{
+    dbgPlugins << "Destructor: " << this;
+}
+
 
 void KisGmicCommand::undo()
 {
@@ -43,52 +53,60 @@ void KisGmicCommand::redo()
     if (m_firstRedo)
     {
         m_firstRedo = false;
-
-        /* process m_images using GMIC here */
-        // Second step : Call G'MIC API to process input images.
-        //------------------------------------------------------
-        std::fprintf(stderr,"\n- 2st step : Call G'MIC interpreter.\n");
-
+        dbgPlugins << "Calling G'MIC interpreter:";
         for (unsigned int i = 0; i<m_images->_width; ++i)
         {
-            std::fprintf(stderr,"   Input image %u = %ux%ux%ux%u, buffer : %p\n",i,
-                        m_images->_data[i]._width,
-                        m_images->_data[i]._height,
-                        m_images->_data[i]._depth,
-                        m_images->_data[i]._spectrum,
-                        m_images->_data[i]._data);
+            dbgPlugins << "G'MIC Input image " << i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
 
+        gmic_list<char> images_names; // unused
+        QString gmicCmd = "-v - -* 255 "; // turn off verbose mode
+        gmicCmd.append(m_gmicCommandString);
+        dbgPlugins << "G'Mic command executed: " << gmicCmd;
+        bool include_default_commands = true;
+        m_isSuccessfullyDone = false;
 
+        QTime timer;
+        timer.start();
 
-        gmic_list<char> images_names;
         try
         {
-            QString gmicCmd = "-* 255 ";
-            gmicCmd.append(m_gmicCommandString);
-            dbgPlugins << m_gmicCommandString;
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, true);
-
+            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands.constData(), include_default_commands, &m_data->progressPtr(), &m_data->cancelPtr());
         }
-        // Catch exception, if an error occured in the interpreter.
         catch (gmic_exception &e)
         {
-            dbgPlugins << "\n- Error encountered when calling G'MIC : '%s'\n" << e.what();
+            QString message = QString::fromUtf8(e.what());
+            dbgPlugins << "Error encountered when calling G'MIC : " << message;
+            int elapsed = timer.elapsed();
+            dbgPlugins << "Filtering failed after " << elapsed << " ms";
+            emit gmicFinished(false, elapsed, message);
             return;
         }
 
-        // Third step : get back modified image data.
-        //-------------------------------------------
-        std::fprintf(stderr,"\n- 3st step : Returned %u output images.\n",m_images->_width);
+        dbgPlugins << "G'MIC returned " << m_images->_width << " output images.";
         for (unsigned int i = 0; i<m_images->_width; ++i)
         {
-            std::fprintf(stderr,"   Output image %u = %ux%ux%ux%u, buffer : %p\n",i,
-                        m_images->_data[i]._width,
-                        m_images->_data[i]._height,
-                        m_images->_data[i]._depth,
-                        m_images->_data[i]._spectrum,
-                        m_images->_data[i]._data);
+            dbgPlugins << "   Output image "<< i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
+
+        int elapsed = timer.elapsed();
+        dbgPlugins << "Filtering took " << elapsed << " ms";
+
+        m_isSuccessfullyDone = true;
+
+        emit gmicFinished(true, elapsed);
     }
 }
+
+
+QString KisGmicCommand::gmicDimensionString(const gmic_image<float>& img)
+{
+    return QString("%1x%2x%3x%4").arg(img._width).arg(img._height).arg(img._depth).arg(img._spectrum);
+}
+
+bool KisGmicCommand::isSuccessfullyDone()
+{
+    return m_isSuccessfullyDone;
+}
+
 

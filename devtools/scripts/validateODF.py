@@ -1,4 +1,4 @@
-#! /usr/bin/python -Qwarnall
+#!/usr/bin/env python
 
 import sys, os, tempfile, subprocess, lxml.etree, zipfile, urllib, hashlib
 
@@ -38,9 +38,15 @@ schemas = {
 		"OpenDocument-v1.2-cs01-manifest-schema.rng"]
 }
 
+def getScriptPath():
+	return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 class jingodfvalidator:
 	def __init__(self, jingjar):
 		self.jingjar = jingjar;
+		self.xmlparser = lxml.etree.XMLParser()
+		xsltpath = os.path.join(getScriptPath(), "removeForeign.xsl")
+		self.removeForeignXSLT = self.loadXSLT(xsltpath)
 
 	def validate(self, odfpath):
 		try:
@@ -91,7 +97,27 @@ class jingodfvalidator:
 		if r:
 			return filepath + " is not valid."
 
-	def validateXML(self, schema, xmlpath):
+	def loadXML(self, filepath):
+		return lxml.etree.parse(open(filepath, 'r'), self.xmlparser)
+
+	def loadXSLT(self, filepath):
+		xsl = self.loadXML(filepath)
+		ac = lxml.etree.XSLTAccessControl(read_network=False, write_file=False)
+		return lxml.etree.XSLT(xsl, access_control=ac)
+
+	def removeForeign(self, filepath):
+		xml = self.loadXML(filepath)
+		xml = self.removeForeignXSLT(xml)
+		xml.write(filepath)
+
+	# Validate the XML and optionally remove the foreign elements and attributes
+	# first. Calligra currently write ODF 1.2 Extended which is allowed to
+	# contain foreign elements and attributes. If Calligra adds a mode to save
+	# ODF 1.2, the validator should not remove them when validation.
+	def validateXML(self, schema, xmlpath, removeForeign = True):
+		if removeForeign:
+			self.removeForeign(xmlpath)
+
 		args = ["java", "-jar", self.jingjar, "-i", schema, xmlpath]
 		return subprocess.call(args)
 

@@ -41,7 +41,7 @@ public:
 
     KexiCharacterEncodingComboBox* encodingComboBox() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void accept();
 
 protected:

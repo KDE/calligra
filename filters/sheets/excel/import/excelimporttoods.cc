@@ -31,7 +31,6 @@
 #include <QPair>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 #include <KoUnit.h>
 #include <kpluginfactory.h>
 
@@ -42,7 +41,7 @@
 #include <KoOdfNumberStyles.h>
 
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <NumberFormatParser.h>
 
 #include "swinder.h"
@@ -119,7 +118,7 @@ public:
     QString subScriptStyle, superScriptStyle;
     QHash<QString, KoGenStyle> valueFormatCache;
     QHash<CellFormatKey, QString> cellFormatCache;
-    QList<ChartExport*> charts;
+    QList<KoOdfChartWriter*> charts;
     QHash<Cell*, QByteArray> cellShapes;
     QHash<Sheet*, QByteArray> sheetShapes;
 
@@ -555,13 +554,13 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     // count the number of rows in total to provide a good progress value
     rowsCountTotal = rowsCountDone = 0;
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         rowsCountTotal += qMin(maximalRowCount, sheet->maxRow()) * 2; // double cause we will count them 2 times, once for styles and once for content
     }
 
     // now start the whole work
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForBody(sheet, xmlWriter, spreadsheet);
     }
@@ -580,7 +579,7 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     table_database_ranges ranges(spreadsheet.add_table_database_ranges());
     int rangeId = 1;
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         QList<QRect> filters = workbook->filterRanges(i);
         QString sheetName = workbook->sheet(i)->name();
         if (filters.size()) {
@@ -637,7 +636,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     pageLayoutStyle.addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
     pageLayoutStyleName = mainStyles->insert(pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    for (unsigned i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForStyle(sheet, xmlWriter);
 
@@ -1326,7 +1325,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
             continue;
         }
 
-        ChartExport *c = new ChartExport(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
@@ -1360,7 +1359,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
-    foreach(ChartExport *c, this->charts) {
+    foreach(KoOdfChartWriter *c, this->charts) {
         c->saveContent(this->storeout, manifestWriter);
     }
 }

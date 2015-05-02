@@ -23,7 +23,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 struct KisScriptManager::Private {
     Private()
@@ -36,12 +36,12 @@ struct KisScriptManager::Private {
     QHash<KisFilter*, KAction*> script2Action;
 
     KActionCollection *actionCollection;
-    KisView2 *view;
+    KisViewManager *view;
     KActionMenu *scriptMenu;
 };
 
 
-KisScriptManager::KisScriptManager(KisView2 *view)
+KisScriptManager::KisScriptManager(KisViewManager *view)
     : QObject(view)
     , d(new Private())
 {

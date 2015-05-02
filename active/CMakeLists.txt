@@ -64,9 +64,9 @@ target_link_libraries(calligraactive
 
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligraactive kordf)
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
-install(FILES calligraactive.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(FILES calligraactive.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(DIRECTORY qml DESTINATION share/calligraactive)

@@ -2,6 +2,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Michał Poteralski <michalpoteralskikde@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -406,7 +407,11 @@ public:
     //! @return class name of currently edited widget's
     QByteArray editedWidgetClass() const;
 
-public slots:
+    //! @return true if we're within redo(). Useful to check if command is being executed
+    //! in response of a redo or it is caused by some other event.
+    bool isRedoing() const;
+
+public Q_SLOTS:
     /*! Called when the user presses a widget item of the toolbox. 
       The form enters into "widget inserting" state.
       Prepares all form's widgets for creation of a new widget 
@@ -503,30 +508,6 @@ public slots:
     /*! Creates a dialog to edit the Connection of \ref activeForm(). */
     void editConnections();
 
-    //! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
-    void layoutHBox();
-    
-    //! Lay out selected widgets using VBox layout.
-    void layoutVBox();
-    
-    //! Lay out selected widgets using Grid layout.
-    void layoutGrid();
-    
-    //! Lay out selected widgets in an horizontal splitter
-    void  layoutHSplitter();
-    
-    //! Lay out selected widgets in a verticak splitter
-    void  layoutVSplitter();
-    
-    //! Lay out selected widgets using HFlow layout
-    void layoutHFlow();
-    
-    //! Lay out selected widgets using VFlow layout.
-    void layoutVFlow();
-
-    //! Breaks selected layout(calls \ref BreakLayoutCommand).
-    void breakLayout();
-
     void alignWidgetsToLeft();
     
     void alignWidgetsToRight();
@@ -571,7 +552,7 @@ public slots:
     */
     void disableFilter(QWidget *w, Container *container);
 
-protected slots:
+protected Q_SLOTS:
     /*! This slot is called when the toplevel widget of this Form is deleted
     (ie the window closed) so that the Form gets deleted at the same time.
      */
@@ -607,7 +588,7 @@ protected slots:
 
     void widgetDestroyed();
 
-signals:
+Q_SIGNALS:
     /*! This signal is emitted by selectWidget() when user selects a new widget,
      to update both the Property Editor and the Object Tree View.
      \a w is the newly selected widget.
@@ -722,18 +703,6 @@ protected:
     /*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
      and modifies the "alignment" property of  the widget.*/
     void saveAlignProperty(const QString &property);
-
-    /*! Creates the "layout" property, for the Container representing \a item. */
-    void createLayoutProperty(ObjectTreeItem *item);
-
-    /*! Saves the "layout" property and changes the Container 's layout,
-        using Container::setLayoutType().*/
-    void saveLayoutProperty(const QString &property, const QVariant &value);
-
-    /*! Function called by the "Lay out in..." menu items. It creates a layout from the
-      currently selected widgets (that must have the same parent).
-      Calls \ref CreateLayoutCommand. */
-    void createLayout(LayoutType layoutType);
 
     KActionCollection  *actionCollection() const;
 

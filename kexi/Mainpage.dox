@@ -1,12 +1,15 @@
 /**
-	\mainpage
-	%Kexi is an integrated data management application. 
-	It can be used for creating database schemas, inserting data, performing
-	queries, and processing data. Forms can be created to provide a custom interface
-	to your data. All database objects - tables, queries and forms - are stored in
-	the database, making it easy to share data and design.
+    \mainpage Kexi
+
+    %Kexi is a visual database applications creator. It can be used for designing database
+    applications, inserting and editing data, performing queries, and processing data. Forms
+    can be created to provide a custom interface to your data. All database objects – tables,
+    queries, forms, reports - are stored in the database, making it easy to share data and design.
+
+    - Home page: http://calligra.org/kexi
+    - Development wiki: https://community.kde.org/Kexi
  */
-IGNORE_PREFIX=Kexi
-EXCLUDE=kexi/3rdparty tests tools kexidb/parser/sqlparser.h kexidb/drivers/odbc plugins/relations
+// DOXYGEN_SET_IGNORE_PREFIX=Kexi Ko K
+EXCLUDE=3rdparty tests tools kexidb/sqlitedump pics plugins/relations
 
 // DOXYGEN_SET_PROJECT_NAME = Kexi

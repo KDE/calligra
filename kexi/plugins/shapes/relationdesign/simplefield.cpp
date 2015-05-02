@@ -18,6 +18,7 @@
 
 #include "simplefield.h"
 
+#include <KoXmlWriter.h>
 
 SimpleField::SimpleField()
 {

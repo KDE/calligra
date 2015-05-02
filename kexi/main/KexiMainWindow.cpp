@@ -41,6 +41,8 @@
 #include <QDockWidget>
 #include <QMenuBar>
 #include <QShortcut>
+#include <QStylePainter>
+#include <QScopedPointer>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -57,18 +59,9 @@
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
 
-#include <kglobalsettings.h>
-#include <ktip.h>
-#include <kstandarddirs.h>
-#include <kpushbutton.h>
-#include <ktextbrowser.h>
 #include <kiconloader.h>
-#include <ktabwidget.h>
-#include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
-#include <kxmlguifactory.h>
 #include <kmultitabbar.h>
 
 #include <db/connection.h>
@@ -78,6 +71,9 @@
 #include <db/drivermanager.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiCloseButton.h>
+#include <kexi_version.h>
 
 #include <core/KexiWindow.h>
 #include <core/KexiRecentProjects.h>
@@ -95,6 +91,8 @@
 #include "kexiactioncategories.h"
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
+#include "KexiBugReportDialog.h"
+
 #include <kexi_global.h>
 
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -106,6 +104,7 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -122,41 +121,101 @@
 # define KexiVDebug if (0) kDebug()
 #endif
 
+#undef HAVE_KNEWSTUFF
 #ifdef HAVE_KNEWSTUFF
 #include <knewstuff/downloaddialog.h>
 #include "kexinewstuff.h"
 #endif
 
-#ifndef KEXI_NO_FEEDBACK_AGENT
-#ifdef FEEDBACK_INCLUDE
-#include FEEDBACK_INCLUDE
-#endif
-#include <kaboutdata.h>
-#include <ktoolinvocation.h>
-#endif
-
-//-------------------------------------------------
-
-//! @internal
-class KexiDockWidget : public QDockWidget
-{
-public:
-    KexiDockWidget(const QString & title, QWidget *parent)
-            : QDockWidget(title, parent) {
-    }
-    void setSizeHint(const QSize& hint) {
-        m_hint = hint;
-    }
-    QSize sizeHint() const {
-        return m_hint.isValid() ? m_hint : QDockWidget::sizeHint();
-    }
-private:
-    QSize m_hint;
-};
-
 //-------------------------------------------------
 
 #include "KexiMainWindow_p.h"
+
+//-------------------------------------------------
+
+class KexiDockWidget::Private
+{
+public:
+    Private() {}
+    QSize hint;
+    KexiCloseButton *closeButton;
+};
+
+KexiDockWidget::KexiDockWidget(const QString & title, QWidget *parent)
+        : QDockWidget(title, parent), d(new Private)
+{
+    // No floatable dockers, Dolphin had problems, we don't want the same...
+    // https://bugs.kde.org/show_bug.cgi?id=288629
+    // https://bugs.kde.org/show_bug.cgi?id=322299
+    setFeatures(QDockWidget::NoDockWidgetFeatures);//DockWidgetClosable);
+    setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    setFocusPolicy(Qt::NoFocus);
+
+    QStyleOptionDockWidgetV2 dockOpt;
+    dockOpt.init(this);
+    const int addSpacing = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, &dockOpt, this);
+
+    QWidget *titleBar = new QWidget;
+    titleBar->setFocusPolicy(Qt::NoFocus);
+    QHBoxLayout *titleLyr = new QHBoxLayout(titleBar);
+    titleLyr->setContentsMargins(addSpacing, addSpacing, addSpacing, addSpacing);
+    titleLyr->setSpacing(0);
+    titleLyr->addStretch(1);
+
+    d->closeButton = new KexiCloseButton;
+    d->closeButton->setMarginEnabled(false);
+    connect(d->closeButton, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
+    titleLyr->addWidget(d->closeButton);
+
+    setTitleBarWidget(titleBar);
+}
+
+KexiDockWidget::~KexiDockWidget()
+{
+    delete d;
+}
+
+void KexiDockWidget::paintEvent(QPaintEvent *pe)
+{
+    Q_UNUSED(pe);
+    QStylePainter p(this);
+    if (isFloating()) {
+        QStyleOptionFrame framOpt;
+        framOpt.init(this);
+        p.drawPrimitive(QStyle::PE_FrameDockWidget, framOpt);
+    }
+
+    // Title must be painted after the frame, since the areas overlap, and
+    // the title may wish to extend out to all sides (eg. XP style)
+    QStyleOptionDockWidgetV2 titleOpt;
+    initStyleOption(&titleOpt);
+    p.drawControl(QStyle::CE_DockWidgetTitle, titleOpt);
+}
+
+void KexiDockWidget::setSizeHint(const QSize& hint)
+{
+    d->hint = hint;
+}
+
+QSize KexiDockWidget::sizeHint() const
+{
+    return d->hint.isValid() ? d->hint : QDockWidget::sizeHint();
+}
+
+void KexiDockWidget::slotCloseClicked()
+{
+    if (isVisible()) {
+        close();
+    }
+    else {
+        show();
+    }
+}
+
+QToolButton* KexiDockWidget::closeButton() const
+{
+    return d->closeButton;
+}
 
 //-------------------------------------------------
 
@@ -207,7 +266,7 @@ void KexiMainWindowTabWidget::closeTab()
 
 tristate KexiMainWindowTabWidget::closeAllTabs()
 {
-    tristate alternateResult = true; 
+    tristate alternateResult = true;
     QList<KexiWindow*> windowList;
     for (int i = 0; i < count(); i++) {
         KexiWindow *window = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->windowForTab(i);
@@ -227,12 +286,6 @@ tristate KexiMainWindowTabWidget::closeAllTabs()
     return alternateResult;
 }
 
-void KexiMainWindowTabWidget::tabInserted(int index)
-{
-    KTabWidget::tabInserted(index);
-    m_mainWidget->slotCurrentTabIndexChanged(index);
-}
-
 void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 {
     QMenu menu;
@@ -243,7 +296,7 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
-    
+
 void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 {
     if (currentIndex() == -1) {
@@ -344,6 +397,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
+    setAttribute(Qt::WA_DeleteOnClose);
     kexiTester() << KexiTestObject(this);
 
     if (d->userMode)
@@ -377,7 +431,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
-    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
     if (Kexi::startupHandler().forcedFullScreen()) {
         toggleFullScreen(true);
     }
@@ -403,16 +456,6 @@ KexiMainWindow::~KexiMainWindow()
 KexiProject *KexiMainWindow::project()
 {
     return d->prj;
-}
-
-KXMLGUIClient* KexiMainWindow::guiClient() const
-{
-    return d->dummy_KXMLGUIClient;
-}
-
-KXMLGUIFactory* KexiMainWindow::guiFactory()
-{
-    return d->dummy_KXMLGUIFactory;
 }
 
 QList<QAction*> KexiMainWindow::allActions() const
@@ -482,7 +525,7 @@ void KexiMainWindow::setupActions()
 
     // PROJECT MENU
     KAction *action;
-    
+
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
     addThreeDotsToActionText(action);
@@ -503,9 +546,9 @@ void KexiMainWindow::setupActions()
 
 #ifdef HAVE_KNEWSTUFF
     action = addAction("project_download_examples", koIcon("go-down"),
-                       i18n("&Download Example Databases..."));
-    action->setToolTip(i18n("Download example databases from the Internet"));
-    action->setWhatsThis(i18n("Downloads example databases from the Internet."));
+                       futureI18n("&Download Example Databases..."));
+    action->setToolTip(futureI18n("Download example databases from the Internet"));
+    action->setWhatsThis(futureI18n("Downloads example databases from the Internet."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotGetNewStuff()));
 #endif
 
@@ -531,14 +574,13 @@ void KexiMainWindow::setupActions()
                                   i18n("Save &As..."));
     d->action_save_as->setToolTip(i18n("Save object as"));
     d->action_save_as->setWhatsThis(
-        i18n("Saves object changes from currently selected window under a new name "
-             "(within the same project)."));
+        i18n("Saves object from currently selected window under a new name (within the same project)."));
     connect(d->action_save_as, SIGNAL(triggered()), this, SLOT(slotProjectSaveAs()));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     ac->addAction("project_properties",
         action = d->action_project_properties = new KexiMenuWidgetAction(
-            koIcon("document-properties"), i18n("Project Properties"), this));
+            koIcon("document-properties"), futureI18n("Project Properties"), this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
     setupMainMenuActionShortcut(action);
 #else
@@ -571,16 +613,16 @@ void KexiMainWindow::setupActions()
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     d->action_project_relations = addAction("project_relations", koIcon("relation"),
-                                            i18n("&Relationships..."), "Ctrl+R");
-    d->action_project_relations->setToolTip(i18n("Project relationships"));
-    d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
+                                            futureI18n("&Relationships..."), "Ctrl+R");
+    d->action_project_relations->setToolTip(futureI18n("Project relationships"));
+    d->action_project_relations->setWhatsThis(futureI18n("Shows project relationships."));
     connect(d->action_project_relations, SIGNAL(triggered()),
             this, SLOT(slotProjectRelations()));
 
 #else
     d->action_project_relations = d->dummy_action;
 #endif
-    d->action_tools_import_project = addAction("tools_import_project", koIcon("document_import_database"),
+    d->action_tools_import_project = addAction("tools_import_project", KexiIcon(koIconName("database-import")),
                                                i18n("&Import Database..."));
     d->action_tools_import_project->setToolTip(i18n("Import entire database as a Kexi project"));
     d->action_tools_import_project->setWhatsThis(
@@ -590,13 +632,13 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_data_import = addAction("tools_import_tables", koIcon("document-import"),
                                             i18n("Import Tables"));
-    d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this database"));
-    d->action_tools_data_import->setWhatsThis(i18n("Import data from an external source into this database"));
+    d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this project"));
+    d->action_tools_data_import->setWhatsThis(i18n("Imports data from an external source into this project."));
     connect(d->action_tools_data_import, SIGNAL(triggered()), this, SLOT(slotToolsImportTables()));
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 KIcon(KexiDB::defaultFileBasedDriverIconName()),
+                                                 koIcon("application-x-compress"),
                                                  i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
@@ -608,7 +650,7 @@ void KexiMainWindow::setupActions()
         d->action_project_import_data_table = 0;
     else {
         d->action_project_import_data_table = addAction("project_import_data_table",
-            koIcon("table"), 
+            KexiIcon(koIconName("kexi-document-empty")),
             /*! @todo: change to "file_import" with a table or so */
             i18nc("Import->Table Data From File...", "Import Data From &File..."));
         d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
@@ -636,23 +678,23 @@ void KexiMainWindow::setupActions()
 #ifndef KEXI_NO_QUICK_PRINTING
     ac->addAction("project_print",
                   d->action_project_print = KStandardAction::print(this, SLOT(slotProjectPrint()), this));
-    d->action_project_print->setToolTip(i18n("Print data from the active table or query"));
-    d->action_project_print->setWhatsThis(i18n("Prints data from the active table or query."));
+    d->action_project_print->setToolTip(futureI18n("Print data from the active table or query"));
+    d->action_project_print->setWhatsThis(futureI18n("Prints data from the active table or query."));
 
     ac->addAction("project_print_preview",
                   d->action_project_print_preview = KStandardAction::printPreview(
                                                         this, SLOT(slotProjectPrintPreview()), this));
     d->action_project_print_preview->setToolTip(
-        i18n("Show print preview for the active table or query"));
+        futureI18n("Show print preview for the active table or query"));
     d->action_project_print_preview->setWhatsThis(
-        i18n("Shows print preview for the active table or query."));
+        futureI18n("Shows print preview for the active table or query."));
 
     d->action_project_print_setup = addAction("project_print_setup",
-        koIcon("document-page-setup"), i18n("Page Set&up..."));
+        koIcon("document-page-setup"), futureI18n("Print Set&up..."));
     d->action_project_print_setup->setToolTip(
-        i18n("Show page setup for printing the active table or query"));
+        futureI18n("Show print setup for the active table or query"));
     d->action_project_print_setup->setWhatsThis(
-        i18n("Shows page setup for printing the active table or query."));
+        futureI18n("Shows print setup for the active table or query."));
     connect(d->action_project_print_setup, SIGNAL(triggered()),
             this, SLOT(slotProjectPageSetup()));
 #endif
@@ -667,11 +709,11 @@ void KexiMainWindow::setupActions()
     else {
         d->action_edit_paste_special_data_table = addAction(
             "edit_paste_special_data_table",
-            koIcon("table"), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
+            KIcon(d->action_edit_paste->icon()), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
-            i18n("Pastes clipboard data to a table."));
+            i18n("Pastes clipboard data as a table."));
         connect(d->action_edit_paste_special_data_table, SIGNAL(triggered()),
                 this, SLOT(slotEditPasteSpecialDataTable()));
     }
@@ -719,8 +761,8 @@ void KexiMainWindow::setupActions()
 
     d->action_edit_delete_row = createSharedAction(i18n("Delete Record"), koIconName("delete_table_row"),
                                 KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
-    d->action_edit_delete_row->setToolTip(i18n("Delete currently selected record"));
-    d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected record."));
+    d->action_edit_delete_row->setToolTip(i18n("Delete the current record"));
+    d->action_edit_delete_row->setWhatsThis(i18n("Deletes the current record."));
 
     d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"),
                                  koIconName("clear_table_contents"), KShortcut(), "edit_clear_table");
@@ -849,8 +891,8 @@ void KexiMainWindow::setupActions()
     //! @todo d->action_data_execute->setToolTip(i18n(""));
     //! @todo d->action_data_execute->setWhatsThis(i18n(""));
 
-#ifndef KEXI_SHOW_UNIMPLEMENTED
-    action = createSharedAction(i18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+    action = createSharedAction(futureI18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
     setActionVolatile(action, true);
 #endif
 //! @todo action->setToolTip(i18n(""));
@@ -874,7 +916,7 @@ void KexiMainWindow::setupActions()
     //WINDOW MENU
     //additional 'Window' menu items
     d->action_window_next = addAction("window_next",
-                                      i18n("&Next Window"), 
+                                      i18n("&Next Window"),
 #ifdef Q_WS_WIN
         "Ctrl+Tab"
 #else
@@ -935,9 +977,9 @@ void KexiMainWindow::setupActions()
                   action = d->action_settings = new KexiMenuWidgetAction(
                     KStandardAction::Preferences, this));
     action->setObjectName("settings");
-    action->setText(i18n("Settings..."));
-    action->setToolTip(i18n("Kexi settings"));
-    action->setWhatsThis(i18n("Lets you to view and change Kexi settings."));
+    action->setText(futureI18n("Settings..."));
+    action->setToolTip(futureI18n("Show Kexi settings"));
+    action->setWhatsThis(futureI18n("Shows Kexi settings."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
     setupMainMenuActionShortcut(action);
 #else
@@ -950,17 +992,8 @@ void KexiMainWindow::setupActions()
     ->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
 
-#ifndef KEXI_NO_FEEDBACK_AGENT
-#ifdef FEEDBACK_CLASS
-    action = addAction("help_start_feedback_agent", koIcon("dialog-information"),
-                       i18n("Give Feedback..."));
-    connect(action, SIGNAL(triggered()),
-            this, SLOT(slotStartFeedbackAgent()));
-#endif
-#endif
-
     // GLOBAL
-    d->action_show_help_menu = addAction("help_show_menu", i18n("Show Help Menu"), "Alt+H");
+    d->action_show_help_menu = addAction("help_show_menu", i18nc("Help Menu", "Help"), "Alt+H");
     d->action_show_help_menu->setToolTip(i18n("Show Help menu"));
     d->action_show_help_menu->setWhatsThis(i18n("Shows Help menu."));
     // (connection is added elsewhere)
@@ -999,6 +1032,10 @@ void KexiMainWindow::setupActions()
 
     //! @todo support this in KexiPart::FormObjectType as well
     acat->addWindowAction("edit_copy_special_data_table",
+                          KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+    //! @todo support this in FormObjectType as well
+    acat->addWindowAction("project_export_data_table",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
     // GlobalActions, etc.
@@ -1045,10 +1082,6 @@ void KexiMainWindow::setupActions()
 
     acat->addAction("project_close", Kexi::GlobalActionCategory);
 
-    //! @todo support this in FormObjectType as well
-    acat->addAction("project_export_data_table", Kexi::GlobalActionCategory | Kexi::WindowActionCategory,
-                    KexiPart::TableObjectType, KexiPart::QueryObjectType);
-
     acat->addAction("project_import_data_table", Kexi::GlobalActionCategory);
 
     acat->addAction("project_new", Kexi::GlobalActionCategory);
@@ -1076,7 +1109,7 @@ void KexiMainWindow::setupActions()
     acat->addAction("tools_import_project", Kexi::GlobalActionCategory);
 
     acat->addAction("tools_import_tables", Kexi::GlobalActionCategory);
-    
+
     acat->addAction("view_data_mode", Kexi::GlobalActionCategory);
 
     acat->addAction("view_design_mode", Kexi::GlobalActionCategory);
@@ -1178,8 +1211,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     if (d->action_tools_data_import)
         d->action_tools_data_import->setEnabled(d->prj && !readOnly);
     d->action_project_export_data_table->setEnabled(
-        currentWindow() && currentWindow()->part()->info()->isDataExportSupported()
-        && !currentWindow()->neverSaved());
+        currentWindow() && currentWindow()->part()->info()->isDataExportSupported());
     if (d->action_edit_paste_special_data_table)
         d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
@@ -1210,7 +1242,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     d->action_view_mainarea->setEnabled(d->prj);
     if (d->action_view_propeditor)
         d->action_view_propeditor->setEnabled(d->prj);
-   #ifndef KEXI_NO_CTXT_HELP
+#ifndef KEXI_NO_CTXT_HELP
     d->action_show_helper->setEnabled(d->prj);
 #endif
 
@@ -1276,38 +1308,33 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
-    createKexiProject(projectData);
-    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
-        delete d->prj;
-        d->prj = 0;
+    QScopedPointer<KexiProject> prj(createKexiProjectObject(projectData));
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(prj->data()->connectionData(), this)) {
         return cancelled;
     }
     bool incompatibleWithKexi;
-    tristate res = d->prj->open(&incompatibleWithKexi);
+    tristate res = prj->open(&incompatibleWithKexi);
 
-    if (d->prj->data()->connectionData()->passwordNeeded()) {
+    if (prj->data()->connectionData()->passwordNeeded()) {
         // password was supplied in this session, and shouldn't be stored or reused afterwards,
         // so let's remove it
-        d->prj->data()->connectionData()->password.clear();
+        prj->data()->connectionData()->password.clear();
     }
 
     if (~res) {
-        delete d->prj;
-        d->prj = 0;
         return cancelled;
     }
     else if (!res) {
-        delete d->prj;
-        d->prj = 0;
         if (incompatibleWithKexi) {
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
-                    i18n("Database project %1 does not appear to have been created using Kexi."
-                         "<p>Do you want to import it as a new Kexi project?",
+                    i18nc("@info",
+                         "Database project <resource>%1</resource> does not appear to have been created using Kexi.<nl/>"
+                         "Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
                     QString(), KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
-                const bool anotherProjectAlreadyOpened = d->prj;
+                const bool anotherProjectAlreadyOpened = prj;
                 tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata",
                                projectData.databaseName(), projectData.constConnectionData());
 
@@ -1323,9 +1350,11 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         return false;
     }
 
+    // success
+    d->prj = prj.take();
     setupProjectNavigator();
     d->prj->data()->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(new KexiProjectData(*d->prj->data()));
+    Kexi::recentProjects()->addProjectData(*d->prj->data());
     updateReadOnlyState();
     invalidateActions();
     enableMessages(false);
@@ -1366,8 +1395,6 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
     const QString caption(i18n("Select New Project's Location"));
 
     while (true) {
-//! @todo remove win32 case
-        Q_UNUSED(projectData);
         if (fname.isEmpty() &&
                 !projectData.constConnectionData()->dbFileName().isEmpty()) {
             //propose filename from db template name
@@ -1407,7 +1434,7 @@ void KexiMainWindow::updateReadOnlyState()
     if (d->navigator) {
         d->navigator->setReadOnly(readOnly);
     }
-    
+
     // update "insert ....." actions for every part
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList();
     if (plist) {
@@ -1457,9 +1484,9 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                     taskName = i18nc("\"executing object\" action", "executing");
 #ifndef KEXI_NO_QUICK_PRINTING
                 else if (info->value("action") == "print-preview")
-                    taskName = i18n("making print preview for");
+                    taskName = futureI18n("making print preview for");
                 else if (info->value("action") == "print")
-                    taskName = i18n("printing");
+                    taskName = futureI18n("printing");
 #endif
                 else
                     taskName = i18n("opening");
@@ -1491,7 +1518,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
             else if (info->value("action") == "print") {
                 tristate res = printItem(item);
                 if (false == res) {
-                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot print object") +
+                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot print object") +
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
@@ -1499,7 +1526,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
             else if (info->value("action") == "print-preview") {
                 tristate res = printPreviewForItem(item);
                 if (false == res) {
-                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot make print preview of object") +
+                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot make print preview of object") +
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
@@ -1643,7 +1670,7 @@ tristate KexiMainWindow::closeProject()
         d->navigator->setProject(0);
         slotProjectNavigatorVisibilityChanged(true); // hide side tab
     }
-    
+
     if (d->propEditorDockWidget)
         d->propEditorDockWidget->hide();
 
@@ -1714,8 +1741,7 @@ void KexiMainWindow::setupMainWidget()
 
     d->mainWidget = new KexiMainWidget();
     d->mainWidget->setParent(this);
-    
-    KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
+
     d->mainWidget->tabWidget()->setTabsClosable(true);
     connect(d->mainWidget->tabWidget(), SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeWindowForTab(int)));
@@ -1770,34 +1796,17 @@ void KexiMainWindow::slotMultiTabBarTabClicked(int id)
     }
 }
 
-static Qt::DockWidgetArea loadDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea defaultArea)
+static Qt::DockWidgetArea applyRightToLeftToDockArea(Qt::DockWidgetArea area)
 {
-        const QString areaName = group.readEntry(configEntry).toLower();
-        if (areaName == "left")
-            return Qt::LeftDockWidgetArea;
-        else if (areaName == "right")
+    if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        if (area == Qt::LeftDockWidgetArea) {
             return Qt::RightDockWidgetArea;
-        else if (areaName == "top")
-            return Qt::TopDockWidgetArea;
-        else if (areaName == "bottom")
-            return Qt::BottomDockWidgetArea;
-        return defaultArea;
-}
-
-static void saveDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea area)
-{
-    QString areaName;
-    switch (area) {
-    case Qt::LeftDockWidgetArea: areaName = "left"; break;
-    case Qt::RightDockWidgetArea: areaName = "right"; break;
-    case Qt::TopDockWidgetArea: areaName = "top"; break;
-    case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
-    default: areaName = "left"; break;
+        }
+        else if (area == Qt::RightDockWidgetArea) {
+            return Qt::LeftDockWidgetArea;
+        }
     }
-    if (areaName.isEmpty())
-        group.deleteEntry(configEntry);
-    else
-        group.writeEntry(configEntry, areaName);
+    return area;
 }
 
 void KexiMainWindow::setupProjectNavigator()
@@ -1809,23 +1818,22 @@ void KexiMainWindow::setupProjectNavigator()
         d->navDockWidget->show();
     }
     else {
-        d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
-        d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
-        KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
-        d->mainWidget->addDockWidget(
-            loadDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", Qt::LeftDockWidgetArea),
-            d->navDockWidget
-        );
-
-        KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
+        KexiDockableWidget* navDockableWidget = new KexiDockableWidget;
         d->navigator = new KexiProjectNavigator(navDockableWidget);
         kexiTester() << KexiTestObject(d->navigator, "KexiProjectNavigator");
 
         navDockableWidget->setWidget(d->navigator);
 
-        d->navDockWidget->setWindowTitle(d->navigator->windowTitle());
+        d->navDockWidget = new KexiDockWidget(d->navigator->windowTitle(), d->mainWidget);
+        d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
+        d->navDockWidget->closeButton()->setToolTip(i18n("Hide project navigator"));
+        d->mainWidget->addDockWidget(
+            applyRightToLeftToDockArea(Qt::LeftDockWidgetArea), d->navDockWidget,
+            Qt::Vertical);
+        navDockableWidget->setParent(d->navDockWidget);
         d->navDockWidget->setWidget(navDockableWidget);
 
+        KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
         const QSize projectNavigatorSize = mainWindowGroup.readEntry<QSize>("ProjectNavigatorSize", QSize());
         if (!projectNavigatorSize.isNull()) {
             navDockableWidget->setSizeHint(projectNavigatorSize);
@@ -1861,26 +1869,22 @@ void KexiMainWindow::setupProjectNavigator()
 #endif
         connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
-        if (d->prj) {//connect to the project
-            connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
-                    d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
-        }
     }
     if (d->prj->isConnected()) {
         QString partManagerErrorMessages;
 
         if (!partManagerErrorMessages.isEmpty()) {
             showWarningContinueMessage(partManagerErrorMessages, QString(),
-                                       "dontShowWarningsRelatedToPluginsLoading");
+                                       "ShowWarningsRelatedToPluginsLoading");
         }
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
-        
-    }
 
+    }
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item&)));
+    connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
 
     d->navigator->setFocus();
-    
+
     if (d->forceShowProjectNavigatorOnCreation) {
         slotViewNavigator();
         d->forceShowProjectNavigatorOnCreation = false;
@@ -1902,9 +1906,9 @@ void KexiMainWindow::setupPropertyEditor()
 //! @todo FIX LAYOUT PROBLEMS
         d->propEditorDockWidget = new KexiDockWidget(i18n("Property Editor"), d->mainWidget);
         d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
+        d->propEditorDockWidget->closeButton()->setToolTip(i18n("Hide property editor"));
         d->mainWidget->addDockWidget(
-            loadDockAreaSetting(mainWindowGroup, "PropertyEditorArea", Qt::RightDockWidgetArea),
-            d->propEditorDockWidget,
+            applyRightToLeftToDockArea(Qt::RightDockWidgetArea), d->propEditorDockWidget,
             Qt::Vertical
         );
         connect(d->propEditorDockWidget, SIGNAL(visibilityChanged(bool)),
@@ -1920,7 +1924,7 @@ void KexiMainWindow::setupPropertyEditor()
         QWidget *propEditorDockWidgetContents = new QWidget(d->propEditorDockableWidget);
         d->propEditorDockableWidget->setWidget(propEditorDockWidgetContents);
         QVBoxLayout *propEditorDockWidgetContentsLyr = new QVBoxLayout(propEditorDockWidgetContents);
-        KexiUtils::setMargins(propEditorDockWidgetContentsLyr, KDialog::marginHint() / 2);
+        propEditorDockWidgetContentsLyr->setContentsMargins(0, 0, 0, 0);
 
         d->propEditorTabWidget = new KTabWidget(propEditorDockWidgetContents);
         d->propEditorTabWidget->setDocumentMode(true);
@@ -2031,12 +2035,9 @@ KexiMainWindow::storeSettings()
         mainWindowGroup.writeEntry("Geometry", geometry());
     }
 
-    saveDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", d->mainWidget->dockWidgetArea(d->navDockWidget));
-    saveDockAreaSetting(mainWindowGroup, "PropertyEditorArea", d->mainWidget->dockWidgetArea(d->propEditorDockWidget));
-
     if (d->navigator)
         mainWindowGroup.writeEntry("ProjectNavigatorSize", d->navigator->parentWidget()->size());
-    
+
     if (d->propEditorDockableWidget)
         mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
 
@@ -2053,12 +2054,6 @@ KexiMainWindow::registerChild(KexiWindow *window)
         d->insertWindow(window);
     }
     //kDebug() << "ID=" << window->id();
-}
-
-void
-KexiMainWindow::updateWindowViewGUIClient(KXMLGUIClient *viewClient)
-{
-    Q_UNUSED(viewClient);
 }
 
 void KexiMainWindow::updateCustomPropertyPanelTabs(KexiWindow *prevWindow,
@@ -2149,8 +2144,15 @@ void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWin
         currentWindow()->selectedView()->propertySetSwitched();
 
     if (windowChanged) {
-        if (currentWindow() && currentWindow()->currentViewMode() != 0 && window) //on opening new dialog it can be 0; we don't want this
+        if (currentWindow() && currentWindow()->currentViewMode() != 0 && window) {
+            //on opening new dialog it can be 0; we don't want this
             d->updatePropEditorVisibility(currentWindow()->currentViewMode());
+
+            restoreDesignTabIfNeeded(window->partItem()->partClass(), window->currentViewMode(),
+                                     prevWindow ? prevWindow->partItem()->identifier() : 0);
+            activateDesignTabIfNeeded(window->partItem()->partClass(),
+                                      window->currentViewMode());
+        }
     }
 
     invalidateActions();
@@ -2222,29 +2224,15 @@ void KexiMainWindow::slotProjectNew()
     createNewProject();
 }
 
-void
-KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
+KexiProject* KexiMainWindow::createKexiProjectObject(const KexiProjectData &data)
 {
-    d->prj = new KexiProject(new_data, this);
-    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
+    KexiProject *prj = new KexiProject(data, this);
+    connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
     }
-    
-}
-
-//unused
-KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
-                                       QString* shortcutFileName)
-{
-    Q_UNUSED(shortcutFileName);
-    Q_UNUSED(confirmOverwrites);
-
-    //! @todo
-    cancelled = false;
-    KexiProjectData *new_data = 0;
-    return new_data;
+    return prj;
 }
 
 void KexiMainWindow::createNewProject()
@@ -2253,26 +2241,34 @@ void KexiMainWindow::createNewProject()
         return;
     d->tabbedToolBar->showMainMenu("project_new");
     KexiNewProjectAssistant* assistant = new KexiNewProjectAssistant;
-    connect(assistant, SIGNAL(createProject(KexiProjectData*)), 
-            this, SLOT(createNewProject(KexiProjectData*)));
+    connect(assistant, SIGNAL(createProject(KexiProjectData)),
+            this, SLOT(createNewProject(KexiProjectData)));
 
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
 
-tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
+tristate KexiMainWindow::createNewProject(const KexiProjectData &projectData)
 {
-    createKexiProject(*projectData);
-    tristate res = d->prj->create(true /*overwrite*/);
+    QScopedPointer<KexiProject> prj(createKexiProjectObject(projectData));
+    tristate res = prj->create(true /*overwrite*/);
     if (res != true) {
-        delete d->prj;
-        d->prj = 0;
+        return res;
+    }
+    //kDebug() << "new project created ---";
+    if (d->prj) {
+        res = openProjectInExternalKexiInstance(
+                prj->data()->connectionData()->fileName(),
+                prj->data()->connectionData(),
+                prj->data()->databaseName());
+        Kexi::recentProjects()->addProjectData(*prj->data());
+        d->tabbedToolBar->hideMainMenu();
         return res;
     }
     d->tabbedToolBar->hideMainMenu();
-    //kDebug() << "new project created ---";
+    d->prj = prj.take();
     setupProjectNavigator();
-    projectData->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(projectData);
+    d->prj->data()->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(*d->prj->data());
 
     invalidateActions();
     updateAppCaption();
@@ -2285,9 +2281,9 @@ void KexiMainWindow::slotProjectOpen()
         return;
     d->tabbedToolBar->showMainMenu("project_open");
     KexiOpenProjectAssistant* assistant = new KexiOpenProjectAssistant;
-    connect(assistant, SIGNAL(openProject(KexiProjectData)), 
+    connect(assistant, SIGNAL(openProject(KexiProjectData)),
             this, SLOT(openProject(KexiProjectData)));
-    connect(assistant, SIGNAL(openProject(QString)), 
+    connect(assistant, SIGNAL(openProject(QString)),
             this, SLOT(openProject(QString)));
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
@@ -2394,7 +2390,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     QString fileNameForConnectionData;
     if (aFileName.isEmpty()) { //try .kexic file
         if (cdata)
-            fileNameForConnectionData = Kexi::connset().fileNameForConnectionData(cdata);
+            fileNameForConnectionData = Kexi::connset().fileNameForConnectionData(*cdata);
     }
     return openProjectInExternalKexiInstance(aFileName, fileNameForConnectionData, dbName);
 }
@@ -2404,7 +2400,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 {
     QString fileName(aFileName);
     QStringList args;
- 
+
     // open a file-based project or a server connection provided as a .kexic file
     // (we have no other simple way to provide the startup data to a new process)
     if (fileName.isEmpty()) { //try .kexic file
@@ -2414,6 +2410,10 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
         if (dbName.isEmpty()) { //use 'kexi --skip-conn-dialog file.kexic'
             fileName = fileNameForConnectionData;
         } else { //use 'kexi --skip-conn-dialog --connection file.kexic dbName'
+            if (fileNameForConnectionData.isEmpty()) {
+                kWarning() << "fileNameForConnectionData?";
+                return false;
+            }
             args << "--connection" << fileNameForConnectionData;
             fileName = dbName;
         }
@@ -2443,7 +2443,7 @@ void KexiMainWindow::slotProjectWelcome()
     d->tabbedToolBar->showMainMenu("project_welcome");
     KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
         Kexi::recentProjects(), this);
-    connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)), 
+    connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)),
             this, SLOT(openProject(KexiProjectData,QString,bool*)));
     d->tabbedToolBar->setMainMenuContent(assistant);
 }
@@ -2619,18 +2619,25 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     }
 
     activateWindow(window);
-    //view changed: switch to this view's gui client
-    KXMLGUIClient *viewClient = currentWindow()->guiClient();
-    updateWindowViewGUIClient(viewClient);
-    if (d->curWindowViewGUIClient && !viewClient)
-        guiFactory()->removeClient(d->curWindowViewGUIClient);
-    d->curWindowViewGUIClient = viewClient; //remember
 
     invalidateSharedActions();
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
-    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
+    QString origTabToActivate;
+    if (viewMode == Kexi::DesignViewMode) {
+        // Save the orig tab: we want to back to design tab
+        // when user moved to data view and then immediately to design view.
+        origTabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
+    }
+    restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode,
+                             currentWindow()->partItem()->identifier());
+    if (viewMode == Kexi::DesignViewMode) {
+        activateDesignTab(currentWindow()->partItem()->partClass());
+        // Restore the saved tab to the orig one. restoreDesignTabIfNeeded() saved tools tab probably.
+        d->tabsToActivateOnShow.insert(currentWindow()->partItem()->identifier(), origTabToActivate);
+    }
+
     return true;
 }
 
@@ -2685,12 +2692,13 @@ tristate KexiMainWindow::getNewObjectInfo(
         //check if that name is allowed
         d->nameDialog->widget()->addNameSubvalidator(
             new KexiDB::ObjectNameValidator(project()->dbConnection()->driver()));
+        d->nameDialog->setButtonText(KexiNameDialog::Ok, i18nc("@action:button Save object", "Save"));
     } else {
         d->nameDialog->widget()->setMessageText(messageWhenAskingForName);
     }
     d->nameDialog->widget()->setCaptionText(partItem->caption());
     d->nameDialog->widget()->setNameText(partItem->name());
-    d->nameDialog->setWindowTitle(i18n("Save Object As"));
+    d->nameDialog->setWindowTitle(i18nc("@title:window", "Save Object As"));
     d->nameDialog->setDialogIcon(info->itemIconName());
     d->nameDialog->setAllowOverwriting(allowOverwriting);
     if (!originalName.isEmpty()) {
@@ -2700,6 +2708,20 @@ tristate KexiMainWindow::getNewObjectInfo(
         != QDialog::Accepted)
     {
         return cancelled;
+    }
+
+    // close window of object that will be overwritten
+    if (*overwriteNeeded) {
+        KexiPart::Item* overwrittenItem = project()->item(info, d->nameDialog->widget()->nameText());
+        if (overwrittenItem) {
+            KexiWindow * openedWindow = d->openedWindowFor(overwrittenItem->identifier());
+            if (openedWindow) {
+                const tristate res = closeWindow(openedWindow);
+                if (res != true) {
+                    return res;
+                }
+            }
+        }
     }
 
     //update name and caption
@@ -2822,11 +2844,13 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 #endif
     ///@note Q_UNUSED layoutTaskBar
     Q_UNUSED(layoutTaskBar);
-    
+
     if (!window)
         return true;
     if (d->insideCloseWindow)
         return true;
+
+    const int previousItemId = window->partItem()->identifier();
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     d->addItemToPendingWindows(window->partItem(), Private::WindowClosingJob);
@@ -2848,11 +2872,11 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         KGuiItem saveChanges(KStandardGuiItem::save());
         saveChanges.setToolTip(i18n("Save changes"));
         saveChanges.setWhatsThis(
-            i18n("Pressing this button will save all recent changes made in \"%1\" object.",
+            i18n("Saves all recent changes made in \"%1\" object.",
                  window->partItem()->name()));
         KGuiItem discardChanges(KStandardGuiItem::discard());
         discardChanges.setWhatsThis(
-            i18n("Pressing this button will discard all recent changes made in \"%1\" object.",
+            i18n("Discards all recent changes made in \"%1\" object.",
                  window->partItem()->name()));
 
         //dialog's data is dirty:
@@ -2872,7 +2896,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 
         const int questionRes = KMessageBox::warningYesNoCancel(this,
                                 "<p>"
-                                + window->part()->i18nMessage("Design of object \"%1\" has been modified.", window)
+                                + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                 .subs(window->partItem()->name()).toString()
                                 + "</p><p>" + i18n("Do you want to save changes?") + "</p>"
                                 + additionalMessageString /*may be empty*/,
@@ -2924,6 +2948,8 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         }
     }
 
+    hideDesignTab(previousItemId, QString());
+
     d->removeWindow(window_id);
     QWidget *windowContainer = window->parentWidget();
     d->mainWidget->tabWidget()->removeTab(
@@ -2936,39 +2962,6 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ window_id ];
     d->pageSetupWindows.remove(printedObjectID);
 #endif
-
-    KXMLGUIClient *client = window->commonGUIClient();
-    KXMLGUIClient *viewClient = window->guiClient();
-    if (d->curWindowGUIClient == client) {
-        d->curWindowGUIClient = 0;
-    }
-    if (d->curWindowViewGUIClient == viewClient) {
-        d->curWindowViewGUIClient = 0;
-    }
-    if (client) {
-        //sanity: ouch, it is not removed yet? - do it now
-        if (d->closedWindowGUIClient && d->closedWindowGUIClient != client)
-            guiFactory()->removeClient(d->closedWindowGUIClient);
-        if (d->openedWindowsCount() == 0) {//now there is no dialogs - remove client RIGHT NOW!
-            d->closedWindowGUIClient = 0;
-            guiFactory()->removeClient(client);
-        } else {
-            //remember this - and MAYBE remove later, if needed
-            d->closedWindowGUIClient = client;
-        }
-    }
-    if (viewClient) {
-        //sanity: ouch, it is not removed yet? - do it now
-        if (d->closedWindowViewGUIClient && d->closedWindowViewGUIClient != viewClient)
-            guiFactory()->removeClient(d->closedWindowViewGUIClient);
-        if (d->openedWindowsCount() == 0) {//now there is no dialogs - remove client RIGHT NOW!
-            d->closedWindowViewGUIClient = 0;
-            guiFactory()->removeClient(viewClient);
-        } else {
-            //remember this - and MAYBE remove later, if needed
-            d->closedWindowViewGUIClient = viewClient;
-        }
-    }
 
     delete windowContainer;
 
@@ -2995,7 +2988,15 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
-    showTabIfNeeded();
+    d->mainWidget->slotCurrentTabIndexChanged(d->mainWidget->tabWidget()->currentIndex());
+    showDesignTabIfNeeded(0);
+
+    if (currentWindow()) {
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+                                 currentWindow()->currentViewMode(),
+                                 0);
+    }
+    d->tabsToActivateOnShow.remove(previousItemId);
     return true;
 }
 
@@ -3009,9 +3010,39 @@ QWidget* KexiMainWindow::findWindow(QWidget *w)
     return w;
 }
 
-KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item) 
+KexiWindow* KexiMainWindow::openedWindowFor(int identifier)
 {
-    return item ? d->openedWindowFor(item->identifier()) : 0;
+    return d->openedWindowFor(identifier);
+}
+
+KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item)
+{
+    return item ? openedWindowFor(item->identifier()) : 0;
+}
+
+KexiDB::QuerySchema* KexiMainWindow::unsavedQuery(int queryId)
+{
+    KexiWindow * queryWindow = openedWindowFor(queryId);
+    if (!queryWindow || !queryWindow->isDirty()) {
+        return 0;
+    }
+
+    return queryWindow->part()->currentQuery(queryWindow->viewForMode(Kexi::DataViewMode));
+}
+
+QList<QVariant> KexiMainWindow::currentParametersForQuery(int queryId) const
+{
+    KexiWindow *queryWindow = d->openedWindowFor(queryId);
+    if (!queryWindow) {
+        return QList<QVariant>();
+    }
+
+    KexiView *view = queryWindow->viewForMode(Kexi::DataViewMode);
+    if (!view) {
+        return QList<QVariant>();
+    }
+
+    return view->currentParameters();
 }
 
 bool KexiMainWindow::acceptsSharedActions(QObject *w)
@@ -3065,6 +3096,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     }
     kDebug() << d->prj << item;
 
+    KexiWindow *prevWindow = currentWindow();
+
     KexiUtils::WaitCursor wait;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
@@ -3076,18 +3109,18 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #else
     KexiWindow *window = openedWindowFor(item);
 #endif
+    int previousItemId = currentWindow() ? currentWindow()->partItem()->identifier() : 0;
     openingCancelled = false;
 
-    bool needsUpdateViewGUIClient = true;
     bool alreadyOpened = false;
     KexiWindowContainer *windowContainer = 0;
+
     if (window) {
         if (viewMode != window->currentViewMode()) {
             if (true != switchToViewMode(*window, viewMode))
                 return 0;
         } else
             activateWindow(*window);
-        needsUpdateViewGUIClient = false;
         alreadyOpened = true;
     } else {
         KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
@@ -3102,7 +3135,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         const int tabIndex = d->mainWidget->tabWidget()->addTab(
             windowContainer,
             KIcon(part ? part->info()->itemIconName() : QString()),
-            item->captionOrName());
+            KexiWindow::windowTitleForItem(*item));
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(item, part));
         QString whatsThisText;
         if (part) {
@@ -3143,15 +3176,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         return 0;
     }
 
-    if (needsUpdateViewGUIClient) {
-        //view changed: switch to this view's gui client
-        KXMLGUIClient *viewClient = window->guiClient();
-        updateWindowViewGUIClient(viewClient);
-        if (d->curWindowViewGUIClient && !viewClient)
-            guiFactory()->removeClient(d->curWindowViewGUIClient);
-        d->curWindowViewGUIClient = viewClient; //remember
-    }
-
     if (viewMode != window->currentViewMode())
         invalidateSharedActions();
 
@@ -3170,8 +3194,18 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         currentWindow()->selectedView()->propertySetSwitched();
     }
     invalidateProjectWideActions();
-    showDesignTabIfNeeded(item->partClass(), viewMode);
-    setDesignTabIfNeeded(item->partClass());
+    restoreDesignTabIfNeeded(item->partClass(), viewMode, previousItemId);
+    activateDesignTabIfNeeded(item->partClass(), viewMode);
+    QString origTabToActivate;
+    if (prevWindow) {
+        // Save the orig tab for prevWindow that was stored in the restoreDesignTabIfNeeded() call above
+        origTabToActivate = d->tabsToActivateOnShow.value(prevWindow->partItem()->identifier());
+    }
+    activeWindowChanged(window, prevWindow);
+    if (prevWindow) {
+        // Restore the orig tab
+        d->tabsToActivateOnShow.insert(prevWindow->partItem()->identifier(), origTabToActivate);
+    }
     return window;
 }
 
@@ -3277,11 +3311,17 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
 
     if (!dontAsk) {
         if (KMessageBox::No == KMessageBox::warningYesNo(this,
-                "<p>" + i18n("Do you want to permanently delete:\n"
-                             "%1\n"
-                             "If you click \"Delete\", you will not be able to undo the deletion.",
-                             "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
-                QString(), KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
+                i18nc("@info Remove <objecttype> <objectname>?",
+                      "Do you want to permanently delete the following object?<nl/>"
+                      "<nl/>%1 <resource>%2</resource><nl/>"
+                      "<nl/><note>If you click <interface>Delete</interface>, "
+                      "you will not be able to undo the deletion.</note>",
+                      part->info()->instanceCaption(), item->name()),
+                i18nc("@title:window Delete Object %1.",
+                      "Delete <resource>%1</resource>?", item->name()),
+                KGuiItem(i18n("Delete"), koIconName("edit-delete")),
+                KStandardGuiItem::no()))
+        {
             return cancelled;
         }
     }
@@ -3353,11 +3393,12 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
 
     KexiWindow *window = openedWindowFor(item);
     if (window) {
-        QString msg = i18n("<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
-                           "<para>Do you want to close it?</para>")
-                      .arg(item->name());
+        QString msg = i18nc("@info",
+                            "<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
+                            "<para>Do you want to close it?</para>",
+                            item->name());
         int r = KMessageBox::questionYesNo(this, msg, QString(),
-                                           KGuiItem(i18n("Close window"), koIconName("window-close")),
+                                           KGuiItem(i18n("Close Window"), koIconName("window-close")),
                                            KStandardGuiItem::cancel());
         if (r != KMessageBox::Yes) {
             success = false;
@@ -3471,114 +3512,15 @@ void KexiMainWindow::slotTipOfTheDay()
     //! @todo
 }
 
-void KexiMainWindow::slotImportantInfo()
+void KexiMainWindow::slotReportBug()
 {
-    importantInfo(false);
-}
-
-void KexiMainWindow::slotStartFeedbackAgent()
-{
-#ifndef KEXI_NO_FEEDBACK_AGENT
-#ifdef FEEDBACK_CLASS
-    const KAboutData* about = KApplication::kApplication()->aboutData();
-    FEEDBACK_CLASS* wizard = new FEEDBACK_CLASS(about->programName(),
-            about->version(), 0, 0, 0, FEEDBACK_CLASS::AllPages);
-
-    if (wizard->exec()) {
-        KToolInvocation::invokeMailer("kexi-reports-dummy@kexi.org",
-                                      QString(), QString(),
-                                      about->appName() + QString::fromLatin1(" [feedback]"),
-                                      wizard->feedbackDocument().toString(2).local8Bit());
-    }
-
-    delete wizard;
-#endif
-#endif
-}
-
-void KexiMainWindow::importantInfo(bool /*onStartup*/)
-{
-
+    KexiBugReportDialog bugReport(this);
+    bugReport.exec();
 }
 
 bool KexiMainWindow::userMode() const
 {
     return d->userMode;
-}
-
-bool
-KexiMainWindow::setupUserMode(KexiProjectData *projectData)
-{
-    if (!projectData)
-        return false;
-
-    createKexiProject(*projectData); //initialize project
-    tristate res = d->prj->open();             //try to open database
-    if (!res || ~res) {
-        delete d->prj;
-        d->prj = 0;
-        return false;
-    }
-
-//! @todo reenable; autoopen objects are handled elsewhere
-#if 0
-    KexiDB::TableSchema *sch = d->prj->dbConnection()->tableSchema("kexi__final");
-    QString err_msg = i18n("Could not start project \"%1\" in Final Mode.",
-                           static_cast<KexiDB::SchemaData*>(projectData)->name());
-    if (!sch) {
-        hide();
-        showErrorMessage(err_msg, i18n("No Final Mode data found."));
-        return false;
-    }
-
-    KexiDB::Cursor *c = d->prj->dbConnection()->executeQuery(*sch);
-    if (!c) {
-        hide();
-        showErrorMessage(err_msg, i18n("Error reading Final Mode data."));
-        return false;
-    }
-
-    QString startupPart;
-    QString startupItem;
-    while (c->moveNext()) {
-        kDebug() << "property: [" << c->value(1).toString() << "] " << c->value(2).toString();
-        if (c->value(1).toString() == "startup-part")
-            startupPart = c->value(2).toString();
-        else if (c->value(1).toString() == "startup-item")
-            startupItem = c->value(2).toString();
-        else if (c->value(1).toString() == "mainxmlui")
-            setXML(c->value(2).toString());
-    }
-    d->prj->dbConnection()->deleteCursor(c);
-
-    kDebug() << "part:" << startupPart;
-    kDebug() << "item:" << startupItem;
-
-    setupActions();
-    setupUserActions();
-    guiFactory()->addClient(this);
-    setStandardToolBarMenuEnabled(false);
-    setHelpMenuEnabled(false);
-
-    KexiPart::Info *i = Kexi::partManager().infoForClass(startupPart);
-    if (!i) {
-        hide();
-        showErrorMessage(err_msg, i18n("Specified plugin does not exist."));
-        return false;
-    }
-
-    Kexi::partManager().part(i);
-    KexiPart::Item *item = d->prj->item(i, startupItem);
-    bool openingCancelled;
-    if (!openObject(item, Kexi::DataViewMode, openingCancelled) && !openingCancelled) {
-        hide();
-        showErrorMessage(err_msg, i18n("Specified object could not be opened."));
-        return false;
-    }
-
-    QWidget::setWindowTitle("MyApp");//TODO
-#endif
-    return true;
 }
 
 void
@@ -3596,14 +3538,22 @@ void KexiMainWindow::slotToolsImportProject()
 void KexiMainWindow::slotToolsImportTables()
 {
     if (project()) {
-        QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0);
+        QMap<QString, QString> args;
+        QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0, &args);
         if (!dlg)
             return; //error msg has been shown by KexiInternalPart
-            
-            const int result = dlg->exec();
+
+        const int result = dlg->exec();
         delete dlg;
         if (result != QDialog::Accepted)
             return;
+
+        QString destinationTableName(args["destinationTableName"]);
+        if (!destinationTableName.isEmpty()) {
+            QString partClass = "org.kexi-project.table";
+            bool openingCancelled;
+            KexiMainWindow::openObject(partClass, destinationTableName, Kexi::DataViewMode, openingCancelled);
+        }
     }
 }
 
@@ -3614,10 +3564,8 @@ void KexiMainWindow::slotToolsCompactDatabase()
     const bool projectWasOpened = d->prj;
 
     if (!d->prj) {
-        KexiProjectSet fake;
         KexiStartupDialog dlg(
-            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), fake,
-            this);
+            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), this);
 
         if (dlg.exec() != QDialog::Accepted)
             return;
@@ -3760,10 +3708,14 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
 {
     if (!item)
         return false;
-//! @todo: check if changes to this are saved, if not: ask for saving
-//! @todo: accept record changes...
 
     QMap<QString, QString> args;
+
+    if (!checkForDirtyFlagOnExport(item, &args)) {
+            return false;
+    }
+
+    //! @todo: accept record changes...
     args.insert("destinationType", "file");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -3773,6 +3725,63 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
     int result = dlg->exec();
     delete dlg;
     return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
+}
+
+bool KexiMainWindow::checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args)
+{
+    //! @todo: handle tables
+    if (item->partClass() != "org.kexi-project.query") {
+        return true;
+    }
+
+    KexiWindow * itemWindow = openedWindowFor(item);
+    if (itemWindow && itemWindow->isDirty()) {
+        tristate result;
+        if (item->neverSaved()) {
+            result = true;
+        } else {
+            int prevWindowId = 0;
+            if (!itemWindow->isVisible()) {
+                prevWindowId = currentWindow()->id();
+                activateWindow(itemWindow->id());
+            }
+            result = askOnExportingChangedQuery(item);
+
+            if (prevWindowId != 0) {
+                activateWindow(prevWindowId);
+            }
+        }
+
+        if (~result) {
+            return false;
+        } else if (true == result) {
+            args->insert("useTempQuery","1");
+        }
+    }
+
+    return true;
+}
+
+tristate KexiMainWindow::askOnExportingChangedQuery(KexiPart::Item *item) const
+{
+    int result = KMessageBox::warningYesNoCancel(const_cast<KexiMainWindow*>(this),
+        i18nc("@info", "Design of query <resource>%1</resource> that you want to export data"
+                                         " from is changed and has not yet been saved. Do you want to use data"
+                                         " from the changed query for exporting or from its original (saved)"
+                                         " version?", item->captionOrName()),
+        QString(),
+        KGuiItem(i18nc("Export query data", "Use the Changed Query")),
+        KGuiItem(i18nc("Export query data", "Use the Original Query")),
+        KStandardGuiItem::cancel(),
+        QString(),
+        KMessageBox::Notify | KMessageBox::Dangerous);
+    if (result == KMessageBox::Yes) {
+        return true;
+    } else if (result == KMessageBox::No) {
+        return false;
+    }
+
+    return cancelled;
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
@@ -3883,28 +3892,28 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
             return false;
         if (window->isDirty()) {
             KGuiItem saveChanges(KStandardGuiItem::save());
-            saveChanges.setToolTip(i18n("Save changes"));
+            saveChanges.setToolTip(futureI18n("Save changes"));
             saveChanges.setWhatsThis(
-                i18n("Pressing this button will save all recent changes made in \"%1\" object.",
+                futureI18n("Pressing this button will save all recent changes made in \"%1\" object.",
                      item->name()));
             KGuiItem doNotSave(KStandardGuiItem::no());
             doNotSave.setWhatsThis(
-                i18n("Pressing this button will ignore all unsaved changes made in \"%1\" object.",
+                futureI18n("Pressing this button will ignore all unsaved changes made in \"%1\" object.",
                      window->partItem()->name()));
 
             QString question;
             if (action == PrintItem)
-                question = i18n("Do you want to save changes before printing?");
+                question = futureI18n("Do you want to save changes before printing?");
             else if (action == PreviewItem)
-                question = i18n("Do you want to save changes before making print preview?");
+                question = futureI18n("Do you want to save changes before making print preview?");
             else if (action == PageSetupForItem)
-                question = i18n("Do you want to save changes before showing page setup?");
+                question = futureI18n("Do you want to save changes before showing page setup?");
             else
                 return false;
 
             const int questionRes = KMessageBox::warningYesNoCancel(this,
                                     "<p>"
-                                    + window->part()->i18nMessage("Design of object \"%1\" has been modified.", window)
+                                    + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                     .subs(item->name())
                                     + "</p><p>" + question + "</p>",
                                     QString(),
@@ -3963,6 +3972,11 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
         return false;
 
     QMap<QString, QString> args;
+
+    if (!checkForDirtyFlagOnExport(item, &args)) {
+            return false;
+    }
+
     args.insert("destinationType", "clipboard");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -4124,42 +4138,93 @@ void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
     d->tabbedToolBar->addSearchableModel(model);
 }
 
-void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
 {
-    closeTab("");
-    if (viewMode == Kexi::DesignViewMode) {
-        switch (d->prj->idForClass(partClass)) {
-        case KexiPart::FormObjectType: 
-            d->tabbedToolBar->showTab("form");
-            break;
-        case KexiPart::ReportObjectType: 
-            d->tabbedToolBar->showTab("report");
-            break;
-        default: ;
+    dialog->setMinimumSize(600, 400);
+    dialog->resize(size() * 0.8);
+}
+
+void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
+{
+    d->tabbedToolBar->showTab(tabName);
+    if (currentWindow() && currentWindow()->partItem()
+        && currentWindow()->partItem()->identifier() != 0) // for unstored items id can be < 0
+    {
+        const QString tabToActivate = d->tabsToActivateOnShow.value(
+                                          currentWindow()->partItem()->identifier());
+        //kDebug() << "tabToActivate:" << tabToActivate << "tabName:" << tabName;
+        if (tabToActivate == tabName) {
+            d->tabbedToolBar->setCurrentTab(tabToActivate);
         }
     }
 }
 
-void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode,
+                                              int previousItemId)
 {
-    switch (d->prj->idForClass(partClass)) {
-    case KexiPart::FormObjectType: 
-        d->tabbedToolBar->setCurrentTab("form"); 
-        break;
-    case KexiPart::ReportObjectType: 
-        d->tabbedToolBar->setCurrentTab("report"); 
-        break;
-    default:;
-    }  
+    //kDebug() << partClass << viewMode << previousItemId;
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: {
+            hideDesignTab(previousItemId, "org.kexi-project.report");
+            restoreDesignTabAndActivateIfNeeded("form");
+            break;
+        }
+        case KexiPart::ReportObjectType: {
+            hideDesignTab(previousItemId, "org.kexi-project.form");
+            restoreDesignTabAndActivateIfNeeded("report");
+            break;
+        }
+        default:
+            hideDesignTab(previousItemId);
+        }
+    }
+    else {
+        hideDesignTab(previousItemId);
+    }
 }
 
-void KexiMainWindow::closeTab(const QString &partClass)
+void KexiMainWindow::activateDesignTab(const QString &partClass)
 {
     switch (d->prj->idForClass(partClass)) {
-    case KexiPart::FormObjectType: 
+    case KexiPart::FormObjectType:
+        d->tabbedToolBar->setCurrentTab("form");
+        break;
+    case KexiPart::ReportObjectType:
+        d->tabbedToolBar->setCurrentTab("report");
+        break;
+    default:;
+    }
+}
+
+void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
+{
+    const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
+    //kDebug() << partClass << viewMode << tabToActivate;
+
+    if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
+        activateDesignTab(partClass);
+    }
+    else {
+        d->tabbedToolBar->setCurrentTab(tabToActivate);
+    }
+}
+
+void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
+{
+    //kDebug() << itemId << partClass;
+    if (   itemId > 0
+        && d->tabbedToolBar->currentWidget())
+    {
+        const QString currentTab = d->tabbedToolBar->currentWidget()->objectName();
+        //kDebug() << "d->tabsToActivateOnShow.insert" << itemId << currentTab;
+        d->tabsToActivateOnShow.insert(itemId, currentTab);
+    }
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType:
         d->tabbedToolBar->hideTab("form");
         break;
-    case KexiPart::ReportObjectType: 
+    case KexiPart::ReportObjectType:
         d->tabbedToolBar->hideTab("report");
         break;
     default:
@@ -4168,12 +4233,15 @@ void KexiMainWindow::closeTab(const QString &partClass)
     }
 }
 
-void KexiMainWindow::showTabIfNeeded()
+void KexiMainWindow::showDesignTabIfNeeded(int previousItemId)
 {
+    if (d->insideCloseWindow)
+        return;
     if (currentWindow()) {
-        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+                                 currentWindow()->currentViewMode(), previousItemId);
     } else {
-        closeTab("");
+        hideDesignTab(previousItemId);
     }
 }
 

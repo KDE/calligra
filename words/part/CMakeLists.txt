@@ -29,6 +29,8 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
+    KWRootAreaProviderBase.cpp
+    KWRootAreaProviderTextBox.cpp
     KWRootAreaProvider.cpp
 
     pagetool/KWPageTool.cpp
@@ -41,11 +43,9 @@ set(wordsprivate_LIB_SRCS
     frames/KWFrameSet.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
-    frames/KWOutlineShape.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWRunAroundProperties.cpp
-    dialogs/KWGeneralFrameProperties.cpp
     dialogs/KWAnchoringProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
@@ -67,9 +67,6 @@ set(wordsprivate_LIB_SRCS
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWNewPageStyleCommand.cpp
-    commands/KWFrameDeleteCommand.cpp
-    commands/KWFrameCreateCommand.cpp
-    commands/KWFrameCreateCommand.cpp
     commands/KWChangePageStyleCommand.cpp
     commands/KWShapeCreateCommand.cpp
 
@@ -79,28 +76,40 @@ set(wordsprivate_LIB_SRCS
     author/CAuPart.cpp
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
+    author/CAuDocument.cpp
 )
 
-if( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]" )
-    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
-        dockers/KWDebugDocker.cpp
-        dockers/KWDebugDockerFactory.cpp
-        dockers/KWDebugWidget.cpp
-    )
-endif ( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]")
+set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
+    dockers/KWDebugDocker.cpp
+    dockers/KWDebugDockerFactory.cpp
+    dockers/KWDebugWidget.cpp
+)
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+
+        author/dockers/CAuOutlinerDocker.cpp
+        author/dockers/CAuOutlinerDockerFactory.cpp
+        author/dockers/CAuOutlinerWidget.cpp
+
+        author/metadata/CAuMetaDataManager.cpp
+
+        author/metadata/CAuSectionRdf.cpp
+        author/metadata/CAuSectionSemanticItemFactory.cpp
+
+        author/metadata/CAuActorRdf.cpp
+        author/metadata/CAuActorSemanticItemFactory.cpp
+
+        author/metadata/CAuSemanticItemBase.cpp
     )
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWRunAroundProperties.ui
-    dialogs/KWGeneralFrameProperties.ui
     dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
@@ -115,8 +124,10 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
 if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
+        author/metadata/CAuSectionRdfEditWidget.ui
+        author/metadata/CAuActorRdfEditWidget.ui
     )
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
@@ -124,7 +135,7 @@ kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 target_link_libraries(wordsprivate komain kotextlayout)
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate kordf)
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate
@@ -202,7 +213,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
 
@@ -216,7 +227,7 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
 install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
-endif (SHOULD_BUILD_APP_AUTHOR)
+endif ()

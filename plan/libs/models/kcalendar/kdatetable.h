@@ -50,7 +50,7 @@ class KPLATOMODELS_EXPORT Frame: public QFrame
 public:
     Frame( QWidget *parent = 0 );
 
-public slots:
+public Q_SLOTS:
     void updateFocus( QFocusEvent *e );
 
 protected:
@@ -298,7 +298,7 @@ Q_SIGNALS:
     
     void focusChanged( QFocusEvent *e );
     
-protected slots:
+protected Q_SLOTS:
     void slotReset();
     void slotDataChanged( const QDate &start, const QDate &end );
     //<------
@@ -336,7 +336,7 @@ public:
     virtual QVariant weekDayData( int day, int role = Qt::DisplayRole ) const;
     virtual QVariant weekNumberData( int week, int role = Qt::DisplayRole ) const;
     
-signals:
+Q_SIGNALS:
     void reset();
     void dataChanged( const QDate &start, const QDate &end );
 

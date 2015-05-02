@@ -33,7 +33,7 @@
 #include <KoPageApp.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 #include <KPrView.h>
 
@@ -229,7 +229,12 @@ void KPrViewModePresentation::deactivate()
     if ( m_endOfSlideShowPage ) {
         if ( page == m_endOfSlideShowPage ) {
             KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
-            page = document->slideShow().last();
+            if (document->slideShow().size() > 0) {
+                page = document->slideShow().last();
+            }
+            else {
+                page = document->pages().first();
+            }
         }
     }
     m_tool->deactivate();

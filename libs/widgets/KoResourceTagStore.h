@@ -6,7 +6,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,6 @@
 #include <QDomDocument>
 #include "kowidgets_export.h"
 #include <kconfiggroup.h>
-#include <ksharedconfig.h>
 #include <KoConfig.h>
 
 class KoResourceServerBase;
@@ -43,16 +42,16 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions);
+    explicit KoResourceTagStore(KoResourceServerBase *resourceServer);
     ~KoResourceTagStore();
 
-    QStringList assignedTagsList(KoResource* resource) const;
+    QStringList assignedTagsList(const KoResource *resource) const;
 
     /// remote the given resource from the tagstore
     void removeResource(const KoResource *resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
-    /// the tag is added bug unused
+    /// the tag is added but unused
     void addTag(KoResource* resource, const QString& tag);
 
     /// Remove the given tag for the given resource.
@@ -64,7 +63,7 @@ public:
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
-    QStringList searchTag(const QString& tag);
+    QStringList searchTag(const QString& query) const;
 
     void loadTags();
     void serializeTags();
@@ -82,17 +81,10 @@ private:
     QString adjustedFileName(const QString &fileName) const;
 
     /// Removes the adjustements before going to the server
-    QStringList removeAdjustedFileNames(QStringList fileNamesList);
+    QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
 
-    QMultiHash<const KoResource*, QString> m_resourceToTag;
-    QHash<QString, int> m_tagList;
-
-    QString m_tagsXMLFile;
-    QString m_serverExtensions;
-
-    KConfigGroup m_config;
-
-    KoResourceServerBase *m_resourceServer;
+    class Private;
+    Private * const d;
 };
 
 

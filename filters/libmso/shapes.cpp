@@ -34,7 +34,6 @@
 #include "generated/leinputstream.h"
 #include "writeodf/writeodfdraw.h"
 
-#include <KoXmlWriter.h>
 #include <kdebug.h>
 
 #include <QTransform>

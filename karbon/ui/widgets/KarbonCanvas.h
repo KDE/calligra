@@ -114,7 +114,7 @@ public:
     /// @return the document used by the canvas.
     KarbonDocument *document() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Tell the canvas that it has to adjust its document origin.
@@ -127,7 +127,7 @@ public slots:
     /// Enables/disables outline painting mode
     void enableOutlineMode(bool on);
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the document origin has changed.
@@ -160,7 +160,7 @@ protected:
     QPoint viewToWidget(const QPoint& p) const;
     QRect viewToWidget(const QRect& r) const;
 
-private slots:
+private Q_SLOTS:
     void updateSizeAndOffset();
 
 private:

@@ -27,6 +27,9 @@
 #include "kis_iterator_ng.h"
 #include "kis_buffer_stream.h"
 
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceTraits.h>
+
 uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
@@ -55,19 +58,20 @@ uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint16_MAX / (double)(pow(2.0, sourceDepth()) - 1);
+    bool no_coeff = (sourceDepth() == 16);
 //         dbgFile <<" depth expension coefficient :" << coeff;
     do {
         quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
         quint8 i;
         for (i = 0; i < nbColorsSamples(); i++) {
-            d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
+            d[poses()[i]] = no_coeff ? tiffstream->nextValue() : (quint16)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess16bit(d);
         if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
-        d[poses()[i]] = quint16_MAX;
+        d[poses()[i]] = m_alphaValue;
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())
-                d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
+                d[poses()[i]] = no_coeff ? tiffstream->nextValue() : (quint16)(tiffstream->nextValue() * coeff);
             else
                 tiffstream->nextValue();
         }
@@ -80,19 +84,20 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint32_MAX / (double)(pow(2.0, sourceDepth()) - 1);
-//         dbgFile <<" depth expension coefficient :" << coeff;
+    bool no_coeff = (sourceDepth() == 32);
+//    dbgFile <<" depth expension coefficient :" << coeff;
     do {
         quint32 *d = reinterpret_cast<quint32 *>(it->rawData());
         quint8 i;
         for (i = 0; i < nbColorsSamples(); i++) {
-            d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
+            d[poses()[i]] = no_coeff ? tiffstream->nextValue() : (quint32)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess32bit(d);
         if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
-        d[poses()[i]] = quint32_MAX;
+        d[poses()[i]] = m_alphaValue;
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())
-                d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
+                d[poses()[i]] = no_coeff ? tiffstream->nextValue() : (quint32)(tiffstream->nextValue() * coeff);
             else
                 tiffstream->nextValue();
         }

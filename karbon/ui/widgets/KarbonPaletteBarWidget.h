@@ -37,14 +37,14 @@ public:
     /// Sets the orientation of the color bar
     void setOrientation(Qt::Orientation orientation);
 
-public slots:
+public Q_SLOTS:
     void updateDocumentColors();
 
-signals:
+Q_SIGNALS:
     /// Emitted whenever a color was clicked
     void colorSelected(const KoColor &color);
 
-private slots:
+private Q_SLOTS:
     void updateButtons();
     void selectPalette();
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003-2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +45,6 @@
 
 #include <KoIcon.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
@@ -57,7 +57,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_cubic_curve.h>
 
@@ -116,8 +116,10 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
     addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (kiscanvas && kiscanvas->viewManager()) {
+        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
+    }
 }
 
 
@@ -136,7 +138,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):
-        slotSetOpacity(v.toDouble());
+        setOpacity(v.toDouble());
         break;
     default: //nothing
         break;
@@ -304,8 +306,10 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
-    canvas()->resourceManager()->
-        setResource(resource, KisToolUtils::pick(device, imagePoint));
+    KoColor color;
+    if (KisToolUtils::pick(device, imagePoint, &color)) {
+        canvas()->resourceManager()->setResource(resource, color);
+    }
 
     return true;
 }
@@ -341,7 +345,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
-    verticalLayout->setMargin(0);
+    verticalLayout->setContentsMargins(0,0,0,0);
     verticalLayout->setSpacing(1);
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -355,8 +359,8 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setColumnStretch(1, 1);
 
     verticalLayout->addLayout(m_optionsWidgetLayout);
+    m_optionsWidgetLayout->setContentsMargins(0,0,0,0);
     m_optionsWidgetLayout->setSpacing(1);
-    m_optionsWidgetLayout->setMargin(0);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -426,9 +430,6 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionsWidgetLayout != 0);
     if (label) {
-        if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
-            lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-        }
         m_optionsWidgetLayout->addWidget(label, m_optionsWidgetLayout->rowCount(), 0);
         m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount() - 1, 1);
     }
@@ -438,7 +439,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(qreal opacity)
+void KisToolPaint::setOpacity(qreal opacity)
 {
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }

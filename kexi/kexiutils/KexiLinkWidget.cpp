@@ -27,7 +27,7 @@
 class KexiLinkWidget::Private
 {
 public:
-    Private(KexiLinkWidget* qq) : q(qq) {
+    explicit Private(KexiLinkWidget* qq) : q(qq) {
         q->setFocusPolicy(Qt::StrongFocus);
         q->setTextFormat(Qt::RichText);
         updateColors();

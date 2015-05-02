@@ -3,7 +3,8 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for the XlsxChartReader
     ${KOMAIN_INCLUDES}
 )
 
@@ -21,9 +22,9 @@ set(docx2odt_PART_SRCS
     DocxXmlEndnoteReader.cpp
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
@@ -31,6 +32,7 @@ kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
 target_link_libraries(
     calligra_filter_docx2odt
     komsooxml
+    mso
     koodf2
     koodf
     komain
@@ -41,7 +43,7 @@ install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-IF(FALSE) # not implemented yet
+if(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
@@ -58,7 +60,7 @@ target_link_libraries(
 
 install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF(FALSE)
+endif()
 
 ########### next target ###############
 
@@ -71,9 +73,9 @@ install( FILES
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
     install( FILES libokularGenerator_docx_calligra.desktop okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-    install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
-endif(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
+    install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif()

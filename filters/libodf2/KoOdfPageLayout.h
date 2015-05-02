@@ -29,7 +29,6 @@
 
 class QString;
 class KoXmlStreamReader;
-class KoOdfStyleProperties;
 class KoOdfPageLayoutProperties;
 class KoOdfHeaderFooterProperties;
 class KoXmlWriter;

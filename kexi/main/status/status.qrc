@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
     <file>add.png</file>
+    <file>heart.png</file>
   </qresource>
 </RCC>

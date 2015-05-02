@@ -86,7 +86,7 @@ public:
     */
     virtual KoDocument* doc();
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Returns the \a Calligra::Sheets::MapAdaptor object.

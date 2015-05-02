@@ -89,6 +89,11 @@ KEXICORE_EXPORT unsigned int versionRelease();
  */
 KEXICORE_EXPORT const char *versionString();
 /**
+ * @return the Kexi version string (versionString()) but appends extra information 
+ * such as "(git 4e06281 master)" if available.
+ */
+KEXICORE_EXPORT const char *fullVersionString();
+/**
  * Returns the encoded number of stable Kexi's version.
  * For 2.3.1 it returns 2.3.1, for 2.5.70 returns 2.6.0, for 2.9.70 returns 3.0.0.
  * In contrary to KEXI_STABLE_VERSION macro this function returns the number

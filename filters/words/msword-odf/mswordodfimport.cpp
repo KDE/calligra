@@ -21,6 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "mswordodfimport.h"
+
 #include <QFile>
 #include <QString>
 #include <QBuffer>
@@ -32,7 +34,6 @@
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 
-#include "mswordodfimport.h"
 #include "document.h"
 #include "exceptions.h"
 #include "msdoc.h"

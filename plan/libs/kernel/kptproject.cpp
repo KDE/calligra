@@ -39,11 +39,11 @@
 #include <QBrush>
 #include <QList>
 
+#include <kglobal.h>
 #include <kdatetime.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
-#include <kdeversion.h>
 
 
 namespace KPlato
@@ -544,7 +544,7 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
 }
 
 #ifndef PLAN_NLOGDEBUG
-bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkParent( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isStartNode() ) {
         kDebug(planDbg())<<n<<"start node"<<list;
@@ -582,7 +582,7 @@ bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked
     return true;
 }
 
-bool Project::checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkChildren( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isEndNode() ) {
         kDebug(planDbg())<<n<<"end node"<<list;
@@ -1857,7 +1857,7 @@ bool Project::setResourceGroupId( ResourceGroup *group )
             return true;
         } else if ( g == 0 ) {
             insertResourceGroupId( group->id(), group );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueResourceGroupId();
@@ -1885,10 +1885,8 @@ ResourceGroup *Project::group( const QString& id )
 
 ResourceGroup *Project::groupByName( const QString& name ) const
 {
-    foreach ( const QString &k, resourceGroupIdDict.keys() ) {
-        ResourceGroup *g = resourceGroupIdDict[ k ];
+    foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         if ( g->name() == name ) {
-            Q_ASSERT( k == g->id() );
             return g;
         }
     }
@@ -1927,7 +1925,7 @@ bool Project::setResourceId( Resource *resource )
             return true;
         } else if ( r == 0 ) {
             insertResourceId( resource->id(), resource );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueResourceId();
@@ -2283,7 +2281,7 @@ bool Project::setCalendarId( Calendar *calendar )
             return true;
         } else if ( c == 0 ) {
             insertCalendarId( calendar->id(), calendar );
-            return true;;
+            return true;
         }
     }
     QString id = uniqueCalendarId();
@@ -2512,7 +2510,7 @@ QString Project::uniqueScheduleName() const {
     n += " %1";
     int i = 1;
     for ( ; true; ++i ) {
-        unique = findScheduleManagerByName( n.arg( i ) ) == 0;;
+        unique = findScheduleManagerByName( n.arg( i ) ) == 0;
         if ( unique ) {
             break;
         }

@@ -37,7 +37,6 @@ class KisToolMultihand : public KisToolBrush
 public:
     KisToolMultihand(KoCanvasBase *canvas);
     ~KisToolMultihand();
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -53,7 +52,7 @@ private:
     void finishAxesSetup();
     void updateCanvas();
 
-private slots:
+private Q_SLOTS:
     void activateAxesPointModeSetup();
     void slotSetHandsCount(int count);
     void slotSetAxesAngle(qreal angle);
@@ -66,7 +65,7 @@ private slots:
 private:
     KisToolMultihandHelper *m_helper;
 
-    enum enumTransforModes { SYMMETRY, MIRROR, TRANSLATE };
+    enum enumTransforModes { SYMMETRY, MIRROR, TRANSLATE, SNOWFLAKE };
     enumTransforModes m_transformMode;
     QPointF m_axesPoint;
     qreal m_angle;

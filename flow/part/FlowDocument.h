@@ -50,7 +50,7 @@ public:
         return QStringList() << "application/vnd.oasis.opendocument.graphics-template";
     }
 
-signals:
+Q_SIGNALS:
     /// Emitted when the gui needs to be updated.
     void updateGui();
 

@@ -21,6 +21,7 @@
 #include "ToCBibGeneratorInfo.h"
 
 #include <KoXmlWriter.h>
+#include <KoUnit.h>
 
 IndexEntry::IndexEntry(const QString &_styleName, IndexEntry::IndexEntryName _name)
         :   styleName(_styleName),
@@ -252,7 +253,7 @@ TocEntryTemplate::TocEntryTemplate()
 TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
 {
     outlineLevel = entryTemplate.outlineLevel;
-    styleName = QString(entryTemplate.styleName);
+    styleName = entryTemplate.styleName;
     styleId = entryTemplate.styleId;
 
     foreach (IndexEntry *entry, entryTemplate.indexEntries) {
@@ -319,3 +320,20 @@ void IndexEntryChapter::addAttributes(KoXmlWriter* writer) const
     }
     writer->addAttribute("text:outline-level", outlineLevel);
 }
+
+BibliographyEntryTemplate::BibliographyEntryTemplate()
+{
+}
+
+BibliographyEntryTemplate::BibliographyEntryTemplate(const BibliographyEntryTemplate &entryTemplate)
+{
+    styleName = entryTemplate.styleName;
+    styleId = entryTemplate.styleId;
+
+    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+        indexEntries.append(entry->clone());
+    }
+
+    bibliographyType = entryTemplate.bibliographyType;
+}
+

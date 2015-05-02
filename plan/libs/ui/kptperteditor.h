@@ -26,34 +26,22 @@
 
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
-
-#include <QList>
-#include <QTreeWidget>
-#include <QTableWidget>
-#include <QFont>
-
-#include <QVariant>
-
-#include <QWidget>
-
-#include <kactionselector.h>
-
 #include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 
 #include "kptcommand.h"
-
 #include "kptnode.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
-
 #include <kdebug.h>
+
+#include <QList>
+
 
 class KoDocument;
 
 class QTreeWidgetItem;
+class QTableWidgetItem;
 class QModelIndex;
 class KUndo2Command;
 
@@ -88,7 +76,7 @@ public:
     void setAvailableItemEnabled( QTreeWidgetItem *item );
     void setAvailableItemEnabled( Node *node );
     
-signals:
+Q_SIGNALS:
     void executeCommand( KUndo2Command* );
 
 protected:
@@ -96,7 +84,7 @@ protected:
     QTreeWidgetItem *findNodeItem( Node *node, QTreeWidgetItem *item );
     QTableWidgetItem *findRequiredItem( Node *node );
     
-private slots:
+private Q_SLOTS:
     void slotNodeAdded( Node* );
     void slotNodeRemoved( Node* );
     void slotNodeMoved( Node* );

@@ -25,7 +25,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include <koproperty/Property.h>
 #include <kexi_global.h>

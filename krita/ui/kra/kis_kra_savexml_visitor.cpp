@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <QDir>
 
+#include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
@@ -33,6 +34,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -42,6 +44,8 @@
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
 #include <kis_file_layer.h>
+#include <kis_psd_layer_style.h>
+
 
 using namespace KRA;
 
@@ -226,6 +230,19 @@ bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
     return true;
 }
 
+bool KisSaveXmlVisitor::visit(KisTransformMask *mask)
+{
+    Q_ASSERT(mask);
+
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, TRANSFORM_MASK, mask);
+
+    m_elem.appendChild(el);
+
+    m_count++;
+    return true;
+}
+
 bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 {
     Q_ASSERT(mask);
@@ -290,6 +307,18 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     if (el.hasAttribute(COLLAPSED)) {
         layer->setCollapsed(el.attribute(COLLAPSED).toInt());
     }
+
+    if (el.hasAttribute(LAYER_STYLE_UUID)) {
+        QString uuidString = el.attribute(LAYER_STYLE_UUID);
+        QUuid uuid(uuidString);
+        if (!uuid.isNull()) {
+            KisPSDLayerStyleSP dumbLayerStyle(new KisPSDLayerStyle());
+            dumbLayerStyle->setUuid(uuid);
+            layer->setLayerStyle(dumbLayerStyle);
+        } else {
+            qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+        }
+    }
 }
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
@@ -306,6 +335,10 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
     el.setAttribute(COLLAPSED, layer->collapsed());
+
+    if (layer->layerStyle()) {
+        el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());
+    }
 
     foreach (KisNodeSP node, m_selectedNodes) {
         if (node.data() == layer) {

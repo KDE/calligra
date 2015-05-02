@@ -25,7 +25,6 @@
 
 #define WEBSHAPEID "WebShape"
 
-class QSvgRenderer;
 class QWebPage;
 
 class WebShape : public QObject, public KoShape
@@ -54,7 +53,7 @@ public:
     void setZoom(qreal _zoom);
 private:
     void updateCache();
-private slots:
+private Q_SLOTS:
     void loadFinished(bool);
 private:
     KUrl m_url;

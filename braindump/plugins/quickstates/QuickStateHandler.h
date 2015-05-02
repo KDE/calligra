@@ -28,7 +28,7 @@ class QuickStateHandler : public QObject
 public:
     QuickStateHandler(const QString& _catId, const QString& _textId, QObject* _obj);
     ~QuickStateHandler();
-public slots:
+public Q_SLOTS:
     void activate();
 private:
     QString m_catId;

@@ -26,9 +26,10 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kapplication.h>
 
+#include <QApplication>
 #include <QDir>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
@@ -125,7 +126,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     if (!iconFileName.isEmpty())
         info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
-        info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
+        info.icon = Kexi::defaultFileBasedDriverIcon();
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
     foreach(const QString &autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();

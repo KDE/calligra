@@ -25,7 +25,6 @@
 #include "calligra_sheets_export.h"
 
 class KAboutData;
-class KIconLoader;
 
 namespace Calligra
 {

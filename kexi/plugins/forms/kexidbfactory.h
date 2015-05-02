@@ -43,7 +43,7 @@ public:
     virtual bool previewWidget(const QByteArray &, QWidget *, KFormDesigner::Container *);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
-protected slots:
+protected Q_SLOTS:
     void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
 
 protected:

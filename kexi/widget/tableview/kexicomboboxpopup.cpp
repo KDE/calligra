@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,8 @@
 
 #include "kexicomboboxpopup.h"
 
-#include "kexidatatableview.h"
-#include "kexitableview_p.h"
+#include "KexiDataTableScrollArea.h"
+#include "KexiTableScrollArea_p.h"
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
@@ -28,20 +28,21 @@
 #include <db/lookupfieldschema.h>
 #include <db/expression.h>
 #include <db/parser/sqlparser.h>
+#include <db/cursor.h>
 
 #include <kdebug.h>
 
-#include <QLayout>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QScrollBar>
 
 /*! @internal
  Helper for KexiComboBoxPopup. */
-class KexiComboBoxPopup_KexiTableView : public KexiDataTableView
+class KexiComboBoxPopup_KexiTableView : public KexiDataTableScrollArea
 {
 public:
     KexiComboBoxPopup_KexiTableView(QWidget* parent = 0)
-            : KexiDataTableView(parent) {
+            : KexiDataTableScrollArea(parent) {
         init();
     }
     void init() {
@@ -49,18 +50,19 @@ public:
         setReadOnly(true);
         setLineWidth(0);
         d->moveCursorOnMouseRelease = true;
-        KexiTableView::Appearance a(appearance());
+        KexiTableScrollArea::Appearance a(appearance());
         a.navigatorEnabled = false;
 //! @todo add option for backgroundAltering??
         a.backgroundAltering = false;
-        a.fullRecordSelection = true;
-        a.recordHighlightingEnabled = true;
-        a.recordMouseOverHighlightingEnabled = true;
+        a.fullRowSelection = true;
+        a.rowHighlightingEnabled = true;
+        a.rowMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.recordMouseOverHighlightingColor = palette().highlight().color();
-        a.recordMouseOverHighlightingTextColor = palette().highlightedText().color();
-        a.recordHighlightingTextColor = a.recordMouseOverHighlightingTextColor;
-        a.gridEnabled = false;
+        a.rowMouseOverHighlightingColor = palette().highlight().color();
+        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
+        a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
+        a.horizontalGridEnabled = false;
+        a.verticalGridEnabled = false;
         setAppearance(a);
         setInsertingEnabled(false);
         setSortingEnabled(false);
@@ -69,13 +71,13 @@ public:
         setContextMenuEnabled(false);
         setScrollbarToolTipsEnabled(false);
         installEventFilter(this);
-        setBottomMarginInternal(- horizontalScrollBar()->sizeHint().height());
+        setBottomMarginInternal(0);
     }
     virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
-        KexiTableView::setData(data, owner);
+        KexiTableScrollArea::setData(data, owner);
     }
     bool setData(KexiDB::Cursor *cursor) {
-        return KexiDataTableView::setData(cursor);
+        return KexiDataTableScrollArea::setData(cursor);
     }
 };
 
@@ -99,6 +101,10 @@ public:
     KexiDB::Field *int_f; //!< @todo remove this -temporary
     KexiDB::QuerySchema* privateQuery;
     int max_rows;
+    //! Columns that should be kept visible; the others should be hidden.
+    //! Used when query is used as the row source type (KexiDB::LookupFieldSchema::RowSource::Query).
+    //! We're doing this in this case because it's hard to alter the query to remove columns.
+    QList<uint> visibleColumnsToShow;
 };
 
 //========================================
@@ -115,7 +121,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &c
 }
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
-        : QFrame(parent, Qt::WType_Popup)
+        : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
     init();
@@ -157,6 +163,7 @@ void KexiComboBoxPopup::init()
 
 void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *field)
 {
+    d->visibleColumnsToShow.clear();
     if (column && !field)
         field = column->field();
     if (!field) {
@@ -166,7 +173,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
 
     // case 1: simple related data
     if (column && column->relatedData()) {
-        d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column
+        d->tv->setColumnsResizeEnabled(true); //only needed when using single column
         setDataInternal(column->relatedData(), false /*!owner*/);
         return;
     }
@@ -176,8 +183,8 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         lookupFieldSchema = field->table()->lookupFieldSchema(*field);
     delete d->privateQuery;
     d->privateQuery = 0;
-    if (lookupFieldSchema) {
-        const QList<uint> visibleColumns(lookupFieldSchema->visibleColumns());
+    const QList<uint> visibleColumns(lookupFieldSchema ? lookupFieldSchema->visibleColumns() : QList<uint>());
+    if (!visibleColumns.isEmpty() && lookupFieldSchema->boundColumn() >= 0) {
         const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
         KexiDB::Cursor *cursor = 0;
@@ -189,11 +196,42 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
-                kDebug() << "--- Orig query: ";
+                /*kDebug() << "--- Orig query: ";
                 lookupTable->query()->debug();
+                kDebug() << field->table()->connection()->selectStatement(*lookupTable->query());*/
                 d->privateQuery = new KexiDB::QuerySchema(*lookupTable->query());
             } else {
-                cursor = field->table()->connection()->prepareQuery(*lookupTable);
+                // Create a simple SELECT query that contains only needed columns,
+                // that is visible and bound ones. The bound columns are placed on the end.
+                // Don't do this if one or more visible or bound columns cannot be found.
+                const KexiDB::QueryColumnInfo::Vector fieldsExpanded(lookupTable->query()->fieldsExpanded());
+                d->privateQuery = new KexiDB::QuerySchema;
+                bool columnsFound = true;
+                QList<uint> visibleAndBoundColumns = visibleColumns;
+                visibleAndBoundColumns.append(lookupFieldSchema->boundColumn());
+                //kDebug() << visibleAndBoundColumns;
+                foreach (uint index, visibleAndBoundColumns) {
+                    KexiDB::QueryColumnInfo *columnInfo = fieldsExpanded.value(index);
+                    if (columnInfo && columnInfo->field) {
+                        d->privateQuery->addField(columnInfo->field);
+                    }
+                    else {
+                        columnsFound = false;
+                        break;
+                    }
+                }
+                if (columnsFound) {
+                    // proper data source: bound + visible columns
+                    cursor = field->table()->connection()->prepareQuery(*d->privateQuery);
+                    /*kDebug() << "--- Composed query:";
+                    d->privateQuery->debug();
+                    kDebug() << field->table()->connection()->selectStatement(*d->privateQuery);*/
+                } else {
+                    // for sanity
+                    delete d->privateQuery;
+                    d->privateQuery = 0;
+                    cursor = field->table()->connection()->prepareQuery(*lookupTable);
+                }
             }
             break;
         }
@@ -204,17 +242,20 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
-                kDebug() << "--- Orig query: ";
+                /*kDebug() << "--- Orig query: ";
                 lookupQuery->debug();
+                kDebug() << field->table()->connection()->selectStatement(*lookupQuery);*/
                 d->privateQuery = new KexiDB::QuerySchema(*lookupQuery);
             } else {
+                d->visibleColumnsToShow = visibleColumns;
+                qSort(d->visibleColumnsToShow); // because we will depend on a sorted list
                 cursor = field->table()->connection()->prepareQuery(*lookupQuery);
             }
             break;
         }
         default:;
         }
-        if (d->privateQuery) {
+        if (multipleLookupColumnJoined && d->privateQuery) {
             // append column computed using multiple columns
             const KexiDB::QueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
             uint fieldsExpandedSize(fieldsExpanded.size());
@@ -274,7 +315,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
     kWarning() << "no column relatedData \n - moving to setData(KexiDB::Field &)";
 
     // case 3: enum hints
-    d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column
+    d->tv->setColumnsResizeEnabled(true);   //only needed when using single column
 
 //! @todo THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
     d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
@@ -288,6 +329,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         data->append(record);
     }
     setDataInternal(data, true);
+    updateSize();
 }
 
 void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
@@ -302,33 +344,55 @@ void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 
 void KexiComboBoxPopup::updateSize(int minWidth)
 {
-    const int rows = qMin(d->max_rows, d->tv->rows());
-
-    d->tv->adjustColumnWidthToContents(-1);
+    const int rows = qMin(d->max_rows, d->tv->rowCount());
 
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
-    const int width = qMax(d->tv->tableSize().width(),
+    int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
     //kDebug() << "size=" << size();
-    resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
+    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
     //kDebug() << "size after=" << size();
-
-    //stretch the last column
-    d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);
+    if (d->visibleColumnsToShow.isEmpty()) {
+        // row source type is not Query
+        d->tv->setColumnResizeEnabled(0, true);
+        d->tv->setColumnResizeEnabled(d->tv->columnCount() - 1, false);
+        d->tv->setColumnWidth(1, 0); //!< @todo A temp. hack to hide the bound column
+        d->tv->setColumnWidth(0, d->tv->width() - 1);
+    }
+    else {
+        // row source type is Query
+        // Set width to 0 and disable resizing of columns that shouldn't be visible
+        const KexiDB::QueryColumnInfo::Vector fieldsExpanded(d->tv->cursor()->query()->fieldsExpanded());
+        QList<uint>::ConstIterator visibleColumnsToShowIt = d->visibleColumnsToShow.constBegin();
+        for (uint i = 0; i < uint(fieldsExpanded.count()); ++i) {
+            bool show = visibleColumnsToShowIt != d->visibleColumnsToShow.constEnd() && i == *visibleColumnsToShowIt;
+            d->tv->setColumnResizeEnabled(i, show);
+            if (show) {
+                if (d->visibleColumnsToShow.count() == 1) {
+                    d->tv->setColumnWidth(i, d->tv->width() - 1);
+                }
+                ++visibleColumnsToShowIt;
+            }
+            else {
+                d->tv->setColumnWidth(i, 0);
+            }
+            //kDebug() << i << show;
+        }
+    }
 }
 
-KexiTableView* KexiComboBoxPopup::tableView()
+KexiTableScrollArea* KexiComboBoxPopup::tableView()
 {
     return d->tv;
 }
 
 void KexiComboBoxPopup::resize(int w, int h)
 {
-    d->tv->horizontalScrollBar()->hide();
-    d->tv->verticalScrollBar()->hide();
-    d->tv->move(1, 1);
-    d->tv->resize(w - 2, h - 2);
-    QFrame::resize(w, h);
+    //d->tv->horizontalScrollBar()->hide();
+    //d->tv->verticalScrollBar()->hide();
+    d->tv->move(0, 0);
+    d->tv->resize(w + 1, h - 1);
+    QFrame::resize(d->tv->size() + QSize(1, 1));
     update();
     updateGeometry();
 }

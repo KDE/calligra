@@ -18,9 +18,13 @@
  */
 
 #include "KarbonOutlinePaintingStrategy.h"
+
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoShapeStroke.h>
+
+#include <QPen>
+#include <QPainter>
 
 class OutlineStroke : public KoShapeStroke {
 public:

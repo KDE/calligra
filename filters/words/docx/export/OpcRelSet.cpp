@@ -30,11 +30,6 @@
 // KDE
 #include <kdebug.h>
 
-// Calligra
-#include <KoXmlWriter.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
-
 
 // ================================================================
 //                         class OpcRelSet
@@ -50,6 +45,8 @@ OpcRelSet::~OpcRelSet()
 
 QString OpcRelSet::addRelationship(const QString &type, const QString &target)
 {
+    Q_UNUSED(type);
+    Q_UNUSED(target);
     //FIXME: NYI
     return QString();
 }

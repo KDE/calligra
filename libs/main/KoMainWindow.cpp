@@ -41,7 +41,6 @@
 #include "KoPart.h"
 #include <KoPageLayoutDialog.h>
 #include "KoApplication.h"
-#include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
 
@@ -69,8 +68,6 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kurlcombobox.h>
-#include <kdiroperator.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
 
@@ -95,8 +92,6 @@
 #include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
-
-#include "thememanager.h"
 
 #include "calligraversion.h"
 
@@ -143,7 +138,6 @@ public:
 #ifdef HAVE_KACTIVITIES
         activityResource = 0;
 #endif
-        themeManager = 0;
 
         m_helpMenu = 0;
 
@@ -226,6 +220,7 @@ public:
     KAction *uncompressToDir;
 #endif
     KToggleAction *toggleDockers;
+    KToggleAction *toggleDockerTitleBars;
     KRecentFilesAction *recent;
 
     bool isImporting;
@@ -248,7 +243,6 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
-    Digikam::ThemeManager *themeManager;
 
     KHelpMenu *m_helpMenu;
 
@@ -365,15 +359,6 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->uncompressToDir->setEnabled(false);
 #endif
 
-    // populate theme menu
-    d->themeManager = new Digikam::ThemeManager(this);
-    KConfigGroup group(KGlobal::config(), "theme");
-    d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
-    d->themeManager->registerThemeActions(actionCollection());
-    d->themeManager->setCurrentTheme(group.readEntry("Theme",
-                                                     d->themeManager->defaultThemeName()));
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
-
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
@@ -382,8 +367,14 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
-
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
+
+    d->toggleDockerTitleBars = new KToggleAction(i18nc("@action:inmenu", "Show Docker Titlebars"), this);
+    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    d->toggleDockerTitleBars->setChecked(configGroupInterface.readEntry("ShowDockerTitleBars", true));
+    d->toggleDockerTitleBars->setVisible(false);
+    actionCollection()->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
@@ -452,11 +443,6 @@ KoMainWindow::~KoMainWindow()
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());
-
-    {
-        KConfigGroup group(KGlobal::config(), "theme");
-        group.writeEntry("Theme", d->themeManager->currentThemeName());
-    }
 
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
@@ -527,6 +513,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
             dockWidget->setVisible(false);
         }
 
+        d->toggleDockerTitleBars->setVisible(false);
         d->dockWidgetMenu->setVisible(false);
     }
 
@@ -540,6 +527,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     }
 
     if (doc) {
+        d->toggleDockerTitleBars->setVisible(true);
         d->dockWidgetMenu->setVisible(true);
         d->m_registeredPart = d->rootPart.data();
 
@@ -1001,12 +989,23 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
 
+        if (newURL.isLocalFile()) {
+            QString fn = newURL.toLocalFile();
+            if (QFileInfo(fn).completeSuffix().isEmpty()) {
+                KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
+                fn.append(mime->mainExtension());
+                newURL = KUrl::fromPath(fn);
+            }
+        }
+
         QByteArray outputFormat = _native_format;
+
         if (!specialOutputFlag) {
             KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
             QString outputFormatString = mime->name();
             outputFormat = outputFormatString.toLatin1();
         }
+
 
         if (!isExporting())
             justChangingFilterOptions = (newURL == d->rootDocument->url()) &&
@@ -1027,11 +1026,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KoDocument::SaveAsDirectoryStore) {
-                qDebug() << "save to directory: " << newURL.url();
+                // Do nothing
             }
             else if (specialOutputFlag == KoDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
-                qDebug() << dot;
                 QString ext = mime->mainExtension();
                 if (!ext.isEmpty()) {
                     if (dot < 0) fileName += ext;
@@ -1189,7 +1187,7 @@ void KoMainWindow::saveWindowSettings()
         d->windowSizeDirty = false;
     }
 
-    if ( rootDocument()) {
+    if ( rootDocument() && d->rootPart) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
@@ -1226,7 +1224,7 @@ bool KoMainWindow::queryClose()
         return true;
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
     //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << endl;
-    if (!d->forQuit && d->rootPart->mainwindowCount() > 1)
+    if (!d->forQuit && d->rootPart && d->rootPart->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1624,9 +1622,9 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     if (fullScreen) {
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
+        window()->setWindowState(window()->windowState() | Qt::WindowFullScreen);   // set
     } else {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
+        window()->setWindowState(window()->windowState() & ~Qt::WindowFullScreen);   // reset
     }
 }
 
@@ -1873,6 +1871,11 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (titleBar && locked)
             titleBar->setLocked(true);
 
+        if (titleBar) {
+            KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+            titleBar->setVisible(configGroupInterface.readEntry("ShowDockerTitleBars", true));
+        }
+
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[ factory->id()];
@@ -2078,8 +2081,13 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
+        KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+        const bool showDockerTitleBar = configGroupInterface.readEntry("ShowDockerTitleBars", true);
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+                if (wdg->titleBarWidget()) {
+                    wdg->titleBarWidget()->setVisible(showDockerTitleBar);
+                }
                 wdg->setVisible(true);
             }
         }
@@ -2126,7 +2134,17 @@ void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 
 }
 
+void KoMainWindow::showDockerTitleBars(bool show)
+{
+    foreach (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(show);
+        }
+    }
 
+    KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
+    configGroupInterface.writeEntry("ShowDockerTitleBars", show);
+}
 
 
 

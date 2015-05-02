@@ -188,14 +188,14 @@ QStringList DBase::readRecord(unsigned recno)
         return result;
 
     // load it
-    for (int i = 0; i < fields.count(); i++)
+    for (int i = 0; i < fields.count(); ++i)
         switch (fields.at(i)->type) {
             // Numeric or Character
         case DBaseField::Numeric:
         case DBaseField::Character: {
             QString str;
             quint8 ch;
-            for (unsigned j = 0; j < fields.at(i)->length; j++) {
+            for (unsigned j = 0; j < fields.at(i)->length; ++j) {
                 m_stream >> ch; str += QChar(ch);
             }
             result.append(str);

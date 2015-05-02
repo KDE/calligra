@@ -27,7 +27,6 @@
 #include <QTimer>
 #include <QStyle>
 #include <QApplication>
-#include <QToolTip>
 #include <QResizeEvent>
 #include <kdebug.h>
 
@@ -38,17 +37,12 @@ SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
     setMinimumWidth(100);
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
-    //m_tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this ); XXX
-
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
-    //connect(this, SIGNAL(activated(int)), XXX
-    //        SLOT(slotUpdateToolTip(int)));
 }
 
 SqueezedComboBox::~SqueezedComboBox()
 {
-    //delete m_tooltip; XXX
     delete m_timer;
 }
 
@@ -92,19 +86,15 @@ QSize SqueezedComboBox::sizeHint() const
                                      QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
 }
 
-void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
+void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
-    QComboBox::insertItem(index, squeezeText(newItem));
-
-    // if this is the first item, set the tooltip.
-    if (index == 0)
-        slotUpdateToolTip(0);
+    QComboBox::insertItem(index, squeezeText(newItem), userData);
 }
 
-void SqueezedComboBox::addSqueezedItem(const QString& newItem)
+void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
 {
-    insertSqueezedItem(newItem, count());
+    insertSqueezedItem(newItem, count(), userData);
 }
 
 void SqueezedComboBox::setCurrent(const QString& itemText)
@@ -148,12 +138,6 @@ QString SqueezedComboBox::squeezeText(const QString& original)
         }
     }
     return sqItem;
-}
-
-void SqueezedComboBox::slotUpdateToolTip(int /*index*/)
-{
-//     QToolTip::remove(this); XXX
-//     this->setToolTip( m_originalItems[index]);
 }
 
 QString SqueezedComboBox::itemHighlighted()

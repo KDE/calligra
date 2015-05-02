@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include "kis_node_filter_interface.h"
 
-class KisNodeVisitor;
 class KisFilterConfiguration;
 
 /**
@@ -69,13 +68,6 @@ public:
     KisPaintDeviceSP paintDevice() const;
 
     bool needProjection() const;
-    void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                  KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
-
-    // From KisNode
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
      * resets cached projection of lower layer to a new device
@@ -161,10 +153,21 @@ public:
      */
     QImage createThumbnail(qint32 w, qint32 h);
 
+
+protected:
+    // override from KisLayer
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
+    // override from KisNode
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+
 protected:
     void initSelection();
 
-public slots:
+    QRect cropChangeRectBySelection(const QRect &rect) const;
+
+public Q_SLOTS:
 
     /**
      * gets this layer. Overriddes function in

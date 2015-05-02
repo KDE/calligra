@@ -30,7 +30,6 @@ namespace KexiDB
 {
 class ResultInfo;
 class RecordData;
-class TableViewData;
 }
 
 class QLabel;
@@ -41,7 +40,6 @@ namespace KFormDesigner
 {
 
 class Form;
-class ConnectionBuffer;
 class Connection;
 
 
@@ -73,7 +71,7 @@ protected:
     //! Updates the signal list, according to the sender name.
     void updateSignalList(KexiDB::RecordData *record);
 
-protected slots:
+protected Q_SLOTS:
     /*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
     void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
     /*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
@@ -94,7 +92,7 @@ protected slots:
       and an empty connection is created. */
     void slotConnectionAborted(KFormDesigner::Form *form);
 
-    void slotCellSelected(int col, int row);
+    void slotCellSelected(int row, int col);
     void slotRowInserted(KexiDB::RecordData*, bool);
 
     /*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.

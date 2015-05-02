@@ -92,7 +92,7 @@ public:
      *
      * @param monitor the new screen number used for presentation
      */
-    void setPresentationMonitor( int monitor );
+    Q_INVOKABLE void setPresentationMonitor( int monitor );
 
     /**
      * Check whether the presenter view feature is enabled for presentation
@@ -106,7 +106,7 @@ public:
      *
      * @param enabled whether the presenter view should be enabled or disabled
      */
-    void setPresenterViewEnabled( bool enabled );
+    Q_INVOKABLE void setPresenterViewEnabled( bool enabled );
 
     /**
      * Get the list of pages for slide show. It is possible that the pages for
@@ -153,10 +153,10 @@ public:
      */
     KPrDeclarations * declarations() const;
 
-public slots:
+public Q_SLOTS:
     virtual void initEmpty();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the active custom slide show changes.
      * This is to allow for signalling dbus interfaces.

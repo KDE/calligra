@@ -170,7 +170,7 @@ public:
     int sectionNumber(void) const { return m_sectionNumber; }
 
     // Communication with Document, without having to know about Document
-signals:
+Q_SIGNALS:
     void sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);

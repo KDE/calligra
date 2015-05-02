@@ -22,7 +22,6 @@
 #include <QHBoxLayout>
 
 #include <klistview.h>
-#include <ktabwidget.h>
 #include <Klistbox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -47,7 +46,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     setObjectName("editlistview_dialog");
     setModal(true);
     setFaceType(Tabbed);
-    setWindowTitle(i18n("Edit Listview Contents"));
+    setWindowTitle(i18nc("@title:window", "Edit Listview Contents"));
 
     ///////// Setup the "Contents" page /////////////////////////////
     m_columnsPageItem = addPage(new QWidget(this), i18n("Columns"));
@@ -467,3 +466,4 @@ EditListViewDialog::MoveRowDown()
 }
 
 #include "editlistviewdialog.moc"
+#warning noi18n # added to disable message extraction in Messages.sh

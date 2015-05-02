@@ -26,7 +26,6 @@ class KPrAnimationsTimeLineView;
 class KPrView;
 class KoPAViewBase;
 class QModelIndex;
-class KoShape;
 class QModelIndex;
 class QComboBox;
 class QTimeEdit;
@@ -76,7 +75,7 @@ public:
      */
     QModelIndex currentIndex();
 
-signals:
+Q_SIGNALS:
     /// emitted ed if an item on Time line view has been clicked
     void itemClicked(const QModelIndex &index);
     /// Request animation preview for the current index
@@ -84,14 +83,14 @@ signals:
     /// Emitted if user has changed the state of automatic preview check box
     void previousStateChanged(bool isEnabled);
 
-public slots:
+public Q_SLOTS:
     /**
      * @brief Sync node type and time combo boxes with the given index
      * @param index of the animation
      */
     void updateIndex(const QModelIndex &index);
 
-protected slots:
+protected Q_SLOTS:
     /**
      * @brief Change current animation begin time
      */

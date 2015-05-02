@@ -22,10 +22,8 @@
 #ifndef KARBONSMALLSTYLEPREVIEW_H
 #define KARBONSMALLSTYLEPREVIEW_H
 
-#include <KoCheckerBoardPainter.h>
 #include <QWidget>
 
-class QPaintEvent;
 class KarbonFillStyleWidget;
 class KarbonStrokeStyleWidget;
 class KoCanvasBase;
@@ -38,11 +36,11 @@ public:
     explicit KarbonSmallStylePreview(QWidget* parent = 0L);
     virtual ~KarbonSmallStylePreview();
 
-signals:
+Q_SIGNALS:
     void fillApplied();
     void strokeApplied();
 
-private slots:
+private Q_SLOTS:
     void selectionChanged();
     void canvasChanged(const KoCanvasBase *canvas);
 

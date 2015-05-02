@@ -31,7 +31,6 @@
 #include "Sheet.h"
 
 #include <kdebug.h>
-#include <kmessagebox.h>
 
 using namespace Calligra::Sheets;
 

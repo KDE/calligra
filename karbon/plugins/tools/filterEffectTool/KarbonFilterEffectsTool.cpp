@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,7 +19,6 @@
 
 #include "KarbonFilterEffectsTool.h"
 
-#include "KoGenericRegistryModel.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectFactoryBase.h"
@@ -28,6 +27,7 @@
 #include "KoCanvasBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeManager.h"
+#include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectResource.h"
@@ -416,9 +416,9 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
 }
 
-QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
+QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 {
-    QList<QWidget*> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();

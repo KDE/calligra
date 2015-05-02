@@ -21,6 +21,7 @@
  */
 
 #include "kis_duplicateop.h"
+#include "kis_duplicateop_p.h"
 
 #include <string.h>
 
@@ -65,9 +66,10 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-KisDuplicateOp::KisDuplicateOp(KisImageWSP image, const KisDuplicateOpSettings *settings, KisPainter *painter)
+KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
+    , m_node(node)
     , m_settings(settings)
 {
     Q_ASSERT(settings);
@@ -85,43 +87,18 @@ KisDuplicateOp::~KisDuplicateOp()
 {
 }
 
-qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
-{
-    int rowstride = 3 * w;
-    qreal err = 0;
-    memcpy(sol, m, 3 * sizeof(qreal) * w);
-    m += rowstride;
-    sol += rowstride;
-    for (int i = 1; i < h - 1; i++) {
-        memcpy(sol, m, 3 * sizeof(qreal));
-        m += 3; sol += 3;
-        for (int j = 3; j < rowstride - 3; j++) {
-            qreal tmp = *sol;
-            *sol = ((*(m - 3) + * (m + 3) + * (m - rowstride) + * (m + rowstride)) + 2 * *m) / 6;
-            qreal diff = *sol - tmp;
-            err += diff * diff;
-            m ++; sol ++;
-        }
-        memcpy(sol, m, 3 * sizeof(qreal));
-        m += 3; sol += 3;
-    }
-    memcpy(sol, m, 3 * sizeof(qreal) * w);
-    return err;
-}
-
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
 
 KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return 1.0;
+    if (!painter()->device()) return KisSpacingInformation(1.0);
 
     KisBrushSP brush = m_brush;
     if (!brush)
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     if (!brush->canPaintFor(info))
-        return 1.0;
+        return KisSpacingInformation(1.0);
 
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
@@ -134,7 +111,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = m_image->projection();
     }
     else {
-        realSourceDevice = m_settings->node()->projection();
+        realSourceDevice = m_node->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);
@@ -152,7 +129,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
+    if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
 
     QPoint srcPoint;
@@ -179,18 +156,15 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
         QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
-#if 1
         if (subGridStart) {
             startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective(r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
         }
-#endif
-#if 1
+
         // Second look for the grid corresponding to the end point
         KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
-#endif
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
@@ -199,6 +173,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
+
         //Action
         do {
             QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
@@ -216,19 +191,31 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     }
 
     // heal ?
-
     if (m_healing) {
+        QRect healRect(dstRect);
+
+        const bool smallWidth = healRect.width() < 3;
+        const bool smallHeight = healRect.height() < 3;
+
+        if (smallWidth || smallHeight) {
+            healRect.adjust(-smallWidth, -smallHeight, smallWidth, smallHeight);
+        }
+
+        const int healSW = healRect.width();
+        const int healSH = healRect.height();
+
+
         quint16 srcData[4];
         quint16 tmpData[4];
-        qreal* matrix = new qreal[ 3 * sw * sh ];
+        QScopedArrayPointer<qreal> matrix(new qreal[ 3 * healSW * healSH ]);
         // First divide
         const KoColorSpace* srcCs = realSourceDevice->colorSpace();
         const KoColorSpace* tmpCs = m_srcdev->colorSpace();
-        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(dstRect.x(), dstRect.y() , sw);
-        KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
-        qreal* matrixIt = &matrix[0];
-        for (int j = 0; j < sh; j++) {
-            for (int i = 0; i < sw; i++) {
+        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(healRect.x(), healRect.y() , healSW);
+        KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, healSW);
+        qreal* matrixIt = matrix.data();
+        for (int j = 0; j < healSH; j++) {
+            for (int i = 0; i < healSW; i++) {
                 srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
                 tmpCs->toLabA16(tmpIt->rawData(), (quint8*)tmpData, 1);
                 // Division
@@ -246,41 +233,33 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         {
             int iter = 0;
             qreal err;
-            qreal* solution = new qreal [ 3 * sw * sh ];
-            do {
-                err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
+            QScopedArrayPointer<qreal> solution(new qreal[ 3 * healSW * healSH ]);
 
-                // swap pointers
-                qreal *tmp = matrix;
-                matrix = solution;
-                solution = tmp;
+            do {
+                err = DuplicateOpUtils::minimizeEnergy(matrix.data(), solution.data(), healSW, healSH);
+
+                solution.swap(matrix);
 
                 iter++;
             } while (err > 0.00001 && iter < 100);
-            delete [] solution;
         }
 
         // Finaly multiply
-        KisHLineIteratorSP srcIt2 = realSourceDevice->createHLineIteratorNG(dstRect.x(), dstRect.y(), sw);
-        KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, healSW);
         matrixIt = &matrix[0];
-        for (int j = 0; j < sh; j++) {
-            for (int i = 0; i < sw; i++) {
-                srcCs->toLabA16(srcIt2->rawData(), (quint8*)srcData, 1);
+        for (int j = 0; j < healSH; j++) {
+            for (int i = 0; i < healSW; i++) {
                 tmpCs->toLabA16(tmpIt2->rawData(), (quint8*)tmpData, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
                     tmpData[k] = (int)CLAMP(matrixIt[k] * qMax((int) tmpData[k], 1), 0, 65535);
                 }
                 tmpCs->fromLabA16((quint8*)tmpData, tmpIt2->rawData(), 1);
-                srcIt2->nextPixel();
                 tmpIt2->nextPixel();
                 matrixIt += 3;
             }
-            srcIt2->nextRow();
             tmpIt2->nextRow();
         }
-        delete [] matrix;
     }
 
     painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
@@ -291,5 +270,5 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return effectiveSpacing(dstRect.width(), dstRect.height());
+    return effectiveSpacing(scale, 0.0);
 }

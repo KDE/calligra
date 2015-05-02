@@ -33,14 +33,10 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kstdaccel.h>
-#include <kmessagebox.h>
-#include <kguiitem.h>
 #include <kiconeffect.h>
 
 #include <KoIcon.h>
@@ -70,7 +66,7 @@ K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         : KexiFrame(parent)
         , KexiFormDataItemInterface()
-        , m_alignment(Qt::AlignAuto | Qt::AlignTop)
+        , m_alignment(Qt::AlignLeft | Qt::AlignTop)
         , m_readOnly(false)
         , m_scaledContents(false)
         , m_smoothTransformation(true)
@@ -346,7 +342,7 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
 
         //! @todo download the file if remote, then set fileName properly
         QFile f(fileName);
-        if (!f.open(IO_ReadOnly)) {
+        if (!f.open(QIODevice::ReadOnly)) {
             //! @todo err msg
             return;
         }
@@ -386,7 +382,7 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
 void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
 {
     QFile f(fileName);
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         //! @todo err msg
         return;
     }
@@ -428,7 +424,7 @@ void KexiDBImageBox::handlePasteAction()
         m_pixmap = pm;
         QByteArray ba;
         QBuffer buffer(&ba);
-        buffer.open(IO_WriteOnly);
+        buffer.open(QIODevice::WriteOnly);
         if (m_pixmap.save(&buffer, "PNG")) {  // write pixmap into ba in PNG format
             setValueInternal(ba, true, false/* !loadPixmap */);
             m_currentScaledPixmap = QPixmap(); // clear cache
@@ -515,7 +511,7 @@ void KexiDBImageBox::updateActionStrings()
                 beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
             }
             m_chooser->setToolTip(
-                i18n("Click to show actions for \"%1\" image box", beautifiedImageBoxName));
+                i18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
         }
     }
 }

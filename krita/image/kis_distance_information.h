@@ -33,20 +33,24 @@ class KisPaintInformation;
  */
 class KisSpacingInformation {
 public:
-    KisSpacingInformation()
-        : m_isIsotropic(true)
+    explicit KisSpacingInformation()
+        : m_spacing(0.0, 0.0)
+        , m_isIsotropic(true)
+        , m_rotation(0.0)
     {
     }
 
-    KisSpacingInformation(qreal isotropicSpacing)
-        : m_spacing(isotropicSpacing, isotropicSpacing),
-          m_isIsotropic(true)
+    explicit KisSpacingInformation(qreal isotropicSpacing)
+        : m_spacing(isotropicSpacing, isotropicSpacing)
+        , m_isIsotropic(true)
+        , m_rotation(0.0)
     {
     }
 
-    KisSpacingInformation(const QPointF &anisotropicSpacing)
-        : m_spacing(anisotropicSpacing),
-          m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
+    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
+        : m_spacing(anisotropicSpacing)
+        , m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
+        , m_rotation(rotation)
     {
     }
 
@@ -62,9 +66,14 @@ public:
         return m_isIsotropic ? m_spacing.x() : QVector2D(m_spacing).length();
     }
 
+    inline qreal rotation() const {
+        return m_rotation;
+    }
+
 private:
     QPointF m_spacing;
     bool m_isIsotropic;
+    qreal m_rotation;
 };
 
 /**
@@ -74,7 +83,7 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(const QPointF &lastPosition, int lastTime);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
 
@@ -83,7 +92,7 @@ public:
     const KisSpacingInformation& currentSpacing() const;
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
-    int lastTime() const;
+    qreal lastTime() const;
     qreal lastDrawingAngle() const;
 
     bool hasLastPaintInformation() const;

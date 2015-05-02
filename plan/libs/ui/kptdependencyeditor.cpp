@@ -47,13 +47,8 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
 #include <kactionmenu.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
 #include <kactioncollection.h>
-#include <kdeversion.h>
 
 
 #if QT_VERSION >= 0x040700
@@ -2194,7 +2189,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             DependencyConnectorItem *c = static_cast<DependencyConnectorItem*>( item );
             QList<DependencyLinkItem*> items;
             QList<QAction*> actions;
-            KMenu menu;;
+            KMenu menu;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
                 actions << menu.addAction(koIcon("document-properties"), i->predItem->text());

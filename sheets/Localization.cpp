@@ -20,7 +20,6 @@
 
 #include "Localization.h"
 
-#include <kdeversion.h>
 #include <QDomDocument>
 
 using namespace Calligra::Sheets;

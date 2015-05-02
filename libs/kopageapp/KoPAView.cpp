@@ -24,9 +24,6 @@
 #include "KoPAView.h"
 
 #include <QGridLayout>
-#include <QToolBar>
-#include <QScrollBar>
-#include <QTimer>
 #include <QApplication>
 #include <QClipboard>
 #include <QLabel>
@@ -38,7 +35,6 @@
 #include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoCanvasResourceManager.h>
-#include <KoDocumentResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>
@@ -60,10 +56,8 @@
 #include <KoRuler.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
-#include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
-#include <KoFilterManager.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
@@ -77,7 +71,6 @@
 #include "KoPAPrintJob.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAChangeMasterPageCommand.h"
-#include "commands/KoPAChangePageLayoutCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 #include "dialogs/KoPAPageLayoutDialog.h"
 #include "dialogs/KoPAConfigureDialog.h"
@@ -326,8 +319,8 @@ void KoPAView::initGUI(KoPAFlags flags)
         if (mw) {
             KoToolBoxFactory toolBoxFactory;
             mw->createDockWidget( &toolBoxFactory );
-            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QPointer<QWidget> > &) ));
         }
     }
 
@@ -335,7 +328,7 @@ void KoPAView::initGUI(KoPAFlags flags)
     connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeAdded(KoShape *)), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(updateCanvasSize()));
-    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(pageUpdated(KoPAPageBase*)));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
@@ -434,6 +427,10 @@ void KoPAView::initActions()
     d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    d->actionConfigure->setMenuRole(QAction::PreferencesRole);
 
     d->find = new KoFind( this, d->canvas->resourceManager(), actionCollection() );
     connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),
@@ -712,6 +709,16 @@ void KoPAView::reinitDocumentDocker()
 {
     if (mainWindow()) {
         d->documentStructureDocker->setActivePage( d->activePage );
+    }
+}
+
+void KoPAView::pageUpdated(KoPAPageBase* page)
+{
+    // if the page was updated its content e.g. master page has been changed. Therefore we need to
+    // set the page again to set the shapes of the new master page and get a repaint. Without this
+    // changing the master page does not update the page.
+    if (d->activePage == page) {
+        doUpdateActivePage(page);
     }
 }
 

@@ -20,6 +20,7 @@
 #include "KPrAnimateTransform.h"
 
 #include "KPrAnimationCache.h"
+#include "KoPASavingContext.h"
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>

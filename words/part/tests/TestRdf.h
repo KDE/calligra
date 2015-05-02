@@ -27,7 +27,7 @@
 class TestRdf : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void basicload();
     void findStatements();
 #ifdef KDEPIMLIBS_FOUND

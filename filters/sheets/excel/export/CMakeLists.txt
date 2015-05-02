@@ -4,6 +4,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
+    ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/sheets # for PointStorage
@@ -35,8 +36,6 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/chartsubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/XlsRecordOutputStream.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/NumberFormatParser.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/ChartExport.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
@@ -47,7 +46,11 @@ set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 kde4_add_plugin(calligra_filter_sheets2xls ${sheets2xls_SRCS})
 
 
-target_link_libraries(calligra_filter_sheets2xls komsooxml komain mso koodf ${ZLIB_LIBRARIES} calligrasheetscommon)
+target_link_libraries(calligra_filter_sheets2xls
+                      calligrasheetscommon
+                      komsooxml mso
+                      komain koodf
+                      ${ZLIB_LIBRARIES})
 
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 
@@ -58,5 +61,5 @@ if(INSTALL_XLS_EXPORT_FILTER)
 ########### install files ###############
 
   install( FILES  calligra_filter_sheets2xls.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-endif(INSTALL_XLS_EXPORT_FILTER)
+endif()
 

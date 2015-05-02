@@ -33,7 +33,6 @@
 // calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
-#include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoGridData.h>
@@ -180,7 +179,6 @@ void KWCanvasBase::setShowAnnotations(bool doShow)
 void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
     // Paint the page.
-    Q_UNUSED(viewMap);
 
     QColor color = Qt::white;
 #ifdef DEBUG_REPAINT

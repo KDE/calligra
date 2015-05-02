@@ -27,21 +27,21 @@
 
 #include <MsooXmlCommonReader.h>
 
-namespace Charting {
+namespace KoChart {
     class Series;
     class Chart;
     class ShapeProperties;
 }
 
-class ChartExport;
+class XlsxChartOdfWriter;
 
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     KoStore* m_storeout;
-    Charting::Chart* m_chart;
-    ChartExport* m_chartExport;
-    explicit XlsxXmlChartReaderContext(KoStore* _storeout, ChartExport* _chartExport);
+    KoChart::Chart* m_chart;
+    XlsxChartOdfWriter* m_chartWriter;
+    explicit XlsxXmlChartReaderContext(KoStore* _storeout, XlsxChartOdfWriter* _chartWriter);
     virtual ~XlsxXmlChartReaderContext();
 };
 
@@ -133,8 +133,8 @@ private:
     enum ReadTxContext{ Title, None };
     enum ReadAreaContext{ PlotArea, ChartArea };
     XlsxXmlChartReaderContext *m_context;
-    Charting::Series *m_currentSeries;
-    Charting::ShapeProperties* m_currentShapeProperties;
+    KoChart::Series *m_currentSeries;
+    KoChart::ShapeProperties* m_currentShapeProperties;
     QString m_cellRangeAddress;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;

@@ -903,7 +903,7 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
                 if (bookResource(a, r, date, slotDuration, slotsToLimit,
                                  maxAvailability))
                 {
-                    a->setLockedResource(r);;
+                    a->setLockedResource(r);
                     found = true;
                     break;
                 }

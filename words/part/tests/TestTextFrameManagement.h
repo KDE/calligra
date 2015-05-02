@@ -14,7 +14,7 @@ class TestTextFrameManagement : public QObject
 public:
     TestTextFrameManagement();
 
-private slots:
+private Q_SLOTS:
     // tests
     void testFrameRemoval();
 

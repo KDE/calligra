@@ -48,8 +48,6 @@
 #include <KoStoreDevice.h>
 #include <KoDocumentRdfBase.h>
 
-#include "author/CoverImage.h"
-
 #include <QBuffer>
 #include <QTextCursor>
 #include <kdebug.h>
@@ -86,8 +84,8 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
     context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml | KoShapeSavingContext::ZIndex);
     context.setXmlWriter(writer);
 
-    Q_ASSERT(!fs->frames().isEmpty());
-    KoTextShapeData *shapedata = qobject_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
+    Q_ASSERT(!fs->shapes().isEmpty());
+    KoTextShapeData *shapedata = qobject_cast<KoTextShapeData *>(fs->shapes().first()->userData());
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
@@ -130,6 +128,8 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
         KoGenStyle layoutStyle = pageStyle.saveOdf();
         if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
             masterStyle.addProperty("style:display-name", pageStyle.displayName());
+        if (!pageStyle.nextStyleName().isEmpty())
+            masterStyle.addProperty("style:next-style-name", pageStyle.nextStyleName());
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
         QString name = context.mainStyles().insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);
@@ -151,6 +151,10 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
+        if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
+            masterStyle.addProperty("style:display-name", pageStyle.displayName());
+        if (!pageStyle.nextStyleName().isEmpty())
+            masterStyle.addProperty("style:next-style-name", pageStyle.nextStyleName());
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
 
         int index = 0;
@@ -159,7 +163,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
                 continue;
             KWTextFrameSet *fs = headersAndFooters.value(type);
             Q_ASSERT(fs);
-            if (fs->frameCount() == 0) // don't save empty framesets
+            if (fs->shapeCount() == 0) // don't save empty framesets
                 continue;
 
             QByteArray content = serializeHeaderFooter(context, fs);
@@ -231,8 +235,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoGenChanges changes;
 
-    CoverImage coverImage;
-
     KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
 
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
@@ -272,9 +274,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         //  3) frames that are not anchored but freely positioned somewhere on the page.
         //     in ODF terms those frames are page-anchored.
 
-        if (fs->frameCount() == 1) {
+        if (fs->shapeCount() == 1) {
             // may be a frame that is anchored to text, don't save those here.
-            KoShapeAnchor *anchor = fs->frames().first()->shape()->anchor();
+            KoShapeAnchor *anchor = fs->shapes().first()->anchor();
             if (anchor && anchor->anchorType() != KoShapeAnchor::AnchorPage)
                 continue;
         }
@@ -292,30 +294,42 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
         int counter = 1;
         QSet<QString> uniqueNames;
-        foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
-            KoShape *shape = frame->shape();
+        foreach (KoShape *shape, fs->shapes()) { // make sure all shapes have names.
             if (counter++ == 1)
                 shape->setName(fs->name());
             else if (shape->name().isEmpty() || uniqueNames.contains(shape->name()))
                 shape->setName(QString("%1-%2").arg(fs->name(), QString::number(counter)));
             uniqueNames << shape->name();
         }
-        const QList<KWFrame*> frames = fs->frames();
-        for (int i = 0; i < frames.count(); ++i) {
-            KWFrame *frame = frames.at(i);
-            KWPage page = m_document->pageManager()->page(frame->shape());
-            KoShape *shape = frame->shape();
+        foreach (KoShape *shape, fs->shapes()) {
+            KWPage page = m_document->pageManager()->page(shape);
             if (m_document->annotationLayoutManager()->isAnnotationShape(shape)) {
                 // Skip to save annotation shapes.
                 continue;
             }
-            frame->saveOdf(context, page, m_zIndexOffsets.value(page));
+
+            if (shape->minimumHeight() > 1) {
+                shape->setAdditionalAttribute("fo:min-height", QString::number(shape->minimumHeight()) + "pt");
+            }
+
+            // shape properties
+            const qreal pagePos = page.offsetInDocument();
+
+            shape->setAdditionalAttribute("text:anchor-type", "page");
+            shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
+            context.addShapeOffset(shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
+            shape->saveOdf(context);
+            context.removeShapeOffset(shape);
+            shape->removeAdditionalAttribute("fo:min-height");
+            shape->removeAdditionalAttribute("text:anchor-page-number");
+            shape->removeAdditionalAttribute("text:anchor-page-number");
+            shape->removeAdditionalAttribute("text:anchor-type");
         }
     }
 
     if (mainTextFrame) {
-        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
-            KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
+        if (! mainTextFrame->shapes().isEmpty() && mainTextFrame->shapes().first()) {
+            KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->shapes().first()->userData());
             if (shapeData) {
                 shapeData->saveOdf(context, m_document->documentRdf());
             }
@@ -325,14 +339,12 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     //we save the changes before starting the page sequence element because odf validator insist on having <tracked-changes> right after the <office:text> tag
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
-
     if (!changeTracker || !changeTracker->recordChanges()) {
         changes.saveOdfChanges(changeWriter, false);
     }
     else {
         changes.saveOdfChanges(changeWriter, true);
     }
-
 
     delete changeWriter;
     changeWriter = 0;
@@ -389,10 +401,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         return false;
     }
 
-    // save cover image in Author.
-    if (!coverImage.saveCoverImage(store, manifestWriter, m_document->coverImage())) {
-        return false;
-    }
     return true;
 }
 
@@ -464,8 +472,8 @@ void KWOdfWriter::calculateZindexOffsets()
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         if (Words::isAutoGenerated(fs))
             continue;
-        foreach (KWFrame *frame, fs->frames()) {
-            addShapeToTree(frame->shape());
+        foreach (KoShape *shape, fs->shapes()) {
+            addShapeToTree(shape);
         }
     }
 

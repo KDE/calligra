@@ -29,6 +29,7 @@
 class QString;
 class KoStore;
 class KoOdfStyle;
+class KoOdfListStyle;
 class KoXmlStreamReader;
 class KoXmlWriter;
 
@@ -40,6 +41,9 @@ class KOODF2_EXPORT KoOdfStyleManager
 
     KoOdfStyle *style(const QString &name, const QString &family) const;
     void setStyle(const QString &name, KoOdfStyle *style);
+
+    KoOdfListStyle *listStyle(const QString &name) const;
+    void setListStyle(const QString &name, KoOdfListStyle *listStyle);
 
     KoOdfStyle *defaultStyle(const QString &family) const;
     void setDefaultStyle(const QString &family, KoOdfStyle *style);

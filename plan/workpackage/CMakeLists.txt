@@ -96,7 +96,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan.work")
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan Work")
-endif (Q_WS_MAC)
+endif ()
 
 target_link_libraries(
     kdeinit_calligraplanwork
@@ -119,5 +119,5 @@ install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  planworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/planwork)
 install( FILES  planworkrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

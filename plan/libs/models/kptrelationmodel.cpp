@@ -32,15 +32,8 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
-#include <kactionmenu.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
-#include <kactioncollection.h>
 
 #include <kdganttglobal.h>
 
@@ -129,7 +122,7 @@ QVariant RelationModel::data( const Relation *r, int property, int role ) const
         case 2: result = type( r, role ); break;
         case 3: result = lag( r, role ); break;
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property<<endl;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property<<endl;
             return result;
     }
     return result;

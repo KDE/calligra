@@ -560,7 +560,7 @@ void PivotMain::Summarize()
   }
   
   
-  QString title=d->func + "-" + valueList.at(0)->text();
+  const QString title = d->func + QLatin1Char('-') + valueList.at(0)->text();
   Cell(mySheet,1,1).setValue(Value(title));
   Cell(mySheet,1,1).setStyle(st);
   for(int l=0;l<rowVect[0].count();l++)
@@ -735,7 +735,7 @@ void PivotMain::clean(Sheet* sheet)
   for(int i=d->mainWidget.Rows->count()+1;i<=lastRow+1;i++){
     int temp=0;
     for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	if(!conv->toInteger(Cell(sheet,j,i).value())==0){
+    if(conv->toInteger(Cell(sheet,j,i).value()) != 0){
 	  temp=1;
 	  break;
 	}
@@ -754,7 +754,7 @@ void PivotMain::clean(Sheet* sheet)
   for(int i=d->mainWidget.Columns->count()+1;i<=lastColumn;i++){
     int temp=0;
     for(int j=d->mainWidget.Rows->count()+1;j<=lastRow;j++){
-	if(!conv->toInteger(Cell(sheet,i,j).value())==0){
+    if(conv->toInteger(Cell(sheet,i,j).value()) != 0){
 	  temp=1;
 	  break;
 	}

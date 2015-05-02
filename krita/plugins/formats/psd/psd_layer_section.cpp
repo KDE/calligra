@@ -30,7 +30,7 @@
 
 #include "compression.h"
 
-PSDLayerSection::PSDLayerSection(const PSDHeader& header)
+PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
     : m_header(header)
 {
     hasTransparency = false;
@@ -39,12 +39,12 @@ PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     nLayers = 0;
 }
 
-PSDLayerSection::~PSDLayerSection()
+PSDLayerMaskSection::~PSDLayerMaskSection()
 {
     qDeleteAll(layers);
 }
 
-bool PSDLayerSection::read(QIODevice* io)
+bool PSDLayerMaskSection::read(QIODevice* io)
 {
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
@@ -119,7 +119,7 @@ bool PSDLayerSection::read(QIODevice* io)
 
         for (int i = 0; i < nLayers; ++i) {
 
-            dbgFile << "Going to read layer " << i << "pos" << io->pos();
+            dbgFile << "Going to read layer" << i << "pos" << io->pos();
             PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
@@ -224,24 +224,24 @@ bool PSDLayerSection::read(QIODevice* io)
 
     if (globalMaskBlockLength > 0) {
 
-        if (!psdread(io, &overlayColorSpace)) {
+        if (!psdread(io, &globalLayerMaskInfo.overlayColorSpace)) {
             error = "Could not read global mask info overlay colorspace";
             return false;
         }
 
         for (int i = 0; i < 4; ++i) {
-            if (!psdread(io, &colorComponents[i])) {
+            if (!psdread(io, &globalLayerMaskInfo.colorComponents[i])) {
                 error = QString("Could not read mask info visualizaion color component %1").arg(i);
                 return false;
             }
         }
 
-        if (!psdread(io, &opacity)) {
+        if (!psdread(io, &globalLayerMaskInfo.opacity)) {
             error = "Could not read global mask info visualization opacity";
             return false;
         }
 
-        if (!psdread(io, &kind)) {
+        if (!psdread(io, &globalLayerMaskInfo.kind)) {
             error = "Could not read global mask info visualization type";
             return false;
         }
@@ -267,7 +267,7 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
     dbgFile << layers.size();
 }
 
-bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
+bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -383,7 +383,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     return true;
 }
 
-bool PSDLayerSection::valid()
+bool PSDLayerMaskSection::valid()
 {
     if (layerInfoSize > 0) {
         if (nLayers <= 0) return false;

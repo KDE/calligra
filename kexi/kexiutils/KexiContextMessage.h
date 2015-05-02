@@ -128,7 +128,7 @@ public:
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
-private slots:
+private Q_SLOTS:
     void actionTriggered();
 
 private:

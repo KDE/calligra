@@ -21,7 +21,6 @@
 
 #include <KoShape.h>
 #include <KoFrameShape.h>
-#include <kurl.h>
 #include "simplefield.h"
 
 namespace KexiDB

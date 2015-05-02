@@ -15,7 +15,7 @@ target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordspriva
 install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES calligra_filter_ascii2words.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-endif(SHOULD_BUILD_FILTER_ASCII_TO_WORDS)
+endif()
 
 
 if(SHOULD_BUILD_FILTER_ODT_TO_ASCII)
@@ -37,9 +37,9 @@ install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES calligra_filter_odt2ascii.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
-install( PROGRAMS  calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
-endif(SHOULD_BUILD_FILTER_ODT_TO_ASCII)
+endif()
 
 
 

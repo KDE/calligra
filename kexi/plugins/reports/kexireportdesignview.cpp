@@ -24,8 +24,8 @@
 #include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
-#include <kpushbutton.h>
 #include <KoIcon.h>
+#include <QShortcut>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
         : KexiView(parent)
@@ -166,6 +166,17 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     connect(m_reportDesigner, SIGNAL(propertySetChanged()), this, SLOT(slotDesignerPropertySetChanged()));
     connect(m_reportDesigner, SIGNAL(dirty()), this, SLOT(setDirty()));
 
+     //Added default keyboard shortcuts for the actions
+     QShortcut *cutShortcut = new QShortcut(QKeySequence(QKeySequence::Cut), m_reportDesigner);
+     QShortcut *copyShortcut = new QShortcut(QKeySequence(QKeySequence::Copy), m_reportDesigner);
+     QShortcut *pasteShortcut = new QShortcut(QKeySequence(QKeySequence::Paste), m_reportDesigner);
+     QShortcut *deleteShortcut = new QShortcut(QKeySequence(QKeySequence::Delete), m_reportDesigner);
+
+     connect(cutShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCut()));
+     connect(copyShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCopy()));
+     connect(pasteShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditPaste()));
+     connect(deleteShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditDelete()));
+
     //Edit Actions
     connect(m_editCutAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCut()));
     connect(m_editCopyAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCopy()));
@@ -195,4 +206,3 @@ void KexiReportDesignView::triggerAction(const QString &action)
 {
     m_reportDesigner->slotItem(action);
 }
-

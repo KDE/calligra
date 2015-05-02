@@ -24,11 +24,14 @@ KexiServerDriverNotFoundMessage::KexiServerDriverNotFoundMessage(QWidget *parent
     KexiContextMessageWidget(parent, 0, 0,
             KexiContextMessage (
                 i18nc("@info",
-                "<title>No database server drivers found</title> \
-                <para>Connection to a database server requires an appropriate driver which you do not have installed.</para> \
-                <subtitle>Details</subtitle> \
-                <para>To obtain database drivers please use your Package Manager to search and install packages named <filename> \
-                calligra-kexi-xxxx-driver</filename>. Please note that your package names could vary slightly according to the distribution you use.</para>"))
+                "<title>No database server drivers found</title>"
+                "<para>Connection to a database server requires an appropriate driver which "
+                "you do not have installed.</para>"
+                "<subtitle>Details</subtitle>"
+                "<para>To obtain database drivers please use your Package Manager to search "
+                "and install packages named <filename>calligra-kexi-xxxx-driver</filename>. "
+                "Please note that your package names could vary slightly depending on the "
+                "operating system you use.</para>"))
             )
 {
         setMessageType(KMessageWidget::Warning);

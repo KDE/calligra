@@ -18,7 +18,6 @@
 */
 
 #include "debugarea.h"
-#include <kdeversion.h>
 
 int planworkDbg() {
     static int s_area = KDebug::registerArea( "planwork" );

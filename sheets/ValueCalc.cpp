@@ -2457,7 +2457,7 @@ void ValueCalc::getCond(Condition &cond, Value val)
     } else if (text.startsWith(QLatin1Char('='))) {
         cond.comp = isEqual;
         text.remove(0, 1);
-    } else { // character comparision
+    } else { // character comparison
         cond.type = string;
         cond.stringValue = text;
         if (settings()->useWildcards()) { // HOST-USE-WILDCARDS Excel like wildcard matching

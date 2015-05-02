@@ -30,7 +30,6 @@
 
 #include "kis_deform_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 class KisBrushSizeProperties;
 
@@ -38,12 +37,10 @@ class KisDeformPaintOp : public KisPaintOp
 {
 
 public:
-    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisDeformPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-    qreal spacing(qreal pressure) const;
-
 
 private:
 

@@ -41,7 +41,6 @@
 #include "commands/CommentCommand.h"
 #include "commands/StyleCommand.h"
 
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 
 using namespace Calligra::Sheets;

@@ -38,7 +38,6 @@
 #include "KoResourceServerProvider.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
-#include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -271,14 +270,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
-    d->gradientAction->setToolTip(i18n("Change the filling color"));
+    d->gradientAction->setToolTip(i18n("Change the filling gradient"));
     connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground> )));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
 
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
-    d->patternAction->setToolTip(i18n("Change the filling color"));
+    d->patternAction->setToolTip(i18n("Change the filling pattern"));
     connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground> )));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
@@ -453,7 +452,9 @@ void KoFillConfigWidget::shapeChanged()
         return;
     }
 
+    d->colorAction->blockSignals(true);
     updateWidget(shape);
+    d->colorAction->blockSignals(false);
 }
 
 

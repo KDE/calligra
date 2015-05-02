@@ -48,13 +48,13 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-public slots:
+public Q_SLOTS:
     virtual void documentResourceChanged(int key, const QVariant & res);
 
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
-private slots:
+private Q_SLOTS:
     void patternSelected(KoResource * resource);
     void initialize();
     /// updates options widget from selected pattern

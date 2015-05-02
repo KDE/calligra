@@ -3,37 +3,38 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-missing-format-attribute)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-parameter)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
+set(MDBTOOLS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/kexi/migration/mdb/3rdparty/mdbtools")
 
-include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/migration/mdb/src/mdbtools/include )
+include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${MDBTOOLS_SOURCE_DIR}/include )
 
-INCLUDE(FindIconv)
+include(FindIconv)
 if(ICONV_FOUND)
     add_definitions(-DHAVE_ICONV=1)
     include_directories(${ICONV_INCLUDE_DIR})
-else(ICONV_FOUND)
+else()
     message(FATAL_ERROR "Could not find library with iconv and iconv headers. Required for MS Access import plugin.")
-endif(ICONV_FOUND)
+endif()
 
 ########### mdb migrate target ###############
 
 set(keximigrate_mdbmigrate_PART_SRCS keximdb/mdbmigrate.cpp
-mdbtools/libmdb/catalog.c
-mdbtools/libmdb/data.c
-mdbtools/libmdb/dump.c
-mdbtools/libmdb/file.c
-mdbtools/libmdb/iconv.c
-mdbtools/libmdb/index.c
-mdbtools/libmdb/like.c
-mdbtools/libmdb/map.c
-mdbtools/libmdb/mem.c
-mdbtools/libmdb/money.c
-mdbtools/libmdb/options.c
-mdbtools/libmdb/sargs.c
-mdbtools/libmdb/table.c
-mdbtools/libmdb/worktable.c
-mdbtools/libmdb/write.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/catalog.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/data.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/dump.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/file.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/iconv.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/index.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/like.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/map.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/mem.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/money.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/options.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/sargs.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/table.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/worktable.c
+${MDBTOOLS_SOURCE_DIR}/libmdb/write.c
 )
 
 

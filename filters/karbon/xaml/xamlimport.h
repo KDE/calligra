@@ -34,7 +34,6 @@
 #include "xamlgraphiccontext.h"
 
 class VGroup;
-class VPath;
 
 class XAMLImport : public KoFilter
 {

@@ -88,7 +88,7 @@ public:
 protected :
     virtual void mouseMoveEvent(QMouseEvent *e);
 
-private slots:
+private Q_SLOTS:
     void pageSetupChanged();
     void updateMousePos(const QPoint &point);
     void shapeSelectionChanged();

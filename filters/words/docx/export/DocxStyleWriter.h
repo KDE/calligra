@@ -25,7 +25,6 @@
 #include <QBuffer>
 
 class QByteArray;
-class QStringList;
 
 class KoXmlWriter;
 class OdfReaderContext;
@@ -33,7 +32,7 @@ class OdfReaderContext;
 class DocxStyleWriter
 {
 public:
-    DocxStyleWriter(OdfReaderContext *context);
+    explicit DocxStyleWriter(OdfReaderContext *context);
     virtual ~DocxStyleWriter();
 
     void read();

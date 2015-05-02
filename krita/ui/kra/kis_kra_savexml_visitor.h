@@ -50,6 +50,7 @@ public:
     bool visit(KisGeneratorLayer *layer);
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
+    bool visit(KisTransformMask *mask);
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
 
@@ -59,6 +60,8 @@ public:
 
 public:
     QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
+
+    // used by EXR to save properties of Krita layers inside .exr
     static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer);
 
 private:

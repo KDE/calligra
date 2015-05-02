@@ -26,14 +26,13 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
+
 
 #include "kis_factory2.h"
 #include "kis_config.h"
 
 WdgImagesplit::WdgImagesplit(QWidget* parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

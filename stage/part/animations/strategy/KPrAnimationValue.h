@@ -23,9 +23,9 @@
 #include <QtGlobal>
 #include "KoPASavingContext.h"
 class KoShape;
-class KoTextBlockData;
 class KPrAnimationCache;
 class KPrShapeAnimation;
+class QTextBlockUserData;
 
 class KPrAnimationValue
 {

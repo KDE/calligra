@@ -18,4 +18,4 @@ install( FILES  calligra_filter_xfig2odg.desktop DESTINATION ${SERVICES_INSTALL_
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  karbon_xfig_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()

@@ -24,6 +24,9 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 
+#include "kis_abstract_projection_plane.h"
+
+
 class KisBaseRectsWalker;
 typedef KisSharedPtr<KisBaseRectsWalker> KisBaseRectsWalkerSP;
 
@@ -32,6 +35,7 @@ class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 public:
     enum UpdateType {
         UPDATE,
+        UPDATE_NO_FILTHY,
         FULL_REFRESH,
         UNSUPPORTED
     };
@@ -58,7 +62,20 @@ public:
     };
 
     #define GRAPH_POSITION_MASK     0x07
-    #define POSITION_TO_FILTHY_MASK 0xF8
+
+    static inline KisNode::PositionToFilthy convertPositionToFilthy(NodePosition position) {
+        static const int positionToFilthyMask =
+            N_ABOVE_FILTHY |
+            N_FILTHY_PROJECTION |
+            N_FILTHY |
+            N_BELOW_FILTHY;
+
+        qint32 positionToFilthy = position & N_EXTRA ? N_FILTHY : position & positionToFilthyMask;
+        // We do not use N_FILTHY_ORIGINAL yet, so...
+        Q_ASSERT(positionToFilthy);
+
+        return static_cast<KisNode::PositionToFilthy>(positionToFilthy);
+    }
 
     struct CloneNotification {
         CloneNotification() {}
@@ -150,15 +167,15 @@ public:
         return m_cloneNotifications;
     }
 
-    inline const QRect& accessRect() const {
+    inline QRect accessRect() const {
         return m_resultAccessRect;
     }
 
-    inline const QRect& changeRect() const {
+    inline QRect changeRect() const {
         return m_resultChangeRect;
     }
 
-    inline const QRect& uncroppedChangeRect() const {
+    inline QRect uncroppedChangeRect() const {
         return m_resultUncroppedChangeRect;
     }
 
@@ -174,7 +191,7 @@ public:
         return m_startNode;
     }
 
-    inline const QRect& requestedRect() const {
+    inline QRect requestedRect() const {
         return m_requestedRect;
     }
 
@@ -189,13 +206,6 @@ protected:
     virtual void startTrip(KisNodeSP startWith) = 0;
 
 protected:
-    static inline KisNode::PositionToFilthy getPositionToFilthy(qint32 position) {
-        qint32 positionToFilthy = position & POSITION_TO_FILTHY_MASK;
-        // We do not use N_FILTHY_ORIGINAL yet, so...
-        Q_ASSERT(!(positionToFilthy & N_FILTHY_ORIGINAL));
-
-        return static_cast<KisNode::PositionToFilthy>(positionToFilthy);
-    }
 
     static inline qint32 getGraphPosition(qint32 position) {
         return position & GRAPH_POSITION_MASK;
@@ -269,8 +279,8 @@ protected:
         // We do not work with masks here. It is KisLayer's job.
         if(!isLayer(node)) return;
 
-        QRect currentChangeRect = node->changeRect(m_resultChangeRect,
-                                                   getPositionToFilthy(position));
+        QRect currentChangeRect = node->projectionPlane()->changeRect(m_resultChangeRect,
+                                                                      convertPositionToFilthy(position));
         currentChangeRect = cropThisRect(currentChangeRect);
 
         if(!m_changeRectVaries)
@@ -278,8 +288,8 @@ protected:
 
         m_resultChangeRect = currentChangeRect;
 
-        m_resultUncroppedChangeRect = node->changeRect(m_resultUncroppedChangeRect,
-                                                       getPositionToFilthy(position));
+        m_resultUncroppedChangeRect = node->projectionPlane()->changeRect(m_resultUncroppedChangeRect,
+                                                                          convertPositionToFilthy(position));
         registerCloneNotification(node, position);
     }
 
@@ -319,11 +329,11 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;
 
-            m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                   getPositionToFilthy(position));
+            m_resultAccessRect |= node->projectionPlane()->accessRect(m_lastNeedRect,
+                                                                      convertPositionToFilthy(position));
 
-            m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                            getPositionToFilthy(position));
+            m_lastNeedRect = node->projectionPlane()->needRect(m_lastNeedRect,
+                                                               convertPositionToFilthy(position));
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
         }
@@ -331,11 +341,11 @@ protected:
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
 
-                m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                       getPositionToFilthy(position));
+                m_resultAccessRect |= node->projectionPlane()->accessRect(m_lastNeedRect,
+                                                                          convertPositionToFilthy(position));
 
-                m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                                getPositionToFilthy(position));
+                m_lastNeedRect = node->projectionPlane()->needRect(m_lastNeedRect,
+                                                                   convertPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
         }
@@ -363,7 +373,7 @@ protected:
                      (!isMask(currentNode) || !currentNode->visible()));
 
             if(currentNode) {
-                QRect changeRect = currentNode->changeRect(m_resultChangeRect);
+                QRect changeRect = currentNode->projectionPlane()->changeRect(m_resultChangeRect);
                 m_changeRectVaries |= changeRect != m_resultChangeRect;
                 m_resultChangeRect = changeRect;
                 m_resultUncroppedChangeRect = changeRect;
@@ -381,11 +391,11 @@ protected:
         qint32 x, y, w, h;
         QRect tempRect;
 
-        tempRect = node->changeRect(requestedRect);
+        tempRect = node->projectionPlane()->changeRect(requestedRect);
         tempRect.getRect(&x, &y, &w, &h);
         checksum += -x - y + w + h;
 
-        tempRect = node->needRect(requestedRect);
+        tempRect = node->projectionPlane()->needRect(requestedRect);
         tempRect.getRect(&x, &y, &w, &h);
         checksum += -x - y + w + h;
 

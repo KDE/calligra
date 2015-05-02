@@ -46,11 +46,24 @@ namespace utils {
         void test();
         void benchmark();
 
+        void setNumIterations(int value);
+        void setBaseFuzziness(int value);
+
     protected:
         KisStrokeId strokeId() {
             return m_strokeId;
         }
 
+        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+                                           KisImageWSP image, int iteration);
+
+        virtual void initImage(KisImageWSP image, KisNodeSP activeNode, int iteration);
+
+        // overload
+        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+                                           KisImageWSP image);
+
+        // overload
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
 
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
@@ -60,7 +73,12 @@ namespace utils {
 
         virtual void addPaintingJobs(KisImageWSP image,
                                      KisResourcesSnapshotSP resources,
-                                     KisPainter *painter) = 0;
+                                     KisPainter *painter, int iteration);
+
+        // overload
+        virtual void addPaintingJobs(KisImageWSP image,
+                                     KisResourcesSnapshotSP resources,
+                                     KisPainter *painter);
 
     private:
         void testOneStroke(bool cancelled, bool indirectPainting,
@@ -81,6 +99,8 @@ namespace utils {
         QString m_name;
         QSize m_imageSize;
         QString m_presetFilename;
+        int m_numIterations;
+        int m_baseFuzziness;
     };
 }
 

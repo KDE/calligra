@@ -25,7 +25,6 @@
 #include <QPrinter>
 
 class KPrView;
-class KoPAPageBase;
 
 class KPrPdfPrintJob : public KoPAPrintJob
 {
@@ -34,7 +33,7 @@ public:
     explicit KPrPdfPrintJob(KPrView *view);
     virtual ~KPrPdfPrintJob();
 
-public slots:
+public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 };
 

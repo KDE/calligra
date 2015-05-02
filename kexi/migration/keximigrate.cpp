@@ -23,7 +23,6 @@
 
 #include <kdebug.h>
 #include <kinputdialog.h>
-#include <kapplication.h>
 
 #include <kexiutils/identifier.h>
 #include <core/kexi.h>
@@ -248,7 +247,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     QMap<QString, QString> nativeNames;
     foreach(const QString& tableCaption, tables) {
         if (destDriver->isSystemObjectName(tableCaption)   //"kexi__objects", etc.
-                || tableCaption.toLower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
+                || tableCaption.startsWith(QLatin1String("kexi__"), Qt::CaseInsensitive)) //tables at KexiProject level, e.g. "kexi__blobs"
             continue;
         // this is a non-KexiDB table: generate schema from native data source
         const QString tableIdentifier(KexiUtils::stringToIdentifier(tableCaption.toLower()));
@@ -543,9 +542,9 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
     const QStringList typeNames(KexiDB::Field::typeNames());
     bool ok;
     const QString res(KInputDialog::getItem(i18n("Field Type"),
-                                            i18n("The data type for %1 could not be determined. "
-                                                 "Please select one of the following data types", fname),
-                                            typeNames, 0, false/*!editable*/, &ok));
+        i18n("The data type for field <resource>%1</resource> could not be determined. "
+             "Please select one of the following data types.", fname),
+        typeNames, 0, false/*!editable*/, &ok));
 
     if (!ok || res.isEmpty())
 //! @todo OK?

@@ -27,8 +27,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <kglobal.h>
-
 // FIXME: Don't cross include
 //#include "KWStatisticsDocker.h"
 #include "StatisticsPreferencesPopup.h"
@@ -37,7 +35,6 @@
 class QTimer;
 class QTextDocument;
 class QToolButton;
-class KConfigGroup;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;
@@ -75,7 +72,7 @@ public:
 
     void unsetCanvas();
     
-public slots:
+public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
     void linesDisplayChanged(int);
@@ -151,6 +148,9 @@ private:
     long m_charsWithoutSpace;
     long m_lines;
     long m_paragraphs;
+
+    // to ensure we're not running over ourselves.
+    bool m_running;
 };
 
 #endif // KWSTATISTICSWIDGET_H

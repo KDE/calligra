@@ -36,7 +36,6 @@
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 
 #include <QGridLayout>
 #include <QTimer>
@@ -115,7 +114,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
 KWGui::~KWGui()
 {
-    KoToolManager::instance()->removeCanvasController(m_canvasController);
+   KoToolManager::instance()->removeCanvasController(m_canvasController);
 }
 
 int KWGui::visibleWidth() const

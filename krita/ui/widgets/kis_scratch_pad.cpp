@@ -46,6 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
+#include "kis_layer_projection_plane.h"
 
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
@@ -201,6 +202,7 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
     m_helper->initPaint(event,
                         resourceManager,
                         0,
+                        0,
                         m_updateScheduler,
                         m_undoAdapter,
                         m_paintLayer,
@@ -241,7 +243,10 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 
 void KisScratchPad::pick(KoPointerEvent *event)
 {
-    emit colorSelected(KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint()));
+    KoColor color;
+    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+        emit colorSelected(color);
+    }
 }
 
 void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
@@ -294,7 +299,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
     QPointF offset = alignedImageRect.topLeft();
 
-    m_paintLayer->updateProjection(alignedImageRect);
+    m_paintLayer->projectionPlane()->recalculate(alignedImageRect, m_paintLayer);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
     QImage image = projection->convertToQImage(m_displayProfile,
@@ -425,9 +430,9 @@ void KisScratchPad::fillGradient()
     KisGradientPainter painter(paintDevice);
 
     painter.setGradient(gradient);
+    painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
     painter.paintGradient(gradientRect.topLeft(),
                           gradientRect.bottomRight(),
-                          KisGradientPainter::GradientShapeLinear,
                           KisGradientPainter::GradientRepeatNone,
                           0.2, false,
                           gradientRect.left(), gradientRect.top(),

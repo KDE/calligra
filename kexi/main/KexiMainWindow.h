@@ -55,16 +55,13 @@ class KexiMainWindowTabWidget : public KTabWidget
 public:
     KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
     virtual ~KexiMainWindowTabWidget();
-public slots:
+public Q_SLOTS:
     void closeTab();
     tristate closeAllTabs();
 
 protected:
     //! Implemented to add context menu
     void contextMenu(int index, const QPoint& point);
-
-    //! Implemented to update main window on creation of the first tab
-    virtual void tabInserted(int index);
 
     //! Reimplemented to hide frame when no tabs are displayed
     virtual void paintEvent(QPaintEvent * event);
@@ -100,25 +97,6 @@ public:
     virtual QWidget* focusWidget() const {
         return KexiMainWindowSuper::focusWidget();
     }
-
-//! @todo virtual void plugActionList(const QString& name,
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {
-        Q_UNUSED(name)
-        Q_UNUSED(actionList)
-    }
-
-//! @todo KXMLGUIClient* guiClient() const;
-    virtual KXMLGUIClient* guiClient() const;
-
-//! @todo virtual void unplugActionList (const QString &name);
-    virtual void unplugActionList(const QString &name) {
-        Q_UNUSED(name)
-    }
-
-    //! Implemented by KMainWindow
-//! @todo virtual KXMLGUIFactory * KMainWindow::guiFactory();
-    virtual KXMLGUIFactory* guiFactory();
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
@@ -156,7 +134,7 @@ public:
     /*! \return currently active window or 0 if there is no active window.
      Implemented for KexiWindow. */
     virtual KexiWindow* currentWindow() const;
-    
+
     /*! @return window for tab @a tabIndex or 0 if there is no such tab. */
     KexiWindow* windowForTab(int tabIndex) const;
 
@@ -175,14 +153,19 @@ public:
     // see KexiMainWindowIface
     virtual KToolBar *toolBar(const QString& name) const;
 
-    //! Shows design tab when switching between objects or views.
-    void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
+    //! Shows design tab @a tabName again and activates it as current if it was hidden
+    //! before for the same object.
+    void restoreDesignTabAndActivateIfNeeded(const QString &tabName);
 
-    //! Sets currently visible tab when switching to design view, according to object type opened.
-    virtual void setDesignTabIfNeeded(const QString &partClass);
+    //! Shows design tab again when switching between objects or views.
+    void restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode, int previousItemId);
 
-    //! Hides tabs when they are closed (depending on class)
-    virtual void closeTab(const QString &partClass);
+    //! Sets currently visible design tab when switching to design view, according to object type opened.
+    virtual void activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode);
+
+    //! Hides design tabs when they are closed (depending on class @a partClass).
+    //! If @a partClass is empty, all tabs get hidden.
+    virtual void hideDesignTab(int itemId, const QString &partClass = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
@@ -190,7 +173,7 @@ public:
     /*! Implemented for KexiMainWindow */
     virtual KexiMigrateManagerInterface* migrateManager();
 
-public slots:
+public Q_SLOTS:
     /*! Implemented for KexiMainWindow */
     virtual tristate closeWindow(KexiWindow *window);
 
@@ -238,7 +221,14 @@ public slots:
                                 SaveObjectOptions options = 0);
 
     /*! Implemented for KexiMainWindowIface. */
+    virtual KexiWindow *openedWindowFor(int identifier);
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
+
+    /*! Implemented for KexiMainWindowIface */
+    virtual QList<QVariant> currentParametersForQuery(int queryId) const;
+
+    /*! Implemented for KexiMainWindowIface. */
+    virtual KexiDB::QuerySchema *unsavedQuery(int queryId);
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
@@ -284,7 +274,7 @@ public slots:
 
     /*! Opens project referenced by @a data.
      If @a shortcutPath is a empty .kexis filename and there is another project opened,
-     a new instance of Kexi is started with the .kexis file as argument. 
+     a new instance of Kexi is started with the .kexis file as argument.
      Value pointed by @a opened is set to true if the database has been opened successfully.
      @return true on successful opening, cancelled if the operation was cancelled
      and false on failure.*/
@@ -318,15 +308,20 @@ public slots:
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. @see KexiMainWindowIface */
     virtual void addSearchableModel(KexiSearchableModel *model);
 
-    //! Shows Context sensitive ToolTab when changing current Object Tab
-    void showTabIfNeeded();
+    //! Shows design tab when switching between objects or views. Depends on current window and view mode.
+    void showDesignTabIfNeeded(int previousItemId);
 
     void toggleFullScreen(bool isFullScreen);
-signals:
+
+    /*! Implemented for KexiMainWindowIface.
+     Sets reasonable dialog size based on main window size, that is 80% of its size. */
+    virtual void setReasonableDialogSize(QDialog *dialog);
+
+Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
     void acceptProjectClosingRequested(bool& cancel);
@@ -344,12 +339,6 @@ signals:
 protected:
     /*! Setups main widget */
     void setupMainWidget();
-
-    /*! Setups the User Mode: constructs window according to kexi__final database
-     and loads the specified part.
-     \return true on success or false if e.g. kexi__final does not exist
-     or a fatal exception happened */
-    bool setupUserMode(KexiProjectData *projectData);
 
     /*! Creates the Project Navigator (if it's not yet created),
      lookups items for current project and fills the nav. with not-opened items */
@@ -420,11 +409,6 @@ protected:
      Switches \a window to view \a mode. Activates the window if it is not the current window. */
     virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
 
-    /*! Helper. Removes and/or adds GUI client for current window's view;
-     on switching to other window (activeWindowChanged())
-     or on switching to other view within the same window (switchToViewMode()). */
-    void updateWindowViewGUIClient(KXMLGUIClient *viewClient);
-
     /*! Helper. Updates setup of property panel's tabs. Used when switching
      from \a prevWindow window to a current window. */
     void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, Kexi::ViewMode prevViewMode);
@@ -450,8 +434,11 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
-protected slots:
-    tristate createNewProject(KexiProjectData* projectData);
+    //! Activates design tab when switching to design view, according to \a partClass.
+    void activateDesignTab(const QString &partClass);
+
+protected Q_SLOTS:
+    tristate createNewProject(const KexiProjectData &projectData);
 
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
@@ -461,8 +448,8 @@ protected slots:
 
     void slotPartLoaded(KexiPart::Part* p);
 
-    //! internal - creates and initializes kexi project
-    void createKexiProject(const KexiProjectData& new_data);
+    //! Internal - creates and initializes Kexi project object based on @a data.
+    KexiProject* createKexiProjectObject(const KexiProjectData &data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.
@@ -562,13 +549,8 @@ protected slots:
 
     /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
-
+    void slotReportBug();
     void slotTipOfTheDay();
-
-    //! Shows 'important info' dialog, is \a onStartup is false, it's always shown
-    void importantInfo(bool onStartup);
-    void slotImportantInfo(); //!< just importantInfo(false);
-    void slotStartFeedbackAgent();
     void slotImportFile();
     void slotImportServer();
 
@@ -578,7 +560,7 @@ protected slots:
     virtual void acceptPropertySetEditing();
 
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, 
+                                     bool preservePrevSelection = true,
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray());
 
@@ -604,6 +586,16 @@ protected slots:
 
     //! Shows "copy special as data table" dialog for \a item.
     tristate copyItemToClipboardAsDataTable(KexiPart::Item* item);
+
+    bool checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args);
+
+    /*! Shows a question message
+     * "Design of query %1 that you want to export data from is changed and has not yet been saved.
+     * Do you want to use data from the changed query for exporting or from its original (saved) version?"
+    \return true if the user picked the first option,
+     * false if the user picked the second option and cancelled value if user cancelled the export.
+     */
+    tristate askOnExportingChangedQuery(KexiPart::Item* item) const;
 
     //! Shows "print" dialog for \a item.
     //! \return true on success.

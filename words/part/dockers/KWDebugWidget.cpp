@@ -22,6 +22,14 @@
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
+#include <KoTextDocument.h>
+#include <KoSectionManager.h>
+#include <KoDocumentRdf.h>
+#include <KoElementReference.h>
+#include <KoShapeController.h>
+#include <KoRdfPrefixMapping.h>
+#include <KoTextInlineRdf.h>
+#include <KoSectionUtils.h>
 
 #include <QHBoxLayout>
 #include <QTimer>
@@ -44,12 +52,22 @@ void KWDebugWidget::initUi()
 {
     m_label = new QLabel(this);
     m_label->setText("Some debug info will be here."); // No i18n as it's for debug only.
+
+    m_buttonSet = new QPushButton(this);
+    m_buttonSet->setText("Set"); // No i18n as it's for debug only.
+    connect(m_buttonSet, SIGNAL(clicked(bool)), this, SLOT(doSetMagic()));
+
+    m_buttonGet = new QPushButton(this);
+    m_buttonGet->setText("Get"); // No i18n as it's for debug only.
+    connect(m_buttonGet, SIGNAL(clicked(bool)), this, SLOT(doGetMagic()));
 }
 
 void KWDebugWidget::initLayout()
 {
-    QHBoxLayout *mainBox = new QHBoxLayout(this);
+    QVBoxLayout *mainBox = new QVBoxLayout(this);
     mainBox->addWidget(m_label);
+    mainBox->addWidget(m_buttonSet);
+    mainBox->addWidget(m_buttonGet);
 
     setLayout(mainBox);
 }
@@ -61,38 +79,30 @@ void KWDebugWidget::updateData()
         return;
     }
 
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    if (!editor) {
+    KoTextEditor *editor = 0;
+    if (m_canvas) {
+        editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+        if (!editor) {
+            return;
+        }
+    } else {
         return;
     }
 
     QTextBlock curBlock = editor->block();
     QTextBlockFormat fmt = curBlock.blockFormat();
 
-    QString willShow;
-    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-        willShow = "This sections starts here :";
-        QVariant var = fmt.property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> openList = var.value< QList<QVariant> >();
-        foreach (const QVariant &sv, openList)
-        {
-            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-            willShow += sec->name() + " ";
-        }
-        willShow.append("\n");
+    QString willShow = "This sections starts here :";
+    foreach (const KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
+        willShow += " \"" + sec->name() + "\"";
     }
+    willShow.append("\n");
 
-    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-        willShow += "This sections end here :";
-        QVariant var = fmt.property(KoParagraphStyle::SectionEndings);
-        QList<QVariant> closeList = var.value< QList<QVariant> >();
-        foreach (const QVariant &sv, closeList)
-        {
-            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-            willShow += sec->name() + " ";
-        }
-        willShow.append("\n");
+    willShow += "This sections end here :";
+    foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
+        willShow += " \"" + sec->name() + "\"";
     }
+    willShow.append("\n");
 
     willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber()) + "\n";
     willShow += "cur pos " + QString::number(editor->constCursor().position()) + "\n";
@@ -109,4 +119,115 @@ void KWDebugWidget::setCanvas(KWCanvas* canvas)
 
 void KWDebugWidget::unsetCanvas()
 {
+}
+
+void KWDebugWidget::doSetMagic()
+{
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    if (!editor) {
+        return;
+    }
+
+    QTextDocument *doc = editor->document();
+    KoSectionManager *manager = KoTextDocument(doc).sectionManager();
+
+    int pos = editor->position();
+
+    KoSection *sec = manager->sectionAtPosition(pos);
+
+    if (!sec) {
+        return;
+    }
+
+    KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
+    if (!kwdoc) {
+        return;
+    }
+
+    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
+    if (!rdf) {
+        return;
+    }
+//     KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(doc, sec);
+//     sec->setInlineRdf(inlineRdf);
+
+//     rdf->rememberNewInlineRdfObject(inlineRdf);
+
+    Soprano::Node sectionNode = Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE"));
+
+    rdf->prefixMapping()->insert("cau", "http://www.caligra.org/author#");
+
+    qDebug() << rdf->model()->addStatement(
+        sectionNode,
+        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
+        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("cau:Section")),
+        rdf->manifestRdfNode());
+
+//     qDebug() << rdf->model()->addStatement(
+//         sectionNode,
+//         Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:idref")),
+//         Soprano::Node::createLiteralNode(inlineRdf->xmlId()),
+//         rdf->manifestRdfNode());
+
+    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
+
+    qDebug() << rdf->model()->addStatement(
+        sectionNode,
+        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
+        Soprano::Node::createLiteralNode("Some TEST descr"),
+        authorContext);
+
+    Soprano::Node authorRdfFileNode = Soprano::Node::createBlankNode("CAU_META_DATA_FILE");
+    qDebug() << rdf->model()->addStatement(
+        authorRdfFileNode,
+        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
+        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
+        rdf->manifestRdfNode());
+
+    qDebug() << rdf->model()->addStatement(
+        authorRdfFileNode,
+        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
+        Soprano::Node::createLiteralNode("author.rdf"),
+        rdf->manifestRdfNode());
+}
+
+void KWDebugWidget::doGetMagic()
+{
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    if (!editor) {
+        return;
+    }
+
+    QTextDocument *doc = editor->document();
+    KoSectionManager *manager = KoTextDocument(doc).sectionManager();
+
+    int pos = editor->position();
+
+    KoSection *sec = manager->sectionAtPosition(pos);
+
+    if (!sec) {
+        return;
+    }
+
+    KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
+    if (!kwdoc) {
+        return;
+    }
+
+    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
+    if (!rdf) {
+        return;
+    }
+
+//     KoTextInlineRdf *inlineRdf = sec->inlineRdf();
+
+    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
+
+    Soprano::StatementIterator it = rdf->model()->listStatements(
+        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE")),
+        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
+        Soprano::Node::createEmptyNode(),
+        authorContext);
+
+    m_buttonGet->setText(it.current().object().toString());
 }

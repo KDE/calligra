@@ -29,7 +29,7 @@
 class TestPageManager : public QObject
 {
     Q_OBJECT
-private slots: // tests
+private Q_SLOTS: // tests
     void init();
     void getAddPages();
     void getAddPages2();

@@ -25,8 +25,6 @@
 #include <QPainterPath>
 #include <QRect>
 
-#include <ksharedconfig.h>
-
 #include <KoProperties.h>
 
 #include "kis_global.h"
@@ -39,6 +37,8 @@
 
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
+
+#include "kis_abstract_projection_plane.h"
 
 
 /**
@@ -188,7 +188,8 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    m_d->nodeProgressProxy->deleteLater();
+    if (m_d->nodeProgressProxy)
+        m_d->nodeProgressProxy->deleteLater();
 
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
@@ -214,6 +215,15 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     return rect;
+}
+
+KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
+{
+    KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
+    static KisAbstractProjectionPlaneSP plane = 
+        toQShared(new KisDumbProjectionPlane());
+
+    return plane;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)
@@ -415,14 +425,12 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
 
-        newNode->prepareForAddition();
         newNode->createNodeProgressProxy();
 
         m_d->nodes.insert(idx, newNode);
 
         newNode->setParent(this);
         newNode->setGraphListener(m_d->graphListener);
-        newNode->initAfterAddition();
     }
 
     if (m_d->graphListener) {
@@ -445,7 +453,6 @@ bool KisNode::remove(quint32 index)
         {
             QWriteLocker l(&m_d->nodeSubgraphLock);
 
-            removedNode->prepareForRemoval();
             removedNode->setGraphListener(0);
 
             removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest

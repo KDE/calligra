@@ -30,6 +30,7 @@
 
 #include <kdebug.h>
 #include <knumvalidator.h>
+#include <kglobal.h>
 
 #include <math.h>
 #include <limits.h>

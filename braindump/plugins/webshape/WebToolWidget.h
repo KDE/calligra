@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _WEBTOOLWIDGET_H_
+#define _WEBTOOLWIDGET_H_
 
 #include <QWidget>
 
@@ -31,7 +33,7 @@ class WebToolWidget : public QWidget
     Q_OBJECT
 public:
     explicit WebToolWidget(WebTool* _tool);
-public slots:
+public Q_SLOTS:
     void open(WebShape *shape);
     void save();
 private:
@@ -45,3 +47,5 @@ private:
     WebShape *m_shape;
     Ui::WebShapeConfigWidget m_widget;
 };
+
+#endif

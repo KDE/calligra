@@ -37,9 +37,6 @@
 #include <KoProperties.h>
 
 #include <kdebug.h>
-#include <ksharedconfig.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
 
 #include <QPainter>
 #include <QDragEnterEvent>
@@ -56,7 +53,6 @@ Viewport::Viewport(KoCanvasControllerWidget *parent)
         , m_documentOffset(QPoint(0, 0))
         , m_margin(0)
 {
-    setBackgroundRole(QPalette::Dark);
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setMouseTracking(true);

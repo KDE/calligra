@@ -40,10 +40,10 @@
 #include "kis_favorite_resource_manager.h"
 
 #include "kis_config.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 
-KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
+KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view)
     , m_displayProfile(0)
 {
@@ -126,19 +126,28 @@ void KisCanvasResourceProvider::setHDRGamma(float gamma)
 
 KoPattern * KisCanvasResourceProvider::currentPattern() const
 {
-    return static_cast<KoPattern*>(m_resourceManager->resource(CurrentPattern).value<void *>());
+    if (m_resourceManager->hasResource(CurrentPattern)) {
+        return m_resourceManager->resource(CurrentPattern).value<KoPattern*>();
+    }
+    else {
+        return 0;
+    }
 }
 
 KisFilterConfiguration * KisCanvasResourceProvider::currentGeneratorConfiguration() const
 {
-    return static_cast<KisFilterConfiguration*>(m_resourceManager->
-            resource(CurrentGeneratorConfiguration).value<void *>());
+    return m_resourceManager->resource(CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 }
 
 
 KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 {
-    return static_cast<KoAbstractGradient*>(m_resourceManager->resource(CurrentGradient).value<void *>());
+    if (m_resourceManager->hasResource(CurrentGradient)) {
+        return m_resourceManager->resource(CurrentGradient).value<KoAbstractGradient*>();
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -205,12 +214,11 @@ void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetS
     m_resourceManager->setResource(PreviousPaintOpPreset, v);
 }
 
-
-
 void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 {
-    KoPattern * pattern = dynamic_cast<KoPattern*>(res);
-    QVariant v = qVariantFromValue((void *) pattern);
+    KoPattern *pattern = dynamic_cast<KoPattern*>(res);
+    QVariant v;
+    v.setValue<KoPattern*>(pattern);
     m_resourceManager->setResource(CurrentPattern, v);
     emit sigPatternChanged(pattern);
 }
@@ -218,7 +226,8 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 void KisCanvasResourceProvider::slotGeneratorConfigurationActivated(KisFilterConfiguration * res)
 {
     KisFilterConfiguration * generatorConfiguration = dynamic_cast<KisFilterConfiguration*>(res);
-    QVariant v = qVariantFromValue((void *) generatorConfiguration);
+    QVariant v;
+    v.setValue<KisFilterConfiguration*>(generatorConfiguration);
     m_resourceManager->setResource(CurrentGeneratorConfiguration, v);
 }
 
@@ -226,7 +235,8 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 {
 
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(res);
-    QVariant v = qVariantFromValue((void *) gradient);
+    QVariant v;
+    v.setValue<KoAbstractGradient*>(gradient);
     m_resourceManager->setResource(CurrentGradient, v);
     emit sigGradientChanged(gradient);
 }
@@ -263,7 +273,7 @@ void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
 void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 {
     QVariant v;
-    v.setValue(node);
+    v.setValue(KisNodeWSP(node));
     m_resourceManager->setResource(CurrentKritaNode, v);
     emit sigNodeChanged(currentNode());
 }
@@ -374,7 +384,7 @@ void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
     m_enablefGChange = b;
 }
 
-QList<KisAbstractPerspectiveGrid*> KisCanvasResourceProvider::perspectiveGrids() const
+QList<QPointer<KisAbstractPerspectiveGrid> > KisCanvasResourceProvider::perspectiveGrids() const
 {
     return m_perspectiveGrids;
 }

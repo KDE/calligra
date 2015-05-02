@@ -21,8 +21,6 @@
 
 #include <QMimeData>
 
-#include <kundo2stack.h>
-
 #include <KoShapeRenameCommand.h>
 
 #include "RootSection.h"

@@ -26,7 +26,6 @@
 #include <KoIcon.h>
 
 #include <kdatepicker.h>
-#include <kdatewidget.h>
 #include <kdebug.h>
 
 #include <QPushButton>

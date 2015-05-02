@@ -35,8 +35,6 @@
 #include <QRect>
 #include <QString>
 
-#include <kglobalsettings.h>
-
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 #include <KoGenStyle.h>
@@ -49,12 +47,8 @@
 class QDomDocument;
 class QPainter;
 
-class KoGenStyles;
-class KoOasisSettings;
-class KoDocumentResourceManager;
 class KoStore;
 class KoXmlWriter;
-class KoView;
 class KoPart;
 
 namespace Calligra
@@ -65,9 +59,6 @@ class Sheet;
 class Doc;
 class View;
 class Map;
-class Region;
-class UndoAction;
-class SheetAccessModel;
 
 /**
  * This class holds the data that makes up a spreadsheet.

@@ -41,7 +41,7 @@ public:
     // to make sure all parameters are uptodate
     void emitAll();
 
-signals:
+Q_SIGNALS:
     // all the following signals emit user friendly values, not the internal
     // values which are instead computed directly by KarbonCalligraphyTool
     void usePathChanged(bool);
@@ -55,14 +55,14 @@ signals:
     void massChanged(double);
     void dragChanged(double);
 
-public slots:
+public Q_SLOTS:
     // needed for the shortcuts
     void increaseWidth();
     void decreaseWidth();
     void increaseAngle();
     void decreaseAngle();
 
-private slots:
+private Q_SLOTS:
     void loadProfile(const QString &name);
     void toggleUseAngle(bool checked);
     void updateCurrentProfile();

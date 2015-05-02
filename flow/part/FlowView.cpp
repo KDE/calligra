@@ -22,12 +22,10 @@
 #include "FlowDocument.h"
 #include "FlowPart.h"
 
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 
 FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
   : KoPAView(part, document, KoPAView::NormalMode, parent), m_document(document)
@@ -60,6 +58,7 @@ void FlowView::initializeGUI()
 void FlowView::initializeActions()
 {
     actionCollection()->action("configure")->setText(i18n("Configure Flow..."));
+    actionCollection()->action("configure")->setMenuRole(QAction::PreferencesRole);
 }
 
 void FlowView::updateGui()

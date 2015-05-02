@@ -235,6 +235,8 @@ void TestFinancialFunctions::testCOUPNUM()
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 2 )", Value(20));     //
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 3 )", Value(20));     //
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 4 )", Value(20));     //
+    CHECK_EVAL_SHORT("COUPNUM( \"2004-01-01\"; \"2004-04-30\"; 12; 1 )", Value(4));     // Monthly, to end of month with less daysInMonth
+    CHECK_EVAL_SHORT("COUPNUM( \"2004-01-01\"; \"2004-05-01\"; 12; 1 )", Value(4));     // Monthly, to begin of month
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM(\"2004-01-01\";\"2007-01-01\";1;1)", Value(3));
 }

@@ -81,13 +81,19 @@ public:
 
     QString serverType() const;
 
-signals:
+Q_SIGNALS:
     /// XXX: not sure if this is the best place for these
     void tagBoxEntryModified();
     void tagBoxEntryAdded(const QString& tag);
     void tagBoxEntryRemoved(const QString& tag);
 
-private slots:
+    void beforeResourcesLayoutReset(KoResource *activateAfterReformat);
+    void afterResourcesLayoutReset();
+
+private:
+    void doSafeLayoutReset(KoResource *activateAfterReformat);
+
+private Q_SLOTS:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
     void resourceChanged(KoResource *resource);
@@ -98,6 +104,7 @@ private slots:
 private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;
     int m_columnCount;
+    QString m_currentTag;
 };
 
 #endif // KORESOURCEMODEL_H

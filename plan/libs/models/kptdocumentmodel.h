@@ -102,7 +102,7 @@ public:
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
 
-protected slots:
+protected Q_SLOTS:
     void slotDocumentChanged( Document* );
     void slotDocumentToBeInserted( Documents*, int row );
     void slotDocumentInserted( Document* );

@@ -24,7 +24,6 @@
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
-#include <knuminput.h>
 #include <QProgressBar>
 
 //! @short A db-aware Progress bar 
@@ -71,7 +70,7 @@ public:
 
     virtual void  setEnabled(bool enabled);
 
-public slots:
+public Q_SLOTS:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }

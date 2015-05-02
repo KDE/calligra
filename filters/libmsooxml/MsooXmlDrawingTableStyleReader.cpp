@@ -18,7 +18,8 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
-#include "MsooXmlThemesReader.h"
+#include "MsooXmlTheme.h"
+
 
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
@@ -32,8 +33,6 @@
 #include <MsooXmlRelationships.h>
 #include <MsooXmlImport.h>
 #include <MsooXmlUnits.h>
-
-#include <KoXmlWriter.h>
 
 #include <QString>
 

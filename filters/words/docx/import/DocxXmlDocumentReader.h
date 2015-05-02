@@ -21,15 +21,14 @@
  *
  */
 
-#ifndef DOCXXMLDOCREADER_H
-#define DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
+#define DOCXXMLDOCUMENTREADER_H
 
 #include <QBuffer>
 #include <QString>
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-
 #include <MsooXmlDrawingTableStyle.h>
 
 #include <KoXmlWriter.h>
@@ -89,6 +88,7 @@ protected:
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_ind();
     KoFilter::ConversionStatus read_outline();
+    KoFilter::ConversionStatus read_outlineLvl();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
     KoFilter::ConversionStatus read_control();
@@ -449,4 +449,4 @@ public:
 private:
 };
 
-#endif //DOCXXMLDOCREADER_H
+#endif //DOCXXMLDOCUMENTREADER_H

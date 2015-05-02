@@ -30,7 +30,6 @@ namespace KexiDB
     class TableOrQuerySchema;
 }
 
-class KexiFieldListModelItem;
 
 //! Flags used to alter models behaviour and appearance
 enum KexiFieldListOption {

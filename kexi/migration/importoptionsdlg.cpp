@@ -28,12 +28,9 @@
 #include <QCheckBox>
 #include <QGridLayout>
 
-#include <kapplication.h>
 #include <kconfig.h>
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kcharsets.h>
 
 using namespace KexiMigration;
 
@@ -43,7 +40,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
-    setWindowTitle(i18n("Advanced Import Options"));
+    setWindowTitle(i18nc("@title:window", "Advanced Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setWindowIcon(koIcon("configure"));

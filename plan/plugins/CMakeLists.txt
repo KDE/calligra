@@ -1,6 +1,6 @@
 if(SHOULD_BUILD_FEATURE_SCRIPTING)
   add_subdirectory(scripting)
-endif(SHOULD_BUILD_FEATURE_SCRIPTING)
+endif()
 
 add_subdirectory(schedulers)
 

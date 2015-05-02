@@ -19,7 +19,7 @@
 
 #include "WebBrowserWidget.h"
 #include <QtWebKit>
-#include <QtWebKit/QWebHistory>
+#include <QWebHistory>
 #include <QWebView>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)

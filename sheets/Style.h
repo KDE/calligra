@@ -46,7 +46,6 @@ class CustomStyle;
 class SharedSubStyle;
 class Style;
 class StyleManager;
-class StyleManipulator;
 class SubStyle;
 class ValueParser;
 

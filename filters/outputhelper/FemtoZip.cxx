@@ -53,7 +53,7 @@
 // see http://www.w3.org/TR/PNG-CRCAppendix.html on info regarding CRC-32
 
 #ifdef FEMTOZIP_SMALLTABLE
-static unsigned long crc_table[16] =
+static const unsigned long crc_table[16] =
 {
 	0x00000000L, 0x1db71064L, 0x3b6e20c8L, 0x26d930acL,
 	0x76dc4190L, 0x6b6b51f4L, 0x4db26158L, 0x5005713cL,
@@ -61,7 +61,7 @@ static unsigned long crc_table[16] =
 	0x9b64c2b0L, 0x86d3d2d4L, 0xa00ae278L, 0xbdbdf21cL
 };
 #else
-static unsigned long crc_table[256] =
+static const unsigned long crc_table[256] =
 {
 	0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL,
 	0x076dc419L, 0x706af48fL, 0xe963a535L, 0x9e6495a3L,

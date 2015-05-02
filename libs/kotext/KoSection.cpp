@@ -5,7 +5,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,8 +20,6 @@
 
 #include "KoSection.h"
 
-#include "kdebug.h"
-
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoTextSharedLoadingData.h>
@@ -31,19 +29,26 @@
 #include <KoSectionManager.h>
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
+#include <KoTextInlineRdf.h>
+
+#include <KDebug>
+
+#include <QTextBlock>
 
 class KoSectionPrivate
 {
 public:
     explicit KoSectionPrivate(const QTextDocument *_document)
-        : manager(KoTextDocument(_document).sectionManager())
+        : document(_document)
+        , manager(KoTextDocument(_document).sectionManager())
         , sectionStyle(0)
-        , modelItem(0)
+        , inlineRdf(0)
     {
         Q_ASSERT(manager);
         name = manager->possibleNewName();
     }
 
+    const QTextDocument *document;
     KoSectionManager *manager;
 
     QString condition;
@@ -55,12 +60,11 @@ public:
     QString style_name;
     KoSectionStyle *sectionStyle;
 
-    KoElementReference ref;
-
     QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
     int level; //< level of the section in document, root sections have 0 level
     QPair<int, int> bounds; //< start and end position of section in QDocument
-    QStandardItem *modelItem;
+
+    KoTextInlineRdf *inlineRdf;
 };
 
 KoSection::KoSection(const QTextCursor &cursor)
@@ -96,7 +100,7 @@ int KoSection::level() const
     return d->level;
 }
 
-bool KoSection::setName(QString name)
+bool KoSection::setName(const QString &name)
 {
     Q_D(KoSection);
 
@@ -105,8 +109,8 @@ bool KoSection::setName(QString name)
     }
 
     if (d->manager->isValidNewName(name)) {
-        d->manager->sectionRenamed(d->name, name);
         d->name = name;
+        d->manager->invalidate();
         return true;
     }
     return false;
@@ -115,7 +119,6 @@ bool KoSection::setName(QString name)
 bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
 {
     Q_D(KoSection);
-    d->ref = d->ref.loadOdf(element);
     // check whether we really are a section
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
         // get all the attributes
@@ -140,6 +143,17 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
             d->sectionStyle = sharedData->sectionStyle(d->style_name, stylesDotXml);
         }
 
+        // lets handle associated xml:id
+        if (element.hasAttribute("id")) {
+            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
+            if (inlineRdf->loadOdf(element)) {
+                d->inlineRdf = inlineRdf;
+            } else {
+                delete inlineRdf;
+                inlineRdf = 0;
+            }
+        }
+
         return true;
     }
     return false;
@@ -160,8 +174,8 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     if (!d->protection_key_digest_algorithm.isEmpty()) writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 
-    if (d->ref.isValid()) {
-        d->ref.saveOdf(writer);
+    if (d->inlineRdf) {
+        d->inlineRdf->saveOdf(context, writer);
     }
 }
 
@@ -189,14 +203,14 @@ void KoSection::setLevel(int level)
     d->level = level;
 }
 
-QStandardItem *KoSection::modelItem()
+KoTextInlineRdf *KoSection::inlineRdf() const
 {
-    Q_D(KoSection);
-    return d->modelItem;
+    Q_D(const KoSection);
+    return d->inlineRdf;
 }
 
-void KoSection::setModelItem(QStandardItem *item)
+void KoSection::setInlineRdf(KoTextInlineRdf *inlineRdf)
 {
     Q_D(KoSection);
-    d->modelItem = item;
+    d->inlineRdf = inlineRdf;
 }

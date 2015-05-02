@@ -22,8 +22,6 @@
 
 #include <KoPAView.h>
 
-class KAction;
-
 class FlowDocument;
 class FlowPart;
 
@@ -38,7 +36,7 @@ class FlowView : public KoPAView
     /// Returns the document
     FlowDocument* document() const;
 
-  protected slots:
+  protected Q_SLOTS:
     /// Called when the doc emits updateGui
     void updateGui();
 

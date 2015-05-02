@@ -38,17 +38,13 @@
 
 #include "kis_brush.h"
 
-KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    {
+{
     Q_UNUSED(image)
     Q_ASSERT(settings);
 
-    if (!settings->node()) {
-        m_dev = 0;
-    } else {
-        m_dev = settings->node()->paintDevice();
-    }
+    m_dev = node ? node->paintDevice() : 0;
 
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
@@ -107,7 +103,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
-    return 0.5;
+    return KisSpacingInformation(0.5);
 }
 
 

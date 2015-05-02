@@ -27,15 +27,8 @@
 #include "kptdatetime.h"
 #include "kptproject.h"
 
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <ktextedit.h>
-#include <kcombobox.h>
-#include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kdatewidget.h>
 
-#include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>

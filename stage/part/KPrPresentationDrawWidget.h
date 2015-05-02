@@ -29,7 +29,6 @@
 #include <QVarLengthArray>
 
 class QAction;
-class KoPACanvas;
 
 struct Path
 {
@@ -57,7 +56,7 @@ public :
     /** Popup menu for colors and sizes */
     void contextMenuEvent( QContextMenuEvent * event );
 
-public slots:
+public Q_SLOTS:
     void updateColor( QAction * );
     void updateColor( const QString &color );
     void updateSize( QAction * );

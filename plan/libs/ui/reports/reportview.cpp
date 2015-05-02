@@ -57,14 +57,12 @@
 #include "KoDocument.h"
 #include "KoIcon.h"
 
-#include <ktabwidget.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
 #include <kfiledialog.h>

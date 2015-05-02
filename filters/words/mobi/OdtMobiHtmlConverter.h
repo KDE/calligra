@@ -30,7 +30,6 @@
 
 class QByteArray;
 class QSizeF;
-class QStringList;
 class KoXmlWriter;
 class KoStore;
 class FileCollector;
@@ -144,7 +143,7 @@ class OdtMobiHtmlConverter
     // Options for the conversion process
     // FIXME: This should go into an Options struct together with some
     //        others from FileConversion.h.
-    ConversionOptions  *m_options;
+    const ConversionOptions *m_options;
 
     QHash<QString, StyleInfo*> m_styles;
 

@@ -91,7 +91,7 @@ public:
 
     const QPixmap *pixmap() const;
 
-public slots:
+public Q_SLOTS:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
@@ -107,7 +107,7 @@ public slots:
 
     virtual void setFrameColor(const QColor& color);
 
-protected slots:
+protected Q_SLOTS:
     //! empty
     virtual void setReadOnly(bool readOnly);
 

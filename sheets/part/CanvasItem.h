@@ -43,25 +43,16 @@
 #include "Global.h"
 #include "CanvasBase.h"
 
-class QDragLeaveEvent;
-class QDragMoveEvent;
-class QDropEvent;
 class QEvent;
 class QFocusEvent;
 class QKeyEvent;
-class QMouseEvent;
 class QPainter;
-class QPaintEvent;
-class QPen;
-class QResizeEvent;
-class QScrollBar;
 
 namespace Calligra
 {
 namespace Sheets
 {
 class Cell;
-class CellEditor;
 class CanvasItem;
 class ColumnHeader;
 class Damage;

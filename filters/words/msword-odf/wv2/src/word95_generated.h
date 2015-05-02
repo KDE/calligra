@@ -37,7 +37,6 @@ namespace wvWare {
 
 class OLEStreamReader;
 class OLEStreamWriter;
-class StyleSheet;
 class Style;
 
 namespace Word95 {

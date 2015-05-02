@@ -42,7 +42,7 @@ public:
         return m_pagelayout;
     }
 
-public slots:
+public Q_SLOTS:
 
     /** Return the page orientation.
     *

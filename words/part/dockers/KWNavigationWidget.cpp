@@ -40,11 +40,10 @@ KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     , m_document(0)
     , m_canvas(0)
     , m_layout(0)
-    , m_updateTimer(0)
+    , m_updateTimer(new QTimer(this))
 {
     m_model = new QStandardItemModel(this);
 
-    m_updateTimer = new QTimer(this);
     m_updateTimer->setSingleShot(true);
 
     initUi();
@@ -160,13 +159,19 @@ void KWNavigationWidget::updateData()
 
 void KWNavigationWidget::setCanvas(KWCanvas* canvas)
 {
+    if (!canvas)
+        return;
     m_document = canvas->document();
     if (m_layout) {
         disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
     }
-    m_layout = qobject_cast<KoTextDocumentLayout *>(
-        m_document->mainFrameSet()->document()->documentLayout());
-    connect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+    if (m_document->mainFrameSet()) {
+        m_layout = qobject_cast<KoTextDocumentLayout *>(
+            m_document->mainFrameSet()->document()->documentLayout());
+        connect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+    } else {
+        m_layout = 0;
+    }
     m_canvas = canvas;
 }
 

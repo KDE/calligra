@@ -22,6 +22,7 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
+#include <QTransform>
 
 #include <KoShape.h>
 

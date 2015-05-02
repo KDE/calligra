@@ -58,7 +58,7 @@ public:
     KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
     virtual ~KexiDBParser();
 
-public slots:
+public Q_SLOTS:
 
     /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
     bool parse(const QString& sql);

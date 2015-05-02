@@ -32,13 +32,10 @@
 namespace KPlato
 {
 
-class View;
 class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
-class Node;
-class Resource;
 
 class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {
@@ -101,10 +98,10 @@ public:
     
     void setFlat( bool flat );
 
-signals:
+Q_SIGNALS:
     void scheduleManagerAdded( ScheduleManager* );
 
-protected slots:
+protected Q_SLOTS:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
 
@@ -193,7 +190,7 @@ public:
     
     QString identity( const QModelIndex &idx ) const;
 
-protected slots:
+protected Q_SLOTS:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
 

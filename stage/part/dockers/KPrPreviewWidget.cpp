@@ -23,7 +23,6 @@
 #include <QMouseEvent>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
-#include <KoPAMasterPage.h>
 #include <KoZoomHandler.h>
 
 #include "KPrPage.h"

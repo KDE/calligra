@@ -40,7 +40,7 @@ class KOODF2_EXPORT KoOdfStyleBase
         // ... more here
     };
 
-    KoOdfStyleBase(StyleType type);
+    explicit KoOdfStyleBase(StyleType type);
     virtual ~KoOdfStyleBase();
 
     StyleType type() const;

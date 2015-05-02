@@ -342,10 +342,10 @@ void KarbonCalligraphyTool::deactivate()
     }
 }
 
-QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
+QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
     fillWidget->setWindowTitle(i18n("Fill"));

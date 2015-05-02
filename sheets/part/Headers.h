@@ -33,7 +33,6 @@ namespace Sheets
 {
 class CanvasBase;
 class Selection;
-class View;
 
 /**
  * Base class for the widget above the cells showing the column headers.

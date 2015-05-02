@@ -94,10 +94,6 @@ static KCmdLineOptions kexi_options()
              "completely. A number of commands from the main\n"
              "menu is always visible. This option is useful\n"
              "in User Mode."))
-    .add("skip-startup-dialog", ki18n(
-             "Skip displaying startup dialog window.\n"
-             "If there is no project name specified to open,\n"
-             "an empty application window will appear."))
     .add(":", ki18n("Options related to opening objects within a project:"))
     .add("open [<object_type>:]<object_name>", ki18n(
              "\nOpen object of type 'object_type'\n"
@@ -176,10 +172,9 @@ static KCmdLineOptions kexi_options()
              "opening .kexic or .kexis shortcut files."))
     .add("f")
     .add("fullscreen", ki18n(
-             "Start fullscreen\n"
              "Start Kexi in full screen mode to occupy the\n"
              "whole screen area by hiding window decorations,\n"
-             "such as a title bar."))
+             "such as title bars."))
     .add("+[project-name]", ki18n(
              "Kexi database project filename,\n"
              "Kexi shortcut filename,\n"

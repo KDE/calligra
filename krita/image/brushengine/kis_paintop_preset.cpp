@@ -38,12 +38,18 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
+#include <KoStore.h>
+
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0)
-    {}
+        : settings(0),
+          dirtyPreset(false)
+    {
+    }
 
     KisPaintOpSettingsSP settings;
+    bool dirtyPreset;
+
 };
 
 
@@ -64,19 +70,32 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
-KisPaintOpPreset* KisPaintOpPreset::clone() const
+KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
-    KisPaintOpPreset * preset = new KisPaintOpPreset();
+    KisPaintOpPresetSP preset = new KisPaintOpPreset();
+
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
+    preset->setPresetDirty(isPresetDirty());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
+    preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
+
+    Q_ASSERT(preset->valid());
 
     return preset;
+}
+void KisPaintOpPreset::setPresetDirty(bool value)
+{
+    m_d->dirtyPreset = value;
+}
+bool KisPaintOpPreset::isPresetDirty() const
+{
+    return m_d->dirtyPreset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
@@ -96,11 +115,14 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
+    DirtyStateSaver dirtyStateSaver(this);
+
     if (settings) {
         m_d->settings = settings->clone();
-    }
-    else {
+        m_d->settings->setPreset(KisPaintOpPresetWSP(this));
+    } else {
         m_d->settings = 0;
+        m_d->settings->setPreset(0);
     }
     setValid(m_d->settings);
 }
@@ -122,27 +144,67 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
-    QFile file(filename());
+    QIODevice *dev = 0;
+    QByteArray ba;
 
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
+    if (filename().startsWith("bundle://")) {
+        qDebug() << "bundle";
+        QString bn = filename().mid(9);
+        QString fn = bn.mid(bn.indexOf(":") + 1);
+        bn = bn.left(bn.indexOf(":"));
+
+        QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+        if (!resourceStore || resourceStore->bad()) {
+            qWarning() << "Could not open store on bundle" << bn;
+            return false;
+        }
+
+        if (resourceStore->isOpen()) resourceStore->close();
+
+        if (!resourceStore->open(fn)) {
+            qWarning() << "Could not open preset" << fn << "in bundle" << bn;
+            return false;
+        }
+
+        ba = resourceStore->device()->readAll();
+        dev = new QBuffer(&ba);
+
+        resourceStore->close();
+    }
+    else {
+
+        dev = new QFile(filename());
+        if (dev->size() == 0)
+        {
+            delete dev;
+            return false;
+        }
+
+        if (!dev->open(QIODevice::ReadOnly)) {
+            warnKrita << "Can't open file " << filename();
+            delete dev;
+            return false;
+        }
     }
 
-    bool res = loadFromDevice(&file);
+    bool res = loadFromDevice(dev);
+    delete dev;
 
+    setValid(res);
+    setPresetDirty(false);
     return res;
+
 }
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
 {
+
     QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
 
-    dbgImage << version << preset;
+    dbgImage << version;
 
     if (version != "2.2") {
         return false;
@@ -200,6 +262,16 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
 
+    // sanitize the settings
+    bool hasTexture = m_d->settings->getBool("Texture/Pattern/Enabled");
+    if (!hasTexture) {
+        foreach(const QString & key, m_d->settings->getProperties().keys()) {
+            if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
+                m_d->settings->removeProperty(key);
+            }
+        }
+    }
+
     m_d->settings->toXML(doc, elt);
 }
 
@@ -228,8 +300,19 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         qWarning() << "Could not load settings for preset" << paintopid;
         return;
     }
+
     settings->fromXML(presetElt);
+    // sanitize the settings
+    bool hasTexture = settings->getBool("Texture/Pattern/Enabled");
+    if (!hasTexture) {
+        foreach(const QString & key, settings->getProperties().keys()) {
+            if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
+                settings->removeProperty(key);
+            }
+        }
+    }
     setSettings(settings);
+
 }
 
 QByteArray KisPaintOpPreset::generateMD5() const
@@ -264,11 +347,12 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     QImage img;
 
     if (image().isNull()) {
-        img = QImage(1,1, QImage::Format_RGB32);
-    }
-    else {
+        img = QImage(1, 1, QImage::Format_RGB32);
+    } else {
         img = image();
     }
+
+    m_d->dirtyPreset = false;
 
     return writer.write(img);
 

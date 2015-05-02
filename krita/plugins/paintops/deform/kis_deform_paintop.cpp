@@ -49,10 +49,11 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
+    Q_UNUSED(node);
     Q_ASSERT(settings);
 
     m_sizeProperties.readOptionSetting(settings);
@@ -96,8 +97,8 @@ KisDeformPaintOp::~KisDeformPaintOp()
 
 KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return m_spacing;
-    if (!m_dev) return m_spacing;
+    if (!painter()) return KisSpacingInformation(m_spacing);
+    if (!m_dev) return KisSpacingInformation(m_spacing);
 
     KisFixedPaintDeviceSP dab = cachedDab(source()->compositionSourceColorSpace());
 
@@ -138,7 +139,7 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     // this happens for the first dab of the move mode, we need more information for being able to move
     if (!mask) {
-        return m_spacing;
+        return KisSpacingInformation(m_spacing);
     }
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
@@ -146,13 +147,7 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
     painter()->setOpacity(origOpacity);
 
-    return m_spacing;
-}
-
-
-qreal KisDeformPaintOp::spacing(qreal /*pressure*/) const
-{
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }
 
 

@@ -444,7 +444,8 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
             if (d->caret.selectionEnd() <= table->lastPosition()) {
                 return;
             }
-        } if (subFrame) {
+        } else if (subFrame) {
+            recursivelyVisitSelection(subFrame->begin(), visitor);
         } else {
             // TODO build up the section stack
 
@@ -484,7 +485,7 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
-KoTextRangeManager *KoTextEditor::textRangeManager()
+KoTextRangeManager *KoTextEditor::textRangeManager() const
 {
     return KoTextDocument(d->document).textRangeManager();
 }
@@ -998,13 +999,7 @@ void KoTextEditor::insertTableRowAbove()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        int changeId = 0;
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Insert Row Above"));
-            changeId = changeTracker->getInsertChangeId(title, 0);
-        }
-        addCommand(new InsertTableRowCommand(this, table, false, changeId));
+        addCommand(new InsertTableRowCommand(this, table, false));
     }
 }
 
@@ -1016,13 +1011,7 @@ void KoTextEditor::insertTableRowBelow()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        int changeId = 0;
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Insert Row Above"));
-            changeId = changeTracker->getInsertChangeId(title, 0);
-        }
-        addCommand(new InsertTableRowCommand(this, table, true, changeId));
+        addCommand(new InsertTableRowCommand(this, table, true));
     }
 }
 
@@ -1034,13 +1023,7 @@ void KoTextEditor::insertTableColumnLeft()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        int changeId = 0;
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Insert Column Left"));
-            changeId = changeTracker->getInsertChangeId(title, 0);
-        }
-        addCommand(new InsertTableColumnCommand(this, table, false, changeId));
+        addCommand(new InsertTableColumnCommand(this, table, false));
     }
 }
 
@@ -1052,13 +1035,7 @@ void KoTextEditor::insertTableColumnRight()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        int changeId = 0;
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Insert Column Right"));
-            changeId = changeTracker->getInsertChangeId(title, 0);
-        }
-        addCommand(new InsertTableColumnCommand(this, table, true, changeId));
+        addCommand(new InsertTableColumnCommand(this, table, true));
     }
 }
 
@@ -1070,14 +1047,7 @@ void KoTextEditor::deleteTableColumn()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        int changeId = 0;
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Delete Column"));
-            changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
-        }
-
-        addCommand(new DeleteTableColumnCommand(this, table, changeId));
+        addCommand(new DeleteTableColumnCommand(this, table));
     }
 }
 
@@ -1089,13 +1059,7 @@ void KoTextEditor::deleteTableRow()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-        int changeId = 0;
-        if (changeTracker && changeTracker->recordChanges()) {
-            KUndo2MagicString title(kundo2_i18n("Delete Row"));
-            changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
-        }
-        addCommand(new DeleteTableRowCommand(this, table, changeId));
+        addCommand(new DeleteTableRowCommand(this, table));
     }
 }
 
@@ -1527,7 +1491,7 @@ void KoTextEditor::newSection()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::renameSection(KoSection* section, QString newName)
+void KoTextEditor::renameSection(KoSection* section, const QString &newName)
 {
     if (isEditProtected()) {
         return;

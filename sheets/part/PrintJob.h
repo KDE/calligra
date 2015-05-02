@@ -27,7 +27,6 @@ namespace Calligra
 namespace Sheets
 {
 class View;
-class SheetSelectPage;
 
 /**
  * Manages printing on the document level.

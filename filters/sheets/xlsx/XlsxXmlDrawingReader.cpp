@@ -28,7 +28,7 @@
 #include "XlsxXmlChartReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartOdfWriter.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -72,7 +72,7 @@ QString columnName2(uint column)
     QString s;
     unsigned digits = 1;
     unsigned offset = 0;
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, ++digits)
         offset += limit;
     for (unsigned col = column - offset; digits; --digits, col /= 26)
         s.prepend(QChar('A' + (col % 26)));
@@ -96,7 +96,7 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
             // nothing to do for us
         } break;
         case Chart: {
-            m_chart->m_chartExport->saveIndex(xmlWriter);
+            m_chart->m_chartWriter->saveIndex(xmlWriter);
         } break;
         case Diagram: {
             xmlWriter->startElement("draw:g");

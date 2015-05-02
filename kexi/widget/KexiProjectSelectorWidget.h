@@ -40,9 +40,9 @@ public:
     information about database driver and connection columns are added.
     \a prj_set may be NULL - you can assign a set later with setProjectSet().
     */
-    KexiProjectSelectorWidget(QWidget* parent = 0,
-                              KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
-                              bool showConnectionColumns = true);
+    explicit KexiProjectSelectorWidget(QWidget* parent = 0,
+                                       KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
+                                       bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorWidget();
 
@@ -70,11 +70,11 @@ public:
 
     QTreeWidget* list() const;
     
-signals:
+Q_SIGNALS:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
 
-protected slots:
+protected Q_SLOTS:
     void slotItemExecuted(QTreeWidgetItem*);
     void slotItemExecuted();
     void slotItemSelected();
@@ -93,14 +93,7 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    /*! Constructor 1, used for displaying recent projects list
-     Label "there are recently opened projects" is displayed automatically
-    */
-    KexiProjectSelectorDialog(QWidget *parent,
-                              KexiProjectSet* prj_set,
-                              bool showProjectNameColumn = true, bool showConnectionColumns = true);
-
-    /*! Constructor 2, used for displaying projects list for given connection
+    /*! Displays projects list for given connection
      Label "Select one of these existing projects on server" is displayed automatically
      You should test if project set was properly loaded using projectSet()->error().
     */
@@ -119,7 +112,7 @@ public:
 
     virtual void showEvent(QShowEvent * event);
 
-protected slots:
+protected Q_SLOTS:
     void slotProjectExecuted(KexiProjectData*);
     void slotProjectSelectionChanged(KexiProjectData*);
 

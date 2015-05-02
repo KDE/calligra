@@ -51,12 +51,12 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_image(image)
+    , m_node(node)
 {
-
     m_properties.fillProperties(settings);
     m_colorProperties.fillProperties(settings);
 
@@ -86,7 +86,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     time.start();
 #endif
 
-    if (!painter()) return m_spacing;
+    if (!painter()) return KisSpacingInformation(m_spacing);
     m_dab->clear();
 
     int gridWidth = m_properties.gridWidth * m_properties.scale;
@@ -113,7 +113,11 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     QRectF tile;
     KoColor color(painter()->paintColor());
-    KisCrossDeviceColorPicker colorPicker(m_settings->node()->paintDevice(), color);
+
+    KisCrossDeviceColorPicker *colorPicker = 0;
+    if (m_node) {
+        colorPicker = new KisCrossDeviceColorPicker(m_node->paintDevice(), color);
+    }
 
     qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
@@ -142,8 +146,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
             // do color transformation
             if (shouldColor) {
-                if (m_colorProperties.sampleInputColor) {
-                    colorPicker.pickOldColor(tile.center().x(), tile.center().y(), color.data());
+                if (colorPicker && m_colorProperties.sampleInputColor) {
+                    colorPicker->pickOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color
@@ -168,9 +172,10 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     params["h"] = (m_colorProperties.hue / 180.0) * drand48();
                     params["s"] = (m_colorProperties.saturation / 100.0) * drand48();
                     params["v"] = (m_colorProperties.value / 100.0) * drand48();
-
                     KoColorTransformation* transfo;
                     transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+                    transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
+                    transfo->setParameter(4, false);//sets the colorize to false.
                     transfo->transform(color.data(), color.data() , 1);
                 }
 
@@ -183,7 +188,6 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 if (!m_colorProperties.colorPerParticle) {
                     shouldColor = false;
                 }
-
                 m_painter->setPaintColor(color);
             }
 
@@ -215,6 +219,10 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 break;
             }
             }
+
+            if (m_colorProperties.colorPerParticle){
+                color=painter()->paintColor();//reset color//
+            }
         }
     }
 
@@ -222,6 +230,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
 
+    delete colorPicker;
 
 #ifdef BENCHMARK
     int msec = time.elapsed();
@@ -229,7 +238,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)

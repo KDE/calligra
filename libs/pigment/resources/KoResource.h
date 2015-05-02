@@ -5,7 +5,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -105,11 +105,8 @@ protected:
     /// call this when the contents of the resource change so the md5 needs to be recalculated
     void setMD5(const QByteArray &md5);
 
-private:
-    /// save the resource as XML to the given document with the given element as root
-    virtual void toXML(QDomDocument& doc, QDomElement& element) const;
-
-    Q_DISABLE_COPY(KoResource)
+protected:
+    KoResource(const KoResource &rhs);
 
 private:
     struct Private;

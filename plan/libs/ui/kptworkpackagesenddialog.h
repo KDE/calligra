@@ -22,15 +22,13 @@
 
 #include "kplatoui_export.h"
 
-#include <kpagedialog.h>
+#include <kdialog.h>
 
 
 namespace KPlato
 {
 
 class WorkPackageSendPanel;
-class Project;
-class Task;
 class Node;
 class ScheduleManager;
 

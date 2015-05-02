@@ -24,7 +24,6 @@
 
 #include <KoShapePainter.h>
 #include <KoShapeSavingContext.h>
-#include <KoShapeLayer.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
 #include <KoXmlWriter.h>
@@ -113,6 +112,7 @@ void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
 {
     Q_ASSERT(masterPage);
     m_masterPage = masterPage;
+    pageUpdated();
 }
 
 void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )

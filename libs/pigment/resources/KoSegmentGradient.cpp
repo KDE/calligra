@@ -8,7 +8,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QCryptographicHash>
 #include <QByteArray>
+#include <QBuffer>
+
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
@@ -59,6 +61,19 @@ KoSegmentGradient::~KoSegmentGradient()
         delete m_segments[i];
         m_segments[i] = 0;
     }
+}
+
+KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
+    : KoAbstractGradient(rhs)
+{
+    foreach(KoGradientSegment *segment, rhs.m_segments) {
+        pushSegment(new KoGradientSegment(*segment));
+    }
+}
+
+KoAbstractGradient* KoSegmentGradient::clone() const
+{
+    return new KoSegmentGradient(*this);
 }
 
 bool KoSegmentGradient::load()
@@ -260,15 +275,17 @@ QString KoSegmentGradient::defaultFileExtension() const
 
 QByteArray KoSegmentGradient::generateMD5() const
 {
-    QFile f(filename());
-    if (f.exists()) {
-        QByteArray ba = f.readAll();
-        if (!ba.isEmpty()) {
-            QCryptographicHash md5(QCryptographicHash::Md5);
-            md5.addData(ba);
-            return md5.result();
-        }
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    saveToDevice(&buffer);
+    QByteArray ba = buffer.buffer();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
     }
+
     return QByteArray();
 }
 
@@ -895,4 +912,9 @@ bool KoSegmentGradient::removeSegmentPossible() const
     if (m_segments.count() < 2)
         return false;
     return true;
+}
+
+const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
+{
+    return m_segments;
 }
