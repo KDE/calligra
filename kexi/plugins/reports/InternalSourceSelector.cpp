@@ -42,8 +42,8 @@ QStringList InternalSourceSelector::queryList()
     //Get the list of queries in the database
     QStringList qs;
     if (m_conn && m_conn->isConnected()) {
-        QList<int> tids = m_conn->tableIds();
         qs << "";
+        QList<int> tids = m_conn->tableIds();
         for (int i = 0; i < tids.size(); ++i) {
             KexiDB::TableSchema* tsc = m_conn->tableSchema(tids[i]);
             if (tsc)
@@ -51,7 +51,6 @@ QStringList InternalSourceSelector::queryList()
         }
         
         QList<int> qids = m_conn->queryIds();
-        qs << "";
         for (int i = 0; i < qids.size(); ++i) {
             KexiDB::QuerySchema* qsc = m_conn->querySchema(qids[i]);
             if (qsc)
