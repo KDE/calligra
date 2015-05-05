@@ -34,6 +34,7 @@ class KexiDBReportData : public KoReportData
 {
 public:
     KexiDBReportData(const QString &qstrSQL, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &qstrSQL, const QString& partClass, KexiDB::Connection *conn);
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;
@@ -66,6 +67,7 @@ private:
     Private * const d;
 
     bool getSchema();
+    bool getSchema(const QString& partClass);
 };
 
 #endif

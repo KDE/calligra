@@ -54,6 +54,15 @@ KexiDBReportData::KexiDBReportData (const QString &qstrSQL,
     getSchema();
 }
 
+KexiDBReportData::KexiDBReportData(const QString& qstrSQL,
+                                   const QString& partClass,
+                                   KexiDB::Connection* pDb)
+        : d(new Private(pDb))
+{
+    d->qstrQuery = qstrSQL;
+    getSchema(partClass);
+}
+
 void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
 {
     if (d->copySchema) {
@@ -158,6 +167,41 @@ bool KexiDBReportData::getSchema()
         return true;
     }
     return false;
+}
+
+bool KexiDBReportData::getSchema(const QString& partClass)
+{
+  if ( d->connection )
+  {
+      delete d->originalSchema;
+      d->originalSchema = 0;
+      delete d->copySchema;
+      d->copySchema = 0;
+
+      if ( partClass == "org.kexi-project.table" && d->connection->tableSchema ( d->qstrQuery ) )
+      {
+          kDebug() << d->qstrQuery <<  " is a table..";
+          d->originalSchema = new KexiDB::QuerySchema ( *(d->connection->tableSchema ( d->qstrQuery )) );
+      }
+      else if ( partClass == "org.kexi-project.query" && d->connection->querySchema ( d->qstrQuery ) )
+      {
+          kDebug() << d->qstrQuery <<  " is a query..";
+          d->connection->querySchema(d->qstrQuery)->debug();
+          d->originalSchema = new KexiDB::QuerySchema(*(d->connection->querySchema ( d->qstrQuery )));
+      }
+
+      if (d->originalSchema) {
+          kDebug() << "Original:" << d->connection->selectStatement(*d->originalSchema);
+          d->originalSchema->debug();
+
+          d->copySchema = new KexiDB::QuerySchema(*d->originalSchema);
+          d->copySchema->debug();
+          kDebug() << "Copy:" << d->connection->selectStatement(*d->copySchema);
+      }
+
+      return true;
+  }
+  return false;
 }
 
 QString KexiDBReportData::sourceName() const
