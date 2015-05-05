@@ -43,19 +43,25 @@ QStringList InternalSourceSelector::queryList()
     QStringList qs;
     if (m_conn && m_conn->isConnected()) {
         qs << "";
+        QStringList tempList;
         QList<int> tids = m_conn->tableIds();
         for (int i = 0; i < tids.size(); ++i) {
             KexiDB::TableSchema* tsc = m_conn->tableSchema(tids[i]);
             if (tsc)
-                qs << tsc->name();
+                tempList << tsc->name();
         }
+        tempList.sort();
+        qs.append(tempList);
+        tempList.clear();
         
         QList<int> qids = m_conn->queryIds();
         for (int i = 0; i < qids.size(); ++i) {
             KexiDB::QuerySchema* qsc = m_conn->querySchema(qids[i]);
             if (qsc)
-                qs << qsc->name();
+                tempList << qsc->name();
         }
+        tempList.sort();
+        qs.append(tempList);
     }
     
     return qs;
