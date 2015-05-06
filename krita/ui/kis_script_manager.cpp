@@ -46,9 +46,6 @@ KisScriptManager::KisScriptManager(KisViewManager *view)
     , d(new Private())
 {
     d->view = view;
-    d->actionCollection = view->actionCollection();
-    d->scriptMenu = new KActionMenu(i18n("Scripts"),this);
-    d->actionCollection->addAction("scripting", d->scriptMenu);
 }
 
 KisScriptManager::~KisScriptManager()
@@ -60,6 +57,8 @@ KisScriptManager::~KisScriptManager()
 void KisScriptManager::setup(KActionCollection * ac)
 {
     d->actionCollection = ac;
+    d->scriptMenu = new KActionMenu(i18n("Scripts"),this);
+    d->actionCollection->addAction("scripting", d->scriptMenu);
 }
 
 void KisScriptManager::updateGUI()
