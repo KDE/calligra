@@ -308,10 +308,6 @@ bool KexiDataSourceComboBox::isSelectionValid() const
 
 void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
 {
-    //if selected text is valid: no competition is required.
-    if (isSelectionValid())
-        return;
-
     //text is available: select item for this text:
     bool changed = false;
     if (text.isEmpty() && 0 != currentIndex()) {

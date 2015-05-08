@@ -18,6 +18,7 @@ set(kexihandler_report_SRCS
     kexidbreportdata.cpp
     kexisourceselector.cpp
     krscriptfunctions.cpp
+    InternalSourceSelector.cpp
 )
 
 if (KEXI_MOBILE)
@@ -43,7 +44,6 @@ target_link_libraries(kexihandler_report
     kexicore
     ${KOPROPERTY_LIBS}
     kexiguiutils
-    kexiextendedwidgets
     ${KDE4_KROSSCORE_LIBS}
 )
 

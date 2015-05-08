@@ -27,7 +27,6 @@
 #include <KoReportData.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
-#include <kexiproject.h>
 
 //! @todo rename to KexiReportDataSourcePage
 //! @todo use KexiPropertyPaneViewBase
@@ -35,7 +34,7 @@ class KexiSourceSelector : public QWidget
 {
     Q_OBJECT
 public:
-    KexiSourceSelector(QWidget* parent, KexiProject* project);
+    KexiSourceSelector(QWidget* parent, KexiDB::Connection* conn);
     ~KexiSourceSelector();
 
     KoReportData* sourceData();
