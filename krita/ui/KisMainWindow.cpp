@@ -309,6 +309,8 @@ KisMainWindow::KisMainWindow()
 
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
+
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
 
@@ -352,8 +354,6 @@ KisMainWindow::KisMainWindow()
     createActions();
 
     setAutoSaveSettings(KisFactory::componentName(), false);
-
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
 
     subWindowActivated();
     updateWindowMenu();
