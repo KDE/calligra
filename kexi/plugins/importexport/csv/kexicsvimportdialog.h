@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
@@ -67,6 +67,7 @@ class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiProject;
 class KexiCSVImportDialogModel;
+class KexiCSVImportDialogItemDelegate;
 class KexiFileWidget;
 class KexiCommandLinkButton;
 class KexiNameWidget;
@@ -123,6 +124,7 @@ private:
     QGridLayout* MyDialogLayout;
     QHBoxLayout* Layout1;
     KexiCSVImportDialogModel *m_table;
+    KexiCSVImportDialogItemDelegate *m_tableItemDelegate;
     QTableView *m_tableView;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     KexiCSVCommentWidget* m_commentWidget;
