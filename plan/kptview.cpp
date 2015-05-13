@@ -471,7 +471,7 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".plant",
                                         Factory::global(), getPart(), this);
 }
 
