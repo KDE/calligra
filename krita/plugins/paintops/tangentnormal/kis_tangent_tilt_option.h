@@ -30,6 +30,10 @@ const QString TANGENT_RED = "Tangent/swizzleRed";
 const QString TANGENT_GREEN = "Tangent/swizzleGreen";
 const QString TANGENT_BLUE = "Tangent/swizzleBlue";
 const QString TANGENT_TYPE = "Tangent/directionType";
+const QString TANGENT_EV_MIN = "Tangent/elevationMinimum";
+const QString TANGENT_EV_MAX = "Tangent/elevationMaximum";
+//const QString TANGENT_DIR_MIN = "Tangent/directionMinimum";
+//const QString TANGENT_DIR_MAX = "Tangent/directionMaximum";
 
 class KisPropertiesConfiguration;
 class KisPainter;
@@ -45,6 +49,10 @@ public:
     int greenChannel() const;
     int blueChannel() const;
     int directionType() const;
+    int elevationMin() const;
+    int elevationMax() const;
+    int directionMin() const;
+    int directionMax() const;
     /*This assigns the right axis to the component, based on index and maximum value*/
     void swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue);
     

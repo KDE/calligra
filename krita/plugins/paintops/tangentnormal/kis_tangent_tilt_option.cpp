@@ -42,6 +42,8 @@ KisTangentTiltOption::KisTangentTiltOption()
     m_options->comboRed->setCurrentIndex(0);
     m_options->comboGreen->setCurrentIndex(2);
     m_options->comboBlue->setCurrentIndex(4);
+    m_options->spinElevationMin->setValue(0);
+    m_options->spinElevationMax->setValue(360);
     //m_options->
     
     connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
@@ -52,6 +54,15 @@ KisTangentTiltOption::KisTangentTiltOption()
     connect(m_options->optionDirection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->optionRotation, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     
+    connect(m_options->spinElevationMin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->spinElevationMax, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    
+    //hiding these, they don't work.
+    m_options->spinDirectionMin->setVisible(false);
+    m_options->spinDirectionMax->setVisible(false);
+    m_options->L_direction->setVisible(false);
+    //connect(m_options->spinDirectionMin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    //connect(m_options->spinDirectionMax, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     //connect tangent tilt
     setConfigurationPage(m_options);
 
@@ -96,6 +107,26 @@ int KisTangentTiltOption::directionType() const
         
 }
 
+int KisTangentTiltOption::elevationMin() const
+{
+    return m_options->spinElevationMin->value(); 
+}
+
+int KisTangentTiltOption::elevationMax() const
+{
+    return m_options->spinElevationMax->value(); 
+}
+
+int KisTangentTiltOption::directionMin() const
+{
+    return m_options->spinDirectionMin->value(); 
+}
+
+int KisTangentTiltOption::directionMax() const
+{
+    return m_options->spinDirectionMax->value(); 
+}
+
 void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue)
 {
     switch(index) {
@@ -110,8 +141,7 @@ void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const ver
 
 void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint8 *g,quint8 *b)
 {
-    //formula based on http://nl.mathworks.com/help/matlab/ref/sph2cart.html
-    //and http://www.cerebralmeltdown.com/programming_projects/Altitude%20and%20Azimuth%20to%20Vector/index.html
+    //formula based on http://www.cerebralmeltdown.com/programming_projects/Altitude%20and%20Azimuth%20to%20Vector/index.html
     
     //TODO: Have these take higher bitspaces into account, including floating point.
     qreal halfvalue = 128;
@@ -135,8 +165,30 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     }
     direction = direction-info.canvasRotation()+threesixty;
 
-    //TODO:limit the direction/elevation
-
+    //limit the direction/elevation
+    
+    qreal elevationFull = 90-((90-elevationMax())+elevationMin());
+    if (elevationFull<0) {elevationFull = 10;}
+    if (elevation>elevationMax()) {
+        elevation=elevationMax();
+    }
+    elevation=elevation-elevationMin();
+    if (elevation<0) {elevation = 0;}
+    qreal elevationT = ((elevation/elevationFull)*90.0);
+    elevation = static_cast<int>(elevationT);
+    
+    /* this doesn't work...
+    qreal directionFull = 360-((360-directionMax())+directionMin());
+    if (directionFull<0) {directionFull = 10;}
+    if (direction>directionMax()) {
+        direction=directionMax();
+    }
+    direction=direction-directionMin();
+    if (direction<0) {direction = 0;}
+    qreal directionT = ((direction/directionFull)*360.0);
+    direction = static_cast<int>(directionT);
+    */
+    
     //convert to radians.
     //TODO: Convert this to kis_global's radian function.
     direction = direction*M_PI / 180.0;
@@ -164,16 +216,13 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
         vertical = halfvalue-(fabs(vertical)*halfvalue);
     }
     
-    depth = sin(elevation)*maxvalue;//zTilt*255;
+    depth = sin(elevation)*maxvalue;
     
-    //TODO: Allow for swizzle to decide this.(or something...)
     //assign right components to correct axes.
     swizzleAssign(horizontal, vertical, depth, r, redChannel(), maxvalue);
     swizzleAssign(horizontal, vertical, depth, g, greenChannel(), maxvalue);
     swizzleAssign(horizontal, vertical, depth, b, blueChannel(), maxvalue);
-    /**r = horizontal;
-    *g = vertical;
-    *b = depth;*/
+    
 }
 
 /*settings*/
@@ -183,13 +232,17 @@ void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfiguration* settin
     setting->setProperty(TANGENT_GREEN, greenChannel());
     setting->setProperty(TANGENT_BLUE, blueChannel());
     setting->setProperty(TANGENT_TYPE, directionType());
+    setting->setProperty(TANGENT_EV_MIN, elevationMin());
+    setting->setProperty(TANGENT_EV_MAX, elevationMax());
+    //setting->setProperty(TANGENT_DIR_MIN, directionMin());
+    //setting->setProperty(TANGENT_DIR_MAX, directionMax());
 }
 
 void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->comboRed->setCurrentIndex(setting->getInt(TANGENT_RED));
-    m_options->comboGreen->setCurrentIndex(setting->getInt(TANGENT_GREEN));
-    m_options->comboBlue->setCurrentIndex(setting->getInt(TANGENT_BLUE));
+    m_options->comboRed->setCurrentIndex(setting->getInt(TANGENT_RED, 0));
+    m_options->comboGreen->setCurrentIndex(setting->getInt(TANGENT_GREEN, 2));
+    m_options->comboBlue->setCurrentIndex(setting->getInt(TANGENT_BLUE, 4));
     
     if (setting->getInt(TANGENT_TYPE)== 0){
         m_options->optionTilt->setChecked(true);
@@ -200,4 +253,9 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
     else if (setting->getInt(TANGENT_TYPE)== 2) {
         m_options->optionRotation->setChecked(true);
     }
+    
+    m_options->spinElevationMin->setValue(setting->getInt(TANGENT_EV_MIN, 0));
+    m_options->spinElevationMax->setValue(setting->getInt(TANGENT_EV_MAX, 90));
+    //m_options->spinDirectionMin->setValue(setting->getInt(TANGENT_DIR_MIN, 0));
+    //m_options->spinDirectionMax->setValue(setting->getInt(TANGENT_DIR_MAX, 360));
 }

@@ -40,7 +40,7 @@ TangentNormalPaintOpPlugin::TangentNormalPaintOpPlugin(QObject* parent, const QV
     QObject(parent)
 {
     KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisTangentNormalPaintOp, KisBrushBasedPaintOpSettings, KisTangentNormalPaintOpSettingsWidget>(
-                                            "tangennormal", i18n("Tangent Normal"), KisPaintOpFactory::categoryStable(), "krita-tangetnormal.png",
+                                            "tangentnormal", i18n("Tangent Normal"), KisPaintOpFactory::categoryStable(), "krita-tangetnormal.png",
                                             QString(), QStringList(), 2)
                                        );
 }

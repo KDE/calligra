@@ -243,6 +243,69 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinElevationMin">
+          <property name="toolTip">
+           <string>Elevation substracted from min</string>
+          </property>
+          <property name="suffix">
+           <string>°</string>
+          </property>
+          <property name="maximum">
+           <number>90</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QSpinBox" name="spinElevationMax">
+          <property name="suffix">
+           <string>°</string>
+          </property>
+          <property name="maximum">
+           <number>90</number>
+          </property>
+          <property name="value">
+           <number>90</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="spinDirectionMin">
+          <property name="suffix">
+           <string>°</string>
+          </property>
+          <property name="maximum">
+           <number>360</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QSpinBox" name="spinDirectionMax">
+          <property name="suffix">
+           <string>°</string>
+          </property>
+          <property name="maximum">
+           <number>360</number>
+          </property>
+          <property name="value">
+           <number>360</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="L_elevation">
+          <property name="text">
+           <string>Elevation Limits</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="L_direction">
+          <property name="text">
+           <string>Direction Limits</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
