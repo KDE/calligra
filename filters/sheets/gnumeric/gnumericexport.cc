@@ -36,6 +36,7 @@
 
 // Calligra
 #include <KoDocumentInfo.h>
+#include <KoUnit.h>
 
 // Calligra::Sheets
 #include <sheets/ApplicationSettings.h>

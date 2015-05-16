@@ -32,6 +32,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoUnit.h>
 
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??

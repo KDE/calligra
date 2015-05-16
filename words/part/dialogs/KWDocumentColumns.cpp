@@ -21,6 +21,7 @@
 #include <KoPagePreviewWidget.h>
 
 #include <KoPageLayout.h>
+#include <KoUnit.h>
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
         : QWidget(parent)

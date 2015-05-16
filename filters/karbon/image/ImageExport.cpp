@@ -38,6 +38,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoZoomHandler.h>
+#include <KoUnit.h>
 
 #include <kpluginfactory.h>
 #include <kdialog.h>
