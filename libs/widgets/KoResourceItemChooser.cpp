@@ -56,6 +56,8 @@
 #include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceTaggingManager.h"
+#include "KoTagFilterWidget.h"
+#include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
 
 class KoResourceItemChooser::Private
@@ -97,7 +99,8 @@ public:
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
-    : QWidget( parent ), d( new Private() )
+    : QWidget( parent )
+    , d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
 

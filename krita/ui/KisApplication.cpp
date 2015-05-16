@@ -21,10 +21,6 @@
 
 #include "KisApplication.h"
 
-#ifndef QT_NO_DBUS
-#include <QtDBus>
-#endif
-
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
@@ -163,6 +159,7 @@ KisApplication::KisApplication(const QString &key)
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
+        setStyle("Breeze");
         setStyle("Oxygen");
     }
 
@@ -339,35 +336,37 @@ bool KisApplication::start()
             KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                QStringList paths;
+                QString templatePath;
                 if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                    paths << QString(args->url(argNumber).toLocalFile());
+                    templatePath = args->url(argNumber).toLocalFile();
                     kDebug(30003) << "using full path...";
                 }
                 else {
                     QString desktopName(args->arg(argNumber));
-                    QString appName = KGlobal::mainComponent().componentName();
+                    const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-                    paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                    QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                     if (paths.isEmpty()) {
-                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                        paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                     }
                     if (paths.isEmpty()) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
-                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1"));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1", desktopName));
                         delete mainWindow;
                         mainWindow = 0;
+                    } else {
+                        templatePath = paths.at(0);
                     }
                 }
 
-                if (!paths.isEmpty()) {
+                if (!templatePath.isEmpty()) {
                     KUrl templateBase;
-                    templateBase.setPath(paths[0]);
-                    KDesktopFile templateInfo(paths[0]);
+                    templateBase.setPath(templatePath);
+                    KDesktopFile templateInfo(templatePath);
 
                     QString templateName = templateInfo.readUrl();
                     KUrl templateURL;
@@ -579,40 +578,6 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     // all autosave files for our application
     autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
-
-    QStringList pids;
-    QString ourPid;
-    ourPid.setNum(qApp->applicationPid());
-
-#ifndef QT_NO_DBUS
-    // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
-    QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
-
-    foreach (const QString &name, reply.value()) {
-        if (name.contains("krita")) {
-            // we got another instance of ourselves running, let's get the pid
-            QString pid = name.split('-').last();
-            if (pid != ourPid) {
-                pids << pid;
-            }
-        }
-    }
-#endif
-
-    // remove the autosave files that are saved for other, open instances of ourselves.
-    foreach(const QString &autoSaveFileName, autoSaveFiles) {
-        if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
-            autoSaveFiles.removeAll(autoSaveFileName);
-            continue;
-        }
-        QStringList split = autoSaveFileName.split('-');
-        if (split.size() == 4) {
-            if (pids.contains(split[1])) {
-                // We've got an active, owned autosave file. Remove.
-                autoSaveFiles.removeAll(autoSaveFileName);
-            }
-        }
-    }
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {

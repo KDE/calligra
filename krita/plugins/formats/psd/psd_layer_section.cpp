@@ -24,6 +24,8 @@
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_effect_mask.h>
 
 #include "psd_header.h"
 #include "psd_utils.h"
@@ -106,26 +108,23 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             return false;
         }
 
-        if (nLayers < 0) {
-            hasTransparency = true; // first alpha channel is the alpha channel of the projection.
-            nLayers = -nLayers;
-        }
-        else {
-            hasTransparency = false;
-        }
-        dbgFile << "transparency" << hasTransparency;
+        hasTransparency = nLayers < 0; // first alpha channel is the alpha channel of the projection.
+        nLayers = qAbs(nLayers);
 
-        dbgFile << "Number of layers" << nLayers << "transparency" << hasTransparency;
+        dbgFile << "Number of layers:" << nLayers;
+        dbgFile << "Has separate projection transparency:" << hasTransparency;
 
         for (int i = 0; i < nLayers; ++i) {
 
             dbgFile << "Going to read layer" << i << "pos" << io->pos();
+            dbgFile << "== Enter PSDLayerRecord";
             PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                 return false;
             }
-            dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
+            dbgFile << "== Leave PSDLayerRecord";
+            dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode"
                     << layerRecord->blendModeKey << io->pos()
                     << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
             layers << layerRecord;
@@ -148,14 +147,7 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             quint64 channelStartPos = io->pos();
             dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
 
-            Q_ASSERT(j < layerRecord->channelInfoRecords.size());
-            if (j > layerRecord->channelInfoRecords.size()) {
-                error = QString("Expected channel %1, but only have %2 channels for layer %3")
-                        .arg(j)
-                        .arg(layerRecord->channelInfoRecords.size())
-                        .arg(i);
-                return false;
-            }
+            KIS_ASSERT_RECOVER(j < layerRecord->channelInfoRecords.size()) { return false; }
 
             ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
@@ -167,9 +159,11 @@ bool PSDLayerMaskSection::read(QIODevice* io)
             channelInfo->compressionType = (Compression::CompressionType)compressionType;
             dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
 
+            QRect channelRect = layerRecord->channelRect(channelInfo);
+
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
-                for(qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+                for(qint64 row = 0; row < channelRect.height(); ++row) {
 
                     //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 
@@ -253,18 +247,65 @@ bool PSDLayerMaskSection::read(QIODevice* io)
     return valid();
 }
 
-void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
+struct FlattenedNode {
+    FlattenedNode() : type(RASTER_LAYER) {}
+
+    KisNodeSP node;
+
+    enum Type {
+        RASTER_LAYER,
+        FOLDER_OPEN,
+        FOLDER_CLOSED,
+        SECTION_DIVIDER
+    };
+
+    Type type;
+};
+
+void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
 {
-    for (uint i = 0; i < node->childCount(); ++i) {
-        KisNodeSP child = node->at(i);
-        if (child->inherits("KisPaintLayer") || child->inherits("KisShapeLayer")) {
-            layers << child;
+    KisNodeSP child = node->firstChild();
+    while (child) {
+
+        bool isGroupLayer = child->inherits("KisGroupLayer");
+        bool isRasterLayer = child->inherits("KisPaintLayer") || child->inherits("KisShapeLayer");
+
+        if (isGroupLayer) {
+            {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::SECTION_DIVIDER;
+                nodes << item;
+            }
+
+            flattenNodes(child, nodes);
+
+            {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::FOLDER_OPEN;
+                nodes << item;
+            }
+        } else if (isRasterLayer) {
+            FlattenedNode item;
+            item.node = child;
+            item.type = FlattenedNode::RASTER_LAYER;
+            nodes << item;
         }
-        if (child->childCount() > 0) {
-            flattenLayers(child, layers);
-        }
+
+        child = child->nextSibling();
     }
-    dbgFile << layers.size();
+}
+
+KisNodeSP findOnlyTransparencyMask(KisNodeSP node)
+{
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    QList<KisEffectMaskSP> masks = layer->effectMasks();
+
+    if (masks.size() != 1) return 0;
+
+    KisEffectMaskSP onlyMask = masks.first();
+    return onlyMask->inherits("KisTransparencyMask") ? onlyMask : 0;
 }
 
 bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
@@ -272,8 +313,8 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
     dbgFile << "Writing layer layer section";
 
     // Build the whole layer structure
-    QList<KisNodeSP> nodes;
-    flattenLayers(rootLayer, nodes);
+    QList<FlattenedNode> nodes;
+    flattenNodes(rootLayer, nodes);
 
     if (nodes.isEmpty()) {
         error = "Could not find paint layers to save";
@@ -294,48 +335,96 @@ bool PSDLayerMaskSection::write(QIODevice* io, KisNodeSP rootLayer)
     psdwrite(io, (qint16)-nodes.size());
 
     // Layer records section
-    foreach(KisNodeSP node, nodes) {
+    foreach(const FlattenedNode &item, nodes) {
+        KisNodeSP node = item.node;
+
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
-        QRect rc = node->projection()->extent();
-        rc = rc.normalized();
-        Q_ASSERT(rc.width() >= 0);
-        Q_ASSERT(rc.height() >= 0);
+        KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node);
+        const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
 
-        // keep to the max of photoshop's capabilities
-        if (rc.width() > 30000) rc.setWidth(30000);
-        if (rc.height() > 30000) rc.setHeight(30000);
-        layerRecord->top = rc.y();
-        layerRecord->left = rc.x();
-        layerRecord->bottom = rc.y() + rc.height();
-        layerRecord->right = rc.x() + rc.width();
-        layerRecord->nChannels = node->projection()->colorSpace()->colorChannelCount();
+        const bool nodeVisible = node->visible();
+        const KoColorSpace *colorSpace = node->colorSpace();
+        const quint8 nodeOpacity = node->opacity();
+        const quint8 nodeClipping = 0;
+        const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+        const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
+        const QString nodeCompositeOp = node->compositeOpId();
 
-        // XXX: masks should be saved as channels as well, with id -2
+        const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer*>(node.data());
+        const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
+
+        bool nodeIrrelevant = false;
+        QString nodeName;
+        KisPaintDeviceSP layerContentDevice;
+        psd_section_type sectionType;
+
+        if (item.type == FlattenedNode::RASTER_LAYER) {
+            nodeIrrelevant = false;
+            nodeName = node->name();
+            layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+            sectionType = psd_other;
+        } else {
+            nodeIrrelevant = true;
+            nodeName = item.type == FlattenedNode::SECTION_DIVIDER ?
+                QString("</Layer group>") :
+                node->name();
+            layerContentDevice = 0;
+            sectionType =
+                item.type == FlattenedNode::SECTION_DIVIDER ? psd_bounding_divider :
+                item.type == FlattenedNode::FOLDER_OPEN ? psd_open_folder :
+                psd_closed_folder;
+        }
+
+
+        // === no access to node anymore
+
+        QRect layerRect;
+
+        if (layerContentDevice) {
+            QRect rc = layerContentDevice->extent();
+            rc = rc.normalized();
+
+            // keep to the max of photoshop's capabilities
+            if (rc.width() > 30000) rc.setWidth(30000);
+            if (rc.height() > 30000) rc.setHeight(30000);
+
+            layerRect = rc;
+        }
+
+        layerRecord->top = layerRect.y();
+        layerRecord->left = layerRect.x();
+        layerRecord->bottom = layerRect.y() + layerRect.height();
+        layerRecord->right = layerRect.x() + layerRect.width();
+
+        // colors + alpha channel
+        // note: transparency mask not included
+        layerRecord->nChannels = colorSpace->colorChannelCount() + 1;
+
         ChannelInfo *info = new ChannelInfo;
         info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
         layerRecord->channelInfoRecords << info;
 
         // the rest is in display order: rgb, cmyk, lab...
-        for (int i = 0; i < layerRecord->nChannels; ++i) {
+        for (int i = 0; i < (int)colorSpace->colorChannelCount(); ++i) {
             info = new ChannelInfo;
             info->channelId = i; // 0 for red, 1 = green, etc
             layerRecord->channelInfoRecords << info;
         }
-        layerRecord->nChannels++; // to compensate for the alpha channel at the start
 
-        layerRecord->blendModeKey = composite_op_to_psd_blendmode(node->compositeOpId());
-        layerRecord->opacity = node->opacity();
-        layerRecord->clipping = 0;
+        layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+        layerRecord->isPassThrough = nodeIsPassThrough;
+        layerRecord->opacity = nodeOpacity;
+        layerRecord->clipping = nodeClipping;
 
-        KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
-        layerRecord->transparencyProtected = (paintLayer && paintLayer->alphaLocked());
-        layerRecord->visible = node->visible();
+        layerRecord->transparencyProtected = alphaLocked;
+        layerRecord->visible = nodeVisible;
+        layerRecord->irrelevant = nodeIrrelevant;
 
-        layerRecord->layerName = node->name();
+        layerRecord->layerName = nodeName;
 
-        if (!layerRecord->write(io, node)) {
+        if (!layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType)) {
             error = layerRecord->error;
             return false;
         }

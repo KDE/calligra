@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ONLINEDOCUMENT_H
-#define ONLINEDOCUMENT_H
+#ifndef __KIS_OFFSET_KEEPER_H
+#define __KIS_OFFSET_KEEPER_H
 
-#include <plugin.h>
 
-class LoginWindow;
+#include <QDebug>
+#include <QIODevice>
 
-class OnlineDocument : public KoParts::Plugin
+/**
+ * Restore the offset of the io device on exit from the current
+ * namespace
+ */
+
+class KisOffsetKeeper
 {
-    Q_OBJECT
 public:
-    enum DocumentType {
-        WORDS,
-        STAGE,
-        SHEETS,
-        UNKNOWN
-    };
 
-    OnlineDocument(QObject *parent, const QVariantList &);
-    virtual ~OnlineDocument();
+    KisOffsetKeeper(QIODevice *device)
+        : m_device(device)
+    {
+        m_expectedPos = m_device->pos();
+    }
 
-private Q_SLOTS:
-    void slotOnlineDocument();
-    void receivedOnlineDocument(QString path);
+    ~KisOffsetKeeper() {
+        if (m_device->pos() != m_expectedPos) {
+            m_device->seek(m_expectedPos);
+        }
+    }
 
 private:
-    LoginWindow *m_login;
-    DocumentType m_type;
+    QIODevice *m_device;
+    qint64 m_expectedPos;
 };
 
-#endif
+#endif /* __KIS_OFFSET_KEEPER_H */

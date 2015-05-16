@@ -263,9 +263,13 @@ public:
     QStringList keys; // List of all the keys that we've seen
 
     QString unicodeLayerName;
+    KisPSDLayerStyleSP layerStyle;
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
+
+private:
+    void readImpl(QIODevice* io);
 
 };
 

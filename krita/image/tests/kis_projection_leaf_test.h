@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,36 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTLISTWINDOW_H
-#define DOCUMENTLISTWINDOW_H
+#ifndef __KIS_PROJECTION_LEAF_TEST_H
+#define __KIS_PROJECTION_LEAF_TEST_H
 
-#include <QDialog>
+#include <QtTest/QtTest>
 
-#include "ui_documentlist.h"
-
-class GoogleDocumentService;
-class GoogleDocument;
-class GoogleDocumentList;
-
-class DocumentListWindow : public QDialog
+class KisProjectionLeafTest : public QObject
 {
     Q_OBJECT
-
-public:
-    DocumentListWindow(GoogleDocumentService *service, GoogleDocumentList *gList);
-    ~DocumentListWindow();
-    QString currentDocument();
-
-public Q_SLOTS:
-    void hideDialog();
-
-private Q_SLOTS:
-    void getClickedDocument(const QModelIndex & index);
-    void fetchDocument();
-
-private:
-    Ui_ListDialog *m_docListDialog;
-    GoogleDocumentService *m_gService;
+private slots:
+    void test();
+    void testPassThrough();
 };
 
-#endif // DOCUMENTLISTWINDOW_H
+#endif /* __KIS_PROJECTION_LEAF_TEST_H */

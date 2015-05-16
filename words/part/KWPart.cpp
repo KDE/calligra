@@ -41,9 +41,8 @@ KWPart::KWPart(QObject *parent)
     : KoPart(parent)
     , m_document(0)
 {
+    setTemplatesResourcePath(QLatin1String("words/templates/"));
     setComponentData(KWFactory::componentData());
-
-    setTemplateType("words_template");
 }
 
 KWPart::~KWPart()

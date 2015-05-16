@@ -28,6 +28,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
@@ -207,14 +208,25 @@ KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    if (compositeOp())
+
+    if (compositeOp()) {
         l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+    }
+
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+
     return l;
 }
 
 void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
+
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Inherit Alpha")) {
+            disableAlphaChannel(property.state.toBool());
+        }
+    }
 }
 
 void KisLayer::disableAlphaChannel(bool disable)
@@ -513,7 +525,7 @@ KisNode::PositionToFilthy calculatePositionToFilthy(KisNodeSP nodeInQuestion,
 }
 
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
-                           const KisPaintDeviceSP destination,
+                           KisPaintDeviceSP destination,
                            const QRect &requestedRect,
                            KisNodeSP filthyNode,
                            KisNodeSP lastNode) const
@@ -594,9 +606,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             }
             Q_ASSERT(applyRects.isEmpty());
 
-            KisPainter gc2(destination);
-            gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-            gc2.bitBlt(changeRect.topLeft(), tempDevice, changeRect);
+            KisPainter::copyAreaOptimized(changeRect.topLeft(), tempDevice, destination, changeRect);
         }
     }
 
@@ -663,9 +673,7 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
                                         KisPaintDeviceSP projection,
                                         const QRect& rect) const
 {
-    KisPainter gc(projection);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 }
 
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const

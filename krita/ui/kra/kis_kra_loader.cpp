@@ -353,7 +353,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         {
             KoStoreDevice device(store);
             device.open(QIODevice::ReadOnly);
-            collection->loadFromDevice(&device);
+
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&raDevice);
         }
         store->close();
 
@@ -569,6 +577,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
             } else {
                 qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
             }
+        }
+    }
+
+    if (node->inherits("KisGroupLayer")) {
+        if (element.hasAttribute(PASS_THROUGH_MODE)) {
+            bool value = element.attribute(PASS_THROUGH_MODE, "0") != "0";
+
+            KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
+            group->setPassThroughMode(value);
         }
     }
 

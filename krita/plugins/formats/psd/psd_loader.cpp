@@ -38,6 +38,9 @@
 #include <kis_transaction.h>
 #include <kis_transparency_mask.h>
 
+#include <kis_psd_layer_style_resource.h>
+#include "kis_resource_server_provider.h"
+
 #include "psd.h"
 #include "psd_header.h"
 #include "psd_colormode_block.h"
@@ -186,6 +189,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     QStack<KisGroupLayerSP> groupStack;
     groupStack.push(m_image->rootLayer());
 
+    QVector<KisPSDLayerStyleSP> allStyles;
+
     // read the channels for the various layers
     for(int i = 0; i < layerSection.nLayers; ++i) {
 
@@ -203,12 +208,32 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 KisGroupLayerSP groupLayer = groupStack.pop();
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
+
+                QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode);
+
+                // Krita doesn't support pass-through blend
+                // mode. Instead it is just a property of a goupr
+                // layer, so flip it
+                if (compositeOp == COMPOSITE_PASS_THROUGH) {
+                    compositeOp = COMPOSITE_OVER;
+                    groupLayer->setPassThroughMode(true);
+                }
+
+                groupLayer->setCompositeOp(compositeOp);
+
                 newLayer = groupLayer;
             }
         }
         else {
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
             layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+
+            KisPSDLayerStyleSP style = layerRecord->infoBlocks.layerStyle;
+
+            if (style) {
+                allStyles << style;
+                layer->setLayerStyle(style->clone());
+            }
 
             if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
                 dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
@@ -224,17 +249,32 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             newLayer = layer;
 
         }
-                    foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
-                        if (channelInfo->channelId < 0) {
-                            qDebug() << ">>>>>>>>>>>>>> transparency mask" << channelInfo->channelId;
-//                            KisTransparencyMaskSP mask = new KisTransparencyMask();
-//                            mask->initSelection(newLayer);
-//                            if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
-//                                dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
-//                            }
-//                            m_image->addNode(mask, newLayer);
-                        }
-                    }
+
+        foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
+            if (channelInfo->channelId < -1) {
+                KisTransparencyMaskSP mask = new KisTransparencyMask();
+                mask->setName(i18n("Transparency Mask"));
+                mask->initSelection(newLayer);
+                if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
+                    dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+                }
+                m_image->addNode(mask, newLayer);
+            }
+        }
+    }
+
+    if (!allStyles.isEmpty()) {
+        KisPSDLayerStyleCollectionResource *collection =
+            new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl");
+
+        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
+        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+
+        collection->setLayerStyles(allStyles);
+        KIS_ASSERT_RECOVER_NOOP(collection->valid());
+
+        KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+        server->addResource(collection, false);
     }
 
 
