@@ -128,10 +128,15 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     }
     qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     
-    //TODO:subtract/add the rotation of the canvas.
-    
-    //TODO:limit the directin/elevation
-    
+    //subtract/add the rotation of the canvas.
+    int threesixty = 0;
+    if (info.canvasRotation()<0) {
+        threesixty = 360;
+    }
+    direction = direction-info.canvasRotation()+threesixty;
+
+    //TODO:limit the direction/elevation
+
     //convert to radians.
     //TODO: Convert this to kis_global's radian function.
     direction = direction*M_PI / 180.0;

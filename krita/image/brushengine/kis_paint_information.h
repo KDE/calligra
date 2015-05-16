@@ -198,8 +198,17 @@ public:
             qreal xTilt = 0.0, qreal yTilt = 0.0,
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
-            qreal perspective = 1.0);
-
+            qreal perspective = 1.0,
+            int canvasrotation = 0);
+    /**
+     *Returns the canvas rotation if that has been given to the kispaintinformation.
+     */
+    int canvasRotation() const;
+    /**
+     *set the canvas rotation.
+     */
+    void setCanvasRotation(int rotation);
+    
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

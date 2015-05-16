@@ -53,7 +53,7 @@ struct KisPaintInformation::Private {
         time = rhs.time;
         isHoveringMode = rhs.isHoveringMode;
         currentDistanceInfo = rhs.currentDistanceInfo;
-
+        canvasRotation = rhs.canvasRotation;
         if (rhs.drawingAngleOverride) {
             drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
         }
@@ -69,6 +69,7 @@ struct KisPaintInformation::Private {
     qreal perspective;
     qreal time;
     bool isHoveringMode;
+    int canvasRotation;
 
     QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
@@ -113,6 +114,7 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_,
     d->perspective = perspective_;
     d->time = time;
     d->isHoveringMode = false;
+    d->canvasRotation = 0;
 }
 
 KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new Private(*rhs.d))
@@ -134,13 +136,15 @@ bool KisPaintInformation::isHoveringMode() const
     return d->isHoveringMode;
 }
 
+
 KisPaintInformation
 KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal pressure,
         qreal xTilt, qreal yTilt,
         qreal rotation,
         qreal tangentialPressure,
-        qreal perspective)
+        qreal perspective,
+        int canvasrotation)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -149,8 +153,20 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
                              tangentialPressure,
                              perspective, 0);
     info.d->isHoveringMode = true;
+    info.d->canvasRotation = canvasrotation;
     return info;
 }
+
+
+int KisPaintInformation::canvasRotation() const
+{
+    return d->canvasRotation;
+}
+
+void KisPaintInformation::setCanvasRotation(int rot)
+{
+    d->canvasRotation=rot;
+} 
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 {
@@ -374,6 +390,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
     result.d->isHoveringMode = pi1.isHoveringMode();
+    result.d->canvasRotation = pi2.canvasRotation();
 
     return result;
 }

@@ -74,6 +74,8 @@ public:
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettings *globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
+    int canvasRotation();
+    void setCanvasRotation(int rotation = 0);
 
 Q_SIGNALS:
     /**
