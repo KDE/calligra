@@ -39,7 +39,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoUnit.h>
 #include <QFontMetricsF>
 
 #include <sheets/Util.h>

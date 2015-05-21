@@ -37,7 +37,6 @@
 #include "msoleps.h"
 #include "msdoc.h"
 
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <kdebug.h>
 

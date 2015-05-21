@@ -39,6 +39,7 @@
 
 // Calligra
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoViewConverter.h>
 // KDE
 #include <kdebug.h>

@@ -36,6 +36,7 @@
 #include "Style.h"
 
 #include <QPen>
+#include <KoUnit.h>
 
 using namespace Calligra::Sheets;
 
