@@ -37,6 +37,7 @@
 #include <klocale.h>
 
 #include <KoDocumentInfo.h>
+#include <KoUnit.h>
 #include <KoFilterChain.h>
 
 // Don't show this warning: it occurs because gcc gets confused, but

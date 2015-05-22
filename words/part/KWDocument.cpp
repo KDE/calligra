@@ -71,6 +71,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoAnnotationLayoutManager.h>
 #include <KoPageWidgetItem.h>
+#include <KoUnit.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>

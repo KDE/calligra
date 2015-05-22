@@ -37,7 +37,7 @@
 KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)
 {
-    setTemplateType("stage_template");
+    setTemplatesResourcePath(QLatin1String("stage/templates/"));
     setComponentData(KPrFactory::componentData());
 }
 

@@ -40,6 +40,7 @@
 #include <KoShapeManagerPaintingStrategy.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 
 #include <kdebug.h>
 #include <klocale.h>

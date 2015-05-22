@@ -76,6 +76,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoStoreDevice.h>
 #include <KoStore.h>
+#include <KoUnit.h>
 #include <KoShapePainter.h>
 #include <SvgShapeFactory.h>
 

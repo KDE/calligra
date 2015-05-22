@@ -62,6 +62,7 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
+#include <KoUnit.h>
 
 // KSpread
 #include "Canvas.h"

@@ -1179,7 +1179,7 @@ void View::updateReadWrite(bool readwrite)
 
 void View::createTemplate()
 {
-    KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
+    KoTemplateCreateDia::createTemplate(doc()->documentPart()->templatesResourcePath(), ".ots",
                                         Factory::global(), doc(), this);
 }
 

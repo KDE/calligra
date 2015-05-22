@@ -514,7 +514,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
         y = 0;
     QStyle *style = q->style();
     QStyleOption opt;
-    opt.init(q);
+    opt.initFrom(q);
     const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q),
               vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q),
               icone = KIconLoader::SizeMedium;
@@ -1774,7 +1774,7 @@ QSize KexiMenuWidget::sizeHint() const
     // the top and left margins, so we only need to add margins for
     // the bottom and right.
     QStyleOption opt(0);
-    opt.init(this);
+    opt.initFrom(this);
     const int fw = d->frameWidth(&opt);
     int leftmargin, topmargin, rightmargin, bottommargin;
     getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
