@@ -92,8 +92,6 @@ const KComponentData &KWFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-        KGlobal::dirs()->addResourceType("words_template",
-                                            "data", "words/templates/");
         KGlobal::dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");

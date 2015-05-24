@@ -27,6 +27,8 @@
 #include <commands/KWNewPageStyleCommand.h>
 #include <commands/KWChangePageStyleCommand.h>
 
+#include <KoUnit.h>
+
 #include <QPushButton>
 #include <QListWidget>
 #include <kinputdialog.h>

@@ -39,8 +39,8 @@
 #include "events.h"
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 #include <kexiutils/utils.h>
 
 #include "commands.h"

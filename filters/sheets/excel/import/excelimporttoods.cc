@@ -30,7 +30,6 @@
 #include <QPair>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <KoUnit.h>
 #include <kpluginfactory.h>
 
 #include <KoXmlWriter.h>

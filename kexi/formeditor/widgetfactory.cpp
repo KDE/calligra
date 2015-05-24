@@ -40,8 +40,8 @@
 #include "utils.h"
 
 #include "widgetwithsubpropertiesinterface.h"
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 #include <kexiutils/utils.h>
 
 using namespace KFormDesigner;
@@ -286,7 +286,7 @@ bool WidgetFactory::inheritsFactories()
     return false;
 }
 
-void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w)
+void WidgetFactory::setPropertyOptions(KPropertySet& set, const WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(set)
     Q_UNUSED(info)

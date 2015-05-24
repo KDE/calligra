@@ -728,7 +728,7 @@ GanttView::GanttView( Part *part, QWidget *parent )
     format.insert( "%I", "HH A" );
     format.insert( "%l", "h a" );
     // QT5TODO
-//     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
+//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
 
     for ( int i = 0; i < part->workPackageCount(); ++i ) {
         updateDateTimeGrid( part->workPackage( i ) );

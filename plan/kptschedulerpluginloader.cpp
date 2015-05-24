@@ -23,8 +23,11 @@
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
-#include <kservicetypetrader.h>
+#include <KoJsonTrader.h>
+
 #include <kdebug.h>
+
+#include <QPluginLoader>
 
 
 namespace KPlato
@@ -42,31 +45,32 @@ SchedulerPluginLoader::~SchedulerPluginLoader()
 void SchedulerPluginLoader::loadAllPlugins()
 {
     kDebug(planDbg()) << "Load all plugins";
-    KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
- 
-    KService::List::const_iterator iter;
-    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
-    {
-        QString error;
-        KService::Ptr service = *iter;
- 
-        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Plan/SchedulerPlugin", QString());
+
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory*>(pluginLoader->instance());
  
         if (!factory)
         {
-            kError() << "KPluginFactory could not load the plugin:" << service->library();
+            kError() << "KPluginFactory could not load the plugin:" << pluginLoader->fileName();
             continue;
         }
  
         SchedulerPlugin *plugin = factory->create<SchedulerPlugin>(this);
  
         if (plugin) {
-            kDebug(planDbg()) << "Load plugin:" << service->name()<<", "<<service->comment();
-            plugin->setName( service->name() );
-            plugin->setComment( service->comment() );
-            emit pluginLoaded( service->library(), plugin);
+            QJsonObject json = pluginLoader->metaData().value("MetaData").toObject();
+            json = json.value("KPlugin").toObject();
+            // QT5TODO: get localized variant of Name & Description
+            const QString name = json.value("Name").toString();
+            const QString comment = json.value("Description").toString();
+
+            kDebug(planDbg()) << "Load plugin:" << name << ", " << comment;
+            plugin->setName( name );
+            plugin->setComment( comment );
+            emit pluginLoaded( pluginLoader->fileName(), plugin);
         } else {
-           kDebug(planDbg()) << error;
+           kDebug(planDbg()) << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
         }
     }
 }

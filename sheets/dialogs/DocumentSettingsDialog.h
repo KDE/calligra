@@ -33,8 +33,6 @@
 #include <kpagedialog.h>
 #include <klocale.h>
 
-#include <KoUnit.h>
-
 class KVBox;
 class QCheckBox;
 class QSpinBox;

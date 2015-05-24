@@ -45,6 +45,8 @@
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
 
+#include <KoUnit.h>
+
 using namespace Calligra::Sheets;
 
 SheetAdaptor::SheetAdaptor(Sheet* t)

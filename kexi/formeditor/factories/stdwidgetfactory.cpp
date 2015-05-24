@@ -49,8 +49,8 @@
 
 #include <KoIcon.h>
 
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 
 #include "formIO.h"
 #include "form.h"
@@ -928,7 +928,7 @@ StdWidgetFactory::editListContents()
 #endif
 
 void
-StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
+StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(info);
     Q_UNUSED(w);

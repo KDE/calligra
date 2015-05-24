@@ -36,8 +36,8 @@
 
 #include <kexiutils/styleproxy.h>
 
-#include <koproperty/Set.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KProperty>
 
 class QStyleOption;
 
@@ -81,12 +81,12 @@ public:
 
     void addValueCaption(const QByteArray &value, const QString &caption);
 
-    KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+    KProperty::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
     //! Sets color of selected widget(s) to value of @a p.
     //! @a roleMethod can be backgroundColor or foregroundColor.
     //! Makes background inherited if @a roleMethod if background and value is null.
-    void setColorProperty(KoProperty::Property& p,
+    void setColorProperty(KProperty& p,
                           QPalette::ColorRole (QWidget::*roleMethod)() const,
                           const QVariant& value);
 
@@ -97,7 +97,7 @@ public:
     QPointer<Container>  toplevel;
     ObjectTree *topTree;
     QPointer<QWidget> widget;
-    KoProperty::Set propertySet;
+    KPropertySet propertySet;
     QWidgetList selected;
     ResizeHandleSet::Hash resizeHandles;
     QByteArray selectedClass;

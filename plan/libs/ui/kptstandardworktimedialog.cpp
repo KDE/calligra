@@ -48,7 +48,7 @@ public:
         if (day->state() == CalendarDay::NonWorking) {
             setHours();
         } else {
-            setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+            setText(1, KLocale::global()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
         }
     }
     ~WeekdayListItem() {
@@ -60,7 +60,7 @@ public:
     }
     void setIntervals(QList<TimeInterval*> intervals) {
         day->setIntervals(intervals);
-        setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+        setText(1, KLocale::global()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
     }
     void setState(int st) {
         day->setState(st+1);

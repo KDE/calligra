@@ -21,11 +21,12 @@ include_directories(
 ########### KPlato private library ###############
 
 set(kplatoui_LIB_SRCS
-    reports/reportview.cpp
-    reports/reportdata.cpp
-    reports/reportsourceeditor.cpp
-    reports/reportscripts.cpp
-    reports/reportexportpanel.cpp
+# QT5TODO: reenable reports
+#     reports/reportview.cpp
+#     reports/reportdata.cpp
+#     reports/reportsourceeditor.cpp
+#     reports/reportscripts.cpp
+#     reports/reportexportpanel.cpp
 
     kptganttitemdelegate.cpp
 
@@ -84,12 +85,13 @@ set(kplatoui_LIB_SRCS
     kptlocaleconfigmoneydialog.cpp
 )
 ki18n_wrap_ui(kplatoui_LIB_SRCS
-    reports/reportsourceeditor.ui
-    reports/reportnavigator.ui
-    reports/reportexportpanel.ui
-    reports/reportsectionswidget.ui
-    reports/reportgroupsectionswidget.ui
-    reports/reporttoolswidget.ui
+# QT5TODO: reenable reports
+#     reports/reportsourceeditor.ui
+#     reports/reportnavigator.ui
+#     reports/reportexportpanel.ui
+#     reports/reportsectionswidget.ui
+#     reports/reportgroupsectionswidget.ui
+#     reports/reporttoolswidget.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -131,7 +133,8 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
-set(KPLATO_REPORTS_LIBS KProperty KReport)
+# QT5TODO: reenable reports
+# set(KPLATO_REPORTS_LIBS KProperty KReport)
 target_link_libraries(kplatoui KF5::AkonadiContact ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels KChart KGantt KF5::KHtml )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

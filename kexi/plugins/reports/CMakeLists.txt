@@ -16,7 +16,6 @@ set(kexihandler_report_SRCS
     kexidbreportdata.cpp
     kexisourceselector.cpp
     krscriptfunctions.cpp
-    InternalSourceSelector.cpp
 )
 
 if (KEXI_MOBILE)
@@ -43,6 +42,7 @@ target_link_libraries(kexihandler_report
 
     kexiguiutils
     KF5::KrossCore
+    kexiextendedwidgets
 )
 
 if (KEXI_MOBILE)

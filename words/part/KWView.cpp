@@ -80,6 +80,7 @@
 #include <KoAnnotationLayoutManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasControllerWidget.h>
+#include <KoPart.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -532,7 +533,7 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".ott",
                                         KWFactory::componentData(), m_document, this);
 }
 

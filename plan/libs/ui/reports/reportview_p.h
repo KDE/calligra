@@ -57,7 +57,7 @@ public:
     QDomDocument document() const;
     
     KoReportDesigner *m_designer;
-    KoProperty::EditorView *m_propertyeditor;
+    KPropertyEditorView *m_propertyeditor;
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
     QActionGroup *m_actionGroup;

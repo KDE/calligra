@@ -46,7 +46,7 @@ UsedEffortItemModel::UsedEffortItemModel ( QWidget *parent )
 {
     m_headers << i18n( "Resource" );
     for ( int i = 1; i <= 7; ++i ) {
-        m_headers << KGlobal::locale()->calendar()->weekDayName( i, KCalendarSystem::ShortDayName );
+        m_headers << KLocale::global()->calendar()->weekDayName( i, KCalendarSystem::ShortDayName );
     }
     m_headers << i18n( "This Week" );
 }
@@ -97,11 +97,11 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                     Completion::UsedEffort::ActualEffort e = ue->effort( d );
                     res += e.normalEffort().toDouble( Duration::Unit_h );
                 }
-                return KGlobal::locale()->formatNumber( res, 1 );
+                return KLocale::global()->formatNumber( res, 1 );
             }
             Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
             double res = e.normalEffort().toDouble( Duration::Unit_h );
-            return KGlobal::locale()->formatNumber( res, 1 );
+            return KLocale::global()->formatNumber( res, 1 );
         }
         case Qt::EditRole: {
             if ( index.column() == 8 ) {
@@ -120,7 +120,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                 }
                 Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
                 double res = e.normalEffort().toDouble( Duration::Unit_h );
-                return KGlobal::locale()->formatNumber( res, 1 );
+                return KLocale::global()->formatNumber( res, 1 );
             }
             break;
         }
@@ -218,7 +218,7 @@ QVariant UsedEffortItemModel::headerData ( int section, Qt::Orientation orientat
             return m_headers.at( section );
         case Qt::ToolTipRole: {
             if ( section >= 1 && section <= 7 ) {
-                return KGlobal::locale()->formatDate( m_dates.at( section - 1 ) );
+                return KLocale::global()->formatDate( m_dates.at( section - 1 ) );
             }
             if ( section == 8 ) {
                 return i18n( "Total effort this week" );

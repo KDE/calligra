@@ -85,7 +85,6 @@ const KComponentData &KPrFactory::componentData()
     {
         s_instance = new KComponentData(aboutData());
 
-        KGlobal::dirs()->addResourceType("stage_template", "data", "stage/templates/");
         KGlobal::dirs()->addResourceType("styles", "data", "stage/styles/");
     }
     return *s_instance;

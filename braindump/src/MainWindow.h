@@ -45,7 +45,7 @@ private:
     void setupActions();
 public:
     void activateView(View* view);
-    QList<KoCanvasObserverBase*> canvasObservers();
+    QList<KoCanvasObserverBase*> canvasObservers() const;
 public Q_SLOTS:
     void forceDockTabFonts();
 private:

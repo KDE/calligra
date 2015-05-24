@@ -34,14 +34,10 @@
 class KexiMainWindow;
 class KexiWindowData;
 class KexiView;
+class KPropertySet;
 namespace KexiPart
 {
 class Part;
-}
-
-namespace KoProperty
-{
-class Set;
 }
 
 //! Base class for child window of Kexi's main application window.
@@ -152,7 +148,7 @@ public:
 
     /*! \return property set provided by the current view,
      or NULL if there is no view set (or the view has no set assigned). */
-    KoProperty::Set *propertySet();
+    KPropertySet *propertySet();
 
     KexiDB::SchemaData* schemaData() const;
 

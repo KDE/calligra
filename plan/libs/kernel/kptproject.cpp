@@ -163,7 +163,7 @@ void Project::calculate( const DateTime &dt )
         return ;
     }
     stopcalculation = false;
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     DateTime time = dt.isValid() ? dt : DateTime( QDateTime::currentDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
@@ -267,7 +267,7 @@ void Project::calculate()
     if ( cs->manager() ) {
         backwards = cs->manager()->schedulingDirection();
     }
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         QTime timer; timer.start();

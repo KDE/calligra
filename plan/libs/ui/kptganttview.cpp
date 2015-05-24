@@ -323,7 +323,7 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KGantt::View( parent )
 {
-    const KLocale *locale = KGlobal::locale();
+    const KLocale *locale = KLocale::global();
     if ( locale ) {
         KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
 
@@ -504,7 +504,7 @@ MyKGanttView::MyKGanttView( QWidget *parent )
     format.insert( "%I", "HH A" );
     format.insert( "%l", "h a" );
     // QT5TODO
-//     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
+//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
 
     connect( model(), SIGNAL(nodeInserted(Node*)), this, SLOT(slotNodeInserted(Node*)) );
 }
@@ -887,7 +887,7 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     format.insert( "%I", "HH A" );
     format.insert( "%l", "h a" );
     // QT5TODO
-//     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
+//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
 }
 
 MilestoneItemModel *MilestoneKGanttView::model() const

@@ -74,7 +74,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_pageSelector = new KexiRecordNavigator(*m_reportView, m_reportView);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setInsertingEnabled(false);
-    m_pageSelector->setLabelText(i18n("Page"));
+    m_pageSelector->setLabelText(i18nc("Page selector label", "Page:"));
     m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first page"));
     m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first page"));
     m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, i18n("Go to previous page"));

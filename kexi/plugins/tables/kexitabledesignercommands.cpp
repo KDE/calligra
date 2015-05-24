@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koproperty/Property.h>
+#include <KProperty>
 #include <kexi_global.h>
 
 #include "kexitabledesignercommands.h"
@@ -81,17 +81,17 @@ void Command::undoInternal()
 
 ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
     Command* parent, KexiTableDesignerView* view,
-    const KoProperty::Set& set, const QByteArray& propertyName,
+    const KPropertySet& set, const QByteArray& propertyName,
     const QVariant& oldValue, const QVariant& newValue,
-    KoProperty::Property::ListData* const oldListData,
-    KoProperty::Property::ListData* const newListData)
+    KProperty::ListData* const oldListData,
+    KProperty::ListData* const newListData)
         : Command(parent, view)
         , m_alterTableAction(
             propertyName == "name" ? oldValue.toString() : set.property("name").value().toString(),
             propertyName, newValue, set["uid"].value().toInt())
         , m_oldValue(oldValue)
-        , m_oldListData(oldListData ? new KoProperty::Property::ListData(*oldListData) : 0)
-        , m_listData(newListData ? new KoProperty::Property::ListData(*newListData) : 0)
+        , m_oldListData(oldListData ? new KProperty::ListData(*oldListData) : 0)
+        , m_listData(newListData ? new KProperty::ListData(*newListData) : 0)
 {
     setText(kundo2_i18n("Change \"%1\" property for table field from \"%2\" to \"%3\"",
                         m_alterTableAction.propertyName(),
@@ -150,11 +150,11 @@ KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction(
 //--------------------------------------------------------
 
 RemoveFieldCommand::RemoveFieldCommand(Command* parent, KexiTableDesignerView* view, int fieldIndex,
-                                       const KoProperty::Set* set)
+                                       const KPropertySet* set)
         : Command(parent, view)
         , m_alterTableAction(set ? (*set)["name"].value().toString() : QString(),
                              set ? (*set)["uid"].value().toInt() : -1)
-        , m_set(set ? new KoProperty::Set(*set /*deep copy*/) : 0)
+        , m_set(set ? new KPropertySet(*set /*deep copy*/) : 0)
         , m_fieldIndex(fieldIndex)
 {
     if (m_set)
@@ -199,10 +199,10 @@ KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction() const
 //--------------------------------------------------------
 
 InsertFieldCommand::InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                                       int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set)
+                                       int fieldIndex/*, const KexiDB::Field& field*/, const KPropertySet& set)
         : Command(parent, view)
         , m_alterTableAction(0) //fieldIndex, new KexiDB::Field(field) /*deep copy*/)
-        , m_set(set)   //? new KoProperty::Set(*set) : 0 )
+        , m_set(set)   //? new KPropertySet(*set) : 0 )
 {
     KexiDB::Field *f = view->buildField(m_set);
     if (f)
@@ -243,7 +243,7 @@ QString InsertFieldCommand::debugString() const
 //--------------------------------------------------------
 
 ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(Command* parent, KexiTableDesignerView* view,
-        const KoProperty::Set& set, const QByteArray& propertyName, bool visible)
+        const KPropertySet& set, const QByteArray& propertyName, bool visible)
         : Command(parent, view)
         , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
         , m_oldVisibility(set.property(propertyName).isVisible())

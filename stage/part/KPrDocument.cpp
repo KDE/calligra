@@ -284,8 +284,7 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    // QT5TODO: needs new approach
-    QString fileName(KStandardDirs::locate( "stage_template", "Screen/.source/emptyLandscape.otp" /*, KGlobal::mainComponent()*/));
+    QString fileName(KStandardDirs::locate( "data", "stage/templates/Screen/.source/emptyLandscape.otp"));
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {

@@ -24,6 +24,7 @@
 #include "frames/KWTextFrameSet.h"
 
 #include <commands/KoShapeRunAroundCommand.h>
+#include <KoUnit.h>
 
 #include <kundo2command.h>
 

@@ -20,18 +20,18 @@
 #ifndef KEXICUSTOMPROPFACTORY_P_H
 #define KEXICUSTOMPROPFACTORY_P_H
 
-//! @todo #include <koproperty/editors/pixmapedit.h>
-#include <koproperty/editors/stringedit.h>
+//! @todo #include <KProperty/PixmapEditor>
+#include <KProperty/StringListEditor>
 #include <kexiblobbuffer.h>
 
 #if 0 // todo
 //! Kexi-specific image editor for property editor's item
-class KexiImagePropertyEdit : public KoProperty::PixmapEdit
+class KexiImagePropertyEdit : public KPropertyPixmapEditor
 {
     Q_OBJECT
 
 public:
-    explicit KexiImagePropertyEdit(KoProperty::Property *property,
+    explicit KexiImagePropertyEdit(KProperty *property,
                           QWidget *parent = 0);
     virtual ~KexiImagePropertyEdit();
 
@@ -53,9 +53,9 @@ protected:
  is unable to enter invalid characters. Any chages to a null value or empty string,
  have no effect.
 
- @todo move this to koproperty library (when KexiUtils moves to Calligra Libs)
+ @todo move this to the KProperty library (when KexiUtils moves to Calligra Libs)
  */
-class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
+class KexiIdentifierPropertyEdit : public KPropertyStringEditor
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)

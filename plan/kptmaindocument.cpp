@@ -78,7 +78,7 @@ MainDocument::MainDocument(KoPart *part)
     Q_ASSERT(part);
     m_config.setReadWrite( true );
     // Add library translation files
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         // QT5TODO
 //         locale->insertCatalog( "planlibs" );

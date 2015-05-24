@@ -906,7 +906,7 @@ date2time(const QString& date)
 QString
 formatTime(time_t t)
 {
-    KLocale *l = KGlobal::locale();
+    KLocale *l = KLocale::global();
     if ( l ) {
         return l->formatDateTime( QDateTime::fromTime_t(t) );
     }

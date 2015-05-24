@@ -58,6 +58,7 @@
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoUnit.h>
 
 #include "CalculationSettings.h"
 #include "Cell.h"

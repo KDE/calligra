@@ -87,10 +87,10 @@ void Form::init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &g
     d->features = 0;
     d->widgetActionGroup = &group;
 
-    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
-    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
+            this, SLOT(slotPropertyChanged(KPropertySet&,KProperty&)));
+    connect(&d->propertySet, SIGNAL(propertyReset(KPropertySet&,KProperty&)),
+            this, SLOT(slotPropertyReset(KPropertySet&,KProperty&)));
 
     d->collection = &col;
 }
@@ -1211,7 +1211,7 @@ void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
     d->insideAddPropertyCommand = false;
 }
 
-void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
+void Form::slotPropertyChanged(KPropertySet& set, KProperty& p)
 {
     Q_UNUSED(set);
 
@@ -1301,7 +1301,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     }
 }
 
-void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
+void Form::slotPropertyReset(KPropertySet& set, KProperty& property)
 {
     Q_UNUSED(set);
 
@@ -1445,7 +1445,7 @@ void Form::addWidget(QWidget *w)
     // show only properties shared by widget (properties chosen by factory)
     bool isTopLevel = isTopLevelWidget(w);
 
-    for (KoProperty::Set::Iterator it(d->propertySet); it.current(); ++it) {
+    for (KPropertySet::Iterator it(d->propertySet); it.current(); ++it) {
         //kDebug() << it.current();
         if (!isPropertyVisible(it.current()->name(), isTopLevel, classname)) {
             it.current()->setVisible(false);
@@ -1478,7 +1478,7 @@ void Form::createPropertiesForWidget(QWidget *w)
     const QHash<QString, QVariant>* modifiedProperties = tree->modifiedProperties();
     QHash<QString, QVariant>::ConstIterator modifiedPropertiesIt;
     bool isTopLevel = isTopLevelWidget(w);
-    KoProperty::Property *newProp = 0;
+    KProperty *newProp = 0;
     WidgetInfo *winfo = library()->widgetInfoForClassName(w->metaObject()->className());
     if (!winfo) {
         kWarning() << "no widget info for class" << w->metaObject()->className();
@@ -1546,7 +1546,7 @@ void Form::createPropertiesForWidget(QWidget *w)
                 }
 
                 QStringList keys(KexiUtils::enumKeysForProperty(meta));
-                newProp = new KoProperty::Property(
+                newProp = new KProperty(
                     propertyName, d->createValueList(subwinfo, keys),
                     // assign current or older value
                     meta.enumerator().valueToKey(
@@ -1560,11 +1560,15 @@ void Form::createPropertiesForWidget(QWidget *w)
                 }
             }
             else {
+                int realType = subwinfo->customTypeForProperty(propertyName);
+                if (realType == KoProperty::Invalid || realType == KoProperty::Auto) {
+                    realType = meta.type();
+                }
                 newProp = new KoProperty::Property(
                     propertyName,
                     // assign current or older value
                     oldValueExists ? modifiedPropertiesIt.value() : subwidget->property(propertyName),
-                    desc, desc, subwinfo->customTypeForProperty(propertyName)
+                    desc, desc, realType
                 );
                 //now set current value, so the old one is stored as old
                 if (oldValueExists) {
@@ -1575,8 +1579,9 @@ void Form::createPropertiesForWidget(QWidget *w)
             if (!isPropertyVisible(propertyName, isTopLevel))
                 newProp->setVisible(false);
 //! @todo
-            if (newProp->type() == 0) // invalid type == null pixmap ?
-                newProp->setType(KoProperty::Pixmap);
+            if (newProp->type() == KoProperty::Invalid) {
+                newProp->setType(KoProperty::String);
+            }
 
             d->propertySet.addProperty(newProp);
         }
@@ -1586,14 +1591,14 @@ void Form::createPropertiesForWidget(QWidget *w)
     }
 
     const QString paletteBackgroundColorDesc(d->propCaption.value("paletteBackgroundColor"));
-    newProp = new KoProperty::Property("paletteBackgroundColor",
+    newProp = new KProperty("paletteBackgroundColor",
                                        w->palette().color(w->backgroundRole()),
                                        paletteBackgroundColorDesc,
                                        paletteBackgroundColorDesc);
 
     const QString paletteForegroundColorDesc(d->propCaption.value("paletteForegroundColor"));
     d->propertySet.addProperty(newProp);
-    newProp = new KoProperty::Property("paletteForegroundColor",
+    newProp = new KProperty("paletteForegroundColor",
                                        w->palette().color(w->foregroundRole()),
                                        paletteForegroundColorDesc,
                                        paletteForegroundColorDesc);
@@ -1603,12 +1608,12 @@ void Form::createPropertiesForWidget(QWidget *w)
 
     if (winfo) {
         library()->setPropertyOptions(d->propertySet, *winfo, w);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
+        d->propertySet.addProperty(newProp = new KProperty("this:classString", winfo->name()));
         newProp->setVisible(false);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
+        d->propertySet.addProperty(newProp = new KProperty("this:iconName", winfo->iconName()));
         newProp->setVisible(false);
     }
-    d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
+    d->propertySet.addProperty(newProp = new KProperty("this:className",
             w->metaObject()->className()));
     newProp->setVisible(false);
 }
@@ -1624,7 +1629,7 @@ void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const
     const char *propertyName = meta.isValid() ? meta.name() : property;
     if (!d->propertySet.contains(propertyName))
         return;
-    KoProperty::Property &p = d->propertySet[propertyName];
+    KProperty &p = d->propertySet[propertyName];
 
 //! \todo what about set properties, and lists properties
     const QHash<QString, QVariant>::ConstIterator it(tree->modifiedProperties()->find(propertyName));
@@ -1676,7 +1681,7 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
     }
  }
 
-KoProperty::Set& Form::propertySet()
+KPropertySet& Form::propertySet()
 {
     return d->propertySet;
 }
@@ -2173,7 +2178,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         QStringList list;
         list << "AlignAuto" << "AlignLeft" << "AlignRight"
             << "AlignHCenter" << "AlignJustify";
-        KoProperty::Property *p = new KoProperty::Property(
+        KProperty *p = new KProperty(
             "hAlign", d->createValueList(0, list), value,
             i18nc("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
             i18n("Horizontal Alignment"));
@@ -2196,7 +2201,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
 
         QStringList list;
         list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-        KoProperty::Property *p = new KoProperty::Property(
+        KProperty *p = new KProperty(
             "vAlign", d->createValueList(0, list), value,
             i18nc("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
             i18n("Vertical Alignment"));
@@ -2209,7 +2214,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
     
     if (possibleValues.contains("WordBreak")) {
         // Create the wordbreak property
-        KoProperty::Property *p = new KoProperty::Property("wordbreak",
+        KProperty *p = new KProperty("wordbreak",
                 QVariant((bool)(alignment & Qt::TextWordWrap)),
                 i18n("Word Break"), i18n("Word Break"));
         d->propertySet.addProperty(p);
@@ -2374,7 +2379,7 @@ void Form::changeFont()
             prevFont.setPointSize(font.pointSize());
         }
         //! @todo this modification is not added to UNDO BUFFER:
-        //!      do it when KoProperty::Set supports multiple selections
+        //!      do it when KPropertySet supports multiple selections
         widget->setFont(prevFont);
     }
 //! @todo temporary fix for dirty flag

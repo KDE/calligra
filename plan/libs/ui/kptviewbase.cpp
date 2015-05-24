@@ -36,7 +36,7 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
-#include "KoUnit.h"
+#include <KoUnit.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -398,7 +398,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
     QRect managerRect;
     QString manager = project.leader();
     QRect dateRect;
-    QString date = KGlobal::locale()->formatDate( QDate::currentDate() );
+    QString date = KLocale::global()->formatDate( QDate::currentDate() );
 
     QRect rect_1 = rect;
     QRect rect_2 = rect;

@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
+#include <KoResourceServerProvider.h>
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
 

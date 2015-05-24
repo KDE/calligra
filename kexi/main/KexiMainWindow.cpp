@@ -105,8 +105,8 @@
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
 #include <widget/KexiDBPasswordDialog.h>
-#include <koproperty/EditorView.h>
-#include <koproperty/Set.h>
+#include <KPropertyEditorView>
+#include <KPropertySet>
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
@@ -152,7 +152,7 @@ KexiDockWidget::KexiDockWidget(const QString & title, QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 
     QStyleOptionDockWidgetV2 dockOpt;
-    dockOpt.init(this);
+    dockOpt.initFrom(this);
     const int addSpacing = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, &dockOpt, this);
 
     QWidget *titleBar = new QWidget;
@@ -181,7 +181,7 @@ void KexiDockWidget::paintEvent(QPaintEvent *pe)
     QStylePainter p(this);
     if (isFloating()) {
         QStyleOptionFrame framOpt;
-        framOpt.init(this);
+        framOpt.initFrom(this);
         p.drawPrimitive(QStyle::PE_FrameDockWidget, framOpt);
     }
 
@@ -319,7 +319,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
     KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
-    KGlobal::locale()->insertCatalog("koproperty");
+    //! @todo KGlobal::locale()->insertCatalog("kproperty");
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
@@ -2633,9 +2633,9 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode,
                              currentWindow()->partItem()->identifier());
     if (viewMode == Kexi::DesignViewMode) {
+        activateDesignTab(currentWindow()->partItem()->partClass());
         // Restore the saved tab to the orig one. restoreDesignTabIfNeeded() saved tools tab probably.
         d->tabsToActivateOnShow.insert(currentWindow()->partItem()->identifier(), origTabToActivate);
-        d->tabbedToolBar->setCurrentTab(origTabToActivate);
     }
 
     return true;
@@ -2708,6 +2708,20 @@ tristate KexiMainWindow::getNewObjectInfo(
         != QDialog::Accepted)
     {
         return cancelled;
+    }
+
+    // close window of object that will be overwritten
+    if (*overwriteNeeded) {
+        KexiPart::Item* overwrittenItem = project()->item(info, d->nameDialog->widget()->nameText());
+        if (overwrittenItem) {
+            KexiWindow * openedWindow = d->openedWindowFor(overwrittenItem->identifier());
+            if (openedWindow) {
+                const tristate res = closeWindow(openedWindow);
+                if (res != true) {
+                    return res;
+                }
+            }
+        }
     }
 
     //update name and caption
@@ -3455,16 +3469,16 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         return;
     }
     if (d->propEditor) {
-        KoProperty::Set *newSet = _currentWindow ? _currentWindow->propertySet() : 0;
-        if (!newSet || (force || static_cast<KoProperty::Set*>(d->propertySet) != newSet)) {
+        KPropertySet *newSet = _currentWindow ? _currentWindow->propertySet() : 0;
+        if (!newSet || (force || static_cast<KPropertySet*>(d->propertySet) != newSet)) {
             d->propertySet = newSet;
             if (preservePrevSelection || force) {
-                KoProperty::EditorView::SetOptions options = KoProperty::EditorView::ExpandChildItems;
+                KPropertyEditorView::SetOptions options = KPropertyEditorView::ExpandChildItems;
                 if (preservePrevSelection) {
-                    options |= KoProperty::EditorView::PreservePreviousSelection;
+                    options |= KPropertyEditorView::PreservePreviousSelection;
                 }
                 if (sortedProperties) {
-                    options |= KoProperty::EditorView::AlphabeticalOrder;
+                    options |= KPropertyEditorView::AlphabeticalOrder;
                 }
 
                 if (propertyToSelect.isEmpty()) {
@@ -4133,8 +4147,8 @@ void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 {
     d->tabbedToolBar->showTab(tabName);
-    if (   currentWindow() && currentWindow()->partItem()
-        && currentWindow()->partItem()->identifier() > 0)
+    if (currentWindow() && currentWindow()->partItem()
+        && currentWindow()->partItem()->identifier() != 0) // for unstored items id can be < 0
     {
         const QString tabToActivate = d->tabsToActivateOnShow.value(
                                           currentWindow()->partItem()->identifier());
@@ -4170,21 +4184,26 @@ void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::Vi
     }
 }
 
+void KexiMainWindow::activateDesignTab(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType:
+        d->tabbedToolBar->setCurrentTab("form");
+        break;
+    case KexiPart::ReportObjectType:
+        d->tabbedToolBar->setCurrentTab("report");
+        break;
+    default:;
+    }
+}
+
 void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
 {
     const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
     //kDebug() << partClass << viewMode << tabToActivate;
 
     if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
-        switch (d->prj->idForClass(partClass)) {
-        case KexiPart::FormObjectType:
-            d->tabbedToolBar->setCurrentTab("form");
-            break;
-        case KexiPart::ReportObjectType:
-            d->tabbedToolBar->setCurrentTab("report");
-            break;
-        default:;
-        }
+        activateDesignTab(partClass);
     }
     else {
         d->tabbedToolBar->setCurrentTab(tabToActivate);

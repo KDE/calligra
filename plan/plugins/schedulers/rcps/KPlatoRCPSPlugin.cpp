@@ -35,8 +35,9 @@
 #include <QApplication>
 #include <kptschedulerplugin.h>
 
-
-KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
+#ifndef PLAN_NOPLUGIN
+KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin, "planrcpsscheduler.json")
+#endif
 
 using namespace KPlato;
 
@@ -44,7 +45,7 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
     kDebug(planDbg())<<rcps_version();
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         // QT5TODO
 //         locale->insertCatalog( "planrcpsplugin" );

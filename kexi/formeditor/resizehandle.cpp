@@ -32,7 +32,7 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
-#include <koproperty/Set.h>
+#include <KPropertySet>
 
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10

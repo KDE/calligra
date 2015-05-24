@@ -27,11 +27,7 @@
 #include "kexiactionproxy.h"
 
 class KexiWindow;
-
-namespace KoProperty
-{
-class Set;
-}
+class KPropertySet;
 
 namespace KexiDB
 {
@@ -199,7 +195,7 @@ protected:
     virtual void closeEvent(QCloseEvent * e);
 
     /*! \return a property set for this view. For reimplementation. By default returns NULL. */
-    virtual KoProperty::Set *propertySet();
+    virtual KPropertySet *propertySet();
 
     /*! Call this in your view's implementation whenever current property set
      is changed that few properties are now visible and/or few other are invisible,

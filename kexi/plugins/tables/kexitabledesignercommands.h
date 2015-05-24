@@ -23,7 +23,7 @@
 #include <QPointer>
 
 #include <kexidb/alter.h>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 #include <kundo2command.h>
 
 #include "kexitabledesignerview.h"
@@ -77,10 +77,10 @@ public:
      on execute() and unexecute().
     */
     ChangeFieldPropertyCommand(Command* parent, KexiTableDesignerView* view,
-                               const KoProperty::Set& set, const QByteArray& propertyName,
+                               const KPropertySet& set, const QByteArray& propertyName,
                                const QVariant& oldValue, const QVariant& newValue,
-                               KoProperty::Property::ListData* const oldListData = 0,
-                               KoProperty::Property::ListData* const newListData = 0);
+                               KProperty::ListData* const oldListData = 0,
+                               KProperty::ListData* const newListData = 0);
 
     virtual ~ChangeFieldPropertyCommand();
 
@@ -92,7 +92,7 @@ public:
 protected:
     KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
-    KoProperty::Property::ListData* m_oldListData, *m_listData;
+    KProperty::ListData* m_oldListData, *m_listData;
 };
 
 //! @short Undo/redo command used when a field is removed from a table
@@ -102,7 +102,7 @@ public:
     /*! Constructs RemoveFieldCommand object.
      If \a set is 0, the action only means removing empty row (internal). */
     RemoveFieldCommand(Command* parent, KexiTableDesignerView* view, int fieldIndex,
-                       const KoProperty::Set* set);
+                       const KPropertySet* set);
 
     virtual ~RemoveFieldCommand();
 
@@ -114,7 +114,7 @@ public:
 
 protected:
     KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
-    KoProperty::Set* m_set;
+    KPropertySet* m_set;
     int m_fieldIndex;
 };
 
@@ -123,7 +123,7 @@ class InsertFieldCommand : public Command
 {
 public:
     InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                       int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set);
+                       int fieldIndex/*, const KexiDB::Field& field*/, const KPropertySet& set);
     virtual ~InsertFieldCommand();
 
     virtual void redoInternal();
@@ -134,7 +134,7 @@ public:
 
 protected:
     KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
-    KoProperty::Set m_set;
+    KPropertySet m_set;
 };
 
 
@@ -151,7 +151,7 @@ public:
      (it's invalid but allowed in design time).
     */
     ChangePropertyVisibilityCommand(Command* parent, KexiTableDesignerView* view,
-                                    const KoProperty::Set& set, const QByteArray& propertyName,
+                                    const KPropertySet& set, const QByteArray& propertyName,
                                     bool visible);
 
     virtual ~ChangePropertyVisibilityCommand();

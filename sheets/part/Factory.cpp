@@ -77,7 +77,6 @@ const KComponentData &Factory::global()
     if (!s_global) {
         s_global = new KComponentData(aboutData());
 
-        KGlobal::dirs()->addResourceType("sheets_template", "data", "sheets/templates/");
         KGlobal::dirs()->addResourceType("functions", "data", "sheets/functions/");
         KGlobal::dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 

@@ -33,6 +33,7 @@
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoRuler.h>
+#include <KoUnit.h>
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <kactioncollection.h>
