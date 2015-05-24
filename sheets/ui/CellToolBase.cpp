@@ -1138,12 +1138,13 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void CellToolBase::deactivate()
 {
+    Selection *sel = selection();
     // Disconnect.
-    disconnect(selection(), 0, this, 0);
+    if (sel) disconnect(sel, 0, this, 0);
     // close the cell editor
     deleteEditor(true); // save changes
     // clear the selection rectangle
-    selection()->update();
+    if (sel) sel->update();
 }
 
 void CellToolBase::init()

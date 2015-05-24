@@ -655,6 +655,7 @@ View::~View()
     delete d->scrollTimer;
 
     delete d->selection;
+    d->selection = 0;
     delete d->calcLabel;
     delete d->actions;
     delete d->zoomHandler;
