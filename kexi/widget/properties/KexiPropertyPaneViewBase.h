@@ -25,7 +25,6 @@
 
 class QVBoxLayout;
 
-class KPropertyEditorView;
 class KPropertySet;
 
 class KexiObjectInfoLabel;
