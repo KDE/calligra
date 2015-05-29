@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=ServiceType
-X-KDE-ServiceType=Krita/AnimationDock
-Comment=Animation Docker for Krita
-[PropertyDef::X-Krita-Version]
-Type=int

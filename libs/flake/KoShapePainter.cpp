@@ -32,6 +32,7 @@
 
 #include <KoUnit.h>
 
+#include <QPainter>
 #include <QImage>
 
 class SimpleCanvas : public KoCanvasBase
@@ -195,7 +196,7 @@ void KoShapePainter::paint(QImage &image)
     paint(painter, image.rect(), contentRect());
 }
 
-QRectF KoShapePainter::contentRect()
+QRectF KoShapePainter::contentRect() const
 {
     QRectF bound;
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {

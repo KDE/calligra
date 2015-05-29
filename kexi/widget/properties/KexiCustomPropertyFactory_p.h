@@ -40,7 +40,7 @@ public:
     virtual void drawViewer(QPainter *p, cg, const QRect &r,
                             const QVariant &value);
 
-public slots:
+public Q_SLOTS:
     virtual void selectPixmap();
 
 protected:
@@ -64,7 +64,7 @@ public:
     explicit KexiIdentifierPropertyEdit(QWidget *parent = 0);
     virtual ~KexiIdentifierPropertyEdit();
 
-public slots:
+public Q_SLOTS:
     /*! Reimplemented: sets \a value but it is converted to identifier
      using KexiUtils::stringToIdentifier().
      If \a value is empty string, this method has no effect. */

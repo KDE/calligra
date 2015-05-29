@@ -26,15 +26,14 @@
 #include "flake_export.h"
 
 #include <QMetaType>
-#include <QMap>
+#include <QTransform>
 
 #include "KoTosContainer.h"
-#include "KoPathSegment.h"
 #include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
-class KoPathShape;
+class KoPathSegment;
 class KoPathPoint;
 class KoPathShapePrivate;
 class KoMarker;
@@ -221,14 +220,14 @@ public:
      * @param rect the rectangle the requested points are in
      * @return list of points within the rectangle
      */
-    QList<KoPathPoint*> pointsAt(const QRectF &rect);
+    QList<KoPathPoint*> pointsAt(const QRectF &rect) const;
 
     /**
      * @brief Returns the list of path segments within the given rectangle.
      * @param rect the rectangle the requested segments are in
      * @return list of segments within the rectangle
      */
-    QList<KoPathSegment> segmentsAt(const QRectF &rect);
+    QList<KoPathSegment> segmentsAt(const QRectF &rect) const;
 
     /**
      * @brief Returns the path point index of a given path point

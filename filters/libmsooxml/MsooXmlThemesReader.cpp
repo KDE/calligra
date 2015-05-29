@@ -23,9 +23,9 @@
 
 #include "MsooXmlThemesReader.h"
 #include "MsooXmlSchemas.h"
+#include "MsooXmlTheme.h"
 #include "MsooXmlUtils.h"
 #include "MsooXmlUnits.h"
-#include "KoXmlWriter.h"
 
 #include <KoOdfGraphicStyles.h>
 #include <MsooXmlRelationships.h>
@@ -360,7 +360,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(MSOOXML_CURRENT_NS, Schemas::drawingml::main))) {
-        raiseError(i18n("Namespace \"%1\" not found", Schemas::drawingml::main));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(Schemas::drawingml::main)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...

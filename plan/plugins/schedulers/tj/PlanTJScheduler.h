@@ -52,7 +52,6 @@ namespace KPlato
     class Schedule;
     class MainSchedule;
     class Resource;
-    class ResourceRequest;
     class Task;
     class Node;
     class Relation;
@@ -79,12 +78,12 @@ public:
     bool kplatoFromTJ();
 
 
-signals:
+Q_SIGNALS:
     void sigCalculationStarted( Project*, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
     const char* taskname();
 
-public slots:
+public Q_SLOTS:
     void slotMessage( int type, const QString &msg, TJ::CoreAttributes *object );
 
 protected:

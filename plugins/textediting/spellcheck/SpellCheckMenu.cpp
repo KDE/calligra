@@ -79,7 +79,6 @@ void SpellCheckMenu::createSuggestionsMenu()
     m_suggestionsMenu->addAction(m_ignoreWordAction);
     m_suggestionsMenu->addAction(m_addToDictionaryAction);
     m_suggestionsMenu->addSeparator();
-
     if (!m_currentMisspelled.isEmpty()) {
         m_suggestions = m_speller.suggest(m_currentMisspelled);
         for (int i = 0; i < m_suggestions.count(); ++i) {
@@ -117,7 +116,7 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString word, int position,int length)
+void SpellCheckMenu::setMisspelled(const QString &word, int position,int length)
 {
     m_currentMisspelled = word;
     m_lengthMisspelled=length;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Roman Shtemberko <shtemberko@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,15 +66,16 @@ public:
     //! \return true if only connection data is managed by this widget
     bool connectionOnly() const;
 
-signals:
+Q_SIGNALS:
     //! emitted when data saving is needed
     void saveChanges();
 
     void loadDBList();
 
-protected slots:
+protected Q_SLOTS:
     void slotLocationRadioClicked();
     void slotCBToggled(bool on);
+    void slotShowSavePasswordHelp();
 
 protected:
     void setDataInternal(const KexiProjectData& data, bool connectionOnly,
@@ -91,7 +93,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidgetDetails
             : public QWidget, public Ui::KexiDBConnectionWidgetDetails
 {
 public:
-    KexiDBConnectionWidgetDetails(QWidget* parent = 0);
+    explicit KexiDBConnectionWidgetDetails(QWidget* parent = 0);
     ~KexiDBConnectionWidgetDetails();
 };
 
@@ -116,11 +118,11 @@ public:
     //! \return true if 'save password' option is selected
     bool savePasswordOptionSelected() const;
 
-signals:
+Q_SIGNALS:
     //! emitted when test connection is needed
     void testConnection();
 
-protected slots:
+protected Q_SLOTS:
     void slotTestConnection();
     void slotSocketComboboxToggled(bool on);
 
@@ -172,7 +174,7 @@ public:
     KexiDBConnectionWidget *mainWidget() const;
     KexiDBConnectionWidgetDetails* detailsWidget() const;
 
-signals:
+Q_SIGNALS:
     //! emitted when data saving is needed
     void saveChanges();
 

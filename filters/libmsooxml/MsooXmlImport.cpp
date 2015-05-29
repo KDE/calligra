@@ -29,7 +29,7 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlRelationships.h"
-#include "MsooXmlThemesReader.h"
+#include "MsooXmlTheme.h"
 #include "ooxml_pole.h"
 
 #include <QColor>
@@ -42,18 +42,14 @@
 #include <QImageReader>
 #include <QFileInfo>
 
-#include <kdeversion.h>
 #include <kdebug.h>
 #include <kzip.h>
-#include <kmessagebox.h>
 #include <ktemporaryfile.h>
 
-#include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
@@ -753,7 +749,7 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseFromDevice(MsooXmlReader* 
 
 KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QString& errorMessage)
 {
-    static const char *Content_Types_xml = "[Content_Types].xml";
+    static const char Content_Types_xml[] = "[Content_Types].xml";
     KoFilter::ConversionStatus status = loadAndParse(Content_Types_xml, m_contentTypesXML, errorMessage);
     if (status != KoFilter::OK) {
         kDebug() << Content_Types_xml << "could not be parsed correctly! Aborting!";
@@ -761,13 +757,13 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
     }
     RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )
 
-    static const char *docPropy_core_xml = "docProps/core.xml";
+    static const char docPropy_core_xml[] = "docProps/core.xml";
     KoXmlDocument coreXML;
     if (loadAndParse(docPropy_core_xml, coreXML, errorMessage) == KoFilter::OK) {
         RETURN_IF_ERROR( Utils::loadDocumentProperties(coreXML, m_documentProperties) )
     }
 
-    static const char *docPropy_app_xml = "docProps/app.xml";
+    static const char docPropy_app_xml[] = "docProps/app.xml";
     KoXmlDocument appXML;
     if (loadAndParse(docPropy_app_xml, appXML, errorMessage) == KoFilter::OK) {
         RETURN_IF_ERROR( Utils::loadDocumentProperties(appXML, m_documentProperties) )

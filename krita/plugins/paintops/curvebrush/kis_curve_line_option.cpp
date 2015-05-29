@@ -30,7 +30,7 @@ public:
 
         lineWidthSlider->setRange(1, 100);
         lineWidthSlider->setValue(1);
-        lineWidthSlider->setSuffix("px");
+        lineWidthSlider->setSuffix(" px");
 
         curvesOpacitySlider->setRange(0.0, 1.0, 2);
         curvesOpacitySlider->setValue(1.0);
@@ -38,18 +38,20 @@ public:
 };
 
 KisCurveOpOption::KisCurveOpOption()
-    : KisPaintOpOption(i18n("Lines"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisCurveOpOptionsWidget();
 
-    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->smoothingCHBox, SIGNAL(toggled(bool)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->historySizeSlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->lineWidthSlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->curvesOpacitySlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
+    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), this, SLOT(emitSettingChanged()));
+    connect(m_options->smoothingCHBox, SIGNAL(toggled(bool)), this, SLOT(emitSettingChanged()));
+    connect(m_options->historySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(emitSettingChanged()));
+    connect(m_options->lineWidthSlider, SIGNAL(valueChanged(qreal)), this, SLOT(emitSettingChanged()));
+    connect(m_options->curvesOpacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
+
+    setObjectName("KisCurveOpOption");
 }
 
 KisCurveOpOption::~KisCurveOpOption()

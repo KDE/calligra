@@ -19,7 +19,6 @@
 #ifndef PARAGRAPHSETTINGSDIALOG_H
 #define PARAGRAPHSETTINGSDIALOG_H
 
-#include <KoUnit.h>
 #include <KoTextEditor.h>
 
 #include <kdialog.h>
@@ -27,6 +26,8 @@
 class TextTool;
 class ParagraphGeneral;
 class KoImageCollection;
+
+class KoUnit;
 
 /// A dialog to show the settings for a paragraph
 class ParagraphSettingsDialog : public KDialog
@@ -40,7 +41,7 @@ public:
 
     void setImageCollection(KoImageCollection *imageCollection);
 
-protected slots:
+protected Q_SLOTS:
     void styleChanged(bool state = true);
 
     void slotApply();

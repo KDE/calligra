@@ -137,7 +137,7 @@ public:
     /// Set the result of the function call.
     void setResult(const QVariant& result);
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Add an example to demonstrate the usage of the function.
@@ -158,7 +158,7 @@ public slots:
     */
     bool registerFunction();
 
-signals:
+Q_SIGNALS:
 
     /**
     * This signal is emitted if the function got called.

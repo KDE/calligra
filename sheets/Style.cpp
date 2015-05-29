@@ -37,7 +37,6 @@
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 #include <KoOdfWorkaround.h>
 
 #include "Condition.h"

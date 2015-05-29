@@ -34,12 +34,8 @@
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrDeleteSlidesCommand.h"
-#include <KoPACanvas.h>
-#include <KoPACanvasItem.h>
-#include <KoPAViewModeNormal.h>
 #include <KoPASavingContext.h>
 #include <KoPALoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
@@ -288,7 +284,7 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    QString fileName(KStandardDirs::locate( "stage_template", "Screen/.source/emptyLandscape.otp", KGlobal::mainComponent()));
+    QString fileName(KStandardDirs::locate( "data", "stage/templates/Screen/.source/emptyLandscape.otp"));
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {

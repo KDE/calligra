@@ -1,6 +1,7 @@
 set(kritalibpaintop_LIB_SRCS
     kis_airbrush_option.cpp
     kis_auto_brush_widget.cpp
+    kis_spacing_selection_widget.cpp
     kis_bidirectional_mixing_option.cpp
     kis_bidirectional_mixing_option_widget.cpp
     kis_brush_based_paintop.cpp
@@ -27,14 +28,13 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp
     kis_pressure_opacity_option.cpp
+    kis_pressure_flow_option.cpp
     kis_pressure_mirror_option.cpp
     kis_pressure_scatter_option.cpp
     kis_pressure_scatter_option_widget.cpp
     kis_pressure_sharpness_option.cpp
     kis_pressure_sharpness_option_widget.cpp
     kis_pressure_mirror_option_widget.cpp
-    kis_pressure_rate_option.cpp
-    kis_pressure_rate_option_widget.cpp
     kis_pressure_rotation_option.cpp
     kis_pressure_size_option.cpp
     kis_pressure_spacing_option.cpp
@@ -50,8 +50,8 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop_settings.cpp
     kis_compositeop_option.cpp
     kis_texture_option.cpp
-    kis_embedded_pattern_manager.cpp
     kis_pressure_texture_strength_option.cpp
+    kis_embedded_pattern_manager.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc

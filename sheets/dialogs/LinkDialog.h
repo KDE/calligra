@@ -46,11 +46,11 @@ public:
     QString text() const;
     QString link() const;
 
-public slots:
+public Q_SLOTS:
     void setText(const QString& text);
     void setLink(const QString& link);
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
 private:

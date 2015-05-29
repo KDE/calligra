@@ -28,12 +28,7 @@
 
 
 
-class QByteArray;
-class QSizeF;
-class QStringList;
-class KoStore;
 class OdfReaderContext;
-class OdfReaderDocxContext;
 
 class OdtReaderDocxBackend : public OdtReaderBackend
 {

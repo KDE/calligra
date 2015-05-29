@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRLABEL_H
-#define KRLABEL_H
+#ifndef KOREPORTITEMLABEL_H
+#define KOREPORTITEMLABEL_H
+
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QPainter>
@@ -29,16 +30,12 @@ namespace Scripting
 {
 class Label;
 }
-/**
- @author
-*/
+
 class KoReportItemLabel : public KoReportItemBase
 {
 public:
-    KoReportItemLabel() {
-        createProperties();
-    };
-    KoReportItemLabel(QDomNode & element);
+    KoReportItemLabel();
+    explicit KoReportItemLabel(QDomNode & element);
     virtual ~KoReportItemLabel();
 
     virtual QString typeName() const;
@@ -65,10 +62,10 @@ protected:
     void setText(const QString&);
     KRTextStyleData textStyle();
     KRLineStyleData lineStyle();
-    
+
 private:
     virtual void createProperties();
-    
+
     friend class Scripting::Label;
 };
 #endif

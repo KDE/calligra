@@ -29,7 +29,6 @@
 
 #include <KoRdfSemanticItem.h>
 #include <KoDocumentRdf.h>
-#include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
 #include <KoTextInlineRdf.h>
@@ -60,7 +59,7 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
     cur.setPosition(table->firstPosition());
     KoBookmark *bookmark = new KoBookmark(cur);
     bookmark->setPositionOnlyMode(false); // we want it to be several chars long
- 
+
     KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor.document(), bookmark));
     QString newId = inlineRdf->createXmlId();
     inlineRdf->setXmlId(newId);
@@ -76,7 +75,7 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
     testItem->setName(name);
     Soprano::Statement st(
                 testItem->linkingSubject(), // subject
-                Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
+                Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
                 Soprano::Node::createLiteralNode(newId), // object
                 rdfDoc.manifestRdfNode()); // manifest datastore
     rdfDoc.model()->addStatement(st);

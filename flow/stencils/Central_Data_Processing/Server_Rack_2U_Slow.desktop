@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=ServerRack2USlow
 Name[bs]=ServerRack2USlow
-Name[ca]=ServerRack2USlow
+Name[ca]=ServidorRack2USlow
 Name[ca@valencia]=ServerRack2USlow
 Name[da]=ServerRack2USlow
 Name[de]=ServerRack2USlow
@@ -10,6 +10,7 @@ Name[en_GB]=ServerRack2USlow
 Name[es]=Rack servidor 2U lento
 Name[et]=Serverikapp 2USlow
 Name[eu]=2U zerbitzari-rack motela
+Name[fi]=ServerRack2U-hidas
 Name[fr]=ServeurRack2ULent
 Name[gl]=Estante de servidor 2U lento
 Name[hu]=ServerRack2USlow

@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QDialog>
+#include <QTreeWidget>
 
 /*! @internal */
 class DelayedCursorHandler : public QObject
@@ -33,21 +34,27 @@ public:
     void start(bool noDelay);
     void stop();
     bool startedOrActive; //!< true if ounting started or the cursor is active
-protected slots:
+protected Q_SLOTS:
     void show();
 protected:
     QTimer timer;
 };
 
-/*! @internal */
-class DebugWindowDialog : public QDialog
+/*! @internal KexiDB Debug Tree */
+class KexiDBDebugTreeWidget : public QTreeWidget
+{
+    Q_OBJECT
+public:
+    explicit KexiDBDebugTreeWidget(QWidget *parent = 0);
+public Q_SLOTS:
+    void copy();
+};
+
+/*! @internal Debug window */
+class DebugWindow : public QWidget
 {
 public:
-    explicit DebugWindowDialog(QWidget * parent)
-            : QDialog(parent, Qt::Dialog | Qt::WindowMinMaxButtonsHint | Qt::WindowStaysOnTopHint) {
-        setWindowState(Qt::WindowMinimized);
-    }
+    explicit DebugWindow(QWidget * parent = 0);
 };
 
 #endif
-

@@ -20,7 +20,6 @@
 #include "kexicomboboxdropdownbutton.h"
 
 #include <kdebug.h>
-#include <kcombobox.h>
 
 #include <QStyle>
 #include <QStyleOptionToolButton>
@@ -33,7 +32,7 @@
 class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
 {
 public:
-    KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
+    explicit KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
             : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }

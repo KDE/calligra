@@ -25,7 +25,9 @@
 
 #ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusConnectionInterface>
 #endif
 
 #include "KoPrintJob.h"
@@ -154,7 +156,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
+    if ((applicationName() == "krita" || applicationName() == "calligragemini") && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
@@ -492,17 +494,17 @@ bool KoApplication::start()
 
                 // are we just trying to open a template?
                 if (doTemplate) {
-                    QStringList paths;
+                    QString templatePath;
                     if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                        paths << QString(args->url(argNumber).toLocalFile());
+                        templatePath = args->url(argNumber).toLocalFile();
                         kDebug(30003) << "using full path...";
                     } else {
                         QString desktopName(args->arg(argNumber));
-                        QString appName = KGlobal::mainComponent().componentName();
+                        const QString templatesResourcePath = part->templatesResourcePath();
 
-                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                        QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
                         if (paths.isEmpty()) {
-                            paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
                         }
                         if (paths.isEmpty()) {
                             KMessageBox::error(0, i18n("No template found for: %1", desktopName));
@@ -510,13 +512,15 @@ bool KoApplication::start()
                         } else if (paths.count() > 1) {
                             KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
                             delete mainWindow;
+                        } else {
+                            templatePath = paths.at(0);
                         }
                     }
 
-                    if (!paths.isEmpty()) {
+                    if (!templatePath.isEmpty()) {
                         KUrl templateBase;
-                        templateBase.setPath(paths[0]);
-                        KDesktopFile templateInfo(paths[0]);
+                        templateBase.setPath(templatePath);
+                        KDesktopFile templateInfo(templatePath);
 
                         QString templateName = templateInfo.readUrl();
                         KUrl templateURL;

@@ -21,7 +21,6 @@
 #ifndef KARBONCONFIGINTERFACEPAGE_H
 #define KARBONCONFIGINTERFACEPAGE_H
 
-#include <KoUnit.h>
 #include <kvbox.h>
 #include <ksharedconfig.h>
 
@@ -39,7 +38,7 @@ public:
 
     void apply();
 
-public slots:
+public Q_SLOTS:
     void slotDefault();
 
 private:

@@ -92,14 +92,14 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
         return st.object().dataType().toString();
     case ColCtx: {
         QString ctx = st.context().toString();
-        QString RdfPathContextPrefix = m_rdf->rdfPathContextPrefix();
+        QString RdfPathContextPrefix = m_rdf->RDF_PATH_CONTEXT_PREFIX;
         QString InternalContext = m_rdf->inlineRdfContext().toString();
 
         kDebug(30015) << "InternalContext:" << InternalContext;
         kDebug(30015) << "ctx:" << ctx;
 
         if (ctx.startsWith(RdfPathContextPrefix)) {
-            ctx = ctx.mid(RdfPathContextPrefix.size());
+            ctx.remove(0, RdfPathContextPrefix.size());
         }
         if (isInlineRdf(st)) {
             ctx = "inline";
@@ -180,7 +180,7 @@ bool KoSopranoTableModel::setDataUpdateTriple(const QModelIndex &index, const So
 {
     model()->addStatement(n);
     model()->removeStatement(old);
-    m_statementIndex[ index.row()] = n;
+    m_statementIndex[index.row()] = n;
     emit dataChanged(index, index);
     return true;
 }
@@ -233,7 +233,7 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
         } else {
             if (!v.endsWith(".rdf"))
                 v = v + ".rdf";
-            n.setContext(Soprano::Node(QUrl(m_rdf->rdfPathContextPrefix() + v)));
+            n.setContext(Soprano::Node(QUrl(m_rdf->RDF_PATH_CONTEXT_PREFIX + v)));
         }
         return setDataUpdateTriple(index, st, n);
     }

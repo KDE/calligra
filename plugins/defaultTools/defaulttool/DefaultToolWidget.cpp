@@ -28,6 +28,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
@@ -242,6 +243,9 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
     widthSpinBox->setUnit( unit );
     heightSpinBox->setUnit( unit );
     m_blockSignals = false;
+
+    updatePosition();
+    updateSize();
 }
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )

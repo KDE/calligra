@@ -12,4 +12,3 @@ ViewMode=Detailed
 [calligra]
 FlakePluginsDisabled=kexirelationdesignshape,karbonimagefilter,karbonsvgfilter
 TextInlinePluginsDisabled=kprvariables
-ToolPluginsDisabled=calligrastagetoolanimation

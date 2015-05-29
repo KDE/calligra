@@ -25,13 +25,8 @@
 #include <QFile>
 #include <QRegExp>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
-#include <kurl.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include <db/connectiondata.h>
 #include <db/drivermanager.h>

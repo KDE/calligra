@@ -36,7 +36,7 @@ public:
     RefinePathPlugin(QObject *parent, const QVariantList &);
     virtual ~RefinePathPlugin() {}
 
-private slots:
+private Q_SLOTS:
     void slotRefinePath();
 
 private:

@@ -24,20 +24,6 @@
 
 class KexiActionProxy;
 
-//! Helper class for KexiActionProxy::plugSharedActionToExternalGUI() method.
-class KAction_setEnabled_Helper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit KAction_setEnabled_Helper(KexiActionProxy* proxy);
-
-public slots:
-    void slotSetEnabled(bool enabled);
-
-protected:
-    KexiActionProxy *m_proxy;
-};
-
 //! @internal a tool for emitting signal
 class KexiActionProxySignal : public QObject
 {
@@ -45,7 +31,7 @@ class KexiActionProxySignal : public QObject
 public:
     explicit KexiActionProxySignal(QObject *parent) : QObject(parent) {}
     void activate() { emit invoke(); }
-signals:
+Q_SIGNALS:
     void invoke();
 };
 

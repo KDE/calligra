@@ -58,15 +58,13 @@
 
 // KDE
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kwordwrap.h>
 
 // Calligra
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
-#include <KoDpi.h>
 #include <KoPointerEvent.h>
+#include <KoUnit.h>
 
 // KSpread
 #include "CanvasItem.h"

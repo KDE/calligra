@@ -66,11 +66,11 @@ public:
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
     virtual void dropEvent(QDropEvent *e);
 
-public slots:
+public Q_SLOTS:
     virtual void setPalette(const QPalette &pal);
     virtual void setFrameColor(const QColor& color);
 
-signals:
+Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 

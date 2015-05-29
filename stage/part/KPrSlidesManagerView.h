@@ -86,7 +86,7 @@ public:
 protected:
     virtual void wheelEvent(QWheelEvent *event);
 
-signals:
+Q_SIGNALS:
 
     /** Is emitted if the user has request a context menu */
     void requestContextMenu(QContextMenuEvent *event);

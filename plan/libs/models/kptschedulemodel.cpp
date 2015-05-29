@@ -581,9 +581,9 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KGlobal::locale()->formatDateTime( sm->expected()->start() ), KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );;
+                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KGlobal::locale()->formatDateTime( sm->expected()->start() ), KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
             } else {
-                return i18nc( "@info:tooltip", "Target start: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );;
+                return i18nc( "@info:tooltip", "Target start: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -617,9 +617,9 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KGlobal::locale()->formatDateTime( sm->expected()->end() ), KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );;
+                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KGlobal::locale()->formatDateTime( sm->expected()->end() ), KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
             } else {
-                return i18nc( "@info:tooltip", "Target finish: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );;
+                return i18nc( "@info:tooltip", "Target finish: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
             }
             break;
         case Qt::TextAlignmentRole:

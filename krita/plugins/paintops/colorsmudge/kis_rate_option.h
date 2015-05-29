@@ -25,13 +25,12 @@
 #include <kis_paint_information.h>
 #include <kis_types.h>
 
-class KisPropertiesConfiguration;
 class KisPainter;
 
 class KisRateOption: public KisCurveOption
 {
 public:
-    KisRateOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
+    KisRateOption(const QString& name, KisPaintOpOption::PaintopCategory category, bool checked);
 
     /**
      * Set the opacity of the painter based on the rate

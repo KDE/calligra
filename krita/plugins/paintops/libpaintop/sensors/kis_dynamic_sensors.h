@@ -2,14 +2,14 @@
  *  Copyright (c) 2006-2007,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -55,6 +55,26 @@ public:
     virtual qreal value(const KisPaintInformation& info) {
         return info.pressure();
     }
+};
+
+class KisDynamicSensorPressureIn : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorPressureIn();
+    virtual ~KisDynamicSensorPressureIn() { }
+    virtual qreal value(const KisPaintInformation& info) {
+        if(!info.isHoveringMode()) {
+            if(info.pressure() > lastPressure) {
+                lastPressure = info.pressure();
+            }
+            return lastPressure;
+        }
+
+        lastPressure = 0.0;
+        return 0.0;
+    }
+private:
+    qreal lastPressure;
 };
 
 class KisDynamicSensorXTilt : public KisDynamicSensor

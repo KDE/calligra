@@ -15,29 +15,43 @@ Splitting Calligra into packages:
 Table Of Contents
 -----------------
 1. Kexi
-1.1. Kexi database and migration drivers to package separately
-1.2. Other Kexi plugins to package separately
-1.3. Kexi development files
-1.4. Quick command-line tests of Kexi installation
+1.1. Required: KTextEditor - advanced text editor library
+1.2. Kexi database and migration drivers to package separately
+1.3. Other Kexi plugins to package separately
+1.4. Kexi development files
+1.5. Quick command-line tests of Kexi installation
 2. Krita
 2.1. Krita development files
 3. Debug information
 4. Calligra plugins
 5. Calligra libraries
-5.1. Calligra default database driver: SQLite
-6. WARNING against qt 4.8.0 and 4.8.1
+5.1. Required: Calligra default database driver: SQLite
+6. WARNING against Qt 4.8.0 and 4.8.1
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 8. Plan
 8.1. Runtime dependency of Plan's import filters
-9. Okular ODP plugin
+9. Okular plugins
 9.1. Runtime dependency of the Okular ODP plugin
 9.2. Support for PPT, PPTX and more runtime dependency
+9.3. Support for DOC, DOCX, WPD and more runtime dependency
 
 
 1. Kexi
 =======
 
-1.1. Kexi database and migration drivers to package separately
+1.1. Required: KTextEditor - advanced text editor library
+---------------------------------------------------------
+
+Kexi uses the Kate editor's plugin and an advanced text editor library
+to implement editing of SQL statements and scripts. The files are
+"libktexteditor.so" and "katepart.so" among others. Depending package
+can be named like "libktexteditor".
+
+NOTE: Kexi does not depend on the entire Kate application, just on the editing
+component.
+
+
+1.2. Kexi database and migration drivers to package separately
 --------------------------------------------------------------
 
 Kexi provides database drivers and migration drivers for a number of
@@ -59,6 +73,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_mysql.so
                                keximigrate_mysql.desktop
+                           Translation File:
+                               keximysqldriver.mo
                            Dependencies:
                                libmysqlclient
  ------------------------------------------------------------------------
@@ -69,6 +85,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_pqxx.so
                                keximigrate_pqxx.desktop
+                           Translation File:
+                               kexipostgresqldriver.mo
                            Dependencies:
                                libpq
                                libpqxx
@@ -80,6 +98,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_sybase.so
                                keximigrate_sybase.desktop
+                           Translation File:
+                               kexisybasedriver.mo
                            Dependencies:
                                libsybdb (FreeTDS)
  ------------------------------------------------------------------------
@@ -90,6 +110,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_xbase.so
                                keximigrate_xbase.desktop
+                           Translation File:
+                               kexixbasedriver.mo
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
@@ -107,14 +129,11 @@ The following matrix lists the packages and dependencies.
 Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
 and .desktop service files are installed to $KDEDIR/share/services/.
 
-Notes:
-* Oracle driver is not currently distributed.
-
 TODOs:
 * Add minimal versions of dependencies.
 
 
-1.2. Other Kexi plugins to package separately
+1.3. Other Kexi plugins to package separately
 ---------------------------------------------
 
 Kexi provides less a number of plugin types that are optional either because 
@@ -164,13 +183,14 @@ The following matrix lists the packages and dependencies.
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
 
-1.3. Kexi development files
+
+1.4. Kexi development files
 ---------------------------
 
 Kexi ships no development files at the moment, so -devel packages are not needed.
 
 
-1.4. Quick command-line tests of Kexi installation
+1.5. Quick command-line tests of Kexi installation
 --------------------------------------------------
 
 If you don't want to click through Kexi interface but still want
@@ -246,7 +266,7 @@ the things that KDEPIM/Akonadi pulls in.
 
 
 5. Calligra libraries
-====================
+=====================
 
 Calligra share common functionality within libraries, placed in libs/
 subdirectory. Calligra libraries should be placed in a single package,
@@ -271,8 +291,8 @@ pigment
 kowidgets
 
 
-5.1. Calligra default database driver: SQLite
----------------------------------------------
+5.1. Required: Calligra default database driver: SQLite
+-------------------------------------------------------
 
 In contrast to the all other Kexi database drivers, SQLite 3 driver SHOULD BE PART
 of the Calligra libraries package nor Kexi package, and it SOULD NOT be in optional.
@@ -290,14 +310,26 @@ be obtained by executing this command in calligra/ directory:
 
 Without SQLite in at least this version Calligra will not compile.
 
+Database driver files:
+    kexidb_sqlite3driver.so
+    kexidb_sqlite3driver.desktop
+Translation File:
+    kexisqlite3driver.mo
+Dependencies:
+    libsqlite3
+    libicu libicudata libicuuc libicui18n
 
-6. WARNING against qt 4.8.0 and 4.8.1
-====================
-Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch in this directory
+
+6. WARNING against Qt 4.8.0 and 4.8.1
+=====================================
+
+Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built.
+Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT.
+Patch against Qt can be found in qt48setx.patch in this directory
 
 
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
-====================
+========================================================================
 
 IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
              PACKAGERS_BUILD=ON option when building a package.
@@ -360,13 +392,13 @@ in the line before calligra_drop_unbuildable_products() with
 calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
 
 
-9. Okular ODP plugin
-====================
+9. Okular plugins
+=================
 
 9.1. Runtime dependency of the Okular ODP plugin
 ------------------------------------------------
-OKULAR_GENERATOR_ODP, the plugin for Okular, in extras/okularodpgenerator, has a
-runtime dependency on the Stage engine, PART_STAGE.
+OKULAR_GENERATOR_ODP, the ODP plugin for Okular, in extras/okularodpgenerator,
+has a runtime dependency on the Stage engine, PART_STAGE.
 
 9.2. Support for PPT, PPTX and more runtime dependency
 ------------------------------------------------------
@@ -381,4 +413,20 @@ In that case the files
 will be installed from the filters/stage/{powerpoint,pptx}.
 
 So with those desktop files and the Okular ODP plugin installed there is a
-runtime dependency on the Stage engine and the respective filter.
+runtime dependency on the Stage engine and the respective filters.
+
+9.3. Support for DOC, DOCX, WPD and more runtime dependency
+-----------------------------------------------------------
+The Okular ODT plugin also supports the formats DOC, DOCX and WPD, if the
+respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT and
+FILTER_WORDPERFECT_TO_ODT are built, by the products OKULAR_GENERATOR_DOC,
+OKULAR_GENERATOR_DOCX and OKULAR_GENERATOR_WORDPERFECT.
+
+In that case the files
+* libokularGenerator_{doc,docx,wpd}_calligra.desktop
+* okular{Doc,Doxx,Wpd}_calligra.desktop
+* okularApplication_{doc,docx,wpd}_calligra.desktop
+will be installed from the filters/word/{msword-odf,docx/import,wordperfect/import}.
+
+So with those desktop files and the Okular ODT plugin installed there is a
+runtime dependency on the respective filters.

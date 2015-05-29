@@ -101,7 +101,7 @@ public:
     void changeProperty(KFormDesigner::Form *form, QWidget *widget, const char *name,
         const QVariant &value) { KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value); }
 
-public slots:
+public Q_SLOTS:
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     void  editListContents();
 #endif

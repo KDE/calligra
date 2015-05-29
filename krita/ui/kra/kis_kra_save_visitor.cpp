@@ -42,6 +42,8 @@
 #include <kis_clone_layer.h>
 #include <kis_mask.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
+#include <kis_transform_mask_params_interface.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_selection_component.h>
@@ -49,16 +51,16 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
+KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
         : KisNodeVisitor()
         , m_store(store)
         , m_external(false)
-        , m_count(count)
         , m_name(name)
         , m_nodeFileNames(nodeFileNames)
         , m_writer(new KisStorePaintDeviceWriter(store))
@@ -89,7 +91,10 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         result = shapeLayer->saveLayer(m_store);
         m_store->popDirectory();
     }
-    m_count++;
+    else if (KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer)) {
+        Q_UNUSED(fileLayer); // We don't save data for file layers, but we still want to save the masks.
+        result = true;
+    }
     return result && visitAllInverse(layer);
 }
 
@@ -107,13 +112,11 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
         m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
         return false;
     }
-    m_count++;
     return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
-    m_count++;
     if (!saveMetaData(layer)) {
         m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
         return false;
@@ -139,7 +142,6 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
         m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
         return false;
     }
-    m_count++;
     return visitAllInverse(layer);
 }
 
@@ -161,14 +163,12 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
         return false;
     }
-    m_count++;
     return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     // Clone layers do not have a profile
-    m_count++;
     if (!saveMetaData(layer)) {
         m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
         return false;
@@ -190,7 +190,32 @@ bool KisKraSaveVisitor::visit(KisFilterMask *mask)
         m_errorMessages << i18n("Failed to save the filter configuration for filter mask %1.", mask->name());
         return false;
     }
-    m_count++;
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisTransformMask *mask)
+{
+    QDomDocument doc("transform_params");
+
+    QDomElement root = doc.createElement("transform_params");
+
+    QDomElement main = doc.createElement("main");
+    main.setAttribute("id", mask->transformParams()->id());
+
+    QDomElement data = doc.createElement("data");
+    mask->transformParams()->toXML(&data);
+
+    doc.appendChild(root);
+    root.appendChild(main);
+    root.appendChild(data);
+
+    QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
+    if (m_store->open(location)) {
+        QByteArray a = doc.toByteArray();
+        m_store->write(a, a.size());
+        m_store->close();
+    }
+
     return true;
 }
 
@@ -200,7 +225,6 @@ bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
         m_errorMessages << i18n("Failed to save the selection for transparency mask %1.", mask->name());
         return false;
     }
-    m_count++;
     return true;
 }
 
@@ -210,7 +234,6 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
         m_errorMessages << i18n("Failed to save the selection for local selection %1.", mask->name());
         return false;
     }
-    m_count++;
     return true;
 }
 
@@ -224,7 +247,9 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
     // Layer data
-    m_store->setCompressionEnabled(false);
+    KisConfig cfg;
+    m_store->setCompressionEnabled(cfg.compressKra());
+
     if (m_store->open(location)) {
         if (!device->write(*m_writer)) {
             device->disconnect();

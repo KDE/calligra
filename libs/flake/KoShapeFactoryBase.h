@@ -36,7 +36,6 @@ class KoProperties;
 class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
-class KoDataCenterBase;
 class KoDocumentResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
@@ -133,7 +132,7 @@ public:
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    QList<KoShapeConfigFactoryBase*> panelFactories();
+    QList<KoShapeConfigFactoryBase*> panelFactories() const;
 
     /**
      * return the id for the shape this factory creates.
@@ -316,7 +315,7 @@ private:
 
     void getDeferredPlugin();
 
-private slots:
+private Q_SLOTS:
 
     /// called whenever a document KoDocumentResourceManager is deleted
     void pruneDocumentResourceManager(QObject *);

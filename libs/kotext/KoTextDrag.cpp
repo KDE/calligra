@@ -32,7 +32,7 @@
 #include <KoGenChanges.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
-#include <KoOdfDocument.h>
+#include <KoDocumentBase.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 #include "KoStyleManager.h"
@@ -58,21 +58,12 @@ KoTextDrag::~KoTextDrag()
 
 bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 {
-    struct Finally {
-        Finally(KoStore *s) : store(s) { }
-        ~Finally() {
-            delete store;
-        }
-        KoStore *store;
-    };
-
     QBuffer buffer;
-    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
-    Finally finally(store); // delete store when we exit this scope
+    QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, mimeType));
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
 
-    KoOdfWriteStore odfStore(store);
+    KoOdfWriteStore odfStore(store.data());
     KoEmbeddedDocumentSaver embeddedSaver;
 
     KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
@@ -131,21 +122,21 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
         kDebug(30015) << "rdf model size:" << m->statementCount();
         KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
-                                             store, manifestWriter);
+                                             store.data(), manifestWriter);
     }
 #endif
 
-    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
+    if (!mainStyles.saveOdfStylesDotXml(store.data(), manifestWriter)) {
         return false;
     }
 
-    if (!context->saveDataCenter(store, manifestWriter)) {
+    if (!context->saveDataCenter(store.data(), manifestWriter)) {
         kDebug(32500) << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(32500) << "save embedded documents failed";
         return false;
@@ -156,8 +147,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
         return false;
     }
 
-    delete store; // make sure the buffer if fully flushed.
-    finally.store = 0;
+    store.reset();
     setData(mimeType, buffer.buffer());
 
     return true;
@@ -171,7 +161,7 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
     m_mimeData->setData(mimeType, data);
 }
 
-QMimeData * KoTextDrag::mimeData()
+QMimeData * KoTextDrag::takeMimeData()
 {
     QMimeData * mimeData = m_mimeData;
     m_mimeData = 0;

@@ -46,7 +46,6 @@
 #include <QContextMenuEvent>
 
 #include <kaction.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <ktabwidget.h>

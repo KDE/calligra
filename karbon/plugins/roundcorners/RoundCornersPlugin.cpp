@@ -38,7 +38,9 @@
 #include <KoParameterShape.h>
 #include <KoParameterToPathCommand.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoUnit.h>
 #include <KoIcon.h>
+#include <kundo2command.h>
 
 #include <kpluginfactory.h>
 #include <kdebug.h>

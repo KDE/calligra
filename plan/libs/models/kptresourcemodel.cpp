@@ -38,10 +38,8 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kio/job.h>
@@ -430,7 +428,7 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;;
+                    kDebug(planDbg())<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }

@@ -33,12 +33,11 @@
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 #include <KoPAViewBase.h>
-#include <KoPADocument.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPathShape.h>
-#include <KoPAPage.h>
+#include <KoPAPageBase.h>
 #include <KoZoomHandler.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeStroke.h>
@@ -200,7 +199,7 @@ QRectF KPrAnimationTool::handlesSize()
     return bound;
 }
 
-QList<QWidget *> KPrAnimationTool::createOptionWidgets()
+QList<QPointer<QWidget> > KPrAnimationTool::createOptionWidgets()
 {
     KPrPageEffectDocker *effectWidget = new KPrPageEffectDocker( );
     effectWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
@@ -215,7 +214,7 @@ QList<QWidget *> KPrAnimationTool::createOptionWidgets()
     connect((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
              m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
 
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     effectWidget->setWindowTitle(i18n("Slide Transitions"));
     widgets.append(effectWidget);
     clickActionWidget->setWindowTitle(i18n("Shape Click Actions"));

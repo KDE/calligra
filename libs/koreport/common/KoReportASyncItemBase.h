@@ -28,8 +28,9 @@ class KOREPORT_EXPORT KoReportASyncItemBase : public KoReportItemBase
     Q_OBJECT
 public:
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script) = 0;
+    virtual QVariant realItemData(const QVariant& itemData) const;
 
-signals:
+Q_SIGNALS:
     void finishedRendering();
 };
 

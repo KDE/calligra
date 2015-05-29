@@ -32,6 +32,7 @@
 #include <flake/kis_shape_layer.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 
 #include <kis_debug.h>
 
@@ -114,7 +115,7 @@ void KisShapeLayerCanvas::repaint()
 
     if (r.isEmpty()) return;
 
-    r.intersect(m_parentLayer->image()->bounds());
+    r = r.intersected(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);
@@ -133,10 +134,9 @@ void KisShapeLayerCanvas::repaint()
 
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
     dev->convertFromQImage(image, 0);
-    KisPainter kp(m_projection.data());
-    kp.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-    kp.bitBlt(r.x(), r.y(), dev, 0, 0, r.width(), r.height());
-    kp.end();
+
+    KisPainter::copyAreaOptimized(r.topLeft(), dev, m_projection, QRect(QPoint(), r.size()));
+
     m_parentLayer->setDirty(r);
 }
 

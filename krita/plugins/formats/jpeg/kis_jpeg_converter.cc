@@ -36,11 +36,10 @@ extern "C" {
 
 #include <QFile>
 #include <QBuffer>
+#include <QApplication>
 
-#include <kapplication.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klocale.h>
-#include <kde_file.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -50,9 +49,10 @@ extern "C" {
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoUnit.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
@@ -85,7 +85,7 @@ namespace
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+    if (KoID(cs->id()) == KoID("GRAYA") || cs->id() == "GRAYAU16" || cs->id() == "GRAYA16") {
         return JCS_GRAYSCALE;
     }
     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
@@ -94,7 +94,7 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
         return JCS_CMYK;
     }
-    KMessageBox::information(0, i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
+    QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 
@@ -113,7 +113,7 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc)
+KisJPEGConverter::KisJPEGConverter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;
@@ -226,6 +226,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     // Set resolution
+    qDebug() << "cinfo.X_density" << cinfo.X_density << "cinfo.y_density" << cinfo.Y_density << "unit" << cinfo.density_unit;
     double xres = 72, yres = 72;
     if (cinfo.density_unit == 1) {
         xres = cinfo.X_density;
@@ -409,6 +410,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Dump loaded metadata
     layer->metaData()->debugDump();
+
+    // Check whether the metadata has resolution info, too...
+    if (cinfo.density_unit == 0) {
+        double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
+        double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
+        if (xres != 0 && yres != 0) {
+            m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+        }
+    }
 
     // Finish decompression
     jpeg_finish_decompress(&cinfo);

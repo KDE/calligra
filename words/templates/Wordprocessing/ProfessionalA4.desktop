@@ -102,3 +102,5 @@ Comment[zh_CN]=创建具有专业外观的宽页边距的空白文档
 Comment[zh_TW]=建立有寬邊界的空白文件
 Icon=template_a4
 X-KDE-MeasureSystem=metric
+X-KDE-VariantName=A4
+X-KDE-Thumbnail=.thumbnail/professional.png

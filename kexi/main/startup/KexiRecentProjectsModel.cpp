@@ -126,17 +126,16 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         }
         else {
             KexiDB::DriverManager manager;
-            return i18nc("<type> database", "%1 database",
+            return i18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
                   manager.driverInfo(pdata->constConnectionData()->driverName).caption);
-            return pdata->objectName();
         }
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
         if (fileBased) {
-            return KIcon(KexiDB::defaultFileBasedDriverIconName());
+            return Kexi::defaultFileBasedDriverIcon();
         }
         else {
-            return KIcon(KEXI_DATABASE_SERVER_ICON_NAME);
+            return Kexi::serverIcon();
         }
     }
     /*case KCategorizedSortFilterProxyModel::CategorySortRole: {

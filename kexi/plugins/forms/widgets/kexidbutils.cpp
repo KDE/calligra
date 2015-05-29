@@ -41,7 +41,7 @@
 class KexiDBWidgetContextMenuExtender::Private
 {
 public:
-    Private(KexiDataItemInterface* iface_)
+    explicit Private(KexiDataItemInterface* iface_)
       : iface(iface_)
       , contextMenuHasTitle(false)
     {

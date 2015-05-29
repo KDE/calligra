@@ -22,10 +22,10 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"
+#include "CellToolBase.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
 #include <KoToolBase.h>
 
 #include <kmessagebox.h>
@@ -63,10 +63,10 @@ HyperlinkStrategy::~HyperlinkStrategy()
 
 void HyperlinkStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
 {
-    d->lastPoint = documentPos;
-    if (d->textRect.contains(documentPos)) {
+    const QPointF position = documentPos - cellTool()->offset();
+    d->lastPoint = position;
+    if (d->textRect.contains(position))
         return;
-    }
     AbstractSelectionStrategy::handleMouseMove(documentPos, modifiers);
 }
 

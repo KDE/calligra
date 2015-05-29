@@ -24,9 +24,8 @@
 
 #include "ui_kptmainprojectpanelbase.h"
 
-#include "kptdatetime.h"
-
 #include <QWidget>
+#include <QDateTime>
 
 
 namespace KPlato
@@ -48,14 +47,14 @@ public:
     
     bool ok();
 
-public slots:
+public Q_SLOTS:
     virtual void slotCheckAllFieldsFilled();
     virtual void slotChooseLeader();
     virtual void slotStartDateClicked();
     virtual void slotEndDateClicked();
     virtual void enableDateTime();
 
-signals:
+Q_SIGNALS:
     void obligatedFieldsFilled(bool);
     void changed();
 

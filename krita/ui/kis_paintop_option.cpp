@@ -21,38 +21,27 @@
 
 #include <klocale.h>
 
-QString KisPaintOpOption::generalCategory()
-{
-    return i18n("General");
-}
-
-QString KisPaintOpOption::colorCategory()
-{
-    return i18n("Color");
-}
-
-QString KisPaintOpOption::textureCategory()
-{
-    return i18n("Texture");
-}
-
-
 struct KisPaintOpOption::Private
 {
 public:
     bool checked;
     QString label;
-    QString category;
-    QWidget * configurationPage;
+    KisPaintOpOption::PaintopCategory category;
+    QWidget *configurationPage;
+
+    bool updatesBlocked;
+    bool isWritingSettings;
 };
 
-KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
-        : m_checkable(true)
-        , m_d(new Private())
+KisPaintOpOption::KisPaintOpOption(PaintopCategory category, bool checked)
+    : m_checkable(true)
+    , m_d(new Private())
+
 {
     m_d->checked = checked;
-    m_d->label = label;
     m_d->category = category;
+    m_d->updatesBlocked = false;
+    m_d->isWritingSettings = false;
     m_d->configurationPage = 0;
 }
 
@@ -61,12 +50,30 @@ KisPaintOpOption::~KisPaintOpOption()
     delete m_d;
 }
 
-QString KisPaintOpOption::label() const
+void KisPaintOpOption::emitSettingChanged()
 {
-    return m_d->label;
+    KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
+
+    if (!m_d->updatesBlocked) {
+        emit sigSettingChanged();
+    }
 }
 
-QString KisPaintOpOption::category() const
+void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    m_d->updatesBlocked = true;
+    readOptionSetting(setting);
+    m_d->updatesBlocked = false;
+}
+
+void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    m_d->isWritingSettings = true;
+    writeOptionSetting(setting);
+    m_d->isWritingSettings = false;
+}
+
+KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 {
     return m_d->category;
 }
@@ -76,15 +83,24 @@ bool KisPaintOpOption::isChecked() const
     return m_d->checked;
 }
 
+bool KisPaintOpOption::isCheckable() const {
+    return m_checkable;
+}
+
 void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checked = checked;
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPaintOpOption::setImage(KisImageWSP image)
 {
     Q_UNUSED(image);
+}
+
+void KisPaintOpOption::setNode(KisNodeWSP node)
+{
+    Q_UNUSED(node);
 }
 
 void KisPaintOpOption::setConfigurationPage(QWidget * page)
@@ -96,6 +112,16 @@ QWidget* KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }
+void KisPaintOpOption::setLocked(bool value)
+{
+    m_locked = value;
+}
+
+bool KisPaintOpOption::isLocked ()const
+{
+    return m_locked;
+}
+
 
 #include "kis_paintop_option.moc"
 

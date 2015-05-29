@@ -5,7 +5,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,7 +49,6 @@ const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
 const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
-const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
 const QString COMPOSITE_ALLANON       = "allanon";
@@ -62,7 +61,7 @@ const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
 
 const QString COMPOSITE_DARKEN      = "darken";
-const QString COMPOSITE_BURN        = "burn";
+const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
 const QString COMPOSITE_LINEAR_BURN = "linear_burn";
 const QString COMPOSITE_GAMMA_DARK  = "gamma_dark";
 
@@ -118,6 +117,7 @@ const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";
 const QString COMPOSITE_COPY_GREEN   = "copy_green";
 const QString COMPOSITE_COPY_BLUE    = "copy_blue";
+const QString COMPOSITE_TANGENT_NORMALMAP    = "tangent_normalmap";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";
@@ -126,6 +126,8 @@ const QString COMPOSITE_DISSOLVE     = "dissolve";
 const QString COMPOSITE_DISPLACE     = "displace";
 const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_DARKER_COLOR = "darker color";
+const QString COMPOSITE_LIGHTER_COLOR = "lighter color";
 const QString COMPOSITE_UNDEF        = "undefined";
 
 

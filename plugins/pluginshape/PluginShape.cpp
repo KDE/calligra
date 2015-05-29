@@ -26,8 +26,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoStoreDevice.h>
-#include <KoUnit.h>
 
 #include <QPainter>
 #include <kdebug.h>

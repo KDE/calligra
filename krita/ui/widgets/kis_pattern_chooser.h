@@ -19,19 +19,20 @@
 #define KIS_PATTERN_CHOOSER_H_
 
 #include <QFrame>
-#include <KoResourceItemChooser.h>
 #include <krita_export.h>
 
 class QLabel;
+class KoResourceItemChooser;
+class KoResource;
 
-class KRITAUI_EXPORT KoPatternChooser : public QFrame
+class KRITAUI_EXPORT KisPatternChooser : public QFrame
 {
 
     Q_OBJECT
 
 public:
-    KoPatternChooser(QWidget *parent = 0);
-    virtual ~KoPatternChooser();
+    KisPatternChooser(QWidget *parent = 0);
+    virtual ~KisPatternChooser();
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
@@ -42,13 +43,13 @@ public:
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
 
-signals:
+Q_SIGNALS:
 
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);
     void updateItemSize();
 
-private slots:
+private Q_SLOTS:
 
     void update(KoResource *resource);
 

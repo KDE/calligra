@@ -29,7 +29,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorConversionTransformation.h>
 
-#include "kundo2command.h"
+#include "kundo2magicstring.h"
 #include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"
@@ -39,7 +39,6 @@ class QPen;
 class KUndo2Command;
 class QRect;
 class QRectF;
-class QStringList;
 class QBitArray;
 class QPainterPath;
 
@@ -88,6 +87,22 @@ public:
     virtual ~KisPainter();
 
 public:
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect);
+
+    static void copyAreaOptimizedOldData(const QPoint &dstPt,
+                                         KisPaintDeviceSP src,
+                                         KisPaintDeviceSP dst,
+                                         const QRect &originalSrcRect);
+
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect,
+                                  KisSelectionSP selection);
+
     /**
      * Start painting on the specified device. Not undoable.
      */
@@ -109,7 +124,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString());
+    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString(),int timedID = -1);
 
     /// Cancel all the changes made by the painter
     void revertTransaction();
@@ -513,7 +528,12 @@ public:
 
     /**
      * Draw the path using the Pen
+     *
+     * if \p requestedRect is null, the entire path is painted
      */
+    void drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect);
+
+    // convenience overload
     void drawPainterPath(const QPainterPath& path, const QPen& pen);
 
     /**
@@ -582,7 +602,7 @@ public:
      * Some paintops really want to know about the image they work
      * for, e.g. the clone paintop.
      */
-    void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image);
+    void setPaintOpPreset(KisPaintOpPresetSP preset, KisNodeSP node, KisImageSP image);
 
     /// Return the paintop preset
     KisPaintOpPresetSP preset() const;

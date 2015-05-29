@@ -17,15 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALLIGRA_PAGE_LAYOUT_WIDGET
-#define CALLIGRA_PAGE_LAYOUT_WIDGET
+#ifndef KO_PAGE_LAYOUT_WIDGET
+#define KO_PAGE_LAYOUT_WIDGET
 
 #include "kowidgets_export.h"
 
 #include <KoText.h>
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <QWidget>
+
+class KoUnit;
 
 /// the widget that shows the size/margins and other page settings.
 class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
@@ -49,15 +50,15 @@ public:
     void setTextDirection(KoText::Direction direction);
     KoText::Direction textDirection() const;
 
-signals:
+Q_SIGNALS:
     void layoutChanged(const KoPageLayout &layout);
     void unitChanged(const KoUnit &unit);
 
-public slots:
+public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
     void setTextAreaAvailable(bool available);
 
-private slots:
+private Q_SLOTS:
     void sizeChanged(int row);
     void unitChanged(int row);
     void facingPagesChanged();

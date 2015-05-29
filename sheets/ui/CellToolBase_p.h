@@ -42,8 +42,6 @@
 #include <QAction>
 #include <QHash>
 
-class QGridLayout;
-class QToolButton;
 class KUndo2Command;
 class KFind;
 class KReplace;
@@ -55,7 +53,6 @@ namespace Sheets
 {
 class CharacterSelectDialog;
 class CellEditor;
-class CellToolOptionWidget;
 class Sheet;
 
 class CellToolBase::Private

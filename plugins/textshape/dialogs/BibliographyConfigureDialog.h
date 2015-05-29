@@ -29,7 +29,6 @@
 
 #include "KoOdfBibliographyConfiguration.h"
 
-class KoInlineCite;
 
 class BibliographyConfigureDialog : public QDialog
 {
@@ -38,7 +37,7 @@ class BibliographyConfigureDialog : public QDialog
 public:
     explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void addSortKey();
     void save(QAbstractButton *);
     void sortMethodChanged(bool);
@@ -54,12 +53,12 @@ class SortKeyWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent);
+    explicit SortKeyWidget(const QString &sortKey, Qt::SortOrder order, QWidget *parent);
 
     QString sortKey() const;
     Qt::SortOrder sortOrder() const;
 
-    void setSortKey(QString &sortKey);
+    void setSortKey(const QString &sortKey);
     void setSortOrder(Qt::SortOrder order);
 
 private:

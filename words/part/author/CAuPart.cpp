@@ -24,7 +24,6 @@
 #include "CAuFactory.h"
 
 #include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
 #include <kmessagebox.h>
 
@@ -32,7 +31,6 @@ CAuPart::CAuPart(QObject *parent)
     : KWPart(parent)
 {
     setComponentData(CAuFactory::componentData());
-    setTemplateType("words_template");
 }
 
 

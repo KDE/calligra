@@ -23,7 +23,6 @@
 #include <QPixmap>
 #include <QList>
 
-class KConfig;
 class KoOpenPanePrivate;
 class KComponentData;
 class QPixmap;
@@ -46,7 +45,7 @@ public:
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templateType = QString());
+    KoOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     virtual ~KoOpenPane();
 
     QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
@@ -63,18 +62,18 @@ public:
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
 
-protected slots:
+protected Q_SLOTS:
     void updateSelectedWidget();
     void itemClicked(QTreeWidgetItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
 
-private slots:
+private Q_SLOTS:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
 
-signals:
+Q_SIGNALS:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
 
@@ -88,9 +87,9 @@ protected:
     void initRecentDocs();
     /**
      * Populate the list with all templates the user can choose.
-     * @param templateType the template-type (group) that should be selected on creation.
+     * @param templatesResourcePath the template-type (group) that should be selected on creation.
      */
-    void initTemplates(const QString& templateType);
+    void initTemplates(const QString& templatesResourcePath);
 
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);

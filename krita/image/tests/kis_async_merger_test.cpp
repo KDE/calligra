@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_selection.h"
@@ -118,7 +119,7 @@ void KisAsyncMergerTest::testMerger()
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
     resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
     QPoint pt;
-    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 1));
+    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 5, 0, 0));
 }
 
 

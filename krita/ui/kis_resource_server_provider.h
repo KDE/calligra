@@ -23,18 +23,19 @@
 #ifndef KIS_RESOURCESERVERPROVIDER_H_
 #define KIS_RESOURCESERVERPROVIDER_H_
 
-#include <QString>
-#include <QStringList>
-#include <QList>
-
 #include <KoResourceServer.h>
+#include <KoResourceServerAdapter.h>
+
+#include <kis_paintop_preset.h>
 
 #include <krita_export.h>
 
-class KoResource;
 class KoResourceLoaderThread;
-class KisPaintOpPreset;
 class KisWorkspaceResource;
+class KisPSDLayerStyleCollectionResource;
+
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -45,26 +46,31 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
-    KoResourceServer<KisWorkspaceResource>* workspaceServer();
+    KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
+    KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
 
     void brushBlacklistCleanup();
-signals:
+
+Q_SIGNALS:
     void notifyBrushBlacklistCleanup();
-    
+
 private:
 
     KisResourceServerProvider();
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
-    KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
+    KisPaintOpPresetResourceServer* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* m_layerStyleCollectionServer;
 
 private:
 
-    KoResourceLoaderThread *paintOpPresetThread;
-    KoResourceLoaderThread *workspaceThread;
+    KoResourceLoaderThread *m_paintOpPresetThread;
+    KoResourceLoaderThread *m_workspaceThread;
+    KoResourceLoaderThread *m_layerStyleCollectionThread;
+
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

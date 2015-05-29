@@ -29,7 +29,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
-#include <kfile.h>
 
 #include "kis_config.h"
 #include "kis_alternate_invocation_action.h"
@@ -124,7 +123,7 @@ void KisInputProfileManager::removeProfile(const QString &name)
         d->profiles.remove(name);
 
         //Delete the settings file for the removed profile, if it exists
-        QDir userDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+        QDir userDir(KGlobal::dirs()->saveLocation("data", "krita/input/"));
 
         if (userDir.exists(d->profileFileName(name))) {
             userDir.remove(d->profileFileName(name));
@@ -194,7 +193,7 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("data", "krita/input/*", KStandardDirs::Recursive);
 
 
     QMap<QString, QList<ProfileEntry> > profileEntries;
@@ -284,7 +283,7 @@ void KisInputProfileManager::loadProfiles()
 
 void KisInputProfileManager::saveProfiles()
 {
-    QString storagePath = KGlobal::dirs()->saveLocation("appdata", "input/");
+    QString storagePath = KGlobal::dirs()->saveLocation("data", "krita/input/");
     Q_FOREACH(KisInputProfile * p, d->profiles) {
         QString fileName = d->profileFileName(p->name());
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
@@ -316,7 +315,7 @@ void KisInputProfileManager::saveProfiles()
 void KisInputProfileManager::resetAll()
 {
     QString kdeHome = KGlobal::mainComponent().dirs()->localkdedir();
-    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("data", "krita/input/*", KStandardDirs::Recursive);
 
     foreach(const QString &profile, profiles) {
         if(profile.contains(kdeHome)) {

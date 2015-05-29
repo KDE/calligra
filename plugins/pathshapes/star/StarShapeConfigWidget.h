@@ -36,13 +36,13 @@ public:
     /// reimplemented
     virtual void save();
     /// reimplemented
-    virtual void setUnit(KoUnit unit);
+    virtual void setUnit(const KoUnit &unit);
     /// reimplemented
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
     virtual KUndo2Command * createCommand();
 
-private slots:
+private Q_SLOTS:
     void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;

@@ -35,19 +35,8 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
-#include <kurlcombobox.h>
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <kcategorizedview.h>
-#include <ktitlewidget.h>
-#include <kpushbutton.h>
-#include <kacceleratormanager.h>
-#include <kfileitemdelegate.h>
 #include <kdialog.h>
 
 #include <QLayout>
@@ -59,8 +48,8 @@
  
 KexiMainWelcomePage::KexiMainWelcomePage(
    KexiWelcomeAssistant* assistant, QWidget* parent)
- : KexiAssistantPage(i18n("Welcome to Kexi"),
-                  i18n("Select one of the recently used projects to open."),
+ : KexiAssistantPage(i18nc("@title:window", "Welcome to Kexi"),
+                  i18nc("@info", "Select one of the recently used projects to open."),
                   parent)
  , m_assistant(assistant)
 {
@@ -82,7 +71,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     //not needed in grid:
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+    connect(m_recentProjects, SIGNAL(activated(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     
     m_statusBar = new KexiWelcomeStatusBar;
     contentsLyr->addWidget(m_statusBar);
@@ -123,7 +112,7 @@ void KexiMainWelcomePage::updateRecentProjects()
 class KexiWelcomeAssistant::Private
 {
 public:
-    Private(KexiWelcomeAssistant *qq)
+    explicit Private(KexiWelcomeAssistant *qq)
      : q(qq)
     {
     }

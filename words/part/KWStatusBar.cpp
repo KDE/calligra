@@ -32,7 +32,6 @@
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-#include <KoZoomInput.h>
 #include <QStackedWidget>
 #include <QLabel>
 #include <QLineEdit>
@@ -42,7 +41,6 @@
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");
@@ -288,7 +286,9 @@ void KWStatusBar::gotoPage(int pagenumber)
 void KWStatusBar::updatePageStyle()
 {
     KWPage page = m_currentView ? m_currentView->currentPage() : KWPage();
-    QString name = page.isValid() && page.pageStyle().isValid() ? page.pageStyle().name() : QString();
+    QString name = (page.isValid() && page.pageStyle().isValid() 
+		    ? page.pageStyle().displayName()
+		    : QString());
     m_pageStyleLabel->m_label->setText(name);
     m_pageStyleLabel->m_button->setText(name);
 }
@@ -316,7 +316,9 @@ void KWStatusBar::updateCursorPosition()
     KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
     KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
     if (editor) {
-        line = editor->block().firstLineNumber() + 1;
+        line = editor->block().firstLineNumber();
+        int posInDoc = editor->position() - editor->block().position();
+        line += editor->block().layout()->lineForTextPosition(posInDoc).lineNumber() + 1;
     }
     m_lineLabel->m_label->setText(i18nLine.subs(line).toString());
     m_lineLabel->m_edit->setText(QString::number(line));

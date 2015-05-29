@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=empty-func
-Name[bs]=Prazna funkcija
+Name[bs]=prazna funkcija
 Name[ca]=funció-buit
 Name[ca@valencia]=funció-buit
 Name[da]=empty-func
@@ -14,6 +14,7 @@ Name[fr]=fonction-vide
 Name[gl]=Función baleira
 Name[hu]=üres-függvény
 Name[it]=funzione-vuota
+Name[ja]=空の関数
 Name[kk]=бос-функция
 Name[nb]=tom funksj
 Name[nl]=empty-func

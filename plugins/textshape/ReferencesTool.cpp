@@ -51,7 +51,7 @@
 #include <QBoxLayout>
 #include <QMenu>
 
-LabeledWidget::LabeledWidget(KAction *action, const QString label, LabelPosition lb, bool warningLabelRequired)
+LabeledWidget::LabeledWidget(KAction *action, const QString &label, LabelPosition lb, bool warningLabelRequired)
     : QWidget()
     , m_action(action)
 {
@@ -215,9 +215,9 @@ void ReferencesTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QList<QWidget*> ReferencesTool::createOptionWidgets()
+QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
 
     m_sfenw = new SimpleFootEndNotesWidget(this, 0);
@@ -294,7 +294,7 @@ void ReferencesTool::insertAutoFootNote()
     m_note->setAutoNumbering(true);
 }
 
-void ReferencesTool::insertLabeledFootNote(QString label)
+void ReferencesTool::insertLabeledFootNote(const QString &label)
 {
     m_note = textEditor()->insertFootNote();
     m_note->setAutoNumbering(false);
@@ -307,7 +307,7 @@ void ReferencesTool::insertAutoEndNote()
     m_note->setAutoNumbering(true);
 }
 
-void ReferencesTool::insertLabeledEndNote(QString label)
+void ReferencesTool::insertLabeledEndNote(const QString &label)
 {
     m_note = textEditor()->insertEndNote();
     m_note->setAutoNumbering(false);

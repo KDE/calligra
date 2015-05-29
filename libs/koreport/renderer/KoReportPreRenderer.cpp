@@ -21,7 +21,6 @@
 #include "renderobjects.h"
 #include "KoReportData.h"
 
-#include <kdeversion.h>
 #include <QFontMetrics>
 #include <labelsizeinfo.h>
 #include <KoPageFormat.h>
@@ -79,9 +78,9 @@ public:
     ///Scripting Stuff
     KRScriptHandler *m_scriptHandler;
     void initEngine();
-    
+
     KoReportASyncItemManager* asyncManager;
-    
+
 private slots:
     void asyncItemsFinished();
 
@@ -104,7 +103,7 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
     m_maxHeight = m_maxWidth = 0.0;
     m_kodata = 0;
     asyncManager = new KoReportASyncItemManager(this);
-    
+
     connect(asyncManager, SIGNAL(finished()), this, SLOT(asyncItemsFinished()));
 }
 
@@ -205,11 +204,10 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
-            bool status = false;
             QList<int> shownGroups;
             ORDetailGroupSectionData * grp = 0;
 
-            status = m_kodata->moveFirst();
+            bool status = m_kodata->moveFirst();
             m_recordCount = m_kodata->recordCount();
 
             //kDebug() << "Record Count:" << m_recordCount;
@@ -297,7 +295,7 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
                                             createNewPage();
                                             m_kodata->moveNext();
                                         }
-                                        
+
                                         if (!keys[i].isEmpty())
                                             keyValues[i] = m_kodata->value(m_kodata->fieldNumber(keys[i])).toString();
 
@@ -338,7 +336,7 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
 
     int itemHeight = 0;
-    
+
     if (sectionData.objects().count() == 0)
         return intHeight;
 
@@ -346,13 +344,13 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
     foreach(KoReportItemBase *ob, objects) {
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
-        
+
         //ASync objects cannot alter the section height
         KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
-        
-        if (!async_ob) { 
+
+        if (!async_ob) {
             itemHeight = ob->renderSimpleData(0, 0, offset, itemData, m_scriptHandler);
-           
+
             if (itemHeight > intHeight) {
                 intHeight = itemHeight;
             }
@@ -397,7 +395,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
             KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
             if (async_ob){
                 //kDebug() << "async object";
-                asyncManager->addItem(async_ob, m_page, sec, offset, itemData, m_scriptHandler);
+                asyncManager->addItem(async_ob, m_page, sec, offset, async_ob->realItemData(itemData), m_scriptHandler);
             } else {
                 //kDebug() << "sync object";
                 itemHeight = ob->renderSimpleData(m_page, sec, offset, itemData, m_scriptHandler);
@@ -426,11 +424,11 @@ void KoReportPreRendererPrivate::initEngine()
 {
     m_scriptHandler = new KRScriptHandler(m_kodata, m_reportData);
 
-    connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(enteredGroup(QString,QVariant)), m_scriptHandler, SLOT(slotEnteredGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(exitedGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotExitedGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(exitedGroup(QString,QVariant)), m_scriptHandler, SLOT(slotExitedGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
+    connect(this, SIGNAL(renderingSection(KRSectionData*,OROPage*,QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*,OROPage*,QPointF)));
 }
 
 void KoReportPreRendererPrivate::asyncItemsFinished()
@@ -542,7 +540,7 @@ ORODocument* KoReportPreRenderer::generate()
 
             //!TODO This is a hack
             if (i.key() == "field")
-                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(const QString&)), i.value(), SLOT(setWhere(const QString&)));
+                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(QString)), i.value(), SLOT(setWhere(QString)));
         }
     }
 
@@ -552,9 +550,6 @@ ORODocument* KoReportPreRenderer::generate()
     d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
-        int row = 0;
-        int col = 0;
-
         // remember the initial margin setting as we will be modifying
         // the value and restoring it as we move around
         qreal margin = d->m_leftMargin;
@@ -585,6 +580,8 @@ ORODocument* KoReportPreRenderer::generate()
 
             if (mydata && mydata->recordCount() > 0) { /* && !((query = orqThis->getQuery())->eof()))*/
                 mydata->moveFirst();
+                int row = 0;
+                int col = 0;
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
                     d->renderSection(*(detailData->m_detailSection));
@@ -637,7 +634,7 @@ ORODocument* KoReportPreRenderer::generate()
 
         tb->setText(d->m_scriptHandler->evaluate(tb->text()).toString());
     }
-    
+
     d->asyncManager->startRendering();
 
     d->m_scriptHandler->displayErrors();

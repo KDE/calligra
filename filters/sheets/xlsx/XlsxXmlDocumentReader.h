@@ -21,10 +21,11 @@
  *
  */
 
-#ifndef XLSXXMLDOCREADER_H
-#define XLSXXMLDOCREADER_H
+#ifndef XLSXXMLDOCUMENTREADER_H
+#define XLSXXMLDOCUMENTREADER_H
 
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
+#include <MsooXmlReader.h>
 
 #include <QMap>
 
@@ -92,4 +93,4 @@ private:
     Private* const d;
 };
 
-#endif //XLSXXMLDOCREADER_H
+#endif //XLSXXMLDOCUMENTREADER_H

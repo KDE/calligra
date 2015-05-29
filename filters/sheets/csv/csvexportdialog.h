@@ -71,7 +71,7 @@ private:
     QString m_delimiter;
     QChar   m_textquote;
 
-private slots:
+private Q_SLOTS:
     void slotOk();
     void slotCancel();
 

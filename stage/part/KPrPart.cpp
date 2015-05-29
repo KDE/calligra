@@ -25,7 +25,6 @@
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
@@ -38,7 +37,7 @@
 KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)
 {
-    setTemplateType("stage_template");
+    setTemplatesResourcePath(QLatin1String("stage/templates/"));
     setComponentData(KPrFactory::componentData());
 }
 

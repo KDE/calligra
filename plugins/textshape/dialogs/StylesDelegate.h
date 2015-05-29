@@ -41,11 +41,11 @@ public:
                             const QStyleOptionViewItem &option, const QModelIndex &index);
     void setEditButtonEnable(bool enable);
 
-signals:
-    void styleManagerButtonClicked(QModelIndex index);
-    void deleteStyleButtonClicked(QModelIndex index);
-    void needsUpdate(QModelIndex index);
-    void clickedInItem(QModelIndex index);
+Q_SIGNALS:
+    void styleManagerButtonClicked(const QModelIndex &index);
+    void deleteStyleButtonClicked(const QModelIndex &index);
+    void needsUpdate(const QModelIndex &index);
+    void clickedInItem(const QModelIndex &index);
 
 private:
     bool m_editButtonPressed;

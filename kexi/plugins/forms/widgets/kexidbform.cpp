@@ -303,6 +303,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 if (!(ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Home
                         || key == Qt::Key_End || key == Qt::Key_Down || key == Qt::Key_Up))
                         /* ^^ home/end/down/up are already handled by widgets */
+                        && !ke->isAccepted()
                         && d->dataAwareObject->handleKeyPress(
                             ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
                     if (ke->isAccepted())
@@ -375,7 +376,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 bool wasAtFirstWidget = false; //used to protect against infinite loop
                 while (true) {
                     if (tab) {
-                        if (d->orderedFocusWidgets.first() && realWidget == d->orderedFocusWidgets.last()) {
+                        if (!d->orderedFocusWidgets.isEmpty() && realWidget == d->orderedFocusWidgets.last()) {
                             if (wasAtFirstWidget)
                                 break;
                             d->orderedFocusWidgetsIterator = d->orderedFocusWidgets.begin();
@@ -386,7 +387,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             return true; //ignore
                         }
                     } else {//backtab
-                        if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
+                        if (!d->orderedFocusWidgets.isEmpty() && realWidget == d->orderedFocusWidgets.first()) {
                             d->orderedFocusWidgetsIterator
                                 = d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count() - 1);
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {

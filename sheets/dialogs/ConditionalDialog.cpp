@@ -41,8 +41,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <KoGlobal.h>
-
 #include <QGroupBox>
 #include <QLabel>
 #include <QGridLayout>

@@ -21,6 +21,12 @@
 #ifndef KOICON_H
 #define KOICON_H
 
+// Qt
+
+#include <QApplication>
+#include <QPalette>
+#include <QColor>
+
 // KDE
 #include <kicon.h>
 #include <kiconloader.h>
@@ -56,5 +62,33 @@
 /// Use these macros if the UI is okay without any icon, but would be better with one.
 #define koIconWanted(comment, wantedName) (KIcon())
 #define koIconNameWanted(comment, wantedName) (QString())
+
+/// Use this function to load an icon that fits the current color theme
+inline KIcon themedIcon(const QString &name, bool fast = false) {
+    Q_UNUSED(fast);
+
+    static bool firstUse = true;
+    if (firstUse) {
+        // workaround for some kde-related crash
+        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
+        Q_UNUSED(_unused);
+        firstUse = false;
+    }
+
+    // try load themed icon
+    QColor background = qApp->palette().background().color();
+    bool useDarkIcons = background.value() > 100;
+    const char * const prefix = useDarkIcons ? "dark_" : "light_";
+
+    QString realName = QLatin1String(prefix) + name;
+    KIcon icon(realName);
+
+    // fallback
+    if (icon.isNull()) {
+        icon = KIcon(name);
+    }
+
+    return icon;
+}
 
 #endif

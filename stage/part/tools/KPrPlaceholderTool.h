@@ -35,7 +35,7 @@ public:
     virtual void mouseMoveEvent( KoPointerEvent *event );
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 };
 

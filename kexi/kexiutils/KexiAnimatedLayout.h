@@ -37,7 +37,7 @@ public:
 
     ~KexiAnimatedLayout();
 
-public slots:
+public Q_SLOTS:
     //! Sets the current widget to be the specified widget.
     /*! Animation is performed while switching the widgets
         (assuming animations are enabled in KGlobalSettings (see the explanation

@@ -39,15 +39,8 @@
 #include <QPair>
 #include <QByteArray>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
-#include <kactionmenu.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
-#include <kactioncollection.h>
 #include <krichtextwidget.h>
 #include <kmimetype.h>
 
@@ -2225,7 +2218,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case WPTransmitionTime: result = wpTransmitionTime( n, role ); break;
 
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;
             return result;
     }
     return result;

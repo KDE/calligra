@@ -30,7 +30,6 @@
 
 class QByteArray;
 class QSizeF;
-class QStringList;
 class KoXmlWriter;
 class KoStore;
 class FileCollector;
@@ -156,7 +155,7 @@ class OdtHtmlConverter
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
-    ConversionOptions       *m_options;
+    const ConversionOptions *m_options;
     QHash<QString, QString> *m_manifest;
     KoStore                 *m_odfStore;
 

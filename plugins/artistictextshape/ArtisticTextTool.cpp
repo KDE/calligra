@@ -46,6 +46,7 @@
 
 #include <klocale.h>
 #include <kstandardaction.h>
+#include <kaction.h>
 #include <kdebug.h>
 
 #include <QAction>
@@ -57,6 +58,7 @@
 #include <kundo2command.h>
 
 #include <float.h>
+#include <math.h>
 
 const int BlinkInterval = 500;
 
@@ -578,9 +580,9 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QList<QWidget *> ArtisticTextTool::createOptionWidgets()
+QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");

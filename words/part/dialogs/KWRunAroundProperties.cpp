@@ -24,12 +24,12 @@
 #include "frames/KWTextFrameSet.h"
 
 #include <commands/KoShapeRunAroundCommand.h>
+#include <KoUnit.h>
 
 #include <kundo2command.h>
 
 KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
-        : m_state(state),
-        m_shape(0)
+        : m_state(state)
 {
     widget.setupUi(this);
 
@@ -65,10 +65,10 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
 }
 
-bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
+bool KWRunAroundProperties::open(const QList<KoShape *> &shapes)
 {
     m_state->addUser();
-    m_frames = frames;
+    m_shapes = shapes;
     GuiHelper::State runaround = GuiHelper::Unset;
     GuiHelper::State raDistanceLeft = GuiHelper::Unset;
     GuiHelper::State raDistanceTop = GuiHelper::Unset;
@@ -86,50 +86,51 @@ bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
 
     bool atLeastOne = false;
 
-    foreach (KWFrame *frame, frames) {
-        if (frame->frameSet()->type() == Words::TextFrameSet) {
-            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
-                continue;
+    foreach (KoShape *shape, shapes) {
+        KWFrameSet *fs = KWFrameSet::from(shape);
+        if (fs && fs->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(fs)->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue; // we don't change for main or headers or footers
             }
         }
         atLeastOne = true;
         if (runaround == GuiHelper::Unset) {
-            side = frame->shape()->textRunAroundSide();
+            side = shape->textRunAroundSide();
             runaround = GuiHelper::On;
-        } else if (side != frame->shape()->textRunAroundSide())
+        } else if (side != shape->textRunAroundSide())
             runaround = GuiHelper::TriState;
 
         if (raThreshold == GuiHelper::Unset) {
-            threshold = frame->shape()->textRunAroundThreshold();
+            threshold = shape->textRunAroundThreshold();
             raThreshold = GuiHelper::On;
-        } else if (threshold != frame->shape()->textRunAroundThreshold())
+        } else if (threshold != shape->textRunAroundThreshold())
             raThreshold = GuiHelper::TriState;
 
         if (raContour == GuiHelper::Unset) {
-            contour = frame->shape()->textRunAroundContour();
+            contour = shape->textRunAroundContour();
             raContour = GuiHelper::On;
-        } else if (contour != frame->shape()->textRunAroundContour())
+        } else if (contour != shape->textRunAroundContour())
             raContour = GuiHelper::TriState;
 
         if (raDistanceLeft == GuiHelper::Unset) {
-            distanceLeft = frame->shape()->textRunAroundDistanceLeft();
+            distanceLeft = shape->textRunAroundDistanceLeft();
             raDistanceLeft = GuiHelper::On;
-        } else if (distanceLeft != frame->shape()->textRunAroundDistanceLeft())
+        } else if (distanceLeft != shape->textRunAroundDistanceLeft())
             raDistanceLeft = GuiHelper::TriState;
         if (raDistanceTop == GuiHelper::Unset) {
-            distanceTop = frame->shape()->textRunAroundDistanceTop();
+            distanceTop = shape->textRunAroundDistanceTop();
             raDistanceTop = GuiHelper::On;
-        } else if (distanceTop != frame->shape()->textRunAroundDistanceTop())
+        } else if (distanceTop != shape->textRunAroundDistanceTop())
             raDistanceTop = GuiHelper::TriState;
         if (raDistanceRight == GuiHelper::Unset) {
-            distanceRight = frame->shape()->textRunAroundDistanceRight();
+            distanceRight = shape->textRunAroundDistanceRight();
             raDistanceRight = GuiHelper::On;
-        } else if (distanceRight != frame->shape()->textRunAroundDistanceRight())
+        } else if (distanceRight != shape->textRunAroundDistanceRight())
             raDistanceRight = GuiHelper::TriState;
         if (raDistanceBottom == GuiHelper::Unset) {
-            distanceBottom = frame->shape()->textRunAroundDistanceBottom();
+            distanceBottom = shape->textRunAroundDistanceBottom();
             raDistanceBottom = GuiHelper::On;
-        } else if (distanceBottom != frame->shape()->textRunAroundDistanceBottom())
+        } else if (distanceBottom != shape->textRunAroundDistanceBottom())
             raDistanceBottom = GuiHelper::TriState;
     }
 
@@ -160,19 +161,10 @@ bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
 
 void KWRunAroundProperties::open(KoShape *shape)
 {
-    m_state->addUser();
-    m_shape = shape;
-    m_runAroundSide->button(shape->textRunAroundSide())->setChecked(true);
-    widget.threshold->changeValue(shape->textRunAroundThreshold());
-    widget.distanceLeft->changeValue(shape->textRunAroundDistanceLeft());
-    widget.distanceTop->changeValue(shape->textRunAroundDistanceTop());
-    widget.distanceRight->changeValue(shape->textRunAroundDistanceRight());
-    widget.distanceBottom->changeValue(shape->textRunAroundDistanceBottom());
-    if (shape->textRunAroundContour() == KoShape::ContourFull) {
-        m_runAroundContour->button(KoShape::ContourOutside)->setChecked(true);
-    } else {
-        m_runAroundContour->button(shape->textRunAroundContour())->setChecked(true);
-    }
+    QList<KoShape *> list;
+    list.append(shape);
+
+    open(list);
 }
 
 void KWRunAroundProperties::save()
@@ -182,21 +174,13 @@ void KWRunAroundProperties::save()
 
 void KWRunAroundProperties::save(KUndo2Command *macro)
 {
-    if (m_frames.count() == 0) {
-        KWFrame *frame = m_state->frame();
-        if (frame == 0 && m_shape)
-            frame = m_state->createFrame(m_shape);
-        Q_ASSERT(frame);
-        m_state->markFrameUsed();
-        m_frames.append(frame);
-    }
-    foreach (KWFrame *frame, m_frames) {
-        if (frame->frameSet()->type() == Words::TextFrameSet) {
-            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
-                continue;
+    foreach (KoShape *shape, m_shapes) {
+        KWFrameSet *fs = KWFrameSet::from(shape);
+        if (fs && fs->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(fs)->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue; // we don't change for main or headers or footers
             }
         }
-        KoShape *shape = frame->shape();
         KoShape::TextRunAroundSide side = shape->textRunAroundSide();
         int runThrough = shape->runThrough();
         qreal distanceLeft = shape->textRunAroundDistanceLeft();

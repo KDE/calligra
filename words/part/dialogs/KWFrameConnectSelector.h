@@ -27,10 +27,7 @@
 
 #include <QList>
 
-class KWFrame;
-class KWTextFrame;
 class KWFrameSet;
-class KWDocument;
 
 /// A widget that is shown for 1 textframe to connect it to a frameset
 class KWFrameConnectSelector : public KoShapeConfigWidgetBase
@@ -41,7 +38,7 @@ public:
     explicit KWFrameConnectSelector(FrameConfigSharedState *state);
 
     /// load all info from the argument frame into this widget
-    bool open(KWFrame *frame);
+    bool canOpen(KoShape *shape);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -52,7 +49,7 @@ public:
         return true;
     }
 
-private slots:
+private Q_SLOTS:
     void frameSetSelected();
     void nameChanged(const QString &text);
 
@@ -62,7 +59,7 @@ private:
     QList<KWFrameSet*> m_frameSets;
     QList<QTreeWidgetItem *> m_items;
     FrameConfigSharedState *m_state;
-    KWFrame *m_frame;
+    KoShape *m_shape;
 };
 
 #endif

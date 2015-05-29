@@ -20,10 +20,12 @@
 #define __KRITA_UTILS_H
 
 class QRect;
+class QRectF;
 class QSize;
 class QPen;
 class QPointF;
 class QPainterPath;
+class QBitArray;
 #include <QVector>
 #include "krita_export.h"
 
@@ -41,6 +43,25 @@ namespace KritaUtils
                                        int antLength = 4, int antSpace = 4);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
+
+    qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue);
+    QPainterPath KRITAIMAGE_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
+
+    /**
+     * Split a path \p path into a set of disjoint (non-intersectable)
+     * paths if possible.
+     *
+     * It tries to follow odd-even fill rule, but has a small problem:
+     * If you have three selections included into each other twice,
+     * then the smallest selection will be included into the final subpath,
+     * although it shouldn't according to odd-even-fill rule. It is still
+     * to be fixed.
+     */
+    QList<QPainterPath> KRITAIMAGE_EXPORT splitDisjointPaths(const QPainterPath &path);
+
+
+    quint8 KRITAIMAGE_EXPORT mergeOpacity(quint8 opacity, quint8 parentOpacity);
+    QBitArray KRITAIMAGE_EXPORT mergeChannelFlags(const QBitArray &flags, const QBitArray &parentFlags);
 }
 
 #endif /* __KRITA_UTILS_H */

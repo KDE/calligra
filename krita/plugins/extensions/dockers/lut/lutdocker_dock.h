@@ -39,12 +39,6 @@ namespace OCIO = OCIO_NAMESPACE;
 
 
 class KisCanvas2;
-class KisDoubleWidget;
-class KoZoomAdapter;
-class SqueezedComboBox;
-class QCheckBox;
-class KComboBox;
-class QToolButton;
 class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"
@@ -59,10 +53,10 @@ public:
 
     LutDockerDock();
     ~LutDockerDock();
-
+QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); m_displayFilter = 0;}
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;
@@ -70,7 +64,7 @@ public:
     qreal currentGamma() const;
     void setCurrentGamma(qreal value);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageColorSpaceChanged();
 
@@ -110,7 +104,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilterSP m_displayFilter;
+    OcioDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
 

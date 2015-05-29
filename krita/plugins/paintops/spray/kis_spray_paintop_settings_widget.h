@@ -19,14 +19,11 @@
 #ifndef KIS_SPRAYPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_SPRAYPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 class KisSprayOpOption;
-class KisSprayShapeOption;
-class KisSprayShapeDynamicsOption;
-class KisColorOption;
 
-class KisSprayPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisSprayPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

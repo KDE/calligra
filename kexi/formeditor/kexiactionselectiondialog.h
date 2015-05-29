@@ -48,7 +48,7 @@ public:
      or "No action" has been selected. */
     KexiFormEventAction::ActionData currentAction() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotActionCategorySelected(QTreeWidgetItem* item);
     void slotKActionItemExecuted(QTreeWidgetItem*);
     void slotKActionItemSelected(QTreeWidgetItem*);

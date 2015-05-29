@@ -27,7 +27,6 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
-#include "KoUnit.h"
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>
@@ -199,6 +198,19 @@ KoShapeShadow::KoShapeShadow()
 KoShapeShadow::~KoShapeShadow()
 {
     delete d;
+}
+
+KoShapeShadow::KoShapeShadow(const KoShapeShadow &rhs)
+    : d(new Private(*rhs.d))
+{
+    d->refCount = 0;
+}
+
+KoShapeShadow& KoShapeShadow::operator=(const KoShapeShadow &rhs)
+{
+    *d = *rhs.d;
+    d->refCount = 0;
+    return *this;
 }
 
 void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)

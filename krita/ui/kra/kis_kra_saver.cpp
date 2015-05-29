@@ -27,6 +27,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <kurl.h>
+
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -40,8 +42,9 @@
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
+#include <kis_psd_layer_style_resource.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include <string>
 
 
@@ -50,13 +53,13 @@ using namespace KRA;
 struct KisKraSaver::Private
 {
 public:
-    KisDoc2* doc;
+    KisDocument* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
     QStringList errorMessages;
 };
 
-KisKraSaver::KisKraSaver(KisDoc2* document)
+KisKraSaver::KisKraSaver(KisDocument* document)
         : m_d(new Private)
 {
     m_d->doc = document;
@@ -109,9 +112,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     QString location;
 
     // Save the layers data
-    quint32 count = 0;
-
-    KisKraSaveVisitor visitor(store, count, m_d->imageName, m_d->nodeFileNames);
+    KisKraSaveVisitor visitor(store, m_d->imageName, m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);
@@ -155,6 +156,26 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             location += m_d->imageName + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
+                store->close();
+            }
+        }
+    }
+
+    {
+        KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
+        KIS_ASSERT_RECOVER_NOOP(!collection.valid());
+        collection.collectAllLayerStyles(image->root());
+        if (collection.valid()) {
+            location = external ? QString() : uri;
+            location += m_d->imageName + LAYER_STYLES_PATH;
+
+            if (store->open(location)) {
+                QBuffer aslBuffer;
+                aslBuffer.open(QIODevice::WriteOnly);
+                collection.saveToDevice(&aslBuffer);
+                aslBuffer.close();
+
+                store->write(aslBuffer.buffer());
                 store->close();
             }
         }
@@ -229,7 +250,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
-    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_spline = 0;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
@@ -245,6 +266,18 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
             else if (assist->id() == "perspective"){
                 assist->saveXmlList(doc, assistantsElement, count_perspective);
                 count_perspective++;
+            }
+            else if (assist->id() == "vanishing point"){
+                assist->saveXmlList(doc, assistantsElement, count_vanishingpoint);
+                count_vanishingpoint++;
+            }
+            else if (assist->id() == "infinite ruler"){
+                assist->saveXmlList(doc, assistantsElement, count_infiniteruler);
+                count_infiniteruler++;
+            }
+            else if (assist->id() == "parallel ruler"){
+                assist->saveXmlList(doc, assistantsElement, count_parallelruler);
+                count_parallelruler++;
             }
             else if (assist->id() == "ruler"){
                 assist->saveXmlList(doc, assistantsElement, count_ruler);

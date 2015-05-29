@@ -26,9 +26,9 @@
 #include <KoShapeRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoSelection.h>
 #include <KoParameterShape.h>
+#include <KoUnit.h>
 
 #include <klocale.h>
 
@@ -60,11 +60,14 @@ ShapePropertiesDocker::~ShapePropertiesDocker()
 
 void ShapePropertiesDocker::unsetCanvas()
 {
+    setEnabled(false);
     d->canvas = 0;
 }
 
 void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
 {
+    setEnabled(canvas != 0);
+
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }

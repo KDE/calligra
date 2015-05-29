@@ -51,6 +51,7 @@
 #include <KoImageCollection.h>
 #include <KoDataCenterBase.h>
 #include <KoText.h>
+#include <KoSelection.h>
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>
@@ -75,12 +76,12 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoStoreDevice.h>
 #include <KoStore.h>
+#include <KoUnit.h>
 #include <KoShapePainter.h>
 #include <SvgShapeFactory.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kundo2stack.h>

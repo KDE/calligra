@@ -44,7 +44,6 @@ public:
     explicit ParagraphGeneral(QWidget *parent = 0);
 
     void setStyle(KoParagraphStyle *style, int level = 0);
-    void setParagraphStyles(const QList<KoParagraphStyle*> styles);
     void setUnit(const KoUnit &unit);
 
     void switchToGeneralTab();
@@ -59,14 +58,14 @@ public:
 
     KoParagraphStyle *style() const;
 
-public slots:
+public Q_SLOTS:
     void save(KoParagraphStyle *style = 0);
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &name);
     void styleAltered(const KoParagraphStyle *style); /// when saving
 
-private slots:
+private Q_SLOTS:
     void setPreviewParagraphStyle();
 
 private:

@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _STATETOOLWIDGET_H_
+#define _STATETOOLWIDGET_H_
+
 #include <QWidget>
 
 #include "ui_StateShapeConfigWidget.h"
@@ -32,7 +35,7 @@ class StateToolWidget : public QWidget
     Q_OBJECT
 public:
     explicit StateToolWidget(StateTool*);
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void open(StateShape *shape);
     /// reimplemented
@@ -49,3 +52,5 @@ private:
     KCategorizedSortFilterProxyModel* m_proxyModel;
     Ui::StateShapeConfigWidget m_widget;
 };
+
+#endif

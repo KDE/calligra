@@ -492,7 +492,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 namespace
 {
-    const char* markerStyles[6] = {
+    const char* const markerStyles[6] = {
         "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
         "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
     };
@@ -777,7 +777,7 @@ QString ODrawToOdf::defineDashStyle(KoGenStyles& styles, const quint32 lineDashi
 
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
-    static QRgb systemColors[25] = {
+    static const QRgb systemColors[25] = {
         0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
         0x000000, 0x000000, 0xffffff, 0xc0c0c0, 0xc0c0c0, 0x808080, 0x000080,
         0xffffff, 0xc0c0c0, 0x808080, 0x808080, 0x000000, 0xc0c0c0, 0xffffff,

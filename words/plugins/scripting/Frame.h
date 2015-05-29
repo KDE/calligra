@@ -89,7 +89,7 @@ public:
         IgnoreContentFrameBehavior = Words::IgnoreContentFrameBehavior ///< Ignore the content and clip it
     };
 
-public slots:
+public Q_SLOTS:
 
     /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
     QString shapeId() const {

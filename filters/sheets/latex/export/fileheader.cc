@@ -19,11 +19,12 @@
 **
 */
 
+#include "fileheader.h"
+
 #include <stdlib.h>
 
 #include <kdebug.h>
 
-#include "fileheader.h"
 #include "config.h"
 #include <QTextStream>
 

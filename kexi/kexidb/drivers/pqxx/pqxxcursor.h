@@ -26,7 +26,15 @@
 
 #include <pqxx/pqxx>
 #include <pqxx/binarystring>
-#include <migration/pqxx/pg_type.h>
+
+#ifndef _MSC_VER
+#  define _MSC_VER 0 // avoid warning in server/c.h
+#  include <postgres.h>
+#  undef _MSC_VER
+#else
+#  include <postgres.h>
+#endif
+#include <catalog/pg_type.h>
 
 namespace KexiDB
 {

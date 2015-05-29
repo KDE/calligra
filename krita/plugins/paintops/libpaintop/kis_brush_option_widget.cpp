@@ -26,15 +26,17 @@
 
 
 KisBrushOptionWidget::KisBrushOptionWidget()
-    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::generalCategory(), true)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();
-    connect(m_brushSelectionWidget, SIGNAL(sigPrecisionChanged()), SIGNAL(sigSettingChanged()));
+    connect(m_brushSelectionWidget, SIGNAL(sigPrecisionChanged()), SLOT(emitSettingChanged()));
     connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SLOT(brushChanged()));
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
     m_brushOption.setBrush(brush());
+
+    setObjectName("KisBrushOptionWidget");
 }
 
 KisBrushSP KisBrushOptionWidget::brush() const
@@ -100,7 +102,7 @@ QSizeF KisBrushOptionWidget::brushSize() const
 void KisBrushOptionWidget::brushChanged()
 {
     m_brushOption.setBrush(brush());
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 bool KisBrushOptionWidget::presetIsValid()

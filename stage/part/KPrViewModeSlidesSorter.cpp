@@ -49,7 +49,6 @@
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAMasterPage.h>
 #include <KoPAView.h>
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
@@ -290,6 +289,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
+    m_view->setActionEnabled(KoPAView::AllActions, false);
 }
 
 void KPrViewModeSlidesSorter::deactivate()

@@ -53,13 +53,13 @@ public:
 
     QString serviceUrl() const;
 
-signals:
+Q_SIGNALS:
     void redirectLoaded();
 
-public slots:
+public Q_SLOTS:
     void waitForRedirect(QObject *receiver, const char* slot);
 
-private slots:
+private Q_SLOTS:
     void sendDataFinished(KJob* job);
     void sendRedirectQuestionFinished(KJob* job);
 

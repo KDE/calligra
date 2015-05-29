@@ -44,7 +44,7 @@ using namespace KFormDesigner;
 class ConnectionDialog::Private
 {
 public:
-    Private(Form *f);
+    explicit Private(Form *f);
     ~Private();
 
     Form *form;
@@ -77,7 +77,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 {
     setObjectName("connections_dialog");
     setModal(true);
-    setWindowTitle(i18n("Edit Form Connections"));
+    setWindowTitle(i18nc("@title:window", "Edit Form Connections"));
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Details);
     setDefaultButton(KDialog::Ok);
 
@@ -105,7 +105,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     // And the KexiTableView ////////
     d->data = new KexiDB::TableViewData();
     d->table = new KexiTableView(0, frame, "connections_tableview");
-    d->table->setSpreadSheetMode();
+    d->table->setSpreadSheetMode(true);
     d->table->setInsertingEnabled(true);
     initTable();
     d->table->setData(d->data, false);
@@ -171,7 +171,7 @@ ConnectionDialog::initTable()
     QList<int> c;
     c << 2 << 4;
     d->table->maximizeColumnsWidth(c);
-    d->table->setColumnStretchEnabled(true, 4);
+    d->table->setColumnResizeEnabled(4, true);
 
     connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
             this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
@@ -185,7 +185,7 @@ void ConnectionDialog::exec()
     KDialog::exec();
 }
 
-void ConnectionDialog::slotCellSelected(int col, int row)
+void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
     KexiDB::RecordData *record = d->table->itemAt(row);
@@ -439,7 +439,7 @@ ConnectionDialog::removeItem()
               QString(),
               KGuiItem(i18n("&Delete Connection")),
               KStandardGuiItem::no(),
-              "dontAskBeforeDeleteConnection"/*config entry*/);
+              "AskBeforeDeleteConnection"/*config entry*/);
     if (confirm != KMessageBox::Yes)
         return;
 
@@ -448,3 +448,4 @@ ConnectionDialog::removeItem()
 }
 
 #include "connectiondialog.moc"
+#warning noi18n # added to disable message extraction in Messages.sh

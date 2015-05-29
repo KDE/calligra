@@ -53,10 +53,10 @@ public:
 
     virtual QSize sizeHint() const;
 
-signals:
+Q_SIGNALS:
     void tableScrolling();
 
-protected slots:
+protected Q_SLOTS:
     void slotContentsMoving(int, int);
 
 protected:
@@ -81,7 +81,7 @@ public:
     virtual void setFocus();
     virtual void unsetFocus();
 
-signals:
+Q_SIGNALS:
     void moved();
     void endDrag();
 

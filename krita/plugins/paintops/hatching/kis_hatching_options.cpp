@@ -54,24 +54,26 @@ public:
 };
 
 KisHatchingOptions::KisHatchingOptions()
-    : KisPaintOpOption(i18n("Hatching options"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisHatchingOptions");
+
     m_checkable = false;
     m_options = new KisHatchingOptionsWidget();
 
-    connect(m_options->angleKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->separationKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->thicknessKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->originXKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->originYKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->angleKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->separationKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->thicknessKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->originXKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->originYKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
-    connect(m_options->noCrosshatchingRadioButton, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->perpendicularRadioButton, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->minusThenPlusRadioButton, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->plusThenMinusRadioButton, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->moirePatternRadioButton, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->noCrosshatchingRadioButton, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->perpendicularRadioButton, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->minusThenPlusRadioButton, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->plusThenMinusRadioButton, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->moirePatternRadioButton, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
-    connect(m_options->separationIntervalSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->separationIntervalSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

@@ -25,6 +25,7 @@
 
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 #include <kdebug.h>
 
 #include <QGridLayout>
@@ -56,7 +57,7 @@ public:
     KexiNameDialogValidator *validator;
     bool checkIfObjectExists;
     bool allowOverwriting;
-    bool *overwriteNeeded;
+    bool overwriteNeeded;
 };
 
 KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
@@ -150,14 +151,14 @@ bool KexiNameDialog::canOverwrite()
     }
     if (!d->allowOverwriting) {
         KMessageBox::information(this,
-                                 "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
+                                 "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                                              .subs(widget()->nameText()).toString()
                                  + "</p><p>" + i18n("Please choose other name.") + "</p>");
         return false;
     }
 
     QString msg =
-        "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
+        "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                     .subs(widget()->nameText()).toString()
         + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
     KGuiItem yesItem(KStandardGuiItem::yes());
@@ -168,8 +169,8 @@ bool KexiNameDialog::canOverwrite()
                   yesItem, KGuiItem(i18n("&Choose Other Name...")),
                   QString(),
                   KMessageBox::Notify | KMessageBox::Dangerous);
-    if (d->overwriteNeeded && res == KMessageBox::Yes) {
-        *d->overwriteNeeded = true;
+    if (res == KMessageBox::Yes) {
+        d->overwriteNeeded = true;
     }
     return res == KMessageBox::Yes;
 }
@@ -217,15 +218,17 @@ int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
     d->project = &project;
     d->part = &part;
     d->checkIfObjectExists = true;
-    d->overwriteNeeded = overwriteNeeded;
-    if (d->overwriteNeeded) {
-        *d->overwriteNeeded = false;
+    if (overwriteNeeded) {
+        *overwriteNeeded = false;
+        d->overwriteNeeded = false;
     }
     int res = exec();
     d->project = 0;
     d->part = 0;
     d->checkIfObjectExists = false;
-    d->overwriteNeeded = 0;
+    if (overwriteNeeded) {
+        *overwriteNeeded = d->overwriteNeeded;
+    }
     return res;
 }
 

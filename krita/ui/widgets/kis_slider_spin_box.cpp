@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2010 Justin Noel <justin@ics.com>
  * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,8 +33,17 @@
 #include <QtDebug>
 #include <QDoubleSpinBox>
 
+#include "KisPart.h"
+#include "input/kis_input_manager.h"
+
 class KisAbstractSliderSpinBoxPrivate {
 public:
+    enum Style {
+        STYLE_NOQUIRK,
+        STYLE_PLASTIQUE,
+        STYLE_BREEZE
+    };
+
     QLineEdit* edit;
     QDoubleValidator* validator;
     bool upButtonDown;
@@ -43,6 +53,7 @@ public:
     qreal slowFactor;
     qreal shiftPercent;
     bool shiftMode;
+    QString prefix;
     QString suffix;
     qreal exponentRatio;
     int value;
@@ -50,6 +61,7 @@ public:
     int minimum;
     int singleStep;
     QSpinBox* dummySpinBox;
+    Style style;
 };
 
 KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d)
@@ -57,12 +69,15 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     , d_ptr(_d)
 {
     Q_D(KisAbstractSliderSpinBox);
+    changeEvent(new QEvent(QEvent::StyleChange));
+
     d->upButtonDown = false;
     d->downButtonDown = false;
     d->edit = new QLineEdit(this);
     d->edit->setFrame(false);
     d->edit->setAlignment(Qt::AlignCenter);
     d->edit->hide();
+    d->edit->setContentsMargins(0,0,0,0);
     d->edit->installEventFilter(this);
 
     //Make edit transparent
@@ -106,12 +121,18 @@ void KisAbstractSliderSpinBox::showEdit()
 {
     Q_D(KisAbstractSliderSpinBox);
     if (d->edit->isVisible()) return;
-    d->edit->setGeometry(progressRect(spinBoxOptions()));
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE) {
+        d->edit->setGeometry(progressRect(spinBoxOptions()).adjusted(0,0,-2,0));
+    }
+    else {
+        d->edit->setGeometry(progressRect(spinBoxOptions()));
+    }
     d->edit->setText(valueString());
     d->edit->selectAll();
     d->edit->show();
     d->edit->setFocus(Qt::OtherFocusReason);
     update();
+    KisPart::currentInputManager()->slotFocusOnEnter(false);
 }
 
 void KisAbstractSliderSpinBox::hideEdit()
@@ -119,6 +140,7 @@ void KisAbstractSliderSpinBox::hideEdit()
     Q_D(KisAbstractSliderSpinBox);
     d->edit->hide();
     update();
+    KisPart::currentInputManager()->slotFocusOnEnter(true);
 }
 
 void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
@@ -128,25 +150,45 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 
     QPainter painter(this);
 
+    switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
+        paintPlastique(painter);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
+        paintBreeze(painter);
+        break;
+    default:
+        paint(painter);
+        break;
+    }
+
+    painter.end();
+}
+
+void KisAbstractSliderSpinBox::paint(QPainter &painter)
+{
+    Q_D(KisAbstractSliderSpinBox);
+
     //Create options to draw spin box parts
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    spinOpts.rect.adjust(0, 2, 0, -2);
 
     //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
     //borders being drawn
     painter.save();
     painter.setClipping(true);
+
     QRect eraseRect(QPoint(rect().x(), rect().y()),
                     QPoint(progressRect(spinOpts).right(), rect().bottom()));
+
     painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
     style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
     painter.setClipping(false);
     painter.restore();
 
 
-    //Create options to draw progress bar parts
     QStyleOptionProgressBar progressOpts = progressBarOptions();
-
-    //Draw "ProgressBar" in SpinBox
+    progressOpts.rect.adjust(0, 2, 0, -2);
     style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, 0);
 
     //Draw focus if necessary
@@ -158,6 +200,112 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
         focusOpts.backgroundColor = palette().color(QPalette::Window);
         style()->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpts, &painter, this);
     }
+}
+
+
+void KisAbstractSliderSpinBox::paintPlastique(QPainter &painter)
+{
+    Q_D(KisAbstractSliderSpinBox);
+
+    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
+
+    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
+
+    painter.save();
+
+    QRect rect = progressOpts.rect.adjusted(2,0,-2,0);
+    QRect leftRect;
+
+    int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
+                               qreal(progressOpts.maximum) - progressOpts.minimum) * rect.width();
+
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0)) {
+        leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
+    } else if (progressIndicatorPos > rect.width()) {
+        painter.setPen(palette().highlightedText().color());
+    } else {
+        painter.setPen(palette().buttonText().color());
+    }
+
+    QRegion rightRect = rect;
+    rightRect = rightRect.subtracted(leftRect);
+
+    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
+    textOption.setWrapMode(QTextOption::NoWrap);
+
+    if (!(d->edit && d->edit->isVisible())) {
+        painter.setClipRegion(rightRect);
+        painter.setClipping(true);
+        painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
+        painter.setClipping(false);
+    }
+
+    if (!leftRect.isNull()) {
+        painter.setPen(palette().highlight().color());
+        painter.setBrush(palette().highlight());
+        painter.drawRect(leftRect.adjusted(0,0,0,-1));
+        if (!(d->edit && d->edit->isVisible())) {
+            painter.setPen(palette().highlightedText().color());
+            painter.setClipRect(leftRect.adjusted(0,0,1,0));
+            painter.setClipping(true);
+            painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
+            painter.setClipping(false);
+        }
+    }
+
+    painter.restore();
+}
+
+void KisAbstractSliderSpinBox::paintBreeze(QPainter &painter)
+{
+    Q_D(KisAbstractSliderSpinBox);
+
+    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
+    QString valueText = progressOpts.text;
+    progressOpts.text = "";
+    progressOpts.rect.adjust(0, 1, 0, -1);
+
+    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, this);
+    style()->drawControl(QStyle::CE_ProgressBarGroove, &progressOpts, &painter, this);
+
+    painter.save();
+
+    QRect leftRect;
+
+    int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
+                               qreal(progressOpts.maximum) - progressOpts.minimum) * progressOpts.rect.width();
+
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= progressOpts.rect.width()) {
+        leftRect = QRect(progressOpts.rect.left(), progressOpts.rect.top(), progressIndicatorPos, progressOpts.rect.height());
+    } else if (progressIndicatorPos > progressOpts.rect.width()) {
+        painter.setPen(palette().highlightedText().color());
+    } else {
+        painter.setPen(palette().buttonText().color());
+    }
+
+    QRegion rightRect = progressOpts.rect;
+    rightRect = rightRect.subtracted(leftRect);
+    painter.setClipRegion(rightRect);
+
+    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
+    textOption.setWrapMode(QTextOption::NoWrap);
+
+    if (!(d->edit && d->edit->isVisible())) {
+        painter.drawText(progressOpts.rect, valueText, textOption);
+    }
+
+    if (!leftRect.isNull()) {
+        painter.setPen(palette().highlightedText().color());
+        painter.setClipRect(leftRect);
+        style()->drawControl(QStyle::CE_ProgressBarContents, &progressOpts, &painter, this);
+        if (!(d->edit && d->edit->isVisible())) {
+            painter.drawText(progressOpts.rect, valueText, textOption);
+        }
+    }
+
+    painter.restore();
 
 }
 
@@ -300,26 +448,47 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    QFontMetrics fm(font());
-    //We need at least 50 pixels or things start to look bad
-    int w = qMax(fm.width(QString::number(d->maximum)), 50);
-    QSize hint(w, d->edit->sizeHint().height() + 3);
+    QFont ft(font());
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK) {
+        // Some styles use bold font in progressbars
+        // unfortunately there is no reliable way to check for that
+        ft.setBold(true);
+    }
+
+    QFontMetrics fm(ft);
+    QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
+    hint += QSize(0, 2);
+
+    switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
+        hint += QSize(8, 0);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
+        hint += QSize(2, 0);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK:
+        // almost all "modern" styles have a margin around controls
+        hint += QSize(6, 6);
+        break;
+    default:
+        break;
+    }
 
     //Getting the size of the buttons is a pain as the calcs require a rect
     //that is "big enough". We run the calc twice to get the "smallest" buttons
     //This code was inspired by QAbstractSpinBox
-    QSize extra(35, 6);
+    QSize extra(1000, 0);
     spinOpts.rect.setSize(hint + extra);
     extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
                                             QStyle::SC_SpinBoxEditField, this).size();
-
     spinOpts.rect.setSize(hint + extra);
     extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
                                             QStyle::SC_SpinBoxEditField, this).size();
     hint += extra;
 
-    spinOpts.rect = rect();
-    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
+
+    spinOpts.rect.setSize(hint);
+    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint)
             .expandedTo(QApplication::globalStrut());
 
 }
@@ -327,6 +496,11 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
 QSize KisAbstractSliderSpinBox::minimumSizeHint() const
 {
     return sizeHint();
+}
+
+QSize KisAbstractSliderSpinBox::minimumSize() const
+{
+    return QWidget::minimumSize().expandedTo(minimumSizeHint());
 }
 
 QStyleOptionSpinBox KisAbstractSliderSpinBox::spinBoxOptions() const
@@ -375,7 +549,7 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
     qreal dValues = (d->maximum - minDbl);
 
     progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1.0 / d->exponentRatio) + minDbl;
-    progressOpts.text = valueString() + d->suffix;
+    progressOpts.text = d->prefix + valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());
 
@@ -387,8 +561,22 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
 
 QRect KisAbstractSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
-    return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
-                                   QStyle::SC_SpinBoxEditField);
+    const Q_D(KisAbstractSliderSpinBox);
+    QRect ret = style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
+                                        QStyle::SC_SpinBoxEditField);
+
+    switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
+        ret.adjust(-2, 0, 1, 0);
+        break;
+    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
+        ret.adjust(1, 0, 0, 0);
+        break;
+    default:
+        break;
+    }
+
+    return ret;
 }
 
 QRect KisAbstractSliderSpinBox::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
@@ -408,8 +596,14 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    //Adjust for magic number in style code (margins)
-    QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
+    QRect correctedProgRect;
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
+        correctedProgRect = progressRect(spinOpts);
+    }
+    else {
+        //Adjust for magic number in style code (margins)
+        correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
+    }
 
     //Compute the distance of the progress bar, in pixel
     qreal leftDbl = correctedProgRect.left();
@@ -440,6 +634,12 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     }
     //Return the value
     return int(realvalue);
+}
+
+void KisAbstractSliderSpinBox::setPrefix(const QString& prefix)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->prefix = prefix;
 }
 
 void KisAbstractSliderSpinBox::setSuffix(const QString& suffix)
@@ -639,7 +839,7 @@ qreal KisDoubleSliderSpinBox::value()
 void KisDoubleSliderSpinBox::setValue(qreal value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    setInternalValue(d->value = value * d->factor);
+    setInternalValue(d->value = qRound(value * d->factor));
     update();
 }
 
@@ -660,4 +860,26 @@ void KisDoubleSliderSpinBox::setInternalValue(int _value)
     Q_D(KisAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
     emit(valueChanged(value()));
+}
+
+
+void KisAbstractSliderSpinBox::changeEvent(QEvent *e)
+{
+    Q_D(KisAbstractSliderSpinBox);
+
+    QWidget::changeEvent(e);
+
+    switch (e->type()) {
+    case QEvent::StyleChange:
+        if (style()->objectName() == "plastique") {
+            d->style = KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE;
+        }
+        else if (style()->objectName() == "breeze") {
+            d->style = KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE;
+        }
+        else {
+            d->style = KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK;
+        }
+        break;
+    }
 }

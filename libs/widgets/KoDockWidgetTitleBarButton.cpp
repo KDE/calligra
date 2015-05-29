@@ -54,8 +54,9 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
     ensurePolished();
 
     const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
-    if (icon().isNull())
-        return QSize(margin, margin);
+    if (icon().isNull()) {
+        return QSize(18, 18);
+    }
 
     int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
     if (iconSize != d->iconSize) {
@@ -91,7 +92,7 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     QPainter p(this);
 
     QStyleOptionToolButton opt;
-    opt.init(this);
+    opt.initFrom(this);
     opt.state |= QStyle::State_AutoRaise;
 
     if (isEnabled() && underMouse() && !isChecked() && !isDown())

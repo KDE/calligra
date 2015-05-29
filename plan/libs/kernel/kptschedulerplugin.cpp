@@ -26,6 +26,8 @@
 
 #include "KoXmlReader.h"
 
+#include <kglobal.h>
+
 #include <QDomDocument>
 
 

@@ -24,7 +24,7 @@
 
 #include "kptschedule.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 #include <QObject>
 #include <QString>
@@ -32,8 +32,6 @@
 #include <QThread>
 #include <QTimer>
 
-class QDomDocument;
-class KLocale;
 
 namespace KPlato
 {
@@ -109,7 +107,7 @@ public:
     /// Set current index of supported granularities
     void setGranularity( int index );
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotSyncData();
 
 protected:
@@ -192,7 +190,7 @@ public:
     ///Add a scheduling debug log message
     void logDebug( Node *n, Resource *r, const QString &msg, int phase = -1 );
 
-signals:
+Q_SIGNALS:
     /// Job has started
     void jobStarted( SchedulerThread *job );
     /// Job is finished
@@ -203,14 +201,14 @@ signals:
     /// Progress has changed
     void progressChanged( int value, ScheduleManager *sm = 0 );
 
-public slots:
+public Q_SLOTS:
     /// Stop scheduling. Result may still be used.
     virtual void stopScheduling();
     /// Halt scheduling. Discard result.
     virtual void haltScheduling();
 
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotStarted();
     virtual void slotFinished();
 

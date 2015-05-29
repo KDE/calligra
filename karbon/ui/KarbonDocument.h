@@ -40,7 +40,6 @@
 #include <KoShapeBasedDocumentBase.h>
 
 #include <KoDocument.h>
-#include <KoUnit.h>
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoXmlReader.h>
@@ -239,10 +238,10 @@ public:
 
     void addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter);
 
-public slots:
+public Q_SLOTS:
     void slotDocumentRestored();
 
-signals:
+Q_SIGNALS:
     void shapeCountChanged();
     void applyCanvasConfiguration(KarbonCanvas *canvas);
 

@@ -23,14 +23,12 @@
 #include <QWidget>
 #include <animations/KPrShapeAnimation.h>
 
-class QListWidget;
 class QToolButton;
 class KoPAViewBase;
 class KPrView;
 class QTreeView;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimations;
-class KPrAnimationsDataModel;
 class KPrViewModePreviewShapeAnimations;
 class KPrEditAnimationsWidget;
 class QModelIndex;
@@ -86,7 +84,7 @@ public:
       */
     KoShape *getSelectedShape();
 
-signals:
+Q_SIGNALS:
     /// emitted if the configuration for automatic preview is changed
     void previousStateChanged(bool isEnabled);
     /// emitted if an animation of the given shape is changed
@@ -94,7 +92,7 @@ signals:
     /// emitted if a motion path animation is added or removed
     void motionPathAddedRemoved();
 
-public slots:
+public Q_SLOTS:
     /**
      * @brief Update widget with animations of the new active page
      */
@@ -173,7 +171,7 @@ public slots:
      */
     void verifyMotionPathChanged(const QModelIndex &index, const QModelIndex &indexEnd);
 
-private slots:
+private Q_SLOTS:
     /// Test if the current on click animation displayed as root in edit panel has changed
     void testEditPanelRoot();
     /// Display context menu

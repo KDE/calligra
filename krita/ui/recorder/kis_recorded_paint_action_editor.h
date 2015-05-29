@@ -25,11 +25,10 @@
 
 class QGridLayout;
 class KoColorPopupAction;
-class KisPaintOpSettingsWidget;
+class KisPaintOpConfigWidget;
 class KisRecordedPaintAction;
 class Ui_WdgPaintActionEditor;
 class KoResource;
-class KisNodeQueryPathEditor;
 
 /**
  * This is the editor for all \ref KisRecordedPaintAction
@@ -40,18 +39,18 @@ class KisRecordedPaintActionEditor : public QWidget
 public:
     KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action);
     ~KisRecordedPaintActionEditor();
-private slots:
+private Q_SLOTS:
     void configurationUpdated();
     void paintOpChanged(int index);
     void resourceSelected(KoResource* resource);
     void nodeQueryPathChanged();
-signals:
+Q_SIGNALS:
     void actionEdited();
 private:
     void setPaintOpPreset();
     KisRecordedPaintAction* m_action;
     Ui_WdgPaintActionEditor* m_actionEditor;
-    KisPaintOpSettingsWidget* m_configWidget;
+    KisPaintOpConfigWidget* m_configWidget;
     KoColorPopupAction* m_paintColorPopup;
     KoColorPopupAction* m_backgroundColorPopup;
     QGridLayout* m_gridLayout;

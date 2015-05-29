@@ -24,7 +24,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoUnit.h>
 
 #include <math.h>
 
@@ -213,8 +212,8 @@ void SpiralShape::createPath(const QSizeF &size)
         newP.setY(r * sin(adv_ang * (i + 2)) + newCenter.y());
 
         if (m_type == Curve) {
-            qreal rx = abs(oldP.x() - newP.x());
-            qreal ry = abs(oldP.y() - newP.y());
+            qreal rx = qAbs(oldP.x() - newP.x());
+            qreal ry = qAbs(oldP.y() - newP.y());
             if (m_clockwise) {
                 arcTo(rx, ry, ((i + 1) % 4) * 90, 90);
             } else {

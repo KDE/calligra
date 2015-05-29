@@ -129,7 +129,7 @@ public:
     }
 
     struct Change {
-        Change() : first(-1), last(-1) {}
+        Change() : first(-1), last(-1), needsAdjust(false) {}
         Change(const Change &c) : parent(c.parent), first(c.first), last(c.last), needsAdjust(c.needsAdjust) {}
         Change(const QModelIndex &p, int f, int l) : parent(p), first(f), last(l), needsAdjust(false) {}
         QModelIndex parent;

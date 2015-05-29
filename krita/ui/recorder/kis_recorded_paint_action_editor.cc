@@ -27,7 +27,7 @@
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>
 #include <kis_paintop_registry.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 
 #include "ui_wdgpaintactioneditor.h"
 #include <KoColorSpaceRegistry.h>
@@ -66,24 +66,22 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     foreach(const KoID& paintopId, keys) {
-        if (KisPaintOpRegistry::instance()->userVisible(paintopId, KoColorSpaceRegistry::instance()->rgb8())) {
-            QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintopId);
+        QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintopId);
 
-            QPixmap pm;
-            if (!pixmapName.isEmpty()) {
-                QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName);
-                pm = QPixmap(fname);
-            }
-
-
-            if (pm.isNull()) {
-                pm = QPixmap(16, 16);
-                pm.fill();
-            }
-
-            m_actionEditor->paintOps->addItem(QIcon(pm), paintopId.name());
-            m_paintops.append(paintopId.id());
+        QPixmap pm;
+        if (!pixmapName.isEmpty()) {
+            QString fname = KisFactory::componentData().dirs()->findResource("kis_images", pixmapName);
+            pm = QPixmap(fname);
         }
+
+
+        if (pm.isNull()) {
+            pm = QPixmap(16, 16);
+            pm.fill();
+        }
+
+        m_actionEditor->paintOps->addItem(QIcon(pm), paintopId.name());
+        m_paintops.append(paintopId.id());
     }
     connect(m_actionEditor->paintOps, SIGNAL(activated(int)), SLOT(paintOpChanged(int)));
 
@@ -130,7 +128,7 @@ void KisRecordedPaintActionEditor::paintOpChanged(int index)
 
 void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
 {
-    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource)->clone();
+    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource);
 
     m_paintOpsToPreset[preset->paintOp().id()] = preset;
     m_action->setPaintOpPreset(preset);
@@ -147,7 +145,7 @@ void KisRecordedPaintActionEditor::nodeQueryPathChanged()
 void KisRecordedPaintActionEditor::setPaintOpPreset()
 {
     delete m_configWidget;
-    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
+    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createConfigWidget(m_actionEditor->frmOptionWidgetContainer);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
         //TODO use default configuration instead?

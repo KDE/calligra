@@ -36,35 +36,22 @@
 
 #include <KoView.h>
 #include <QPointF>
-#include <kxmlguibuilder.h>
-#include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
-#include <KoZoomMode.h>
 #include <karbonui_export.h>
 #include "KarbonBooleanCommand.h"
 
-class QLabel;
 class QDropEvent;
 class QResizeEvent;
-class QRectF;
-class QPrinter;
 
-class KAction;
 class KarbonDocument;
-class KSelectAction;
-class KToggleAction;
 
-class KoCanvasController;
-class KoRuler;
 class KoColor;
+class KoUnit;
 
-class KarbonLayerDocker;
-class KarbonZoomController;
 
 class KarbonPart;
 class KarbonCanvas;
-class KarbonStylePreviewDocker;
 
 class KARBONUI_EXPORT KarbonView : public KoView
 {
@@ -91,7 +78,7 @@ public:
     virtual KoZoomController *zoomController() const;
 
 
-public slots:
+public Q_SLOTS:
     // editing:
     void editSelectAll();
     void editDeselectAll();
@@ -140,7 +127,7 @@ public slots:
     void snapToGrid();
     void showPalette();
 
-protected slots:
+protected Q_SLOTS:
     // Object related operations.
 
     // View

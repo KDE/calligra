@@ -28,22 +28,6 @@
 
 
 struct KisEmbeddedPatternManager::Private {
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
-        KoPattern *pattern = 0;
-
-        if (!md5.isEmpty()) {
-            foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
-                KoPattern *pat = dynamic_cast<KoPattern *>(res);
-                if (pat && pat->valid() && pat->md5() == md5) {
-                    pattern = pat;
-                    break;
-                }
-            }
-        }
-
-        return pattern;
-    }
-
     static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfiguration* setting) {
         KoPattern *pattern = 0;
 
@@ -65,7 +49,14 @@ struct KisEmbeddedPatternManager::Private {
 
         return pattern;
     }
+
+    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
+        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
+        return server->resourceByMD5(md5);
+    }
 };
+
+
 
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern)
 {

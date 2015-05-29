@@ -49,7 +49,7 @@ public:
     /// Enables/disables setting the background opacity
     void enableBackgroundOpacity(bool enable);
 
-private slots:
+private Q_SLOTS:
     void unitWidthChanged(qreal);
     void unitHeightChanged(qreal);
     void pxWidthChanged(int);

@@ -30,7 +30,7 @@
 #include <QColor>
 #include <QRect>
 #include <QString>
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 #include "calligra_sheets_export.h"
 
 namespace Calligra

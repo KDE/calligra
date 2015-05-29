@@ -1,0 +1,2 @@
+module Calligra.Gemini.Git
+plugin calligrageminigitplugin

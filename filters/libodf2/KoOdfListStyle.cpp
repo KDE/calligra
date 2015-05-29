@@ -146,33 +146,28 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {
 
-        // So far we only have support for text-properies and list-level-properties.
+        // So far we only have support for text-properties and list-level-properties.
         QString propertiesType = reader.qualifiedName().toString();
-        if (propertiesType == "style:text-properties"
-                || propertiesType == "style:list-level-properties"
-                || propertiesType == "office:binary-data")
-        {
-            kDebug() << "properties type: " << propertiesType;
+        kDebug() << "properties type: " << propertiesType;
 
-            // Create a new propertyset variable depending on the type of properties.
-            KoOdfStyleProperties *properties;
-            if (propertiesType == "style:text-properties") {
-                properties = new KoOdfTextProperties();
-            }
-            else if (propertiesType == "style:list-level-properties") {
-                properties = new KoOdfListLevelProperties();
-            }
-            else if (propertiesType == "office:binary-data") {
-                // FIXME: Not supported for now.
-                reader.skipCurrentElement();
-                continue;
-            }
-
-            if (!properties->readOdf(reader)) {
-                return false;
-            }
-            d->properties[propertiesType] = properties;
+        // Create a new propertyset variable depending on the type of properties.
+        KoOdfStyleProperties *properties;
+        if (propertiesType == "style:text-properties") {
+            properties = new KoOdfTextProperties();
         }
+        else if (propertiesType == "style:list-level-properties") {
+            properties = new KoOdfListLevelProperties();
+        } else {
+            // FIXME: support office:binary-data
+            // kDebug() << "Unsupported property type: " << propertiesType;
+            reader.skipCurrentElement();
+            continue;
+        }
+
+        if (!properties->readOdf(reader)) {
+            return false;
+        }
+        d->properties[propertiesType] = properties;
     }
 
     return true;

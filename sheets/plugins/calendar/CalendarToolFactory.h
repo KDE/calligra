@@ -22,6 +22,7 @@
 
 #include <part/CellToolFactory.h>
 #include <QObject>
+#include <QVariantList>
 
 #define CALLIGRA_SHEETS_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 

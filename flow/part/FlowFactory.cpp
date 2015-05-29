@@ -26,17 +26,29 @@
 #include <KoPluginLoader.h>
 
 #include <kcomponentdata.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
 KComponentData* FlowFactory::s_instance = 0;
 KAboutData* FlowFactory::s_aboutData = 0;
 
+static int factoryCount = 0;
+
 FlowFactory::FlowFactory(QObject* parent)
   : KPluginFactory(*aboutData(), parent)
 {
-  (void) componentData();
+    (void) componentData();
+
+    if (factoryCount == 0) {
+
+        // Load the KoPA-specific tools
+        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"),
+                                         QLatin1String("[X-KoPageApp-Version] == 28"));
+
+        // Load Flow specific dockers
+        KoPluginLoader::instance()->load(QLatin1String("Flow/Dock"));
+    }
+    factoryCount++;
 }
 
 FlowFactory::~FlowFactory()
@@ -64,10 +76,6 @@ const KComponentData &FlowFactory::componentData()
   if (!s_instance) {
     s_instance = new KComponentData(aboutData());
 
-    // Load Flow specific dockers
-    KoPluginLoader::instance()->load(QString::fromLatin1("Flow/Dock"));
-
-    s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
     s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
     s_instance->dirs()->addResourceType("styles", "data", "flow/styles/");
     KIconLoader::global()->addAppDir("calligra");

@@ -24,7 +24,6 @@
 #include <StringDocumentHandler.hxx>
 
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 #include <KoOdf.h>
 
 #include <kpluginfactory.h>

@@ -45,18 +45,13 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kdeversion.h>
 #include <kdebug.h>
-#include <kzip.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
-#include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 

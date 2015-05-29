@@ -21,20 +21,23 @@
 #ifndef KEXIQUERYVIEW_H
 #define KEXIQUERYVIEW_H
 
-#include <kexidatatable.h>
+#include <widget/tableview/KexiDataTableView.h>
 
 namespace KexiDB
 {
 class QuerySchema;
 }
 
-class KexiQueryView : public KexiDataTable
+class KexiQueryView : public KexiDataTableView
 {
     Q_OBJECT
 
 public:
     explicit KexiQueryView(QWidget *parent);
     virtual ~KexiQueryView();
+
+    /*! \return curent parameters for parametrized query */
+    virtual QList<QVariant> currentParameters() const;
 
 protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);

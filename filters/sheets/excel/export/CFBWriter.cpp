@@ -364,16 +364,16 @@ void CFBWriter::close()
         sectorCount = (fatSize + (m_sectorSize/4)-1) / (m_sectorSize/4);
         fatSize = m_fat.size() + sectorCount;
     }
-    for (unsigned i = 0; i < sectorCount; i++) {
+    for (unsigned i = 0; i < sectorCount; ++i) {
         m_difat.append(m_fat.size());
         m_fat.append(FATSECT);
     }
-    for (unsigned i = 0; i < sectorCount; i++) {
+    for (unsigned i = 0; i < sectorCount; ++i) {
         unsigned sector = m_difat[i];
         m_device->seek((sector + 1) * m_sectorSize);
         QDataStream ds(m_device);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (unsigned j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; j++, idx++) {
+        for (unsigned j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; ++j, ++idx) {
             ds << quint32(idx < unsigned(m_fat.size()) ? m_fat[idx] : FREESECT);
         }
     }

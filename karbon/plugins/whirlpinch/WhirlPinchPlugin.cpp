@@ -41,6 +41,7 @@
 #include <KoParameterShape.h>
 #include <KoSelection.h>
 #include <KoIcon.h>
+#include <KoUnit.h>
 
 #include <kpluginfactory.h>
 #include <kdebug.h>

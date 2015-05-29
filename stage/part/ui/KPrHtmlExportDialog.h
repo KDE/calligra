@@ -40,7 +40,7 @@ public:
     QString author();
     bool openBrowser();
 
-private slots:
+private Q_SLOTS:
     void checkAllItems();
     void uncheckAllItems();
     void renderPreview();

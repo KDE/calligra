@@ -36,7 +36,7 @@ public:
     CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup);
     ~CSTProcessRunner();
 
-public slots:
+public Q_SLOTS:
     void start();
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 

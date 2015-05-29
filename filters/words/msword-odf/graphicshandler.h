@@ -162,7 +162,7 @@ public:
     QString getPicturePath(quint32 pib) const;
 
     // Communication with Document, without having to know about Document
-signals:
+Q_SIGNALS:
     void textBoxFound(unsigned int index, bool stylesxml);
 
 private:

@@ -23,9 +23,9 @@
 #include <kexi_global.h>
 #include <db/queryschema.h>
 #include <kmenu.h>
-#include <kurl.h>
 
 class KActionCollection;
+class KUrl;
 
 //! @short A set of helpers for updating popup menu titles
 /*! The functions set meaningful titles like "Emploee : Image".
@@ -63,7 +63,7 @@ public:
     static bool updateTitle(KMenu *menu, const QString& title,
                             const QString& iconName = QString());
 
-public slots:
+public Q_SLOTS:
     void updateActionsAvailability();
 
     virtual void insertFromFile();
@@ -74,7 +74,7 @@ public slots:
     virtual void clear();
     virtual void showProperties();
 
-signals:
+Q_SIGNALS:
     //! Emitted when actions availability should be performed. Just connect this signal
     //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
     void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);

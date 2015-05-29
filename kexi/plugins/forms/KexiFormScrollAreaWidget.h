@@ -35,7 +35,7 @@ public:
 
     KexiFormScrollView *scrollArea;
 
-signals:
+Q_SIGNALS:
     //! Emitted when the contents is being interactively resized.
     bool resized();
 

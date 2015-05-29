@@ -70,7 +70,7 @@ public:
 
     virtual void  setEnabled(bool enabled);
 
-public slots:
+public Q_SLOTS:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }

@@ -39,7 +39,7 @@ public:
 
     void import(KPrView *view);
 
-private slots:
+private Q_SLOTS:
     // starts the transfer of the next image
     void import();
     void pictureImported(KJob *job);

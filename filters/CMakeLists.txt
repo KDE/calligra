@@ -17,19 +17,19 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 if(SHOULD_BUILD_LIB_KOODF2)
     add_subdirectory( libodf2 )
-endif(SHOULD_BUILD_LIB_KOODF2)
+endif()
 
 if(SHOULD_BUILD_LIB_KOODFREADER)
     add_subdirectory(libodfreader)
-endif(SHOULD_BUILD_LIB_KOODFREADER)
+endif()
 
 if(SHOULD_BUILD_LIB_MSO)
     add_subdirectory(libmso)
-endif(SHOULD_BUILD_LIB_MSO)
+endif()
 
 if(SHOULD_BUILD_LIB_KOMSOOXML)
     add_subdirectory( libmsooxml )
-endif(SHOULD_BUILD_LIB_KOMSOOXML)
+endif()
 
 add_subdirectory(words)
 add_subdirectory(stage)

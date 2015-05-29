@@ -17,6 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _XML_H_
+#define _XML_H_
+
+
 #include <KoXmlWriter.h>
 
 namespace Xml
@@ -27,3 +31,5 @@ inline void writeBraindumpNS(KoXmlWriter& bodyWriter)
 }
 
 }
+
+#endif

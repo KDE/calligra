@@ -5,7 +5,7 @@ include_directories( .. ${KPLATO_INCLUDES} ${KOODF_INCLUDES})
 
 set(test_files version-0-6.kplato project_stats1.kplato pert1.kplato)
 foreach(it ${test_files})
-    ADD_CUSTOM_TARGET(${it} ALL
+    add_custom_target(${it} ALL
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${it} ${CMAKE_CURRENT_BINARY_DIR}/${it}
         COMMENT "Copy test file ${it}" VERBATIM
     )

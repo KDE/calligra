@@ -78,7 +78,7 @@ public:
      */
     static QString printOptionForIndex(unsigned int index);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Inserts given sheet to the list of available sheets.
@@ -90,7 +90,7 @@ public slots:
      */
     void prependSelectedSheet(const QString& sheetname);
 
-protected slots:
+protected Q_SLOTS:
 
     // The following slots just implement the code for the buttons
 

@@ -24,12 +24,6 @@
 
 #include "ui_kptrecalculatedialog.h"
 
-#include <kdialog.h>
-
-#include <QDateTimeEdit>
-
-class QString;
-
 namespace KPlato
 {
 

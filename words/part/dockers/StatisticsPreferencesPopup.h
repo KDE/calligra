@@ -39,7 +39,7 @@ public:
     virtual QSize sizeHint() const;
     Ui::StatisticsPreferencesPopup *w;
 
-signals:
+Q_SIGNALS:
     void wordsDisplayChange(int);
     void sentencesDisplayChange(int);
     void syllablesDisplayChange(int);

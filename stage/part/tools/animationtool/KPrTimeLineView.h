@@ -23,11 +23,6 @@
 #include <QWidget>
 
 class KPrAnimationsTimeLineView;
-class QGraphicsView;
-class QGraphicsScene;
-class KPrTimeLineHeader;
-class TimeLineItem;
-class QAbstractItemModel;
 class QModelIndex;
 
 /**
@@ -42,7 +37,7 @@ public:
     virtual QSize minimumSizeHint() const;
     virtual bool eventFilter(QObject *target, QEvent *event);
 
-signals:
+Q_SIGNALS:
     /// emitted if an item is clicked (returns the index of the item clicked
     void clicked(const QModelIndex&);
 

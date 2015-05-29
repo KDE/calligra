@@ -22,7 +22,6 @@
 
 #include <QLabel>
 
-#include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KoIcon.h>
@@ -40,11 +39,11 @@ class KexiReportPart::Private
 public:
     Private() : toolboxActionGroup(0)
     {
-        ksrc = 0;
+        sourceSelector = 0;
     }
     ~Private() {
     }
-    KexiSourceSelector *ksrc;
+    KexiSourceSelector *sourceSelector;
     QActionGroup toolboxActionGroup;
     QMap<QString, QAction*> toolboxActionsByName;
 };
@@ -72,10 +71,10 @@ KLocalizedString KexiReportPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of report \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Report \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of report <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Report <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }
@@ -92,8 +91,8 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
         view = new KexiReportView(parent);
 
     } else if (viewMode == Kexi::DesignViewMode) {
-        view = new KexiReportDesignView(parent, d->ksrc);
-        connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
+        view = new KexiReportDesignView(parent, d->sourceSelector);
+        connect(d->sourceSelector, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
         connect(view, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
     }
     return view;
@@ -172,10 +171,11 @@ KexiReportPart::TempData::TempData(QObject* parent)
 
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
-    if (!d->ksrc)
-        d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
-    tab->addTab(d->ksrc, koIcon("server-database"), QString());
-    tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
+    if (!d->sourceSelector) {
+        d->sourceSelector = new KexiSourceSelector(KexiMainWindowIface::global()->project(), tab);
+    }
+    tab->addTab(d->sourceSelector, koIcon("server-database"), QString());
+    tab->setTabToolTip(tab->indexOf(d->sourceSelector), i18n("Data Source"));
 }
 
 void KexiReportPart::slotToolboxActionTriggered(bool checked)

@@ -30,7 +30,7 @@ Field::~Field()
 {
 }
 
-QString Field::source()
+QString Field::source() const
 {
     return m_field->itemDataSource();
 }
@@ -40,15 +40,17 @@ void Field::setSource(const QString& s)
     m_field->setItemDataSource(s);
 }
 
-int Field::horizontalAlignment()
+int Field::horizontalAlignment() const
 {
-    QString a = m_field->m_horizontalAlignment->value().toString();
+    const QString a = m_field->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "left") {
+    if (a == QLatin1String("left")) {
         return -1;
-    } else if (a.toLower() == "center") {
+    }
+    if (a == QLatin1String("center")) {
         return 0;
-    } else if (a.toLower() == "right") {
+    }
+    if (a == QLatin1String("right")) {
         return 1;
     }
     return -1;
@@ -71,15 +73,17 @@ void Field::setHorizonalAlignment(int a)
     }
 }
 
-int Field::verticalAlignment()
+int Field::verticalAlignment() const
 {
-    QString a = m_field->m_horizontalAlignment->value().toString();
+    const QString a = m_field->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "top") {
+    if (a == QLatin1String("top")) {
         return -1;
-    } else if (a.toLower() == "middle") {
+    }
+    if (a == QLatin1String("middle")) {
         return 0;
-    } else if (a.toLower() == "bottom") {
+    }
+    if (a == QLatin1String("bottom")) {
         return 1;
     }
     return -1;
@@ -102,7 +106,7 @@ void Field::setVerticalAlignment(int a)
     }
 }
 
-QColor Field::backgroundColor()
+QColor Field::backgroundColor() const
 {
     return m_field->m_backgroundColor->value().value<QColor>();
 }
@@ -111,7 +115,7 @@ void Field::setBackgroundColor(const QColor& c)
     m_field->m_backgroundColor->setValue(c);
 }
 
-QColor Field::foregroundColor()
+QColor Field::foregroundColor() const
 {
     return m_field->m_foregroundColor->value().value<QColor>();
 }
@@ -120,7 +124,7 @@ void Field::setForegroundColor(const QColor& c)
     m_field->m_foregroundColor->setValue(c);
 }
 
-int Field::backgroundOpacity()
+int Field::backgroundOpacity() const
 {
     return m_field->m_backgroundOpacity->value().toInt();
 }
@@ -129,7 +133,7 @@ void Field::setBackgroundOpacity(int o)
     m_field->m_backgroundOpacity->setValue(o);
 }
 
-QColor Field::lineColor()
+QColor Field::lineColor() const
 {
     return m_field->m_lineColor->value().value<QColor>();
 }
@@ -138,7 +142,7 @@ void Field::setLineColor(const QColor& c)
     m_field->m_lineColor->setValue(c);
 }
 
-int Field::lineWeight()
+int Field::lineWeight() const
 {
     return m_field->m_lineWeight->value().toInt();
 }
@@ -147,7 +151,7 @@ void Field::setLineWeight(int w)
     m_field->m_lineWeight->setValue(w);
 }
 
-int Field::lineStyle()
+int Field::lineStyle() const
 {
     return m_field->m_lineStyle->value().toInt();
 }
@@ -159,7 +163,7 @@ void Field::setLineStyle(int s)
     m_field->m_lineStyle->setValue(s);
 }
 
-QPointF Field::position()
+QPointF Field::position() const
 {
     return m_field->m_pos.toPoint();
 }
@@ -168,7 +172,7 @@ void Field::setPosition(const QPointF &p)
     m_field->m_pos.setPointPos(p);
 }
 
-QSizeF Field::size()
+QSizeF Field::size() const
 {
     return m_field->m_size.toPoint();
 }
@@ -176,5 +180,5 @@ void Field::setSize(const QSizeF &s)
 {
     m_field->m_size.setPointSize(s);
 }
-     
+
 }

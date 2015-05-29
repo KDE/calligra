@@ -31,8 +31,8 @@
 class KoResource;
 class KoResourceLoaderThread;
 
-typedef KoResourceServer<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServer;
-typedef KoResourceServerAdapter<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
+typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;
+typedef KoResourceServerAdapter<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
 
 /**
  *
@@ -45,11 +45,11 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
 
     virtual ~KisBrushServer();
-    KisBrushResourceServer* brushServer();
+    KisBrushResourceServer* brushServer(bool block = true);
 
     static KisBrushServer* instance();
 
-public slots:
+public Q_SLOTS:
     void slotRemoveBlacklistedResources();
 
 private:

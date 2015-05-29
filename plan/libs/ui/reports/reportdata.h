@@ -133,11 +133,11 @@ public:
     bool isSubDataSource() const { return m_subdatasource; }
     void setSubDataSources( QList<ReportData*> &lst ) { m_subdatasources = lst; }
 
-public slots:
+public Q_SLOTS:
     virtual void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
-signals:
+Q_SIGNALS:
     void scheduleManagerChanged( ScheduleManager *sm );
     void createReportData( const QString &type, ReportData *rd );
 

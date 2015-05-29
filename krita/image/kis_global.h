@@ -21,12 +21,13 @@
 
 #include <limits.h>
 
-#include <kglobal.h>
 #include <calligraversion.h>
 
 #include <KoConfig.h>
 #include "kis_assert.h"
 
+#include <QPoint>
+#include <QPointF>
 
 #define KRITA_VERSION CALLIGRA_VERSION
 
@@ -40,19 +41,44 @@ const quint8 MAX_SELECTED = UCHAR_MAX;
 const quint8 MIN_SELECTED = 0;
 const quint8 SELECTION_THRESHOLD = 1;
 
-enum enumCursorStyle {
-    CURSOR_STYLE_TOOLICON = 0,
-    CURSOR_STYLE_CROSSHAIR = 1,
-    CURSOR_STYLE_POINTER = 2,
-    CURSOR_STYLE_OUTLINE = 3,
-    CURSOR_STYLE_NO_CURSOR = 4,
-    CURSOR_STYLE_SMALL_ROUND = 5,
-    CURSOR_STYLE_OUTLINE_CENTER_DOT = 6,
-    CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7,
-    CURSOR_STYLE_TRIANGLE_RIGHTHANDED = 8,
-    CURSOR_STYLE_TRIANGLE_LEFTHANDED = 9,
-    CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED = 10,
-    CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED = 11
+enum OutlineStyle {
+    OUTLINE_NONE = 0,
+    OUTLINE_CIRCLE,
+    OUTLINE_FULL,
+
+    N_OUTLINE_STYLE_SIZE
+};
+
+enum CursorStyle {
+    CURSOR_STYLE_NO_CURSOR = 0,
+    CURSOR_STYLE_TOOLICON,
+    CURSOR_STYLE_POINTER,
+    CURSOR_STYLE_SMALL_ROUND,
+    CURSOR_STYLE_CROSSHAIR,
+    CURSOR_STYLE_TRIANGLE_RIGHTHANDED,
+    CURSOR_STYLE_TRIANGLE_LEFTHANDED,
+
+    N_CURSOR_STYLE_SIZE
+};
+
+enum OldCursorStyle {
+    OLD_CURSOR_STYLE_TOOLICON = 0,
+    OLD_CURSOR_STYLE_CROSSHAIR = 1,
+    OLD_CURSOR_STYLE_POINTER = 2,
+
+    OLD_CURSOR_STYLE_OUTLINE = 3,
+
+    OLD_CURSOR_STYLE_NO_CURSOR = 4,
+    OLD_CURSOR_STYLE_SMALL_ROUND = 5,
+
+    OLD_CURSOR_STYLE_OUTLINE_CENTER_DOT = 6,
+    OLD_CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7,
+
+    OLD_CURSOR_STYLE_TRIANGLE_RIGHTHANDED = 8,
+    OLD_CURSOR_STYLE_TRIANGLE_LEFTHANDED = 9,
+
+    OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED = 10,
+    OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED = 11
 };
 
 /*
@@ -116,7 +142,7 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(T x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 
@@ -153,9 +179,9 @@ inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
     qreal distance = 0;
 
     if (qFuzzyCompare(p1.x(), p2.x())) {
-        distance = qAbs(p1.y() - p2.y());
+        distance = qAbs(m.x() - p2.x());
     } else if (qFuzzyCompare(p1.y(), p2.y())) {
-        distance = qAbs(p1.x() - p2.x());
+        distance = qAbs(m.y() - p2.y());
     } else {
         qreal A = 1;
         qreal B = - (p1.x() - p2.x()) / (p1.y() - p2.y());
@@ -197,6 +223,13 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     }
 
     return rc;
+}
+
+#include <QSharedPointer>
+
+template <class T>
+inline QSharedPointer<T> toQShared(T* ptr) {
+    return QSharedPointer<T>(ptr);
 }
 
 #endif // KISGLOBAL_H_

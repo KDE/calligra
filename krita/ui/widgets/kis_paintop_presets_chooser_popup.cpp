@@ -24,7 +24,6 @@
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
@@ -33,6 +32,7 @@
 #include <kis_paintop_preset.h>
 #include <KoIcon.h>
 #include <QCompleter>
+#include "kis_paintop_settings.h"
 
 struct KisPaintOpPresetsChooserPopup::Private
 {
@@ -63,7 +63,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setActionGroup(actionGroup);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true,true);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true, true);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
@@ -108,12 +108,22 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource)
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
 {
+    Q_UNUSED(preset2);
+
     if (resource) {
         blockSignals(true);
-        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(rserver->resourceByName(resource->name()));
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
+
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
         blockSignals(false);
     }
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+}
+
+void KisPaintOpPresetsChooserPopup::updateViewSettings()
+{
+   m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
 }

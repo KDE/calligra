@@ -33,14 +33,10 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kstdaccel.h>
-#include <kmessagebox.h>
-#include <kguiitem.h>
 #include <kiconeffect.h>
 
 #include <KoIcon.h>
@@ -515,7 +511,7 @@ void KexiDBImageBox::updateActionStrings()
                 beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
             }
             m_chooser->setToolTip(
-                i18n("Click to show actions for \"%1\" image box", beautifiedImageBoxName));
+                i18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
         }
     }
 }

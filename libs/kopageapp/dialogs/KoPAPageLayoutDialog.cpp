@@ -23,7 +23,8 @@
 
 #include "KoPageLayout.h"
 #include "KoPADocument.h"
-#include "KoPAMasterPage.h"
+
+#include <KoUnit.h>
 
 KoPAPageLayoutDialog::KoPAPageLayoutDialog( KoPADocument *document, const KoPageLayout &pageLayout, QWidget *parent )
 : KoPageLayoutDialog( parent, pageLayout )

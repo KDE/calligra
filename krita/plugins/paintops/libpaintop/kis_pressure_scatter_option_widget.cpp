@@ -30,8 +30,10 @@
 
 
 KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
-    : KisCurveOptionWidget(new KisPressureScatterOption())
+    : KisCurveOptionWidget(new KisPressureScatterOption(), i18n("0.0"), i18n("1.0"))
 {
+    setObjectName("setObjectName("");");
+
     QWidget* w = new QWidget;
     m_axisX = new QCheckBox(i18n("Axis X"));
     m_axisX->setChecked(true);
@@ -72,11 +74,11 @@ void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfig
 void KisPressureScatterOptionWidget::xAxisEnabled(bool enable)
 {
     static_cast<KisPressureScatterOption*>(curveOption())->enableAxisX(enable);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPressureScatterOptionWidget::yAxisEnabled(bool enable)
 {
     static_cast<KisPressureScatterOption*>(curveOption())->enableAxisY(enable);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

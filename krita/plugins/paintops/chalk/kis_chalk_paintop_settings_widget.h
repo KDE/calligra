@@ -19,15 +19,13 @@
 #ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 #include "ui_wdgchalkoptions.h"
 
-class KisPaintActionTypeOption;
 class KisChalkOpOption;
-class KisPressureOpacityOption;
 
-class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisChalkPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

@@ -32,7 +32,7 @@
 #include "kis_pressure_spacing_option_widget.h"
 
 KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
-    KisCurveOptionWidget(new KisPressureSpacingOption())
+    KisCurveOptionWidget(new KisPressureSpacingOption(), i18n("0%"), i18n("100%"))
 {
     QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
 
@@ -46,7 +46,6 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 
     KisCurveOptionWidget::setConfigurationPage(w);
 
-
     connect(isotropicSpacing, SIGNAL(stateChanged(int)),
             this, SLOT(setIsotropicSpacing(int)));
 
@@ -56,5 +55,5 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 void KisPressureSpacingOptionWidget::setIsotropicSpacing(int isotropic)
 {
     dynamic_cast<KisPressureSpacingOption*>(KisCurveOptionWidget::curveOption())->setIsotropicSpacing(isotropic);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

@@ -23,6 +23,7 @@
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 
+#include "KoPathSegment.h"
 #include "KoOdfWorkaround.h"
 #include "KoPathPoint.h"
 #include "KoShapeStrokeModel.h"
@@ -37,6 +38,7 @@
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 #include "KoShapeStroke.h"
+#include "KoInsets.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -692,7 +694,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
     //center berechnen
     QPointF center(startpoint - QPointF(cossa * rx, -sinsa * ry));
 
-    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;;
+    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;
 
     for (int part = 0; part < parts; ++part) {
         // start tangent
@@ -787,7 +789,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
     (*lastPoint)->unsetProperty(KoPathPoint::CloseSubpath);
 }
 
-QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
+QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
 {
     QList<KoPathPoint*> result;
 
@@ -806,7 +808,7 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
     return result;
 }
 
-QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r)
+QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r) const
 {
     QList<KoPathSegment> segments;
     int subpathCount = m_subpaths.count();
@@ -1592,7 +1594,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
      *
      * The shorten factor to use results of the 0.3 which means we need to start at 0.7 * height of the marker
      */
-    static qreal shortenFactor = 0.7;
+    static const qreal shortenFactor = 0.7;
 
     KoMarkerData mdStart = markerData(KoMarkerData::MarkerStart);
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);

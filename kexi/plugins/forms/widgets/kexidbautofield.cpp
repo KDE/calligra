@@ -561,7 +561,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
     bool unbound = false;
     if (d->autoCaption && (d->widgetType == Auto || dataSource().isEmpty())) {
         if (designMode())
-            realText = i18nc("Unbound Auto Field", "%1 (unbound)", objectName());
+            realText = futureI18nc2("Unbound Auto Field", "%1 (unbound)", objectName());
         else
             realText.clear();
         unbound = true;
@@ -658,7 +658,7 @@ KexiDBAutoField::updateInformationAboutUnboundField()
 {
     if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
-        d->label->setText(objectName() + " " + i18nc("Unbound Auto Field", " (unbound)"));
+        d->label->setText(futureI18nc2("Unbound Auto Field", "%1 (unbound)", objectName()));
     }
 }
 

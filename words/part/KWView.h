@@ -42,15 +42,15 @@ class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
-class KoFindStyle;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
-class KoRdfSemanticItem;
-typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
+class KoRdfBasicSemanticItem;
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 #endif
 
 class KToggleAction;
+class KAction;
 /**
  * Words' view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
@@ -124,10 +124,10 @@ public:
     void viewMouseMoveEvent(QMouseEvent *e);
 
 
-signals:
+Q_SIGNALS:
     void shownPagesChanged();
 
-public slots:
+public Q_SLOTS:
     void offsetInDocumentMoved(int yOffset);
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -153,15 +153,16 @@ public slots:
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
+    virtual bool event(QEvent* event);
 
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
+    /// loops over the selected shapes and returns the top level shapes.
+    QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;
 
-private slots:
+private Q_SLOTS:
     /// create a template from document
     void createTemplate();
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -180,12 +181,8 @@ private slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// shows or hides the rulers
     void showRulers(bool visible);
-    /// creates a copy of the current frame
-    void createLinkedFrame();
     /// shows or hides the status bar
     void showStatusBar(bool);
-    /// selects all frames
-    void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
@@ -196,7 +193,7 @@ private slots:
     void configure();
 #ifdef SHOULD_BUILD_RDF
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid);
 #endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
@@ -208,8 +205,10 @@ private slots:
     void pasteRequested();
     /// Call when the user want to show/hide the WordsCount in the statusbar
     void showWordCountInStatusBar(bool doShow);
-    /// Show annotations ("notes" in the UI) on the canvas
-    void showNotes(bool doShow);
+    /// Show annotations ("notes" in the UI) on the canvas - this is the user view menu visibility change
+    void showNotes(bool show);
+    /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
+    void hasNotes(bool has);
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.

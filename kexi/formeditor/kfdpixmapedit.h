@@ -32,10 +32,10 @@ class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
     Q_OBJECT
 
 public:
-    KFDPixmapEdit(KoProperty::Property *property, QWidget *parent = 0);
+    explicit KFDPixmapEdit(KoProperty::Property *property, QWidget *parent = 0);
     virtual ~KFDPixmapEdit();
 
-public slots:
+public Q_SLOTS:
     virtual void selectPixmap();
 };
 

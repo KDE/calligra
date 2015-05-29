@@ -22,7 +22,6 @@
 #include <QTimer>
 
 #include <kaboutdata.h>
-#include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -192,7 +191,7 @@ int main(int argc, char **argv)
         // Code form koDocument.cc
         KIO::UDSEntry entry;
         if (KIO::NetAccess::stat(urlOut, entry, 0L)) {   // this file exists => backup
-            kDebug() << "Making backup...";;
+            kDebug() << "Making backup...";
             KUrl backup(urlOut);
             backup.setPath(urlOut.path() + '~');
             KIO::FileCopyJob *job = KIO::file_copy(urlOut, backup, -1, KIO::Overwrite | KIO::HideProgressInfo);

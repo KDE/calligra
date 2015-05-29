@@ -32,7 +32,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kundo2stack.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
@@ -241,7 +240,7 @@ void MainWindow::removeStatusBarItem(QWidget* _widget)
     kWarning() << "Widget " << _widget << " not found in the status bar";
 }
 
-QList<KoCanvasObserverBase*> MainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> MainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 

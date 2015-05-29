@@ -21,7 +21,6 @@
 #include "KPrAnimationToolFactory.h"
 #include "KPrAnimationTool.h"
 #include "KPrView.h"
-#include <KoPACanvas.h>
 #include <KoIcon.h>
 
 #include <klocale.h>

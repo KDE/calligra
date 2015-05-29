@@ -25,7 +25,7 @@
 #include "PptxImport.h"
 
 #include "Charting.h"
-#include "ChartExport.h"
+#include "KoOdfChartWriter.h"
 #include "XlsxXmlChartReader.h"
 #include "PptxXmlCommentsReader.h"
 
@@ -35,14 +35,11 @@
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyle.h>
 #include <MsooXmlDrawingTableStyleReader.h>
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoUnit.h>
-
-#include <kde_file.h> // for WARNING
 
 #include <QBrush>
 
@@ -330,7 +327,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("p", MSOOXML::Schemas::presentationml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::presentationml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::presentationml)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...
@@ -1012,7 +1009,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
         KoFilter::ConversionStatus stat = m_context->import->copyFile(sourceName, destinationName, false );
         // In case the file could not be find due to it being external we can at least do draw:image from below
         if (stat == KoFilter::OK) {

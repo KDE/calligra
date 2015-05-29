@@ -115,11 +115,10 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 {
     lockTemporaryTarget();
 
-    KisPainter gc(projection);
-    gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 
     if (hasTemporaryTarget()) {
+        KisPainter gc(projection);
         setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
@@ -143,28 +142,24 @@ void KisPaintLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
-KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
-    l << KoDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
-    
+    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+
     return l;
 }
 
-void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
-    foreach (const KoDocumentSectionModel::Property &property, properties) {
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Inherit Alpha")) {
-            disableAlphaChannel(property.state.toBool());
-        }
     }
-    
+
     KisLayer::setSectionModelProperties(properties);
 }
 

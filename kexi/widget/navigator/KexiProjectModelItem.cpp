@@ -21,8 +21,8 @@
 
 #include "KexiProjectModelItem.h"
 
-
 #include <core/kexipartinfo.h>
+#include <kexiutils/utils.h>
 #include <kicon.h>
 #include <QtAlgorithms>
 #include <kdebug.h>
@@ -60,13 +60,12 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
     : d(new Private(&i, 0, p))
 {
-    d->icon = KIcon(i.itemIconName());
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
     : d(new Private(&i, &item, p))
 {
-    d->icon = KIcon(i.itemIconName());
+    d->icon = SmallIcon(i.itemIconName(), KIconLoader::SizeSmall);
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()
@@ -138,7 +137,7 @@ QVariant KexiProjectModelItem::data(int column) const
 #else
         QString result = d->item->name();
         if (d->dirty) {
-            result.append(QLatin1Char('*'));
+            KexiUtils::addDirtyFlag(&result);
         }
         return result;
 #endif
@@ -170,7 +169,7 @@ Qt::ItemFlags KexiProjectModelItem::flags() const
     if (d->item) {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     } else {
-        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
     }
 }
 

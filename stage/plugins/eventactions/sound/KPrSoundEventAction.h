@@ -48,7 +48,7 @@ public:
     void setSoundData( KPrSoundData * soundData );
     KPrSoundData * soundData() const;
 
-public slots:
+public Q_SLOTS:
     void finished();
 
 private:

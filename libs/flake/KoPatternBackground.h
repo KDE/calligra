@@ -22,12 +22,16 @@
 
 #include "KoShapeBackground.h"
 #include "flake_export.h"
-#include <QTransform>
 
 class KoImageCollection;
 class KoOdfLoadingContext;
 class KoPatternBackgroundPrivate;
 class KoImageData;
+
+class QTransform;
+class QImage;
+class QPointF;
+class QRectF;
 
 /// A pattern shape background
 class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
@@ -70,7 +74,7 @@ public:
     void setPattern(KoImageData *imageData);
 
     /// Returns the pattern
-    QImage pattern();
+    QImage pattern() const;
 
     /// Sets the pattern repeatgfl
     void setRepeat(PatternRepeat repeat);

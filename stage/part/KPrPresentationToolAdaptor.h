@@ -23,7 +23,7 @@
 #ifndef QT_NO_DBUS
 #include "KPrPresentationTool.h"
 
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 
 class KPrViewModePresentation;
 class KPrPresentationTool;
@@ -37,7 +37,7 @@ public:
     explicit KPrPresentationToolAdaptor(KPrPresentationTool *tool);
     virtual ~KPrPresentationToolAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
 
     /**
      * Blank the presentation.

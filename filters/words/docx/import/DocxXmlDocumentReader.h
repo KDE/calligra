@@ -21,15 +21,14 @@
  *
  */
 
-#ifndef DOCXXMLDOCREADER_H
-#define DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
+#define DOCXXMLDOCUMENTREADER_H
 
 #include <QBuffer>
 #include <QString>
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-
 #include <MsooXmlDrawingTableStyle.h>
 
 #include <KoXmlWriter.h>
@@ -450,4 +449,4 @@ public:
 private:
 };
 
-#endif //DOCXXMLDOCREADER_H
+#endif //DOCXXMLDOCUMENTREADER_H

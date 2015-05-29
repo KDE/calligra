@@ -2,7 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
-Comment[bs]=Docker za protok
+Comment[bs]=Docker za Flow
 Comment[ca]=Acoblador per al Flow
 Comment[ca@valencia]=Acoblador per al Flow
 Comment[cs]=Dok pro Flow
@@ -10,7 +10,7 @@ Comment[da]=Dokker til Flow
 Comment[de]=Docker für Flow
 Comment[el]=Προσάρτηση για το Flow
 Comment[en_GB]=Docker for Flow
-Comment[es]=Ventana acoplable para Flow
+Comment[es]=Panel para Flow
 Comment[et]=Flow dokk
 Comment[eu]=Flow-rako panela
 Comment[fi]=Flow-telakka

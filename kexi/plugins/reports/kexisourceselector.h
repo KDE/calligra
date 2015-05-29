@@ -22,13 +22,13 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
-#include <klineedit.h>
-#include <kpushbutton.h>
 
 #include <db/connection.h>
 #include <KoReportData.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
+
+class KexiProject;
 
 //! @todo rename to KexiReportDataSourcePage
 //! @todo use KexiPropertyPaneViewBase
@@ -36,17 +36,17 @@ class KexiSourceSelector : public QWidget
 {
     Q_OBJECT
 public:
-    KexiSourceSelector(QWidget* parent, KexiDB::Connection* conn);
+    explicit KexiSourceSelector(KexiProject* project, QWidget* parent = 0);
     ~KexiSourceSelector();
 
     KoReportData* sourceData();
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
-signals:
+Q_SIGNALS:
     void setData(KoReportData*);
 
-private slots:
+private Q_SLOTS:
     void setDataClicked();
 
 private:

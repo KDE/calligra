@@ -33,7 +33,6 @@ class KoInlineNote;
 class KoTextEditor;
 class KoBibliographyInfo;
 class KoTableOfContentsGeneratorInfo;
-class QPainter;
 class SimpleLinksWidget;
 class LabeledWidget;
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -59,9 +58,9 @@ public:
 
 protected:
     /// reimplemented from superclass
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
-private slots:
+private Q_SLOTS:
     /// insert a citation
     void insertCitation();
     /// configure a bibliography
@@ -75,11 +74,11 @@ private slots:
     /// insert an autonumbered footnote
     void insertAutoFootNote();
     /// insert a labeled footnote
-    void insertLabeledFootNote(QString label);
+    void insertLabeledFootNote(const QString &label);
     /// insert an autonumbered endnote
     void insertAutoEndNote();
     /// insert a labeled endnote
-    void insertLabeledEndNote(QString label);
+    void insertLabeledEndNote(const QString &label);
     /// show the configuration dialog for footnotes
     void showFootnotesConfigureDialog();
     /// show the configuration dialog for endnotes
@@ -113,14 +112,14 @@ class LabeledWidget : public QWidget
     Q_OBJECT
 public:
     enum LabelPosition {INLINE, ABOVE};
-    LabeledWidget(KAction *action, const QString label, LabelPosition pos, bool warningLabelRequired);
+    LabeledWidget(KAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
     void setWarningText(int pos, const QString &warning);
     void clearLineEdit();
-signals:
-    void triggered(QString label);
-    void lineEditChanged(QString);
+Q_SIGNALS:
+    void triggered(const QString &label);
+    void lineEditChanged(const QString &);
 
-private slots:
+private Q_SLOTS:
     void returnPressed();
 
 protected:

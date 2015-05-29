@@ -35,6 +35,8 @@ class KoProperties;
 class KisNodeVisitor;
 class KisNodeGraphListener;
 class KisNodeProgressProxy;
+class KisAbstractProjectionPlane;
+class KisProjectionLeaf;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -125,6 +127,35 @@ public:
     virtual void setDirty(const QRegion &region);
 
     /**
+     * \return a pointer to a KisAbstractProjectionPlane interface of
+     *         the node. This interface is used by the image merging
+     *         framework to get information and to blending for the
+     *         layer.
+     *
+     * Please note the difference between need/change/accessRect and
+     * the projectionPlane() interface. The former one gives
+     * information about internal composition of the layer, and the
+     * latter one about the total composition, including layer styles,
+     * pass-through blending and etc.
+     */
+    virtual KisAbstractProjectionPlaneSP projectionPlane() const;
+
+    /**
+     * The rendering of the image may not always happen in the order
+     * of the main graph. Pass-through nodes ake some subgraphs
+     * linear, so it the order of rendering change. projectionLeaf()
+     * is a special interface of KisNode that represents "a graph for
+     * projection rendering". Therefore the nodes in projectionLeaf()
+     * graph may have a different order the main one.
+     */
+    virtual KisProjectionLeafSP projectionLeaf() const;
+
+protected:
+
+    /**
+     * \return internal changeRect() of the node. Do not mix with \see
+     *         projectionPlane()
+     *
      * Some filters will cause a change of pixels those are outside
      * a requested rect. E.g. we change a rect of 2x2, then we want to
      * apply a convolution filter with kernel 4x4 (changeRect is
@@ -135,6 +166,9 @@ public:
     virtual QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
+     * \return internal needRect() of the node. Do not mix with \see
+     *         projectionPlane()
+     *
      * Some filters need pixels outside the current processing rect to
      * compute the new value (for instance, convolution filters)
      * See \ref changeRect
@@ -144,6 +178,9 @@ public:
 
 
     /**
+     * \return internal accessRect() of the node. Do not mix with \see
+     *         projectionPlane()
+     *
      * Shows the area of image, that may be accessed during accessing
      * the node.
      *
@@ -274,26 +311,6 @@ protected:
     KisBaseNodeSP parentCallback() const;
     void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * before it is removed.
-     */
-    virtual void prepareForRemoval() {}
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * before being added to the stack.
-     */
-    virtual void prepareForAddition() {}
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * right after being added to the stack.
-     */
-    virtual void initAfterAddition() {}
-
-
 private:
 
     friend class KisNodeFacade;
@@ -335,5 +352,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisNodeSP)
+
+Q_DECLARE_METATYPE(KisNodeWSP)
 
 #endif

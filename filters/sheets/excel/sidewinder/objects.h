@@ -130,9 +130,9 @@ private:
 class ChartObject : public Object
 {
 public:
-    Charting::Chart* m_chart;
+    KoChart::Chart* m_chart;
 
-    explicit ChartObject(unsigned long id) : Object(Chart, id), m_chart(new Charting::Chart) {}
+    explicit ChartObject(unsigned long id) : Object(Chart, id), m_chart(new KoChart::Chart) {}
     virtual ~ChartObject() { delete m_chart; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }

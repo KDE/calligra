@@ -24,7 +24,6 @@
 #include <KoPAViewMode.h>
 
 class KoPAView;
-class KoPACanvas;
 class KoPAPageBase;
 
 class KPrViewModeNotes : public KoPAViewMode

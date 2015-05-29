@@ -26,19 +26,13 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include <kglobal.h>
-
 // FIXME: Don't cross include
 //#include "KWNavigationDocker.h"
 #include "StatisticsPreferencesPopup.h"
 #include <KWCanvas.h>
 #include <KoTextDocumentLayout.h>
 
-class QTextDocument;
-class QToolButton;
-class KConfigGroup;
 class KoCanvasResourceManager;
-class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
@@ -61,10 +55,10 @@ public:
 
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void navigationClicked(QModelIndex idx);
 
-public slots:
+public Q_SLOTS:
     void updateData();
 
 private:

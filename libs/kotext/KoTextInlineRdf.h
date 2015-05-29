@@ -34,6 +34,7 @@ class KoBookmark;
 class KoAnnotation;
 class KoTextMeta;
 class KoTextEditor;
+class KoSection;
 
 class QTextDocument;
 class QTextCursor;
@@ -85,6 +86,7 @@ public:
     KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b);
     KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b);
     KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
+    KoTextInlineRdf(const QTextDocument *doc, KoSection *s);
 
     virtual ~KoTextInlineRdf();
 
@@ -155,7 +157,7 @@ private:
     friend class KoDocumentRdf;
 
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 Q_DECLARE_METATYPE(KoTextInlineRdf*)

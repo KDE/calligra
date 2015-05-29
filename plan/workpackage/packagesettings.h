@@ -58,10 +58,10 @@ public:
     WorkPackageSettings settings() const;
     void setSettings( const WorkPackageSettings &settings );
 
-signals:
+Q_SIGNALS:
     void changed( bool );
 
-public slots:
+public Q_SLOTS:
     void slotChanged();
 
 protected:

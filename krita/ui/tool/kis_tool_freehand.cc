@@ -27,9 +27,6 @@
 #include <QRect>
 #include <QThreadPool>
 
-#include <kaction.h>
-#include <kactioncollection.h>
-
 #include <KoIcon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
@@ -52,7 +49,7 @@
 #include "kis_config.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_painting_assistants_decoration.h>
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
@@ -92,35 +89,29 @@ void KisToolFreehand::resetCursorStyle()
 {
     KisConfig cfg;
 
-    switch (cfg.cursorStyle()) {
-    case CURSOR_STYLE_CROSSHAIR:
-    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
-        useCursor(KisCursor::crossCursor());
+    switch (cfg.newCursorStyle()) {
+    case CURSOR_STYLE_NO_CURSOR:
+        useCursor(KisCursor::blankCursor());
         break;
     case CURSOR_STYLE_POINTER:
         useCursor(KisCursor::arrowCursor());
         break;
-    case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor());
-        break;
     case CURSOR_STYLE_SMALL_ROUND:
-    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
         useCursor(KisCursor::roundCursor());
         break;
-    case CURSOR_STYLE_OUTLINE:
-        useCursor(KisCursor::blankCursor());
+    case CURSOR_STYLE_CROSSHAIR:
+        useCursor(KisCursor::crossCursor());
         break;
     case CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
-    case CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
         useCursor(KisCursor::triangleRightHandedCursor());
         break;
     case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
-    case CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
         useCursor(KisCursor::triangleLeftHandedCursor());
         break;
     case CURSOR_STYLE_TOOLICON:
     default:
         KisToolPaint::resetCursorStyle();
+        break;
     }
 }
 
@@ -165,6 +156,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
+                        currentNode(),
                         image().data(),
                         image()->postExecutionUndoAdapter());
 }
@@ -202,7 +194,7 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
-        canvas2->view()->disableControls();
+        canvas2->viewManager()->disableControls();
     }
 
     initStroke(event);
@@ -227,14 +219,14 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 
     endStroke();
 
-    if (m_assistant) {
-        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->endStroke();
+    if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+        static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
     }
 
     notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
-        canvas2->view()->enableControls();
+        canvas2->viewManager()->enableControls();
     }
 
     setMode(KisTool::HOVER_MODE);
@@ -250,11 +242,14 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
      */
     QPointF pos = adjustPosition(event->point, event->point);
     qreal perspective = 1.0;
-    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
-        if (grid->contains(pos)) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
+        if (grid && grid->contains(pos)) {
             perspective = grid->distance(pos);
             break;
         }
+    }
+    if (!currentPaintOpPreset()) {
+        return false;
     }
     bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->
         mousePressEvent(KisPaintInformation(convertToPixelCoord(event->point),
@@ -325,10 +320,12 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
      */
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
 
-    currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
-    requestUpdateOutline(m_initialGestureDocPoint, 0);
+    if (qRound(scaledOffset.x()) != 0) {
+        currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
+        requestUpdateOutline(m_initialGestureDocPoint, 0);
 
-    m_lastDocumentPoint = event->point;
+        m_lastDocumentPoint = event->point;
+    }
 }
 
 void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -358,8 +355,8 @@ void KisToolFreehand::setAssistant(bool assistant)
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
-    if (m_assistant) {
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
+    if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;
@@ -368,8 +365,8 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
 qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 {
     qreal perspective = 1.0;
-    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
-        if (grid->contains(documentPoint)) {
+    foreach (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
+        if (grid && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;
         }
@@ -388,10 +385,13 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 {
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
 
-    return m_helper->paintOpOutline(imagePos,
-                                    event,
-                                    currentPaintOpPreset()->settings(),
-                                    outlineMode);
+    if (currentPaintOpPreset())
+        return m_helper->paintOpOutline(imagePos,
+                                        event,
+                                        currentPaintOpPreset()->settings(),
+                                        outlineMode);
+    else
+        return QPainterPath();
 }
 
 #include "kis_tool_freehand.moc"

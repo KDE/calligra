@@ -49,19 +49,14 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
-#include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kmessagebox.h>
 
 KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
-    setTemplateType("karbon_template");
+    setTemplatesResourcePath(QLatin1String("karbon/templates/"));
     setComponentData(KarbonFactory::componentData());
 }
 

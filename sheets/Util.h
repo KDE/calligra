@@ -45,7 +45,6 @@ namespace Calligra
 namespace Sheets
 {
 class Cell;
-class Map;
 class Sheet;
 
 namespace Util

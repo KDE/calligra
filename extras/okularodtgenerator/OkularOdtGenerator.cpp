@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <calligraversion.h>
+
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KWDocument.h>
@@ -41,7 +43,6 @@
 #include <kmimetype.h>
 
 #include <okular/core/page.h>
-#include <okular/core/version.h>
 
 static KAboutData createAboutData()
 {
@@ -49,7 +50,7 @@ static KAboutData createAboutData()
          "okular_odt",
          "okularGenerator_odt",
          ki18n( "ODT/OTT Backend" ),
-         "0.1",
+         CALLIGRA_VERSION_STRING,
          ki18n( "ODT/OTT file renderer" ),
          KAboutData::License_GPL,
          ki18n( "© 2012 Sven Langkamp" )
@@ -249,7 +250,7 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         QSize rSize(request->width(), request->height());
 
         pix = new QPixmap();
-        pix->convertFromImage(page.thumbnail(rSize, shapeManager));
+        pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
 // API change
@@ -262,10 +263,19 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
     signalPixmapRequestDone( request );
 }
 
+#if OKULAR_IS_VERSION(0, 20, 60)
+Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+{
+    Q_UNUSED(keys);
+
+    return m_documentInfo;
+}
+#else
 const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
 {
     return &m_documentInfo;
 }
+#endif
 
 const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {

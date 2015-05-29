@@ -1,6 +1,10 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30527)
 
-include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
+include_directories(${KOMAIN_INCLUDES}
+                    ${KOODF2_INCLUDES}           # For KoOdfChartWriter
+                    ${CMAKE_SOURCE_DIR}/filters/libmso
+                    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+)
 
 ########### next target ###############
 
@@ -15,8 +19,8 @@ set(xlsx2ods_PART_SRCS
     XlsxXmlChartReader.cpp
     XlsxXmlCommentsReader.cpp
     XlsxXmlTableReader.cpp
-    NumberFormatParser.cpp
-    ChartExport.cpp
+
+    XlsxChartOdfWriter.cpp
     FormulaParser.cpp
 )
 
@@ -24,7 +28,9 @@ kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_xlsx2ods
+    koodf2
     komsooxml
+    mso
     koodf
     komain
     calligrasheetscommon
@@ -42,7 +48,7 @@ install( FILES
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+endif()
 
 ########## unit tests ###################
 

@@ -96,7 +96,7 @@ koppttoodp(const QString& from) {
 }
 void
 CombinedView::openFile(const QString& path) {
-    bool odp = path.toLower().endsWith(".odp");
+    bool odp = path.endsWith(QLatin1String(".odp"), Qt::CaseInsensitive);
     oopptview->setVisible(!odp);
     kopptview->setVisible(!odp);
     layout->setRowStretch(1, (odp)?0:1);

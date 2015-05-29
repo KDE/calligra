@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -83,7 +83,7 @@ public:
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    //! Used to select row item for an user-entered value \a v.
+    //! Used to select row item for a user-entered value \a v.
     //! Only for "lookup table" mode.
     KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
 
@@ -146,6 +146,12 @@ protected:
 
     //! Used by KexiDBComboBox.
     void undoChanges();
+
+    //! \return index of bound column.
+    int boundColumnIndex() const;
+
+    //! \return index of (actually, first as this is the current limitation) visible column.
+    int visibleColumnIndex() const;
 
     //! A hack for createPopup(), used by forms only. Avoid magical disappearing of the popup in forms after 2nd and subsequent use.
     //! fix creating popup for forms instead!

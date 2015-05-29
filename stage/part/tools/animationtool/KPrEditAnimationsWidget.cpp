@@ -47,18 +47,13 @@
 //KDE Headers
 #include <KoIcon.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kaction.h>
 #include <kdebug.h>
 
 //Calligra Headers
-#include <KoToolManager.h>
 #include <KoSelection.h>
-#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
 #include <KoPAViewBase.h>
-#include <KoPACanvasBase.h>
 
 KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent)
     : QWidget(parent)

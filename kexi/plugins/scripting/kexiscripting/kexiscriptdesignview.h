@@ -90,7 +90,7 @@ public:
      */
     virtual tristate storeData(bool dontAsk = false);
 
-private slots:
+private Q_SLOTS:
 
     /**
      * Deferred initialization.

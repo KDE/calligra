@@ -58,7 +58,7 @@ public:
     QModelIndex index(SectionGroup*);
     Section* dataFromIndex(const QModelIndex& index) const;
     void* dataToIndex(Section* section) const;
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted when the active section is changed.
      */

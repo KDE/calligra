@@ -25,7 +25,7 @@
 #include "CAuAboutData.h"
 
 #include <kdebug.h>
-#include "KWDocument.h"
+#include <author/CAuDocument.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
@@ -41,6 +41,8 @@
 #include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
+#include "dockers/CAuOutlinerDocker.h"
+#include "dockers/CAuOutlinerDockerFactory.h"
 #endif
 
 #include "dockers/KWStatisticsDocker.h"
@@ -71,7 +73,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
     Q_UNUSED(keyword);
 
     CAuPart *part = new CAuPart(parent);
-    KWDocument *doc = new KWDocument(part);
+    CAuDocument *doc = new CAuDocument(part);
     part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
     return part;
@@ -90,8 +92,6 @@ const KComponentData &CAuFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-        s_instance->dirs()->addResourceType("words_template",
-                                            "data", "words/templates/");
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
@@ -102,6 +102,8 @@ const KComponentData &CAuFactory::componentData()
 #ifdef SHOULD_BUILD_RDF
 // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
+// FIXME: hidden from users until completely implemented
+//         dockRegistry->add(new CAuOutlinerDockerFactory());
 #endif
 
     }

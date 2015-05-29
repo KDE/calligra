@@ -37,10 +37,11 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_isPresetValid(true)
+    , m_node(node)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -49,6 +50,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+
     m_rotationOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
@@ -91,7 +93,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter() || !m_isPresetValid) {
-        return m_spacing;
+        return KisSpacingInformation(m_spacing);
     }
 
     if (!m_dab) {
@@ -111,7 +113,7 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
 
     m_sprayBrush.paint(m_dab,
-                       m_settings->node()->paintDevice(),
+                       m_node->paintDevice(),
                        info,
                        rotation,
                        scale,
@@ -123,5 +125,5 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    return m_spacing;
+    return KisSpacingInformation(m_spacing);
 }

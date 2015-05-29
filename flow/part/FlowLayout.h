@@ -68,7 +68,7 @@ class FlowLayout : public QObject {
   protected:
     // Reimplemented from QObject
     virtual bool event(QEvent * e);
-  signals:
+  Q_SIGNALS:
     void boundingBoxChanged( const QRectF& _rect );
   private:
     struct Private;

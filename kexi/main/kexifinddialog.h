@@ -70,7 +70,7 @@ public:
     //! \return value that to be used as a replacement
     QVariant valueToReplaceWith() const;
 
-public slots:
+public Q_SLOTS:
     /*! Sets \a columnNames list and \a columnCaptions for 'look in column' combo box.
      \a columnCaptions are visible values, while \a columnNames are used for returning
      in currentLookInColumn().
@@ -110,7 +110,7 @@ public slots:
     void addToFindHistory();
     void addToReplaceHistory();
 
-signals:
+Q_SIGNALS:
     //! Emitted after clicking "Find next" button or pressing appropriate shortcut set by setActions()
     void findNext();
 
@@ -123,7 +123,7 @@ signals:
     //! Emitted after clicking "Replace All" button or pressing appropriate shortcut set by setActions()
     void replaceAll();
 
-protected slots:
+protected Q_SLOTS:
     void slotCloseClicked();
     void updateMessage(const QString&) {
         updateMessage();

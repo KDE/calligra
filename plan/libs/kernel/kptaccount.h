@@ -23,10 +23,8 @@
 
 #include "kplatokernel_export.h"
 
-#include <QDateTime>
 #include <QMap>
 #include <QList>
-#include <QStringList>
 
 #include "kptglobal.h"
 #include "kpteffortcostmap.h"
@@ -39,6 +37,7 @@
 
 class QDomElement;
 class QString;
+class QStringList;
 
 namespace KPlato
 {
@@ -276,7 +275,7 @@ public:
     QList<Account*> allAccounts() const { return m_idDict.values(); }
     QList<Node*> allNodes() const;
     
-signals:
+Q_SIGNALS:
     void accountAdded( const Account * );
     void accountToBeAdded( const Account *, int );
     void accountRemoved( const Account * );

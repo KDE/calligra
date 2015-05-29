@@ -1,0 +1,2 @@
+module Calligra.Gemini.Dropbox
+plugin calligrageminidropboxplugin

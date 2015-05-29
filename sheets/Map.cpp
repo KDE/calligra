@@ -28,8 +28,8 @@
 
 #include <kcodecs.h>
 #include <kcompletion.h>
-#include <ktemporaryfile.h>
 
+#include <KoUnit.h>
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
 #include <KoGlobal.h>
@@ -44,7 +44,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
-#include <KoShapeRegistry.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
 
@@ -143,9 +142,6 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->recalcManager = new RecalcManager(this);
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
-    if (doc) {
-        d->textStyleManager->setUndoStack(doc->undoStack());
-    }
     d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
 

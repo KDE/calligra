@@ -31,19 +31,21 @@ public:
 };
 
 KisHatchingPreferences::KisHatchingPreferences()
-    : KisPaintOpOption(i18n("Hatching preferences"), KisPaintOpOption::generalCategory(), false)
+    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
+    setObjectName("KisHatchingPreferences");
+
     m_checkable = false;
     m_options = new KisHatchingPreferencesWidget();
 
     /*
-    connect(m_options->trigonometryAlgebraRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->scratchOffRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->trigonometryAlgebraRadioButton, SIGNAL(clicked(bool)),SLOT(emitSettingChanged()));
+    connect(m_options->scratchOffRadioButton, SIGNAL(clicked(bool)),SLOT(emitSettingChanged()));
     */
 
-    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,6 +51,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[1], KoID(COMPOSITE_LINEAR_BURN, i18n("Linear Burn")));
     m_map.insert(m_categories[1], KoID(COMPOSITE_DARKEN     , i18n("Darken")));
     m_map.insert(m_categories[1], KoID(COMPOSITE_GAMMA_DARK , i18n("Gamma Dark")));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_DARKER_COLOR     , i18n("Darker Color")));
 
     m_map.insert(m_categories[2], KoID(COMPOSITE_DODGE       , i18n("Color Dodge")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge")));
@@ -63,6 +64,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LIGHTER_COLOR     , i18n("Lighter Color")));
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DIFF                 , i18n("Difference")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EQUIVALENCE          , i18n("Equivalence")));
@@ -88,6 +90,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_BLUE , i18n("Copy Blue")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY      , i18n("Copy")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_TANGENT_NORMALMAP, i18n("Tangent Normalmap")));
 
     m_map.insert(m_categories[6], KoID(COMPOSITE_COLOR         , i18n("Color")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HUE           , i18n("Hue")));

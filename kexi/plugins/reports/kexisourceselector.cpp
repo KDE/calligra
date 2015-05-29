@@ -18,11 +18,15 @@
 
 #include "kexisourceselector.h"
 
+#include <kpushbutton.h>
+#include <klineedit.h>
+
 #include <QLabel>
 #include <klocale.h>
 #include <kdebug.h>
 #include <QDomElement>
-#include "InternalSourceSelector.h"
+#include "KexiDataSourceComboBox.h"
+#include <kexiproject.h>
 
 //#define NO_EXTERNAL_SOURCES
 
@@ -54,7 +58,7 @@ public:
 
     QVBoxLayout *layout;
     QComboBox *sourceType;
-    QComboBox *internalSource;
+    KexiDataSourceComboBox *internalSource;
     KLineEdit *externalSource;
     KPushButton *setData;
 
@@ -66,11 +70,11 @@ public:
 
 };
 
-KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn)
+KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
         : QWidget(parent)
         , d(new Private)
 {
-    d->conn = conn;
+    d->conn = project->dbConnection();
     d->kexiDBData = 0;
 
 #ifndef KEXI_MOBILE
@@ -79,7 +83,8 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     d->layout = new QVBoxLayout(this);
     d->sourceType = new QComboBox(this);
-    d->internalSource = new InternalSourceSelector(this, conn);
+    d->internalSource = new KexiDataSourceComboBox(this);
+    d->internalSource->setProject(project);
     d->externalSource = new KLineEdit(this);
     d->setData = new KPushButton(i18n("Set Data"));
 
@@ -173,8 +178,8 @@ KoReportData* KexiSourceSelector::sourceData()
 
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
-    if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal") {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->currentText(), d->conn);
+    if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal" && d->internalSource->isSelectionValid()) {
+        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPartClass(), d->conn);
         return d->kexiDBData;
     }
 
@@ -186,8 +191,10 @@ KoReportData* KexiSourceSelector::sourceData()
 #endif
 
 #else
-    d->kexiDBData = new KexiDBReportData(d->internalSource->currentText(), d->conn);
-    return d->kexiDBData;
+    if (d->internalSource->isSelectionValid()) {
+        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->conn);
+        return d->kexiDBData;
+    }
 #endif
     return 0;
 }

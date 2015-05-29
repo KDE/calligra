@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 
 #include <KoResource.h>
-#include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
@@ -65,7 +64,9 @@ public:
             }
         }
         else {
+
             return KisBrushResourceServer::importResourceFile(filename, fileCreation);
+
         }
         qApp->processEvents(QEventLoop::AllEvents);
         return true;
@@ -84,6 +85,7 @@ private:
             foreach(KisAbrBrush * abrBrush, collection.brushes()) {
 //                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
+                addTag(abrBrush, collection.filename());
             }
         }
         else {
@@ -127,7 +129,6 @@ KisBrushServer::KisBrushServer()
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
-    m_brushThread->barrier();
     foreach(KisBrushSP brush, m_brushServer->resources()) {
         if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
             brush->setBrushTipImage(QImage());
@@ -149,9 +150,9 @@ KisBrushServer* KisBrushServer::instance()
 }
 
 
-KisBrushResourceServer* KisBrushServer::brushServer()
+KisBrushResourceServer* KisBrushServer::brushServer(bool block)
 {
-    m_brushThread->barrier();
+    if (block) m_brushThread->barrier();
     return m_brushServer;
 }
 

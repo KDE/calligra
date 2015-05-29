@@ -29,8 +29,9 @@
 #include <QVBoxLayout>
 #include <QUrl>
 #include<QWebView>
-#include <kpushbutton.h>
-  
+
+class KPushButton;
+
 class QWebView;
 class QVBoxLayout;
 class QWebHistory;
@@ -106,7 +107,7 @@ public:
     virtual void setReadOnly(bool readOnly);  
     virtual void setInvalidState(const QString& displayText);
 
-public slots:
+public Q_SLOTS:
     void setDataSource(const QString &ds);
     void setDataSourcePartClass(const QString &ds);
     void setUrl(const QString& url);

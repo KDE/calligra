@@ -27,10 +27,9 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
-#include <kptdebug.h>
+#include "kptdebug.h"
 
 #include <klocale.h>
-#include <kdeversion.h>
 
 #include <QHash>
 #include <QMap>

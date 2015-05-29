@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,24 +22,27 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 #include <QColor>
 
 class Parameter
 {
 public:
     enum ParameterType {
-        INVALID_P,
-        FLOAT_P,
-        INT_P,
+        INVALID_P = -1,
         BOOL_P,
+        BUTTON_P,
         CHOICE_P,
-        TEXT_P,
-        FILE_P,
-        FOLDER_P,
         COLOR_P,
-        NOTE_P,
+        CONST_P,
+        FILE_P,
+        FLOAT_P,
+        FOLDER_P,
+        INT_P,
         LINK_P,
-        SEPARATOR_P
+        NOTE_P,
+        TEXT_P,
+        SEPARATOR_P,
     };
 
     Parameter(const QString &name, bool updatePreview = true);
@@ -61,33 +64,27 @@ public:
 
     virtual void reset() { };
 
+    static Parameter::ParameterType nameToType(const QString &typeName);
+    static bool isTypeDefined(const QString &typeName);
+    QString typeName() const;
+
+
 protected:
     // strips parameter type (int, note, etc.) and enclosing brackets
     QString extractValues(const QString& typeDefinition);
+    // returns list of parameter values or empty item if parameter list is empty
     QStringList getValues(const QString& typeDefinition);
-    QString stripQuotes(const QString& str);
+    static QString stripQuotes(const QString& str);
+    static QString addQuotes(const QString& str);
+
+
+    static QMap<Parameter::ParameterType, QString> initMap();
+
+public:
+    static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES;
+    static const QList<QString> PARAMETER_NAMES_STRINGS;
+
 };
-
-static QMap<Parameter::ParameterType, QString> initMap()
-{
-    QMap<Parameter::ParameterType, QString> map;
-    map.insert(Parameter::FLOAT_P,"float");
-    map.insert(Parameter::INT_P, "int");
-    map.insert(Parameter::BOOL_P, "bool");
-    map.insert(Parameter::CHOICE_P, "choice");
-    map.insert(Parameter::TEXT_P, "text");
-    map.insert(Parameter::FILE_P, "file");
-    map.insert(Parameter::FOLDER_P, "folder");
-    map.insert(Parameter::COLOR_P, "color");
-    map.insert(Parameter::NOTE_P, "note");
-    map.insert(Parameter::LINK_P, "link");
-    map.insert(Parameter::SEPARATOR_P, "separator");
-    return map;
-}
-
-static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES = initMap();
-
-static const QList<QString> PARAMETER_NAMES_STRINGS = PARAMETER_NAMES.values();
 
 class FloatParameter : public Parameter
 {
@@ -123,6 +120,8 @@ public:
 
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
+    // reset parameter to default value from gmic definition
+    // some parameters do not need reset, e.g. const is not mutable
     virtual void reset();
 };
 
@@ -214,11 +213,17 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
 
+    QString toUiValue() const;
+    void fromUiValue(const QString &uiValue);
+
+    bool m_multiline;
+
+private:
     QString m_value;
     QString m_defaultValue;
-    bool m_multiline;
 };
 
 class FolderParameter : public Parameter
@@ -228,7 +233,11 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
+
+    QString toUiValue();
+    void fromUiValue(const QString &uiValue);
 
     QString m_folderPath;
     QString m_defaultFolderPath;
@@ -241,10 +250,45 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
+
+    QString toUiValue();
+    void fromUiValue(const QString &uiValue);
 
     QString m_filePath;
     QString m_defaultFilePath;
+};
+
+class ConstParameter : public Parameter
+{
+public:
+    ConstParameter(const QString& name, bool updatePreview = false);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QStringList m_values;
+};
+
+class ButtonParameter : public Parameter
+{
+public:
+    ButtonParameter(const QString& name, bool updatePreview = false);
+    enum Aligment { AlignLeft, AlignRight, AlignCenter };
+
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+    virtual void setValue(const QString& value);
+    virtual void reset();
+    void initValue(bool value);
+
+    bool m_value;
+    bool m_defaultValue;
+    Aligment m_buttonAligment;
+
+
 };
 
 

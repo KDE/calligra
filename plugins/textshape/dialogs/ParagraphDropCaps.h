@@ -23,10 +23,10 @@
 #define PARAGRAPHDROPCAPS_H
 #include "ui_ParagraphDropCaps.h"
 
-#include "KoUnit.h"
 #include <QWidget>
 
 class KoParagraphStyle;
+class KoUnit;
 
 namespace Ui {
     class ParagraphDropCaps;
@@ -44,10 +44,10 @@ public:
 
   void setUnit(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
   void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
   void dropCapsStateChanged();
   void paragraphDistanceChanged(qreal distance);
   void dropsLineSpanChanged(int lineSpan);

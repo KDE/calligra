@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include <QMimeData>
-#include <QDataStream>
 #include <QBuffer>
 
 #include <KoColorSpaceConstants.h>
@@ -39,6 +38,8 @@
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_projection_leaf.h>
+
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -59,7 +60,9 @@ public:
                 indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
-                needFinishInsertRows(false) {}
+                needFinishInsertRows(false),
+                parentOfRemovedNode(0)
+    {}
 
     KisImageWSP image;
     KisShapeController *shapeController;
@@ -72,10 +75,12 @@ public:
     KisDummiesFacadeBase *dummiesFacade;
     bool needFinishRemoveRows;
     bool needFinishInsertRows;
+
+    KisNodeDummy* parentOfRemovedNode;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
-        : KoDocumentSectionModel(parent)
+        : KisDocumentSectionModel(parent)
         , m_d(new Private)
 {
     updateSettings();
@@ -292,16 +297,16 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
 
-    KisNodeDummy *parentDummy = dummy->parent();
+    m_d->parentOfRemovedNode = dummy->parent();
 
     QModelIndex parentIndex;
-    if(parentDummy) {
-        parentIndex = m_d->indexConverter->indexFromDummy(parentDummy);
+    if (m_d->parentOfRemovedNode) {
+        parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
     }
 
     QModelIndex itemIndex = m_d->indexConverter->indexFromDummy(dummy);
 
-    if(itemIndex.isValid()) {
+    if (itemIndex.isValid()) {
         connectDummy(dummy, false);
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
@@ -386,7 +391,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
-        return belongsToIsolatedGroup(node) ? QVariant() : Qt::gray;
+        return belongsToIsolatedGroup(node) &&
+            !node->projectionLeaf()->isDroppedMask() ? QVariant() : Qt::gray;
+    case Qt::FontRole: {
+        QFont baseFont;
+        if (node->projectionLeaf()->isDroppedMask()) {
+            baseFont.setStrikeOut(true);
+        }
+        return baseFont;
+    }
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
     case ProgressRole: {
@@ -413,9 +426,28 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == ActiveRole || role == AlternateActiveRole) {
-        KisNodeSP activatedNode =
-            index.isValid() && value.toBool() ? nodeFromIndex(index) : 0;
+
+    if (role == ActiveRole || role == AlternateActiveRole) {
+
+        QModelIndex parentIndex;
+        if (!index.isValid() && m_d->parentOfRemovedNode && m_d->dummiesFacade && m_d->indexConverter) {
+            parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
+            m_d->parentOfRemovedNode = 0;
+        }
+
+        KisNodeSP activatedNode;
+
+        if (index.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(index);
+        }
+        else if (parentIndex.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(parentIndex);
+        }
+        else {
+            activatedNode = 0;
+        }
+
+
         emit nodeActivated(activatedNode);
 
         if (role == AlternateActiveRole) {
@@ -441,7 +473,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             // don't record undo/redo for visibility, locked or alpha locked changes
             PropertyList proplist = value.value<PropertyList>();
             bool undo = true;
-            foreach(const KoDocumentSectionModel::Property &prop, proplist) {
+            foreach(const KisDocumentSectionModel::Property &prop, proplist) {
                 if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Active")) {

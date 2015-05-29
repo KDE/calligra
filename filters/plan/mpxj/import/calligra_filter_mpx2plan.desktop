@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Exchange Import Filter
-Name[bs]=MS Project Exchange uvozni filter
+Name[bs]=MS Project uvozni Filter razmjene
 Name[ca]=Filtre d'importació de MS Project Exchange
 Name[ca@valencia]=Filtre d'importació de MS Project Exchange
 Name[cs]=Importní filtr Microsoft Project Exchange
@@ -12,7 +12,7 @@ Name[en_GB]=MS Project Exchange Import Filter
 Name[es]=Filtro de importación de MS Project Exchange
 Name[et]=MS Project Exchange'i impordifilter
 Name[eu]=MS Project Exchange inportazio-iragazkia
-Name[fi]=MS Project Exchange -tuontisuodin
+Name[fi]=MS Project Exchange -tuontisuodatin
 Name[fr]=Filtre d'importation MS Project Exchange
 Name[gl]=Filtro de importación de MS Project
 Name[hu]=MS Projekt Exchange importszűrő

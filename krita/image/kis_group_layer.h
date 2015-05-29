@@ -47,7 +47,12 @@ public:
 
     QIcon icon() const;
 
-    void setImage(KisImageWSP image);
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
+
+    virtual void setImage(KisImageWSP image);
+
+    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
 
     /**
      * Clear the projection
@@ -76,6 +81,22 @@ public:
     */
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+
+    /**
+     * A special method that changes the default color of the
+     * projection merged onto this group layer. Please note, that you
+     * cannot use original()->setDefaultPixel(), because original()
+     * device can be switched by tryOblidgeChild() mechanism randomly.
+     */
+    void setDefaultProjectionColor(KoColor color);
+
+    /**
+     * \see setDefaultProjectionColor()
+     */
+    KoColor defaultProjectionColor() const;
+
+    bool passThroughMode() const;
+    void setPassThroughMode(bool value);
 
 protected:
     KisLayer* onlyMeaningfulChild() const;

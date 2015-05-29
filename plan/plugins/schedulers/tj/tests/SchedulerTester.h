@@ -21,7 +21,6 @@
 #define KPlato_SchedulerTester_h
 
 #include <QtTest>
-#include <ktempdir.h>
 
 class KoXmlDocument;
 
@@ -32,7 +31,7 @@ class Node;
 class SchedulerTester : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

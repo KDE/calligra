@@ -2,14 +2,14 @@
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -31,6 +31,7 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id)
     , m_customCurve(false)
     , m_active(false)
 {
+    //qDebug() << "creating KisDynamicSensor" << id;
     setMinimumLabel(i18n("0.0"));
     setMaximumLabel(i18n("1.0"));
 }
@@ -53,6 +54,9 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
 {
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
+    }
+    else if (id.id() == PressureInId.id()) {
+        return new KisDynamicSensorPressureIn();
     }
     else if (id.id() == XTiltId.id()) {
         return new KisDynamicSensorXTilt();
@@ -121,6 +125,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     QList<KoID> ids;
 
     ids << PressureId
+        << PressureInId
         << XTiltId
         << YTiltId
         << TiltDirectionId

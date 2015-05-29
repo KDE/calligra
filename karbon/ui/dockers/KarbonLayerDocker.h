@@ -25,7 +25,6 @@
 #include <KoDocumentSectionView.h>
 #include <KoCanvasObserverBase.h>
 
-class KoShapeBasedDocumentBase;
 class KoShape;
 class KoShapeLayer;
 class KoShapeGroup;
@@ -33,11 +32,6 @@ class KarbonLayerModel;
 class KarbonLayerSortingModel;
 class KarbonDocument;
 class QModelIndex;
-
-namespace KParts
-{
-class Part;
-}
 
 class KarbonLayerDockerFactory : public KoDockFactoryBase
 {
@@ -58,11 +52,13 @@ class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
-public slots:
+    QString observerName() { return "KarbonLayerDocker"; }
+
+public Q_SLOTS:
     void updateView();
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
-private slots:
+private Q_SLOTS:
     void slotButtonClicked(int buttonId);
     void addLayer();
     void deleteItem();

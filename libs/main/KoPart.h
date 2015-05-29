@@ -25,19 +25,12 @@
 
 #include <QList>
 
-#include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
 
 #include "komain_export.h"
 
 #include <KoMainWindow.h>
-
-class KJob;
-namespace KIO {
-  class Job;
-}
 
 class KoDocument;
 class KoView;
@@ -123,11 +116,11 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(KUrl url);
+    void addRecentURLToAllMainWindows(const KUrl &url);
 
     KoMainWindow *currentMainwindow() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This slot loads an existing file and deletes the start up widget.
@@ -135,7 +128,7 @@ public slots:
      */
     virtual void openExistingFile(const KUrl& url);
 
-protected slots:
+protected Q_SLOTS:
 
     /**
      * This slot loads a template and deletes the start up widget.
@@ -143,7 +136,7 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
-private slots:
+private Q_SLOTS:
 
     void startCustomDocument();
 
@@ -193,10 +186,10 @@ public:
     // ------- startup/openpane etc ---------------
 
     /**
-     * Template type used. This is used by the start up widget to show
+     * Template resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    QString templateType() const;
+    QString templatesResourcePath() const;
 
 
     /**
@@ -214,10 +207,10 @@ public:
 protected:
 
     /**
-     * Set the template type used. This is used by the start up widget to show
+     * Set the templates resource path used. This is used by the start up widget to show
      * the correct templates.
      */
-    void setTemplateType(const QString& _templateType);
+    void setTemplatesResourcePath(const QString &templatesResourcePath);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -251,7 +244,7 @@ protected:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
+                               const QString& templatesResourcePath = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 

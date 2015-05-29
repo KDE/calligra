@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Animator
-Comment=Animator
-X-KDE-ServiceTypes=Krita/AnimationDock
-Type=Service
-X-KDE-Library=kritaanimator
-X-Krita-Version=28

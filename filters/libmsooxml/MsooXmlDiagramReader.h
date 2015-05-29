@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef MSOOXMLXMLDIAGRAMREADER_H
-#define MSOOXMLXMLDIAGRAMREADER_H
+#ifndef MSOOXMLDIAGRAMREADER_H
+#define MSOOXMLDIAGRAMREADER_H
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
@@ -37,7 +37,6 @@ namespace Diagram
 {
     class Context;
     class DataModel;
-    class LayoutNode;
 }
 
 class KOMSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext

@@ -23,8 +23,6 @@
 #include <KWPageStyle.h>
 #include <KoPageLayoutDialog.h>
 
-#include <kdialog.h>
-
 class QPushButton;
 class QListWidget;
 class KWDocument;
@@ -43,7 +41,7 @@ protected:
     void accept();
     void reject();
 
-private slots:
+private Q_SLOTS:
     void slotApplyClicked();
     void setDocumentUnit(const KoUnit &unit);
     void onDocumentUnitChange(const KoUnit &unit);

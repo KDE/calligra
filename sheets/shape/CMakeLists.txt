@@ -8,7 +8,7 @@ include_directories(
 
 ########### Flake Plugin library ###############
 
-SET (tableshape_LIB_SRCS
+set (tableshape_LIB_SRCS
     TablePageManager.cpp
     TableShape.cpp
     TableShapeDeferredFactory.cpp

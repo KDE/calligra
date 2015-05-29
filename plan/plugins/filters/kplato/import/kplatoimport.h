@@ -27,14 +27,10 @@
 #include <QObject>
 #include <QVariantList>
 
-class QFile;
 class QByteArray;
-class QStringList;
 
 namespace KPlato
 {
-class Project;
-class Node;
 }
 
 class KPlatoImport : public KoFilter

@@ -43,11 +43,11 @@ public:
     void setAddButtonShown(bool show);
     bool isAddButtonShown() const;
 
-    void setPreview(QImage image);
+    void setPreview(const QImage &image);
 
-signals:
+Q_SIGNALS:
     void resized();
-    void newStyleRequested(QString name);
+    void newStyleRequested(const QString &name);
     void clicked();
 
 protected:
@@ -57,7 +57,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 
-private slots:
+private Q_SLOTS:
     void addNewStyle();
 
 private:

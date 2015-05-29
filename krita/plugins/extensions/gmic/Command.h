@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <Component.h>
 #include "kis_gmic_filter_settings.h"
+#include "Parameter.h"
 
 #include <QList>
 
@@ -40,10 +41,11 @@ public:
 
     QString m_command;
     QString m_commandPreview;
+    QString m_commandPreviewZoom;
     QList<Parameter*> m_parameters;
 
     virtual void add(Component* c);
-    virtual Component* child(int index);
+    virtual Component* child(int index) const;
     virtual Component* parent();
     void setParent(Component * parent) { m_parent = parent; }
     virtual int row() const;
@@ -52,6 +54,7 @@ public:
     virtual QVariant data(int column);
 
     void setParameter(const QString &name, const QString &value);
+    QString parameter(const QString &name) const;
 
     // reset to default values
     void reset();
@@ -63,6 +66,8 @@ public:
 
     // QWidget * createSettingsWidget();
     void writeConfiguration(KisGmicFilterSetting * setting);
+
+    bool hasParameterName(const QString& paramName, const QString& paramType = QString());
 
 private:
     QString mergeBlockToLine(const QStringList &block);

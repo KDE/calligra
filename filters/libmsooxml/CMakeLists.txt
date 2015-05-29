@@ -3,13 +3,14 @@
 if(QCA2_FOUND)
     add_definitions( -DHAVE_QCA2 )
     include_directories(${QCA2_INCLUDE_DIR})
-endif(QCA2_FOUND)
+endif()
 
 include_directories(
     ${KOMAIN_INCLUDES}
-    ${KOODF2_INCLUDES}
+    ${KOODF2_INCLUDES} # For charts
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # For ChartExport  FIXME: Remove when moved to libodf2
 )
 
 ########### next target ###############
@@ -33,18 +34,18 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )
 
 kde4_add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(komsooxml koodf2 koodf komain)
+target_link_libraries(komsooxml mso koodf2 koodf komain)
 if(QCA2_FOUND)
    target_link_libraries(komsooxml ${QCA2_LIBRARIES})
-endif(QCA2_FOUND)
+endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -63,6 +64,7 @@ install( FILES
     MsooXmlCommonReaderMethods.h
     MsooXmlSchemas.h
     MsooXmlThemesReader.h
+    MsooXmlTheme.h
     MsooXmlUtils.h
     MsooXmlRelationships.h
     MsooXmlImport.h
@@ -80,4 +82,4 @@ install( FILES
     PredefinedShapeHelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
-endif (FALSE)
+endif ()

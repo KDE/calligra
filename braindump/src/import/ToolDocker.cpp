@@ -22,7 +22,6 @@
 #include "ToolDocker.h"
 #include "ToolDocker_p.h"
 
-#include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
 
 #include <KoIcon.h>
@@ -113,7 +112,7 @@ bool ToolDocker::hasOptionWidget()
     return !d->currentWidgetList.isEmpty();
 }
 
-void ToolDocker::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->recreateLayout(optionWidgetList);
 }

@@ -38,18 +38,17 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
-#include <kmessagebox.h>
 
 #include <KoConfigAuthorPage.h>
+#include <KoUnit.h>
 
-#include <kcolorbutton.h>
 #include <kplugininfo.h>
 #include <kpluginselector.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"

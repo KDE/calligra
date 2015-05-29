@@ -26,7 +26,6 @@
 
 class CollectionItemModel;
 class CollectionTreeWidget;
-class KoShape;
 
 class KLineEdit;
 
@@ -50,7 +49,7 @@ class StencilBoxDocker : public QDockWidget
         bool addCollection(const QString& path);
         void removeCollection(const QString& family);
 
-    protected slots:
+    protected Q_SLOTS:
         /// Called when the docker changes area
         void locationChanged(Qt::DockWidgetArea area);
 	
@@ -65,7 +64,7 @@ class StencilBoxDocker : public QDockWidget
         QVBoxLayout* m_layout;
         QHBoxLayout* m_panelLayout;
 
-    private slots:
+    private Q_SLOTS:
         void reapplyFilter();
 #ifdef GHNS
         void getHotNewStuff();

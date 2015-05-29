@@ -29,8 +29,10 @@
 #include "kis_pressure_mirror_option.h"
 
 KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
-    : KisCurveOptionWidget(new KisPressureMirrorOption())
+    : KisCurveOptionWidget(new KisPressureMirrorOption(), i18n("Not mirrored"), i18n("Mirrored"))
 {
+    setObjectName("KisPressureMirrorOptionWidget");
+
     QWidget* w = new QWidget;
     m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
     m_horizontalMirror->setChecked(false);
@@ -66,13 +68,13 @@ void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfigu
 void KisPressureMirrorOptionWidget::horizontalMirrorChanged(bool mirror)
 {
     static_cast<KisPressureMirrorOption*>(curveOption())->enableHorizontalMirror(mirror);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPressureMirrorOptionWidget::verticalMirrorChanged(bool mirror)
 {
     static_cast<KisPressureMirrorOption*>(curveOption())->enableVerticalMirror(mirror);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 

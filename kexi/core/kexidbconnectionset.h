@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003,2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@ public:
     /*! Saves changes made to \a oldData to a file which name has been provided by addConnectionData().
      This function does nothing if \a oldData hasn't been added to this set.
      \return true on success (data is then copied from \a newData to \a oldData) */
-    bool saveConnectionData(KexiDB::ConnectionData *oldData, KexiDB::ConnectionData *newData);
+    bool saveConnectionData(KexiDB::ConnectionData *oldData, const KexiDB::ConnectionData &newData);
 
     /*! Removed \a data from this set.
      \return true on successful removing of corresponding .kexic file */
@@ -59,11 +59,15 @@ public:
     const KexiDB::ConnectionData::List& list() const;
 
     /*! \return a filename of a connection data file for \a data. */
-    QString fileNameForConnectionData(KexiDB::ConnectionData *data) const;
+    QString fileNameForConnectionData(const KexiDB::ConnectionData &data) const;
 
     /*! \return a connection data for a .kexic shortcut filename.
      0 is returned if the filename does not match. */
     KexiDB::ConnectionData* connectionDataForFileName(const QString& fileName) const;
+
+    /*! \return key for connection data @a data, basically a comma-separated string with
+     all properties serialized: "driverName,userName,...". Used in internal structures. */
+    static QString key(const KexiDB::ConnectionData &data);
 
 private:
     /*! Removes all connection data items from this set. */

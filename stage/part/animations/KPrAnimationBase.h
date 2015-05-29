@@ -25,9 +25,8 @@
 
 class KoXmlElement;
 class KoShapeLoadingContext;
-class KoShapeSavingContext;
+class KoPASavingContext;
 class KoShape;
-class KoTextBlockData;
 class KPrAnimationCache;
 class KPrShapeAnimation;
 

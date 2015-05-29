@@ -42,17 +42,12 @@
 
 class QAbstractItemModel;
 class QDomElement;
-class KUndo2Command;
-class QWidget;
 
-class KoDataCenterBase;
-class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
 class KoOasisSettings;
 class KoOdfStylesReader;
 class KoShape;
-class KoShapeSavingContext;
 class KoXmlWriter;
 
 namespace Calligra
@@ -787,7 +782,7 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted, if the document size changed.
      * E.g. if some columns were inserted.

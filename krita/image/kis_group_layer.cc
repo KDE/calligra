@@ -23,6 +23,8 @@
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
+
 
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -33,6 +35,8 @@
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
+#include "kis_psd_layer_style.h"
+
 
 struct KisGroupLayer::Private
 {
@@ -40,12 +44,15 @@ public:
     Private()
         : paintDevice(0)
         , x(0)
-        , y(0) {
+        , y(0)
+        , passThroughMode(false)
+    {
     }
 
     KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
+    bool passThroughMode;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
@@ -133,6 +140,27 @@ void KisGroupLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
+KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+
+    if (prevGroup) {
+        KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
+
+        KisNodeSP child, cloned;
+
+        for (child = firstChild(); child; child = child->nextSibling()) {
+            cloned = child->clone();
+            image()->addNode(cloned, merged);
+        }
+
+        image()->refreshGraphAsync(merged);
+
+        return merged;
+    } else
+        return KisLayer::createMergedLayer(prevLayer);
+}
+
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)
@@ -153,9 +181,10 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setY(m_d->y);
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
 
-        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                    KoColorConversionTransformation::InternalConversionFlags);
+        m_d->paintDevice->colorSpace()->
+            convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -194,7 +223,8 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
          child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
          child->compositeOpId() == COMPOSITE_COPY) &&
         child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+        *child->projection()->colorSpace() == *colorSpace() &&
+        !child->layerStyle()) {
 
         quint8 defaultOpacity =
             m_d->paintDevice->colorSpace()->opacityU8(
@@ -215,8 +245,57 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * Try to use children's paintDevice if it's the only
      * one in stack and meets some conditions
      */
-    KisPaintDeviceSP childOriginal = tryObligeChild();
-    return childOriginal ? childOriginal : m_d->paintDevice;
+    KisPaintDeviceSP realOriginal = tryObligeChild();
+
+    if (!realOriginal) {
+        if (!childCount() && !m_d->paintDevice->extent().isEmpty()) {
+            m_d->paintDevice->clear();
+        }
+        realOriginal = m_d->paintDevice;
+    }
+
+    return realOriginal;
+}
+
+void KisGroupLayer::setDefaultProjectionColor(KoColor color)
+{
+    color.convertTo(m_d->paintDevice->colorSpace());
+    m_d->paintDevice->setDefaultPixel(color.data());
+}
+
+KoColor KisGroupLayer::defaultProjectionColor() const
+{
+    KoColor color(m_d->paintDevice->defaultPixel(), m_d->paintDevice->colorSpace());
+    return color;
+}
+
+bool KisGroupLayer::passThroughMode() const
+{
+    return m_d->passThroughMode;
+}
+
+void KisGroupLayer::setPassThroughMode(bool value)
+{
+    m_d->passThroughMode = value;
+}
+
+KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
+{
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    // XXX: get right icons
+    l << KisDocumentSectionModel::Property(i18n("Pass Through"), koIcon("passthrough-enabled"), koIcon("passthrough-disabled"), passThroughMode());
+    return l;
+}
+
+void KisGroupLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+{
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Pass Through")) {
+            setPassThroughMode(property.state.toBool());
+        }
+    }
+
+    KisLayer::setSectionModelProperties(properties);
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

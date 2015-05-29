@@ -22,14 +22,15 @@
 #include <QApplication>
 #include <QStringList>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
+
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -44,6 +45,7 @@
 #include <kis_assert.h>
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -55,13 +57,15 @@
 #include <kis_transparency_mask.h>
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
+#include <kis_psd_layer_style.h>
+#include <kis_psd_layer_style_resource.h>
+#include "kis_resource_server_provider.h"
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
-
 
 /*
 
@@ -104,7 +108,7 @@ struct KisKraLoader::Private
 {
 public:
 
-    KisDoc2* document;
+    KisDocument* document;
     QString imageName; // used to be stored in the image, is now in the documentInfo block
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
@@ -154,7 +158,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
     }
 }
 
-KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
+KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
         : m_d(new Private())
 {
     m_d->document = document;
@@ -334,6 +338,44 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     }
 
 
+    // layer styles
+    location = external ? QString() : uri;
+    location += m_d->imageName + LAYER_STYLES_PATH;
+    if (store->hasFile(location)) {
+        KisPSDLayerStyleCollectionResource *collection =
+            new KisPSDLayerStyleCollectionResource("Embedded Styles.asl");
+
+        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
+
+        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+
+        store->open(location);
+        {
+            KoStoreDevice device(store);
+            device.open(QIODevice::ReadOnly);
+
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&raDevice);
+        }
+        store->close();
+
+        if (collection->valid()) {
+            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+            server->addResource(collection, false);
+
+            collection->assignAllLayerStyles(image->root());
+        } else {
+            qWarning() << "WARNING: Couldn't load layer styles library from .kra!";
+            delete collection;
+        }
+    }
+
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("comment").isNull())
@@ -486,6 +528,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
         node = loadFilterMask(element, parent);
+    else if (nodeType == TRANSFORM_MASK)
+        node = loadTransformMask(element, parent);
     else if (nodeType == TRANSPARENCY_MASK)
         node = loadTransparencyMask(element, parent);
     else if (nodeType == SELECTION_MASK)
@@ -522,6 +566,27 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
+
+        if (element.hasAttribute(LAYER_STYLE_UUID)) {
+            QString uuidString = element.attribute(LAYER_STYLE_UUID);
+            QUuid uuid(uuidString);
+            if (!uuid.isNull()) {
+                KisPSDLayerStyleSP dumbLayerStyle(new KisPSDLayerStyle());
+                dumbLayerStyle->setUuid(uuid);
+                layer->setLayerStyle(dumbLayerStyle);
+            } else {
+                qWarning() << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
+            }
+        }
+    }
+
+    if (node->inherits("KisGroupLayer")) {
+        if (element.hasAttribute(PASS_THROUGH_MODE)) {
+            bool value = element.attribute(PASS_THROUGH_MODE, "0") != "0";
+
+            KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
+            group->setPassThroughMode(value);
+        }
     }
 
     if (node->inherits("KisPaintLayer")) {
@@ -602,13 +667,12 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
             "%2<nl/><nl/>"
             "Do you want to locate it manually?", name, fullPath);
 
-        int result = KMessageBox::warningYesNo(0, msg,
-                                               i18n("File not found"));
+        int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-        if (result == KMessageBox::Yes) {
+        if (result == QMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-            dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
             QString url = dialog.url();
 
@@ -688,7 +752,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP 
     if (m_d->document) {
         shapeController = m_d->document->shapeController();
     }
-    KisShapeLayer* layer = new KisShapeLayer(0, shapeController, image, name, opacity);
+    KisShapeLayer* layer = new KisShapeLayer(shapeController, image, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;
@@ -783,6 +847,23 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
     mask->setFilter(kfc);
+    Q_CHECK_PTR(mask);
+
+    return mask;
+}
+
+KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP parent)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(parent);
+
+    KisTransformMask* mask;
+
+    /**
+     * We'll load the transform configuration later on a stage
+     * of binary data loading
+     */
+    mask = new KisTransformMask();
     Q_CHECK_PTR(mask);
 
     return mask;

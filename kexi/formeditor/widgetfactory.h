@@ -156,7 +156,7 @@ public:
     };
     Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
-    WidgetFactory(QObject *parent, const char *name);
+    explicit WidgetFactory(QObject *parent, const char *name = 0);
     virtual ~WidgetFactory();
 
     /*! Adds a new class described by \a w. */
@@ -358,7 +358,7 @@ protected:
 
     void setLibrary(WidgetLibrary* library);
 
-public slots:
+public Q_SLOTS:
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
 

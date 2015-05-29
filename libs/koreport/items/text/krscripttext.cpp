@@ -33,7 +33,7 @@ Text::~Text()
 {
 }
 
-QString Text::source()
+QString Text::source() const
 {
     return m_text->itemDataSource();
 }
@@ -43,15 +43,17 @@ void Text::setSource(const QString& s)
     m_text->m_controlSource->setValue(s);
 }
 
-int Text::horizontalAlignment()
+int Text::horizontalAlignment() const
 {
-    QString a = m_text->m_horizontalAlignment->value().toString();
+    const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "left") {
+    if (a == "left") {
         return -1;
-    } else if (a.toLower() == "center") {
+    }
+    if (a == "center") {
         return 0;
-    } else if (a.toLower() == "right") {
+    }
+    if (a == "right") {
         return 1;
     }
     return -1;
@@ -74,15 +76,17 @@ void Text::setHorizonalAlignment(int a)
     }
 }
 
-int Text::verticalAlignment()
+int Text::verticalAlignment() const
 {
-    QString a = m_text->m_horizontalAlignment->value().toString();
+    const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "top") {
+    if (a == "top") {
         return -1;
-    } else if (a.toLower() == "middle") {
+    }
+    if (a == "middle") {
         return 0;
-    } else if (a.toLower() == "bottom") {
+    }
+    if (a == "bottom") {
         return 1;
     }
     return -1;
@@ -105,7 +109,7 @@ void Text::setVerticalAlignment(int a)
     }
 }
 
-QColor Text::backgroundColor()
+QColor Text::backgroundColor() const
 {
     return m_text->m_backgroundColor->value().value<QColor>();
 }
@@ -114,7 +118,7 @@ void Text::setBackgroundColor(const QColor& c)
     m_text->m_backgroundColor->setValue(QColor(c));
 }
 
-QColor Text::foregroundColor()
+QColor Text::foregroundColor() const
 {
     return m_text->m_foregroundColor->value().value<QColor>();
 }
@@ -123,7 +127,7 @@ void Text::setForegroundColor(const QColor& c)
     m_text->m_foregroundColor->setValue(QColor(c));
 }
 
-int Text::backgroundOpacity()
+int Text::backgroundOpacity() const
 {
     return m_text->m_backgroundOpacity->value().toInt();
 }
@@ -132,7 +136,7 @@ void Text::setBackgroundOpacity(int o)
     m_text->m_backgroundOpacity->setValue(o);
 }
 
-QColor Text::lineColor()
+QColor Text::lineColor() const
 {
     return m_text->m_lineColor->value().value<QColor>();
 }
@@ -141,7 +145,7 @@ void Text::setLineColor(const QColor& c)
     m_text->m_lineColor->setValue(QColor(c));
 }
 
-int Text::lineWeight()
+int Text::lineWeight() const
 {
     return m_text->m_lineWeight->value().toInt();
 }
@@ -150,7 +154,7 @@ void Text::setLineWeight(int w)
     m_text->m_lineWeight->setValue(w);
 }
 
-int Text::lineStyle()
+int Text::lineStyle() const
 {
     return m_text->m_lineStyle->value().toInt();
 }
@@ -162,7 +166,7 @@ void Text::setLineStyle(int s)
     m_text->m_lineStyle->setValue(s);
 }
 
-QPointF Text::position()
+QPointF Text::position() const
 {
     return m_text->m_pos.toPoint();
 }
@@ -171,7 +175,7 @@ void Text::setPosition(const QPointF& p)
     m_text->m_pos.setPointPos(p);
 }
 
-QSizeF Text::size()
+QSizeF Text::size() const
 {
     return m_text->m_size.toPoint();
 }

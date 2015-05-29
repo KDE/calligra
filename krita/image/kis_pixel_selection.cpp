@@ -465,6 +465,13 @@ void KisPixelSelection::recalculateThumbnailImage(const QColor &maskColor)
     QRect rc = selectedExactRect();
     const int maxPreviewSize = 2000;
 
+    if (rc.isEmpty()) {
+        m_d->thumbnailImageTransform = QTransform();
+        m_d->thumbnailImage = QImage();
+        return;
+    }
+
+
     if (rc.width() > maxPreviewSize ||
         rc.height() > maxPreviewSize) {
 
@@ -518,9 +525,6 @@ void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QR
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {
-        KisPainter painter(projection);
-        painter.setCompositeOp(COMPOSITE_COPY);
-        painter.bitBlt(updateRect.topLeft(), KisPaintDeviceSP(this), updateRect);
-        painter.end();
+        KisPainter::copyAreaOptimized(updateRect.topLeft(), KisPaintDeviceSP(this), projection, updateRect);
     }
 }

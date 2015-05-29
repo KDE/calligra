@@ -37,15 +37,11 @@
 
 class KoDocument;
 
-class KAction;
-
 /// The main namespace
 namespace KPlato
 {
 
 class DateTime;
-class Duration;
-class Estimate;
 class Node;
 class Project;
 class ScheduleManager;
@@ -75,10 +71,10 @@ public:
     
     Node *currentNode() const;
             
-public slots:
+public Q_SLOTS:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
-protected slots:
+protected Q_SLOTS:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
     void slotScheduleManagerChanged( ScheduleManager *sm );
@@ -94,7 +90,7 @@ private:
     ScheduleManager *current_schedule;
     Ui::PertResult widget;
     
-private slots:
+private Q_SLOTS:
     void slotUpdate();
 
 };
@@ -126,10 +122,10 @@ public:
     
     Node *currentNode() const;
     
-public slots:
+public Q_SLOTS:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
-protected slots:
+protected Q_SLOTS:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
     void slotScheduleManagerChanged( ScheduleManager *sm );
@@ -142,7 +138,7 @@ protected slots:
     void slotFinishTimeChanged( const QDateTime &dt );
     void slotProbabilityChanged( int value );
 
-private slots:
+private Q_SLOTS:
     void slotUpdate();
 
 private:

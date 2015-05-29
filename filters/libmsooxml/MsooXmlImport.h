@@ -41,7 +41,6 @@
 class QSize;
 class KZip;
 class KTemporaryFile;
-class KoOdfWriteStore;
 class KoStore;
 
 namespace MSOOXML
@@ -50,7 +49,6 @@ namespace MSOOXML
 class MsooXmlReader;
 class MsooXmlReaderContext;
 class MsooXmlRelationships;
-class DrawingMLTheme;
 
 //! A base class for MSOOXML-to-ODF import filters
 class KOMSOOXML_EXPORT MsooXmlImport : public KoOdfExporter

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Firewall horizontal
-Name[bs]=horizontalni Firewall
-Name[ca]=Tallafocs horitzontal
+Name[bs]=Horizontalni Firewall
+Name[ca]=Tallafoc horitzontal
 Name[ca@valencia]=Tallafocs horitzontal
 Name[da]=Firewall vandret
 Name[de]=Firewall waagerecht
@@ -14,6 +14,7 @@ Name[fr]=Pare-feu horizontal
 Name[gl]=Devasa horizontal
 Name[hu]=Vízszintes tűzfal
 Name[it]=Firewall (orizzontale)
+Name[ja]=ファイアウォール(横)
 Name[kk]=Жатық желіаралық қалқаны
 Name[ko]=수평 방화벽
 Name[lt]=Ugniasienė (horizontali)

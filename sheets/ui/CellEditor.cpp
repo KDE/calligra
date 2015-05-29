@@ -27,7 +27,6 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 #include "FunctionCompletion.h"
-#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -40,25 +39,22 @@
 
 // Calligra
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoViewConverter.h>
 // KDE
 #include <kdebug.h>
 #include <ktextedit.h>
 
 // Qt
-#include <QtGui>
 #include <QFocusEvent>
 #include <QKeyEvent>
-#include <QScrollBar>
-#include <QTimer>
 #include <QCompleter>
 #include <QAbstractItemView>
 #include <QtDebug>
-#include <QApplication>
-#include <QModelIndex>
-#include <QAbstractItemModel>
+#include <QStringListModel>
 #include <QScrollBar>
 #include <QList>
+
 using namespace Calligra::Sheets;
 
 class CellEditor::Private
@@ -632,8 +628,8 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // Always forward tab/backtab to parent, so that pressing them leaves
         // editing mode. To insert literal tabs you can always use the external
         // editor.
-        
-	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())){
+
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
 	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore();
@@ -644,7 +640,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
 	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore(); // pass to parent

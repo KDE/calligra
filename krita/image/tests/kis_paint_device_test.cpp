@@ -177,25 +177,29 @@ void KisPaintDeviceTest::testClear()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
 
     dev->clear();
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
+
+    QRect fillRect1(50, 100, 150, 100);
+    dev->fill(fillRect1, KoColor(Qt::red, cs));
+
+    QCOMPARE(dev->extent(), QRect(0, 64, 256, 192));
+    QCOMPARE(dev->exactBounds(), fillRect1);
 
     dev->clear(QRect(100, 100, 100, 100));
 
-    // XXX: This is strange!
-    QVERIFY(dev->extent() == QRect(64, 64, 192, 192));
-    QVERIFY(dev->exactBounds() == QRect(64, 64, 192, 192));
+    QCOMPARE(dev->extent(), QRect(0, 64, 256, 192));
+    QCOMPARE(dev->exactBounds(), QRect(50, 100, 50, 100));
 
     dev->clear();
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
-
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
 }
 
 void KisPaintDeviceTest::testCrop()
@@ -540,7 +544,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     // check if one of the planes is Null.
     Q_ASSERT(planes.size() == 4);
-    delete planes[2];
+    delete [] planes[2];
     planes[2] = 0;
     dev->writePlanarBytes(planes, 0, 0, 100, 100);
     dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar_noR.png");
@@ -552,7 +556,11 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QCOMPARE(c1.blue(), 155);
     QCOMPARE(c1.alpha(), 100);
 
-    qDeleteAll(planes);
+    QVector<quint8*>::iterator i;
+    for (i = planes.begin(); i != planes.end(); ++i)
+    {
+        delete [] *i;
+    }
     swappedPlanes.clear();
 }
 
@@ -744,6 +752,40 @@ void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
     QCOMPARE(measuredRect, fillRect);
 }
 
+void KisPaintDeviceTest::testNonDefaultPixelArea()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+    QVERIFY(dev->nonDefaultPixelArea().isEmpty());
+
+    KoColor defPixel(Qt::red, cs);
+    dev->setDefaultPixel(defPixel.data());
+
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QVERIFY(dev->nonDefaultPixelArea().isEmpty());
+
+    QRect fillRect(10,11,18,14);
+
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QCOMPARE(dev->nonDefaultPixelArea(), fillRect);
+
+
+    // non-default pixel variant should also handle weird pixels
+
+    const quint8 weirdPixelData[4] = {0,10,0,0};
+    KoColor weirdColor(weirdPixelData, cs);
+    dev->setPixel(100,100,weirdColor);
+
+    // such weird pixels should not change our opinion about
+    // device's size
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QCOMPARE(dev->nonDefaultPixelArea(), fillRect | QRect(100,100,1,1));
+}
+
 KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
 {
     struct TestingDefaultBounds : public KisDefaultBoundsBase {
@@ -771,7 +813,7 @@ void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
     QRect readRect(10, 10, 20, 20);
     int bufSize = rc.width() * rc.height() * dev->pixelSize();
 
-    QScopedPointer<quint8> buf1(new quint8[bufSize]);
+    QScopedArrayPointer<quint8> buf1(new quint8[bufSize]);
 
     deviceCopy->readBytes(buf1.data(), rc);
 
@@ -779,7 +821,7 @@ void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
     QVERIFY(deviceCopy->extent().isEmpty());
 
 
-    QScopedPointer<quint8> buf2(new quint8[bufSize]);
+    QScopedArrayPointer<quint8> buf2(new quint8[bufSize]);
     deviceCopy->writeBytes(buf1.data(), rc);
     deviceCopy->readBytes(buf2.data(), rc);
 
@@ -802,7 +844,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
 
     {
         QRect readRect(10, 10, 20, 20);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -820,7 +862,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check weird case when the read rect is larger than wrap rect
         QRect readRect(10, 10, 30, 30);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -847,7 +889,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // even more large
         QRect readRect(10, 10, 40, 40);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -883,7 +925,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap rect contains the read rect entirely
         QRect readRect(1, 1, 10, 10);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -898,7 +940,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap happens only on vertical side of the rect
         QRect readRect(1, 1, 29, 10);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -916,7 +958,7 @@ void KisPaintDeviceTest::testReadBytesWrapAround()
     {
         // check if the wrap happens only on horizontal side of the rect
         QRect readRect(1, 1, 10, 29);
-        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+        QScopedArrayPointer<quint8> buf(new quint8[readRect.width() *
                                               readRect.height() *
                                               pixelSize]);
         dev->readBytes(buf.data(), readRect);
@@ -1180,7 +1222,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
     QImage result = dst->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QImage ref = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
 
-    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName));
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName, 1));
 }
 
 void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()

@@ -302,7 +302,7 @@ protected:
      You may also want to change options in DriverBehaviour *beh member.
      See drivers/mySQL/mysqldriver.cpp for usage example.
      */
-    Driver(QObject *parent, const QVariantList &args = QVariantList());
+    explicit Driver(QObject *parent, const QVariantList &args = QVariantList());
 
     /*! For reimplementation: creates and returns connection object
      with additional structures specific for a given driver.
@@ -349,7 +349,7 @@ protected:
     /*! Used to initialise the dictionary of driver-specific keywords.
       Should be called by the Driver's constructor.
       \a keywords should be 0-terminated array of null-terminated strings. */
-    void initDriverSpecificKeywords(const char** keywords);
+    void initDriverSpecificKeywords(const char* const* keywords);
 
     /*! \return SQL statement @a sql modified by adding limiting command,
      (if possible and if @add is true). Used for optimization for the server side.

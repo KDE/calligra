@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLCT_H
-#define MSOOXMLCT_H
+#ifndef MSOOXMLCONTENTTYPES_H
+#define MSOOXMLCONTENTTYPES_H
 
 #include "komsooxml_export.h"
 
@@ -30,11 +30,6 @@
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
 
-class QColor;
-class QDomElement;
-class KoStyleStack;
-class QDomDocument;
-class KZip;
 
 namespace MSOOXML
 {
@@ -44,47 +39,47 @@ class KOMSOOXML_EXPORT ContentTypes
 {
 public:
     // common officedocument namespaces
-    static const char* const coreProps;
-    static const char* const extProps;
-    static const char* const theme;
+    static const char coreProps[];
+    static const char extProps[];
+    static const char theme[];
 
     // wordprocessingml-specific namespaces
-    static const char* const wordDocument;
-    static const char* const wordSettings;
-    static const char* const wordStyles;
-    static const char* const wordHeader;
-    static const char* const wordFooter;
-    static const char* const wordFootnotes;
-    static const char* const wordEndnotes;
-    static const char* const wordFontTable;
-    static const char* const wordWebSettings;
-    static const char* const wordTemplate;
-    static const char* const wordComments;
+    static const char wordDocument[];
+    static const char wordSettings[];
+    static const char wordStyles[];
+    static const char wordHeader[];
+    static const char wordFooter[];
+    static const char wordFootnotes[];
+    static const char wordEndnotes[];
+    static const char wordFontTable[];
+    static const char wordWebSettings[];
+    static const char wordTemplate[];
+    static const char wordComments[];
 
     // presentationml-specific namespaces
-    static const char* const presentationDocument;
-    static const char* const presentationSlide;
-    static const char* const presentationSlideLayout;
-    static const char* const presentationSlideShow;
-    static const char* const presentationTemplate;
-    static const char* const presentationNotes;
-    static const char* const presentationTableStyles;
-    static const char* const presentationProps;
-    static const char* const presentationViewProps;
-    static const char* const presentationComments;
+    static const char presentationDocument[];
+    static const char presentationSlide[];
+    static const char presentationSlideLayout[];
+    static const char presentationSlideShow[];
+    static const char presentationTemplate[];
+    static const char presentationNotes[];
+    static const char presentationTableStyles[];
+    static const char presentationProps[];
+    static const char presentationViewProps[];
+    static const char presentationComments[];
 
     // spreadsheetml-specific content types
-    static const char* const spreadsheetDocument;
-    static const char* const spreadsheetMacroDocument;
-    static const char* const spreadsheetPrinterSettings;
-    static const char* const spreadsheetStyles;
-    static const char* const spreadsheetWorksheet;
-    static const char* const spreadsheetCalcChain;
-    static const char* const spreadsheetSharedStrings;
-    static const char* const spreadsheetTemplate;
-    static const char* const spreadsheetComments;
+    static const char spreadsheetDocument[];
+    static const char spreadsheetMacroDocument[];
+    static const char spreadsheetPrinterSettings[];
+    static const char spreadsheetStyles[];
+    static const char spreadsheetWorksheet[];
+    static const char spreadsheetCalcChain[];
+    static const char spreadsheetSharedStrings[];
+    static const char spreadsheetTemplate[];
+    static const char spreadsheetComments[];
 };
 
 } // MSOOXML namespace
 
-#endif /* MSOOXMLCT_H */
+#endif /* MSOOXMLCONTENTTYPES_H */

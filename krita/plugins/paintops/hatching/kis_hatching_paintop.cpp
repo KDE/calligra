@@ -41,10 +41,12 @@
 
 #include <KoColorSpaceRegistry.h>
 
-KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
 {
+    Q_UNUSED(node);
+
     m_settings = new KisHatchingPaintOpSettings();
     settings->initializeTwin(m_settings);
 
@@ -70,7 +72,8 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
 KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
     //------START SIMPLE ERROR CATCHING-------
-    if (!painter()->device()) return 1;
+    if (!painter()->device()) return KisSpacingInformation(1.0);
+
     if (!m_hatchedDab)
         m_hatchedDab = source()->createCompositionSourceDevice();
     else
@@ -84,8 +87,8 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     Q_ASSERT(brush);
 
     //----------SIMPLE error catching code, maybe it's not even needed------
-    if (!brush) return 1;
-    if (!brush->canPaintFor(info)) return 1;
+    if (!brush) return KisSpacingInformation(1.0);
+    if (!brush->canPaintFor(info)) return KisSpacingInformation(1.0);
 
     //SENSOR-depending settings
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
@@ -93,7 +96,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     m_settings->thicknesssensorvalue = m_thicknessOption.apply(info);
 
     double scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return KisSpacingInformation(1.0);
 
     setCurrentScale(scale);
 
@@ -175,7 +178,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(sw, sh);
+    return effectiveSpacing(scale, 0.0);
 }
 
 double KisHatchingPaintOp::spinAngle(double spin)

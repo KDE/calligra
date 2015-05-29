@@ -46,11 +46,9 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 
 #include <KoApplication.h>
 #include <KoDocumentInfo.h>
@@ -58,14 +56,10 @@
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
-#include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
-#include <KoStoreDevice.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -73,9 +67,9 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoView.h>
+#include <KoUnit.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -105,7 +99,7 @@
 #ifndef QT_NO_DBUS
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
 #endif
 
 // chart shape

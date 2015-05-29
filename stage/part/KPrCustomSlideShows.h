@@ -27,12 +27,10 @@
 #include<QObject>
 
 //Forward declarations
-class KoXmlWriter;
 class KoPAPageBase;
 #include "KoXmlReaderForward.h"
 class KoPASavingContext;
 class KoPALoadingContext;
-class KPrDocument;
 
 #include "stage_export.h"
 
@@ -166,7 +164,7 @@ public:
      */
     QStringList namesByPage(KoPAPageBase *page);
 
-signals:
+Q_SIGNALS:
     void updated();
 
 private:

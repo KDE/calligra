@@ -34,9 +34,6 @@
 
 
 class QByteArray;
-class QSizeF;
-class QFile;
-class QStringList;
 
 class KoStore;
 class KoXmlWriter;

@@ -27,7 +27,6 @@
 
 #include <QTransform>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
@@ -233,6 +232,11 @@ void swapValues(T *a, T *b) {
 
 bool KisTransformWorker::run()
 {
+    return runPartial(m_dev->exactBounds());
+}
+
+bool KisTransformWorker::runPartial(const QRect &processRect)
+{
     /* Check for nonsense and let the user know, this helps debugging.
     Otherwise the program will crash at a later point, in a very obscure way, probably by division by zero */
     Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
@@ -240,7 +244,7 @@ bool KisTransformWorker::run()
     // Fallback safety line in case Krita is compiled without ASSERTS
     if (m_xscale == 0 || m_yscale == 0) return false;
 
-    m_boundRect = m_dev->exactBounds();
+    m_boundRect = processRect;
 
     if (m_boundRect.isNull()) {
         if (!m_progressUpdater.isNull()) {
@@ -631,8 +635,6 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     }
 
     KisPaintDeviceSP offsetDevice = new KisPaintDevice(device->colorSpace());
-    KisPainter gc(offsetDevice);
-    gc.setCompositeOp(COMPOSITE_COPY);
 
     int srcX = 0;
     int srcY = 0;
@@ -643,10 +645,9 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     width = qBound<int>(0, width - offsetX, width);
     height = qBound<int>(0, height - offsetY, height);
 
-    if ((width != 0) && (height != 0))
-    {
+    if ((width != 0) && (height != 0)) {
         // convert back to paint device space
-        gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, width, height);
+        KisPainter::copyAreaOptimized(QPoint(destX + sx, destY + sy), device, offsetDevice, QRect(srcX + sx, srcY + sy, width, height));
     }
 
     srcX = wrapRect.width() - offsetX;
@@ -655,28 +656,21 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     destX = (srcX + offsetX) % wrapRect.width();
     destY = (srcY + offsetY) % wrapRect.height();
 
-    if (offsetX != 0 && offsetY != 0)
-    {
-          gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, offsetX, offsetY);
+    if (offsetX != 0 && offsetY != 0) {
+          KisPainter::copyAreaOptimized(QPoint(destX + sx, destY + sy), device, offsetDevice, QRect(srcX + sx, srcY + sy, offsetX, offsetY));
     }
 
-    if (offsetX != 0)
-    {
-        gc.bitBlt(destX + sx, (destY + offsetY) + sy, device, srcX + sx, 0 + sy, offsetX, wrapRect.height() - offsetY);
+    if (offsetX != 0) {
+        KisPainter::copyAreaOptimized(QPoint(destX + sx, (destY + offsetY) + sy), device, offsetDevice, QRect(srcX + sx, 0 + sy, offsetX, wrapRect.height() - offsetY));
     }
 
-    if (offsetY != 0)
-    {
-        gc.bitBlt((destX + offsetX) + sx, destY + sy, device, 0 + sx, srcY + sy, wrapRect.width() - offsetX, offsetY);
+    if (offsetY != 0) {
+        KisPainter::copyAreaOptimized(QPoint((destX + offsetX) + sx, destY + sy), device, offsetDevice, QRect(0 + sx, srcY + sy, wrapRect.width() - offsetX, offsetY));
     }
-
-    gc.end();
 
     // bitblt the result back
-    KisPainter gc2(device);
-    gc2.setCompositeOp(COMPOSITE_COPY);
-    gc2.bitBlt(sx,sy,offsetDevice, sx, sy, wrapRect.width(), wrapRect.height());
-    gc2.end();
+    QRect resultRect(sx, sy, wrapRect.width(), wrapRect.height());
+    KisPainter::copyAreaOptimized(resultRect.topLeft(), offsetDevice, device, resultRect);
 }
 
 

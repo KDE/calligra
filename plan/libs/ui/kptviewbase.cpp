@@ -23,12 +23,9 @@
 #include "kptdebug.h"
 
 #include <kaction.h>
-#include <kparts/event.h>
 #include <kmessagebox.h>
-#include <knotification.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
 
 #include <KoIcon.h>
 #include "calligraversion.h"
@@ -38,7 +35,7 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
-#include "KoUnit.h"
+#include <KoUnit.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -51,6 +48,13 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QContextMenuEvent>
+#include <QDragMoveEvent>
+
+
 
 namespace KPlato
 {

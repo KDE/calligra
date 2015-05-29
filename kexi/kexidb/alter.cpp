@@ -319,14 +319,13 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
     ActionDict *actionsLikeThis = fieldActions.value(uid());
     if (m_propertyName == "name") {
         // Case 1. special: name1 -> name2, i.e. rename action
-        QString newName(newValue().toString());
+        QByteArray newName(newValue().toString().toLatin1());
         // try to find rename(newName, otherName) action
-        ActionBase *renameActionLikeThis = actionsLikeThis ? actionsLikeThis->value("name") : 0;
+        ActionBase *renameActionLikeThis = actionsLikeThis ? actionsLikeThis->value(newName) : 0;
         if (dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)) {
             // 1. instead of having rename(fieldName(), newValue()) action,
             // let's have rename(fieldName(), otherName) action
-            dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue
-            = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
+            m_newValue = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
             /*   AlterTableHandler::ChangeFieldPropertyAction* newRenameAction
                     = new AlterTableHandler::ChangeFieldPropertyAction( *this );
                   newRenameAction->m_newValue = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;

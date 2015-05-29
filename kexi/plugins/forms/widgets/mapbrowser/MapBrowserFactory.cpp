@@ -25,6 +25,8 @@
 #include <formeditor/formIO.h>
 
 #include <KoIcon.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
@@ -32,6 +34,8 @@
 
 #include <QVariant>
 #include <QVariantList>
+
+#include <marble/MapThemeManager.h>
 
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "mapbrowser")
@@ -41,8 +45,15 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
     mapBrowser->setIconName(koIconName("map_browser"));
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
-    mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                     "spaces and non latin1 characters.", "mapBrowser"));
+    mapBrowser->setNamePrefix(
+        i18nc("A prefix for identifiers of map browser widgets. Based on that, identifiers such as "
+            "mapBrowser1, mapBrowser2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "mapBrowser"));
     mapBrowser->setDescription(i18n("Displays an interactive map."));
     addClass(mapBrowser);
 }
@@ -96,7 +107,55 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     Q_UNUSED(widget);
     return true;
 }
-     
+
+void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w)
+{
+    KFormDesigner::WidgetFactory::setPropertyOptions(set, info, w);
+
+    KoProperty::Property *property = &set["latitude"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Latitude"));
+        property->setDescription(i18n("Latitude"));
+        property->setType(KoProperty::Double);
+        property->setOption("precision", 7);
+        property->setOption("min", -90);
+        property->setOption("max", 90);
+        property->setOption("unit", QString::fromUtf8("°"));
+    }
+
+    property = &set["longitude"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Longitude"));
+        property->setDescription(i18n("Longitude"));
+        property->setOption("precision", 7);
+        property->setType(KoProperty::Double);
+        property->setOption("min", -180);
+        property->setOption("max", 180);
+        property->setOption("unit", QString::fromUtf8("°"));
+    }
+
+    property = &set["mapThemeId"];
+    if (!property->isNull()) {
+        Marble::MapThemeManager themeManager;
+        QStringList themes(themeManager.mapThemeIds());
+
+        property->setCaption(i18n("Theme"));
+        property->setDescription(i18n("Theme"));
+        property->setType(KoProperty::List);
+        property->setListData(themes, themes);
+    }
+
+    property = &set["zoom"];
+    if (!property->isNull()) {
+        property->setCaption(i18n("Zoom"));
+        property->setDescription(i18n("Zoom"));
+        property->setOption("min", 0);
+        property->setOption("max", 4000);
+        property->setOption("step", 100);
+        property->setOption("slider", true);
+    }
+}
+
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"

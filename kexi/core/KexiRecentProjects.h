@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,9 +33,8 @@ public:
     ~KexiRecentProjects();
 
     /*! Adds @a data as project data.
-     @a data will be owned by this object. 
      While saved, data will be merged with earlier saved data. */
-    void addProjectData(KexiProjectData *data);
+    void addProjectData(const KexiProjectData &data);
 
     //! @return list of data items.
     KexiProjectData::List list() const;

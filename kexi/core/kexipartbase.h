@@ -59,16 +59,16 @@ public:
      a part does not offer a message for such \a englishMessage.
      This is used e.g. in KexiMainWindow::closeWindow().
 
-     Note: As number of %n parameters is unspecified,
+     @note As number of %n parameters is unspecified,
      you should add appropriate number of parameters using .subs().
-     to result of results of i18nMessage().
+     to result of i18nMessage().
      In your your implementation, you should use ki18n(I18N_NOOP())
      or ki18nc(I18N_NOOP2()) instead of i18n() or i18nc().
      Example:
      @code
       QString tableName = "Employees";
       QString translated
-       = part->i18nMessage("Design of object \"%1\" has been modified.")
+       = part->i18nMessage("Design of object <resource>%1</resource> has been modified.")
         .subs(tableName).toString();
      @endcode */
     virtual KLocalizedString i18nMessage(const QString& englishMessage,

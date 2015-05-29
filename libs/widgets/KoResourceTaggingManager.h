@@ -26,34 +26,41 @@
 #ifndef KORESOURCETAGGINGMANAGER_H
 #define KORESOURCETAGGINGMANAGER_H
 
-#include "KoTagFilterWidget.h"
-#include "KoTagChooserWidget.h"
+#include <QObject>
 
-#include "kowidgets_export.h"
+class QWidget;
+class QStringList;
+class QString;
+class QPoint;
 
-class KoResourceModelBase;
+class KoTagFilterWidget;
+class KoTagChooserWidget;
+class KoResourceModel;
 class KoResource;
 
-class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
+class KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager();
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;
     QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);
+    void allowTagModification( bool set );
+    bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
-private slots:
+private Q_SLOTS:
     void undeleteTag(const QString& tagToUndelete);
     void purgeTagUndeleteList();
     void contextCreateNewTag(KoResource* resource, const QString& tag);
     void contextCreateNewTag(const QString& tag);
     void syncTagBoxEntryRemoval(const QString& tag);
     void syncTagBoxEntryAddition(const QString& tag);
+    void syncTagBoxEntries();
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
     void contextAddTagToResource(KoResource* resource, const QString& tag);

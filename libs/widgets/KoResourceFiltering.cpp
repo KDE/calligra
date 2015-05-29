@@ -5,7 +5,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,12 @@
  */
 
 #include "KoResourceFiltering.h"
-#include "KoResourceTagStore.h"
+
+#include "KoResourceServer.h"
+
+#include <QStringList>
+#include <QString>
+
 
 class KoResourceFiltering::Private
 {
@@ -30,14 +35,14 @@ public:
     , hasNewFilters(false)
     , name(true)
     , filename(true)
-    , tagStore(0)
+    , resourceServer(0)
     {}
     QRegExp isTag;
     QRegExp isExactMatch;
     QRegExp searchTokenizer;
     bool hasNewFilters;
     bool name,filename;
-    KoResourceTagStore *tagStore;
+    KoResourceServerBase *resourceServer;
     QStringList tagSetFilenames;
     QStringList includedNames;
     QStringList excludedNames;
@@ -131,9 +136,9 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
 
         if(!name.isEmpty()) {
             if (name.startsWith('[')) {
-                if (d->isTag.exactMatch(name) && d->tagStore) {
+                if (d->isTag.exactMatch(name) && d->resourceServer) {
                     name = d->isTag.cap(1);
-                    (*target) += d->tagStore->searchTag(name);
+                    (*target) += d->resourceServer->queryResources(name);
                 }
             }
             else if (name.startsWith('"')) {
@@ -241,7 +246,7 @@ void KoResourceFiltering::setDoneFiltering()
 
 void KoResourceFiltering::rebuildCurrentTagFilenames()
 {
-    d->tagSetFilenames = d->tagStore->searchTag(d->currentTag);
+    d->tagSetFilenames = d->resourceServer->queryResources(d->currentTag);
 }
 
 void KoResourceFiltering::setCurrentTag(const QString& tagSet)
@@ -250,7 +255,7 @@ void KoResourceFiltering::setCurrentTag(const QString& tagSet)
     rebuildCurrentTagFilenames();
 }
 
-void KoResourceFiltering::setTagStore(KoResourceTagStore* tagStore)
+void KoResourceFiltering::setResourceServer(KoResourceServerBase* resourceServer)
 {
-    d->tagStore = tagStore;
+    d->resourceServer = resourceServer;
 }

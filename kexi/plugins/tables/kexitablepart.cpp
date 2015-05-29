@@ -27,11 +27,11 @@
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 
-#include <KexiMainWindowIface.h>
-#include "kexiproject.h"
-#include "kexipartinfo.h"
-#include "widget/tableview/kexidatatable.h"
-#include "widget/tableview/kexidatatableview.h"
+#include <core/KexiMainWindowIface.h>
+#include <core/kexiproject.h>
+#include <core/kexipartinfo.h>
+#include <widget/tableview/KexiDataTableView.h>
+#include <widget/tableview/KexiDataTableScrollArea.h>
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"
@@ -199,11 +199,11 @@ KLocalizedString KexiTablePart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of table \"%1\" has been modified."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of table <resource>%1</resource> has been modified."));
 
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Table \"%1\" already exists."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Table <resource>%1</resource> already exists."));
 
     if (window->currentViewMode() == Kexi::DesignViewMode && !window->neverSaved()
             && englishMessage == ":additional message before saving design")

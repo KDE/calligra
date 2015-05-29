@@ -26,9 +26,10 @@
 #include <KoID.h>
 #include <ui_wdgCompositeOpOption.h>
 #include <kis_composite_ops_model.h>
+#include "kis_signals_blocker.h"
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::generalCategory(), true),
+    KisPaintOpOption(KisPaintOpOption::GENERAL, true),
     m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
@@ -51,6 +52,9 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
         connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
+
+    setObjectName("KisCompositeOpOption");
+
 }
 
 KisCompositeOpOption::~KisCompositeOpOption()
@@ -79,12 +83,12 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
     if (m_createConfigWidget) {
         m_label->setText(compositeOp.name());
-        m_bnEraser->blockSignals(true);
+
+        KisSignalsBlocker b(m_bnEraser);
         m_bnEraser->setChecked(m_currCompositeOpID == "erase");
-        m_bnEraser->blockSignals(false);
     }
 
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 

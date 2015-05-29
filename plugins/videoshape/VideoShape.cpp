@@ -35,8 +35,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoStoreDevice.h>
-#include <KoUnit.h>
+#include <KoStore.h>
 #include <KoIcon.h>
 
 #include <kdebug.h>

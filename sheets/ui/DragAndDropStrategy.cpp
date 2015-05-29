@@ -23,6 +23,7 @@
 #include "calligra_sheets_limits.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "CellToolBase.h"
 
 #include <KoCanvasBase.h>
 #include <KoToolBase.h>
@@ -83,9 +84,8 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     Q_UNUSED(modifiers);
     if (d->started)
         return;
-    d->lastPoint = documentPos;
-    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
+    const QPointF position = documentPos - cellTool()->offset();
+    d->lastPoint = position;
 
     // In which cell did the user click?
     qreal xpos;

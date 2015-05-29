@@ -32,7 +32,6 @@
 namespace Swinder
 {
 
-class Workbook;
 class Sheet;
 class ChartObject;
 class OfficeArtObject;

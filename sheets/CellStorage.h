@@ -30,8 +30,6 @@
 
 #include "database/Database.h"
 
-class KoXmlWriter;
-
 class KUndo2Command;
 
 namespace Calligra

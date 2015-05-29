@@ -230,7 +230,29 @@ KoGenStyle KWPageStyle::saveOdf() const
 {
     KoGenStyle pageLayout = d->pageLayout.saveOdf();
     pageLayout.setAutoStyleInStylesDotXml(true);
-    pageLayout.addAttribute("style:page-usage", "all");
+
+    switch (d->pageUsage) {
+        case LeftPages:
+            pageLayout.addAttribute("style:page-usage", "left");
+            break;
+        case MirroredPages:
+            pageLayout.addAttribute("style:page-usage", "mirrored");
+            break;
+        case RightPages:
+            pageLayout.addAttribute("style:page-usage", "right");
+            break;
+        default:
+            pageLayout.addAttribute("style:page-usage", "all");
+            break;
+    }
+
+    // Save background color if it is set
+    if (d->fullPageBackground)
+    {
+        KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(d->fullPageBackground.data());
+        if (colorBackground)
+            pageLayout.addProperty("fo:background-color", colorBackground->color().name());
+    }
 
     // save column data
     d->columns.saveOdf(pageLayout);
@@ -244,7 +266,6 @@ KoGenStyle KWPageStyle::saveOdf() const
     //writer.addAttribute("style:line-style",)
     //writer.endElement();
 
-    // TODO save background
 
 
     if (headerPolicy() != Words::HFTypeNone) {
@@ -297,7 +318,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     QString direction = props.attributeNS(KoXmlNS::style, "writing-mode", "lr-tb");
     d->direction = KoText::directionFromString(direction);
 
-    QString pageUsage = props.attributeNS(KoXmlNS::style, "page-usage", "all");
+    QString pageUsage = style.attributeNS(KoXmlNS::style, "page-usage", "all");
     if (pageUsage == "left") {
         d->pageUsage = LeftPages;
     } else if (pageUsage == "mirrored") {

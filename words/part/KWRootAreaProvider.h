@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2015 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Sebastian Sauer <sebastian.sauer@kdab.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 #define KWROOTAREAPROVIDER_H
 
 #include "KWPage.h"
-#include <KoTextLayoutRootAreaProvider.h>
+#include <KWRootAreaProviderBase.h>
 
 #include <QMap>
 #include <QPair>
@@ -30,7 +30,6 @@
 class KoShape;
 class KoTextShapeData;
 class KWTextFrameSet;
-class KWFrame;
 class KWPage;
 
 class KWRootAreaPage
@@ -39,35 +38,35 @@ public:
     KWRootAreaPage() {};
     ~KWRootAreaPage() {};
     KWPage page;
-	QList<KoTextLayoutRootArea *> rootAreas;
+    QList<KoTextLayoutRootArea *> rootAreas;
     explicit KWRootAreaPage(const KWPage &p) : page(p) {}
 };
 
-class KWRootAreaProvider : public KoTextLayoutRootAreaProvider
+class KWRootAreaProvider : public KWRootAreaProviderBase
 {
 public:
     //KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
     explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
     virtual ~KWRootAreaProvider();
 
-    void clearPages(int pageNumber);
-    QList<KWRootAreaPage *> pages() const { return m_pages; }
+    void addDependentProvider(KWRootAreaProviderBase *provider, int pageNumber);
+
+    virtual void clearPages(int pageNumber);
+    virtual void setPageDirty(int pageNumber);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-    virtual void updateAll();
-    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
+
 private:
-    KWTextFrameSet *m_textFrameSet;
     QList<KWRootAreaPage *> m_pages;
     QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
-    QList<QPair<KWRootAreaProvider *, int> > m_dependentProviders;
+    QList<KoTextLayoutRootArea*> m_rootAreaCache;
+    QList<QPair<KWRootAreaProviderBase *, int> > m_dependentProviders;
 
-    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout);
-    void addDependentProvider(KWRootAreaProvider *provider, int pageNumber);
+    QList<KWRootAreaPage *> pages() const { return m_pages; }
+    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints);
     void handleDependentProviders(int pageNumber);
 };
 

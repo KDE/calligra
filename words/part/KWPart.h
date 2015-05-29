@@ -27,7 +27,6 @@
 class KoMainWindow;
 class KWDocument;
 class KWView;
-class KComponentData;
 class QGraphicsItem;
 
 class WORDS_EXPORT KWPart : public KoPart
@@ -52,7 +51,7 @@ public:
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
-private slots:
+private Q_SLOTS:
      void showErrorAndDie();
 
 protected:

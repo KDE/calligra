@@ -18,10 +18,6 @@
 */
 
 #include "KexiPushButton.h"
-#include <krun.h>
-#include <kmimetype.h>
-#include <ktoolinvocation.h>
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
 
 #include <QDir>
@@ -29,7 +25,7 @@
 class KexiPushButtonPrivate
 {
 public:
-    KexiPushButtonPrivate(KexiPushButton *qq)
+    explicit KexiPushButtonPrivate(KexiPushButton *qq)
         : hyperlinkType(KexiPushButton::NoHyperlink)
         , hyperlinkTool(KexiUtils::OpenHyperlinkOptions::DefaultHyperlinkTool)
         , executable(false)
