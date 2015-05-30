@@ -14,6 +14,7 @@
   <name xml:lang="es">Kexi</name>
   <name xml:lang="fi">Kexi</name>
   <name xml:lang="fr">Kexi</name>
+  <name xml:lang="gl">Kexi</name>
   <name xml:lang="ia">Kexi</name>
   <name xml:lang="it">Kexi</name>
   <name xml:lang="ja">Kexi</name>
@@ -34,6 +35,7 @@
   <summary xml:lang="es">Creador de bases de datos</summary>
   <summary xml:lang="fi">Tietokantojen luonti</summary>
   <summary xml:lang="fr">Créateur de base de données</summary>
+  <summary xml:lang="gl">Editor de bases da datos</summary>
   <summary xml:lang="ia">Creator de base de datos</summary>
   <summary xml:lang="it">Creazione di basi di dati</summary>
   <summary xml:lang="ja">データベース作成</summary>
