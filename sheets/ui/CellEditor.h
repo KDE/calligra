@@ -23,10 +23,12 @@
 #define CALLIGRA_SHEETS_CELL_EDITOR
 
 #include <kglobalsettings.h>
-#include <ktextedit.h>
+//#include <ktextedit.h>
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
+#include "ktextedit2.h"
+
 class KoViewConverter;
 
 namespace Calligra
@@ -39,7 +41,7 @@ class Selection;
 /**
  * class CellEditor
  */
-class CellEditor : public KTextEdit, public CellEditorBase
+class CellEditor : public KTextEdit2, public CellEditorBase
 {
     Q_OBJECT
 public:
@@ -74,10 +76,10 @@ public:
 
     // CellEditorBase interface
     virtual QWidget* widget() { return this; }
-    virtual void cut() { KTextEdit::cut(); }
-    virtual void copy() { KTextEdit::copy(); }
-    virtual void paste() { KTextEdit::paste(); }
-    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
+    virtual void cut() { KTextEdit2::cut(); }
+    virtual void copy() { KTextEdit2::copy(); }
+    virtual void paste() { KTextEdit2::paste(); }
+    virtual QString toPlainText() const { return KTextEdit2::toPlainText(); }
 Q_SIGNALS:
     void textChanged(const QString &text);
 

@@ -371,6 +371,7 @@ install( FILES
     part/View.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/part COMPONENT Devel)
 install( FILES
+    ui/ktextedit2.h
     ui/CellToolBase.h
     ui/CellEditorBase.h
     ui/Selection.h
