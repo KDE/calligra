@@ -13,6 +13,7 @@
   <name xml:lang="es">Stage</name>
   <name xml:lang="fi">Stage</name>
   <name xml:lang="fr">Stage</name>
+  <name xml:lang="gl">Stage</name>
   <name xml:lang="ia">Stage</name>
   <name xml:lang="it">Stage</name>
   <name xml:lang="nl">Stage</name>
@@ -32,6 +33,7 @@
   <summary xml:lang="es">Presentación</summary>
   <summary xml:lang="fi">Esitysgrafiikka</summary>
   <summary xml:lang="fr">Présentation</summary>
+  <summary xml:lang="gl">Presentación</summary>
   <summary xml:lang="ia">Presentation</summary>
   <summary xml:lang="it">Presentazioni</summary>
   <summary xml:lang="nl">Presentatie</summary>
@@ -74,6 +76,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>

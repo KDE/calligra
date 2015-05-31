@@ -35,6 +35,7 @@
   <summary xml:lang="es">Procesador de texto</summary>
   <summary xml:lang="fi">Tekstinkäsittely</summary>
   <summary xml:lang="fr">Traitement de texte</summary>
+  <summary xml:lang="gl">Procesador de texto</summary>
   <summary xml:lang="ia">Processator de parolas</summary>
   <summary xml:lang="it">Elaboratore di testi</summary>
   <summary xml:lang="ja">ワードプロセッサ</summary>
@@ -79,6 +80,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>

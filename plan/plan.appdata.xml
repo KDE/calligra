@@ -13,6 +13,7 @@
   <name xml:lang="es">Plan</name>
   <name xml:lang="fi">Plan</name>
   <name xml:lang="fr">Plan</name>
+  <name xml:lang="gl">Plan</name>
   <name xml:lang="ia">Plan</name>
   <name xml:lang="it">Plan</name>
   <name xml:lang="nl">Plan</name>
@@ -33,6 +34,7 @@
   <summary xml:lang="es">Gestor de proyectos</summary>
   <summary xml:lang="fi">Projektinhallinta</summary>
   <summary xml:lang="fr">Gestion de projet</summary>
+  <summary xml:lang="gl">Xestión de proxectos</summary>
   <summary xml:lang="ia">Administration de projectos</summary>
   <summary xml:lang="it">Gestione progetti</summary>
   <summary xml:lang="nl">Projectbeheer</summary>
@@ -72,6 +74,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
