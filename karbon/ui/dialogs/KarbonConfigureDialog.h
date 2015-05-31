@@ -21,7 +21,6 @@
 #ifndef KARBONCONFIGUREDIALOG_H
 #define KARBONCONFIGUREDIALOG_H
 
-#include <KoUnit.h>
 #include <kpagedialog.h>
 
 class KarbonView;

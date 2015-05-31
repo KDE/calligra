@@ -498,6 +498,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
     if (index.isValid()) {
         menu.addAction(m_propertiesAction);
+        addActionToMenu(&menu, "layer_style");
+
         menu.addSeparator();
         menu.addAction(m_removeAction);
 
@@ -514,7 +516,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(convertToMenu, "convert_to_paint_layer");
         addActionToMenu(convertToMenu, "convert_to_transparency_mask");
         addActionToMenu(convertToMenu, "convert_to_filter_mask");
-        addActionToMenu(convertToMenu, "convert_to_transform_mask");
         addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
         QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
@@ -522,7 +523,10 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(splitAlphaMenu, "split_alpha_write");
         addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-        addActionToMenu(&menu, "isolate_layer");
+        KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+        if (node && !node->inherits("KisTransformMask")) {
+            addActionToMenu(&menu, "isolate_layer");
+        }
     }
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");

@@ -56,7 +56,7 @@
 KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
-    setTemplateType("karbon_template");
+    setTemplatesResourcePath(QLatin1String("karbon/templates/"));
     setComponentData(KarbonFactory::componentData());
 }
 

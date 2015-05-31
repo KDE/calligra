@@ -116,6 +116,7 @@
 #include <KoZoomController.h>
 #include <KoIcon.h>
 #include <KoFileDialog.h>
+#include <KoUnit.h>
 
 // kde header
 #include <kaction.h>

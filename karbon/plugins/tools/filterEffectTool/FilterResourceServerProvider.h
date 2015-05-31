@@ -23,7 +23,6 @@
 #define FILTERRESOURCESERVERPROVIDER_H
 
 #include "KoResourceServer.h"
-#include "KoResourceServerProvider.h"
 
 class KoResourceLoaderThread;
 class FilterEffectResource;

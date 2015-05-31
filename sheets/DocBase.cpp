@@ -46,6 +46,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoPart.h>
+#include <KoUnit.h>
 
 #include "calligra_sheets_limits.h"
 #include "BindingModel.h"

@@ -41,7 +41,7 @@ public:
     KisProjectionLeafSP prevSibling() const;
     KisProjectionLeafSP nextSibling() const;
 
-    int childCount() const;
+    bool hasChildren() const;
 
     KisNodeSP node() const;
     KisAbstractProjectionPlaneSP projectionPlane() const;
@@ -57,7 +57,10 @@ public:
     bool dependsOnLowerNodes() const;
     bool visible() const;
     quint8 opacity() const;
+    QBitArray channelFlags() const;
     bool isStillInGraph() const;
+
+    bool isDroppedMask() const;
 
 private:
     struct Private;

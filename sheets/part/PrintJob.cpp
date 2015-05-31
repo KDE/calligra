@@ -40,6 +40,7 @@
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoZoomHandler.h>
+#include <KoUnit.h>
 
 #include <kmessagebox.h>
 

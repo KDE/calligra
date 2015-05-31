@@ -82,8 +82,6 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     int state;
-    KisFactory factory;
-    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
     KAboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
@@ -119,11 +117,22 @@ extern "C" int main(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KisApplication app(key);
 
+    // create factory only after application, the componentData it creates in the
+    // constructor will need an existing QCoreApplication at least with Qt5/KF5,
+    // to set name of application etc., as also needed to find resources
+    KisFactory factory;
+    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
+
     if (app.isRunning()) {
 
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-        if (!args->isSet("export")) {
+        // only pass arguments to main instance if they are not for batch processing
+        // any batch processing would be done in this separate instance
+        const bool batchRun =
+            args->isSet("print") || args->isSet("export") || args->isSet("export-pdf");
+
+        if (!batchRun) {
 
             QByteArray ba;
             QDataStream ds(&ba, QIODevice::WriteOnly);

@@ -32,7 +32,7 @@ KAboutData *newKritaAboutData()
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion);
 #else
     version = calligraVersion;
 #endif
@@ -543,8 +543,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Pat David"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Patrick \"ponpat\" Poniewas"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Paul Wortmann"), ki18n("Krita 2.9 Kickstarter Backer"));
-    aboutData->addCredit(ki18n("Pawel"), ki18n("Krita 2.9 Kickstarter Backer"));
-    aboutData->addCredit(ki18n("Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Pawel Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("P+B-Snegge"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("pepeland"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Peter Moonen"), ki18n("Krita 2.9 Kickstarter Backer"));

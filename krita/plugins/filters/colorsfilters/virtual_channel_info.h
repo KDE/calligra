@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,14 +15,35 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
-#define KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
 
-#include <kis_curve_option_widget.h>
+#ifndef __VIRTUAL_CHANNEL_INFO_H
+#define __VIRTUAL_CHANNEL_INFO_H
 
-class KisSmudgeRadiusOptionWidget: public KisCurveOptionWidget
+#include <KoChannelInfo.h>
+
+class VirtualChannelInfo
 {
 public:
-    KisSmudgeRadiusOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+    enum Type {
+        REAL,
+        LIGHTNESS
+    };
+
+    VirtualChannelInfo();
+
+    VirtualChannelInfo(Type type, int pixelIndex, KoChannelInfo *realChannelInfo);
+
+    Type type() const;
+    KoChannelInfo* channelInfo() const;
+    QString name() const;
+    int pixelIndex() const;
+    KoChannelInfo::enumChannelValueType valueType() const;
+    int channelSize() const;
+
+private:
+    Type m_type;
+    int m_pixelIndex;
+    KoChannelInfo *m_realChannelInfo;
 };
-#endif // KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
+
+#endif /* __VIRTUAL_CHANNEL_INFO_H */

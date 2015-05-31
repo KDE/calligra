@@ -18,12 +18,14 @@
 
 #include "kis_projection_leaf.h"
 
-#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+
+#include "krita_utils.h"
 
 
 struct KisProjectionLeaf::Private
@@ -123,12 +125,10 @@ KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
-
-int KisProjectionLeaf::childCount() const
+bool KisProjectionLeaf::hasChildren() const
 {
-    return m_d->node->childCount();
+    return m_d->node->firstChild();
 }
-
 
 KisNodeSP KisProjectionLeaf::node() const
 {
@@ -182,27 +182,61 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 
 bool KisProjectionLeaf::visible() const
 {
-    // check opacity as well!
-    return m_d->node->visible(true);
+    // TODO: check opacity as well!
+
+    bool hiddenByParentPassThrough =
+        m_d->checkParentPassThrough() && !m_d->node->parent()->visible();
+
+    return m_d->node->visible(false) &&
+        !m_d->checkThisPassThrough() &&
+        !hiddenByParentPassThrough;
 }
 
 quint8 KisProjectionLeaf::opacity() const
 {
     quint8 resultOpacity = m_d->node->opacity();
-    quint8 parentOpacity = 255;
 
     if (m_d->checkParentPassThrough()) {
         quint8 parentOpacity = m_d->node->parent()->projectionLeaf()->opacity();
 
-        if (parentOpacity != OPACITY_OPAQUE_U8) {
-            resultOpacity = (int(resultOpacity) * parentOpacity) / OPACITY_OPAQUE_U8;
-        }
+        resultOpacity = KritaUtils::mergeOpacity(resultOpacity, parentOpacity);
     }
 
     return resultOpacity;
 }
 
+QBitArray KisProjectionLeaf::channelFlags() const
+{
+    QBitArray channelFlags;
+
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node);
+    if (!layer) return channelFlags;
+
+    channelFlags = layer->channelFlags();
+
+    if (m_d->checkParentPassThrough()) {
+        QBitArray parentChannelFlags;
+
+        if (*m_d->node->colorSpace() ==
+            *m_d->node->parent()->colorSpace()) {
+
+            KisLayer *parentLayer = qobject_cast<KisLayer*>(m_d->node->parent().data());
+            parentChannelFlags = parentLayer->channelFlags();
+        }
+
+        channelFlags = KritaUtils::mergeChannelFlags(channelFlags, parentChannelFlags);
+    }
+
+    return channelFlags;
+}
+
 bool KisProjectionLeaf::isStillInGraph() const
 {
     return (bool)m_d->node->graphListener();
+}
+
+bool KisProjectionLeaf::isDroppedMask() const
+{
+    return qobject_cast<KisMask*>(m_d->node) &&
+        m_d->checkParentPassThrough();
 }

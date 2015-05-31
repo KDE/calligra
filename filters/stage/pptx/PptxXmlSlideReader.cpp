@@ -40,7 +40,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoUnit.h>
 
 #include <QBrush>
 
