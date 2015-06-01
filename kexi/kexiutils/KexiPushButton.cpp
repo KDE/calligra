@@ -53,9 +53,11 @@ void KexiPushButtonPrivate::slotClicked()
         return;
     }
 
-    KUrl url(hyperlink);
+    QUrl url(hyperlink);
 
-    if (hyperlinkTool == KexiUtils::OpenHyperlinkOptions::MailerHyperlinkTool && url.protocol().isEmpty()) {
+    if (hyperlinkTool == KexiUtils::OpenHyperlinkOptions::MailerHyperlinkTool
+            && url.scheme().isEmpty())
+    {
         url.setScheme("mailto");
     }
 

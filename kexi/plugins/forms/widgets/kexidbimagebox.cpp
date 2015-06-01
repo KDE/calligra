@@ -108,8 +108,8 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
             this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
-    connect(m_contextMenu, SIGNAL(insertFromFileRequested(KUrl)),
-            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(m_contextMenu, SIGNAL(insertFromFileRequested(QUrl)),
+            this, SLOT(handleInsertFromFileAction(QUrl)));
     connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
             this, SLOT(handleSaveAsAction(QString)));
     connect(m_contextMenu, SIGNAL(cutRequested()),
@@ -327,7 +327,7 @@ void KexiDBImageBox::insertFromFile()
     m_contextMenu->insertFromFile();
 }
 
-void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
+void KexiDBImageBox::handleInsertFromFileAction(const QUrl &url)
 {
     if (!dataSource().isEmpty() && isReadOnly())
         return;
@@ -341,7 +341,7 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
         repaint();
     } else {
         //db-aware
-        QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
+        QString fileName(url.isLocalFile() ? url.toLocalFile() : url.toDisplayString());
 
         //! @todo download the file if remote, then set fileName properly
         QFile f(fileName);

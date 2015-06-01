@@ -26,7 +26,7 @@
 #include <QMenu>
 
 class KActionCollection;
-class KUrl;
+class QUrl;
 
 //! @short A set of helpers for updating popup menu titles
 /*! The functions set meaningful titles like "Emploee : Image".
@@ -81,7 +81,7 @@ Q_SIGNALS:
     void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
     /*! Emitted before "insertFromFile" action was requested. */
-    void insertFromFileRequested(const KUrl &url);
+    void insertFromFileRequested(const QUrl &url);
 
     /*! Emitted before "saveAs" action was requested.
      You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.

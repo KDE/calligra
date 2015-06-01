@@ -36,8 +36,8 @@
 #include <QClipboard>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QUrl>
 
-#include <KUrl>
 #include <KRun>
 #include <KToolInvocation>
 #include <KLocalizedString>
@@ -722,7 +722,7 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
 {
     if (url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());
@@ -733,7 +733,8 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
     }
 
     if (!url.isValid()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 
@@ -741,12 +742,14 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
     QString type = db.mimeTypeForUrl(url).name();
 
     if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
-        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 
     if (!options.allowRemote && !url.isLocalFile()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 

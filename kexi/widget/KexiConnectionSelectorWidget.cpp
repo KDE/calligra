@@ -247,7 +247,7 @@ void KexiConnectionSelectorWidget::showSimpleConn()
     if (!d->file_sel_shown) {
         d->file_sel_shown = true;
         fileWidget = new KexiFileWidget(
-            KUrl(d->startDirOrVariable),
+            QUrl(d->startDirOrVariable),
             d->fileAccessType == KAbstractFileWidget::Opening
             ? KexiFileWidget::Opening : KexiFileWidget::SavingFileBasedDB,
             d->stack);
@@ -292,12 +292,13 @@ QString KexiConnectionSelectorWidget::selectedFileName()
     if (selectedConnectionType() != KexiConnectionSelectorWidget::FileBased)
         return QString();
     else if (fileWidget->selectedFile().isEmpty()) {
-        KUrl path = fileWidget->baseUrl();
+        QUrl path = fileWidget->baseUrl();
         const QString firstUrl(fileWidget->locationEdit()->lineEdit()->text());
         if (QDir::isAbsolutePath(firstUrl))
-            path = KUrl::fromPath(firstUrl);
+            path = QUrl::fromLocalFile(firstUrl);
         else
-            path.addPath(firstUrl);
+            path = path.adjusted(QUrl::StripTrailingSlash);
+            path.setPath(path.path() + '/' + (firstUrl));
         return path.toLocalFile();
     }
 

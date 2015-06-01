@@ -42,7 +42,7 @@ void KexiImagePropertyEdit::selectPixmap()
     QString fileName(KPropertyPixmapEditor::selectPixmapFileName());
     if (fileName.isEmpty())
         return;
-    KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(KUrl(fileName)));
+    KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(QUrl(fileName)));
     setValue((uint)/*! @todo unsafe*/h.id());
 #if 0 //will be reenabled for new image collection
     if (!m_manager->activeForm() || !property())

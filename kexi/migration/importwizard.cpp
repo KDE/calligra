@@ -342,7 +342,7 @@ void ImportWizard::setupDstTitle()
     d->dstNewDBNameUrlLabel = d->dstTitlePageWidget->label_requester;
     d->dstNewDBNameUrl = d->dstTitlePageWidget->file_requester;
     d->dstNewDBFileHandler = new KexiStartupFileHandler(
-        KUrl("kfiledialog:///ProjectMigrationDestinationDir"),
+        QUrl("kfiledialog:///ProjectMigrationDestinationDir"),
         KexiStartupFileHandler::SavingFileBasedDB,
         d->dstTitlePageWidget->file_requester);
     d->dstNewDBNameLabel = new QLabel(i18n("Destination project's name:"), d->dstTitlePageWidget);
@@ -913,7 +913,7 @@ void ImportWizard::next()
 {
     if (currentPage() == d->srcConnPageItem) {
         if (fileBasedSrcSelected()
-                && /*! @todo use KUrl? */!QFileInfo(selectedSourceFileName()).isFile()) {
+                && /*! @todo use QUrl? */!QFileInfo(selectedSourceFileName()).isFile()) {
 
             KMessageBox::sorry(this, i18n("Select source database filename."));
             return;

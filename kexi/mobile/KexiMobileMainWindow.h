@@ -21,9 +21,10 @@
 #ifndef KexiMobile_H
 #define KexiMobile_H
 
-#include <QMainWindow>
 #include <core/KexiMainWindowIface.h>
-#include <kurl.h>
+
+#include <QUrl>
+#include <QMainWindow>
 
 class KexiMobileToolbar;
 class QHBoxLayout;
@@ -89,7 +90,7 @@ private:
     
     void setupToolbar();
     
-    KexiProject* openProject(const KUrl &url);
+    KexiProject* openProject(const QUrl &url);
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage);
 };
 

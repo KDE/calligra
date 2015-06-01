@@ -47,7 +47,7 @@ public:
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
     KexiFileWidget(
-        const KUrl &startDirOrVariable, Mode mode, QWidget *parent);
+        const QUrl &startDirOrVariable, Mode mode, QWidget *parent);
 
     virtual ~KexiFileWidget();
 
@@ -71,7 +71,7 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    // KUrl currentURL();
+    // QUrl currentURL();
     virtual QString highlightedFile() const;
 
     //! just sets locationWidget()->setCurrentText(fn)
