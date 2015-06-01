@@ -29,7 +29,7 @@
  It is a replacement QDateEdit due to usability problems:
  people are accustomed to use single-character cursor.
  Date format is retrieved from the KDE global settings.
- and input/output is performed using KLineEdit (from KexiInputTableEdit).
+ and input/output is performed using QLineEdit (from KexiInputTableEdit).
 */
 class KexiDateTableEdit : public KexiInputTableEdit
 {

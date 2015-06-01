@@ -81,9 +81,8 @@ public:
         // by providing this in propeditor
         advancedProperties.insert("minimumSize");
         advancedProperties.insert("maximumSize");
-#if QT_VERSION  >= 0x040700
-        advancedProperties.insert("clickMessage");
-#endif
+        advancedProperties.insert("clickMessage"); // for backward compatibility Kexi projects created with Qt < 4.7
+        advancedProperties.insert("showClearButton"); // for backward compatibility Kexi projects created with Qt 4
 #ifndef KEXI_SHOW_UNFINISHED
 /*! @todo reenable */
         advancedProperties.insert("accel");

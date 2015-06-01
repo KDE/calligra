@@ -31,7 +31,6 @@
 #include <KexiIcon.h>
 
 #include <kdebug.h>
-#include <klineedit.h>
 #include <KStandardAction>
 #include <KAction>
 
@@ -41,6 +40,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QWhatsThis>
+#include <QLineEdit>
 
 //! Templorary hides db list
 //! @todo reenable this when implemented
