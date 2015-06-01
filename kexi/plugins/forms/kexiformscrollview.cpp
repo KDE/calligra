@@ -30,10 +30,10 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <KMenu>
 #include <KDebug>
 #include <KLocale>
 
+#include <QMenu>
 #include <QPalette>
 #include <QCursor>
 #include <QPainter>
@@ -129,7 +129,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
         setRecordNavigatorVisible(true);
         refreshContentsSizeLater();
     }
-    m_contextMenu = new KMenu(this);
+    m_contextMenu = new QMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
 //! @todo sorting temporarily disabled because not it's not implemented in forms (bug 150372)
     setSortingEnabled(false);
