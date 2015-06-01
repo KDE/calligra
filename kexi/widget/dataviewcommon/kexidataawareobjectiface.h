@@ -39,7 +39,7 @@
 
 class QHeaderView;
 class QScrollBar;
-class KMenu;
+class QMenu;
 class KexiRecordNavigatorIface;
 
 namespace KexiDB
@@ -475,7 +475,7 @@ public:
     virtual void dataSet(KexiDB::TableViewData *data) = 0;
 
     /*! \return a pointer to context menu. This can be used to plug some actions there. */
-    KMenu* contextMenu() const {
+    QMenu* contextMenu() const {
         return m_contextMenu;
     }
 
@@ -924,7 +924,7 @@ protected:
     int m_dragIndicatorLine;
 
     /*! Context menu widget. */
-    KMenu *m_contextMenu;
+    QMenu *m_contextMenu;
 
     /*! Text of context menu title. */
     QString m_contextMenuTitleText;
