@@ -19,9 +19,11 @@
 #ifndef KEXIRELATIONDESIGNTOOL_H
 #define KEXIRELATIONDESIGNTOOL_H
 
-#include <KoToolBase.h>
-#include <kurl.h>
 #include <core/kexi.h>
+
+#include <KoToolBase.h>
+
+#include <QUrl>
 
 class KexiRelationDesignShape;
 class KexiStartupDialog;
@@ -54,7 +56,7 @@ protected:
 private:
     KexiRelationDesignShape *m_relationDesign;
     KexiStartupDialog *m_dbDialog;
-    KUrl m_url;
+    QUrl m_url;
     QLabel *m_fileLabel;
     KComboBox *m_relationCombo;
 

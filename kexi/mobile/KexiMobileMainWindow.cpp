@@ -86,7 +86,7 @@ void KexiMobileMainWindow::slotOpenDatabase()
     fileName = QFileDialog::getOpenFileName(this, i18n("Open Database"), "", i18n("Database Files (*.kexi)"));
 
     if (!fileName.isNull()) {
-        KexiProject *proj = openProject(KUrl::fromPath(fileName));
+        KexiProject *proj = openProject(QUrl::fromLocalFile(fileName));
         if (proj) {
             m_project = proj;
             m_mobile->databaseOpened(proj);
@@ -96,7 +96,7 @@ void KexiMobileMainWindow::slotOpenDatabase()
     }
 }
 
-KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
+KexiProject *KexiMobileMainWindow::openProject(const QUrl &url)
 {
     KexiDB::DriverManager driverManager;
     KexiDB::Driver *driver = 0;

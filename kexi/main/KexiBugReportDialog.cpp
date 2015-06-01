@@ -98,7 +98,7 @@ KAboutData* KexiBugReportDialog::copyAboutData()
 void KexiBugReportDialog::accept()
 {
     // override, based on KBugReport::accept()
-    KUrl url("https://bugs.kde.org/enter_bug.cgi");
+    QUrl url("https://bugs.kde.org/enter_bug.cgi");
     url.addQueryItem("format", "guided"); // use the guided form
     // the string format is product/component, where component is optional
     url.addQueryItem("product", "kexi");

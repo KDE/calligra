@@ -566,7 +566,8 @@ public:
 /*!
  * Opens the given \a url using \a options
 */
-KEXIUTILS_EXPORT void openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options);
+KEXIUTILS_EXPORT void openHyperLink(const QUrl &url, QWidget *parent,
+                                    const OpenHyperlinkOptions &options);
 
 //! \return size of combo box arrow according to \a style
 /*! Application's style is the default. \see QStyle::SC_ComboBoxArrow */

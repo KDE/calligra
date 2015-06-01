@@ -535,7 +535,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
             //get suggested name based on the file name
             QString suggestedName;
             if (m_mode == File) {
-                suggestedName = KUrl(m_fname).fileName();
+                suggestedName = QUrl(m_fname).fileName();
                 //remove extension
                 if (!suggestedName.isEmpty()) {
                     const int idx = suggestedName.lastIndexOf('.');
@@ -578,13 +578,13 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
 void KexiCSVImportDialog::createFileOpenPage()
 {
     m_openFileWidget = new KexiFileWidget(
-        KUrl("kfiledialog:///CSVImportExport"), //startDir
+        QUrl("kfiledialog:///CSVImportExport"), //startDir
         KexiFileWidget::Custom | KexiFileWidget::Opening,
         this);
     m_openFileWidget->setObjectName("m_openFileWidget");
     m_openFileWidget->setAdditionalFilters(csvMimeTypes().toSet());
     m_openFileWidget->setDefaultExtension("csv");
-    connect(m_openFileWidget, SIGNAL(fileSelected(KUrl)), this, SLOT(next()));
+    connect(m_openFileWidget, SIGNAL(fileSelected(QUrl)), this, SLOT(next()));
     m_openFilePage = new KPageWidgetItem(m_openFileWidget, i18n("Select file name for import"));
     addPage(m_openFilePage);
 }

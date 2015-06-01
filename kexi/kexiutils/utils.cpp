@@ -36,8 +36,8 @@
 #include <QClipboard>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QUrl>
 
-#include <KUrl>
 #include <KRun>
 #include <KToolInvocation>
 #include <KLocalizedString>
@@ -722,7 +722,7 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
 {
     if (url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());

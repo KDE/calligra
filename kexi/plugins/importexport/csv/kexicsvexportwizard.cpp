@@ -117,7 +117,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     // 1. File Save Page
     if (m_options.mode == KexiCSVExport::File) {
         m_fileSaveWidget = new KexiFileWidget(
-            KUrl("kfiledialog:///CSVImportExport"), //startDir
+            QUrl("kfiledialog:///CSVImportExport"), //startDir
             KexiFileWidget::Custom | KexiFileWidget::SavingFileBasedDB,
             this);
         m_fileSaveWidget->setObjectName("m_fileSavePage");

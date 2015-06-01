@@ -764,7 +764,7 @@ tristate KexiStartupHandler::detectActionForFile(
         kDebug() << "found mime is:" << mimename;
         if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
             //try by URL:
-            mime = db.mimeTypeForUrl(KUrl::fromPath(dbFileName));
+            mime = db.mimeTypeForUrl(QUrl::fromLocalFile(dbFileName));
             mimename = mime.name();
         }
     }

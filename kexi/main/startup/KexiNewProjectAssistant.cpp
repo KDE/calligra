@@ -209,7 +209,7 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
     connect(contents->le_title, SIGNAL(textChanged(QString)),
             this, SLOT(titleTextChanged(QString)));
     fileHandler = new KexiStartupFileHandler(
-        KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
+        QUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
         KexiStartupFileHandler::SavingFileBasedDB,
         contents->file_requester);
     fileHandler->setDefaultExtension("kexi");
@@ -258,7 +258,7 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
         contents->le_title->setText(QString());
         return false;
     }
-    KUrl url = contents->file_requester->url();
+    QUrl url = contents->file_requester->url();
     QFileInfo fileInfo(contents->file_requester->text());
     if (fileInfo.dir().isRelative()) {
         messageWidget = new KexiContextMessageWidget(contents->formLayout,

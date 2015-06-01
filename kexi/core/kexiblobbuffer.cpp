@@ -213,7 +213,7 @@ KexiBLOBBuffer::~KexiBLOBBuffer()
     delete d;
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QUrl &url)
 {
     if (url.isEmpty())
         return KexiBLOBBuffer::Handle();
@@ -222,11 +222,11 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?
-    Item * item = d->itemsByURL.value(url.prettyUrl());
+    Item * item = d->itemsByURL.value(url.toDisplayString());
     if (item)
         return KexiBLOBBuffer::Handle(item);
 
-    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
+    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.toDisplayString();
 //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);
     if (!f.open(QIODevice::ReadOnly)) {
@@ -247,8 +247,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     insertItem(item);
 
     //cache
-    item->prettyURL = url.prettyUrl();
-    d->itemsByURL.insert(url.prettyUrl(), item);
+    item->prettyURL = url.toDisplayString();
+    d->itemsByURL.insert(url.toDisplayString(), item);
     return KexiBLOBBuffer::Handle(item);
 }
 

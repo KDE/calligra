@@ -22,8 +22,10 @@
 #include "KexiDBPushButton.h"
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
+
 #include <db/connection.h>
-#include <KUrl>
+
+#include <QUrl>
 #include <QDebug>
 
 class KexiDBPushButtonPrivate
@@ -54,7 +56,7 @@ void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         KexiPushButton::setHyperlink(KexiDataItemInterface::originalValue().toString());
     }
-    KUrl url(KexiDataItemInterface::originalValue().toString());
+    QUrl url(KexiDataItemInterface::originalValue().toString());
     QFontMetrics f(font());
     QString text;
     QString path = url.pathOrUrl();

@@ -22,8 +22,10 @@
 #include "kexidbcommandlinkbutton.h"
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
+
 #include <db/connection.h>
-#include <KUrl>
+
+#include <QUrl>
 #include <QDebug>
 
 class KexiDBCommandLinkButtonPrivate
@@ -56,7 +58,7 @@ void KexiDBCommandLinkButton::setValueInternal(const QVariant& add, bool removeO
         KexiPushButton::setHyperlink(KexiDataItemInterface::originalValue().toString());
     }
 
-    KUrl url(KexiDataItemInterface::originalValue().toString());
+    QUrl url(KexiDataItemInterface::originalValue().toString());
     setDescription(url.pathOrUrl());
     setToolTip(url.pathOrUrl());
 }
