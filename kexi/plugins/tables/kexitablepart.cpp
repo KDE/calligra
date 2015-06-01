@@ -23,10 +23,6 @@
 
 #include <KexiIcon.h>
 
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <ktabwidget.h>
-
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -35,11 +31,15 @@
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"
+#include <KexiWindow.h>
 
 #include <db/connection.h>
 #include <db/cursor.h>
 
-#include <KexiWindow.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+
+#include <QTabWidget>
 
 //! @internal
 class KexiTablePart::Private
@@ -212,7 +212,7 @@ KLocalizedString KexiTablePart::i18nMessage(
     return Part::i18nMessage(englishMessage, window);
 }
 
-void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void KexiTablePart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 {
     if (!d->lookupColumnPage) {
         d->lookupColumnPage = new KexiLookupColumnPage(0);

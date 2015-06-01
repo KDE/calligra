@@ -36,10 +36,10 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QScopedPointer>
+#include <QTabWidget>
 
 #include <ktoolbar.h>
 #include <khelpmenu.h>
-#include <ktabwidget.h>
 #include <kglobalsettings.h>
 #include <KAboutData>
 
@@ -58,7 +58,7 @@ class KexiProjectNavigator;
 static const int KEXITABBEDTOOLBAR_SPACER_TAB_INDEX = 1;
 
 //! @short Main application's tabbed toolbar
-class KexiTabbedToolBar : public KTabWidget
+class KexiTabbedToolBar : public QTabWidget
 {
     Q_OBJECT
 public:
@@ -800,7 +800,7 @@ KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QStr
 }
 
 KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
-        : KTabWidget(parent)
+        : QTabWidget(parent)
         , d(new Private(this))
 {
     d->customTabBar = new KexiTabbedToolBarTabBar(this);
@@ -808,7 +808,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     setStyle(d->customTabBar->customStyle);
 
     // from ktabwidget.cpp
-    //! @todo KTabWidget::setTabBar() should be added with this code
+    //! @todo QTabWidget::setTabBar() should be added with this code
     connect(tabBar(), SIGNAL(contextMenu( int, const QPoint & )), SLOT(contextMenu( int, const QPoint & )));
     connect(tabBar(), SIGNAL(tabDoubleClicked( int )), SLOT(mouseDoubleClick( int )));
     connect(tabBar(), SIGNAL(newTabRequest()), this, SIGNAL(mouseDoubleClick())); // #185487
@@ -1033,7 +1033,7 @@ void KexiTabbedToolBar::mouseMoveEvent(QMouseEvent* event)
         d->tabToRaise = tab;
     }
 #endif
-    KTabWidget::mouseMoveEvent(event);
+    QTabWidget::mouseMoveEvent(event);
 }
 
 void KexiTabbedToolBar::leaveEvent(QEvent* event)
@@ -1042,7 +1042,7 @@ void KexiTabbedToolBar::leaveEvent(QEvent* event)
     d->tabRaiseTimer.stop();
     d->tabToRaise = -1;
 #endif
-    KTabWidget::leaveEvent(event);
+    QTabWidget::leaveEvent(event);
 }
 
 bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
@@ -1120,7 +1120,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     }
     default:;
     }
-    return KTabWidget::eventFilter(watched, event);
+    return QTabWidget::eventFilter(watched, event);
 }
 
 void KexiTabbedToolBar::slotCurrentChanged(int index)
@@ -1783,7 +1783,7 @@ public:
     KexiTabbedToolBar *tabbedToolBar;
     QMap<int, QString> tabsToActivateOnShow;
     KexiDockWidget *navDockWidget;
-    KTabWidget *propEditorTabWidget;
+    QTabWidget *propEditorTabWidget;
     KexiDockWidget *propEditorDockWidget;
     QPointer<KexiDockableWidget> propEditorDockableWidget;
     //! poits to kexi part which has been previously used to setup proppanel's tabs using

@@ -26,7 +26,7 @@
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
 
-class KTabWidget;
+class QTabWidget;
 class KexiWindow;
 
 namespace KexiPart
@@ -81,7 +81,7 @@ public:
      type (mime type) of its contents differs from previous one.
      For example, if a user switched from Table Designer to Form Designer,
      additional tab containing Form Designer's object tree should be shown. */
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
 protected:
     /*!

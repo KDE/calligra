@@ -472,8 +472,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wTabWidget->setClassName("KFDTabWidget");
     wTabWidget->addAlternateClassName("KTabWidget");
     wTabWidget->addAlternateClassName("QTabWidget");
-    wTabWidget->setSavingName("KTabWidget");
-    wTabWidget->setIncludeFileName("ktabwidget.h");
+    wTabWidget->setSavingName("QTabWidget");
+    wTabWidget->setIncludeFileName("qtabwidget.h");
     wTabWidget->setName(i18n("Tab Widget"));
     wTabWidget->setNamePrefix(
         i18nc("A prefix for identifiers of tab widgets. Based on that, identifiers such as "

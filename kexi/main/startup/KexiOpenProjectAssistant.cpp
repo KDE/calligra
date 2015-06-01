@@ -34,7 +34,7 @@
 
 #include <KexiIcon.h>
 
-#include <KTabWidget>
+#include <QTabWidget>
 
 #include <QTimer>
 #include <QVBoxLayout>
@@ -49,7 +49,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
 {
     setNextButtonVisible(true);
 
-    tabWidget = new KTabWidget;
+    tabWidget = new QTabWidget;
     tabWidget->setElideMode(Qt::ElideNone);
     tabWidget->setAutomaticResizeTabs(true);
     tabWidget->setDocumentMode(true);

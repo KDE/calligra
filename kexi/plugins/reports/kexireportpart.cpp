@@ -21,6 +21,7 @@
 #include "kexireportpart.h"
 
 #include <QLabel>
+#include <QTabWidget>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -29,7 +30,6 @@
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-#include <ktabwidget.h>
 
 #include "kexisourceselector.h"
 
@@ -169,7 +169,7 @@ KexiReportPart::TempData::TempData(QObject* parent)
 {
 }
 
-void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void KexiReportPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 {
     if (!d->sourceSelector) {
         d->sourceSelector = new KexiSourceSelector(KexiMainWindowIface::global()->project(), tab);

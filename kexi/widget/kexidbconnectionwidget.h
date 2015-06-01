@@ -26,7 +26,7 @@
 
 #include <kexiprojectdata.h>
 
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <kdialog.h>
 
 class QPushButton;
@@ -97,7 +97,7 @@ public:
     ~KexiDBConnectionWidgetDetails();
 };
 
-class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
+class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public QTabWidget
 {
     Q_OBJECT
 

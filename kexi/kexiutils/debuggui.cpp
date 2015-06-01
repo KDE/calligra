@@ -28,13 +28,13 @@
 #include <QThread>
 #include <QHeaderView>
 #include <QPushButton>
+#include <QTabWidget>
 
-#include <ktabwidget.h>
 #include <kguiitem.h>
 #include <kdebug.h>
 
 static DebugWindow* debugWindow = 0;
-static KTabWidget* debugWindowTab = 0;
+static QTabWidget* debugWindowTab = 0;
 static KexiDBDebugTreeWidget* kexiDBDebugPage = 0;
 static QTreeWidget* kexiAlterTableActionDebugPage = 0;
 
@@ -185,7 +185,7 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
     // (this is internal code - do not use i18n() here)
     debugWindow = new DebugWindow(parent);
     QBoxLayout *lyr = new QVBoxLayout(debugWindow);
-    debugWindowTab = new KTabWidget(debugWindow);
+    debugWindowTab = new QTabWidget(debugWindow);
     debugWindowTab->setObjectName("debugWindowTab");
     lyr->addWidget(debugWindowTab);
     debugWindow->resize(900, 600);

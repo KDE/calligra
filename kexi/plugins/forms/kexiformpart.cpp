@@ -21,9 +21,9 @@
 
 #include <QVBoxLayout>
 #include <QDomDocument>
+#include <QTabWidget>
 
 #include <kdebug.h>
-#include <ktabwidget.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 
@@ -341,7 +341,7 @@ KFormDesigner::WidgetTreeWidget* KexiFormPart::widgetTreePage() const
     return d->widgetTree;
 }
 
-void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void KexiFormPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 {
     if (!d->dataSourcePage) {
         d->dataSourcePage = new KexiDataSourcePage(0);
