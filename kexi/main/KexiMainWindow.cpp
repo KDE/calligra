@@ -1403,7 +1403,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         }
         const bool specialDir = fname.isEmpty();
         kDebug() << fname << ".............";
-        KFileDialog dlg(specialDir ? KUrl(startDir) : KUrl(),
+        KFileDialog dlg(specialDir ? QUrl(startDir) : QUrl(),
                         QString(), this);
         dlg.setModal(true);
         dlg.setMimeFilter(mimetypes);

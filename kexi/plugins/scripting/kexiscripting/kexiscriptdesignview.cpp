@@ -214,7 +214,7 @@ void KexiScriptDesignView::slotImport()
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
     const QString file = KFileDialog::getOpenFileName(
-        KUrl("kfiledialog:///kexiscriptingdesigner"),
+        QUrl("kfiledialog:///kexiscriptingdesigner"),
         filters.join(" "), this, i18nc("@title:window", "Import Script"));
     if (file.isEmpty())
         return;
@@ -235,7 +235,7 @@ void KexiScriptDesignView::slotExport()
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
     const QString file = KFileDialog::getSaveFileName(
-        KUrl("kfiledialog:///kexiscriptingdesigner"),
+        QUrl("kfiledialog:///kexiscriptingdesigner"),
         filters.join(" "), this, i18nc("@title:window", "Export Script"));
     if (file.isEmpty())
         return;
