@@ -370,7 +370,7 @@ void KexiUserFeedbackAgent::sendData()
     }
     kDebug() << postData;
     
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, QUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
@@ -399,7 +399,7 @@ void KexiUserFeedbackAgent::sendRedirectQuestion()
 {
     QByteArray postData = "get_url";
     kDebug() << postData;
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, QUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }

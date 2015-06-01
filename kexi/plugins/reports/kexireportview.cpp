@@ -233,10 +233,10 @@ void KexiReportView::slotExportAsPdf()
    }
 }
 
-KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
+QUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
                                   const QString &lastExportPath, const QString &extension)
 {
-    KUrl result;
+    QUrl result;
     QString defaultSavePath;
 
     if (lastExportPath.startsWith("kfiledialog:///")) {
@@ -245,7 +245,7 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
 
     // loop until an url has been chosen or the file selection has been cancelled
     while (true) {
-        result = KFileDialog::getSaveUrl(KUrl(defaultSavePath), mimetype, this, caption);
+        result = KFileDialog::getSaveUrl(QUrl(defaultSavePath), mimetype, this, caption);
 
         // not cancelled?
         if (result.isValid()) {
@@ -268,7 +268,7 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     return result;
 }
 
-void KexiReportView::openExportedDocument(const KUrl& destination)
+void KexiReportView::openExportedDocument(const QUrl &destination)
 {
     const int answer =
         KMessageBox::questionYesNo(
