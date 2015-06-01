@@ -712,7 +712,7 @@ protected:
       is the name of the modified property, and @a value is the new value of this property. */
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
-    /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
+    /*! This function creates a QLineEdit to input some text and edit a widget's contents. */
     void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
 
     QString inlineEditorText() const;

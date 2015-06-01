@@ -116,7 +116,7 @@ public:
     virtual QVariant visibleValue();
 
     /*! \return 'readOnly' flag for this item. The flag is usually taken from
-     the item's widget, e.g. KLineEdit::isReadOnly().
+     the item's widget, e.g. QLineEdit::isReadOnly().
      By default, always returns false. */
     virtual bool isReadOnly() const;
 

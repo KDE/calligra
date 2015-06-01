@@ -25,9 +25,9 @@
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QVector>
+#include <QLineEdit>
 
 #include <klocale.h>
-#include <klineedit.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kio/global.h>
@@ -64,7 +64,7 @@ public:
     QString delimiter;
     QVector<QString> availableDelimiters;
     KComboBox* combo;
-    KLineEdit* delimiterEdit;
+    QLineEdit* delimiterEdit;
 };
 
 class KexiCSVCommentWidget::Private
@@ -77,7 +77,7 @@ public:
     QString commentSymbol;
     QVector<QString> availablecommentSymbols;
     KComboBox* combo;
-    KLineEdit* commentSymbolEdit;
+    QLineEdit* commentSymbolEdit;
 };
 
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent)
@@ -99,7 +99,7 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     lyr->addWidget(d->combo);
     setFocusProxy(d->combo);
 
-    d->delimiterEdit = new KLineEdit(this);
+    d->delimiterEdit = new QLineEdit(this);
     d->delimiterEdit->setObjectName("d->delimiterEdit");
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));
     d->delimiterEdit->setMaxLength(1);

@@ -30,9 +30,9 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QStyleOptionFrameV2>
+#include <QLineEdit>
 
 #include <klocale.h>
-#include <klineedit.h>
 #include <kguiitem.h>
 #include <kdebug.h>
 
@@ -89,9 +89,9 @@ public:
     QToolButton *navBtnNext;
     QToolButton *navBtnLast;
     QToolButton *navBtnNew;
-    KLineEdit *navRecordNumber;
+    QLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
-    KLineEdit *navRecordCount; //!< readonly counter
+    QLineEdit *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
     QAbstractScrollArea *view;
 
@@ -133,7 +133,7 @@ KexiRecordNavigator::KexiRecordNavigator(QAbstractScrollArea &parentView, QWidge
 
     d->lyr->addSpacing(2);
 
-    d->navRecordNumber = new KLineEdit(this);
+    d->navRecordNumber = new QLineEdit(this);
     d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignVCenter);
     KexiUtils::WidgetMargins margins;
     margins.copyToWidget(d->navRecordNumber);
@@ -152,7 +152,7 @@ KexiRecordNavigator::KexiRecordNavigator(QAbstractScrollArea &parentView, QWidge
     lbl_of->setAlignment(Qt::AlignCenter);
     d->lyr->addWidget(lbl_of, 0, Qt::AlignVCenter);
 
-    d->navRecordCount = new KLineEdit(this);
+    d->navRecordCount = new QLineEdit(this);
     d->lyr->addWidget(d->navRecordCount, 0, Qt::AlignVCenter);
     d->navRecordCount->setFrame(false);
     d->navRecordCount->setReadOnly(true);

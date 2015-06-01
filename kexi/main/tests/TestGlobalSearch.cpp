@@ -29,13 +29,13 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
-#include <klineedit.h>
 
 #include <QtTest>
 #include <QtTest/qtestkeyboard.h>
 #include <QtTest/qtestmouse.h>
 #include <QFile>
 #include <QTreeView>
+#include <QLineEdit>
 
 const int GUI_DELAY = 10;
 
@@ -83,7 +83,7 @@ void TestGlobalSearch::testGlobalSearch()
     QVERIFY(kapp);
     QCOMPARE(result, 0);
 
-    KLineEdit *lineEdit = kexiTester().widget<KLineEdit*>("globalSearch.lineEdit");
+    QLineEdit *lineEdit = kexiTester().widget<QLineEdit*>("globalSearch.lineEdit");
     QVERIFY(lineEdit);
     QTreeView *treeView = kexiTester().widget<QTreeView*>("globalSearch.treeView");
     QVERIFY(treeView);

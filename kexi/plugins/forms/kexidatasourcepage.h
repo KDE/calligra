@@ -70,7 +70,8 @@ Q_SIGNALS:
                           const QStringList& fields);
 
 protected Q_SLOTS:
-    void slotFormDataSourceTextChanged(const QString & string);
+    void slotWidgetDataSourceTextChanged(const QString &text);
+    void slotFormDataSourceTextChanged(const QString &text);
     void slotFormDataSourceChanged();
     void slotFieldSelected();
     void slotGotoSelected();

@@ -25,11 +25,11 @@
 
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <klineedit.h>
 #include <kdebug.h>
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QLineEdit>
 
 KexiNameDialogValidator::KexiNameDialogValidator()
 {

@@ -80,7 +80,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
     connect(this, SIGNAL(returnPressed(QString)),
             this, SLOT(slotReturnPressed(QString)));
-    connect(lineEdit(), SIGNAL(clearButtonClicked()), this, SLOT(slotClearButtonClicked()));
+    connect(lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotTextChanged(QString)));
 
     d->tableIcon = koIcon("table");
     d->queryIcon = koIcon("query");
@@ -273,6 +273,13 @@ void KexiDataSourceComboBox::slotActivated(int index)
     if (index >= d->firstTableIndex() && index < count() && d->prevIndex != currentIndex()) {
         d->prevIndex = currentIndex();
         emit dataSourceChanged();
+    }
+}
+
+void KexiDataSourceComboBox::slotTextChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        slotClearButtonClicked();
     }
 }
 

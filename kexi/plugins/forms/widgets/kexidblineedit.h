@@ -24,7 +24,7 @@
 #include <QValidator>
 #include <QEvent>
 #include <QPaintEvent>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
@@ -40,7 +40,7 @@ class KexiDBLineEditStyle;
 /*! Handles many data types. User input is validated by using validators
  and/or input masks.
 */
-class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
+class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public QLineEdit,
                                             protected KexiDBTextWidgetInterface,
                                             public KexiFormDataItemInterface,
                                             public KexiSubwidgetInterface,
@@ -50,9 +50,14 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
-    Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage) // internal, only for compatibility with Kexi 2
-                                                                             // (equivalent of placeholderText)
-
+    Q_PROPERTY(QString clickMessage READ placeholderText
+                                    WRITE setPlaceholderText) // Internal, equivalent of placeholderText
+                                                              // For backward compatibility Kexi projects
+                                                              // created with Qt < 4.7.
+    Q_PROPERTY(QString showClearButton READ isClearButtonEnabled
+                                       WRITE setClearButtonEnabled) // Internal, equivalent of clearButtonEnabled
+                                                                    // For backward compatibility Kexi projects
+                                                                    // created with Qt 4.
 public:
     explicit KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
@@ -111,9 +116,6 @@ public:
     //! Used when read only flag is true
     int originalCursorPosition() const;
 
-    //! @return the message set with setClickMessage (equivalent of placeholderText)
-    QString clickMessage() const;
-
 public Q_SLOTS:
     void setDataSource(const QString &ds);
 
@@ -138,7 +140,8 @@ public Q_SLOTS:
 
     //! This makes the line edit display a grayed-out hinting text as long as
     //! the user didn't enter any text. Equivalent of placeholderText. Calls QLineEdit::placeholderText().
-    void setClickMessage(const QString &msg);
+    //! For backward compatibility Kexi projects created with Qt < 4.7.
+    void setPlaceholderText(const QString &msg);
 
 protected Q_SLOTS:
     void slotTextChanged(const QString&);
@@ -177,7 +180,7 @@ protected:
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
-    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
+    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when QLineEdit::isReadOnly
     //! is still false.
     bool m_internalReadOnly;
 

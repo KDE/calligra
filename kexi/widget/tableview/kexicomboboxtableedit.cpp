@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QScrollBar>
+#include <QLineEdit>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -36,8 +37,6 @@
 #include "KexiTableScrollArea.h"
 #include "KexiTableScrollAreaWidget.h"
 #include "kexi.h"
-
-#include <klineedit.h>
 
 // the right margin is too large when the editor is show, reduce it
 const int RIGHT_MARGIN_DELTA = 6;

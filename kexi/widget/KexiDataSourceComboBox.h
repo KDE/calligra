@@ -79,6 +79,7 @@ protected Q_SLOTS:
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
     void slotActivated(int index);
     void slotReturnPressed(const QString & text);
+    void slotTextChanged(const QString &text);
     void slotClearButtonClicked();
 
 protected:

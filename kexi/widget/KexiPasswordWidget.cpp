@@ -27,10 +27,10 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QPalette>
+#include <QLineEdit>
 
 #include <kcombobox.h>
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktitlewidget.h>
@@ -75,7 +75,7 @@ KexiPasswordWidget::~KexiPasswordWidget()
     delete d;
 }
 
-static void setLineEditReadOnly(KLineEdit *edit, bool readOnly)
+static void setLineEditReadOnly(QLineEdit *edit, bool readOnly)
 {
     QPalette p(edit->parentWidget()->palette());
     p.setColor(QPalette::Base, Qt::transparent);
@@ -395,7 +395,7 @@ void KexiPasswordWidget::setKnownLogins( const QMap<QString, QString>& knownLogi
         d->ui.formLayout->removeWidget(d->ui.userEdit);
         delete d->ui.userEdit;
         d->userEditCombo = new KComboBox(true, this);
-        d->ui.userEdit = qobject_cast<KLineEdit*>(d->userEditCombo->lineEdit());
+        d->ui.userEdit = qobject_cast<QLineEdit*>(d->userEditCombo->lineEdit());
         d->ui.userNameLabel->setBuddy( d->userEditCombo );
         d->ui.formLayout->setWidget( d->commentRow, QFormLayout::FieldRole, d->userEditCombo );
         setTabOrder( d->ui.userEdit, d->ui.anonymousCheckBox );

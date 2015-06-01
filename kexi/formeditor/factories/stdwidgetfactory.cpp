@@ -36,12 +36,12 @@
 #include <QTimeEdit>
 #include <QDateEdit>
 #include <QDateTimeEdit>
+#include <QLineEdit>
 
 #include <kpushbutton.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <ktextedit.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -222,9 +222,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 
     KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
     wLineEdit->setIconName(koIconName("lineedit"));
-    wLineEdit->setClassName("KLineEdit");
-    wLineEdit->addAlternateClassName("QLineEdit");
-    wLineEdit->setIncludeFileName("klineedit.h");
+    wLineEdit->setClassName("QLineEdit");
+    wLineEdit->addAlternateClassName("KLineEdit");
+    wLineEdit->setIncludeFileName("qlineedit.h");
     wLineEdit->setName(/* no i18n needed */ "Line Edit");
     wLineEdit->setNamePrefix(/* no i18n needed */ "lineEdit");
     wLineEdit->setDescription(/* no i18n needed */ "A widget to input text");
@@ -414,13 +414,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     setValueDescription("LogText", i18nc("For Text Format", "Log"));
     setPropertyDescription("openExternalLinks", i18nc("property: Can open external links in label", "Open Ext. Links"));
 
-    //KLineEdit
-#if QT_VERSION  >= 0x040700
+    //QLineEdit
     setPropertyDescription("placeholderText", i18nc("Property: line edit's placeholder text", "Placeholder Text"));
-#else
-    setPropertyDescription("clickMessage", i18nc("Property: \"Click Me\",message for line edit", "Click Message"));
-#endif
-    setPropertyDescription("showClearButton", i18nc("Property: Show Clear Button", "Clear Button"));
+    setPropertyDescription("clearButtonEnabled", i18nc("Property: Clear Button Enabled", "Clear Button"));
     //for EchoMode
     setPropertyDescription("passwordMode", i18nc("Property: Password Mode for line edit", "Password Mode"));
     setPropertyDescription("squeezedTextEnabled", i18nc("Property: Squeezed Text Mode for line edit", "Squeezed Text"));
@@ -464,8 +460,8 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new QLabel(text, p);
     else if (c == "KexiPictureLabel")
         w = new KexiPictureLabel(koDesktopIcon("image-x-generic"), p);
-    else if (c == "KLineEdit") {
-        w = new KLineEdit(p);
+    else if (c == "QLineEdit") {
+        w = new QLineEdit(p);
     } else if (c == "KPushButton")
         w = new KPushButton(text, p);
 
@@ -555,8 +551,8 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
 bool
 StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
-    if (args.classname == "KLineEdit") {
-        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+    if (args.classname == "QLineEdit") {
+        QLineEdit *lineedit = static_cast<QLineEdit*>(args.widget);
         args.text = lineedit->text();
         args.alignment = lineedit->alignment();
         args.useFrame = true;
@@ -634,8 +630,8 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
 bool
 StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
 {
-    if (classname == "KLineEdit")
-        dynamic_cast<KLineEdit*>(w)->clear();
+    if (classname == "QLineEdit")
+        dynamic_cast<QLineEdit*>(w)->clear();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget")
         dynamic_cast<QTreeWidget*>(w)->clear();
@@ -889,7 +885,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
     } else if (classname == "QLabel") {
         if (property == "pixmap")
             return false;
-    } else if (classname == "KLineEdit") {
+    } else if (classname == "QLineEdit") {
         if (property == "vAlign")
             return false;
     } else if (classname == "KTextEdit")

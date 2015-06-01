@@ -144,8 +144,6 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->rowSourceCombo = new KexiDataSourceComboBox;
     d->rowSourceCombo->setObjectName("rowSourceCombo");
     d->rowSourceLabel->setBuddy(d->rowSourceCombo);
-    connect(d->rowSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearRowSourceSelection()));
     mainLayout()->addWidget(d->rowSourceCombo);
 
     addWidgetSpacer();
@@ -160,8 +158,6 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->boundColumnCombo = new KexiFieldComboBox();
     d->boundColumnCombo->setObjectName("boundColumnCombo");
     d->boundColumnLabel->setBuddy(d->boundColumnCombo);
-    connect(d->boundColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearBoundColumnSelection()));
     mainLayout()->addWidget(d->boundColumnCombo);
 
     addWidgetSpacer();
@@ -176,14 +172,16 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->visibleColumnCombo = new KexiFieldComboBox;
     d->visibleColumnCombo->setObjectName("visibleColumnCombo");
     d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
-    connect(d->visibleColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearVisibleColumnSelection()));
     mainLayout()->addWidget(d->visibleColumnCombo);
 
     mainLayout()->addStretch(1);
 
     connect(d->rowSourceCombo, SIGNAL(textChanged(QString)),
             this, SLOT(slotRowSourceTextChanged(QString)));
+    connect(d->boundColumnCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotBoundColumnTextChanged(QString)));
+    connect(d->visibleColumnCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotVisibleColumnTextChanged(QString)));
     connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
     connect(d->boundColumnCombo, SIGNAL(selected()), this, SLOT(slotBoundColumnSelected()));
     connect(d->visibleColumnCombo, SIGNAL(selected()), this, SLOT(slotVisibleColumnSelected()));
@@ -238,6 +236,13 @@ void KexiLookupColumnPage::assignPropertySet(KPropertySet* propertySet)
     d->propertySetEnabled = true;
 }
 
+void KexiLookupColumnPage::slotBoundColumnTextChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        clearBoundColumnSelection();
+    }
+}
+
 void KexiLookupColumnPage::clearBoundColumnSelection()
 {
     d->boundColumnCombo->setEditText("");
@@ -260,6 +265,13 @@ void KexiLookupColumnPage::slotBoundColumnSelected()
     // update property set
     if (d->hasPropertySet()) {
         d->changeProperty("boundColumn", d->boundColumnCombo->indexOfField());
+    }
+}
+
+void KexiLookupColumnPage::slotVisibleColumnTextChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        clearVisibleColumnSelection();
     }
 }
 
@@ -320,9 +332,12 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 //! @todo update d->propertySet ^^
 }
 
-void KexiLookupColumnPage::slotRowSourceTextChanged(const QString & string)
+void KexiLookupColumnPage::slotRowSourceTextChanged(const QString &text)
 {
-    Q_UNUSED(string);
+    if (text.isEmpty()) {
+        clearRowSourceSelection();
+    }
+
     const bool enable = d->rowSourceCombo->isSelectionValid();
     if (enable) {
         updateBoundColumnWidgetsAvailability();

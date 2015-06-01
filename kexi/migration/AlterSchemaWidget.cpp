@@ -36,7 +36,6 @@
 #include <KexiWindow.h>
 #include <kexiutils/identifier.h>
 #include <widget/KexiNameWidget.h>
-#include <klineedit.h>
 
 using namespace KexiMigration;
 

@@ -28,12 +28,12 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QHBoxLayout>
+#include <QLineEdit>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcolorscheme.h>
-#include <klineedit.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
@@ -41,10 +41,10 @@
 #include <kexidb/fieldvalidator.h>
 
 //! @internal
-class MyLineEdit : public KLineEdit
+class MyLineEdit : public QLineEdit
 {
 public:
-    explicit MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
+    explicit MyLineEdit(QWidget *parent) : QLineEdit(parent) {}
 protected:
     virtual void drawFrame(QPainter * p) {
         p->setPen(QPen(palette().text(), 1.0));

@@ -26,7 +26,7 @@
 
 #include <kexi_export.h>
 
-class KLineEdit;
+class QLineEdit;
 
 namespace KexiDB
 {
@@ -56,8 +56,8 @@ public:
 
     QLabel* captionLabel() const;
     QLabel* nameLabel() const;
-    KLineEdit* captionLineEdit() const;
-    KLineEdit* nameLineEdit() const;
+    QLineEdit* captionLineEdit() const;
+    QLineEdit* nameLineEdit() const;
 
     QString messageText() const;
     void setMessageText(const QString& msg);

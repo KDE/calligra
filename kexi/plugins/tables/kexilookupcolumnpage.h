@@ -55,10 +55,12 @@ Q_SIGNALS:
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
 protected Q_SLOTS:
-    void slotRowSourceTextChanged(const QString & string);
+    void slotRowSourceTextChanged(const QString &text);
     void slotRowSourceChanged();
     void slotGotoSelectedRowSource();
+    void slotBoundColumnTextChanged(const QString &text);
     void slotBoundColumnSelected();
+    void slotVisibleColumnTextChanged(const QString &text);
     void slotVisibleColumnSelected();
 
 protected:

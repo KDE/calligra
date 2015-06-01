@@ -92,8 +92,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_widgetDataSourceCombo->setObjectName("sourceFieldCombo");
     m_widgetDataSourceCombo->setContentsMargins(0, 0, 0, 0);
     m_widgetDSLabel->setBuddy(m_widgetDataSourceCombo);
-    connect(m_widgetDataSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearWidgetDataSourceSelection()));
+    connect(m_widgetDataSourceCombo->lineEdit(), SIGNAL(textChanged(QString)),
+        this, SLOT(slotWidgetDataSourceTextChanged(QString)));
     mainLayout()->addWidget(m_widgetDataSourceCombo);
     
     m_widgetDataSourceComboSpacer = addWidgetSpacer();
@@ -129,8 +129,6 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_formDataSourceCombo->setObjectName("dataSourceCombo");
     m_formDataSourceCombo->setContentsMargins(0, 0, 0, 0);
     m_dataSourceLabel->setBuddy(m_formDataSourceCombo);
-    connect(m_formDataSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearFormDataSourceSelection()));
     mainLayout()->addWidget(m_formDataSourceCombo);
 
     m_formDataSourceComboSpacer = addWidgetSpacer();
@@ -231,6 +229,13 @@ void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
     m_insideClearFormDataSourceSelection = false;
 }
 
+void KexiDataSourcePage::slotWidgetDataSourceTextChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        clearWidgetDataSourceSelection();
+    }
+}
+
 void KexiDataSourcePage::clearWidgetDataSourceSelection()
 {
     m_widgetDataSourceCombo->setFieldOrExpression(QString());
@@ -273,11 +278,12 @@ void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, 
 #endif
 }
 
-void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString & string)
+void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString &text)
 {
-    Q_UNUSED(string);
     const bool enable = m_formDataSourceCombo->isSelectionValid();
-    if (!enable) {
+    if (text.isEmpty()) {
+        clearFormDataSourceSelection();
+    } else if (!enable) {
         clearFormDataSourceSelection(m_formDataSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/);
     }
     updateSourceFieldWidgetsAvailability();

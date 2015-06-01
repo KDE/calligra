@@ -94,7 +94,7 @@ public:
 
     /*! Changes 'read only' flag, for this widget.
      Typically this flag can be passed to a widget itself,
-     e.g. KLineEdit::setReadOnly(bool). */
+     e.g. QLineEdit::setReadOnly(bool). */
     virtual void setReadOnly(bool readOnly) = 0;
 
     //! \return database column information for this item

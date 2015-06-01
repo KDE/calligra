@@ -32,11 +32,11 @@
 #include <QButtonGroup>
 #include <QDir>
 #include <QApplication>
+#include <QLineEdit>
 
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <klineedit.h>
 
 #include <KexiIcon.h>
 
@@ -99,9 +99,9 @@ public:
     KexiPrjTypeSelector *dstPrjTypeSelector;
 
     KexiConnectionSelectorWidget *srcConn, *dstConn;
-    KLineEdit *dstNewDBTitleLineEdit;
+    QLineEdit *dstNewDBTitleLineEdit;
     QLabel *dstNewDBNameLabel;
-    KLineEdit *dstNewDBNameLineEdit;
+    QLineEdit *dstNewDBNameLineEdit;
 
     QLabel *dstNewDBNameUrlLabel;
     KUrlRequester *dstNewDBNameUrl;
@@ -343,7 +343,7 @@ void ImportWizard::setupDstTitle()
         d->dstTitlePageWidget->file_requester);
     d->dstNewDBNameLabel = new QLabel(i18n("Destination project's name:"), d->dstTitlePageWidget);
     d->dstTitlePageWidget->formLayout->setWidget(2, QFormLayout::LabelRole, d->dstNewDBNameLabel);
-    d->dstNewDBNameLineEdit = new KLineEdit(d->dstTitlePageWidget);
+    d->dstNewDBNameLineEdit = new QLineEdit(d->dstTitlePageWidget);
     d->dstNewDBNameLineEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
     idValidator->setLowerCaseForced(true);
