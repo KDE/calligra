@@ -26,6 +26,15 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiContextMessage.h>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kfile.h>
+#include <kurlcombobox.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
+#include <kurlrequester.h>
+
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
@@ -34,17 +43,7 @@
 #include <QApplication>
 #include <QMimeDatabase>
 #include <QMimeType>
-
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <kfile.h>
-#include <kurlcombobox.h>
-#include <kactioncollection.h>
-#include <kfiledialog.h>
-#include <kurlrequester.h>
-#include <kurl.h>
+#include <QUrl>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -70,7 +69,7 @@ public:
         }
     }
 
-    void setUrl(const KUrl& url)
+    void setUrl(const QUrl &url)
     {
         if (requester) {
             requester->setUrl(url);
@@ -98,7 +97,7 @@ public:
 //------------------
 
 KexiStartupFileHandler::KexiStartupFileHandler(
-    const KUrl &startDirOrVariable, Mode mode, KFileDialog *dialog)
+    const QUrl &startDirOrVariable, Mode mode, KFileDialog *dialog)
     :  QObject(dialog->parent())
     , d(new Private)
 {
@@ -107,7 +106,7 @@ KexiStartupFileHandler::KexiStartupFileHandler(
 }
 
 KexiStartupFileHandler::KexiStartupFileHandler(
-    const KUrl &startDirOrVariable, Mode mode, KUrlRequester *requester)
+    const QUrl &startDirOrVariable, Mode mode, KUrlRequester *requester)
     :  QObject(requester->parent())
     , d(new Private)
 {
@@ -116,11 +115,11 @@ KexiStartupFileHandler::KexiStartupFileHandler(
     init(startDirOrVariable, mode);
 }
 
-void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
+void KexiStartupFileHandler::init(const QUrl &startDirOrVariable, Mode mode)
 {
     connect(d->dialog, SIGNAL(accepted()), this, SLOT(slotAccepted()));
-    KUrl url;
-    if (startDirOrVariable.protocol() == "kfiledialog") {
+    QUrl url;
+    if (startDirOrVariable.scheme() == "kfiledialog") {
         url = KFileDialog::getStartUrl(startDirOrVariable, d->recentDirClass);
     }
     else {
@@ -144,14 +143,15 @@ void KexiStartupFileHandler::saveRecentDir()
     if (!d->recentDirClass.isEmpty()) {
         kDebug() << d->recentDirClass;
         
-        KUrl dirUrl;
+        QUrl dirUrl;
         if (d->requester)
             dirUrl = d->requester->url();
         else if (d->dialog)
             dirUrl = d->dialog->selectedUrl();
         kDebug() << dirUrl;
         if (dirUrl.isValid() && dirUrl.isLocalFile()) {
-            dirUrl.setFileName(QString());
+            dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+            dirUrl.setPath(dirUrl.path() + QString());
             kDebug() << "Added" << dirUrl.url() << "to recent dirs class" << d->recentDirClass;
             KRecentDirs::add(d->recentDirClass, dirUrl.url());
         }
@@ -337,7 +337,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 {
     //kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
-    KUrl url;
+    QUrl url;
     if (d->requester)
         url = d->requester->url();
     else
@@ -352,7 +352,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
         d->highlightedUrl = baseUrl();
         const QString firstUrl(locationEdit()->lineEdit()->text());   // FIXME: find first...
         if (QDir::isAbsolutePath(firstUrl))
-            d->highlightedUrl = KUrl::fromPath(firstUrl);
+            d->highlightedUrl = QUrl::fromLocalFile(firstUrl);
         else
             d->highlightedUrl.addPath(firstUrl);
     }
@@ -384,7 +384,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
                 }
                 path += (QLatin1String(".") + defaultExtension);
                 kDebug() << "appended extension, result:" << path;
-                url = KUrl(path);
+                url = QUrl(path);
                 d->setUrl(url);
             }
         }
@@ -432,11 +432,12 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
 
 void KexiStartupFileHandler::updateUrl(const QString &name)
 {
-    KUrl url = d->requester->url();
+    QUrl url = d->requester->url();
     QString fn = KexiUtils::stringToFileName(name);
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
-    url.setFileName(fn);
+    url = url.adjusted(QUrl::RemoveFilename);
+    url.setPath(url.path() + fn);
     d->requester->setUrl(url);
 }
 
@@ -473,7 +474,7 @@ bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 
 void KexiStartupFileHandler::setLocationText(const QString& fn)
 {
-    d->dialog->locationEdit()->setUrl(KUrl(fn));
+    d->dialog->locationEdit()->setUrl(QUrl(fn));
 }
 
 void KexiStartupFileHandler::setDefaultExtension(const QString& ext)
