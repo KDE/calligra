@@ -27,11 +27,13 @@
 #include <QAction>
 #include <QWidget>
 #include <QApplication>
+#include <QPushButton>
+
 #include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
-
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
@@ -44,10 +46,11 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     setMinimumWidth(minimumHeight());
     QPair< KGuiItem, KGuiItem > backForward = KStandardGuiItem::backAndForward();
     m_view = new QWebView(this);
-    m_reload = new KPushButton(i18n("Reload"),this);
-    m_stop = new KPushButton(KStandardGuiItem::stop());
-    m_back = new KPushButton(backForward.first);
-    m_forward = new KPushButton(backForward.second);
+    m_reload = new QPushButton(i18n("Reload"),this);
+    m_stop = new QPushButton;
+    KGuiItem::assign(m_stop,KStandardGuiItem::stop());
+    m_back = new QPushButton(backForward.first);
+    m_forward = new QPushButton(backForward.second);
     h_layout = new QHBoxLayout;
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
