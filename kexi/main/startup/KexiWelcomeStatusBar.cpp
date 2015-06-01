@@ -38,7 +38,6 @@
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <kcodecs.h>
-#include <ktempdir.h>
 #include <kde_file.h>
 #include <KSharedConfig>
 
@@ -55,6 +54,8 @@
 #include <QTimer>
 #include <QCryptographicHash>
 #include <QStandardPaths>
+#include <QTemporaryDir>
+#include <QDir>
 
 #include <stdio.h>
 
@@ -201,13 +202,13 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     foreach (const QString &fname, d->fileNamesToUpdate) {
         sourceFiles.append(KUrl(uiPath(fname)));
     }
-    KTempDir tempDir(QDir::tempPath() + "/kexi-status"));
+    QTemporaryDir tempDir(QDir::tempPath() + "/kexi-status");
     tempDir.setAutoRemove(false);
-    d->tempDir = tempDir.name();
-    kDebug() << tempDir.name();
+    d->tempDir = tempDir.path();
+    kDebug() << tempDir.path();
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
-                                        KUrl("file://" + tempDir.name()),
-                                        KIO::HideProgressInfo | KIO::Overwrite);
+                                      KUrl("file://" + tempDir.path()),
+                                      KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
     //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
     //         << (dir + fname);
@@ -241,8 +242,6 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
     }
 }
 
-#include <QDir>
-
 void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
 {
     if (job->error()) {
@@ -269,7 +268,7 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
             }
         }
     }
-    KTempDir::removeDir(d->tempDir);
+    QDir(d->tempDir).removeRecursively();
 }
 
 // ---
