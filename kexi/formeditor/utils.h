@@ -27,7 +27,6 @@
 #include <QActionGroup>
 #include <kexi_export.h>
 
-//! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
 typedef QTabWidget TabWidgetBase;
 //! @todo uncomment
 //!//#define USE_KTabWidget

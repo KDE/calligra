@@ -29,9 +29,11 @@
 
 #include <QApplication>
 #include <QMainWindow>
+#include <QTabWidget>
 
 class QPaintEvent;
 class KexiProjectData;
+class KexiMainWidget;
 
 namespace KexiDB
 {
@@ -44,12 +46,8 @@ class Info;
 class Part;
 }
 
-class KexiMainWidget;
-
-#include <ktabwidget.h>
-
 //! @internal tab widget acting as central widget for KexiMainWindow
-class KexiMainWindowTabWidget : public KTabWidget
+class KexiMainWindowTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:

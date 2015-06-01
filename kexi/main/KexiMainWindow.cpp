@@ -221,7 +221,7 @@ QToolButton* KexiDockWidget::closeButton() const
 //-------------------------------------------------
 
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget* mainWidget)
-        : KTabWidget(parent)
+        : QTabWidget(parent)
         , m_mainWidget(mainWidget)
         , m_tabIndex(-1)
 {
@@ -255,7 +255,7 @@ KexiMainWindowTabWidget::~KexiMainWindowTabWidget()
 void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 {
     if (count() > 0)
-        KTabWidget::paintEvent(event);
+        QTabWidget::paintEvent(event);
     else
         QWidget::paintEvent(event);
 }
@@ -295,7 +295,7 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 //! @todo add "&Detach Tab"
     setTabIndexFromContextMenu(index);
     menu.exec(point);
-    KTabWidget::contextMenu(index, point);
+    QTabWidget::contextMenu(index, point);
 }
 
 void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
@@ -1930,7 +1930,7 @@ void KexiMainWindow::setupPropertyEditor()
         QVBoxLayout *propEditorDockWidgetContentsLyr = new QVBoxLayout(propEditorDockWidgetContents);
         propEditorDockWidgetContentsLyr->setContentsMargins(0, 0, 0, 0);
 
-        d->propEditorTabWidget = new KTabWidget(propEditorDockWidgetContents);
+        d->propEditorTabWidget = new QTabWidget(propEditorDockWidgetContents);
         d->propEditorTabWidget->setDocumentMode(true);
         propEditorDockWidgetContentsLyr->addWidget(d->propEditorTabWidget);
         d->propEditor = new KexiPropertyEditorView(d->propEditorTabWidget);
