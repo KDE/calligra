@@ -303,7 +303,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
                 "button"));
         wi->setDescription(i18n("A button for executing actions"));
         wi->setParentFactoryName("stdwidgets");
-        wi->setInheritedClassName("KPushButton");
+        wi->setInheritedClassName("QPushButton");
         addClass(wi);
     }
     {
@@ -527,7 +527,7 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     else if (c == "KexiDBComboBox") {
         w = new KexiDBComboBox(p);
     }
-    else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton") {
+    else if (c == "QPushButton" || c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton") {
         w = new KexiDBPushButton(text, p);
     }
     else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
