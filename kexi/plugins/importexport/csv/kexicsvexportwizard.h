@@ -28,7 +28,7 @@
 
 class QCheckBox;
 class QGroupBox;
-class KPushButton;
+class QPushButton;
 class KexiFileWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
@@ -95,8 +95,8 @@ protected:
     QWidget* m_exportOptionsWidget;
     KPageWidgetItem *m_fileSavePage;
     KPageWidgetItem *m_exportOptionsPage;
-    KPushButton *m_showOptionsButton;
-    KPushButton *m_defaultsBtn;
+    QPushButton *m_showOptionsButton;
+    QPushButton *m_defaultsBtn;
     QGroupBox* m_exportOptionsSection;
     KexiCSVInfoLabel *m_infoLblFrom, *m_infoLblTo;
     KexiCSVDelimiterWidget* m_delimiterWidget;

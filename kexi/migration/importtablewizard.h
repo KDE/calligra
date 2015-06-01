@@ -81,7 +81,7 @@ Q_OBJECT
         QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_progressLbl, *m_rowsImportedLbl, *m_finishLbl;
         QProgressBar *m_importingProgressBar;
         QCheckBox *m_finishCheckBox;
-        KPushButton* m_importOptionsButton;
+        QPushButton* m_importOptionsButton;
         bool m_importComplete;
         bool m_importWasCanceled;
         unsigned m_rowCount;

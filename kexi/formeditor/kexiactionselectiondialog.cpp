@@ -32,11 +32,10 @@
 
 #include <kaction.h>
 #include <kdebug.h>
-#include <kpushbutton.h>
 
 #include <QBitmap>
 #include <QLabel>
-
+#include <QPushButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -743,7 +742,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
 
 void KexiActionSelectionDialog::updateOKButtonStatus()
 {
-    KPushButton *btn = button(Ok);
+    QPushButton *btn = button(Ok);
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
     
     //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;

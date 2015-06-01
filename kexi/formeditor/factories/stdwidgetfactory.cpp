@@ -37,8 +37,8 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 #include <QLineEdit>
+#include <QPushButton>
 
-#include <kpushbutton.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <ktextedit.h>
@@ -232,9 +232,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
     wPushButton->setIconName(koIconName("button"));
-    wPushButton->setClassName("KPushButton");
-    wPushButton->addAlternateClassName("QPushButton");
-    wPushButton->setIncludeFileName("kpushbutton.h");
+    wPushButton->setClassName("QPushButton");
+    wPushButton->addAlternateClassName("KPushButton");
+    wPushButton->setIncludeFileName("qpushbutton.h");
     wPushButton->setName(/* no i18n needed */ "Push Button");
     wPushButton->setNamePrefix(/* no i18n needed */ "button");
     wPushButton->setDescription(/* no i18n needed */ "A simple push button to execute actions");
@@ -462,9 +462,9 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KexiPictureLabel(koDesktopIcon("image-x-generic"), p);
     else if (c == "QLineEdit") {
         w = new QLineEdit(p);
-    } else if (c == "KPushButton")
-        w = new KPushButton(text, p);
-
+    } else if (c == "QPushButton") {
+        w = new QPushButton(text, p);
+    }
     else if (c == "QRadioButton")
         w = new QRadioButton(text, p);
 
@@ -570,8 +570,8 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         }
         return true;
     }
-    else if (args.classname == "KPushButton") {
-        KPushButton *push = static_cast<KPushButton*>(args.widget);
+    else if (args.classname == "QPushButton") {
+        QPushButton *push = static_cast<QPushButton*>(args.widget);
         QStyleOption option;
         option.initFrom(push);
         args.text = push->text();
@@ -683,7 +683,7 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
                 QStyle::SE_CheckBoxContents, &option, widget);
         p += r.topLeft();
         s.setWidth(r.width());
-    } else if (classname == "KPushButton") {
+    } else if (classname == "QPushButton") {
         QStyleOption option;
         option.initFrom(widget);
         r = widget->style()->subElementRect(
@@ -907,7 +907,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
         ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoRepeat");
     } else if (classname == "QRadioButton") {
         ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoRepeat");
-    } else if (classname == "KPushButton") {
+    } else if (classname == "QPushButton") {
 //! @todo reenable autoDefault / default if the top level window is dialog...
         ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoDefault" && property != "default");
     }

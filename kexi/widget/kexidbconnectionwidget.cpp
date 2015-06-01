@@ -54,7 +54,7 @@ public:
             : connectionOnly(false) {
     }
 
-    KPushButton *btnSaveChanges, *btnTestConnection;
+    QPushButton *btnSaveChanges, *btnTestConnection;
     bool connectionOnly;
     KexiProjectData data;
     KexiDBDriverComboBox *driversCombo;
@@ -103,7 +103,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
     hbox->addStretch(2);
-    d->btnSaveChanges = new KPushButton(
+    d->btnSaveChanges = new QPushButton(
         KGuiItem(
             i18n("Save Changes"), "document-save",
             i18n("Save all changes made to this connection information"),
@@ -116,7 +116,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
     d->btnSaveChanges->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    d->btnTestConnection = new KPushButton(
+    d->btnTestConnection = new QPushButton(
 //! @todo add Test Connection icon
         KGuiItem(i18n("&Test Connection"), QString(),
                  i18n("Test database connection"),
@@ -212,12 +212,12 @@ void KexiDBConnectionWidget::setData(const KexiDB::ConnectionData& data, const Q
     setDataInternal(pdata, true /*connectionOnly*/, shortcutFileName);
 }
 
-KPushButton* KexiDBConnectionWidget::saveChangesButton() const
+QPushButton* KexiDBConnectionWidget::saveChangesButton() const
 {
     return d->btnSaveChanges;
 }
 
-KPushButton* KexiDBConnectionWidget::testConnectionButton() const
+QPushButton* KexiDBConnectionWidget::testConnectionButton() const
 {
     return d->btnTestConnection;
 }

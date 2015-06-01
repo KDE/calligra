@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kpushbutton.h>
 
+#include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
 #include <QDomElement>
@@ -60,7 +60,7 @@ public:
     QComboBox *sourceType;
     KexiDataSourceComboBox *internalSource;
     QLineEdit *externalSource;
-    KPushButton *setData;
+    QPushButton *setData;
 
     KexiDBReportData *kexiDBData;
 
@@ -86,7 +86,7 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->internalSource = new KexiDataSourceComboBox(this);
     d->internalSource->setProject(project);
     d->externalSource = new QLineEdit(this);
-    d->setData = new KPushButton(i18n("Set Data"));
+    d->setData = new QPushButton(i18n("Set Data"));
 
     connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
 

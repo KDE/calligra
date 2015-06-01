@@ -23,10 +23,10 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QFrame>
+#include <QPushButton>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpushbutton.h>
 
 #include <KexiIcon.h>
 
@@ -48,7 +48,7 @@ public:
     ~Private();
 
     WidgetTreeWidget *widgetTree;
-    KPushButton *btnUp, *btnDown;
+    QPushButton *btnUp, *btnDown;
     QCheckBox *check;
 };
 
@@ -92,12 +92,12 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
-    d->btnUp = new KPushButton(koIcon("arrow-up"), i18n("Move Up"), frame);
+    d->btnUp = new QPushButton(koIcon("arrow-up"), i18n("Move Up"), frame);
     d->btnUp->setToolTip(i18n("Move widget up"));
     vbox->addWidget(d->btnUp);
     connect(d->btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-    d->btnDown = new KPushButton(koIcon("arrow-down"), i18n("Move Down"), frame);
+    d->btnDown = new QPushButton(koIcon("arrow-down"), i18n("Move Down"), frame);
     d->btnDown->setToolTip(i18n("Move widget down"));
     vbox->addWidget(d->btnDown);
     connect(d->btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));

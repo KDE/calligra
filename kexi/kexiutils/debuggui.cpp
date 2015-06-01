@@ -27,9 +27,9 @@
 #include <QLayout>
 #include <QThread>
 #include <QHeaderView>
+#include <QPushButton>
 
 #include <ktabwidget.h>
-#include <kpushbutton.h>
 #include <kguiitem.h>
 #include <kdebug.h>
 
@@ -54,10 +54,10 @@ static void addKexiDBDebug(const QString& text)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_copy = new KPushButton(page);
+        QPushButton *btn_copy = new QPushButton(page);
         btn_copy->setIcon(koSmallIcon("edit-copy"));
         hbox->addWidget(btn_copy);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
+        QPushButton *btn_clear = new QPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
 
         kexiDBDebugPage = new KexiDBDebugTreeWidget(page);
@@ -105,12 +105,12 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
+        QPushButton *btn_exec = new QPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
         btn_exec->setObjectName("executeRealAlterTable");
         hbox->addWidget(btn_exec);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
+        QPushButton *btn_clear = new QPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
-        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
+        QPushButton *btn_sim = new QPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
         btn_sim->setObjectName("simulateAlterTableExecution");
         hbox->addWidget(btn_sim);
 
@@ -199,8 +199,8 @@ void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
         const QObject *receiver, const char* slot)
 {
     if (debugWindow) {
-        KPushButton* btn = KexiUtils::findFirstChild<KPushButton*>(
-                               debugWindow, "KPushButton", actionName);
+        QPushButton* btn = KexiUtils::findFirstChild<QPushButton*>(
+                               debugWindow, "QPushButton", actionName);
         if (btn)
             QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
     }
