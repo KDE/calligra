@@ -638,7 +638,7 @@ StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
         dynamic_cast<KLineEdit*>(w)->clear();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget")
-        dynamic_cast<KListWidget*>(w)->clear();
+        dynamic_cast<QTreeWidget*>(w)->clear();
 #endif
     else if (classname == "KComboBox")
         dynamic_cast<KComboBox*>(w)->clear();
