@@ -30,16 +30,16 @@
 #define PROJECT_NAVIGATOR_TABBAR_ID 0
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
-#include <ktoolbar.h>
-#include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QScopedPointer>
+
+#include <ktoolbar.h>
+#include <khelpmenu.h>
 #include <ktabwidget.h>
-#include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <KAboutData>
 
@@ -488,6 +488,7 @@ public:
 };
 
 #include <ktabbar.h>
+#include <KSharedConfig>
 #include <QTabBar>
 
 class KexiTabbedToolBarStyle;
@@ -1467,7 +1468,7 @@ public:
         isMainMenuVisible = Kexi::startupHandler().isMainMenuVisible();
         navigator = 0;
         prj = 0;
-        config = KGlobal::config();
+        config = KSharedConfig::openConfig();
         nameDialog = 0;
         m_findDialog = 0;
         focus_before_popup = 0;
