@@ -24,6 +24,8 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QHBoxLayout>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include "KexiMobileWidget.h"
 #include "KexiMobileToolbar.h"
@@ -34,7 +36,7 @@
 #include <KexiIcon.h>
 
 #include <kdebug.h>
-#include <kmimetype.h>
+
 #include <QFileDialog>
 #include <kexipart.h>
 #include <kexipartinfo.h>
@@ -99,9 +101,10 @@ KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
     KexiDB::DriverManager driverManager;
     KexiDB::Driver *driver = 0;
 
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
 
-    QString driverName = driverManager.lookupByMime(mimeType->name());
+    QString driverName = driverManager.lookupByMime(mime.name());
     driver = driverManager.driver(driverName.toLower());
 
     qDebug() << driverManager.driverNames();
