@@ -29,8 +29,8 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <kurl.h>
 
+#include <QUrl>
 #include <QApplication>
 
 //! @internal
@@ -95,8 +95,8 @@ KexiImageContextMenu::~KexiImageContextMenu()
 
 void KexiImageContextMenu::insertFromFile()
 {
-    KUrl url(KFileDialog::getImageOpenUrl(
-                 KUrl("kfiledialog:///LastVisitedImagePath"), this, i18n("Insert Image From File")));
+    QUrl url(KFileDialog::getImageOpenUrl(
+                 QUrl("kfiledialog:///LastVisitedImagePath"), this, i18n("Insert Image From File")));
     //! @todo download the file if remote, then set fileName properly
     if (!url.isValid()) {
         //focus the app again to avoid annoying the user with unfocused main window
@@ -107,7 +107,7 @@ void KexiImageContextMenu::insertFromFile()
 #endif
         return;
     }
-    //kDebug() << "fname=" << url.prettyUrl();
+    //kDebug() << "fname=" << url.toDisplayString();
 
     emit insertFromFileRequested(url);
 #ifndef KEXI_MOBILE
@@ -137,7 +137,7 @@ void KexiImageContextMenu::saveAs()
 
     //! @todo add originalFileName! (requires access to KRecentDirs)
     QString fileName = KFileDialog::getSaveFileName(
-                           KUrl("kfiledialog:///LastVisitedImagePath"),
+                           QUrl("kfiledialog:///LastVisitedImagePath"),
                            KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
     if (fileName.isEmpty())
         return;
@@ -145,7 +145,7 @@ void KexiImageContextMenu::saveAs()
     if (QFileInfo(fileName).completeSuffix().isEmpty())
         fileName += (QString(".") + fileExtension);
     kDebug() << fileName;
-    KUrl url;
+    QUrl url;
     url.setPath(fileName);
 
     QFile f(fileName);
@@ -157,7 +157,7 @@ void KexiImageContextMenu::saveAs()
         return;
     }
 
-//! @todo use KUrl?
+//! @todo use QUrl?
     emit saveAsRequested(fileName);
 }
 
