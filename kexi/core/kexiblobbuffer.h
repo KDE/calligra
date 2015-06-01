@@ -22,8 +22,7 @@
 
 #include <QObject>
 #include <QPixmap>
-
-#include <kurl.h>
+#include <QUrl>
 
 #include <kexi_export.h>
 
@@ -165,7 +164,7 @@ public:
      and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from
      external source, so stored() will be equal to false for returned handle.
      \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
-    Handle insertPixmap(const KUrl& url);
+    Handle insertPixmap(const QUrl &url);
 
     /*! Inserts a new BLOB data.
      @param data The data for BLOB object.
