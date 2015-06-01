@@ -21,12 +21,13 @@
 
 #include <KexiIcon.h>
 
-#include <QHash>
 #include <kglobal.h>
-#include <kshortcut.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <klocale.h>
+
+#include <QHash>
+#include <QKeySequence>
 
 namespace KexiStandardAction
 {
@@ -34,7 +35,7 @@ namespace KexiStandardAction
 //! @internal
 struct Info {
     StandardAction id;
-    KShortcut shortcut;
+    QKeySequence shortcut;
     const char* psName;
     const char* psText;
     const char* psToolTip;
@@ -44,16 +45,16 @@ struct Info {
 
 //! @internal
 static const Info g_rgActionInfo[] = {
-    { SortAscending, KShortcut(), "data_sort_az", I18N_NOOP("&Ascending"),
+    { SortAscending, QKeySequence(), "data_sort_az", I18N_NOOP("&Ascending"),
         I18N_NOOP("Sort data in ascending order"),
         I18N_NOOP("Sorts data in ascending order (from A to Z and from 0 to 9). Data from selected column is used for sorting."),
         koIconNameCStr("view-sort-ascending") },
-    { SortDescending, KShortcut(), "data_sort_za", I18N_NOOP("&Descending"),
+    { SortDescending, QKeySequence(), "data_sort_za", I18N_NOOP("&Descending"),
       I18N_NOOP("Sort data in descending order"),
       I18N_NOOP("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."),
       koIconNameCStr("view-sort-descending") },
 
-    { ActionNone, KShortcut(), 0, 0, 0, 0, 0 }
+    { ActionNone, QKeySequence(), 0, 0, 0, 0, 0 }
 };
 
 //! @internal
@@ -85,7 +86,7 @@ KAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
     if (pInfo) {
         pAction = new KAction(parent);
         pAction->setObjectName(pInfo->psName);
-        KShortcut cut(pInfo->shortcut);
+        QKeySequence cut(pInfo->shortcut);
         if (!cut.isEmpty())
             pAction->setShortcut(cut);
         pAction->setText(i18n(pInfo->psText));
