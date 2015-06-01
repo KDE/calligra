@@ -19,7 +19,7 @@
 
 #include "KexiStandardAction.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QHash>
 #include <kglobal.h>
@@ -92,7 +92,7 @@ KAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
         pAction->setToolTip(i18n(pInfo->psToolTip));
         pAction->setWhatsThis(i18n(pInfo->psWhatsThis));
         if (pInfo->psIconName)
-            pAction->setIcon(KIcon(QLatin1String(pInfo->psIconName)));
+            pAction->setIcon(QIcon::fromTheme(QLatin1String(pInfo->psIconName)));
     }
 
     if (recvr && slot)

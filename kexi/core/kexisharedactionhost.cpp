@@ -26,13 +26,14 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <QApplication>
 #include <kguiitem.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kicon.h>
+
+#include <QApplication>
+#include <QIcon>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
         : QObject()
@@ -212,19 +213,19 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
         col = d->mainWin->actionCollection();
 
     if (subclassName == 0) {
-        KAction *action = new KAction(KIcon(iconName), text, col);
+        KAction *action = new KAction(QIcon::fromTheme(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KToggleAction") == 0) {
-        KToggleAction *action = new KToggleAction(KIcon(iconName), text, col);
+        KToggleAction *action = new KToggleAction(QIcon::fromTheme(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KActionMenu") == 0) {
-        KActionMenu *action = new KActionMenu(KIcon(iconName), text, col);
+        KActionMenu *action = new KActionMenu(QIcon::fromTheme(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);

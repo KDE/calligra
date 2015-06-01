@@ -20,9 +20,10 @@
 #ifndef KEXI_TEMPLLOADER_H
 #define KEXI_TEMPLLOADER_H
 
-#include <QList>
-#include <kicon.h>
 #include "kexiprojectdata.h"
+
+#include <QList>
+#include <QIcon>
 
 //! A structure providing information about single kexi database template
 class KEXICORE_EXPORT KexiTemplateInfo

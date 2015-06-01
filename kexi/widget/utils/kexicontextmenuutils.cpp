@@ -20,7 +20,7 @@
 #include "kexicontextmenuutils.h"
 #include <core/KexiMainWindowIface.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -236,7 +236,7 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                             objectName[0].toUpper() + objectName.mid(1),
                             objectTypeName));
 
-    menu->addTitle(KIcon(iconName), realTitle, action /*before old*/);
+    menu->addTitle(QIcon::fromTheme(iconName), realTitle, action /*before old*/);
     if (dynamic_cast<QWidgetAction*>(action)
         && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
     {

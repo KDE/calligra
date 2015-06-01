@@ -62,7 +62,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "KexiTableScrollArea.h"
 #include "KexiTableScrollArea_p.h"

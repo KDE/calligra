@@ -24,7 +24,7 @@
 #include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <QShortcut>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)

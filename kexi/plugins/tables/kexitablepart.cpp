@@ -21,7 +21,7 @@
 
 #include "kexitablepart.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>

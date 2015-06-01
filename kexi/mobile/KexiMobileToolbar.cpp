@@ -20,7 +20,7 @@
 
 
 #include "KexiMobileToolbar.h"
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QToolButton>
 #include <QVBoxLayout>

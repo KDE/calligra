@@ -37,7 +37,7 @@
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kdebug.h>
 #include <klocale.h>

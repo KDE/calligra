@@ -28,7 +28,7 @@
 #include <db/utils.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QVBoxLayout>
 #include <QToolButton>

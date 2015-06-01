@@ -36,7 +36,7 @@
 #include <db/connection.h>
 #include <db/utils.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kexiutils/utils.h>
 
@@ -111,7 +111,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
 
     d->hideTableAction = plugSharedAction("edit_delete", i18n("&Hide Table"), d->tableQueryPopup);
     if (d->hideTableAction)
-        d->hideTableAction->setIcon(KIcon());
+        d->hideTableAction->setIcon(QIcon());
 
     d->connectionPopup = new KMenu(this);
     d->connectionPopup->setObjectName("connectionPopup");
@@ -390,7 +390,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
     } else if (d->scrollArea->selectedConnection()) {
         unplugSharedAction("edit_delete", d->connectionPopup);
         d->connectionPopup->clear();
-        d->connectionPopup->addTitle(KIcon(),
+        d->connectionPopup->addTitle(QIcon(),
                                      d->scrollArea->selectedConnection()->toString() + " : " + i18n("Relationship"));
         plugSharedAction("edit_delete", d->connectionPopup);
     }

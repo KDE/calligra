@@ -98,7 +98,7 @@ static QString nameForCreateAction(const Info& info)
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
+    : KAction(QIcon::fromTheme(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
     setObjectName(nameForCreateAction(*m_info));

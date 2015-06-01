@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
 #include "kexireportdesignview.h"

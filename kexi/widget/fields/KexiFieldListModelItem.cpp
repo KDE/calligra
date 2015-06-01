@@ -21,7 +21,7 @@
 #include "KexiFieldListModelItem.h"
 #include <db/utils.h>
 #include <kexiutils/utils.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <klocalizedstring.h>
 
 class KexiFieldListModelItem::Private

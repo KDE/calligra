@@ -66,7 +66,7 @@
 #include <klineedit.h>
 #include <KProgressDialog>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>

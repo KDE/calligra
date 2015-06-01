@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kfadewidgeteffect.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiObjectInfoLabel.h>
 #include <widget/KexiDataSourceComboBox.h>

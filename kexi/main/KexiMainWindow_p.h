@@ -43,7 +43,7 @@
 #include <kglobalsettings.h>
 #include <KAboutData>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"

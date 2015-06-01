@@ -39,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <kiconeffect.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <widget/utils/kexidropdownbutton.h>
 #include <kexiutils/utils.h>
 #include <db/field.h>

@@ -28,7 +28,7 @@
 #include <kexipartmanager.h>
 #include <kexiactioncategories.h>
 #include <KexiMainWindowIface.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -231,7 +231,7 @@ public:
                 itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "navObject");
                 itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, info->objectName());
                 itm->setData(ActionSelectorDialogTreeItem::ActionPartClassRole, info->partClass());
-                itm->setIcon(KIcon(part->info()->itemIconName()));
+                itm->setIcon(QIcon::fromTheme(part->info()->itemIconName()));
             }
         }
 

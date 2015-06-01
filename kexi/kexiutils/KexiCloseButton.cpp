@@ -20,9 +20,9 @@
 #include "KexiCloseButton.h"
 #include "utils.h"
 
-#include <KIcon>
 #include <KStandardGuiItem>
 
+#include <QIcon>
 #include <QApplication>
 #include <QStyle>
 #include <QStyleOptionButton>

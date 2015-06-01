@@ -29,7 +29,7 @@
 #include <db/queryschema.h>
 #include <db/utils.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>

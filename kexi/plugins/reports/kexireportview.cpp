@@ -42,7 +42,7 @@
 #include <krun.h>
 #include <kactionmenu.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <renderobjects.h>
 #include <KoReportPreRenderer.h>
 

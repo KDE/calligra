@@ -50,7 +50,7 @@ KexiLinkButton::KexiLinkButton(const KIcon &icon, QWidget* parent)
 }
 
 KexiLinkButton::KexiLinkButton(const QPixmap &pixmap, QWidget* parent)
- : KPushButton(KIcon(pixmap), QString(), parent), d(new Private)
+ : KPushButton(QIcon::fromTheme(pixmap), QString(), parent), d(new Private)
 {
     init();
 }
@@ -77,7 +77,7 @@ void KexiLinkButton::init()
     option.initFrom(this);
     int m = style()->pixelMetric(QStyle::PM_ButtonMargin, &option, this);
     setFixedSize(iconSize() + QSize(m*2, m*2));
-    d->origIcon = KIcon(icon());
+    d->origIcon = QIcon::fromTheme(icon());
 }
 
 void KexiLinkButton::setUsesForegroundColor(bool set)
@@ -98,7 +98,7 @@ void KexiLinkButton::changeEvent(QEvent* event)
     switch (event->type()) {
     case QEvent::EnabledChange:
     case QEvent::PaletteChange:
-        updateIcon(KIcon(icon()));
+        updateIcon(QIcon::fromTheme(icon()));
         break;
     default:;
     }
@@ -112,7 +112,7 @@ void KexiLinkButton::updateIcon(const KIcon &icon)
     QColor c(palette().color(foregroundRole()));
     QPixmap pixmap(icon.pixmap(iconSize()));
     KexiUtils::replaceColors(&pixmap, c);
-    KPushButton::setIcon(KIcon(pixmap));
+    KPushButton::setIcon(QIcon::fromTheme(pixmap));
 }
 
 void KexiLinkButton::setIcon(const KIcon &icon)

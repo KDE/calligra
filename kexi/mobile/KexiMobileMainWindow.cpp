@@ -31,7 +31,7 @@
 
 #include <db/drivermanager.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kdebug.h>
 #include <kmimetype.h>

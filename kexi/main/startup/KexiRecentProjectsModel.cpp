@@ -26,7 +26,7 @@
 #include <db/utils.h>
 #include <db/drivermanager.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kdatetime.h>
 #include <kdebug.h>

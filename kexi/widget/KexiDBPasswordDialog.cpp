@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <KLocale>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <db/connectiondata.h>
 

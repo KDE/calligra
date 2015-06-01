@@ -22,7 +22,7 @@
 
 #include <db/tableviewcolumn.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 class KexiTableScrollAreaHeaderModel::Private
 {

@@ -27,7 +27,7 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>

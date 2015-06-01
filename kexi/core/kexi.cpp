@@ -27,7 +27,7 @@
 #include <db/drivermanager.h>
 #include <db/utils.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QTimer>
 #include <QImage>
@@ -369,7 +369,7 @@ QString KexiIconName(const QString &baseName)
 
 KIcon KexiIcon(const QString &baseName)
 {
-    return KIcon(KexiIconName(baseName));
+    return QIcon::fromTheme(KexiIconName(baseName));
 }
 
 QString Kexi::defaultFileBasedDriverIconName()
@@ -387,7 +387,7 @@ QString Kexi::defaultFileBasedDriverIconName()
 
 KIcon Kexi::defaultFileBasedDriverIcon()
 {
-    return KIcon(defaultFileBasedDriverIconName());
+    return QIcon::fromTheme(defaultFileBasedDriverIconName());
 }
 
 QString Kexi::serverIconName()
@@ -397,6 +397,6 @@ QString Kexi::serverIconName()
 
 KIcon Kexi::serverIcon()
 {
-    return KIcon(serverIconName());
+    return QIcon::fromTheme(serverIconName());
 }
 

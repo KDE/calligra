@@ -23,9 +23,11 @@
 
 #include <core/kexipartinfo.h>
 #include <kexiutils/utils.h>
-#include <kicon.h>
-#include <QtAlgorithms>
+
 #include <kdebug.h>
+
+#include <QIcon>
+#include <QtAlgorithms>
 
 class KexiProjectModelItem::Private
 {

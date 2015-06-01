@@ -124,7 +124,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     info.description = cg.readEntry("Description");
     const QString iconFileName(cg.readEntry("Icon"));
     if (!iconFileName.isEmpty())
-        info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
+        info.icon = QIcon::fromTheme(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
         info.icon = Kexi::defaultFileBasedDriverIcon();
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());

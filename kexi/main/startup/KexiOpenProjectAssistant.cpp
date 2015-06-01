@@ -32,7 +32,7 @@
 #include <kexiprojectdata.h>
 #include <kexi.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <KTabWidget>
 

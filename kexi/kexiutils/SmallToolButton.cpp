@@ -18,6 +18,10 @@
 */
 
 #include "SmallToolButton.h"
+#include "utils.h"
+
+#include <kglobalsettings.h>
+#include <kdebug.h>
 
 #include <QStyle>
 #include <QStyleOption>
@@ -25,12 +29,7 @@
 #include <QActionEvent>
 #include <QPointer>
 #include <QAction>
-
-#include <kicon.h>
-#include <kglobalsettings.h>
-#include <kdebug.h>
-
-#include "utils.h"
+#include <QIcon>
 
 //! @internal
 class KexiSmallToolButton::Private
@@ -53,7 +52,7 @@ KexiSmallToolButton::KexiSmallToolButton(QWidget* parent)
         , d(new Private)
 {
     init();
-    update(QString(), KIcon());
+    update(QString(), QIcon());
 }
 
 KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
@@ -61,7 +60,7 @@ KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
         , d(new Private)
 {
     init();
-    update(text, KIcon());
+    update(text, QIcon());
 }
 
 KexiSmallToolButton::KexiSmallToolButton(const KIcon& icon, const QString& text,
@@ -153,7 +152,7 @@ void KexiSmallToolButton::setIcon(const QIcon& icon)
 
 void KexiSmallToolButton::setIcon(const QString &iconName)
 {
-    setIcon(KIcon(iconName));
+    setIcon(QIcon::fromTheme(iconName));
 }
 
 void KexiSmallToolButton::setText(const QString& text)

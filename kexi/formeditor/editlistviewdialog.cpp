@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <KPropertyEditorView>
 #include <KPropertySet>
 #include <KProperty>

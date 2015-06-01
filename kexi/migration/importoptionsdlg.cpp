@@ -20,7 +20,7 @@
 #include "importoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QDir>
 #include <QLabel>

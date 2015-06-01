@@ -24,7 +24,7 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QToolButton>
 #include <QDomDocument>

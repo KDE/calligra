@@ -23,7 +23,7 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <KLocale>
 

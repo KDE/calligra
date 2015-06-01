@@ -153,7 +153,7 @@ void KexiPasswordWidget::KexiPasswordWidgetPrivate::init()
     QRect desktop = KGlobalSettings::desktopGeometry(q->topLevelWidget());
     q->setMinimumWidth(qMin(1000, qMax(q->sizeHint().width(), desktop.width() / 4)));
     if ( ( m_flags & KexiPasswordWidget::ShowIcon ) ) {
-        q->setPixmap(KIcon("dialog-password").pixmap(KIconLoader::SizeHuge));
+        q->setPixmap(QIcon::fromTheme("dialog-password").pixmap(KIconLoader::SizeHuge));
     }
 
     QObject::connect(ui.userEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));

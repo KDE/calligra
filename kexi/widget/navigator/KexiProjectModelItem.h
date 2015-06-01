@@ -21,11 +21,12 @@
 #ifndef KEXIPROJECTMODELITEM_H
 #define KEXIPROJECTMODELITEM_H
 
+#include <core/kexipartitem.h>
+#include <kexi.h>
+
 #include <QVariant>
 #include <QString>
 #include <QIcon>
-#include <core/kexipartitem.h>
-#include <kexi.h>
 
 namespace KexiPart
 {

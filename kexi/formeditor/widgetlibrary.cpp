@@ -30,7 +30,7 @@
 #include <kactioncollection.h>
 
 #include <KoServiceLocator.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
@@ -662,13 +662,13 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
     if (iconName.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalIcon").toString();
     if (!iconName.isEmpty())
-        iconHorizontal = KIcon(iconName);
+        iconHorizontal = QIcon::fromTheme(iconName);
 
     iconName = wclass->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (iconName.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (!iconName.isEmpty())
-        iconVertical = KIcon(iconName);
+        iconVertical = QIcon::fromTheme(iconName);
 
     QString textHorizontal = wclass->internalProperty("orientationSelectionPopup:horizontalText").toString();
     if (textHorizontal.isEmpty() && wclass->inheritedClass())
@@ -684,7 +684,7 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
 
     KMenu popup(parent);
     popup.setObjectName("orientationSelectionPopup");
-    popup.addTitle(KIcon(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
+    popup.addTitle(QIcon::fromTheme(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
     QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);
     QAction* vertAction = popup.addAction(iconVertical, textVertical);
     popup.addSeparator();

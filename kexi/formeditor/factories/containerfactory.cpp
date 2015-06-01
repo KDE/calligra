@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QStackedWidget>
 #include <QFrame>
@@ -431,7 +431,7 @@ void RemoveStackPageAction::slotTriggered()
 GoToStackPageAction::GoToStackPageAction(Direction direction,
                                          KFormDesigner::Container *container,
                                          QWidget *receiver, QObject *parent)
-    : KAction(KIcon(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
+    : KAction(QIcon::fromTheme(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
               direction == Previous ? i18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
                                     : i18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
               parent)
