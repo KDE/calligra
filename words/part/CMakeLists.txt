@@ -170,7 +170,7 @@ install(TARGETS wordspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
+install( FILES words.rc words_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/words)
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
