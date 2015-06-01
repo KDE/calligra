@@ -32,14 +32,14 @@
 
 #include <klocale.h>
 
+#include <QPushButton>
+
 KWConfigureDialog::KWConfigureDialog(KWView* parent)
 : KPageDialog(parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
-// QT5TODO: port to QDialog
-//     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
-//     setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
 
     m_miscPage = new KoConfigMiscPage(parent->koDocument(), parent->canvasBase()->shapeController()->resourceManager());
     KPageWidgetItem *item = addPage(m_miscPage, i18n("Misc"));
@@ -63,9 +63,9 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()) );
+    connect(buttonBox(), SIGNAL(accepted()), this, SLOT(slotApply()));
+    connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)),
+            this, SLOT(handleButtonClicked(QAbstractButton*)));
     connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
 }
 
@@ -88,5 +88,17 @@ void KWConfigureDialog::slotDefault()
     }
     else if (curr == m_docPage) {
         m_docPage->slotDefault();
+    }
+}
+
+void KWConfigureDialog::handleButtonClicked(QAbstractButton* button)
+{
+    if(button == buttonBox()->button(QDialogButtonBox::RestoreDefaults))
+    {
+        slotDefault();
+    }
+    else if (button == buttonBox()->button(QDialogButtonBox::Apply))
+    {
+        slotApply();
     }
 }
