@@ -56,6 +56,7 @@
 #include <QTreeView>
 #include <QApplication>
 #include <QStyledItemDelegate>
+#include <QProgressDialog>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -63,7 +64,6 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 #include <knuminput.h>
-#include <KProgressDialog>
 
 #include <KexiIcon.h>
 
@@ -500,7 +500,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
     }
     if(page == m_optionsPage){
         if (m_mode == File) {
-            m_loadingProgressDlg = new KProgressDialog(
+            m_loadingProgressDlg = new QProgressDialog(
                     this, i18nc("@title:window", "Loading CSV Data"),
                     i18nc("@info", "Loading CSV Data from <filename>%1</filename>...", QDir::toNativeSeparators(m_fname)));
             m_loadingProgressDlg->setObjectName("m_loadingProgressDlg");
