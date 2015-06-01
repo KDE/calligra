@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include "kexitableview.h"
 
 #include "events.h"

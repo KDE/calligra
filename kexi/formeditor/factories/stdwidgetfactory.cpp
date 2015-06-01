@@ -47,7 +47,7 @@
 
 #include <kaction.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <KProperty>
 #include <KPropertySet>

@@ -20,7 +20,7 @@
 #include "kexirelationdesigntool.h"
 #include "kexirelationdesignshape.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
     : KoToolFactoryBase("KexiRelationDesignToolFactoryId")

@@ -19,7 +19,7 @@
 
 #include "richtextdialog.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QLayout>
 #include <QAction>

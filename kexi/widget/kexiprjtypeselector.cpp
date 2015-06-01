@@ -19,7 +19,7 @@
 
 #include "kexiprjtypeselector.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <QLabel>
 #include <db/driver.h>
 #include <db/utils.h>

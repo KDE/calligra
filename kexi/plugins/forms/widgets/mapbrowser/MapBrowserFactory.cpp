@@ -24,7 +24,7 @@
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
