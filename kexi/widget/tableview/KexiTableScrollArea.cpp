@@ -51,6 +51,7 @@
 #include <QScrollArea>
 #include <QApplication>
 #include <QScrollBar>
+#include <QMenu>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
@@ -60,7 +61,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
-#include <kmenu.h>
 
 #include <KexiIcon.h>
 
@@ -201,7 +201,7 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     horizontalScrollBar()->installEventFilter(this);
 
     //context menu
-    m_contextMenu = new KMenu(this);
+    m_contextMenu = new QMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
 
 //! \todo replace lineedit with table_field icon
