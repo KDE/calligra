@@ -32,11 +32,13 @@
 #include <QLineEdit>
 #include <QEventLoop>
 #include <QApplication>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kmimetype.h>
+
 #include <kfile.h>
 #include <kurlcombobox.h>
 #include <kactioncollection.h>
@@ -202,40 +204,41 @@ void KexiStartupFileHandler::updateFilters()
     d->dialog->clearFilter();
 
     QString filter;
-    KMimeType::Ptr mime;
+    QMimeDatabase db;
+    QMimeType mime;
     QStringList allfilters;
 
     const bool normalOpeningMode = d->mode & Opening && !(d->mode & Custom);
     const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
     if (normalOpeningMode || normalSavingMode) {
-        mime = KMimeType::mimeType(KexiDB::defaultFileBasedDriverMimeType());
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
+        mime = db.mimeTypeForName(KexiDB::defaultFileBasedDriverMimeType());
+        if (mime && !d->excludedMimeTypes.contains(mime.name().toLower())) {
             filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+            allfilters += mime.globPatterns();
         }
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
+        mime = db.mimeTypeForName("application/x-kexiproject-shortcut");
+        if (mime && !d->excludedMimeTypes.contains(mime.name().toLower())) {
             filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+            allfilters += mime.globPatterns();
         }
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexi-connectiondata");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
+        mime = db.mimeTypeForName("application/x-kexi-connectiondata");
+        if (mime && !d->excludedMimeTypes.contains(mime.name().toLower())) {
             filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+            allfilters += mime.globPatterns();
         }
     }
 
 //! @todo hardcoded for MSA:
     if (normalOpeningMode) {
-        mime = KMimeType::mimeType("application/vnd.ms-access");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
+        mime = db.mimeTypeForName("application/vnd.ms-access");
+        if (mime && !d->excludedMimeTypes.contains(mime.name().toLower())) {
             filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+            allfilters += mime.globPatterns();
         }
     }
 
@@ -245,8 +248,8 @@ void KexiStartupFileHandler::updateFilters()
         if (d->excludedMimeTypes.contains(mimeName.toLower()))
             continue;
         filter += KexiUtils::fileDialogFilterString(mimeName);
-        mime = KMimeType::mimeType(mimeName);
-        allfilters += mime->patterns();
+        mime = db.mimeTypeForName(mimeName);
+        allfilters += mime.globPatterns();
     }
 
     if (!d->excludedMimeTypes.contains("all/allfiles"))

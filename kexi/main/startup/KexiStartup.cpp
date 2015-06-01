@@ -41,7 +41,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmimetype.h>
+
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 
@@ -51,6 +51,8 @@
 
 #include <QApplication>
 #include <QLayout>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 //! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION
@@ -747,7 +749,7 @@ tristate KexiStartupHandler::detectActionForFile(
         }
     }
 
-    KMimeType::Ptr ptr;
+    QMimeType mime;
     QString mimename;
 
     const bool thisIsShortcut = (options & ThisIsAShortcutToAProjectFile)
@@ -755,13 +757,16 @@ tristate KexiStartupHandler::detectActionForFile(
 
     if ((options & ThisIsAProjectFile) || !thisIsShortcut) {
         //try this detection if "project file" mode is forced or no type is forced:
-        ptr = KMimeType::findByFileContent(dbFileName);
-        mimename = ptr.data() ? ptr.data()->name() : QString();
+        QMimeDatabase db;
+        mime = db.mimeTypeForFile(dbFileName, QMimeDatabase::MatchContent);
+        if (mime.isValid()) {
+            mimename = mime.name();
+        }
         kDebug() << "found mime is:" << mimename;
         if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
             //try by URL:
-            ptr = KMimeType::findByUrl(KUrl::fromPath(dbFileName));
-            mimename = ptr.data()->name();
+            mime = db.mimeTypeForUrl(KUrl::fromPath(dbFileName));
+            mimename = mime.name();
         }
     }
     if (mimename.isEmpty() || mimename == "application/octet-stream") {

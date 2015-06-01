@@ -31,6 +31,8 @@
 #include <QImage>
 #include <QBuffer>
 #include <QPainter>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -352,7 +354,8 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
             f.close();
             return;
         }
-        m_valueMimeType = KMimeType::findByUrl(fileName, 0, url.isLocalFile())->name();
+        QMimeDatabase db;
+        m_valueMimeType = db.mimeTypeForFile(fileName, QMimeDatabase::MatchExtension).name();
         setValueInternal(ba, true);
     }
 
