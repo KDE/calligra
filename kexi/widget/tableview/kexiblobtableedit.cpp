@@ -35,9 +35,9 @@
 #include <QBuffer>
 #include <QCache>
 #include <QScrollBar>
+#include <QTemporaryFile>
 
 #include <kdebug.h>
-#include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kurl.h>
@@ -139,7 +139,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
     kDebug() << "Size of BLOB: " << val.size();
-    m_tempFile = new KTemporaryFile();
+    m_tempFile = new QTemporaryFile();
     m_tempFile->open();
     kDebug() << "Creating temporary file: " << m_tempFile->fileName();
     QDataStream stream(m_tempFile);
