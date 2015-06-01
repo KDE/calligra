@@ -17,16 +17,16 @@
 */
 
 #include "kexisourceselector.h"
-
-#include <kpushbutton.h>
-#include <klineedit.h>
-
-#include <QLabel>
-#include <klocale.h>
-#include <kdebug.h>
-#include <QDomElement>
 #include "KexiDataSourceComboBox.h"
 #include <kexiproject.h>
+
+#include <klocale.h>
+#include <kdebug.h>
+#include <kpushbutton.h>
+
+#include <QLabel>
+#include <QLineEdit>
+#include <QDomElement>
 
 //#define NO_EXTERNAL_SOURCES
 
@@ -59,7 +59,7 @@ public:
     QVBoxLayout *layout;
     QComboBox *sourceType;
     KexiDataSourceComboBox *internalSource;
-    KLineEdit *externalSource;
+    QLineEdit *externalSource;
     KPushButton *setData;
 
     KexiDBReportData *kexiDBData;
@@ -85,7 +85,7 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->sourceType = new QComboBox(this);
     d->internalSource = new KexiDataSourceComboBox(this);
     d->internalSource->setProject(project);
-    d->externalSource = new KLineEdit(this);
+    d->externalSource = new QLineEdit(this);
     d->setData = new KPushButton(i18n("Set Data"));
 
     connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
