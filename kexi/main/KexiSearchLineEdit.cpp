@@ -349,7 +349,7 @@ static void fixLeftMargin(QLineEdit *lineEdit)
 // ----
 
 KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
- : KLineEdit(parent), d(new Private(this))
+ : QLineEdit(parent), d(new Private(this))
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
@@ -380,8 +380,8 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
                                  // Qt::ClickFocus would make it impossible to find
                                  // previously focus widget in KexiSearchLineEdit::setFocus().
                                  // We need this information to focus back when pressing Escape key.
-    setClearButtonShown(true);
-    setClickMessage(i18n("Search"));
+    setClearButtonEnabled(true);
+    setPlaceholderText(i18n("Search"));
     fixLeftMargin(this);
 }
 
@@ -480,7 +480,7 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
 // forked bits from QLineEdit::inputMethodEvent()
 void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
 {
-    KLineEdit::inputMethodEvent(e);
+    QLineEdit::inputMethodEvent(e);
     if (isReadOnly() || !e->isAccepted())
         return;
     if (!e->commitString().isEmpty()) {
@@ -495,7 +495,7 @@ void KexiSearchLineEdit::setFocus()
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
     }
-    KLineEdit::setFocus();
+    QLineEdit::setFocus();
 }
 
 // forked bits from QLineEdit::focusInEvent()
@@ -506,7 +506,7 @@ void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
     }
-    KLineEdit::focusInEvent(e);
+    QLineEdit::focusInEvent(e);
     d->completer->setWidget(this);
     connectCompleter();
     update();
@@ -515,7 +515,7 @@ void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 // forked bits from QLineEdit::focusOutEvent()
 void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
 {
-    KLineEdit::focusOutEvent(e);
+    QLineEdit::focusOutEvent(e);
     disconnectCompleter();
     update();
     if (e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason) {
@@ -639,7 +639,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         // applying completion since there is item selected
         d->completer->popup()->hide();
         connectCompleter();
-        KLineEdit::keyPressEvent(event); /* executes this:
+        QLineEdit::keyPressEvent(event); /* executes this:
                                             if (hasAcceptableInput() || fixup()) {
                                                 emit returnPressed();
                                                 emit editingFinished();
@@ -699,7 +699,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
                 break;
             case Qt::Key_Delete:
                 if (!isReadOnly()) {
-                    KLineEdit::keyPressEvent(event);
+                    QLineEdit::keyPressEvent(event);
                     complete(Qt::Key_Delete);
                     return;
                 }
@@ -712,13 +712,13 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     if (!isReadOnly()) {
         QString t = event->text();
         if (!t.isEmpty() && t.at(0).isPrint()) {
-            KLineEdit::keyPressEvent(event);
+            QLineEdit::keyPressEvent(event);
             complete(event->key());
             return;
         }
     }
 
-    KLineEdit::keyPressEvent(event);
+    QLineEdit::keyPressEvent(event);
 }
 
 void KexiSearchLineEdit::changeEvent(QEvent *event)

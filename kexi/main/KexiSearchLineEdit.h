@@ -23,17 +23,17 @@
 
 #include <QPair>
 #include <QModelIndex>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <KexiSearchableModel.h>
 
 class KexiSearchableModel;
 
 //! @short Search line edit with advanced autocompletion
-/*! It works like KLineEdit with QCompleter but uses fork of QCompleter
+/*! It works like QLineEdit with QCompleter but uses fork of QCompleter
     for full-text-search.
     @note Qt Embedded features of QLineEdit+QCompleter
           (i.e. those marked with ifdef QT_KEYPAD_NAVIGATION) are not ported. */
-class KexiSearchLineEdit : public KLineEdit
+class KexiSearchLineEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(bool highlightMatchingSubstrings READ highlightMatchingSubstrings WRITE setHighlightMatchingSubstrings)
