@@ -42,6 +42,7 @@
 #include <db/connection.h>
 #include <db/cursor.h>
 #include <db/pluginloader.h>
+#include <KSharedConfig>
 
 using namespace KexiPart;
 
@@ -157,7 +158,7 @@ bool Manager::lookup()
         return false;
     }
 
-    KConfigGroup cg(KGlobal::config()->group("Parts"));
+    KConfigGroup cg(KSharedConfig::openConfig()->group("Parts"));
     if (qApp && !cg.hasKey("Order")) {
         m_serverErrorMsg = i18nc("@info",
                                  "Missing or invalid default application configuration. No <resource>%1</resource> key.",

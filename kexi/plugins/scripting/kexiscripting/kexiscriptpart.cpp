@@ -38,6 +38,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <KSharedConfig>
 
 #include <QMetaObject>
 #include <QMenu>
@@ -111,7 +112,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
     if (scriptaction) {
 
         const QString dontAskAgainName = "askExecuteScript";
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         QString dontask = config->readEntry(dontAskAgainName).toLower();
 
         bool exec = (dontask == "yes");

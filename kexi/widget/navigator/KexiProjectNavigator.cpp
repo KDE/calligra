@@ -42,6 +42,7 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kdialog.h>
+#include <KSharedConfig>
 
 #include <KexiIcon.h>
 #include <kexi.h>
@@ -147,7 +148,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
 
     connect(d->list, SIGNAL(pressed(QModelIndex)), this,SLOT(slotSelectionChanged(QModelIndex)));
 
-    KConfigGroup mainWindowGroup = KGlobal::config()->group("MainWindow");
+    KConfigGroup mainWindowGroup = KSharedConfig::openConfig()->group("MainWindow");
     if (mainWindowGroup.readEntry("SingleClickOpensItem", true)) {
         connect(d->list, SIGNAL(activated(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
     } else {

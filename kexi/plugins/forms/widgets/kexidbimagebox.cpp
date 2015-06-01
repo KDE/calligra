@@ -33,12 +33,13 @@
 #include <QPainter>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QStandardPaths>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kstandarddirs.h>
+
 #include <kiconeffect.h>
 
 #include <KexiIcon.h>
@@ -700,7 +701,8 @@ void KexiDBImageBox::updatePixmap()
         return;
 
     if (!KexiDBImageBox_static->pixmap) {
-        const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
+        const QString fname(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                   QLatin1String("kexi/pics/imagebox.png")));
         QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
             koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {

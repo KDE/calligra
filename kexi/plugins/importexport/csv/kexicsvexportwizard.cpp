@@ -46,6 +46,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kdialog.h>
+#include <KSharedConfig>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)
@@ -53,7 +54,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         , m_options(options)
         , m_fileSavePage(0)
         , m_defaultsBtn(0)
-        , m_importExportGroup(KGlobal::config()->group("ImportExport"))
+        , m_importExportGroup(KSharedConfig::openConfig()->group("ImportExport"))
         , m_cancelled(false)
 {
     KexiMainWindowIface::global()->setReasonableDialogSize(this);

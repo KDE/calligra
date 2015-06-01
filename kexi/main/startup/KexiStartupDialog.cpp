@@ -47,6 +47,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
+#include <KSharedConfig>
 
 //! @internal
 class KexiStartupDialog::Private
@@ -217,7 +218,7 @@ void KexiStartupDialog::done(int r)
     }
 
     //save settings
-    KConfigGroup group = KGlobal::config()->group("Startup");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Startup");
     if (d->openExistingConnWidget)
         group.writeEntry("OpenExistingType",
                          (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
@@ -370,7 +371,7 @@ void KexiStartupDialog::setupPageOpenExisting()
     d->openExistingConnWidget->setObjectName("KexiConnectionSelectorWidget");
     d->openExistingConnWidget->hideConnectonIcon();
     lyr->addWidget(d->openExistingConnWidget);
-    KConfigGroup group = KGlobal::config()->group("Startup");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Startup");
     if (group.readEntry("OpenExistingType", "File") == "File")
         d->openExistingConnWidget->showSimpleConn();
     else {

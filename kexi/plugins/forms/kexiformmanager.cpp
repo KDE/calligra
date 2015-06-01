@@ -34,6 +34,7 @@
 #include <kpagedialog.h>
 #include <ktextedit.h>
 #include <ktoolbar.h>
+#include <KSharedConfig>
 
 #include <formeditor/form.h>
 #include <formeditor/widgetlibrary.h>
@@ -205,7 +206,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->lib->addCustomWidgetActions(d->collection);
 
 #ifdef KEXI_DEBUG_GUI
-    KConfigGroup generalGroup(KGlobal::config()->group("General"));
+    KConfigGroup generalGroup(KSharedConfig::openConfig()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
         KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);

@@ -19,12 +19,13 @@
 
 #ifdef HAVE_KNEWSTUFF
 
+#include <QDir>
+
 #include <kdebug.h>
 #include <ktar.h>
-#include <QDir>
 #include <kfiledialog.h>
 #include <klocale.h>
-
+#include <KSharedConfig>
 
 #include "kexinewstuff.h"
 
@@ -37,7 +38,7 @@ KexiNewStuff::KexiNewStuff(QWidget *parent)
     // fails to download something, it still marks the thing as
     // successfully downloaded and therefore we arn't able to
     // download it again :-/
-    KGlobal::config()->deleteGroup("KNewStuffStatus");
+    KSharedConfig::openConfig()->deleteGroup("KNewStuffStatus");
 }
 
 KexiNewStuff::~KexiNewStuff()

@@ -23,8 +23,10 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include <QDirIterator>
 #include <QFile>
 #include <QHash>
+#include <QStandardPaths>
 
 //! @internal
 class KexiDBConnectionSetPrivate
@@ -65,7 +67,8 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
         || (!filename.isEmpty() && data == d->dataForFilenames.value(filename));
 
     if (generateUniqueFilename) {
-        QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
+        QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                      + "/kexi/connections/";
         if (dir.isEmpty())
             return false;
         QString baseFilename(dir + (data->hostName.isEmpty() ? "localhost" : data->hostName));
@@ -155,17 +158,20 @@ void KexiDBConnectionSet::clear()
 void KexiDBConnectionSet::load()
 {
     clear();
-    QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
-    foreach(const QString& file, files) {
-        KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
-        KexiDBConnShortcutFile shortcutFile(file);
-        if (!shortcutFile.loadConnectionData(*data)) {
-            delete data;
-            continue;
+    const QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kexi/connections"));
+    foreach(const QString &dir, dirs) {
+        QDirIterator it(dir, QStringList() << "*.kexic");
+        while (it.hasNext()) {
+            KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
+            KexiDBConnShortcutFile shortcutFile(it.next());
+            if (!shortcutFile.loadConnectionData(*data)) {
+                delete data;
+                continue;
+            }
+            addConnectionDataInternal(data, it.next());
+            // kDebug() << file << "added.";
         }
-        addConnectionDataInternal(data, file);
-        // kDebug() << file << "added.";
-    }
+   }
 }
 
 QString KexiDBConnectionSet::fileNameForConnectionData(const KexiDB::ConnectionData &data) const

@@ -31,8 +31,11 @@
 #ifndef KEXIMENUWIDGET_P_H
 #define KEXIMENUWIDGET_P_H
 
+#include "KexiMenuWidget.h"
+
 #include <kcomponentdata.h>
-#include <ksharedconfig.h>
+#include <KSharedConfig>
+
 #include <QStyleOption>
 #include <QDateTime>
 #include <QCache>
@@ -41,7 +44,6 @@
 #include <QBasicTimer>
 #include <QPointer>
 #include <QAbstractButton>
-#include "KexiMenuWidget.h"
 
 class QEventLoop;
 

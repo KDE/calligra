@@ -31,6 +31,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 
 KexiCSVImportOptions::DateFormat dateFormatFromString(const QString& s)
 {
@@ -57,7 +58,7 @@ QString dateFormatToString(KexiCSVImportOptions::DateFormat format)
 
 KexiCSVImportOptions::KexiCSVImportOptions()
 {
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     encoding = importExportGroup.readEntry("DefaultEncodingForImportingCSVFiles");
     if (encoding.isEmpty()) {
         encoding = QString::fromLatin1(KGlobal::locale()->encoding());
@@ -178,7 +179,7 @@ KexiCSVImportOptions KexiCSVImportOptionsDialog::options() const
 
 void KexiCSVImportOptionsDialog::accept()
 {
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     if (m_chkAlwaysUseThisEncoding->isChecked())
         importExportGroup.writeEntry("DefaultEncodingForImportingCSVFiles",
                                      m_encodingComboBox->selectedEncoding());

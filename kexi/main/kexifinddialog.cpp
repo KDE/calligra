@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 
 #include <QCheckBox>
 #include <QLabel>
@@ -43,7 +44,7 @@ class KexiFindDialog::Private
 {
 public:
     Private() :
-        confGroup(KGlobal::config()->group("FindDialog"))
+        confGroup(KSharedConfig::openConfig()->group("FindDialog"))
     {
     }
     ~Private() {

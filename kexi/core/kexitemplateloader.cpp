@@ -31,6 +31,7 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QStandardPaths>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)
@@ -65,7 +66,7 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
 //! @todo OK? KGlobal::mainComponent().componentName()
     const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
     QString lang(KGlobal::locale()->language());
-    QStringList dirs(KGlobal::dirs()->findDirs("data", subdir));
+    QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subdir));
     while (true) {
         foreach(const QString &dirname, dirs) {
             QDir dir(dirname + lang);
