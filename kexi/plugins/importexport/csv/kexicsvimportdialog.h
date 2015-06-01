@@ -55,10 +55,10 @@ class QTableView;
 class QTreeView;
 class QFile;
 class QStackedWidget;
+class QProgressDialog;
+class QProgressBar;
 class KComboBox;
 class KIntSpinBox;
-class KProgressDialog;
-class QProgressBar;
 class KPageWidgetItem;
 
 class KexiCSVCommentWidget;
@@ -73,7 +73,6 @@ class KexiCommandLinkButton;
 class KexiNameWidget;
 class KexiProjectNavigator;
 class KexiFieldListModel;
-
 
 namespace KexiPart {
 class Item;
@@ -254,7 +253,7 @@ private:
     QFile* m_file;
     QTextStream *m_inputStream; //!< used in loadData()
     KexiCSVImportOptions m_options;
-    KProgressDialog *m_loadingProgressDlg;
+    QProgressDialog *m_loadingProgressDlg;
     QProgressBar *m_importingProgressBar;
     bool m_dialogCancelled;
     KexiCSVInfoLabel *m_infoLbl;
