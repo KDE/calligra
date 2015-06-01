@@ -29,6 +29,7 @@
 #include <kaboutdata.h>
 #include <KComponentData>
 #include <kdeversion.h>
+#include <KSharedConfig>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -56,7 +57,7 @@ class KexiUserFeedbackAgent::Private
 {
 public:
     Private()
-     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+     : configGroup(KConfigGroup(KSharedConfig::openConfig()->group("User Feedback")))
      , areas(KexiUserFeedbackAgent::NoAreas)
      , sentDataInThisSession(KexiUserFeedbackAgent::NoAreas)
      , url(QLatin1String("http://www.kexi-project.org/feedback"))
