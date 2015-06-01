@@ -116,10 +116,10 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setIconName(koIconName("lineedit"));
         wi->setClassName("KexiDBLineEdit");
         wi->setParentFactoryName("stdwidgets");
-        wi->setInheritedClassName("KLineEdit");
+        wi->setInheritedClassName("QLineEdit");
         wi->addAlternateClassName("QLineEdit", true/*override*/);
-        wi->addAlternateClassName("KLineEdit", true/*override*/);
-        wi->setIncludeFileName("klineedit.h");
+        wi->addAlternateClassName("QLineEdit", true/*override*/);
+        wi->setIncludeFileName("qlineedit.h");
         wi->setName(i18nc("Text Box widget", "Text Box"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of text box widgets. Based on that, identifiers such as "
@@ -594,7 +594,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::startInlineEditing() should be called
 
-        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+        QLineEdit *lineedit = static_cast<QLineEdit*>(args.widget);
         args.text = lineedit->text();
         args.alignment = lineedit->alignment();
         args.useFrame = true;
@@ -773,9 +773,10 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"
-#if QT_VERSION  >= 0x040700
-             && property != "clickMessage" // replaced by placeholderText in 2.9
-#endif
+             && property != "clickMessage" // Replaced by placeholderText in 2.9,
+                                           // kept for backward compatibility Kexi projects created with Qt < 4.7.
+             && property != "showClearButton" // Replaced by clearButtonEnabled in 3.0,
+                                              // kept for backward compatibility Kexi projects created with Qt 4.
 #ifndef KEXI_SHOW_UNFINISHED
              && property != "inputMask"
              && property != "maxLength" //!< we may want to integrate this with db schema
