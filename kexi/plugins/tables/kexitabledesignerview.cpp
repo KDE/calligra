@@ -27,11 +27,11 @@
 #include <QSplitter>
 #include <QByteArray>
 #include <QHash>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kundo2command.h>
 #include <kactioncollection.h>

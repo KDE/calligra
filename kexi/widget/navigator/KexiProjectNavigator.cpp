@@ -32,11 +32,11 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QLabel>
+#include <QMenu>
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kactioncollection.h>
@@ -296,7 +296,7 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
     if (!bit || !bit->partItem() /*no menu for group*/) {
         return;
     }
-    KMenu *pm = 0;
+    QMenu *pm = 0;
     if (bit->partItem()) {
         pm = d->itemMenu;
         KexiProjectModelItem *par_it = static_cast<KexiProjectModelItem*>(bit->parent());
@@ -661,7 +661,7 @@ void KexiProjectNavigator::slotUpdateEmptyStateLabel()
 //--------------------------------------------
 
 KexiMenuBase::KexiMenuBase(QWidget* parent, KActionCollection *col)
-        : KMenu(parent)
+        : QMenu(parent)
         , m_actionCollection(col)
 {
 }
@@ -674,7 +674,7 @@ QAction* KexiMenuBase::addAction(const QString& actionName)
 {
     QAction* action = m_actionCollection->action(actionName);
     if (action)
-        KMenu::addAction(action);
+        QMenu::addAction(action);
     return action;
 }
 

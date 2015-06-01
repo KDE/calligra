@@ -36,8 +36,9 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kactioncollection.h>
-#include <kmenu.h>
 #include <kglobalsettings.h>
+
+#include <QMenu>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>
@@ -110,7 +111,7 @@ public:
         }
     }
 
-    KMenu* mainMenu()
+    QMenu* mainMenu()
     {
         if (m_mainMenu) {
             return m_mainMenu;
@@ -127,7 +128,7 @@ public:
         menuButton->setPopupMode(QToolButton::InstantPopup);
         topBarLyr->insertWidget(0, menuButton);
 
-        m_mainMenu = new KMenu;
+        m_mainMenu = new QMenu;
         menuButton->setMenu(m_mainMenu);
         return m_mainMenu;
     }
@@ -209,7 +210,7 @@ public:
     //! did not succeed, so for the second time we block this call.
     tristate recentResultOfSwitchToViewModeInternal;
 private:
-    KMenu* m_mainMenu;
+    QMenu* m_mainMenu;
 };
 
 //----------------------------------------------------------

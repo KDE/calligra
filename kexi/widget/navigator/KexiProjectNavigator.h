@@ -23,7 +23,8 @@
 #define KEXIPROJECTNAVIGATOR_H
 
 #include <QPointer>
-#include <KMenu>
+#include <QMenu>
+
 #include <kexi.h>
 
 class KIcon;
@@ -40,7 +41,7 @@ namespace KexiPart
 class KexiProject;
 
 /*! @internal */
-class KexiMenuBase : public KMenu
+class KexiMenuBase : public QMenu
 {
 public:
     KexiMenuBase(QWidget *parent, KActionCollection *collection);

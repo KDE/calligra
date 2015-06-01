@@ -28,7 +28,7 @@
 
 #include <kstatusbar.h>
 
-class KMenu;
+class QMenu;
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor
@@ -68,7 +68,7 @@ protected:
     KTextEditor::ViewCursorInterface * m_cursorIface;
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
-    KMenu *m_viewMenu;
+    QMenu *m_viewMenu;
 };
 
 #endif

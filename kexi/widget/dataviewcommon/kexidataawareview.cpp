@@ -26,10 +26,10 @@
 #include <core/KexiWindow.h>
 #include <db/roweditbuffer.h>
 
-#include <QVBoxLayout>
-
 #include <kactioncollection.h>
-#include <kmenu.h>
+
+#include <QVBoxLayout>
+#include <QMenu>
 
 class KexiDataAwareView::Private
 {

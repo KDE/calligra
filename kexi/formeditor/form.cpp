@@ -29,6 +29,7 @@
 #include <QStyleOption>
 #include <QDomDocument>
 #include <QLineEdit>
+#include <QMenu>
 
 #include <kundo2stack.h>
 
@@ -37,7 +38,6 @@
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <kmenu.h>
 #include <kfontdialog.h>
 #include <ktextedit.h>
 
@@ -1725,8 +1725,8 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
-    KMenu menu;
-    menu.addTitle(icon, titleText);
+    QMenu menu;
+    menu.addSection(icon, titleText);
 
     QAction *a;
 #define PLUG_ACTION(_name, forceVisible) \
@@ -1768,7 +1768,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         if (separatorNeeded)
             menu.addSeparator();
 
-        KMenu *sub = new KMenu(w);
+        QMenu *sub = new QMenu(w);
         QWidget *buddy = buddyLabelWidget->buddy();
 
         noBuddyAction = sub->addAction(i18n("No Buddy"));
@@ -1803,7 +1803,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             menu.addSeparator();
 
         // We create the signals menu
-        KMenu *sigMenu = new KMenu();
+        QMenu *sigMenu = new QMenu();
         const QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));

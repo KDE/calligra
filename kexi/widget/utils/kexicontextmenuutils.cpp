@@ -49,7 +49,7 @@ public:
 //------------
 
 KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
-        : KMenu(parent)
+        : QMenu(parent)
         , d(new Private(this))
 {
     addTitle(QString());
@@ -210,7 +210,7 @@ KActionCollection* KexiImageContextMenu::actionCollection() const
 }
 
 //static
-bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString& title,
+bool KexiImageContextMenu::updateTitle(QMenu *menu, const QString& title,
                                        const QString& iconName)
 {
     return KexiContextMenuUtils::updateTitle(menu, title, i18n("Image"), iconName);
@@ -219,7 +219,7 @@ bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString& title,
 // -------------------------------------------
 
 //static
-bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
+bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
                                        const QString& objectTypeName, const QString& iconName)
 {
     if (!menu || objectName.isEmpty() || objectTypeName.isEmpty())
@@ -236,7 +236,7 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                             objectName[0].toUpper() + objectName.mid(1),
                             objectTypeName));
 
-    menu->addTitle(QIcon::fromTheme(iconName), realTitle, action /*before old*/);
+    menu->addSection(QIcon::fromTheme(iconName), realTitle, action /*before old*/);
     if (dynamic_cast<QWidgetAction*>(action)
         && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
     {

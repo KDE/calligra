@@ -22,7 +22,8 @@
 
 #include <kexi_global.h>
 #include <db/queryschema.h>
-#include <kmenu.h>
+
+#include <QMenu>
 
 class KActionCollection;
 class KUrl;
@@ -35,7 +36,7 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 public:
     /*! Updates title for context menu.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& objectName,
+    static bool updateTitle(QMenu *menu, const QString& objectName,
                             const QString& objectTypeName, const QString& iconName);
 };
 
@@ -47,7 +48,7 @@ public:
  handlers in KexiDBImageBox and KexiBlobTableEdit so these objects can
  respond on requests for data handling.
 */
-class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
+class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public QMenu
 {
     Q_OBJECT
 
@@ -60,7 +61,7 @@ public:
     /*! Updates title for context menu.
      Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& title,
+    static bool updateTitle(QMenu *menu, const QString& title,
                             const QString& iconName = QString());
 
 public Q_SLOTS:
