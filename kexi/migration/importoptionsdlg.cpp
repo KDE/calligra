@@ -31,6 +31,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 
 using namespace KexiMigration;
 
@@ -76,7 +77,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     lyr->addItem(new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 2);
 
     //read config
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     QString defaultEncodingForMSAccessFiles
         = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
     if (!defaultEncodingForMSAccessFiles.isEmpty()) {
@@ -99,7 +100,7 @@ KexiCharacterEncodingComboBox* OptionsDialog::encodingComboBox() const
 
 void OptionsDialog::accept()
 {
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     if (m_chkAlwaysUseThisEncoding->isChecked())
         importExportGroup.writeEntry("defaultEncodingForMSAccessFiles",
                                      m_encodingComboBox->selectedEncoding());
