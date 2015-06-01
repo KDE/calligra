@@ -752,29 +752,29 @@ void KexiMainWindow::setupActions()
                                  "edit_select_all");
 
     d->action_edit_delete = createSharedAction(i18n("&Delete"), koIconName("edit-delete"),
-                            KShortcut(), "edit_delete");
+                            QKeySequence(), "edit_delete");
     d->action_edit_delete->setToolTip(i18n("Delete selected object"));
     d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
     d->action_edit_delete_row = createSharedAction(i18n("Delete Record"), koIconName("delete_table_row"),
-                                KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
+                                QKeySequence(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
     d->action_edit_delete_row->setToolTip(i18n("Delete the current record"));
     d->action_edit_delete_row->setWhatsThis(i18n("Deletes the current record."));
 
     d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"),
-                                 koIconName("clear_table_contents"), KShortcut(), "edit_clear_table");
+                                 koIconName("clear_table_contents"), QKeySequence(), "edit_clear_table");
     d->action_edit_clear_table->setToolTip(i18n("Clear table contents"));
     d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
     setActionVolatile(d->action_edit_clear_table, true);
 
     d->action_edit_edititem = createSharedAction(i18n("Edit Item"), QString(),
-                              KShortcut(), /* CONFLICT in TV: Qt::Key_F2,  */
+                              QKeySequence(), /* CONFLICT in TV: Qt::Key_F2,  */
                               "edit_edititem");
     d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
     d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
     d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"),
-                                      koIconName("insert_table_row"), KShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_Insert),
+                                      koIconName("insert_table_row"), QKeySequence(Qt::SHIFT | Qt::CTRL | Qt::Key_Insert),
                                       "edit_insert_empty_row");
     setActionVolatile(d->action_edit_insert_empty_row, true);
     d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
@@ -870,13 +870,13 @@ void KexiMainWindow::setupActions()
 
     //DATA MENU
     d->action_data_save_row = createSharedAction(i18n("&Save Record"), koIconName("dialog-ok"),
-                              KShortcut(Qt::SHIFT + Qt::Key_Return), "data_save_row");
+                              QKeySequence(Qt::SHIFT + Qt::Key_Return), "data_save_row");
     d->action_data_save_row->setToolTip(i18n("Save changes made to the current record"));
     d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current record."));
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
 
     d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Record Changes"),
-                                        koIconName("dialog-cancel"), KShortcut(Qt::Key_Escape), "data_cancel_row_changes");
+                                        koIconName("dialog-cancel"), QKeySequence(Qt::Key_Escape), "data_cancel_row_changes");
     d->action_data_cancel_row_changes->setToolTip(
         i18n("Cancel changes made to the current record"));
     d->action_data_cancel_row_changes->setWhatsThis(
@@ -884,27 +884,27 @@ void KexiMainWindow::setupActions()
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_cancel_row_changes, true );
 
     d->action_data_execute = createSharedAction(
-                                 i18n("&Execute"), koIconName("media-playback-start"), KShortcut(), "data_execute");
+                                 i18n("&Execute"), koIconName("media-playback-start"), QKeySequence(), "data_execute");
     //! @todo d->action_data_execute->setToolTip(i18n(""));
     //! @todo d->action_data_execute->setWhatsThis(i18n(""));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-    action = createSharedAction(futureI18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
+    action = createSharedAction(futureI18n("&Filter"), koIconName("view-filter"), QKeySequence(), "data_filter");
     setActionVolatile(action, true);
 #endif
 //! @todo action->setToolTip(i18n(""));
 //! @todo action->setWhatsThis(i18n(""));
 
     // - record-navigation related actions
-    createSharedAction(KexiRecordNavigator::Actions::moveToFirstRecord(), KShortcut(), "data_go_to_first_record");
-    createSharedAction(KexiRecordNavigator::Actions::moveToPreviousRecord(), KShortcut(), "data_go_to_previous_record");
-    createSharedAction(KexiRecordNavigator::Actions::moveToNextRecord(), KShortcut(), "data_go_to_next_record");
-    createSharedAction(KexiRecordNavigator::Actions::moveToLastRecord(), KShortcut(), "data_go_to_last_record");
-    createSharedAction(KexiRecordNavigator::Actions::moveToNewRecord(), KShortcut(), "data_go_to_new_record");
+    createSharedAction(KexiRecordNavigator::Actions::moveToFirstRecord(), QKeySequence(), "data_go_to_first_record");
+    createSharedAction(KexiRecordNavigator::Actions::moveToPreviousRecord(), QKeySequence(), "data_go_to_previous_record");
+    createSharedAction(KexiRecordNavigator::Actions::moveToNextRecord(), QKeySequence(), "data_go_to_next_record");
+    createSharedAction(KexiRecordNavigator::Actions::moveToLastRecord(), QKeySequence(), "data_go_to_last_record");
+    createSharedAction(KexiRecordNavigator::Actions::moveToNewRecord(), QKeySequence(), "data_go_to_new_record");
 
     //FORMAT MENU
     d->action_format_font = createSharedAction(i18n("&Font..."), koIconNameWanted("change font of selected object","fonts"),
-                            KShortcut(), "format_font");
+                            QKeySequence(), "format_font");
     d->action_format_font->setToolTip(i18n("Change font for selected object"));
     d->action_format_font->setWhatsThis(i18n("Changes font for selected object."));
 
@@ -941,7 +941,7 @@ void KexiMainWindow::setupActions()
     d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
     ac->addAction("full_screen", d->action_window_fullscreen);
     QList<QKeySequence> shortcuts;
-    KShortcut shortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
+    QKeySequence shortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
     shortcuts = shortcut.toList();
     d->action_window_fullscreen->setShortcuts(shortcuts);
     QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
