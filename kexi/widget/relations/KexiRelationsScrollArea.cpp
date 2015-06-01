@@ -31,10 +31,10 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QScrollBar>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kmenu.h>
 
 #include <db/tableschema.h>
 #include <db/indexschema.h>
@@ -130,7 +130,7 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
 #endif
 
 #if 0
-    d->popup = new KMenu(this, "popup");
+    d->popup = new QMenu(this, "popup");
     d->openSelectedTableQueryAction->plug(d->popup);
     d->removeSelectedTableQueryAction->plug(d->popup);
     d->removeSelectedConnectionAction->plug(d->popup);

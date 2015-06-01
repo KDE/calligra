@@ -25,12 +25,12 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
+#include <QMenu>
 
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <kmenu.h>
 #include <kdialog.h>
 
 #include <db/connection.h>
@@ -58,7 +58,7 @@ public:
     KexiRelationsScrollArea *scrollArea;
     KexiDB::Connection *conn;
 
-    KMenu *tableQueryPopup //!< over table/query
+    QMenu *tableQueryPopup //!< over table/query
     , *connectionPopup //!< over connection
     , *areaPopup; //!< over outer area
     KAction *openSelectedTableAction, *designSelectedTableAction,
@@ -105,7 +105,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     g->addWidget(d->scrollArea, 1, 0);
 
     //actions
-    d->tableQueryPopup = new KMenu(this);
+    d->tableQueryPopup = new QMenu(this);
     d->tableQueryPopup->setObjectName("tableQueryPopup");
     connect(d->tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
@@ -113,12 +113,12 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     if (d->hideTableAction)
         d->hideTableAction->setIcon(QIcon());
 
-    d->connectionPopup = new KMenu(this);
+    d->connectionPopup = new QMenu(this);
     d->connectionPopup->setObjectName("connectionPopup");
     connect(d->connectionPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
 //! @todo areaPopup
-    d->areaPopup = new KMenu(this);
+    d->areaPopup = new QMenu(this);
     d->areaPopup->setObjectName("areaPopup");
 
     d->appendSelectedFieldAction = new KAction(koIcon("add_field"), i18n("&Append Field"), this);
@@ -373,7 +373,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
     if (currentTableContainer /*&& currentTableContainer->schema()->table()*/) {
         /*! @todo what about query? */
         d->tableQueryPopup->clear();
-        d->tableQueryPopup->addTitle(koIcon("table"),
+        d->tableQueryPopup->addSection(koIcon("table"),
                                      QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + i18n("Table"));
         QStringList selectedFieldNames(currentTableContainer->selectedFieldNames());
         if (currentTableContainer && !selectedFieldNames.isEmpty()) {
@@ -390,7 +390,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
     } else if (d->scrollArea->selectedConnection()) {
         unplugSharedAction("edit_delete", d->connectionPopup);
         d->connectionPopup->clear();
-        d->connectionPopup->addTitle(QIcon(),
+        d->connectionPopup->addSection(QIcon(),
                                      d->scrollArea->selectedConnection()->toString() + " : " + i18n("Relationship"));
         plugSharedAction("edit_delete", d->connectionPopup);
     }
