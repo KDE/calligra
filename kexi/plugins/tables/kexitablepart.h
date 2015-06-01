@@ -72,7 +72,7 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
             Kexi::ViewMode viewMode, bool *ownedByWindow);
