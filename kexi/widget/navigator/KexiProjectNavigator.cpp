@@ -43,7 +43,7 @@
 #include <kactionmenu.h>
 #include <kdialog.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
@@ -188,7 +188,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    i18n("Starts designing of the object selected in the list."),
                                    SLOT(slotDesignObject()));
 
-        d->editTextAction = addAction("editText_object", KIcon(), i18n("Design in &Text View"),
+        d->editTextAction = addAction("editText_object", QIcon(), i18n("Design in &Text View"),
                                      i18n("Design object in text view"),
                                      i18n("Starts designing of the object in the list in text view."),
                                      SLOT(slotEditTextObject()));
@@ -364,7 +364,7 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
             if (d->newObjectAction) {
                 d->newObjectAction->setText(
                     i18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
-                d->newObjectAction->setIcon(KIcon(it->partInfo()->createItemIconName()));
+                d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createItemIconName()));
             }
         #if 0 
              } else {
@@ -695,7 +695,7 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
     if (partInfo && !partInfo->instanceCaption().isEmpty()) {
         title_text += (" : " + partInfo->instanceCaption());
     }
-    addTitle(KIcon(partInfo->itemIconName()), title_text);
+    addTitle(QIcon::fromTheme(partInfo->itemIconName()), title_text);
 
     if (m_actionCollection->action("open_object")
             && m_actionCollection->action("open_object")->isEnabled()

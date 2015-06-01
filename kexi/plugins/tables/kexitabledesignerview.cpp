@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 #include <kundo2command.h>
 #include <kactioncollection.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <KPropertySet>
 #include <KPropertyUtils>

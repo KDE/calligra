@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kexi_global.h>
 #include "kexiactionproxy.h"
 #include "kexiactionproxy_p.h"
 #include "KexiMainWindowIface.h"
@@ -27,7 +28,6 @@
 
 #include <QWidget>
 #include <QIcon>
-#include <kexi_global.h>
 
 KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
         : m_proxy(proxy)

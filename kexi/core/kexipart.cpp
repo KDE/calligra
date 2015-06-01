@@ -237,7 +237,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
     window->setId(item.identifier()); //not needed, but we did it
-    window->setWindowIcon(KIcon(window->itemIconName()));
+    window->setWindowIcon(QIcon::fromTheme(window->itemIconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),

@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kexi.h>
 #include <kexiproject.h>

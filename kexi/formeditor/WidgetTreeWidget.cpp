@@ -28,7 +28,7 @@
 #include <kiconeffect.h>
 #include <klocale.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "objecttree.h"
 #include "form.h"

@@ -19,7 +19,7 @@
 
 #include "kexidbdrivercombobox.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 class KexiDBDriverComboBox::Private
 {

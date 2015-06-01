@@ -27,7 +27,7 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <KexiView.h>
 #include <KexiWindow.h>
