@@ -609,7 +609,7 @@ void KWView::formatPage()
         if (item)
             dia->setCurrentPage(item);
     }
-    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
+    connect(dia, SIGNAL(finished(int)), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
 }
 
