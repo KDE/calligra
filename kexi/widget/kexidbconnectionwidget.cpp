@@ -272,7 +272,7 @@ KexiDBConnectionWidgetDetails::~KexiDBConnectionWidgetDetails()
 //-----------
 
 KexiDBConnectionTabWidget::KexiDBConnectionTabWidget(QWidget* parent)
-        : KTabWidget(parent)
+        : QTabWidget(parent)
 {
     mainWidget = new KexiDBConnectionWidget(this);
     mainWidget->setObjectName("mainWidget");

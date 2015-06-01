@@ -49,7 +49,7 @@ public:
                                  KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
     virtual void initPartActions();
 

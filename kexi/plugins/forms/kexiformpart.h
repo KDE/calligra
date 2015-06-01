@@ -91,7 +91,7 @@ protected:
 
     virtual void initPartActions();
     virtual void initInstanceActions();
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
 private:
     class Private;
