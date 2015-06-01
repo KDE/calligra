@@ -22,11 +22,11 @@
 #include "widgetlibrary.h"
 
 #include <QDomDocument>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <kmenu.h>
 #include <kactioncollection.h>
 
 #include <KoServiceLocator.h>
@@ -681,9 +681,9 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
     if (textVertical.isEmpty()) //default
         textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
 
-    KMenu popup(parent);
+    QMenu popup(parent);
     popup.setObjectName("orientationSelectionPopup");
-    popup.addTitle(QIcon::fromTheme(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
+    popup.addSection(QIcon::fromTheme(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
     QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);
     QAction* vertAction = popup.addAction(iconVertical, textVertical);
     popup.addSeparator();
