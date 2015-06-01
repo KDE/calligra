@@ -22,8 +22,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <klineedit.h>
 
+#include <QLineEdit>
 
 class KexiDateFormatter::Private
 {

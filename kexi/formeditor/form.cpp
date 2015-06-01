@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QStyleOption>
 #include <QDomDocument>
+#include <QLineEdit>
 
 #include <kundo2stack.h>
 
@@ -39,7 +40,6 @@
 #include <kmenu.h>
 #include <kfontdialog.h>
 #include <ktextedit.h>
-#include <klineedit.h>
 
 #include <KexiIcon.h>
 
@@ -2416,7 +2416,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
         connect(textedit, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     } else {
-        KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
+        QLineEdit *editor = new QLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
         editor->setText(args.text);
         editor->setAlignment(args.alignment);
@@ -2573,7 +2573,7 @@ QString Form::inlineEditorText() const
     if (!ed)
         return QString();
     return dynamic_cast<KTextEdit*>(ed)
-           ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<KLineEdit*>(ed)->text();
+           ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<QLineEdit*>(ed)->text();
 }
 
 void Form::setInlineEditorText(const QString& text)
@@ -2584,10 +2584,10 @@ void Form::setInlineEditorText(const QString& text)
 
     if (dynamic_cast<KTextEdit*>(ed))
         dynamic_cast<KTextEdit*>(ed)->setPlainText(text);
-    else if (dynamic_cast<KLineEdit*>(ed))
-        dynamic_cast<KLineEdit*>(ed)->setText(text);
+    else if (dynamic_cast<QLineEdit*>(ed))
+        dynamic_cast<QLineEdit*>(ed)->setText(text);
     else
-        kWarning() << "Inline editor is neither KTextEdit nor KLineEdit";
+        kWarning() << "Inline editor is neither KTextEdit nor QLineEdit";
 }
 
 void Form::disableFilter(QWidget *w, Container *container)

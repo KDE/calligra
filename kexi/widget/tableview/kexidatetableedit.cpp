@@ -34,10 +34,10 @@
 #include <QLayout>
 #include <QToolButton>
 #include <QClipboard>
+#include <QLineEdit>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <klineedit.h>
 
 #include <kexiutils/utils.h>
 
