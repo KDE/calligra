@@ -26,7 +26,7 @@
 #include <db/tristate.h>
 
 class KProcess;
-class KProgressDialog;
+class QProgressDialog;
 
 class SQLite2ToSQLite3Migration : public QObject
 {
@@ -45,7 +45,7 @@ public Q_SLOTS:
 protected:
     QString m_filePath;
     KProcess *m_process;
-    KProgressDialog* m_dlg;
+    QProgressDialog* m_dlg;
 
     struct stat m_st;
     bool m_restoreStat;
