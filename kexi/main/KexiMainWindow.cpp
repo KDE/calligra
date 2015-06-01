@@ -124,6 +124,7 @@
 #undef HAVE_KNEWSTUFF
 #ifdef HAVE_KNEWSTUFF
 #include <knewstuff/downloaddialog.h>
+#include <KSharedConfig>
 #include "kexinewstuff.h"
 #endif
 
@@ -342,7 +343,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 #ifdef KEXI_DEBUG_GUI
     QWidget* debugWindow = 0;
     if (GUIenabled) {
-        KConfigGroup generalGroup = KGlobal::config()->group("General");
+        KConfigGroup generalGroup = KSharedConfig::openConfig()->group("General");
         if (generalGroup.readEntry("ShowInternalDebugger", false)) {
             debugWindow = KexiUtils::createDebugWindow(win);
             debugWindow->show();
