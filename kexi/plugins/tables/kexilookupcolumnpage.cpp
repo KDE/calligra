@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <widget/KexiDataSourceComboBox.h>

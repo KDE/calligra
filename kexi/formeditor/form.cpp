@@ -41,7 +41,7 @@
 #include <ktextedit.h>
 #include <klineedit.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "WidgetInfo.h"
 #include "FormWidget.h"
@@ -1715,7 +1715,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             titleText = i18n("%1 : Form", w->objectName());
         }
         else {
-            icon = KIcon(
+            icon = QIcon::fromTheme(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
@@ -1787,7 +1787,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         foreach (const QString& name, sortedItemNames) {
             ObjectTreeItem *item = items.value(name);
             QAction* action = sub->addAction(
-                KIcon(
+                QIcon::fromTheme(
                     container->form()->library()->iconName(item->className().toLatin1())),
                 item->name()
             );

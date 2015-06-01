@@ -115,7 +115,7 @@
 #include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kDebug()
@@ -513,7 +513,7 @@ KAction* KexiMainWindow::addAction(const char *name, const KIcon &icon, const QS
 
 KAction* KexiMainWindow::addAction(const char *name, const QString& text, const char *shortcut)
 {
-    return addAction(name, KIcon(), text, shortcut);
+    return addAction(name, QIcon(), text, shortcut);
 }
 
 void KexiMainWindow::setupActions()
@@ -552,7 +552,7 @@ void KexiMainWindow::setupActions()
     {
         ac->addAction("project_welcome",
             action = d->action_project_welcome = new KexiMenuWidgetAction(
-                KIcon(), i18n("Welcome"), this));
+                QIcon(), i18n("Welcome"), this));
             addThreeDotsToActionText(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectWelcome()));
         setupMainMenuActionShortcut(action);
@@ -706,7 +706,7 @@ void KexiMainWindow::setupActions()
     else {
         d->action_edit_paste_special_data_table = addAction(
             "edit_paste_special_data_table",
-            KIcon(d->action_edit_paste->icon()), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
+            QIcon::fromTheme(d->action_edit_paste->icon()), i18nc("Paste Special->As Data &Table...", "Paste Special..."));
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
@@ -3143,7 +3143,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         windowContainer = new KexiWindowContainer(d->mainWidget->tabWidget());
         const int tabIndex = d->mainWidget->tabWidget()->addTab(
             windowContainer,
-            KIcon(part ? part->info()->itemIconName() : QString()),
+            QIcon::fromTheme(part ? part->info()->itemIconName() : QString()),
             KexiWindow::windowTitleForItem(*item));
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(item, part));
         QString whatsThisText;

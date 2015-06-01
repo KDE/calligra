@@ -36,7 +36,7 @@
 
 #include <kmessagebox.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kexi.h>
 #include <kexi_global.h>

@@ -23,7 +23,7 @@
 #include <kexi_version.h>
 
 #include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <klocale.h>
 
 static const char description[] =
