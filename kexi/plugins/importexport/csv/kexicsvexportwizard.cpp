@@ -40,8 +40,9 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <QPushButton>
+
 #include <klocale.h>
-#include <kpushbutton.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kdialog.h>
@@ -163,7 +164,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_infoLblTo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 2);
     exportOptionsLyr->setRowStretch(2, 1);
-    m_showOptionsButton = new KPushButton(i18n("Show Options &gt;&gt;"));
+    m_showOptionsButton = new QPushButton(i18n("Show Options &gt;&gt;"));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
     exportOptionsLyr->addWidget(m_showOptionsButton, 3, 1, Qt::AlignRight);
@@ -217,7 +218,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_addColumnNamesCheckBox->setChecked(true);
     exportOptionsSectionLyr->addWidget(m_addColumnNamesCheckBox, 3, 1);
 
-    m_defaultsBtn = new KPushButton(i18n("Defaults"), this);
+    m_defaultsBtn = new QPushButton(i18n("Defaults"), this);
     connect(m_defaultsBtn, SIGNAL(clicked()), this, SLOT(slotDefaultsButtonClicked()));
     exportOptionsLyr->addWidget(m_defaultsBtn, 5, 0);
     exportOptionsLyr->setColumnStretch(1, 1);

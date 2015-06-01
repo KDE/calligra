@@ -35,9 +35,9 @@
 #include <QLineEdit>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QPushButton>
 
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 #include <kdebug.h>
 
 #include <KexiIcon.h>
@@ -117,7 +117,7 @@ public:
     bool importExecuted; //!< used in import()
     KexiProjectSet* prjSet;
     QProgressBar *progressBar;
-    KPushButton* importOptionsButton;
+    QPushButton* importOptionsButton;
     QMap<QString, QString> *args;
     QString predefinedDatabaseName, predefinedMimeType;
     KexiDB::ConnectionData *predefinedConnectionData;
@@ -453,7 +453,7 @@ void ImportWizard::setupImporting()
     options_vbox->setSpacing(KDialog::spacingHint());
     QHBoxLayout *importOptionsButtonLyr = new QHBoxLayout;
     options_vbox->addLayout(importOptionsButtonLyr);
-    d->importOptionsButton = new KPushButton(koIcon("configure"),
+    d->importOptionsButton = new QPushButton(koIcon("configure"),
                                              i18n("Advanced Options"), options_widget);
     connect(d->importOptionsButton, SIGNAL(clicked()),
             this, SLOT(slotOptionsButtonClicked()));
