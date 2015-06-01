@@ -23,7 +23,7 @@
 #include "keximigratedata.h"
 #include "AlterSchemaWidget.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QSet>
 #include <QVBoxLayout>

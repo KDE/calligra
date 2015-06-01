@@ -25,6 +25,7 @@
 
 #include <kstandardaction.h>
 #include <kaction.h>
+
 #include <QWidget>
 #include <QString>
 #include <QIcon>

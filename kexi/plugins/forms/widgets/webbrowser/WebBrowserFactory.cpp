@@ -24,7 +24,7 @@
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QVariant>
 #include <QVariantList>

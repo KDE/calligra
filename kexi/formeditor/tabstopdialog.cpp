@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "form.h"
 #include "WidgetTreeWidget.h"
