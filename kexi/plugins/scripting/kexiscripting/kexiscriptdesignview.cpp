@@ -34,15 +34,16 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QDomDocument>
-#include <ktextbrowser.h>
+#include <QTextBrowser>
+#include <QTextDocument>
+#include <QMenu>
+
 #include <kfiledialog.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
 #include <db/connection.h>
-#include <QTextDocument>
-#include <QMenu>
 
 /// @internal
 class KexiScriptDesignViewPrivate
@@ -67,7 +68,7 @@ public:
     bool updatesProperties;
 
     /// Used to display statusmessages.
-    KTextBrowser* statusbrowser;
+    QTextBrowser* statusbrowser;
     
     /** The type of script
      *  executable = regular script that can be executed by the user
@@ -99,7 +100,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     //addChildView(d->editor);
     setViewWidget(d->splitter);
 
-    d->statusbrowser = new KTextBrowser(d->splitter);
+    d->statusbrowser = new QTextBrowser(d->splitter);
     d->splitter->addWidget(d->statusbrowser);
     d->splitter->setStretchFactor(d->splitter->indexOf(d->statusbrowser), 1);
     d->statusbrowser->setObjectName("ScriptStatusBrowser");
