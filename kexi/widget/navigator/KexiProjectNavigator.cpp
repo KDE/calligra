@@ -176,7 +176,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    i18n("Rename object"),
                                    i18n("Renames the object selected in the list."),
                                    SLOT(slotRename()));
-//! @todo enable, doesn't work now: d->renameAction->setShortcut(KShortcut(Qt::Key_F2));
+//! @todo enable, doesn't work now: d->renameAction->setShortcut(QKeySequence(Qt::Key_F2));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
         //! @todo plugSharedAction("edit_cut",SLOT(slotCut()));
         //! @todo plugSharedAction("edit_copy",SLOT(slotCopy()));

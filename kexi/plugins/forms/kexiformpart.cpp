@@ -104,51 +104,51 @@ void KexiFormPart::initInstanceActions()
 {
     //connect actions provided by widget factories
     createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"),
-                       koIconName("edit-clear"), KShortcut(), "formpart_clear_contents");
+                       koIconName("edit-clear"), QKeySequence(), "formpart_clear_contents");
     createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order..."),
-                       koIconName("tab_order"), KShortcut(), "formpart_taborder");
+                       koIconName("tab_order"), QKeySequence(), "formpart_taborder");
 //! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
 //! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
 
     createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), koIconName("raise"),
-                       KShortcut(), "formpart_format_raise");
+                       QKeySequence(), "formpart_format_raise");
     createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), koIconName("lower"),
-                       KShortcut(), "formpart_format_lower");
+                       QKeySequence(), "formpart_format_lower");
 
 #ifdef KEXI_SHOW_UNFINISHED
     action = createSharedAction(Kexi::DesignViewMode, futureI18n("Other Widgets"), QString(),
-                                KShortcut(), "other_widgets_menu", "KActionMenu");
+                                QKeySequence(), "other_widgets_menu", "KActionMenu");
 #endif
 
     KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
-                                koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
+                                koIconName("aoleft"), QKeySequence(), "formpart_align_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
-                                       KShortcut(), "formpart_align_to_left"));
+                                       QKeySequence(), "formpart_align_to_left"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),
-                                       KShortcut(), "formpart_align_to_right"));
+                                       QKeySequence(), "formpart_align_to_right"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Top"), koIconName("aotop"),
-                                       KShortcut(), "formpart_align_to_top"));
+                                       QKeySequence(), "formpart_align_to_top"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Bottom"), koIconName("aobottom"),
-                                       KShortcut(), "formpart_align_to_bottom"));
+                                       QKeySequence(), "formpart_align_to_bottom"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), koIconName("aopos2grid"),
-                                       KShortcut(), "formpart_align_to_grid"));
+                                       QKeySequence(), "formpart_align_to_grid"));
 
     action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets Size"), koIconName("aogrid"),
-                                KShortcut(), "formpart_adjust_size_menu", "KActionMenu");
+                                QKeySequence(), "formpart_adjust_size_menu", "KActionMenu");
     menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Fit"), koIconName("aofit"),
-                                       KShortcut(), "formpart_adjust_to_fit"));
+                                       QKeySequence(), "formpart_adjust_to_fit"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), koIconName("aogrid"),
-                                       KShortcut(), "formpart_adjust_size_grid"));
+                                       QKeySequence(), "formpart_adjust_size_grid"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Shortest"), koIconName("aoshortest"),
-                                       KShortcut(), "formpart_adjust_height_small"));
+                                       QKeySequence(), "formpart_adjust_height_small"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Tallest"), koIconName("aotallest"),
-                                       KShortcut(), "formpart_adjust_height_big"));
+                                       QKeySequence(), "formpart_adjust_height_big"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Narrowest"), koIconName("aonarrowest"),
-                                       KShortcut(), "formpart_adjust_width_small"));
+                                       QKeySequence(), "formpart_adjust_width_small"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), koIconName("aowidest"),
-                                       KShortcut(), "formpart_adjust_width_big"));
+                                       QKeySequence(), "formpart_adjust_width_big"));
 }
 
 KexiWindowData*

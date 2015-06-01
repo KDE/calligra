@@ -207,7 +207,7 @@ QList<KAction*> KexiSharedActionHost::sharedActions() const
 }
 
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
-        const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
+        const QKeySequence &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
     if (!col)
         col = d->mainWin->actionCollection();
@@ -248,7 +248,7 @@ KAction* KexiSharedActionHost::createSharedAction(KStandardAction::StandardActio
     return action;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut,
+KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const QKeySequence &cut,
         const char *name, KActionCollection* col)
 {
     if (!col)
