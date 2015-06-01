@@ -293,7 +293,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     showButton(FinishButton, false);
     showButton(BackButton, false);
 
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     m_maximumRowsForPreview = importExportGroup.readEntry(
                                   "MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
     m_maximumBytesForPreview = importExportGroup.readEntry(

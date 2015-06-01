@@ -22,6 +22,7 @@
 #define KEXI_CSVEXPORTWIZARD_H
 
 #include <kconfiggroup.h>
+#include <KSharedConfig>
 
 #include "kexicsvexport.h"
 #include <kassistantdialog.h>
@@ -69,7 +70,7 @@ protected:
     //! \return default text quote depending on mode.
     QString defaultTextQuote() const;
 
-    //! Helper, works like KGlobal::config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
+    //! Helper, works like KSharedConfig::openConfig()->readBoolEntry(const char*, bool) but if mode is Clipboard,
     //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
@@ -78,7 +79,7 @@ protected:
     //! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
     QString readEntry(const char *key, const QString& defaultValue = QString());
 
-    //! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
+    //! Helper, works like KSharedConfig::openConfig()->writeEntry(const char*,bool) but if mode is Clipboard,
     //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
