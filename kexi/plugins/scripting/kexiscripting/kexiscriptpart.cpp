@@ -34,7 +34,7 @@
 
 #include <kexipart.h>
 #include <kexipartitem.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

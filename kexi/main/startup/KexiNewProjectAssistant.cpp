@@ -43,7 +43,7 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

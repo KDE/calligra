@@ -52,7 +52,7 @@ public:
     //! matching switchedTo(Kexi::ViewMode mode) signal.
     KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent)
         : KAction(
-            KIcon(Kexi::iconNameForViewMode(mode)),
+            QIcon::fromTheme(Kexi::iconNameForViewMode(mode)),
             Kexi::nameForViewMode(mode, true/*withAmpersand*/),
             parent)
     {
@@ -119,7 +119,7 @@ public:
             return 0;
         }
         KexiSmallToolButton* menuButton = new KexiSmallToolButton(
-                         KIcon(),
+                         QIcon(),
                          window->part()->info()->instanceCaption() + " ",
                          topBarHWidget);
         menuButton->setToolTip(i18n("Menu for the current window"));

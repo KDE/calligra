@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>

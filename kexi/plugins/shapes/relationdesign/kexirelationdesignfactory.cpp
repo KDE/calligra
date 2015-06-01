@@ -19,7 +19,7 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesignshape.h"
 #include <KoShapeLoadingContext.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 

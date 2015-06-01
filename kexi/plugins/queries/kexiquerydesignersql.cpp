@@ -30,7 +30,7 @@
 #include <kaction.h>
 #include <kdialog.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kexiutils/utils.h>
 #include <db/driver.h>
