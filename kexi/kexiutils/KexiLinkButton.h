@@ -22,10 +22,10 @@
 
 #include "kexiutils_export.h"
 
-#include <kpushbutton.h>
+#include <QPushButton>
 
 //! A flat icon-based button without background that behaves like a link
-class KEXIUTILS_EXPORT KexiLinkButton : public KPushButton
+class KEXIUTILS_EXPORT KexiLinkButton : public QPushButton
 {
     Q_OBJECT
 public:

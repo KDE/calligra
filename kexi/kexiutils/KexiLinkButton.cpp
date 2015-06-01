@@ -38,25 +38,25 @@ public:
 };
 
 KexiLinkButton::KexiLinkButton(QWidget* parent)
- : KPushButton(parent), d(new Private)
+ : QPushButton(parent), d(new Private)
 {
     init();
 }
 
 KexiLinkButton::KexiLinkButton(const KIcon &icon, QWidget* parent)
- : KPushButton(icon, QString(), parent), d(new Private)
+ : QPushButton(icon, QString(), parent), d(new Private)
 {
     init();
 }
 
 KexiLinkButton::KexiLinkButton(const QPixmap &pixmap, QWidget* parent)
- : KPushButton(QIcon::fromTheme(pixmap), QString(), parent), d(new Private)
+ : QPushButton(QIcon::fromTheme(pixmap), QString(), parent), d(new Private)
 {
     init();
 }
 
 KexiLinkButton::KexiLinkButton(const KGuiItem &item, QWidget *parent)
- : KPushButton(item, parent), d(new Private)
+ : QPushButton(item, parent), d(new Private)
 {
     init();
 }
@@ -102,7 +102,7 @@ void KexiLinkButton::changeEvent(QEvent* event)
         break;
     default:;
     }
-    KPushButton::changeEvent(event);
+    QPushButton::changeEvent(event);
 }
 
 void KexiLinkButton::updateIcon(const KIcon &icon)
@@ -112,7 +112,7 @@ void KexiLinkButton::updateIcon(const KIcon &icon)
     QColor c(palette().color(foregroundRole()));
     QPixmap pixmap(icon.pixmap(iconSize()));
     KexiUtils::replaceColors(&pixmap, c);
-    KPushButton::setIcon(QIcon::fromTheme(pixmap));
+    QPushButton::setIcon(QIcon::fromTheme(pixmap));
 }
 
 void KexiLinkButton::setIcon(const KIcon &icon)
@@ -122,6 +122,6 @@ void KexiLinkButton::setIcon(const KIcon &icon)
         updateIcon(d->origIcon);
     }
     else {
-        KPushButton::setIcon(d->origIcon);
+        QPushButton::setIcon(d->origIcon);
     }
 }
