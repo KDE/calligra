@@ -25,7 +25,7 @@
 #include <kexiutils/utils.h>
 #include <db/utils.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QLayout>
 #include <QTabWidget>

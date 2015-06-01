@@ -31,7 +31,7 @@
 
 #include <core/kexi.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
