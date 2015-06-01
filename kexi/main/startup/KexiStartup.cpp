@@ -45,14 +45,13 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 
-#include <KProgressDialog>
-
 #include <unistd.h>
 
 #include <QApplication>
 #include <QLayout>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QProgressDialog>
 
 //! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION
@@ -115,7 +114,7 @@ static bool stripQuotes(const QString &item, QString &name)
     return false;
 }
 
-void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
+void updateProgressBar(QProgressDialog *pd, char *buffer, int buflen)
 {
     char *p = buffer;
     QByteArray line;

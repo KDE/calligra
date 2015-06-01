@@ -28,6 +28,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QApplication>
+#include <QProgressDialog>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
         : m_filePath(filePath)
@@ -71,16 +72,16 @@ tristate SQLite2ToSQLite3Migration::run()
     if (!m_process->start(KProcess::NotifyOnExit, KProcess::Stderr))
         return false;
 
-    m_dlg = new KProgressDialog(0, 0, QString(),
-                                i18n("Saving \"%1\" project file to a new \"%2\" database format...",
-                                     QDir::convertSeparators(QFileInfo(m_filePath).fileName()), "SQLite3")
-                               );
+    m_dlg = new QProgressDialog(0);
+    m_dlg->setWindowTitle(0);
+    m_dlg->setLabelText(i18n("Saving \"%1\" project file to a new \"%2\" database format...",
+                             QDir::convertSeparators(QFileInfo(m_filePath).fileName()), "SQLite3"));
     m_dlg->setModal(true);
-    connect(m_dlg, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
+    connect(m_dlg, SIGNAL(canceled()), this, SLOT(cancelClicked()));
     m_dlg->setMinimumDuration(1000);
     m_dlg->setAutoClose(true);
-    m_dlg->progressBar()->setTotalSteps(100);
-    m_dlg->progressBar()->setProgress(0);
+    m_dlg->setMaximum(100);
+    m_dlg->setValue(0);
     m_dlg->exec();
 
     if (result != true)
@@ -89,7 +90,7 @@ tristate SQLite2ToSQLite3Migration::run()
     return result;
 }
 
-extern void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen);
+extern void updateProgressBar(QProgressDialog *pd, char *buffer, int buflen);
 
 void SQLite2ToSQLite3Migration::receivedStderr(KProcess *, char *buffer, int buflen)
 {
