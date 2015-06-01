@@ -36,11 +36,13 @@
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kmimetype.h>
+
 #include <kfile.h>
 #include <kurlcombobox.h>
 #include <kactioncollection.h>
@@ -66,10 +68,11 @@ public:
         @a mimeName mime type name. Does nothing is excludedMimeTypes contains this mime name. */
     bool addFilterForType(QString *filter, QStringList *allfilters, const QString &mimeName) const
     {
-        const KMimeType::Ptr mime = KMimeType::mimeType(mimeName);
-        if (mime && !excludedMimeTypes.contains(mime->name().toLower())) {
+        QMimeDatabase db;
+        const QMimeType mime = db.mimeTypeForName(mimeName);
+        if (mime && !excludedMimeTypes.contains(mime.name().toLower())) {
             *filter += KexiUtils::fileDialogFilterString(mime);
-            *allfilters += mime->patterns();
+            *allfilters += mime.globPatterns();
             return true;
         }
         return false;
@@ -184,7 +187,6 @@ void KexiFileWidget::updateFilters()
     clearFilter();
 
     QString filter;
-    KMimeType::Ptr mime;
     QStringList allfilters;
 
     const bool normalOpeningMode = d->mode & Opening && !(d->mode & Custom);

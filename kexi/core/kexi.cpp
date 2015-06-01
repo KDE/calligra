@@ -36,11 +36,12 @@
 #include <QColor>
 #include <QFileInfo>
 #include <QLabel>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <KIconTheme>
-#include <KMimeType>
 
 using namespace Kexi;
 
@@ -375,10 +376,11 @@ KIcon KexiIcon(const QString &baseName)
 QString Kexi::defaultFileBasedDriverIconName()
 {
     if (!isSpecialIconTheme()) {
-        KMimeType::Ptr mimeType(KMimeType::mimeType(
+        QMimeDatabase db;
+        QMimeType mimeType(db.mimeTypeForName(
                                     KexiDB::defaultFileBasedDriverMimeType()));
-        if (!mimeType.isNull()) {
-            return mimeType->iconName();
+        if (mimeType.isValid()) {
+            return mimeType.iconName();
         }
         KexiDBWarn << KexiDB::defaultFileBasedDriverMimeType() << "mimetype not installed!";
     }

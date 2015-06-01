@@ -26,11 +26,12 @@
 #include <QBuffer>
 #include <QPixmap>
 #include <QHash>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
-#include <kmimetype.h>
 
 #include <db/connection.h>
 
@@ -166,8 +167,9 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
     @todo default PNG ok? */
 static QString formatFromMimeType(const QString& mimeType, const QString& defaultType = "PNG")
 {
-    const KMimeType::Ptr mime = KMimeType::mimeType(mimeType);
-    if (mime.isNull()) {
+    QMimeDatabase db;
+    const QMimeType mime = db.mimeTypeForName(mimeType);
+    if (!mime.isValid()) {
         return defaultType;
     }
     return mime->mainExtension().mid(1); // without '.'
@@ -238,9 +240,10 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     }
     QFileInfo fi(url.fileName());
     QString caption(fi.baseName().replace('_', ' ').simplified());
-    const KMimeType::Ptr mimeType(KMimeType::findByNameAndContent(fileName, data));
+    QMimeDatabase db;
+    const QMimeType mimeType(db.mimeTypeForNameAndData(fileName, data));
 
-    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType->name());
+    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType.name());
     insertItem(item);
 
     //cache

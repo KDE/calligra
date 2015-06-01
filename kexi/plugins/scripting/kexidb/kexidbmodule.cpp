@@ -31,8 +31,10 @@
 #include <db/queryschema.h>
 
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <kconfiggroup.h>
+
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // The as version() published versionnumber of this kross-module.
 #define KROSS_KEXIDB_VERSION 1
@@ -93,9 +95,11 @@ const QString KexiDBModule::lookupByMime(const QString& mimetype)
 
 const QString KexiDBModule::mimeForFile(const QString& filename)
 {
-    QString mimename = KMimeType::findByFileContent(filename)->name();
-    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
-        mimename = KMimeType::findByUrl(filename)->name();
+    QMimeDatabase db;
+    QString mimename = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent).name();
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
+        mimename = db.mimeTypeForUrl(filename).name();
+    }
     return mimename;
 }
 
@@ -107,11 +111,11 @@ QObject* KexiDBModule::createConnectionData()
 QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 {
     //! @todo reuse the original code!
-
-    QString mimename = KMimeType::findByFileContent(filename)->name();
-    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
-        mimename = KMimeType::findByUrl(filename)->name();
-
+    QMimeDatabase db;
+    QString mimename = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent).name();
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
+        mimename = db.mimeTypeForUrl(filename).name();
+    }
     if (mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
         KConfig _config(filename, KConfig::NoGlobals);
 

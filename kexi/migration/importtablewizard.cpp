@@ -31,6 +31,8 @@
 #include <QStringList>
 #include <QProgressBar>
 #include <QCheckBox>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kpushbutton.h>
 #include <kdebug.h>
@@ -56,7 +58,6 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameWidget.h>
-
 
 using namespace KexiMigration;
 
@@ -628,14 +629,16 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
 QString ImportTableWizard::driverNameForSelectedSource()
 {
     if (fileBasedSrcSelected()) {
-        KMimeType::Ptr ptr = KMimeType::findByFileContent(m_srcConnSel->selectedFileName());
-        if (!ptr
-            || ptr.data()->name() == "application/octet-stream"
-            || ptr.data()->name() == "text/plain") {
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForFile(m_srcConnSel->selectedFileName());
+        if (!mime.isValid()
+            || mime.name() == "application/octet-stream"
+            || mime.name() == "text/plain")
+        {
             //try by URL:
-            ptr = KMimeType::findByUrl(m_srcConnSel->selectedFileName());
+            mime = db.mimeTypeForUrl(m_srcConnSel->selectedFileName());
         }
-    return ptr ? m_migrateManager->driverForMimeType(ptr.data()->name()) : QString();
+        return mime.isValid() ? m_migrateManager->driverForMimeType(mime.name()) : QString();
     }
 
     return m_srcConnSel->selectedConnectionData() ? m_srcConnSel->selectedConnectionData()->driverName : QString();

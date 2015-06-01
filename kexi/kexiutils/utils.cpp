@@ -34,6 +34,8 @@
 #include <KMessageBox>
 #include <QFileInfo>
 #include <QClipboard>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <KUrl>
 #include <KRun>
@@ -238,8 +240,9 @@ QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFo
 
 QString KexiUtils::fileDialogFilterString(const QString& mimeString, bool kdeFormat)
 {
-    KMimeType::Ptr ptr = KMimeType::mimeType(mimeString);
-    return fileDialogFilterString(ptr, kdeFormat);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(mimeString);
+    return fileDialogFilterString(mime, kdeFormat);
 }
 
 QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat)
@@ -734,7 +737,8 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
         return;
     }
 
-    QString type = KMimeType::findByUrl(url)->name();
+    QMimeDatabase db;
+    QString type = db.mimeTypeForUrl(url).name();
 
     if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
         KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
