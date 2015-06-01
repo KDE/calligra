@@ -28,7 +28,7 @@
 #include "kexicelleditorfactory.h"
 #include "kexitextformatter.h"
 
-class KLineEdit;
+class QLineEdit;
 
 /*! @short General purpose cell editor using line edit widget.
 */
@@ -110,7 +110,7 @@ protected:
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    KLineEdit *m_lineedit;
+    QLineEdit *m_lineedit;
 
 Q_SIGNALS:
     void hintClicked();
