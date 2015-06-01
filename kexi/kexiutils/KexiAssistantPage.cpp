@@ -25,7 +25,7 @@
 #include "KexiLinkButton.h"
 #include "KexiCloseButton.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kacceleratormanager.h>
 #include <kstandardguiitem.h>

@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <klineedit.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>

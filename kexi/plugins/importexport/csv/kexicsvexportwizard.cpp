@@ -30,7 +30,7 @@
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/KexiFileWidget.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QCheckBox>
 #include <QGroupBox>

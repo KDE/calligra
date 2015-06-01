@@ -27,7 +27,7 @@
 #include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <QLayout>
 #include <QSplitter>

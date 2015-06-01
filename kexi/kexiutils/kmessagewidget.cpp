@@ -22,7 +22,7 @@
 #include "kmessagewidget_p.h"
 
 #include <KexiCloseButton.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include <kaction.h>
 #include <kcolorscheme.h>
