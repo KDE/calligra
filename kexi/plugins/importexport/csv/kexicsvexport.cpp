@@ -36,8 +36,8 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <ksavefile.h>
 
+#include <QSaveFile>
 
 using namespace KexiCSVExport;
 
@@ -107,7 +107,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
     QString buffer;
 
-    QScopedPointer<KSaveFile> kSaveFile;
+    QScopedPointer<QSaveFile> kSaveFile;
     QTextStream *stream = 0;
     QScopedPointer<QTextStream> kSaveFileTextStream;
 
@@ -129,16 +129,16 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 kWarning() << "Fname is empty";
                 return false;
             }
-            kSaveFile.reset(new KSaveFile(options.fileName));
+            kSaveFile.reset(new QSaveFile(options.fileName));
 
-            kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
+            kDebug() << "QSaveFile Filename:" << kSaveFile->fileName();
 
-            if (kSaveFile->open()) {
+            if (kSaveFile->open(QIODevice::WriteOnly)) {
                 kSaveFileTextStream.reset(new QTextStream(kSaveFile.data()));
                 stream = kSaveFileTextStream.data();
                 kDebug() << "have a stream";
             }
-            if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
+            if (QFileDevice::NoError != kSaveFile->error() || !stream) {//sanity
                 kWarning() << "Status != 0 or stream == 0";
 //! @todo show error
                 return false;
@@ -149,7 +149,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //! @todo escape strings
 
 #define _ERR \
-    if (kSaveFile) { kSaveFile->abort(); } \
+    if (kSaveFile) { kSaveFile->cancelWriting(); } \
     return false
 
 #define APPEND(what) \
@@ -269,8 +269,8 @@ kDebug() << 1;
 
     if (kSaveFile) {
         stream->flush();
-        if (!kSaveFile->finalize()) {
-                kDebug() << "Error finalizing stream!";
+        if (!kSaveFile->commit()) {
+                kDebug() << "Error commiting the file" << kSaveFile->fileName();
         }
     }
     return true;
