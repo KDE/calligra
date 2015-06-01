@@ -24,7 +24,7 @@
 
 #include <QObject>
 #include <QString>
-#include <ksharedptr.h>
+#include <QExplicitlySharedDataPointer>
 
 class ScriptManager;
 
@@ -77,7 +77,7 @@ public:
 private:
     ScriptManager  *m_manager;
     Form  *m_form;
-    KSharedPtr<Kross::Api::ScriptContainer> m_script;
+    QExplicitlySharedDataPointer<Kross::Api::ScriptContainer> m_script;
     EventList  m_list;
 };
 
