@@ -19,8 +19,15 @@
  */
 
 #include "kexiblobtableedit.h"
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
+#include <kexiutils/utils.h>
+#include <widget/utils/kexidropdownbutton.h>
+#include <widget/utils/kexicontextmenuutils.h>
 
-#include <stdlib.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 #include <QDataStream>
 #include <QFile>
@@ -36,18 +43,9 @@
 #include <QCache>
 #include <QScrollBar>
 #include <QTemporaryFile>
+#include <QUrl>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kurl.h>
-
-#include <kexiutils/utils.h>
-#include <widget/utils/kexidropdownbutton.h>
-#include <widget/utils/kexicontextmenuutils.h>
-
-#include "KexiTableScrollArea.h"
-#include "KexiTableScrollAreaWidget.h"
+#include <stdlib.h>
 
 struct PixmapAndPos {
     QPixmap pixmap;
@@ -94,8 +92,8 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *p
 
     connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
             this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
-    connect(d->menu, SIGNAL(insertFromFileRequested(KUrl)),
-            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(d->menu, SIGNAL(insertFromFileRequested(QUrl)),
+            this, SLOT(handleInsertFromFileAction(QUrl)));
     connect(d->menu, SIGNAL(saveAsRequested(QString)),
             this, SLOT(handleSaveAsAction(QString)));
     connect(d->menu, SIGNAL(cutRequested()),
@@ -250,12 +248,12 @@ bool KexiBlobTableEdit::cursorAtEnd()
     return true;
 }
 
-void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
+void KexiBlobTableEdit::handleInsertFromFileAction(const QUrl &url)
 {
     if (isReadOnly())
         return;
 
-    QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
+    QString fileName(url.isLocalFile() ? url.toLocalFile() : url.toDisplayString());
 
     //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);

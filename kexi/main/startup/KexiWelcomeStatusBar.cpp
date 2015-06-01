@@ -139,7 +139,7 @@ void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 {
     QByteArray postData = stableVersionStringDot0().toLatin1();
     KIO::Job* sendJob = KIO::storedHttpPost(postData,
-                                            KUrl(uiPath(".list")),
+                                            QUrl(uiPath(".list")),
                                             KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRequestListFilesFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
@@ -198,19 +198,19 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
         }
     }
     // update files
-    KUrl::List sourceFiles;
+    QList<QUrl> sourceFiles;
     foreach (const QString &fname, d->fileNamesToUpdate) {
-        sourceFiles.append(KUrl(uiPath(fname)));
+        sourceFiles.append(QUrl(uiPath(fname)));
     }
     QTemporaryDir tempDir(QDir::tempPath() + "/kexi-status");
     tempDir.setAutoRemove(false);
     d->tempDir = tempDir.path();
     kDebug() << tempDir.path();
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
-                                      KUrl("file://" + tempDir.path()),
+                                      QUrl("file://" + tempDir.path()),
                                       KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
-    //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
+    //kDebug() << "copying from" << QUrl(uiPath(fname)) << "to"
     //         << (dir + fname);
 }
 
