@@ -24,7 +24,7 @@
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 class KUrl;
 
 class KexiBlobTableEdit : public KexiTableEdit
@@ -109,7 +109,7 @@ protected:
 
     class Private;
     Private * const d;
-    //! @todo  KTemporaryFile* m_tempFile;
+    //! @todo  QTemporaryFile* m_tempFile;
     //! @todo  KProcess* m_proc;
     //! @todo  QTextEdit *m_content;
 };
