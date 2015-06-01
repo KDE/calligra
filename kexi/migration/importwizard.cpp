@@ -33,6 +33,8 @@
 #include <QDir>
 #include <QApplication>
 #include <QLineEdit>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kmessagebox.h>
 #include <kpushbutton.h>
@@ -236,13 +238,15 @@ void ImportWizard::setupIntro()
                    d->predefinedDatabaseName, d->predefinedConnectionData->serverInfoString());
     } else if (!d->predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
-        KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(d->predefinedMimeType);
-        if (mimeTypePtr.isNull())
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(d->predefinedMimeType);
+        if (!mime.isValid()) {
             KexiDBWarn << QString("'%1' mimetype not installed!").arg(d->predefinedMimeType);
+        }
         msg = i18nc("@info",
                     "Database Importing Assistant is about to import <filename>%1</filename> file "
                     "of type <resource>%2</resource> into a Kexi project.",
-                    QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
+                    QDir::convertSeparators(d->predefinedDatabaseName), mime.isValid() ? mime.comment() : "???");
     } else {
         msg = i18n("Database Importing Assistant allows you to import an existing database "
                    "into a Kexi project.");
@@ -670,16 +674,17 @@ void ImportWizard::progressUpdated(int percent)
 QString ImportWizard::driverNameForSelectedSource()
 {
     if (fileBasedSrcSelected()) {
-        KMimeType::Ptr ptr = KMimeType::findByFileContent(selectedSourceFileName());
-        if (!ptr
-                || ptr.data()->name() == "application/octet-stream"
-                || ptr.data()->name() == "text/plain"
-                || ptr.data()->name() == "application/zip")
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForFile(selectedSourceFileName());
+        if (!mime.isValid()
+                || mime.name() == "application/octet-stream"
+                || mime.name() == "text/plain"
+                || mime.name() == "application/zip")
         {
             //try by URL:
-            ptr = KMimeType::findByUrl(selectedSourceFileName());
+            mime = db.mimeTypeForUrl(selectedSourceFileName());
         }
-        return ptr ? d->migrateManager.driverForMimeType(ptr.data()->name()) : QString();
+        return mime.isValid() ? d->migrateManager.driverForMimeType(mime.name()) : QString();
     }
 
     //server-based
