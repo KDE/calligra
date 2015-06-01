@@ -22,6 +22,8 @@
 
 #include "kexipart.h"
 
+#include <QSharedData>
+
 namespace Kexi
 {
 
@@ -39,7 +41,7 @@ enum ActionCategory {
 /*! Note: we do not declare actions used in design/text view modes,
  because the categories are used in the data view,
  for now in the 'assign action to a push button' function. */
-class KEXICORE_EXPORT ActionCategories : public KShared
+class KEXICORE_EXPORT ActionCategories : public QSharedData
 {
 public:
     ActionCategories();
