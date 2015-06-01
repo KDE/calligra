@@ -20,11 +20,12 @@
 #ifndef KEXISTARTUPFILEHANDLER_H
 #define KEXISTARTUPFILEHANDLER_H
 
-#include <QSet>
-#include <QObject>
 #include <kexi_export.h>
 
-class KUrl;
+#include <QSet>
+#include <QObject>
+
+class QUrl;
 class KFileDialog;
 class KUrlRequester;
 class KexiContextMessage;
@@ -53,10 +54,10 @@ public:
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
     KexiStartupFileHandler(
-        const KUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);
+        const QUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);
 
     KexiStartupFileHandler(
-        const KUrl &startDirOrVariable, Mode mode, KUrlRequester *requester);
+        const QUrl &startDirOrVariable, Mode mode, KUrlRequester *requester);
 
     virtual ~KexiStartupFileHandler();
 
@@ -115,7 +116,7 @@ protected Q_SLOTS:
     void messageWidgetActionNoTriggered();
 
 private:
-    void init(const KUrl &startDirOrVariable, Mode mode);
+    void init(const QUrl &startDirOrVariable, Mode mode);
     void updateFilters();
 
     class Private;
