@@ -28,7 +28,7 @@
 
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
-#include <kstandarddirs.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
@@ -40,6 +40,7 @@
 #include <kcodecs.h>
 #include <ktempdir.h>
 #include <kde_file.h>
+#include <KSharedConfig>
 
 #include <QEvent>
 #include <QLayout>
@@ -53,6 +54,7 @@
 #include <QResource>
 #include <QTimer>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 #include <stdio.h>
 
@@ -75,7 +77,8 @@ static QString basePath()
 
 static QString findFilename(const QString &guiFileName)
 {
-    const QString result = KStandardDirs::locate("data", basePath() + '/' + guiFileName);
+    const QString result = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                  basePath() + '/' + guiFileName);
     //kDebug() << result;
     return result;
 }
@@ -86,7 +89,7 @@ class KexiWelcomeStatusBarGuiUpdater::Private
 {
 public:
     Private()
-     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+     : configGroup(KConfigGroup(KSharedConfig::openConfig()->group("User Feedback")))
     {
     }
     KConfigGroup configGroup;
@@ -198,7 +201,7 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     foreach (const QString &fname, d->fileNamesToUpdate) {
         sourceFiles.append(KUrl(uiPath(fname)));
     }
-    KTempDir tempDir(KStandardDirs::locateLocal("tmp", "kexi-status"));
+    KTempDir tempDir(QDir::tempPath() + "/kexi-status"));
     tempDir.setAutoRemove(false);
     d->tempDir = tempDir.name();
     kDebug() << tempDir.name();
@@ -238,6 +241,8 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
     }
 }
 
+#include <QDir>
+
 void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
 {
     if (job->error()) {
@@ -248,12 +253,20 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
     KIO::CopyJob* copyJob = qobject_cast<KIO::CopyJob*>(job);
     kDebug() << "DONE" << copyJob->destUrl();
 
-    QString dir(KStandardDirs::locateLocal("data", basePath() + '/', true /*create*/));
-    kDebug() << dir;
-    foreach (const QString &fname, d->fileNamesToUpdate) {
-        const QByteArray oldName(QFile::encodeName(d->tempDir + fname)), newName(QFile::encodeName(dir + fname));
-        if (0 != ::rename(oldName.constData(), newName.constData())) {
-            kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
+    QString dir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                + QLatin1Char('/') + basePath() + '/');
+    bool ok = true;
+    if (!QDir(dir).exists()) {
+        if (!QDir().mkpath(dir)) {
+            ok = false;
+            kWarning() << "Could not create" << dir;
+        }
+    }
+    if (ok) {
+        foreach (const QString &fname, d->fileNamesToUpdate) {
+            if (!QFile::rename(d->tempDir + fname, dir + fname)) {
+                kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
+            }
         }
     }
     KTempDir::removeDir(d->tempDir);
@@ -578,7 +591,7 @@ public:
 
     void updateDonationInfo()
     {
-        KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
+        KConfigGroup configGroup(KSharedConfig::openConfig()->group("User Feedback"));
         QDateTime lastDonation = configGroup.readEntry("LastDonation", QDateTime());
         if (lastDonation.isValid()) {
             int days = lastDonation.secsTo(QDateTime::currentDateTime()) / 60 / 60 / 24;
@@ -824,7 +837,7 @@ void KexiWelcomeStatusBar::showDonation()
         QDesktopServices::openUrl(donationUrl);
         d->donated = true;
         d->updateStatusWidget();
-        KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
+        KConfigGroup configGroup(KSharedConfig::openConfig()->group("User Feedback"));
         int donationsCount = configGroup.readEntry("DonationsCount", 0);
         configGroup.writeEntry("LastDonation", QDateTime::currentDateTime());
         configGroup.writeEntry("DonationsCount", donationsCount + 1);
@@ -986,7 +999,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
         }
     }
     QLabel* lbl;
-    KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
+    KConfigGroup configGroup(KSharedConfig::openConfig()->group("User Feedback"));
     if ((lbl = d->contributionDetailsWidget->findChild<QLabel*>("value_recent_donation"))) {
         QDateTime lastDonation = configGroup.readEntry("LastDonation", QDateTime());
         QString recentDonation = "-";
