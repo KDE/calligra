@@ -24,8 +24,8 @@
 #include <QLabel>
 #include <QRegExp>
 #include <QMetaObject>
+#include <QPushButton>
 
-#include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -54,7 +54,7 @@ public:
     KexiDB::TableViewData *widgetsColumnData,
     *slotsColumnData, *signalsColumnData;
     QLabel  *pixmapLabel, *textLabel;
-    KPushButton *addButton, *removeButton;
+    QPushButton *addButton, *removeButton;
 };
 
 ConnectionDialog::Private::Private(Form *f)
@@ -119,11 +119,11 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
-    d->addButton = new KPushButton(koIcon("document-new"), i18n("&New Connection"), frame);
+    d->addButton = new QPushButton(koIcon("document-new"), i18n("&New Connection"), frame);
     vlayout->addWidget(d->addButton);
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(newItem()));
 
-    d->removeButton = new KPushButton(koIcon("edit-delete"), i18n("&Remove Connection"), frame);
+    d->removeButton = new QPushButton(koIcon("edit-delete"), i18n("&Remove Connection"), frame);
     vlayout->addWidget(d->removeButton);
     connect(d->removeButton, SIGNAL(clicked()), this, SLOT(removeItem()));
 

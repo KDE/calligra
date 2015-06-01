@@ -29,7 +29,7 @@
 #include <ktabwidget.h>
 #include <kdialog.h>
 
-class KPushButton;
+class QPushButton;
 class KexiDBDriverComboBox;
 class KexiDBConnectionTabWidget;
 
@@ -56,10 +56,10 @@ public:
     KexiProjectData data();
 
     //! \return a pointer to 'save changes' button. You can call hide() for this to hide it.
-    KPushButton* saveChangesButton() const;
+    QPushButton* saveChangesButton() const;
 
     //! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
-    KPushButton* testConnectionButton() const;
+    QPushButton* testConnectionButton() const;
 
     KexiDBDriverComboBox *driversCombo() const;
 
