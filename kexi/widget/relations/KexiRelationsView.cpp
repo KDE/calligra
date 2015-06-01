@@ -26,11 +26,11 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QMenu>
+#include <QPushButton>
 
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kpushbutton.h>
 #include <kdialog.h>
 
 #include <db/connection.h>
@@ -54,7 +54,7 @@ public:
     }
 
     KComboBox *tableCombo;
-    KPushButton *btnAdd;
+    QPushButton *btnAdd;
     KexiRelationsScrollArea *scrollArea;
     KexiDB::Connection *conn;
 
@@ -93,7 +93,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     hlyr->addWidget(d->tableCombo);
     fillTablesCombo();
 
-    d->btnAdd = new KPushButton(i18nc("Insert table/query into relations view", "&Insert"), horWidget);
+    d->btnAdd = new QPushButton(i18nc("Insert table/query into relations view", "&Insert"), horWidget);
     hlyr->addWidget(d->btnAdd);
     hlyr->addStretch(1);
     connect(d->btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
