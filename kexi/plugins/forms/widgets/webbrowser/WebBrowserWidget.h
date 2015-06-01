@@ -30,8 +30,7 @@
 #include <QUrl>
 #include<QWebView>
 
-class KPushButton;
-
+class QPushButton;
 class QWebView;
 class QVBoxLayout;
 class QWebHistory;
@@ -126,10 +125,10 @@ private:
     QWebHistory* m_history;
     QProgressBar* m_pbar;
     bool  m_urlChanged_enabled;
-    KPushButton* m_back;
-    KPushButton* m_forward;
-    KPushButton* m_reload;  
-    KPushButton* m_stop;  
+    QPushButton* m_back;
+    QPushButton* m_forward;
+    QPushButton* m_reload;
+    QPushButton* m_stop;
     QHBoxLayout* h_layout;
 };
 
