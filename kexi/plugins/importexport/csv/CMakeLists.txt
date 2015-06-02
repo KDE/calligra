@@ -22,7 +22,7 @@ target_link_libraries(
     kexiextendedwidgets
     keximain
 
-    Predicate
+    KDb
 
     Qt5::Gui
 )

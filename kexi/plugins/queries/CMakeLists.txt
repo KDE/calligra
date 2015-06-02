@@ -23,7 +23,7 @@ target_link_libraries(
     kexirelationsview
     kexiutils
 
-    Predicate
+    KDb
     KProperty
 
     Qt5::Gui

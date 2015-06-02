@@ -19,7 +19,7 @@ target_link_libraries(
     kexicore
     kexiutils
 
-    Predicate
+    KDb
     KProperty
 
     KF5::KIOWidgets

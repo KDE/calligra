@@ -1,5 +1,9 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
 
+set(kexiutils_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 include_directories( 
   ${CMAKE_SOURCE_DIR}/kexi 
   ${CMAKE_CURRENT_SOURCE_DIR}/completer
@@ -41,8 +45,17 @@ endif ()
 
 add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 
-target_link_libraries(kexiutils  Predicate KF5::KIOWidgets)
-target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
+target_include_directories(kexiutils
+    PUBLIC "$<BUILD_INTERFACE:${kexiutils_INCLUDE_DIRS}>"
+)
+
+target_link_libraries(kexiutils
+    PUBLIC
+        KF5::KIOWidgets KF5::KIconThemes KDb
+)
+#target_link_libraries(kexiutils LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
+
+generate_export_header(kexiutils BASE_NAME kexiutils)
 
 set_target_properties(kexiutils PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
