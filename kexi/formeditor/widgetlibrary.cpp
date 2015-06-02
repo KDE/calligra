@@ -219,7 +219,7 @@ WidgetLibrary::loadFactories()
         if (KFormDesigner::version() != loader.majorVersion()) {
 //! @todo show this error to the user?
             kWarning() << 
-                 i18n(
+                 xi18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
                      ptr->library(),
                      loader.majorVersion(),
@@ -673,21 +673,21 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
     if (textHorizontal.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalText").toString();
     if (textHorizontal.isEmpty()) //default
-        textHorizontal = i18nc("Insert Horizontal Widget", "Insert Horizontal");
+        textHorizontal = xi18nc("Insert Horizontal Widget", "Insert Horizontal");
 
     QString textVertical = wclass->internalProperty("orientationSelectionPopup:verticalText").toString();
     if (textVertical.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:verticalText").toString();
     if (textVertical.isEmpty()) //default
-        textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
+        textVertical = xi18nc("Insert Vertical Widget", "Insert Vertical");
 
     QMenu popup(parent);
     popup.setObjectName("orientationSelectionPopup");
-    popup.addSection(QIcon::fromTheme(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
+    popup.addSection(QIcon::fromTheme(wclass->iconName()), xi18n("Insert Widget: %1", wclass->name()));
     QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);
     QAction* vertAction = popup.addAction(iconVertical, textVertical);
     popup.addSeparator();
-    popup.addAction(koIcon("dialog-cancel"), i18n("Cancel"));
+    popup.addAction(koIcon("dialog-cancel"), xi18n("Cancel"));
     QAction *a = popup.exec(pos);
     if (a == horizAction)
         return WidgetFactory::HorizontalOrientation;

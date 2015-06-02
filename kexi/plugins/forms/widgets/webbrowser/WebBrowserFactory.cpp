@@ -39,9 +39,9 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
     webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
-    webBrowser->setName(i18n("Web Browser"));
+    webBrowser->setName(xi18n("Web Browser"));
     webBrowser->setNamePrefix(
-        i18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
             "webBrowser1, webBrowser2 are generated. "
             "This string can be used to refer the widget object as variables in programming "
             "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -49,12 +49,12 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
             "start with upper case letter. Example: smallCamelCase. "
             "Moreover, try to make this prefix as short as possible.",
             "webBrowser"));
-    webBrowser->setDescription(i18n("Web widget with browsing features."));
+    webBrowser->setDescription(xi18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
 
-    setPropertyDescription("zoomFactor", i18n("Zoom Factor"));
-    setPropertyDescription("url", i18n("Url"));
+    setPropertyDescription("zoomFactor", xi18n("Zoom Factor"));
+    setPropertyDescription("url", xi18n("Url"));
 }
 
 WebBrowserFactory::~WebBrowserFactory()

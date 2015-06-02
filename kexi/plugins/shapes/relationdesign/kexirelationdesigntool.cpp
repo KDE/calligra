@@ -94,7 +94,7 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
 
     fileButton = new QToolButton(optionWidget);
     fileButton->setIcon(koIcon("document-open"));
-    fileButton->setToolTip(i18n("Open Database"));
+    fileButton->setToolTip(xi18n("Open Database"));
 
     connect(fileButton, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
     connect(m_relationCombo, SIGNAL(activated(QString)), this, SLOT(relationSelected(QString)));

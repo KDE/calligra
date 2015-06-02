@@ -60,16 +60,16 @@ public:
         setCheckable(true);
         if (mode == Kexi::DataViewMode) {
             setObjectName("view_data_mode");
-            setToolTip(i18n("Switch to data view"));
-            setWhatsThis(i18n("Switches to data view."));
+            setToolTip(xi18n("Switch to data view"));
+            setWhatsThis(xi18n("Switches to data view."));
         } else if (mode == Kexi::DesignViewMode) {
             setObjectName("view_design_mode");
-            setToolTip(i18n("Switch to design view"));
-            setWhatsThis(i18n("Switches to design view."));
+            setToolTip(xi18n("Switch to design view"));
+            setWhatsThis(xi18n("Switches to design view."));
         } else if (mode == Kexi::TextViewMode) {
             setObjectName("view_text_mode");
-            setToolTip(i18n("Switch to text view"));
-            setWhatsThis(i18n("Switches to text view."));
+            setToolTip(xi18n("Switch to text view"));
+            setWhatsThis(xi18n("Switches to text view."));
         } else {
             kWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
         }
@@ -123,8 +123,8 @@ public:
                          QIcon(),
                          window->part()->info()->instanceCaption() + " ",
                          topBarHWidget);
-        menuButton->setToolTip(i18n("Menu for the current window"));
-        menuButton->setWhatsThis(i18n("Shows menu for the current window."));
+        menuButton->setToolTip(xi18n("Menu for the current window"));
+        menuButton->setWhatsThis(xi18n("Shows menu for the current window."));
         menuButton->setPopupMode(QToolButton::InstantPopup);
         topBarLyr->insertWidget(0, menuButton);
 
@@ -268,9 +268,9 @@ KexiView::KexiView(QWidget *parent)
         if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode) {
             QAction *a = sharedAction("project_save");
             d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
-            d->saveDesignButton->setText(i18n("Save"));
-            d->saveDesignButton->setToolTip(i18n("Save current design"));
-            d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
+            d->saveDesignButton->setText(xi18n("Save"));
+            d->saveDesignButton->setToolTip(xi18n("Save current design"));
+            d->saveDesignButton->setWhatsThis(xi18n("Saves changes made to the current design."));
             d->topBarLyr->addWidget(d->saveDesignButton);
 
             a = sharedAction("project_saveas");
@@ -654,11 +654,11 @@ void KexiView::createViewModeToggleButtons()
     d->topBarLyr->addSpacing(KDialog::spacingHint());
 
     d->addViewButton(KoGroupButton::GroupLeft, Kexi::DataViewMode, btnCont,
-                     SLOT(slotSwitchToDataViewModeInternal(bool)), i18n("Data"), btnLyr);
+                     SLOT(slotSwitchToDataViewModeInternal(bool)), xi18n("Data"), btnLyr);
     d->addViewButton(d->window->supportsViewMode(Kexi::TextViewMode) ? KoGroupButton::GroupCenter
                                                                      : KoGroupButton::GroupRight,
                      Kexi::DesignViewMode, btnCont,
-                     SLOT(slotSwitchToDesignViewModeInternal(bool)), i18n("Design"), btnLyr);
+                     SLOT(slotSwitchToDesignViewModeInternal(bool)), xi18n("Design"), btnLyr);
     KoGroupButton *btn = d->addViewButton(KoGroupButton::GroupRight, Kexi::TextViewMode,
                                           btnCont, SLOT(slotSwitchToTextViewModeInternal(bool)),
                                           QString(), btnLyr);

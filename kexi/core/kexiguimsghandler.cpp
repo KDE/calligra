@@ -116,7 +116,7 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 
     QString msg(title);
     if (title.isEmpty())
-        msg = i18n("Unknown error");
+        msg = xi18n("Unknown error");
     msg = "<qt><p>" + msg + "</p>";
     if (!details.isEmpty()) {
         switch (type) {

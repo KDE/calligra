@@ -37,7 +37,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
     ok = false;
     const KexiDB::QuerySchemaParameterList params(querySchema.parameters());
     QList<QVariant> values;
-    const QString caption(i18nc("Enter Query Parameter Value", "Enter Parameter Value"));
+    const QString caption(xi18nc("Enter Query Parameter Value", "Enter Parameter Value"));
     for (KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
             it != params.constEnd(); ++it) {
         switch ((*it).type) {
@@ -58,7 +58,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         }
         case KexiDB::Field::Boolean: {
             QStringList list;
-            list << i18nc("Boolean True - Yes", "Yes") << i18nc("Boolean False - No", "No");
+            list << xi18nc("Boolean True - Yes", "Yes") << xi18nc("Boolean False - No", "No");
             const QString result = KInputDialog::getItem(
                                        caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
             if (!ok || result.isEmpty())
