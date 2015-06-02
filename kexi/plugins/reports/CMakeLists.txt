@@ -36,7 +36,7 @@ target_link_libraries(kexihandler_report
     Qt5::Script
     kexicore
 
-    Predicate
+    KDb
     KProperty
     KReport
 

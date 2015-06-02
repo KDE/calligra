@@ -10,5 +10,5 @@ set(kexialtertabletest_SRCS main.cpp )
 
 add_executable(kexialtertabletest ${kexialtertabletest_SRCS})
 
-target_link_libraries(kexialtertabletest Predicate)
+target_link_libraries(kexialtertabletest KDb)
 
