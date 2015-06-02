@@ -13,15 +13,15 @@ simplefield.cpp
 add_library(kexirelationdesignshape MODULE ${kexirelationdesignshape_PART_SRCS})
 
 target_link_libraries(
-kexirelationdesignshape
-kexicore
-keximain
-komain
+    kexirelationdesignshape
+    kexicore
+    keximain
+    komain
 
-Predicate
+    KDb
 
-Qt5::Core
-Qt5::Gui
+    Qt5::Core
+    Qt5::Gui
 )
 
 install(TARGETS kexirelationdesignshape  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

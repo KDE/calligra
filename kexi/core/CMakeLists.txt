@@ -45,13 +45,15 @@ set(kexicore_LIB_SRCS
 
 add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
+generate_export_header(kexicore BASE_NAME kexicore)
+
 target_link_libraries(kexicore
   KF5::KIOWidgets
 
   kexiutils
   kowidgetutils
 
-  Predicate
+  KDb
   KProperty
 )
 target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils)

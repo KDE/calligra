@@ -1,4 +1,3 @@
-#include <config-calligradb.h>
 
 /*! Compile a mobile version of Kexi. */
 #cmakedefine KEXI_MOBILE

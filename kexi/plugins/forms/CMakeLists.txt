@@ -51,13 +51,13 @@ target_link_libraries(
     kexicore
     kexiguiutils
     kexidataviewcommon
-	kexidatatable
-	kexiextendedwidgets
+    kexidatatable
+    kexiextendedwidgets
 
-    Predicate
+    KDb
 
     Qt5::Gui
-    )
+)
 
 install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
@@ -109,7 +109,7 @@ target_link_libraries(
     kexidatatable
     kexiguiutils
 
-    Predicate
+    KDb
     KProperty
 
     Qt5::Gui

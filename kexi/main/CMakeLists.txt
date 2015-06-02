@@ -48,6 +48,8 @@ ki18n_wrap_ui(keximain_LIB_SRCS
 
 add_library(keximain SHARED ${keximain_LIB_SRCS})
 
+generate_export_header(keximain BASE_NAME keximain)
+
 target_link_libraries(
     keximain
     kexicore
@@ -57,7 +59,7 @@ target_link_libraries(
     keximigrate
 #TODO:    ${KDE4_KNEWSTUFF_LIBS}
 
-    Predicate
+    KDb
     KProperty
 
     KF5::KIOWidgets
