@@ -20,7 +20,7 @@
 #ifndef KEXITABLEDESIGNERINTERFACE_H
 #define KEXITABLEDESIGNERINTERFACE_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 #include <KProperty>
 #include <db/tristate.h>
 #include <QVariant>
