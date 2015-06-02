@@ -1391,7 +1391,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
                                           QDateTime::fromString(res, Qt::ISODate));
     } else if ((str[0] >= '0' && str[0] <= '9') || str[0] == '-' || str[0] == '+') {
         //number
-        QString decimalSym = KGlobal::locale()->decimalSymbol();
+        QString decimalSym = KLocale::global()->decimalSymbol();
         bool ok;
         int pos = str.indexOf('.');
         if (pos == -1) {//second chance: local decimal symbol

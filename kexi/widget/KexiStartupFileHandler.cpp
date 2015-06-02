@@ -280,7 +280,7 @@ void KexiStartupFileHandler::updateFilters()
 /*TODO
 QString KexiStartupFileDialog::selectedFile() const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 // QString path = selectedFile();
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
