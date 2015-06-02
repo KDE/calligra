@@ -253,11 +253,11 @@ void KexiUserFeedbackAgent::Private::updateData()
     ADD("screen_height", screen.height(), ScreenInfoArea);
     ADD("screen_count", QApplication::desktop()->screenCount(), ScreenInfoArea);
 
-    ADD("country", KGlobal::locale()->country(), RegionalSettingsArea);
-    ADD("language", KGlobal::locale()->language(), RegionalSettingsArea);
-    ADD("date_format", KGlobal::locale()->dateFormat(), RegionalSettingsArea);
-    ADD("short_date_format", KGlobal::locale()->dateFormatShort(), RegionalSettingsArea);
-    ADD("time_format", KGlobal::locale()->timeFormat(), RegionalSettingsArea);
+    ADD("country", KLocale::global()->country(), RegionalSettingsArea);
+    ADD("language", KLocale::global()->language(), RegionalSettingsArea);
+    ADD("date_format", KLocale::global()->dateFormat(), RegionalSettingsArea);
+    ADD("short_date_format", KLocale::global()->dateFormatShort(), RegionalSettingsArea);
+    ADD("time_format", KLocale::global()->timeFormat(), RegionalSettingsArea);
     ADD("right_to_left", QApplication::isRightToLeft(), RegionalSettingsArea);
 #undef ADD
 }

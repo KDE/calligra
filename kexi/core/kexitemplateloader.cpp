@@ -65,7 +65,7 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
     KexiTemplateInfoList list;
 //! @todo OK? KGlobal::mainComponent().componentName()
     const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
-    QString lang(KGlobal::locale()->language());
+    QString lang(KLocale::global()->language());
     QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subdir));
     while (true) {
         foreach(const QString &dirname, dirs) {
