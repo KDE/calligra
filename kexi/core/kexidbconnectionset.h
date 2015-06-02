@@ -20,7 +20,7 @@
 #ifndef KEXIDBCONNSET_H
 #define KEXIDBCONNSET_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 #include <db/connectiondata.h>
 

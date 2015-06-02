@@ -20,7 +20,7 @@
 #ifndef KEXISTANDARDACTION_H
 #define KEXISTANDARDACTION_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 #include <QObject>
 
 class KAction;
