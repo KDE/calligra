@@ -2166,7 +2166,7 @@ void KexiMenuWidgetPrivate::updateLogo()
         updateLogoPixmap();
         clickableLogoArea = new ClickableLogoArea(q);
         clickableLogoArea->setCursor(Qt::PointingHandCursor);
-        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", QLatin1String(calligraUrl)));
+        clickableLogoArea->setToolTip(xi18n("Visit Calligra home page at %1", QLatin1String(calligraUrl)));
     }
     clickableLogoArea->setGeometry(logoRect);
 }

@@ -54,12 +54,12 @@
 KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
         : KFormDesigner::WidgetFactory(parent, name)
 {
-    setPropertyDescription("dataSource", i18n("Data Source"));
+    setPropertyDescription("dataSource", xi18n("Data Source"));
 
     //used in labels, frames...
-    setPropertyDescription("frameColor", i18n("Frame Color"));
+    setPropertyDescription("frameColor", xi18n("Frame Color"));
 
-    setPropertyDescription("readOnly", i18n("Read Only"));
+    setPropertyDescription("readOnly", xi18n("Read Only"));
 }
 
 KexiDBFactoryBase::~KexiDBFactoryBase()

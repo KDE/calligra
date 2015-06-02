@@ -98,7 +98,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
         KexiPluginLoader loader(i->ptr(), "X-Kexi-Class");
         if (loader.majorVersion() != KEXI_PART_VERSION) {
             i->setBroken(true,
-                i18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
+                xi18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
                       "found version %2, expected version %3.",
                       i->objectName(),
                       loader.majorVersion(),
@@ -109,7 +109,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
         p = loader.createPlugin<PartClass>(manager);
         if (!p) {
             kWarning() << "failed";
-            i->setBroken(true, i18nc("@info", "Error while loading plugin <resource>%1</resource>",
+            i->setBroken(true, xi18nc("@info", "Error while loading plugin <resource>%1</resource>",
                                      i->objectName()));
             manager->setError(i->errorMessage());
             return 0;
@@ -135,7 +135,7 @@ Manager::~Manager()
 
 static QString appIncorrectlyInstalledMessage()
 {
-    return i18nc("@info", "<application>%1</application> could have been incorrectly installed or started. The application will be closed.",
+    return xi18nc("@info", "<application>%1</application> could have been incorrectly installed or started. The application will be closed.",
                  KGlobal::mainComponent().aboutData()->programName());
 }
 
@@ -152,7 +152,7 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        m_serverErrorMsg = i18nc("@info", "No <resource>%1</resource> service type installed.",
+        m_serverErrorMsg = xi18nc("@info", "No <resource>%1</resource> service type installed.",
                                  QLatin1String("Kexi/Handler"));
         setError(appIncorrectlyInstalledMessage());
         return false;
@@ -160,7 +160,7 @@ bool Manager::lookup()
 
     KConfigGroup cg(KSharedConfig::openConfig()->group("Parts"));
     if (qApp && !cg.hasKey("Order")) {
-        m_serverErrorMsg = i18nc("@info",
+        m_serverErrorMsg = xi18nc("@info",
                                  "Missing or invalid default application configuration. No <resource>%1</resource> key.",
                                  QLatin1String("Parts/Order"));
         setError(appIncorrectlyInstalledMessage());
@@ -258,7 +258,7 @@ Info* Manager::infoForClass(const QString &className)
     Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
     if (i)
         return i;
-    setError(i18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
+    setError(xi18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
     return 0;
 }
 

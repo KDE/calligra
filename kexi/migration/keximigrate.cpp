@@ -130,7 +130,7 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
                                      d->migrateData->destination->connectionData()->driverName);
     if (!destDriver) {
         result->setStatus(&drvManager,
-                          i18n("Could not create database \"%1\".",
+                          xi18n("Could not create database \"%1\".",
                                d->migrateData->destination->databaseName()));
         return false;
     }
@@ -180,7 +180,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                                      d->migrateData->destination->connectionData()->driverName);
     if (!destDriver) {
         result->setStatus(&drvManager,
-                          i18n("Could not create database \"%1\".",
+                          xi18n("Could not create database \"%1\".",
                                d->migrateData->destination->databaseName()));
         return false;
     }
@@ -192,7 +192,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     if (!drv_connect()) {
         kDebug() << "Couldnt connect to database server";
         if (result)
-            result->setStatus(i18n("Could not connect to data source \"%1\".",
+            result->setStatus(xi18n("Could not connect to data source \"%1\".",
                                    d->migrateData->source->serverInfoString()), "");
         return false;
     }
@@ -203,7 +203,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         kDebug() << "Couldnt get list of tables";
         if (result)
             result->setStatus(
-                i18n("Could not get a list of table names for data source \"%1\".",
+                xi18n("Could not get a list of table names for data source \"%1\".",
                      d->migrateData->source->serverInfoString()), "");
         return false;
     }
@@ -213,7 +213,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         kDebug() << "There were no tables to import";
         if (result)
             result->setStatus(
-                i18n("No tables to import found in data source \"%1\".",
+                xi18n("No tables to import found in data source \"%1\".",
                      d->migrateData->source->serverInfoString()), "");
         return false;
     }
@@ -259,7 +259,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             delete tableSchema;
             if (result)
                 result->setStatus(
-                    i18n(
+                    xi18n(
                         "Could not import project from data source \"%1\". Error reading table \"%2\".",
                         d->migrateData->source->serverInfoString(), tableCaption), QString());
             return false;
@@ -289,7 +289,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             ok = false;
             if (result)
                 result->setStatus(destConn,
-                                  i18n("Could not create database \"%1\".",
+                                  xi18n("Could not create database \"%1\".",
                                        d->migrateData->destination->databaseName()));
             //later destConn->dropDatabase(d->migrateData->destination->databaseName());
             //don't delete prj, otherwise eror message will be deleted  delete prj;
@@ -360,7 +360,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 destConn->debugError();
                 if (result)
                     result->setStatus(destConn,
-                                      i18n("Could not create database \"%1\".",
+                                      xi18n("Could not create database \"%1\".",
                                            d->migrateData->destination->databaseName()));
                 d->tableSchemas.removeAt(d->tableSchemas.indexOf(ts));
                 break;
@@ -388,7 +388,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             ok = false;
             if (result)
                 result->setStatus(d->destPrj,
-                                  i18n("Could not import project from data source \"%1\".",
+                                  xi18n("Could not import project from data source \"%1\".",
                                        d->migrateData->source->serverInfoString()));
         }
     }
@@ -438,7 +438,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 kDebug() << "Failed to copy table " << tsName;
                 if (result)
                     result->setStatus(destConn,
-                                      i18n("Could not copy table \"%1\" to destination database.", tsName));
+                                      xi18n("Could not copy table \"%1\" to destination database.", tsName));
                 break;
             }
         }//for
@@ -462,7 +462,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     // Finally: error handling
     if (result && result->error())
         result->setStatus(destConn,
-                          i18n("Could not import data from data source \"%1\".",
+                          xi18n("Could not import data from data source \"%1\".",
                                d->migrateData->source->serverInfoString()));
     if (destConn) {
         destConn->debugError();
@@ -541,8 +541,8 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 {
     const QStringList typeNames(KexiDB::Field::typeNames());
     bool ok;
-    const QString res(KInputDialog::getItem(i18n("Field Type"),
-        i18n("The data type for field <resource>%1</resource> could not be determined. "
+    const QString res(KInputDialog::getItem(xi18n("Field Type"),
+        xi18n("The data type for field <resource>%1</resource> could not be determined. "
              "Please select one of the following data types.", fname),
         typeNames, 0, false/*!editable*/, &ok));
 
@@ -603,7 +603,7 @@ bool KexiMigrate::isValid()
     if (KexiMigration::versionMajor() != versionMajor()
             || KexiMigration::versionMinor() != versionMinor()) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
-                 i18n(
+                 xi18n(
                      "Incompatible migration driver's \"%1\" version: found version %2, expected version %3.",
                      objectName(),
                      QString("%1.%2").arg(versionMajor()).arg(versionMinor()),

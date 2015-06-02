@@ -98,7 +98,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 {
     d->splitter = new QSplitter(this);
     d->splitter->setOrientation(Qt::Vertical);
-    d->head = new KexiSectionHeader(i18n("SQL Query Text"), Qt::Vertical, d->splitter);
+    d->head = new KexiSectionHeader(xi18n("SQL Query Text"), Qt::Vertical, d->splitter);
     d->splitter->addWidget(d->head);
     d->splitter->setStretchFactor(
         d->splitter->indexOf(d->head), 3/*stretch*/);
@@ -151,11 +151,11 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
-    viewActions << (a = new KAction(koIcon("test_it"), i18n("Check Query"), this));
+    viewActions << (a = new KAction(koIcon("test_it"), xi18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
     a->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
-    a->setToolTip(i18n("Check Query"));
-    a->setWhatsThis(i18n("Checks query for validity."));
+    a->setToolTip(xi18n("Check Query"));
+    a->setWhatsThis(xi18n("Checks query for validity."));
     addAction(a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
@@ -179,20 +179,20 @@ KexiQueryDesignerSQLEditor *KexiQueryDesignerSQLView::editor() const
 void KexiQueryDesignerSQLView::setStatusOk()
 {
     d->pixmapStatus->setPixmap(d->statusPixmapOk);
-    setStatusText("<h3>" + i18n("The query is correct") + "</h3>");
+    setStatusText("<h3>" + xi18n("The query is correct") + "</h3>");
 }
 
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 {
     d->pixmapStatus->setPixmap(d->statusPixmapErr);
-    setStatusText("<h3>" + i18n("The query is incorrect") + "</h3><p>" + msg + "</p>");
+    setStatusText("<h3>" + xi18n("The query is incorrect") + "</h3><p>" + msg + "</p>");
 }
 
 void KexiQueryDesignerSQLView::setStatusEmpty()
 {
     d->pixmapStatus->setPixmap(d->statusPixmapInfo);
     setStatusText(
-        i18n("Please enter your query and execute \"Check query\" function to verify it."));
+        xi18n("Please enter your query and execute \"Check query\" function to verify it."));
 }
 
 void KexiQueryDesignerSQLView::setStatusText(const QString& text)
@@ -229,9 +229,9 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                 //yes: parse SQL text
                 if (sqlTextIsEmpty || !slotCheckQuery()) {
                     if (KMessageBox::No == KMessageBox::warningYesNo(this,
-                            "<p>" + i18n("The query you entered is incorrect.")
-                            + "</p><p>" + i18n("Do you want to cancel any changes made to this SQL text?") + "</p>"
-                            + "</p><p>" + i18n("Answering \"No\" allows you to make corrections.") + "</p>")) {
+                            "<p>" + xi18n("The query you entered is incorrect.")
+                            + "</p><p>" + xi18n("Do you want to cancel any changes made to this SQL text?") + "</p>"
+                            + "</p><p>" + xi18n("Answering \"No\" allows you to make corrections.") + "</p>")) {
                         return cancelled;
                     }
                     //do not change original query - it's invalid
@@ -382,7 +382,7 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
         }
     }
     else { //the query is not ok
-        if (KMessageBox::Yes != KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
+        if (KMessageBox::Yes != KMessageBox::questionYesNo(this, xi18n("Do you want to save invalid query?"),
                                          0, KStandardGuiItem::yes(), KStandardGuiItem::no(),
                                          "askBeforeSavingInvalidQueries"/*config entry*/))
         {

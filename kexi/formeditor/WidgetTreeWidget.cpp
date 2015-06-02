@@ -116,7 +116,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                     if (itemName.isEmpty()) {
                         itemName = forcedTabPageName;
                         if (itemName.isEmpty())
-                            itemName = i18n("Page %1", tabIndex + 1);
+                            itemName = xi18n("Page %1", tabIndex + 1);
                     }
                     else {
                         itemName.remove('&');
@@ -124,7 +124,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 }
                 else
                     itemName = forcedTabPageName;
-                itemClass = i18nc("Tab widget's page", "Tab Page");
+                itemClass = xi18nc("Tab widget's page", "Tab Page");
                 d->customSortingKey = QString("tab%1").arg(tabIndex);
                 //kDebug() << "d->customSortingKey" << d->customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
@@ -222,7 +222,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
     : QTreeWidget(parent), d(new Private(options))
 {
     setRootIsDecorated(false);
-    setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
+    setHeaderLabels(QStringList() << xi18n("Widget name") << xi18nc("Widget's type", "Type"));
     installEventFilter(this);
 
     if (!(d->options & DisableSelection)) {

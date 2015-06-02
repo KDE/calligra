@@ -66,7 +66,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
 {
     setObjectName("tabstop_dialog");
     setModal(true);
-    setWindowTitle(i18nc("@title:window", "Edit Tab Order"));
+    setWindowTitle(xi18nc("@title:window", "Edit Tab Order"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 
@@ -92,18 +92,18 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
-    d->btnUp = new QPushButton(koIcon("arrow-up"), i18n("Move Up"), frame);
-    d->btnUp->setToolTip(i18n("Move widget up"));
+    d->btnUp = new QPushButton(koIcon("arrow-up"), xi18n("Move Up"), frame);
+    d->btnUp->setToolTip(xi18n("Move widget up"));
     vbox->addWidget(d->btnUp);
     connect(d->btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-    d->btnDown = new QPushButton(koIcon("arrow-down"), i18n("Move Down"), frame);
-    d->btnDown->setToolTip(i18n("Move widget down"));
+    d->btnDown = new QPushButton(koIcon("arrow-down"), xi18n("Move Down"), frame);
+    d->btnDown->setToolTip(xi18n("Move widget down"));
     vbox->addWidget(d->btnDown);
     connect(d->btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
     vbox->addStretch();
 
-    d->check = new QCheckBox(i18n("Handle tab order automatically"), frame);
+    d->check = new QCheckBox(xi18n("Handle tab order automatically"), frame);
     d->check->setObjectName("tabstops_check");
     connect(d->check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
     l->addWidget(d->check, 1, 0, 1, 2);

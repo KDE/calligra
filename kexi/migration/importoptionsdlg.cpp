@@ -41,7 +41,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
-    setWindowTitle(i18nc("@title:window", "Advanced Import Options"));
+    setWindowTitle(xi18nc("@title:window", "Advanced Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setWindowIcon(koIcon("configure"));
@@ -54,10 +54,10 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     m_encodingComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     lyr->addWidget(m_encodingComboBox, 1, 1);
     QLabel* lbl = new QLabel(
-        i18n("<h3>Text encoding for Microsoft Access database</h3>\n"
-             "<p>Database file \"%1\" appears to be created by a version of Microsoft Access older than 2000.</p>"
-             "<p>In order to properly import national characters, you may need to choose a proper text encoding "
-             "if the database was created on a computer with a different character set.</p>",
+        xi18n("<title>Text encoding for Microsoft Access database</title>\n"
+             "<para>Database file <filename>%1</filename> appears to be created by a version of Microsoft Access older than 2000.</para>"
+             "<para>In order to properly import national characters, you may need to choose a proper text encoding "
+             "if the database was created on a computer with a different character set.</para>",
              QDir::convertSeparators(databaseFile)),
         plainPage);
     lbl->setAlignment(Qt::AlignLeft);
@@ -65,12 +65,12 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     lyr->addWidget(lbl, 0, 0, 1, 3);
 
-    QLabel* lbl2 = new QLabel(i18n("Text encoding:"), plainPage);
+    QLabel* lbl2 = new QLabel(xi18n("Text encoding:"), plainPage);
     lbl2->setBuddy(m_encodingComboBox);
     lyr->addWidget(lbl2, 1, 0);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
-        i18n("Always use this encoding in similar situations"), plainPage);
+        xi18n("Always use this encoding in similar situations"), plainPage);
     lyr->addWidget(m_chkAlwaysUseThisEncoding, 2, 1, 1, 2);
 
     lyr->addItem(new QSpacerItem(20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 1);

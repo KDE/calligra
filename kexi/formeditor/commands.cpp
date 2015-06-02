@@ -942,7 +942,7 @@ void InsertWidgetCommand::execute()
         d->form->abortWidgetInserting();
         WidgetInfo *winfo = d->form->library()->widgetInfoForClassName(d->_class);
         KMessageBox::sorry(d->form ? d->form->widget() : 0,
-                           i18n("Could not insert widget of type \"%1\". "
+                           xi18n("Could not insert widget of type \"%1\". "
                                 "A problem with widget's creation encountered.",
                                 winfo ? winfo->name() : QString()));
         kWarning() << "widget creation failed";
@@ -1842,7 +1842,7 @@ void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pa
     if (classname == "KFDTabWidget") {
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
         const QString realPageName = pageName.isEmpty() ?
-            i18n("Page %1", tab->count() + 1) : pageName;
+            xi18n("Page %1", tab->count() + 1) : pageName;
         if (pageIndex < 0)
             pageIndex = tab->count();
         tab->insertTab(pageIndex, page, realPageName);
