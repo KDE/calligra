@@ -306,72 +306,6 @@ QPixmap KexiUtils::emptyIcon(KIconLoader::Group iconGroup)
     return noIcon;
 }
 
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QByteArray& array)
-{
-    QDataStream ds(&array, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds << map;
-}
-
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QString& string)
-{
-    QByteArray array;
-    QDataStream ds(&array, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds << map;
-    kDebug() << array[3] << " " << array[4] << " " << array[5];
-    const uint size = array.size();
-    string.clear();
-    string.reserve(size);
-    for (uint i = 0; i < size; i++) {
-        string[i] = QChar(ushort(array[i]) + 1);
-    }
-}
-
-QMap<QString, QString> KexiUtils::deserializeMap(const QByteArray& array)
-{
-    QMap<QString, QString> map;
-    QByteArray ba(array);
-    QDataStream ds(&ba, QIODevice::ReadOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds >> map;
-    return map;
-}
-
-QMap<QString, QString> KexiUtils::deserializeMap(const QString& string)
-{
-    QByteArray array;
-    const uint size = string.length();
-    array.resize(size);
-    for (uint i = 0; i < size; i++) {
-        array[i] = char(string[i].unicode() - 1);
-    }
-    QMap<QString, QString> map;
-    QDataStream ds(&array, QIODevice::ReadOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds >> map;
-    return map;
-}
-
-QString KexiUtils::stringToFileName(const QString& string)
-{
-    QString _string(string);
-    _string.replace(QRegExp("[\\\\/:\\*?\"<>|]"), " ");
-    return _string.simplified();
-}
-
-void KexiUtils::simpleCrypt(QString& string)
-{
-    for (int i = 0; i < string.length(); i++)
-        string[i] = QChar(string[i].unicode() + 47 + i);
-}
-
-void KexiUtils::simpleDecrypt(QString& string)
-{
-    for (int i = 0; i < string.length(); i++)
-        string[i] = QChar(string[i].unicode() - 47 - i);
-}
-
 static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins, const QRect& rect,
                                       QPixmap& pixmap, QPoint &pos, Qt::Alignment alignment,
                                       bool scaledContents, bool keepAspectRatio,
@@ -465,33 +399,6 @@ QPixmap KexiUtils::scaledPixmap(const WidgetMargins& margins, const QRect& rect,
     QPixmap px(pixmap);
     drawOrScalePixmapInternal(0, margins, rect, px, pos, alignment, scaledContents, keepAspectRatio, transformMode);
     return px;
-}
-
-QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
-{
-    QString str;
-    unsigned char* cstr_ptr = (unsigned char*) & ptr;
-    for (uint i = 0; i < size; i++) {
-        QString s;
-        s.sprintf("%2.2x", cstr_ptr[i]);
-        str.append(s);
-    }
-    return str;
-}
-
-void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
-{
-    if ((str.length() / 2) < (int)size)
-        return 0;
-    QByteArray array;
-    array.resize(size);
-    bool ok;
-    for (uint i = 0; i < size; i++) {
-        array[i] = (unsigned char)(str.mid(i * 2, 2).toUInt(&ok, 16));
-        if (!ok)
-            return 0;
-    }
-    return *(void**)(array.data());
 }
 
 void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
