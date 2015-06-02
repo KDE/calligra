@@ -54,14 +54,17 @@
 #ifndef QT_NO_WHATSTHIS
 # include <QWhatsThis>
 #endif
-
-#include "KexiMenuWidget_p.h"
 #include <QWidgetAction>
 #include <QToolButton>
 #include <QPushButton>
 #include <QScopedPointer>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFontDatabase>
+
+#include <KColorScheme>
+
+#include "KexiMenuWidget_p.h"
 
 const int calligraLogoPixmapInternalWidth = 100;
 const int calligraLogoPixmapInternalHeight = 71;
@@ -72,7 +75,7 @@ OxygenHelper::OxygenHelper()
  : _componentData("oxygen", 0, KComponentData::SkipMainComponentRegistration)
 {
     _config = _componentData.config();
-    _contrast = KGlobalSettings::contrastF(_config);
+    _contrast = KColorScheme::contrastF(_config);
     // background contrast is calculated so that it is 0.9
     // when KGlobalSettings contrast value of 0.7
     _bgcontrast = qMin(1.0, 0.9*_contrast/0.7);
@@ -2366,7 +2369,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     style()->drawControl(QStyle::CE_MenuEmptyArea, &menuOpt, &p, this);
 
     // version
-    p.setFont(KGlobalSettings::smallestReadableFont());
+    p.setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     QColor textColor;
     textColor = palette().color(QPalette::Base);
     p.setPen(QPen(textColor));
@@ -2441,7 +2444,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
         if (!action->menu()){
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
             //On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
 #endif
@@ -2586,7 +2589,7 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
         else if (key == Qt::Key_Right)
             key = Qt::Key_Left;
     }
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     if (key == Qt::Key_Tab) //means down
         key = Qt::Key_Down;
     if (key == Qt::Key_Backtab) //means up
@@ -3097,7 +3100,7 @@ void KexiMenuWidget::internalDelayedPopup()
 */
 void KexiMenuWidget::setNoReplayFor(QWidget *noReplayFor)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->noReplayFor = noReplayFor;
 #else
     Q_UNUSED(noReplayFor);

@@ -181,7 +181,7 @@ QVariant KexiTextFormatter::fromString(const QString& text) const
     case KexiDB::Field::Double: {
         // replace custom decimal symbol with '.' as required by to{Float|Double}()
         QString fixedText(text);
-        fixedText.replace(KGlobal::locale()->decimalSymbol(), ".");
+        fixedText.replace(KLocale::global()->decimalSymbol(), ".");
         if (d->field->type() == KexiDB::Field::Double)
             return fixedText.toDouble();
         return fixedText.toFloat();

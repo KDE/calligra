@@ -27,7 +27,7 @@
 
 class QAbstractItemModel;
 
-typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
+typedef KCategoryDrawer KexiCategoryDrawerBase;
 
 //! Modification of category drawer for KCategorizedView: disallows clicking on the drawer
 class KEXIUTILS_EXPORT KexiCategoryDrawer : public KexiCategoryDrawerBase

@@ -29,6 +29,7 @@
 #include <QPaintEvent>
 #include <QStyle>
 #include <QStyleOption>
+#include <QFontDatabase>
 
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
@@ -102,7 +103,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         , m_inStyleChangeEvent(false)
 {
     QFont tmpFont;
-    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    tmpFont.setPointSize(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     m_originalPalette = palette();
     connect(this, SIGNAL(textChanged(QString)),
