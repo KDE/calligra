@@ -395,4 +395,3 @@ KexiFormPartTempData::~KexiFormPartTempData()
 {
 }
 
-#include "kexiformpart.moc"

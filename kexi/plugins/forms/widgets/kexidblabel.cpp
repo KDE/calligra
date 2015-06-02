@@ -226,4 +226,3 @@ void KexiDBLabel::setText(const QString& text)
 #define ClassName KexiDBLabel
 #define SuperClassName QLabel
 #include "kexiframeutils_p.cpp"
-#include "kexidblabel.moc"

@@ -92,4 +92,3 @@ void KexiTitleLabel::changeEvent(QEvent* event)
     }
 }
 
-#include "KexiTitleLabel.moc"

@@ -103,4 +103,3 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
     KPropertyStringEditor::setValue(identifier);
 }
 
-#include "KexiCustomPropertyFactory_p.moc"

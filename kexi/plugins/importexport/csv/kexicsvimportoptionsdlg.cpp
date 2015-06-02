@@ -201,4 +201,3 @@ void KexiCSVImportOptionsDialog::accept()
     KDialog::accept();
 }
 
-#include "kexicsvimportoptionsdlg.moc"

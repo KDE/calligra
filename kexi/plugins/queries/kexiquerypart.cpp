@@ -263,4 +263,3 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 
 K_EXPORT_KEXIPART_PLUGIN( KexiQueryPart, query )
 
-#include "kexiquerypart.moc"

@@ -185,4 +185,3 @@ QStringList KexiRelationsTableContainer::selectedFieldNames() const
     return d->fieldList->selectedFieldNames();
 }
 
-#include "KexiRelationsTableContainer.moc"

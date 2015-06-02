@@ -133,4 +133,3 @@ KexiTemplatesProxyModel::KexiTemplatesProxyModel(QObject *parent)
     setCategorizedModel(true);
 }
 
-#include "KexiTemplatesModel.moc"

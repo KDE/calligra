@@ -127,4 +127,3 @@ void KexiStatusBar::setReadOnlyFlag(bool readOnly)
     changeItem(readOnly ? i18n("Read only") : QString(), m_readOnlyID);
 }
 
-#include "kexistatusbar.moc"

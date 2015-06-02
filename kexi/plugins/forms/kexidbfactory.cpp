@@ -890,4 +890,3 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(KexiDBFactory, kexidbwidgets)
 
-#include "kexidbfactory.moc"

@@ -185,4 +185,3 @@ void KexiDBCheckBox::paintEvent(QPaintEvent* e)
     }
 }
 
-#include "kexidbcheckbox.moc"

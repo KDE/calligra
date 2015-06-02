@@ -159,4 +159,3 @@ bool KexiDataTableView::saveSettings()
     return ok;
 }
 
-#include "KexiDataTableView.moc"

@@ -308,4 +308,3 @@ void KexiNameWidget::addNameSubvalidator(KexiDB::Validator* validator, bool owne
     d->validator->addSubvalidator(validator, owned);
 }
 
-#include "KexiNameWidget.moc"
