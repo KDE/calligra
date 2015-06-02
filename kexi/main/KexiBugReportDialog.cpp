@@ -37,7 +37,7 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
  : KBugReport(parent, true /*modal*/, copyAboutData())
 {
     collectData();
-    setWindowTitle(i18nc("@title:window", "Report a Bug or Wish"));
+    setWindowTitle(xi18nc("@title:window", "Report a Bug or Wish"));
     QWidget *title = KexiUtils::findFirstChild<QWidget*>(this, "KTitleWidget");
     if (title) {
         title->hide();
@@ -58,19 +58,19 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
             lbl->setAlignment(Qt::AlignRight);
         }
         if (glay->itemAtPosition(2, 0) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 0)->widget())))) {
-            lbl->setText(i18n("Operating system & platform:"));
+            lbl->setText(xi18n("Operating system & platform:"));
             lbl->setAlignment(Qt::AlignRight);
         }
         if (glay->itemAtPosition(2, 1) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 1)->widget())))) {
             QString op_sys = m_op_sys;
             QString rep_platform = m_rep_platform;
             if (op_sys == "other") {
-                op_sys = i18nc("Other operating system", "Other");
+                op_sys = xi18nc("Other operating system", "Other");
             }
             if (rep_platform == "Other") {
-                rep_platform = i18nc("Other platform", "Other");
+                rep_platform = xi18nc("Other platform", "Other");
             }
-            lbl->setText(i18nc("<operating system>, <platform>", "%1, %2", op_sys, rep_platform));
+            lbl->setText(xi18nc("<operating system>, <platform>", "%1, %2", op_sys, rep_platform));
         }
         if (glay->itemAtPosition(3, 0) && glay->itemAtPosition(3, 0)->widget()) {
             glay->itemAtPosition(3, 0)->widget()->hide(); // compiler label

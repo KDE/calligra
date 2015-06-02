@@ -91,11 +91,11 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVDelimiterComboBox");
-    d->combo->addItem(i18n("Comma \",\""));    //<-- KEXICSV_DEFAULT_FILE_DELIMITER
-    d->combo->addItem(i18n("Semicolon \";\""));
-    d->combo->addItem(i18n("Tabulator"));
-    d->combo->addItem(i18n("Space \" \""));
-    d->combo->addItem(i18n("Other"));
+    d->combo->addItem(xi18n("Comma \",\""));    //<-- KEXICSV_DEFAULT_FILE_DELIMITER
+    d->combo->addItem(xi18n("Semicolon \";\""));
+    d->combo->addItem(xi18n("Tabulator"));
+    d->combo->addItem(xi18n("Space \" \""));
+    d->combo->addItem(xi18n("Other"));
     lyr->addWidget(d->combo);
     setFocusProxy(d->combo);
 
@@ -195,8 +195,8 @@ KexiCSVCommentWidget::KexiCSVCommentWidget(bool lineEditOnBottom, QWidget *paren
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVcommentSymbolComboBox");
-    d->combo->addItem(i18n("None"));
-    d->combo->addItem(i18n("Hashtag \"#\""));
+    d->combo->addItem(xi18n("None"));
+    d->combo->addItem(xi18n("Hashtag \"#\""));
     lyr->addWidget(d->combo);
 
     setFocusProxy(d->combo);
@@ -248,7 +248,7 @@ KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
 {
     addItem("\"");
     addItem("'");
-    addItem(i18n("None"));
+    addItem(xi18n("None"));
 }
 
 QString KexiCSVTextQuoteComboBox::textQuote() const
@@ -260,7 +260,7 @@ QString KexiCSVTextQuoteComboBox::textQuote() const
 
 void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 {
-    QString q(textQuote.isEmpty() ? i18n("None") : textQuote);
+    QString q(textQuote.isEmpty() ? xi18n("None") : textQuote);
     setCurrentIndex(findText(q));
 }
 

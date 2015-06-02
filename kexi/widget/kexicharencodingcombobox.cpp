@@ -70,7 +70,7 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
     //prepend default encoding, if present
     if (!defaultEncodingDescriptiveName.isEmpty()) {
         d->defaultEncodingAdded = true;
-        QString desc = i18nc("Text encoding: Default", "Default: %1",
+        QString desc = xi18nc("Text encoding: Default", "Default: %1",
                              defaultEncodingDescriptiveName);
         insertItem(0, desc);
         if (_selectedEncoding == defaultEncoding) {

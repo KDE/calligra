@@ -90,9 +90,9 @@ int main(int argc, char** argv)
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
 
-    KAboutData aboutData(prgname, 0, ki18n("KexiDBTest"),
+    KAboutData aboutData(prgname, 0, kxi18n("KexiDBTest"),
                          KEXI_VERSION_STRING, KLocalizedString(), KAboutData::License_GPL,
-                         ki18n("(c) 2003-2010, Kexi Team\n"
+                         kxi18n("(c) 2003-2010, Kexi Team\n"
                                "(c) 2003-2006, OpenOffice Software.\n"),
                          KLocalizedString(),
                          "http://www.calligra.org/kexi",
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("test <test_name>", ki18n("Available tests:\n"
+    options.add("test <test_name>", kxi18n("Available tests:\n"
                                           "- cursors: test for cursors behaviour\n"
                                           "- schema: test for db schema retrieving\n"
                                           "- dbcreation: test for new db creation\n"
@@ -114,12 +114,12 @@ int main(int argc, char** argv)
                                           "   returns debug string for a given\n"
                                           "   sql statement or error message\n"
                                           "- dr_prop: shows properties of selected driver"));
-    options.add("buffered-cursors", ki18n("Optional switch: turns cursors used in any tests\n"
+    options.add("buffered-cursors", kxi18n("Optional switch: turns cursors used in any tests\n"
                                           " to be buffered"));
-    options.add("query-params <params>", ki18n("Query parameters separated\n"
+    options.add("query-params <params>", kxi18n("Query parameters separated\n"
                 "by '|' character that will be passed to query\n"
                 "statement to replace [...] placeholders."));
-    options.add("", ki18n(" Notes:<nl/>"
+    options.add("", kxi18n(" Notes:<nl/>"
                           "1. 'dr_prop' requires <placeholder>db_name</placeholder> argument.<nl/>"
                           "2. 'parser' test requires <placeholder>db_name</placeholder>,<nl/>"
                           " <placeholder>driver_name</placeholder> and <placeholder>sql_statement</placeholder> arguments<nl/>"
@@ -129,9 +129,9 @@ int main(int argc, char** argv)
                           " test. (<placeholder>new_db_name</placeholder> is removed if already exists).<nl/>"
                           "5. <placeholder>db_name</placeholder> must be a valid kexi database<nl/>"
                           " e.g. created with 'tables' test."));
-    options.add("+driver_name", ki18n("Driver name"));
-    options.add("+[db_name]", ki18n("Database name"));
-    options.add("+[sql_statement]", ki18n("Optional SQL statement (for parser test)"));
+    options.add("+driver_name", kxi18n("Driver name"));
+    options.add("+[db_name]", kxi18n("Database name"));
+    options.add("+[sql_statement]", kxi18n("Optional SQL statement (for parser test)"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

@@ -61,7 +61,7 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
     //! @todo hide details by default
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            koIcon("view-refresh"), i18n("Try Again"), dynamic_cast<QWidget*>(this));
+            koIcon("view-refresh"), xi18n("Try Again"), dynamic_cast<QWidget*>(this));
         QObject::connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                          dynamic_cast<QWidget*>(this), SLOT(tryAgainActionTriggered()));
     }

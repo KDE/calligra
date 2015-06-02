@@ -38,15 +38,15 @@
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "query"),
-        i18nc("tooltip", "Create new query"),
-        i18nc("what's this", "Creates new query."),
+        xi18nc("tooltip", "Create new query"),
+        xi18nc("what's this", "Creates new query."),
         l)
 {
-    setInternalPropertyValue("textViewModeCaption", i18n("SQL"));
+    setInternalPropertyValue("textViewModeCaption", xi18n("SQL"));
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -57,7 +57,7 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>",
+    data->listenerInfoString = xi18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>",
                                      window->part()->info()->instanceCaption(),
                                      window->partItem()->name());
     return data;
