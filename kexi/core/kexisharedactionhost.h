@@ -27,7 +27,7 @@
 #include <kstandardaction.h>
 #include <kaction.h>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 class QKeySequence;
 class KGuiItem;
