@@ -70,14 +70,14 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
                     QLatin1String("KexiAssistantPage:back"),
                     KStandardGuiItem::back().plainText(), q);
                 (*button)->setFormat(
-                    i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
+                    xi18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
             }
             else {
                 *button = new KexiLinkWidget(
                     QLatin1String("KexiAssistantPage:next"),
-                    i18nc("Button text: Next page in assistant (wizard)", "Next"), q);
+                    xi18nc("Button text: Next page in assistant (wizard)", "Next"), q);
                 (*button)->setFormat(
-                    i18nc("Next button arrow: next button in assistant (wizard)", "%L ›"));
+                    xi18nc("Next button arrow: next button in assistant (wizard)", "%L ›"));
             }
             int space = (*button)->fontMetrics().height() / 2;
             Qt::Alignment align;

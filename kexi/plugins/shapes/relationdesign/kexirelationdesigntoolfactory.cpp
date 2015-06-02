@@ -25,7 +25,7 @@
 KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
     : KoToolFactoryBase("KexiRelationDesignToolFactoryId")
 {
-    setToolTip(i18n("Relation design tool"));
+    setToolTip(xi18n("Relation design tool"));
     setIconName(koIconNameCStr("calligrakexi"));
     setToolType(dynamicToolType());
     setPriority(1);

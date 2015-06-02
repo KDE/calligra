@@ -92,7 +92,7 @@ KexiDisplayUtils::DisplayParameters::DisplayParameters(QWidget *w)
 
 static QString autonumberText()
 {
-    return i18nc("Autonumber, make it as short as possible", "(auto)");
+    return xi18nc("Autonumber, make it as short as possible", "(auto)");
 }
 
 void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget)

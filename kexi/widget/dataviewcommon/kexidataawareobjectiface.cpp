@@ -856,7 +856,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             //! @todo allow displaying user-defined warning
             showEditorContextMessage(
                         m_editor,
-                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
+                        xi18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
                         KMessageWidget::Error,
                         KMessageWidget::Up);
         }
@@ -866,7 +866,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 res = KexiDB::Validator::Error;
                 msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                       + "\n\n" + KexiDB::msgYouCanImproveData();
-                desc = i18n("The column's constraint is declared as NOT NULL (required).");
+                desc = xi18n("The column's constraint is declared as NOT NULL (required).");
             } else {
                 kDebug() << "NULL VALUE WILL BE SET";
                 //ok, just leave newval as NULL
@@ -879,7 +879,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     res = KexiDB::Validator::Error;
                     msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + KexiDB::msgYouCanImproveData();
-                    desc = i18n("The column's constraint is declared as NOT EMPTY (text should be filled).");
+                    desc = xi18n("The column's constraint is declared as NOT EMPTY (text should be filled).");
                 } else {
                     kDebug() << "EMPTY VALUE WILL BE SET";
                 }
@@ -889,7 +889,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     res = KexiDB::Validator::Error;
                     msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + KexiDB::msgYouCanImproveData();
-                    desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
+                    desc = xi18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
                 } else {
                     kDebug() << "NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
                     //ok, just leave newval as NULL
@@ -1085,8 +1085,8 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
     case AskDelete:
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
                     dynamic_cast<QWidget*>(this),
-                    i18n("Do you want to delete selected record?"), QString(),
-                    KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
+                    xi18n("Do you want to delete selected record?"), QString(),
+                    KGuiItem(xi18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "AskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
@@ -1185,8 +1185,8 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
             tableName.append("\"");
         }
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this),
-                i18n("Do you want to clear the contents of table %1?", tableName),
-                0, KGuiItem(i18n("&Clear Contents"))))
+                xi18n("Do you want to clear the contents of table %1?", tableName),
+                0, KGuiItem(xi18n("&Clear Contents"))))
         {
             return cancelled;
         }
@@ -1584,7 +1584,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
         QWidget* thisWidget = dynamic_cast<QWidget*>(this);
         const int row = lastVisibleRow() + 1;
         if (row > 0) {
-            const QString toolTipText( i18n("Record: %1", row) );
+            const QString toolTipText( xi18n("Record: %1", row) );
             QToolTip::showText(
                 QPoint(
                     verticalScrollBar()->mapToGlobal(QPoint(0, 0)).x()
@@ -1631,10 +1631,10 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::Result
         return KMessageBox::questionYesNo(thisWidget, resultInfo.msg
                                           + (resultInfo.desc.isEmpty() ? QString() : ("\n" + resultInfo.desc)),
                                           QString(),
-                                          KGuiItem(i18nc("Correct Changes", "Correct"),
+                                          KGuiItem(xi18nc("Correct Changes", "Correct"),
                                                    QString(),
-                                                   i18n("Correct changes")),
-                                          KGuiItem(i18n("Discard Changes")));
+                                                   xi18n("Correct changes")),
+                                          KGuiItem(xi18n("Discard Changes")));
     }
 
     if (resultInfo.desc.isEmpty())
@@ -1946,7 +1946,7 @@ void KexiDataAwareObjectInterface::showEditorContextMessage(
 
 static QString lengthExceededMessage(KexiDataItemInterface *item)
 {
-    return i18np(
+    return xi18np(
         "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 character.\n"
         "Fix the text or it will be truncated upon saving changes.",
         "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 characters.\n"

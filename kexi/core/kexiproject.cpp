@@ -127,11 +127,11 @@ public:
             newName = _newName->trimmed();
             KexiDB::MessageTitle et(q);
             if (newName.isEmpty()) {
-                q->setError(i18n("Could not set empty name for this object."));
+                q->setError(xi18n("Could not set empty name for this object."));
                 return false;
             }
             if (q->itemForClass(item.partClass(), newName) != 0) {
-                q->setError(i18n("Could not use this name. Object with name \"%1\" already exists.",
+                q->setError(xi18n("Could not use this name. Object with name \"%1\" already exists.",
                               newName));
                 return false;
             }
@@ -142,7 +142,7 @@ public:
         }
 
         KexiDB::MessageTitle et(q,
-                                i18n("Could not rename object \"%1\".", item.name()));
+                                xi18n("Could not rename object \"%1\".", item.name()));
         if (!q->checkWritable())
             return false;
         KexiPart::Part *part = q->findPartFor(item);
@@ -286,7 +286,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         *incompatibleWithKexi = false;
     //kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
-                            i18n("Could not open project \"%1\".", d->data->databaseName()));
+                            xi18n("Could not open project \"%1\".", d->data->databaseName()));
 
     if (!d->data->connectionData()->fileName().isEmpty()) {
         QFileInfo finfo(d->data->connectionData()->fileName());
@@ -322,7 +322,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
                     *incompatibleWithKexi = true;
             } else {
                 KexiDB::MessageTitle et(this,
-                    i18n("Database project %1 does not appear to have been created using Kexi and cannot be opened. "
+                    xi18n("Database project %1 does not appear to have been created using Kexi and cannot be opened. "
                          "It is an SQLite file created using other tools.", d->data->infoString()));
                 setError(d->connection);
             }
@@ -345,7 +345,7 @@ tristate
 KexiProject::create(bool forceOverwrite)
 {
     KexiDB::MessageTitle et(this,
-                            i18n("Could not create project \"%1\".", d->data->databaseName()));
+                            xi18n("Could not create project \"%1\".", d->data->databaseName()));
 
     if (!createConnection())
         return false;
@@ -388,13 +388,13 @@ KexiProject::create(bool forceOverwrite)
 //! @todo put more props. todo - creator, created date, etc. (also to KexiProjectData)
     KexiDB::DatabaseProperties &props = d->connection->databaseProperties();
     if (!props.setValue("kexiproject_major_ver", d->versionMajor)
-            || !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
+            || !props.setCaption("kexiproject_major_ver", xi18n("Project major version"))
             || !props.setValue("kexiproject_minor_ver", d->versionMinor)
-            || !props.setCaption("kexiproject_minor_ver", i18n("Project minor version"))
+            || !props.setCaption("kexiproject_minor_ver", xi18n("Project minor version"))
             || !props.setValue("project_caption", d->data->caption())
-            || !props.setCaption("project_caption", i18n("Project caption"))
+            || !props.setCaption("project_caption", xi18n("Project caption"))
             || !props.setValue("project_desc", d->data->description())
-            || !props.setCaption("project_desc", i18n("Project description")))
+            || !props.setCaption("project_desc", xi18n("Project description")))
         return false;
 
     if (trans.active() && !d->connection->commitTransaction(trans))
@@ -442,9 +442,9 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
         //1. no kexiproject_major_ver and kexiproject_minor_ver -> add them
         if (!d->connection->isReadOnly()) {
             if (!props.setValue("kexiproject_major_ver", d->versionMajor)
-                    || !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
+                    || !props.setCaption("kexiproject_major_ver", xi18n("Project major version"))
                     || !props.setValue("kexiproject_minor_ver", d->versionMinor)
-                    || !props.setCaption("kexiproject_minor_ver", i18n("Project minor version"))) {
+                    || !props.setCaption("kexiproject_minor_ver", xi18n("Project minor version"))) {
                 return false;
             }
         }
@@ -862,7 +862,7 @@ KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item,
     KexiWindow *window  = part->openInstance(parent, item, viewMode, staticObjectArgs);
     if (!window) {
         if (part->lastOperationStatus().error())
-            setError(i18n("Opening object \"%1\" failed.", item.name()) + "<br>"
+            setError(xi18n("Opening object \"%1\" failed.", item.name()) + "<br>"
                      + part->lastOperationStatus().message,
                      part->lastOperationStatus().description);
         return 0;
@@ -881,7 +881,7 @@ bool KexiProject::checkWritable()
 {
     if (!d->connection->isReadOnly())
         return true;
-    setError(i18n("This project is opened as read only."));
+    setError(xi18n("This project is opened as read only."));
     return false;
 }
 
@@ -912,7 +912,7 @@ bool KexiProject::removeObject(KexiPart::Item& item)
             return false;
         }
         if (!removeUserDataBlock(item.identifier())) {
-            setError(ERR_DELETE_SERVER_ERROR, i18n("Could not remove object's user data."));
+            setError(ERR_DELETE_SERVER_ERROR, xi18n("Could not remove object's user data."));
             return false;
         }
         if (!tg.commit()) {
@@ -1048,11 +1048,11 @@ KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
     tristate res = prj->create(false);
     if (~res) {
 //! @todo move to KexiMessageHandler
-        if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>" + i18n(
+        if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>" + xi18n(
                     "The project %1 already exists.\n"
                     "Do you want to replace it with a new, blank one?",
                     prj->data()->infoString()) + "\n" + i18n(warningNoUndo) + "</qt>",
-                QString(), KGuiItem(i18n("Replace")), KStandardGuiItem::cancel()))
+                QString(), KGuiItem(xi18n("Replace")), KStandardGuiItem::cancel()))
 //! @todo add serverInfoString() for server-based prj
         {
             delete prj;
@@ -1076,7 +1076,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
                                   KexiDB::MessageHandler* handler, bool dontAsk)
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
-            i18n("Do you want to drop the project \"%1\"?",
+            xi18n("Do you want to drop the project \"%1\"?",
                  static_cast<const KexiDB::SchemaData*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
@@ -1086,7 +1086,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 
     if (prj.dbConnection()->isReadOnly()) {
         handler->showErrorMessage(
-            i18n("Could not drop this project. Database connection for this project has been opened as read only."));
+            xi18n("Could not drop this project. Database connection for this project has been opened as read only."));
         return false;
     }
 
@@ -1306,13 +1306,13 @@ bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
 bool KexiProject::askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const QFileInfo &finfo)
 {
     KGuiItem openItem(KStandardGuiItem::open());
-    openItem.setText(i18n("Open As Read Only"));
+    openItem.setText(xi18n("Open As Read Only"));
     return KMessageBox::Yes == KMessageBox::questionYesNo(
-            parent, i18nc("@info",
+            parent, xi18nc("@info",
                           "<para>Could not open file <filename>%1</filename> for reading and writing.</para>"
                           "<para>Do you want to open the file as read only?</para>",
                           QDir::convertSeparators(finfo.filePath())),
-                    i18nc("@title:window", "Could Not Open File" ),
+                    xi18nc("@title:window", "Could Not Open File" ),
                     openItem, KStandardGuiItem::cancel(), QString());
 }
 

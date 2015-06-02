@@ -70,7 +70,7 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 {
     setObjectName("richtext_dialog");
     setModal(true);
-    setWindowTitle(i18nc("@title:window", "Edit Rich Text"));
+    setWindowTitle(xi18nc("@title:window", "Edit Rich Text"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 
@@ -92,31 +92,31 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     d->colorComboAction = d->toolbar->addWidget(d->colorCombo);
     connect(d->colorCombo, SIGNAL(activated(QColor)), this, SLOT(changeColor(QColor)));
 
-    d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), i18n("Bold"));
+    d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), xi18n("Bold"));
     d->boldTextAction->setCheckable(true);
-    d->italicTextAction = d->toolbar->addAction(koIcon("format-text-italic"), i18n("Italic"));
+    d->italicTextAction = d->toolbar->addAction(koIcon("format-text-italic"), xi18n("Italic"));
     d->italicTextAction->setCheckable(true);
-    d->underlineTextAction = d->toolbar->addAction(koIcon("format-text-underline"), i18n("Underline"));
+    d->underlineTextAction = d->toolbar->addAction(koIcon("format-text-underline"), xi18n("Underline"));
     d->underlineTextAction->setCheckable(true);
     d->toolbar->addSeparator();
 
-    d->superscriptTextAction = d->toolbar->addAction(koIcon("format-text-superscript"), i18n("Superscript"));
+    d->superscriptTextAction = d->toolbar->addAction(koIcon("format-text-superscript"), xi18n("Superscript"));
     d->superscriptTextAction->setCheckable(true);
-    d->subscriptTextAction = d->toolbar->addAction(koIcon("format-text-subscript"), i18n("Subscript"));
+    d->subscriptTextAction = d->toolbar->addAction(koIcon("format-text-subscript"), xi18n("Subscript"));
     d->subscriptTextAction->setCheckable(true);
     d->toolbar->addSeparator();
 
     d->alignActionGroup = new QActionGroup(this);
-    d->alignLeftAction = d->toolbar->addAction(koIcon("format-justify-left"), i18n("Left Align"));
+    d->alignLeftAction = d->toolbar->addAction(koIcon("format-justify-left"), xi18n("Left Align"));
     d->alignLeftAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignLeftAction);
-    d->alignCenterAction = d->toolbar->addAction(koIcon("format-justify-center"), i18n("Centered"));
+    d->alignCenterAction = d->toolbar->addAction(koIcon("format-justify-center"), xi18n("Centered"));
     d->alignCenterAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignCenterAction);
-    d->alignRightAction = d->toolbar->addAction(koIcon("format-justify-right"), i18n("Right Align"));
+    d->alignRightAction = d->toolbar->addAction(koIcon("format-justify-right"), xi18n("Right Align"));
     d->alignRightAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignRightAction);
-    d->alignJustifyAction = d->toolbar->addAction(koIcon("format-justify-fill"), i18n("Justified"));
+    d->alignJustifyAction = d->toolbar->addAction(koIcon("format-justify-fill"), xi18n("Justified"));
     d->alignJustifyAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignJustifyAction);
 

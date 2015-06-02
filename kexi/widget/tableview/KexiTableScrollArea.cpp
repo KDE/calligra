@@ -205,7 +205,7 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     m_contextMenu->setObjectName("m_contextMenu");
 
 //! \todo replace lineedit with table_field icon
-//setContextMenuTitle(koIcon("lineedit"), i18n("Record"));   // the default
+//setContextMenuTitle(koIcon("lineedit"), xi18n("Record"));   // the default
     // cannot display anything here - most actions in the context menu
     // are related to a single cell (Cut, Copy..) and others to entire row (Delete Row):
     setContextMenuEnabled(false);
@@ -2399,17 +2399,17 @@ QString KexiTableScrollArea::whatsThisText(const QPoint &pos) const
 {
     const int leftMargin = verticalHeaderVisible() ? d->verticalHeader->width() : 0;
     if (KexiUtils::hasParent(d->verticalHeader, childAt(pos))) {
-        return i18nc("@info:whatsthis", "Contains a pointer to the currently selected record.");
+        return xi18nc("@info:whatsthis", "Contains a pointer to the currently selected record.");
     }
     else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
-        return i18nc("@info:whatsthis", "Record navigator.");
+        return xi18nc("@info:whatsthis", "Record navigator.");
     }
     const int col = columnAt(pos.x() - leftMargin);
     KexiDB::Field *f = col == -1 ? 0 : field(col);
     if (!f) {
         return QString();
     }
-    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.",
+    return xi18nc("@info:whatsthis", "Column <resource>%1</resource>.",
                  f->description().isEmpty() ? f->captionOrName() : f->description());
 }
 

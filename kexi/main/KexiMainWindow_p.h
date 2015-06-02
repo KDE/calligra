@@ -820,7 +820,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     connect(tabBar(), SIGNAL(tabCloseRequested( int )), SLOT(closeRequest( int )));
 
     setMouseTracking(true); // for mouseMoveEvent()
-    setWhatsThis(i18n("Task-oriented toolbar. Groups commands using tabs."));
+    setWhatsThis(xi18n("Task-oriented toolbar. Groups commands using tabs."));
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     connect(&d->tabRaiseTimer, SIGNAL(timeout()), this, SLOT(slotDelayedTabRaise()));
 #endif
@@ -848,18 +848,18 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
     QObject::disconnect(help_report_bug_action, 0, 0, 0);
     QObject::connect(help_report_bug_action, SIGNAL(triggered()), mainWin, SLOT(slotReportBug()));
-    help_report_bug_action->setText(i18nc("Report a bug or wish for Kexi application", "Report a &Bug or Wish..."));
+    help_report_bug_action->setText(xi18nc("Report a bug or wish for Kexi application", "Report a &Bug or Wish..."));
     help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
-    help_report_bug_action->setWhatsThis(i18n("Files a bug or wish for Kexi application."));
+    help_report_bug_action->setWhatsThis(xi18n("Files a bug or wish for Kexi application."));
     QAction* help_whats_this_action =  d->ac->action("help_whats_this");
-    help_whats_this_action->setWhatsThis(i18n("Activates a \"What's This?\" tool."));
+    help_whats_this_action->setWhatsThis(xi18n("Activates a \"What's This?\" tool."));
     QAction* help_contents_action = d->ac->action("help_contents");
-    help_contents_action->setText(i18n("Help"));
-    help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
+    help_contents_action->setText(xi18n("Help"));
+    help_contents_action->setWhatsThis(xi18n("Shows Kexi Handbook."));
     QAction* help_about_app_action = d->ac->action("help_about_app");
-    help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
+    help_about_app_action->setWhatsThis(xi18n("Shows information about Kexi application."));
     QAction* help_about_kde_action = d->ac->action("help_about_kde");
-    help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
+    help_about_kde_action->setWhatsThis(xi18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
     KexiSmallToolButton *btn = new KexiSmallToolButton(koIcon("help-contextual"), QString(), helpWidget);
@@ -894,10 +894,10 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     d->toolbarsVisibleForIndex.append(true);
 
     if (!userMode) {
-        d->createWidgetToolBar = d->createToolBar("create", i18n("Create"));
+        d->createWidgetToolBar = d->createToolBar("create", xi18n("Create"));
     }
 
-    tbar = d->createToolBar("data", i18n("Data"));
+    tbar = d->createToolBar("data", xi18n("Data"));
     addAction(tbar, "edit_cut");
     addAction(tbar, "edit_copy");
     addAction(tbar, "edit_paste");
@@ -905,20 +905,20 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
         addAction(tbar, "edit_paste_special_data_table");
 //! @todo move undo/redo to quickbar:
 
-    tbar = d->createToolBar("external", i18n("External Data"));
+    tbar = d->createToolBar("external", xi18n("External Data"));
     if (!userMode) {
         addAction(tbar, "project_import_data_table");
         addAction(tbar, "tools_import_tables");
     }
 
-    tbar = d->createToolBar("tools", i18n("Tools"));
+    tbar = d->createToolBar("tools", xi18n("Tools"));
     addAction(tbar, "tools_compact_database");
 
 //! @todo move to form plugin
-    tbar = d->createToolBar("form", i18n("Form Design"));
+    tbar = d->createToolBar("form", xi18n("Form Design"));
 
 //! @todo move to report plugin
-    tbar = d->createToolBar("report", i18n("Report Design"));
+    tbar = d->createToolBar("report", xi18n("Report Design"));
     
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
     setCurrentWidget(widget(KEXITABBEDTOOLBAR_SPACER_TAB_INDEX + 1)); // the default
@@ -1593,8 +1593,8 @@ public:
     }
 
     void showStartProcessMsg(const QStringList& args) {
-        wnd->showErrorMessage(i18n("Could not start %1 application.", QString(KEXI_APP_NAME)),
-                              i18n("Command \"%1\" failed.", args.join(" ")));
+        wnd->showErrorMessage(xi18n("Could not start %1 application.", QString(KEXI_APP_NAME)),
+                              xi18n("Command \"%1\" failed.", args.join(" ")));
     }
 
     /* void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)

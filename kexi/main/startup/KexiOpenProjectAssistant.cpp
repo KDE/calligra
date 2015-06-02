@@ -40,8 +40,8 @@
 #include <QVBoxLayout>
 
 KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project"),
-                     i18nc("@info", "Select project to open. "
+ : KexiAssistantPage(xi18nc("@title:window", "Open Project"),
+                     xi18nc("@info", "Select project to open. "
                           "You can choose project stored in file or on database server."),
                      parent)
  , connSelector(0)
@@ -56,7 +56,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
 
     m_fileSelectorWidget = new QWidget;
     tabWidget->addTab(m_fileSelectorWidget, Kexi::defaultFileBasedDriverIcon(),
-                      i18nc("@title:tab", "Projects Stored in File"));
+                      xi18nc("@title:tab", "Projects Stored in File"));
     fileSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
@@ -72,7 +72,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
                       
     m_connSelectorWidget = new QWidget;
     tabWidget->addTab(m_connSelectorWidget, Kexi::serverIcon(),
-                      i18nc("@title:tab", "Projects Stored on Database Server"));
+                      xi18nc("@title:tab", "Projects Stored on Database Server"));
 
     setFocusWidget(tabWidget);
     setContents(tabWidget);
@@ -107,7 +107,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
                 // server-based:
                 connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
                 QLabel* connSelectorLabel = new QLabel(
-                    i18nc("@info",
+                    xi18nc("@info",
                           "<para>Select database server's connection with project you wish to open.</para>"
                           "<para>Here you may also add, edit or remove connections from the list.</para>"));
                 connSelectorLayout->addWidget(connSelectorLabel);
@@ -149,12 +149,12 @@ KexiMainOpenProjectPage::~KexiMainOpenProjectPage()
 
 KexiProjectDatabaseSelectionPage::KexiProjectDatabaseSelectionPage(
    KexiOpenProjectAssistant* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project on Database Server"), QString(), parent)
+ : KexiAssistantPage(xi18nc("@title:window", "Open Project on Database Server"), QString(), parent)
  , m_assistant(parent)
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-    nextButton()->setLinkText(i18n("Open"));
+    nextButton()->setLinkText(xi18n("Open"));
 
     projectSelector = new KexiProjectSelectorWidget(
         this, 0,
@@ -192,7 +192,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* dat
     }
     if (conndataToShow) {
         setDescription(
-            i18nc("@info", "Select project on database server <resource>%1 (%2)</resource> to open.",
+            xi18nc("@info", "Select project on database server <resource>%1 (%2)</resource> to open.",
                   conndataToShow->caption, conndataToShow->serverInfoString(true)));
     }
     return true;

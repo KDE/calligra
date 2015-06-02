@@ -260,7 +260,7 @@ void KexiStartupFileHandler::updateFilters()
 
     if (allfiltersUnique.count() > 1) {//prepend "all supoported files" entry
         filter.prepend(allfilters.join(" ") + "|"
-                       + i18n("All Supported Files (%1)", allfiltersUnique.join(", ")) + "\n");
+                       + xi18n("All Supported Files (%1)", allfiltersUnique.join(", ")) + "\n");
     }
 
     if (filter.right(1) == "\n")
@@ -359,7 +359,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 #endif
     //kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
     if (!url.isValid() || QFileInfo(url.path()).isDir()) {
-        KMessageBox::error(d->dialog->parentWidget(), i18n("Enter a filename."));
+        KMessageBox::error(d->dialog->parentWidget(), xi18n("Enter a filename."));
         return false;
     }
 
@@ -397,17 +397,17 @@ bool KexiStartupFileHandler::checkSelectedUrl()
     if (d->mode & KFile::ExistingOnly) {
         if (!fi.exists()) {
             KMessageBox::error(d->dialog->parentWidget(),
-                               "<qt>" + i18n("The file \"%1\" does not exist.",
+                               "<qt>" + xi18n("The file \"%1\" does not exist.",
                                QDir::convertSeparators(url.toLocalFile())));
             return false;
         } else if (mode() & KFile::File) {
             if (!fi.isFile()) {
                 KMessageBox::error(d->dialog->parentWidget(),
-                                   "<qt>" + i18n("Enter a filename."));
+                                   "<qt>" + xi18n("Enter a filename."));
                 return false;
             } else if (!fi.isReadable()) {
                 KMessageBox::error(d->dialog->parentWidget(),
-                                   "<qt>" + i18n("The file \"%1\" is not readable.",
+                                   "<qt>" + xi18n("The file \"%1\" is not readable.",
                                    QDir::convertSeparators(url.toLocalFile())));
                 return false;
             }
@@ -451,8 +451,8 @@ bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
     if (!fi.exists())
         return true;
     KexiContextMessage message(
-        i18n("This file already exists. Do you want to overwrite it?"));
-    QScopedPointer<QAction> messageWidgetActionYes(new QAction(i18n("Overwrite"), 0));
+        xi18n("This file already exists. Do you want to overwrite it?"));
+    QScopedPointer<QAction> messageWidgetActionYes(new QAction(xi18n("Overwrite"), 0));
     connect(messageWidgetActionYes.data(), SIGNAL(triggered()),
             this, SLOT(messageWidgetActionYesTriggered()));
     message.addAction(messageWidgetActionYes.data());

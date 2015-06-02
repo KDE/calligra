@@ -46,45 +46,45 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     setObjectName("editlistview_dialog");
     setModal(true);
     setFaceType(Tabbed);
-    setWindowTitle(i18nc("@title:window", "Edit Listview Contents"));
+    setWindowTitle(xi18nc("@title:window", "Edit Listview Contents"));
 
     ///////// Setup the "Contents" page /////////////////////////////
-    m_columnsPageItem = addPage(new QWidget(this), i18n("Columns"));
+    m_columnsPageItem = addPage(new QWidget(this), xi18n("Columns"));
     QHBoxLayout *layout = new QHBoxLayout(m_contentsPageItem->widget(), 0, 6);
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
     QToolButton *newRow = new QToolButton(m_contentsPageItem->widget());
     newRow->setIconSet(koIcon("list-add"));
-    newRow->setTextLabel(i18n("&Add Item"), true);
+    newRow->setTextLabel(xi18n("&Add Item"), true);
     vlayout->addWidget(newRow);
     m_buttons.insert(BNewRow, newRow);
     connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
     QToolButton *newChild = new QToolButton(m_contentsPageItem->widget());
     newChild->setIconSet(koIcon("arrow-right"));
-    newChild->setTextLabel(i18n("New &Subitem"), true);
+    newChild->setTextLabel(xi18n("New &Subitem"), true);
     vlayout->addWidget(newChild);
     m_buttons.insert(BNewChild, newChild);
     connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
     QToolButton *delRow = new QToolButton(m_contentsPageItem->widget());
     delRow->setIconSet(koIcon("list-remove"));
-    delRow->setTextLabel(i18n("&Remove Item"), true);
+    delRow->setTextLabel(xi18n("&Remove Item"), true);
     vlayout->addWidget(delRow);
     m_buttons.insert(BRemRow, delRow);
     connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
     QToolButton *rowUp = new QToolButton(m_contentsPageItem->widget());
     rowUp->setIconSet(koIcon("arrow-up"));
-    rowUp->setTextLabel(i18n("Move Item &Up"), true);
+    rowUp->setTextLabel(xi18n("Move Item &Up"), true);
     vlayout->addWidget(rowUp);
     m_buttons.insert(BRowUp, rowUp);
     connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
     QToolButton *rowDown = new QToolButton(m_contentsPageItem->widget());
     rowDown->setIconSet(koIcon("arrow-down"));
-    rowDown->setTextLabel(i18n("Move Item &Down"), true);
+    rowDown->setTextLabel(xi18n("Move Item &Down"), true);
     vlayout->addWidget(rowDown);
     m_buttons.insert(BRowDown, rowDown);
     connect(rowDown, SIGNAL(clicked()), this, SLOT(MoveRowDown()));
@@ -107,7 +107,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     connect(m_listview, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 
     /////////////////// Setup the columns page ////////////////
-    m_contentsPageItem = addPage(new QWidget(this), i18n("Contents"));
+    m_contentsPageItem = addPage(new QWidget(this), xi18n("Contents"));
     QHBoxLayout *hbox = new QHBoxLayout(m_columnsPageItem->widget(), 0, 6);
 
     // The "item properties" field
@@ -115,15 +115,15 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     m_editor->setObjectName("editcolumn_propeditor");
     m_propSet = new KPropertySet(this, "columns");
     m_propSet->addProperty(
-        new KProperty("caption", "Caption", i18n("Caption"), i18n("Caption")));
+        new KProperty("caption", "Caption", xi18n("Caption"), xi18n("Caption")));
     m_propSet->addProperty(
-        new KProperty("width", 100, i18n("Width"), i18n("Width")));
+        new KProperty("width", 100, xi18n("Width"), xi18n("Width")));
     m_propSet->addProperty(
-        new KProperty("clickable", QVariant(true), i18n("Clickable"), i18n("Clickable")));
+        new KProperty("clickable", QVariant(true), xi18n("Clickable"), xi18n("Clickable")));
     m_propSet->addProperty(
-        new KProperty("resizable", QVariant(true), i18n("Resizable"), i18n("Resizable")));
+        new KProperty("resizable", QVariant(true), xi18n("Resizable"), xi18n("Resizable")));
     m_propSet->addProperty(
-        new KProperty("fullwidth", QVariant(false), i18n("Full Width"), i18n("Full Width")));
+        new KProperty("fullwidth", QVariant(false), xi18n("Full Width"), xi18n("Full Width")));
     m_editor->changeSet(m_propSet);
     connect(m_propSet, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
             this, SLOT(changeProperty(KPropertySet&,KProperty&)));
@@ -132,28 +132,28 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     QVBoxLayout *vbox = new QVBoxLayout(hbox, 3);
     QToolButton *add = new QToolButton(m_columnsPageItem->widget());
     add->setIconSet(koIcon("list-add"));
-    add->setTextLabel(i18n("&Add Item"), true);
+    add->setTextLabel(xi18n("&Add Item"), true);
     vbox->addWidget(add);
     m_buttons.insert(BColAdd, add);
     connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
     QToolButton *remove = new QToolButton(m_columnsPageItem->widget());
     remove->setIconSet(koIcon("list-remove"));
-    remove->setTextLabel(i18n("&Remove Item"), true);
+    remove->setTextLabel(xi18n("&Remove Item"), true);
     vbox->addWidget(remove);
     m_buttons.insert(BColRem, remove);
     connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
     QToolButton *up = new QToolButton(m_columnsPageItem->widget());
     up->setIconSet(koIcon("arrow-up"));
-    up->setTextLabel(i18n("Move Item &Up"), true);
+    up->setTextLabel(xi18n("Move Item &Up"), true);
     vbox->addWidget(up);
     m_buttons.insert(BColUp, up);
     connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
     QToolButton *down = new QToolButton(m_columnsPageItem->widget());
     down->setIconSet(koIcon("arrow-down"));
-    down->setTextLabel(i18n("Move Item &Down"), true);
+    down->setTextLabel(xi18n("Move Item &Down"), true);
     vbox->addWidget(down);
     m_buttons.insert(BColDown, down);
     connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));
@@ -280,8 +280,8 @@ EditListViewDialog::updateItemProperties(QListBoxItem *item)
 void
 EditListViewDialog::newItem()
 {
-    m_listbox->insertItem(i18n("New Column"));
-    m_listview->addColumn(i18n("New Column"));
+    m_listbox->insertItem(xi18n("New Column"));
+    m_listview->addColumn(xi18n("New Column"));
     m_listview->setRenameable(m_listview->columns() - 1, true);
     m_listbox->setCurrentItem(m_listbox->count() - 1);
     m_buttons[BColRem]->setEnabled(true);
@@ -421,7 +421,7 @@ EditListViewDialog::newRow()
         item = new KListViewItem(parent, m_listview->selectedItem());
     else
         item = new KListViewItem(m_listview, m_listview->selectedItem());
-    item->setText(0, i18n("New Item"));
+    item->setText(0, xi18n("New Item"));
     m_listview->setCurrentItem(item);
 }
 
@@ -434,7 +434,7 @@ EditListViewDialog::newChildRow()
         item = new KListViewItem(parent);
     else
         item = new KListViewItem(m_listview, m_listview->currentItem());
-    item->setText(0, i18n("Sub Item"));
+    item->setText(0, xi18n("Sub Item"));
 
     m_listview->setCurrentItem(item);
     if (parent)

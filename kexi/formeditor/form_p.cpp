@@ -249,89 +249,89 @@ void FormPrivate::initPropertiesDescription()
 {
 //! \todo perhaps a few of them shouldn't be translated within KFD mode,
 //!       to be more Qt Designer friendly?
-    propCaption["name"] = i18n("Name"); // for backward compatibility with Qt 3
-    propCaption["objectName"] = i18n("Name");
-    propCaption["caption"] = i18n("Caption");
-    propCaption["windowTitle"] = i18n("Window title");
-    propCaption["text"] = i18n("Text");
-    propCaption["paletteBackgroundPixmap"] = i18n("Background Pixmap");
-    propCaption["enabled"] = i18nc("Propery: enabled widget", "Enabled");
-    propCaption["geometry"] = i18n("Geometry");
-    propCaption["sizePolicy"] = i18n("Size Policy");
-    propCaption["minimumSize"] = i18n("Minimum Size");
-    propCaption["maximumSize"] = i18n("Maximum Size");
-    propCaption["font"] = i18n("Font");
-    propCaption["cursor"] = i18n("Cursor");
-    propCaption["paletteForegroundColor"] = i18n("Foreground Color");
-    propCaption["paletteBackgroundColor"] = i18n("Background Color");
-    propCaption["autoFillBackground"] = i18n("Fill Background");
-    propCaption["focusPolicy"] = i18n("Focus Policy");
-    propCaption["margin"] = i18n("Margin");
-    propCaption["readOnly"] = i18n("Read Only");
-    propCaption["styleSheet"] = i18n("Style Sheet");
-    propCaption["toolTip"] = i18nc("Widget's Tooltip", "Tooltip");
-    propCaption["whatsThis"] = i18nc("Widget's Whats This", "What's This");
-    propCaption["iconSize"] = i18n("Icon Size");
+    propCaption["name"] = xi18n("Name"); // for backward compatibility with Qt 3
+    propCaption["objectName"] = xi18n("Name");
+    propCaption["caption"] = xi18n("Caption");
+    propCaption["windowTitle"] = xi18n("Window title");
+    propCaption["text"] = xi18n("Text");
+    propCaption["paletteBackgroundPixmap"] = xi18n("Background Pixmap");
+    propCaption["enabled"] = xi18nc("Propery: enabled widget", "Enabled");
+    propCaption["geometry"] = xi18n("Geometry");
+    propCaption["sizePolicy"] = xi18n("Size Policy");
+    propCaption["minimumSize"] = xi18n("Minimum Size");
+    propCaption["maximumSize"] = xi18n("Maximum Size");
+    propCaption["font"] = xi18n("Font");
+    propCaption["cursor"] = xi18n("Cursor");
+    propCaption["paletteForegroundColor"] = xi18n("Foreground Color");
+    propCaption["paletteBackgroundColor"] = xi18n("Background Color");
+    propCaption["autoFillBackground"] = xi18n("Fill Background");
+    propCaption["focusPolicy"] = xi18n("Focus Policy");
+    propCaption["margin"] = xi18n("Margin");
+    propCaption["readOnly"] = xi18n("Read Only");
+    propCaption["styleSheet"] = xi18n("Style Sheet");
+    propCaption["toolTip"] = xi18nc("Widget's Tooltip", "Tooltip");
+    propCaption["whatsThis"] = xi18nc("Widget's Whats This", "What's This");
+    propCaption["iconSize"] = xi18n("Icon Size");
 
     //any QFrame
-    propCaption["frame"] = i18n("Frame");
-    propCaption["lineWidth"] = i18n("Frame Width");
-    propCaption["midLineWidth"] = i18n("Mid Frame Width");
-    propCaption["frameShape"] = i18n("Frame Shape");
-    propCaption["frameShadow"] = i18n("Frame Shadow");
+    propCaption["frame"] = xi18n("Frame");
+    propCaption["lineWidth"] = xi18n("Frame Width");
+    propCaption["midLineWidth"] = xi18n("Mid Frame Width");
+    propCaption["frameShape"] = xi18n("Frame Shape");
+    propCaption["frameShadow"] = xi18n("Frame Shadow");
     //any QScrollBar
-    propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
-    propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
+    propCaption["vScrollBarMode"] = xi18n("Vertical Scrollbar");
+    propCaption["hScrollBarMode"] = xi18n("Horizontal Scrollbar");
 
-    propValCaption["NoBackground"] = i18n("No Background");
-    propValCaption["PaletteForeground"] = i18n("Palette Foreground");
-    propValCaption["AutoText"] = i18nc("Auto (HINT: for AutoText)", "Auto");
+    propValCaption["NoBackground"] = xi18n("No Background");
+    propValCaption["PaletteForeground"] = xi18n("Palette Foreground");
+    propValCaption["AutoText"] = xi18nc("Auto (HINT: for AutoText)", "Auto");
 
-    propValCaption["AlignAuto"] = i18nc("Auto (HINT: for Align)", "Auto");
-    propValCaption["AlignLeft"] = i18nc("Left (HINT: for Align)", "Left");
-    propValCaption["AlignRight"] = i18nc("Right (HINT: for Align)", "Right");
-    propValCaption["AlignHCenter"] = i18nc("Center (HINT: for Align)", "Center");
-    propValCaption["AlignJustify"] = i18nc("Justify (HINT: for Align)", "Justify");
-    propValCaption["AlignVCenter"] = i18nc("Center (HINT: for Align)", "Center");
-    propValCaption["AlignTop"] = i18nc("Top (HINT: for Align)", "Top");
-    propValCaption["AlignBottom"] = i18nc("Bottom (HINT: for Align)", "Bottom");
+    propValCaption["AlignAuto"] = xi18nc("Auto (HINT: for Align)", "Auto");
+    propValCaption["AlignLeft"] = xi18nc("Left (HINT: for Align)", "Left");
+    propValCaption["AlignRight"] = xi18nc("Right (HINT: for Align)", "Right");
+    propValCaption["AlignHCenter"] = xi18nc("Center (HINT: for Align)", "Center");
+    propValCaption["AlignJustify"] = xi18nc("Justify (HINT: for Align)", "Justify");
+    propValCaption["AlignVCenter"] = xi18nc("Center (HINT: for Align)", "Center");
+    propValCaption["AlignTop"] = xi18nc("Top (HINT: for Align)", "Top");
+    propValCaption["AlignBottom"] = xi18nc("Bottom (HINT: for Align)", "Bottom");
 
-    propValCaption["NoFrame"] = i18nc("No Frame (HINT: for Frame Shape)", "No Frame");
-    propValCaption["Box"] = i18nc("Box (HINT: for Frame Shape)", "Box");
-    propValCaption["Panel"] = i18nc("Panel (HINT: for Frame Shape)", "Panel");
-    propValCaption["WinPanel"] = i18nc("Windows Panel (HINT: for Frame Shape)", "Windows Panel");
-    propValCaption["HLine"] = i18nc("Horiz. Line (HINT: for Frame Shape)", "Horiz. Line");
-    propValCaption["VLine"] = i18nc("Vertical Line (HINT: for Frame Shape)", "Vertical Line");
-    propValCaption["StyledPanel"] = i18nc("Styled (HINT: for Frame Shape)", "Styled");
-    propValCaption["PopupPanel"] = i18nc("Popup (HINT: for Frame Shape)", "Popup");
-    propValCaption["MenuBarPanel"] = i18nc("Menu Bar (HINT: for Frame Shape)", "Menu Bar");
-    propValCaption["ToolBarPanel"] = i18nc("Toolbar (HINT: for Frame Shape)", "Toolbar");
-    propValCaption["LineEditPanel"] = i18nc("Text Box (HINT: for Frame Shape)", "Text Box");
-    propValCaption["TabWidgetPanel"] = i18nc("Tab Widget (HINT: for Frame Shape)", "Tab Widget");
-    propValCaption["GroupBoxPanel"] = i18nc("Group Box (HINT: for Frame Shape)", "Group Box");
+    propValCaption["NoFrame"] = xi18nc("No Frame (HINT: for Frame Shape)", "No Frame");
+    propValCaption["Box"] = xi18nc("Box (HINT: for Frame Shape)", "Box");
+    propValCaption["Panel"] = xi18nc("Panel (HINT: for Frame Shape)", "Panel");
+    propValCaption["WinPanel"] = xi18nc("Windows Panel (HINT: for Frame Shape)", "Windows Panel");
+    propValCaption["HLine"] = xi18nc("Horiz. Line (HINT: for Frame Shape)", "Horiz. Line");
+    propValCaption["VLine"] = xi18nc("Vertical Line (HINT: for Frame Shape)", "Vertical Line");
+    propValCaption["StyledPanel"] = xi18nc("Styled (HINT: for Frame Shape)", "Styled");
+    propValCaption["PopupPanel"] = xi18nc("Popup (HINT: for Frame Shape)", "Popup");
+    propValCaption["MenuBarPanel"] = xi18nc("Menu Bar (HINT: for Frame Shape)", "Menu Bar");
+    propValCaption["ToolBarPanel"] = xi18nc("Toolbar (HINT: for Frame Shape)", "Toolbar");
+    propValCaption["LineEditPanel"] = xi18nc("Text Box (HINT: for Frame Shape)", "Text Box");
+    propValCaption["TabWidgetPanel"] = xi18nc("Tab Widget (HINT: for Frame Shape)", "Tab Widget");
+    propValCaption["GroupBoxPanel"] = xi18nc("Group Box (HINT: for Frame Shape)", "Group Box");
 
-    propValCaption["Plain"] = i18nc("Plain (HINT: for Frame Shadow)", "Plain");
-    propValCaption["Raised"] = i18nc("Raised (HINT: for Frame Shadow)", "Raised");
-    propValCaption["Sunken"] = i18nc("Sunken (HINT: for Frame Shadow)", "Sunken");
-    propValCaption["MShadow"] = i18nc("for Frame Shadow", "Internal");
+    propValCaption["Plain"] = xi18nc("Plain (HINT: for Frame Shadow)", "Plain");
+    propValCaption["Raised"] = xi18nc("Raised (HINT: for Frame Shadow)", "Raised");
+    propValCaption["Sunken"] = xi18nc("Sunken (HINT: for Frame Shadow)", "Sunken");
+    propValCaption["MShadow"] = xi18nc("for Frame Shadow", "Internal");
 
-    propValCaption["NoFocus"] = i18nc("No Focus (HINT: for Focus)", "No Focus");
-    propValCaption["TabFocus"] = i18nc("Tab (HINT: for Focus)", "Tab");
-    propValCaption["ClickFocus"] = i18nc("Click (HINT: for Focus)", "Click");
-    propValCaption["StrongFocus"] = i18nc("Tab/Click (HINT: for Focus)", "Tab/Click");
-    propValCaption["WheelFocus"] = i18nc("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/Mouse Wheel");
+    propValCaption["NoFocus"] = xi18nc("No Focus (HINT: for Focus)", "No Focus");
+    propValCaption["TabFocus"] = xi18nc("Tab (HINT: for Focus)", "Tab");
+    propValCaption["ClickFocus"] = xi18nc("Click (HINT: for Focus)", "Click");
+    propValCaption["StrongFocus"] = xi18nc("Tab/Click (HINT: for Focus)", "Tab/Click");
+    propValCaption["WheelFocus"] = xi18nc("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/Mouse Wheel");
 
-    propValCaption["Auto"] = i18n("Auto");
-    propValCaption["AlwaysOff"] = i18n("Always Off");
-    propValCaption["AlwaysOn"] = i18n("Always On");
+    propValCaption["Auto"] = xi18n("Auto");
+    propValCaption["AlwaysOff"] = xi18n("Always Off");
+    propValCaption["AlwaysOn"] = xi18n("Always On");
 
     //orientation
-    propValCaption["Horizontal"] = i18n("Horizontal");
-    propValCaption["Vertical"] = i18n("Vertical");
+    propValCaption["Horizontal"] = xi18n("Horizontal");
+    propValCaption["Vertical"] = xi18n("Vertical");
 
     //layout direction
-    propValCaption["LeftToRight"] = i18n("Left to Right");
-    propValCaption["RightToLeft"] = i18n("Right to Left");
+    propValCaption["LeftToRight"] = xi18n("Left to Right");
+    propValCaption["RightToLeft"] = xi18n("Right to Left");
 }
 
 KProperty::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)

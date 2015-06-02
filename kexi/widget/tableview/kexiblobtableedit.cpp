@@ -80,7 +80,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *p
     KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
-    d->button->setToolTip(i18n("Click to show available actions for this cell"));
+    d->button->setToolTip(xi18n("Click to show available actions for this cell"));
 
     d->menu = new KexiImageContextMenu(this);
     d->menu->installEventFilter(this);

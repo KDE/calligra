@@ -88,7 +88,7 @@ public:
         KexiPart::Item* existingItem = project->item(part->info(), sdata->name());
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
-                                     i18n("Could not create new object.")
+                                     xi18n("Could not create new object.")
                                      + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
                                        .subs(sdata->name()).toString());
             return false;
@@ -443,16 +443,16 @@ tristate KexiWindow::switchToViewMode(
         res = true;
         if (view->isDataEditingInProgress()) {
             KGuiItem saveItem(KStandardGuiItem::save());
-            saveItem.setText(i18n("Save Changes"));
+            saveItem.setText(xi18n("Save Changes"));
             KGuiItem dontSaveItem(KStandardGuiItem::dontSave());
             KGuiItem cancelItem(KStandardGuiItem::cancel());
-            cancelItem.setText(i18n("Do Not Switch"));
+            cancelItem.setText(xi18n("Do Not Switch"));
             const int res = KMessageBox::questionYesNoCancel(
                 selectedView(),
-                i18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
+                xi18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
                      "<para>Do you want to save these changes before switching to other view?</para>",
                      partItem()->captionOrName()),
-                    i18n("Confirm Saving Changes"),
+                    xi18n("Confirm Saving Changes"),
                     saveItem, dontSaveItem, cancelItem
             );
             if (res == KMessageBox::Yes) {
@@ -477,11 +477,11 @@ tristate KexiWindow::switchToViewMode(
         if (~res || !res)
             return res;
         if (!dontStore && view->isDirty()) {
-            res = KexiMainWindowIface::global()->saveObject(this, i18n("Design has been changed. "
+            res = KexiMainWindowIface::global()->saveObject(this, xi18n("Design has been changed. "
                     "You must save it before switching to other view."));
             if (~res || !res)
                 return res;
-//   KMessageBox::questionYesNo(0, i18n("Design has been changed. You must save it before switching to other view."))
+//   KMessageBox::questionYesNo(0, xi18n("Design has been changed. You must save it before switching to other view."))
 //    ==KMessageBox::No
         }
     }
@@ -551,7 +551,7 @@ tristate KexiWindow::switchToViewMode(
         << prevViewMode << " restored.";
         const Kexi::ObjectStatus status(*this);
         setStatus(KexiMainWindowIface::global()->project()->dbConnection(),
-                  i18n("Switching to other view failed (%1).", Kexi::nameForViewMode(newViewMode)), "");
+                  xi18n("Switching to other view failed (%1).", Kexi::nameForViewMode(newViewMode)), "");
         append(status);
         d->currentViewMode = prevViewMode;
         return false;
@@ -708,7 +708,7 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     if (cancel)
         return cancelled;
     if (!d->schemaData) {
-        setStatus(project->dbConnection(), i18n("Saving object's definition failed."), "");
+        setStatus(project->dbConnection(), xi18n("Saving object's definition failed."), "");
         return false;
     }
 
@@ -736,7 +736,7 @@ tristate KexiWindow::storeData(bool dontAsk)
 
 #define storeData_ERR \
     setStatus(KexiMainWindowIface::global()->project()->dbConnection(), \
-        i18n("Saving object's data failed."),"");
+        xi18n("Saving object's data failed."),"");
 
     //save changes using transaction
     KexiDB::Transaction transaction = KexiMainWindowIface::global()
@@ -795,7 +795,7 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
         return cancelled;
     }
     if (!newSchemaData) {
-        setStatus(project->dbConnection(), i18n("Saving object's definition failed."), "");
+        setStatus(project->dbConnection(), xi18n("Saving object's definition failed."), "");
         return false;
     }
     setSchemaData(newSchemaData); // deletes previous schema if owned

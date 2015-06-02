@@ -119,10 +119,10 @@ protected:
   * "orientationSelectionPopup:verticalIcon" - the same for "Vertical" item.
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:horizontalText" - sets a i18n'd text for "Horizontal" item
-    for objects of class 'ClassName', e.g. i18n("Insert Horizontal Line").
+    for objects of class 'ClassName', e.g. xi18n("Insert Horizontal Line").
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
-    e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
+    e.g. xi18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
   * "dontStartEditingOnInserting" - if true, WidgetFactory::startInlineEditing() will not be executed upon
     widget inseting by a user.
   * "forceShowAdvancedProperty:{propertyname}" - set it to true for "{propertyname}" advanced property

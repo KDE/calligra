@@ -134,7 +134,7 @@ EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent,
                                        StdWidgetFactory *factory)
     : KAction(koIcon("document-edit"),
-              i18nc("Edit rich text for a widget", "Edit Rich Text"),
+              xi18nc("Edit rich text for a widget", "Edit Rich Text"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -179,9 +179,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     KFormDesigner::WidgetInfo *wFormWidget = new KFormDesigner::WidgetInfo(this);
     wFormWidget->setIconName(koIconName("form"));
     wFormWidget->setClassName("FormWidgetBase");
-    wFormWidget->setName(i18n("Form"));
+    wFormWidget->setName(xi18n("Form"));
     wFormWidget->setNamePrefix(
-        i18nc("A prefix for identifiers of form widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of form widgets. Based on that, identifiers such as "
             "form1, form2 are generated. "
             "This string can be used to refer the widget object as variables in programming "
             "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -189,7 +189,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
             "start with upper case letter. Example: smallCamelCase. "
             "Moreover, try to make this prefix as short as possible.",
             "form"));
-    wFormWidget->setDescription(i18n("A simple form widget"));
+    wFormWidget->setDescription(xi18n("A simple form widget"));
     addClass(wFormWidget);
 
     KFormDesigner::WidgetInfo *wCustomWidget = new KFormDesigner::WidgetInfo(this);
@@ -286,10 +286,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 //     wListBox->addAlternateClassName("QListBox");
 //     wListBox->addAlternateClassName("KListBox");
 //     wListBox->setIncludeFileName("qlistbox.h");
-//     wListBox->setName(i18n("List Box"));
+//     wListBox->setName(xi18n("List Box"));
 //     wListBox->setNamePrefix(
-//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
-//     wListBox->setDescription(i18n("A simple list widget"));
+//         xi18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
+//     wListBox->setDescription(xi18n("A simple list widget"));
 //     wListBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
 //     addClass(wListBox);
 
@@ -300,10 +300,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 // //?    wTreeWidget->addAlternateClassName("QListView");
 // //?    wTreeWidget->addAlternateClassName("KListView");
 //     wTreeWidget->setIncludeFileName("qtreewidget.h");
-//     wTreeWidget->setName(i18n("List Widget"));
+//     wTreeWidget->setName(xi18n("List Widget"));
 //     wTreeWidget->setNamePrefix(
-//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
-//     wTreeWidget->setDescription(i18n("A list (or tree) widget"));
+//         xi18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
+//     wTreeWidget->setDescription(xi18n("A list (or tree) widget"));
 //     wTreeWidget->setAutoSaveProperties(QList<QByteArray>() << "list_contents");
 //     addClass(wTreeWidget);
 #endif
@@ -338,9 +338,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     KFormDesigner::WidgetInfo *wLine = new KFormDesigner::WidgetInfo(this);
     wLine->setIconName(koIconName("line"));
     wLine->setClassName("Line");
-    wLine->setName(i18n("Line"));
+    wLine->setName(xi18n("Line"));
     wLine->setNamePrefix(
-        i18nc("A prefix for identifiers of line widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of line widgets. Based on that, identifiers such as "
             "line1, line2 are generated. "
             "This string can be used to refer the widget object as variables in programming "
             "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -348,13 +348,13 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
             "start with upper case letter. Example: smallCamelCase. "
             "Moreover, try to make this prefix as short as possible.",
             "line"));
-    wLine->setDescription(i18n("A line to be used as a separator"));
+    wLine->setDescription(xi18n("A line to be used as a separator"));
     wLine->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     wLine->setInternalProperty("orientationSelectionPopup", true);
     wLine->setInternalProperty("orientationSelectionPopup:horizontalIcon", "line_horizontal");
     wLine->setInternalProperty("orientationSelectionPopup:verticalIcon", "line_vertical");
-    wLine->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Line"));
-    wLine->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Line"));
+    wLine->setInternalProperty("orientationSelectionPopup:horizontalText", xi18n("Insert &Horizontal Line"));
+    wLine->setInternalProperty("orientationSelectionPopup:verticalText", xi18n("Insert &Vertical Line"));
     addClass(wLine);
 
     KFormDesigner::WidgetInfo *wDate = new KFormDesigner::WidgetInfo(this);
@@ -390,59 +390,59 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDateTime->setAutoSaveProperties(QList<QByteArray>() << "dateTime");
     addClass(wDateTime);
 
-    setPropertyDescription("checkable", i18nc("Property: Button is checkable", "On/Off"));
-    setPropertyDescription("autoRepeat", i18nc("Property: Button", "Auto Repeat"));
-    setPropertyDescription("autoRepeatDelay", i18nc("Property: Auto Repeat Button's Delay", "Auto Rep. Delay"));
-    setPropertyDescription("autoRepeatInterval", i18nc("Property: Auto Repeat Button's Interval", "Auto Rep. Interval"));
-    // unused (too advanced) setPropertyDescription("autoDefault", i18n("Auto Default"));
-    // unused (too advanced) setPropertyDescription("default", i18nc("Property: Button is default", "Default"));
-    setPropertyDescription("flat", i18nc("Property: Button is flat", "Flat"));
+    setPropertyDescription("checkable", xi18nc("Property: Button is checkable", "On/Off"));
+    setPropertyDescription("autoRepeat", xi18nc("Property: Button", "Auto Repeat"));
+    setPropertyDescription("autoRepeatDelay", xi18nc("Property: Auto Repeat Button's Delay", "Auto Rep. Delay"));
+    setPropertyDescription("autoRepeatInterval", xi18nc("Property: Auto Repeat Button's Interval", "Auto Rep. Interval"));
+    // unused (too advanced) setPropertyDescription("autoDefault", xi18n("Auto Default"));
+    // unused (too advanced) setPropertyDescription("default", xi18nc("Property: Button is default", "Default"));
+    setPropertyDescription("flat", xi18nc("Property: Button is flat", "Flat"));
     setPropertyDescription("echoMode",
-        i18nc("Property: Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode"));
-    setPropertyDescription("indent", i18n("Indent"));
+        xi18nc("Property: Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode"));
+    setPropertyDescription("indent", xi18n("Indent"));
     //line
-    setPropertyDescription("orientation", i18n("Orientation"));
+    setPropertyDescription("orientation", xi18n("Orientation"));
     //checkbox
-    setPropertyDescription("checked", i18nc("Property: Checked checkbox", "Checked"));
-    setPropertyDescription("tristate", i18nc("Property: Tristate checkbox", "Tristate"));
+    setPropertyDescription("checked", xi18nc("Property: Checked checkbox", "Checked"));
+    setPropertyDescription("tristate", xi18nc("Property: Tristate checkbox", "Tristate"));
 
     //for labels
-    setPropertyDescription("textFormat", i18n("Text Format"));
-    setValueDescription("PlainText", i18nc("For Text Format", "Plain"));
-    setValueDescription("RichText", i18nc("For Text Format", "Hypertext"));
-    setValueDescription("AutoText", i18nc("For Text Format", "Auto"));
-    setValueDescription("LogText", i18nc("For Text Format", "Log"));
-    setPropertyDescription("openExternalLinks", i18nc("property: Can open external links in label", "Open Ext. Links"));
+    setPropertyDescription("textFormat", xi18n("Text Format"));
+    setValueDescription("PlainText", xi18nc("For Text Format", "Plain"));
+    setValueDescription("RichText", xi18nc("For Text Format", "Hypertext"));
+    setValueDescription("AutoText", xi18nc("For Text Format", "Auto"));
+    setValueDescription("LogText", xi18nc("For Text Format", "Log"));
+    setPropertyDescription("openExternalLinks", xi18nc("property: Can open external links in label", "Open Ext. Links"));
 
     //QLineEdit
-    setPropertyDescription("placeholderText", i18nc("Property: line edit's placeholder text", "Placeholder Text"));
-    setPropertyDescription("clearButtonEnabled", i18nc("Property: Clear Button Enabled", "Clear Button"));
+    setPropertyDescription("placeholderText", xi18nc("Property: line edit's placeholder text", "Placeholder Text"));
+    setPropertyDescription("clearButtonEnabled", xi18nc("Property: Clear Button Enabled", "Clear Button"));
     //for EchoMode
-    setPropertyDescription("passwordMode", i18nc("Property: Password Mode for line edit", "Password Mode"));
-    setPropertyDescription("squeezedTextEnabled", i18nc("Property: Squeezed Text Mode for line edit", "Squeezed Text"));
+    setPropertyDescription("passwordMode", xi18nc("Property: Password Mode for line edit", "Password Mode"));
+    setPropertyDescription("squeezedTextEnabled", xi18nc("Property: Squeezed Text Mode for line edit", "Squeezed Text"));
     
     //KTextEdit
-    setPropertyDescription("tabStopWidth", i18n("Tab Stop Width"));
-    setPropertyDescription("tabChangesFocus", i18n("Tab Changes Focus"));
-    setPropertyDescription("wrapPolicy", i18n("Word Wrap Policy"));
-    setValueDescription("AtWordBoundary", i18nc("Property: For Word Wrap Policy", "At Word Boundary"));
-    setValueDescription("Anywhere", i18nc("Property: For Word Wrap Policy", "Anywhere"));
-    setValueDescription("AtWordOrDocumentBoundary", i18nc("Property: For Word Wrap Policy", "At Word Boundary If Possible"));
-    setPropertyDescription("wordWrap", i18n("Word Wrapping"));
-    setPropertyDescription("wrapColumnOrWidth", i18n("Word Wrap Position"));
-    setValueDescription("NoWrap", i18nc("Property: For Word Wrap Position", "None"));
-    setValueDescription("WidgetWidth", i18nc("Property: For Word Wrap Position", "Widget's Width"));
-    setValueDescription("FixedPixelWidth", i18nc("Property: For Word Wrap Position", "In Pixels"));
-    setValueDescription("FixedColumnWidth", i18nc("Property: For Word Wrap Position", "In Columns"));
-    setPropertyDescription("linkUnderline", i18n("Links Underlined"));
-    setPropertyDescription("horizontalScrollBarPolicy", i18n("Horizontal Scroll Bar"));
-    setPropertyDescription("verticalScrollBarPolicy", i18n("Vertical Scroll Bar"));
+    setPropertyDescription("tabStopWidth", xi18n("Tab Stop Width"));
+    setPropertyDescription("tabChangesFocus", xi18n("Tab Changes Focus"));
+    setPropertyDescription("wrapPolicy", xi18n("Word Wrap Policy"));
+    setValueDescription("AtWordBoundary", xi18nc("Property: For Word Wrap Policy", "At Word Boundary"));
+    setValueDescription("Anywhere", xi18nc("Property: For Word Wrap Policy", "Anywhere"));
+    setValueDescription("AtWordOrDocumentBoundary", xi18nc("Property: For Word Wrap Policy", "At Word Boundary If Possible"));
+    setPropertyDescription("wordWrap", xi18n("Word Wrapping"));
+    setPropertyDescription("wrapColumnOrWidth", xi18n("Word Wrap Position"));
+    setValueDescription("NoWrap", xi18nc("Property: For Word Wrap Position", "None"));
+    setValueDescription("WidgetWidth", xi18nc("Property: For Word Wrap Position", "Widget's Width"));
+    setValueDescription("FixedPixelWidth", xi18nc("Property: For Word Wrap Position", "In Pixels"));
+    setValueDescription("FixedColumnWidth", xi18nc("Property: For Word Wrap Position", "In Columns"));
+    setPropertyDescription("linkUnderline", xi18n("Links Underlined"));
+    setPropertyDescription("horizontalScrollBarPolicy", xi18n("Horizontal Scroll Bar"));
+    setPropertyDescription("verticalScrollBarPolicy", xi18n("Vertical Scroll Bar"));
     //ScrollBarPolicy
-    setValueDescription("ScrollBarAsNeeded", i18nc("Property: Show Scroll Bar As Needed", "As Needed"));
-    setValueDescription("ScrollBarAlwaysOff", i18nc("Property: Scroll Bar Always Off", "Always Off"));
-    setValueDescription("ScrollBarAlwaysOn", i18nc("Property: Scroll Bar Always On", "Always On"));
-    setPropertyDescription("acceptRichText", i18nc("Property: Text Edit accepts rich text", "Rich Text"));
-    setPropertyDescription("HTML", i18nc("Property: HTML value of text edit", "HTML"));
+    setValueDescription("ScrollBarAsNeeded", xi18nc("Property: Show Scroll Bar As Needed", "As Needed"));
+    setValueDescription("ScrollBarAlwaysOff", xi18nc("Property: Scroll Bar Always Off", "Always Off"));
+    setValueDescription("ScrollBarAlwaysOn", xi18nc("Property: Scroll Bar Always On", "Always On"));
+    setPropertyDescription("acceptRichText", xi18nc("Property: Text Edit accepts rich text", "Rich Text"));
+    setPropertyDescription("HTML", xi18nc("Property: HTML value of text edit", "HTML"));
 }
 
 StdWidgetFactory::~StdWidgetFactory()
@@ -539,7 +539,7 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
     }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget") {
-        menu->addAction(koIcon("document-properties"), i18n("Edit Contents of List Widget"), 
+        menu->addAction(koIcon("document-properties"), xi18n("Edit Contents of List Widget"),
             this, SLOT(editListContents()));
         return true;
     }
@@ -931,7 +931,7 @@ StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::Wid
 
     if (set.contains("indent")) {
         set["indent"].setOption("min", -1);
-        set["indent"].setOption("minValueText", i18nc("default indent value", "default"));
+        set["indent"].setOption("minValueText", xi18nc("default indent value", "default"));
     }
 }
 

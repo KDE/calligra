@@ -48,8 +48,8 @@
  
 KexiMainWelcomePage::KexiMainWelcomePage(
    KexiWelcomeAssistant* assistant, QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Welcome to Kexi"),
-                  i18nc("@info", "Select one of the recently used projects to open."),
+ : KexiAssistantPage(xi18nc("@title:window", "Welcome to Kexi"),
+                  xi18nc("@info", "Select one of the recently used projects to open."),
                   parent)
  , m_assistant(assistant)
 {

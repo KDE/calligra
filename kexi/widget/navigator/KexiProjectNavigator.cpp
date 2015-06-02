@@ -116,7 +116,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->actions = new KActionCollection(this);
 
     setObjectName("KexiProjectNavigator");
-    setWindowTitle(i18nc("@title:window", "Project Navigator"));
+    setWindowTitle(xi18nc("@title:window", "Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     d->lyr = new QVBoxLayout(this);
@@ -156,8 +156,8 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     }
 
     // actions
-    d->openAction = addAction("open_object", koIcon("document-open"), i18n("&Open"),
-                             i18n("Open object"), i18n("Opens object selected in the list."),
+    d->openAction = addAction("open_object", koIcon("document-open"), xi18n("&Open"),
+                             xi18n("Open object"), xi18n("Opens object selected in the list."),
                              SLOT(slotOpenObject()));
 
     if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->userMode()) {
@@ -168,14 +168,14 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         d->editTextAction = 0;
         d->newObjectAction = 0;
     } else {
-        d->deleteAction = addAction("edit_delete", koIcon("edit-delete"), i18n("&Delete..."),
-                                   i18n("Delete object"),
-                                   i18n("Deletes the object selected in the list."),
+        d->deleteAction = addAction("edit_delete", koIcon("edit-delete"), xi18n("&Delete..."),
+                                   xi18n("Delete object"),
+                                   xi18n("Deletes the object selected in the list."),
                                    SLOT(slotRemove()));
 
-        d->renameAction = addAction("edit_rename", koIcon("edit-rename"), i18n("&Rename..."),
-                                   i18n("Rename object"),
-                                   i18n("Renames the object selected in the list."),
+        d->renameAction = addAction("edit_rename", koIcon("edit-rename"), xi18n("&Rename..."),
+                                   xi18n("Rename object"),
+                                   xi18n("Renames the object selected in the list."),
                                    SLOT(slotRename()));
 //! @todo enable, doesn't work now: d->renameAction->setShortcut(QKeySequence(Qt::Key_F2));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -184,37 +184,37 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         //! @todo plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 
-        d->designAction = addAction("design_object", koIcon("document-properties"), i18n("&Design"),
-                                   i18n("Design object"),
-                                   i18n("Starts designing of the object selected in the list."),
+        d->designAction = addAction("design_object", koIcon("document-properties"), xi18n("&Design"),
+                                   xi18n("Design object"),
+                                   xi18n("Starts designing of the object selected in the list."),
                                    SLOT(slotDesignObject()));
 
-        d->editTextAction = addAction("editText_object", QIcon(), i18n("Design in &Text View"),
-                                     i18n("Design object in text view"),
-                                     i18n("Starts designing of the object in the list in text view."),
+        d->editTextAction = addAction("editText_object", QIcon(), xi18n("Design in &Text View"),
+                                     xi18n("Design object in text view"),
+                                     xi18n("Starts designing of the object in the list in text view."),
                                      SLOT(slotEditTextObject()));
 
         d->newObjectAction = addAction("new_object", koIcon("document-new"), QString(),QString(), QString(), SLOT(slotNewObject()));
     }
 
-    d->executeAction = addAction("data_execute", koIcon("system-run"), i18n("Execute"),
+    d->executeAction = addAction("data_execute", koIcon("system-run"), xi18n("Execute"),
 //! @todo tooltip, what's this
                                 QString(), QString(),
                                 SLOT(slotExecuteObject()));
 
     d->actions->addAction("export_object",
-                         d->exportActionMenu = new KActionMenu(i18n("Export"), this));
+                         d->exportActionMenu = new KActionMenu(xi18n("Export"), this));
     d->dataExportToClipboardAction = addAction("exportToClipboardAsDataTable", koIcon("edit-copy"),
-                                   i18nc("Export->To Clipboard as Data... ", "To &Clipboard..."),
-                                   i18n("Export data to clipboard"),
-                                   i18n("Exports data from the currently selected table or query to clipboard."),
+                                   xi18nc("Export->To Clipboard as Data... ", "To &Clipboard..."),
+                                   xi18n("Export data to clipboard"),
+                                   xi18n("Exports data from the currently selected table or query to clipboard."),
                                    SLOT(slotExportToClipboardAsDataTable()));
     d->exportActionMenu->addAction(d->dataExportToClipboardAction);
 
     d->dataExportToFileAction = addAction("exportToFileAsDataTable", koIcon("table"),
-                                   i18nc("Export->To File As Data &Table... ", "To &File As Data Table..."),
-                                   i18n("Export data to a file"),
-                                   i18n("Exports data from the currently selected table or query to a file."),
+                                   xi18nc("Export->To File As Data &Table... ", "To &File As Data Table..."),
+                                   xi18n("Export data to a file"),
+                                   xi18n("Exports data from the currently selected table or query to a file."),
                                    SLOT(slotExportToFileAsDataTable()));
     d->exportActionMenu->addAction(d->dataExportToFileAction);
 
@@ -364,13 +364,13 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
             d->prevSelectedPartInfo = it->partInfo();
             if (d->newObjectAction) {
                 d->newObjectAction->setText(
-                    i18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
+                    xi18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
                 d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createItemIconName()));
             }
         #if 0 
              } else {
             if (d->newObjectAction) {
-                d->newObjectAction->setText(i18n("&Create Object..."));
+                d->newObjectAction->setText(xi18n("&Create Object..."));
             }
         #endif
         }
@@ -464,9 +464,9 @@ void KexiProjectNavigator::slotRename()
         return;
     }
     KexiNameDialog dialog(
-        i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
+        xi18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
         this);
-    dialog.setButtonText(KexiNameDialog::Ok, i18nc("@action:button Rename object", "Rename"));
+    dialog.setButtonText(KexiNameDialog::Ok, xi18nc("@action:button Rename object", "Rename"));
     if (!d->model->project()) {
         kWarning() << "No KexiProject assigned!";
         return;
@@ -476,7 +476,7 @@ void KexiProjectNavigator::slotRename()
     dialog.widget()->setCaptionText(partItem->caption());
     dialog.widget()->setNameText(partItem->name());
     dialog.setWindowTitle(
-        i18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>", partItem->name()));
+        xi18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>", partItem->name()));
     dialog.setDialogIcon(info->itemIconName());
     dialog.setAllowOverwriting(true);
 
@@ -632,7 +632,7 @@ void KexiProjectNavigator::slotUpdateEmptyStateLabel()
             QString imgPath = KIconLoader::global()->iconPath(KexiIconName(koIconName("kexi-document-empty")), - KIconLoader::SizeMedium);
             kDebug() << imgPath;
             d->emptyStateLabel = new QLabel(
-                i18nc("@info Message for empty state in project navigator",
+                xi18nc("@info Message for empty state in project navigator",
                       "<nl/>"
                       "<nl/>"
                       "<img src=\"%1\" width=\"48\"/><nl/>"

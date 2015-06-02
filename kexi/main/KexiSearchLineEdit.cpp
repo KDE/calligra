@@ -363,7 +363,7 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
                                  // previously focus widget in KexiSearchLineEdit::setFocus().
                                  // We need this information to focus back when pressing Escape key.
     setClearButtonEnabled(true);
-    setPlaceholderText(i18n("Search"));
+    setPlaceholderText(xi18n("Search"));
 }
 
 KexiSearchLineEdit::~KexiSearchLineEdit()

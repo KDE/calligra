@@ -23,7 +23,7 @@
 KexiServerDriverNotFoundMessage::KexiServerDriverNotFoundMessage(QWidget *parent):
     KexiContextMessageWidget(parent, 0, 0,
             KexiContextMessage (
-                i18nc("@info",
+                xi18nc("@info",
                 "<title>No database server drivers found</title>"
                 "<para>Connection to a database server requires an appropriate driver which "
                 "you do not have installed.</para>"

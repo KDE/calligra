@@ -86,7 +86,7 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-    init(QString()/*i18n("Auto Field")*/, Auto, pos);
+    init(QString()/*xi18n("Auto Field")*/, Auto, pos);
 }
 
 KexiDBAutoField::~KexiDBAutoField()

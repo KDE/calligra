@@ -91,12 +91,12 @@ void KexiNameWidget::init(
     d->lbl_message->setTextInteractionFlags(Qt::TextBrowserInteraction);
     d->lyr->addWidget(d->lbl_message, 0, 0, 1, 2);
 
-    d->lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
+    d->lbl_caption = new QLabel(captionLabel.isEmpty() ? xi18n("Caption:") : captionLabel,
                              this);
     d->lbl_caption->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
     d->lyr->addWidget(d->lbl_caption, 1, 0);
 
-    d->lbl_name = new QLabel(nameLabel.isEmpty() ? i18n("Name:") : nameLabel,
+    d->lbl_name = new QLabel(nameLabel.isEmpty() ? xi18n("Name:") : nameLabel,
                           this);
     d->lbl_name->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
     d->lyr->addWidget(d->lbl_name, 2, 0);
@@ -123,8 +123,8 @@ void KexiNameWidget::init(
     setFocusProxy(d->le_caption);
     resize(QSize(342, 123).expandedTo(minimumSizeHint()));
 
-    d->nameWarning = i18n("Please enter the name.");
-    d->captionWarning = i18n("Please enter the caption.");
+    d->nameWarning = xi18n("Please enter the name.");
+    d->captionWarning = xi18n("Please enter the caption.");
 
     connect(d->le_caption, SIGNAL(textChanged(QString)),
             this, SLOT(slotCaptionTextChanged(QString)));

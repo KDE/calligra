@@ -141,15 +141,15 @@ QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
         return Kexi::nameForViewMode(mode, true).remove('&');
 
     if (mode == NoViewMode)
-        return i18n("&No View");
+        return xi18n("&No View");
     else if (mode == DataViewMode)
-        return i18n("&Data View");
+        return xi18n("&Data View");
     else if (mode == DesignViewMode)
-        return i18n("D&esign View");
+        return xi18n("D&esign View");
     else if (mode == TextViewMode)
-        return i18n("&Text View");
+        return xi18n("&Text View");
 
-    return i18n("&Unknown");
+    return xi18n("&Unknown");
 }
 
 //--------------------------------------------------------------------------------
@@ -316,11 +316,11 @@ void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_
                               QString* line1, QString* line2)
 {
     if (feature_name.isEmpty())
-        *line1 = i18n("This function is not available for version %1 of %2 application.",
+        *line1 = xi18n("This function is not available for version %1 of %2 application.",
                    QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     else {
         QString feature_name_(feature_name);
-        *line1 = i18n(
+        *line1 = xi18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
                   feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }

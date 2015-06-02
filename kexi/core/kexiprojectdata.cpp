@@ -195,7 +195,7 @@ QString KexiProjectData::infoString(bool nobr) const
     if (d->connData.fileName().isEmpty()) {
         //server-based
         return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
-               + (nobr ? " <nobr>" : " ") + i18nc("database connection", "(connection %1)",
+               + (nobr ? " <nobr>" : " ") + xi18nc("database connection", "(connection %1)",
                                                   d->connData.serverInfoString()) + (nobr ? "</nobr>" : "");
     }
     //file-based
@@ -250,7 +250,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     } else if (type == "connection") {
         isDatabaseShortcut = false;
     } else {
-        //! @todo ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
+        //! @todo ERR: xi18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
         return false;
     }
 
