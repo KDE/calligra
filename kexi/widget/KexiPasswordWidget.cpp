@@ -28,6 +28,8 @@
 #include <QTimer>
 #include <QPalette>
 #include <QLineEdit>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <kcombobox.h>
 #include <kiconloader.h>
@@ -150,7 +152,7 @@ void KexiPasswordWidget::KexiPasswordWidgetPrivate::init()
 
     updateFields();
 
-    QRect desktop = KGlobalSettings::desktopGeometry(q->topLevelWidget());
+    QRect desktop = QApplication::desktop()->screenGeometry(q->topLevelWidget());
     q->setMinimumWidth(qMin(1000, qMax(q->sizeHint().width(), desktop.width() / 4)));
     if ( ( m_flags & KexiPasswordWidget::ShowIcon ) ) {
         q->setPixmap(QIcon::fromTheme("dialog-password").pixmap(KIconLoader::SizeHuge));

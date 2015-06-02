@@ -320,7 +320,7 @@ void KexiTableScrollArea::setFont(const QFont &font)
 {
     QScrollArea::setFont(font);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->rowHeight = fontMetrics().lineSpacing() + 4;
 #else
     d->rowHeight = fontMetrics().lineSpacing() + 1;

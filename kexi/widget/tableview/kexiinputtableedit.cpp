@@ -78,7 +78,7 @@ void KexiInputTableEdit::init()
     m_textFormatter.setField( field() );
 
     //init settings
-    m_decsym = KGlobal::locale()->decimalSymbol();
+    m_decsym = KLocale::global()->decimalSymbol();
     if (m_decsym.isEmpty())
         m_decsym = ".";//default
 

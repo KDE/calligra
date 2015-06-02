@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QHash>
 #include <QStandardPaths>
+#include <QDir>
 
 //! @internal
 class KexiDBConnectionSetPrivate
@@ -77,8 +78,10 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
             i++;
         if (!KStandardDirs::exists(dir)) {
             //make 'connections' dir and protect it
-            if (!KStandardDirs::makeDir(dir, 0700))
+            if (!QDir().mkpath(dir, 0700))
                 return false;
+            //! @todo change permission of every created subdir, see KStandardDirs::makeDir() create
+            QFile(dir).setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
         }
         filename = baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic";
     }

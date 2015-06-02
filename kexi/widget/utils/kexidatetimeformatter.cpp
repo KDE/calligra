@@ -89,7 +89,7 @@ KexiDateFormatter::KexiDateFormatter()
 {
     // use "short date" format system settings
 //! @todo allow to override the format using column property and/or global app settings
-    QString df(KGlobal::locale()->dateFormatShort());
+    QString df(KLocale::global()->dateFormatShort());
     if (df.length() > 2)
         d->separator = df.mid(2, 1);
     else
@@ -233,7 +233,7 @@ QString KexiDateFormatter::toString(const QDate& date) const
 KexiTimeFormatter::KexiTimeFormatter()
         : d(new Private)
 {
-    QString tf(KGlobal::locale()->timeFormat());
+    QString tf(KLocale::global()->timeFormat());
     //d->hourpos, d->minpos, d->secpos; are result of tf.indexOf()
     QString hourVariable, minVariable, secVariable;
 

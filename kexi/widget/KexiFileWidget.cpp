@@ -252,7 +252,7 @@ void KexiFileWidget::showEvent(QShowEvent * event)
 /*TODO
 QString KexiFileWidget::selectedFile() const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 // QString path = selectedFile();
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
@@ -414,7 +414,7 @@ void KexiFileWidget::accept()
     //  m_lastUrl=QUrl();
         d->lastFileName.clear();
         kDebug() << "d->lastFileName==selectedFile()";
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
         return;
     #endif
       }
@@ -424,7 +424,7 @@ void KexiFileWidget::accept()
       }
       d->lastFileName = selectedFile();
 
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       saveLastVisitedPath(d->lastFileName);
     #endif*/
 }
@@ -439,7 +439,7 @@ void KexiFileWidget::setLocationText(const QString& fn)
 {
     locationEdit()->setUrl(QUrl(fn));
     /*
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       //js @todo
       setSelection(fn);
     #else

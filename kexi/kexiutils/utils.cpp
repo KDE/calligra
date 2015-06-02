@@ -37,6 +37,9 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QFontDatabase>
 
 #include <KRun>
 #include <KToolInvocation>
@@ -479,10 +482,10 @@ QFont KexiUtils::smallFont(QWidget *init)
 {
     if (init) {
         *_smallFont = init->font();
-        const int wdth = KGlobalSettings::desktopGeometry(init).width();
+        const int wdth = QApplication::desktop()->screenGeometry(init).width();
         int size = 10 + qMax(0, wdth - 1100) / 100;
         size = qMin(init->fontInfo().pixelSize(), size);
-        size = qMax(KGlobalSettings::smallestReadableFont().pixelSize(), size);
+        size = qMax(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize(), size);
         _smallFont->setPixelSize(size);
     }
     return *_smallFont;

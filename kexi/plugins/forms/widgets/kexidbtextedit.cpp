@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QMenu>
+#include <QFontDatabase>
 
 class DataSourceLabel : public QLabel
 {
@@ -81,7 +82,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_paletteChangeEvent_enabled(true)
 {
     QFont tmpFont;
-    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    tmpFont.setPointSize(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 //hmm disabled again because this makes the widget disappear entirely

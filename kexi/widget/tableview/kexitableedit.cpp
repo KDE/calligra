@@ -53,21 +53,21 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
 
     //margins
     if (displayedField()->isFPNumericType()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 0;
 #else
         m_leftMargin = 0;
 #endif
         m_rightMargin = 6;
     } else if (displayedField()->isIntegerType()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 1;
 #else
         m_leftMargin = 0;
 #endif
         m_rightMargin = 6;
     } else {//default
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 5;
 #else
         m_leftMargin = 5;
@@ -213,7 +213,7 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     Q_UNUSED(h);
     KexiDB::Field *realField = displayedField();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;

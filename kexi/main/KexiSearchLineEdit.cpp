@@ -633,7 +633,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     }
 
     if (event == QKeySequence::MoveToNextChar) {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
@@ -647,7 +647,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 #endif
     }
     else if (event == QKeySequence::MoveToPreviousChar) {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
