@@ -156,5 +156,4 @@ bool KexiDBCursor::save()
     return ok;
 }
 
-#include "kexidbcursor.moc"
 

@@ -110,4 +110,3 @@ bool WebBrowserFactory::previewWidget(const QByteArray &classname,
      
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
 
-#include "WebBrowserFactory.moc"

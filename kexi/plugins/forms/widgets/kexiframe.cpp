@@ -85,4 +85,3 @@ void KexiFrame::paintEvent(QPaintEvent *pe)
 #define ClassName KexiFrame
 #define SuperClassName QFrame
 #include "kexiframeutils_p.cpp"
-#include "kexiframe.moc"

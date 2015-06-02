@@ -190,4 +190,3 @@ void KexiDBField::setDefaultValue(const QVariant& defaultvalue)
     m_field->setDefaultValue(defaultvalue);
 }
 
-#include "kexidbfield.moc"

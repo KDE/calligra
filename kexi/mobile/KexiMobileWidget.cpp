@@ -85,4 +85,3 @@ void KexiMobileWidget::setActiveObject(KexiWindow* win)
     setCurrentWidget(m_objectPage);
 }
 
-#include "KexiMobileWidget.moc"

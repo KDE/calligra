@@ -93,4 +93,3 @@ void KexiToolTip::drawContents(QPainter& p)
     p.drawText(rect(), Qt::AlignCenter, d->value.toString());
 }
 
-#include "kexitooltip.moc"

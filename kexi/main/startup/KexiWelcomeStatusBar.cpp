@@ -1102,6 +1102,3 @@ void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
 }
 
 // Contribution Details END
-
-#include "KexiWelcomeStatusBar.moc"
-#include "KexiWelcomeStatusBar_p.moc"

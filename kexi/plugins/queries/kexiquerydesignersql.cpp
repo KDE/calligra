@@ -442,4 +442,3 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
     return res;
 }
 
-#include "kexiquerydesignersql.moc"

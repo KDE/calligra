@@ -322,4 +322,3 @@ QWidget* KexiOpenProjectAssistant::calloutWidget() const
     return currentPage()->nextButton();
 }
 
-#include "KexiOpenProjectAssistant.moc"

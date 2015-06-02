@@ -492,4 +492,3 @@ void KexiStartupFileHandler::slotAccepted()
     checkSelectedUrl();
 }
 
-#include "KexiStartupFileHandler.moc"

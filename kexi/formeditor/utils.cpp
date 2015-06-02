@@ -316,4 +316,3 @@ void KFormDesigner::paintWidgetFrame(QPainter& p, const QRect& geometry)
     p.drawRect(r);
 }
 
-#include "utils.moc"
