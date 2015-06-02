@@ -423,7 +423,7 @@ public:
     template<typename T>
     T widgetOfClass(T parent, const char *widgetName) const
     {
-        T w = qFindChild<T>(parent, widgetName);
+        T w = parent->findChild<T>(widgetName);
         if (!w) {
             kWarning() << "NO SUCH widget" << widgetName << "in" << parent;
         }
@@ -437,7 +437,7 @@ public:
     
     QObject* object(QObject *parent, const char *objectName) const
     {
-        QObject *o = qFindChild<QObject*>(parent, objectName);
+        QObject *o = parent->findChild<QObject*>(objectName);
         if (!o) {
             kWarning() << "NO SUCH object" << objectName << "in" << parent;
         }
@@ -768,7 +768,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     if (!widget) {
         return;
     }
-    QLabel *lbl = qFindChild<QLabel*>(widget, "question");
+    QLabel *lbl = widget->findChild<QLabel*>("question");
     if (!lbl) {
         return;
     }
