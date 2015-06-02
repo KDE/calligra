@@ -10,7 +10,7 @@ set(kexidbparser_SRCS main.cpp )
 
 add_executable(kexidbparser ${kexidbparser_SRCS})
 
-target_link_libraries(kexidbparser Predicate kexidbparser)
+target_link_libraries(kexidbparser KDb kexidbparser)
 
 install(TARGETS kexidbparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
