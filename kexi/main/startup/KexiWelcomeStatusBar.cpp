@@ -56,6 +56,7 @@
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QDir>
+#include <QFontDatabase>
 
 #include <stdio.h>
 
@@ -507,7 +508,7 @@ public:
         if (!widget) {
             return;
         }
-        int smallFontSize = qFloor((KGlobalSettings::smallestReadableFont().pointSizeF()
+        int smallFontSize = qFloor((QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()
                                    + q->font().pointSizeF())
                                    / 2.0);
         smallFont = q->font();
@@ -969,7 +970,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->countryMask = lbl->text();
                 }
                 value = d->countryMask
-                    .arg(KGlobal::locale()->countryCodeToName(f->value(name).toString()))
+                    .arg(KLocale::global()->countryCodeToName(f->value(name).toString()))
                     .arg(f->value(name).toString());
             }
             else if (name == QLatin1String("language")) {
@@ -977,7 +978,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->languageMask = lbl->text();
                 }
                 value = d->languageMask
-                    .arg(KGlobal::locale()->languageCodeToName(f->value(name).toString()))
+                    .arg(KLocale::global()->languageCodeToName(f->value(name).toString()))
                     .arg(f->value(name).toString());
             }
             else {
@@ -1009,7 +1010,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
             }
             else if (days > 0) {
                 recentDonation = i18ncp("Recent donation date (xx days)", "%1 (1 day)", "%1 (%2 days)",
-                                        KGlobal::locale()->formatDateTime(lastDonation), days);
+                                        KLocale::global()->formatDateTime(lastDonation), days);
             }
         }
         lbl->setText(recentDonation);

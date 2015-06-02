@@ -372,10 +372,10 @@ void KexiScriptDesignView::execute()
     d->scriptaction->trigger();
     if (d->scriptaction->hadError()) {
         QString errormessage = d->scriptaction->errorMessage();
-        d->statusbrowser->append(QString("<b>%2</b><br>").arg(Qt::escape(errormessage)));
+        d->statusbrowser->append(QString("<b>%2</b><br>").arg(errormessage.toHtmlEscaped()));
 
         QString tracedetails = d->scriptaction->errorTrace();
-        d->statusbrowser->append(Qt::escape(tracedetails));
+        d->statusbrowser->append(tracedetails.toHtmlEscaped());
 
         long lineno = d->scriptaction->errorLineNo();
         if (lineno >= 0)
