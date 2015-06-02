@@ -88,7 +88,7 @@ target_link_libraries(
     kexicore
     ktexteditor
 
-    Predicate
+    KDb
     KProperty
 )
 

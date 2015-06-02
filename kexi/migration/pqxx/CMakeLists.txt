@@ -18,7 +18,7 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 )
 
 install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

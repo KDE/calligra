@@ -13,7 +13,7 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 
     ${MYSQL_LIBRARIES}
     )
