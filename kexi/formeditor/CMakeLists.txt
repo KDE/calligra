@@ -48,7 +48,7 @@ set(kformdesigner_LIBS
   kexicore
   kexiextendedwidgets
 
-  Predicate
+  KDb
   KProperty
 )
 

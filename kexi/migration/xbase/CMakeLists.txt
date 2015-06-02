@@ -12,10 +12,10 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 
     ${XBase_LIBRARIES}
-    )
+)
 
 install(TARGETS keximigrate_xbase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
