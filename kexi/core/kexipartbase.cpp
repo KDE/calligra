@@ -72,4 +72,3 @@ void PartBase::setupCustomPropertyPanelTabs(QTabWidget *)
 {
 }
 
-#include "kexipartbase.moc"

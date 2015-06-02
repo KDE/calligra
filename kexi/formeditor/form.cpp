@@ -2697,4 +2697,3 @@ QByteArray Form::editedWidgetClass() const
     return d->editedWidgetClass;
 }
 
-#include "form.moc"

@@ -492,4 +492,3 @@ KexiProjectData::AutoOpenObjects KexiStartupDialog::autoopenObjects() const
 }
 #endif
 
-#include "KexiStartupDialog.moc"

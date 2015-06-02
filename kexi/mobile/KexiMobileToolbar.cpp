@@ -106,4 +106,3 @@ void KexiMobileToolbar::updatePage()
     }
 }
 
-#include "KexiMobileToolbar.moc"

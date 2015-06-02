@@ -218,4 +218,3 @@ QObject* KexiDBConnection::parser()
     return new KexiDBParser(this, new ::KexiDB::Parser(m_connection), true);
 }
 
-#include "kexidbconnection.moc"
