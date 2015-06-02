@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QUrl>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 namespace KexiDB
 {
