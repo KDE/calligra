@@ -20,7 +20,7 @@
 #ifndef KEXIRECORDNAVIGATORIFACE_H
 #define KEXIRECORDNAVIGATORIFACE_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 class KexiRecordNavigatorHandler;
 class QScrollBar;

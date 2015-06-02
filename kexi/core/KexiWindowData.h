@@ -21,7 +21,7 @@
 #define KEXIWINDOWDATA_H
 
 #include <QObject>
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 //! Privides temporary data shared between KexiWindow's views (KexiView's)
 /*! Designed for reimplementation, if needed. */

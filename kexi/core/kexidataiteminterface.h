@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QPointer>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 class KexiDataItemInterface;
 namespace KexiDB

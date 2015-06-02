@@ -20,7 +20,7 @@
 #ifndef KEXI_MIGRATEMANAGERINTERFACE_H
 #define KEXI_MIGRATEMANAGERINTERFACE_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 #include <QList>
 #include <QString>
