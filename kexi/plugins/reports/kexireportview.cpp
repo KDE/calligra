@@ -74,16 +74,16 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_pageSelector = new KexiRecordNavigator(*m_reportView, m_reportView);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setInsertingEnabled(false);
-    m_pageSelector->setLabelText(i18nc("Page selector label", "Page:"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, i18n("Go to previous page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, i18n("Goes to previous page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, i18n("Go to next page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, i18n("Goes to next page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, i18n("Go to last page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, i18n("Goes to last page"));
-    m_pageSelector->setNumberFieldToolTips(i18n("Current page number"), i18n("Number of pages"));
+    m_pageSelector->setLabelText(xi18nc("Page selector label", "Page:"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, xi18n("Go to first page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, xi18n("Goes to first page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, xi18n("Go to previous page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, xi18n("Goes to previous page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, xi18n("Go to next page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, xi18n("Goes to next page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, xi18n("Go to last page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, xi18n("Goes to last page"));
+    m_pageSelector->setNumberFieldToolTips(xi18n("Current page number"), xi18n("Number of pages"));
     m_pageSelector->setRecordHandler(this);
 #endif
 
@@ -92,29 +92,29 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("document-print"), i18n("Print"), this));
+    viewActions << (a = new KAction(koIcon("document-print"), xi18n("Print"), this));
     a->setObjectName("print_report");
-    a->setToolTip(i18n("Print report"));
-    a->setWhatsThis(i18n("Prints the current report."));
+    a->setToolTip(xi18n("Print report"));
+    a->setWhatsThis(xi18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
-    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), xi18nc("@title:menu","E&xport As"), this);
     exportMenu->setObjectName("report_export_as");
     exportMenu->setDelayed(false);
 #endif
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(i18n("Export:"), this));
+    viewActions << (a = new KAction(xi18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar!
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
     exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.text"),
-                                          i18nc("open dialog to export as text document", "Text Document..."), this));
+                                          xi18nc("open dialog to export as text document", "Text Document..."), this));
 #endif
     a->setObjectName("export_as_text_document");
-    a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
-    a->setWhatsThis(i18n("Exports the report as a text document (in OpenDocument Text format)."));
+    a->setToolTip(xi18n("Export the report as a text document (in OpenDocument Text format)"));
+    a->setWhatsThis(xi18n("Exports the report as a text document (in OpenDocument Text format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
 
@@ -122,11 +122,11 @@ KexiReportView::KexiReportView(QWidget *parent)
     viewActions << (a = new KAction(koIcon("application-pdf"), QLatin1String(" "), this));
 #else
     exportMenu->addAction(a = new KAction(koIcon("application-pdf"),
-                                          i18nc("Portable Document Format...", "PDF..."), this));
+                                          xi18nc("Portable Document Format...", "PDF..."), this));
 #endif
     a->setObjectName("export_as_pdf");
-    a->setToolTip(i18n("Export as PDF"));
-    a->setWhatsThis(i18n("Exports the current report as PDF."));
+    a->setToolTip(xi18n("Export as PDF"));
+    a->setWhatsThis(xi18n("Exports the current report as PDF."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
 
@@ -134,11 +134,11 @@ KexiReportView::KexiReportView(QWidget *parent)
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
     exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
-                                          i18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
+                                          xi18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
-    a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
-    a->setWhatsThis(i18n("Exports the report as a spreadsheet (in OpenDocument Spreadsheet format)."));
+    a->setToolTip(xi18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
+    a->setWhatsThis(xi18n("Exports the report as a spreadsheet (in OpenDocument Spreadsheet format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsSpreadsheet()));
 
@@ -146,11 +146,11 @@ KexiReportView::KexiReportView(QWidget *parent)
     viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
     exportMenu->addAction(a = new KAction(koIcon("text-html"),
-                                          i18nc("open dialog to export as web page", "Web Page..."), this));
+                                          xi18nc("open dialog to export as web page", "Web Page..."), this));
 #endif
     a->setObjectName("export_as_web_page");
-    a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
-    a->setWhatsThis(i18n("Exports the report as a web page (in HTML format)."));
+    a->setToolTip(xi18n("Export the report as a web page (in HTML format)"));
+    a->setWhatsThis(xi18n("Exports the report as a web page (in HTML format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsWebPage()));
 
@@ -206,7 +206,7 @@ void KexiReportView::slotExportAsPdf()
         KoReportRendererContext cxt;
 
         cxt.destinationUrl = getExportUrl(QLatin1String("application/pdf"),
-                                          i18n("Export Report as PDF"),
+                                          xi18n("Export Report as PDF"),
                                           "kfiledialog:///LastVisitedPDFExportPath/",
                                           "pdf");
         if (!cxt.destinationUrl.isValid()) {
@@ -225,8 +225,8 @@ void KexiReportView::slotExportAsPdf()
         cxt.painter = &painter;
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
@@ -251,8 +251,8 @@ QUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
         if (result.isValid()) {
             if (KIO::NetAccess::exists(result, KIO::NetAccess::DestinationSide, this)) {
                 const int answer = KMessageBox::warningContinueCancel(this,
-                    i18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
-                    caption, KGuiItem(i18n("Overwrite")));
+                    xi18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
+                    caption, KGuiItem(xi18n("Overwrite")));
 
                 // if overwriting not wanted, let select another url
                 if (answer == KMessageBox::Cancel) {
@@ -273,7 +273,7 @@ void KexiReportView::openExportedDocument(const QUrl &destination)
     const int answer =
         KMessageBox::questionYesNo(
             this,
-            i18n("Do you want to open exported document?"),
+            xi18n("Do you want to open exported document?"),
             QString(),
             KStandardGuiItem::open(),
             KStandardGuiItem::close());
@@ -292,7 +292,7 @@ void KexiReportView::slotExportAsSpreadsheet()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.spreadsheet"),
-                                          i18n("Export Report as Spreadsheet"),
+                                          xi18n("Export Report as Spreadsheet"),
                                           "kfiledialog:///LastVisitedODSExportPath/",
                                           "ods");
         if (!cxt.destinationUrl.isValid()) {
@@ -301,8 +301,8 @@ void KexiReportView::slotExportAsSpreadsheet()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
@@ -318,7 +318,7 @@ void KexiReportView::slotExportAsTextDocument()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.text"),
-                                          i18n("Export Report as Text Document"),
+                                          xi18n("Export Report as Text Document"),
                                           "kfiledialog:///LastVisitedODTExportPath/",
                                           "odt");
         if (!cxt.destinationUrl.isValid()) {
@@ -327,8 +327,8 @@ void KexiReportView::slotExportAsTextDocument()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
@@ -340,7 +340,7 @@ void KexiReportView::slotExportAsWebPage()
     KoReportRendererContext cxt;
     KoReportRendererBase *renderer;
 
-    const QString dialogTitle = i18n("Export Report as Web Page");
+    const QString dialogTitle = xi18n("Export Report as Web Page");
     cxt.destinationUrl = getExportUrl(QLatin1String("text/html"),
                                       dialogTitle,
                                       "kfiledialog:///LastVisitedHTMLExportPath/",
@@ -352,12 +352,12 @@ void KexiReportView::slotExportAsWebPage()
     const int answer =
         KMessageBox::questionYesNo(
             this,
-            i18n("Would you like to export using a Cascading Style Sheet (CSS), "
+            xi18n("Would you like to export using a Cascading Style Sheet (CSS), "
                  "which will give an output closer to the original, "
                  "or export using a HTML Table, which outputs a much simpler format?"),
             dialogTitle,
-            KGuiItem(i18n("Use CSS")),
-            KGuiItem(i18n("Use Table")));
+            KGuiItem(xi18n("Use CSS")),
+            KGuiItem(xi18n("Use Table")));
 
     if (answer == KMessageBox::Yes) {
         renderer = m_factory.createInstance("htmlcss");
@@ -368,8 +368,8 @@ void KexiReportView::slotExportAsWebPage()
 
     if (!renderer->render(cxt, m_reportDocument)) {
         KMessageBox::error(this,
-                           i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                           i18n("Export Failed"));
+                           xi18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                           xi18n("Export Failed"));
     } else {
         openExportedDocument(cxt.destinationUrl);
     }
@@ -448,7 +448,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportView->centerOn(0,0);
 
         } else {
-            KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
+            KMessageBox::error(this, xi18n("Report schema appears to be invalid or corrupt"), xi18n("Opening failed"));
         }
 
 

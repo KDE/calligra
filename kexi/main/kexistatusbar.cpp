@@ -75,9 +75,9 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     QToolButton *viewButton = new QToolButton(this);
     viewButton->setContentsMargins(0, 0, 0, 0);
     viewButton->setAutoRaise(true);
-    viewButton->setText(i18nc("View menu", "View"));
-    viewButton->setToolTip(i18n("Show view menu"));
-    viewButton->setWhatsThis(i18n("Shows menu with view-related options"));
+    viewButton->setText(xi18nc("View menu", "View"));
+    viewButton->setToolTip(xi18n("Show view menu"));
+    viewButton->setWhatsThis(xi18n("Shows menu with view-related options"));
     addPermanentWidget(viewButton);
 
 //!@ todo add small close button
@@ -85,10 +85,10 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     viewButton->setMenu(m_viewMenu);
     viewButton->setPopupMode(QToolButton::InstantPopup);
 
-    m_showNavigatorAction = m_viewMenu->addAction(i18n("Project &Navigator"));
+    m_showNavigatorAction = m_viewMenu->addAction(xi18n("Project &Navigator"));
     m_showNavigatorAction->setCheckable(true);
 
-    m_showPropertyEditorAction = m_viewMenu->addAction(i18n("&Property Editor"));
+    m_showPropertyEditorAction = m_viewMenu->addAction(xi18n("&Property Editor"));
     m_showPropertyEditorAction->setCheckable(true);
 #endif
     /// @todo remove parts from the map on PartRemoved() ?
@@ -124,6 +124,6 @@ void KexiStatusBar::setCursorPosition(int line, int col)
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {
-    changeItem(readOnly ? i18n("Read only") : QString(), m_readOnlyID);
+    changeItem(readOnly ? xi18n("Read only") : QString(), m_readOnlyID);
 }
 

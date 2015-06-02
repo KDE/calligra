@@ -183,7 +183,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     connect(d->relations, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)),
             this, SLOT(slotAppendFields(KexiDB::TableOrQuerySchema&,QStringList)));
 
-    d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
+    d->head = new KexiSectionHeader(xi18n("Query Columns"), Qt::Vertical, d->spl);
     d->spl->addWidget(d->head);
     d->dataTable = new KexiDataTableView(d->head, false);
     d->head->setWidget(d->dataTable);
@@ -240,22 +240,22 @@ KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 void
 KexiQueryDesignerGuiEditor::initTableColumns()
 {
-    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn("column", KexiDB::Field::Enum, i18n("Column"),
-            i18n("Describes field name or expression for the designed query."));
+    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn("column", KexiDB::Field::Enum, xi18n("Column"),
+            xi18n("Describes field name or expression for the designed query."));
     col1->setRelatedDataEditable(true);
 
     d->fieldColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col1->setRelatedData(d->fieldColumnData);
     d->data->addColumn(col1);
 
-    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn("table", KexiDB::Field::Enum, i18n("Table"),
-            i18n("Describes table for a given field. Can be empty."));
+    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn("table", KexiDB::Field::Enum, xi18n("Table"),
+            xi18n("Describes table for a given field. Can be empty."));
     d->tablesColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col2->setRelatedData(d->tablesColumnData);
     d->data->addColumn(col2);
 
-    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
-            i18n("Describes visibility for a given field or expression."));
+    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn("visible", KexiDB::Field::Boolean, xi18n("Visible"),
+            xi18n("Describes visibility for a given field or expression."));
     col3->field()->setDefaultValue(QVariant(false));
     col3->field()->setNotNull(true);
     d->data->addColumn(col3);
@@ -274,18 +274,18 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     d->data->addColumn(col4);
 #endif
 
-    KexiDB::TableViewColumn *col5 = new KexiDB::TableViewColumn("sort", KexiDB::Field::Enum, i18n("Sorting"),
-            i18n("Describes a way of sorting for a given field."));
+    KexiDB::TableViewColumn *col5 = new KexiDB::TableViewColumn("sort", KexiDB::Field::Enum, xi18n("Sorting"),
+            xi18n("Describes a way of sorting for a given field."));
     QVector<QString> sortTypes;
     sortTypes.append("");
-    sortTypes.append(i18n("Ascending"));
-    sortTypes.append(i18n("Descending"));
+    sortTypes.append(xi18n("Ascending"));
+    sortTypes.append(xi18n("Descending"));
     col5->field()->setEnumHints(sortTypes);
     d->data->addColumn(col5);
     d->initSortColumnPreferredWidth(sortTypes);
 
-    KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
-            i18n("Describes the criteria for a given field or expression."));
+    KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, xi18n("Criteria"),
+            xi18n("Describes the criteria for a given field or expression."));
     d->data->addColumn(col6);
 }
 
@@ -383,7 +383,7 @@ KexiQueryDesignerGuiEditor::tempData() const
 
 static QString msgCannotSwitch_EmptyDesign()
 {
-    return i18n("Cannot switch to data view, because query design is empty.\n"
+    return xi18n("Cannot switch to data view, because query design is empty.\n"
                 "First, please create your design.");
 }
 
@@ -422,7 +422,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             kDebug() << "no field provided!";
             d->dataTable->dataAwareObject()->setCursorPosition(i, 0);
             if (errMsg)
-                *errMsg = i18n("Select column for table \"%1\"",
+                *errMsg = xi18n("Select column for table \"%1\"",
                                (**it)[COLUMN_ID_TABLE].toString());
             return false;
         }
@@ -444,7 +444,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                                                  true/*allowRelationalOperator*/);
                 if (!criteriaExpr) {//for sanity
                     if (errMsg)
-                        *errMsg = i18n("Invalid criteria \"%1\"", criteriaStr);
+                        *errMsg = xi18n("Invalid criteria \"%1\"", criteriaStr);
                     delete whereExpr;
                     return false;
                 }
@@ -465,7 +465,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                                                    false/*!allowRelationalOperator*/);
                     if (!columnExpr) {
                         if (errMsg)
-                            *errMsg = i18n("Invalid expression \"%1\"", fieldName);
+                            *errMsg = xi18n("Invalid expression \"%1\"", fieldName);
                         return false;
                     }
                     temp->query()->addExpression(columnExpr, fieldVisible);
@@ -651,8 +651,8 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             if (!loadLayout()) {
                 //err msg
                 window()->setStatus(d->conn,
-                                    i18n("Query definition loading failed."),
-                                    i18n("Query design may be corrupted so it could not be opened even in text view.\n"
+                                    xi18n("Query definition loading failed."),
+                                    xi18n("Query design may be corrupted so it could not be opened even in text view.\n"
                                          "You can delete the query and create it again."));
                 return false;
             }
@@ -665,7 +665,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
                 KexiDB::ResultInfo result;
                 showFieldsForQuery(q, result);
                 if (!result.success) {
-                    window()->setStatus(&result, i18n("Query definition loading failed."));
+                    window()->setStatus(&result, xi18n("Query definition loading failed."));
                     tempData()->proposeOpeningInTextViewModeBecauseOfProblems = true;
                     return false;
                 }
@@ -687,7 +687,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
                 KexiDB::ResultInfo result;
                 showFieldsAndRelationsForQuery(tempData()->query(), result);
                 if (!result.success) {
-                    window()->setStatus(&result, i18n("Query definition loading failed."));
+                    window()->setStatus(&result, xi18n("Query definition loading failed."));
                     return false;
                 }
             } else {
@@ -1091,7 +1091,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
             KexiDB::ResultInfo result;
             showRelationsForQuery(q, result);
             if (!result.success) {
-                window()->setStatus(&result, i18n("Query definition loading failed."));
+                window()->setStatus(&result, xi18n("Query definition loading failed."));
                 return false;
             }
         }
@@ -1277,7 +1277,7 @@ QByteArray KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 {
 //! @todo add option for using non-i18n'd "expr" prefix?
     const QByteArray expStr(
-        i18nc("short for 'expression' word (only latin letters, please)", "expr").toLatin1());
+        xi18nc("short for 'expression' word (only latin letters, please)", "expr").toLatin1());
 //! @todo optimization: cache it?
     QSet<QByteArray> aliases;
     const int setsSize = d->sets->size();
@@ -1481,9 +1481,9 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
                 result->success = false;
                 result->allowToDiscardChanges = true;
                 result->column = COLUMN_ID_COLUMN;
-                result->msg = i18n(
+                result->msg = xi18n(
                     "Entered column alias \"%1\" is not a valid identifier.", QString(alias));
-                result->desc = i18n("Identifiers should start with a letter or '_' character");
+                result->desc = xi18n("Identifiers should start with a letter or '_' character");
                 return;
             }
         }
@@ -1502,7 +1502,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
             result->success = false;
             result->allowToDiscardChanges = true;
             result->column = COLUMN_ID_COLUMN;
-            result->msg = i18n("Invalid expression \"%1\"", fieldName);
+            result->msg = xi18n("Invalid expression \"%1\"", fieldName);
             return;
         }
     }
@@ -1654,7 +1654,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KexiDB::RecordData
         result->success = false;
         result->allowToDiscardChanges = true;
         result->column = COLUMN_ID_SORTING;
-        result->msg = i18n("Could not set sorting for multiple columns (%1)",
+        result->msg = xi18n("Could not set sorting for multiple columns (%1)",
                            table == "*" ? table : (table + ".*"));
     }
 }
@@ -1679,10 +1679,10 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
         result->allowToDiscardChanges = true;
         result->column = COLUMN_ID_CRITERIA;
         if (propertySet())
-            result->msg = i18n("Could not set criteria for \"%1\"",
+            result->msg = xi18n("Could not set criteria for \"%1\"",
                                table == "*" ? table : field);
         else
-            result->msg = i18n("Could not set criteria for empty record");
+            result->msg = xi18n("Could not set criteria for empty record");
     }
     else if (str.isEmpty()
              || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
@@ -1708,7 +1708,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
         result->success = false;
         result->allowToDiscardChanges = true;
         result->column = COLUMN_ID_CRITERIA;
-        result->msg = i18n("Invalid criteria \"%1\"", newValue.toString());
+        result->msg = xi18n("Invalid criteria \"%1\"", newValue.toString());
     }
 }
 
@@ -1779,7 +1779,7 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     KProperty *prop;
 
     //meta-info for property editor
-    set->addProperty(prop = new KProperty("this:classString", i18n("Query column")));
+    set->addProperty(prop = new KProperty("this:classString", xi18n("Query column")));
     prop->setVisible(false);
 //! \todo add table_field icon (add buff->addProperty(prop = new KexiProperty("this:iconName", "table_field") );
 // prop->setVisible(false);
@@ -1790,12 +1790,12 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     set->addProperty(prop = new KProperty("field", QVariant(fieldName)));
     prop->setVisible(false);//always hidden
 
-    set->addProperty(prop = new KProperty("caption", QVariant(QString()), i18n("Caption")));
+    set->addProperty(prop = new KProperty("caption", QVariant(QString()), xi18n("Caption")));
 #ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
-    set->addProperty(prop = new KProperty("alias", QVariant(QString()), i18n("Alias")));
+    set->addProperty(prop = new KProperty("alias", QVariant(QString()), xi18n("Alias")));
 
     set->addProperty(prop = new KProperty("visible", QVariant(true)));
     prop->setVisible(false);
@@ -1807,9 +1807,9 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     //sorting
     QStringList slist, nlist;
     slist << "nosorting" << "ascending" << "descending";
-    nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
+    nlist << xi18n("None") << xi18n("Ascending") << xi18n("Descending");
     set->addProperty(prop = new KProperty("sorting",
-            slist, nlist, slist[0], i18n("Sorting")));
+            slist, nlist, slist[0], xi18n("Sorting")));
     prop->setVisible(false);
 
     set->addProperty(prop = new KProperty("criteria", QVariant(QString())));

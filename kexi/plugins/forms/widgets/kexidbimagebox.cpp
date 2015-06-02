@@ -503,7 +503,7 @@ void KexiDBImageBox::updateActionStrings()
 
     if (m_chooser) {
         if (popupMenuAvailable() && dataSource().isEmpty()) { //this may work in the future (see @todo below)
-            m_chooser->setToolTip(i18n("Click to show actions for this image box"));
+            m_chooser->setToolTip(xi18n("Click to show actions for this image box"));
         } else {
             QString beautifiedImageBoxName;
             if (designMode()) {
@@ -515,7 +515,7 @@ void KexiDBImageBox::updateActionStrings()
                 beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
             }
             m_chooser->setToolTip(
-                i18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
+                xi18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
         }
     }
 }
@@ -640,7 +640,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         p.setFont(f);
         QString text;
         if (dataSource().isEmpty()) {
-            text = objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)");
+            text = objectName() + "\n" + xi18nc("Unbound Image Box", "(unbound)");
         }
         else {
             text = dataSource();

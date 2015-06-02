@@ -282,7 +282,7 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     setFormWidget(formWidget);
     d->toplevel = new Container(0, container, this);
     d->toplevel->setObjectName(objectName());
-    d->topTree = new ObjectTree(i18n("Form"), container->objectName(), container, d->toplevel);
+    d->topTree = new ObjectTree(xi18n("Form"), container->objectName(), container, d->toplevel);
     d->toplevel->setObjectTree(d->topTree);
     d->toplevel->setForm(this);
 
@@ -758,7 +758,7 @@ void Form::changeName(const QByteArray &oldname, const QByteArray &newname)
     }
     else { // rename failed
         KMessageBox::sorry(widget()->topLevelWidget(),
-                           i18n("Renaming widget \"%1\" to \"%2\" failed.",
+                           xi18n("Renaming widget \"%1\" to \"%2\" failed.",
                                 QString(oldname), QString(newname)));
         kWarning() << "widget" << newname << "already exists, reverting rename";
         d->propertySet.changeProperty("objectName", oldname);
@@ -1326,7 +1326,7 @@ bool Form::isNameValid(const QString &name) const
     //also update widget's name in QObject member
     if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
-                           i18n("Could not rename widget \"%1\" to \"%2\" because "
+                           xi18n("Could not rename widget \"%1\" to \"%2\" because "
                                 "\"%3\" is not a valid name (identifier) for a widget.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
@@ -1337,7 +1337,7 @@ bool Form::isNameValid(const QString &name) const
 
     if (objectTree()->lookup(name)) {
         KMessageBox::sorry(widget(),
-                           i18n("Could not rename widget \"%1\" to \"%2\" "
+                           xi18n("Could not rename widget \"%1\" to \"%2\" "
                                 "because a widget with the name \"%3\" already exists.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
@@ -1456,7 +1456,7 @@ void Form::addWidget(QWidget *w)
         //second widget, update metainfo
         d->propertySet["this:className"].setValue("special:multiple");
         d->propertySet["this:classString"].setValue(
-            i18n("Multiple Widgets (%1)", d->selected.count()));
+            xi18n("Multiple Widgets (%1)", d->selected.count()));
         d->propertySet["this:iconName"].setValue("multiple_obj");
         //name doesn't make sense for now
         d->propertySet["objectName"].setValue("");
@@ -1712,7 +1712,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     if (!multiple) {
         if (w == container->form()->widget()) {
             icon = koIcon("form");
-            titleText = i18n("%1 : Form", w->objectName());
+            titleText = xi18n("%1 : Form", w->objectName());
         }
         else {
             icon = QIcon::fromTheme(
@@ -1722,7 +1722,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     else {
         icon = koIcon("multiple_obj");
-        titleText = i18n("Multiple Widgets (%1)", widgetsCount);
+        titleText = xi18n("Multiple Widgets (%1)", widgetsCount);
     }
 
     QMenu menu;
@@ -1771,7 +1771,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         QMenu *sub = new QMenu(w);
         QWidget *buddy = buddyLabelWidget->buddy();
 
-        noBuddyAction = sub->addAction(i18n("No Buddy"));
+        noBuddyAction = sub->addAction(xi18n("No Buddy"));
         if (!buddy)
             noBuddyAction->setChecked(true);
         sub->addSeparator();
@@ -2180,8 +2180,8 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
             << "AlignHCenter" << "AlignJustify";
         KProperty *p = new KProperty(
             "hAlign", d->createValueList(0, list), value,
-            i18nc("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
-            i18n("Horizontal Alignment"));
+            xi18nc("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
+            xi18n("Horizontal Alignment"));
         d->propertySet.addProperty(p);
         if (!isPropertyVisible(p->name(), isTopLevel)) {
             p->setVisible(false);
@@ -2203,8 +2203,8 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         list << "AlignTop" << "AlignVCenter" << "AlignBottom";
         KProperty *p = new KProperty(
             "vAlign", d->createValueList(0, list), value,
-            i18nc("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
-            i18n("Vertical Alignment"));
+            xi18nc("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
+            xi18n("Vertical Alignment"));
         d->propertySet.addProperty(p);
         if (!isPropertyVisible(p->name(), isTopLevel)) {
             p->setVisible(false);
@@ -2216,7 +2216,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         // Create the wordbreak property
         KProperty *p = new KProperty("wordbreak",
                 QVariant((bool)(alignment & Qt::TextWordWrap)),
-                i18n("Word Break"), i18n("Word Break"));
+                xi18n("Word Break"), xi18n("Word Break"));
         d->propertySet.addProperty(p);
         updatePropertyValue(tree, "wordbreak");
         if (!library()->isPropertyVisible(

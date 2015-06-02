@@ -92,7 +92,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
     if (!d->cursor) {
         window()->setStatus(
             conn,
-            i18n("Query executing failed."));
+            xi18n("Query executing failed."));
 //! @todo also provide server result and sql statement
         return false;
     }

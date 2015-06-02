@@ -46,7 +46,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     setMinimumWidth(minimumHeight());
     QPair< KGuiItem, KGuiItem > backForward = KStandardGuiItem::backAndForward();
     m_view = new QWebView(this);
-    m_reload = new QPushButton(i18n("Reload"),this);
+    m_reload = new QPushButton(xi18n("Reload"),this);
     m_stop = new QPushButton;
     KGuiItem::assign(m_stop,KStandardGuiItem::stop());
     m_back = new QPushButton(backForward.first);

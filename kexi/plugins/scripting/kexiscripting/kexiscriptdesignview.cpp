@@ -118,10 +118,10 @@ KexiScriptDesignView::KexiScriptDesignView(
     QList<QAction*> viewActions;
 
     {
-        QAction *a = new KAction(koIcon("system-run"), i18n("Execute"), this);
+        QAction *a = new KAction(koIcon("system-run"), xi18n("Execute"), this);
         a->setObjectName("script_execute");
-        a->setToolTip(i18n("Execute the scripting code"));
-        a->setWhatsThis(i18n("Executes the scripting code."));
+        a->setToolTip(xi18n("Execute the scripting code"));
+        a->setWhatsThis(xi18n("Executes the scripting code."));
         connect(a, SIGNAL(triggered()), this, SLOT(execute()));
         viewActions << a;
     }
@@ -130,20 +130,20 @@ KexiScriptDesignView::KexiScriptDesignView(
     a->setSeparator(true);
     viewActions << a;
 
-    KActionMenu *menu = new KActionMenu(koIcon("document-properties"), i18n("Edit"), this);
+    KActionMenu *menu = new KActionMenu(koIcon("document-properties"), xi18n("Edit"), this);
     menu->setObjectName("script_edit_menu");
-    menu->setToolTip(i18n("Edit actions"));
-    menu->setWhatsThis(i18n("Provides Edit menu."));
+    menu->setToolTip(xi18n("Edit actions"));
+    menu->setWhatsThis(xi18n("Provides Edit menu."));
     menu->setDelayed(false);
     foreach(QAction *a, d->editor->defaultContextMenu()->actions()) {
         menu->addAction(a);
     }
     if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode available.
         menu->addSeparator();
-        QAction *a = new KAction(koIcon("configure"), i18n("Configure Editor..."), this);
+        QAction *a = new KAction(koIcon("configure"), xi18n("Configure Editor..."), this);
         a->setObjectName("script_config_editor");
-        a->setToolTip(i18n("Configure the scripting editor"));
-        a->setWhatsThis(i18n("Configures the scripting editor."));
+        a->setToolTip(xi18n("Configure the scripting editor"));
+        a->setWhatsThis(xi18n("Configures the scripting editor."));
         connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
         menu->addAction(a);
     }
@@ -152,10 +152,10 @@ KexiScriptDesignView::KexiScriptDesignView(
 
     // setup main menu actions
     QList<QAction*> mainMenuActions;
-    a = new QAction(koIcon("document-import"), i18n("&Import..."), this);
+    a = new QAction(koIcon("document-import"), xi18n("&Import..."), this);
     a->setObjectName("script_import");
-    a->setToolTip(i18n("Import script"));
-    a->setWhatsThis(i18n("Imports script from a file."));
+    a->setToolTip(xi18n("Import script"));
+    a->setWhatsThis(xi18n("Imports script from a file."));
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
     mainMenuActions << a;
 
@@ -168,10 +168,10 @@ KexiScriptDesignView::KexiScriptDesignView(
     a = sharedAction("project_saveas");
     mainMenuActions << a;
 
-    a = new QAction(koIcon("document-export"), i18n("&Export..."), this);
+    a = new QAction(koIcon("document-export"), xi18n("&Export..."), this);
     a->setObjectName("script_export");
-    a->setToolTip(i18n("Export script"));
-    a->setWhatsThis(i18n("Exports script to a file."));
+    a->setToolTip(xi18n("Export script"));
+    a->setWhatsThis(xi18n("Exports script to a file."));
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotExport()));
     mainMenuActions << a;
 
@@ -215,13 +215,13 @@ void KexiScriptDesignView::slotImport()
     }
     const QString file = KFileDialog::getOpenFileName(
         QUrl("kfiledialog:///kexiscriptingdesigner"),
-        filters.join(" "), this, i18nc("@title:window", "Import Script"));
+        filters.join(" "), this, xi18nc("@title:window", "Import Script"));
     if (file.isEmpty())
         return;
     QFile f(file);
     if (! f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         KMessageBox::sorry(this,
-            i18nc("@info", "Could not read <filename>%1</filename>.", file));
+            xi18nc("@info", "Could not read <filename>%1</filename>.", file));
         return;
     }
     d->editor->setText(f.readAll());
@@ -236,13 +236,13 @@ void KexiScriptDesignView::slotExport()
     }
     const QString file = KFileDialog::getSaveFileName(
         QUrl("kfiledialog:///kexiscriptingdesigner"),
-        filters.join(" "), this, i18nc("@title:window", "Export Script"));
+        filters.join(" "), this, xi18nc("@title:window", "Export Script"));
     if (file.isEmpty())
         return;
     QFile f(file);
     if (! f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         KMessageBox::sorry(this,
-            i18nc("@info", "Could not write <filename>%1</filename>.", file));
+            xi18nc("@info", "Could not write <filename>%1</filename>.", file));
         return;
     }
     f.write(d->editor->text().toUtf8());
@@ -287,8 +287,8 @@ void KexiScriptDesignView::updateProperties()
         "type", // name
         typelist, // ListData
         (d->scriptType.isEmpty() ? "executable" : d->scriptType), // value
-        i18n("Script Type"), // caption
-        i18n("The type of script"), // description
+        xi18n("Script Type"), // caption
+        xi18n("The type of script"), // description
         KProperty::List // type
     );
     d->properties->addProperty(t);
@@ -302,8 +302,8 @@ void KexiScriptDesignView::updateProperties()
         "language", // name
         proplist, // ListData
         d->scriptaction->interpreter(), // value
-        i18n("Interpreter"), // caption
-        i18n("The used scripting interpreter."), // description
+        xi18n("Interpreter"), // caption
+        xi18n("The used scripting interpreter."), // description
         KProperty::List // type
     );
     d->properties->addProperty(prop);
@@ -367,7 +367,7 @@ void KexiScriptDesignView::execute()
     d->statusbrowser->clear();
     QTime time;
     time.start();
-    d->statusbrowser->append(i18n("Execution of the script \"%1\" started.", d->scriptaction->name()));
+    d->statusbrowser->append(xi18n("Execution of the script \"%1\" started.", d->scriptaction->name()));
 
     d->scriptaction->trigger();
     if (d->scriptaction->hadError()) {
@@ -383,7 +383,7 @@ void KexiScriptDesignView::execute()
     }
     else {
         // xgettext: no-c-format
-        d->statusbrowser->append(i18n("Successfully executed. Time elapsed: %1ms", time.elapsed()));
+        d->statusbrowser->append(xi18n("Successfully executed. Time elapsed: %1ms", time.elapsed()));
     }
 }
 

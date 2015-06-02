@@ -82,7 +82,7 @@ public:
         if (selector->d->showConnectionColumns) {
             QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
             if (info.fileBased) {
-                setText(colnum++, i18n("File (%1)", drvname));
+                setText(colnum++, xi18n("File (%1)", drvname));
             } else {
                 setText(colnum++, drvname + "  ");
             }
@@ -92,7 +92,7 @@ public:
                 conn = cdata->serverInfoString();
             }
             else {
-                conn = i18nc("caption: server_info", "%1: %2",
+                conn = xi18nc("caption: server_info", "%1: %2",
                              cdata->caption, cdata->serverInfoString());
             }
             setText(3, conn + "  ");
@@ -293,14 +293,14 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         : KPageDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18nc("@title:window", "Open Project"));
+    setWindowTitle(xi18nc("@title:window", "Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
-    setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
-                                  i18n("Open Database Connection")));
+    setButtonGuiItem(Ok, KGuiItem(xi18n("&Open"), koIconName("document-open"),
+                                  xi18n("Open Database Connection")));
 
-    d->sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",
+    d->sel->label()->setText(xi18n("Select a project on <resource>%1</resource> database server to open:",
                                  _cdata.serverInfoString(false)));
 }
 

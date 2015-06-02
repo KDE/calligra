@@ -55,12 +55,12 @@ public:
 
 KexiTablePart::KexiTablePart(QObject *parent, const QVariantList& l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "table"),
-        i18nc("tooltip", "Create new table"),
-        i18nc("what's this", "Creates new table."),
+        xi18nc("tooltip", "Create new table"),
+        xi18nc("what's this", "Creates new table."),
         l)
   , d(new Private)
 {
@@ -127,7 +127,7 @@ tristate KexiTablePart::remove(KexiPart::Item &item)
     if (sch) {
         tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
             KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
-            i18n("You are about to remove table <resource>%1</resource> but following objects using this table are opened:",
+            xi18n("You are about to remove table <resource>%1</resource> but following objects using this table are opened:",
                  sch->name()));
         if (res != true) {
             return res;
@@ -146,7 +146,7 @@ tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
         return false;
     tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
         KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
-        i18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
+        xi18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
              sch->name()));
     if (res != true) {
         return res;
@@ -180,9 +180,9 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     openedObjectsStr += "</list>";
     int r = KMessageBox::questionYesNo(parent,
                                        "<para>" + msg + "</para><para>" + openedObjectsStr + "</para><para>"
-                                       + i18n("Do you want to close all windows for these objects?")
+                                       + xi18n("Do you want to close all windows for these objects?")
                                        + "</para>",
-                                       QString(), KGuiItem(i18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
+                                       QString(), KGuiItem(xi18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
     tristate res;
     if (r == KMessageBox::Yes) {
         //try to close every window
@@ -236,7 +236,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 
 //! @todo add lookup field icon
     tab->addTab(d->lookupColumnPage, koIcon("combo"), QString());
-    tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), i18n("Lookup column"));
+    tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), xi18n("Lookup column"));
 }
 
 KexiLookupColumnPage* KexiTablePart::lookupColumnPage() const

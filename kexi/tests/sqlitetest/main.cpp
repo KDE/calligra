@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("kexicrash", 0, ki18n("kexicrash"), "0.1");
+    KAboutData aboutData("kexicrash", 0, kxi18n("kexicrash"), "0.1");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 

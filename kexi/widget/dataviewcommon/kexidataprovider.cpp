@@ -226,7 +226,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         Q_ASSERT(item);
 
         if (invalidSources.contains(item->dataSource().toLower())) {
-            item->setInvalidState(QString::fromLatin1("#%1?").arg(i18n("NAME")));
+            item->setInvalidState(QString::fromLatin1("#%1?").arg(xi18n("NAME")));
             it = m_dataItems.erase(it);
             continue;
         }

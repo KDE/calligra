@@ -637,13 +637,13 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
     if (url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());
         if (!fileInfo.exists()) {
-            KMessageBox::sorry(parent, i18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
+            KMessageBox::sorry(parent, xi18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
             return;
         }
     }
 
     if (!url.isValid()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.",
+        KMessageBox::sorry(parent, xi18nc("@info", "Invalid hyperlink <link>%1</link>.",
                                           url.url(QUrl::PreferLocalFile)));
         return;
     }
@@ -652,20 +652,20 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
     QString type = db.mimeTypeForUrl(url).name();
 
     if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
-        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.",
+        KMessageBox::sorry(parent, xi18nc("@info", "Executable <link>%1</link> not allowed.",
                                           url.url(QUrl::PreferLocalFile)));
         return;
     }
 
     if (!options.allowRemote && !url.isLocalFile()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.",
+        KMessageBox::sorry(parent, xi18nc("@info", "Remote hyperlink <link>%1</link> not allowed.",
                                           url.url(QUrl::PreferLocalFile)));
         return;
     }
 
     if (KRun::isExecutableFile(url, type)) {
         int ret = KMessageBox::warningYesNo(parent
-                                            , i18nc("@info", "Do you want to run this file?"
+                                            , xi18nc("@info", "Do you want to run this file?"
                                                     "<warning>Running executables can be dangerous.</warning>")
                                             , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
                                             , "AllowRunExecutable", KMessageBox::Dangerous);
@@ -723,5 +723,5 @@ QSize KexiUtils::comboBoxArrowSize(QStyle *style)
 void KexiUtils::addDirtyFlag(QString *text)
 {
     Q_ASSERT(text);
-    *text = i18nc("'Dirty (modified) object' flag", "%1*", *text);
+    *text = xi18nc("'Dirty (modified) object' flag", "%1*", *text);
 }

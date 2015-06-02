@@ -83,7 +83,7 @@ void KexiMobileMainWindow::slotOpenDatabase()
 {
     QString fileName;
 
-    fileName = QFileDialog::getOpenFileName(this, i18n("Open Database"), "", i18n("Database Files (*.kexi)"));
+    fileName = QFileDialog::getOpenFileName(this, xi18n("Open Database"), "", xi18n("Database Files (*.kexi)"));
 
     if (!fileName.isNull()) {
         KexiProject *proj = openProject(QUrl::fromLocalFile(fileName));
@@ -146,7 +146,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 
     if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
-            *errorMessage = i18nc(
+            *errorMessage = xi18nc(
                                 "opening is not allowed in \"data view/design view/text view\" mode",
                                 "opening is not allowed in \"%1\" mode", Kexi::nameForViewMode(viewMode));
         openingCancelled = true;

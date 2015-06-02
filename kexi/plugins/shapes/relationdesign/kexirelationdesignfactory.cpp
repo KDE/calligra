@@ -25,9 +25,9 @@
 
 KexiRelationDesignFactory::KexiRelationDesignFactory()
     : KoShapeFactoryBase("KexiRelationDesignShape",
-                         i18n("Kexi Relation Design"))
+                         xi18n("Kexi Relation Design"))
 {
-    setToolTip(i18n("A kexi relation design shape"));
+    setToolTip(xi18n("A kexi relation design shape"));
     setIconName(koIconNameCStr("calligrakexi"));
     setXmlElementNames("http://www.calligra.org/kexirelationdesign", QStringList("shape"));
     setLoadingPriority(1);

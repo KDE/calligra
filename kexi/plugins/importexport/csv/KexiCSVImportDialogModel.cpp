@@ -75,7 +75,7 @@ QVariant KexiCSVImportDialogModel::headerData(int section, Qt::Orientation orien
     QVariant value = QStandardItemModel::headerData(section, orientation, role);
     if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
         if (section == 0) {
-            return i18nc("@title:row (with two spaces at the end)", "Column name  ");
+            return xi18nc("@title:row (with two spaces at the end)", "Column name  ");
         } else {
             return QString::number(section);
         }
@@ -112,7 +112,7 @@ void KexiCSVImportDialogModel::setFirstRowForFieldNames(bool flag)
         d->firstRowForFieldNames = flag;
         for (int i = 0; i < columnCount(); ++i) {
             setData(index(0, i),
-                    i18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1),
+                    xi18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1),
                     Qt::EditRole);
         }
     }

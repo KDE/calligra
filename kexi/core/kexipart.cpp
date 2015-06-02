@@ -62,12 +62,12 @@ public:
             //! @todo use message handler for this to enable non-gui apps
             QString singleStatusString(window->singleStatusString());
             if (!singleStatusString.isEmpty())
-                singleStatusString.prepend(QString("\n\n") + i18n("Details:") + " ");
+                singleStatusString.prepend(QString("\n\n") + xi18n("Details:") + " ");
             if (KMessageBox::No == KMessageBox::questionYesNo(0,
                     ((viewMode == Kexi::DesignViewMode)
-                     ? i18n("Object \"%1\" could not be opened in Design View.", item.name())
-                     : i18n("Object could not be opened in Data View.")) + "\n"
-                    + i18n("Do you want to open it in Text View?") + singleStatusString, 0,
+                     ? xi18n("Object \"%1\" could not be opened in Design View.", item.name())
+                     : xi18n("Object could not be opened in Data View.")) + "\n"
+                    + xi18n("Do you want to open it in Text View?") + singleStatusString, 0,
                     KStandardGuiItem::open(), KStandardGuiItem::cancel())) {
                 return false;
             }
@@ -103,7 +103,7 @@ Part::Part(QObject *parent,
 {
     d->instanceName = KexiUtils::stringToIdentifier(
         instanceName.isEmpty()
-        ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        ? xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                 "Use '_' character instead of spaces. First character should be a..z character. "
                 "If you cannot use latin characters in your language, use english word.",
                 "object").toLower()
@@ -241,7 +241,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
-                                       i18n("Could not create object's window."), i18n("The plugin or object definition may be corrupted."));
+                                       xi18n("Could not create object's window."), xi18n("The plugin or object definition may be corrupted."));
         delete window;
         return 0;
     }
@@ -263,9 +263,9 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         if (!window->schemaData()) {
             if (!d->status.error())
                 d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
-                                               i18n("Could not load object's definition."), i18n("Object design may be corrupted."));
+                                               xi18n("Could not load object's definition."), xi18n("Object design may be corrupted."));
             d->status.append(
-                Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.",
+                Kexi::ObjectStatus(xi18n("You can delete \"%1\" object and create it again.",
                                         item.name()), QString()));
 
             window->close();
@@ -347,7 +347,7 @@ bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString&
     if (!KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(
                 window->id(), dataString, dataID)) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
-                                       i18n("Could not load object's data."), i18n("Data identifier: \"%1\".", dataID));
+                                       xi18n("Could not load object's data."), xi18n("Data identifier: \"%1\".", dataID));
         d->status.append(*window);
         return false;
     }

@@ -74,12 +74,12 @@ public:
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "script"),
-        i18nc("tooltip", "Create new script"),
-        i18nc("what's this", "Creates new script."),
+        xi18nc("tooltip", "Create new script"),
+        xi18nc("what's this", "Creates new script."),
         l)
   , d(new Private(this))
 {
@@ -188,7 +188,7 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
     kDebug();
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."),
+    createSharedAction(Kexi::DesignViewMode, xi18n("Configure Editor..."),
                        koIconName("configure"), QKeySequence(), "script_config_editor");
 }
 
@@ -210,7 +210,7 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
             return 0;
         Kross::Api::ScriptActionCollection* collection = d->scriptguiclient->getActionCollection("projectscripts");
         if (! collection) {
-            collection = new Kross::Api::ScriptActionCollection(i18n("Scripts"), d->scriptguiclient->actionCollection(), "projectscripts");
+            collection = new Kross::Api::ScriptActionCollection(xi18n("Scripts"), d->scriptguiclient->actionCollection(), "projectscripts");
             d->scriptguiclient->addActionCollection("projectscripts", collection);
         }
         const char* name = partname.toLatin1();

@@ -75,7 +75,7 @@ void KexiTextMessageHandler::showMessageInternal(MessageType type,
 
     QString msg(title);
     if (title.isEmpty())
-        msg = i18n("Unknown error");
+        msg = xi18n("Unknown error");
     msg = "<qt><p>" + msg + "</p>";
     *d->messageTarget = msg;
     *d->detailsTarget = details;

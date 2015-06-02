@@ -27,10 +27,10 @@
 int main(int argc, char** argv)
 {
     KAboutData aboutData( "keximobile", "keximobile",
-      ki18n("Kexi Mobile"), "0.2",
-      ki18n("A mobile optimized version of Kexi from Calligra Suite"),
+      kxi18n("Kexi Mobile"), "0.2",
+      kxi18n("A mobile optimized version of Kexi from Calligra Suite"),
       KAboutData::License_LGPL,
-      ki18n("Copyright (c) 2014 Adam Pigg") );
+      kxi18n("Copyright (c) 2014 Adam Pigg") );
     KCmdLineArgs::init( argc, argv, &aboutData );
   
     KApplication app;

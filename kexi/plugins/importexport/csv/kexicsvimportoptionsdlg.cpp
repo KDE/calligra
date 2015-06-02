@@ -97,7 +97,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     const KexiCSVImportOptions& options, QWidget* parent)
         : KDialog(parent)
 {
-    setWindowTitle(i18nc("@title:window", "CSV Import Options"));
+    setWindowTitle(xi18nc("@title:window", "CSV Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName("KexiCSVImportOptionsDialog");
@@ -107,7 +107,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 
     QGridLayout *lyr = new QGridLayout(plainPage);
 
-    QGroupBox* textEncodingGroupBox = new QGroupBox(i18n("Text encoding"), plainPage);
+    QGroupBox* textEncodingGroupBox = new QGroupBox(xi18n("Text encoding"), plainPage);
     lyr->addWidget(textEncodingGroupBox, 0, 0, 1, 2);
     QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout;
     KexiUtils::setStandardMarginsAndSpacing(textEncodingGroupBoxLyr);
@@ -121,14 +121,14 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     lyr->addItem(new QSpacerItem(20, KDialog::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
-        i18n("Always use this encoding when importing CSV data files"), textEncodingGroupBox);
+        xi18n("Always use this encoding when importing CSV data files"), textEncodingGroupBox);
     textEncodingGroupBoxLyr->addWidget(m_chkAlwaysUseThisEncoding);
 
     m_comboDateFormat = new QComboBox(plainPage);
     m_comboDateFormat->setObjectName("m_comboDateFormat");
-    m_comboDateFormat->addItem(i18nc("Date format: Auto", "Auto"));
-    QString year(i18n("year")), month(i18n("month")), day(i18n("day"));
-    KLocalizedString mask = ki18nc("do not reorder placeholders, just translate e.g. and - to the "
+    m_comboDateFormat->addItem(xi18nc("Date format: Auto", "Auto"));
+    QString year(xi18n("year")), month(xi18n("month")), day(xi18n("day"));
+    KLocalizedString mask = kxi18nc("do not reorder placeholders, just translate e.g. and - to the "
                                    "separator used by dates in your language",
                                    "%1, %2, %3 (e.g. %4-%5-%6)");
     m_comboDateFormat->addItem(
@@ -139,16 +139,16 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
         mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString());
     lyr->addWidget(m_comboDateFormat, 1, 1);
 
-    QLabel* lblDateFormat = new QLabel(i18n("Date format:"), plainPage);
+    QLabel* lblDateFormat = new QLabel(xi18n("Date format:"), plainPage);
     lblDateFormat->setBuddy(m_comboDateFormat);
     lyr->addWidget(lblDateFormat, 1, 0);
 
     m_chkStripWhiteSpaceInTextValues = new QCheckBox(
-        i18n("Strip leading and trailing blanks off of text values"), plainPage);
+        xi18n("Strip leading and trailing blanks off of text values"), plainPage);
     lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
 
     m_chkImportNULLsAsEmptyText = new QCheckBox(
-                i18n("Import missing text values as empty texts"), plainPage);
+                xi18n("Import missing text values as empty texts"), plainPage);
     lyr->addWidget(m_chkImportNULLsAsEmptyText, 3, 0, 1, 2);
     lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
     //update widgets

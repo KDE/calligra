@@ -165,7 +165,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->pointerAction = new KToggleAction(
-        koIcon("mouse_pointer"), i18n("Pointer"), d->collection);
+        koIcon("mouse_pointer"), xi18n("Pointer"), d->collection);
     d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
@@ -173,14 +173,14 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->pointerAction->setChecked(true);
 
     d->snapToGridAction = new KToggleAction(
-        i18n("Snap to Grid"), d->collection);
+        xi18n("Snap to Grid"), d->collection);
     d->snapToGridAction->setObjectName("snap_to_grid");
 
 //! @todo
 #if 0
     // Create the Style selection action (with a combo box in toolbar and submenu items)
     KSelectAction *styleAction = new KSelectAction(
-        i18n("Style"), d->collection);
+        xi18n("Style"), d->collection);
     styleAction->setObjectName("change_style");
     connect(styleAction, SIGNAL(triggered()),
             this, SLOT(slotStyle()));
@@ -199,7 +199,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             break;
         }
     }
-    styleAction->setToolTip(i18n("Set the current view style."));
+    styleAction->setToolTip(xi18n("Set the current view style."));
     styleAction->setMenuAccelsEnabled(true);
 #endif
 
@@ -208,7 +208,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KSharedConfig::openConfig()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        KAction *a = new KAction(koIcon("run-build-file"), xi18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));
@@ -392,7 +392,7 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
         propValues.insert("dataSource", name);
         propValues.insert("dataSourcePartClass", partClass);
         KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
-            i18n("Set Form's Data Source to \"%1\"", name));
+            xi18n("Set Form's Data Source to \"%1\"", name));
         formViewWidget->form()->createPropertyCommandsInDesignMode(
             formWidget, propValues, group, true /*addToActiveForm*/);
     }
@@ -476,18 +476,18 @@ void KexiFormManager::showFormUICode()
     KPageDialog uiCodeDialog;
     uiCodeDialog.setFaceType(KPageDialog::Tabbed);
     uiCodeDialog.setModal(true);
-    uiCodeDialog.setWindowTitle(i18nc("@title:window", "Form's UI Code"));
+    uiCodeDialog.setWindowTitle(xi18nc("@title:window", "Form's UI Code"));
     uiCodeDialog.setButtons(KDialog::Close);
     uiCodeDialog.resize(700, 600);
     KTextEdit *currentUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
-    uiCodeDialog.addPage(currentUICodeDialogEditor, i18n("Current"));
+    uiCodeDialog.addPage(currentUICodeDialogEditor, xi18n("Current"));
     currentUICodeDialogEditor->setReadOnly(true);
     QFont f(currentUICodeDialogEditor->font());
     f.setFamily("courier");
     currentUICodeDialogEditor->setFont(f);
 
     KTextEdit *originalUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
-    uiCodeDialog.addPage(originalUICodeDialogEditor, i18n("Original"));
+    uiCodeDialog.addPage(originalUICodeDialogEditor, xi18n("Original"));
     originalUICodeDialogEditor->setReadOnly(true);
     originalUICodeDialogEditor->setFont(f);
     currentUICodeDialogEditor->setPlainText(uiCode);

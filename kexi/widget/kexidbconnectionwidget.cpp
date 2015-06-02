@@ -92,9 +92,9 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     btnLoadDBList->hide();
 #endif
     btnLoadDBList->setIcon(koIcon("view-refresh"));
-    btnLoadDBList->setToolTip(i18n("Load database list from the server"));
+    btnLoadDBList->setToolTip(xi18n("Load database list from the server"));
     btnLoadDBList->setWhatsThis(
-        i18n("Loads database list from the server, so you can select one using the <interface>Name</interface> combo box."));
+        xi18n("Loads database list from the server, so you can select one using the <interface>Name</interface> combo box."));
 
     btnSavePasswordHelp->setIcon(koIcon("help-contextual"));
     btnSavePasswordHelp->setToolTip(KStandardAction::whatsThis(0, 0, btnSavePasswordHelp)->text().remove('&'));
@@ -105,9 +105,9 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     hbox->addStretch(2);
     d->btnSaveChanges = new QPushButton(
         KGuiItem(
-            i18n("Save Changes"), "document-save",
-            i18n("Save all changes made to this connection information"),
-            i18n("Save all changes made to this connection information. "
+            xi18n("Save Changes"), "document-save",
+            xi18n("Save all changes made to this connection information"),
+            xi18n("Save all changes made to this connection information. "
                  "You can later reuse this information.")),
         frmBottom);
     d->btnSaveChanges->setObjectName("savechanges");
@@ -118,9 +118,9 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     d->btnTestConnection = new QPushButton(
 //! @todo add Test Connection icon
-        KGuiItem(i18n("&Test Connection"), QString(),
-                 i18n("Test database connection"),
-                 i18n("Tests database connection. "
+        KGuiItem(xi18n("&Test Connection"), QString(),
+                 xi18n("Test database connection"),
+                 xi18n("Tests database connection. "
                       "You can check validity of connection information.")),
         frmBottom);
     d->btnTestConnection->setObjectName("testConnection");
@@ -155,7 +155,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
         nameLabel->hide();
         nameCombo->hide();
         btnLoadDBList->hide();
-        dbGroupBox->setTitle(i18n("Database Connection"));
+        dbGroupBox->setTitle(xi18n("Database Connection"));
     } else {
         nameLabel->show();
         nameCombo->show();
@@ -163,7 +163,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
         btnLoadDBList->show();
 #endif
         nameCombo->setEditText(d->data.databaseName());
-        dbGroupBox->setTitle(i18n("Database"));
+        dbGroupBox->setTitle(xi18n("Database"));
     }
 //! @todo what if there's no such driver name?
     d->driversCombo->setDriverName(d->data.connectionData()->driverName);
@@ -277,11 +277,11 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget(QWidget* parent)
     mainWidget = new KexiDBConnectionWidget(this);
     mainWidget->setObjectName("mainWidget");
     mainWidget->layout()->setMargin(KDialog::marginHint());
-    addTab(mainWidget, i18n("Parameters"));
+    addTab(mainWidget, xi18n("Parameters"));
 
     detailsWidget = new KexiDBConnectionWidgetDetails(this);
     detailsWidget->setObjectName("detailsWidget");
-    addTab(detailsWidget, i18n("Details"));
+    addTab(detailsWidget, xi18n("Details"));
     connect(detailsWidget->chkSocketDefault, SIGNAL(toggled(bool)),
             this, SLOT(slotSocketComboboxToggled(bool)));
     connect(detailsWidget->chkUseSocket, SIGNAL(toggled(bool)),
@@ -402,7 +402,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18nc("@title:window", "Open Database"));
+    setWindowTitle(xi18nc("@title:window", "Open Database"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);
@@ -414,7 +414,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18nc("@title:window", "Connect to a Database Server"));
+    setWindowTitle(xi18nc("@title:window", "Connect to a Database Server"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);
@@ -431,7 +431,7 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
     setButtons(KDialog::User1 | KDialog::Cancel | KDialog::Help);
     setButtonGuiItem(KDialog::User1,
                      acceptButtonGuiItem.text().isEmpty()
-                     ? KGuiItem(i18n("&Open"), koIconName("document-open"), i18n("Open Database Connection"))
+                     ? KGuiItem(xi18n("&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
                      : acceptButtonGuiItem
                     );
     setModal(true);

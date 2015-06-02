@@ -290,7 +290,7 @@ SubForm::setFormName(const QString &name)
 
 AddTabAction::AddTabAction(KFormDesigner::Container *container,
                            TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("tab-new"), i18nc("Add page to tab widget", "Add Page"),
+    : KAction(koIcon("tab-new"), xi18nc("Add page to tab widget", "Add Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -314,7 +314,7 @@ void AddTabAction::slotTriggered()
 
 RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("tab-close-other"), i18nc("Remove tab widget's page", "Remove Page"),
+    : KAction(koIcon("tab-close-other"), xi18nc("Remove tab widget's page", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -335,7 +335,7 @@ void RemoveTabAction::slotTriggered()
 
 RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("edit-rename"), i18nc("Rename tab widget's page", "Rename Page..."),
+    : KAction(koIcon("edit-rename"), xi18nc("Rename tab widget's page", "Rename Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -349,8 +349,8 @@ void RenameTabAction::slotTriggered()
         return;
     QWidget *w = m_receiver->currentWidget();
     bool ok;
-    QString name = KInputDialog::getText(i18n("New Page Title"),
-                                         i18n("Enter a new title for the current page:"),
+    QString name = KInputDialog::getText(xi18n("New Page Title"),
+                                         xi18n("Enter a new title for the current page:"),
                                          m_receiver->tabText(m_receiver->indexOf(w)), &ok, w->topLevelWidget());
     if (ok)
         m_receiver->setTabText(m_receiver->indexOf(w), name);
@@ -358,7 +358,7 @@ void RenameTabAction::slotTriggered()
 
 AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent)
-    : KAction(koIcon("tab-new"), i18nc("Add page to a stacked widget", "Add Page..."),
+    : KAction(koIcon("tab-new"), xi18nc("Add page to a stacked widget", "Add Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -385,7 +385,7 @@ void AddStackPageAction::slotTriggered()
 
 RemoveStackPageAction::RemoveStackPageAction(KFormDesigner::Container *container,
                                              QWidget *receiver, QObject *parent)
-    : KAction(koIcon("tab-close-other"), i18nc("Remove page from a stacked widget", "Remove Page"),
+    : KAction(koIcon("tab-close-other"), xi18nc("Remove page from a stacked widget", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -432,8 +432,8 @@ GoToStackPageAction::GoToStackPageAction(Direction direction,
                                          KFormDesigner::Container *container,
                                          QWidget *receiver, QObject *parent)
     : KAction(QIcon::fromTheme(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
-              direction == Previous ? i18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
-                                    : i18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
+              direction == Previous ? xi18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
+                                    : xi18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
               parent)
     , m_direction(direction)
     , m_container(container)
@@ -474,9 +474,9 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wTabWidget->addAlternateClassName("QTabWidget");
     wTabWidget->setSavingName("QTabWidget");
     wTabWidget->setIncludeFileName("qtabwidget.h");
-    wTabWidget->setName(i18n("Tab Widget"));
+    wTabWidget->setName(xi18n("Tab Widget"));
     wTabWidget->setNamePrefix(
-        i18nc("A prefix for identifiers of tab widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of tab widgets. Based on that, identifiers such as "
               "tab1, tab2 are generated. "
               "This string can be used to refer the widget object as variables in programming "
               "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -484,7 +484,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
               "start with upper case letter. Example: smallCamelCase. "
               "Moreover, try to make this prefix as short as possible.",
               "tabWidget"));
-    wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
+    wTabWidget->setDescription(xi18n("A widget to display multiple pages using tabs"));
     addClass(wTabWidget);
 
     KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
@@ -500,9 +500,9 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wGroupBox->setIconName(koIconName("groupbox"));
     wGroupBox->setClassName("QGroupBox");
     wGroupBox->addAlternateClassName("GroupBox");
-    wGroupBox->setName(i18n("Group Box"));
+    wGroupBox->setName(xi18n("Group Box"));
     wGroupBox->setNamePrefix(
-        i18nc("A prefix for identifiers of group box widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of group box widgets. Based on that, identifiers such as "
               "groupBox1, groupBox2 are generated. "
               "This string can be used to refer the widget object as variables in programming "
               "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -510,7 +510,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
               "start with upper case letter. Example: smallCamelCase. "
               "Moreover, try to make this prefix as short as possible.",
               "groupBox"));
-    wGroupBox->setDescription(i18n("A container to group some widgets"));
+    wGroupBox->setDescription(xi18n("A container to group some widgets"));
     addClass(wGroupBox);
 
     KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
@@ -527,31 +527,31 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 //     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
 //     wSubForm->setIconName(koIconName("form"));
 //     wSubForm->setClassName("SubForm");
-//     wSubForm->setName(i18n("Sub Form"));
+//     wSubForm->setName(xi18n("Sub Form"));
 //     wSubForm->setNamePrefix(
-//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-//     wSubForm->setDescription(i18n("A form widget included in another Form"));
+//         xi18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
+//     wSubForm->setDescription(xi18n("A form widget included in another Form"));
 //     wSubForm->setAutoSyncForProperty("formName", false);
 //     addClass(wSubForm);
 #endif
 
     //groupbox
-    setPropertyDescription("title", i18nc("'Title' property for group box", "Title"));
-    setPropertyDescription("flat", i18nc("'Flat' property for group box", "Flat"));
+    setPropertyDescription("title", xi18nc("'Title' property for group box", "Title"));
+    setPropertyDescription("flat", xi18nc("'Flat' property for group box", "Flat"));
 
     //tab widget
-    setPropertyDescription("tabPosition", i18n("Tab Position"));
-    setPropertyDescription("currentIndex", i18nc("'Current page' property for tab widget", "Current Page"));
-    setPropertyDescription("tabShape", i18n("Tab Shape"));
-    setPropertyDescription("elideMode", i18nc("Tab Widget's Elide Mode property", "Elide Mode"));
-    setPropertyDescription("usesScrollButtons", i18nc("Tab Widget's property: true if can use scroll buttons", "Scroll Buttons"));
+    setPropertyDescription("tabPosition", xi18n("Tab Position"));
+    setPropertyDescription("currentIndex", xi18nc("'Current page' property for tab widget", "Current Page"));
+    setPropertyDescription("tabShape", xi18n("Tab Shape"));
+    setPropertyDescription("elideMode", xi18nc("Tab Widget's Elide Mode property", "Elide Mode"));
+    setPropertyDescription("usesScrollButtons", xi18nc("Tab Widget's property: true if can use scroll buttons", "Scroll Buttons"));
 
-    setPropertyDescription("tabsClosable", i18n("Closable Tabs"));
-    setPropertyDescription("movable", i18n("Movable Tabs"));
-    setPropertyDescription("documentMode", i18n("Document Mode"));
+    setPropertyDescription("tabsClosable", xi18n("Closable Tabs"));
+    setPropertyDescription("movable", xi18n("Movable Tabs"));
+    setPropertyDescription("documentMode", xi18n("Document Mode"));
 
-    setValueDescription("Rounded", i18nc("Property value for Tab Shape", "Rounded"));
-    setValueDescription("Triangular", i18nc("Property value for Tab Shape", "Triangular"));
+    setValueDescription("Rounded", xi18nc("Property value for Tab Shape", "Rounded"));
+    setValueDescription("Triangular", xi18nc("Property value for Tab Shape", "Triangular"));
 }
 
 ContainerFactory::~ContainerFactory()

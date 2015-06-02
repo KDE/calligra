@@ -103,9 +103,9 @@ KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
 {
     setObjectName(nameForCreateAction(*m_info));
     // default tooltip and what's this
-    setToolTip(i18n("Create new object of type \"%1\"",
+    setToolTip(xi18n("Create new object of type \"%1\"",
                 m_info->instanceCaption().toLower()));
-    setWhatsThis(i18n("Creates new object of type \"%1\"",
+    setWhatsThis(xi18n("Creates new object of type \"%1\"",
                     m_info->instanceCaption().toLower()));
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
     connect(this, SIGNAL(newObjectRequested(KexiPart::Info*)),
