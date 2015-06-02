@@ -94,7 +94,7 @@ else()
     keximain
     kexicore
 
-    Predicate
+    KDb
   )
   install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
