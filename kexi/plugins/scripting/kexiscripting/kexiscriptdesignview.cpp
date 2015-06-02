@@ -494,5 +494,4 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
     return storeDataBlock(domdoc.toString());
 }
 
-#include "kexiscriptdesignview.moc"
 

@@ -748,6 +748,3 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
     //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }
-
-#include "kexiactionselectiondialog.moc"
-#include "kexiactionselectiondialog_p.moc"

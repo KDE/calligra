@@ -1279,4 +1279,3 @@ void KexiFormView::updateActionsInternal()
 #endif
 }
 
-#include "kexiformview.moc"

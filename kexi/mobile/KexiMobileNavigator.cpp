@@ -62,4 +62,3 @@ void KexiMobileNavigator::slotOpenItem(KexiPart::Item* item)
     emit(openItem(item));
 }
 
-#include "KexiMobileNavigator.moc"

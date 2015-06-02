@@ -455,4 +455,3 @@ void KexiDataSourcePage::updateSourceFieldWidgetsAvailability()
 #endif
 }
 
-#include "kexidatasourcepage.moc"

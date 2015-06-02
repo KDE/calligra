@@ -175,4 +175,3 @@ int KexiBoolTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBoolEditorFactoryItem, KexiBoolTableEdit)
 
-#include "kexibooltableedit.moc"

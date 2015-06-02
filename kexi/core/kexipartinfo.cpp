@@ -253,5 +253,3 @@ QAction* Info::newObjectAction()
     }
     return act;
 }
-
-#include "kexipartinfo_p.moc"

@@ -240,4 +240,3 @@ void KexiFieldComboBox::focusOutEvent(QFocusEvent *e)
     }
 }
 
-#include "KexiFieldComboBox.moc"

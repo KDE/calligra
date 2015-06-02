@@ -815,6 +815,3 @@ void KexiUtils::addDirtyFlag(QString *text)
     Q_ASSERT(text);
     *text = i18nc("'Dirty (modified) object' flag", "%1*", *text);
 }
-
-#include "moc_utils.cpp"
-#include "utils_p.moc"

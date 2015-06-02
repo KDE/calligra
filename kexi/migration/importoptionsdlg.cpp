@@ -110,4 +110,3 @@ void OptionsDialog::accept()
     KDialog::accept();
 }
 
-#include "importoptionsdlg.moc"

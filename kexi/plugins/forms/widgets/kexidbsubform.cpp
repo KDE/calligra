@@ -137,4 +137,3 @@ KexiDBSubForm::setFormName(const QString &name)
     //KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 
-#include "kexidbsubform.moc"

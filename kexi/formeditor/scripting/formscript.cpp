@@ -101,5 +101,4 @@ FormScript::connectEvents()
 }
 
 
-#include "formscript.moc"
 
