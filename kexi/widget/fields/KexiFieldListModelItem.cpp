@@ -58,7 +58,7 @@ KexiFieldListModelItem::~KexiFieldListModelItem()
 QVariant KexiFieldListModelItem::data(int column) const
 {
     if (column == 0) {
-        return d->fieldName == "*" ? i18n("* (All Columns)") : d->fieldName;
+        return d->fieldName == "*" ? xi18n("* (All Columns)") : d->fieldName;
     } else {
         return d->dateType;
     }

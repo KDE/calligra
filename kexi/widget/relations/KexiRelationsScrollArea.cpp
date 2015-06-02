@@ -121,11 +121,11 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 #if 0
-    d->removeSelectedTableQueryAction = new KAction(i18n("&Hide Selected Table/Query"), "edit-delete", "",
+    d->removeSelectedTableQueryAction = new KAction(xi18n("&Hide Selected Table/Query"), "edit-delete", "",
             this, SLOT(removeSelectedTableQuery()), parent->actionCollection(), "relationsview_removeSelectedTableQuery");
-    d->removeSelectedConnectionAction = new KAction(i18n("&Remove Selected Relationship"), "dialog-cancel", "",
+    d->removeSelectedConnectionAction = new KAction(xi18n("&Remove Selected Relationship"), "dialog-cancel", "",
             this, SLOT(removeSelectedConnection()), parent->actionCollection(), "relationsview_removeSelectedConnection");
-    d->openSelectedTableQueryAction = new KAction(i18n("&Open Selected Table/Query"), "", "",
+    d->openSelectedTableQueryAction = new KAction(xi18n("&Open Selected Table/Query"), "", "",
             this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");
 #endif
 

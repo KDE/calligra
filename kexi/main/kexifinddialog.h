@@ -90,7 +90,7 @@ public Q_SLOTS:
     void setReplaceMode(bool set);
 
     /*! Sets object name for caption, so for example it will be set
-     to i18n("Find \"Persons\"")). */
+     to xi18n("Find \"Persons\"")). */
     void setObjectNameForCaption(const QString& name);
 
     /*! Enables of disables the find/replace/replace all buttons.

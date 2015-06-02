@@ -114,9 +114,9 @@ void ImportTableWizard::next() {
     } else if (currentPage() == m_alterTablePageItem) {
         if (m_alterSchemaWidget->nameExists(m_alterSchemaWidget->nameWidget()->nameText())) {
             KMessageBox::information(this,
-                                     i18n("<resource>%1</resource> name is already used by an existing table. "
+                                     xi18n("<resource>%1</resource> name is already used by an existing table. "
                                           "Enter different table name to continue.", m_alterSchemaWidget->nameWidget()->nameText()),
-                                     i18n("Name Already Used"));
+                                     xi18n("Name Already Used"));
             return;
         }
     }
@@ -155,14 +155,14 @@ void ImportTableWizard::setupIntroPage()
     lblIntro->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lblIntro->setWordWrap(true);
     lblIntro->setText(
-        i18n("<para>Table Importing Assistant allows you to import a table from an existing "
+        xi18n("<para>Table Importing Assistant allows you to import a table from an existing "
              "database into the current Kexi project.</para>"
              "<para>Click <interface>Next</interface> button to continue or "
              "<interface>Cancel</interface> button to exit this assistant.</para>"));
     vbox->addWidget(lblIntro);
 
     m_introPageItem = new KPageWidgetItem(m_introPageWidget,
-                                          i18n("Welcome to the Table Importing Assistant"));
+                                          xi18n("Welcome to the Table Importing Assistant"));
     addPage(m_introPageItem);
 }
 
@@ -189,7 +189,7 @@ void ImportTableWizard::setupSrcConn()
 
     vbox->addWidget(m_srcConnSel);
 
-    m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
+    m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, xi18n("Select Location for Source Database"));
     addPage(m_srcConnPageItem);
 }
 
@@ -199,7 +199,7 @@ void ImportTableWizard::setupSrcDB()
     m_srcDBPageWidget = new QWidget(this);
     m_srcDBName = NULL;
 
-    m_srcDBPageItem = new KPageWidgetItem(m_srcDBPageWidget, i18n("Select Source Database"));
+    m_srcDBPageItem = new KPageWidgetItem(m_srcDBPageWidget, xi18n("Select Source Database"));
     addPage(m_srcDBPageItem);
 }
 
@@ -216,7 +216,7 @@ void ImportTableWizard::setupTableSelectPage() {
 
     vbox->addWidget(m_tableListWidget);
 
-    m_tablesPageItem = new KPageWidgetItem(m_tablesPageWidget, i18n("Select the Table to Import"));
+    m_tablesPageItem = new KPageWidgetItem(m_tablesPageWidget, xi18n("Select the Table to Import"));
     addPage(m_tablesPageItem);
 }
 
@@ -244,14 +244,14 @@ void ImportTableWizard::setupImportingPage()
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
     options_vbox->setSpacing(KDialog::spacingHint());
-    m_importOptionsButton = new QPushButton(koIcon("configure"), i18n("Advanced Options"), options_widget);
+    m_importOptionsButton = new QPushButton(koIcon("configure"), xi18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),this, SLOT(slotOptionsButtonClicked()));
     options_vbox->addWidget(m_importOptionsButton);
     options_vbox->addStretch(1);
 
     m_importingPageWidget->show();
 
-    m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, i18n("Importing"));
+    m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, xi18n("Importing"));
     addPage(m_importingPageItem);
 }
 
@@ -267,7 +267,7 @@ void ImportTableWizard::setupAlterTablePage()
     vbox->addWidget(m_alterSchemaWidget);
     m_alterTablePageWidget->show();
 
-    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Table Design"));
+    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, xi18n("Alter the Detected Table Design"));
     addPage(m_alterTablePageItem);
 }
 
@@ -293,7 +293,7 @@ void ImportTableWizard::setupProgressPage()
     vbox->addWidget(m_importingProgressBar);
     vbox->addStretch(1);
 
-    m_progressPageItem = new KPageWidgetItem(m_progressPageWidget, i18n("Processing Import"));
+    m_progressPageItem = new KPageWidgetItem(m_progressPageWidget, xi18n("Processing Import"));
     addPage(m_progressPageItem);
 }
 
@@ -308,13 +308,13 @@ void ImportTableWizard::setupFinishPage()
     m_finishLbl->setWordWrap(true);
 
     vbox->addWidget(m_finishLbl);
-    m_finishCheckBox = new QCheckBox(i18n("Open imported table"),
+    m_finishCheckBox = new QCheckBox(xi18n("Open imported table"),
                                      m_finishPageWidget);
     vbox->addSpacing(KDialog::spacingHint());
     vbox->addWidget(m_finishCheckBox);
     vbox->addStretch(1);
 
-    m_finishPageItem = new KPageWidgetItem(m_finishPageWidget, i18n("Success"));
+    m_finishPageItem = new KPageWidgetItem(m_finishPageWidget, xi18n("Success"));
     addPage(m_finishPageItem);
 }
 
@@ -362,7 +362,7 @@ void ImportTableWizard::arriveSrcDBPage()
             KexiUtils::setStandardMarginsAndSpacing(vbox);
             m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPageWidget, m_prjSet);
             vbox->addWidget(m_srcDBName);
-            m_srcDBName->label()->setText(i18n("Select source database you wish to import:"));
+            m_srcDBName->label()->setText(xi18n("Select source database you wish to import:"));
         }
         m_srcDBPageWidget->show();
     }
@@ -399,7 +399,7 @@ void ImportTableWizard::arriveTableSelectPage(KPageWidgetItem *prevPage)
             }
         } else {
             kWarning() << "No driver for selected source";
-            QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+            QString errMessage =result.message.isEmpty() ? xi18n("Unknown error") : result.message;
             QString errDescription = result.description.isEmpty() ? errMessage : result.description;
             KMessageBox::error(this, errMessage, errDescription);
             setValid(m_tablesPageItem, false);
@@ -442,7 +442,7 @@ void ImportTableWizard::arriveAlterTablePage()
         baseName = m_srcDBName->selectedProjectData()->databaseName();
     }
 
-    QString suggestedCaption = i18nc("<basename-filename> <tablename>", "%1 %2", baseName, m_importTableName);
+    QString suggestedCaption = xi18nc("<basename-filename> <tablename>", "%1 %2", baseName, m_importTableName);
     m_alterSchemaWidget->setTableSchema(ts, suggestedCaption);
 
     if (!m_migrateDriver->readFromTable(m_importTableName))
@@ -450,7 +450,7 @@ void ImportTableWizard::arriveAlterTablePage()
 
     if (!m_migrateDriver->moveFirst()) {
         back();
-        KMessageBox::information(this,i18n("No data has been found in table <resource>%1</resource>. Select different table or cancel importing.",
+        KMessageBox::information(this,xi18n("No data has been found in table <resource>%1</resource>. Select different table or cancel importing.",
                                            m_importTableName));
     }
     QList<KexiDB::RecordData> data;
@@ -484,7 +484,7 @@ void ImportTableWizard::arriveImportingPage()
 
     QString txt;
 
-    txt = i18nc("@info Table import wizard, final message", "<para>All required information has now been gathered. "
+    txt = xi18nc("@info Table import wizard, final message", "<para>All required information has now been gathered. "
                    "Click <interface>Next</interface> button to start importing table <resource>%1</resource>.</para>"
                    "<note>Depending on size of the table this may take some time.</note>", m_alterSchemaWidget->nameWidget()->nameText());
 
@@ -515,7 +515,7 @@ void ImportTableWizard::arriveImportingPage()
 
 void ImportTableWizard::arriveProgressPage()
 {
-    m_progressLbl->setText(i18nc("@info", "Please wait while the table is imported."));
+    m_progressLbl->setText(xi18nc("@info", "Please wait while the table is imported."));
 
     enableButton(KDialog::User1, false);
     enableButton(KDialog::User2, false);
@@ -535,11 +535,11 @@ void ImportTableWizard::arriveProgressPage()
 void ImportTableWizard::arriveFinishPage()
 {
     if (m_importComplete) {
-        m_finishLbl->setText(i18n("Table <resource>%1</resource> has been imported.",
+        m_finishLbl->setText(xi18n("Table <resource>%1</resource> has been imported.",
                                   m_alterSchemaWidget->nameWidget()->nameText()));
     } else {
         m_finishCheckBox->setEnabled(false);
-        m_finishLbl->setText(i18n("An error occured.",
+        m_finishLbl->setText(xi18n("An error occured.",
                                   m_alterSchemaWidget->nameWidget()->nameText()));
     }
 
@@ -560,7 +560,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
 
     sourceDriverName = driverNameForSelectedSource();
     if (sourceDriverName.isEmpty())
-        result.setStatus(i18n("No appropriate migration driver found."),
+        result.setStatus(xi18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
 
 
@@ -650,7 +650,7 @@ bool ImportTableWizard::doImport()
 
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project) {
-        msg.showErrorMessage(i18n("No project available."));
+        msg.showErrorMessage(xi18n("No project available."));
         return false;
     }
 
@@ -662,7 +662,7 @@ bool ImportTableWizard::doImport()
 
     KexiDB::TableSchema* newSchema = m_alterSchemaWidget->newSchema();
     if (!newSchema) {
-        msg.showErrorMessage(i18n("No table was selected to import."));
+        msg.showErrorMessage(xi18n("No table was selected to import."));
         return false;
     }
     newSchema->setName(m_alterSchemaWidget->nameWidget()->nameText());
@@ -676,7 +676,7 @@ bool ImportTableWizard::doImport()
 
     //Create the table
     if (!m_connection->createTable(newSchema, true)) {
-        msg.showErrorMessage(i18n("Unable to create table <resource>%1</resource>.",
+        msg.showErrorMessage(xi18n("Unable to create table <resource>%1</resource>.",
                                   newSchema->name()));
         return false;
     }
