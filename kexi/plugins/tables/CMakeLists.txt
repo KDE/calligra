@@ -21,7 +21,7 @@ target_link_libraries(
     kexiextendedwidgets
     kexiutils
 
-    Predicate
+    KDb
     KProperty
 
     Qt5::Core

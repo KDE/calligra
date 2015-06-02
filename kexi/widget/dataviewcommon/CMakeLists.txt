@@ -22,7 +22,7 @@ target_link_libraries(
     kexiutils
     kexiguiutils
 
-    Predicate
+    KDb
     KProperty
 
     KF5::KIOWidgets
