@@ -319,9 +319,6 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
     bool kappExisted = kapp;
     KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
-    KGlobal::locale()->insertCatalog("calligra");
-    //! @todo KGlobal::locale()->insertCatalog("kproperty");
-
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
         if (!kappExisted) {
@@ -915,7 +912,7 @@ void KexiMainWindow::setupActions()
     //additional 'Window' menu items
     d->action_window_next = addAction("window_next",
                                       i18n("&Next Window"),
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         "Ctrl+Tab"
 #else
         "Alt+Right"
@@ -928,7 +925,7 @@ void KexiMainWindow::setupActions()
 
     d->action_window_previous = addAction("window_previous",
                                           i18n("&Previous Window"),
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         "Ctrl+Shift+Tab"
 #else
         "Alt+Left"

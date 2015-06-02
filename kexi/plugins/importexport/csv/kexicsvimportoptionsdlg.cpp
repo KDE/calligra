@@ -61,7 +61,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
     KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     encoding = importExportGroup.readEntry("DefaultEncodingForImportingCSVFiles");
     if (encoding.isEmpty()) {
-        encoding = QString::fromLatin1(KGlobal::locale()->encoding());
+        encoding = QString::fromLatin1(KLocale::global()->encoding());
         defaultEncodingExplicitySet = false;
     } else
         defaultEncodingExplicitySet = true;
