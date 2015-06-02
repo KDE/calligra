@@ -761,4 +761,3 @@ void KexiFormScrollView::updateVerticalHeaderSection(int section)
     //! @todo implement when header is used
 }
 
-#include "kexiformscrollview.moc"

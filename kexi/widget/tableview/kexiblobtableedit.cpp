@@ -592,4 +592,3 @@ void KexiKIconTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiKIconTableEditorFactoryItem, KexiKIconTableEdit)
 
-#include "kexiblobtableedit.moc"

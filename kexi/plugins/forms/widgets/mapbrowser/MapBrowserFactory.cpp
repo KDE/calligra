@@ -158,5 +158,4 @@ void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesi
 
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
-#include "MapBrowserFactory.moc"
 

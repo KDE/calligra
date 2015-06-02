@@ -399,4 +399,3 @@ void KexiDBTextEdit::changeEvent(QEvent *e)
     KTextEdit::changeEvent(e);
 }
 
-#include "kexidbtextedit.moc"

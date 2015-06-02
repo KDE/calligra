@@ -225,4 +225,3 @@ QString KexiAssistantPage::description() const
     return d->descriptionLabel->text();
 }
 
-#include "KexiAssistantPage.moc"

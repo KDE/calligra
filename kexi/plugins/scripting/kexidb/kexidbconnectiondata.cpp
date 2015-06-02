@@ -148,4 +148,3 @@ const QString KexiDBConnectionData::serverInfoString() const
     return m_data->serverInfoString(true);
 }
 
-#include "kexidbconnectiondata.moc"

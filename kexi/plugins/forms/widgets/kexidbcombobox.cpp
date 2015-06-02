@@ -603,4 +603,3 @@ void KexiDBComboBox::undoChanges()
     KexiComboBoxBase::undoChanges();
 }
 
-#include "kexidbcombobox.moc"

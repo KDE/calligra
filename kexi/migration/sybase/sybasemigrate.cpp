@@ -537,4 +537,3 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
     return indexList;
 }
 
-#include "sybasemigrate.moc"

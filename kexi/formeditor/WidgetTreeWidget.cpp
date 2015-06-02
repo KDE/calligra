@@ -533,4 +533,3 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
     }
 }
 
-#include "WidgetTreeWidget.moc"

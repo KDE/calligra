@@ -174,4 +174,3 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
     return true;
 }
 
-#include "kexidbschema.moc"

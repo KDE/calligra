@@ -448,4 +448,3 @@ bool MDBMigrate::drv_getTableSize(const QString& table, qulonglong& size)
 }
 
 
-#include "mdbmigrate.moc"

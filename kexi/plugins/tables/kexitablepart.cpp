@@ -257,4 +257,3 @@ KexiTablePart::TempData::TempData(QObject* parent)
 
 K_EXPORT_KEXIPART_PLUGIN( KexiTablePart, table )
 
-#include "kexitablepart.moc"

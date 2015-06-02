@@ -107,4 +107,3 @@ void KexiDBProgressBar::clear()
     //read only widget
 }
 
-#include "kexidbprogressbar.moc"

@@ -142,4 +142,3 @@ void MapBrowserWidget::resizeEvent(QResizeEvent *event)
     Marble::MarbleWidget::resizeEvent(event);
 }
 
-#include "MapBrowserWidget.moc"

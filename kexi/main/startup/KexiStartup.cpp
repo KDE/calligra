@@ -953,4 +953,3 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
     }
 }
 
-#include "KexiStartup.moc"

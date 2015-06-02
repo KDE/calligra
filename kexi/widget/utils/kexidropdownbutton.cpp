@@ -128,4 +128,3 @@ void KexiDropDownButton::keyPressEvent(QKeyEvent * e)
     QToolButton::keyPressEvent(e);
 }
 
-#include "kexidropdownbutton.moc"

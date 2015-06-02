@@ -1089,4 +1089,3 @@ void ImportWizard::slotOptionsButtonClicked()
     delete dlg;
 }
 
-#include "importwizard.moc"

@@ -158,4 +158,3 @@ void KexiDateTableEdit::handleAction(const QString& actionName)
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateEditorFactoryItem, KexiDateTableEdit)
 
-#include "kexidatetableedit.moc"

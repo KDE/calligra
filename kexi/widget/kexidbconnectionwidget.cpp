@@ -475,4 +475,3 @@ KexiDBConnectionWidgetDetails* KexiDBConnectionDialog::detailsWidget() const
     return d->tabWidget->detailsWidget;
 }
 
-#include "kexidbconnectionwidget.moc"

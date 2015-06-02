@@ -562,4 +562,3 @@ void KexiDBForm::paintEvent(QPaintEvent *e)
     }
 }
 
-#include "kexidbform.moc"

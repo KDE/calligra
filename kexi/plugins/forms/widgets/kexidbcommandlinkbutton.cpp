@@ -140,4 +140,3 @@ void KexiDBCommandLinkButton::setOnClickActionOption(const QString& option)
      d->onClickActionData.option = option;
 }
 
-#include "kexidbcommandlinkbutton.moc"

@@ -123,4 +123,3 @@ void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
     }
 }
 
-#include "KexiAssistantWidget.moc"

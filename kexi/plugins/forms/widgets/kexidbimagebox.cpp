@@ -887,4 +887,3 @@ void KexiDBImageBox::setMidLineWidth(int w)
     update();
 }
 
-#include "kexidbimagebox.moc"

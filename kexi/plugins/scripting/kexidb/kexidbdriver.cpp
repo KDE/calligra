@@ -90,4 +90,3 @@ uint KexiDBDriver::connectionCount()
     return (index < list.count()) ? list.at(index) : 0;
 }*/
 
-#include "kexidbdriver.moc"

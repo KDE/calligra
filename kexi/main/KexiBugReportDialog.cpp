@@ -227,4 +227,3 @@ void KexiBugReportDialog::collectData()
 #endif
 }
 
-#include "KexiBugReportDialog.moc"

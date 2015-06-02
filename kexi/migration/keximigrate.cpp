@@ -702,4 +702,3 @@ DatabaseVersionInfo KexiMigration::version()
     return KEXI_MIGRATION_VERSION;
 }
 
-#include "keximigrate.moc"

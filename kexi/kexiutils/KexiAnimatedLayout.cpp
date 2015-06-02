@@ -121,6 +121,3 @@ void KexiAnimatedLayout::setCurrentIndex(int index)
     
     setCurrentWidget(w);
 }
-
-#include "KexiAnimatedLayout.moc"
-#include "KexiAnimatedLayout_p.moc"

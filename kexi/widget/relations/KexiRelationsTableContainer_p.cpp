@@ -318,4 +318,3 @@ bool KexiRelationsTableFieldList::eventFilter(QObject *o, QEvent *ev)
     return KexiFieldListView::eventFilter(o, ev);
 }
 
-#include "KexiRelationsTableContainer_p.moc"

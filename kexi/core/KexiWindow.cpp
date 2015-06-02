@@ -878,4 +878,3 @@ QVariant KexiWindow::internalPropertyValue(const QByteArray& name,
     return d->part->internalPropertyValue(name, defaultValue);
 }
 
-#include "KexiWindow.moc"

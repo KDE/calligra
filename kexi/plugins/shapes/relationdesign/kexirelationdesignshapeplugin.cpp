@@ -34,5 +34,3 @@ KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin(QObject *parent, co
     KoToolRegistry::instance()->add(new KexiRelationDesignToolFactory());
     // we could register more things here in this same plugin.
 }
-#include "kexirelationdesignshapeplugin.moc"
-

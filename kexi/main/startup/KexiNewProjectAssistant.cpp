@@ -690,4 +690,3 @@ QWidget* KexiNewProjectAssistant::calloutWidget() const
     return currentPage()->nextButton();
 }
 
-#include "KexiNewProjectAssistant.moc"

@@ -469,4 +469,3 @@ void KexiContextMessageWidget::setPaletteInherited()
     }
 }
 
-#include "KexiContextMessage.moc"

@@ -131,4 +131,3 @@ tristate KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data,
     return false;
 }
 
-#include "KexiDBPasswordDialog.moc"

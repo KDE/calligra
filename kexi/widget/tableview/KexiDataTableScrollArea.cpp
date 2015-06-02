@@ -104,4 +104,3 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     return true;
 }
 
-#include "KexiDataTableScrollArea.moc"

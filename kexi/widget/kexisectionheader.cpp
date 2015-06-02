@@ -146,4 +146,3 @@ QString KexiSectionHeader::caption() const
     return d->lbl->text();
 }
 
-#include "kexisectionheader.moc"

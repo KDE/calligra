@@ -376,4 +376,3 @@ void KexiLookupColumnPage::updateBoundColumnWidgetsAvailability()
     d->visibleColumnLabel->setEnabled(hasRowSource);
 }
 
-#include "kexilookupcolumnpage.moc"

@@ -457,6 +457,3 @@ KActionCollection* GUIClient::actionCollection() const
 {
     return &d->actionCollection;
 }
-
-#include "kexipart.moc"
-#include "kexipartguiclient.moc"

@@ -225,4 +225,3 @@ RichTextDialog::slotCurrentCharFormatChanged(const QTextCharFormat& f)
 //! @todo add more formatting options (buttons)
 }
 
-#include "richtextdialog.moc"

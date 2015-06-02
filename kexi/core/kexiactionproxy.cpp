@@ -242,5 +242,3 @@ void KexiActionProxy::setActionProxyParent_internal(KexiActionProxy* parent)
     m_actionProxyParent = parent;
 }
 
-#include "kexiactionproxy_p.moc"
-

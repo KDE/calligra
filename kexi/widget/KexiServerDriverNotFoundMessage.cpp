@@ -45,4 +45,3 @@ KexiServerDriverNotFoundMessage::~KexiServerDriverNotFoundMessage()
 {
 }
 
-#include "KexiServerDriverNotFoundMessage.moc"

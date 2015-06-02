@@ -391,4 +391,3 @@ KexiUserFeedbackAgent* KexiMobileMainWindow::userFeedbackAgent() const
 
 
 
-#include "KexiMobileMainWindow.moc"

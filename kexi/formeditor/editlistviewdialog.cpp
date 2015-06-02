@@ -465,5 +465,4 @@ EditListViewDialog::MoveRowDown()
 
 }
 
-#include "editlistviewdialog.moc"
 #warning noi18n # added to disable message extraction in Messages.sh

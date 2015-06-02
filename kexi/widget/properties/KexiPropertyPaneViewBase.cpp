@@ -125,4 +125,3 @@ QWidget* KexiPropertyPaneViewBase::addWidgetSpacer()
     return sp;
 }
 
-#include "KexiPropertyPaneViewBase.moc"

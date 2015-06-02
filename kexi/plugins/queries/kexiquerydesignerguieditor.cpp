@@ -1870,4 +1870,3 @@ void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, con
     d->relations->objectRenamed(item.partClass(), oldName, item.name());
 }
 
-#include "kexiquerydesignerguieditor.moc"

@@ -243,4 +243,3 @@ void KexiNameDialog::setValidator(KexiNameDialogValidator *validator)
     d->validator = validator;
 }
 
-#include "KexiNameDialog.moc"

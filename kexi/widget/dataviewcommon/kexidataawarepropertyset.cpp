@@ -279,4 +279,3 @@ int KexiDataAwarePropertySet::findRowForPropertyValue(
     return -1;
 }
 
-#include "kexidataawarepropertyset.moc"

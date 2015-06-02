@@ -809,4 +809,3 @@ bool KexiDBAutoField::keyPressed(QKeyEvent *ke)
     return false;
 }
 
-#include "kexidbautofield.moc"

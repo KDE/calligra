@@ -348,5 +348,3 @@ QList<QString> MigrateManager::supportedFileMimeTypes()
     }
     return d_int->m_services_by_mimetype.keys();
 }
-
-#include "migratemanager_p.moc"
