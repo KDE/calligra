@@ -293,4 +293,3 @@ QMenu* KexiEditor::defaultContextMenu()
 #endif
 }
 
-#include "kexieditor.moc"

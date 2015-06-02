@@ -149,4 +149,3 @@ void KexiDBPushButton::setOnClickActionOption(const QString& option)
 {
      d->onClickActionData.option = option;
 }
-#include "KexiDBPushButton.moc"

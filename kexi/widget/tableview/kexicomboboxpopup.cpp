@@ -451,4 +451,3 @@ void KexiComboBoxPopup::slotDataReloadRequested()
     updateSize();
 }
 
-#include "kexicomboboxpopup.moc"

@@ -83,4 +83,3 @@ KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject
     return tester;
 }
 
-#include "KexiTester.moc"

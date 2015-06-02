@@ -62,4 +62,3 @@ KexiFindDialog::~KexiFindDialog()
 {
 }
 
-#include "kexifinddialog.moc"

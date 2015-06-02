@@ -96,5 +96,4 @@ void KexiScriptEditor::setLineNo(long lineno)
     setCursorPosition(lineno, 0);
 }
 
-#include "kexiscripteditor.moc"
 

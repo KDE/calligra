@@ -100,4 +100,3 @@ void KexiCloseButton::paintEvent(QPaintEvent *e)
     style()->drawItemPixmap(&p, iconRect, Qt::AlignCenter, pixmap);
 }
 
-#include "KexiCloseButton.moc"

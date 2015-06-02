@@ -116,4 +116,3 @@ QObject* KexiDBFieldList::subList(QVariantList list)
     return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }
 
-#include "kexidbfieldlist.moc"

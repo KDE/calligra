@@ -834,4 +834,3 @@ KFormDesigner::ObjectTreeItem* ContainerFactory::selectableItem(KFormDesigner::O
 
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(ContainerFactory, containers)
 
-#include "containerfactory.moc"

@@ -631,4 +631,3 @@ QPixmap KexiRecordNavigator::pointerPixmap(const QPalette &palette)
                 KexiRecordNavigator_static->pointer, palette);
 }
 
-#include "kexirecordnavigator.moc"

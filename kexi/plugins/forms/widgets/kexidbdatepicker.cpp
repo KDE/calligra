@@ -113,4 +113,3 @@ void KexiDBDatePicker::clear()
     KDatePicker::setDate(QDate());
 }
 
-#include "kexidbdatepicker.moc"

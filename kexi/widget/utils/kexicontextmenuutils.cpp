@@ -245,4 +245,3 @@ bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
     return true;
 }
 
-#include "kexicontextmenuutils.moc"

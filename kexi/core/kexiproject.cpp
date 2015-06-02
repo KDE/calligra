@@ -1316,4 +1316,3 @@ bool KexiProject::askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const 
                     openItem, KStandardGuiItem::cancel(), QString());
 }
 
-#include "kexiproject.moc"

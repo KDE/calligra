@@ -92,4 +92,3 @@ KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
     return static_cast<KexiTablePart::TempData*>(window()->data());
 }
 
-#include "kexitabledesigner_dataview.moc"

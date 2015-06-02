@@ -426,4 +426,3 @@ bool KexiPasswordWidget::checkPassword()
     return true;
 }
 
-#include "KexiPasswordWidget.moc"

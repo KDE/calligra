@@ -239,4 +239,3 @@ KLocalizedString KexiScriptPart::i18nMessage(
 
 K_EXPORT_KEXIPART_PLUGIN( KexiScriptPart, script )
 
-#include "kexiscriptpart.moc"

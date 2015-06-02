@@ -335,4 +335,3 @@ void KexiTableScrollAreaHeader::setSortingEnabled(bool set)
     setSortIndicatorShown(set);
 }
 
-#include "KexiTableScrollAreaHeader.moc"

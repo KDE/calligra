@@ -290,4 +290,3 @@ int KexiTableEdit::rightMargin(bool focused) const
     return focused ? m_rightMarginWhenFocused : m_rightMargin;
 }
 
-#include "kexitableedit.moc"

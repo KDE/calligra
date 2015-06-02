@@ -230,4 +230,3 @@ void KexiInternalPart::setCancelled(bool set)
     d->cancelled = set;
 }
 
-#include "kexiinternalpart.moc"

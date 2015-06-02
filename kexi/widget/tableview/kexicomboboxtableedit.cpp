@@ -431,4 +431,3 @@ QVariant KexiComboBoxTableEdit::origValue() const
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 
-#include "kexicomboboxtableedit.moc"

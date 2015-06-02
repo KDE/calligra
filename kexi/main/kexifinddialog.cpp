@@ -314,4 +314,3 @@ KexiSearchAndReplaceViewInterface::Options KexiFindDialog::options() const
     return options;
 }
 
-#include "kexifinddialog.moc"

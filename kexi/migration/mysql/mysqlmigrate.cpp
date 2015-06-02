@@ -596,4 +596,3 @@ void MySQLMigrate::getRow()
     }
 }
 
-#include "mysqlmigrate.moc"

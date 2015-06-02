@@ -619,4 +619,3 @@ const ConnectionSet* KexiRelationsScrollArea::connections() const
     return &d->connectionViews;
 }
 
-#include "KexiRelationsScrollArea.moc"

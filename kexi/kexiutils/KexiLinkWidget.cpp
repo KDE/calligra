@@ -120,4 +120,3 @@ void KexiLinkWidget::changeEvent(QEvent* event)
     QLabel::changeEvent(event);
 }
 
-#include "KexiLinkWidget.moc"

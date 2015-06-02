@@ -214,4 +214,3 @@ void KexiReportPart::slotItemInserted(const QString& entity)
     }
 }
 
-#include "kexireportpart.moc"

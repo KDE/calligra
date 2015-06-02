@@ -428,4 +428,3 @@ QString KexiCSVExportWizard::defaultTextQuote() const
     return KEXICSV_DEFAULT_FILE_TEXT_QUOTE;
 }
 
-#include "kexicsvexportwizard.moc"

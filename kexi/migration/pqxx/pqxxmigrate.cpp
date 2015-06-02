@@ -597,4 +597,3 @@ QVariant PqxxMigrate::drv_value(uint i)
     return QVariant();
 }
 
-#include "pqxxmigrate.moc"

@@ -77,4 +77,3 @@ bool KexiDBFactoryBase::isPropertyVisibleInternal(
     return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
-#include "kexidbfactorybase.moc"

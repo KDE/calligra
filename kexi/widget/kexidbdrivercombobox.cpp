@@ -96,4 +96,3 @@ void KexiDBDriverComboBox::setDriverName(const QString& driverName)
     setCurrentIndex(index);
 }
 
-#include "kexidbdrivercombobox.moc"

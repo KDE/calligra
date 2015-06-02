@@ -391,4 +391,3 @@ KexiBLOBBuffer* KexiBLOBBuffer::self()
     return _buffer;
 }
 
-#include "kexiblobbuffer.moc"

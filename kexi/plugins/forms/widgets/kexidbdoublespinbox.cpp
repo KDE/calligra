@@ -110,4 +110,3 @@ void KexiDBDoubleSpinBox::clear()
     KDoubleSpinBox::setValue(minValue());
 }
 
-#include "kexidbdoublespinbox.moc"

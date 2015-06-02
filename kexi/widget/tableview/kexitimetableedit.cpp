@@ -156,4 +156,3 @@ void KexiTimeTableEdit::handleAction(const QString& actionName)
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiTimeEditorFactoryItem, KexiTimeTableEdit)
 
-#include "kexitimetableedit.moc"

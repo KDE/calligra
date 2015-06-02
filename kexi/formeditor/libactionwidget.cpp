@@ -68,4 +68,3 @@ LibActionWidget::slotToggled(bool checked)
         emit toggled(d->className);
 }
 
-#include "libactionwidget.moc"

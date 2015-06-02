@@ -452,4 +452,3 @@ void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
     updateTextForDataSource();
 }
 
-#include "kexidblineedit.moc"

@@ -215,4 +215,3 @@ bool TabStopDialog::autoTabStops() const
     return d->check->isChecked();
 }
 
-#include "tabstopdialog.moc"

@@ -207,4 +207,3 @@ void  WebBrowserWidget::setReadOnly(bool val)
     m_readOnly = val;
 }
 
-#include "WebBrowserWidget.moc"

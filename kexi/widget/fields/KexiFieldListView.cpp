@@ -135,4 +135,3 @@ void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
     }
 }
 
-#include "KexiFieldListView.moc"

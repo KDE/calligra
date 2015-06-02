@@ -1329,4 +1329,3 @@ void DesignTimeDynamicChildWidgetHandler::assignItem(ObjectTreeItem* item)
     d->item = item;
 }
 
-#include "container.moc"

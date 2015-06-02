@@ -2161,4 +2161,3 @@ void KexiCSVImportDialog::updateRowCountInfo()
     }
 }
 
-#include "kexicsvimportdialog.moc"

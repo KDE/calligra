@@ -274,5 +274,3 @@ void KexiSharedActionHost::setActionVolatile(KAction *a, bool set)
         return;
     d->volatileActions.insert(a, new KexiVolatileActionData());
 }
-
-#include "kexisharedactionhost_p.moc"

@@ -901,6 +901,3 @@ void KMessageWidget::resizeToContents()
     (void)sizeHint(); // to update d->content->sizeHint()
     setFixedSize(d->content->sizeHint());
 }
-
-#include "kmessagewidget.moc"
-#include "kmessagewidget_p.moc"

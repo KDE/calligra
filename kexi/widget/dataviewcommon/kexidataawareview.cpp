@@ -491,4 +491,3 @@ tristate KexiDataAwareView::cancelDataChanges()
     return cancelRowEdit();
 }
 
-#include "kexidataawareview.moc"

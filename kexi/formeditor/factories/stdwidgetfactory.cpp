@@ -937,5 +937,4 @@ StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::Wid
 
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(StdWidgetFactory, stdwidgets)
 
-#include "stdwidgetfactory.moc"
 
