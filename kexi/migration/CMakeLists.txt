@@ -50,7 +50,7 @@ target_link_libraries(
     kexiextendedwidgets
     kexiutils
 
-    Predicate
+    KDb
 
     Qt5::Gui
     )

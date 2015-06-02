@@ -43,12 +43,12 @@ add_library(keximigrate_mdb MODULE ${keximigrate_mdbmigrate_PART_SRCS})
 
 
 target_link_libraries(keximigrate_mdb
-${GLIB2_LIBRARIES}
-${ICONV_LIBRARIES}
-keximigrate
-kexiutils
+    ${GLIB2_LIBRARIES}
+    ${ICONV_LIBRARIES}
+    keximigrate
+    kexiutils
 
-Predicate
+    KDb
 )
 
 install(TARGETS keximigrate_mdb  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
