@@ -111,4 +111,3 @@ void KexiDBIntSpinBox::clear()
     KIntSpinBox::setValue(minValue()); //! \todo ?
 }
 
-#include "kexidbintspinbox.moc"

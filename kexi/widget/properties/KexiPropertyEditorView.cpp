@@ -86,4 +86,3 @@ void KexiPropertyEditorView::slotPropertySetChanged(KPropertySet* set)
     d->editor->setEnabled(set);
 }
 
-#include "KexiPropertyEditorView.moc"

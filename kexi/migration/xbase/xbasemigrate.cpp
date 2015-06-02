@@ -416,4 +416,3 @@ QStringList KexiMigration::xBaseMigrate::getIndexFileNames(const QString& tableN
   return absolutePathNames;
 }
 
-#include "xbasemigrate.moc"

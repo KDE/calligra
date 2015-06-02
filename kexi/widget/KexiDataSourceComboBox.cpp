@@ -348,4 +348,3 @@ void KexiDataSourceComboBox::focusOutEvent(QFocusEvent *e)
     slotReturnPressed(currentText());
 }
 
-#include "KexiDataSourceComboBox.moc"

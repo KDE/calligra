@@ -247,4 +247,3 @@ QWidget* KexiWelcomeAssistant::calloutWidget() const
     return currentPage()->nextButton();
 }
 
-#include "KexiWelcomeAssistant.moc"

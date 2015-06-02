@@ -109,4 +109,3 @@ void KexiDBSlider::clear()
     KexiSlider::setValue(minimum());
 }
 
-#include "kexidbslider.moc"

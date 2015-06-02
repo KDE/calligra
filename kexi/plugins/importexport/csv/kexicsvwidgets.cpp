@@ -390,4 +390,3 @@ QStringList csvMimeTypes()
     return mimetypes;
 }
 
-#include "kexicsvwidgets.moc"

@@ -86,4 +86,3 @@ int KexiDBParser::errorAt()
     return m_parser->error().at();
 }
 
-#include "kexidbparser.moc"

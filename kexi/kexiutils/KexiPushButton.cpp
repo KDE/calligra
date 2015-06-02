@@ -148,4 +148,3 @@ void KexiPushButton::setLocalBasePath(const QString &basePath)
     d->basePath = basePath;
 }
 
-#include "KexiPushButton.moc"

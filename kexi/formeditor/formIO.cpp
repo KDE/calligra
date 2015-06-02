@@ -1537,4 +1537,3 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
     return pix;
 }
 
-#include "formIO.moc"
