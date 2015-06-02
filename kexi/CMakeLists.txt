@@ -25,6 +25,8 @@ add_definitions(
   -DKEXI_NO_AUTOFIELD_WIDGET
 )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"kexi\")
+
 #no default: add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
