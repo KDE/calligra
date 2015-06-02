@@ -194,4 +194,3 @@ QObject* KexiDBModule::connectionWrapper(QObject* connection)
     return c ? new KexiDBConnection(c) : 0;
 }
 
-#include "kexidbmodule.moc"

@@ -1875,4 +1875,3 @@ bool KexiTableDesignerView::isPhysicalAlteringNeeded()
     return true;
 }
 
-#include "kexitabledesignerview.moc"

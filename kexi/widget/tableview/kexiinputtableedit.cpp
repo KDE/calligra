@@ -341,4 +341,3 @@ void KexiInputTableEdit::updateLineEditStyleSheet()
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)
 
-#include "kexiinputtableedit.moc"

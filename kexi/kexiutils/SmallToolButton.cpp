@@ -268,4 +268,3 @@ void KexiToolBarSeparator::paintEvent(QPaintEvent *e)
     style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &o, &p, parentWidget());
 }
 
-#include "SmallToolButton.moc"

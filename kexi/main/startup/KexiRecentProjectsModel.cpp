@@ -190,4 +190,3 @@ bool KexiRecentProjectsProxyModel::subSortLessThan(
     return pdataLeft->lastOpened() < pdataRight->lastOpened();
 }
 
-#include "KexiRecentProjectsModel.moc"

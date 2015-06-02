@@ -562,4 +562,3 @@ QString KexiFormManager::translateName(const char* name) const
     return n;
 }
 
-#include "kexiformmanager.moc"

@@ -770,4 +770,3 @@ QList<QVariant> KexiView::currentParameters() const
     return QList<QVariant>();
 }
 
-#include "KexiView.moc"
