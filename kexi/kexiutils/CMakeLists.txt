@@ -3,21 +3,17 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
 include_directories( 
   ${CMAKE_SOURCE_DIR}/kexi 
   ${CMAKE_CURRENT_SOURCE_DIR}/completer
-  
 )
 
-set(kexiutils_LIB_SRCS 
-  identifier.cpp 
-  multivalidator.cpp 
-  utils.cpp 
-  styleproxy.cpp 
-  longlongvalidator.cpp 
+set(kexiutils_LIB_SRCS
+  utils.cpp
+  styleproxy.cpp
   InternalPropertyMap.cpp
-  SmallToolButton.cpp 
+  SmallToolButton.cpp
   KexiCommandLinkButton.cpp
   FlowLayout.cpp
   transliteration_table.cpp
-  kmessagewidget.cpp 
+  kmessagewidget.cpp
   KexiContextMessage.cpp
   KexiTitleLabel.cpp
   KexiLinkWidget.cpp
@@ -28,10 +24,9 @@ set(kexiutils_LIB_SRCS
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
   KexiTester.cpp
-  
+
   completer/KexiCompleter.cpp
   KexiPushButton.cpp
-
 )
 
 if (KEXI_MOBILE)
@@ -56,8 +51,8 @@ set_target_properties(kexiutils PROPERTIES
 install(TARGETS kexiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(FALSE) # TODO: install when we move to independent place
-    install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
-    styleproxy.h longlongvalidator.h InternalPropertyMap.h 
+    install( FILES  tristate.h utils.h kexiutils_export.h kexiutils_global.h
+    styleproxy.h InternalPropertyMap.h
     SmallToolButton.h FlowLayout.h
     kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h 
     KexiAssistantWidget.h KexiAnimatedLayout.h

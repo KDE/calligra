@@ -41,29 +41,6 @@ class QLayout;
 namespace KexiUtils
 {
 
-//! \return true if \a o has parent \a par.
-inline bool hasParent(QObject* par, QObject* o)
-{
-    if (!o || !par)
-        return false;
-    while (o && o != par)
-        o = o->parent();
-    return o == par;
-}
-
-//! \return parent object of \a o that is of type \a type or NULL if no such parent
-template<class type>
-inline type findParent(QObject* o, const char* className = 0)
-{
-    if (!o)
-        return 0;
-    while ((o = o->parent())) {
-        if (::qobject_cast< type >(o) && (!className || o->inherits(className)))
-            return ::qobject_cast< type >(o);
-    }
-    return 0;
-}
-
 //! \return true if parent of \a o that is of type \a className or false otherwise
 inline bool parentIs(QObject* o, const char* className = 0)
 {
@@ -257,35 +234,6 @@ KEXIUTILS_EXPORT QPalette paletteForReadOnly(const QPalette &palette);
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
 
-/*! Serializes \a map to \a array.
- KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
-KEXIUTILS_EXPORT void serializeMap(const QMap<QString, QString>& map, QByteArray& array);
-KEXIUTILS_EXPORT void serializeMap(const QMap<QString, QString>& map, QString& string);
-
-/*! \return a map deserialized from a byte array \a array.
- \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
-KEXIUTILS_EXPORT QMap<QString, QString> deserializeMap(const QByteArray& array);
-
-/*! \return a map deserialized from \a string.
- \a string need to contain data previously serialized using KexiUtils::serializeMap(). */
-KEXIUTILS_EXPORT QMap<QString, QString> deserializeMap(const QString& string);
-
-/*! \return a valid filename converted from \a string by:
- - replacing \\, /, :, *, ?, ", <, >, |, \n \\t characters with a space
- - simplifing whitespace by removing redundant space characters using QString::simplified()
- Do not pass full paths here, but only filename strings. */
-KEXIUTILS_EXPORT QString stringToFileName(const QString& string);
-
-/*! Performs a simple \a string  encryption using rot47-like algorithm.
- Each character's unicode value is increased by 47 + i (where i is index of the character).
- The resulting string still contains redable characters.
- Do not use this for data that can be accessed by attackers! */
-KEXIUTILS_EXPORT void simpleCrypt(QString& string);
-
-/*! Performs a simple \a string decryption using rot47-like algorithm,
- using opposite operations to KexiUtils::simpleCrypt(). */
-KEXIUTILS_EXPORT void simpleDecrypt(QString& string);
-
 #ifdef KEXI_DEBUG_GUI
 //! Creates debug window for convenient debugging output
 KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
@@ -295,25 +243,6 @@ KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
 KEXIUTILS_EXPORT void connectPushButtonActionForDebugWindow(const char* actionName,
         const QObject *receiver, const char* slot);
 #endif
-
-//! @internal
-KEXIUTILS_EXPORT QString ptrToStringInternal(void* ptr, uint size);
-//! @internal
-KEXIUTILS_EXPORT void* stringToPtrInternal(const QString& str, uint size);
-
-//! \return a pointer \a ptr safely serialized to string
-template<class type>
-QString ptrToString(type *ptr)
-{
-    return ptrToStringInternal(ptr, sizeof(type*));
-}
-
-//! \return a pointer of type \a type safely deserialized from \a str
-template<class type>
-type* stringToPtr(const QString& str)
-{
-    return static_cast<type*>(stringToPtrInternal(str, sizeof(type*)));
-}
 
 //! Sets focus for widget \a widget with reason \a reason.
 KEXIUTILS_EXPORT void setFocusWithReason(QWidget* widget, Qt::FocusReason reason);
@@ -373,66 +302,6 @@ public:
     }
 private:
     Container& m_container;
-};
-
-//! @short Case insensitive hash container supporting QString or QByteArray keys.
-//! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
-template <typename Key, typename T>
-class CaseInsensitiveHash : public QHash<Key, T>
-{
-public:
-    CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
-    ~CaseInsensitiveHash() {
-        if (m_autoDelete) qDeleteAll(*this);
-    }
-    typename QHash<Key, T>::iterator find(const Key& key) const {
-        return QHash<Key, T>::find(key.toLower());
-    }
-    typename QHash<Key, T>::const_iterator constFind(const Key& key) const {
-        return QHash<Key, T>::constFind(key.toLower());
-    }
-    bool contains(const Key& key) const {
-        return QHash<Key, T>::contains(key.toLower());
-    }
-    int count(const Key& key) const {
-        return QHash<Key, T>::count(key.toLower());
-    }
-    typename QHash<Key, T>::iterator insert(const Key& key, const T& value) {
-        return QHash<Key, T>::insert(key.toLower(), value);
-    }
-    typename QHash<Key, T>::iterator insertMulti(const Key& key, const T& value) {
-        return QHash<Key, T>::insertMulti(key.toLower(), value);
-    }
-    const Key key(const T& value, const Key& defaultKey) const {
-        return QHash<Key, T>::key(value, defaultKey.toLower());
-    }
-    int remove(const Key& key) {
-        return QHash<Key, T>::remove(key.toLower());
-    }
-    const T take(const Key& key) {
-        return QHash<Key, T>::take(key.toLower());
-    }
-    const T value(const Key& key) const {
-        return QHash<Key, T>::value(key.toLower());
-    }
-    const T value(const Key& key, const T& defaultValue) const {
-        return QHash<Key, T>::value(key.toLower(), defaultValue);
-    }
-    QList<T> values(const Key& key) const {
-        return QHash<Key, T>::values(key.toLower());
-    }
-    T& operator[](const Key& key) {
-        return QHash<Key, T>::operator[](key.toLower());
-    }
-    const T operator[](const Key& key) const {
-        return QHash<Key, T>::operator[](key.toLower());
-    }
-    //! Controls autodeletion flag.
-    void setAutoDelete(bool set) {
-        m_autoDelete = set;
-    }
-private:
-    bool m_autoDelete;
 };
 
 //! Helper that sets given variable to specified value on destruction
