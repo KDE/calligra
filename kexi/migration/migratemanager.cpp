@@ -166,7 +166,7 @@ bool MigrateManagerInternal::lookupDrivers()
     }
 
     if (tlist.isEmpty()) {
-        setError(ERR_DRIVERMANAGER, i18n("Could not find any import/export database drivers."));
+        setError(ERR_DRIVERMANAGER, xi18n("Could not find any import/export database drivers."));
         return false;
     }
     return true;
@@ -188,7 +188,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 
     if (!m_services_lcase.contains(name.toLower())) {
         setError(ERR_DRIVERMANAGER,
-                 i18n("Could not find import/export database driver \"%1\".", name));
+                 xi18n("Could not find import/export database driver \"%1\".", name));
         return 0;
     }
 
@@ -196,7 +196,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     KexiPluginLoader loader(ptr, "X-Kexi-MigrationDriverName");
     if (!KexiMigration::version().matches(loader.majorVersion(), loader.minorVersion())) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
-                 i18n(
+                 xi18n(
                      "Incompatible migration driver's \"%1\" version: found version %2, expected version %3.",
                      name,
                      QString("%1.%2").arg(loader.majorVersion()).arg(loader.minorVersion()),
@@ -207,7 +207,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     drv = loader.createPlugin<KexiMigrate>(this);
     if (!drv) {
         setError(ERR_DRIVERMANAGER,
-                 i18n("Could not load import/export database driver \"%1\".", name));
+                 xi18n("Could not load import/export database driver \"%1\".", name));
         return 0;
     }
 

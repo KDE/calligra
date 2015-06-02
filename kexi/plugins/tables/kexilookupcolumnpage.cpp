@@ -121,14 +121,14 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 {
     setObjectName("KexiLookupColumnPage");
 
-//! @todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
-//! @todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
+//! @todo d->noDataSourceAvailableSingleText = xi18n("No data source could be assigned for this widget.");
+//! @todo d->noDataSourceAvailableMultiText = xi18n("No data source could be assigned for multiple widgets.");
 
     //-Record Source
 
     QHBoxLayout *hlyr = new QHBoxLayout();
     mainLayout()->addLayout(hlyr);
-    d->rowSourceLabel = new QLabel(i18n("Record source:"));
+    d->rowSourceLabel = new QLabel(xi18n("Record source:"));
     d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->rowSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
@@ -138,7 +138,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->gotoRowSourceButton = new KexiSmallToolButton(koIcon("go-jump"), QString());
     d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
     d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
-    d->gotoRowSourceButton->setToolTip(i18n("Go to selected record source"));
+    d->gotoRowSourceButton->setToolTip(xi18n("Go to selected record source"));
     hlyr->addWidget(d->gotoRowSourceButton);
     connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
     d->rowSourceCombo = new KexiDataSourceComboBox;
@@ -149,7 +149,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     addWidgetSpacer();
 
     //- Bound Column
-    d->boundColumnLabel = new QLabel(i18n("Bound column:"));
+    d->boundColumnLabel = new QLabel(xi18n("Bound column:"));
     d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->boundColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
@@ -163,7 +163,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     addWidgetSpacer();
 
     //- Visible Column
-    d->visibleColumnLabel = new QLabel(i18n("Visible column:"));
+    d->visibleColumnLabel = new QLabel(xi18n("Visible column:"));
     d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->visibleColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
@@ -211,7 +211,7 @@ void KexiLookupColumnPage::assignPropertySet(KPropertySet* propertySet)
 
     d->propertySetEnabled = false;
     d->setPropertySet(propertySet);
-    d->updateInfoLabelForPropertySet(i18n("No field selected"));
+    d->updateInfoLabelForPropertySet(xi18n("No field selected"));
 
     const bool hasRowSource = d->hasPropertySet() && !d->propertyValue("rowSourceType").isNull()
                               && !d->propertyValue("rowSource").isNull();

@@ -153,20 +153,20 @@ bool KexiNameDialog::canOverwrite()
         KMessageBox::information(this,
                                  "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                                              .subs(widget()->nameText()).toString()
-                                 + "</p><p>" + i18n("Please choose other name.") + "</p>");
+                                 + "</p><p>" + xi18n("Please choose other name.") + "</p>");
         return false;
     }
 
     QString msg =
         "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
                     .subs(widget()->nameText()).toString()
-        + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
+        + "</p><p>" + xi18n("Do you want to replace it?") + "</p>";
     KGuiItem yesItem(KStandardGuiItem::yes());
-    yesItem.setText(i18n("&Replace"));
-    yesItem.setToolTip(i18n("Replace object"));
+    yesItem.setText(xi18n("&Replace"));
+    yesItem.setToolTip(xi18n("Replace object"));
     int res = KMessageBox::warningYesNo(
                   this, msg, QString(),
-                  yesItem, KGuiItem(i18n("&Choose Other Name...")),
+                  yesItem, KGuiItem(xi18n("&Choose Other Name...")),
                   QString(),
                   KMessageBox::Notify | KMessageBox::Dangerous);
     if (res == KMessageBox::Yes) {

@@ -46,9 +46,9 @@
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : KexiPropertyPaneViewBase(parent)
         , m_noDataSourceAvailableSingleText(
-            i18n("No data source could be assigned for this widget.") )
+            xi18n("No data source could be assigned for this widget.") )
         , m_noDataSourceAvailableMultiText(
-            i18n("No data source could be assigned for multiple widgets.") )
+            xi18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearFormDataSourceSelection(false)
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
         , m_tableOrQuerySchema(0)
@@ -71,7 +71,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 // m_widgetDSLabel = new QLabel(futureI18nc("Table Field, Query Field or Expression", "Source field or expression"), this);
 #else
     m_widgetDSLabel = new QLabel(
-        i18nc("Table Field or Query Field", "Widget's data source"), this);
+        xi18nc("Table Field or Query Field", "Widget's data source"), this);
 #endif
     m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_widgetDSLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
@@ -102,7 +102,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     hlyr = new QHBoxLayout();
     hlyr->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addLayout(hlyr);
-    m_dataSourceLabel = new QLabel(i18n("Form's data source"), this);
+    m_dataSourceLabel = new QLabel(xi18n("Form's data source"), this);
     m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_dataSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(m_dataSourceLabel);
@@ -110,8 +110,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_gotoButton = new KexiSmallToolButton(
         koIcon("go-jump"), QString(), this);
     m_gotoButton->setObjectName("gotoButton");
-    m_gotoButton->setToolTip(i18n("Go to selected form's data source"));
-    m_gotoButton->setWhatsThis(i18n("Goes to selected form's data source"));
+    m_gotoButton->setToolTip(xi18n("Go to selected form's data source"));
+    m_gotoButton->setWhatsThis(xi18n("Goes to selected form's data source"));
     hlyr->addWidget(m_gotoButton);
     connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
