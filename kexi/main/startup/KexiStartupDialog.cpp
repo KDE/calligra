@@ -99,11 +99,11 @@ public:
 static QString captionForDialogType(int type)
 {
     if (type == KexiStartupDialog::Templates)
-        return i18n("Create Project");
+        return xi18n("Create Project");
     else if (type == KexiStartupDialog::OpenExisting)
-        return i18n("Open Existing Project");
+        return xi18n("Open Existing Project");
 
-    return i18n("Choose Project");
+    return xi18n("Choose Project");
 }
 
 /*================================================================*/
@@ -239,7 +239,7 @@ void KexiStartupDialog::reject()
 void KexiStartupDialog::setupPageTemplates()
 {
     QFrame *pageTemplatesFrame = new QFrame(this);
-    d->pageTemplates = addPage(pageTemplatesFrame, i18n("Create Project"));
+    d->pageTemplates = addPage(pageTemplatesFrame, xi18n("Create Project"));
     QVBoxLayout *lyr = new QVBoxLayout(pageTemplatesFrame);
     lyr->setSpacing(KDialog::spacingHint());
     lyr->setMargin(0);
@@ -257,7 +257,7 @@ void KexiStartupDialog::setupPageTemplates()
             this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
     if (d->dialogOptions & CheckBoxDoNotShowAgain) {
-        d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), pageTemplatesFrame);
+        d->chkDoNotShow = new QCheckBox(xi18n("Do not show me this dialog again"), pageTemplatesFrame);
         d->chkDoNotShow->setObjectName("chkDoNotShow");
         lyr->addWidget(d->chkDoNotShow);
     }
@@ -267,16 +267,16 @@ void KexiStartupDialog::setupPageTemplates()
     QVBoxLayout *tmplyr;
 
     //- page "blank db"
-    QString clickMsg("\n\n" + i18n("Click <interface>OK</interface> button to proceed."));
+    QString clickMsg("\n\n" + xi18n("Click <interface>OK</interface> button to proceed."));
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget,
-                                           i18n("Blank Database"));
-    d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
+                                           xi18n("Blank Database"));
+    d->templPageWidgetItem_BlankDatabase->setHeader(xi18n("New Blank Database Project"));
     d->templPageWidgetItem_BlankDatabase->setIcon(koIcon("x-office-document"));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_blank = new QLabel(
-        i18n("Kexi will create a new blank database project.") + clickMsg, templPageWidget);
+        xi18n("Kexi will create a new blank database project.") + clickMsg, templPageWidget);
     lbl_blank->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     lbl_blank->setWordWrap(true);
     lbl_blank->setMargin(0);
@@ -286,14 +286,14 @@ void KexiStartupDialog::setupPageTemplates()
     //- page "import db"
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_ImportExisting = d->templatesWidget->addPage(templPageWidget,
-                                            i18n("Import Existing Database"));
+                                            xi18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
-        i18n("Import Existing Database as New Database Project"));
+        xi18n("Import Existing Database as New Database Project"));
     d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_import = new QLabel(
-        i18n("Kexi will import the structure and data of an existing database "
+        xi18n("Kexi will import the structure and data of an existing database "
              "as a new database project.") + clickMsg, templPageWidget);
     lbl_import->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     lbl_import->setWordWrap(true);
@@ -359,7 +359,7 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
 void KexiStartupDialog::setupPageOpenExisting()
 {
     QWidget *pageOpenExistingWidget = new QFrame(this);
-    d->pageOpenExisting = addPage(pageOpenExistingWidget, i18n("Open Existing Project"));
+    d->pageOpenExisting = addPage(pageOpenExistingWidget, xi18n("Open Existing Project"));
 
     QVBoxLayout *lyr = new QVBoxLayout(pageOpenExistingWidget);
     lyr->setSpacing(KDialog::spacingHint());

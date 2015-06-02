@@ -33,7 +33,7 @@ KexiFindDialog::KexiFindDialog(bool replaceMode, QWidget* parent, const char* na
     m_btnFind->setIconSet(KStandardGuiItem::find().iconSet());
     m_btnClose->setIconSet(KStandardGuiItem::close().iconSet());
     setReplaceMode(replaceMode);
-    m_lookIn->insertItem(i18n("(All columns)"));
+    m_lookIn->insertItem(xi18n("(All columns)"));
 }
 
 void KexiFindDialog::setReplaceMode(bool set)

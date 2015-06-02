@@ -86,18 +86,18 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->internalSource = new KexiDataSourceComboBox(this);
     d->internalSource->setProject(project);
     d->externalSource = new QLineEdit(this);
-    d->setData = new QPushButton(i18n("Set Data"));
+    d->setData = new QPushButton(xi18n("Set Data"));
 
     connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
 
-    d->sourceType->addItem(i18n("Internal"), QVariant("internal"));
-    d->sourceType->addItem(i18n("External"), QVariant("external"));
+    d->sourceType->addItem(xi18n("Internal"), QVariant("internal"));
+    d->sourceType->addItem(xi18n("External"), QVariant("external"));
 
 #ifndef NO_EXTERNAL_SOURCES
 
 //!@TODO enable when adding external data
 
-    d->layout->addWidget(new QLabel(i18n("Source Type:"), this));
+    d->layout->addWidget(new QLabel(xi18n("Source Type:"), this));
     d->layout->addWidget(d->sourceType);
     d->layout->addSpacing(10);
 #else
@@ -105,12 +105,12 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->externalSource->setVisible(false);
 #endif
 
-    d->layout->addWidget(new QLabel(i18n("Internal Source:"), this));
+    d->layout->addWidget(new QLabel(xi18n("Internal Source:"), this));
     d->layout->addWidget(d->internalSource);
     d->layout->addSpacing(10);
 
 #ifndef NO_EXTERNAL_SOURCES
-    d->layout->addWidget(new QLabel(i18n("External Source:"), this));
+    d->layout->addWidget(new QLabel(xi18n("External Source:"), this));
     d->layout->addWidget(d->externalSource);
 #endif
     d->layout->addSpacing(20);

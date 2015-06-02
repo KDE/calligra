@@ -86,14 +86,14 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
     d->tableCombo->setInsertPolicy(QComboBox::NoInsert);
     d->tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
-    QLabel *lbl = new QLabel(i18n("Table:"), horWidget);
+    QLabel *lbl = new QLabel(xi18n("Table:"), horWidget);
     lbl->setBuddy(d->tableCombo);
     lbl->setIndent(3);
     hlyr->addWidget(lbl);
     hlyr->addWidget(d->tableCombo);
     fillTablesCombo();
 
-    d->btnAdd = new QPushButton(i18nc("Insert table/query into relations view", "&Insert"), horWidget);
+    d->btnAdd = new QPushButton(xi18nc("Insert table/query into relations view", "&Insert"), horWidget);
     hlyr->addWidget(d->btnAdd);
     hlyr->addStretch(1);
     connect(d->btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
@@ -109,7 +109,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->tableQueryPopup->setObjectName("tableQueryPopup");
     connect(d->tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
-    d->hideTableAction = plugSharedAction("edit_delete", i18n("&Hide Table"), d->tableQueryPopup);
+    d->hideTableAction = plugSharedAction("edit_delete", xi18n("&Hide Table"), d->tableQueryPopup);
     if (d->hideTableAction)
         d->hideTableAction->setIcon(QIcon());
 
@@ -121,22 +121,22 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->areaPopup = new QMenu(this);
     d->areaPopup->setObjectName("areaPopup");
 
-    d->appendSelectedFieldAction = new KAction(koIcon("add_field"), i18n("&Append Field"), this);
+    d->appendSelectedFieldAction = new KAction(koIcon("add_field"), xi18n("&Append Field"), this);
     d->appendSelectedFieldAction->setObjectName("relationsview_appendField");
     connect(d->appendSelectedFieldAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->appendSelectedFieldsAction = new KAction(koIcon("add_field"), i18n("&Append Fields"), this);
+    d->appendSelectedFieldsAction = new KAction(koIcon("add_field"), xi18n("&Append Fields"), this);
     d->appendSelectedFieldsAction->setObjectName("relationsview_appendFields");
     connect(d->appendSelectedFieldsAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->openSelectedTableAction = new KAction(koIcon("document-open"), i18n("&Open Table"), this);
+    d->openSelectedTableAction = new KAction(koIcon("document-open"), xi18n("&Open Table"), this);
     d->openSelectedTableAction->setObjectName("relationsview_openTable");
     connect(d->openSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(openSelectedTable()));
 
-    d->designSelectedTableAction = new KAction(koIcon("document-properties"), i18n("&Design Table"), this);
+    d->designSelectedTableAction = new KAction(koIcon("document-properties"), xi18n("&Design Table"), this);
     connect(d->designSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(designSelectedTable()));
     d->designSelectedTableAction->setObjectName("relationsview_designTable");
@@ -163,7 +163,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     //! @todo
 #if 0
     if (!embedd) {
-        /*todo  setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
+        /*todo  setContextHelp(xi18n("Relations"), xi18n("To create a relationship simply drag the source field onto the target field. "
               "An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));*/
     }
 #endif
@@ -374,7 +374,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
         /*! @todo what about query? */
         d->tableQueryPopup->clear();
         d->tableQueryPopup->addSection(koIcon("table"),
-                                     QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + i18n("Table"));
+                                     QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + xi18n("Table"));
         QStringList selectedFieldNames(currentTableContainer->selectedFieldNames());
         if (currentTableContainer && !selectedFieldNames.isEmpty()) {
             if (selectedFieldNames.count() > 1 || selectedFieldNames.first() == "*") //multiple
@@ -391,7 +391,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
         unplugSharedAction("edit_delete", d->connectionPopup);
         d->connectionPopup->clear();
         d->connectionPopup->addSection(QIcon(),
-                                     d->scrollArea->selectedConnection()->toString() + " : " + i18n("Relationship"));
+                                     d->scrollArea->selectedConnection()->toString() + " : " + xi18n("Relationship"));
         plugSharedAction("edit_delete", d->connectionPopup);
     }
 }

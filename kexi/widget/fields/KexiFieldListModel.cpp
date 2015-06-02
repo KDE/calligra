@@ -134,9 +134,9 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
 
     if (orientation == Qt::Horizontal) {
         if (section == 0) {
-            return i18n("Field Name");
+            return xi18n("Field Name");
         } else if (section == 1) {
-            return i18n("Data Type");
+            return xi18n("Data Type");
         }
     }
     return QVariant();

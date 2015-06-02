@@ -244,7 +244,7 @@ void KexiFormView::initForm()
         d->scrollView->setMainAreaWidget(d->dbform);
     }
     d->dbform->setObjectName(
-        i18nc("A prefix for identifiers of forms. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of forms. Based on that, identifiers such as "
             "form1, form2 are generated. "
             "This string can be used to refer the widget object as variables in programming "
             "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
