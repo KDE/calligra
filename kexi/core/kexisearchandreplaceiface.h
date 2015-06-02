@@ -20,7 +20,7 @@
 #ifndef KexiSearchAndReplaceViewInterface_H
 #define KexiSearchAndReplaceViewInterface_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 #include <db/tristate.h>
 #include <QString>
 class QVariant;

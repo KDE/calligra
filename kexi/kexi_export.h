@@ -20,16 +20,6 @@
 #ifndef _KEXI_EXPORT_H_
 #define _KEXI_EXPORT_H_
 
-#include <kexidb/kexidb_export.h>
-
-#ifndef KEXICORE_EXPORT
-# ifdef MAKE_KEXICORE_LIB
-#  define KEXICORE_EXPORT KDE_EXPORT
-# else
-#  define KEXICORE_EXPORT KDE_IMPORT
-# endif
-#endif
-
 #ifndef KEXIMAIN_EXPORT
 # ifdef MAKE_KEXIMAIN_LIB
 #  define KEXIMAIN_EXPORT KDE_EXPORT

@@ -24,7 +24,7 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 class QStringList;
 class QWidget;
