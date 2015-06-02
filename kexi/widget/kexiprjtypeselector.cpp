@@ -50,4 +50,3 @@ void KexiPrjTypeSelector::slotSelectionChanged(QAbstractButton *btn)
     frame_server->setEnabled(btn == option_server);
 }
 
-#include "kexiprjtypeselector.moc"

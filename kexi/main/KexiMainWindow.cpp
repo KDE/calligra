@@ -4300,6 +4300,3 @@ void KexiMainWindow::toggleFullScreen(bool isFullScreen)
     }
     KToggleFullScreenAction::setFullScreen(this, isFullScreen);
 }
-
-#include "KexiMainWindow.moc"
-#include "KexiMainWindow_p.moc"

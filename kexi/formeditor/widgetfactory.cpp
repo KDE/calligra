@@ -359,4 +359,3 @@ void WidgetFactory::setValueDescription(const char *valueName, const QString &de
     d->propValDesc.insert(valueName, description);
 }
 
-#include "widgetfactory.moc"

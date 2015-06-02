@@ -716,4 +716,3 @@ ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem* item)
     return wi->factory()->selectableItem(item);
 }
 
-#include "widgetlibrary.moc"

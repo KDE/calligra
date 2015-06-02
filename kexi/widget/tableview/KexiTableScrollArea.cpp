@@ -2470,4 +2470,3 @@ void KexiTableScrollArea::endRemoveItem(int pos)
 }
 
 
-#include "KexiTableScrollArea.moc"

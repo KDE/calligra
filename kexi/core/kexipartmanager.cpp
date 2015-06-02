@@ -288,4 +288,3 @@ PartInfoList* Manager::infoList()
     return &d->partlist;
 }
 
-#include "kexipartmanager.moc"

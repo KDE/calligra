@@ -388,4 +388,3 @@ Form* ResizeHandleSet::form() const
     return d->form;
 }
 
-#include "resizehandle.moc"

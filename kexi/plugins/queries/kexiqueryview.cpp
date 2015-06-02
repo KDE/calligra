@@ -156,4 +156,3 @@ QList<QVariant> KexiQueryView::currentParameters() const
     return d->currentParams;
 }
 
-#include "kexiqueryview.moc"

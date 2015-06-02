@@ -60,4 +60,3 @@ QStyle* StyleProxy::parentStyle(int methodIndex) const
     return m_style;
 }
 
-#include "styleproxy.moc"

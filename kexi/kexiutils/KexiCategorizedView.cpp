@@ -63,4 +63,3 @@ void KexiCategorizedView::setModel(QAbstractItemModel *model)
     setSelectionModel(new KexiCategorySingleSelectionModel(model));
 }
 
-#include "KexiCategorizedView.moc"

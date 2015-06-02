@@ -478,4 +478,3 @@ KexiRelationsView::hideAllTablesExcept(KexiDB::TableSchema::List* tables)
     d->scrollArea->hideAllTablesExcept(tables);
 }
 
-#include "KexiRelationsView.moc"
