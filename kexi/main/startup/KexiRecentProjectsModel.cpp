@@ -69,18 +69,18 @@ static QString openedString(const QDateTime& _opened)
         const int hours = minutes / 60;
         if (hours < 1) {
             if (minutes == 0)
-                return i18n("Opened less than minute ago");
+                return xi18n("Opened less than minute ago");
             else
-                return i18np("Opened 1 minute ago", "Opened %1 minutes ago", minutes);
+                return xi18np("Opened 1 minute ago", "Opened %1 minutes ago", minutes);
         } else {
-            return i18np("Opened 1 hour ago", "Opened %1 hours ago", hours);
+            return xi18np("Opened 1 hour ago", "Opened %1 hours ago", hours);
         }
     } else {
         if (days < 30)
-            return i18np("Opened yesterday", "Opened %1 days ago", days);
+            return xi18np("Opened yesterday", "Opened %1 days ago", days);
         if (days < 365)
-            return i18np("Opened over a month ago", "Opened %1 months ago", days / 30);
-        return i18np("Opened one year ago", "Opened %1 years ago", days / 365);
+            return xi18np("Opened over a month ago", "Opened %1 months ago", days / 30);
+        return xi18np("Opened one year ago", "Opened %1 years ago", days / 365);
     }
     return QString();
 }
@@ -113,10 +113,10 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
             QString serverInfo = pdata->connectionData()->serverInfoString(false /* without user */);
             // friendly message:
             if (serverInfo == "localhost") {
-                serverInfo = i18n("on local server");
+                serverInfo = xi18n("on local server");
             }
             else {
-                serverInfo = i18n("on \"%1\" server", serverInfo);
+                serverInfo = xi18n("on \"%1\" server", serverInfo);
             }
             return QString(n + serverInfo + opened);
         }
@@ -124,12 +124,12 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
     case Qt::ToolTipRole:
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
-            return i18nc("File database <file>", "File database %1",
+            return xi18nc("File database <file>", "File database %1",
                          pdata->constConnectionData()->fileName());
         }
         else {
             KexiDB::DriverManager manager;
-            return i18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
+            return xi18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
                   manager.driverInfo(pdata->constConnectionData()->driverName).caption);
         }
     case Qt::DecorationRole: {

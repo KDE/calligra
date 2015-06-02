@@ -783,7 +783,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
         connect(d->helpAction, SIGNAL(triggered()), this, SLOT(showContributionHelp()));
     }
     if (!d->shareAction) {
-        d->shareAction = new KAction(KStandardGuiItem::yes().icon(), i18n("Share"), this);
+        d->shareAction = new KAction(KStandardGuiItem::yes().icon(), xi18n("Share"), this);
         connect(d->shareAction, SIGNAL(triggered()), this, SLOT(slotShareFeedback()));
     }
     if (!d->cancelAction) {
@@ -815,20 +815,20 @@ void KexiWelcomeStatusBar::showDonation()
         return;
     }
     if (KMessageBox::Yes != KMessageBox::questionYesNo(this, 
-       i18n("<p><b>Kexi may be totally free, but its development is costly.</b><br/>"
-            "Power, hardware, office space, internet access, traveling for meetings - everything costs.</p>"
-            "<p>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
-            "Everyone, regardless of any degree of involvement can do so.</p>"
-            "<p>What do you receive for your donation? Kexi will become more feature-full and stable as "
+       xi18n("<para><title>Kexi may be totally free, but its development is costly.</title><nl/>"
+            "<para>Power, hardware, office space, internet access, traveling for meetings - everything costs.</para>"
+            "<para>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
+            "Everyone, regardless of any degree of involvement can do so.</para>"
+            "<para>What do you receive for your donation? Kexi will become more feature-full and stable as "
             "contributors will be able to devote more time to Kexi. Not only you can "
-            "expect new features, but you can also have an influence on what features are added!</p>"
-            "<p>Currently we are accepting donations through <b>BountySource</b> (a funding platform "
-            "for open-source software) using secure PayPal, Bitcoin and Google Wallet transfers.</p>"
-            "<p>Contact us at http://community.kde.org/Kexi/Contact for more information.</p>"
-            "<p>Thanks for your support!</p>"),
-       i18n("Donate to the Project"),
-       KGuiItem(i18n("Proceed to the Donation Web Page"), QIcon::fromTheme(QIcon(":/icons/heart.png"))),
-       KGuiItem(i18nc("Do not donate now", "Not Now"))))
+            "expect new features, but you can also have an influence on what features are added!</para>"
+            "<para>Currently we are accepting donations through <emphasis>BountySource</emphasis> (a funding platform "
+            "for open-source software) using secure PayPal, Bitcoin and Google Wallet transfers.</para>"
+            "<para>Contact us at http://community.kde.org/Kexi/Contact for more information.</para>"
+            "<para>Thanks for your support!</para>"),
+       xi18n("Donate to the Project"),
+       KGuiItem(xi18n("Proceed to the Donation Web Page"), QIcon::fromTheme(QIcon(":/icons/heart.png"))),
+       KGuiItem(xi18nc("Do not donate now", "Not Now"))))
     {
         return;
     }
@@ -1006,10 +1006,10 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
         if (lastDonation.isValid()) {
             int days = lastDonation.secsTo(QDateTime::currentDateTime()) / 60 / 60 / 24;
             if (days == 0) {
-                recentDonation = i18nc("Donation today", "today");
+                recentDonation = xi18nc("Donation today", "today");
             }
             else if (days > 0) {
-                recentDonation = i18ncp("Recent donation date (xx days)", "%1 (1 day)", "%1 (%2 days)",
+                recentDonation = xi18ncp("Recent donation date (xx days)", "%1 (1 day)", "%1 (%2 days)",
                                         KLocale::global()->formatDateTime(lastDonation), days);
             }
         }
@@ -1021,7 +1021,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
             lbl->setText(QString::number(donationsCount));
         }
         else {
-            lbl->setText(i18nc("donations count", "%1 (thanks!)", donationsCount));
+            lbl->setText(xi18nc("donations count", "%1 (thanks!)", donationsCount));
         }
     }
 }

@@ -49,9 +49,9 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_columnPKey = new QCheckBox(this);
     m_tableNameWidget = new KexiNameWidget("",this);
 
-    m_columnNumLabel = new QLabel(i18n("Column %1", 1), this);
-    m_columnTypeLabel = new QLabel(i18n("Type"), this);
-    m_columnPKeyLabel = new QLabel(i18n("Primary Key"), this);
+    m_columnNumLabel = new QLabel(xi18n("Column %1", 1), this);
+    m_columnTypeLabel = new QLabel(xi18n("Type"), this);
+    m_columnPKeyLabel = new QLabel(xi18n("Primary Key"), this);
 
     m_types = KexiDB::Field::typeNames();
     m_types.removeFirst(); //Remove InvalidTypes
@@ -111,7 +111,7 @@ void AlterSchemaWidget::setData(const QList<KexiDB::RecordData>& data)
 void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     m_selectedColumn = idx.column();
-    m_columnNumLabel->setText(i18n("Column %1", m_selectedColumn + 1));
+    m_columnNumLabel->setText(xi18n("Column %1", m_selectedColumn + 1));
     if (m_schema && m_selectedColumn < int(m_schema->fieldCount()) && m_schema->field(m_selectedColumn)) {
         kDebug() << m_schema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_schema->field(m_selectedColumn)->typeName());
         m_columnType->setCurrentIndex(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName()));

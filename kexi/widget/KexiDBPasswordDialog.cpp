@@ -56,25 +56,25 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
             (flags & ShowDetailsButton) ? KDialog::User1 : KDialog::None)
         , d(new Private(&cdata))
 {
-    setCaption(i18nc("@title:window", "Opening Database"));
-    setPrompt(i18nc("@info", "Supply a password below."));
+    setCaption(xi18nc("@title:window", "Opening Database"));
+    setPrompt(xi18nc("@info", "Supply a password below."));
     /*  msg += cdata.userName.isEmpty() ?
-          "<p>"+i18n("Please enter the password.")
-          : "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
+          "<p>"+xi18n("Please enter the password.")
+          : "<p>"+xi18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
 
     QString srv = cdata.serverInfoString(false);
 //    if (srv.isEmpty() || srv.toLower() == "localhost")
-//        srv = i18n("local database server");
+//        srv = xi18n("local database server");
 
     QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, "QLabel", "domainLabel");
     if (domainLabel) {
-        domainLabel->setText(i18n("Database server:"));
+        domainLabel->setText(xi18n("Database server:"));
     }
     setDomain(srv);
 
     QString usr;
     if (cdata.userName.isEmpty())
-        usr = i18nc("unspecified user", "(unspecified)");
+        usr = xi18nc("unspecified user", "(unspecified)");
     else
         usr = cdata.userName;
     setUsernameReadOnly(true);
@@ -83,9 +83,9 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
     if ((flags & ShowDetailsButton)) {
         connect(this, SIGNAL(user1Clicked()),
                 this, SLOT(slotShowConnectionDetails()));
-        setButtonText(KDialog::User1, i18n("&Details") + " >>");
+        setButtonText(KDialog::User1, xi18n("&Details") + " >>");
     }
-    setButtonText(KDialog::Ok, i18n("&Open"));
+    setButtonText(KDialog::Ok, xi18n("&Open"));
     setButtonIcon(KDialog::Ok, koIcon("document-open"));
 }
 

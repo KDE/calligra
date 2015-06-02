@@ -49,12 +49,12 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_editDeleteAction->setWhatsThis(del.whatsThis());
     m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new KAction(i18n("Edit Sections"), this);
+    m_sectionEdit = new KAction(xi18n("Edit Sections"), this);
     m_sectionEdit->setObjectName("sectionedit");
 
-    m_itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
+    m_itemRaiseAction = new KAction(koIcon("arrow-up"), xi18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
-    m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
+    m_itemLowerAction = new KAction(koIcon("arrow-down"), xi18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
     QList<QAction*> al;
     KAction *sep = new KAction(QString(), this);

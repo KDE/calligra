@@ -56,7 +56,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 
     d->actionCollection.addAction("insert",
                                   d->insertFromFileAction = new KAction(
-        koIcon("document-open"), i18n("Insert From &File..."), this));
+        koIcon("document-open"), xi18n("Insert From &File..."), this));
     connect(d->insertFromFileAction, SIGNAL(triggered()),
             this, SLOT(insertFromFile()));
     addAction(d->insertFromFileAction);
@@ -71,7 +71,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     addAction(d->pasteAction);
     d->actionCollection.addAction("delete",
                                   d->deleteAction = new KAction(
-        koIcon("edit-clear"), i18n("&Clear"), this));
+        koIcon("edit-clear"), xi18n("&Clear"), this));
     connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(clear()));
     addAction(d->deleteAction);
@@ -80,7 +80,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 #else
     addSeparator();
     d->actionCollection.addAction("properties",
-                                  d->propertiesAction = new KAction(i18n("Properties"), this));
+                                  d->propertiesAction = new KAction(xi18n("Properties"), this));
     connect(d->propertiesAction, SIGNAL(triggered()),
             this, SLOT(showProperties()));
     addAction(d->propertiesAction);
@@ -96,7 +96,7 @@ KexiImageContextMenu::~KexiImageContextMenu()
 void KexiImageContextMenu::insertFromFile()
 {
     QUrl url(KFileDialog::getImageOpenUrl(
-                 QUrl("kfiledialog:///LastVisitedImagePath"), this, i18n("Insert Image From File")));
+                 QUrl("kfiledialog:///LastVisitedImagePath"), this, xi18n("Insert Image From File")));
     //! @todo download the file if remote, then set fileName properly
     if (!url.isValid()) {
         //focus the app again to avoid annoying the user with unfocused main window
@@ -138,7 +138,7 @@ void KexiImageContextMenu::saveAs()
     //! @todo add originalFileName! (requires access to KRecentDirs)
     QString fileName = KFileDialog::getSaveFileName(
                            QUrl("kfiledialog:///LastVisitedImagePath"),
-                           KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
+                           KImageIO::pattern(KImageIO::Writing), this, xi18n("Save Image to File"));
     if (fileName.isEmpty())
         return;
 
@@ -150,10 +150,10 @@ void KexiImageContextMenu::saveAs()
 
     QFile f(fileName);
     if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this,
-            i18n("<para>File <filename>%1</filename> already exists.</para>"
+            xi18n("<para>File <filename>%1</filename> already exists.</para>"
                  "<para>Do you want to replace it with a new one?</para>",
                  QDir::convertSeparators(fileName)), 0,
-            KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace")))) {
+            KGuiItem(xi18n("&Replace")), KGuiItem(xi18n("&Don't Replace")))) {
         return;
     }
 
@@ -213,7 +213,7 @@ KActionCollection* KexiImageContextMenu::actionCollection() const
 bool KexiImageContextMenu::updateTitle(QMenu *menu, const QString& title,
                                        const QString& iconName)
 {
-    return KexiContextMenuUtils::updateTitle(menu, title, i18n("Image"), iconName);
+    return KexiContextMenuUtils::updateTitle(menu, title, xi18n("Image"), iconName);
 }
 
 // -------------------------------------------
@@ -232,7 +232,7 @@ bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
 
     /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
      (see doc/dev/settings.txt) */
-    QString realTitle(i18nc("Object name : Object type", "%1 : %2",
+    QString realTitle(xi18nc("Object name : Object type", "%1 : %2",
                             objectName[0].toUpper() + objectName.mid(1),
                             objectTypeName));
 
