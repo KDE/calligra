@@ -22,6 +22,7 @@
 #ifndef KexiDBProgressBar_H
 #define KexiDBProgressBar_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <QProgressBar>

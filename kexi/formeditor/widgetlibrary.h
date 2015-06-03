@@ -22,10 +22,10 @@
 #ifndef KFORMDESIGNERWIDGETLIBRARY_H
 #define KFORMDESIGNERWIDGETLIBRARY_H
 
+#include "widgetfactory.h"
+
 #include <QObject>
 #include <QList>
-
-#include "widgetfactory.h"
 
 template<class type> class QList;
 template<class type> class QVector;

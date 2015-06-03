@@ -20,9 +20,9 @@
 #ifndef KEXIDBTITLEPAGE_H
 #define KEXIDBTITLEPAGE_H
 
+#include "kexiextwidgets_export.h"
 #include "ui_KexiDBTitlePage.h"
 #include <QWidget>
-#include <kexi_export.h>
 
 //! @short A helper widget used to displaying a line edit with a label and layout
 class KEXIEXTWIDGETS_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTitlePage

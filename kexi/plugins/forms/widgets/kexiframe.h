@@ -20,9 +20,11 @@
 #ifndef KexiFrame_H
 #define KexiFrame_H
 
-#include <QFrame>
+#include "kexiformutils_export.h"
+
 #include <formeditor/FormWidgetInterface.h>
-#include <kexi_export.h>
+
+#include <QFrame>
 
 //! @short Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,

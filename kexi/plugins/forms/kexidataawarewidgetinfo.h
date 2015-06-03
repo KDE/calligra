@@ -20,6 +20,8 @@
 #ifndef KEXIDATAAWAREWIDGETINFO_H
 #define KEXIDATAAWAREWIDGETINFO_H
 
+#include "kexiformutils_export.h"
+
 #include <formeditor/widgetfactory.h>
 #include <formeditor/WidgetInfo.h>
 

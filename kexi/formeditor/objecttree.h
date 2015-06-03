@@ -22,16 +22,15 @@
 #ifndef KFORMDESIGNEROBJECTTREE_H
 #define KFORMDESIGNEROBJECTTREE_H
 
+#include "kformdesigner_export.h"
+#include "container.h"
+
 #include <QList>
 #include <QHash>
 #include <QVariant>
 #include <QString>
 #include <QPointer>
 #include <QByteArray>
-
-#include <kexi_export.h>
-
-#include "container.h"
 
 class QWidget;
 class QDomElement;

@@ -20,7 +20,7 @@
 #ifndef RICHTEXTEDIT_DIALOG_H
 #define RICHTEXTEDIT_DIALOG_H
 
-#include <kexi_export.h>
+#include "kformdesigner_export.h"
 
 #include <QDialog>
 
