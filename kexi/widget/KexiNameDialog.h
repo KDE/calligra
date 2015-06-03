@@ -20,9 +20,10 @@
 #ifndef KEXINAMEDIALOG_H
 #define KEXINAMEDIALOG_H
 
-#include <kdialog.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
+
+#include <QDialog>
 
 class KexiNameWidget;
 class KexiNameDialog;
@@ -41,7 +42,7 @@ public:
 
 //! A dialog displaying object's name and caption and allowing editing.
 //! @see KexiNameWidget
-class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public KDialog
+class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public QDialog
 {
     Q_OBJECT
 
@@ -59,7 +60,7 @@ public:
 
     void setDialogIcon(const QString &iconName);
 
-    /*! Shows the dialog as a modal dialog, blocking until the user closes it, like KDialog::exec()
+    /*! Shows the dialog as a modal dialog, blocking until the user closes it, like QDialog::exec()
         but uses @a project and @a part to check if object of given type and name already exists.
         If so, warning or question is displayed.
         You can check @a overwriteNeeded after calling this method.

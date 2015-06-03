@@ -24,8 +24,7 @@
 #include "KexiWindow.h"
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
-
-#include <QDialog>
+#include <kexi_global.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -33,7 +32,7 @@
 #include <db/msghandler.h>
 #include <db/pluginloader.h>
 
-#include <kexi_global.h>
+#include <QDialog>
 
 //----------------------------------------------
 

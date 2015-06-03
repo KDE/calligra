@@ -243,7 +243,7 @@ void ImportTableWizard::setupImportingPage()
     QWidget *options_widget = new QWidget(m_importingPageWidget);
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
-    options_vbox->setSpacing(KDialog::spacingHint());
+    options_vbox->setSpacing(KexiUtils::spacingHint());
     m_importOptionsButton = new QPushButton(koIcon("configure"), xi18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),this, SLOT(slotOptionsButtonClicked()));
     options_vbox->addWidget(m_importOptionsButton);
@@ -310,7 +310,7 @@ void ImportTableWizard::setupFinishPage()
     vbox->addWidget(m_finishLbl);
     m_finishCheckBox = new QCheckBox(xi18n("Open imported table"),
                                      m_finishPageWidget);
-    vbox->addSpacing(KDialog::spacingHint());
+    vbox->addSpacing(KexiUtils::spacingHint());
     vbox->addWidget(m_finishCheckBox);
     vbox->addStretch(1);
 
@@ -475,10 +475,10 @@ void ImportTableWizard::arriveImportingPage()
 #if 0
     if (checkUserInput()) {
         //setNextEnabled(m_importingPageWidget, true);
-        enableButton(KDialog::User2, true);
+        user2Button->setEnabled(true);
     } else {
         //setNextEnabled(m_importingPageWidget, false);
-        enableButton(KDialog::User2, false);
+        user2Button->setEnabled(false);
     }
 #endif
 
@@ -517,17 +517,19 @@ void ImportTableWizard::arriveProgressPage()
 {
     m_progressLbl->setText(xi18nc("@info", "Please wait while the table is imported."));
 
-    enableButton(KDialog::User1, false);
-    enableButton(KDialog::User2, false);
-    enableButton(KDialog::User3, false);
+    // KEXI3 user1Button->setEnabled(false);
+    // KEXI3 user2Button->setEnabled(false);
+    // KEXI3 user3Button->setEnabled(false);
 
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(slotCancelClicked()));
 
     QApplication::setOverrideCursor(Qt::BusyCursor);
     m_importComplete = doImport();
     QApplication::restoreOverrideCursor();
 
-    disconnect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()));
+    disconnect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+               this, SLOT(slotCancelClicked()));
 
     next();
 }
@@ -543,9 +545,9 @@ void ImportTableWizard::arriveFinishPage()
                                   m_alterSchemaWidget->nameWidget()->nameText()));
     }
 
-    enableButton(KDialog::User2, false);
-    enableButton(KDialog::User3, false);
-    enableButton(KDialog::Cancel, false);
+    // KEXI3 user2Button->setEnabled(false);
+    // KEXI3 user3Button->setEnabled(false);
+    buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
 }
 
 bool ImportTableWizard::fileBasedSrcSelected() const

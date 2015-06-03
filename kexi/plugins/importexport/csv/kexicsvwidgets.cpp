@@ -26,9 +26,9 @@
 #include <QFrame>
 #include <QVector>
 #include <QLineEdit>
+#include <QDialog>
 
 #include <klocale.h>
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <kio/global.h>
 
@@ -87,7 +87,7 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     setLayout(lyr);
     KexiUtils::setMargins(lyr, 0);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVDelimiterComboBox");
@@ -191,7 +191,7 @@ KexiCSVCommentWidget::KexiCSVCommentWidget(bool lineEditOnBottom, QWidget *paren
     QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     setLayout(lyr);
     KexiUtils::setMargins(lyr, 0);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVcommentSymbolComboBox");
@@ -273,7 +273,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     QVBoxLayout *vbox = new QVBoxLayout;
     setLayout(vbox);
     KexiUtils::setMargins(vbox, 0);
-    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setSpacing(KexiUtils::spacingHint());
     QGridLayout *topbox = new QGridLayout;
     vbox->addLayout(topbox);
 
@@ -282,7 +282,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     d->iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     topbox->addWidget(d->iconLbl, 0, 0, 2, 1);
     topbox->addItem(new QSpacerItem(
-        KDialog::spacingHint(), KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
+        KexiUtils::spacingHint(), KexiUtils::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
         0, 1, 2, 1
     );
 

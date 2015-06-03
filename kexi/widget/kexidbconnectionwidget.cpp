@@ -41,6 +41,8 @@
 #include <QHBoxLayout>
 #include <QWhatsThis>
 #include <QLineEdit>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 //! Templorary hides db list
 //! @todo reenable this when implemented
@@ -112,7 +114,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
         frmBottom);
     d->btnSaveChanges->setObjectName("savechanges");
     hbox->addWidget(d->btnSaveChanges);
-    hbox->addSpacing(KDialog::spacingHint());
+    hbox->addSpacing(KexiUtils::spacingHint());
     QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
     d->btnSaveChanges->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
@@ -276,7 +278,7 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget(QWidget* parent)
 {
     mainWidget = new KexiDBConnectionWidget(this);
     mainWidget->setObjectName("mainWidget");
-    mainWidget->layout()->setMargin(KDialog::marginHint());
+    mainWidget->layout()->setMargin(KexiUtils::marginHint());
     addTab(mainWidget, xi18n("Parameters"));
 
     detailsWidget = new KexiDBConnectionWidgetDetails(this);
@@ -399,7 +401,7 @@ void KexiDBConnectionTabWidget::slotSocketComboboxToggled(bool on)
 
 KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjectData& data,
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
-        : KDialog(parent)
+        : QDialog(parent)
         , d(new Private)
 {
     setWindowTitle(xi18nc("@title:window", "Open Database"));
@@ -411,7 +413,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
 KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
         const KexiDB::ConnectionData& data,
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
-        : KDialog(parent)
+        : QDialog(parent)
         , d(new Private)
 {
     setWindowTitle(xi18nc("@title:window", "Connect to a Database Server"));
@@ -428,21 +430,15 @@ KexiDBConnectionDialog::~KexiDBConnectionDialog()
 void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
 {
     setObjectName("KexiDBConnectionDialog");
-    setButtons(KDialog::User1 | KDialog::Cancel | KDialog::Help);
-    setButtonGuiItem(KDialog::User1,
-                     acceptButtonGuiItem.text().isEmpty()
-                     ? KGuiItem(xi18n("&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
-                     : acceptButtonGuiItem
-                    );
     setModal(true);
 
-    setMainWidget(d->tabWidget);
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(accept()));
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    mainLayout->addWidget(d->tabWidget);
     connect(d->tabWidget->mainWidget, SIGNAL(saveChanges()), this, SIGNAL(saveChanges()));
     connect(d->tabWidget, SIGNAL(testConnection()), this, SIGNAL(testConnection()));
 
-    adjustSize();
-    resize(width(), d->tabWidget->height());
     if (d->tabWidget->mainWidget->connectionOnly())
         d->tabWidget->mainWidget->driversCombo()->setFocus();
     else if (d->tabWidget->mainWidget->nameCombo->currentText().isEmpty())
@@ -453,6 +449,20 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
         d->tabWidget->mainWidget->passwordEdit->setFocus();
     else //back
         d->tabWidget->mainWidget->nameCombo->setFocus();
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    KGuiItem::assign(button(QDialogButtonBox::Ok),
+                     acceptButtonGuiItem.text().isEmpty()
+                     ? KGuiItem(xi18n("&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
+                     : acceptButtonGuiItem
+                    );
+    mainLayout->addWidget(buttonBox);
+
+    adjustSize();
+    resize(width(), d->tabWidget->height());
 }
 
 KexiProjectData KexiDBConnectionDialog::currentProjectData()

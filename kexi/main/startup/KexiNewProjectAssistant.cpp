@@ -56,7 +56,7 @@
 #include <QPainter>
 #include <QProgressBar>
 #include <QFileInfo>
- 
+
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
 {
@@ -88,7 +88,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     m_templatesList->setFrameShape(QFrame::NoFrame);
     m_templatesList->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+        + KexiUtils::marginHint();
     //not needed in grid:
     m_templatesList->setSpacing(margin);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -203,7 +203,7 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
     setBackButtonVisible(true);
     setNextButtonVisible(true);
     contents = new KexiDBTitlePage(QString());
-    contents->formLayout->setSpacing(KDialog::spacingHint());
+    contents->formLayout->setSpacing(KexiUtils::spacingHint());
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
     connect(contents->le_title, SIGNAL(textChanged(QString)),

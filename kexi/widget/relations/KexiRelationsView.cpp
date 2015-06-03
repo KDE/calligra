@@ -27,11 +27,11 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QPushButton>
+#include <QDialog>
 
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdialog.h>
 
 #include <db/connection.h>
 #include <db/utils.h>
@@ -74,7 +74,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     QWidget *mainWidget = new QWidget(this);
     QGridLayout *g = new QGridLayout(mainWidget);
     g->setContentsMargins(0, 0, 0, 0);
-    g->setSpacing(KDialog::spacingHint());
+    g->setSpacing(KexiUtils::spacingHint());
 
     QWidget *horWidget = new QWidget(mainWidget);
     QHBoxLayout *hlyr = new QHBoxLayout(horWidget);

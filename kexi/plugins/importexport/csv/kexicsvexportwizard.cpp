@@ -41,11 +41,11 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QPushButton>
+#include <QDialog>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kdialog.h>
 #include <KSharedConfig>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
@@ -60,11 +60,11 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 
     if (m_options.mode == KexiCSVExport::Clipboard) {
-        button(KDialog::User1)->setText(xi18n("Copy"));
+        // KEXI3 ?
+        button(QDialogButtonBox::Ok)->setText(xi18n("Copy"));
     } else {
-        button(KDialog::User1)->setText(xi18n("Export"));
+        button(QDialogButtonBox::Ok)->setText(xi18n("Export"));
     }
-    showButton(KDialog::Help, false);
 
     QString infoLblFromText;
     QString captionOrName;

@@ -275,7 +275,7 @@ void KexiPasswordWidget::addCommentLine( const QString& label,
         if (li) {
             QLabel *l = qobject_cast<QLabel*>(li->widget());
             if (l && l->wordWrap()) {
-                int w = sizeHint().width() - firstColumnWidth - ( 2 * KDialog::marginHint() )
+                int w = sizeHint().width() - firstColumnWidth - ( 2 * KexiUtils::marginHint() )
                         - gridMarginLeft - gridMarginRight - spacing;
                 l->setMinimumSize( w, l->heightForWidth(w) );
             }
@@ -329,7 +329,7 @@ void KexiPasswordWidget::setPrompt(const QString& prompt)
     d->ui.prompt->setText( prompt );
     d->ui.prompt->setWordWrap( true );
     d->ui.prompt->setMinimumHeight(
-                d->ui.prompt->heightForWidth( width() -  ( 2 * KDialog::marginHint() ) ) );
+                d->ui.prompt->heightForWidth( width() -  ( 2 * KexiUtils::marginHint() ) ) );
 }
 
 QString KexiPasswordWidget::prompt() const

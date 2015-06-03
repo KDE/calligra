@@ -52,12 +52,23 @@ KexiDBPasswordDialog::Private::~Private()
 KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata,
                                            Flags flags)
         : KPasswordDialog(parent,
-            ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags),
-            (flags & ShowDetailsButton) ? KDialog::User1 : KDialog::None)
+            ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags))
         , d(new Private(&cdata))
 {
-    setCaption(xi18nc("@title:window", "Opening Database"));
+    setWindowTitle(xi18nc("@title:window", "Opening Database"));
     setPrompt(xi18nc("@info", "Supply a password below."));
+
+    if ((flags & ShowDetailsButton)) {
+        // KEXI3 OK?
+        buttonBox()->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel
+                                        | QDialogButtonBox::Help);
+        QPushButton *detailsButton = buttonBox()->button(QDialogButtonBox::Help);
+        connect(detailsButton, SIGNAL(clicked()),
+                this, SLOT(slotShowConnectionDetails()));
+        detailsButton->setText(xi18n("&Details" + " >>"));
+        connect(detailsButton, SIGNAL(clicked()),
+                this, SLOT(slotOkOrDetailsButtonClicked()))
+    }
     /*  msg += cdata.userName.isEmpty() ?
           "<p>"+xi18n("Please enter the password.")
           : "<p>"+xi18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
@@ -80,13 +91,10 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
     setUsernameReadOnly(true);
     setUsername(usr);
 
-    if ((flags & ShowDetailsButton)) {
-        connect(this, SIGNAL(user1Clicked()),
-                this, SLOT(slotShowConnectionDetails()));
-        setButtonText(KDialog::User1, xi18n("&Details") + " >>");
-    }
-    setButtonText(KDialog::Ok, xi18n("&Open"));
-    setButtonIcon(KDialog::Ok, koIcon("document-open"));
+    buttonBox()->button(QDialogButtonBox::Ok)->setText(xi18n("&Open"));
+    connect(buttonBox()->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotOkOrDetailsButtonClicked()))
+    // KEXI3 buttonBox()->button(QDialogButtonBox::Ok)->setIcon(koIcon("document-open");
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()
@@ -99,19 +107,13 @@ bool KexiDBPasswordDialog::showConnectionDetailsRequested() const
     return d->showConnectionDetailsRequested;
 }
 
-void KexiDBPasswordDialog::slotButtonClicked(int button)
+void KexiDBPasswordDialog::slotOkOrDetailsButtonClicked()
 {
-    if (button == KDialog::Ok || button == KDialog::User1) {
-        d->cdata->password = password();
-        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
-        if (!userEdit->isReadOnly()) {
-            d->cdata->userName = userEdit->text();
-        }
+    d->cdata->password = password();
+    QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
+    if (!userEdit->isReadOnly()) {
+        d->cdata->userName = userEdit->text();
     }
-    else {
-        //d->cdata->password.clear();
-    }
-    KPasswordDialog::slotButtonClicked(button);
 }
 
 void KexiDBPasswordDialog::slotShowConnectionDetails()

@@ -22,20 +22,16 @@
 #include "kexilookupcolumnpage.h"
 #include "kexitabledesignercommands.h"
 
-#include <QLayout>
-#include <QLabel>
-#include <QSplitter>
-#include <QByteArray>
-#include <QHash>
-#include <QMenu>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <ktoggleaction.h>
-#include <kmessagebox.h>
-#include <kundo2command.h>
-#include <kactioncollection.h>
 #include <KexiIcon.h>
+#include <kexiutils/identifier.h>
+#include <kexiproject.h>
+#include <KexiMainWindowIface.h>
+#include <widget/dataviewcommon/kexidataawarepropertyset.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
+#include <widget/tableview/KexiTableScrollArea.h>
+#include <kexiutils/utils.h>
+#include <KexiWindow.h>
+#include <kexi_global.h>
 
 #include <KPropertySet>
 #include <KPropertyUtils>
@@ -47,16 +43,21 @@
 #include <db/roweditbuffer.h>
 #include <db/error.h>
 #include <db/lookupfieldschema.h>
-#include <kexiutils/identifier.h>
-#include <kexiproject.h>
-#include <KexiMainWindowIface.h>
-#include <widget/dataviewcommon/kexidataawarepropertyset.h>
-#include <widget/properties/KexiCustomPropertyFactory.h>
-#include <widget/tableview/KexiTableScrollArea.h>
-#include <kexiutils/utils.h>
-#include <KexiWindow.h>
 
-#include <kexi_global.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktoggleaction.h>
+#include <kmessagebox.h>
+#include <kundo2command.h>
+#include <kactioncollection.h>
+
+#include <QLayout>
+#include <QLabel>
+#include <QSplitter>
+#include <QByteArray>
+#include <QHash>
+#include <QMenu>
+#include <QVBoxLayout>
 
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"

@@ -339,7 +339,29 @@ protected:
     virtual void changeEvent(QEvent *event);
 };
 
-/*! Sets KDialog::marginHint() margins and KDialog::spacingHint() spacing 
+/**
+ * Returns the number of pixels that should be used between a
+ * dialog edge and the outermost widget(s) according to the KDE standard.
+ *
+ * Copied from QDialog.
+ *
+ * @deprecated Use the style's pixelMetric() function to query individual margins.
+ * Different platforms may use different values for the four margins.
+ */
+KEXIUTILS_EXPORT int marginHint();
+
+/**
+ * Returns the number of pixels that should be used between
+ * widgets inside a dialog according to the KDE standard.
+ *
+ * Copied from QDialog.
+ *
+ * @deprecated Use the style's layoutSpacing() function to query individual spacings.
+ * Different platforms may use different values depending on widget types and pairs.
+ */
+KEXIUTILS_EXPORT int spacingHint();
+
+/*! Sets KexiUtils::marginHint() margins and KexiUtils::spacingHint() spacing
  for the layout @a layout. */
 KEXIUTILS_EXPORT void setStandardMarginsAndSpacing(QLayout *layout);
 

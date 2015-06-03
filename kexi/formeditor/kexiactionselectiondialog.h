@@ -21,8 +21,9 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_H
 #define KEXIACTIONSELECTIONDIALOG_H
 
-#include <kdialog.h>
 #include "kexiformeventhandler.h"
+
+#include <QDialog>
 
 class QTreeWidgetItem;
 
@@ -36,7 +37,7 @@ class Item;
  - application's global actions like "edit->copy" (KAction-based)
  - opening/printing/executing of selected object (table/query/form/script/macrto, etc.)
 */
-class KFORMEDITOR_EXPORT KexiActionSelectionDialog : public KDialog
+class KFORMEDITOR_EXPORT KexiActionSelectionDialog : public QDialog
 {
     Q_OBJECT
 public:

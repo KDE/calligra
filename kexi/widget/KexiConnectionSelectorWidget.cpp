@@ -36,8 +36,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurlcombobox.h>
-#include <kdialog.h>
 
+#include <QDialog>
 #include <QLabel>
 #include <QPushButton>
 #include <QLayout>
@@ -146,8 +146,8 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     connect(d->prjTypeSelector->buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
             this, SLOT(slotPrjTypeSelected(QAbstractButton*)));
     openExistingWidgetLyr->addWidget(d->prjTypeSelector);
-    d->prjTypeSelector->setContentsMargins(0, 0, 0, KDialog::spacingHint());
-    //openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
+    d->prjTypeSelector->setContentsMargins(0, 0, 0, KexiUtils::spacingHint());
+    //openExistingWidgetLyr->addSpacing(KexiUtils::spacingHint());
     QFrame* line = new QFrame(d->openExistingWidget);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);

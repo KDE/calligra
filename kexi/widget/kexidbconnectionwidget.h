@@ -27,7 +27,7 @@
 #include <kexiprojectdata.h>
 
 #include <QTabWidget>
-#include <kdialog.h>
+#include <QDialog>
 
 class QPushButton;
 class KexiDBDriverComboBox;
@@ -134,7 +134,7 @@ protected:
 };
 
 
-class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public KDialog
+class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public QDialog
 {
     Q_OBJECT
 

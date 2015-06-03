@@ -321,7 +321,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 #endif
         Ok | Cancel
     );
-    setDefaultButton(Ok);
+    button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(Plain);
     setSizeGripEnabled(true);
 
@@ -349,7 +349,7 @@ void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 
 void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pdata)
 {
-    enableButtonOk(pdata);
+    button(QDialogButtonBox::Ok)->setEnabled(pdata);
 }
 
 void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
