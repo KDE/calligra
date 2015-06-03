@@ -1714,8 +1714,8 @@ void KexiMainWindow::setupMainWidget()
         QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
         tabbedToolBarContainerLyr->setSpacing(0);
         tabbedToolBarContainerLyr->setContentsMargins(
-            KDialog::marginHint() / 2, KDialog::marginHint() / 2,
-            KDialog::marginHint() / 2, KDialog::marginHint() / 2);
+            KexiUtils::marginHint() / 2, KexiUtils::marginHint() / 2,
+            KexiUtils::marginHint() / 2, KexiUtils::marginHint() / 2);
 
         d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
         Q_ASSERT(d->action_view_global_search);
@@ -1970,7 +1970,7 @@ void KexiMainWindow::updateAppCaption()
         }
     }
 
-    setWindowTitle(KDialog::makeStandardCaption(d->appCaptionPrefix, this));
+    setWindowTitle(QDialog::makeStandardCaption(d->appCaptionPrefix, this));
 }
 
 bool KexiMainWindow::queryClose()

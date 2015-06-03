@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QFontDatabase>
+#include <QDialog>
 
 #include <KRun>
 #include <KToolInvocation>
@@ -47,7 +48,6 @@
 #include <kdebug.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
-#include <kdialog.h>
 #include <kcolorscheme.h>
 
 using namespace KexiUtils;
@@ -512,10 +512,20 @@ void KTextEditorFrame::changeEvent(QEvent *event)
 
 //---------------------
 
+int KexiUtils::marginHint()
+{
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+}
+
+int KexiUtils::spacingHint()
+{
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+}
+
 void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
 {
-    setMargins(layout, KDialog::marginHint());
-    layout->setSpacing( KDialog::spacingHint() );
+    setMargins(layout, KexiUtils::marginHint());
+    layout->setSpacing(KexiUtils::spacingHint());
 }
 
 void KexiUtils::setMargins(QLayout *layout, int value)

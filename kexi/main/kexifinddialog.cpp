@@ -24,12 +24,12 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdialog.h>
 #include <kaction.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 
+#include <QDialog>
 #include <QCheckBox>
 #include <QLabel>
 #include <QLayout>
@@ -99,8 +99,8 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     setupUi(this);
     m_search->setCurrentIndex(
         (int)KexiSearchAndReplaceViewInterface::Options::SearchDown);
-    layout()->setMargin(KDialog::marginHint());
-    layout()->setSpacing(KDialog::spacingHint());
+    layout()->setMargin(KexiUtils::marginHint());
+    layout()->setSpacing(KexiUtils::spacingHint());
     KAction *a = KStandardAction::findNext(0, 0, 0);
     m_btnFind->setText(a->text());
     m_btnFind->setIcon(a->icon());

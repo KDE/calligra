@@ -37,8 +37,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdialog.h>
 
+#include <QDialog>
 #include <QLayout>
 #include <QCheckBox>
 #include <QPaintEvent>
@@ -67,7 +67,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+        + KexiUtils::marginHint();
     //not needed in grid:
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
