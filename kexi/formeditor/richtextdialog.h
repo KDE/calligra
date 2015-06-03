@@ -20,9 +20,9 @@
 #ifndef RICHTEXTEDIT_DIALOG_H
 #define RICHTEXTEDIT_DIALOG_H
 
-#include <kdialog.h>
-
 #include <kexi_export.h>
+
+#include <QDialog>
 
 class QTextCharFormat;
 
@@ -31,7 +31,7 @@ namespace KFormDesigner
 
 //! A simple dialog to edit rich text
 /*! It allows to change font name, style and color, alignment. */
-class KFORMEDITOR_EXPORT RichTextDialog : public KDialog
+class KFORMEDITOR_EXPORT RichTextDialog : public QDialog
 {
     Q_OBJECT
 

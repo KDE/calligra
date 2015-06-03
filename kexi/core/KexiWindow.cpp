@@ -39,9 +39,9 @@
 #include <QTimer>
 #include <QEvent>
 #include <QCloseEvent>
+#include <QDialog>
 
 #include <kdebug.h>
-#include <kdialog.h>
 
 //----------------------------------------------------------
 
@@ -171,7 +171,7 @@ KexiWindow::~KexiWindow()
 void KexiWindow::createSubwidgets()
 {
     d->mainLyr = new QVBoxLayout(this);
-    d->mainLyr->setContentsMargins(0, KDialog::marginHint() / 2, 0, 0);
+    d->mainLyr->setContentsMargins(0, KexiUtils::marginHint() / 2, 0, 0);
     d->stack = new QStackedWidget(this);
     d->mainLyr->addWidget(d->stack);
 }
