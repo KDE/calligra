@@ -24,6 +24,7 @@
 #include <QGridLayout>
 #include <QFrame>
 #include <QPushButton>
+#include <QDialogButtonBox>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -62,18 +63,18 @@ TabStopDialog::Private::~Private()
 
 }
 
-TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Private())
+TabStopDialog::TabStopDialog(QWidget *parent)    : QDialog(parent), d(new Private())
 {
     setObjectName("tabstop_dialog");
     setModal(true);
     setWindowTitle(xi18nc("@title:window", "Edit Tab Order"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
 
-    QFrame *frame = new QFrame(this);
-    setMainWidget(frame);
-    QGridLayout *l = new QGridLayout(frame);
-    d->widgetTree = new WidgetTreeWidget(frame,
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    QGridLayout *l = new QGridLayout;
+    mainLayout->addLayout(l);
+    d->widgetTree = new WidgetTreeWidget(this,
         WidgetTreeWidget::DisableSelection | WidgetTreeWidget::DisableContextMenu);
     d->widgetTree->setObjectName("tabstops:widgetTree");
     d->widgetTree->setDragEnabled(true);
@@ -108,8 +109,18 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
     connect(d->check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
     l->addWidget(d->check, 1, 0, 1, 2);
 
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     updateGeometry();
-    setInitialSize(QSize(500 + d->btnUp->width(), qMax(400, d->widgetTree->height())));
+    resize(QSize(500 + d->btnUp->width(), qMax(400, d->widgetTree->height())));
 }
 
 TabStopDialog::~TabStopDialog()
@@ -140,7 +151,7 @@ int TabStopDialog::exec(Form *form)
         firstItem->setSelected(true);
     }
 
-    if (QDialog::Rejected == KDialog::exec())
+    if (QDialog::Rejected == QDialog::exec())
         return QDialog::Rejected;
 
     //accepted

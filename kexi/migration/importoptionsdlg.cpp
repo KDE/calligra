@@ -22,32 +22,37 @@
 
 #include <KexiIcon.h>
 
+#include <kconfig.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
+
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include <QDir>
 #include <QLabel>
 #include <QTextCodec>
 #include <QCheckBox>
 #include <QGridLayout>
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <KSharedConfig>
-
 using namespace KexiMigration;
 
 OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selectedEncoding,
                              QWidget* parent)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
     setWindowTitle(xi18nc("@title:window", "Advanced Import Options"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
     setWindowIcon(koIcon("configure"));
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
     QWidget *plainPage = new QWidget(this);
-    setMainWidget(plainPage);
+    mainLayout->addWidget(plainPage);
     QGridLayout *lyr = new QGridLayout(plainPage);
 
     m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, selectedEncoding);
@@ -85,6 +90,15 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
         m_chkAlwaysUseThisEncoding->setChecked(true);
     }
 
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     adjustSize();
     m_encodingComboBox->setFocus();
 }
@@ -107,6 +121,6 @@ void OptionsDialog::accept()
     else
         importExportGroup.deleteEntry("defaultEncodingForMSAccessFiles");
 
-    KDialog::accept();
+    QDialog::accept();
 }
 
