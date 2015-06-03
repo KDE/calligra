@@ -27,6 +27,8 @@
 #ifndef KEXITABLESCROLLAREA_H
 #define KEXITABLESCROLLAREA_H
 
+#include "kexidatatable_export.h"
+
 #include <QScrollArea>
 #include <QVariant>
 #include <QToolTip>

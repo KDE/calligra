@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include "kformdesigner_export.h"
 
 #include <QMetaObject>
 #include <QDomDocument>
@@ -38,6 +38,7 @@
 #include <QImageWriter>
 
 #include <KoFileDialog.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kacceleratormanager.h>
 

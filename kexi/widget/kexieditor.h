@@ -22,6 +22,8 @@
 #ifndef KEXIEDITOR_H
 #define KEXIEDITOR_H
 
+#include "kexiextwidgets_export.h"
+
 #include <KexiView.h>
 
 namespace KTextEditor
