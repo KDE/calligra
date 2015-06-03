@@ -22,7 +22,7 @@
 #define KEXIICON_H
 
 #ifdef KOICON_H
-# error Don't use with KoIcon.h!
+# error "Don't use with KoIcon.h!"
 #endif
 
 #include <QApplication>
