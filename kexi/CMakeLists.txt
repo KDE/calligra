@@ -86,7 +86,7 @@ if(KEXI_MOBILE)
   add_subdirectory( mobile )
 else()
   set(kexi_SRCS main.cpp )
-  file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
+  file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakexi.png")
   ecm_add_app_icon(kexi_SRCS ICONS ${ICONS_SRCS})
   add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi
