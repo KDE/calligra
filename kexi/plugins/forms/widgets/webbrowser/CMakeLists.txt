@@ -36,4 +36,9 @@ install(TARGETS kformdesigner_webbrowser  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_
 install( FILES  kformdesigner_webbrowser.desktop DESTINATION
         ${SERVICES_INSTALL_DIR}/calligra)
 
-ecm_install_icons(${DATA_INSTALL_DIR}/kexi/icons)
+ecm_install_icons(ICONS
+    16-actions-web_browser.png
+    22-actions-web_browser.png
+    DESTINATION ${DATA_INSTALL_DIR}/kexi/icons
+    THEME hicolor
+)
