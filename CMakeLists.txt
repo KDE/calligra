@@ -730,6 +730,18 @@ endif()
 macro_optional_find_package(Libgit2)
 macro_optional_find_package(Libqgit2)
 
+find_package(KDb 1.0.0)
+macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
+                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
+
+find_package(KReport 2.96.0)
+macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
+                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+
+find_package(KProperty 2.96.0)
+macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
+                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
+
 ##
 ## Generate a file for prefix information
 ##
@@ -899,6 +911,12 @@ calligra_drop_product_on_bad_condition( PART_STAGE
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
+)
+
+calligra_drop_product_on_bad_condition( APP_KEXI
+    KDb_FOUND "KDb not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_KRITA
