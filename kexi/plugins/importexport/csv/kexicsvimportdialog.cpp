@@ -57,9 +57,9 @@
 #include <QApplication>
 #include <QStyledItemDelegate>
 #include <QProgressDialog>
+#include <QDialog>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcharsets.h>
@@ -94,6 +94,8 @@
 
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
+#include <KConfigGroup>
+#include <KGuiItem>
 
 #define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
 
@@ -243,10 +245,10 @@ private:
 
 // --
 
-const KDialog::ButtonCode FinishButton = KDialog::User1;
-const KDialog::ButtonCode NextButton = KDialog::User2;
-const KDialog::ButtonCode BackButton = KDialog::User3;
-const KDialog::ButtonCode ConfigureButton = KDialog::Help;
+const QDialogButtonBox::ButtonRole FinishButton = QDialog::User1;
+const QDialog::ButtonRole NextButton = QDialog::User2;
+const QDialog::ButtonRole BackButton = QDialog::User3;
+const QDialog::ButtonRole ConfigureButton = QDialogButtonBox::Help;
 
 KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         : KAssistantDialog(parent),
@@ -286,12 +288,12 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     setObjectName("KexiCSVImportDialog");
     setSizeGripEnabled(true);
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
-    KDialog::centerOnScreen(this);
 
-    setButtonGuiItem(ConfigureButton, KStandardGuiItem::configure());
+    // KEXI3 ?
+    KGuiItem::assign(button(ConfigureButton), KStandardGuiItem::configure());
 
-    showButton(FinishButton, false);
-    showButton(BackButton, false);
+    button(FinishButton)->setEnabled(false);
+    button(BackButton)->setEnabled(false);
 
     KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     m_maximumRowsForPreview = importExportGroup.readEntry(
@@ -303,8 +305,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 
     m_pkIcon = koSmallIcon("key");
 
+    button(ConfigureButton)->setVisible(m_mode != File);
     if (m_mode == File) {
-        showButton(ConfigureButton, false);
         createFileOpenPage();
     } else if (m_mode == Clipboard) {
         QString subtype("plain");
@@ -332,7 +334,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 
     /*if ( m_mode == Clipboard )
       {
-      setCaption( xi18n( "Inserting From Clipboard" ) );
+      setWindowTitle( xi18n( "Inserting From Clipboard" ) );
       QMimeSource * mime = QApplication::clipboard()->data();
       if ( !mime )
       {
@@ -465,7 +467,7 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
         return;
     }
 
-    enableButton(NextButton, true);
+    button(NextButton)->setEnabled(true);
     KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
             KexiMainWindowIface::global()->project()->dbConnection(),
             item->identifier()
@@ -483,14 +485,14 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
 
 void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
 {
-    enableButton(NextButton, (page == m_saveMethodPage ? false : true));
-    showButton(FinishButton, (page == m_importPage ? true : false));
+    button(NextButton)->setEnabled(page == m_saveMethodPage ? false : true);
+    button(FinishButton)->setEnabled(page == m_importPage ? true : false);
     if (page == m_importPage) {
-        setButtonGuiItem(FinishButton, KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
+        KGuiItem::assign(button(FinishButton), KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
     }
-    showButton(ConfigureButton, (page == m_optionsPage ? true : false));
-    showButton(NextButton, (page == m_importPage ? false : true));
-    showButton(BackButton, (page == m_openFilePage ? false : true));
+    button(ConfigureButton)->setEnabled(page == m_optionsPage ? true : false);
+    button(NextButton)->setEnabled(page == m_importPage ? false : true);
+    button(BackButton)->setEnabled(page == m_openFilePage ? false : true);
 
     if (page == m_saveMethodPage && prev == m_tableNamePage && m_partItemForSavedTable) {
         if (m_newTable) {
@@ -562,7 +564,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
         } else if (!m_newTable) {
             KexiPart::Item *i = m_tablesList->selectedPartItem();
             if (!i) {
-                enableButton(NextButton, false);
+                button(NextButton)->setEnabled(false);
             }
             slotShowSchema(i);
         }
@@ -859,7 +861,7 @@ bool KexiCSVImportDialog::openData()
         m_file = 0;
         KMessageBox::sorry(this, xi18n("Cannot open input file <filename>%1</filename>.",
                                       QDir::toNativeSeparators(m_fname)));
-        enableButtonOk(false);
+        button(QDialogButtonBox::Ok)->setEnabled(false);
         m_cancelled = true;
         if (parentWidget())
             parentWidget()->raise();
@@ -878,7 +880,7 @@ void KexiCSVImportDialog::fillTable()
     KexiUtils::WaitCursor wc(true);
     repaint();
     m_blockUserEvents = true;
-    enableButtonCancel(true);
+    button(QDialogButtonBox::Cancel)->setEnabled(true);
     KexiUtils::WaitCursor wait;
 
     if (m_table->rowCount() > 0) //to accept editor
@@ -1786,13 +1788,13 @@ void KexiCSVImportDialog::dropDestinationTable(KexiProject* project, KexiPart::I
 //! Used in emergency by accept()
 void KexiCSVImportDialog::raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable)
 {
-    enableButton(FinishButton, true);
-    setButtonGuiItem(FinishButton, KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
+    button(FinishButton)->setEnabled(true);
+    KGuiItem::assign(button(FinishButton), KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
     project->deleteUnstoredItem(partItemForSavedTable);
     delete m_destinationTableSchema;
     m_destinationTableSchema = 0;
     m_conn = 0;
-    enableButton(BackButton, true);
+    button(BackButton)->setEnabled(true);
     m_importInProgress = false;
     m_importingProgressBar->hide();
 }
@@ -1955,8 +1957,8 @@ void KexiCSVImportDialog::import()
     }
 
     m_importInProgress = true;
-    enableButton(BackButton, false);
-    enableButton(FinishButton, false);
+    button(BackButton)->setEnabled(false);
+    button(FinishButton)->setEnabled(false);
     KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
@@ -2045,10 +2047,10 @@ void KexiCSVImportDialog::import()
     m_importInProgress = false;
     //kDebug()<<"IMPORT DONE";
     setButtonGuiItem(FinishButton, KStandardGuiItem::open());
-    showButton(FinishButton, true);
-    setButtonGuiItem(KDialog::Cancel, KStandardGuiItem::close());
-    showButton(NextButton, false);
-    showButton(BackButton, false);
+    button(FinishButton)->setEnabled(true);
+    KGuiItem::assign(button(QDialogButtonBox::Cancel), KStandardGuiItem::close());
+    button(NextButton)->setEnabled(false);
+    button(BackButton)->setEnabled(false);
     m_conn = 0;
     d->imported = true;
 }

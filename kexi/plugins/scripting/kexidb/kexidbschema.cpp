@@ -21,6 +21,7 @@
 #include "kexidbfieldlist.h"
 
 #include <QRegExp>
+
 #include <kdebug.h>
 
 using namespace Scripting;

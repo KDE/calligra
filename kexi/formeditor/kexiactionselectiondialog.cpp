@@ -41,6 +41,7 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QStackedWidget>
+#include <QDialogButtonBox>
 
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
@@ -424,20 +425,19 @@ static QLabel *createSelectActionLabel(QWidget *parent, QWidget *buddy)
 KexiActionSelectionDialog::KexiActionSelectionDialog(
     QWidget *parent, const KexiFormEventAction::ActionData& action,
     const QString& actionWidgetName)
-        : KDialog(parent)
+        : QDialog(parent)
         , d(new Private())
 {
     setModal(true);
     setObjectName("actionSelectorDialog");
     setWindowTitle(xi18nc("@title:window", "Assigning Action to Button"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    d->actionWidgetName = actionWidgetName;
-    setButtonGuiItem(KDialog::Ok,
-                     KGuiItem(xi18nc("Assign action", "&Assign"), koIconName("dialog-ok"), xi18n("Assign action")));
 
+    // layout
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
     QWidget *mainWidget = new QWidget(this);
     mainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    setMainWidget(mainWidget);
+    mainLayout->addWidget(mainWidget);
 
     /*    lbl 1
        +------------+ +-------------------------------+
@@ -483,7 +483,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->secondAnd3rdColumnGrLyr = new QGridLayout(d->secondAnd3rdColumnMainWidget);
-    KDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KDialog::spacingHint());
+    QDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KexiUtils::spacingHint());
     d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
@@ -559,6 +559,19 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
         d->actionCategoriesListView->selectAction("noaction");
         d->actionCategoriesListView->setFocus();
     }
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    d->actionWidgetName = actionWidgetName;
+    buttonBox->button(QDialogButtonBox::Ok)->setText(xi18nc("Assign action", "&Assign"));
+    //buttonBox->button(QDialogButtonBox::Ok)->setIcon(koIconName("dialog-ok"));
+    buttonBox->button(QDialogButtonBox::Ok)->setToolTip(xi18n("Assign action"));
+    mainLayout->addWidget(buttonBox);
 }
 
 KexiActionSelectionDialog::~KexiActionSelectionDialog()
@@ -620,7 +633,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 d->kactionPageWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
                 QVBoxLayout *vlyr = new QVBoxLayout(d->kactionPageWidget);
                 KexiUtils::setMargins(vlyr, 0);
-                vlyr->setSpacing(KDialog::spacingHint());
+                vlyr->setSpacing(KexiUtils::spacingHint());
                 d->kactionListView = new KActionsListView(d->kactionPageWidget);
                 d->kactionListView->init();
                 d->kactionPageLabel  = createSelectActionLabel(d->kactionPageWidget, d->kactionListView);
@@ -645,7 +658,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                     QSizePolicy::Minimum, QSizePolicy::Minimum);
                 QVBoxLayout *vlyr = new QVBoxLayout(d->currentFormActionsPageWidget);
                 KexiUtils::setMargins(vlyr, 0);
-                vlyr->setSpacing(KDialog::spacingHint());
+                vlyr->setSpacing(KexiUtils::spacingHint());
                 d->currentFormActionsListView = new CurrentFormActionsListView(
                     d->currentFormActionsPageWidget);
                 d->currentFormActionsListView->init();
@@ -742,9 +755,9 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
 
 void KexiActionSelectionDialog::updateOKButtonStatus()
 {
-    QPushButton *btn = button(Ok);
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
-    
+
     //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
+    QPushButton *btn = button(QDialogButtonBox::Ok);
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }

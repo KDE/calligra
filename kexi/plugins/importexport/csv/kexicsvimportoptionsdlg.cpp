@@ -21,17 +21,21 @@
 #include <widget/kexicharencodingcombobox.h>
 #include <kexiutils/utils.h>
 
+#include <kconfig.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 #include <QLabel>
 #include <QLayout>
 #include <QTextCodec>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QGridLayout>
-
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <KSharedConfig>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 KexiCSVImportOptions::DateFormat dateFormatFromString(const QString& s)
 {
@@ -95,19 +99,18 @@ bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions & opt) const
 
 KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     const KexiCSVImportOptions& options, QWidget* parent)
-        : KDialog(parent)
+        : QDialog(parent)
 {
-    setWindowTitle(xi18nc("@title:window", "CSV Import Options"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
     setObjectName("KexiCSVImportOptionsDialog");
+    setWindowTitle(xi18nc("@title:window", "CSV Import Options"));
     setModal(true);
-    QWidget *plainPage = new QWidget(this);
-    setMainWidget(plainPage);
 
-    QGridLayout *lyr = new QGridLayout(plainPage);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    QGridLayout *lyr = new QGridLayout;
+    mainLayout->addLayout(lyr);
 
-    QGroupBox* textEncodingGroupBox = new QGroupBox(xi18n("Text encoding"), plainPage);
+    QGroupBox* textEncodingGroupBox = new QGroupBox(xi18n("Text encoding"), this);
     lyr->addWidget(textEncodingGroupBox, 0, 0, 1, 2);
     QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout;
     KexiUtils::setStandardMarginsAndSpacing(textEncodingGroupBoxLyr);
@@ -118,13 +121,13 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_encodingComboBox = new KexiCharacterEncodingComboBox(textEncodingGroupBox, options.encoding);
     textEncodingGroupBoxLyr->addWidget(m_encodingComboBox);
 
-    lyr->addItem(new QSpacerItem(20, KDialog::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
+    lyr->addItem(new QSpacerItem(20, KexiUtils::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
         xi18n("Always use this encoding when importing CSV data files"), textEncodingGroupBox);
     textEncodingGroupBoxLyr->addWidget(m_chkAlwaysUseThisEncoding);
 
-    m_comboDateFormat = new QComboBox(plainPage);
+    m_comboDateFormat = new QComboBox(this);
     m_comboDateFormat->setObjectName("m_comboDateFormat");
     m_comboDateFormat->addItem(xi18nc("Date format: Auto", "Auto"));
     QString year(xi18n("year")), month(xi18n("month")), day(xi18n("day"));
@@ -139,18 +142,18 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
         mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString());
     lyr->addWidget(m_comboDateFormat, 1, 1);
 
-    QLabel* lblDateFormat = new QLabel(xi18n("Date format:"), plainPage);
+    QLabel* lblDateFormat = new QLabel(xi18n("Date format:"), this);
     lblDateFormat->setBuddy(m_comboDateFormat);
     lyr->addWidget(lblDateFormat, 1, 0);
 
     m_chkStripWhiteSpaceInTextValues = new QCheckBox(
-        xi18n("Strip leading and trailing blanks off of text values"), plainPage);
+        xi18n("Strip leading and trailing blanks off of text values"), this);
     lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
 
     m_chkImportNULLsAsEmptyText = new QCheckBox(
-                xi18n("Import missing text values as empty texts"), plainPage);
+                xi18n("Import missing text values as empty texts"), this);
     lyr->addWidget(m_chkImportNULLsAsEmptyText, 3, 0, 1, 2);
-    lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
+    lyr->addItem(new QSpacerItem(30, KexiUtils::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
     //update widgets
     m_encodingComboBox->setSelectedEncoding(options.encoding);
     if (options.defaultEncodingExplicitySet) {
@@ -159,6 +162,16 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_comboDateFormat->setCurrentIndex((int)options.dateFormat);
     m_chkStripWhiteSpaceInTextValues->setChecked(options.trimmedInTextValuesChecked);
     m_chkImportNULLsAsEmptyText->setChecked(options.nullsImportedAsEmptyTextChecked);
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    okButton->setDefault(true);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 
     adjustSize();
     m_encodingComboBox->setFocus();
@@ -198,6 +211,6 @@ void KexiCSVImportOptionsDialog::accept()
     importExportGroup.writeEntry("ImportNULLsAsEmptyText",
                                  m_chkImportNULLsAsEmptyText->isChecked());
 
-    KDialog::accept();
+    QDialog::accept();
 }
 

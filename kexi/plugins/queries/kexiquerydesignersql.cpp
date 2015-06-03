@@ -24,11 +24,11 @@
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
+#include <QDialog>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kaction.h>
-#include <kdialog.h>
 
 #include <KexiIcon.h>
 
@@ -127,7 +127,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 
     d->splitter->setCollapsible(1, false);
     d->statusHLyr = new QHBoxLayout(d->statusMainWidget);
-    d->statusHLyr->setContentsMargins(0, KDialog::marginHint() / 2, 0, KDialog::marginHint() / 2);
+    d->statusHLyr->setContentsMargins(0, KexiUtils::marginHint() / 2, 0, KexiUtils::marginHint() / 2);
     d->statusHLyr->setSpacing(0);
 
     d->pixmapStatus = new QLabel(d->statusMainWidget);

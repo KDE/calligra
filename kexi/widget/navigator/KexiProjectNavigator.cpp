@@ -33,6 +33,7 @@
 #include <QEvent>
 #include <QLabel>
 #include <QMenu>
+#include <QDialog>
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -41,7 +42,6 @@
 #include <kglobal.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kdialog.h>
 #include <KSharedConfig>
 
 #include <KexiIcon.h>
@@ -58,7 +58,6 @@
 #include <db/utils.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexi_global.h>
-
 
 class KexiProjectNavigator::Private
 {

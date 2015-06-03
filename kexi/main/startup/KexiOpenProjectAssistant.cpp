@@ -86,7 +86,7 @@ void KexiMainOpenProjectPage::init()
 {
     // file-based:
     QVBoxLayout* fileSelectorLayout = new QVBoxLayout(m_fileSelectorWidget);
-    fileSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+    fileSelectorLayout->setContentsMargins(0, KexiUtils::marginHint() * 2, 0, 0);
     fileSelectorLayout->addWidget(fileSelector);
     fileSelector->show();
 }
@@ -105,13 +105,13 @@ void KexiMainOpenProjectPage::tabChanged(int index)
         if (KexiDB::hasDatabaseServerDrivers()) {
             if (!connSelector) {
                 // server-based:
-                connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+                connSelectorLayout->setContentsMargins(0, KexiUtils::marginHint() * 2, 0, 0);
                 QLabel* connSelectorLabel = new QLabel(
                     xi18nc("@info",
                           "<para>Select database server's connection with project you wish to open.</para>"
                           "<para>Here you may also add, edit or remove connections from the list.</para>"));
                 connSelectorLayout->addWidget(connSelectorLabel);
-                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelectorLayout->addSpacing(KexiUtils::marginHint());
                 connSelector = new KexiConnectionSelectorWidget(
                     Kexi::connset(),
                     "kfiledialog:///OpenExistingOrCreateNewProject",
@@ -131,7 +131,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
                 setNextButtonVisible(false);
                 setDescription(QString());
                 m_errorMessagePopup = new KexiServerDriverNotFoundMessage(m_connSelectorWidget);
-                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelectorLayout->addSpacing(KexiUtils::marginHint());
                 connSelectorLayout->addWidget(m_errorMessagePopup);
                 connSelectorLayout->setAlignment(m_errorMessagePopup, Qt::AlignTop);
                 m_errorMessagePopup->setAutoDelete(false);

@@ -18,9 +18,10 @@
 */
 
 #include "KexiBugReportDialog.h"
-
-#include <QGridLayout>
-#include <QLabel>
+#include "KexiUserFeedbackAgent.h"
+#include <core/KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
+#include <kexi_version.h>
 
 #include <KAboutData>
 #include <KComponentData>
@@ -28,10 +29,8 @@
 #include <KTitleWidget>
 #include <KToolInvocation>
 
-#include <core/KexiMainWindowIface.h>
-#include <kexiutils/utils.h>
-#include <kexi_version.h>
-#include "KexiUserFeedbackAgent.h"
+#include <QGridLayout>
+#include <QLabel>
 
 KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
  : KBugReport(parent, true /*modal*/, copyAboutData())
@@ -115,7 +114,7 @@ void KexiBugReportDialog::accept()
     url.addQueryItem("op_sys", m_op_sys);
     url.addQueryItem("rep_platform", m_rep_platform);
     KToolInvocation::invokeBrowser(url.url());
-    KDialog::accept();
+    QDialog::accept();
 }
 
 void KexiBugReportDialog::collectData()

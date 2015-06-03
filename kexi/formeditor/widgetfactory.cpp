@@ -24,8 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kdialog.h>
-# include <keditlistwidget.h>
+#include <keditlistwidget.h>
 
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -43,6 +42,10 @@
 #include <KProperty>
 #include <KPropertySet>
 #include <kexiutils/utils.h>
+
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 using namespace KFormDesigner;
 
@@ -145,16 +148,27 @@ void WidgetFactory::disableFilter(QWidget *w, Container *container)
 
 bool WidgetFactory::editList(QWidget *w, QStringList &list) const
 {
-    KDialog dialog(w->topLevelWidget());
+    QDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
     dialog.setWindowTitle(xi18nc("@title:window", "Edit Contents of %1", w->objectName()));
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    dialog.setLayout(mainLayout);
     KEditListWidget *edit = new KEditListWidget(&dialog);
     edit->setObjectName("editlist");
-    dialog.setMainWidget(edit);
     edit->insertStringList(list);
+    mainLayout->addWidget(edit);
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mainLayout->addWidget(buttonBox);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
 
     if (dialog.exec() == QDialog::Accepted) {
         list = edit->items();

@@ -24,6 +24,8 @@
 #include <QLayout>
 #include <QAction>
 #include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 #include <ktoolbar.h>
 #include <kfontrequester.h>
@@ -66,20 +68,17 @@ RichTextDialog::Private::~Private()
 }
 
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
-    : KDialog(parent), d(new Private())
+    : QDialog(parent), d(new Private())
 {
     setObjectName("richtext_dialog");
     setModal(true);
     setWindowTitle(xi18nc("@title:window", "Edit Rich Text"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
 
-    QFrame *frame = new QFrame(this);
-    setMainWidget(frame);
-    QVBoxLayout *lyr = new QVBoxLayout(frame);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
 
     d->toolbar = new KToolBar(frame);
-    lyr->addWidget(d->toolbar);
+    mainLayout->addWidget(d->toolbar);
 
     d->fontCombo = new KFontRequester(d->toolbar);
     d->fontComboAction = d->toolbar->addWidget(d->fontCombo);
@@ -123,10 +122,9 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     connect(d->toolbar, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(slotActionTriggered(QAction*)));
 
-    d->edit = new KTextEdit(text, frame);
-    lyr->addWidget(d->edit);
+    d->edit = new KTextEdit(text);
     d->edit->setAcceptRichText(true);
-
+    mainLayout->addWidget(d->edit);
 
     connect(d->edit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(slotCurrentCharFormatChanged(QTextCharFormat)));
@@ -134,6 +132,16 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     d->edit->moveCursor(QTextCursor::End);
     slotCurrentCharFormatChanged(d->edit->currentCharFormat());
     d->edit->setFocus();
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 }
 
 RichTextDialog::~RichTextDialog()

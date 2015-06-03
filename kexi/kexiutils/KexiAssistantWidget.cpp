@@ -21,9 +21,9 @@
 #include "KexiAssistantPage.h"
 #include "KexiAnimatedLayout.h"
 
-#include <kdialog.h>
 #include <kdebug.h>
 
+#include <QDialog>
 #include <QStyle>
 #include <QStack>
 #include <QPointer>
@@ -64,7 +64,7 @@ KexiAssistantWidget::KexiAssistantWidget(QWidget* parent)
     d->lyr = new KexiAnimatedLayout;
     mainLyr->addLayout(d->lyr);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+        + KexiUtils::marginHint();
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 }
 
