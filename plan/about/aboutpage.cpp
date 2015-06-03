@@ -57,9 +57,9 @@ QString KPlatoAboutPage::main()
 
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
     res = res.arg( "" );
 
@@ -90,9 +90,9 @@ QString KPlatoAboutPage::intro()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -136,9 +136,9 @@ QString KPlatoAboutPage::tips()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -166,9 +166,9 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
     const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
     const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
