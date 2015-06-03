@@ -42,4 +42,9 @@ install(TARGETS kformdesigner_mapbrowser  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_
 install( FILES  kformdesigner_mapbrowser.desktop DESTINATION
         ${SERVICES_INSTALL_DIR}/calligra)
 
-ecm_install_icons(${DATA_INSTALL_DIR}/kexi/icons)
+ecm_install_icons(ICONS
+    16-actions-map_browser.png
+    22-actions-map_browser.png
+    DESTINATION ${DATA_INSTALL_DIR}/kexi/icons
+    THEME hicolor
+)
