@@ -13,8 +13,9 @@ set(kexidataviewcommon_LIB_SRCS
    kexiformdataiteminterface.cpp
 )
 
-
 add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
+
+generate_export_header(kexidataviewcommon)
 
 target_link_libraries(
     kexidataviewcommon

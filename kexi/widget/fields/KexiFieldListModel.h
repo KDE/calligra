@@ -21,9 +21,10 @@
 #ifndef KEXIFIELDLISTMODEL_H
 #define KEXIFIELDLISTMODEL_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QModelIndex>
 #include <QPixmap>
-#include <kexi_export.h>
 
 namespace KexiDB
 {

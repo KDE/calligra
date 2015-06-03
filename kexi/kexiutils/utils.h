@@ -30,9 +30,9 @@
 #include <QFont>
 #include <QFrame>
 #include <QFontDatabase>
+#include <QMimeType>
 
-#include <kmimetype.h>
-#include <kiconloader.h>
+#include <KIconLoader>
 
 class QColor;
 class QMetaProperty;
@@ -168,12 +168,12 @@ private:
  eg. "Image files (*.png *.xpm *.jpg)", otherwise KFileDialog -compatible
  filter string is generated, eg. "*.png *.xpm *.jpg|Image files (*.png *.xpm *.jpg)".
  "\\n" is appended if \a kdeFormat is true, otherwise ";;" is appended. */
-KEXIUTILS_EXPORT QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true);
+KEXIUTILS_EXPORT QString fileDialogFilterString(const QMimeType &mime, bool kdeFormat = true);
 
-/*! @overload QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true) */
-KEXIUTILS_EXPORT QString fileDialogFilterString(const QString& mimeString, bool kdeFormat = true);
+/*! @overload QString fileDialogFilterString(const QMimeType &mime, bool kdeFormat = true) */
+KEXIUTILS_EXPORT QString fileDialogFilterString(const QString& mimeName, bool kdeFormat = true);
 
-/*! Like QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true)
+/*! Like QString fileDialogFilterString(const QMimeType &mime, bool kdeFormat = true)
  but returns a list of filter strings. */
 KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
 

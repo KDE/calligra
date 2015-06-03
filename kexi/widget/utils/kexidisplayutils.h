@@ -20,9 +20,11 @@
 #ifndef KEXIDISPUTILS_H
 #define KEXIDISPUTILS_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QFont>
 #include <QColor>
+
 class QWidget;
 
 //! \brief A set of utilities related to displaying common elements in Kexi, like e.g. (autonumber) sign

@@ -20,7 +20,8 @@
 #ifndef KEXITEXTFORMATTER_H
 #define KEXITEXTFORMATTER_H
 
-#include <kexi_export.h>
+#include "kexidatatable_export.h"
+
 #include <db/field.h>
 
 //! @short Text formatter used to format QVariant values to text for displaying and back to QVariant

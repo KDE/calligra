@@ -20,6 +20,7 @@
 #ifndef KEXIFORMDATAITEMINTERFACE_H
 #define KEXIFORMDATAITEMINTERFACE_H
 
+#include "kexidataviewcommon_export.h"
 #include <widget/utils/kexidisplayutils.h>
 #include <core/kexidataiteminterface.h>
 #include <QWidget>

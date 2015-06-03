@@ -20,10 +20,11 @@
 #ifndef KEXIFILEWIDGET_H
 #define KEXIFILEWIDGET_H
 
-#include <QSet>
-#include <kfilewidget.h>
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
+#include <kfilewidget.h>
+
+#include <QSet>
 
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */
