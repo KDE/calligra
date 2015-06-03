@@ -20,12 +20,12 @@
 #ifndef WIDGETWITHSUBPROPERTIESINTERFACE_H
 #define WIDGETWITHSUBPROPERTIESINTERFACE_H
 
+#include "kformdesigner_export.h"
+
 #include <QWidget>
 #include <QPointer>
 #include <QVariant>
 #include <QSet>
-
-#include <kexi_export.h>
 
 namespace KFormDesigner
 {

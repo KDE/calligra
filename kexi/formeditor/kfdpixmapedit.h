@@ -20,9 +20,9 @@
 #ifndef KFORMEDITOR_PIXMAPEDIT_H
 #define KFORMEDITOR_PIXMAPEDIT_H
 
-#include <KProperty/PixmapEdit>
+#include "kformdesigner_export.h"
 
-#include <kexi_export.h>
+#include <KProperty/PixmapEdit>
 
 namespace KFormDesigner
 {
