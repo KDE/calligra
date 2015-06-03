@@ -21,6 +21,7 @@
 #ifndef KexiDBSubForm_H
 #define KexiDBSubForm_H
 
+#include "kexiformutils_export.h"
 #include <QScrollArea>
 #include <formeditor/form.h>
 

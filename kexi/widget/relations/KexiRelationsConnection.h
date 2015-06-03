@@ -21,8 +21,9 @@
 #ifndef KexiRelationsConnection_H
 #define KexiRelationsConnection_H
 
+#include "kexirelationsview_export.h"
+
 #include <QString>
-#include <kexi_export.h>
 
 class QPainter;
 class KexiRelationsTableContainer;

@@ -21,6 +21,8 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
+#include "kexiformutils_export.h"
+
 #include <QScrollArea>
 #include <QPixmap>
 #include <QEvent>
@@ -32,8 +34,6 @@
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
-
-#include <kexi_export.h>
 
 class KexiRecordNavigator;
 class KexiDBForm;

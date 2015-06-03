@@ -21,14 +21,16 @@
 #ifndef KexiRelationsTableContainer_H
 #define KexiRelationsTableContainer_H
 
+#include "kexirelationsview_export.h"
+
+#include <widget/fields/KexiFieldListView.h>
+
 #include <QFrame>
 #include <QStringList>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QDropEvent>
-
-#include <widget/fields/KexiFieldListView.h>
 
 class KexiRelationsScrollArea;
 class KexiRelationViewTable;

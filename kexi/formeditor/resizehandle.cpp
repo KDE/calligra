@@ -18,14 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <QPainter>
-#include <QCursor>
-#include <QMouseEvent>
-#include <QPaintEvent>
-
 #include "form.h"
 #include "resizehandle.h"
 #include "container.h"
@@ -33,6 +25,14 @@
 #include "widgetlibrary.h"
 
 #include <KPropertySet>
+
+#include <kdebug.h>
+#include <klocale.h>
+
+#include <QPainter>
+#include <QCursor>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10

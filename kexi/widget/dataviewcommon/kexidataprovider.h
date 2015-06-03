@@ -20,6 +20,7 @@
 #ifndef KEXIFORMDATAPROVIDER_H
 #define KEXIFORMDATAPROVIDER_H
 
+#include "kexidataviewcommon_export.h"
 #include "kexiformdataiteminterface.h"
 #include <QSet>
 #include <QList>

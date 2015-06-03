@@ -20,7 +20,7 @@
 #ifndef KEXISTARTUPFILEHANDLER_H
 #define KEXISTARTUPFILEHANDLER_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
 #include <QSet>
 #include <QObject>

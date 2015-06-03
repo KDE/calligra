@@ -21,10 +21,10 @@
 #ifndef FORMCONNECTIONDIALOG_H
 #define FORMCONNECTIONDIALOG_H
 
+#include "kformdesigner_export.h"
+
 #include <QLabel>
 #include <kdialog.h>
-
-#include <kexi_export.h>
 
 namespace KexiDB
 {
