@@ -148,6 +148,7 @@ const QString KexiDBField::caption()
 {
     return m_field->caption();
 }
+
 void KexiDBField::setCaption(const QString& caption)
 {
     m_field->setCaption(caption);

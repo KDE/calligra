@@ -20,9 +20,10 @@
 #ifndef KEXIFINDDIALOG_H
 #define KEXIFINDDIALOG_H
 
-#include <QDialog>
 #include "ui_kexifinddialog.h"
 #include <core/kexisearchandreplaceiface.h>
+
+#include <QDialog>
 
 class KAction;
 
