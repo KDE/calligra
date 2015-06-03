@@ -30,6 +30,10 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 KexiNameDialogValidator::KexiNameDialogValidator()
 {
@@ -61,7 +65,7 @@ public:
 };
 
 KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
-        : KDialog(parent)
+        : QDialog(parent)
         , d(new Private)
 {
     setMainWidget(new QWidget(this));
@@ -73,7 +77,7 @@ KexiNameDialog::KexiNameDialog(const QString& message,
                                const QString& nameLabel, const QString& nameText,
                                const QString& captionLabel, const QString& captionText,
                                QWidget * parent)
-        : KDialog(parent)
+        : QDialog(parent)
         , d(new Private)
 {
     setMainWidget(new QWidget(this));
@@ -92,9 +96,13 @@ void KexiNameDialog::init()
     d->checkIfObjectExists = false;
     d->allowOverwriting = false;
     d->validator = 0;
-    setButtons(Ok | Cancel | Help);
-    QGridLayout *lyr = new QGridLayout(mainWidget());
-    d->icon = new QLabel(mainWidget());
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    QGridLayout *lyr = new QGridLayout;
+    mainLayout->addLayout(lyr);
+    d->icon = new QLabel;
     d->icon->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Preferred);
     sp.setHorizontalStretch(1);
@@ -109,8 +117,18 @@ void KexiNameDialog::init()
     lyr->addItem(new QSpacerItem(25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
     lyr->addItem(new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding), 1, 1);
     connect(d->widget, SIGNAL(messageChanged()), this, SLOT(updateSize()));
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    okButton->setEnabled(true);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     updateSize();
-    enableButtonOk(true);
     slotTextChanged();
     connect(d->widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
@@ -130,7 +148,7 @@ void KexiNameDialog::slotTextChanged()
     {
         enable = false;
     }
-    enableButtonOk(enable);
+    button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
 
 bool KexiNameDialog::canOverwrite()
@@ -191,7 +209,7 @@ void KexiNameDialog::accept()
         }
     }
 
-    KDialog::accept();
+    QDialog::accept();
 }
 
 void KexiNameDialog::setDialogIcon(const QString &iconName)
@@ -203,7 +221,7 @@ void KexiNameDialog::showEvent(QShowEvent * event)
 {
     d->widget->captionLineEdit()->selectAll();
     d->widget->captionLineEdit()->setFocus();
-    KDialog::showEvent(event);
+    QDialog::showEvent(event);
 }
 
 KexiNameWidget* KexiNameDialog::widget() const

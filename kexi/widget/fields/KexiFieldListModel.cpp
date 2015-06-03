@@ -24,8 +24,10 @@
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 #include <db/utils.h>
-#include <kdebug.h>
 #include <drivers/xbase/xbaseexport.h>
+
+#include <kdebug.h>
+
 #include <QMimeData>
 
 class KexiFieldListModel::Private

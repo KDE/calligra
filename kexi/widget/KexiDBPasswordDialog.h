@@ -59,7 +59,7 @@ public:
     static tristate getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
 
 protected Q_SLOTS:
-    virtual void slotButtonClicked(int button);
+    virtual void slotOkOrDetailsButtonClicked();
     void slotShowConnectionDetails();
 
 protected:

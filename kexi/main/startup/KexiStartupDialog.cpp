@@ -24,8 +24,13 @@
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
 #include <db/utils.h>
-
 #include <KexiIcon.h>
+
+#include <klocale.h>
+#include <kcomponentdata.h>
+#include <kdebug.h>
+#include <kconfig.h>
+#include <KSharedConfig>
 
 #include <QLayout>
 #include <QTabWidget>
@@ -34,20 +39,14 @@
 #include <QPoint>
 #include <QObject>
 #include <QApplication>
-
 #include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QListView>
-
-#include <klocale.h>
-
-#include <kcomponentdata.h>
-#include <kdebug.h>
-#include <kmimetype.h>
-#include <kconfig.h>
-#include <KSharedConfig>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 //! @internal
 class KexiStartupDialog::Private
@@ -115,14 +114,18 @@ KexiStartupDialog::KexiStartupDialog(
         : KPageDialog(parent)
         , d(new Private())
 {
-    d->singlePage = dialogType == KexiStartupDialog::Templates
-                    || dialogType == KexiStartupDialog::OpenExisting;
-    setFaceType(d->singlePage ? Plain : Tabbed);
-    setCaption(captionForDialogType(dialogType));
-    setButtons(Help | Ok | Cancel);
     d->connSet = &connSet;
     d->dialogType = dialogType;
     d->dialogOptions = dialogOptions;
+    d->singlePage = dialogType == KexiStartupDialog::Templates
+                    || dialogType == KexiStartupDialog::OpenExisting;
+    setFaceType(d->singlePage ? Plain : Tabbed);
+    setWindowTitle(captionForDialogType(dialogType));
+
+    // buttons
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     if (dialogType == OpenExisting) {//this dialog has "open" tab only!
         setWindowIcon(koIcon("document-open"));
@@ -152,7 +155,7 @@ KexiStartupDialog::KexiStartupDialog(
                 this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
         d->templatesWidget->setFocus();
     }
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
     setCurrentPage(firstPage);
     updateDialogOKButton(firstPage);
     adjustSize();
@@ -169,7 +172,7 @@ void KexiStartupDialog::showEvent(QShowEvent *e)
     //just some cleanup
     d->result = -1;
 
-    KDialog::centerOnScreen(this);
+    QDialog::centerOnScreen(this);
 }
 
 int KexiStartupDialog::result() const
@@ -241,7 +244,7 @@ void KexiStartupDialog::setupPageTemplates()
     QFrame *pageTemplatesFrame = new QFrame(this);
     d->pageTemplates = addPage(pageTemplatesFrame, xi18n("Create Project"));
     QVBoxLayout *lyr = new QVBoxLayout(pageTemplatesFrame);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
     lyr->setMargin(0);
 
     d->templatesWidget = new KPageWidget(pageTemplatesFrame);
@@ -274,7 +277,7 @@ void KexiStartupDialog::setupPageTemplates()
     d->templPageWidgetItem_BlankDatabase->setHeader(xi18n("New Blank Database Project"));
     d->templPageWidgetItem_BlankDatabase->setIcon(koIcon("x-office-document"));
     tmplyr = new QVBoxLayout(templPageWidget);
-    tmplyr->setSpacing(KDialog::spacingHint());
+    tmplyr->setSpacing(KexiUtils::spacingHint());
     QLabel *lbl_blank = new QLabel(
         xi18n("Kexi will create a new blank database project.") + clickMsg, templPageWidget);
     lbl_blank->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -291,7 +294,7 @@ void KexiStartupDialog::setupPageTemplates()
         xi18n("Import Existing Database as New Database Project"));
     d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
     tmplyr = new QVBoxLayout(templPageWidget);
-    tmplyr->setSpacing(KDialog::spacingHint());
+    tmplyr->setSpacing(KexiUtils::spacingHint());
     QLabel *lbl_import = new QLabel(
         xi18n("Kexi will import the structure and data of an existing database "
              "as a new database project.") + clickMsg, templPageWidget);
@@ -353,7 +356,8 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
             : (bool)d->openExistingConnWidget->selectedConnectionData();
 //kDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
     }
-    enableButton(Ok, enable);
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(enable);
 }
 
 void KexiStartupDialog::setupPageOpenExisting()
@@ -362,7 +366,7 @@ void KexiStartupDialog::setupPageOpenExisting()
     d->pageOpenExisting = addPage(pageOpenExistingWidget, xi18n("Open Existing Project"));
 
     QVBoxLayout *lyr = new QVBoxLayout(pageOpenExistingWidget);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
     lyr->setMargin(0);
 
     d->openExistingConnWidget = new KexiConnectionSelectorWidget(*d->connSet,
@@ -397,7 +401,8 @@ void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVIt
 
 void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataLVItem *item)
 {
-    enableButtonOk(item);
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(item);
 }
 
 void KexiStartupDialog::slotOk()
