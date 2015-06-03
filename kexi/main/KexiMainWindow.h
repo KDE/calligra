@@ -23,6 +23,8 @@
 
 //#define KEXI_IMPL_WARNINGS
 
+#include "keximain_export.h"
+
 #include <kmainwindow.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>

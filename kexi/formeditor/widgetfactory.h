@@ -22,11 +22,12 @@
 #ifndef KFORMDESIGNERWIDGETFACTORY_H
 #define KFORMDESIGNERWIDGETFACTORY_H
 
-#include <QPixmap>
-#include <QVariant>
 #include "WidgetInfo.h"
 
 #include <db/pluginloader.h>
+
+#include <QPixmap>
+#include <QVariant>
 
 class QWidget;
 class QListWidget;

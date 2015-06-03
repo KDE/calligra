@@ -27,8 +27,9 @@ set(kexidatatable_LIB_SRCS
    kexitextformatter.cpp
 )
 
-
 add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
+
+generate_export_header(kexidatatable)
 
 target_link_libraries(
     kexidatatable

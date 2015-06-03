@@ -22,10 +22,11 @@
 #ifndef KEXIPROJECTNAVIGATOR_H
 #define KEXIPROJECTNAVIGATOR_H
 
+#include "kexiextwidgets_export.h"
+#include <kexi.h>
+
 #include <QPointer>
 #include <QMenu>
-
-#include <kexi.h>
 
 class KIcon;
 class KAction;

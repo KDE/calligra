@@ -22,10 +22,11 @@
 #ifndef KFORMDESIGNERFORMWIDGET_H
 #define KFORMDESIGNERFORMWIDGET_H
 
+#include "kformdesigner_export.h"
+
 #include <QList>
 #include <QRect>
 #include <QWidget>
-#include <kexi_export.h>
 
 namespace KFormDesigner
 {

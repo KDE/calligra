@@ -20,7 +20,6 @@
 #ifndef _KEXI_GLOBAL_
 #define _KEXI_GLOBAL_
 
-#include <kexi_export.h>
 #include <config-kexi.h>
 
 #ifdef _MSC_VER

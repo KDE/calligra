@@ -22,12 +22,13 @@
 #ifndef FORMEDITORCONTAINER_H
 #define FORMEDITORCONTAINER_H
 
+#include "kformdesigner_export.h"
+#include "utils.h"
+#include "form.h"
+
 #include <QPointer>
 #include <QWidget>
 #include <QMouseEvent>
-
-#include "utils.h"
-#include "form.h"
 
 class QEvent;
 class QLayout;

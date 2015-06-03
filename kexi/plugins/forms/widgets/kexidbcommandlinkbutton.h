@@ -22,6 +22,7 @@
 #ifndef KexiDBCommandLinkButton_H
 #define KexiDBCommandLinkButton_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <formeditor/kexiformeventhandler.h>

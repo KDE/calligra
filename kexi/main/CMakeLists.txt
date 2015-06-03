@@ -48,7 +48,7 @@ ki18n_wrap_ui(keximain_LIB_SRCS
 
 add_library(keximain SHARED ${keximain_LIB_SRCS})
 
-generate_export_header(keximain BASE_NAME keximain)
+generate_export_header(keximain)
 
 target_link_libraries(
     keximain

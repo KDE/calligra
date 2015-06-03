@@ -21,11 +21,10 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <ktoggleaction.h>
-
-#include <kexi_export.h>
-
+#include "kformdesigner_export.h"
 #include "utils.h"
+
+#include <ktoggleaction.h>
 
 namespace KFormDesigner
 {

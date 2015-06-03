@@ -45,7 +45,7 @@ set(kexicore_LIB_SRCS
 
 add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
-generate_export_header(kexicore BASE_NAME kexicore)
+generate_export_header(kexicore)
 
 target_link_libraries(kexicore
   KF5::KIOWidgets

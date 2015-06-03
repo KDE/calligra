@@ -20,7 +20,8 @@
 #ifndef KexiComboBoxDropDownButton_H
 #define KexiComboBoxDropDownButton_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QToolButton>
 
 //! @short A drop-down button for combo box widgets

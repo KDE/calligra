@@ -21,11 +21,11 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QPointer>
 #include <QWidget>
-
-#include <kexi_export.h>
 
 namespace KFormDesigner
 {

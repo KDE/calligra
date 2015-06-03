@@ -21,8 +21,8 @@
 #include "kmessagewidget.h"
 #include "kmessagewidget_p.h"
 
-#include <KexiCloseButton.h>
-#include <KexiIcon.h>
+#include "KexiCloseButton.h"
+#include "KexiIcon.h"
 
 #include <kaction.h>
 #include <kcolorscheme.h>

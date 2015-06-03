@@ -80,6 +80,8 @@ ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
 
 add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
+generate_export_header(kexiextendedwidgets BASE_NAME kexiextwidgets)
+
 target_link_libraries(
     kexiextendedwidgets
     kexidataviewcommon

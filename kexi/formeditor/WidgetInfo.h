@@ -22,12 +22,13 @@
 #ifndef KFORMDESIGNERWIDGETINFO_H
 #define KFORMDESIGNERWIDGETINFO_H
 
+#include "kformdesigner_export.h"
+
+#include <db/tristate.h>
+
 #include <QObject>
 #include <QPointer>
 #include <QHash>
-
-#include <kexi_export.h>
-#include <db/tristate.h>
 
 namespace KFormDesigner
 {

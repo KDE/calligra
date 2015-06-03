@@ -20,8 +20,9 @@
 #ifndef KEXIOBJECTINFOLABEL_H
 #define KEXIOBJECTINFOLABEL_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QWidget>
-#include <kexi_export.h>
 
 //! @short Helper class displaying small icon with class name and object name
 /*! The info label is displayed in a form:

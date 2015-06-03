@@ -23,6 +23,8 @@ endif ()
 
 add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 
+generate_export_header(kexiguiutils)
+
 target_link_libraries(kexiguiutils
 kexicore
 kexiutils KF5::KIOWidgets

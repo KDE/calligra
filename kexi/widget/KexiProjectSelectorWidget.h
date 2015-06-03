@@ -20,6 +20,7 @@
 #ifndef KEXIPROJECTSELECTORWIDGET_H
 #define KEXIPROJECTSELECTORWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 

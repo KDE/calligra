@@ -20,10 +20,10 @@
 #ifndef KFORMDESIGNEREVENTS_H
 #define KFORMDESIGNEREVENTS_H
 
+#include "kformdesigner_export.h"
+
 #include <QList>
 #include <QString>
-
-#include <kexi_export.h>
 
 class QDomNode;
 

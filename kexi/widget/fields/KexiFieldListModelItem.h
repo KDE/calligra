@@ -21,8 +21,6 @@
 #ifndef KEXIFIELDLISTMODELITEM_H
 #define KEXIFIELDLISTMODELITEM_H
 
-#include <kexi_export.h>
-
 #include <QString>
 #include <QIcon>
 

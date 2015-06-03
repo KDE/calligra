@@ -20,7 +20,9 @@
 #ifndef KEXITABLESCROLLAREAHEADERMODEL_H
 #define KEXITABLESCROLLAREAHEADERMODEL_H
 
+#include "kexidatatable_export.h"
 #include <kexi_global.h>
+
 #include <QAbstractTableModel>
 
 class KexiTableScrollArea;

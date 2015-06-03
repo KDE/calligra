@@ -20,7 +20,7 @@
 #ifndef KEXIDATAAWAREVIEW_H
 #define KEXIDATAAWAREVIEW_H
 
-#include <kexi_export.h>
+#include "kexidataviewcommon_export.h"
 #include <KexiView.h>
 #include <core/kexisearchandreplaceiface.h>
 

@@ -22,14 +22,14 @@
 #define KexiDBImageBox_H
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <widget/utils/kexicontextmenuutils.h>
 #include "kexiframe.h"
 #include "kexidbutils.h"
+#include <kexiblobbuffer.h>
+
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QPaintEvent>
-#include <kexiblobbuffer.h>
-
-#include <widget/utils/kexicontextmenuutils.h>
 
 class KexiDropDownButton;
 class KexiImageContextMenu;

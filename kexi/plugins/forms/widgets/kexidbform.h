@@ -21,6 +21,7 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
+#include "kexiformutils_export.h"
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
 #include <formeditor/FormWidgetInterface.h>

@@ -20,8 +20,10 @@
 #ifndef KEXISECTIONHEADER_H
 #define KEXISECTIONHEADER_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
+
 #include <QWidget>
+
 class QEvent;
 class KIcon;
 

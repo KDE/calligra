@@ -20,7 +20,8 @@
 #ifndef KEXIDATETIMEFORMATTER_H
 #define KEXIDATETIMEFORMATTER_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QDateTimeEdit>
 #include <QRegExp>
 

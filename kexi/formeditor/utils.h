@@ -21,11 +21,12 @@
 #ifndef FORMEDITORUTILS_H
 #define FORMEDITORUTILS_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QTabBar>
 #include <QTabWidget>
 #include <QActionGroup>
-#include <kexi_export.h>
 
 typedef QTabWidget TabWidgetBase;
 //! @todo uncomment

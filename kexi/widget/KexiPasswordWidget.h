@@ -24,7 +24,7 @@
 #ifndef KEXIPASSWORDWIDGET_H
 #define KEXIPASSWORDWIDGET_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
 #include <QWidget>
 

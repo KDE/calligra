@@ -21,8 +21,9 @@
 #ifndef KEXIRECORDNAVIGATOR_H
 #define KEXIRECORDNAVIGATOR_H
 
+#include "kexiguiutils_export.h"
+
 #include <QWidget>
-#include <kexi_export.h>
 
 class QToolButton;
 class QAbstractScrollArea;

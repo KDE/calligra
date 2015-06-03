@@ -20,11 +20,10 @@
 #ifndef KEXIDBDRIVERCOMBOBOX_H
 #define KEXIDBDRIVERCOMBOBOX_H
 
-#include <QHash>
-#include <kcombobox.h>
-
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 #include <db/driver.h>
+
+#include <QHash>
 
 //! \brief Combo box widget for selecting a database driver
 /*! This widget provides a combobox for selecting a database driver.

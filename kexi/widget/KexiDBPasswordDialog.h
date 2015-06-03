@@ -20,7 +20,7 @@
 #ifndef KEXIDBPASSWORDDIALOG_H
 #define KEXIDBPASSWORDDIALOG_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 #include <kpassworddialog.h>
 #include <db/tristate.h>
 
