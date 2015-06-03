@@ -34,10 +34,10 @@
 #include <widgetutils/KoGroupButton.h>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 
+#include <QDialog>
 #include <QMenu>
 #include <QEvent>
 #include <QCloseEvent>
@@ -245,7 +245,7 @@ KexiView::KexiView(QWidget *parent)
         d->mainLyr->addWidget(d->topBarHWidget);
         QHBoxLayout *topBarHLyr = new QHBoxLayout(d->topBarHWidget); //needed unless KexiFlowLayout properly handles contents margins
         topBarHLyr->setContentsMargins(0, 0, 0, 0);
-        topBarHLyr->addSpacing(KDialog::marginHint() / 2);
+        topBarHLyr->addSpacing(QDialog::marginHint() / 2);
         d->topBarLyr = new KexiFlowLayout(topBarHLyr, 0, 2);
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
@@ -643,7 +643,7 @@ void KexiView::toggleViewModeButtonBack()
 
 void KexiView::createViewModeToggleButtons()
 {
-    d->topBarLyr->addSpacing(KDialog::spacingHint());
+    d->topBarLyr->addSpacing(KexiUtils::spacingHint());
 
     QWidget *btnCont = new QWidget(d->topBarHWidget);
     QHBoxLayout *btnLyr = new QHBoxLayout;
@@ -651,7 +651,7 @@ void KexiView::createViewModeToggleButtons()
     btnLyr->setContentsMargins(0, 0, 0, 0);
     btnCont->setLayout(btnLyr);
     d->topBarLyr->addWidget(btnCont);
-    d->topBarLyr->addSpacing(KDialog::spacingHint());
+    d->topBarLyr->addSpacing(KexiUtils::spacingHint());
 
     d->addViewButton(KoGroupButton::GroupLeft, Kexi::DataViewMode, btnCont,
                      SLOT(slotSwitchToDataViewModeInternal(bool)), xi18n("Data"), btnLyr);

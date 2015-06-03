@@ -334,7 +334,7 @@ void ImportWizard::setupDstType()
 void ImportWizard::setupDstTitle()
 {
     d->dstTitlePageWidget = new KexiDBTitlePage(xi18n("Destination project's caption:"), this);
-    d->dstTitlePageWidget->layout()->setMargin(KDialog::marginHint());
+    d->dstTitlePageWidget->layout()->setMargin(KexiUtils::marginHint());
     d->dstTitlePageWidget->updateGeometry();
     d->dstNewDBTitleLineEdit = d->dstTitlePageWidget->le_title;
     connect(d->dstNewDBTitleLineEdit, SIGNAL(textChanged(QString)),
@@ -450,7 +450,7 @@ void ImportWizard::setupImporting()
     QWidget *options_widget = new QWidget(d->importingPageWidget);
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
-    options_vbox->setSpacing(KDialog::spacingHint());
+    options_vbox->setSpacing(KexiUtils::spacingHint());
     QHBoxLayout *importOptionsButtonLyr = new QHBoxLayout;
     options_vbox->addLayout(importOptionsButtonLyr);
     d->importOptionsButton = new QPushButton(koIcon("configure"),
@@ -486,7 +486,7 @@ void ImportWizard::setupFinish()
     d->openImportedProjectCheckBox = new QCheckBox(xi18n("Open imported project"),
             d->finishPageWidget);
     d->openImportedProjectCheckBox->setChecked(true);
-    vbox->addSpacing(KDialog::spacingHint());
+    vbox->addSpacing(KexiUtils::spacingHint());
     vbox->addWidget(d->openImportedProjectCheckBox);
     vbox->addStretch(1);
 
@@ -608,9 +608,9 @@ void ImportWizard::arriveImportingPage()
 {
     d->importingPageWidget->hide();
     if (checkUserInput()) {
-        enableButton(KDialog::User2, true);
+        // KEXI3 user2Button->setEnabled(true);
     } else {
-        enableButton(KDialog::User2, false);
+        // KEXI3 user2Button->setEnabled(false);
     }
 
     d->lblImportingTxt->setText(xi18n(
@@ -984,9 +984,9 @@ void ImportWizard::next()
     } else if (currentPage() == d->importingPageItem) {
         if (!d->importExecuted) {
             d->importOptionsButton->hide();
-            enableButton(KDialog::User2, false);
-            enableButton(KDialog::User1, false);
-            enableButton(KDialog::User3, false);
+            // KEXI3 user2Button->setEnabled(false);
+            // KEXI3 user1Button->setEnabled(false);
+            // KEXI3 user3Button->setEnabled(false);
             d->lblImportingTxt->setText(xi18n("Importing in progress..."));
             tristate res = import();
             if (true == res) {
@@ -994,8 +994,8 @@ void ImportWizard::next()
                     xi18n("Database has been imported into Kexi project \"%1\".",
                          d->dstNewDBNameLineEdit->text()));
                 enableButtonCancel(false);
-                enableButton(KDialog::User3, false);
-                enableButton(KDialog::User1, true);
+                // KEXI3 user3Button->setEnabled(false);
+                // KEXI3 user1Button->setEnabled(true);
                 d->openImportedProjectCheckBox->show();
                 next();
                 return;
@@ -1004,8 +1004,8 @@ void ImportWizard::next()
             d->progressBar->hide();
 
             enableButtonCancel(true);
-            enableButton(KDialog::User3, true);
-            enableButton(KDialog::User1, false);
+            // KEXI3 user3Button->setEnabled(true);
+            // KEXI3 user1Button->setEnabled(false);
 
             d->openImportedProjectCheckBox->hide();
             if (!res)
