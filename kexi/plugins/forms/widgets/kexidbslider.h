@@ -22,6 +22,7 @@
 #ifndef KexiDBSlider_H
 #define KexiDBSlider_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/kexislider.h>

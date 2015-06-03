@@ -20,7 +20,10 @@
 #ifndef KexiDBTextWidgetInterface_H
 #define KexiDBTextWidgetInterface_H
 
+#include "kexiformutils_export.h"
+
 #include <widget/utils/kexidisplayutils.h>
+
 #include <QFrame>
 #include <QEvent>
 

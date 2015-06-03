@@ -25,7 +25,6 @@
 #ifndef _KEXI_VERSION_
 #define _KEXI_VERSION_
 
-#include "kexi_export.h"
 #include <calligraversion.h>
 
 #define KEXI_APP_NAME "Kexi"

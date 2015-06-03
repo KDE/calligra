@@ -26,16 +26,19 @@
 #ifndef KEXIDATAAWAREOBJECTINTERFACE_H
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
+#include "kexidataviewcommon_export.h"
+#include <core/kexisearchandreplaceiface.h>
+#include <core/kexidataiteminterface.h>
+#include <kexiutils/KexiContextMessage.h>
+
+#include <db/tableviewdata.h>
+
 #include <QTimer>
 #include <QPointer>
 #include <QLabel>
 #include <QList>
 
 #include <kdebug.h>
-#include <core/kexisearchandreplaceiface.h>
-#include <core/kexidataiteminterface.h>
-#include <kexiutils/KexiContextMessage.h>
-#include <db/tableviewdata.h>
 
 class QHeaderView;
 class QScrollBar;

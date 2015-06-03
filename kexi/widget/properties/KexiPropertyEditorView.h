@@ -21,6 +21,7 @@
 #ifndef KEXIPROPERTYEDITORVIEW_H
 #define KEXIPROPERTYEDITORVIEW_H
 
+#include "kexiextwidgets_export.h"
 #include "KexiPropertyPaneViewBase.h"
 
 //! @short The container (acts as a dock window) for KexiPropertyEditor.

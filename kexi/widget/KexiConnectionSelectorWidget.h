@@ -21,6 +21,7 @@
 #ifndef KEXICONNECTIONSELECTORWIDGET_H
 #define KEXICONNECTIONSELECTORWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include <core/kexidbconnectionset.h>
 #include <db/driver.h>
 #include <kexiutils/KexiContextMessage.h>

@@ -21,14 +21,17 @@
 #ifndef KFORMEDITOR_COMMANDS_H
 #define KFORMEDITOR_COMMANDS_H
 
-#include <QHash>
-#include <QVariant>
-#include <kundo2command.h>
-
-#include <kdebug.h>
+#include "kformdesigner_export.h"
 #include "utils.h"
 #include "objecttree.h"
 #include "form.h"
+
+#include <QHash>
+#include <QVariant>
+
+#include <kundo2command.h>
+
+#include <kdebug.h>
 
 class QPoint;
 class QStringList;

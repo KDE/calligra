@@ -20,7 +20,7 @@
 #ifndef KEXISERVERDRIVERNOTFOUNDMESSAGE_H
 #define KEXISERVERDRIVERNOTFOUNDMESSAGE_H
 
-#include "kexi_export.h"
+#include "kexiextwidgets_export.h"
 #include <kexiutils/KexiContextMessage.h>
 #include <QWidget>
 

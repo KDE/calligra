@@ -20,9 +20,10 @@
 #ifndef KEXIDOCKABLEWIDGET_H
 #define KEXIDOCKABLEWIDGET_H
 
+#include "kexiguiutils_export.h"
+
 #include <QWidget>
 #include <QPointer>
-#include <kexi_export.h>
 
 //! @short Ordinary QWidget that supports forcing size hint
 /*! The setSizeHint() method is needed be the main window to properly 

@@ -21,8 +21,10 @@
 #ifndef _KEXICOMBOBOXBASE_H_
 #define _KEXICOMBOBOXBASE_H_
 
-#include <db/field.h>
+#include "kexidatatable_export.h"
 #include "kexiinputtableedit.h"
+
+#include <db/field.h>
 #include <db/lookupfieldschema.h>
 #include <db/tristate.h>
 

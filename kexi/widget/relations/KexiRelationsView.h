@@ -21,8 +21,9 @@
 #ifndef KexiRelationsView_H
 #define KexiRelationsView_H
 
-#include <KexiView.h>
 #include "KexiRelationsScrollArea.h"
+
+#include <KexiView.h>
 
 namespace KexiDB
 {

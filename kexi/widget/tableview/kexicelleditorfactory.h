@@ -20,10 +20,12 @@
 #ifndef KEXICELLEDITORFACTORY_H
 #define KEXICELLEDITORFACTORY_H
 
+#include "kexidatatable_export.h"
+#include <kexi_global.h>
+
 #include <QVariant>
 #include <QWidget>
 
-#include <kexi_global.h>
 #include <db/field.h>
 
 class KexiCellEditorFactoryItem;

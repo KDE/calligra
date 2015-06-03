@@ -21,13 +21,13 @@
 #ifndef FORMIO_H
 #define FORMIO_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QPixmap>
 #include <QLabel>
 #include <QPaintEvent>
 #include <QLabel>
-
-#include <kexi_export.h>
 
 class QString;
 class QDomElement;

@@ -22,6 +22,7 @@
 #ifndef KexiDBPushButton_H
 #define KexiDBPushButton_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/kexiformeventhandler.h>
 #include <formeditor/FormWidgetInterface.h>

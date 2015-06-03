@@ -20,7 +20,8 @@
 #ifndef KEXICUSTOMPROPFACTORY_H
 #define KEXICUSTOMPROPFACTORY_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
+
 #include <KPropertyFactory>
 
 //! Kexi-specific custom property factory for the KProperty library

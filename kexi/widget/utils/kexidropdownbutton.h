@@ -20,7 +20,8 @@
 #ifndef KexiDropDownButton_H
 #define KexiDropDownButton_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QToolButton>
 
 //! @short A button for drop-down "Image" menu

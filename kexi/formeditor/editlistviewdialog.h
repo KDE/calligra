@@ -20,11 +20,11 @@
 #ifndef EDITLISTVIEW_DIALOG_H
 #define EDITLISTVIEW_DIALOG_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QToolButton>
 #include <kpagedialog.h>
-
-#include <kexi_export.h>
 
 class QListView;
 class QListViewItem;

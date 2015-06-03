@@ -99,6 +99,8 @@ set(kexiformutils_LIB_SRCS
 
 add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
+generate_export_header(kexiformutils)
+
 target_link_libraries(
     kexiformutils
     kexicore

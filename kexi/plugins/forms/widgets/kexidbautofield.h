@@ -22,13 +22,16 @@
 #ifndef KEXIDBAUTOFIELD_H
 #define KEXIDBAUTOFIELD_H
 
-#include <QWidget>
-#include <QLabel>
-#include <db/field.h>
+#include "kexiformutils_export.h"
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+
+#include <db/field.h>
+
+#include <QWidget>
+#include <QLabel>
 
 class QLabel;
 

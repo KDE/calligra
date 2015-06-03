@@ -20,11 +20,11 @@
 #ifndef KEXINAMEWIDGET_H
 #define KEXINAMEWIDGET_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-
-#include <kexi_export.h>
 
 class QLineEdit;
 

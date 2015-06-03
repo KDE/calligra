@@ -20,8 +20,8 @@
 #ifndef KEXIDATASOURCECOMBOBOX_H
 #define KEXIDATASOURCECOMBOBOX_H
 
+#include "kexiextwidgets_export.h"
 #include <kcombobox.h>
-#include <kexi_export.h>
 
 class KexiProject;
 namespace KexiPart

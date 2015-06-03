@@ -21,6 +21,7 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_H
 #define KEXIACTIONSELECTIONDIALOG_H
 
+#include "kformdesigner_export.h"
 #include "kexiformeventhandler.h"
 
 #include <QDialog>

@@ -20,6 +20,7 @@
 #ifndef KexiContextMenuUtils_H
 #define KexiContextMenuUtils_H
 
+#include "kexiguiutils_export.h"
 #include <kexi_global.h>
 #include <db/queryschema.h>
 

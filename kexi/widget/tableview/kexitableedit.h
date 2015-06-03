@@ -21,6 +21,7 @@
 #ifndef _KEXITABLEEDIT_H_
 #define _KEXITABLEEDIT_H_
 
+#include "kexidatatable_export.h"
 #include <core/kexidataiteminterface.h>
 
 #include <db/tableviewdata.h>

@@ -20,7 +20,7 @@
 #ifndef KFORMDESIGNERFORMWIDGETIFACE_H
 #define KFORMDESIGNERFORMWIDGETIFACE_H
 
-#include <kexi_export.h>
+#include "kformdesigner_export.h"
 
 namespace KFormDesigner
 {
