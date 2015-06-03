@@ -20,7 +20,9 @@
 #ifndef KEXITABLESCROLLAREAHEADER_H
 #define KEXITABLESCROLLAREAHEADER_H
 
+#include "kexidatatable_export.h"
 #include <kexi_global.h>
+
 #include <QHeaderView>
 #include <QPointer>
 #include <QStyle>

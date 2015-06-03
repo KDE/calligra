@@ -20,11 +20,13 @@
 #ifndef KEXIPROJECTMODEL_H
 #define KEXIPROJECTMODEL_H
 
-#include <QModelIndex>
-#include <QAbstractItemModel>
+#include "kexiextwidgets_export.h"
 
 #include <kexipart.h>
 #include <KexiSearchableModel.h>
+
+#include <QModelIndex>
+#include <QAbstractItemModel>
 
 class KexiProjectModelItem;
 class KexiProject;

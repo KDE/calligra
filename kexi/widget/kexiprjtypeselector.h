@@ -20,9 +20,10 @@
 #ifndef KEXIPRJTYPESELECTOR_H
 #define KEXIPRJTYPESELECTOR_H
 
-#include <kexi_export.h>
-#include <QWidget>
+#include "kexiextwidgets_export.h"
 #include "ui_kexiprjtypeselector.h"
+
+#include <QWidget>
 
 //! @short A simple widget with radio buttons with "show file/server-based projects" options
 class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector

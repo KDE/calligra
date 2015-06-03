@@ -20,6 +20,8 @@
 #ifndef KEXIDBFACTORYBASE_H
 #define KEXIDBFACTORYBASE_H
 
+#include "kexiformutils_export.h"
+
 #include <formeditor/widgetfactory.h>
 
 namespace KFormDesigner

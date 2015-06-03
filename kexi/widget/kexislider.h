@@ -20,7 +20,7 @@
 #ifndef KEXISLIDER_H
 #define KEXISLIDER_H
 
-#include "kexi_export.h"
+#include "kexiextwidgets_export.h"
 
 #include <QWidget>
 #include <QSlider>

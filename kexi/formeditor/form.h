@@ -23,10 +23,12 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
+#include "kformdesigner_export.h"
+#include "widgetlibrary.h"
+#include <kexi_global.h>
+
 #include <QMetaProperty>
 #include <QAction>
-#include <kexi_global.h>
-#include "widgetlibrary.h"
 
 class QWidget;
 class KActionCollection;

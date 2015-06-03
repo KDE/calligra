@@ -44,7 +44,6 @@
 
 #include <KRun>
 #include <KToolInvocation>
-#include <KLocalizedString>
 #include <kdebug.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
@@ -212,26 +211,28 @@ QStringList KexiUtils::enumKeysForProperty(const QMetaProperty& metaProperty)
     return result;
 }
 
-QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const QMimeType &mime, bool kdeFormat)
 {
-    if (mime.isNull())
+    if (!mime.isValid()) {
         return QString();
+    }
 
     QString str;
     if (kdeFormat) {
-        if (mime->patterns().isEmpty())
+        if (mime.globPatterns().isEmpty()) {
             str = "*";
-        else
-            str = mime->patterns().join(" ");
+        } else {
+            str = mime.globPatterns().join(" ");
+        }
         str += "|";
     }
-    str += mime->comment();
-    if (!mime->patterns().isEmpty() || !kdeFormat) {
+    str += mime.comment();
+    if (!mime.globPatterns().isEmpty() || !kdeFormat) {
         str += " (";
-        if (mime->patterns().isEmpty())
+        if (mime.globPatterns().isEmpty())
             str += "*";
         else
-            str += mime->patterns().join("; ");
+            str += mime.globPatterns().join("; ");
         str += ")";
     }
     if (kdeFormat)
@@ -241,10 +242,10 @@ QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFo
     return str;
 }
 
-QString KexiUtils::fileDialogFilterString(const QString& mimeString, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const QString& mimeName, bool kdeFormat)
 {
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(mimeString);
+    QMimeType mime = db.mimeTypeForName(mimeName);
     return fileDialogFilterString(mime, kdeFormat);
 }
 
