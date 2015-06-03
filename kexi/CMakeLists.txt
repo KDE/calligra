@@ -70,14 +70,14 @@ add_subdirectory( widget )
 add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
-add_subdirectory( tests )
+#TODO KEXI3 add_subdirectory( tests )
 
 if(KEXI_MOBILE)
 
 else()
   add_subdirectory( main )
   add_subdirectory( formeditor )
-  add_subdirectory( migration )
+#TODO KEXI3  add_subdirectory( migration )
 endif()
 
 ########### next target ###############
