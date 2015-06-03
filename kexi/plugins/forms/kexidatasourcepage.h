@@ -19,9 +19,12 @@
 #ifndef KEXIDATASOURCEPAGE_H
 #define KEXIDATASOURCEPAGE_H
 
+#include "kexiformutils_export.h"
 #include <widget/properties/KexiPropertyPaneViewBase.h>
+
 #include <db/field.h>
 #include <db/utils.h>
+
 #include <KPropertySet>
 
 class KexiDataSourceComboBox;

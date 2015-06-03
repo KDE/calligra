@@ -20,9 +20,11 @@
 #ifndef KEXIFORMEVENTHANDLER_H
 #define KEXIFORMEVENTHANDLER_H
 
-#include <QWidget>
+#include "kformdesigner_export.h"
+
 #include <kaction.h>
-#include <kexi_export.h>
+
+#include <QWidget>
 
 namespace KexiPart
 {

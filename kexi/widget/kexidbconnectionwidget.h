@@ -21,6 +21,7 @@
 #ifndef KEXIDBCONNECTIONWIDGET_H
 #define KEXIDBCONNECTIONWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include "ui_kexidbconnectionwidget.h"
 #include "ui_kexidbconnectionwidgetdetails.h"
 

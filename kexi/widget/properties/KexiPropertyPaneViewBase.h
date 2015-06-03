@@ -20,8 +20,9 @@
 #ifndef KEXIPROPERTYEDITORVIEWBASE_H
 #define KEXIPROPERTYEDITORVIEWBASE_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QWidget>
-#include <kexi_export.h>
 
 class QVBoxLayout;
 

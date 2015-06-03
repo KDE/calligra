@@ -21,6 +21,7 @@
 #ifndef KEXIPROJECTMODELITEM_H
 #define KEXIPROJECTMODELITEM_H
 
+#include "kexiextwidgets_export.h"
 #include <core/kexipartitem.h>
 #include <kexi.h>
 

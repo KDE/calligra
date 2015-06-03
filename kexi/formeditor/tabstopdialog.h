@@ -21,7 +21,7 @@
 #ifndef TABSTOPEDIT_DIALOG_H
 #define TABSTOPEDIT_DIALOG_H
 
-#include <kexi_export.h>
+#include "kformdesigner_export.h"
 
 #include <QDialog>
 

@@ -22,6 +22,7 @@
 #ifndef KEXIDATATABLE_H
 #define KEXIDATATABLE_H
 
+#include "kexidatatable_export.h"
 #include <widget/dataviewcommon/kexidataawareview.h>
 
 class KexiTableScrollArea;

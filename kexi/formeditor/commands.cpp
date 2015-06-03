@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include <QLayout>
 #include <QLabel>
 #include <QMetaObject>
@@ -30,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kacceleratormanager.h>
 
+#include "kformdesigner_export.h"
 #include "WidgetInfo.h"
 #include "formIO.h"
 #include "container.h"

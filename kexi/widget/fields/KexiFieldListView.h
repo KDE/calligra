@@ -20,11 +20,12 @@
 #ifndef KEXIFIELDLISTVIEW_H
 #define KEXIFIELDLISTVIEW_H
 
-#include <QPixmap>
-#include <QListView>
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 #include <kexi.h>
 #include "KexiFieldListModel.h"
+
+#include <QPixmap>
+#include <QListView>
 
 namespace KexiDB
 {
