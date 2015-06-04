@@ -32,9 +32,9 @@
 #include <QStyleOptionFrameV2>
 #include <QLineEdit>
 
-#include <klocale.h>
 #include <kguiitem.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include "kexirecordnavigator.h"
 #include <kexiutils/SmallToolButton.h>

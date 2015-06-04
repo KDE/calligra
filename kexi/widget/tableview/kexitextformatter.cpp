@@ -22,7 +22,7 @@
 #include <widget/utils/kexidatetimeformatter.h>
 #include <db/utils.h>
 
-#include <klocale.h>
+#include <QLocale>
 
 //! @internal
 class KexiTextFormatter::Private
@@ -181,7 +181,8 @@ QVariant KexiTextFormatter::fromString(const QString& text) const
     case KexiDB::Field::Double: {
         // replace custom decimal symbol with '.' as required by to{Float|Double}()
         QString fixedText(text);
-        fixedText.replace(KLocale::global()->decimalSymbol(), ".");
+        QLocale locale;
+        fixedText.replace(locale.decimalPoint(), '.');
         if (d->field->type() == KexiDB::Field::Double)
             return fixedText.toDouble();
         return fixedText.toFloat();

@@ -28,8 +28,6 @@
 #include "kexiprojectset.h"
 #include <db/driver.h>
 
-#include <klocale.h>
-
 class QLabel;
 class KAboutData;
 class KexiRecentProjects;

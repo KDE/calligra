@@ -18,7 +18,7 @@
 */
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KProperty>
 #include <kexi_global.h>

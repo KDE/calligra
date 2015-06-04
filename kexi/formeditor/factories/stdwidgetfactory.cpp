@@ -42,8 +42,8 @@
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <ktextedit.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 

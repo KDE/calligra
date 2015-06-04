@@ -23,7 +23,7 @@
 #include <KPropertySet>
 #include <KProperty>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QVBoxLayout>
 
