@@ -22,9 +22,9 @@
 #include <QVBoxLayout>
 #include <QDomDocument>
 #include <QTabWidget>
+#include <QAction>
 
 #include <kdebug.h>
-#include <kaction.h>
 #include <kactionmenu.h>
 
 #include <KexiIcon.h>
@@ -119,7 +119,7 @@ void KexiFormPart::initInstanceActions()
                                 QKeySequence(), "other_widgets_menu", "KActionMenu");
 #endif
 
-    KAction *action = createSharedAction(Kexi::DesignViewMode, xi18n("Align Widgets Position"),
+    QAction *action = createSharedAction(Kexi::DesignViewMode, xi18n("Align Widgets Position"),
                                 koIconName("aoleft"), QKeySequence(), "formpart_align_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Left"), koIconName("aoleft"),

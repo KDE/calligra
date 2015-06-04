@@ -20,11 +20,11 @@
 #include "kexiformeventhandler.h"
 
 #include <QWidget>
+#include <QAction>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 
 #include <db/tableviewdata.h>
 #include <db/queryschema.h>
@@ -91,7 +91,7 @@ KexiFormEventAction::Private::~Private()
 
 KexiFormEventAction::KexiFormEventAction(QObject* parent,
         const QString& actionName, const QString& objectName, const QString& actionOption)
-        : KAction(parent)
+        : QAction(parent)
         ,d(new Private(actionName, objectName, actionOption))
 {
     connect(this, SIGNAL(triggered()), this, SLOT(trigger()));

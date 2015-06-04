@@ -24,7 +24,6 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kaction.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <KSharedConfig>
@@ -35,6 +34,7 @@
 #include <QList>
 #include <QShortcut>
 #include <QPointer>
+#include <QAction>
 
 #include <kexi_global.h>
 
@@ -53,7 +53,7 @@ public:
     //! Connects action \a action with appropriate signal \a member
     //! and optionally adds shortcut that will receive shortcut for \a action
     //! at global scope of the dialog \a parent.
-    void setActionAndShortcut(KAction *action, QWidget* parent, const char* member) {
+    void setActionAndShortcut(QAction *action, QWidget* parent, const char* member) {
 #ifdef __GNUC__
 #warning not tested: setActionAndShortcut::setActionAndShortcut()
 #else
@@ -78,10 +78,10 @@ public:
     QStringList lookInColumnNames;
     QStringList lookInColumnCaptions;
     QString objectName; //!< for caption
-    QPointer<KAction> findnextAction;
-    QPointer<KAction> findprevAction;
-    QPointer<KAction> replaceAction;
-    QPointer<KAction> replaceallAction;
+    QPointer<QAction> findnextAction;
+    QPointer<QAction> findprevAction;
+    QPointer<QAction> replaceAction;
+    QPointer<QAction> replaceallAction;
     QList<QShortcut*> shortcuts;
     KConfigGroup confGroup;
     bool replaceMode;
@@ -100,7 +100,7 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
         (int)KexiSearchAndReplaceViewInterface::Options::SearchDown);
     layout()->setMargin(KexiUtils::marginHint());
     layout()->setSpacing(KexiUtils::spacingHint());
-    KAction *a = KStandardAction::findNext(0, 0, 0);
+    QAction *a = KStandardAction::findNext(0, 0, 0);
     m_btnFind->setText(a->text());
     m_btnFind->setIcon(a->icon());
     delete a;
@@ -136,8 +136,8 @@ KexiFindDialog::~KexiFindDialog()
     delete d;
 }
 
-void KexiFindDialog::setActions(KAction *findnext, KAction *findprev,
-                                KAction *replace, KAction *replaceall)
+void KexiFindDialog::setActions(QAction *findnext, QAction *findprev,
+                                QAction *replace, QAction *replaceall)
 {
     d->findnextAction = findnext;
     d->findprevAction = findprev;
