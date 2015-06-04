@@ -23,10 +23,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <QDomDocument>
 #include <QDir>
-#include <QFile>
-#include <QRegExp>
 #include <QStringList>
 
 #include <kdebug.h>

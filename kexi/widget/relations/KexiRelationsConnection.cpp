@@ -19,9 +19,7 @@
 */
 
 #include <QPainter>
-#include <QPixmap>
 #include <QColor>
-#include <QApplication>
 #include <QPolygon>
 #include <QScrollBar>
 

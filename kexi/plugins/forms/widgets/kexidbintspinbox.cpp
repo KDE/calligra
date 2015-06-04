@@ -20,7 +20,6 @@
 
 #include "kexidbintspinbox.h"
 
-#include <QLineEdit>
 #include <knumvalidator.h>
 
 KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent)

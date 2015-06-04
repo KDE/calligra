@@ -20,7 +20,6 @@
 
 #include "kexireportpart.h"
 
-#include <QLabel>
 #include <QTabWidget>
 
 #include <klocale.h>

@@ -18,7 +18,6 @@
 */
 
 #include <QFileInfo>
-#include <QPointer>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

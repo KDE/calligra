@@ -26,8 +26,6 @@
 
 #include <db/tristate.h>
 
-#include <QObject>
-#include <QPointer>
 #include <QHash>
 
 namespace KFormDesigner

@@ -23,8 +23,6 @@
 #include <QFileInfo>
 #include <QFocusEvent>
 #include <QDragMoveEvent>
-#include <QEvent>
-#include <QHBoxLayout>
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QApplication>

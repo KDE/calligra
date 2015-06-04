@@ -24,7 +24,6 @@
 
 #include <widget/utils/kexidisplayutils.h>
 
-#include <QFrame>
 #include <QEvent>
 
 namespace KexiDB

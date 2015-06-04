@@ -29,12 +29,8 @@
 
 #include <KexiIcon.h>
 
-#include <QTimer>
-#include <QImage>
 #include <QPixmap>
 #include <QPixmapCache>
-#include <QColor>
-#include <QFileInfo>
 #include <QLabel>
 #include <QMimeDatabase>
 #include <QMimeType>

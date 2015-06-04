@@ -21,7 +21,6 @@
 #ifndef KEXIFORMVIEW_H
 #define KEXIFORMVIEW_H
 
-#include <QTimer>
 #include <QDragMoveEvent>
 #include <QResizeEvent>
 #include <QDropEvent>

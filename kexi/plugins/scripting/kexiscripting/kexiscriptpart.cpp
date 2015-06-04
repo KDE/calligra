@@ -40,8 +40,6 @@
 #include <kdebug.h>
 #include <KSharedConfig>
 
-#include <QMetaObject>
-#include <QMenu>
 
 /// \internal
 class KexiScriptPart::Private
