@@ -21,9 +21,6 @@
 #include "kexiinputtableedit.h"
 #include <kexi_global.h>
 
-#include <QRegExp>
-#include <QEvent>
-#include <QTimer>
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>

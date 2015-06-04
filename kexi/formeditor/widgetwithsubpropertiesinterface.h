@@ -23,7 +23,6 @@
 #include "kformdesigner_export.h"
 
 #include <QWidget>
-#include <QPointer>
 #include <QVariant>
 #include <QSet>
 

@@ -27,8 +27,6 @@
 #include <db/RecordData.h>
 #include <db/tableviewdata.h>
 
-#include <QPointer>
-#include <QVector>
 #include <QList>
 #include <QByteArray>
 

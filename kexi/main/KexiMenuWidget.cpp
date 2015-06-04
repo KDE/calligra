@@ -43,7 +43,6 @@
 #include <QStyle>
 #include <QEvent>
 #include <QTimer>
-#include <QLayout>
 #include <QMenu>
 #include <QPainter>
 #include <QApplication>
@@ -55,7 +54,6 @@
 # include <QWhatsThis>
 #endif
 #include <QWidgetAction>
-#include <QToolButton>
 #include <QPushButton>
 #include <QScopedPointer>
 #include <QDesktopServices>

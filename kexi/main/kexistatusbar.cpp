@@ -23,9 +23,7 @@
 #include "kexistatusbar.h"
 
 #include <QToolButton>
-#include <QWidgetAction>
 #include <QCheckBox>
-#include <QVBoxLayout>
 #include <QMenu>
 
 #include <kdebug.h>

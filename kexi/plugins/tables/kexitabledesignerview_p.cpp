@@ -20,9 +20,6 @@
 #include "kexitabledesignerview_p.h"
 #include "kexitabledesignerview.h"
 
-#include <QLayout>
-#include <QLabel>
-#include <QSplitter>
 
 #include <kdebug.h>
 #include <klocale.h>

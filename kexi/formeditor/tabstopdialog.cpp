@@ -22,7 +22,6 @@
 
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QFrame>
 #include <QPushButton>
 #include <QDialogButtonBox>
 

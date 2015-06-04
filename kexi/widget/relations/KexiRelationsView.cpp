@@ -27,7 +27,6 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QPushButton>
-#include <QDialog>
 
 #include <kcombobox.h>
 #include <klocale.h>

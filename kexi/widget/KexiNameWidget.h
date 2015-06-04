@@ -23,8 +23,6 @@
 #include "kexiextwidgets_export.h"
 
 #include <QLabel>
-#include <QLayout>
-#include <QGridLayout>
 
 class QLineEdit;
 

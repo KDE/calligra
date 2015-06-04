@@ -21,8 +21,6 @@
 #define AlterTableTester_H
 
 #include <QUrlOperator>
-#include <QtNetwork>
-#include <QNetworkProtocol>
 #include <db/tristate.h>
 
 class KexiTableDesignerInterface;

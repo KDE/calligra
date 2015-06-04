@@ -21,8 +21,6 @@
 #include <migration/keximigrate_p.h>
 
 #include <QString>
-#include <QRegExp>
-#include <QFile>
 #include <QVariant>
 #include <QList>
 #include <kdebug.h>
