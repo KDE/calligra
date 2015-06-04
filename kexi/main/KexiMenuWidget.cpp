@@ -34,10 +34,10 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
+#include <KLocalizedString>
 
 #include <QCache>
 #include <QStyle>

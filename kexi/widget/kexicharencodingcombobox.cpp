@@ -20,11 +20,12 @@
 #include "kexicharencodingcombobox.h"
 
 #include <QTextCodec>
+#include <QLocale>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <kcharsets.h>
+#include <KLocalizedString>
 
 class KexiCharacterEncodingComboBox::Private {
 public:
@@ -38,12 +39,12 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
     QWidget* parent, const QString& selectedEncoding)
   : KComboBox(parent), d(new Private)
 {
-    QString defaultEncoding(QString::fromLatin1(KLocale::global()->encoding()));
+    QString defaultEncoding(QString::fromLatin1(KexiUtils::encoding()));
     QString defaultEncodingDescriptiveName;
 
     QString _selectedEncoding = selectedEncoding;
     if (_selectedEncoding.isEmpty())
-        _selectedEncoding = QString::fromLatin1(KLocale::global()->encoding());
+        _selectedEncoding = defaultEncoding;
 
     QStringList descEncodings(KCharsets::charsets()->descriptiveEncodingNames());
 
@@ -88,7 +89,7 @@ KexiCharacterEncodingComboBox::~KexiCharacterEncodingComboBox()
 QString KexiCharacterEncodingComboBox::selectedEncoding() const
 {
     if (defaultEncodingSelected()) {
-        return QString::fromLatin1(KLocale::global()->encoding());
+        return QString::fromLatin1(KexiUtils::encoding());
     } else {
         return KCharsets::charsets()->encodingForName(currentText());
     }

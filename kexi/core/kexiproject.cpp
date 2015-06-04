@@ -23,7 +23,7 @@
 #include <QDir>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <kexiutils/identifier.h>
 

@@ -29,16 +29,14 @@
 #include <QPushButton>
 
 #include <kcombobox.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <db/connection.h>
 #include <db/utils.h>
 
 #include <KexiIcon.h>
-
 #include <kexiutils/utils.h>
-
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include "KexiRelationsScrollArea.h"

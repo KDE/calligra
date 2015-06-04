@@ -18,7 +18,7 @@
 */
 
 #include "KexiPushButton.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDir>
 #include <QUrl>

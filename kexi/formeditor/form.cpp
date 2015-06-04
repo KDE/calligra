@@ -32,11 +32,11 @@
 #include <kundo2stack.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kfontdialog.h>
 #include <ktextedit.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 

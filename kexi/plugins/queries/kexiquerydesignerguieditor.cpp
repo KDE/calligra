@@ -26,10 +26,11 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QSet>
+#include <QLocale>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
+#include <KLocalizedString>
 
 #include <db/field.h>
 #include <db/queryschema.h>
@@ -1387,7 +1388,8 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
                                           QDateTime::fromString(res, Qt::ISODate));
     } else if ((str[0] >= '0' && str[0] <= '9') || str[0] == '-' || str[0] == '+') {
         //number
-        QString decimalSym = KLocale::global()->decimalSymbol();
+        QLocale locale;
+        const QChar decimalSym = locale.decimalPoint();
         bool ok;
         int pos = str.indexOf('.');
         if (pos == -1) {//second chance: local decimal symbol

@@ -22,11 +22,11 @@
 #include <kstandardguiitem.h>
 #include <kstandardaction.h>
 #include <kcombobox.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QDialog>
 #include <QCheckBox>
