@@ -63,7 +63,7 @@ KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
     update(text, QIcon());
 }
 
-KexiSmallToolButton::KexiSmallToolButton(const KIcon& icon, const QString& text,
+KexiSmallToolButton::KexiSmallToolButton(const QIcon& icon, const QString& text,
         QWidget* parent)
         : QToolButton(parent)
         , d(new Private)

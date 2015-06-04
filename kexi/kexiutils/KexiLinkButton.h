@@ -24,6 +24,8 @@
 
 #include <QPushButton>
 
+class KGuiItem;
+
 //! A flat icon-based button without background that behaves like a link
 class KEXIUTILS_EXPORT KexiLinkButton : public QPushButton
 {
@@ -31,7 +33,7 @@ class KEXIUTILS_EXPORT KexiLinkButton : public QPushButton
 public:
     explicit KexiLinkButton(QWidget* parent = 0);
 
-    explicit KexiLinkButton(const KIcon &icon, QWidget* parent = 0);
+    explicit KexiLinkButton(const QIcon &icon, QWidget* parent = 0);
 
     explicit KexiLinkButton(const KGuiItem &item, QWidget *parent = 0);
 
@@ -52,14 +54,14 @@ public:
         the button's icon. */
     bool usesForegroundColor() const;
 
-    void setIcon(const KIcon &icon);
+    void setIcon(const QIcon &icon);
     
 protected:
     virtual void changeEvent(QEvent* event);
 
 private:
     void init();
-    void updateIcon(const KIcon &icon);
+    void updateIcon(const QIcon &icon);
 
     class Private;
     Private * const d;

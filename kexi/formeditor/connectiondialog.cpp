@@ -144,7 +144,7 @@ void
 ConnectionDialog::initTable()
 {
     KexiDB::TableViewColumn *col0 = new KexiDB::TableViewColumn(xi18n("OK?"), KexiDB::Field::Text);
-    col0->field()->setSubType("KIcon");
+    col0->field()->setSubType("QIcon");
     col0->setReadOnly(true);
     col0->field()->setDescription(xi18n("Connection correctness"));
     d->data->addColumn(col0);
