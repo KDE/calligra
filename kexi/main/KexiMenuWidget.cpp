@@ -383,7 +383,7 @@ KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
 {
 }
 
-KexiMenuWidgetAction::KexiMenuWidgetAction(const KIcon &icon, const QString &text,
+KexiMenuWidgetAction::KexiMenuWidgetAction(const QIcon &icon, const QString &text,
                                            QObject *parent)
  : KAction(icon, text, parent)
  , d(new KexiMenuWidgetActionPrivate)
