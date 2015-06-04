@@ -24,11 +24,11 @@
 #define KEXIMENUWIDGET_H
 
 #include <kstandardaction.h>
-#include <kaction.h>
 
 #include <QWidget>
 #include <QString>
 #include <QIcon>
+#include <QAction>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;
@@ -36,7 +36,7 @@ class QStyleOptionMenuItem;
 class QEventLoop;
 struct KexiMenuWidgetCaused;
 
-class KexiMenuWidgetAction : public KAction
+class KexiMenuWidgetAction : public QAction
 {
     Q_OBJECT
 public:

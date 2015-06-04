@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#include <KDbUtils>
+
 class KexiContextMessage::Private
 {
 public:
@@ -333,7 +335,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
         QMouseEvent *me = static_cast<QMouseEvent*>(event);
         QWidget *w = QApplication::widgetAt(me->globalPos());
         //kDebug() << watched << w << w->parentWidget();
-        if (!KexiUtils::hasParent(this, w)) {
+        if (!KDbUtils::hasParent(this, w)) {
             actionTriggered();
             return true;
         }
