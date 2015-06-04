@@ -27,12 +27,12 @@
 #include <QDomDocument>
 #include <QLineEdit>
 #include <QMenu>
+#include <QAction>
 
 #include <kundo2stack.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kfontdialog.h>
@@ -579,11 +579,11 @@ void Form::emitUndoActionSignals()
 {
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
+    QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 
-    KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
+    QAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 #endif
@@ -805,7 +805,7 @@ void Form::emitUndoEnabled()
 {
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
+    QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 #endif
@@ -815,7 +815,7 @@ void Form::emitRedoEnabled()
 {
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
+    QAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 #endif
