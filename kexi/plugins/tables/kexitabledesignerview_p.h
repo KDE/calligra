@@ -21,7 +21,6 @@
 #define KEXIALTERTABLEDIALOG_P_H
 
 #include "kexitabledesignerview.h"
-#include <QList>
 #include <kundo2command.h>
 #include <QByteArray>
 

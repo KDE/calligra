@@ -27,7 +27,6 @@
 #include <db/tristate.h>
 #include "migratemanager.h"
 
-#include <QProgressBar>
 #include <QLabel>
 
 class QLabel;

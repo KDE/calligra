@@ -29,7 +29,6 @@
 
 #include <QVariantList>
 #include <QByteArray>
-#include <QPointer>
 
 namespace Kexi
 {

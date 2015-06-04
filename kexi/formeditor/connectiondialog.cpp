@@ -20,10 +20,8 @@
 
 #include "connectiondialog.h"
 
-#include <QLayout>
 #include <QLabel>
 #include <QRegExp>
-#include <QMetaObject>
 #include <QPushButton>
 
 #include <kmessagebox.h>

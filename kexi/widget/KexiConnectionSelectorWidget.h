@@ -31,7 +31,6 @@
 
 #include <QPointer>
 #include <QTreeWidgetItem>
-#include <QLineEdit>
 
 class KexiFileWidget;
 

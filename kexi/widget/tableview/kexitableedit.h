@@ -28,7 +28,6 @@
 
 #include <QVariant>
 #include <QKeyEvent>
-#include <QEvent>
 
 namespace KexiDB
 {

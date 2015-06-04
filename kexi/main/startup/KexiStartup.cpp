@@ -48,7 +48,6 @@
 #include <unistd.h>
 
 #include <QApplication>
-#include <QLayout>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QProgressDialog>

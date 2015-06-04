@@ -22,8 +22,6 @@
 #include "KexiMobileToolbar.h"
 #include <KexiIcon.h>
 
-#include <QToolButton>
-#include <QVBoxLayout>
 #include <QAction>
 #include <kdebug.h>
 #include <QPushButton>

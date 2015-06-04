@@ -24,7 +24,6 @@
 
 #include <kdebug.h>
 #include <KProperty>
-#include <KPropertySet>
 
 namespace KFormDesigner {
 class WidgetInfo::Private

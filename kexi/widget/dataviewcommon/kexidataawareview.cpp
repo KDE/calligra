@@ -28,8 +28,6 @@
 
 #include <kactioncollection.h>
 
-#include <QVBoxLayout>
-#include <QMenu>
 
 class KexiDataAwareView::Private
 {

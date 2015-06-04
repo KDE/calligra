@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QtGlobal>
 #ifdef Q_OS_WIN
 # define KDEWIN_FCNTL_H // avoid redef.
 # define KDEWIN_SYS_STAT_H // avoid redef.
@@ -34,7 +33,6 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QFile>
 #include <QVariant>
 #include <QList>
 #include <kdebug.h>

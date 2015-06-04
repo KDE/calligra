@@ -23,7 +23,6 @@
 
 #include <kdebug.h>
 
-#include <QPointF>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
