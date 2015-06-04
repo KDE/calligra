@@ -81,13 +81,16 @@ Q_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
 
 void KexiUtils::setWaitCursor(bool noDelay)
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qobject_cast<QApplication*>(qApp)) {
         _delayedCursorHandler->start(noDelay);
+    }
 }
+
 void KexiUtils::removeWaitCursor()
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qobject_cast<QApplication*>(qApp)) {
         _delayedCursorHandler->stop();
+    }
 }
 
 WaitCursor::WaitCursor(bool noDelay)
