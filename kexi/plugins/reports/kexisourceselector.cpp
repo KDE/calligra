@@ -20,8 +20,8 @@
 #include "KexiDataSourceComboBox.h"
 #include <kexiproject.h>
 
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QPushButton>
 #include <QLabel>

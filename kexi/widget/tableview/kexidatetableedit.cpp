@@ -27,10 +27,8 @@
 #include <QClipboard>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <kexiutils/utils.h>
-
 
 KexiDateTableEdit::KexiDateTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)

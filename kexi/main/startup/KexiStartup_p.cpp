@@ -22,8 +22,8 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kde_file.h>
+#include <KLocalizedString>
 
 #include <QFileInfo>
 #include <QDir>
