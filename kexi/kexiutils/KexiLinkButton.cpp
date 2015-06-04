@@ -20,6 +20,8 @@
 #include "KexiLinkButton.h"
 #include "utils.h"
 
+#include <KGuiItem>
+
 #include <QCursor>
 #include <QStyle>
 #include <QStyleOptionButton>
@@ -34,7 +36,7 @@ public:
     }
     bool usesForegroundColor;
     //! Used to remember the orig icon so setUsesForegroundColor(false) is possible
-    KIcon origIcon;
+    QIcon origIcon;
 };
 
 KexiLinkButton::KexiLinkButton(QWidget* parent)
@@ -43,20 +45,20 @@ KexiLinkButton::KexiLinkButton(QWidget* parent)
     init();
 }
 
-KexiLinkButton::KexiLinkButton(const KIcon &icon, QWidget* parent)
+KexiLinkButton::KexiLinkButton(const QIcon &icon, QWidget* parent)
  : QPushButton(icon, QString(), parent), d(new Private)
 {
     init();
 }
 
 KexiLinkButton::KexiLinkButton(const QPixmap &pixmap, QWidget* parent)
- : QPushButton(QIcon::fromTheme(pixmap), QString(), parent), d(new Private)
+ : QPushButton(pixmap, QString(), parent), d(new Private)
 {
     init();
 }
 
 KexiLinkButton::KexiLinkButton(const KGuiItem &item, QWidget *parent)
- : QPushButton(item, parent), d(new Private)
+ : QPushButton(item.icon(), item.text(), parent), d(new Private)
 {
     init();
 }
@@ -77,7 +79,7 @@ void KexiLinkButton::init()
     option.initFrom(this);
     int m = style()->pixelMetric(QStyle::PM_ButtonMargin, &option, this);
     setFixedSize(iconSize() + QSize(m*2, m*2));
-    d->origIcon = QIcon::fromTheme(icon());
+    d->origIcon = icon();
 }
 
 void KexiLinkButton::setUsesForegroundColor(bool set)
@@ -98,24 +100,24 @@ void KexiLinkButton::changeEvent(QEvent* event)
     switch (event->type()) {
     case QEvent::EnabledChange:
     case QEvent::PaletteChange:
-        updateIcon(QIcon::fromTheme(icon()));
+        updateIcon(icon());
         break;
     default:;
     }
     QPushButton::changeEvent(event);
 }
 
-void KexiLinkButton::updateIcon(const KIcon &icon)
+void KexiLinkButton::updateIcon(const QIcon &icon)
 {
     if (!d->usesForegroundColor)
         return;
     QColor c(palette().color(foregroundRole()));
     QPixmap pixmap(icon.pixmap(iconSize()));
     KexiUtils::replaceColors(&pixmap, c);
-    QPushButton::setIcon(QIcon::fromTheme(pixmap));
+    QPushButton::setIcon(pixmap);
 }
 
-void KexiLinkButton::setIcon(const KIcon &icon)
+void KexiLinkButton::setIcon(const QIcon &icon)
 {
     d->origIcon = icon;
     if (d->usesForegroundColor) {
