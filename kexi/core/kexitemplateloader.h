@@ -38,7 +38,7 @@ public:
     QString category;
     QString filename;
     bool enabled;
-    KIcon icon;
+    QIcon icon;
     KexiProjectData::AutoOpenObjects autoopenObjects;
 };
 
