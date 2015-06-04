@@ -65,8 +65,8 @@ protected:
     virtual void paintEvent(QPaintEvent * event);
 
     KexiMainWidget *m_mainWidget;
-    KAction *m_closeAction;
-    KAction *m_closeAllTabsAction;
+    QAction *m_closeAction;
+    QAction *m_closeAllTabsAction;
 
 private:
     int m_tabIndex;
@@ -348,7 +348,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action);
+    void setupMainMenuActionShortcut(QAction * action);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
@@ -629,14 +629,14 @@ protected Q_SLOTS:
 private:
     //! Adds action @a name with text @a text and optional shortcut @a shortcut.
     //! This is helper method containing workaround for Kexi
-    //! until KAction::setShortcut() works again.
+    //! until QAction::setShortcut() works again.
     //! @return created action
-    KAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
+    QAction * addAction(const char *name, const QString &text, const char *shortcut = 0);
 
     //! Like @ref addAction(const char *, const QString&, const char *) but also adds
     //! icon @a icon.
     //! @return created action
-    KAction* addAction(const char *name, const QIcon &icon, const QString& text,
+    QAction * addAction(const char *name, const QIcon &icon, const QString& text,
                        const char *shortcut = 0);
 
     class MessageHandler;

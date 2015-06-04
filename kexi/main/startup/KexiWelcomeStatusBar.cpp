@@ -28,10 +28,8 @@
 
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
-
 #include <klocale.h>
 #include <kdebug.h>
-#include <kaction.h>
 #include <kstandardguiitem.h>
 #include <kfadewidgeteffect.h>
 #include <kconfiggroup.h>
@@ -56,6 +54,7 @@
 #include <QTemporaryDir>
 #include <QDir>
 #include <QFontDatabase>
+#include <QAction>
 
 #include <stdio.h>
 
@@ -693,9 +692,9 @@ public:
     QVBoxLayout *lyr;
     QPointer<KexiContextMessageWidget> msgWidget;
     QFont smallFont;
-    KAction *helpAction;
-    KAction *shareAction;
-    KAction *cancelAction;
+    QAction *helpAction;
+    QAction *shareAction;
+    QAction *cancelAction;
     QString label_involved_text_mask;
     QString link_share_more_usage_info_mask;
     QPointer<QGridLayout> contributionHelpLayout;
@@ -777,16 +776,16 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     KexiContextMessage msg(lbl->text());
     delete widget;
     if (!d->helpAction) {
-        d->helpAction = new KAction(KStandardGuiItem::help().icon(),
+        d->helpAction = new QAction(KStandardGuiItem::help().icon(),
                                     KStandardGuiItem::help().text(), this);
         connect(d->helpAction, SIGNAL(triggered()), this, SLOT(showContributionHelp()));
     }
     if (!d->shareAction) {
-        d->shareAction = new KAction(KStandardGuiItem::yes().icon(), xi18n("Share"), this);
+        d->shareAction = new QAction(KStandardGuiItem::yes().icon(), xi18n("Share"), this);
         connect(d->shareAction, SIGNAL(triggered()), this, SLOT(slotShareFeedback()));
     }
     if (!d->cancelAction) {
-        d->cancelAction = new KAction(KStandardGuiItem::cancel().icon(),
+        d->cancelAction = new QAction(KStandardGuiItem::cancel().icon(),
                                       KStandardGuiItem::cancel().text(), this);
         QObject::connect(d->cancelAction, SIGNAL(triggered()), this, SLOT(slotCancelled()));
     }

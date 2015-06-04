@@ -88,7 +88,7 @@ Info::Private::Private()
 
 //------------------------------
 
-/*! \return "create" KAction's name for part defined by \a info.
+/*! \return "create" QAction's name for part defined by \a info.
  The result is like "tablepart_create". */
 static QString nameForCreateAction(const Info& info)
 {
@@ -98,7 +98,7 @@ static QString nameForCreateAction(const Info& info)
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(QIcon::fromTheme(info->createItemIconName()), info->instanceCaption() + "...", parent)
+    : QAction(QIcon::fromTheme(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
     setObjectName(nameForCreateAction(*m_info));
