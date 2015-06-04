@@ -51,8 +51,9 @@ target_include_directories(kexiutils
 
 target_link_libraries(kexiutils
     PUBLIC
-        #KF5::KIOWidgets
+        KF5::KIOWidgets #for KRun...
         KF5::IconThemes
+        KF5::WidgetsAddons
         KDb
 )
 #target_link_libraries(kexiutils LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
