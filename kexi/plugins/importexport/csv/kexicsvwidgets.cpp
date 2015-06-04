@@ -26,9 +26,9 @@
 #include <QVector>
 #include <QLineEdit>
 
-#include <klocale.h>
 #include <kiconloader.h>
 #include <kio/global.h>
+#include <KLocalizedString>
 
 #include <kexi_global.h>
 #include <kexiutils/utils.h>

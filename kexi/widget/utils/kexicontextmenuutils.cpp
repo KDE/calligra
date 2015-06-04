@@ -22,12 +22,12 @@
 
 #include <KexiIcon.h>
 
-#include <klocale.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
+#include <KLocalizedString>
 
 #include <QUrl>
 #include <QAction>

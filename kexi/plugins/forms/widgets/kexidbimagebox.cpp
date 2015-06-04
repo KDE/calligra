@@ -34,9 +34,9 @@
 #include <QStandardPaths>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>
+#include <KLocalizedString>
 
 #include <kiconeffect.h>
 

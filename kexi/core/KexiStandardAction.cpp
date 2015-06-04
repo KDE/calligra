@@ -23,7 +23,7 @@
 
 #include <kglobal.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QHash>
 #include <QKeySequence>

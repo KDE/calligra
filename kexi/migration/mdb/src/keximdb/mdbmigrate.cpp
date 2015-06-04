@@ -27,7 +27,7 @@
 #include <QList>
 
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <kexiutils/identifier.h>
 

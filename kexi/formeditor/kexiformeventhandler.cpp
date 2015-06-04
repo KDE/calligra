@@ -23,7 +23,6 @@
 #include <QAction>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kactioncollection.h>
 
 #include <db/tableviewdata.h>

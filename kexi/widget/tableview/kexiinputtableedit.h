@@ -109,7 +109,7 @@ protected:
 
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
-    QString m_decsym; //! decimal symbol
+    QChar m_decsym; //! decimal symbol
     QLineEdit *m_lineedit;
 
 Q_SIGNALS:

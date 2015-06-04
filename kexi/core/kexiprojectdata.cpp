@@ -27,9 +27,9 @@
 #include <QStringList>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <KLocalizedString>
 
 #include <db/drivermanager.h>
 #include <db/connectiondata.h>

@@ -24,7 +24,7 @@
 #include <QLineEdit>
 
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <db/validator.h>
 #include <kexiutils/identifier.h>

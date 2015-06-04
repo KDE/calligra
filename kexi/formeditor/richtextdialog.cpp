@@ -31,7 +31,7 @@
 #include <kcolorcombo.h>
 #include <ktextedit.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace KFormDesigner;
 

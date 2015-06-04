@@ -35,8 +35,8 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QCheckBox>
 #include <QTimer>

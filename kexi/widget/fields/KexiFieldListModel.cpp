@@ -20,12 +20,13 @@
 
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-#include <klocalizedstring.h>
+
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 #include <db/utils.h>
 #include <drivers/xbase/xbaseexport.h>
 
+#include <KLocalizedString>
 #include <kdebug.h>
 
 #include <QMimeData>

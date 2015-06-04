@@ -34,12 +34,12 @@
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 #include <kexi.h>

@@ -22,8 +22,8 @@
 
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kactioncollection.h>
+#include <KLocalizedString>
 
 #include <KPropertySet>
 

@@ -20,8 +20,9 @@
 #include "kexirelationdesignshape.h"
 #include <KoShapeLoadingContext.h>
 #include <KexiIcon.h>
-#include <klocale.h>
+
 #include <kdebug.h>
+#include <KLocalizedString>
 
 KexiRelationDesignFactory::KexiRelationDesignFactory()
     : KoShapeFactoryBase("KexiRelationDesignShape",

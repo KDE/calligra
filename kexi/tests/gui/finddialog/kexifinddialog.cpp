@@ -21,7 +21,7 @@
 
 #include <kstandardguiitem.h>
 #include <kcombobox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QCheckBox>
 

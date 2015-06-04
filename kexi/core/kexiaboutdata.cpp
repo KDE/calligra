@@ -24,7 +24,7 @@
 
 #include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
 #include <KexiIcon.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 static const char description[] =
     I18N_NOOP("Visual database applications creator");

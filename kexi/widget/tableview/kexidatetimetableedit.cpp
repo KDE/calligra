@@ -27,7 +27,6 @@
 #include <QClipboard>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <kexiutils/utils.h>
 

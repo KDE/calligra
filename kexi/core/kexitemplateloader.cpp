@@ -23,7 +23,6 @@
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
@@ -64,7 +63,8 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
     KexiTemplateInfoList list;
 //! @todo OK? KGlobal::mainComponent().componentName()
     const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
-    QString lang(KLocale::global()->language());
+    QLocale locale;
+    QString lang(QLocale::languageToString(locale.language()));
     QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subdir));
     while (true) {
         foreach(const QString &dirname, dirs) {

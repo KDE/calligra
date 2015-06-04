@@ -41,7 +41,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
-#include <klocale.h>
 #include <kstandardshortcut.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -53,6 +52,7 @@
 #include <khelpmenu.h>
 #include <kfiledialog.h>
 #include <kmultitabbar.h>
+#include <KLocalizedString>
 
 #include <db/connection.h>
 #include <db/utils.h>

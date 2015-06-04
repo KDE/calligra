@@ -41,10 +41,10 @@
 #include <QPushButton>
 #include <QDialog>
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)

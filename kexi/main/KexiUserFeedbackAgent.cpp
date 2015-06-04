@@ -23,17 +23,18 @@
 #include <KexiMainWindowIface.h>
 
 #include <KIO/Job>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <kdeversion.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QProcess>
 #include <QUuid>
+#include <QLocale>
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -252,11 +253,13 @@ void KexiUserFeedbackAgent::Private::updateData()
     ADD("screen_height", screen.height(), ScreenInfoArea);
     ADD("screen_count", QApplication::desktop()->screenCount(), ScreenInfoArea);
 
-    ADD("country", KLocale::global()->country(), RegionalSettingsArea);
-    ADD("language", KLocale::global()->language(), RegionalSettingsArea);
-    ADD("date_format", KLocale::global()->dateFormat(), RegionalSettingsArea);
-    ADD("short_date_format", KLocale::global()->dateFormatShort(), RegionalSettingsArea);
-    ADD("time_format", KLocale::global()->timeFormat(), RegionalSettingsArea);
+    QLocale locale;
+    ADD("country", QLocale::countryToString(locale.country()), RegionalSettingsArea);
+    ADD("language", QLocale::languageToString(locale.language()), RegionalSettingsArea);
+    ADD("date_format", locale.dateFormat(QLocale::LongFormat), RegionalSettingsArea);
+    ADD("short_date_format", locale.dateFormat(QLocale::ShortFormat), RegionalSettingsArea);
+    ADD("time_format", locale.timeFormat(QLocale::LongFormat), RegionalSettingsArea);
+    //! @todo KEXI3 "short_time_format"
     ADD("right_to_left", QApplication::isRightToLeft(), RegionalSettingsArea);
 #undef ADD
 }

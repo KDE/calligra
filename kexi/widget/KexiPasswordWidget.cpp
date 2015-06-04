@@ -31,7 +31,6 @@
 
 #include <kcombobox.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <ktitlewidget.h>
 

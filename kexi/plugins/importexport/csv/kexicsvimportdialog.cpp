@@ -54,13 +54,14 @@
 #include <QDialog>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kcharsets.h>
 #include <knuminput.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KGuiItem>
 
 #include <KexiIcon.h>
-
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <core/kexi.h>
@@ -85,11 +86,8 @@
 #include <kexidb/dbobjectnamevalidator.h>
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldListModel.h>
-
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
-#include <KConfigGroup>
-#include <KGuiItem>
 
 #define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
 

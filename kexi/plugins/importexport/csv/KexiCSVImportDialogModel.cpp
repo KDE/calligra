@@ -28,7 +28,7 @@
 
 #include "KexiCSVImportDialogModel.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QVector>
 

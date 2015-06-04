@@ -21,7 +21,8 @@
 
 #include <QLabel>
 #include <QLineEdit>
-#include <KLocale>
+
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 

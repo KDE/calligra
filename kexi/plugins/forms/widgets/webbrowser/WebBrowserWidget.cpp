@@ -25,11 +25,11 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 #include <KGuiItem>
 #include <KStandardGuiItem>
+#include <KLocalizedString>
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()

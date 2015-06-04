@@ -20,9 +20,9 @@
 #include "kexiqueryparameters.h"
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kinputdialog.h>
 #include <knumvalidator.h>
+#include <KLocalizedString>
 
 #include <db/queryschemaparameter.h>
 #include <db/utils.h>

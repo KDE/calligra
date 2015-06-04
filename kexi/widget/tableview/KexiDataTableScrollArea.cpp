@@ -21,7 +21,6 @@
 
 #include "KexiDataTableScrollArea.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 
 #include <db/connection.h>

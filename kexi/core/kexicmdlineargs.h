@@ -23,7 +23,7 @@
 #define KEXICMDLINEARGS_H
 
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 static KCmdLineOptions kexi_options()
 {

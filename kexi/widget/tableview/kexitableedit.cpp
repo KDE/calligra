@@ -30,7 +30,6 @@
 #include <QEvent>
 
 #include <kglobal.h>
-#include <klocale.h>
 #include <kdebug.h>
 
 #ifdef KEXI_MOBILE

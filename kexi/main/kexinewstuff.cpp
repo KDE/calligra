@@ -23,8 +23,8 @@
 #include <kdebug.h>
 #include <ktar.h>
 #include <kfiledialog.h>
-#include <klocale.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include "kexinewstuff.h"
 

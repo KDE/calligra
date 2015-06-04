@@ -24,11 +24,12 @@
 #include <QCheckBox>
 #include <QLabel>
 
-#include <db/tableschema.h>
-#include <KexiIcon.h>
-
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
+
+#include <db/tableschema.h>
+
+#include <KexiIcon.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <db/connection.h>

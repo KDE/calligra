@@ -22,8 +22,8 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <klocale.h>
 #include <kiconloader.h>
+#include <KLocalizedString>
 
 class KexiObjectInfoLabel::Private
 {

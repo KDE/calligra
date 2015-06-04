@@ -26,8 +26,8 @@
 #include <widget/utils/kexicontextmenuutils.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kiconloader.h>
+#include <KLocalizedString>
 
 #include <QDataStream>
 #include <QFile>

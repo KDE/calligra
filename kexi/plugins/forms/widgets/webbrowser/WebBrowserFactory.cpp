@@ -30,7 +30,7 @@
 #include <QVariantList>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "webbrowser")

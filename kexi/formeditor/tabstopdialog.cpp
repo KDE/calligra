@@ -26,7 +26,7 @@
 #include <QDialogButtonBox>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 

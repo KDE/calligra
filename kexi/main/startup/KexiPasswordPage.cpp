@@ -21,7 +21,7 @@
 #include <widget/KexiPasswordWidget.h>
 #include <db/connectiondata.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QLineEdit>
 #include <QVBoxLayout>

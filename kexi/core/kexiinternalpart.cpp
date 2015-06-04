@@ -27,7 +27,7 @@
 #include <kexi_global.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <db/msghandler.h>
 #include <db/pluginloader.h>

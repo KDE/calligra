@@ -29,8 +29,8 @@
 #include <KoServiceLocator.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kservice.h>
+#include <KLocalizedString>
 
 #include <assert.h>
 

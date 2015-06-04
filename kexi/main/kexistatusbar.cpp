@@ -27,7 +27,7 @@
 #include <QMenu>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>

@@ -26,8 +26,8 @@
 #include <QWidget>
 
 #include <kglobal.h>
-#include <klocale.h>
 #include <kcolorscheme.h>
+#include <KLocalizedString>
 
 //! A color for displaying default values or autonumbers
 #define SPECIAL_TEXT_COLOR KColorScheme(QPalette::Active, KColorScheme::View).foreground(KColorScheme::LinkText).color()

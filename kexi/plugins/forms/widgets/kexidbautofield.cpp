@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "kexidbcheckbox.h"
 #include "kexidbimagebox.h"

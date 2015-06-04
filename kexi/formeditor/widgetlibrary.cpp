@@ -25,9 +25,9 @@
 #include <QMenu>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kservice.h>
 #include <kactioncollection.h>
+#include <KLocalizedString>
 
 #include <KoServiceLocator.h>
 #include <KexiIcon.h>

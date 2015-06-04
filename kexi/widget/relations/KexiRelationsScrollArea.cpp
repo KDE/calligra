@@ -27,7 +27,7 @@
 #include <QAction>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <db/tableschema.h>
 #include <db/indexschema.h>

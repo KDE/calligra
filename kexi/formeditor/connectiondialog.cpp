@@ -26,7 +26,7 @@
 
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 #include "kexitableview.h"

@@ -18,9 +18,9 @@
 */
 
 #include <kapplication.h>
-#include <klocale.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <KLocalizedString>
 
 #include "kexifinddialog.h"
 

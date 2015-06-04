@@ -18,7 +18,7 @@
  */
 
 #include "KexiServerDriverNotFoundMessage.h"
-#include <klocale.h>
+#include <KLocalizedString>
 
 KexiServerDriverNotFoundMessage::KexiServerDriverNotFoundMessage(QWidget *parent):
     KexiContextMessageWidget(parent, 0, 0,

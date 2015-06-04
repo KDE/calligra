@@ -24,9 +24,9 @@
 #include <kexi_version.h>
 
 #include <KAboutData>
-#include <KLocale>
 #include <KTitleWidget>
 #include <KToolInvocation>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

@@ -22,10 +22,10 @@
 #include <kexiutils/utils.h>
 
 #include <kconfig.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QLabel>
 #include <QCheckBox>
@@ -34,6 +34,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QLocale>
 
 KexiCSVImportOptions::DateFormat dateFormatFromString(const QString& s)
 {
@@ -63,7 +64,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
     KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     encoding = importExportGroup.readEntry("DefaultEncodingForImportingCSVFiles");
     if (encoding.isEmpty()) {
-        encoding = QString::fromLatin1(KLocale::global()->encoding());
+        encoding = QString::fromLatin1(KexiUtils::encoding());
         defaultEncodingExplicitySet = false;
     } else
         defaultEncodingExplicitySet = true;

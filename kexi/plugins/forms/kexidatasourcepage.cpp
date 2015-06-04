@@ -22,9 +22,9 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kfadewidgeteffect.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 #include <widget/properties/KexiPropertyEditorView.h>

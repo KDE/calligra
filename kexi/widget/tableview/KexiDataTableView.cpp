@@ -19,18 +19,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include <klocale.h>
+#include "KexiDataTableView.h"
+#include "KexiDataTableScrollArea.h"
+#include <core/KexiWindow.h>
+#include <core/kexiproject.h>
+#include <core/KexiMainWindowIface.h>
 
 #include <db/cursor.h>
 #include <db/utils.h>
 #include <db/tableviewdata.h>
-
-#include "KexiDataTableScrollArea.h"
-#include "KexiDataTableView.h"
-#include <core/KexiWindow.h>
-#include <core/kexiproject.h>
-#include <core/KexiMainWindowIface.h>
 
 class KexiDataTableView::Private
 {

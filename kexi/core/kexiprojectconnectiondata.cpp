@@ -23,7 +23,6 @@
 #include <QDomDocument>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <db/connectiondata.h>
 #include <db/drivermanager.h>

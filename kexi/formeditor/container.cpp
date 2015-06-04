@@ -31,7 +31,6 @@
 #include <QMouseEvent>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include "utils.h"
 #include "container.h"

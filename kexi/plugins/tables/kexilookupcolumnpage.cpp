@@ -23,8 +23,8 @@
 #include <QHBoxLayout>
 
 #include <kiconloader.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 
