@@ -25,15 +25,11 @@
 #include "keximigratereportdata.h"
 #endif
 
-#include <QLabel>
-#include <QBoxLayout>
-#include <QScrollArea>
 #include <QLayout>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QGraphicsScene>
-#include <QScrollBar>
 
 #include <kdebug.h>
 #include "krscriptfunctions.h"

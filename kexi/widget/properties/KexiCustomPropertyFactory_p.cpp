@@ -19,7 +19,6 @@
 
 #include "KexiCustomPropertyFactory_p.h"
 
-#include <QLineEdit>
 #include <kdebug.h>
 #include <KProperty>
 #include <kexiutils/identifier.h>

@@ -19,13 +19,8 @@
 
 #include "kexitooltip.h"
 
-#include <QPixmap>
-#include <QBitmap>
 #include <QPainter>
-#include <QImage>
 #include <QFont>
-#include <QFontMetrics>
-#include <QTimer>
 #include <QToolTip>
 
 #ifdef __GNUC__

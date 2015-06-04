@@ -32,15 +32,11 @@
 
 #include <kdebug.h>
 #include <KStandardAction>
-#include <KAction>
 
-#include <QLabel>
 #include <QCheckBox>
-#include <QRadioButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QWhatsThis>
-#include <QLineEdit>
 #include <QDialogButtonBox>
 #include <QPushButton>
 

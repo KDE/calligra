@@ -38,12 +38,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QDialog>
-#include <QLayout>
 #include <QCheckBox>
-#include <QPaintEvent>
-#include <QPainter>
-#include <QProgressBar>
 #include <QTimer>
  
 KexiMainWelcomePage::KexiMainWelcomePage(

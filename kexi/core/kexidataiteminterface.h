@@ -22,7 +22,6 @@
 
 #include <QVariant>
 #include <QWidget>
-#include <QPointer>
 
 #include "kexicore_export.h"
 

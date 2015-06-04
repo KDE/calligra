@@ -19,8 +19,6 @@
 */
 
 #include <QLayout>
-#include <QLabel>
-#include <QMetaObject>
 #include <QClipboard>
 #include <QApplication>
 #include <QDomDocument>
@@ -42,7 +40,6 @@
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include <KProperty>
-#include <KPropertySet>
 #include <kexiutils/utils.h>
 
 #include "commands.h"
