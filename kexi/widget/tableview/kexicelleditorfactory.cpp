@@ -59,7 +59,7 @@ public:
         registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime);
         registerItem(*new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum);
         registerItem(*new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean);
-        registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon");
+        registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "QIcon");
         //default type
         registerItem(*new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType);
     }

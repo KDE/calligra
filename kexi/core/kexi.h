@@ -153,13 +153,13 @@ KEXICORE_EXPORT QString defaultFileBasedDriverIconName();
  If contains special workaround to properly load mimetype icon according to current theme,
  at least needed for Breeze.
  @see KexiDB::defaultFileBasedDriverIconName() */
-KEXICORE_EXPORT KIcon defaultFileBasedDriverIcon();
+KEXICORE_EXPORT QIcon defaultFileBasedDriverIcon();
 
 /*! \return icon name for database servers. */
 KEXICORE_EXPORT QString serverIconName();
 
 /*! \return icon for database servers. */
-KEXICORE_EXPORT KIcon serverIcon();
+KEXICORE_EXPORT QIcon serverIcon();
 
 }//namespace Kexi
 
@@ -167,7 +167,7 @@ KEXICORE_EXPORT KIcon serverIcon();
 KEXICORE_EXPORT QString KexiIconName(const QString &baseName);
 
 //! @return icon as understood by Kexi. Icon theme support is improved this way.
-KEXICORE_EXPORT KIcon KexiIcon(const QString &baseName);
+KEXICORE_EXPORT QIcon KexiIcon(const QString &baseName);
 
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
