@@ -23,7 +23,7 @@
 #include <klistview.h>
 #include <Klistbox.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 #include <KPropertyEditorView>

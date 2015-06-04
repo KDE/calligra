@@ -20,10 +20,11 @@
 #include "kexidatetimeformatter.h"
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kglobal.h>
+#include <KLocalizedString>
 
 #include <QLineEdit>
+#include <QLocale>
 
 class KexiDateFormatter::Private
 {
@@ -75,7 +76,9 @@ public:
 
     bool hoursWithLeadingZero;
 
-    //! Time format used in toString(). Notation from KLocale::setTimeFormat() is used.
+    //! Time format used in toString().
+    //! @todo KEXI3 port this to QLocale: Notation from KLocale::setTimeFormat() is used.
+    //! @todo KEXI3 Qt5's QTime/QDate::fromString() differs from KLocale::setTimeFormat()
     QString outputFormat;
 
     //! Used in fromString(const QString&) to convert string back to QTime
@@ -89,7 +92,8 @@ KexiDateFormatter::KexiDateFormatter()
 {
     // use "short date" format system settings
 //! @todo allow to override the format using column property and/or global app settings
-    QString df(KLocale::global()->dateFormatShort());
+    QLocale locale;
+    QString df(locale.dateFormat(QLocale::ShortFormat));
     if (df.length() > 2)
         d->separator = df.mid(2, 1);
     else
@@ -102,8 +106,7 @@ KexiDateFormatter::KexiDateFormatter()
     bool ok = df.length() >= 8;
     int yearpos, monthpos, daypos; //result of df.find()
     if (ok) {//look at % variables
-//! @todo more variables are possible here, see void KLocale::setDateFormatShort() docs
-//!       http://developer.kde.org/documentation/library/3.5-api/kdelibs-apidocs/kdecore/html/classKLocale.html#a59
+//! @todo more variables are possible here, see QDate::toString() docs
         yearpos = df.indexOf("%y", 0, Qt::CaseInsensitive); //&y or %y
         d->longYear = !(yearpos >= 0 && df.mid(yearpos + 1, 1) == "y");
         if (!d->longYear) {
@@ -233,7 +236,8 @@ QString KexiDateFormatter::toString(const QDate& date) const
 KexiTimeFormatter::KexiTimeFormatter()
         : d(new Private)
 {
-    QString tf(KLocale::global()->timeFormat());
+    QLocale locale;
+    QString tf(locale.timeFormat(QLocale::ShortFormat));
     //d->hourpos, d->minpos, d->secpos; are result of tf.indexOf()
     QString hourVariable, minVariable, secVariable;
 

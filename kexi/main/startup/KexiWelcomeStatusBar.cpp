@@ -28,7 +28,6 @@
 
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kstandardguiitem.h>
 #include <kfadewidgeteffect.h>
@@ -38,6 +37,7 @@
 #include <kcodecs.h>
 #include <kde_file.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QEvent>
 #include <QLayout>
@@ -55,6 +55,7 @@
 #include <QDir>
 #include <QFontDatabase>
 #include <QAction>
+#include <QLocale>
 
 #include <stdio.h>
 
@@ -955,6 +956,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
         slotToggleContributionDetailsDataVisibility();
     }
     // fill shared values
+    QLocale locale;
     foreach(QLabel* lbl, d->contributionDetailsWidget->findChildren<QLabel*>()) {
         if (lbl->objectName().startsWith(QLatin1String("value_"))) {
             QString name = lbl->objectName().mid(6); // cut "value_"
@@ -968,7 +970,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->countryMask = lbl->text();
                 }
                 value = d->countryMask
-                    .arg(KLocale::global()->countryCodeToName(f->value(name).toString()))
+                    .arg(f->value(name).toString() /*! @todo KEXI3 port KLocale::global()->countryCodeToName(f->value(name).toString()) */)
                     .arg(f->value(name).toString());
             }
             else if (name == QLatin1String("language")) {
@@ -976,7 +978,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->languageMask = lbl->text();
                 }
                 value = d->languageMask
-                    .arg(KLocale::global()->languageCodeToName(f->value(name).toString()))
+                    .arg(f->value(name).toString() /*! @todo KEXI3 port KLocale::global()->languageCodeToName(f->value(name).toString()) */)
                     .arg(f->value(name).toString());
             }
             else {
@@ -1008,7 +1010,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
             }
             else if (days > 0) {
                 recentDonation = xi18ncp("Recent donation date (xx days)", "%1 (1 day)", "%1 (%2 days)",
-                                        KLocale::global()->formatDateTime(lastDonation), days);
+                                         locale.toString(lastDonation), days);
             }
         }
         lbl->setText(recentDonation);

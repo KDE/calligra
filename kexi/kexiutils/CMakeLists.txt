@@ -54,6 +54,7 @@ target_link_libraries(kexiutils
         KF5::KIOWidgets #for KRun...
         KF5::IconThemes
         KF5::WidgetsAddons
+        KF5::I18n
         KDb
 )
 #target_link_libraries(kexiutils LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)

@@ -23,10 +23,10 @@
 #include <KexiIcon.h>
 
 #include <kconfig.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QDialogButtonBox>
 #include <QPushButton>

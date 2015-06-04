@@ -25,9 +25,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include <klocale.h>
 #include <kdebug.h>
-
 
 KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)

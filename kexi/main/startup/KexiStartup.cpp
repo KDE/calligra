@@ -40,10 +40,9 @@
 #include <KexiIcon.h>
 
 #include <kdebug.h>
-#include <klocale.h>
-
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
+#include <KLocalizedString>
 
 #include <unistd.h>
 

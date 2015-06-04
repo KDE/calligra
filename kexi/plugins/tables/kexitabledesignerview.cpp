@@ -44,11 +44,11 @@
 #include <db/lookupfieldschema.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <ktoggleaction.h>
 #include <kmessagebox.h>
 #include <kundo2command.h>
 #include <kactioncollection.h>
+#include <KLocalizedString>
 
 #include <QByteArray>
 #include <QHash>

@@ -22,7 +22,7 @@
 #include <QWidget>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <db/tableviewdata.h>
 #include <db/queryschema.h>
