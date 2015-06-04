@@ -23,7 +23,7 @@
 #ifndef KEXIMENUWIDGET_H
 #define KEXIMENUWIDGET_H
 
-#include <kstandardaction.h>
+#include <KStandardAction>
 
 #include <QWidget>
 #include <QString>
