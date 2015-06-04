@@ -28,7 +28,7 @@
 #include <QPointer>
 #include <QMenu>
 
-class KIcon;
+class QIcon;
 class KAction;
 class KActionCollection;
 class QModelIndex;
@@ -182,7 +182,7 @@ protected Q_SLOTS:
 protected:
     void itemRenameDone();
 
-    KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
+    KAction* addAction(const QString& name, const QIcon& icon, const QString& text,
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );

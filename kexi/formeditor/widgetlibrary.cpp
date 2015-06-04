@@ -656,7 +656,7 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
         return WidgetFactory::AnyOrientation;
 
     //get custom icons and strings
-    KIcon iconHorizontal, iconVertical;
+    QIcon iconHorizontal, iconVertical;
     QString iconName(wclass->internalProperty("orientationSelectionPopup:horizontalIcon").toString());
     if (iconName.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalIcon").toString();

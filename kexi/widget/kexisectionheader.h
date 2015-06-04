@@ -25,7 +25,7 @@
 #include <QWidget>
 
 class QEvent;
-class KIcon;
+class QIcon;
 
 //! @short A section header widget acting as a splitter with caption and buttons
 /*! see KexiQueryDesignerGuiEditor for example use. */
@@ -42,7 +42,7 @@ public:
     //! A widget previously set is removed from the layout.
     void setWidget(QWidget * widget);
 
-    void addButton(const KIcon& icon, const QString& toolTip,
+    void addButton(const QIcon& icon, const QString& toolTip,
                    const QObject * receiver, const char * member);
 
     virtual QSize sizeHint() const;

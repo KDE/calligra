@@ -42,7 +42,7 @@ class KexiMenuWidgetAction : public KAction
 public:
     explicit KexiMenuWidgetAction(QObject *parent);
     KexiMenuWidgetAction(const QString &text, QObject *parent);
-    KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
+    KexiMenuWidgetAction(const QIcon &icon, const QString &text, QObject *parent);
     KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
 
     void setPersistentlySelected(bool set);

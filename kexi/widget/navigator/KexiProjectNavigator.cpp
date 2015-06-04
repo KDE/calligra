@@ -274,7 +274,7 @@ KexiProjectNavigator::~KexiProjectNavigator()
     delete d;
 }
 
-KAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon, const QString& text,
+KAction* KexiProjectNavigator::addAction(const QString& name, const QIcon& icon, const QString& text,
                                 const QString& toolTip, const QString& whatsThis, const char* slot)
 {
     KAction *action = new KAction(icon, text, this);

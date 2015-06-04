@@ -83,7 +83,7 @@ public:
 
     int result;
 
-    KIcon kexi_sqlite_icon;
+    QIcon kexi_sqlite_icon;
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;

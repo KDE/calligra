@@ -24,7 +24,7 @@
 #include "kexiutils_export.h"
 
 class QAction;
-class KIcon;
+class QIcon;
 
 //! @short A small tool button with icon and optional text
 class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
@@ -35,7 +35,7 @@ public:
 
     explicit KexiSmallToolButton(const QString& text, QWidget* parent = 0);
 
-    KexiSmallToolButton(const KIcon& icon, const QString& text, QWidget* parent = 0);
+    KexiSmallToolButton(const QIcon& icon, const QString& text, QWidget* parent = 0);
 
     explicit KexiSmallToolButton(QAction *action, QWidget* parent = 0);
 

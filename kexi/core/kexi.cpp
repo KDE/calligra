@@ -368,7 +368,7 @@ QString KexiIconName(const QString &baseName)
     return baseName;
 }
 
-KIcon KexiIcon(const QString &baseName)
+QIcon KexiIcon(const QString &baseName)
 {
     return QIcon::fromTheme(KexiIconName(baseName));
 }
@@ -387,7 +387,7 @@ QString Kexi::defaultFileBasedDriverIconName()
     return koIconName("breeze-kexi-file-database");
 }
 
-KIcon Kexi::defaultFileBasedDriverIcon()
+QIcon Kexi::defaultFileBasedDriverIcon()
 {
     return QIcon::fromTheme(defaultFileBasedDriverIconName());
 }
@@ -397,7 +397,7 @@ QString Kexi::serverIconName()
     return KexiIconName("network-server-database");
 }
 
-KIcon Kexi::serverIcon()
+QIcon Kexi::serverIcon()
 {
     return QIcon::fromTheme(serverIconName());
 }
