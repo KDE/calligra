@@ -28,9 +28,9 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 
 #include <QUrl>
+#include <QAction>
 
 //! @internal
 class KexiImageContextMenu::Private
@@ -41,7 +41,7 @@ public:
     }
 
     KActionCollection actionCollection;
-    KAction *insertFromFileAction, *saveAsAction, *cutAction, *copyAction, *pasteAction,
+    QAction *insertFromFileAction, *saveAsAction, *cutAction, *copyAction, *pasteAction,
             *deleteAction, *propertiesAction;
 };
 
@@ -54,7 +54,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     addTitle(QString());
 
     d->actionCollection.addAction("insert",
-                                  d->insertFromFileAction = new KAction(
+                                  d->insertFromFileAction = new QAction(
         koIcon("document-open"), xi18n("Insert From &File..."), this));
     connect(d->insertFromFileAction, SIGNAL(triggered()),
             this, SLOT(insertFromFile()));
@@ -69,7 +69,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     d->pasteAction = KStandardAction::paste(this, SLOT(paste()), &d->actionCollection);
     addAction(d->pasteAction);
     d->actionCollection.addAction("delete",
-                                  d->deleteAction = new KAction(
+                                  d->deleteAction = new QAction(
         koIcon("edit-clear"), xi18n("&Clear"), this));
     connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(clear()));
@@ -79,7 +79,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 #else
     addSeparator();
     d->actionCollection.addAction("properties",
-                                  d->propertiesAction = new KAction(xi18n("Properties"), this));
+                                  d->propertiesAction = new QAction(xi18n("Properties"), this));
     connect(d->propertiesAction, SIGNAL(triggered()),
             this, SLOT(showProperties()));
     addAction(d->propertiesAction);

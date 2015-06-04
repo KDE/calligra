@@ -23,10 +23,10 @@
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
+#include <QAction>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kaction.h>
 
 #include <KexiIcon.h>
 
@@ -149,7 +149,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
-    viewActions << (a = new KAction(koIcon("test_it"), xi18n("Check Query"), this));
+    viewActions << (a = new QAction(koIcon("test_it"), xi18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
     a->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
     a->setToolTip(xi18n("Check Query"));

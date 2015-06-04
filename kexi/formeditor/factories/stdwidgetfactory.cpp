@@ -37,14 +37,13 @@
 #include <QDateTimeEdit>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QAction>
 
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <ktextedit.h>
 #include <klocale.h>
 #include <kdebug.h>
-
-#include <kaction.h>
 
 #include <KexiIcon.h>
 
@@ -115,7 +114,7 @@ Line::orientation() const
 
 //! Action of editing rich text for a label or text editor
 //! Keeps context expressed using container and receiver widget
-class EditRichTextAction : public KAction
+class EditRichTextAction : public QAction
 {
 public:
     EditRichTextAction(KFormDesigner::Container *container,
@@ -132,7 +131,7 @@ private:
 EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container, 
                                        QWidget *receiver, QObject *parent,
                                        StdWidgetFactory *factory)
-    : KAction(koIcon("document-edit"),
+    : QAction(koIcon("document-edit"),
               xi18nc("Edit rich text for a widget", "Edit Rich Text"),
               parent)
     , m_container(container)

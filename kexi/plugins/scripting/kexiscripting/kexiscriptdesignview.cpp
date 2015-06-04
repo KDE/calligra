@@ -114,7 +114,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     QList<QAction*> viewActions;
 
     {
-        QAction *a = new KAction(koIcon("system-run"), xi18n("Execute"), this);
+        QAction *a = new QAction(koIcon("system-run"), xi18n("Execute"), this);
         a->setObjectName("script_execute");
         a->setToolTip(xi18n("Execute the scripting code"));
         a->setWhatsThis(xi18n("Executes the scripting code."));
@@ -136,7 +136,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     }
     if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode available.
         menu->addSeparator();
-        QAction *a = new KAction(koIcon("configure"), xi18n("Configure Editor..."), this);
+        QAction *a = new QAction(koIcon("configure"), xi18n("Configure Editor..."), this);
         a->setObjectName("script_config_editor");
         a->setToolTip(xi18n("Configure the scripting editor"));
         a->setWhatsThis(xi18n("Configures the scripting editor."));

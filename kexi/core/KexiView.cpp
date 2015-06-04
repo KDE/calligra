@@ -45,13 +45,13 @@
 #include <QVBoxLayout>
 
 //! @internal Action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
+class KEXICORE_EXPORT KexiToggleViewModeAction : public QAction
 {
 public:
     //! Creates action for toggling to view mode @a mode. @a slot should have signature
     //! matching switchedTo(Kexi::ViewMode mode) signal.
     KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent)
-        : KAction(
+        : QAction(
             QIcon::fromTheme(Kexi::iconNameForViewMode(mode)),
             Kexi::nameForViewMode(mode, true/*withAmpersand*/),
             parent)
@@ -139,7 +139,7 @@ public:
         if (!window->supportsViewMode(mode)) {
             return 0;
         }
-        KAction *a = new KexiToggleViewModeAction(mode, q);
+        QAction *a = new KexiToggleViewModeAction(mode, q);
         toggleViewModeActions.insert(mode, a);
 
         KoGroupButton *btn = new KoGroupButton(pos, parent);

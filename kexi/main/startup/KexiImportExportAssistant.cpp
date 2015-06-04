@@ -19,7 +19,7 @@
 
 #include "KexiImportExportAssistant.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <QPointer>
 
 static QString stripText(const QString &text)
@@ -88,8 +88,8 @@ public:
 // ----
 
 KexiImportExportAssistant::KexiImportExportAssistant(
-    const KAction *action_project_import_export_send_,
-    const KAction *action_import_project_,
+    const QAction *action_project_import_export_send_,
+    const QAction *action_import_project_,
     QWidget* parent)
  : KexiAssistantWidget(parent)
  , action_project_import_export_send(action_project_import_export_send_)

@@ -88,7 +88,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("document-print"), xi18n("Print"), this));
+    viewActions << (a = new QAction(koIcon("document-print"), xi18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(xi18n("Print report"));
     a->setWhatsThis(xi18n("Prints the current report."));
@@ -100,12 +100,12 @@ KexiReportView::KexiReportView(QWidget *parent)
 #endif
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(xi18n("Export:"), this));
+    viewActions << (a = new QAction(xi18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar!
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.text"),
+    exportMenu->addAction(a = new QAction(koIcon("application-vnd.oasis.opendocument.text"),
                                           xi18nc("open dialog to export as text document", "Text Document..."), this));
 #endif
     a->setObjectName("export_as_text_document");
@@ -115,9 +115,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("application-pdf"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-pdf"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-pdf"),
+    exportMenu->addAction(a = new QAction(koIcon("application-pdf"),
                                           xi18nc("Portable Document Format...", "PDF..."), this));
 #endif
     a->setObjectName("export_as_pdf");
@@ -127,9 +127,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
+    exportMenu->addAction(a = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
                                           xi18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
@@ -139,9 +139,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsSpreadsheet()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("text-html"),
+    exportMenu->addAction(a = new QAction(koIcon("text-html"),
                                           xi18nc("open dialog to export as web page", "Web Page..."), this));
 #endif
     a->setObjectName("export_as_web_page");

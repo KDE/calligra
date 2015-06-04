@@ -167,7 +167,7 @@ KActionCollection* Part::actionCollectionForMode(Kexi::ViewMode viewMode) const
     return cli ? cli->actionCollection() : 0;
 }
 
-KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
+QAction * Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
                                   const QString &pix_name, const QKeySequence &cut, const char *name,
                                   const char *subclassName)
 {
@@ -180,7 +180,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
             instanceGuiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedPartAction(const QString &text,
+QAction * Part::createSharedPartAction(const QString &text,
                                       const QString &pix_name, const QKeySequence &cut, const char *name,
                                       const char *subclassName)
 {
@@ -190,13 +190,13 @@ KAction* Part::createSharedPartAction(const QString &text,
             d->guiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+QAction * Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
                                         const QString &pix_name, const QKeySequence &cut, const char *name)
 {
     return createSharedAction(mode, text, pix_name, cut, name, "KToggleAction");
 }
 
-KAction* Part::createSharedPartToggleAction(const QString &text,
+QAction * Part::createSharedPartToggleAction(const QString &text,
         const QString &pix_name, const QKeySequence &cut, const char *name)
 {
     return createSharedPartAction(text, pix_name, cut, name, "KToggleAction");

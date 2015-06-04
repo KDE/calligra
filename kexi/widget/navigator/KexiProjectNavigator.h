@@ -29,7 +29,7 @@
 #include <QMenu>
 
 class QIcon;
-class KAction;
+class QAction;
 class KActionCollection;
 class QModelIndex;
 class KexiProjectModel;
@@ -182,7 +182,7 @@ protected Q_SLOTS:
 protected:
     void itemRenameDone();
 
-    KAction* addAction(const QString& name, const QIcon& icon, const QString& text,
+    QAction * addAction(const QString& name, const QIcon& icon, const QString& text,
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );

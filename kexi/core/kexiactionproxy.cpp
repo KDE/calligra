@@ -23,10 +23,10 @@
 #include "KexiMainWindowIface.h"
 
 #include <kdebug.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 
 #include <QWidget>
+#include <QAction>
 
 KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
         : m_proxy(proxy)
@@ -126,7 +126,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
     w->removeAction(a);
 }
 
-KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
+QAction * KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
@@ -135,9 +135,9 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     }
     QString altName = a->objectName() + "_alt";
 
-    KAction *ka = dynamic_cast<KAction*>(a);
+    QAction *ka = dynamic_cast<QAction*>(a);
     Q_ASSERT(ka);
-    KAction *alt_act = new KAction(0);
+    QAction *alt_act = new QAction(0);
     alt_act->setObjectName(altName);
     alt_act->setText(alternativeText);
     alt_act->setParent(ka->parent());

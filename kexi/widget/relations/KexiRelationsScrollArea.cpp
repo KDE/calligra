@@ -18,17 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-
 #include <QPainter>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QScrollBar>
 #include <QMenu>
+#include <QAction>
 
+#include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
 
 #include <db/tableschema.h>
 #include <db/indexschema.h>
@@ -115,11 +114,11 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 #if 0
-    d->removeSelectedTableQueryAction = new KAction(xi18n("&Hide Selected Table/Query"), "edit-delete", "",
+    d->removeSelectedTableQueryAction = new QAction(xi18n("&Hide Selected Table/Query"), "edit-delete", "",
             this, SLOT(removeSelectedTableQuery()), parent->actionCollection(), "relationsview_removeSelectedTableQuery");
-    d->removeSelectedConnectionAction = new KAction(xi18n("&Remove Selected Relationship"), "dialog-cancel", "",
+    d->removeSelectedConnectionAction = new QAction(xi18n("&Remove Selected Relationship"), "dialog-cancel", "",
             this, SLOT(removeSelectedConnection()), parent->actionCollection(), "relationsview_removeSelectedConnection");
-    d->openSelectedTableQueryAction = new KAction(xi18n("&Open Selected Table/Query"), "", "",
+    d->openSelectedTableQueryAction = new QAction(xi18n("&Open Selected Table/Query"), "", "",
             this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");
 #endif
 

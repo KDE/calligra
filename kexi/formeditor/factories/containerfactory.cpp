@@ -29,12 +29,11 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QFileInfo>
+#include <QAction>
 
 #include <klocale.h>
 #include <kdebug.h>
-
 #include <kinputdialog.h>
-#include <kaction.h>
 
 #include "containerfactory.h"
 #include "container.h"
@@ -290,7 +289,7 @@ SubForm::setFormName(const QString &name)
 
 AddTabAction::AddTabAction(KFormDesigner::Container *container,
                            TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("tab-new"), xi18nc("Add page to tab widget", "Add Page"),
+    : QAction(koIcon("tab-new"), xi18nc("Add page to tab widget", "Add Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -314,7 +313,7 @@ void AddTabAction::slotTriggered()
 
 RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("tab-close-other"), xi18nc("Remove tab widget's page", "Remove Page"),
+    : QAction(koIcon("tab-close-other"), xi18nc("Remove tab widget's page", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -335,7 +334,7 @@ void RemoveTabAction::slotTriggered()
 
 RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(koIcon("edit-rename"), xi18nc("Rename tab widget's page", "Rename Page..."),
+    : QAction(koIcon("edit-rename"), xi18nc("Rename tab widget's page", "Rename Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -358,7 +357,7 @@ void RenameTabAction::slotTriggered()
 
 AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent)
-    : KAction(koIcon("tab-new"), xi18nc("Add page to a stacked widget", "Add Page..."),
+    : QAction(koIcon("tab-new"), xi18nc("Add page to a stacked widget", "Add Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -385,7 +384,7 @@ void AddStackPageAction::slotTriggered()
 
 RemoveStackPageAction::RemoveStackPageAction(KFormDesigner::Container *container,
                                              QWidget *receiver, QObject *parent)
-    : KAction(koIcon("tab-close-other"), xi18nc("Remove page from a stacked widget", "Remove Page"),
+    : QAction(koIcon("tab-close-other"), xi18nc("Remove page from a stacked widget", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -431,7 +430,7 @@ void RemoveStackPageAction::slotTriggered()
 GoToStackPageAction::GoToStackPageAction(Direction direction,
                                          KFormDesigner::Container *container,
                                          QWidget *receiver, QObject *parent)
-    : KAction(QIcon::fromTheme(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
+    : QAction(QIcon::fromTheme(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
               direction == Previous ? xi18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
                                     : xi18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
               parent)

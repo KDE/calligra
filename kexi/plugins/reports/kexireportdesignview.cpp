@@ -43,21 +43,21 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_editPasteAction = KStandardAction::paste(this);
     m_editPasteAction->setProperty("iconOnly", true);
     const KGuiItem del = KStandardGuiItem::del();
-    m_editDeleteAction = new KAction(del.icon(), del.text(), this);
+    m_editDeleteAction = new QAction(del.icon(), del.text(), this);
     m_editDeleteAction->setObjectName("editdelete");
     m_editDeleteAction->setToolTip(del.toolTip());
     m_editDeleteAction->setWhatsThis(del.whatsThis());
     m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new KAction(xi18n("Edit Sections"), this);
+    m_sectionEdit = new QAction(xi18n("Edit Sections"), this);
     m_sectionEdit->setObjectName("sectionedit");
 
-    m_itemRaiseAction = new KAction(koIcon("arrow-up"), xi18n("Raise"), this);
+    m_itemRaiseAction = new QAction(koIcon("arrow-up"), xi18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
-    m_itemLowerAction = new KAction(koIcon("arrow-down"), xi18n("Lower"), this);
+    m_itemLowerAction = new QAction(koIcon("arrow-down"), xi18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
     QList<QAction*> al;
-    KAction *sep = new KAction(QString(), this);
+    QAction *sep = new QAction(QString(), this);
     sep->setSeparator(true);
 
     al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_sectionEdit << sep << m_itemLowerAction << m_itemRaiseAction;
