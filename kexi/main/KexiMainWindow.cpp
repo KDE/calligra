@@ -496,7 +496,7 @@ static void addThreeDotsToActionText(QAction* action)
     action->setText(xi18nc("Action name with three dots...", "%1...", action->text()));
 }
 
-KAction* KexiMainWindow::addAction(const char *name, const KIcon &icon, const QString& text,
+KAction* KexiMainWindow::addAction(const char *name, const QIcon &icon, const QString& text,
                                    const char *shortcut)
 {
     KAction *action = icon.isNull() ? new KAction(text, this) : new KAction(icon, text, this);

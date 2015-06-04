@@ -130,7 +130,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
             xi18n("Additional information about the field"));
     col->setIcon(KexiUtils::colorizeIconToTextColor(koSmallIcon("help-about"), d->view->palette()));
     col->setHeaderTextVisible(false);
-    col->field()->setSubType("KIcon");
+    col->field()->setSubType("QIcon");
     col->setReadOnly(true);
     d->data->addColumn(col);
 

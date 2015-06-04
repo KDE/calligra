@@ -93,7 +93,7 @@ void KexiSectionHeader::setWidget(QWidget * widget)
     }
 }
 
-void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
+void KexiSectionHeader::addButton(const QIcon& icon, const QString& toolTip,
                                   const QObject * receiver, const char * member)
 {
     KexiSmallToolButton *btn = new KexiSmallToolButton(icon, QString(), d->lbl_b);

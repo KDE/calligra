@@ -636,7 +636,7 @@ KMessageWidget::MessageType KMessageWidget::messageType() const
 void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 {
     d->messageType = type;
-    KIcon icon;
+    QIcon icon;
     d->colorSet = KColorScheme::View;
     switch (type) {
     case Positive:

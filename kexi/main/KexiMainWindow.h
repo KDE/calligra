@@ -638,7 +638,7 @@ private:
     //! Like @ref addAction(const char *, const QString&, const char *) but also adds
     //! icon @a icon.
     //! @return created action
-    KAction* addAction(const char *name, const KIcon &icon, const QString& text,
+    KAction* addAction(const char *name, const QIcon &icon, const QString& text,
                        const char *shortcut = 0);
 
     class MessageHandler;
