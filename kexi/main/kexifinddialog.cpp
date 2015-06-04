@@ -20,7 +20,7 @@
 #include "kexifinddialog.h"
 
 #include <kstandardguiitem.h>
-#include <kstandardaction.h>
+#include <KStandardAction>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>

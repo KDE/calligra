@@ -20,7 +20,7 @@
 #ifndef KEXISHAREDACTIONHOST_H
 #define KEXISHAREDACTIONHOST_H
 
-#include <kstandardaction.h>
+#include <KStandardAction>
 
 #include <QAction>
 
