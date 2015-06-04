@@ -22,9 +22,6 @@
 #include "kexidbautofield.h"
 
 #include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QMetaObject>
 #include <QApplication>
 
 #include <kdebug.h>

@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QLayout>
-#include <QStyle>
-#include <QWindowsStyle>
-#include <QPainter>
 
 #include <kexi_global.h>
 #include "kexicomboboxbase.h"

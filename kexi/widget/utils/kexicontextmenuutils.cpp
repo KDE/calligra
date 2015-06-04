@@ -31,7 +31,6 @@
 #include <kaction.h>
 
 #include <QUrl>
-#include <QApplication>
 
 //! @internal
 class KexiImageContextMenu::Private

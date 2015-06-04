@@ -19,16 +19,8 @@
 
 #include "KexiFieldComboBox.h"
 
-#include <QLayout>
-#include <QLabel>
 #include <QPushButton>
-#include <QCursor>
 #include <QPoint>
-#include <QApplication>
-#include <QBitmap>
-#include <QStyle>
-#include <QPixmap>
-#include <QLineEdit>
 
 #include <kdebug.h>
 

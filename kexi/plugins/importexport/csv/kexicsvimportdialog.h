@@ -29,10 +29,8 @@
 #ifndef KEXI_CSVDIALOG_H
 #define KEXI_CSVDIALOG_H
 
-#include <QVector>
 #include <QList>
 #include <QRegExp>
-#include <QBitArray>
 #include <QPixmap>
 #include <QTextStream>
 #include <QEvent>

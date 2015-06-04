@@ -21,7 +21,6 @@
 #define KEXIREPORTDESIGNVIEW_H
 
 #include <core/KexiView.h>
-#include <QDomDocument>
 #include <KPropertySet>
 #include <kexireportpart.h>
 #include <koreport/wrtembed/KoReportDesigner.h>

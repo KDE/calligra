@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kaboutdata.h>
-#include <KComponentData>
 #include <kdeversion.h>
 #include <KSharedConfig>
 

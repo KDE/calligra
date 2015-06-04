@@ -33,11 +33,9 @@
 #include <kaction.h>
 #include <kdebug.h>
 
-#include <QBitmap>
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QStackedWidget>

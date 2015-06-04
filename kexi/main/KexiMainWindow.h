@@ -29,8 +29,6 @@
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
 
-#include <QApplication>
-#include <QMainWindow>
 #include <QTabWidget>
 
 class QPaintEvent;

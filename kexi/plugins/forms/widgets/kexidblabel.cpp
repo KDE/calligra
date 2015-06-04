@@ -20,10 +20,8 @@
 
 #include "kexidblabel.h"
 
-#include <QBitmap>
 #include <QPainter>
 #include <qdrawutil.h>
-#include <QApplication>
 #include <QPaintEvent>
 #include <QLabel>
 #include <QShowEvent>
