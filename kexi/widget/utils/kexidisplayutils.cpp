@@ -32,7 +32,7 @@
 //! A color for displaying default values or autonumbers
 #define SPECIAL_TEXT_COLOR KColorScheme(QPalette::Active, KColorScheme::View).foreground(KColorScheme::LinkText).color()
 
-K_GLOBAL_STATIC(QPixmap, KexiDisplayUtils_autonum)
+Q_GLOBAL_STATIC(QPixmap, KexiDisplayUtils_autonum)
 
 static const unsigned int  autonumber_png_len = 245;
 static const unsigned char autonumber_png_data[] = {

@@ -161,7 +161,7 @@ public:
     QHash<KexiDB::Field::Type, int> indicesForTypes;
 };
 
-K_GLOBAL_STATIC(KexiCSVImportStatic, kexiCSVImportStatic)
+Q_GLOBAL_STATIC(KexiCSVImportStatic, kexiCSVImportStatic)
 
 #define MAX_ROWS_TO_PREVIEW 100 //max 100 rows is reasonable
 #define MAX_BYTES_TO_PREVIEW 10240 //max 10KB is reasonable
