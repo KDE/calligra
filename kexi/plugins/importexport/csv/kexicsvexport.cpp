@@ -33,8 +33,8 @@
 #include <QCheckBox>
 #include <QClipboard>
 #include <kapplication.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QSaveFile>
 

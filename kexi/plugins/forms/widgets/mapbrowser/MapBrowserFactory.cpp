@@ -28,9 +28,8 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <QVariant>
 #include <QVariantList>

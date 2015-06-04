@@ -30,10 +30,8 @@
 #include <kexiutils/utils.h>
 
 #include <core/kexi.h>
-
 #include <KexiIcon.h>
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kurlcombobox.h>
 

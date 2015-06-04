@@ -24,9 +24,7 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
-
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <QCursor>
 #include <QMouseEvent>

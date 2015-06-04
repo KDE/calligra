@@ -31,9 +31,9 @@
 #include <QFileInfo>
 #include <QAction>
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kinputdialog.h>
+#include <KLocalizedString>
 
 #include "containerfactory.h"
 #include "container.h"

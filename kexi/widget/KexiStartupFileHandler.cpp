@@ -27,13 +27,13 @@
 #include <kexiutils/KexiContextMessage.h>
 
 #include <kmessagebox.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
 #include <kactioncollection.h>
 #include <kfiledialog.h>
 #include <kurlrequester.h>
+#include <KLocalizedString>
 
 #include <QEvent>
 #include <QAction>

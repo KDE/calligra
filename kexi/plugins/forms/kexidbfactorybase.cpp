@@ -18,10 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include <klocale.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <KLocalizedString>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>
