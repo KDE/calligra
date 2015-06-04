@@ -22,8 +22,7 @@
 
 #include "kformdesigner_export.h"
 
-#include <kaction.h>
-
+#include <QAction>
 #include <QWidget>
 
 namespace KexiPart
@@ -58,7 +57,7 @@ private:
 };
 
 //! @internal form-level action for handling "on click" actions
-class KFORMEDITOR_EXPORT KexiFormEventAction : public KAction
+class KFORMEDITOR_EXPORT KexiFormEventAction : public QAction
 {
     Q_OBJECT
 public:

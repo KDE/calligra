@@ -25,7 +25,7 @@
 
 #include <QDialog>
 
-class KAction;
+class QAction;
 
 //! @short A Kexi-specific "Find" dialog.
 /*! Also used for as replace dialog.
@@ -42,8 +42,8 @@ public:
     virtual ~KexiFindDialog();
 
     //! Sets actions that receive button clicks and shortcuts within the dialog. Should be called once.
-    void setActions(KAction *findnext, KAction *findprev,
-                    KAction *replace, KAction *replaceall);
+    void setActions(QAction *findnext, QAction *findprev,
+                    QAction *replace, QAction *replaceall);
 
     //! Shows the dialog as a modal dialog.
     virtual void show();
