@@ -467,6 +467,10 @@ KEXIUTILS_EXPORT QSize comboBoxArrowSize(QStyle *style = 0);
 //! It is usually "*" character appended.
 KEXIUTILS_EXPORT void addDirtyFlag(QString *text);
 
+//! @return The name of the user's preferred encoding
+//! Based on KLocale::encoding()
+KEXIUTILS_EXPORT QByteArray encoding();
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H

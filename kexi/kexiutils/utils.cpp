@@ -38,6 +38,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QFontDatabase>
+#include <QTextCodec>
 
 #include <KRun>
 #include <KToolInvocation>
@@ -45,6 +46,10 @@
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
+
+#if HAVE_LANGINFO_H
+#include <langinfo.h>
+#endif
 
 using namespace KexiUtils;
 
@@ -732,4 +737,69 @@ void KexiUtils::addDirtyFlag(QString *text)
 {
     Q_ASSERT(text);
     *text = xi18nc("'Dirty (modified) object' flag", "%1*", *text);
+}
+
+//! From klocale_kde.cpp
+//! @todo KEXI3 support other OS-es (use from klocale_*.cpp)
+static QByteArray systemCodeset()
+{
+    QByteArray codeset;
+#if HAVE_LANGINFO_H
+    // Qt since 4.2 always returns 'System' as codecForLocale and KDE (for example
+    // KEncodingFileDialog) expects real encoding name. So on systems that have langinfo.h use
+    // nl_langinfo instead, just like Qt compiled without iconv does. Windows already has its own
+    // workaround
+
+    codeset = nl_langinfo(CODESET);
+
+    if ((codeset == "ANSI_X3.4-1968") || (codeset == "US-ASCII")) {
+        // means ascii, "C"; QTextCodec doesn't know, so avoid warning
+        codeset = "ISO-8859-1";
+    }
+#endif
+    return codeset;
+}
+
+QTextCodec* g_codecForEncoding = 0;
+
+bool setEncoding(int mibEnum)
+{
+    QTextCodec *codec = QTextCodec::codecForMib(mibEnum);
+    if (codec) {
+        g_codecForEncoding = codec;
+    }
+
+    return codec != 0;
+}
+
+//! From klocale_kde.cpp
+static void initEncoding()
+{
+    if (!g_codecForEncoding) {
+        // This all made more sense when we still had the EncodingEnum config key.
+
+        QByteArray codeset = systemCodeset();
+
+        if (!codeset.isEmpty()) {
+            QTextCodec *codec = QTextCodec::codecForName(codeset);
+            if (codec) {
+                setEncoding(codec->mibEnum());
+            }
+        } else {
+            setEncoding(QTextCodec::codecForLocale()->mibEnum());
+        }
+
+        if (!g_codecForEncoding) {
+            qWarning() << "Cannot resolve system encoding, defaulting to ISO 8859-1.";
+            const int mibDefault = 4; // ISO 8859-1
+            setEncoding(mibDefault);
+        }
+        Q_ASSERT(g_codecForEncoding);
+    }
+}
+
+QByteArray KexiUtils::encoding()
+{
+    initEncoding();
+    return g_codecForEncoding->name();
 }
