@@ -20,10 +20,7 @@
 #include "kexilookupcolumnpage.h"
 
 #include <QLabel>
-#include <QToolTip>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QLineEdit>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -40,7 +37,6 @@
 #include <kexiproject.h>
 
 #include <KProperty>
-#include <KPropertyUtils>
 
 QString partClassToType(const QString& partClass)
 {

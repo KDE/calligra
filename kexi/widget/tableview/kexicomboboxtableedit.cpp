@@ -18,9 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QLayout>
-#include <QStyle>
-#include <QWindowsStyle>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
@@ -28,7 +25,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QScrollBar>
-#include <QLineEdit>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>

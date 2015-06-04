@@ -22,7 +22,6 @@
 
 #include "kformdesigner_export.h"
 
-#include <KProperty/PixmapEdit>
 
 namespace KFormDesigner
 {

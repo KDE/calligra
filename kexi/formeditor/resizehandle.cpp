@@ -24,12 +24,10 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
-#include <KPropertySet>
 
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QPainter>
 #include <QCursor>
 #include <QMouseEvent>
 #include <QPaintEvent>

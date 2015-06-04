@@ -20,10 +20,10 @@
 #include "KexiAssistantWidget.h"
 #include "KexiAssistantPage.h"
 #include "KexiAnimatedLayout.h"
+#include <kexiutils/utils.h>
 
 #include <kdebug.h>
 
-#include <QDialog>
 #include <QStyle>
 #include <QStack>
 #include <QPointer>

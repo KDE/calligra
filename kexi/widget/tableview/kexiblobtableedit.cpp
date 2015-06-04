@@ -31,11 +31,7 @@
 
 #include <QDataStream>
 #include <QFile>
-#include <QLayout>
-#include <QStatusBar>
-#include <QLabel>
 #include <QPixmap>
-#include <QImage>
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>

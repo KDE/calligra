@@ -28,8 +28,6 @@
 #include <KConfigGroup>
 
 #include <QLabel>
-#include <QLayout>
-#include <QTextCodec>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QGridLayout>

@@ -20,13 +20,7 @@
 
 #include <kdebug.h>
 
-#include <QStringList>
-#include <QLayout>
-#include <QLabel>
-#include <QEvent>
 #include <QPainter>
-#include <QStyle>
-#include <QLineEdit>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>

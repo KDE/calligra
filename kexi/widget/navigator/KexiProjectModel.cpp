@@ -26,7 +26,6 @@
 #include <kexipartmanager.h>
 #include <db/utils.h>
 
-#include <KLocale>
 #include <kdebug.h>
 
 #include "KexiProjectModelItem.h"

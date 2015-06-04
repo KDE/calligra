@@ -34,7 +34,6 @@
 #include <kexi_global.h>
 
 #include <KPropertySet>
-#include <KPropertyUtils>
 
 #include <db/cursor.h>
 #include <db/tableschema.h>
@@ -51,13 +50,8 @@
 #include <kundo2command.h>
 #include <kactioncollection.h>
 
-#include <QLayout>
-#include <QLabel>
-#include <QSplitter>
 #include <QByteArray>
 #include <QHash>
-#include <QMenu>
-#include <QVBoxLayout>
 
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"

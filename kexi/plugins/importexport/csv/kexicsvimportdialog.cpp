@@ -29,18 +29,13 @@
 #include "kexicsvimportdialog.h"
 #include "KexiCSVImportDialogModel.h"
 
-#include <QButtonGroup>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QLabel>
-#include <QLineEdit>
 #include <QMimeSource>
 #include <QPushButton>
-#include <QRadioButton>
-#include <QItemSelectionModel>
 #include <QHeaderView>
 #include <QTableView>
-#include <QPainter>
 #include <QTextCodec>
 #include <QTimer>
 #include <QFontMetrics>
@@ -50,7 +45,6 @@
 #include <QTextStream>
 #include <QGridLayout>
 #include <QPixmap>
-#include <QToolTip>
 #include <QStackedWidget>
 #include <QSplitter>
 #include <QTreeView>

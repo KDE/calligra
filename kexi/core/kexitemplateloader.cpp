@@ -29,7 +29,6 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <QApplication>
 #include <QDir>
 #include <QStandardPaths>
 

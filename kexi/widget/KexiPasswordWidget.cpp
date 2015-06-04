@@ -24,8 +24,6 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QLayout>
-#include <QTextDocument>
-#include <QTimer>
 #include <QPalette>
 #include <QLineEdit>
 #include <QApplication>

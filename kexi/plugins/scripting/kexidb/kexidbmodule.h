@@ -21,7 +21,6 @@
 #define SCRIPTING_KEXIDBMODULE_H
 
 #include <QString>
-#include <QVariant>
 #include <QObject>
 
 #include <db/drivermanager.h>

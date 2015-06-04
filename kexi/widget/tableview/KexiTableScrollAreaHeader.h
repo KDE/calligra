@@ -24,8 +24,6 @@
 #include <kexi_global.h>
 
 #include <QHeaderView>
-#include <QPointer>
-#include <QStyle>
 
 class KexiTableScrollArea;
 

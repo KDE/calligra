@@ -43,7 +43,6 @@
 #include <QCloseEvent>
 #include <QApplication>
 #include <QVBoxLayout>
-#include <QLabel>
 
 //! @internal Action for toggling view mode
 class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction

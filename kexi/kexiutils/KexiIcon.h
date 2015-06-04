@@ -26,7 +26,6 @@
 #endif
 
 #include <QApplication>
-#include <QPalette>
 #include <QColor>
 #include <QIcon>
 

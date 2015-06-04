@@ -33,7 +33,6 @@
 #include <QVBoxLayout>
 #include <QDir>
 #include <QLabel>
-#include <QTextCodec>
 #include <QCheckBox>
 #include <QGridLayout>
 

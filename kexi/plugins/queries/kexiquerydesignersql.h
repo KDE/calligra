@@ -24,7 +24,6 @@
 #include "kexiquerypart.h"
 
 #include <KexiView.h>
-#include <QEvent>
 
 class KexiQueryDesignerSQLEditor;
 

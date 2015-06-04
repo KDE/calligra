@@ -21,8 +21,6 @@
 #define KEXIUTILS_P_H
 
 #include <QTimer>
-#include <QApplication>
-#include <QDialog>
 #include <QTreeWidget>
 
 /*! @internal */

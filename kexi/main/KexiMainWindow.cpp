@@ -23,23 +23,14 @@
 #include <unistd.h>
 
 #include <QApplication>
-#include <QEventLoop>
 #include <QFile>
 #include <QTimer>
 #include <QObject>
 #include <QProcess>
 #include <QToolButton>
 
-#include <QMutex>
-#include <QWaitCondition>
-#include <QPixmap>
-#include <QFocusEvent>
-#include <QTextStream>
-#include <QEvent>
-#include <QKeyEvent>
 #include <QHash>
 #include <QDockWidget>
-#include <QMenuBar>
 #include <QShortcut>
 #include <QStylePainter>
 #include <QScopedPointer>

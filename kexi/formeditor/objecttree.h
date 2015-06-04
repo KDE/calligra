@@ -29,7 +29,6 @@
 #include <QHash>
 #include <QVariant>
 #include <QString>
-#include <QPointer>
 #include <QByteArray>
 
 class QWidget;

@@ -18,18 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QCursor>
 #include <QPoint>
-#include <QApplication>
-#include <QBitmap>
 #include <QStyle>
 #include <QEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
-#include <QStyleOptionFocusRect>
 #include <QScrollBar>
 
 #include <kdebug.h>

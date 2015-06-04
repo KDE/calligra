@@ -21,12 +21,10 @@
 #include "utils_p.h"
 #include "kexiutils_global.h"
 
-#include <QRegExp>
 #include <QPainter>
 #include <QImage>
 #include <QIcon>
 #include <QMetaProperty>
-#include <QBitmap>
 #include <QFocusEvent>
 #include <QFile>
 #include <QStyle>
@@ -40,7 +38,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QFontDatabase>
-#include <QDialog>
 
 #include <KRun>
 #include <KToolInvocation>

@@ -31,7 +31,6 @@
 
 #include <QDialog>
 #include <QCheckBox>
-#include <QLabel>
 #include <QLayout>
 #include <QList>
 #include <QShortcut>

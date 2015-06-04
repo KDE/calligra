@@ -31,15 +31,10 @@
 #include <kexi_global.h>
 
 #include <KDebug>
-#include <KLocale>
 
 #include <QMenu>
 #include <QPalette>
-#include <QCursor>
-#include <QPainter>
-#include <QMouseEvent>
 #include <QScrollBar>
-#include <QBoxLayout>
 #include <QHeaderView>
 
 class KexiFormScrollView::Private

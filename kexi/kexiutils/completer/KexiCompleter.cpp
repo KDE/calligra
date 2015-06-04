@@ -148,7 +148,6 @@
 #include <QStringListModel>
 #include <QDirModel>
 #include <QFileSystemModel>
-#include <QHeaderView>
 #include <QListView>
 #include <QApplication>
 #include <QEvent>

@@ -20,8 +20,6 @@
 
 #include "WidgetTreeWidget.h"
 
-#include <QPainter>
-#include <QHeaderView>
 #include <QContextMenuEvent>
 
 #include <kdebug.h>

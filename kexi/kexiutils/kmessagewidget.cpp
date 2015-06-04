@@ -40,7 +40,6 @@
 #include <QToolButton>
 #include <QPointer>
 #include <QPainterPath>
-#include <QTransform>
 #include <QTimer>
 
 static const int LAYOUT_SPACING = 6;

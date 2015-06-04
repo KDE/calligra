@@ -20,18 +20,10 @@
 
 #include <stdlib.h>
 
-#include <QLabel>
 #include <QPushButton>
-#include <QCursor>
 #include <QPoint>
-#include <QApplication>
-#include <QBitmap>
 #include <QStyle>
-#include <QEvent>
-#include <QDropEvent>
 #include <QVBoxLayout>
-#include <QMouseEvent>
-#include <QStyleOptionFocusRect>
 #include <QScrollBar>
 
 #include <kdebug.h>

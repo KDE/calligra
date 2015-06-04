@@ -20,7 +20,6 @@
 */
 
 #include <QLabel>
-#include <QCursor>
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QSlider>

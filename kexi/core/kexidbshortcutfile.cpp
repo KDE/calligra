@@ -25,7 +25,6 @@
 
 #include <kdebug.h>
 
-#include <QStringList>
 #include <QDir>
 
 //! Version of the KexiDBShortcutFile format.

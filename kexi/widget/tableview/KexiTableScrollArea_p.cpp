@@ -27,7 +27,6 @@
 #include "KexiTableScrollArea_p.h"
 #include "kexitableedit.h"
 
-#include <QScrollBar>
 
 KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
         : appearance(t)

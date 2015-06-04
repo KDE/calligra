@@ -46,7 +46,6 @@
 #include <formeditor/WidgetTreeWidget.h>
 
 #include <KProperty>
-#include <KPropertySet>
 
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"

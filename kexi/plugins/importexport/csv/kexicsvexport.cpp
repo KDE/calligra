@@ -31,7 +31,6 @@
 
 #include <QTextStream>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QClipboard>
 #include <kapplication.h>
 #include <klocale.h>

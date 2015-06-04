@@ -20,7 +20,6 @@
 
 #include "kformdesigner_export.h"
 
-#include <QMetaObject>
 #include <QDomDocument>
 #include <QFile>
 #include <QTextStream>

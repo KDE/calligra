@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <Qheader.h>
-#include <QLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

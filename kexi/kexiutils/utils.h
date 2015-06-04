@@ -23,9 +23,7 @@
 #include "kexiutils_export.h"
 #include "kexi_global.h"
 
-#include <QPointer>
 #include <QObject>
-#include <QDateTime>
 #include <QMetaMethod>
 #include <QFont>
 #include <QFrame>

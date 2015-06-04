@@ -25,7 +25,6 @@
 #include <QFrame>
 #include <QPixmap>
 #include <QLabel>
-#include <QList>
 #include <QMenu>
 
 #include "widgetfactory.h"

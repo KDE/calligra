@@ -28,7 +28,6 @@
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
 
-#include <QPointer>
 
 class KexiProjectData;
 class KexiWelcomeAssistant;

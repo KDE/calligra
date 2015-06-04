@@ -29,14 +29,10 @@
 
 #include <KexiIcon.h>
 
-#include <QLayout>
 #include <QSplitter>
 #include <QTimer>
-#include <QDateTime>
 #include <QDomDocument>
 #include <QTextBrowser>
-#include <QTextDocument>
-#include <QMenu>
 
 #include <kfiledialog.h>
 #include <kactionmenu.h>

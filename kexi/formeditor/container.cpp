@@ -20,7 +20,6 @@
 */
 
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QEvent>
 #include <QLayout>

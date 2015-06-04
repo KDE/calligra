@@ -26,7 +26,6 @@
 
 #include <KexiIcon.h>
 
-#include <QToolButton>
 #include <QDomDocument>
 #include <kaction.h>
 #include <ktoggleaction.h>

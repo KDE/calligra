@@ -23,7 +23,6 @@
 #include <db/driver.h>
 #include <db/drivermanager.h>
 
-#include <QFileInfo>
 
 class KexiStartupData::Private
 {

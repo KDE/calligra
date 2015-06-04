@@ -38,7 +38,6 @@
 #include <kurlcombobox.h>
 
 #include <QDialog>
-#include <QLabel>
 #include <QPushButton>
 #include <QLayout>
 #include <QCheckBox>

@@ -33,9 +33,7 @@
 
 #include <db/tableviewdata.h>
 
-#include <QTimer>
 #include <QPointer>
-#include <QLabel>
 #include <QList>
 
 #include <kdebug.h>

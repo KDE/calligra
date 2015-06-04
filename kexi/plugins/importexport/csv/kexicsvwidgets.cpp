@@ -22,11 +22,9 @@
 #include <QDir>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QFrame>
 #include <QVector>
 #include <QLineEdit>
-#include <QDialog>
 
 #include <klocale.h>
 #include <kiconloader.h>

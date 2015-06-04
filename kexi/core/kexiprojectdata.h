@@ -27,7 +27,6 @@
 
 #include <QDateTime>
 #include <QList>
-#include <QtDebug>
 
 class KexiProjectDataPrivate;
 

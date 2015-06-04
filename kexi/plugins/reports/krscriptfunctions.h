@@ -17,7 +17,6 @@
  */
 #ifndef KRSCRIPTFUNCTIONS_H
 #define KRSCRIPTFUNCTIONS_H
-#include <QScriptEngine>
 #include <QObject>
 #include <QString>
 #include <db/connection.h>

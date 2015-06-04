@@ -21,13 +21,11 @@
 #include "KexiObjectInfoLabel.h"
 #include <KexiMainWindowIface.h>
 #include <KPropertySet>
-#include <KPropertyEditorView>
 #include <KProperty>
 
 #include <klocale.h>
 
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 
 //! @internal
 class KexiPropertyPaneViewBase::Private

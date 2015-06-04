@@ -34,10 +34,7 @@
 #include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
-#include <QEvent>
 #include <QTimer>
-#include <QValidator>
-#include <QPixmap>
 #include <QLabel>
 #include <QList>
 #include <QHash>

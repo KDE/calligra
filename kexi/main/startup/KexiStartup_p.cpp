@@ -27,7 +27,6 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <QApplication>
 #include <QProgressDialog>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)

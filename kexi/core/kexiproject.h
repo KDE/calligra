@@ -22,7 +22,6 @@
 #define KEXIPROJECT_H
 
 #include <QObject>
-#include <QPointer>
 
 #include <db/tristate.h>
 #include <db/object.h>

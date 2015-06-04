@@ -27,7 +27,6 @@
 #include "kexipart.h"
 #include "KexiView.h"
 
-#include <QPointer>
 #include <QEvent>
 #include <QCloseEvent>
 

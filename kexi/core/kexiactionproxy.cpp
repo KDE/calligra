@@ -27,7 +27,6 @@
 #include <kactioncollection.h>
 
 #include <QWidget>
-#include <QIcon>
 
 KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
         : m_proxy(proxy)

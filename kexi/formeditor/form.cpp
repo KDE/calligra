@@ -24,9 +24,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QLabel>
-#include <QLayout>
-#include <QTimer>
-#include <QStyleOption>
 #include <QDomDocument>
 #include <QLineEdit>
 #include <QMenu>

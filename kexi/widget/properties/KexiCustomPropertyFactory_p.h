@@ -20,9 +20,7 @@
 #ifndef KEXICUSTOMPROPFACTORY_P_H
 #define KEXICUSTOMPROPFACTORY_P_H
 
-//! @todo #include <KProperty/PixmapEditor>
-#include <KProperty/StringListEditor>
-#include <kexiblobbuffer.h>
+//! @todo #include <kexiblobbuffer.h>
 
 #if 0 // todo
 //! Kexi-specific image editor for property editor's item

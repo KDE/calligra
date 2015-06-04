@@ -21,7 +21,6 @@
 
 #include <core/KexiView.h>
 #include <db/connection.h>
-#include <QDomDocument>
 #include "kexireportpart.h"
 #include <KoReportRendererBase.h>
 #include <QGraphicsView>

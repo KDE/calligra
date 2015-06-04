@@ -20,7 +20,6 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <QPair>
 
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"

@@ -20,9 +20,6 @@
 #include "kexidatasourcepage.h"
 
 #include <QLabel>
-#include <QLineEdit>
-#include <QToolTip>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #include <klocale.h>
@@ -41,7 +38,6 @@
 
 #include <formeditor/commands.h>
 #include <KProperty>
-#include <KPropertyUtils>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : KexiPropertyPaneViewBase(parent)

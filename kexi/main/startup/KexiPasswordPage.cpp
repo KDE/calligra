@@ -25,7 +25,6 @@
 
 #include <QLineEdit>
 #include <QVBoxLayout>
-#include <QFontMetrics>
 
 class KexiPasswordPage::Private
 {

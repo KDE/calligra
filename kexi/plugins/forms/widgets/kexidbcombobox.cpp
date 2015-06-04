@@ -25,7 +25,6 @@
 #include <kdebug.h>
 
 #include <QApplication>
-#include <QMetaObject>
 #include <QPainter>
 #include <QStyle>
 #include <qdrawutil.h>

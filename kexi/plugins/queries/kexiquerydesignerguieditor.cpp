@@ -20,16 +20,12 @@
 
 #include "kexiquerydesignerguieditor.h"
 
-#include <QLayout>
-#include <QPainter>
 #include <QDomDocument>
 #include <QRegExp>
 #include <QSplitter>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QSet>
-#include <QVBoxLayout>
-#include <QStyleOptionComboBox>
 
 #include <kdebug.h>
 #include <klocale.h>

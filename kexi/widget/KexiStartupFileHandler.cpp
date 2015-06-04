@@ -35,12 +35,9 @@
 #include <kfiledialog.h>
 #include <kurlrequester.h>
 
-#include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
-#include <QLineEdit>
 #include <QEventLoop>
-#include <QApplication>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>

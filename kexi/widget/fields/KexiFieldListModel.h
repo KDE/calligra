@@ -24,7 +24,6 @@
 #include "kexiextwidgets_export.h"
 
 #include <QModelIndex>
-#include <QPixmap>
 
 namespace KexiDB
 {

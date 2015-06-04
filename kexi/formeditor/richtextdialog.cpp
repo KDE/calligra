@@ -21,7 +21,6 @@
 
 #include <KexiIcon.h>
 
-#include <QLayout>
 #include <QAction>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>

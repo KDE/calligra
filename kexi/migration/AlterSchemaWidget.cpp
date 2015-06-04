@@ -23,7 +23,6 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
-#include <QLineEdit>
 
 #include <db/tableschema.h>
 #include <KexiIcon.h>

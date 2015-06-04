@@ -27,10 +27,6 @@
 
 #include <QFrame>
 #include <QStringList>
-#include <QLabel>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QDropEvent>
 
 class KexiRelationsScrollArea;
 class KexiRelationViewTable;

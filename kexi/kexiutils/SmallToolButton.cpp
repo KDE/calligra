@@ -26,7 +26,6 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
-#include <QActionEvent>
 #include <QPointer>
 #include <QAction>
 #include <QIcon>

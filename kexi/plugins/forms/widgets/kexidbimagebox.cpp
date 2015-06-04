@@ -28,11 +28,9 @@
 #include <QClipboard>
 
 #include <QFile>
-#include <QImage>
 #include <QBuffer>
 #include <QPainter>
 #include <QMimeDatabase>
-#include <QMimeType>
 #include <QStandardPaths>
 
 #include <kdebug.h>

@@ -19,15 +19,7 @@
 
 #include "KexiFieldListView.h"
 
-#include <QLayout>
-#include <QLabel>
 #include <QPushButton>
-#include <QCursor>
-#include <QPoint>
-#include <QApplication>
-#include <QBitmap>
-#include <QStyle>
-#include <QPixmap>
 
 #include <kdebug.h>
 

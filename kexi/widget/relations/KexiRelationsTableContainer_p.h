@@ -21,8 +21,6 @@
 #ifndef KexiRelationsTableContainer_P_H
 #define KexiRelationsTableContainer_P_H
 
-#include <QFrame>
-#include <QStringList>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QEvent>

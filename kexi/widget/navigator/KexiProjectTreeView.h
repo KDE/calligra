@@ -21,7 +21,6 @@
 #ifndef KEXIPROJECTTREEVIEW_H
 #define KEXIPROJECTTREEVIEW_H
 
-#include <QPointer>
 #include <QTreeView>
 #include <QModelIndex>
 

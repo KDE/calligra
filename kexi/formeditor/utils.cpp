@@ -20,11 +20,8 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QCursor>
 #include <QDomDocument>
 #include <QMimeData>
-#include <QTabWidget>
-#include <QTabBar>
 #include <QPen>
 #include <QPainter>
 

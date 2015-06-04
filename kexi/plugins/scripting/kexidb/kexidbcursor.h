@@ -20,7 +20,6 @@
 #ifndef SCRIPTING_KEXIDBCURSOR_H
 #define SCRIPTING_KEXIDBCURSOR_H
 
-#include <QString>
 #include <QObject>
 
 #include <db/cursor.h>

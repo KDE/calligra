@@ -27,10 +27,8 @@
 
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QLabel>
 #include <QToolTip>
 #include <QStyle>
-#include <QStyleOptionComplex>
 #include <QHeaderView>
 #include <QKeyEvent>
 

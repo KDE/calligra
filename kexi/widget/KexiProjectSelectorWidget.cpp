@@ -30,8 +30,6 @@
 
 #include <QLabel>
 #include <QPushButton>
-#include <QLayout>
-#include <QPixmap>
 #include <QKeyEvent>
 
 #include <assert.h>

@@ -26,7 +26,6 @@
 #include <db/connection.h>
 
 #include <QUrl>
-#include <QDebug>
 
 class KexiDBPushButtonPrivate
 {

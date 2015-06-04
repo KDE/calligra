@@ -24,7 +24,6 @@
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 
-#include <QLayout>
 #include <QList>
 #include <QMenu>
 #include <kdebug.h>

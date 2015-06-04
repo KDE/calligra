@@ -32,14 +32,8 @@
 #include <kconfig.h>
 #include <KSharedConfig>
 
-#include <QLayout>
-#include <QTabWidget>
-#include <QComboBox>
 #include <QCheckBox>
-#include <QPoint>
 #include <QObject>
-#include <QApplication>
-#include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>

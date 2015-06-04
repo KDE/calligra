@@ -24,8 +24,6 @@
 
 #include "kformdesigner_export.h"
 
-#include <QList>
-#include <QRect>
 #include <QWidget>
 
 namespace KFormDesigner

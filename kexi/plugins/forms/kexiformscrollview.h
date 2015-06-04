@@ -24,8 +24,6 @@
 #include "kexiformutils_export.h"
 
 #include <QScrollArea>
-#include <QPixmap>
-#include <QEvent>
 #include <QMargins>
 
 #include <core/KexiRecordNavigatorHandler.h>

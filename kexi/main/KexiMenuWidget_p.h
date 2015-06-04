@@ -37,7 +37,6 @@
 #include <KSharedConfig>
 
 #include <QStyleOption>
-#include <QDateTime>
 #include <QCache>
 #include <QMap>
 #include <QHash>

@@ -31,7 +31,6 @@
 
 #include <QScrollArea>
 #include <QVariant>
-#include <QToolTip>
 #include <QFocusEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
