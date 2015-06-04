@@ -64,7 +64,7 @@ struct KexiRecordNavigatorStatic {
     QPixmap pen, plus, pointer;
 };
 
-K_GLOBAL_STATIC(KexiRecordNavigatorStatic, KexiRecordNavigator_static)
+Q_GLOBAL_STATIC(KexiRecordNavigatorStatic, KexiRecordNavigator_static)
 
 // ----
 
@@ -583,7 +583,7 @@ public:
     KGuiItem moveToNewRecord;
 };
 
-K_GLOBAL_STATIC(KexiRecordNavigatorActionsInternal, KexiRecordNavigatorActions_internal)
+Q_GLOBAL_STATIC(KexiRecordNavigatorActionsInternal, KexiRecordNavigatorActions_internal)
 
 const KGuiItem& KexiRecordNavigator::Actions::moveToFirstRecord()
 {

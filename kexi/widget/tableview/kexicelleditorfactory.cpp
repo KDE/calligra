@@ -96,7 +96,7 @@ public:
     QHash<QString, KexiCellEditorFactoryItem*> items_by_type; //!< editor factory items accessed by a key
 };
 
-K_GLOBAL_STATIC(KexiCellEditorFactoryPrivate, KexiCellEditorFactory_static)
+Q_GLOBAL_STATIC(KexiCellEditorFactoryPrivate, KexiCellEditorFactory_static)
 
 //============= KexiCellEditorFactory ============
 

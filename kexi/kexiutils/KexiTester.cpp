@@ -47,10 +47,11 @@ KexiTester::~KexiTester()
     delete d;
 }
 
+Q_GLOBAL_STATIC(KexiTester, g_kexiTester)
+
 //static
 KexiTester* KexiTester::self()
 {
-    K_GLOBAL_STATIC(KexiTester, g_kexiTester)
     return g_kexiTester;
 }
 

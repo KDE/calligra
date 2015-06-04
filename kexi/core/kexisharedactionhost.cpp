@@ -70,7 +70,7 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 //--------------------------------------------------
 
 //! dummy host to avoid crashes
-K_GLOBAL_STATIC_WITH_ARGS(KexiSharedActionHost, KexiSharedActionHost_dummy, (0))
+Q_GLOBAL_STATIC_WITH_ARGS(KexiSharedActionHost, KexiSharedActionHost_dummy, (0))
 
 //! default host
 KexiSharedActionHost* KexiSharedActionHost_defaultHost = 0;

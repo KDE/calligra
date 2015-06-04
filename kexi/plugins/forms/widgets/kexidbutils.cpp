@@ -84,7 +84,7 @@ private:
     QPixmap m_dataSourceRTLTagIcon;
 };
 
-K_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
+Q_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
 
 //-------
 

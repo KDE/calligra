@@ -62,7 +62,7 @@
 
 namespace Kexi
 {
-K_GLOBAL_STATIC(KexiStartupHandler, _startupHandler)
+Q_GLOBAL_STATIC(KexiStartupHandler, _startupHandler)
 
 KexiStartupHandler& startupHandler()
 {
@@ -145,7 +145,7 @@ KexiStartupHandler::KexiStartupHandler()
         , KexiStartupData()
         , d(new Private())
 {
-    // K_GLOBAL_STATIC is cleaned up *after* QApplication is gone
+    // Q_GLOBAL_STATIC is cleaned up *after* QApplication is gone
     // but we have to cleanup before -> use qAddPostRoutine
     qAddPostRoutine(Kexi::_startupHandler.destroy);
 

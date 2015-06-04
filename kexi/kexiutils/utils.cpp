@@ -74,7 +74,7 @@ void DelayedCursorHandler::show()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
-K_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
+Q_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
 
 void KexiUtils::setWaitCursor(bool noDelay)
 {
@@ -477,7 +477,7 @@ const WidgetMargins KexiUtils::operator+ (
 
 //---------
 
-K_GLOBAL_STATIC(QFont, _smallFont)
+Q_GLOBAL_STATIC(QFont, _smallFont)
 
 QFont KexiUtils::smallFont(QWidget *init)
 {

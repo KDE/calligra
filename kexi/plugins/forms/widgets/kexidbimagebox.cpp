@@ -64,7 +64,7 @@ struct KexiDBImageBox_Static {
     QPixmap *small;
 };
 
-K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
+Q_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 
 KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         : KexiFrame(parent)

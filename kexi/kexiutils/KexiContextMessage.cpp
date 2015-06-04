@@ -129,7 +129,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
+Q_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
 
 class KexiContextMessageWidget::Private
 {
