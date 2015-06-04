@@ -7,6 +7,9 @@
 
 #cmakedefine HAVE_UNAME 1
 
+/*! For KexiUtils::encoding() */
+#cmakedefine01 HAVE_LANGINFO_H
+
 /*! Debugging GUI for Kexi. */
 #cmakedefine KEXI_DEBUG_GUI
 #if defined KEXI_DEBUG_GUI && !defined CALLIGRADB_DEBUG_GUI
