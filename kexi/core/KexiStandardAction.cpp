@@ -69,7 +69,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(ActionsInfoHash, g_rgActionInfoHash)
+Q_GLOBAL_STATIC(ActionsInfoHash, g_rgActionInfoHash)
 
 inline const Info* infoPtr(StandardAction id)
 {

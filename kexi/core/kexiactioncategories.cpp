@@ -44,7 +44,7 @@ public:
     bool allObjectTypesAreSupported;
 };
 
-K_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
+Q_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
 
 //! @internal
 class ActionCategories::Private
