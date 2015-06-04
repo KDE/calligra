@@ -27,7 +27,7 @@
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <kstandardaction.h>
+#include <KStandardAction>
 #include <kstandardguiitem.h>
 
 #include <QEvent>
