@@ -46,6 +46,7 @@
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <kcolorscheme.h>
+#include <KLocalizedString>
 
 #if HAVE_LANGINFO_H
 #include <langinfo.h>

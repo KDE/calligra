@@ -26,9 +26,9 @@
 #include <QClipboard>
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <QLocale>
 
 #include <kglobal.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kcolorscheme.h>
 #include <kcompletionbox.h>
@@ -75,9 +75,10 @@ void KexiInputTableEdit::init()
     m_textFormatter.setField( field() );
 
     //init settings
-    m_decsym = KLocale::global()->decimalSymbol();
+    QLocale locale;
+    m_decsym = locale.decimalPoint();
     if (m_decsym.isEmpty())
-        m_decsym = ".";//default
+        m_decsym = '.';//default
 
     //create layer for internal editor
     QHBoxLayout *lyr =  new QHBoxLayout(this);
@@ -192,8 +193,8 @@ QVariant KexiInputTableEdit::value()
     if (field()->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
-        if (m_decsym != ".")
-            txt.replace(m_decsym, ".");//convert back
+        if (m_decsym != '.')
+            txt.replace(m_decsym, '.'); //convert back
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();

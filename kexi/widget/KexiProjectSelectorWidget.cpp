@@ -25,8 +25,8 @@
 #include <core/kexi.h>
 #include <KexiIcon.h>
 
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QLabel>
 #include <QPushButton>

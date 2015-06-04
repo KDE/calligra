@@ -177,7 +177,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
         #endif
     }
 
-    d->sourceDBEncoding = QString::fromLatin1(KLocale::global()->encoding()); //default
+    d->sourceDBEncoding = QString::fromLatin1(KexiUtils::encoding()); //default
 }
 
 //===========================================================

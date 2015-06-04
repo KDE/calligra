@@ -26,11 +26,11 @@
 #include <db/utils.h>
 #include <KexiIcon.h>
 
-#include <klocale.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QCheckBox>
 #include <QObject>
