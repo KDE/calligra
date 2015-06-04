@@ -22,7 +22,7 @@
 #include "form_p.h"
 #include "formIO.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QStyleOption>
 

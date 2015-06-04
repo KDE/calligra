@@ -38,8 +38,8 @@
 
 #include <KoFileDialog.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kacceleratormanager.h>
+#include <KLocalizedString>
 
 #include <kexiutils/utils.h>
 #include "FormWidget.h"

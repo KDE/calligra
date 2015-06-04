@@ -22,14 +22,14 @@
 
 #include <QTabWidget>
 
-#include <klocale.h>
+#include <KLocalizedString>
+
 #include <kdebug.h>
 #include <KexiIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-
 #include "kexisourceselector.h"
 
 //! @internal

@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 #include <kiconeffect.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KexiIcon.h>
 

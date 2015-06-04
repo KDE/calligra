@@ -38,8 +38,8 @@
 #include <QMimeType>
 
 #include <kmessagebox.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <KLocalizedString>
 
 #include <kfile.h>
 #include <kurlcombobox.h>

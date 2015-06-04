@@ -22,9 +22,8 @@
 #include "widgetfactory.h"
 
 #include <kdebug.h>
-#include <klocale.h>
-
 #include <keditlistwidget.h>
+#include <KLocalizedString>
 
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET

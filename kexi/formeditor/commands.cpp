@@ -25,9 +25,9 @@
 #include <QStackedWidget>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kacceleratormanager.h>
+#include <KLocalizedString>
 
 #include "kformdesigner_export.h"
 #include "WidgetInfo.h"
