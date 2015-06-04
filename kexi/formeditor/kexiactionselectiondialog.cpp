@@ -30,7 +30,6 @@
 #include <KexiMainWindowIface.h>
 #include <KexiIcon.h>
 
-#include <kaction.h>
 #include <kdebug.h>
 
 #include <QLabel>
@@ -40,6 +39,7 @@
 #include <QPixmap>
 #include <QStackedWidget>
 #include <QDialogButtonBox>
+#include <QAction>
 
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
@@ -142,7 +142,7 @@ void KActionsListViewBase::init()
     foreach(QAction *action, sharedActions) {
 //   kDebug() << (*it)->name() << " " << (*it)->text();
         //! @todo group actions
-        //! @todo: store KAction* here?
+        //! @todo: store QAction * here?
         const int actionCategories = acat->actionCategories(action->objectName().toLatin1());
         if (actionCategories == -1) {
             kWarning() << "no category declared for action \""
@@ -291,7 +291,7 @@ public:
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
                 "print", this, futureI18n("Print"));
             printItem->setPixmap(0, koIcon("document-print"));
-            KAction *a = KStandardAction::printPreview(0, 0, 0);
+            QAction *a = KStandardAction::printPreview(0, 0, 0);
             item = new ActionSelectorDialogListItem("printPreview", printItem,
                                                     a->text().remove('&').remove("..."));
             item->setPixmap(0, a->icon().pixmap(16));

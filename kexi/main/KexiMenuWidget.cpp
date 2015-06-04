@@ -370,29 +370,29 @@ public:
 };
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
- : KAction(text, parent)
+ : QAction(text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const QIcon &icon, const QString &text,
                                            QObject *parent)
- : KAction(icon, text, parent)
+ : QAction(icon, text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
-    QScopedPointer<KAction> tmp(KStandardAction::create(id, 0, 0, 0));
+    QScopedPointer<QAction> tmp(KStandardAction::create(id, 0, 0, 0));
     setIcon(tmp->icon());
     setText(tmp->text());
     setShortcut(tmp->shortcut(DefaultShortcut), DefaultShortcut);
