@@ -27,10 +27,7 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 
-#include <QPoint>
 #include <QPixmapCache>
-#include <QKeyEvent>
-#include <QEvent>
 #include <QLabel>
 #include <QMenu>
 #include <QDialog>

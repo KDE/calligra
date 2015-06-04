@@ -34,7 +34,6 @@
 #include <kconfiggroup.h>
 
 #include <QMimeDatabase>
-#include <QMimeType>
 
 // The as version() published versionnumber of this kross-module.
 #define KROSS_KEXIDB_VERSION 1

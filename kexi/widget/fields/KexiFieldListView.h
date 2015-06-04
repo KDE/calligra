@@ -24,7 +24,6 @@
 #include <kexi.h>
 #include "KexiFieldListModel.h"
 
-#include <QPixmap>
 #include <QListView>
 
 namespace KexiDB

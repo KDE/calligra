@@ -28,14 +28,12 @@
 #include <kexiutils/utils.h>
 #include <migration/migratemanager.h>
 
-#include <QLayout>
 #include <QObject>
 #include <QPushButton>
 #include <QApplication>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
-#include <QLineEdit>
 #include <QMimeDatabase>
 #include <QMimeType>
 
@@ -47,7 +45,6 @@
 #include <kurlcombobox.h>
 #include <kactioncollection.h>
 #include <kfiledialog.h>
-#include <KFileFilterCombo>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs

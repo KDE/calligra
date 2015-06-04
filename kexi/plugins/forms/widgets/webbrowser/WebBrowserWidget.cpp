@@ -18,15 +18,11 @@
 */
 
 #include "WebBrowserWidget.h"
-#include <QtWebKit>
-#include <QWebHistory>
 #include <QWebView>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QAction>
 #include <QWidget>
-#include <QApplication>
 #include <QPushButton>
 
 #include <klocale.h>

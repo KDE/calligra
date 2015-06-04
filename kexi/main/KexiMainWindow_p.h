@@ -30,10 +30,8 @@
 #define PROJECT_NAVIGATOR_TABBAR_ID 0
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
-#include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <QTabWidget>
@@ -41,7 +39,6 @@
 #include <ktoolbar.h>
 #include <khelpmenu.h>
 #include <kglobalsettings.h>
-#include <KAboutData>
 
 #include <KexiIcon.h>
 
@@ -159,7 +156,6 @@ private:
 };
 
 #include <kfadewidgeteffect.h>
-#include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QStackedLayout>

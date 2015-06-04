@@ -22,8 +22,6 @@
 #include <QObject>
 #include <QPainter>
 #include <QCursor>
-#include <QApplication>
-#include <QPixmap>
 #include <QFocusEvent>
 #include <QList>
 #include <QEvent>

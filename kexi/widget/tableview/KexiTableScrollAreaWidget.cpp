@@ -21,7 +21,6 @@
 #include "KexiTableScrollArea.h"
 
 #include <QPainter>
-#include <QScrollBar>
 
 KexiTableScrollAreaWidget::KexiTableScrollAreaWidget(KexiTableScrollArea *area)
     : QWidget(), scrollArea(area)

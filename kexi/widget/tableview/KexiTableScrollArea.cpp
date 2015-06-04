@@ -25,15 +25,9 @@
 */
 
 #include <QPainter>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QMatrix>
 #include <QTimer>
 #include <QMenu>
-#include <QCursor>
 #include <QStyle>
-#include <QLayout>
-#include <QLabel>
 #include <QToolTip>
 #include <QWhatsThis>
 #include <QResizeEvent>
@@ -46,7 +40,6 @@
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
-#include <QPixmap>
 #include <QDesktopWidget>
 #include <QScrollArea>
 #include <QApplication>

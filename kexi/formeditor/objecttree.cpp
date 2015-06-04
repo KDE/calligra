@@ -22,7 +22,6 @@
 #include <kdebug.h>
 #include <QWidget>
 #include <QVariant>
-#include <QDomDocument>
 #include <QTextStream>
 
 #include "form.h"

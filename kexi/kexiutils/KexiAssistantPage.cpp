@@ -33,7 +33,6 @@
 
 #include <QGridLayout>
 #include <QPointer>
-#include <QEvent>
 
 #include <kdebug.h>
 

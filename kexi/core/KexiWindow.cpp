@@ -36,10 +36,8 @@
 #include <kexiutils/FlowLayout.h>
 
 #include <QStackedWidget>
-#include <QTimer>
 #include <QEvent>
 #include <QCloseEvent>
-#include <QDialog>
 
 #include <kdebug.h>
 

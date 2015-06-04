@@ -20,8 +20,6 @@
 #define KEXISOURCESELECTOR_H
 
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QComboBox>
 
 #include <db/connection.h>
 #include <KoReportData.h>

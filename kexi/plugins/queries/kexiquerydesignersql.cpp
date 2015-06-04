@@ -19,12 +19,10 @@
 */
 
 #include <QSplitter>
-#include <QLayout>
 #include <QTimer>
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
-#include <QDialog>
 
 #include <kdebug.h>
 #include <kmessagebox.h>

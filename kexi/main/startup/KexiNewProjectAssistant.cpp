@@ -52,8 +52,6 @@
 
 #include <QLayout>
 #include <QCheckBox>
-#include <QPaintEvent>
-#include <QPainter>
 #include <QProgressBar>
 #include <QFileInfo>
 

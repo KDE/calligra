@@ -21,7 +21,6 @@
 #ifndef KEXIINTERNALPART_H
 #define KEXIINTERNALPART_H
 
-#include <QPointer>
 #include <QVariant>
 
 #include "kexipartbase.h"

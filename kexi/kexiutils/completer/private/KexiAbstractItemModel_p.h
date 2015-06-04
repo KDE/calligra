@@ -55,9 +55,7 @@
 //
 
 #include <QStack>
-#include <QSet>
 #include <QHash>
-#include <QPointer>
 
 class QPersistentModelIndexData
 {

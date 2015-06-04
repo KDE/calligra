@@ -21,9 +21,6 @@
 #include <unistd.h>
 
 #include <QDomDocument>
-#include <QDir>
-#include <QFile>
-#include <QRegExp>
 
 #include <kdebug.h>
 #include <klocale.h>

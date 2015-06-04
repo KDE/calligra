@@ -45,7 +45,6 @@
 #include <kexiutils_export.h>
 
 #include <QObject>
-#include <QPoint>
 #include <QString>
 #include <QAbstractItemModel>
 #include <QRect>

@@ -23,7 +23,6 @@
 #include "kexidatatable_export.h"
 #include <kexi_global.h>
 
-#include <QVariant>
 #include <QWidget>
 
 #include <db/field.h>

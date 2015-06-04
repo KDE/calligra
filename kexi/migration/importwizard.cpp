@@ -29,7 +29,6 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QButtonGroup>
 #include <QDir>
 #include <QApplication>
 #include <QLineEdit>

@@ -22,17 +22,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QVariant>
-#include <QRect>
-#include <QPalette>
-#include <QColor>
-#include <QFontMetrics>
-#include <QDateTime>
-#include <QCursor>
-#include <QPoint>
-#include <QLayout>
-#include <QToolButton>
 #include <QClipboard>
-#include <QLineEdit>
 
 #include <kdebug.h>
 #include <klocale.h>

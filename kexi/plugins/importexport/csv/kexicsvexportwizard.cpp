@@ -35,11 +35,9 @@
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QClipboard>
-#include <QTextStream>
 #include <QGridLayout>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <QDesktopWidget>
 #include <QPushButton>
 #include <QDialog>
 
