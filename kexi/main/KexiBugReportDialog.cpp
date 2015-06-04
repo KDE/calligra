@@ -24,7 +24,6 @@
 #include <kexi_version.h>
 
 #include <KAboutData>
-#include <KComponentData>
 #include <KLocale>
 #include <KTitleWidget>
 #include <KToolInvocation>

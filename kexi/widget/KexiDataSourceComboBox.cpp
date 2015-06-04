@@ -19,8 +19,6 @@
 
 #include "KexiDataSourceComboBox.h"
 
-#include <QPixmap>
-#include <QLineEdit>
 
 #include <kdebug.h>
 

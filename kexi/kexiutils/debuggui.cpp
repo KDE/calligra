@@ -24,7 +24,6 @@
 
 #include <KexiIcon.h>
 
-#include <QLayout>
 #include <QThread>
 #include <QHeaderView>
 #include <QPushButton>

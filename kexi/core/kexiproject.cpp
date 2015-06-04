@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QApplication>
-#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>

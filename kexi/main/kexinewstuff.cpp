@@ -19,7 +19,6 @@
 
 #ifdef HAVE_KNEWSTUFF
 
-#include <QDir>
 
 #include <kdebug.h>
 #include <ktar.h>

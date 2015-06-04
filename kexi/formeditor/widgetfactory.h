@@ -26,7 +26,6 @@
 
 #include <db/pluginloader.h>
 
-#include <QPixmap>
 #include <QVariant>
 
 class QWidget;

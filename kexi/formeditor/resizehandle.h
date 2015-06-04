@@ -24,7 +24,6 @@
 #include "kformdesigner_export.h"
 
 #include <QHash>
-#include <QPointer>
 #include <QWidget>
 
 namespace KFormDesigner
