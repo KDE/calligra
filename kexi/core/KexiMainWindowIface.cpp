@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-//K_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
+//Q_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
 #ifdef __GNUC__
 #warning not threadsafe
 #else

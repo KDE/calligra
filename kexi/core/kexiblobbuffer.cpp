@@ -35,7 +35,7 @@
 
 #include <db/connection.h>
 
-K_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
+Q_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
 
 //-----------------
 
