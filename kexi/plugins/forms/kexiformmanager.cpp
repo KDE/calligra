@@ -81,7 +81,7 @@ public:
     KexiFormManager *q;
 };
 
-K_GLOBAL_STATIC(KexiFormManager, g_manager)
+Q_GLOBAL_STATIC(KexiFormManager, g_manager)
 
 KexiFormManager* KexiFormManager::self()
 {
