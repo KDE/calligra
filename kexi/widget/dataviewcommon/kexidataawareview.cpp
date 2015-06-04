@@ -100,7 +100,7 @@ void KexiDataAwareView::initActions()
         << ac->action("data_save_row")
         << ac->action("data_cancel_row_changes");
 
-    KAction *a = new KAction(this);
+    QAction *a = new QAction(this);
     a->setSeparator(true);
     viewActions << a;
 

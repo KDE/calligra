@@ -23,8 +23,9 @@
 
 #include "kexipartinfo.h"
 
-#include <kaction.h>
 #include <kservice.h>
+
+#include <QAction>
 
 namespace KexiPart
 {
@@ -71,7 +72,7 @@ public:
 //! Helper for creating new objects.
 //! On triggering, the request is passed to part manager
 //! @internal
-class KexiNewObjectAction : public KAction
+class KexiNewObjectAction : public QAction
 {
     Q_OBJECT
 public:

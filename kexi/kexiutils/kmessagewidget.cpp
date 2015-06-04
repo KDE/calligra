@@ -24,7 +24,6 @@
 #include "KexiCloseButton.h"
 #include "KexiIcon.h"
 
-#include <kaction.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -41,6 +40,7 @@
 #include <QPointer>
 #include <QPainterPath>
 #include <QTimer>
+#include <QAction>
 
 static const int LAYOUT_SPACING = 6;
 
