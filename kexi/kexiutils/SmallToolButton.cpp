@@ -20,7 +20,6 @@
 #include "SmallToolButton.h"
 #include "utils.h"
 
-#include <kglobalsettings.h>
 #include <kdebug.h>
 
 #include <QStyle>
@@ -109,7 +108,7 @@ void KexiSmallToolButton::updateAction()
 void KexiSmallToolButton::init()
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    QFont f(KGlobalSettings::toolBarFont());
+    QFont f(font());
     f.setPixelSize(KexiUtils::smallFont().pixelSize());
     setFont(f);
     setAutoRaise(true);

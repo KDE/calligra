@@ -23,10 +23,10 @@
 
 #include "KexiCloseButton.h"
 #include "KexiIcon.h"
+#include <kexiutils/utils.h>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
 #include <KStandardAction>
 #include <kstandardguiitem.h>
 
@@ -821,7 +821,7 @@ void KMessageWidget::setAutoDelete(bool set)
 
 void KMessageWidget::animatedShow()
 {
-    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects)) {
         show();
         return;
     }
@@ -853,7 +853,7 @@ void KMessageWidget::animatedShow()
 
 void KMessageWidget::animatedHide()
 {
-    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects)) {
         hide();
         return;
     }

@@ -26,7 +26,6 @@
 #include <kexiutils/KexiContextMessage.h>
 #include "KexiUserFeedbackAgent.h"
 
-#include <kglobalsettings.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kstandardguiitem.h>
