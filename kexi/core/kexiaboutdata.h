@@ -22,7 +22,7 @@
 #ifndef _KEXI_ABOUT_DATA_
 #define _KEXI_ABOUT_DATA_
 
-#include <kaboutdata.h>
+#include <KAboutData>
 #include "kexicore_export.h"
 
 class KEXICORE_EXPORT KexiAboutData : public KAboutData
