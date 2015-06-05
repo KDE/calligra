@@ -26,6 +26,7 @@
 #define _KEXI_VERSION_
 
 #include <calligraversion.h>
+#include "kexicore_export.h"
 
 #define KEXI_APP_NAME "Kexi"
 #define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
