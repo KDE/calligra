@@ -1,6 +1,6 @@
 #include <QDebug>
 
-#include <kaboutdata.h>
+#include <KAboutData>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
