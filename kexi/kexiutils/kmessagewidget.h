@@ -207,13 +207,14 @@ protected:
 
     virtual void showEvent(QShowEvent *event);
 
+private Q_SLOTS:
+    void slotTimeLineChanged(qreal value);
+    void slotTimeLineFinished();
+    void tryClickCloseMessage();
+
 private:
     KMessageWidgetPrivate *const d;
     friend class KMessageWidgetPrivate;
-
-    Q_PRIVATE_SLOT(d, void slotTimeLineChanged(qreal))
-    Q_PRIVATE_SLOT(d, void slotTimeLineFinished())
-    Q_PRIVATE_SLOT(d, void tryClickCloseMessage())
 };
 
 #endif /* KMESSAGEWIDGET_H */
