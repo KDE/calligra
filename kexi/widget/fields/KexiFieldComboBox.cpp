@@ -24,8 +24,6 @@
 
 #include <kdebug.h>
 
-#include <kglobalsettings.h>
-
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 #include <db/utils.h>

@@ -38,7 +38,6 @@
 
 #include <ktoolbar.h>
 #include <khelpmenu.h>
-#include <kglobalsettings.h>
 
 #include <KexiIcon.h>
 
