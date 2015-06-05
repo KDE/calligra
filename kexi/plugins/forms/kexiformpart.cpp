@@ -23,8 +23,8 @@
 #include <QDomDocument>
 #include <QTabWidget>
 #include <QAction>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kactionmenu.h>
 
 #include <KexiIcon.h>
@@ -162,7 +162,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
-    kDebug();
+    qDebug();
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;

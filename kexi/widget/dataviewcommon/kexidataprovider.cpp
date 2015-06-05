@@ -20,8 +20,8 @@
 #include "kexidataprovider.h"
 
 #include <QWidget>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <db/tableviewdata.h>
@@ -74,7 +74,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
         QString dataSource(formDataItem->dataSource().toLower());
         if (dataSource.isEmpty())
             continue;
-        kDebug() << widget->objectName();
+        qDebug() << widget->objectName();
         m_dataItems.append(formDataItem);
         formDataItem->installListener(this);
         tmpSources.insert(dataSource);
@@ -88,7 +88,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 
 void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
 {
-    kDebug() << "record.count=" << record.count()
+    qDebug() << "record.count=" << record.count()
              << "\nRECORD=";
     record.debug();
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
@@ -96,7 +96,7 @@ void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursor
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {
         KexiFormDataItemInterface *itemIface = it.key();
         if (!itemIface->columnInfo()) {
-            kDebug() << "itemIface->columnInfo() == 0";
+            qDebug() << "itemIface->columnInfo() == 0";
             continue;
         }
         //1. Is this a value with a combo box (lookup)?
@@ -107,7 +107,7 @@ void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursor
         QVariant visibleLookupValue;
         if (indexForVisibleLookupValue != -1 && (int)record.size() > indexForVisibleLookupValue)
             visibleLookupValue = record.at(indexForVisibleLookupValue);
-        kDebug() << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value()
+            qDebug() << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value()
             << " data=" << value 
             << (indexForVisibleLookupValue != -1
                  ? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
@@ -141,7 +141,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
         foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
             if (!dataItemIface->columnInfo() || !dataItemIface->columnInfo()->field)
                 continue;
-            kDebug() << " ** " << dataItemIface->columnInfo()->field->name();
+            qDebug() << " ** " << dataItemIface->columnInfo()->field->name();
             it_dup = tmpDuplicatedItems.constFind(dataItemIface->columnInfo()->field);
             uint count;
             if (it_dup == tmpDuplicatedItems.constEnd())
@@ -154,7 +154,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
         for (it_dup = tmpDuplicatedItems.constBegin(); it_dup != tmpDuplicatedItems.constEnd(); ++it_dup) {
             if (it_dup.value() > 1) {
                 m_duplicatedItems->insert(it_dup.key());
-                kDebug() << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name()
+                qDebug() << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name()
                     << " (" << it_dup.value() << " times)";
             }
         }
@@ -162,7 +162,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
     if (item->columnInfo() && m_duplicatedItems->contains(item->columnInfo()->field)) {
         foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
             if (dataItemIface != item && item->columnInfo()->field == dataItemIface->columnInfo()->field) {
-                kDebug() << "- setting a copy of value for item '"
+                qDebug() << "- setting a copy of value for item '"
                     << dynamic_cast<QObject*>(dataItemIface)->objectName() << "' == " << value;
                 dataItemIface->setValue(value);
             }
@@ -194,13 +194,13 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         QHash<KexiDB::QueryColumnInfo*, int> columnsOrder(query->columnsOrder());
         for (QHash<KexiDB::QueryColumnInfo*, int>::const_iterator it
                 = columnsOrder.constBegin(); it != columnsOrder.constEnd(); ++it) {
-            kDebug() << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
+            qDebug() << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
                 << it.value();
         }
         foreach(KexiFormDataItemInterface *item, m_dataItems) {
             KexiDB::QueryColumnInfo* ci = query->columnInfo(item->dataSource());
             int index = ci ? columnsOrder[ ci ] : -1;
-            kDebug() << "query->columnsOrder()[ " << (ci ? ci->field->name() : QString()) << " ] = " << index
+            qDebug() << "query->columnsOrder()[ " << (ci ? ci->field->name() : QString()) << " ] = " << index
                 << " (dataSource: " << item->dataSource() << ", name="
                 << dynamic_cast<QObject*>(item)->objectName() << ")";
             if (index != -1 && !m_fieldNumbersForDataItems[ item ])
@@ -234,7 +234,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         if (query) {
             KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
             item->setColumnInfo(ci);
-            kDebug() << "- item=" << dynamic_cast<QObject*>(item)->objectName()
+            qDebug() << "- item=" << dynamic_cast<QObject*>(item)->objectName()
                 << " dataSource=" << item->dataSource()
                 << " field=" << ci->field->name();
             const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
@@ -250,7 +250,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                         item->internalEditor()->installEventFilter(m_mainWidget);
                     }
 
-                    kDebug() << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
+                    qDebug() << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
                         << "\n at position " << indexForVisibleLookupValue;
                 }
             }

@@ -21,8 +21,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <kexiutils/identifier.h>
@@ -229,7 +229,7 @@ KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* h
     if (d->data->connectionData() == d->connection->data())
         d->connection = conn;
     else
-        kWarning() << "passed connection's data ("
+        qWarning() << "passed connection's data ("
             << conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
             << d->data->connectionData()->serverInfoString() << ")";
 }
@@ -282,7 +282,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
     if (incompatibleWithKexi)
         *incompatibleWithKexi = false;
-    //kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
+    //qDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
                             xi18n("Could not open project \"%1\".", d->data->databaseName()));
 
@@ -299,7 +299,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
 
     if (!createConnection()) {
-        kWarning() << "!createConnection()";
+        qWarning() << "!createConnection()";
         return false;
     }
     bool cancel = false;
@@ -308,7 +308,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         if (cancel) {
             return cancelled;
         }
-        kWarning() << "!d->connection->useDatabase() "
+        qWarning() << "!d->connection->useDatabase() "
                    << d->data->databaseName() << " " << d->data->connectionData()->driverName;
 
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
@@ -357,22 +357,22 @@ KexiProject::create(bool forceOverwrite)
             closeConnection();
             return false;
         }
-        //kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
+        //qDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
     }
     if (!d->connection->createDatabase(d->data->databaseName())) {
         setError(d->connection);
         closeConnection();
         return false;
     }
-    //kDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
+    //qDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
     // and now: open
     if (!d->connection->useDatabase(d->data->databaseName())) {
-        kWarning() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
+        qWarning() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
         setError(d->connection);
         closeConnection();
         return false;
     }
-    //kDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
+    //qDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
 
     //<add some data>
     KexiDB::Transaction trans = d->connection->beginTransaction();
@@ -605,14 +605,14 @@ KexiProject::createConnection()
         connectionOptions |= KexiDB::Driver::ReadOnlyConnection;
     d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
     if (!d->connection) {
-        kWarning() << driver->errorMsg();
+        qWarning() << driver->errorMsg();
         setError(driver);
         return false;
     }
 
     if (!d->connection->connect()) {
         setError(d->connection);
-        kWarning() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
+        qWarning() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
         closeConnection();
         return false;
     }
@@ -643,7 +643,7 @@ KexiProject::closeConnection()
 bool
 KexiProject::initProject()
 {
-    //kDebug() << "checking project parts...";
+    //qDebug() << "checking project parts...";
     if (!checkProject()) {
         return false;
     }
@@ -672,7 +672,7 @@ KexiProject::isConnected()
 KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
-    //kDebug();
+    //qDebug();
     if (!i || !isConnected())
         return 0;
 
@@ -702,7 +702,7 @@ bool KexiProject::retrieveItems()
         bool ok;
         int partId = cursor->value(3).toInt(&ok);
         if (!ok || partId <= 0) {
-            kWarning() << "object of unknown type" << cursor->value(3) << "id=" << cursor->value(0)
+            qWarning() << "object of unknown type" << cursor->value(3) << "id=" << cursor->value(0)
                        << "name=" <<  cursor->value(1);
             continue;
         }
@@ -731,7 +731,7 @@ bool KexiProject::retrieveItems()
             it->setCaption(cursor->value(2).toString());
             dict->insert(it->identifier(), it);
         }
-//  kDebug() << "ITEM ADDED == "<<objName <<" id="<<ident;
+  //qDebug() << "ITEM ADDED == "<<objName <<" id="<<ident;
     }
 
     d->connection->deleteCursor(cursor);
@@ -799,14 +799,14 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
 {
     KexiPart::ItemDict *dict = itemsForClass(partClass);
     if (!dict) {
-        kWarning() << "no part class=" << partClass;
+        qWarning() << "no part class=" << partClass;
         return 0;
     }
     foreach(KexiPart::Item *item, *dict) {
         if (item->name() == name)
             return item;
     }
-    kWarning() << "no name=" << name;
+    qWarning() << "no name=" << name;
     return 0;
 }
 
@@ -840,7 +840,7 @@ KexiPart::Part *KexiProject::findPartFor(const KexiPart::Item& item)
     KexiDB::MessageTitle et(this);
     KexiPart::Part *part = Kexi::partManager().partForClass(item.partClass());
     if (!part) {
-        kWarning() << "!part: " << item.partClass();
+        qWarning() << "!part: " << item.partClass();
         setError(&Kexi::partManager());
     }
     return part;
@@ -1063,7 +1063,7 @@ KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
         delete prj;
         return 0;
     }
-    //kDebug() << "new project created --- ";
+    //qDebug() << "new project created --- ";
 //! @todo Kexi::recentProjects().addProjectData( data );
 
     return prj;
@@ -1124,7 +1124,7 @@ bool KexiProject::checkProject(const QString& singlePartClass)
             bool ok;
             const int classId = cursor->value(0).toInt(&ok);
             if (!ok || classId <= 0) {
-                kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+                qWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
             }
             if (info && ok && classId > 0) {
                 d->saveClassId(partClass, classId);
@@ -1181,14 +1181,14 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
     if (!ts)
         return false;
     QScopedPointer<KexiDB::FieldList> fl(ts->subList("p_id", "p_name", "p_mime", "p_url"));
-    //kDebug() << "fieldlist: " << (fl ? fl->debugString() : QString());
+    //qDebug() << "fieldlist: " << (fl ? fl->debugString() : QString());
     if (!fl)
         return false;
 
-    //kDebug() << info.ptr()->untranslatedGenericName();
+    //qDebug() << info.ptr()->untranslatedGenericName();
 //  QStringList sl = part()->info()->ptr()->propertyNames();
 //  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
-//   kDebug() << *it << " " << part()->info()->ptr()->property(*it).toString();
+   //qDebug() << *it << " " << part()->info()->ptr()->property(*it).toString();
     if (!d->connection->insertRecord(
                 *fl,
                 QVariant(p_id),
@@ -1199,9 +1199,9 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
         return false;
     }
 
-    //kDebug() << "insert success!";
+    //qDebug() << "insert success!";
     d->saveClassId(info.partClass(), p_id);
-    //kDebug() << "new id is: " << p_id;
+    //qDebug() << "new id is: " << p_id;
     return true;
 }
 
@@ -1213,7 +1213,7 @@ KexiPart::MissingPartsList KexiProject::missingParts() const
 static bool checkObjectId(const char* method, int objectID)
 {
     if (objectID <= 0) {
-        kWarning() << method <<  ": Invalid objectID" << objectID;
+        qWarning() << method <<  ": Invalid objectID" << objectID;
         return false;
     }
     return true;

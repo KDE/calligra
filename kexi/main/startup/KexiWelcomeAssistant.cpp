@@ -35,9 +35,9 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QCheckBox>
 #include <QTimer>
  
@@ -91,7 +91,7 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
         return;
     QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
     KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
-    //kDebug() << *pdata;
+    //qDebug() << *pdata;
     if (pdata) {
         m_assistant->openProjectOrShowPasswordPage(pdata);
     }

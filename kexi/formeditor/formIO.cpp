@@ -35,9 +35,9 @@
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QImageWriter>
+#include <QDebug>
 
 #include <KoFileDialog.h>
-#include <kdebug.h>
 #include <kacceleratormanager.h>
 #include <KLocalizedString>
 
@@ -251,8 +251,8 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << errMsg;
-        kDebug() << "line:" << errLine << "col:" << errCol;
+        qDebug() << errMsg;
+        qDebug() << "line:" << errLine << "col:" << errCol;
         return false;
     }
 
@@ -280,8 +280,8 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kWarning() << errMsg;
-        kWarning() << "line:" << errLine << "col: " << errCol;
+        qWarning() << errMsg;
+        qWarning() << "line:" << errLine << "col: " << errCol;
         return false;
     }
 
@@ -317,15 +317,15 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QFile file(_filename);
     if (!file.open(QIODevice::ReadOnly)) {
 //! @todo show err msg to the user
-        kWarning() << "Cannot open the file " << _filename;
+        qWarning() << "Cannot open the file " << _filename;
         return false;
     }
     QDomDocument doc;
     if (!doc.setContent(&file, false/* !namespaceProcessing*/,
                         &errMsg, &errLine, &errCol)) {
 //! @todo show err msg to the user
-        kWarning() << errMsg;
-        kWarning() << errLine << "col:" << errCol;
+        qWarning() << errMsg;
+        qWarning() << errLine << "col:" << errCol;
         return false;
     }
 
@@ -353,19 +353,19 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
         if (ok)
             ver = v;
     }
-    kDebug() << "original format version: " << ver;
+    qDebug() << "original format version: " << ver;
     form->setOriginalFormatVersion(ver);
     if (ver < KFormDesigner::version()) {
 //! @todo We can either 1) convert from old format and later save in a new one or 2) keep old format.
 //!     To do this we may need to look at the original format version number.
-        kWarning() << "original format is older than current: " << KFormDesigner::version();
+        qWarning() << "original format is older than current: " << KFormDesigner::version();
         form->setFormatVersion(KFormDesigner::version());
     } else
         form->setFormatVersion(ver);
 
     if (ver > KFormDesigner::version()) {
 //! @todo display information about too new format and that "some information will not be available".
-        kWarning() << "original format is newer than current: " << KFormDesigner::version();
+        qWarning() << "original format is newer than current: " << KFormDesigner::version();
     }
 
     // Load the pixmap collection
@@ -388,7 +388,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
             QString name = n.toElement().text();
             ObjectTreeItem *item = form->objectTree()->lookup(name);
             if (!item) {
-                kWarning() << "ERROR : no ObjectTreeItem ";
+                qWarning() << "ERROR : no ObjectTreeItem ";
                 continue;
             }
             const int index = form->tabStops()->indexOf(item);
@@ -400,7 +400,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
             }
             if (index == -1) {
                 itemsNotFound++;
-                kDebug() << "FormIO: item '" << name << "' not in list";
+                qDebug() << "FormIO: item '" << name << "' not in list";
             }
         }
     }
@@ -421,7 +421,7 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
                           const char *name, const QVariant &value)
 {
     // Widget specific properties and attributes
-// kDebug() << "Saving the property: " << name;
+// qDebug() << "Saving the property: " << name;
     Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(item->widget());
     QWidget *subwidget = item->widget();
@@ -434,7 +434,7 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
         addSubwidgetFlag = true;
     }
     if (!propertyIsName && propertyId == -1) {
-        kDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
+        qDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
         if (form->library())
             form->library()->saveSpecialProperty(item->widget()->metaObject()->className(), name, value,
                                                  item->widget(), parentNode, parent);
@@ -893,7 +893,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 {
     if (!item)
         return;
-    kDebug() << item->className() << item->widget()->objectName();
+    qDebug() << item->className() << item->widget()->objectName();
     Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     WidgetLibrary *lib = form->library();
 
@@ -1090,7 +1090,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
     }
     ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
     if (item) {
-        kWarning() << "Widget" << wname << "already exists! Skipping...";
+        qWarning() << "Widget" << wname << "already exists! Skipping...";
         return;
     }
 
@@ -1132,10 +1132,10 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
     item = container->form()->objectTree()->lookup(wname);
-    kDebug() << wname << item << classname << (parent ? parent->objectName() : QString());
+    qDebug() << wname << item << classname << (parent ? parent->objectName() : QString());
     if (!item)  {
         // not yet created
-        kDebug() << "Creating ObjectTreeItem:";
+        qDebug() << "Creating ObjectTreeItem:";
         item =  new ObjectTreeItem(container->form()->library()->displayName(classname),
                                    wname, w, container);
         if (parent)  {
@@ -1143,7 +1143,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
             if (titem)
                 container->form()->objectTree()->addItem(titem, item);
             else
-                kWarning() << "ERROR no parent widget";
+                qWarning() << "ERROR no parent widget";
         } else
             container->form()->objectTree()->addItem(container->objectTree(), item);
     }
@@ -1228,7 +1228,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
     {
         ObjectTreeItem *item = form->objectTree()->lookup(it.key());
         if (!item || !item->widget()) {
-            kDebug() << "Cannot assign buddy for widget "
+            qDebug() << "Cannot assign buddy for widget "
                 << it.value()->objectName() << " to " << it.key();
             continue;
         }
@@ -1268,7 +1268,7 @@ void FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QD
                 item->addSubproperty(name.toLatin1(),
                                      readPropertyValue(container->form(), node.firstChild(), w, name));
                 const QVariant val(readPropertyValue(container->form(), node.firstChild(), w, name));
-                kDebug() << val.toStringList();
+                qDebug() << val.toStringList();
                 item->addSubproperty(name.toLatin1(), val);
                 //subwidget->setProperty(name.toLatin1(), val);
                 item->addModifiedProperty(name.toLatin1(), val);

@@ -21,8 +21,8 @@
 
 #include <QTextCodec>
 #include <QLocale>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kcharsets.h>
 #include <KLocalizedString>
@@ -99,7 +99,7 @@ void KexiCharacterEncodingComboBox::setSelectedEncoding(const QString& encodingN
 {
     QString desc = d->encodingDescriptionForName[encodingName];
     if (desc.isEmpty()) {
-        kWarning() << "no such encoding" << encodingName;
+        qWarning() << "no such encoding" << encodingName;
         return;
     }
     setCurrentIndex(findText(desc));

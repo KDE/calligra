@@ -30,8 +30,7 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <KDebug>
-
+#include <QDebug>
 #include <QMenu>
 #include <QPalette>
 #include <QScrollBar>
@@ -260,15 +259,15 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
     Q_UNUSED(flags);
 
     if (row < 0) {
-        kWarning() << "ROW NOT SPECIFIED!" << row;
+        qWarning() << "ROW NOT SPECIFIED!" << row;
         return;
     }
     if (isReadOnly()) {
-        kWarning() << "DATA IS READ ONLY!";
+        qWarning() << "DATA IS READ ONLY!";
         return;
     }
     if (column(col)->isReadOnly()) {
-        kWarning() << "COL IS READ ONLY!";
+        qWarning() << "COL IS READ ONLY!";
         return;
     }
     if (rowEditing() >= 0 && row != rowEditing()) {
@@ -399,19 +398,19 @@ KFormDesigner::Form* KexiFormScrollView::form() const
 
 bool KexiFormScrollView::columnEditable(int col)
 {
-    //kDebug() << "col=" << col;
+    //qDebug() << "col=" << col;
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
-        kDebug() << (dynamic_cast<QWidget*>(dataItemIface)
+        qDebug() << (dynamic_cast<QWidget*>(dataItemIface)
                      ? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "")
             << " " << dataItemIface->dataSource();
     }
-    //kDebug() << "-- focus widgets --";
+    //qDebug() << "-- focus widgets --";
     foreach(QWidget* widget, *dbFormWidget()->orderedFocusWidgets()) {
-        kDebug() << widget->objectName();
+        qDebug() << widget->objectName();
     }
-    //kDebug() << "-- data-aware widgets --";
+    //qDebug() << "-- data-aware widgets --";
     foreach(QWidget *widget, *dbFormWidget()->orderedDataAwareWidgets()) {
-        kDebug() << widget->objectName();
+        qDebug() << widget->objectName();
     }
 
     KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
@@ -428,12 +427,12 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
     if (!item)
         return;
     //only signal start editing when no record editing was started already
-    /*kDebug() << "** editedItem="
+    /*qDebug() << "** editedItem="
         << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
         << ", "
         << (item ? item->value().toString() : QString());*/
     if (dbFormWidget()->editedItem != item) {
-        //kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
+        //qDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
         dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item);
         startEditCurrentCell();
     }
@@ -514,7 +513,7 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
 {
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
         if (dynamic_cast<QWidget*>(dataItemIface)) {
-            kDebug()
+            qDebug()
                 << dynamic_cast<QWidget*>(dataItemIface)->metaObject()->className() << " "
                 << dynamic_cast<QWidget*>(dataItemIface)->objectName();
         }
@@ -603,7 +602,7 @@ void KexiFormScrollView::refreshContentsSize()
     }
     updateScrollBars();
 
-    kDebug() << widget()->size() << d->form->widget()->size() << dbFormWidget()->size();
+    qDebug() << widget()->size() << d->form->widget()->size() << dbFormWidget()->size();
     if (!d->preview) {
         widget()->resize(dbFormWidget()->size() + QSize(300, 300));
     }

@@ -40,8 +40,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QDialog>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
@@ -293,9 +293,9 @@ void KexiCSVExportWizard::next()
         if (!m_fileSaveWidget->checkSelectedFile()) {
             return;
         }
-        kDebug() << "selectedFile:" << m_fileSaveWidget->selectedFile();
-        kDebug() << "selectedUrl:" << m_fileSaveWidget->selectedUrl();
-        kDebug() << "highlightedFile:" << m_fileSaveWidget->highlightedFile();
+        qDebug() << "selectedFile:" << m_fileSaveWidget->selectedFile();
+        qDebug() << "selectedUrl:" << m_fileSaveWidget->selectedUrl();
+        qDebug() << "highlightedFile:" << m_fileSaveWidget->highlightedFile();
         KAssistantDialog::next();
         return;
     }
@@ -306,7 +306,7 @@ void KexiCSVExportWizard::done(int result)
 {
     if (QDialog::Accepted == result) {
         if (m_fileSavePage) {
-            kDebug() << m_fileSaveWidget->highlightedFile();
+            qDebug() << m_fileSaveWidget->highlightedFile();
             m_options.fileName = m_fileSaveWidget->highlightedFile();
         }
         m_options.delimiter = m_delimiterWidget->delimiter();

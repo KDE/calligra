@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <QList>
 #include <QDir>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <migration/keximigratedata.h>
 #include <db/cursor.h>
@@ -82,29 +82,29 @@ bool xBaseMigrate::drv_connect()
     // remove the letters '.dbf'. Hence the -4
     QString choppedFileName = fileName.left( fileName.length() - 4 ).toLower();
     m_tableNamePathMap[choppedFileName] = absoluteFileName;
-    kDebug()<<choppedFileName<<" Path:"<<absoluteFileName;
+    qDebug()<<choppedFileName<<" Path:"<<absoluteFileName;
 
     int returnCode;
     QByteArray ba = absoluteFileName.toUtf8();
     if (  ( returnCode = table->OpenDatabase( ba.constData() ) ) != XB_NO_ERROR ) {
       switch( returnCode ) {
         case XB_OPEN_ERROR:
-          kDebug()<<"Couldn't open "<<absoluteFileName<<".Skipping it.";
+          qDebug()<<"Couldn't open "<<absoluteFileName<<".Skipping it.";
           break;
         case XB_NO_MEMORY:
-          kDebug()<<"Memory allocation error in XBase library";
+          qDebug()<<"Memory allocation error in XBase library";
           return false;
         case XB_NOT_XBASE:
-          kDebug()<<absoluteFileName<<" is not a DBF file.Skipping it.";
+          qDebug()<<absoluteFileName<<" is not a DBF file.Skipping it.";
           break;
         default:
-          kDebug()<<"Error code "<<returnCode;
+          qDebug()<<"Error code "<<returnCode;
           return false;
       }
     }
   }
 
-  kDebug()<<"Successfully processed all the dbf files in the directory";
+  qDebug()<<"Successfully processed all the dbf files in the directory";
   return true;
 }
 
@@ -120,7 +120,7 @@ bool xBaseMigrate::drv_disconnect()
     tempDbfList = tempDbfList->NextDbf;
     if (currentDbf->CloseDatabase() != XB_NO_ERROR) {
       // File not open error
-      kDebug()<<"File Not Open";
+      qDebug()<<"File Not Open";
     }
     // delete currentDbf here ?
   }
@@ -185,7 +185,7 @@ bool xBaseMigrate::drv_tableNames(QStringList& tableNames)
   // Get the names from the map directly
   tableNames<<m_tableNamePathMap.keys();
 
-  kDebug()<<"Tables "<<tableNames;
+  qDebug()<<"Tables "<<tableNames;
 
   return true;
 }
@@ -256,7 +256,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
           #endif
 
           if ( ( returnCode = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
-            kDebug()<<"Error reading blob field. Error code: "<<returnCode; // make error message more verbose
+            qDebug()<<"Error reading blob field. Error code: "<<returnCode; // make error message more verbose
           } else {
             val = KexiDB::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
           }
@@ -266,7 +266,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
           break;
         #else
-          kDebug()<<"XB_MEMO_FIELDS support disabled during compilation of XBase libraries";
+          qDebug()<<"XB_MEMO_FIELDS support disabled during compilation of XBase libraries";
         #endif
 
         default:
@@ -350,12 +350,12 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiD
       index = new xbNtx( tableDbf );
     } else {
       // couldn't recognize extension
-      kDebug()<<"Couldn't recognize extension";
+      qDebug()<<"Couldn't recognize extension";
       return;
     }
   
     if ( index->OpenIndex( indexFileName.toLatin1().constData() ) != XB_NO_ERROR ) {
-      kDebug()<<"Couldn't open index file"<<indexFileName;
+      qDebug()<<"Couldn't open index file"<<indexFileName;
       return;
     }
   
@@ -365,17 +365,17 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiD
     QString expressionName = QString::fromLatin1( buf );
   
     if ( expressionName.toLower() != fld->name() ) {
-      kDebug()<<"Expression mismatch in "<<indexFileName;
+      qDebug()<<"Expression mismatch in "<<indexFileName;
       continue;
     }
   
     // all is well, set the index
     if ( index->UniqueIndex() == XB_UNIQUE ) {
       fld->setUniqueKey( true );
-      kDebug()<<"Unique Index on "<<fld->name();
+      qDebug()<<"Unique Index on "<<fld->name();
     } else {  // index->UniqueIndex() == XB_NOT_UNIQUE
       fld->setIndexed( true );
-      kDebug()<<"Normal Index on "<<fld->name();
+      qDebug()<<"Normal Index on "<<fld->name();
     }
 
     // ok, moving through the loop is fairly useless as we can only set a single index on a field anyway

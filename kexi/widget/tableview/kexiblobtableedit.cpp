@@ -25,10 +25,10 @@
 #include <widget/utils/kexidropdownbutton.h>
 #include <widget/utils/kexicontextmenuutils.h>
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QDataStream>
 #include <QFile>
 #include <QPixmap>
@@ -108,14 +108,14 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 {
     delete d;
 #if 0
-    kDebug() << "Cleaning up...";
+    qDebug() << "Cleaning up...";
     if (m_tempFile) {
         m_tempFile->unlink();
         //! @todo
     }
     delete m_proc;
     m_proc = 0;
-    kDebug() << "Ready.";
+    qDebug() << "Ready.";
 #endif
 }
 
@@ -132,17 +132,17 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 //! @todo
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
-    kDebug() << "Size of BLOB: " << val.size();
+    qDebug() << "Size of BLOB: " << val.size();
     m_tempFile = new QTemporaryFile();
     m_tempFile->open();
-    kDebug() << "Creating temporary file: " << m_tempFile->fileName();
+    qDebug() << "Creating temporary file: " << m_tempFile->fileName();
     QDataStream stream(m_tempFile);
     stream->writeRawBytes(val.data(), val.size());
     delete m_tempFile;
     m_tempFile = 0;
 
     KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
-    kDebug() << "Mimetype = " << mmr->mimeType();
+    qDebug() << "Mimetype = " << mmr->mimeType();
 
     setViewWidget(new QWidget(this));
 #endif
@@ -179,7 +179,7 @@ KexiBlobTableEdit::value()
     stream.readRawBytes(data, f.size());
     value.duplicate(data, f.size());
     free(data);
-    kDebug() << "Size of BLOB: " << value.size();
+    qDebug() << "Size of BLOB: " << value.size();
     return QVariant(value);
 #endif
 }

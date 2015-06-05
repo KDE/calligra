@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <kdebug.h>
+#include <QDebug>
 
 bool KexiFieldDrag::canDecode(QMimeSource *e)
 {
@@ -48,7 +48,7 @@ bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
     stream1 >> *sourceMimeType;
     stream1 >> *sourceName;
     stream1 >> *fields;
-// kDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
+// qDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
     return true;
 }
 
@@ -89,6 +89,6 @@ bool KexiDataProviderDrag::decode(QDropEvent* e, QString* sourceMimeType, QStrin
     QDataStream stream1(&payload, QIODevice::ReadOnly);
     stream1 >> *sourceMimeType;
     stream1 >> *sourceName;
-//  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
+//  qDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
     return true;
 }

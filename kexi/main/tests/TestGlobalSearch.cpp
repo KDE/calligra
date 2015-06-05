@@ -26,7 +26,6 @@
 #include <kexiutils/KexiTester.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
 
@@ -36,6 +35,7 @@
 #include <QFile>
 #include <QTreeView>
 #include <QLineEdit>
+#include <QDebug>
 
 const int GUI_DELAY = 10;
 
@@ -73,7 +73,7 @@ TestGlobalSearch::TestGlobalSearch(int argc, char **argv, bool goToEventLoop)
 void TestGlobalSearch::testGlobalSearch()
 {
     QString filename(QFile::decodeName(FILES_DATA_DIR "/TestGlobalSearch.kexi"));
-    kDebug() << filename;
+    qDebug() << filename;
     NewArgs args(m_argv);
     args.vals[args.count - 1] = qstrdup(QFile::encodeName(filename).constData());
 

@@ -30,7 +30,7 @@
 #endif
 
 #include <QString>
-#include <kdebug.h>
+#include <QDebug>
 #include <QStringList>
 
 //! @todo I maybe should not use stl?
@@ -84,7 +84,7 @@ bool PqxxMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
     //Perform a query on the table to get some data
-    //kDebug();
+    //qDebug();
     tableSchema.setName(originalName);
     if (!query("select * from " + drv_escapeIdentifier(originalName) + " limit 1"))
         return false;
@@ -102,7 +102,7 @@ bool PqxxMigrate::drv_readTableSchema(
         f->setUniqueKey(uniqueKey(toid, i));
         f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
         tableSchema.addField(f);
-        //kDebug() << "Added field [" << f->name() << "] type [" << f->typeName() << ']';
+        //qDebug() << "Added field [" << f->name() << "] type [" << f->typeName() << ']';
     }
     return true;
 }
@@ -166,7 +166,7 @@ KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool PqxxMigrate::drv_connect()
 {
-    //kDebug() << "drv_connect: " << data()->sourceName;
+    //qDebug() << "drv_connect: " << data()->sourceName;
 
     QString conninfo;
     QString socket;
@@ -199,9 +199,9 @@ bool PqxxMigrate::drv_connect()
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());
         return true;
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
+        qWarning() << "exception - " << e.what();
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     return false;
 }
@@ -221,7 +221,7 @@ bool PqxxMigrate::drv_disconnect()
 //Perform a query on the database and store result in m_res
 bool PqxxMigrate::query(const QString& statement)
 {
-    //kDebug() << "query: " << statement.toLatin1();
+    //qDebug() << "query: " << statement.toLatin1();
     if (!m_conn)
         return false;
 
@@ -239,10 +239,10 @@ bool PqxxMigrate::query(const QString& statement)
         return true;
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
-        kWarning() << "exception - " << e.what();
+        qWarning() << "exception - " << e.what();
         return false;
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     return true;
 }
@@ -271,7 +271,7 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
 
     //Some simple result caching
     if (table == otable) {
-        kDebug() << "Returning table OID from cache...";
+        qDebug() << "Returning table OID from cache...";
         return toid;
     } else {
         otable = table;
@@ -293,11 +293,11 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
             toid = 0;
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         toid = 0;
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     delete tmpres;
     tmpres = 0;
@@ -305,7 +305,7 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
     delete tran;
     tran = 0;
 
-    //kDebug() << "OID for table [" << table << "] is [" << toid << ']';
+    //qDebug() << "OID for table [" << table << "] is [" << toid << ']';
     return toid;
 }
 
@@ -335,18 +335,18 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
             tmpres->at(0).at(0).to(keyf);
             if (keyf - 1 == col) {//-1 because pg counts from 1 and we count from 0
                 pkey = true;
-                kDebug() << "Field is pkey";
+                qDebug() << "Field is pkey";
             } else {
                 pkey = false;
-                kDebug() << "Field is NOT pkey";
+                qDebug() << "Field is NOT pkey";
             }
         } else {
             pkey = false;
-            kDebug() << "Field is NOT pkey";
+            qDebug() << "Field is NOT pkey";
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         pkey = false;
     }
     delete tmpres;
@@ -475,18 +475,18 @@ bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
             tmpres->at(0).at(0).to(keyf);
             if (keyf - 1 == col) {//-1 because pg counts from 1 and we count from 0
                 ukey = true;
-                kDebug() << "Field is unique";
+                qDebug() << "Field is unique";
             } else {
                 ukey = false;
-                kDebug() << "Field is NOT unique";
+                qDebug() << "Field is NOT unique";
             }
         } else {
             ukey = false;
-            kDebug() << "Field is NOT unique";
+            qDebug() << "Field is NOT unique";
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         ukey = false;
     }
 
@@ -521,7 +521,7 @@ bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 
 bool PqxxMigrate::drv_readFromTable(const QString & tableName)
 {
-    //kDebug();
+    //qDebug();
     bool ret;
     ret = false;
     
@@ -529,12 +529,12 @@ bool PqxxMigrate::drv_readFromTable(const QString & tableName)
         ret = query(QString("SELECT * FROM %1").arg(m_conn->esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
-            //kDebug() << m_rows;
+            //qDebug() << m_rows;
         }
         
     }
     catch (const std::exception &e) {
-        kWarning();
+        qWarning();
     }
 
     return ret;

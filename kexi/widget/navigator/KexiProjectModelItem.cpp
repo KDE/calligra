@@ -24,8 +24,7 @@
 #include <core/kexipartinfo.h>
 #include <kexiutils/utils.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QIcon>
 #include <QtAlgorithms>
 
@@ -83,11 +82,11 @@ void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
 void KexiProjectModelItem::debugPrint() const
 {
     if (d->item) {
-        kDebug() << d->item->captionOrName();
+        qDebug() << d->item->captionOrName();
     } else if (d->info) {
-        kDebug() << d->info->groupName();
+        qDebug() << d->info->groupName();
     } else   {
-        kDebug() << d->groupName;
+        qDebug() << d->groupName;
     }
 
     foreach(KexiProjectModelItem* itm, d->childItems) {
@@ -154,10 +153,10 @@ int KexiProjectModelItem::row()
 {
      if (d->parentItem)
      {
-         //kDebug() << d->parentItem->d->childItems << this << data(0);
+         //qDebug() << d->parentItem->d->childItems << this << data(0);
          return d->parentItem->d->childItems.indexOf(this);
      }
-     kDebug() << "No parent item!";
+     qDebug() << "No parent item!";
      return 0;
 }
 

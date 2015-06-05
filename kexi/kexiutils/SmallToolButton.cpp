@@ -20,8 +20,7 @@
 #include "SmallToolButton.h"
 #include "utils.h"
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
@@ -169,7 +168,7 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
     if (!d->enableSlotButtonToggled)
         return;
     //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotActionToggled = false;
@@ -181,7 +180,7 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
     if (!d->enableSlotActionToggled)
         return;
     //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotButtonToggled = false;

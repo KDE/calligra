@@ -35,11 +35,9 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QPushButton>
+#include <QDebug>
 
 #include <kmessagebox.h>
-#include <kdebug.h>
-
-#include <KexiIcon.h>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>
@@ -60,6 +58,7 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiDBPasswordDialog.h>
 #include <widget/KexiStartupFileHandler.h>
+#include <KexiIcon.h>
 
 using namespace KexiMigration;
 
@@ -653,7 +652,7 @@ bool ImportWizard::fileBasedSrcSelected() const
     if (d->predefinedConnectionData)
         return false;
 
-// kDebug() << (d->srcConn->selectedConnectionType()==KexiConnectionSelectorWidget::FileBased);
+// qDebug() << (d->srcConn->selectedConnectionType()==KexiConnectionSelectorWidget::FileBased);
     return d->srcConn->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased;
 }
 
@@ -717,7 +716,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     // Start with a driver manager
     KexiDB::DriverManager manager;
 
-    //kDebug() << "Creating destination driver...";
+    //qDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
     KexiDB::Driver *destDriver = manager.driver(
@@ -727,7 +726,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
                                  );
     if (!destDriver || manager.error()) {
         result.setStatus(&manager);
-        kWarning() << "Manager error...";
+        qWarning() << "Manager error...";
         manager.debugError();
     }
 
@@ -737,19 +736,19 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     if (!result.error()) {
         if (d->dstConn->selectedConnectionData()) {
             //server-based project
-            kDebug() << "Server destination...";
+            qDebug() << "Server destination...";
             cdata = d->dstConn->selectedConnectionData();
             dbname = d->dstNewDBNameLineEdit->text();
         }
         else {
             //file-based project
-            kDebug() << "File Destination...";
+            qDebug() << "File Destination...";
             cdata = new KexiDB::ConnectionData();
             cdata->caption = d->dstNewDBTitleLineEdit->text();
             cdata->driverName = KexiDB::defaultFileBasedDriverName();
             dbname = d->dstTitlePageWidget->file_requester->url().toLocalFile();
             cdata->setFileName(dbname);
-            kDebug() << "Current file name: " << dbname;
+            qDebug() << "Current file name: " << dbname;
         }
     }
 
@@ -767,7 +766,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     if (!result.error()) {
         sourceDriver = d->migrateManager.driver(sourceDriverName);
         if (!sourceDriver || d->migrateManager.error()) {
-            kDebug() << "Import migrate driver error...";
+            qDebug() << "Import migrate driver error...";
             result.setStatus(&d->migrateManager);
         }
     }
@@ -788,13 +787,13 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 
         bool keepData;
         if (d->importTypeStructureAndDataCheckBox->isChecked()) {
-            kDebug() << "Structure and data selected";
+            qDebug() << "Structure and data selected";
             keepData = true;
         } else if (d->importTypeStructureOnlyCheckBox->isChecked()) {
-            kDebug() << "structure only selected";
+            qDebug() << "structure only selected";
             keepData = false;
         } else {
-            kDebug() << "Neither radio button is selected (not possible?) presume keep data";
+            qDebug() << "Neither radio button is selected (not possible?) presume keep data";
             keepData = true;
         }
 
@@ -839,13 +838,13 @@ tristate ImportWizard::import()
                                           );
         }
         if (!sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(&result, acceptingNeeded)) {
-            kDebug() << "Abort import cause checkIfDestinationDatabaseOverwritingNeedsAccepting "
+            qDebug() << "Abort import cause checkIfDestinationDatabaseOverwritingNeedsAccepting "
             "returned false.";
             return false;
         }
 
-        //kDebug() << sourceDriver->data()->destination->databaseName();
-        //kDebug() << "Performing import...";
+        qDebug() << sourceDriver->data()->destination->databaseName();
+        qDebug() << "Performing import...";
     }
 
     if (sourceDriver && !result.error() && acceptingNeeded) {
@@ -889,7 +888,7 @@ tristate ImportWizard::import()
         KexiTextMessageHandler handler(msg, details);
         handler.showErrorMessage(&result);
 
-        kDebug() << msg << "\n" << details;
+        qDebug() << msg << "\n" << details;
 
         d->finishPageItem->setHeader(xi18n("Failure"));
         d->finishLbl->setText(

@@ -17,15 +17,15 @@
 * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-#include <kdebug.h>
-#include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
 #include <KexiIcon.h>
+
 #include <QShortcut>
+#include <QDebug>
+#include <QScrollArea>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
         : KexiView(parent)
@@ -85,7 +85,7 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData&
                                                        bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    kDebug() << "new id:" << s->id();
+    qDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -111,33 +111,33 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     QDomElement conndata = m_sourceSelector->connectionData();
 
     if (conndata.isNull())
-        kDebug() << "Null conn data!";
+        qDebug() << "Null conn data!";
 
     root.appendChild(m_reportDesigner->document());
     root.appendChild(conndata);
     doc.appendChild(root);
 
     QString src  = doc.toString();
-    kDebug() << src;
+    qDebug() << src;
 
     if (storeDataBlock(src, "layout")) {
-        kDebug() << "Saved OK";
+        qDebug() << "Saved OK";
         setDirty(false);
         return true;
     }
 
-    kDebug() << "NOT Saved OK";
+    qDebug() << "NOT Saved OK";
     return false;
 }
 
 tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    kDebug() << mode;
+    qDebug() << mode;
     dontStore = true;
     if (m_reportDesigner && mode == Kexi::DataViewMode) {
-        kDebug() << "Saving temp data";
+        qDebug() << "Saving temp data";
         tempData()->reportDefinition = m_reportDesigner->document();
-        kDebug() << m_reportDesigner->document().toDocument().toString();
+        qDebug() << m_reportDesigner->document().toDocument().toString();
         tempData()->reportSchemaChangedInPreviousView = true;
     }
     return true;

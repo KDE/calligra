@@ -24,8 +24,8 @@
 #include <QPalette>
 #include <QToolTip>
 #include <QAction>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 
 #include <KexiIcon.h>
@@ -256,7 +256,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
 tristate
 KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    kDebug();
+    qDebug();
     if (mode == Kexi::NoViewMode) {
         //User opened text view _directly_.
         //This flag is set to indicate for beforeSwitchTo() that even if text has not been changed,
@@ -315,7 +315,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
         return true;
     }
 
-    kDebug();
+    qDebug();
     KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     const bool ok = parser->parse(sqlText);
     delete d->parsedQuery;

@@ -24,7 +24,6 @@
 
 #include <kfiledialog.h>
 #include <kimageio.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
@@ -106,7 +105,7 @@ void KexiImageContextMenu::insertFromFile()
 #endif
         return;
     }
-    //kDebug() << "fname=" << url.toDisplayString();
+    //qDebug() << "fname=" << url.toDisplayString();
 
     emit insertFromFileRequested(url);
 #ifndef KEXI_MOBILE
@@ -123,7 +122,7 @@ void KexiImageContextMenu::saveAs()
     emit aboutToSaveAsRequested(origFilename, fileExtension, dataIsEmpty);
 
     if (dataIsEmpty) {
-        kWarning() << "no data!";
+        qWarning() << "no data!";
         return;
     }
     if (!origFilename.isEmpty())
@@ -143,7 +142,7 @@ void KexiImageContextMenu::saveAs()
 
     if (QFileInfo(fileName).completeSuffix().isEmpty())
         fileName += (QString(".") + fileExtension);
-    kDebug() << fileName;
+    qDebug() << fileName;
     QUrl url;
     url.setPath(fileName);
 

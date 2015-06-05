@@ -24,8 +24,7 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QCursor>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -275,7 +274,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
         tmph = (tmph < MINIMUM_HEIGHT) ? MINIMUM_HEIGHT : tmph;
     }
 
-    //kDebug() << "geometry: OLD" << d->set->widget()->geometry() << "NEW" << QRect(tmpx, tmpy, tmpw, tmph);
+    //qDebug() << "geometry: OLD" << d->set->widget()->geometry() << "NEW" << QRect(tmpx, tmpy, tmpw, tmph);
     emit d->set->geometryChanged(QRect(tmpx, tmpy, tmpw, tmph));
 
     if (shouldBeMoved && shouldBeResized) {
@@ -370,7 +369,7 @@ void ResizeHandleSet::resizeStarted()
 void ResizeHandleSet::resizeFinished()
 {
     if (d->widget) {
-        //kDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
+        //qDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
     }
 }
 

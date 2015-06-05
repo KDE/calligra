@@ -17,7 +17,6 @@
 */
 
 #include "keximigratereportdata.h"
-#include <kdebug.h>
 
 class KexiMigrateReportData::Private
 {

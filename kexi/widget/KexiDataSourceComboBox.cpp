@@ -19,8 +19,7 @@
 
 #include "KexiDataSourceComboBox.h"
 
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <KexiIcon.h>
 

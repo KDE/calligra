@@ -25,9 +25,9 @@
 #include <core/kexi.h>
 #include <KexiIcon.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QLabel>
 #include <QPushButton>
 #include <QKeyEvent>
@@ -174,7 +174,7 @@ void KexiProjectSelectorWidget::slotItemExecuted(QTreeWidgetItem *item)
 
 void KexiProjectSelectorWidget::slotItemExecuted()
 {
-    kDebug();
+    qDebug();
     if (!d->selectable)
         return;
     QList<QTreeWidgetItem *> items = list()->selectedItems();
@@ -203,7 +203,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
         return;
 //! @todo what with project set's ownership?
     if (d->prj_set->error()) {
-        kDebug() << "d->prj_set->error() !";
+        qDebug() << "d->prj_set->error() !";
         return;
     }
     KexiDB::DriverManager manager;
@@ -223,7 +223,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
                 item->setIcon(0, d->dbicon);
         }
         else {
-            kWarning() << "no driver found for" << data->constConnectionData()->driverName;
+            qWarning() << "no driver found for" << data->constConnectionData()->driverName;
         }
     }
     list()->setSortingEnabled(true);

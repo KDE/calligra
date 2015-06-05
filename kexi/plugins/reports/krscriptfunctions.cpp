@@ -19,7 +19,8 @@
 #include "krscriptfunctions.h"
 #include <db/cursor.h>
 #include <db/utils.h>
-#include <kdebug.h>
+
+#include <QDebug>
 
 KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
 {
@@ -46,7 +47,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
         sql += " WHERE(" + m_where + ')';
     }
 
-    kDebug() << sql;
+    qDebug() << sql;
     KexiDB::Cursor *curs = m_connection->executeQuery(sql);
 
     if (curs) {
@@ -88,7 +89,7 @@ QVariant KRScriptFunctions::value(const QString &field)
 {
     QVariant val;
     if (!m_cursor) {
-        kDebug() << "No cursor to get value of field " << field;
+        qDebug() << "No cursor to get value of field " << field;
         return val;
     }
 

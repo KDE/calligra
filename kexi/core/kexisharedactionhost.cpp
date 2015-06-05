@@ -27,13 +27,13 @@
 #include <kexi_global.h>
 
 #include <kguiitem.h>
-#include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
 #include <QApplication>
 #include <QIcon>
+#include <QDebug>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
         : QObject()
@@ -163,7 +163,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
             }
         }
         a->setEnabled(avail);
-//  kDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.");
+  //qDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.");
     }
 }
 

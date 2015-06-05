@@ -20,8 +20,7 @@
 #include "KexiFieldListView.h"
 
 #include <QPushButton>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <db/tableschema.h>
 #include <db/queryschema.h>
@@ -117,7 +116,7 @@ QStringList KexiFieldListView::selectedFieldNames() const
 
 void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
 {
-    kDebug();
+    qDebug();
     if (schema() && idx.isValid()) {
         //! @todo what about query fields/aliases? it.current()->text(0) can be not enough
         emit fieldDoubleClicked(schema()->table() ? "kexi/table" : "kexi/query",

@@ -17,12 +17,10 @@
 */
 
 #include "kexirelationdesignshape.h"
-#include <QPainter>
 #include "KoViewConverter.h"
 #include <db/connection.h>
 #include <db/drivermanager.h>
 #include <db/utils.h>
-#include <kdebug.h>
 #include <db/queryschema.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
@@ -31,6 +29,9 @@
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
+
+#include <QPainter>
+#include <QDebug>
 
 KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra.org/kexirelationdesign", "shape")
 {
@@ -109,11 +110,11 @@ bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, K
     Q_UNUSED(context);
     KoXmlElement relation = KoXml::namedItemNS(element, "http://www.calligra.org/kexirelationdesign", "relation");
     if (relation.isNull()) {
-        kWarning() << "no relation element as first child";
+        qWarning() << "no relation element as first child";
         return false;
     }
 
-    kDebug() << relation.attributeNames();
+    qDebug() << relation.attributeNames();
 
     m_database = relation.attribute("database");
     m_relation = relation.attribute("relation");
@@ -194,13 +195,13 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
 
         KexiDB::DriverManager dm;
 
-        kDebug() << m_connectionData->driverName;
+        qDebug() << m_connectionData->driverName;
         KexiDB::Driver *_driver = dm.driver(m_connectionData->driverName);
 
         if (_driver) {
             m_connection = _driver->createConnection(*m_connectionData);
         } else {
-            kDebug() << "Unable to create driver";
+            qDebug() << "Unable to create driver";
         }
 
         if (m_connection) {
@@ -209,10 +210,10 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
                     m_database = m_connection->currentDatabase();
                 }
             } else {
-                kDebug() << "Unable to connect";
+                qDebug() << "Unable to connect";
             }
         } else {
-            kDebug() << "No connection";
+            qDebug() << "No connection";
         }
         update();
 
@@ -231,7 +232,7 @@ KexiDB::Connection *KexiRelationDesignShape::connection()
 
 void KexiRelationDesignShape::setRelation(const QString &rel)
 {
-    kDebug() << rel;
+    qDebug() << rel;
     if (m_relation != rel) {
         m_relation = rel;
 
@@ -239,10 +240,10 @@ void KexiRelationDesignShape::setRelation(const QString &rel)
         m_relationSchema = 0;
         if (m_connection && m_connection->isConnected()) {
             if (m_connection->tableSchema(m_relation)) {
-                kDebug() << m_relation <<  " is a table..";
+                qDebug() << m_relation <<  " is a table..";
                 m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->tableSchema(m_relation));
             } else if (m_connection->querySchema(m_relation)) {
-                kDebug() << m_relation <<  " is a query..";
+                qDebug() << m_relation <<  " is a query..";
                 m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->querySchema(m_relation));
             }
         }

@@ -39,13 +39,13 @@
 
 #include <KexiIcon.h>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 
 #include <unistd.h>
 
+#include <QDebug>
 #include <QApplication>
 #include <QMimeDatabase>
 #include <QMimeType>
@@ -128,7 +128,7 @@ void updateProgressBar(QProgressDialog *pd, char *buffer, int buflen)
             --i; --p;
             const int percent = line.toInt(&ok);
             if (ok && percent >= 0 && percent <= 100 && pd->progressBar()->value() < percent) {
-//    kDebug() << percent;
+//    qDebug() << percent;
                 pd->progressBar()->setValue(percent);
                 qApp->processEvents(QEventLoop::AllEvents, 100);
             }
@@ -362,9 +362,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         }
     }
 
-    /* kDebug() << "ARGC==" << args->count();
+    /* qDebug() << "ARGC==" << args->count();
       for (int i=0;i<args->count();i++) {
-        kDebug() << "ARG" <<i<< "= " << args->arg(i);
+        qDebug() << "ARG" <<i<< "= " << args->arg(i);
       }*/
 
     if (KexiStartupData::forcedUserMode() && KexiStartupData::forcedDesignMode()) {
@@ -759,7 +759,7 @@ tristate KexiStartupHandler::detectActionForFile(
         if (mime.isValid()) {
             mimename = mime.name();
         }
-        kDebug() << "found mime is:" << mimename;
+        qDebug() << "found mime is:" << mimename;
         if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
             //try by URL:
             mime = db.mimeTypeForUrl(QUrl::fromLocalFile(dbFileName));
@@ -834,7 +834,7 @@ tristate KexiStartupHandler::detectActionForFile(
     } else {//use suggested driver
         *detectedDriverName = suggestedDriverName;
     }
-// kDebug() << "driver name:" << detectedDriverName;
+// qDebug() << "driver name:" << detectedDriverName;
 //hardcoded for convenience:
     const QString newFileFormat = "SQLite3";
 
@@ -847,7 +847,7 @@ tristate KexiStartupHandler::detectActionForFile(
                         detectedDriverName, QDir::convertSeparators(dbFileName), newFileFormat))) {
         SQLite2ToSQLite3Migration migr(finfo.absoluteFilePath());
         tristate res = migr.run();
-//  kDebug() << "--- migr.run() END ---";
+//  qDebug() << "--- migr.run() END ---";
         if (!res) {
             KMessageBox::sorry(parent, xi18n(
                                    "Failed to convert project file \"%1\" to a new \"%2\" format.\n"

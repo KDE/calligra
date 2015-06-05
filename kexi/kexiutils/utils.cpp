@@ -39,10 +39,10 @@
 #include <QDesktopWidget>
 #include <QFontDatabase>
 #include <QTextCodec>
+#include <QDebug>
 
 #include <KRun>
 #include <KToolInvocation>
-#include <kdebug.h>
 #include <kiconeffect.h>
 #include <kcolorscheme.h>
 #include <KLocalizedString>
@@ -602,7 +602,7 @@ void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
     if (!object || !filter || !object->isWidgetType())
         return;
 
-//    kDebug() << "Installing event filter on widget:" << object 
+//    qDebug() << "Installing event filter on widget:" << object
 //        << "directed to" << filter->objectName();
     object->installEventFilter(filter);
 

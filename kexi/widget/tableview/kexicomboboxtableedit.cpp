@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QScrollBar>
+#include <QDebug>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -228,9 +229,9 @@ void KexiComboBoxTableEdit::slotButtonClicked()
         m_mouseBtnPressedWhenPopupVisible = false;
         return;
     }
-    kDebug();
+    qDebug();
     if (!popup() || !popup()->isVisible()) {
-        kDebug() << "SHOW POPUP";
+        qDebug() << "SHOW POPUP";
         showPopup();
     }
 }
@@ -259,7 +260,7 @@ void KexiComboBoxTableEdit::show()
 
 bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
 {
-    //kDebug() << ke;
+    //qDebug() << ke;
     const int k = ke->key();
     if ((ke->modifiers() == Qt::NoButton && k == Qt::Key_F4)
             || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Down)) {
@@ -316,8 +317,8 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
             && e->type() != QEvent::HoverEnter
             && e->type() != QEvent::HoverLeave)
     {
-        kDebug() << e << o;
-        kDebug() << "FOCUS WIDGET:" << focusWidget();
+        qDebug() << e << o;
+        qDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
     KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;

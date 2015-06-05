@@ -28,8 +28,8 @@
 #include <QHash>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
 
@@ -104,7 +104,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
     if (!m_item)
         return;
     if (m_item->stored) {
-        kWarning() << "object for id=" << id << " is aleady stored";
+        qWarning() << "object for id=" << id << " is aleady stored";
         return;
     }
 
@@ -138,7 +138,7 @@ KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, b
 
 KexiBLOBBuffer::Item::~Item()
 {
-    kDebug();
+    qDebug();
     delete m_pixmap;
     m_pixmap = 0;
     delete m_data;
@@ -189,12 +189,12 @@ QByteArray KexiBLOBBuffer::Item::data() const
         QBuffer buffer(m_data);
         if (!buffer.open(QIODevice::WriteOnly)) {
             //! @todo err msg
-            kWarning() << "!QBuffer::open()";
+            qWarning() << "!QBuffer::open()";
         }
         if (!m_pixmap->save(&buffer, formatFromMimeType(mimeType).toLatin1()))
         {
             //! @todo err msg
-            kWarning() << "!QPixmap::save()";
+            qWarning() << "!QPixmap::save()";
         }
     }
     return *m_data;
@@ -218,7 +218,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QUrl &url)
     if (url.isEmpty())
         return KexiBLOBBuffer::Handle();
     if (!url.isValid()) {
-        kWarning() << "INVALID URL" << url;
+        qWarning() << "INVALID URL" << url;
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?
@@ -319,7 +319,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
                            recordData);
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
-            kWarning() << "id=" << id << "stored=" << stored
+            qWarning() << "id=" << id << "stored=" << stored
                 << ": res!=true || recordData.size()<4; res==" << res.toString() 
                 << "recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();

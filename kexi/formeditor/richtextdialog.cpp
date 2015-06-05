@@ -30,7 +30,6 @@
 #include <kfontrequester.h>
 #include <kcolorcombo.h>
 #include <ktextedit.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 using namespace KFormDesigner;

@@ -272,7 +272,7 @@ public:
                 m_persistentlySelectedAction->persistentlySelected());
         }
         /*if (m_menuWidget->persistentlySelectedAction())
-            kDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
+            qDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
         KexiFadeWidgetEffect *fadeEffect = 0;
         
         if (m_contentWidget && contentWidget) {
@@ -484,7 +484,9 @@ public:
 
 #include <ktabbar.h>
 #include <KSharedConfig>
+
 #include <QTabBar>
+#include <QDebug>
 
 class KexiTabbedToolBarStyle;
 
@@ -736,16 +738,16 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
     KexiTabbedToolBarTabBar *tabBar = static_cast<KexiTabbedToolBarTabBar*>(q->tabBar());
     QPoint pos = q->mapToGlobal(QPoint(0, tabBar->originalTabSizeHint(0).height() - 1));
-//     kDebug() << "1." << pos;
+//     qDebug() << "1." << pos;
     pos = mainWindow->mapFromGlobal(pos);
-//     kDebug() << "2." << pos;
-//     kDebug() << "3." << q->pos();
+//     qDebug() << "2." << pos;
+//     qDebug() << "3." << q->pos();
 
     QStyleOptionTab ot;
     ot.initFrom(tabBar);
     int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar)
                   - tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseHeight, &ot, tabBar);
-//     kDebug() << "4. overlap=" << overlap;
+//     qDebug() << "4. overlap=" << overlap;
 
     mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,
                           mainWindow->width(),
@@ -940,37 +942,37 @@ bool KexiTabbedToolBar::Private::isTabVisible(const QString& name) const
 #ifndef NDEBUG
 void KexiTabbedToolBar::Private::debugToolbars() const
 {
-    kDebug() << "QHash<QString, KToolBar*> toolbarsForName:";
+    qDebug() << "QHash<QString, KToolBar*> toolbarsForName:";
     for (QHash<QString, KToolBar*>::ConstIterator it(toolbarsForName.constBegin());
          it!=toolbarsForName.constEnd(); ++it)
     {
-        kDebug() << it.key() << "->" << it.value();
+        qDebug() << it.key() << "->" << it.value();
     }
-    kDebug() << "QHash<QString, int> toolbarsIndexForName:";
+    qDebug() << "QHash<QString, int> toolbarsIndexForName:";
     for (QHash<QString, int>::ConstIterator it(toolbarsIndexForName.constBegin());
          it!=toolbarsIndexForName.constEnd(); ++it)
     {
-        kDebug() << it.key() << "->" << it.value();
+        qDebug() << it.key() << "->" << it.value();
     }
-    kDebug() << "QHash<QString, QString> toolbarsCaptionForName:";
+    qDebug() << "QHash<QString, QString> toolbarsCaptionForName:";
     for (QHash<QString, QString>::ConstIterator it(toolbarsCaptionForName.constBegin());
          it!=toolbarsCaptionForName.constEnd(); ++it)
     {
-        kDebug() << it.key() << "->" << it.value();
+        qDebug() << it.key() << "->" << it.value();
     }
-    kDebug() << "QVector<bool> toolbarsVisibleForIndex:";
+    qDebug() << "QVector<bool> toolbarsVisibleForIndex:";
     for (int i = 0; i < toolbarsVisibleForIndex.size(); i++) {
-        kDebug() << i << "->" << toolbarsVisibleForIndex[i];
+        qDebug() << i << "->" << toolbarsVisibleForIndex[i];
     }
 }
 #endif
 
 void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
-//    kDebug() << "name:" << name;
-//    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
-//    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
-//    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
+//    qDebug() << "name:" << name;
+//    qDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
+//    qDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
+//    qDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
 #ifndef NDEBUG
     //debugToolbars();
 #endif
@@ -1045,7 +1047,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QWidget *mainWin = KexiMainWindowIface::global()->thisWidget();
-        // kDebug() << "MouseButtonPress: watched:" << watched << "window()->focusWidget():" << window()->focusWidget();
+        // qDebug() << "MouseButtonPress: watched:" << watched << "window()->focusWidget():" << window()->focusWidget();
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
                                       // back on Escape key press
@@ -1078,10 +1080,10 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         break;
     case QEvent::KeyPress: {
         QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-//         kDebug() << "**********" << QString::number(ke->key(), 16)
+//         qDebug() << "**********" << QString::number(ke->key(), 16)
 //                  << QKeySequence::mnemonic(tabText(0))[0];
         if (QKeySequence::mnemonic(tabText(0)) == QKeySequence(ke->key())) {
-//             kDebug() << "eat the &File accel";
+//             qDebug() << "eat the &File accel";
             if (!d->mainMenu || !d->mainMenu->isVisible()) {
                 d->showMainMenu();
             }
@@ -1105,7 +1107,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Shortcut: {
         QShortcutEvent *se = static_cast<QShortcutEvent*>(event);
         if (watched == tabBar() && QKeySequence::mnemonic(tabText(0)) == se->key()) {
-//             kDebug() << "eat the &File accel";
+//             qDebug() << "eat the &File accel";
             if (!d->mainMenu || !d->mainMenu->isVisible()) {
                 d->showMainMenu();
                 return true;
@@ -1302,7 +1304,7 @@ KToolBar* KexiTabbedToolBar::createToolBar(const char* name, const QString& capt
 
 void KexiTabbedToolBar::setCurrentTab(const QString& name)
 {
-    //kDebug() << name;
+    //qDebug() << name;
     d->setCurrentTab(name);
 }
 
@@ -1313,13 +1315,13 @@ void KexiTabbedToolBar::setCurrentTab(int index)
 
 void KexiTabbedToolBar::hideTab(const QString& name)
 {
-    //kDebug() << name;
+    //qDebug() << name;
     d->hideTab(name);
 }
 
 void KexiTabbedToolBar::showTab(const QString& name)
 {
-    //kDebug() << name;
+    //qDebug() << name;
     d->showTab(name);
 }
 
@@ -1546,7 +1548,7 @@ public:
 
     bool pendingWindowsExist() {
         if (pendingWindows.begin() != pendingWindows.end())
-            kDebug() <<  pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value();
+            qDebug() <<  pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value();
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return !pendingWindows.isEmpty();
     }
@@ -1600,7 +1602,7 @@ public:
         const QList<QAction*> actions( pm->actions() );
         bool nowHideSeparator = false;
         foreach( QAction *action, actions ) {
-          kDebug() << action->text();
+          qDebug() << action->text();
           if (nowHideSeparator) {
             if (action->isSeparator())
               action->setVisible(false);
@@ -1649,7 +1651,7 @@ public:
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
             && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
-        //kDebug() << "visible == " << visible;
+        //qDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
             propEditorDockWidget->setVisible(!visible);
@@ -1688,7 +1690,7 @@ public:
     template<class type>
     type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name) {
         if (!item || !name) {
-            kWarning() << "!item || !name";
+            qWarning() << "!item || !name";
             return 0;
         }
         QByteArray key(QByteArray::number(item->identifier()) + name);

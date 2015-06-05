@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "txtmigrate.h"
 #include <migration/keximigrate_p.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <QDir>
 
 namespace KexiMigration
@@ -89,7 +89,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
   
   m_DataFile = new QFile(m_Folder + '/' + tableName);
 
-  //kDebug() << m_DataFile->fileName();
+  //qDebug() << m_DataFile->fileName();
   m_Row = -1;
   m_FileRow = -1;
 
@@ -104,7 +104,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
 
 bool TxtMigrate::drv_moveNext()
 {
-    //kDebug();
+    //qDebug();
   if (m_Row < m_FileRow)
   {
    m_Row++; 
@@ -124,7 +124,7 @@ bool TxtMigrate::drv_moveNext()
 
 bool TxtMigrate::drv_movePrevious()
 {
-    //kDebug();
+    //qDebug();
   if (m_Row > 0)
   {
     m_Row--;
@@ -135,8 +135,8 @@ bool TxtMigrate::drv_movePrevious()
 
 QVariant TxtMigrate::drv_value(uint i)
 {
-    //kDebug() << m_Row;
-    //kDebug() << m_LastLine;
+    //qDebug() << m_Row;
+    //qDebug() << m_LastLine;
     
     if (m_Row >= 0)   {
         return QVariant(m_FieldValues[m_Row][i]);
@@ -146,14 +146,14 @@ QVariant TxtMigrate::drv_value(uint i)
 
 bool TxtMigrate::drv_moveFirst()
 {
-    //kDebug();
+    //qDebug();
     m_Row = -1;
     return drv_moveNext();
 }
 
 bool TxtMigrate::drv_moveLast()
 {
-    //kDebug();
+    //qDebug();
     while(drv_moveNext()) {}
     return true;
 }

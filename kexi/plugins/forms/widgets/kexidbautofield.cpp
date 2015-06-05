@@ -23,8 +23,8 @@
 
 #include <QLabel>
 #include <QApplication>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include "kexidbcheckbox.h"
@@ -137,7 +137,7 @@ KexiDBAutoField::createEditor()
     }
 
     QWidget *newSubwidget;
-    //kDebug() << "widgetType:" << d->widgetType;
+    //qDebug() << "widgetType:" << d->widgetType;
     switch (d->widgetType) {
     case Text:
     case Double: //! @todo setup validator
@@ -171,7 +171,7 @@ KexiDBAutoField::createEditor()
         break;
     }
 
-    //kDebug() << newSubwidget;
+    //qDebug() << newSubwidget;
     setSubwidget(newSubwidget);   //this will also allow to declare subproperties, see KFormDesigner::WidgetWithSubpropertiesInterface
     if (newSubwidget) {
         newSubwidget->setObjectName(
@@ -201,9 +201,9 @@ KexiDBAutoField::createEditor()
 
 void KexiDBAutoField::copyPropertiesToEditor()
 {
-    //kDebug() << subwidget();
+    //qDebug() << subwidget();
     if (subwidget()) {
-//  kDebug() << "base col: " <<  d->baseColor.name() <<
+//  qDebug() << "base col: " <<  d->baseColor.name() <<
 //   "; text col: " << d->textColor.name();
         QPalette p(subwidget()->palette());
         p.setBrush(QPalette::Base, d->baseBrush);
@@ -363,7 +363,7 @@ bool
 KexiDBAutoField::valueChanged()
 {
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    //kDebug() << KexiDataItemInterface::originalValue();
+    //qDebug() << KexiDataItemInterface::originalValue();
     if (iface)
         return iface->valueChanged();
     return false;
@@ -694,7 +694,7 @@ QColor KexiDBAutoField::paletteBackgroundColor() const
 
 void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 {
-    //kDebug();
+    //qDebug();
 //! @todo how about brush?
     d->baseBrush.setColor(color);
     copyPropertiesToEditor();

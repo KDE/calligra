@@ -22,7 +22,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <kdebug.h>
 #include <kfadewidgeteffect.h>
 #include <KLocalizedString>
 

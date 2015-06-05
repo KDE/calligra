@@ -52,8 +52,8 @@
 #include <QStyledItemDelegate>
 #include <QProgressDialog>
 #include <QDialog>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcharsets.h>
 #include <knuminput.h>
@@ -305,7 +305,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_clipboardData = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
         /* debug
             for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
-              kDebug() << i << ": "
+              qDebug() << i << ": "
                 << QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);
         */
 
@@ -1316,13 +1316,13 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
         }
 
         if (inGUI && row > (m_maximumRowsForPreview + (m_table->firstRowForFieldNames() ? 1 : 0))) {
-            kDebug() << "loading stopped at row #" << m_maximumRowsForPreview;
+            qDebug() << "loading stopped at row #" << m_maximumRowsForPreview;
             break;
         }
         if (nextRow) {
             nextRow = false;
             //additional speedup: stop processing now if too many bytes were loaded for preview
-            //kDebug() << offset;
+            qDebug() << offset;
             if (inGUI && offset >= m_maximumBytesForPreview && row >= 2) {
                 m_stoppedAt_MAX_BYTES_TO_PREVIEW = true;
                 return true;
@@ -1446,7 +1446,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
     }
 
     type = d->detectedType(col);
-    kDebug() << type;
+    qDebug() << type;
 
     if (type == KexiDB::Field::Integer) {
         // check uniqueness for this value
@@ -1730,7 +1730,7 @@ void KexiCSVImportDialog::textquoteSelected(int)
     else
         m_textquote = tq[0];
 
-    kDebug() << m_textquote;
+    qDebug() << m_textquote;
 
     //delayed, otherwise combobox won't be repainted
     fillTableLater();
@@ -2037,7 +2037,7 @@ void KexiCSVImportDialog::import()
     m_importProgressLabel->setText(xi18n("Data has been successfully imported to table \"%1\".",
                             m_destinationTableSchema->name()));
     m_importInProgress = false;
-    //kDebug()<<"IMPORT DONE";
+    //qDebug()<<"IMPORT DONE";
     setButtonGuiItem(FinishButton, KStandardGuiItem::open());
     button(FinishButton)->setEnabled(true);
     KGuiItem::assign(button(QDialogButtonBox::Cancel), KStandardGuiItem::close());
@@ -2049,7 +2049,7 @@ void KexiCSVImportDialog::import()
 
 void KexiCSVImportDialog::reject()
 {
-    //kDebug()<<"IMP_P"<<m_importInProgress;
+    //qDebug()<<"IMP_P"<<m_importInProgress;
     if (!m_importInProgress) {
         KAssistantDialog::reject();
         return;

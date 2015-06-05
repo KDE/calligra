@@ -27,7 +27,7 @@
 #include "main/scriptcontainer.h"
 #include "api/exception.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace KFormDesigner;
 
@@ -70,7 +70,7 @@ FormScript::execute(const QString &functionName)
     try {
         m_script->callFunction(functionName);
     } catch (Kross::Api::Exception& e) {
-        kDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description());
+        qDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description());
         return false;
     }
     return true;

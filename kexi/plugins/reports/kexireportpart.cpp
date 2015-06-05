@@ -21,10 +21,10 @@
 #include "kexireportpart.h"
 
 #include <QTabWidget>
+#include <QDebug>
 
 #include <KLocalizedString>
 
-#include <kdebug.h>
 #include <KexiIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
@@ -115,7 +115,7 @@ QString KexiReportPart::loadReport(const QString& name)
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     KexiDB::Connection *conn;
     if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {
-        kDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
+        qDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
         return QString();
     }
     QString src, did;
@@ -124,11 +124,11 @@ QString KexiReportPart::loadReport(const QString& name)
     if (conn->loadObjectSchemaData(win->project()->idForClass("org.kexi-project.report"), name, sd) != true
         && conn->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true /* compat. */)
     {
-        kWarning() << "failed to load schema data";
+        qWarning() << "failed to load schema data";
         return QString();
     }
 
-    kDebug() << "***Object ID:" << sd.id();
+    qDebug() << "***Object ID:" << sd.id();
 
     if (   win->project()->dbConnection()->loadDataBlock(sd.id(), src, "layout") == true
         || win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true /* compat */)
@@ -136,20 +136,20 @@ QString KexiReportPart::loadReport(const QString& name)
         return src;
     }
 
-    kWarning() << "Unable to load document";
+    qWarning() << "Unable to load document";
     return QString();
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
-    kDebug();
+    qDebug();
     const QString document(loadReport(window->partItem()->name()));
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
     
     QDomDocument doc;
     doc.setContent(document);
     
-    kDebug() << doc.toString();
+    qDebug() << doc.toString();
     
     QDomElement root = doc.documentElement();
     QDomElement korep = root.firstChildElement("report:content");
