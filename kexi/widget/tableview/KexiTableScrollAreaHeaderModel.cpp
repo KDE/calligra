@@ -19,10 +19,11 @@
 
 #include "KexiTableScrollAreaHeaderModel.h"
 #include "KexiTableScrollArea.h"
+#include <KexiIcon.h>
 
 #include <db/tableviewcolumn.h>
 
-#include <KexiIcon.h>
+#include <QDebug>
 
 class KexiTableScrollAreaHeaderModel::Private
 {
@@ -76,7 +77,7 @@ QVariant KexiTableScrollAreaHeaderModel::data(const QModelIndex& index, int role
 
 QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    //kDebug() << orientation << section << role;
+    //qDebug() << orientation << section << role;
     switch (orientation) {
     case Qt::Horizontal: {
         KexiDB::TableViewData *data = qobject_cast<KexiTableScrollArea*>(QObject::parent())->data();

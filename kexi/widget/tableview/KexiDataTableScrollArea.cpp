@@ -21,7 +21,7 @@
 
 #include "KexiDataTableScrollArea.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <db/connection.h>
 #include <db/cursor.h>
@@ -66,7 +66,7 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     m_cursor = cursor;
 
     if (!m_cursor->query()) {
-        kWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
+        qWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
         m_cursor->debug();
         clearColumns();
         return false;
@@ -78,7 +78,7 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     }
 
     if (!m_cursor->isOpened() && !m_cursor->open()) {
-        kWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
+        qWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
         m_cursor->debug();
         clearColumns();
         return false;

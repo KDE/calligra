@@ -23,8 +23,8 @@
 #include <QPainter>
 #include <QVariant>
 #include <QClipboard>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <kexiutils/utils.h>
@@ -36,7 +36,7 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *p
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-    kDebug() << m_formatter.inputMask();
+    qDebug() << m_formatter.inputMask();
     m_lineedit->setInputMask(m_formatter.inputMask());
 }
 
@@ -115,7 +115,7 @@ bool KexiTimeTableEdit::valueIsValid()
 
 bool KexiTimeTableEdit::valueChanged()
 {
-    kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << m_lineedit->text();
+    qDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << m_lineedit->text();
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 

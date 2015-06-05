@@ -27,7 +27,6 @@
 #include "KexiUserFeedbackAgent.h"
 
 #include <kcolorscheme.h>
-#include <kdebug.h>
 #include <kstandardguiitem.h>
 #include <kfadewidgeteffect.h>
 #include <kconfiggroup.h>
@@ -38,6 +37,7 @@
 #include <KSharedConfig>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QEvent>
 #include <QLayout>
 #include <qmath.h>
@@ -79,7 +79,7 @@ static QString findFilename(const QString &guiFileName)
 {
     const QString result = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                   basePath() + '/' + guiFileName);
-    //kDebug() << result;
+    //qDebug() << result;
     return result;
 }
 
@@ -122,7 +122,7 @@ void KexiWelcomeStatusBarGuiUpdater::update()
         int minutes = lastStatusBarUpdate.secsTo(QDateTime::currentDateTime()) / 60;
         
         if (minutes < GUI_UPDATE_INTERVAL) {
-            kDebug() << "gui updated" << minutes << "min. ago, next auto-update in" 
+            qDebug() << "gui updated" << minutes << "min. ago, next auto-update in"
                 << (GUI_UPDATE_INTERVAL - minutes) << "min.";
             return;
         }
@@ -147,24 +147,24 @@ void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
 {
     if (job->error()) {
-        kWarning() << "Error while receiving .list file - no files will be updated";
+        qWarning() << "Error while receiving .list file - no files will be updated";
         //! @todo error...
         return;
     }
     KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
     QString result = sendJob->data();
     if (result.length() > UPDATE_FILES_LIST_SIZE_LIMIT) { // anit-DOS protection
-        kWarning() << "Too large .list file (" << result.length()
+        qWarning() << "Too large .list file (" << result.length()
             << "); the limit is" << UPDATE_FILES_LIST_SIZE_LIMIT
             << "- no files will be updated";
         return;
     }
-    kDebug() << result;
+    qDebug() << result;
     QStringList data = result.split('\n', QString::SkipEmptyParts);
     result.clear();
     d->fileNamesToUpdate.clear();
     if (data.count() > UPDATE_FILES_COUNT_LIMIT) { // anti-DOS protection
-        kWarning() << "Too many files to update (" << data.count()
+        qWarning() << "Too many files to update (" << data.count()
             << "); the limit is" << UPDATE_FILES_COUNT_LIMIT
             << "- no files will be updated";
         return;
@@ -177,16 +177,16 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
             const QString remoteFname((*it).mid(32 + 2));
             if (stage == 1) {
                 if (hash.length() != 32) {
-                    kWarning() << "Invalid hash" << hash << "in line" << i+1 << "- no files will be updated";
+                    qWarning() << "Invalid hash" << hash << "in line" << i+1 << "- no files will be updated";
                     return;
                 }
                 if ((*it).mid(32, 2) != "  ") {
-                    kWarning() << "Two spaces expected but found" << (*it).mid(32, 2)
+                    qWarning() << "Two spaces expected but found" << (*it).mid(32, 2)
                         << "in line" << i+1 << "- no files will be updated";
                     return;
                 }
                 if (remoteFname.contains(QRegExp("\\s"))) {
-                    kWarning() << "Filename expected without whitespace but found" << remoteFname
+                    qWarning() << "Filename expected without whitespace but found" << remoteFname
                         << "in line" << i+1 << "- no files will be updated";
                     return;
                 }
@@ -204,12 +204,12 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     QTemporaryDir tempDir(QDir::tempPath() + "/kexi-status");
     tempDir.setAutoRemove(false);
     d->tempDir = tempDir.path();
-    kDebug() << tempDir.path();
+    qDebug() << tempDir.path();
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
                                       QUrl("file://" + tempDir.path()),
                                       KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
-    //kDebug() << "copying from" << QUrl(uiPath(fname)) << "to"
+    //qDebug() << "copying from" << QUrl(uiPath(fname)) << "to"
     //         << (dir + fname);
 }
 
@@ -220,23 +220,23 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
     QString localFname = findFilename(remoteFname);
     if (localFname.isEmpty()) {
         fileNamesToUpdate->append(remoteFname);
-        kDebug() << "missing filename" << remoteFname << "- download it";
+        qDebug() << "missing filename" << remoteFname << "- download it";
         return;
     }
     QFile file(localFname);
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "could not open file" << localFname << "- update it";
+        qWarning() << "could not open file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
         return;
     }
     QCryptographicHash md5(QCryptographicHash::Md5);
     if (!md5.addData(file)) {
-        kWarning() << "could not check MD5 for file" << localFname << "- update it";
+        qWarning() << "could not check MD5 for file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
         return;
     }
     if (md5.result() != hash) {
-        kDebug() << "not matching file" << localFname << "- update it";
+        qDebug() << "not matching file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
     }
 }
@@ -245,11 +245,11 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
 {
     if (job->error()) {
         //! @todo error...
-        kDebug() << "ERROR:" << job->errorString();
+        qDebug() << "ERROR:" << job->errorString();
         return;
     }
     KIO::CopyJob* copyJob = qobject_cast<KIO::CopyJob*>(job);
-    kDebug() << "DONE" << copyJob->destUrl();
+    qDebug() << "DONE" << copyJob->destUrl();
 
     QString dir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
                 + QLatin1Char('/') + basePath() + '/');
@@ -257,13 +257,13 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
     if (!QDir(dir).exists()) {
         if (!QDir().mkpath(dir)) {
             ok = false;
-            kWarning() << "Could not create" << dir;
+            qWarning() << "Could not create" << dir;
         }
     }
     if (ok) {
         foreach (const QString &fname, d->fileNamesToUpdate) {
             if (!QFile::rename(d->tempDir + fname, dir + fname)) {
-                kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
+                qWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
             }
         }
     }
@@ -308,7 +308,7 @@ protected:
             return;
         KColorScheme scheme(palette().currentColorGroup());
         QColor linkColor = scheme.foreground(KColorScheme::LinkText).color();
-        //kDebug() << "_____________" << isEnabled();
+        //qDebug() << "_____________" << isEnabled();
 
         foreach(QLabel* lbl, widget()->findChildren<QLabel*>()) {
             QString t = lbl->text();
@@ -317,16 +317,16 @@ protected:
             int pos = 0;
             int oldPos = 0;
             QString newText;
-            //kDebug() << "t:" << t;
+            //qDebug() << "t:" << t;
             while ((pos = re.indexIn(t, pos)) != -1) {
-                //kDebug() << "pos:" << pos;
-                //kDebug() << "newText += t.mid(oldPos, pos - oldPos)"
+                //qDebug() << "pos:" << pos;
+                //qDebug() << "newText += t.mid(oldPos, pos - oldPos)"
                 //    << t.mid(oldPos, pos - oldPos);
                 newText += t.mid(oldPos, pos - oldPos);
-                //kDebug() << "newText1:" << newText;
-                //kDebug() << lbl->objectName() << "~~~~" << t.mid(pos, re.matchedLength());
+                //qDebug() << "newText1:" << newText;
+                //qDebug() << lbl->objectName() << "~~~~" << t.mid(pos, re.matchedLength());
                 QString a = t.mid(pos, re.matchedLength());
-                //kDebug() << "a:" << a;
+                //qDebug() << "a:" << a;
                 int colPos = a.indexOf("color:");
                 if (colPos == -1) { // add color
                     a.insert(a.length() - 1, " style=\"color:" + linkColor.name() + ";\"");
@@ -342,20 +342,20 @@ protected:
                             if (a[i] == ';' || a[i] == ' ' || a[i] == '"' || a[i] == '\'')
                                 break;
                         }
-                        //kDebug() << "******" << a.mid(colPos, i - colPos);
+                        //qDebug() << "******" << a.mid(colPos, i - colPos);
                         a.replace(colPos, i - colPos, linkColor.name().mid(1));
                     }
                 }
-                //kDebug() << "a2:" << a;
+                //qDebug() << "a2:" << a;
                 newText += a;
-                //kDebug() << "newText2:" << newText;
+                //qDebug() << "newText2:" << newText;
                 pos += re.matchedLength();
                 oldPos = pos;
-                //kDebug() << "pos2:" << pos;
+                //qDebug() << "pos2:" << pos;
             }
-            //kDebug() << "oldPos:" << oldPos;
+            //qDebug() << "oldPos:" << oldPos;
             newText += t.mid(oldPos);
-            //kDebug() << "newText3:" << newText;
+            //qDebug() << "newText3:" << newText;
             lbl->setText(newText);
         }
 
@@ -395,7 +395,7 @@ public:
         }
         donationScore = 20;
         donated = false;
-        //kDebug() << "totalFeedbackScore:" << totalFeedbackScore;
+        //qDebug() << "totalFeedbackScore:" << totalFeedbackScore;
     }
     
     ~Private() {
@@ -417,7 +417,7 @@ public:
                 score += it.value();
             }
         }
-        //kDebug() << score;
+        //qDebug() << score;
         return score;
     }
     
@@ -426,7 +426,7 @@ public:
     {
         T w = parent->findChild<T>(widgetName);
         if (!w) {
-            kWarning() << "NO SUCH widget" << widgetName << "in" << parent;
+            qWarning() << "NO SUCH widget" << widgetName << "in" << parent;
         }
         return w;
     }
@@ -440,7 +440,7 @@ public:
     {
         QObject *o = parent->findChild<QObject*>(objectName);
         if (!o) {
-            kWarning() << "NO SUCH object" << objectName << "in" << parent;
+            qWarning() << "NO SUCH object" << objectName << "in" << parent;
         }
         return o;
     }
@@ -483,18 +483,18 @@ public:
     {
         QString fname = findFilename(guiFileName);
         if (fname.isEmpty()) {
-            kWarning() << "filename" << fname << "not found";
+            qWarning() << "filename" << fname << "not found";
             return 0;
         }
         QFile file(fname);
         if (!file.open(QIODevice::ReadOnly)) {
-            kWarning() << "could not open file" << fname;
+            qWarning() << "could not open file" << fname;
             return 0;
         }
         QUiLoader loader;
         QWidget* widget = loader.load(&file, parentWidget);
         if (!widget) {
-            kWarning() << "could load ui from file" << fname;
+            qWarning() << "could load ui from file" << fname;
         }
         file.close();
         return widget;
@@ -595,7 +595,7 @@ public:
             int days = lastDonation.secsTo(QDateTime::currentDateTime()) / 60 / 60 / 24;
             if (days >= DONATION_INTERVAL) {
                 donated = false;
-                kDebug() << "last donation declared" << days << "days ago, next in" 
+                qDebug() << "last donation declared" << days << "days ago, next in"
                     << (DONATION_INTERVAL - days) << "days.";
             }
             else if (days >= 0) {
@@ -615,7 +615,7 @@ public:
         const QString& alignToWidgetName,
         CalloutAlignment calloutAlignment = AlignToBar)
     {
-            //kDebug() << q->pos() << q->mapToGlobal(QPoint(0, 100));
+            //qDebug() << q->pos() << q->mapToGlobal(QPoint(0, 100));
             QPoint p(q->mapToGlobal(QPoint(0, 100)));
             QWidget *alignToWidget = this->widget(statusWidget, alignToWidgetName.toLatin1());
             if (alignToWidget) {
@@ -624,11 +624,11 @@ public:
                         QPoint(-5, alignToWidget->height() / 2)).y());
                 if (calloutAlignment == AlignToWidget) {
                     p.setX(alignToWidget->mapToGlobal(QPoint(-5, 0)).x());
-                    //kDebug() << p;
+                    //qDebug() << p;
                 }
             }
             else {
-                kWarning() << alignToWidgetName << "not found!";
+                qWarning() << alignToWidgetName << "not found!";
             }
             msgWidget->setCalloutPointerPosition(p, alignToWidget);
     }
@@ -656,7 +656,7 @@ public:
         if (msgWidth > 100) { // nice text margin
             (*layout)->setColumnMinimumWidth(0, 50);
         }
-        //kDebug() << (q->parentWidget()->width() - q->width()) << "***";
+        //qDebug() << (q->parentWidget()->width() - q->width()) << "***";
         KexiContextMessage msg(widget);
         if (msgWidget) {
             delete static_cast<KexiContextMessageWidget*>(msgWidget);
@@ -672,7 +672,7 @@ public:
                        - q->parentWidget()->mapToGlobal(QPoint(0, 0)).y();
         }
         else {
-            kWarning() << alignToWidgetName << "not found!";
+            qWarning() << alignToWidgetName << "not found!";
         }
         msgWidget->resize(msgWidth, q->parentWidget()->height() - offset_y);
         setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
@@ -841,7 +841,7 @@ void KexiWelcomeStatusBar::showDonation()
         configGroup.writeEntry("DonationsCount", donationsCount + 1);
     }
     else {
-        kWarning() << "Invalid donation URL" << donationUrl;
+        qWarning() << "Invalid donation URL" << donationUrl;
     }
 }
 
@@ -934,7 +934,7 @@ void KexiWelcomeStatusBar::updateContributionGroupCheckboxes()
 
 void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
 {
-    //kDebug() << sender();
+    //qDebug() << sender();
     QWidget* group_share = d->widget(d->contributionDetailsWidget,
                                      "group_share");
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
@@ -1042,7 +1042,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
     const QString name = sender()->objectName();
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     KexiUserFeedbackAgent::Areas areas = f->enabledAreas();
-    //kDebug() << areas;
+    //qDebug() << areas;
     if (name == "group_system") {
         setArea(&areas, KexiUserFeedbackAgent::SystemInfoArea, on);
     }
@@ -1056,7 +1056,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
         areas |= KexiUserFeedbackAgent::AnonymousIdentificationArea;
     }
     f->setEnabledAreas(areas);
-    //kDebug() << f->enabledAreas();
+    //qDebug() << f->enabledAreas();
 }
 
 void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
@@ -1092,7 +1092,7 @@ void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
 
     foreach (QWidget* w, list) {
         if (qobject_cast<QLabel*>(w) && !w->objectName().startsWith(QLatin1String("desc_"))) {
-            //kDebug() << "+++" << w;
+            //qDebug() << "+++" << w;
             w->setVisible(d->detailsDataVisible);
         }
     }

@@ -28,6 +28,7 @@
 
 #include <QDomDocument>
 #include <QAction>
+#include <QDebug>
 
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
@@ -300,13 +301,13 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
 
         foreach(const QMetaMethod& method, _signals) {
             if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
-                kDebug() << method.signature();
+                qDebug() << method.signature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                             formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
                 }
             } else if (0 == qstrcmp(method.signature(), handleDropEventSignal)) {
-                kDebug() << method.signature();
+                qDebug() << method.signature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDropEvent(QDropEvent*)),
                             formView, SLOT(slotHandleDropEvent(QDropEvent*)));

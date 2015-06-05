@@ -21,12 +21,12 @@
 #include "KexiSearchLineEdit.h"
 #include <KexiSearchableModel.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <kexiutils/completer/KexiCompleter.h>
 #include <kexiutils/KexiTester.h>
 
+#include <QDebug>
 #include <QShortcut>
 #include <QKeySequence>
 #include <QTreeView>
@@ -114,9 +114,9 @@ QVariant KexiSearchLineEditCompleterPopupModel::data(const QModelIndex &index, i
 QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
                                                          const QModelIndex &parent) const
 {
-    //kDebug() << row;
+    //qDebug() << row;
     if (!hasIndex(row, column, parent)) {
-        kDebug() << "!hasIndex";
+        qDebug() << "!hasIndex";
         return QModelIndex();
     }
 
@@ -409,7 +409,7 @@ void KexiSearchLineEdit::disconnectCompleter()
 
 void KexiSearchLineEdit::slotClearShortcutActivated()
 {
-    //kDebug() << (QWidget*)d->previouslyFocusedWidget << text();
+    //qDebug() << (QWidget*)d->previouslyFocusedWidget << text();
     d->removeHighlightingForSearchableObject();
     if (text().isEmpty() && d->previouslyFocusedWidget) {
         // after second Escape, go back to previously focused widget
@@ -459,7 +459,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    //qDebug() << source.second->searchableData(source.first, Qt::EditRole);
     d->highlightSearchableObject(source);
 }
 
@@ -468,7 +468,7 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    //qDebug() << source.second->searchableData(source.first, Qt::EditRole);
     
     d->highlightSearchableObject(source);
     d->removeHighlightingForSearchableObject();
@@ -490,7 +490,7 @@ void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void KexiSearchLineEdit::setFocus()
 {
-    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //qDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
     //         << "window()->focusWidget():" << window()->focusWidget();
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
@@ -501,7 +501,7 @@ void KexiSearchLineEdit::setFocus()
 // forked bits from QLineEdit::focusInEvent()
 void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 {
-    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //qDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
     //         << "window()->focusWidget():" << window()->focusWidget();
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
@@ -534,7 +534,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 {
     bool inlineCompletionAccepted = false;
 
-    //kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
+    //qDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
 
     KexiCompleter::CompletionMode completionMode = d->completer->completionMode();
     if ((completionMode == KexiCompleter::PopupCompletion
@@ -604,16 +604,16 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
             }
             return;
         }
-        //kDebug() << "currentRow:" << d->completer->currentRow();
-        //kDebug() << "currentIndex:" << d->completer->currentIndex().isValid();
-        //kDebug() << "currentCompletion:" << d->completer->currentCompletion();
+        //qDebug() << "currentRow:" << d->completer->currentRow();
+        //qDebug() << "currentIndex:" << d->completer->currentIndex().isValid();
+        //qDebug() << "currentCompletion:" << d->completer->currentCompletion();
         if (d->completer->popup() && d->completer->completionCount() > 1) {
-            //kDebug () << "11111" << d->completer->completionPrefix()
+            //qDebug() << "11111" << d->completer->completionPrefix()
             //          << d->completer->completionCount();
             
             // more than one item on completion list, find exact match, if found, accept
             for (int i = 0; i < d->completer->completionCount(); i++) {
-                //kDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
+                //qDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
                 if (d->completer->completionPrefix()
                     == d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString())
                 {

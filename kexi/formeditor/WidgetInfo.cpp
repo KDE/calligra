@@ -22,7 +22,6 @@
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 
-#include <kdebug.h>
 #include <KProperty>
 
 namespace KFormDesigner {

@@ -1,4 +1,5 @@
-#include <kdebug.h>
+#include <QDebug>
+
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>

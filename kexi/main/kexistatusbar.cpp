@@ -25,8 +25,8 @@
 #include <QToolButton>
 #include <QCheckBox>
 #include <QMenu>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
@@ -109,7 +109,7 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-    //kDebug() << str;
+    //qDebug() << str;
     changeItem(str, m_msgID);
 }
 

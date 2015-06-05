@@ -21,8 +21,7 @@
 #include "MapBrowserWidget.h"
 #include <kexiutils/utils.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -58,8 +57,8 @@ void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld)
     Q_UNUSED(add);
     Q_UNUSED(removeOld);
     m_slotMapChanged_enabled = false;
-    //kDebug() << "add:" << add;
-    //kDebug() << "originalValue():" << originalValue();
+    //qDebug() << "add:" << add;
+    //qDebug() << "originalValue():" << originalValue();
     deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
 }
@@ -114,11 +113,11 @@ QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
 
 void MapBrowserWidget::deserializeData(const QVariant& serialized)
 {
-    //kDebug() << "seting new data";
+    //qDebug() << "seting new data";
     QString serializedData = serialized.toString();
-    //kDebug() << "serializedData:" << serializedData << ";" << serialized;
+    //qDebug() << "serializedData:" << serializedData << ";" << serialized;
     QStringList dataList = serializedData.split(';');
-    //kDebug() << "splited:" << dataList;
+    //qDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
         setAnimationsEnabled(false);
         setCenterLatitude(dataList[0].toDouble());

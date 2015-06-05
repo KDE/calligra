@@ -19,20 +19,18 @@
 */
 
 #include <QCheckBox>
-
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>
 
 #include "form.h"
 #include "WidgetTreeWidget.h"
-
 #include "tabstopdialog.h"
 
 using namespace KFormDesigner;

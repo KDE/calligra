@@ -32,9 +32,9 @@
 #include <core/kexi.h>
 #include <KexiIcon.h>
 
-#include <kdebug.h>
 #include <kurlcombobox.h>
 
+#include <QDebug>
 #include <QDialog>
 #include <QPushButton>
 #include <QLayout>
@@ -198,7 +198,7 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
                     addConnectionData(connData);
                     //   else {
                     //this error should be more verbose:
-                    //    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
+                    //    qWarning() << "no driver found for '" << it.current()->driverName << "'!";
                     //   }
                 }
                 if (d->remote->list->topLevelItemCount() > 0) {

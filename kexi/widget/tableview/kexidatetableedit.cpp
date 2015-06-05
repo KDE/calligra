@@ -25,8 +25,7 @@
 #include <QPainter>
 #include <QVariant>
 #include <QClipboard>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <kexiutils/utils.h>
 
@@ -37,7 +36,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiDB::TableViewColumn &column, QWidget *p
 
 //! @todo add QValidator so date like "2006-59-67" cannot be even entered
 
-    kDebug() << m_formatter.inputMask();
+    qDebug() << m_formatter.inputMask();
     m_lineedit->setInputMask(m_formatter.inputMask());
 }
 
@@ -116,7 +115,7 @@ bool KexiDateTableEdit::valueIsValid()
 
 bool KexiDateTableEdit::valueChanged()
 {
-    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    //qDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 

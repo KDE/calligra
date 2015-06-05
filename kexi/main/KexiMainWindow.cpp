@@ -29,6 +29,7 @@
 #include <QProcess>
 #include <QToolButton>
 #include <QAction>
+#include <QDebug>
 
 #include <QHash>
 #include <QDockWidget>
@@ -44,7 +45,6 @@
 #include <kstandardshortcut.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
@@ -108,7 +108,7 @@
 #include <KexiIcon.h>
 
 #if !defined(KexiVDebug)
-# define KexiVDebug if (0) kDebug()
+# define KexiVDebug if (0) qDebug()
 #endif
 
 #undef HAVE_KNEWSTUFF
@@ -316,7 +316,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
         }
         return (~res) ? 0 : 1;
     }
-    //kDebug() << "startupActions OK";
+    //qDebug() << "startupActions OK";
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
@@ -353,7 +353,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
     static_cast<QWidget*>(win)->activateWindow();
 #endif
     /*foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-        kDebug() << widget;
+        qDebug() << widget;
     }*/
     return 0;
 }
@@ -389,7 +389,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     kexiTester() << KexiTestObject(this);
 
     if (d->userMode)
-        kDebug() << "starting up in the User Mode";
+        qDebug() << "starting up in the User Mode";
 
     setAsDefaultHost(); //this is default host now.
     KIconLoader *globalIconLoader = KIconLoader::global();
@@ -1292,7 +1292,7 @@ static QString internalReason(KexiDB::Object *obj)
 
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
-    kDebug() << projectData;
+    //qDebug() << projectData;
     QScopedPointer<KexiProject> prj(createKexiProjectObject(projectData));
     if (~KexiDBPasswordDialog::getPasswordIfNeeded(prj->data()->connectionData(), this)) {
         return cancelled;
@@ -1388,7 +1388,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
             fname = projectData.constConnectionData()->dbFileName();
         }
         const bool specialDir = fname.isEmpty();
-        kDebug() << fname << ".............";
+        qDebug() << fname << ".............";
         KFileDialog dlg(specialDir ? QUrl(startDir) : QUrl(),
                         QString(), this);
         dlg.setModal(true);
@@ -1578,7 +1578,7 @@ tristate KexiMainWindow::closeProject()
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     if (d->pendingWindowsExist()) {
-        kDebug() << "pendingWindowsExist...";
+        qDebug() << "pendingWindowsExist...";
         d->actionToExecuteWhenPendingJobsAreFinished = Private::CloseProjectAction;
         return cancelled;
     }
@@ -1967,7 +1967,7 @@ bool KexiMainWindow::queryClose()
 {
 #ifndef KEXI_NO_PENDING_DIALOGS
     if (d->pendingWindowsExist()) {
-        kDebug() << "pendingWindowsExist...";
+        qDebug() << "pendingWindowsExist...";
         d->actionToExecuteWhenPendingJobsAreFinished = Private::QuitAction;
         return false;
     }
@@ -2015,7 +2015,7 @@ KexiMainWindow::restoreSettings()
 void
 KexiMainWindow::storeSettings()
 {
-    //kDebug();
+    //qDebug();
     KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
 
     if (isMaximized()) {
@@ -2038,13 +2038,13 @@ KexiMainWindow::storeSettings()
 void
 KexiMainWindow::registerChild(KexiWindow *window)
 {
-    //kDebug();
+    //qDebug();
     connect(window, SIGNAL(dirtyChanged(KexiWindow*)), this, SLOT(slotDirtyFlagChanged(KexiWindow*)));
 
     if (window->id() != -1) {
         d->insertWindow(window);
     }
-    //kDebug() << "ID=" << window->id();
+    //qDebug() << "ID=" << window->id();
 }
 
 void KexiMainWindow::updateCustomPropertyPanelTabs(KexiWindow *prevWindow,
@@ -2117,7 +2117,7 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
 
 void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWindow)
 {
-    //kDebug() << "to=" << (window ? window->windowTitle() : "<none>");
+    //qDebug() << "to=" << (window ? window->windowTitle() : "<none>");
     bool windowChanged = prevWindow != window;
 
     if (windowChanged) {
@@ -2155,7 +2155,7 @@ void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWin
 bool
 KexiMainWindow::activateWindow(int id)
 {
-    kDebug();
+    qDebug();
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     return activateWindow(*d->openedWindowFor(id, pendingType));
@@ -2167,7 +2167,7 @@ KexiMainWindow::activateWindow(int id)
 bool
 KexiMainWindow::activateWindow(KexiWindow& window)
 {
-    kDebug();
+    qDebug();
 
     d->focus_before_popup = &window;
     d->mainWidget->tabWidget()->setCurrentWidget(window.parentWidget()/*container*/);
@@ -2245,7 +2245,7 @@ tristate KexiMainWindow::createNewProject(const KexiProjectData &projectData)
     if (res != true) {
         return res;
     }
-    //kDebug() << "new project created ---";
+    //qDebug() << "new project created ---";
     if (d->prj) {
         res = openProjectInExternalKexiInstance(
                 prj->data()->connectionData()->fileName(),
@@ -2298,7 +2298,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     if (!fileNameForConnectionData.isEmpty()) {
         cdata = Kexi::connset().connectionDataForFileName(fileNameForConnectionData);
         if (!cdata) {
-            kWarning() << "cdata?";
+            qWarning() << "cdata?";
             return false;
         }
     }
@@ -2334,11 +2334,11 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         }
     } else {
         if (aFileName.isEmpty()) {
-            kWarning() << "aFileName.isEmpty()";
+            qWarning() << "aFileName.isEmpty()";
             return false;
         }
         //file-based project
-        kDebug() << "Project File: " << aFileName;
+        qDebug() << "Project File: " << aFileName;
         KexiDB::ConnectionData fileConnData;
         fileConnData.setFileName(aFileName);
         QString detectedDriverName;
@@ -2406,7 +2406,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
             fileName = fileNameForConnectionData;
         } else { //use 'kexi --skip-conn-dialog --connection file.kexic dbName'
             if (fileNameForConnectionData.isEmpty()) {
-                kWarning() << "fileNameForConnectionData?";
+                qWarning() << "fileNameForConnectionData?";
                 return false;
             }
             args << "--connection" << fileNameForConnectionData;
@@ -2414,7 +2414,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
         }
     }
     if (fileName.isEmpty()) {
-        kWarning() << "fileName?";
+        qWarning() << "fileName?";
         return false;
     }
 //! @todo use KRun
@@ -3049,7 +3049,7 @@ bool KexiMainWindow::acceptsSharedActions(QObject *w)
 
 bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage)
 {
-    kDebug() << viewMode;
+    qDebug() << viewMode;
     //! @todo this can be more complex once we deliver ACLs...
     if (!d->userMode)
         return true;
@@ -3059,9 +3059,9 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
             *errorMessage = Kexi::partManager().errorMsg();
         }
     }
-    kDebug() << part << item->partClass();
+    qDebug() << part << item->partClass();
     if (part)
-        kDebug() << item->partClass() << part->info()->supportedUserViewModes();
+        qDebug() << item->partClass() << part->info()->supportedUserViewModes();
     return part && (part->info()->supportedUserViewModes() & viewMode);
 }
 
@@ -3091,7 +3091,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         openingCancelled = true;
         return 0;
     }
-    kDebug() << d->prj << item;
+    qDebug() << d->prj << item;
 
     KexiWindow *prevWindow = currentWindow();
 
@@ -3458,7 +3458,7 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         bool preservePrevSelection, bool sortedProperties, const QByteArray& propertyToSelect)
 {
     KexiWindow* _currentWindow = currentWindow();
-    //kDebug() << "currentWindow(): "
+    //qDebug() << "currentWindow(): "
     //    << (_currentWindow ? _currentWindow->windowTitle() : QString("NULL"))
     //    << " window: " << (window ? window->windowTitle() : QString("NULL"));
     if (_currentWindow && _currentWindow != window) {
@@ -3697,7 +3697,7 @@ tristate KexiMainWindow::executeCustomActionForObject(KexiPart::Item* item,
     else if (actionName == "copyToClipboardAsCSV")
         return copyItemToClipboardAsDataTable(item);
 
-    kWarning() << "no such action:" << actionName;
+    qWarning() << "no such action:" << actionName;
     return false;
 }
 
@@ -4154,7 +4154,7 @@ void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
     {
         const QString tabToActivate = d->tabsToActivateOnShow.value(
                                           currentWindow()->partItem()->identifier());
-        //kDebug() << "tabToActivate:" << tabToActivate << "tabName:" << tabName;
+        //qDebug() << "tabToActivate:" << tabToActivate << "tabName:" << tabName;
         if (tabToActivate == tabName) {
             d->tabbedToolBar->setCurrentTab(tabToActivate);
         }
@@ -4164,7 +4164,7 @@ void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode,
                                               int previousItemId)
 {
-    //kDebug() << partClass << viewMode << previousItemId;
+    //qDebug() << partClass << viewMode << previousItemId;
     if (viewMode == Kexi::DesignViewMode) {
         switch (d->prj->idForClass(partClass)) {
         case KexiPart::FormObjectType: {
@@ -4208,7 +4208,7 @@ void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::V
         return;
     }
     const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
-    //kDebug() << partClass << viewMode << tabToActivate;
+    //qDebug() << partClass << viewMode << tabToActivate;
 
     if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
         activateDesignTab(partClass);
@@ -4223,12 +4223,12 @@ void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
     if (!d->tabbedToolBar) {
         return;
     }
-    //kDebug() << itemId << partClass;
+    //qDebug() << itemId << partClass;
     if (   itemId > 0
         && d->tabbedToolBar->currentWidget())
     {
         const QString currentTab = d->tabbedToolBar->currentWidget()->objectName();
-        //kDebug() << "d->tabsToActivateOnShow.insert" << itemId << currentTab;
+        //qDebug() << "d->tabsToActivateOnShow.insert" << itemId << currentTab;
         d->tabsToActivateOnShow.insert(itemId, currentTab);
     }
     switch (d->prj->idForClass(partClass)) {

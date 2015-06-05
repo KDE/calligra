@@ -29,8 +29,8 @@
 #include <koproperty/Set.h>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 
+#include <QDebug>
 #include <QVariant>
 #include <QVariantList>
 
@@ -76,10 +76,10 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
 
     if (w){
         w->setObjectName(name);
-        kDebug() << w << w->objectName() << "created";
+        qDebug() << w << w->objectName() << "created";
         return w;
     }
-    kWarning() << "w == 0";
+    qWarning() << "w == 0";
     return 0;
 }
 

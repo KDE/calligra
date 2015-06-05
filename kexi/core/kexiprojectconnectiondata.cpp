@@ -22,8 +22,6 @@
 
 #include <QDomDocument>
 
-#include <kdebug.h>
-
 #include <db/connectiondata.h>
 #include <db/drivermanager.h>
 #include "kexiprojectconnectiondata.h"

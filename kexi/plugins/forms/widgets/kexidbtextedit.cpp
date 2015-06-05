@@ -26,7 +26,6 @@
 
 #include <kapplication.h>
 #include <kstandardshortcut.h>
-#include <kdebug.h>
 
 #include <QPaintEvent>
 #include <QPainter>

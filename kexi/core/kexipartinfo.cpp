@@ -24,7 +24,8 @@
 
 #include <db/global.h>
 #include <kactioncollection.h>
-#include <KDebug>
+
+#include <QDebug>
 
 using namespace KexiPart;
 
@@ -243,7 +244,7 @@ QAction* Info::newObjectAction()
     if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()
         || !isVisibleInNavigator())
     {
-        kWarning();
+        qWarning();
         return 0;
     }
     QAction *act = KexiMainWindowIface::global()->actionCollection()->action(nameForCreateAction(*this));

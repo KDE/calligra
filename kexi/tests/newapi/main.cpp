@@ -19,8 +19,8 @@
 
 #include <QFileInfo>
 #include <QPointer>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>
@@ -76,7 +76,7 @@ void exitRoutine()
 
 #define RETURN(code) \
     exitRoutine(); \
-    kDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
+    qDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
     return code
 
 int main(int argc, char** argv)
@@ -139,12 +139,12 @@ int main(int argc, char** argv)
     tests << "cursors" << "schema" << "dbcreation" << "tables"
           << "tableview" << "parser" << "dr_prop";
     if (!args->isSet("test")) {
-        kDebug() << "No test specified. Use --help.";
+        qDebug() << "No test specified. Use --help.";
         RETURN(1);
     }
     test_name = args->getOption("test");
     if (!tests.contains(test_name)) {
-        kDebug() << QString("No such test \"%1\". Use --help.").arg(test_name);
+        qDebug() << QString("No such test \"%1\". Use --help.").arg(test_name);
         RETURN(1);
     }
 
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
         db_name_required = false;
     }
     if ((int)args->count() < minargs) {
-        kDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs);
+        qDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs);
         RETURN(1);
     }
 
@@ -174,9 +174,9 @@ int main(int argc, char** argv)
 
     KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
-    kDebug() << "DRIVERS: ";
+    qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-        kDebug() << *it;
+        qDebug() << *it;
     if (manager.error() || names.isEmpty()) {
         manager.debugError();
         RETURN(1);
@@ -189,14 +189,14 @@ int main(int argc, char** argv)
         manager.debugError();
         RETURN(1);
     }
-    kDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
+    qDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
 
     //open connection
     if (args->count() >= 2)
         db_name = args->arg(1);
 
     if (db_name_required && db_name.isEmpty()) {
-        kDebug() << prgname << ": database name?";
+        qDebug() << prgname << ": database name?";
         RETURN(1);
     }
     if (!db_name.isEmpty()) {
@@ -219,7 +219,7 @@ int main(int argc, char** argv)
             res = project->open(&incompatibleWithKexi);
         if (res != true) {
             if (incompatibleWithKexi)
-                kDebug() << "incompatibleWithKexi";
+                qDebug() << "incompatibleWithKexi";
             project->debugError();
             RETURN(1);
         }
@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     } else if (test_name == "dr_prop")
         r = drPropTest();
     else {
-        kWarning() << "No such test: " << test_name;
+        qWarning() << "No such test: " << test_name;
 //  usage();
         RETURN(1);
     }
@@ -266,7 +266,7 @@ int main(int argc, char** argv)
         app->exec();
 
     if (r)
-        kDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
+        qDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
 
     if (project) {
         if (!project->closeConnection())
@@ -276,8 +276,8 @@ int main(int argc, char** argv)
 //    if (conn && !conn->disconnect())
 //        r = 1;
 
-// kDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount();
-// kDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount();
+// qDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount();
+// qDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount();
 
     delete app;
 
