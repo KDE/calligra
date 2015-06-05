@@ -31,7 +31,6 @@
 #include "KexiMenuWidget.h"
 #include <kcolorscheme.h>
 #include <kcolorutils.h>
-#include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

@@ -44,9 +44,9 @@
 #include <KToolInvocation>
 #include <kdebug.h>
 #include <kiconeffect.h>
-#include <kglobalsettings.h>
 #include <kcolorscheme.h>
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 #if HAVE_LANGINFO_H
 #include <langinfo.h>
@@ -806,4 +806,35 @@ QByteArray KexiUtils::encoding()
 {
     initEncoding();
     return g_codecForEncoding->name();
+}
+
+namespace {
+
+//! @internal for graphicEffectsLevel()
+class GraphicEffectsLevel
+{
+public:
+    GraphicEffectsLevel() {
+        KConfigGroup g(KSharedConfig::openConfig(), "KDE-Global GUI Settings");
+
+        // Asking for hasKey we do not ask for graphicEffectsLevelDefault() that can
+        // contain some very slow code. If we can save that time, do it. (ereslibre)
+        if (g.hasKey("GraphicEffectsLevel")) {
+            value = ((GraphicEffects) g.readEntry("GraphicEffectsLevel", QVariant((int) NoEffects)).toInt());
+            return;
+        }
+
+        // For now, let always enable animations by default. The plan is to make
+        // this code a bit smarter. (ereslibre)
+        value = ComplexAnimationEffects;
+    }
+    GraphicEffects value;
+};
+}
+
+Q_GLOBAL_STATIC(GraphicEffectsLevel, g_graphicEffectsLevel)
+
+GraphicEffects KexiUtils::graphicEffectsLevel()
+{
+    return g_graphicEffectsLevel->value;
 }

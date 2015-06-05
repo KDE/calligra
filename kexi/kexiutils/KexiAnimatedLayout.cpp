@@ -19,8 +19,8 @@
 
 #include "KexiAnimatedLayout.h"
 #include "KexiAnimatedLayout_p.h"
- 
-#include <kglobalsettings.h>
+
+#include <kexiutils/utils.h>
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -42,8 +42,7 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     destinationWidget = destination;
     if (from == destinationWidget)
         return;
-    if (!(KGlobalSettings::self()->graphicEffectsLevel()
-          & KGlobalSettings::SimpleAnimationEffects))
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects))
     {
         // animations not allowed: switch to destination widget immediately
         animationFinished();

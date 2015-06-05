@@ -27,8 +27,7 @@
 //! A tool for animated switching between widgets in a given stacked layout.
 /*! Animation is performed if the graphic effects level is set at least
  at "simple" level, i.e. when
- (KGlobalSettings::self()->graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)
- is true. */
+ (KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects) is true. */
 class KEXIUTILS_EXPORT KexiAnimatedLayout : public QStackedLayout
 {
     Q_OBJECT
@@ -40,7 +39,7 @@ public:
 public Q_SLOTS:
     //! Sets the current widget to be the specified widget.
     /*! Animation is performed while switching the widgets
-        (assuming animations are enabled in KGlobalSettings (see the explanation
+        (assuming animations are enabled (see the explanation
         for @ref KexiAnimatedStackedLayout).
         The new current widget must already be contained in this stacked layout. 
         Because of the animation, changing current widget is asynchronous, i.e.
