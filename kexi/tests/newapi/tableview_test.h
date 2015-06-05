@@ -24,6 +24,7 @@
 #include <db/cursor.h>
 
 #include <QDesktopWidget>
+#include <QDebug>
 
 int tableViewTest()
 {
@@ -35,7 +36,7 @@ int tableViewTest()
     KexiDB::TableSchema *persons = conn->tableSchema("persons");
     if (!persons) {
         conn->debugError();
-        kDebug() << "tableViewTest(): !persons";
+        qDebug() << "tableViewTest(): !persons";
         return 1;
     }
 
@@ -44,7 +45,7 @@ int tableViewTest()
     KexiDB::Cursor *cursor = conn->prepareQuery(*persons , cursor_options);
     if (!cursor) {
         conn->debugError();
-        kDebug() << "tableViewTest(): !cursor";
+        qDebug() << "tableViewTest(): !cursor";
         return 1;
     }
 

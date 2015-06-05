@@ -20,9 +20,9 @@
 #include "kexidbconnectionset.h"
 #include "kexidbshortcutfile.h"
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include <QDebug>
 #include <QDirIterator>
 #include <QFile>
 #include <QHash>
@@ -172,7 +172,7 @@ void KexiDBConnectionSet::load()
                 continue;
             }
             addConnectionDataInternal(data, it.next());
-            // kDebug() << file << "added.";
+            //qDebug() << file << "added.";
         }
    }
 }

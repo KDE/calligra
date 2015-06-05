@@ -32,11 +32,11 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QClipboard>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <KLocalizedString>
-
+#include <QDebug>
 #include <QSaveFile>
+
+#include <kapplication.h>
+#include <KLocalizedString>
 
 using namespace KexiCSVExport;
 
@@ -116,7 +116,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         uint bufSize = qMin(uint(rowCount < 0 ? 10 : rowCount) * fields.count() * 20, (uint)128000);
         buffer.reserve(bufSize);
         if ((uint)buffer.capacity() < bufSize) {
-            kWarning() << "Cannot allocate memory for " << bufSize
+            qWarning() << "Cannot allocate memory for " << bufSize
             << " characters";
             return false;
         }
@@ -125,20 +125,20 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
             stream = predefinedTextStream;
         } else {
             if (options.fileName.isEmpty()) {//sanity
-                kWarning() << "Fname is empty";
+                qWarning() << "Fname is empty";
                 return false;
             }
             kSaveFile.reset(new QSaveFile(options.fileName));
 
-            kDebug() << "QSaveFile Filename:" << kSaveFile->fileName();
+            qDebug() << "QSaveFile Filename:" << kSaveFile->fileName();
 
             if (kSaveFile->open(QIODevice::WriteOnly)) {
                 kSaveFileTextStream.reset(new QTextStream(kSaveFile.data()));
                 stream = kSaveFileTextStream.data();
-                kDebug() << "have a stream";
+                qDebug() << "have a stream";
             }
             if (QFileDevice::NoError != kSaveFile->error() || !stream) {//sanity
-                kWarning() << "Status != 0 or stream == 0";
+                qWarning() << "Status != 0 or stream == 0";
 //! @todo show error
                 return false;
             }
@@ -158,7 +158,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 #define APPEND_EOLN \
     if (copyToClipboard) { APPEND('\n'); } else { APPEND("\r\n"); }
 
-    kDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
+    qDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
     const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
     const QByteArray delimiter(options.delimiter.left(1).toLatin1());
@@ -193,11 +193,10 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
     }
 
-kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
-            kDebug() << "Adding column names";
+            qDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -218,7 +217,7 @@ kDebug() << 1;
         _ERR;
     }
     for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-        kDebug() << "Adding records";
+        qDebug() << "Adding records";
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
@@ -264,12 +263,12 @@ kDebug() << 1;
     if (copyToClipboard)
         kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
 
-    kDebug() << "Done";
+    qDebug() << "Done";
 
     if (kSaveFile) {
         stream->flush();
         if (!kSaveFile->commit()) {
-                kDebug() << "Error commiting the file" << kSaveFile->fileName();
+                qDebug() << "Error commiting the file" << kSaveFile->fileName();
         }
     }
     return true;

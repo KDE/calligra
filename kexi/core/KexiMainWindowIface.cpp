@@ -20,8 +20,6 @@
 
 #include "KexiMainWindowIface.h"
 
-#include <kdebug.h>
-
 //Q_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
 #ifdef __GNUC__
 #warning not threadsafe

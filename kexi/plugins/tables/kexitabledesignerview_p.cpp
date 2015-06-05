@@ -20,8 +20,6 @@
 #include "kexitabledesignerview_p.h"
 #include "kexitabledesignerview.h"
 
-
-#include <kdebug.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
 
@@ -43,6 +41,8 @@
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
 #include "kexitabledesignercommands.h"
+
+#include <QDebug>
 
 using namespace KexiTableDesignerCommands;
 
@@ -155,7 +155,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     bool visible;
 
     prop = &set["subType"];
-    kDebug() << "subType=" << prop->value().toInt()
+    qDebug() << "subType=" << prop->value().toInt()
         << " type=" << set["type"].value().toInt();
 
     //if there is no more than 1 subType name or it's a PK: hide the property

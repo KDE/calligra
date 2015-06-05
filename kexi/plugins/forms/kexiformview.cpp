@@ -27,6 +27,7 @@
 #include <QResizeEvent>
 #include <QApplication>
 #include <QScrollBar>
+#include <QDebug>
 
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
@@ -386,7 +387,7 @@ void KexiFormView::updateValuesForSubproperties()
             for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); 
                 subpropIt != subprops->constEnd(); ++subpropIt)
             {
-                //kDebug() << "delayed setting of the subproperty: widget="
+                //qDebug() << "delayed setting of the subproperty: widget="
                 //    << item->widget()->objectName() << " prop=" << subpropIt.key() << " val="
                 //    << subpropIt.value();
 
@@ -436,7 +437,7 @@ void
 KexiFormView::loadForm()
 {
 //! @todo also load d->resizeMode
-    //kDebug() << "Loading the form with id" << window()->id();
+    //qDebug() << "Loading the form with id" << window()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
         KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, tempData()->tempForm);
@@ -551,7 +552,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
             foreach(widget, *orderedFocusWidgets) {
                 KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(widget);
                 if (iface) {
-                    //kDebug() << iface->dataSource();
+                    //qDebug() << iface->dataSource();
                 }
                 if (iface && iface->columnInfo() && !iface->isReadOnly()
                         /*! @todo add option for skipping autoincremented fields */
@@ -654,9 +655,9 @@ void KexiFormView::initDataSource()
             //always add all fields from table's primary key
             // (don't worry about duplicates, unique list will be computed later)
             sources += pkey->names();
-            //kDebug() << "pkey added to data sources:" << pkey->names();
+            //qDebug() << "pkey added to data sources:" << pkey->names();
         }
-        //kDebug() << "sources=" << sources;
+        //qDebug() << "sources=" << sources;
 
         uint index = 0;
         for (QStringList::ConstIterator it = sources.constBegin();
@@ -676,7 +677,7 @@ void KexiFormView::initDataSource()
                 //remove this widget from the set of data widgets in the provider
                 /*! @todo fieldName is ok, but what about expressions? */
                 invalidSources.insert(fieldName);
-                //kDebug() << "invalidSources+=" << index << " (" << (*it) << ")";
+                //qDebug() << "invalidSources+=" << index << " (" << (*it) << ")";
                 continue;
             }
             if (tableSchema) {
@@ -742,7 +743,7 @@ KexiDB::SchemaData* KexiFormView::storeNewData(const KexiDB::SchemaData& sdata,
                                                bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    //kDebug() << "new id:" << s->id();
+    //qDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -762,7 +763,7 @@ tristate
 KexiFormView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    //kDebug() << window()->partItem()->name() << "[" << window()->id() << "]";
+    //qDebug() << window()->partItem()->name() << "[" << window()->id() << "]";
 
     //-- first, store local BLOBs, so identifiers can be updated
 //! @todo remove unused data stored previously
@@ -793,10 +794,10 @@ KexiFormView::storeData(bool dontAsk)
                 it != tempData()->unsavedLocalBLOBs.constEnd(); ++it)
         {
             if (!it.key()) {
-                kWarning() << "it.key()==0 !";
+                qWarning() << "it.key()==0 !";
                 continue;
             }
-            //kDebug() << "name=" << it.key()->objectName() << " dataID=" << it.value();
+            //qDebug() << "name=" << it.key()->objectName() << " dataID=" << it.value();
             KexiBLOBBuffer::Handle h(blobBuf->objectForId(it.value(), /*!stored*/false));
             if (!h)
                 continue; //no BLOB assigned
@@ -810,7 +811,7 @@ KexiFormView::storeData(bool dontAsk)
                     << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
                 if (!st->execute()) {
                     delete blobsFieldsWithoutID;
-                    kWarning() << "execute error";
+                    qWarning() << "execute error";
                     return false;
                 }
             }
@@ -821,7 +822,7 @@ KexiFormView::storeData(bool dontAsk)
                 //! @todo show message?
                 return false;
             }
-            //kDebug() << "storedDataID=" << storedBLOBID;
+            //qDebug() << "storedDataID=" << storedBLOBID;
             //! @todo unsafe - fix!
             h.setStoredWidthID((KexiBLOBBuffer::Id_t)storedBLOBID);
             //set widget's internal property so it can be saved...
@@ -833,7 +834,7 @@ KexiFormView::storeData(bool dontAsk)
             if (widgetItem)
                 widgetItem->addModifiedProperty("storedPixmapId", oldStoredPixmapId);
             else
-                kWarning() << "no" << widgetItem->name() << "widget found within a form";
+                qWarning() << "no" << widgetItem->name() << "widget found within a form";
         }
     }
 
@@ -1005,7 +1006,7 @@ KexiFormView::resizeEvent(QResizeEvent *e)
 
 void KexiFormView::contextMenuEvent(QContextMenuEvent *e)
 {
-    // kDebug() << form()->selectedWidget() << form()->widget() << e->reason();
+    // qDebug() << form()->selectedWidget() << form()->widget() << e->reason();
     if (form()->selectedWidget()
         && form()->selectedWidget() == form()->widget()
         && e->reason() == QContextMenuEvent::Keyboard)
@@ -1104,7 +1105,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
                                             sourcePartClass == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query()) {
-        kWarning() << "no such table/query" << sourceName;
+        qWarning() << "no such table/query" << sourceName;
         return;
     }
 
@@ -1130,7 +1131,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     foreach(const QString& field, fields) {
         KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(field);
         if (!column) {
-            kWarning() << "no such field" << field << "in table/query" << sourceName;
+            qWarning() << "no such field" << field << "in table/query" << sourceName;
             continue;
         }
 //! todo add autolabel using field's caption or name
@@ -1198,7 +1199,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 
     //eventually, add entire command group to active form
     form()->addCommand(group);
-    //kDebug() << *group;
+    //qDebug() << *group;
     d->scrollView->widget()->update();
     d->scrollView->refreshContentsSize();
 
@@ -1240,7 +1241,7 @@ void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteA
 {
     Q_UNUSED(oldname);
     Q_UNUSED(newname);
-    //kDebug() << oldname << newname << form()->propertySet().propertyValue("objectName").toString();
+    //qDebug() << oldname << newname << form()->propertySet().propertyValue("objectName").toString();
     KexiMainWindowIface::global()->updatePropertyEditorInfoLabel();
     formPart()->dataSourcePage()->updateInfoLabelForPropertySet(&form()->propertySet());
 }
@@ -1255,11 +1256,11 @@ void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::W
 void KexiFormView::updateActionsInternal()
 {
     const QWidget* selectedWidget = form()->selectedWidget();
-    //kDebug() << selectedWidget << (viewMode()==Kexi::DesignViewMode) << widget_assign_action;
+    //qDebug() << selectedWidget << (viewMode()==Kexi::DesignViewMode) << widget_assign_action;
     QByteArray wClass;
     if (selectedWidget) {
         wClass = selectedWidget->metaObject()->className();
-        //kDebug() << wClass;
+        //qDebug() << wClass;
     }
     QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
     if (widget_assign_action) {

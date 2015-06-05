@@ -38,8 +38,7 @@
 #include <QStackedWidget>
 #include <QEvent>
 #include <QCloseEvent>
-
-#include <kdebug.h>
+#include <QDebug>
 
 //----------------------------------------------------------
 
@@ -426,14 +425,14 @@ tristate KexiWindow::switchToViewMode(
             return res;
     }
 
-    kDebug();
+    qDebug();
     bool dontStore = false;
     KexiView *view = selectedView();
 
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kWarning() << "!" << Kexi::nameForViewMode(newViewMode);
+        qWarning() << "!" << Kexi::nameForViewMode(newViewMode);
         return false;
     }
 
@@ -501,7 +500,7 @@ tristate KexiWindow::switchToViewMode(
         KexiUtils::removeWaitCursor();
         if (!newView) {
             //js TODO error?
-            kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
+            qWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
             << d->currentViewMode << " restored.";
             return false;
         }
@@ -525,7 +524,7 @@ tristate KexiWindow::switchToViewMode(
     if (!res) {
         removeView(newViewMode);
         delete newView;
-        kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
+        qWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
         << d->currentViewMode << " restored.";
         return false;
     }
@@ -545,7 +544,7 @@ tristate KexiWindow::switchToViewMode(
     if (!res) {
         removeView(newViewMode);
         delete newView;
-        kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
+        qWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
         << prevViewMode << " restored.";
         const Kexi::ObjectStatus status(*this);
         setStatus(KexiMainWindowIface::global()->project()->dbConnection(),
@@ -764,7 +763,7 @@ tristate KexiWindow::storeData(bool dontAsk)
 tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOptions options)
 {
     if (neverSaved()) {
-        kWarning() << "The data was never saved, so storeNewData() should be called instead, giving up.";
+        qWarning() << "The data was never saved, so storeNewData() should be called instead, giving up.";
         return false;
     }
     KexiView *v = selectedView();
@@ -822,7 +821,7 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
 void KexiWindow::activate()
 {
     KexiView *v = selectedView();
-    //kDebug() << "focusWidget(): " << focusWidget()->name();
+    //qDebug() << "focusWidget(): " << focusWidget()->name();
     if (!KexiUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
         //ah, focused widget is not in this view, move focus:
         if (v)

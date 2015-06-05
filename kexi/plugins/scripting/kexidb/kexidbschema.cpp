@@ -21,8 +21,7 @@
 #include "kexidbfieldlist.h"
 
 #include <QRegExp>
-
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace Scripting;
 
@@ -160,13 +159,13 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
 
         ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field(key);
         if (! field) {
-            kWarning() << QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(key).arg(m_schema->name());
+            qWarning() << QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(key).arg(m_schema->name());
             return false;
         }
 
         QVariant v(value);
         if (! v.convert(field->variantType())) {
-            kWarning() << QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(key).arg(v.typeName()).arg(field->variantType());
+            qWarning() << QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(key).arg(v.typeName()).arg(field->variantType());
             return false;
         }
 

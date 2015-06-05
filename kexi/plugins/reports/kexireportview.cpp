@@ -30,8 +30,8 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QGraphicsScene>
+#include <QDebug>
 
-#include <kdebug.h>
 #include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
@@ -169,7 +169,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 KexiReportView::~KexiReportView()
 {
-    kDebug();
+    qDebug();
     delete m_preRenderer;
     delete m_kexi;
     delete m_functions;
@@ -383,12 +383,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     Q_UNUSED(mode);
 
-    kDebug();
+    qDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
-        kDebug() << "Schema changed";
+        qDebug() << "Schema changed";
         delete m_preRenderer;
 
-        kDebug() << tempData()->reportDefinition.tagName();
+        qDebug() << tempData()->reportDefinition.tagName();
 
         m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
@@ -422,7 +422,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             }
 
             if (m_reportDocument) {
-                kDebug() << "=======================================Deleting old document";
+                qDebug() << "=======================================Deleting old document";
                 delete m_reportDocument;
             }
             

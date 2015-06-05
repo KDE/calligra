@@ -22,8 +22,7 @@
 #include "KexiAnimatedLayout.h"
 #include <kexiutils/utils.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QStyle>
 #include <QStack>
 #include <QPointer>
@@ -82,7 +81,7 @@ void KexiAssistantWidget::previousPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
     if (d->stack.count() < 2) {
-        kWarning() << "Page stack's' count < 2";
+        qWarning() << "Page stack's' count < 2";
         return;
     }
     d->stack.pop();
@@ -107,7 +106,7 @@ KexiAssistantPage* KexiAssistantWidget::currentPage() const
 void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
 {
     if (!page) {
-        kWarning() << "!page";
+        qWarning() << "!page";
         return;
     }
     d->lyr->setCurrentWidget(page);

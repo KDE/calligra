@@ -33,10 +33,10 @@
 #include <QTimer>
 #include <QDomDocument>
 #include <QTextBrowser>
+#include <QDebug>
 
 #include <kfiledialog.h>
 #include <kactionmenu.h>
-#include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
 #include <db/connection.h>
@@ -291,7 +291,7 @@ void KexiScriptDesignView::updateProperties()
 
     QStringList interpreters = manager->interpreters();
 
-    kDebug() << interpreters;
+    qDebug() << interpreters;
 
     KProperty::ListData* proplist = new KProperty::ListData(interpreters, interpreters);
     KProperty* prop = new KProperty(
@@ -330,14 +330,14 @@ KPropertySet* KexiScriptDesignView::propertySet()
 
 void KexiScriptDesignView::slotPropertyChanged(KPropertySet& /*set*/, KProperty& property)
 {
-    kDebug();
+    qDebug();
 
     if (property.isNull())
         return;
 
     if (property.name() == "language") {
         QString language = property.value().toString();
-        kDebug() << "language:" << language;
+        qDebug() << "language:" << language;
         d->scriptaction->setInterpreter(language);
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
@@ -350,7 +350,7 @@ void KexiScriptDesignView::slotPropertyChanged(KPropertySet& /*set*/, KProperty&
     else {
         bool ok = d->scriptaction->setOption(property.name(), property.value());
         if (! ok) {
-            kWarning() << "unknown property:" << property.name();
+            qWarning() << "unknown property:" << property.name();
             return;
         }
     }
@@ -387,7 +387,7 @@ bool KexiScriptDesignView::loadData()
 {
     QString data;
     if (! loadDataBlock(data)) {
-        kDebug() << "no DataBlock";
+        qDebug() << "no DataBlock";
         return false;
     }
 
@@ -399,13 +399,13 @@ bool KexiScriptDesignView::loadData()
     bool parsed = domdoc.setContent(data, false, &errMsg, &errLine, &errCol);
 
     if (! parsed) {
-        kDebug() << "XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg;
+        qDebug() << "XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg;
         return false;
     }
 
     QDomElement scriptelem = domdoc.namedItem("script").toElement();
     if (scriptelem.isNull()) {
-        kDebug() << "script domelement is null";
+        qDebug() << "script domelement is null";
         return false;
     }
 
@@ -442,7 +442,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
                                                        bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    kDebug() << "new id:" << s->id();
+    qDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -450,7 +450,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     }
 
     if (! storeData()) {
-        kWarning() << "Failed to store the data.";
+        qWarning() << "Failed to store the data.";
         //failure: remove object's schema data to avoid garbage
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
@@ -463,7 +463,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
 
 tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 {
-    kDebug(); //<< window()->partItem()->name() << " [" << window()->id() << "]";
+    qDebug(); //<< window()->partItem()->name() << " [" << window()->id() << "]";
 
     QDomDocument domdoc("script");
     QDomElement scriptelem = domdoc.createElement("script");

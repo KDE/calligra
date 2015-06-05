@@ -22,8 +22,7 @@
 #include <kexiutils/SmallToolButton.h>
 #include <KexiView.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QLabel>
 #include <QBoxLayout>
 #include <QEvent>
@@ -117,7 +116,7 @@ bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
 
 void KexiSectionHeader::slotFocus(bool in)
 {
-    kDebug() << in;
+    qDebug() << in;
     in = in || qApp->focusWidget() == this;
     QPalette pal(d->lbl->palette());
     pal.setBrush(QPalette::Window,

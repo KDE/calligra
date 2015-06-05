@@ -38,11 +38,11 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QAction>
+#include <QDebug>
 
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <ktextedit.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>
@@ -511,10 +511,10 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     if (w) {
         w->setObjectName(n);
-        kDebug() << w << w->objectName() << "created";
+        qDebug() << w << w->objectName() << "created";
         return w;
     }
-    kWarning() << "w == 0";
+    qWarning() << "w == 0";
     return 0;
 }
 

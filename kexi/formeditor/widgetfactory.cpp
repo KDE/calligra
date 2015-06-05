@@ -21,7 +21,6 @@
 
 #include "widgetfactory.h"
 
-#include <kdebug.h>
 #include <keditlistwidget.h>
 #include <KLocalizedString>
 
@@ -45,6 +44,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
+#include <QDebug>
 
 using namespace KFormDesigner;
 
@@ -120,7 +120,7 @@ void WidgetFactory::addClass(WidgetInfo *w)
     if (oldw == w)
         return;
     if (oldw) {
-        kWarning() << "class with name '"
+        qWarning() << "class with name '"
             << w->className()
             << "' already exists for factory '" << objectName() << "'";
         return;

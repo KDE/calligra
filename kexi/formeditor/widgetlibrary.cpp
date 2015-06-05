@@ -23,8 +23,8 @@
 
 #include <QDomDocument>
 #include <QMenu>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kservice.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
@@ -135,12 +135,12 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
         if (!w->parentFactoryName().isEmpty() && !w->inheritedClassName().isEmpty()) {
             WidgetFactory *parentFactory = d->factories.value(w->parentFactoryName().toLower());
             if (!parentFactory) {
-                kWarning() << "class" << w->className() << ": no such parent factory" << w->parentFactoryName();
+                qWarning() << "class" << w->className() << ": no such parent factory" << w->parentFactoryName();
                 continue;
             }
             WidgetInfo* inheritedClass = parentFactory->widgetInfoForClassName(w->inheritedClassName());
             if (!inheritedClass) {
-                kWarning() << "class" << w->inheritedClassName() << " - no such class to inherit in factory"
+                qWarning() << "class" << w->inheritedClassName() << " - no such class to inherit in factory"
                     << w->parentFactoryName();
                 continue;
             }
@@ -184,21 +184,21 @@ WidgetLibrary::lookupFactories()
     foreach (KService::Ptr ptr, tlist) {
         KService::Ptr existingService = d->services.value(ptr->library().toLower().toLatin1());
         if (!existingService.isNull()) {
-            kWarning() << "factory" << ptr->name() << "already found (library=" << existingService->library()
+            qWarning() << "factory" << ptr->name() << "already found (library=" << existingService->library()
                 << ")! skipping this one: library=" << ptr->library();
             continue;
         }
-        //kDebug() << "found factory:" << ptr->name();
+        //qDebug() << "found factory:" << ptr->name();
 
         QByteArray groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
         if (!groupName.isEmpty() && !d->supportedFactoryGroups.contains(groupName.toLower())) {
-            kDebug() << "factory group '" << groupName << "is unsupported by this application (library=" 
+            qDebug() << "factory group '" << groupName << "is unsupported by this application (library="
                 << ptr->library() << ")";
             continue;
         }
         const uint factoryVersion = ptr->property("X-KFormDesigner-WidgetFactoryVersion").toUInt();
         if (KFormDesigner::version() != factoryVersion) {
-            kWarning() << QString("factory '%1'"
+            qWarning() << QString("factory '%1'"
                                   " has version '%2' but required Widget Factory version is '%3'\n"
                                   " -- skipping this factory!").arg(ptr->library()).arg(factoryVersion)
                                   .arg(KFormDesigner::version());
@@ -218,7 +218,7 @@ WidgetLibrary::loadFactories()
         KexiPluginLoader loader(ptr, "");
         if (KFormDesigner::version() != loader.majorVersion()) {
 //! @todo show this error to the user?
-            kWarning() << 
+            qWarning() <<
                  xi18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
                      ptr->library(),
@@ -229,7 +229,7 @@ WidgetLibrary::loadFactories()
         WidgetFactory *f = loader.createPlugin<WidgetFactory>(this);
         if (!f) {
 //! @todo show this error to the user?
-            kWarning() << "Creating factory failed!" << ptr->library();
+            qWarning() << "Creating factory failed!" << ptr->library();
             continue;
         }
         f->setObjectName(ptr->library());
@@ -709,7 +709,7 @@ bool WidgetLibrary::propertySetShouldBeReloadedAfterPropertyChange(
 ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem* item)
 {
     loadFactories();
-    kDebug() << item->widget()->metaObject()->className();
+    qDebug() << item->widget()->metaObject()->className();
     WidgetInfo *wi = d->widgets.value(item->widget()->metaObject()->className());
     if (!wi)
         return item;

@@ -23,7 +23,6 @@
 #include "KexiProjectModelItem.h"
 
 #include <QHeaderView>
-#include <KDebug>
 
 KexiProjectTreeView::KexiProjectTreeView(QWidget *parent)
         : QTreeView(parent)

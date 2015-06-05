@@ -19,7 +19,6 @@
 
 #include "KexiRecentProjectsModel.h"
 #include <kexi.h>
-
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 
@@ -29,7 +28,8 @@
 #include <KexiIcon.h>
 
 #include <kdatetime.h>
-#include <kdebug.h>
+
+#include <QDebug>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)
@@ -55,7 +55,7 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
 //! @return "opened x minutes ago" string or similar
 static QString openedString(const QDateTime& _opened)
 {
-    //kDebug() << _opened;
+    //qDebug() << _opened;
     const KDateTime cur(KDateTime::currentUtcDateTime());
     const KDateTime opened = KDateTime(_opened);
     if (!opened.isValid() || opened >= cur)
@@ -186,7 +186,7 @@ bool KexiRecentProjectsProxyModel::subSortLessThan(
 {
     KexiProjectData *pdataLeft = static_cast<KexiProjectData*>(left.internalPointer());
     KexiProjectData *pdataRight = static_cast<KexiProjectData*>(right.internalPointer());
-    //kDebug() << *pdataLeft << *pdataRight;
+    //qDebug() << *pdataLeft << *pdataRight;
     return pdataLeft->lastOpened() < pdataRight->lastOpened();
 }
 
