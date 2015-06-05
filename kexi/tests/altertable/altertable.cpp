@@ -26,9 +26,9 @@
 #include <QDir>
 #include <QRegExp>
 #include <QClipboard>
-
 #include <QDebug>
-#include <kaboutdata.h>
+
+#include <KAboutData>
 
 #include <main/KexiMainWindow.h>
 #include <core/KexiWindow.h>

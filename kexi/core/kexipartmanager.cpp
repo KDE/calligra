@@ -27,7 +27,7 @@
 #include <kservice.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kaboutdata.h>
+#include <KAboutData>
 #include <kglobal.h>
 #include <KLocalizedString>
 
