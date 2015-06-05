@@ -24,7 +24,7 @@
 
 #include <KIO/Job>
 #include <kconfiggroup.h>
-#include <kaboutdata.h>
+#include <KAboutData>
 #include <kdeversion.h>
 #include <KSharedConfig>
 #include <KLocalizedString>

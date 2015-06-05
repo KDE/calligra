@@ -18,8 +18,8 @@
 */
 
 #include <kapplication.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <KAboutData>
 #include <KLocalizedString>
 
 #include "kexifinddialog.h"
