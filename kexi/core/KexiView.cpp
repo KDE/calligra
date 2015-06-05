@@ -35,7 +35,6 @@
 
 #include <kdebug.h>
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
 
 #include <QDialog>
 #include <QMenu>
@@ -148,7 +147,7 @@ public:
         btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         btn->setText(text);
         btn->setIcon(a->icon());
-        QFont f(KGlobalSettings::toolBarFont());
+        QFont f(q->font());
         f.setPixelSize(KexiUtils::smallFont().pixelSize());
         btn->setFont(f);
         btn->setToolTip(a->toolTip());

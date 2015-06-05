@@ -471,6 +471,20 @@ KEXIUTILS_EXPORT void addDirtyFlag(QString *text);
 //! Based on KLocale::encoding()
 KEXIUTILS_EXPORT QByteArray encoding();
 
+//! The desired level of effects on the GUI
+enum GraphicEffect {
+    NoEffects               = 0x0000, ///< GUI with no effects at all.
+    GradientEffects         = 0x0001, ///< GUI with only gradients enabled.
+    SimpleAnimationEffects  = 0x0002, ///< GUI with simple animations enabled.
+    ComplexAnimationEffects = 0x0006  ///< GUI with complex animations enabled.
+                              ///< Note that ComplexAnimationsEffects implies SimpleAnimationEffects.
+};
+Q_DECLARE_FLAGS(GraphicEffects, GraphicEffect)
+
+//! @return the desired level of effects on the GUI.
+//! A copy of KGlobalSettings::graphicEffectsLevel() needed for porting from kdelibs4.
+KEXIUTILS_EXPORT GraphicEffects graphicEffectsLevel();
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H
