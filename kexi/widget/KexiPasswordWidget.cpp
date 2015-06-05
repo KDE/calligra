@@ -31,7 +31,6 @@
 
 #include <kcombobox.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <ktitlewidget.h>
 
 #include "ui_KexiPasswordWidget.h"

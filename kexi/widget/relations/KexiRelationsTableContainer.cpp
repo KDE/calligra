@@ -25,8 +25,7 @@
 #include <QStyle>
 #include <QVBoxLayout>
 #include <QScrollBar>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <kexiutils/utils.h>
 #include <db/tableschema.h>
@@ -109,15 +108,15 @@ void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 
 void KexiRelationsTableContainer::moved()
 {
-// kDebug()<<"finally emitting moved";
+// qDebug()<<"finally emitting moved";
     emit moved(this);
 }
 
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
-// kDebug();
+// qDebug();
     QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
-// kDebug() << "db2";
+// qDebug() << "db2";
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
 
@@ -129,7 +128,7 @@ void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::setFocus()
 {
-    //kDebug() << "SET FOCUS";
+    //qDebug() << "SET FOCUS";
     //select 1st:
 //!TODO
 #if 0
@@ -154,7 +153,7 @@ void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::unsetFocus()
 {
-    //kDebug() << "UNSET FOCUS";
+    //qDebug() << "UNSET FOCUS";
     d->tableHeader->unsetFocus();
     d->fieldList->clearSelection();
 
@@ -168,7 +167,7 @@ void KexiRelationsTableContainer::slotFieldsDoubleClicked(const QModelIndex &idx
     if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
         return;
     const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
-    kDebug();
+    qDebug();
     emit fieldsDoubleClicked(*t->schema(), t->selectedFieldNames());
 }
 

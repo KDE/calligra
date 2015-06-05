@@ -31,8 +31,8 @@
 #include <QLabel>
 #include <QMenu>
 #include <QDialog>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -307,7 +307,7 @@ void KexiProjectNavigator::slotExecuteItem(const QModelIndex& vitem)
 {
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(vitem.internalPointer());
     if (!it) {
-        kWarning() << "No internal pointer";
+        qWarning() << "No internal pointer";
         return;
     }
 //! @todo is this needed?
@@ -462,7 +462,7 @@ void KexiProjectNavigator::slotRename()
         this);
     dialog.setButtonText(KexiNameDialog::Ok, xi18nc("@action:button Rename object", "Rename"));
     if (!d->model->project()) {
-        kWarning() << "No KexiProject assigned!";
+        qWarning() << "No KexiProject assigned!";
         return;
     }
     dialog.widget()->addNameSubvalidator( //check if new name is allowed
@@ -564,7 +564,7 @@ bool KexiProjectNavigator::actionEnabled(const QString& actionName) const
 {
     if (actionName == "project_export_data_table" && (d->features & ContextMenus))
         return d->exportActionMenu->isVisible();
-    kWarning() << "no such action: " << actionName;
+    qWarning() << "no such action: " << actionName;
     return false;
 }
 
@@ -624,7 +624,7 @@ void KexiProjectNavigator::slotUpdateEmptyStateLabel()
         // handle the empty state with care... http://www.pinterest.com/romanyakimovich/ui-empty-states/
         if (!d->emptyStateLabel) {
             QString imgPath = KIconLoader::global()->iconPath(KexiIconName(koIconName("kexi-document-empty")), - KIconLoader::SizeMedium);
-            kDebug() << imgPath;
+            qDebug() << imgPath;
             d->emptyStateLabel = new QLabel(
                 xi18nc("@info Message for empty state in project navigator",
                       "<nl/>"

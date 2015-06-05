@@ -21,8 +21,9 @@
 #include <KoShapeLoadingContext.h>
 #include <KexiIcon.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
+
+#include <QDebug>
 
 KexiRelationDesignFactory::KexiRelationDesignFactory()
     : KoShapeFactoryBase("KexiRelationDesignShape",
@@ -36,7 +37,7 @@ KexiRelationDesignFactory::KexiRelationDesignFactory()
 
 KoShape *KexiRelationDesignFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    kDebug();
+    qDebug();
     KexiRelationDesignShape *fooShape = new KexiRelationDesignShape();
     // set defaults
     return fooShape;
@@ -45,7 +46,7 @@ KoShape *KexiRelationDesignFactory::createDefaultShape(KoDocumentResourceManager
 bool KexiRelationDesignFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    kDebug();
+    qDebug();
     return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra.org/kexirelationdesign");
 }
 

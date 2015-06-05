@@ -19,10 +19,10 @@
 #include <Qheader.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QDebug>
 
 #include <klistview.h>
 #include <Klistbox.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>
@@ -178,7 +178,7 @@ int
 EditListViewDialog::exec(QListView *listview)
 {
     if (!listview) {
-        kWarning() << "EditListViewDialog ERROR: no listview ";
+        qWarning() << "EditListViewDialog ERROR: no listview ";
         return 0;
     }
 

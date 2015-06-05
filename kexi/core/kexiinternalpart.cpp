@@ -26,12 +26,12 @@
 #include "KexiMainWindowIface.h"
 #include <kexi_global.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <db/msghandler.h>
 #include <db/pluginloader.h>
 
+#include <QDebug>
 #include <QDialog>
 
 //----------------------------------------------
@@ -129,7 +129,7 @@ KexiWindow* KexiInternalPart::createKexiWindowInstance(
 {
     KexiInternalPart *part = KexiInternalPart::part(msgHdr, className);
     if (!part) {
-        kWarning() << "!part";
+        qWarning() << "!part";
         return 0; //fatal!
     }
     return part->findOrCreateKexiWindow(objName ? objName : className.toLatin1().constData());
@@ -142,7 +142,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
 {
     KexiInternalPart *part = KexiInternalPart::part(msgHdr, className);
     if (!part) {
-        kWarning() << "!part";
+        qWarning() << "!part";
         return 0; //fatal!
     }
     QWidget *w;
@@ -177,7 +177,7 @@ bool KexiInternalPart::executeCommand(const QString &className,
 {
     KexiInternalPart *part = KexiInternalPart::part(0, className);
     if (!part) {
-        kWarning() << "!part";
+        qWarning() << "!part";
         return 0; //fatal!
     }
     return part->executeCommand(commandName, args);

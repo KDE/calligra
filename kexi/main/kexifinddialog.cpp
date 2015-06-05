@@ -22,12 +22,12 @@
 #include <kstandardguiitem.h>
 #include <KStandardAction>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QDialog>
 #include <QCheckBox>
 #include <QLayout>
@@ -201,7 +201,7 @@ void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
     else {
         index = d->lookInColumnNames.indexOf(columnName);
         if (index == -1) {
-            kWarning() << QString(
+            qWarning() << QString(
                 "KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
             .arg(columnName);
             return;

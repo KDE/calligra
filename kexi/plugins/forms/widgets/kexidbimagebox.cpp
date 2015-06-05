@@ -32,8 +32,8 @@
 #include <QPainter>
 #include <QMimeDatabase>
 #include <QStandardPaths>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <KLocalizedString>
@@ -368,7 +368,7 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
     QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
 {
     if (data().isEmpty()) {
-        kWarning() << "no pixmap!";
+        qWarning() << "no pixmap!";
         dataIsEmpty = false;
         return;
     }

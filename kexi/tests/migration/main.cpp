@@ -18,8 +18,8 @@
 */
 
 #include <QFileInfo>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kcomponentdata.h>
 
 #include <db/drivermanager.h>
@@ -62,13 +62,13 @@ int main(int argc, char** argv)
     KexiDB::DriverManager manager;
     KexiMigration::MigrateManager migrateManager;
 
-    kDebug() << "Creating destination driver...";
+    qDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
     KexiDB::Driver *destDriver = manager.driver(KexiDB::defaultFileBasedDriverName() //file based
                                                );
     if (!destDriver || manager.error()) {
-        kDebug() << "Manager error...";
+        qDebug() << "Manager error...";
         manager.debugError();
     }
 
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
     //! TODO User should be able to specify this
     dbname = destinationDatabase;
     cdata->setFileName(dbname);
-    kDebug() << "Current file name: " << dbname;
+    qDebug() << "Current file name: " << dbname;
 
 
     QString sourceDriverName = "xbase";
@@ -92,7 +92,7 @@ int main(int argc, char** argv)
     KexiMigration::KexiMigrate* sourceDriver = 0;
     sourceDriver = migrateManager.driver(sourceDriverName);
     if (!sourceDriver || migrateManager.error()) {
-        kDebug() << "Import migrate driver error...";
+        qDebug() << "Import migrate driver error...";
         return -1;
     }
 
@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     sourceDriver->setData(md);
 
     if (!sourceDriver->performImport()) {
-        kDebug() << "Import failed";
+        qDebug() << "Import failed";
         return -1;
     }
 

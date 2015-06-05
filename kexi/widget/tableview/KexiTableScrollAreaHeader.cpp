@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QHelpEvent>
 #include <QPainter>
+#include <QDebug>
 
 #include <kiconloader.h>
 #include <kexiutils/utils.h>
@@ -55,7 +56,7 @@ public:
             const int currentSection = headerWidget->orientation() == Qt::Horizontal
                                      ? headerWidget->currentIndex().column()
                                      : headerWidget->currentIndex().row();
-//            kDebug() << headerWidget->orientation() << currentSection <<
+//            qDebug() << headerWidget->orientation() << currentSection <<
 //                        headerWidget->currentIndex().row() << headerWidget->currentIndex().column();
 
             if (newOption.section >= 0) {
@@ -84,7 +85,7 @@ public:
                     // For mouse-over styles such as Breeze fill color and animate,
                     // what's in conflict with what we do: disable this.
                     newOption.state &= (0xffffffff ^ QStyle::State_MouseOver);
-                    //kDebug() << newOption.rect;
+                    //qDebug() << newOption.rect;
                 }
                 StyleProxy::drawControl(ce, &newOption, painter, widget);
                 return;
@@ -269,24 +270,24 @@ QSize KexiTableScrollAreaHeader::sectionSizeFromContents(int logicalIndex) const
     opt.fontMetrics = QFontMetrics(fnt);
     opt.text = model()->headerData(logicalIndex, orientation(),
                                     Qt::DisplayRole).toString();
-    //kDebug() << opt.text;
+    //qDebug() << opt.text;
     QVariant variant = model()->headerData(logicalIndex, orientation(), Qt::DecorationRole);
-    //kDebug() << variant;
+    //qDebug() << variant;
 //            opt.icon = qvariant_cast<QIcon>(variant);
 //            if (opt.icon.isNull())
 //                opt.icon = qvariant_cast<QPixmap>(variant);
     QSize size = style()->sizeFromContents(QStyle::CT_HeaderSection, &opt, QSize(), this);
-    //kDebug() << size;
+    //qDebug() << size;
     if (isSortIndicatorShown()) {
         int margin = style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
         if (orientation() == Qt::Horizontal)
             size.rwidth() += size.height() + margin;
         else
             size.rheight() += size.width() + margin;
-        //kDebug() << "margin" << margin;
+        //qDebug() << "margin" << margin;
     }
-    //kDebug() << size << "---";
-    //kDebug() << orientation() << logicalIndex << s;
+    //qDebug() << size << "---";
+    //qDebug() << orientation() << logicalIndex << s;
     if (orientation() == Qt::Horizontal) {
         KexiDB::TableViewData *data = scrollArea()->data();
         KexiDB::TableViewColumn *col = data->visibleColumn(logicalIndex);
@@ -310,7 +311,7 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
                 continue;
             QSize hint = sectionSizeFromContents(i);
             height = qMax(height, hint.height());
-            //kDebug() << "height:" << height;
+            //qDebug() << "height:" << height;
         }
         return QSize(width, height);
     }
@@ -319,10 +320,10 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
         QStyleOptionHeader opt;
         initStyleOption(&opt);
         if (scrollArea()) {
-            //kDebug() << "scrollArea()->width():" << scrollArea()->width();
+            //qDebug() << "scrollArea()->width():" << scrollArea()->width();
             height = scrollArea()->viewport()->height() - 1;
         }
-        //kDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
+        //qDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
         return QSize(scrollArea()->rowHeight()
                        + style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this),
                      height);

@@ -22,8 +22,8 @@
 #include "../kexiformscrollview.h"
 
 #include <kcombobox.h>
-#include <kdebug.h>
 
+#include <QDebug>
 #include <QApplication>
 #include <QPainter>
 #include <QStyle>
@@ -224,12 +224,12 @@ void KexiDBComboBox::createEditor()
             option.initFrom(subwidget());
             const QRect comboRect = subwidget()->style()->subControlRect(
                 QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, subwidget());
-            //kDebug() << "comboRect:" << comboRect;
+            //qDebug() << "comboRect:" << comboRect;
             subwidget()->setContentsMargins(comboRect.left(), comboRect.top(),
                 width() - comboRect.right(), height() - comboRect.bottom());
             int l, t, r, b;
             subwidget()->getContentsMargins(&l, &t, &r, &b);
-            //kDebug() << "altered margins:" << l << t << r << b;
+            //qDebug() << "altered margins:" << l << t << r << b;
 
             subwidget()->setFocusPolicy(Qt::NoFocus);
             setFocusProxy(0); // Subwidget is not focusable but the form requires focusable
@@ -364,8 +364,8 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
             && e->type() != QEvent::HoverEnter
             && e->type() != QEvent::HoverLeave)
     {
-        kDebug() << e << o << subwidget();
-        kDebug() << "FOCUS WIDGET:" << focusWidget();
+        qDebug() << e << o << subwidget();
+        qDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
     if (o == this || o == popup() || o == subwidget()) {
@@ -411,7 +411,7 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
         }
     }
     if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
-        //kDebug() << "**********************####" << e->type() << o;
+        //qDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
             if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
@@ -445,7 +445,7 @@ void KexiDBComboBox::setPaletteBackgroundColor(const QColor & color)
 
 bool KexiDBComboBox::valueChanged()
 {
-    //kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << value().toString();
+    //qDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << value().toString();
     return KexiDataItemInterface::originalValue() != value();
 }
 

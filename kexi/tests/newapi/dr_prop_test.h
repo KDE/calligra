@@ -23,9 +23,9 @@
 int drPropTest()
 {
     QList<QByteArray> names = driver->propertyNames();
-    kDebug() << QString("%1 properties found:").arg(names.count());
+    qDebug() << QString("%1 properties found:").arg(names.count());
     foreach(const QByteArray& propertyName, names) {
-        kDebug() << " - " << propertyName << ":"
+        qDebug() << " - " << propertyName << ":"
         << " caption=\"" << driver->propertyCaption(propertyName) << "\""
         << " type=" << driver->propertyValue(propertyName).typeName()
         << " value=\"" << driver->propertyValue(propertyName).toString() << "\"";

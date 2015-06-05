@@ -27,8 +27,8 @@
 #include <drivers/xbase/xbaseexport.h>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 
+#include <QDebug>
 #include <QMimeData>
 
 class KexiFieldListModel::Private
@@ -95,7 +95,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
             item->setCaption(colinfo->captionOrAliasOrName());
         }
         d->items.append(item);
-        kDebug() << item->data(0);
+        qDebug() << item->data(0);
     }
 }
 
@@ -113,7 +113,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
         } else if (role == Qt::DecorationRole) {
             return item->icon();
         } else if (role == Qt::UserRole) {
-            kDebug() << item->caption();
+            qDebug() << item->caption();
             return item->caption();
         }
     }

@@ -28,6 +28,7 @@
 
 #include <kactioncollection.h>
 
+#include <QDebug>
 
 class KexiDataAwareView::Private
 {
@@ -246,9 +247,9 @@ QAction* KexiDataAwareView::sharedActionRequested(QKeyEvent *ke, const char *act
 
 bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
 {
-    // kDebug() << "***" << o << e << window()->selectedView() << this;
+    // qDebug() << "***" << o << e << window()->selectedView() << this;
     if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
-        kDebug() << "F O C U S" << e << o;
+        qDebug() << "F O C U S" << e << o;
     }
     if (e->type() == QEvent::ShortcutOverride && o == this) {
         QKeyEvent *ke = static_cast<QKeyEvent*>(e);

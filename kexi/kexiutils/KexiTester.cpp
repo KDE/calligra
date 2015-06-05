@@ -19,9 +19,9 @@
 
 #include "KexiTester.h"
 
-#include <kdebug.h>
 #include <kglobal.h>
 
+#include <QDebug>
 #include <QMap>
 #include <QWidget>
 
@@ -76,7 +76,7 @@ KexiTester& kexiTester()
 KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object)
 {
     if (!object.m_object) {
-        kWarning() << "No object provided";
+        qWarning() << "No object provided";
         return tester;
     }
     QString realName = object.m_name;
@@ -84,7 +84,7 @@ KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject
         realName = object.m_object->objectName();
     }
     if (realName.isEmpty()) {
-        kWarning() << "No name for object provided, won't add";
+        qWarning() << "No name for object provided, won't add";
         return tester;
     }
     g_kexiTester->dPtr()->objects.insert(realName, object.m_object);

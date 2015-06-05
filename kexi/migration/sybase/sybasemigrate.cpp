@@ -23,7 +23,7 @@
 #include <QString>
 #include <QVariant>
 #include <QList>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <migration/keximigratedata.h>
 #include <db/cursor.h>
@@ -105,7 +105,7 @@ bool SybaseMigrate::drv_readTableSchema(
         fieldVector.append(fld);
         tableSchema.addField(fld);
 
-        //kDebug() << fld->caption() << "No.of fields in tableSchema" << tableSchema.fieldCount();
+        //qDebug() << fld->caption() << "No.of fields in tableSchema" << tableSchema.fieldCount();
         delete colInfo;
     }
 
@@ -141,7 +141,7 @@ bool SybaseMigrate::drv_tableNames(QStringList& tableNames)
     if (!query("Select name from sysobjects where type='U'"))
         return false;
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
-        //kDebug() << value(0);
+        //qDebug() << value(0);
         tableNames << value(0);
     }
     return true;
@@ -175,7 +175,7 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
 
         uint numFields = dbnumcols(d->dbProcess);
         if (columnNumber > (numFields - 1)) {
-            kWarning() << sqlStatement
+            qWarning() << sqlStatement
                 << "columnNumber too large"
                 << columnNumber << "expected 0.." << numFields;
         }
@@ -435,7 +435,7 @@ QString SybaseMigrate::value(int pos) const
 bool SybaseMigrate::query(const QString& sqlStatement) const
 {
 
-    //kDebug()<<sqlStatement;
+    //qDebug()<<sqlStatement;
     // discard any previous results, if remaining
     dbcancel(d->dbProcess);
 
@@ -488,7 +488,7 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
     QHash<QString, KexiDB::Field*> fieldHash;
     const KexiDB::Field::List* fieldList = tableSchema.fields();
     foreach(KexiDB::Field* field, *fieldList) {
-        //kDebug() << field->caption();
+        //qDebug() << field->caption();
         fieldHash[field->caption()] = field;
     }
 
@@ -517,7 +517,7 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
             while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
                 // only one row is expected
                 QString fieldName = value(0);
-                //kDebug() << fieldName;
+                //qDebug() << fieldName;
                 indexSchema->addField(fieldHash[fieldName]);
             }
         }

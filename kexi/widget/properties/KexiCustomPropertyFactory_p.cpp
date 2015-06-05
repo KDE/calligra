@@ -19,7 +19,8 @@
 
 #include "KexiCustomPropertyFactory_p.h"
 
-#include <kdebug.h>
+#include <QDebug>
+
 #include <KProperty>
 #include <kexiutils/identifier.h>
 
@@ -93,12 +94,12 @@ KexiIdentifierPropertyEdit::~KexiIdentifierPropertyEdit()
 void KexiIdentifierPropertyEdit::setValue(const QString &value)
 {
     if (value.isEmpty()) {
-        kWarning() << "Value cannot be empty. This call has no effect.";
+        qWarning() << "Value cannot be empty. This call has no effect.";
         return;
     }
     const QString identifier(KexiUtils::stringToIdentifier(value));
     if (identifier != value)
-        kDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
+        qDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
     KPropertyStringEditor::setValue(identifier);
 }
 

@@ -25,8 +25,8 @@
 
 #include <QDir>
 #include <QStringList>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
@@ -157,8 +157,8 @@ QString KexiProjectData::databaseName() const
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-    //kDebug() << dbName;
-    //kDebug() << *this;
+    //qDebug() << dbName;
+    //qDebug() << *this;
     KexiDB::SchemaData::setName(dbName);
 }
 
@@ -305,7 +305,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     d->connData.localSocketFileName = cg.readEntry("localSocketFile");
     d->connData.savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
     if (formatVersion >= 2) {
-        //kDebug() << cg.hasKey("encryptedPassword");
+        //qDebug() << cg.hasKey("encryptedPassword");
         d->connData.password = cg.readEntry("encryptedPassword");
         KexiUtils::simpleDecrypt(d->connData.password);
     }

@@ -28,17 +28,17 @@
 
 #include <KoServiceLocator.h>
 
-#include <kdebug.h>
 #include <kservice.h>
 #include <KLocalizedString>
 
 #include <assert.h>
 
+#include <QDebug>
 #include <QApplication>
 
 //remove debug
 #undef KexiDBDbg
-#define KexiDBDbg if (0) kDebug()
+#define KexiDBDbg if (0) qDebug()
 
 using namespace KexiMigration;
 
@@ -175,7 +175,7 @@ bool MigrateManagerInternal::lookupDrivers()
 KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 {
     if (!lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return 0;
     }
 
@@ -258,15 +258,15 @@ const QStringList MigrateManager::driverNames()
 {
     clearError();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return QStringList();
     }
     if (d_int->m_services.isEmpty()) {
-        kWarning() << "MigrateManager::ServicesMap is empty";
+        qWarning() << "MigrateManager::ServicesMap is empty";
         return QStringList();
     }
     if (d_int->error()) {
-        kWarning() << "Error:" << d_int->errorMsg();
+        qWarning() << "Error:" << d_int->errorMsg();
         return QStringList();
     }
     return d_int->m_services.keys();
@@ -276,14 +276,14 @@ QString MigrateManager::driverForMimeType(const QString &mimeType)
 {
     clearError();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         setError(d_int);
         return 0;
     }
 
     KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.toLower()];
     if (!ptr) {
-        kWarning() << "No such mimetype" << mimeType;
+        qWarning() << "No such mimetype" << mimeType;
         return QString();
     }
 
@@ -295,7 +295,7 @@ KexiMigrate* MigrateManager::driver(const QString& name)
     clearError();
     KexiMigrate *drv = d_int->driver(name);
     if (d_int->error()) {
-        kWarning() << "Error:" << name << d_int->errorMsg();
+        qWarning() << "Error:" << name << d_int->errorMsg();
         setError(d_int);
     }
     return drv;
@@ -342,7 +342,7 @@ QList<QString> MigrateManager::supportedFileMimeTypes()
 {
     clearError();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return QStringList();
     }
     return d_int->m_services_by_mimetype.keys();

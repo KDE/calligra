@@ -23,7 +23,7 @@
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace Scripting;
 
@@ -114,13 +114,13 @@ bool KexiDBCursor::setValue(uint index, QVariant value)
 {
     ::KexiDB::QuerySchema* query = m_cursor->query();
     if (! query) {
-        kWarning() << "Invalid query, index=" << index << " value=" << value;
+        qWarning() << "Invalid query, index=" << index << " value=" << value;
         return false;
     }
 
     ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
     if (! column) {
-        kWarning() << "Invalid column, index=" << index << " value=" << value;
+        qWarning() << "Invalid column, index=" << index << " value=" << value;
         return false;
     }
 

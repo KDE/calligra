@@ -30,7 +30,6 @@
 
 #include <KexiIcon.h>
 
-#include <kdebug.h>
 #include <KStandardAction>
 
 #include <QCheckBox>

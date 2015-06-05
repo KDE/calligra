@@ -25,6 +25,7 @@
 
 #include "kexidataawareobjectiface.h"
 
+#include <QDebug>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QToolTip>
@@ -103,7 +104,7 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
 {
     const bool theSameData = m_data && m_data == data;
     if (m_owner && m_data && m_data != data/*don't destroy if it's the same*/) {
-        kDebug() << "destroying old data (owned)";
+        qDebug() << "destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
         m_itemIterator = KexiDB::TableViewData::Iterator();
@@ -113,7 +114,7 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     if (m_data)
         m_itemIterator = m_data->constBegin();
 
-    //kDebug() << "using shared data";
+    //qDebug() << "using shared data";
     //add columns
     clearColumnsInternal(false);
 
@@ -498,11 +499,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
     newrow = qMax(0, row);
     newrow = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
-// kDebug() << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
+// qDebug() << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
     const bool forceSet = flags & ForceSetCursorPosition;
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
 #ifdef setCursorPosition_DEBUG
-        kDebug() << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
+        qDebug() << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
             .arg(m_curRow).arg(newcol).arg(newrow);
 #endif
 
@@ -581,25 +582,25 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         if (forceSet || m_curRow != oldRow) {
             if (isInsertingEnabled() && m_curRow == rowCount()) {
 #ifdef setCursorPosition_DEBUG
-                kDebug() << "NOW insert item is current";
+                qDebug() << "NOW insert item is current";
 #endif
                 m_currentItem = m_insertItem;
                 m_itemIterator = KexiDB::TableViewData::Iterator();
             } else {
 #ifdef setCursorPosition_DEBUG
-                kDebug() << QString("NOW item at %1 (%2) is current")
+                qDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 int _i = 0;
-                kDebug() << "m_curRow:" << m_curRow;
+                qDebug() << "m_curRow:" << m_curRow;
                 for (KexiDB::TableViewData::Iterator ii = m_data->constBegin();
                      ii != m_data->constEnd(); ++ii)
                 {
-                    kDebug() << _i << (ulong)(*ii)
+                    qDebug() << _i << (ulong)(*ii)
                              << (ii == m_itemIterator ? "CURRENT" : "")
                              << (*ii)->debugString();
                     _i++;
                 }
-                kDebug() << "~" << m_curRow << (ulong)(*m_itemIterator)
+                qDebug() << "~" << m_curRow << (ulong)(*m_itemIterator)
                          << (*m_itemIterator)->debugString();
 #endif
                 if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
@@ -632,7 +633,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 }
                 m_currentItem = *m_itemIterator;
 #ifdef setCursorPosition_DEBUG
-                kDebug() << "new~" << m_curRow
+                qDebug() << "new~" << m_curRow
                          << (ulong)(*m_itemIterator) << (*m_itemIterator)->debugString();
 #endif
             }
@@ -651,7 +652,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
             // the same cell but may need a bit of scrolling to make it visible
             ensureCellVisible(m_curRow, m_curCol);
         }
-        kDebug() << "NO CHANGE";
+        qDebug() << "NO CHANGE";
     }
 
     if (m_initDataContentsOnShow) {
@@ -682,28 +683,28 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     if (!acceptEditor()) {
         return false;
     }
-    kDebug() << "EDIT RECORD ACCEPTING...";
+    qDebug() << "EDIT RECORD ACCEPTING...";
 
     bool success = true;
     const bool inserting = m_newRowEditing;
 
     if (m_data->rowEditBuffer()->isEmpty() && !m_newRowEditing) {
-        kDebug() << "-- NOTHING TO ACCEPT!!!";
+        qDebug() << "-- NOTHING TO ACCEPT!!!";
     } else {//not empty edit buffer or new row to insert:
         if (m_newRowEditing) {
-            kDebug() << "-- INSERTING: ";
+            qDebug() << "-- INSERTING: ";
             m_data->rowEditBuffer()->debug();
             success = m_data->saveNewRow(*m_currentItem);
         }
         else {
             if (success) {
                 //accept changes for this row:
-                kDebug() << "-- UPDATING: ";
+                qDebug() << "-- UPDATING: ";
                 m_data->rowEditBuffer()->debug();
-                kDebug() << "-- BEFORE: ";
+                qDebug() << "-- BEFORE: ";
                 m_currentItem->debug();
                 success = m_data->saveRowChanges(*m_currentItem);
-                kDebug() << "-- AFTER: ";
+                qDebug() << "-- AFTER: ";
                 m_currentItem->debug();
             }
         }
@@ -718,7 +719,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         m_rowEditing = -1;
         m_newRowEditing = false;
         updateAfterAcceptRowEdit();
-        kDebug() << "EDIT RECORD ACCEPTED:";
+        qDebug() << "EDIT RECORD ACCEPTED:";
 
         if (inserting) {
             //update navigator's data
@@ -749,7 +750,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     }
     //indicate on the vheader that we are not editing
     if (verticalHeader()) {
-        kDebug() << currentRow();
+        qDebug() << currentRow();
         updateVerticalHeaderSection(currentRow());
     }
     return success;
@@ -785,12 +786,12 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 
     //indicate on the vheader that we are not editing
     if (verticalHeader()) {
-        kDebug() << currentRow();
+        qDebug() << currentRow();
         updateVerticalHeaderSection(currentRow());
     }
 
 //! \todo (js): cancel changes for this row!
-    kDebug() << "EDIT RECORD CANCELLED.";
+    qDebug() << "EDIT RECORD CANCELLED.";
 
     /*emit*/ rowEditTerminated(m_curRow);
     return true;
@@ -860,36 +861,36 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         }
         else if (m_editor->valueIsNull()) {//null value entered
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                kDebug() << "NULL NOT ALLOWED!";
+                qDebug() << "NULL NOT ALLOWED!";
                 res = KexiDB::Validator::Error;
                 msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                       + "\n\n" + KexiDB::msgYouCanImproveData();
                 desc = xi18n("The column's constraint is declared as NOT NULL (required).");
             } else {
-                kDebug() << "NULL VALUE WILL BE SET";
+                qDebug() << "NULL VALUE WILL BE SET";
                 //ok, just leave newval as NULL
                 setNull = true;
             }
         } else if (m_editor->valueIsEmpty()) {//empty value entered
             if (m_editor->field()->hasEmptyProperty()) {
                 if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "EMPTY NOT ALLOWED!";
+                    qDebug() << "EMPTY NOT ALLOWED!";
                     res = KexiDB::Validator::Error;
                     msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + KexiDB::msgYouCanImproveData();
                     desc = xi18n("The column's constraint is declared as NOT EMPTY (text should be filled).");
                 } else {
-                    kDebug() << "EMPTY VALUE WILL BE SET";
+                    qDebug() << "EMPTY VALUE WILL BE SET";
                 }
             } else {
                 if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
+                    qDebug() << "NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
                     res = KexiDB::Validator::Error;
                     msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + KexiDB::msgYouCanImproveData();
                     desc = xi18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
                 } else {
-                    kDebug() << "NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
+                    qDebug() << "NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
                     //ok, just leave newval as NULL
                     setNull = true;
                 }
@@ -912,7 +913,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
     const int realFieldNumber = fieldNumberForColumn(m_curCol);
     if (realFieldNumber < 0) {
-        kWarning() << "fieldNumberForColumn(m_curCol) < 0";
+        qWarning() << "fieldNumberForColumn(m_curCol) < 0";
         return false;
     }
 
@@ -923,7 +924,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         if (   (!setNull && !valueChanged)
             || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull()))
         {
-            kDebug() << "VALUE NOT CHANGED.";
+            qDebug() << "VALUE NOT CHANGED.";
             removeEditor();
             if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
                 acceptRowEdit();
@@ -970,10 +971,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                                            newval, /*allowSignals*/true,
                                            currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
         {
-            kDebug() << "------ EDIT BUFFER CHANGED TO:";
+            qDebug() << "------ EDIT BUFFER CHANGED TO:";
             m_data->rowEditBuffer()->debug();
         } else {
-            kDebug() << "------ CHANGE FAILED";
+            qDebug() << "------ CHANGE FAILED";
             res = KexiDB::Validator::Error;
 
             //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
@@ -1024,7 +1025,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText,
                                                         CreateEditorFlags flags)
 {
-    //kDebug() << "setText:" << setText;
+    //qDebug() << "setText:" << setText;
     if (isReadOnly() || !columnEditable(m_curCol))
         return;
     if (m_editor) {
@@ -1397,14 +1398,14 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
                                                               bool useDefaultValueIfPossible)
 {
     KexiDB::RecordData *currentItem = row < int(m_data->count()) ? m_data->at(row) : m_insertItem;
-    //kDebug() << m_insertItem << m_currentItem << currentItem;
+    //qDebug() << m_insertItem << m_currentItem << currentItem;
     if (m_rowEditing >= 0 && row == m_rowEditing && m_data->rowEditBuffer()) {
         KexiDB::TableViewColumn* tvcol = column(col);
         if (tvcol->isDBAware()) {
             //get the stored value
             const int realFieldNumber = fieldNumberForColumn(col);
             if (realFieldNumber < 0) {
-                kWarning() << "fieldNumberForColumn(m_curCol) < 0";
+                qWarning() << "fieldNumberForColumn(m_curCol) < 0";
                 return 0;
             }
             const QVariant *storedValue = &currentItem->at(realFieldNumber);
@@ -1424,7 +1425,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
     //not db-aware data:
     const int realFieldNumber = fieldNumberForColumn(col);
     if (realFieldNumber < 0) {
-        kWarning() << "fieldNumberForColumn(m_curCol) < 0";
+        qWarning() << "fieldNumberForColumn(m_curCol) < 0";
         return 0;
     }
     return &currentItem->at(realFieldNumber);
@@ -1899,7 +1900,7 @@ void KexiDataAwareObjectInterface::setRowEditing(int row)
         return;
     }
     if (m_rowEditing >= 0 && row >= 0) {
-        kWarning() << "Cannot set editing for row" << row << "before editing of row"
+        qWarning() << "Cannot set editing for row" << row << "before editing of row"
                    << m_rowEditing << "is accepted or cancelled";
         return;
     }
