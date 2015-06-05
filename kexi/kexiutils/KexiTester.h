@@ -40,16 +40,14 @@ public:
     template <class W>
     W widget(const QString &name) const { return qobject_cast<W>(widget(name)); }
 
-private:
+protected:
     KexiTester();
-    static KexiTester* self();
-
-    Q_DISABLE_COPY(KexiTester)
-    friend KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester&, const KexiTestObject &);
-    friend KexiTester& kexiTester();
 
     class Private;
     Private * const d;
+
+private:
+    Q_DISABLE_COPY(KexiTester)
 };
 
 //! KexiTestObject is a container for object added for tests
@@ -65,7 +63,7 @@ private:
 };
 
 //! @return global KexiTester object.
-inline KexiTester& kexiTester() { return *KexiTester::self(); }
+KexiTester& kexiTester();
 
 //! Adds test object @a object to the tester.
 KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object);
