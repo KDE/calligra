@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QColor>
 #include <QIcon>
+#include <QPalette>
 
 #include <KIconLoader>
 
