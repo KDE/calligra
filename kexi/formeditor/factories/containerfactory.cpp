@@ -30,8 +30,8 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 #include <QAction>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kinputdialog.h>
 #include <KLocalizedString>
 
@@ -563,7 +563,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   CreateWidgetOptions options)
 {
     Q_UNUSED(options);
-    kDebug() << c;
+    qDebug() << c;
     QWidget *w = 0;
     bool createContainer = false;
     if (c == "KFDTabWidget") {
@@ -573,7 +573,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         tab->setTabReorderingEnabled(true);
         connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 #endif
-        kDebug() << "Creating ObjectTreeItem:";
+        qDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),
                 new KFormDesigner::ObjectTreeItem(
                     container->form()->library()->displayName(c), n, tab, container));
@@ -597,7 +597,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = stack;
         stack->setLineWidth(2);
         stack->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-        kDebug() << "Creating ObjectTreeItem:";
+        qDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),
                 new KFormDesigner::ObjectTreeItem(
                     container->form()->library()->displayName(c), n, stack, container));
@@ -629,7 +629,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     if (w) {
         w->setObjectName(n);
-        kDebug() << w << w->objectName() << "created";
+        qDebug() << w << w->objectName() << "created";
     }
     if (createContainer) {
         (void)new KFormDesigner::Container(container, w, container);

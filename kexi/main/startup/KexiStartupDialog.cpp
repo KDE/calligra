@@ -27,11 +27,11 @@
 #include <KexiIcon.h>
 
 #include <kcomponentdata.h>
-#include <kdebug.h>
 #include <kconfig.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QCheckBox>
 #include <QObject>
 #include <QLabel>
@@ -179,7 +179,7 @@ void KexiStartupDialog::done(int r)
     if (d->result != -1) //already done!
         return;
 
-// kDebug() << r;
+// qDebug() << r;
 // updateSelectedTemplateKeyInfo();
 
     if (r == QDialog::Rejected) {
@@ -343,12 +343,12 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
                  || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
 #endif
     } else if (pageWidgetItem == d->pageOpenExisting) {
-        kDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
+        qDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
         enable =
             (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
             ? !d->openExistingFileWidget->highlightedFile().isEmpty()
             : (bool)d->openExistingConnWidget->selectedConnectionData();
-//kDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
+//qDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
     }
     QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
     okButton->setEnabled(enable);
@@ -401,18 +401,18 @@ void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataL
 
 void KexiStartupDialog::slotOk()
 {
-// kDebug();
+// qDebug();
 }
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
-// kDebug() << "simple";
+// qDebug() << "simple";
     d->openExistingConnWidget->showSimpleConn();
 }
 
 void KexiStartupDialog::showAdvancedConnForOpenExisting()
 {
-// kDebug() << "adv";
+// qDebug() << "adv";
     d->openExistingConnWidget->showAdvancedConn();
 }
 
@@ -436,7 +436,7 @@ KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
 
 void KexiStartupDialog::existingFileHighlighted()
 {
-    //kDebug();
+    //qDebug();
     updateDialogOKButton(0);
 }
 

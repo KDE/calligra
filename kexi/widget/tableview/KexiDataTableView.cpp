@@ -29,6 +29,8 @@
 #include <db/utils.h>
 #include <db/tableviewdata.h>
 
+#include <QDebug>
+
 class KexiDataTableView::Private
 {
 public:
@@ -88,14 +90,14 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
             bool ok;
             const QList<int> columnWidths = KexiDB::deserializeIntList(columnWidthsString, &ok);
             if (!ok) {
-                kWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
+                qWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
                 return false;
             }
             KexiDB::TableViewColumn::List* columns = data->columns();
             if (columnWidths.count() == columns->count()) {
                 int i = 0;
                 foreach (int width, columnWidths) {
-                    // kDebug() << width;
+                    // qDebug() << width;
                     columns->at(i)->setWidth(width);
                     ++i;
                 }

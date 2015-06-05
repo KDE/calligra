@@ -25,7 +25,6 @@
 #include <QPushButton>
 
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>

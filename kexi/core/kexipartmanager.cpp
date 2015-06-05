@@ -21,10 +21,10 @@
 #include "kexipartmanager.h"
 
 #include <QApplication>
+#include <QDebug>
 
 #include <kservicetype.h>
 #include <kservice.h>
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kaboutdata.h>
@@ -108,7 +108,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
         }
         p = loader.createPlugin<PartClass>(manager);
         if (!p) {
-            kWarning() << "failed";
+            qWarning() << "failed";
             i->setBroken(true, xi18nc("@info", "Error while loading plugin <resource>%1</resource>",
                                      i->objectName()));
             manager->setError(i->errorMessage());
@@ -151,7 +151,7 @@ bool Manager::lookup()
     d->parts.clear();
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
-        kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
+        qWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
         m_serverErrorMsg = xi18nc("@info", "No <resource>%1</resource> service type installed.",
                                  QLatin1String("Kexi/Handler"));
         setError(appIncorrectlyInstalledMessage());
@@ -175,9 +175,9 @@ bool Manager::lookup()
         // check type name (class is optional)
         QString partClass = ptr->property("X-Kexi-Class", QVariant::String).toString();
         //QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
-        //kDebug() << partName << partClass;
+        //qDebug() << partName << partClass;
         if (partClass.isEmpty()) {
-            kWarning() << "No class name (X-Kexi-Class) specified for Kexi Part" << ptr->desktopEntryName() << ptr->entryPath() << "-- skipping!";
+            qWarning() << "No class name (X-Kexi-Class) specified for Kexi Part" << ptr->desktopEntryName() << ptr->entryPath() << "-- skipping!";
             continue;
         }
         if (   (!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
@@ -190,11 +190,11 @@ bool Manager::lookup()
         bool ok;
         const int ver = ptr->property("X-Kexi-PartVersion").toInt(&ok);
         if (!ok) {
-            kWarning() << "No version (X-Kexi-PartVersion) specified for Kexi Part" << ptr->desktopEntryName() << "-- skipping!";
+            qWarning() << "No version (X-Kexi-PartVersion) specified for Kexi Part" << ptr->desktopEntryName() << "-- skipping!";
             continue;
         }
         if (ver != KEXI_PART_VERSION) {
-            kWarning() << "kexi part" << partClass << "has version (X-Kexi-PartVersion)"
+            qWarning() << "kexi part" << partClass << "has version (X-Kexi-PartVersion)"
                        << ver << "but required version is" << KEXI_PART_VERSION << "-- skipping!";
             continue;
         }
@@ -214,7 +214,7 @@ bool Manager::lookup()
             // to avoid duplicates
             if (!info->partClass().isEmpty()) {
                 d->partsByClass.insert(info->partClass(), info);
-                //kDebug() << "inserting info to" << info->partClass();
+                //qDebug() << "inserting info to" << info->partClass();
             }
             d->partlist.append(info);
         }

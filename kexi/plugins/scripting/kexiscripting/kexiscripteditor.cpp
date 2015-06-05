@@ -24,8 +24,6 @@
 
 #include <kross/core/action.h>
 
-#include <kdebug.h>
-
 /// \internal d-pointer class
 class KexiScriptEditor::Private
 {

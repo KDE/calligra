@@ -33,11 +33,11 @@
 #include <kcolorutils.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QCache>
 #include <QStyle>
 #include <QEvent>
@@ -403,7 +403,7 @@ void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
-    //kDebug() << "^^^^" << objectName() << set;
+    //qDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -2438,7 +2438,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-    //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
+    //qDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
         if (!action->menu()){
 #if defined(Q_OS_WIN)

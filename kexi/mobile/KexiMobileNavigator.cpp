@@ -18,12 +18,11 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "KexiMobileNavigator.h"
 #include <widget/navigator/KexiProjectModel.h>
 #include <widget/navigator/KexiProjectNavigator.h>
-#include <kdebug.h>
+
+#include <QDebug>
 
 KexiMobileNavigator::KexiMobileNavigator(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f), m_project(0)
 {
@@ -57,7 +56,7 @@ void KexiMobileNavigator::setProject(KexiProject* p)
 
 void KexiMobileNavigator::slotOpenItem(KexiPart::Item* item)
 {
-    kDebug();
+    qDebug();
     
     emit(openItem(item));
 }

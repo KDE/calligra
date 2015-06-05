@@ -18,7 +18,6 @@
 */
 
 #include <QDomDocument>
-#include <kdebug.h>
 
 #include "events.h"
 

@@ -20,9 +20,9 @@
 #include "widgetwithsubpropertiesinterface.h"
 
 #include <QMetaObject>
+#include <QDebug>
 
 #include <kexiutils/utils.h>
-#include <kdebug.h>
 
 using namespace KFormDesigner;
 
@@ -68,7 +68,7 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                 {
                     d->subproperties.insert(property.name());
                     addedSubproperties.insert(property.name());
-                    kDebug() << "added subwidget's property that is not present in the parent: "
+                    qDebug() << "added subwidget's property that is not present in the parent: "
                         << property.name();
                 }
             }

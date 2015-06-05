@@ -29,8 +29,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMouseEvent>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include "utils.h"
 #include "container.h"
@@ -201,7 +200,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent)
     d->spacing = d->form ? d->form->defaultSpacing() : 0;
 
     if (toplevel) {
-        //kDebug() << "Creating ObjectTreeItem:";
+        //qDebug() << "Creating ObjectTreeItem:";
         ObjectTreeItem *it = new ObjectTreeItem(d->form->library()->displayName(classname),
                                                 widget()->objectName(), widget(), this, this);
         setObjectTree(it);
@@ -257,17 +256,17 @@ Container::eventFilter(QObject *s, QEvent *e)
         d->stopSelectionRectangleOrInserting();
         d->mousePressEventReceived = true;
 
-        //kDebug() << "sender object =" << s->objectName() << "of type =" << s->metaObject()->className()
+        //qDebug() << "sender object =" << s->objectName() << "of type =" << s->metaObject()->className()
         //    << "this =" << this->objectName() << metaObject()->className();
 
         d->moving = static_cast<QWidget*>(s);
         d->idOfPropertyCommand++; // this will create another PropertyCommand
         if (d->moving->parentWidget() && KexiUtils::objectIsA(d->moving->parentWidget(), "QStackedWidget")) {
-            //kDebug() << "widget is a stacked widget's page";
+            //qDebug() << "widget is a stacked widget's page";
             d->moving = d->moving->parentWidget(); // widget is a stacked widget's page
         }
         if (d->moving->parentWidget() && d->moving->parentWidget()->inherits("QTabWidget")) {
-            //kDebug() << "widget is a tab widget page";
+            //qDebug() << "widget is a tab widget page";
             d->moving = d->moving->parentWidget(); // widget is a tab widget page
         }
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
@@ -463,7 +462,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 #if 1 // grid
 //#define DEBUG_PAINTER
 #ifdef DEBUG_PAINTER
-    kDebug() << "would draw grid" << pe->rect();
+    qDebug() << "would draw grid" << pe->rect();
     QTime t;
     t.start();
     long points= 0;
@@ -504,7 +503,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         p.setPen(KexiUtils::contrastColor(widget()->palette().background().color()));
         p.drawPoints(gridpoints);
 #ifdef DEBUG_PAINTER
-    kDebug() << "millisecs:" << t.elapsed() << "points:" << points;
+    qDebug() << "millisecs:" << t.elapsed() << "points:" << points;
 #endif
 #endif
         if (d->selectionOrInsertingRectangle().isValid()) {
@@ -641,7 +640,7 @@ Container::eventFilter(QObject *s, QEvent *e)
     }
 
     case QEvent::MouseButtonDblClick: { // editing
-        //kDebug() << "Mouse dbl click for widget" << s->objectName();
+        //qDebug() << "Mouse dbl click for widget" << s->objectName();
         QWidget *w = static_cast<QWidget*>(s);
         if (!w)
             return false;
@@ -725,7 +724,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         if (    ((mev->pos().x() - d->grab.x()) < form()->gridSize() && (d->grab.x() - mev->pos().x()) < form()->gridSize())
              && ((mev->pos().y() - d->grab.y()) < form()->gridSize() && (d->grab.y() - mev->pos().y()) < form()->gridSize()) )
         {
-            //kDebug() << "The widget has not been moved. No copying.";
+            //qDebug() << "The widget has not been moved. No copying.";
             return true;
         }
         QPoint copyToPoint;
@@ -977,7 +976,7 @@ Container::createGridLayout(bool testOnly)
                 end = w->geometry().bottom();
         }
     }
-    //kDebug() << "the new grid will have n rows: n == " << rows.size();
+    //qDebug() << "the new grid will have n rows: n == " << rows.size();
 
     end = -10000;
     same = false;
@@ -1003,7 +1002,7 @@ Container::createGridLayout(bool testOnly)
                 end = w->geometry().right();
         }
     }
-    //kDebug() << "the new grid will have n columns: n == " << cols.size();
+    //qDebug() << "the new grid will have n columns: n == " << cols.size();
 
     // We create the layout ..
     QGridLayout *layout = 0;
@@ -1042,7 +1041,7 @@ Container::createGridLayout(bool testOnly)
             }
             i++;
         }
-        //kDebug() << "the widget " << w->objectName() << " will be in the row " << wrow <<
+        //qDebug() << "the widget " << w->objectName() << " will be in the row " << wrow <<
         //" and will go to the row " << endrow;
 
         // .. and column(s)
@@ -1065,7 +1064,7 @@ Container::createGridLayout(bool testOnly)
             }
             i++;
         }
-        //kDebug() << "the widget " << w->objectName() << " will be in the col " << wcol <<
+        //qDebug() << "the widget " << w->objectName() << " will be in the col " << wcol <<
         // " and will go to the col " << endcol;
 
         ObjectTreeItem *item = d->form->objectTree()->lookup(w->objectName());

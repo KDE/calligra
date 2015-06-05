@@ -22,9 +22,9 @@
 #include "kexiactionproxy_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kdebug.h>
 #include <kactioncollection.h>
 
+#include <QDebug>
 #include <QWidget>
 #include <QAction>
 
@@ -110,7 +110,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->addAction(a);
@@ -120,7 +120,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->removeAction(a);
@@ -130,7 +130,7 @@ QAction * KexiActionProxy::plugSharedAction(const QString& action_name, const QS
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return 0;
     }
     QString altName = a->objectName() + "_alt";
@@ -230,7 +230,7 @@ void KexiActionProxy::addActionProxyChild(KexiActionProxy* child)
 
 void KexiActionProxy::takeActionProxyChild(KexiActionProxy* child)
 {
-kDebug() << child;
+    qDebug() << child;
     const int index = m_sharedActionChildren.indexOf(child);
     if (index != -1)
         m_sharedActionChildren.removeAt(index);

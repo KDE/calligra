@@ -18,21 +18,23 @@
 */
 
 #include "AlterSchemaTableModel.h"
+
 #include <db/tableschema.h>
-#include <kdebug.h>
+
+#include <QDebug>
 
 #define ROWS_FOR_PREVIEW 3
 
 AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )
 {
-    kDebug();
+    qDebug();
     m_schema = 0;
     m_rowCount = ROWS_FOR_PREVIEW;
 }
 
 AlterSchemaTableModel::~AlterSchemaTableModel()
 {
-    kDebug();
+    qDebug();
 }
 
 QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) const
@@ -92,7 +94,7 @@ int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
 void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
 {
     m_schema = ts;
-    kDebug() << m_schema->fieldCount();
+    qDebug() << m_schema->fieldCount();
 
     beginInsertColumns(QModelIndex(), 0, m_schema->fieldCount() - 1);
     endInsertColumns();

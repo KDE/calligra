@@ -23,8 +23,7 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QDir>
 
 //! Version of the KexiDBShortcutFile format.

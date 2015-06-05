@@ -1,9 +1,10 @@
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
-#include <kdebug.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +14,7 @@ int main(int argc, char *argv[])
 
     KexiMigration::MigrateManager mm;
 
-    kDebug() << mm.driverNames();
+    qDebug() << mm.driverNames();
 
     //Text File Test
     KexiMigration::KexiMigrate *m = mm.driver("Text");
@@ -33,38 +34,38 @@ int main(int argc, char *argv[])
     
     if (!m->readTableSchema("tabdata.txt", ts))
     {
-      kDebug() << "Unable to read schema";
+      qDebug() << "Unable to read schema";
       return 0;
     }
     
     if (!m->readFromTable("tabdata.txt"))
     {
-      kDebug() << "Unable to read from table";
+      qDebug() << "Unable to read from table";
       return 0;
     }
     
     while(m->moveNext())
     {
-        kDebug() << m->value(0) << m->value(1) << m->value(2);
+        qDebug() << m->value(0) << m->value(1) << m->value(2);
     }
     
     m->movePrevious();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     m->moveNext();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     m->movePrevious();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     m->movePrevious();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     m->movePrevious();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     m->moveNext();
-    kDebug() << m->value(0) << m->value(1) << m->value(2);
+    qDebug() << m->value(0) << m->value(1) << m->value(2);
     
     
     //KSpread file test
@@ -77,11 +78,11 @@ int main(int argc, char *argv[])
     QStringList tn;
     k->tableNames(tn);
     
-    kDebug() << tn;
+    qDebug() << tn;
     KexiDB::TableSchema ts2;
     if (!k->readTableSchema("Names", ts2))
     {
-      kDebug() << "Unable to read schema";
+      qDebug() << "Unable to read schema";
       return 0;
     }
     
@@ -89,6 +90,6 @@ int main(int argc, char *argv[])
     
     while(k->moveNext())
     {
-        kDebug() << k->value(0) << k->value(1) << k->value(2);
+        qDebug() << k->value(0) << k->value(1) << k->value(2);
     }
 }

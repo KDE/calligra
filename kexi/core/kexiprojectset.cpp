@@ -25,8 +25,6 @@
 #include <db/msghandler.h>
 #include <db/drivermanager.h>
 
-#include <kdebug.h>
-
 //! @internal
 class KexiProjectSetPrivate
 {

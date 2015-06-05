@@ -21,9 +21,9 @@
 
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QDebug>
 
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>
@@ -255,7 +255,7 @@ void KexiLookupColumnPage::slotBoundColumnSelected()
         dataType = field->type();
     */
     if (!d->boundColumnCombo->fieldOrExpression().isEmpty()) {
-        kDebug();
+        qDebug();
     }
 
     // update property set

@@ -35,7 +35,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <KIconTheme>
 

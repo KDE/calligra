@@ -20,8 +20,7 @@
 #include "KexiTitleLabel.h"
 #include "utils.h"
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QApplication>
 #include <QDesktopWidget>
 
@@ -74,7 +73,7 @@ void KexiTitleLabel::updateFont()
         factor = 1.2;
         f.setBold(true);
     }
-    //kDebug() << f.pointSize() << f.pixelSize();
+    //qDebug() << f.pointSize() << f.pixelSize();
     if (f.pointSize() == -1) {
         f.setPixelSize(qreal(f.pixelSize()) * factor);
     }
