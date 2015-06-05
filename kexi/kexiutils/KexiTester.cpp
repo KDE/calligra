@@ -47,13 +47,15 @@ KexiTester::~KexiTester()
     delete d;
 }
 
-Q_GLOBAL_STATIC(KexiTester, g_kexiTester)
-
-//static
-KexiTester* KexiTester::self()
+//! @internal
+class KexiTesterInternal : public KexiTester
 {
-    return g_kexiTester;
-}
+public:
+    KexiTesterInternal() {}
+    Private* dPtr() { return d; }
+};
+
+Q_GLOBAL_STATIC(KexiTesterInternal, g_kexiTester)
 
 QObject *KexiTester::object(const QString &name) const
 {
@@ -64,6 +66,11 @@ QWidget *KexiTester::widget(const QString &name) const
 {
     QObject *o = object(name);
     return qobject_cast<QWidget*>(o);
+}
+
+KexiTester& kexiTester()
+{
+    return *g_kexiTester;
 }
 
 KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object)
@@ -80,7 +87,7 @@ KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject
         kWarning() << "No name for object provided, won't add";
         return tester;
     }
-    KexiTester::self()->d->objects.insert(realName, object.m_object);
+    g_kexiTester->dPtr()->objects.insert(realName, object.m_object);
     return tester;
 }
 
