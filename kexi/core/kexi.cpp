@@ -37,6 +37,7 @@
 
 #include <kmessagebox.h>
 #include <KIconTheme>
+#include <KAboutData>
 
 using namespace Kexi;
 

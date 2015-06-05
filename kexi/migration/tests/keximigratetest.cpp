@@ -18,9 +18,9 @@
 */
 
 #include <migration/importwizard.h>
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#include <KAboutData>
 
 /*
 This is in no way meant to compile let alone work
