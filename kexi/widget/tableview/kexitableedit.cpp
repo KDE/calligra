@@ -30,7 +30,6 @@
 #include <QEvent>
 
 #include <kglobal.h>
-#include <kdebug.h>
 
 #ifdef KEXI_MOBILE
 KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)

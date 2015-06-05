@@ -23,8 +23,9 @@
  ***************************************************************************/
 
 #include <QPushButton>
+#include <QDebug>
 #include <Q3VBoxLayout>
-#include <kdebug.h>
+
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>

@@ -21,8 +21,6 @@
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
 
-#include <kdebug.h>
-
 #include <QMenu>
 #include <QPainter>
 #include <QEvent>

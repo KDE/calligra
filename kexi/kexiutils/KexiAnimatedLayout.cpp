@@ -24,6 +24,7 @@
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QDebug>
 
 KexiAnimatedLayout::Private::Private(KexiAnimatedLayout * qq)
  : QWidget(), q(qq), animation(this, "pos")
@@ -59,7 +60,7 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     buffer = QPixmap(s.width() * 2, s.height());
     buffer.fill(Qt::white);
     from->render(&buffer, startPos);
-    //kDebug() << s << from->geometry() << destinationWidget->geometry();
+    //qDebug() << s << from->geometry() << destinationWidget->geometry();
     destinationWidget->resize(from->size()); // needed because destination could
                                                // have been never displayed
     destinationWidget->render(&buffer, endPos);

@@ -21,8 +21,8 @@
 #include "WidgetTreeWidget.h"
 
 #include <QContextMenuEvent>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kiconeffect.h>
 #include <KLocalizedString>
 
@@ -96,7 +96,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
     ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(d->data) : d->data;
     if (selectable != d->data) {
-        //kDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
+        //qDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
         if (qobject_cast<QTabWidget*>(selectable->widget())) {
             // tab widget's page
             const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(selectable->widget());
@@ -107,7 +107,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 else
                     tabIndex = tabWidget->count();
             }
-            //kDebug() << tabIndex;
+            //qDebug() << tabIndex;
             if (tabIndex >= 0) {
                 if (forcedTabPageName.isEmpty()) {
                     itemName = tabWidget->tabText(tabIndex);
@@ -124,7 +124,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                     itemName = forcedTabPageName;
                 itemClass = xi18nc("Tab widget's page", "Tab Page");
                 d->customSortingKey = QString("tab%1").arg(tabIndex);
-                //kDebug() << "d->customSortingKey" << d->customSortingKey;
+                //qDebug() << "d->customSortingKey" << d->customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
                 itemIconName = koIconName("tabwidget_tab");
@@ -410,11 +410,11 @@ void WidgetTreeWidget::addItem(KFormDesigner::ObjectTreeItem *item)
 
     WidgetTreeWidgetItem::LoadTreeFlags flags;
     if (dynamic_cast<const InsertPageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "InsertPageCommand";
+        //qDebug() << "InsertPageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "undoing RemovePageCommand";
+        //qDebug() << "undoing RemovePageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     loadTree(item, parent, flags);
@@ -425,12 +425,12 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
     if (!item)
         return;
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "RemovePageCommand";
+        //qDebug() << "RemovePageCommand";
     }
     WidgetTreeWidgetItem *it = findItem(item->name());
 
     if (!it) {
-        kWarning() << "cannot remove item with name" << item->name();
+        qWarning() << "cannot remove item with name" << item->name();
         return;
     }
 
@@ -443,7 +443,7 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
 void WidgetTreeWidget::renameItem(const QByteArray &oldname, const QByteArray &newname)
 {
     if (findItemByFirstColumn(newname)) {
-        kWarning() << "item with name" << newname << "already exists, cannot rename";
+        qWarning() << "item with name" << newname << "already exists, cannot rename";
         return;
     }
     WidgetTreeWidgetItem *item = findItemByFirstColumn(oldname);
@@ -512,7 +512,7 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
     int forcedTabPageIndex;
     QString forcedTabPageName;
     if (removePageCommand) {
-        //kDebug() << "undoing RemovePageCommand - fixing item name and index";
+        //qDebug() << "undoing RemovePageCommand - fixing item name and index";
         forcedTabPageIndex = removePageCommand->pageIndex();
         forcedTabPageName = removePageCommand->pageName();
     }

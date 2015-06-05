@@ -25,8 +25,8 @@
 
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
+#include <QDebug>
 #include <QGridLayout>
 #include <QLabel>
 #include <QDialogButtonBox>
@@ -159,7 +159,7 @@ bool KexiNameDialog::canOverwrite()
         return true;
     }
     if (result == false) {
-        kWarning() << "Cannot load object schema data for" << widget()->nameText();
+        qWarning() << "Cannot load object schema data for" << widget()->nameText();
         return false;
     }
     if (widget()->originalNameText() == tmp_sdata.name()) {

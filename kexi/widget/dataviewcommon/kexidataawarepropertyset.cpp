@@ -25,6 +25,8 @@
 #include <core/KexiView.h>
 #include <db/tableviewdata.h>
 
+#include <QDebug>
+
 class KexiDataAwarePropertySet::Private
 {
 public:
@@ -97,7 +99,7 @@ void KexiDataAwarePropertySet::eraseAt(uint row)
 {
     KPropertySet *set = d->sets.value(row);
     if (!set) {
-        kWarning() << "No row to erase:" << row;
+        qWarning() << "No row to erase:" << row;
         return;
     }
     d->sets[row] = 0;
@@ -142,13 +144,13 @@ void KexiDataAwarePropertySet::set(uint row, KPropertySet* set, bool newOne)
 {
     if (!set) {
         Q_ASSERT_X(false, "KexiDataAwarePropertySet::set", "set == 0");
-        kWarning() << "set == 0";
+        qWarning() << "set == 0";
         return;
     }
     if (set->parent() && set->parent() != this) {
         const char *msg = "property set's parent must be NULL or this KexiDataAwarePropertySet";
         Q_ASSERT_X(false, "KexiDataAwarePropertySet::set", msg);
-        kWarning() << msg;
+        qWarning() << msg;
         return;
     }
     enlargeToFitRow(row);
@@ -216,11 +218,11 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &_rows)
     {
         cur_r = *r_it;
         if (prev_r >= 0) {
-//   kDebug() << "move " << prev_r+nud->removed-1 << ".." << cur_r-1 << " to " << prev_r+nud->removed-1 << ".." << cur_r-2;
+//   qDebug() << "move " << prev_r+nud->removed-1 << ".." << cur_r-1 << " to " << prev_r+nud->removed-1 << ".." << cur_r-2;
             int i = prev_r;
             KPropertySet *set = d->sets.at(i + num_removed);
             d->sets.remove(i + num_removed);
-            kDebug() << "property set " << i + num_removed << " deleted";
+            qDebug() << "property set " << i + num_removed << " deleted";
             delete set;
             num_removed++;
         }

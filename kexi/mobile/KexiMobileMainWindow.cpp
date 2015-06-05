@@ -26,6 +26,8 @@
 #include <QHBoxLayout>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QDebug>
+#include <QFileDialog>
 
 #include "KexiMobileWidget.h"
 #include "KexiMobileToolbar.h"
@@ -35,9 +37,6 @@
 
 #include <KexiIcon.h>
 
-#include <kdebug.h>
-
-#include <QFileDialog>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <KexiWindow.h>
@@ -192,7 +191,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 
 bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage)
 {
-    kDebug() << viewMode;
+    qDebug() << viewMode;
     //! @todo this can be more complex once we deliver ACLs...
     //1 Load the part
     //2 Return true if the part loads AND the part supports the view mode AND the viewmode is Data

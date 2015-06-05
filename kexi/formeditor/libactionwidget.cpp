@@ -25,8 +25,6 @@
 
 #include <KexiIcon.h>
 
-#include <kdebug.h>
-
 using namespace KFormDesigner;
 
 class LibActionWidget::Private

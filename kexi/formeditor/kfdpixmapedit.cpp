@@ -19,8 +19,6 @@
 
 #include "kfdpixmapedit.h"
 
-#include <kdebug.h>
-
 #include <KProperty>
 #include "form.h"
 #include "objecttree.h"

@@ -20,9 +20,9 @@
 #include "KexiDataSourceComboBox.h"
 #include <kexiproject.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
+#include <QDebug>
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
@@ -141,7 +141,7 @@ void KexiSourceSelector::setConnectionData(QDomElement c)
 
 QDomElement KexiSourceSelector::connectionData()
 {
-    kDebug();
+    qDebug();
     QDomDocument dd;
     QDomElement conndata = dd.createElement("connection");
 

@@ -19,7 +19,6 @@
 
 #include "kexiqueryparameters.h"
 
-#include <kdebug.h>
 #include <kinputdialog.h>
 #include <knumvalidator.h>
 #include <KLocalizedString>
@@ -28,6 +27,8 @@
 #include <db/utils.h>
 #include <kexi_global.h>
 #include "utils/kexidatetimeformatter.h"
+
+#include <QDebug>
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
@@ -131,7 +132,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
             values.append(QByteArray());
         }
         default:
-            kWarning() << "unsupported type " << KexiDB::Field::typeName((*it).type)
+            qWarning() << "unsupported type " << KexiDB::Field::typeName((*it).type)
                 << "for parameter \"" << (*it).message << "\" - aborting query execution!";
             return QList<QVariant>();
         }

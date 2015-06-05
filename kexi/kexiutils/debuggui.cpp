@@ -28,9 +28,9 @@
 #include <QHeaderView>
 #include <QPushButton>
 #include <QTabWidget>
+#include <QDebug>
 
 #include <kguiitem.h>
-#include <kdebug.h>
 
 static DebugWindow* debugWindow = 0;
 static QTabWidget* debugWindowTab = 0;
@@ -44,7 +44,7 @@ static void addKexiDBDebug(const QString& text)
         return;
     if (QThread::currentThread() != debugWindowTab->thread()) {
 //! @todo send debug using async. signal
-        kWarning() << "Debugging from different thread not supported.";
+        qWarning() << "Debugging from different thread not supported.";
         return;
     }
     if (!kexiDBDebugPage) {
@@ -135,12 +135,12 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
     // compute availableNestingLevels
     QTreeWidgetItem * lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
         kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
-    //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
+    //qDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
     while (lastItem) {
         lastItem = lastItem->parent();
         availableNestingLevels++;
     }
-    //kDebug() << "availableNestingLevels: " << availableNestingLevels;
+    //qDebug() << "availableNestingLevels: " << availableNestingLevels;
     //go up (availableNestingLevels-levelsToGoUp) levels
     lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
         kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
@@ -149,7 +149,7 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         lastItem = lastItem->parent();
         levelsToGoUp--;
     }
-    //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
+    //qDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
     if (lastItem) {
         if (lastItem->childCount() > 0) {
                li = new QTreeWidgetItem(lastItem, lastItem->child(lastItem->childCount()-1));   //child, after
@@ -163,7 +163,7 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         while (lastItem && lastItem->parent()) {
             lastItem = lastItem->parent();
         }
-        //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
+        //qDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
         if (lastItem && lastItem->parent())
              li = new QTreeWidgetItem(lastItem->parent(), lastItem);   //after
         else if (!lastItem)

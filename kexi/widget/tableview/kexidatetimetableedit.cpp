@@ -25,8 +25,7 @@
 #include <QPainter>
 #include <QVariant>
 #include <QClipboard>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <kexiutils/utils.h>
 
@@ -37,7 +36,7 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiDB::TableViewColumn &column, QW
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-    kDebug() << KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter);
+    qDebug() << KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter);
     m_lineedit->setInputMask(
         KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter));
 }
@@ -111,7 +110,7 @@ bool KexiDateTimeTableEdit::valueIsValid()
 
 bool KexiDateTimeTableEdit::valueChanged()
 {
-    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    //qDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 

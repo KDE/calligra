@@ -30,9 +30,9 @@
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 
-#include <kdebug.h>
 #include <kconfiggroup.h>
 
+#include <QDebug>
 #include <QMimeDatabase>
 
 // The as version() published versionnumber of this kross-module.
@@ -54,13 +54,13 @@ using namespace Scripting;
 KexiDBModule::KexiDBModule(QObject* parent)
         : QObject(parent)
 {
-    kDebug();
+    qDebug();
     setObjectName("KexiDB");
 }
 
 KexiDBModule::~KexiDBModule()
 {
-    kDebug();
+    qDebug();
 }
 
 int KexiDBModule::version()
@@ -77,11 +77,11 @@ QObject* KexiDBModule::driver(const QString& drivername)
 {
     QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
     if (! driver) {
-        kWarning() << "No such driver '%1'" << drivername;
+        qWarning() << "No such driver '%1'" << drivername;
         return 0;
     }
     if (driver->error()) {
-        kWarning() << "Error for drivername" << drivername << driver->errorMsg();
+        qWarning() << "Error for drivername" << drivername << driver->errorMsg();
         return 0;
     }
     return new KexiDBDriver(this, driver);
@@ -126,7 +126,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
             }
         }
         if (groupkey.isNull()) {
-            kDebug() << "No groupkey, filename=" << filename;
+            qDebug() << "No groupkey, filename=" << filename;
             return 0;
         }
 
@@ -162,7 +162,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
     QString const drivername = m_drivermanager.lookupByMime(mimename);
     if (drivername.isEmpty()) {
-        kDebug() << "No driver, filename=" << filename << "mimename=" << mimename;
+        qDebug() << "No driver, filename=" << filename << "mimename=" << mimename;
         return 0;
     }
 

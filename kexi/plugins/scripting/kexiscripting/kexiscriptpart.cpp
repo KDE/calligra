@@ -37,9 +37,9 @@
 #include <KexiIcon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <KSharedConfig>
 
+#include <QDebug>
 
 /// \internal
 class KexiScriptPart::Private
@@ -92,7 +92,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
     Q_UNUSED(sender);
     if (!item) {
-        kWarning() << "Invalid item.";
+        qWarning() << "Invalid item.";
         return false;
     }
 
@@ -102,7 +102,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
     KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>(
                                      createView(dialog, dialog, *item, Kexi::DesignViewMode));
     if (! view) {
-        kWarning() << "Failed to create a view.";
+        qWarning() << "Failed to create a view.";
         return false;
     }
 
@@ -140,7 +140,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 void KexiScriptPart::initPartActions()
 {
-    kDebug() << ".............";
+    qDebug() << ".............";
 #if 0
     if (m_mainWin) {
         // At this stage the KexiPart::Part::m_mainWin should be defined, so
@@ -185,7 +185,7 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-    kDebug();
+    qDebug();
     createSharedAction(Kexi::DesignViewMode, xi18n("Configure Editor..."),
                        koIconName("configure"), QKeySequence(), "script_config_editor");
 }
@@ -198,7 +198,7 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 {
     Q_UNUSED(window);
     Q_UNUSED(staticObjectArgs);
-    kDebug() << "............. createView";
+    qDebug() << "............. createView";
     QString partname = item.name();
     if (! partname.isNull()) {
         Kross::Action *action = d->action(partname);

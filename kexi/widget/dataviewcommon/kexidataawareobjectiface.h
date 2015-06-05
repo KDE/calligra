@@ -35,8 +35,7 @@
 
 #include <QPointer>
 #include <QList>
-
-#include <kdebug.h>
+#include <QDebug>
 
 class QHeaderView;
 class QScrollBar;
@@ -996,7 +995,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
     if (!m_data)
-        kDebug() << "KexiDataAwareObjectInterface: No data assigned!";
+        qDebug() << "KexiDataAwareObjectInterface: No data assigned!";
     return m_data != 0;
 }
 
@@ -1004,12 +1003,12 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
     KexiDB::RecordData *record = m_data->at(pos);
     if (!record)
-        kDebug() << "pos:" << pos << "- NO ITEM!!";
+        qDebug() << "pos:" << pos << "- NO ITEM!!";
     else {
-        /*  kDebug() << "record:" << row;
+        /*  qDebug() << "record:" << row;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
-              kDebug() << i<<": " << (*it).toString();*/
+              qDebug() << i<<": " << (*it).toString();*/
     }
     return record;
 }

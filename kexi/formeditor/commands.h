@@ -31,7 +31,7 @@
 
 #include <kundo2command.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 class QPoint;
 class QStringList;
@@ -71,7 +71,7 @@ protected:
     bool m_blockRedoOnce; //!< Used to block redo() once
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c); 
 
 //! Command is used when changing a property for one or more widgets. 
@@ -128,7 +128,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c); 
 
 //! Command used when moving multiples widgets at the same time, while holding Ctrl or Shift.
@@ -162,7 +162,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &c); 
 
 //! Command used when an "Align Widgets position" action is activated.
@@ -190,7 +190,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AlignWidgetsCommand &c); 
 
 //! Command used when an "Adjust Widgets Size" action is activated.
@@ -229,7 +229,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AdjustSizeCommand &c); 
 
 //! Command used when switching the layout of a container.
@@ -257,7 +257,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c); 
 
 //! Command used when inserting a widget using toolbar or menu. 
@@ -300,7 +300,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c);
 
 //! @todo add CopyWidgetCommand
@@ -352,7 +352,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PasteWidgetCommand &c);
 
 //! Command used when deleting widgets using the "Delete" menu item.
@@ -378,7 +378,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DeleteWidgetCommand &c);
 
 //! Command used when duplicating widgets.
@@ -405,7 +405,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DuplicateWidgetCommand &c);
 
 //! Command used when cutting widgets. 
@@ -431,7 +431,7 @@ protected:
     Private * const d2;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CutWidgetCommand &c);
 
 //! Command that holds several PropertyCommand subcommands.
@@ -455,7 +455,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c);
 
 //! Command is used when inline text is edited for a single widget. 
@@ -493,7 +493,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InlineTextEditingCommand &c); 
 
 class KFORMEDITOR_EXPORT InsertPageCommand : public Command
@@ -522,7 +522,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertPageCommand &c);
 
 class KFORMEDITOR_EXPORT RemovePageCommand : public Command
@@ -551,7 +551,7 @@ protected:
     Private * const d;
 };
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const RemovePageCommand &c);
 
 }

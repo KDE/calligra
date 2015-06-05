@@ -22,8 +22,8 @@
 #include "KexiMobileNavigator.h"
 
 #include <core/KexiWindow.h>
-#include <QDebug>
 
+#include <QDebug>
 
 KexiMobileWidget::KexiMobileWidget(KexiProject* p) : m_project(p), m_navWidget(0), m_objectPage(0)
 {
@@ -55,7 +55,7 @@ void KexiMobileWidget::databaseOpened(KexiProject *project)
     m_project = project;
     if (project && (project->open() == true)) {
         m_navWidget->setProject(project);
-	qDebug() << "Project opened";
+        qDebug() << "Project opened";
     } else {
       qWarning() << "Project not opened";
       if (project) {

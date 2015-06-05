@@ -33,7 +33,6 @@
 #include <QLineEdit>
 
 #include <kguiitem.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include "kexirecordnavigator.h"

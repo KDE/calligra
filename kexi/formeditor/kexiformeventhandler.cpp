@@ -21,8 +21,8 @@
 
 #include <QWidget>
 #include <QAction>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kactioncollection.h>
 
 #include <db/tableviewdata.h>
@@ -103,7 +103,7 @@ KexiFormEventAction::~KexiFormEventAction()
 
 void KexiFormEventAction::slotTrigger()
 {
-    kDebug() << d->actionName << d->objectName;
+    qDebug() << d->actionName << d->objectName;
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
@@ -212,7 +212,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
         KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
         if (!ok)
             continue;
-        kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
+        qDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
         if (actionType == "kaction" || actionType == "currentForm") {
             QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
                                   actionArg);

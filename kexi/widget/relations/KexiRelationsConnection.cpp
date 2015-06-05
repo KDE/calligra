@@ -22,8 +22,7 @@
 #include <QColor>
 #include <QPolygon>
 #include <QScrollBar>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <math.h>
 
@@ -58,13 +57,13 @@ KexiRelationsConnection::KexiRelationsConnection(
         : d(new Private)
 {
     d->scrollArea = scrollArea;
-// kDebug();
+// qDebug();
 
     d->masterTable = masterTbl;
     if (!masterTbl || !detailsTbl) {
-        kDebug() << "expect sig11";
-        kDebug() << masterTbl;
-        kDebug() << detailsTbl;
+        qDebug() << "expect sig11";
+        qDebug() << masterTbl;
+        qDebug() << detailsTbl;
     }
 
     d->detailsTable = detailsTbl;
@@ -261,23 +260,23 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
     float my = y2 - y1;
     float mag = sqrt(mx * mx + my * my);
     float u = (((p.x() - x1) * (x2 - x1)) + ((p.y() - y1) * (y2 - y1))) / (mag * mag);
-    kDebug() << "u: " << u;
+    qDebug() << "u: " << u;
 
     float iX = x1 + u * (x2 - x1);
     float iY = y1 + u * (y2 - y1);
-    kDebug() << "px: " << p.x();
-    kDebug() << "py: " << p.y();
-    kDebug() << "ix: " << iX;
-    kDebug() << "iy: " << iY;
+    qDebug() << "px: " << p.x();
+    qDebug() << "py: " << p.y();
+    qDebug() << "ix: " << iX;
+    qDebug() << "iy: " << iY;
 
     float dX = iX - p.x();
     float dY = iY - p.y();
 
-    kDebug() << "dx: " << dX;
-    kDebug() << "dy: " << dY;
+    qDebug() << "dx: " << dX;
+    qDebug() << "dy: " << dY;
 
     float distance = sqrt(dX * dX + dY * dY);
-    kDebug() << "distance: " << distance;
+    qDebug() << "distance: " << distance;
 
     if (distance <= tolerance)
         return true;

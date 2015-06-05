@@ -20,7 +20,6 @@
 
 #include <QStyle>
 
-#include <kdebug.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
 

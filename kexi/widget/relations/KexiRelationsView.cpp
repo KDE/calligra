@@ -27,9 +27,9 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QPushButton>
+#include <QDebug>
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <db/connection.h>
@@ -210,7 +210,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         return;
     if (!d->scrollArea->tableContainer(t)) {
         KexiRelationsTableContainer *c = d->scrollArea->addTableContainer(t, rect);
-        kDebug() << "adding table" << t->name();
+        qDebug() << "adding table" << t->name();
         if (!c)
             return;
         connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&,QStringList)),
@@ -226,7 +226,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
     }
     if (i < count) {
         int oi = d->tableCombo->currentIndex();
-        kDebug() << "removing a table from the combo box";
+        qDebug() << "removing a table from the combo box";
         d->tableCombo->removeItem(i);
         if (d->tableCombo->count() > 0) {
             if (oi >= d->tableCombo->count()) {

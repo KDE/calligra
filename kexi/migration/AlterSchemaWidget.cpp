@@ -23,8 +23,8 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <db/tableschema.h>
@@ -113,7 +113,7 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(xi18n("Column %1", m_selectedColumn + 1));
     if (m_schema && m_selectedColumn < int(m_schema->fieldCount()) && m_schema->field(m_selectedColumn)) {
-        kDebug() << m_schema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_schema->field(m_selectedColumn)->typeName());
+        qDebug() << m_schema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_schema->field(m_selectedColumn)->typeName());
         m_columnType->setCurrentIndex(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName()));
 
         //Only set the pkey check enabled if the field type is integer
