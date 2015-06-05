@@ -237,10 +237,7 @@ public:
     void createLayout();
     void updateSnapShot();
     void updateLayout();
-    void slotTimeLineChanged(qreal);
-    void slotTimeLineFinished();
     void updateStyleSheet();
-    void tryClickCloseMessage();
 };
 
 KMessageWidgetPrivate::KMessageWidgetPrivate()
@@ -490,37 +487,6 @@ void KMessageWidgetPrivate::updateSnapShot()
     content->render(&contentSnapShot, QPoint(), QRegion(), QWidget::DrawChildren);
 }
 
-void KMessageWidgetPrivate::slotTimeLineChanged(qreal value)
-{
-    if (!contentsWidget) {
-        q->setFixedHeight(qMin(value * 2, qreal(1.0)) * content->height());
-    }
-    q->update();
-}
-
-void KMessageWidgetPrivate::slotTimeLineFinished()
-{
-    if (timeLine->direction() == QTimeLine::Forward) {
-        // Show
-        content->move(0, 0);
-        content->updateCalloutPointerPosition();
-        if (resizeToContentsOnTimeLineFinished) {
-            resizeToContentsOnTimeLineFinished = false;
-            content->resize(q->size());
-            updateStyleSheet(); // needed because margins could be changed
-        }
-        //q->setFixedHeight(QWIDGETSIZE_MAX);
-        if (defaultButton) {
-            defaultButton->setFocus();
-        }
-        emit q->animatedShowFinished();
-    } else {
-        // Hide
-        q->hide();
-        emit q->animatedHideFinished();
-    }
-}
-
 void KMessageWidgetPrivate::updateStyleSheet()
 {
     KColorScheme scheme(QPalette::Active, colorSet);
@@ -574,13 +540,6 @@ void KMessageWidgetPrivate::updateStyleSheet()
     );
     closeButton->setStyle(QApplication::style()); // clear stylesheets style from this button
 #endif
-}
-
-void KMessageWidgetPrivate::tryClickCloseMessage()
-{
-    if (clickClosesMessage) {
-        QTimer::singleShot(100, q, SLOT(animatedHide()));
-    }
 }
 
 //---------------------------------------------------------------------
@@ -718,7 +677,7 @@ bool KMessageWidget::event(QEvent* event)
     }
     else if (event->type() == QEvent::MouseButtonPress) {
         if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
-            d->tryClickCloseMessage();
+            tryClickCloseMessage();
         }
     }
     return QFrame::event(event);
@@ -899,4 +858,42 @@ void KMessageWidget::resizeToContents()
     d->resizeToContentsOnTimeLineFinished = true; // try to resize later too if animation in progress
     (void)sizeHint(); // to update d->content->sizeHint()
     setFixedSize(d->content->sizeHint());
+}
+
+void KMessageWidget::slotTimeLineChanged(qreal value)
+{
+    if (!d->contentsWidget) {
+        setFixedHeight(qMin(value * 2, qreal(1.0)) * d->content->height());
+    }
+    update();
+}
+
+void KMessageWidget::slotTimeLineFinished()
+{
+    if (d->timeLine->direction() == QTimeLine::Forward) {
+        // Show
+        d->content->move(0, 0);
+        d->content->updateCalloutPointerPosition();
+        if (d->resizeToContentsOnTimeLineFinished) {
+            d->resizeToContentsOnTimeLineFinished = false;
+            d->content->resize(size());
+            d->updateStyleSheet(); // needed because margins could be changed
+        }
+        //q->setFixedHeight(QWIDGETSIZE_MAX);
+        if (d->defaultButton) {
+            d->defaultButton->setFocus();
+        }
+        emit animatedShowFinished();
+    } else {
+        // Hide
+        hide();
+        emit animatedHideFinished();
+    }
+}
+
+void KMessageWidget::tryClickCloseMessage()
+{
+    if (d->clickClosesMessage) {
+        QTimer::singleShot(100, this, SLOT(animatedHide()));
+    }
 }

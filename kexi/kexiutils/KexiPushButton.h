@@ -25,8 +25,6 @@
 #include <QPushButton>
 #include <kexiutils/utils.h>
 
-class KexiPushButtonPrivate;
-
 /*!
  * \short A PushButton widget with hyperlinks support
  * \author Oleg Kukharchuk <oleg.kuh@gmail.com>
@@ -99,11 +97,15 @@ public:
     void setRemoteHyperlink(bool remote);
     bool isRemoteHyperlink() const;
 
+protected Q_SLOTS:
+    void slotClicked();
+
 protected:
     void setLocalBasePath(const QString &basePath);
+
 private:
-    friend class KexiPushButtonPrivate;
-    KexiPushButtonPrivate * const d;
-    Q_PRIVATE_SLOT(d, void slotClicked())
+    class Private;
+    friend class Private;
+    Private * const d;
 };
 #endif // KEXIPUSHBUTTON_H
