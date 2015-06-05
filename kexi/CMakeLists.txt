@@ -8,7 +8,7 @@ option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
-option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
+option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires KDB_DEBUG_GUI to be set too)" OFF)
 option(KEXI_SHOW_UNFINISHED, "Show unfinished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
