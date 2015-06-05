@@ -28,6 +28,8 @@
 #include <calligraversion.h>
 #include "kexicore_export.h"
 
+class QString;
+
 #define KEXI_APP_NAME "Kexi"
 #define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
 #define KEXI_VERSION_MAJOR CALLIGRA_VERSION_MAJOR
