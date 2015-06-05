@@ -22,8 +22,8 @@
 
 #include "kexiutils_export.h"
 
-#include <kcategorydrawer.h>
-#include <kcategorizedview.h>
+#include <KCategoryDrawer>
+#include <KCategorizedView>
 
 class QAbstractItemModel;
 

@@ -54,8 +54,9 @@ target_link_libraries(kexiutils
         KF5::KIOWidgets #for KRun...
         KF5::IconThemes
         KF5::WidgetsAddons
-        KF5::ConfigWidgets # KStandardAction
+        KF5::ConfigWidgets # KStandardAction KColorScheme
         KF5::I18n
+        KF5::ItemViews # KCategorizedView KCategoryDrawer
         KDb
 )
 #target_link_libraries(kexiutils LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
