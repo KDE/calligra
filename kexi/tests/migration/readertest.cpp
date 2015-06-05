@@ -5,6 +5,7 @@
 #include <kcmdlineargs.h>
 
 #include <QDebug>
+#include <KAboutData>
 
 int main(int argc, char *argv[])
 {
