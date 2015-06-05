@@ -60,6 +60,8 @@
 #include <QItemDelegate>
 #include <QAbstractProxyModel>
 #include <QPainter>
+#include <QPointer>
+
 #include "KexiCompleter.h"
 #include "private/KexiAbstractItemModel_p.h"
 
