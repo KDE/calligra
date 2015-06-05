@@ -32,10 +32,8 @@
 #include <QMenu>
 #include <QDialog>
 
-#include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <KSharedConfig>
