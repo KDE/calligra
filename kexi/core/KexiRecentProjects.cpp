@@ -26,8 +26,8 @@
 #include "kexidbconnectionset.h"
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
+#include <QDebug>
 #include <QDir>
 
 #include <unistd.h>
@@ -64,7 +64,7 @@ void KexiRecentProjects::Private::load()
         return;
     loaded = true;
 #ifdef KexiRecentProjects_DEBUG
-    kDebug() << "wait..";
+    qDebug() << "wait..";
     sleep(2);
 #endif
     path = KStandardDirs::locateLocal("data", "kexi/recent_projects/",
@@ -77,16 +77,16 @@ void KexiRecentProjects::Private::load()
         QStringList() << QLatin1String("*.kexis"),
         QDir::Files | QDir::NoSymLinks | QDir::Readable | QDir::CaseSensitive);
 #ifdef KexiRecentProjects_DEBUG
-    kDebug() << shortcuts;
+    qDebug() << shortcuts;
 #endif
     foreach (const QString& shortcutPath, shortcuts) {
 #ifdef KexiRecentProjects_DEBUG
-        kDebug() << shortcutPath;
+        qDebug() << shortcutPath;
 #endif
         KexiProjectData *data = new KexiProjectData;
         bool ok = data->load(path + shortcutPath);
 #ifdef KexiRecentProjects_DEBUG
-        kDebug() << "result:" << ok;
+        qDebug() << "result:" << ok;
 #endif
         if (ok) {
             add(data, path + shortcutPath, true /*deleteDuplicate*/);
@@ -107,7 +107,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
                                       const QString& existingShortcutPath,
                                       bool deleteDuplicate)
 {
-    //kDebug() << *newData;
+    //qDebug() << *newData;
     KexiProjectData::List list(q->list()); // also loads it
     if (list.contains(newData))
         return true;
@@ -115,9 +115,9 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
     // find similar project data
     QString newDataKey = key(*newData);
 #ifdef KexiRecentProjects_DEBUG
-    kDebug() << "path:" << path << "newDataKey:" << newDataKey;
-    kDebug() << "projectsForKey.keys():" << projectsForKey.keys();
-    kDebug() << "shortcutPaths.values():" << shortcutPaths.values();
+    qDebug() << "path:" << path << "newDataKey:" << newDataKey;
+    qDebug() << "projectsForKey.keys():" << projectsForKey.keys();
+    qDebug() << "shortcutPaths.values():" << shortcutPaths.values();
 #endif
     KexiProjectData* existingData = projectsForKey.value(newDataKey);
     QString shortcutPath = existingShortcutPath;
@@ -125,7 +125,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
         if (q->takeProjectDataInternal(existingData)) {
             // this data will be replaced by similar
 #ifdef KexiRecentProjects_DEBUG
-            kDebug() << "Existing data replaced by new similar:"
+            qDebug() << "Existing data replaced by new similar:"
                         << "\nexisting:" << *existingData
                         << "\nnew:" << *newData;
 #endif
@@ -134,10 +134,10 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 
                 delete existingData;
 #ifdef KexiRecentProjects_DEBUG
-                kDebug() << "Removing unnecessary file shortcut:" << fileToRemove;
+                qDebug() << "Removing unnecessary file shortcut:" << fileToRemove;
 #endif
                 if (!QFile::remove(fileToRemove)) {
-                    kWarning() << "Failed to remove unnecessary recent file shortuct:"
+                    qWarning() << "Failed to remove unnecessary recent file shortuct:"
                                << fileToRemove;
                 }
             }
@@ -156,17 +156,17 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
             // the new data is older than existing
             // this data is replaced by similar
 #ifdef KexiRecentProjects_DEBUG
-            kDebug() << "New data is older than existing - removing new:"
+            qDebug() << "New data is older than existing - removing new:"
                         << "\nexisting:" << *existingData
                         << "\nnew:" << *newData;
 #endif
             if (deleteDuplicate) {
                 delete newData;
 #ifdef KexiRecentProjects_DEBUG
-                kDebug() << "Removing unnecessary file shortcut:" << existingShortcutPath;
+                qDebug() << "Removing unnecessary file shortcut:" << existingShortcutPath;
 #endif
                 if (!QFile::remove(existingShortcutPath)) {
-                    kWarning() << "Failed to remove unnecessary recent file shortuct:"
+                    qWarning() << "Failed to remove unnecessary recent file shortuct:"
                                << existingShortcutPath;
                 }
             }
@@ -177,7 +177,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
         }
         else {
 #ifdef KexiRecentProjects_DEBUG
-            kDebug() << "New data:" << *newData;
+            qDebug() << "New data:" << *newData;
 #endif
         }
         if (shortcutPath.isEmpty()) {
@@ -211,8 +211,8 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
     q->addProjectDataInternal(newData);
 
 #ifdef KexiRecentProjects_DEBUG
-    kDebug() << "existingShortcutPath:" << existingShortcutPath;
-    kDebug() << "shortcutPath:" << shortcutPath;
+    qDebug() << "existingShortcutPath:" << existingShortcutPath;
+    qDebug() << "shortcutPath:" << shortcutPath;
 #endif
     bool result = true;
     if (existingShortcutPath.isEmpty()) {
@@ -220,7 +220,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
                               );
     }
 #ifdef KexiRecentProjects_DEBUG
-    kDebug() << "result:" << result;
+    qDebug() << "result:" << result;
 #endif
     return result;
 }

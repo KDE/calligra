@@ -25,8 +25,8 @@
 #include <QVariant>
 #include <QDateTime>
 #include <QList>
+#include <QDebug>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <kexiutils/identifier.h>
@@ -89,7 +89,7 @@ QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 
 bool MDBMigrate::drv_connect()
 {
-    //kDebug() << "mdb_open:";
+    //qDebug() << "mdb_open:";
     KexiDB::ConnectionData *data = this->data()->source;
 
     // mdb_open takes a char*, not const char*, hence this nonsense.
@@ -98,7 +98,7 @@ bool MDBMigrate::drv_connect()
     delete [] filename;
 
     if (!m_mdb) {
-        kWarning() << "mdb_open failed.";
+        qWarning() << "mdb_open failed.";
         return false;
     }
 
@@ -107,7 +107,7 @@ bool MDBMigrate::drv_connect()
         const QByteArray encoding(propertyValue(nonUnicodePropId).toByteArray());
 
         mdb_set_encoding(m_mdb, encoding.constData());
-        //kDebug() << "non-unicode encoding set to" << encoding;
+        //qDebug() << "non-unicode encoding set to" << encoding;
     }
 
     // Supports setting source encoding
@@ -125,7 +125,7 @@ MdbTableDef* MDBMigrate::getTableDef(const QString& tableName)
 {
     MdbTableDef *tableDef = 0;
 
-    //kDebug() << tableName;
+    //qDebug() << tableName;
     
     // Look through each entry in the catalog...
     for (unsigned int i = 0; i < m_mdb->num_catalog; i++) {
@@ -151,11 +151,11 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
     // Get the column meta-data
     MdbTableDef *tableDef = getTableDef(originalName);
     if (!tableDef) {
-        kWarning() << "couldn't find table" << originalName;
+        qWarning() << "couldn't find table" << originalName;
         return false;
     }
     mdb_read_columns(tableDef);
-    //kDebug() << "#cols = " << tableDef->num_cols;
+    //qDebug() << "#cols = " << tableDef->num_cols;
 
     /*! Convert column data to Kexi TableSchema
         Nice mix of terminology here, MDBTools has columns, Kexi has fields. */
@@ -164,7 +164,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
 
         // Field name
         QString fldName = QString::fromUtf8(col->name);
-        //kDebug() << "got column" << fldName << col->name;
+        //qDebug() << "got column" << fldName << col->name;
 
         QString fldID(KexiUtils::stringToIdentifier(fldName));
 
@@ -172,7 +172,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(col->col_type));
 
-        //kDebug() << "size" << col->col_size << "type" << type(col->col_type);
+        //qDebug() << "size" << col->col_size << "type" << type(col->col_type);
         fld->setCaption(fldName);
         tableSchema.addField(fld);
     }
@@ -189,7 +189,7 @@ bool MDBMigrate::drv_tableNames(QStringList& tableNames)
 {
     // Try to read the catalog of database objects
     if (!mdb_read_catalog(m_mdb, MDB_ANY)) {
-        kWarning() << "couldn't read catalog";
+        qWarning() << "couldn't read catalog";
         return false;
     }
 
@@ -202,7 +202,7 @@ bool MDBMigrate::drv_tableNames(QStringList& tableNames)
             QString dbObjectName = QString::fromUtf8(dbObject->object_name);
 
             if (!dbObjectName.startsWith("MSys")) {
-                //kDebug() << dbObjectName;
+                //qDebug() << dbObjectName;
                 tableNames << dbObjectName;
             }
         }
@@ -246,7 +246,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
 {
     MdbTableDef *tableDef = getTableDef(srcTable);
     if (!tableDef) {
-        kWarning() << srcTable;
+        qWarning() << srcTable;
         return false;
     }
 
@@ -273,7 +273,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
 
     //! Copy each row into vals
     mdb_rewind_table(tableDef);
-    //kDebug() << "Fetching" << tableDef->num_rows << "records";
+    //qDebug() << "Fetching" << tableDef->num_rows << "records";
 
 #ifdef KEXI_MIGRATION_MAX_ROWS_TO_IMPORT
     qulonglong rows = 0;
@@ -282,7 +282,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
     bool ok = true;
     while (mdb_fetch_row(tableDef)) {
         QList<QVariant> vals;
-//    kDebug() << kdLoc << "Copying " << tableDef->num_cols << " cols";
+//    qDebug() << kdLoc << "Copying " << tableDef->num_cols << " cols";
         for (unsigned int i = 0; i < tableDef->num_cols; i++) {
             MdbColumn *col = (MdbColumn*) g_ptr_array_index(tableDef->columns, i);
 
@@ -402,7 +402,7 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
 
     //! @todo: MDB index order (asc, desc)
 
-    kDebug() << "num_keys" << idx->num_keys;
+    qDebug() << "num_keys" << idx->num_keys;
 
     //! Create the KexiDB IndexSchema ...
     QVector<int> key_col_num(idx->num_keys);
@@ -412,12 +412,12 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
 
     for (unsigned int i = 0; i < idx->num_keys; i++) {
         key_col_num[i] = idx->key_col_num[i];
-        kDebug() << "key" << i + 1 << " col " << key_col_num[i]
+        qDebug() << "key" << i + 1 << " col " << key_col_num[i]
                  << table->field(idx->key_col_num[i] - 1)->name();
         p_idx->addField(table->field(idx->key_col_num[i] - 1));
     }
 
-    //kDebug() << p_idx->debugString();
+    //qDebug() << p_idx->debugString();
 
     // ... and add it to the table definition
     // but only if the PK has only one field, so far :o(
@@ -438,7 +438,7 @@ bool MDBMigrate::drv_getTableSize(const QString& table, qulonglong& size)
     // Get the column meta-data, which contains the table size
     MdbTableDef *tableDef = getTableDef(table);
     if (!tableDef) {
-        kWarning() << "couldn't find table " << table;
+        qWarning() << "couldn't find table " << table;
         return false;
     }
     size = (qulonglong)(tableDef->num_rows);

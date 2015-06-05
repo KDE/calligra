@@ -20,7 +20,7 @@
 
 #include "kexiquerypart.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -68,7 +68,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 {
     Q_UNUSED(item);
     Q_UNUSED(window);
-    //kDebug();
+    //qDebug();
 
     KexiView* view = 0;
     if (viewMode == Kexi::DataViewMode) {

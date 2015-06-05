@@ -26,6 +26,8 @@
 #include "KexiTableScrollArea.h"
 #include "kexi.h"
 
+#include <QDebug>
+
 KexiComboBoxBase::KexiComboBoxBase()
 {
     m_internalEditorValueChanged = false; //user has text or other value inside editor
@@ -219,7 +221,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     if (column() && column()->isRelatedDataEditable())
         return str; //new value entered and that's allowed
 
-    kWarning() << "no related record found, ID will be painted!";
+    qWarning() << "no related record found, ID will be painted!";
     if (allowNulls)
         return QString();
     return str; //for sanity but it's weird to show id to the user
@@ -307,7 +309,7 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
     if (!popup() || !lookupFieldSchema)
         return QVariant();
     const int visibleColumn = visibleColumnIndex();
-    //kDebug() << "visibleColumn" << visibleColumn;
+    //qDebug() << "visibleColumn" << visibleColumn;
     if (-1 == visibleColumn)
         return QVariant();
     KexiDB::RecordData *record = popup()->tableView()->selectedItem();
@@ -364,19 +366,19 @@ bool KexiComboBoxBase::valueIsEmpty()
 
 void KexiComboBoxBase::showPopup()
 {
-    //kDebug(44010);
+    //qDebug();
     createPopup(true);
 }
 
 void KexiComboBoxBase::createPopup(bool show)
 {
-    //kDebug() << show << field() << popup() << m_updatePopupSelectionOnShow;
+    //qDebug() << show << field() << popup() << m_updatePopupSelectionOnShow;
     if (!field())
         return;
     m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
-    //kDebug() << "widgetToFocus:" << widgetToFocus;
+    //qDebug() << "widgetToFocus:" << widgetToFocus;
 
     if (m_reinstantiatePopupOnShow) {
         QWidget *oldPopup = popup();
@@ -411,13 +413,13 @@ void KexiComboBoxBase::createPopup(bool show)
 //! todo alter the position to fit the popup within screen boundaries
         popup()->hide();
         popup()->move(posMappedToGlobal + QPoint(0, thisWidget->height()));
-        //kDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
+        //qDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
         //to avoid flickering: first resize to 0-height, then show and resize back to prev. height
         const int w = popupWidthHint();
         popup()->resize(w, 0);
         if (show) {
             popup()->show();
-            //kDebug(44010) << "SHOW!!!";
+            //qDebug() << "SHOW!!!";
         }
         popup()->updateSize(w);
         if (m_updatePopupSelectionOnShow) {
@@ -494,7 +496,7 @@ void KexiComboBoxBase::acceptPopupSelection()
 
 void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
 {
-    //kDebug(44010) << "m_visibleValue=" << m_visibleValue;
+    //qDebug() << "m_visibleValue=" << m_visibleValue;
 
     QVariant valueToSet;
     KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
@@ -628,11 +630,11 @@ void KexiComboBoxBase::undoChanges()
 {
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (lookupFieldSchema) {
-//  kDebug() << "m_visibleValue BEFORE=" << m_visibleValue;
+//  qDebug() << "m_visibleValue BEFORE=" << m_visibleValue;
         if (popup())
             popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
         m_visibleValue = visibleValueForLookupField();
-//  kDebug() << "m_visibleValue AFTER=" << m_visibleValue;
+//  qDebug() << "m_visibleValue AFTER=" << m_visibleValue;
         setValueOrTextInInternalEditor(m_visibleValue);
     }
 }

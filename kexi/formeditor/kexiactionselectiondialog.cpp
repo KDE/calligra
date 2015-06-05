@@ -30,7 +30,7 @@
 #include <KexiMainWindowIface.h>
 #include <KexiIcon.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QLabel>
 #include <QPushButton>
@@ -117,7 +117,7 @@ QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, Q
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-  //kDebug() << "Selecting action:" << actionName;
+  //qDebug() << "Selecting action:" << actionName;
   QTreeWidgetItem *itm = itemForAction(actionName);
   if (itm) {
     setCurrentItem(itm);
@@ -140,12 +140,12 @@ void KActionsListViewBase::init()
     QList<QAction*> sharedActions(KexiMainWindowIface::global()->allActions());
     const Kexi::ActionCategories *acat = Kexi::actionCategories();
     foreach(QAction *action, sharedActions) {
-//   kDebug() << (*it)->name() << " " << (*it)->text();
+//   qDebug() << (*it)->name() << " " << (*it)->text();
         //! @todo group actions
         //! @todo: store QAction * here?
         const int actionCategories = acat->actionCategories(action->objectName().toLatin1());
         if (actionCategories == -1) {
-            kWarning() << "no category declared for action \""
+            qWarning() << "no category declared for action \""
                 << action->objectName() << "\"! Fix this!";
             continue;
         }
@@ -615,7 +615,7 @@ void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QTreeWidgetItem*
 
 void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QTreeWidgetItem*)
 {
-  //kDebug();
+  //qDebug();
   updateOKButtonStatus();
 }
 
@@ -744,7 +744,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                 }
             }
         } else {
-            kWarning() << "No current category item";
+            qWarning() << "No current category item";
         }
     }
     
@@ -755,7 +755,7 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
 {
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
 
-    //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
+    //qDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
     QPushButton *btn = button(QDialogButtonBox::Ok);
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }

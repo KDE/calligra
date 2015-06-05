@@ -24,14 +24,13 @@
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>
-
-#include <kdebug.h>
+#include <QDebug>
 
 KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-    kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
-    kDebug() << "type== " << field()->typeName();
+    qDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
+    qDebug() << "type== " << field()->typeName();
     KexiDataItemInterface::setHasFocusableWidget(false);
     KexiDataItemInterface::setAcceptEditorAfterDeleteContents(true);
     m_usesSelectedTextColor = false;
@@ -123,7 +122,7 @@ void KexiBoolTableEdit::clickedOnContents()
         else
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
     }
-    kDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
+    qDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
     if (oldValue != m_currentValue) {
         signalValueChanged();
     }

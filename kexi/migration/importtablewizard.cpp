@@ -34,8 +34,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QPushButton>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>
@@ -344,7 +343,7 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
 
 void ImportTableWizard::arriveSrcConnPage()
 {
-    kDebug();
+    qDebug();
 }
 
 void ImportTableWizard::arriveSrcDBPage()
@@ -353,7 +352,7 @@ void ImportTableWizard::arriveSrcDBPage()
         //! @todo Back button doesn't work after selecting a file to import
     } else if (!m_srcDBName) {
         m_srcDBPageWidget->hide();
-        kDebug() << "Looks like we need a project selector widget!";
+        qDebug() << "Looks like we need a project selector widget!";
 
         KexiDB::ConnectionData* condata = m_srcConnSel->selectedConnectionData();
         if (condata) {
@@ -382,7 +381,7 @@ void ImportTableWizard::arriveTableSelectPage(KPageWidgetItem *prevPage)
 
         if (m_migrateDriver) {
             if (!m_migrateDriver->connectSource()) {
-                kWarning() << "unable to connect to database";
+                qWarning() << "unable to connect to database";
                 return;
             }
 
@@ -398,7 +397,7 @@ void ImportTableWizard::arriveTableSelectPage(KPageWidgetItem *prevPage)
                 }
             }
         } else {
-            kWarning() << "No driver for selected source";
+            qWarning() << "No driver for selected source";
             QString errMessage =result.message.isEmpty() ? xi18n("Unknown error") : result.message;
             QString errDescription = result.description.isEmpty() ? errMessage : result.description;
             KMessageBox::error(this, errMessage, errDescription);
@@ -428,7 +427,7 @@ void ImportTableWizard::arriveAlterTablePage()
         return;
     }
 
-    kDebug() << ts->fieldCount();
+    qDebug() << ts->fieldCount();
 
     setValid(m_alterTablePageItem, ts->fieldCount() > 0);
     if (isValid(m_alterTablePageItem)) {
@@ -571,7 +570,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (!result.error()) {
         sourceDriver = m_migrateManager->driver(sourceDriverName);
         if (!sourceDriver || m_migrateManager->error()) {
-            kDebug() << "Import migrate driver error...";
+            qDebug() << "Import migrate driver error...";
             result.setStatus(m_migrateManager);
         }
     }
@@ -594,13 +593,13 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
 
         #if 0
         if (m_importTypeStructureAndDataCheckBox->isChecked()) {
-            kDebug() << "Structure and data selected";
+            qDebug() << "Structure and data selected";
             keepData = true;
         } else if (m_importTypeStructureOnlyCheckBox->isChecked()) {
-            kDebug() << "structure only selected";
+            qDebug() << "structure only selected";
             keepData = false;
         } else {
-            kDebug() << "Neither radio button is selected (not possible?) presume keep data";
+            qDebug() << "Neither radio button is selected (not possible?) presume keep data";
             keepData = true;
         }
         #endif

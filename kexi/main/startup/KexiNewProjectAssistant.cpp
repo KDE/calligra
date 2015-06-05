@@ -46,9 +46,9 @@
 #include <KexiIcon.h>
 
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 
+#include <QDebug>
 #include <QLayout>
 #include <QCheckBox>
 #include <QProgressBar>
@@ -130,7 +130,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     proxyModel->setSourceModel(model);
     m_templatesList->setModel(proxyModel);
 
-    //kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
+    //qDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
     setContents(m_templatesList);
 }
 
@@ -226,7 +226,7 @@ KexiProjectTitleSelectionPage::~KexiProjectTitleSelectionPage()
 
 void KexiProjectTitleSelectionPage::askForOverwriting(const KexiContextMessage& message)
 {
-    kDebug() << message.text();
+    qDebug() << message.text();
     delete messageWidget;
     messageWidget = new KexiContextMessageWidget(this,
                                                  contents->formLayout,

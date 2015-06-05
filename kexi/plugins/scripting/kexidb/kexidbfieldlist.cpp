@@ -20,8 +20,6 @@
 #include "kexidbfieldlist.h"
 #include "kexidbfield.h"
 
-#include <kdebug.h>
-
 using namespace Scripting;
 
 KexiDBFieldList::KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner)

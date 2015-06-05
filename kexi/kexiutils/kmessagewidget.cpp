@@ -26,10 +26,10 @@
 #include <kexiutils/utils.h>
 
 #include <kcolorscheme.h>
-#include <kdebug.h>
 #include <KStandardAction>
 #include <kstandardguiitem.h>
 
+#include <QDebug>
 #include <QEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -107,7 +107,7 @@ void KMessageWidgetFrame::updateCalloutPointerTransformation() const
 
     const QSizeF s(parentWidget()->size());
     m_sizeForRecentTransformation = parentWidget()->size();
-    // kDebug() << size() << parentWidget()->size();
+    // qDebug() << size() << parentWidget()->size();
     const qreal rad = radius;
     // Original: [v    ]
     //           [     ]
@@ -164,7 +164,7 @@ void KMessageWidgetFrame::updateCalloutPointerPosition() const
         return;
     QWidget *messageWidgetParent = parentWidget()->parentWidget();
     if (messageWidgetParent) {
-/*        kDebug() << "m_calloutPointerGlobalPosition:" << m_calloutPointerGlobalPosition
+/*        qDebug() << "m_calloutPointerGlobalPosition:" << m_calloutPointerGlobalPosition
          << "pos():" << pos()
          << "pointerPosition():" << pointerPosition()
          << "(m_calloutPointerGlobalPosition - pos() - pointerPosition()):"
@@ -199,7 +199,7 @@ void KMessageWidgetFrame::paintCalloutPointer()
 QPoint KMessageWidgetFrame::pointerPosition() const
 {
     updateCalloutPointerTransformation();
-    //kDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
+    //qDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
     return m_calloutPointerTransformation.map(m_polyline[1]).toPoint();
 }
 
@@ -356,14 +356,14 @@ void KMessageWidgetPrivate::createLayout()
                 && contentsWidget->maximumHeight() < QWIDGETSIZE_MAX
                 && contentsWidget->maximumSize() == contentsWidget->minimumSize())
             {
-                kDebug() << "contentsWidget->maximumSize():" << contentsWidget->maximumSize();
-                kDebug() << "content->size():" << content->size();
+                qDebug() << "contentsWidget->maximumSize():" << contentsWidget->maximumSize();
+                qDebug() << "content->size():" << content->size();
                 contentsWidget->setFixedSize(
                     contentsWidget->maximumSize() - QSize(120, 0));
                 //q->setFixedSize(
                 //    contentsWidget->maximumSize() + QSize(100, 0));
 
-                kFatal() << contentsWidget->maximumSize();
+                qFatal() << contentsWidget->maximumSize();
             }*/
         }
         else {
@@ -421,7 +421,7 @@ void KMessageWidgetPrivate::createLayout()
     // add margins based on outer margins
     int left, top, right, bottom;
     q->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "q->getContentsMargins:" << left << top << right << bottom;
     switch (content->calloutPointerDirection()) {
     case KMessageWidget::Up:
         left += 1;
@@ -496,13 +496,13 @@ void KMessageWidgetPrivate::updateStyleSheet()
 
     int left, top, right, bottom;
     content->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "content->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "content->getContentsMargins:" << left << top << right << bottom;
     if (!buttons.isEmpty()) {
         //q->setContentsMargins(0, 0, 0, 0);
         content->setContentsMargins(LAYOUT_SPACING, 0, 0, 0);
     }
     q->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "q->getContentsMargins:" << left << top << right << bottom;
 #if 1
     int add = content->radius * 2;
     switch (content->calloutPointerDirection()) {
@@ -643,8 +643,8 @@ void KMessageWidget::setCalloutPointerDirection(KMessageWidget::CalloutPointerDi
 QSize KMessageWidget::sizeHint() const
 {
     ensurePolished();
-    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
-    kDebug() << "QFrame::sizeHint():" << QFrame::sizeHint();
+    qDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+    qDebug() << "QFrame::sizeHint():" << QFrame::sizeHint();
     return QFrame::sizeHint();
 /*    QSize s1(QFrame::sizeHint());
     QSize s2(d->content->sizeHint());
@@ -654,8 +654,8 @@ QSize KMessageWidget::sizeHint() const
 QSize KMessageWidget::minimumSizeHint() const
 {
     ensurePolished();
-    kDebug() << "d->content->minimumSizeHint():" << d->content->minimumSizeHint();
-    kDebug() << "QFrame::minimumSizeHint():" << QFrame::minimumSizeHint();
+    qDebug() << "d->content->minimumSizeHint():" << d->content->minimumSizeHint();
+    qDebug() << "QFrame::minimumSizeHint():" << QFrame::minimumSizeHint();
     return QFrame::minimumSizeHint();
 /*    QSize s1(QFrame::minimumSizeHint());
     QSize s2(d->content->minimumSizeHint());
@@ -668,7 +668,7 @@ bool KMessageWidget::event(QEvent* event)
         d->createLayout();
     }
     else if (event->type() == QEvent::Hide) {
-        //kDebug() << "QEvent::Hide" << event->spontaneous();
+        //qDebug() << "QEvent::Hide" << event->spontaneous();
         if (!event->spontaneous()) {
             if (d->autoDelete) {
                 deleteLater();
@@ -852,9 +852,9 @@ QBrush KMessageWidget::borderBrush() const
 
 void KMessageWidget::resizeToContents()
 {
-//    kDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
-//    kDebug() << "sizeHint():" << sizeHint();
-//    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+//    qDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
+//    qDebug() << "sizeHint():" << sizeHint();
+//    qDebug() << "d->content->sizeHint():" << d->content->sizeHint();
     d->resizeToContentsOnTimeLineFinished = true; // try to resize later too if animation in progress
     (void)sizeHint(); // to update d->content->sizeHint()
     setFixedSize(d->content->sizeHint());

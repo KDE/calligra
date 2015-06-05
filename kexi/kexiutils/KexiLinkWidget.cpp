@@ -22,7 +22,6 @@
 #include <QEvent>
 
 #include <kcolorscheme.h>
-#include <kdebug.h>
 
 class KexiLinkWidget::Private
 {

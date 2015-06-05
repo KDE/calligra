@@ -26,8 +26,7 @@
 #include <QLabel>
 #include <QShowEvent>
 #include <QResizeEvent>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <db/field.h>
 #include <kexiutils/utils.h>

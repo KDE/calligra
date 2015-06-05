@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include <QDebug>
+
 #include <KLocalizedString>
 
 #include <KProperty>
@@ -92,7 +93,7 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
                         m_oldValue.toString(),
                         m_alterTableAction.newValue().toString()));
 
-    kDebug() << debugString();
+    qDebug() << debugString();
 }
 
 ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
@@ -247,7 +248,7 @@ ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(Command* parent
                           m_oldVisibility ? "true" : "false",
                           m_alterTableAction.newValue().toBool() ? "true" : "false"));
 
-    kDebug() << debugString();
+    qDebug() << debugString();
 }
 
 ChangePropertyVisibilityCommand::~ChangePropertyVisibilityCommand()

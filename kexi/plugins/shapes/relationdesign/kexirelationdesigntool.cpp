@@ -30,12 +30,13 @@
 #include <KoCanvasBase.h>
 #include <KexiIcon.h>
 
+#include <kcombobox.h>
+
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <kdebug.h>
-#include <kcombobox.h>
+#include <QDebug>
 
 KexiRelationDesignTool::KexiRelationDesignTool(KoCanvasBase *canvas) : KoToolBase(canvas)
 {
@@ -120,15 +121,15 @@ void KexiRelationDesignTool::changeUrlPressed()
     }
 
     int res = m_dbDialog->exec();
-    kDebug() << res;
+    qDebug() << res;
     KexiDB::ConnectionData *_cd = m_dbDialog->selectedExistingConnection();
 
     if (_cd) {
         m_fileLabel->setText(_cd->description);
-        kDebug() << _cd->description << _cd->caption;
+        qDebug() << _cd->description << _cd->caption;
     } else {
-        kDebug() << "No connectiondata!";
-        kDebug() << m_dbDialog->selectedFileName();
+        qDebug() << "No connectiondata!";
+        qDebug() << m_dbDialog->selectedFileName();
         m_fileLabel->setText(m_dbDialog->selectedFileName());
 
         _cd = new KexiDB::ConnectionData();

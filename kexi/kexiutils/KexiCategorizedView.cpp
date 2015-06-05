@@ -34,7 +34,7 @@ KexiCategorySingleSelectionModel::KexiCategorySingleSelectionModel(QAbstractItem
 void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
                                               QItemSelectionModel::SelectionFlags command)
 {
-    // kDebug() << selection.indexes().count() << command;
+    // qDebug() << selection.indexes().count() << command;
     if ((command & QItemSelectionModel::Select) && 
         !(command & QItemSelectionModel::Clear) &&
         (selection.indexes().count() > 1 || !this->selection().indexes().isEmpty()))

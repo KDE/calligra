@@ -21,7 +21,6 @@
 
 #include "keximigrate.h"
 
-#include <kdebug.h>
 #include <kinputdialog.h>
 
 #include <kexiutils/identifier.h>
@@ -29,6 +28,8 @@
 #include <core/kexiproject.h>
 #include <db/drivermanager.h>
 #include <db/utils.h>
+
+#include <QDebug>
 
 using namespace KexiDB;
 using namespace KexiMigration;
@@ -188,9 +189,9 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     QStringList tables;
 
     // Step 1 - connect
-    kDebug() << "CONNECTING...";
+    qDebug() << "CONNECTING...";
     if (!drv_connect()) {
-        kDebug() << "Couldnt connect to database server";
+        qDebug() << "Couldnt connect to database server";
         if (result)
             result->setStatus(xi18n("Could not connect to data source \"%1\".",
                                    d->migrateData->source->serverInfoString()), "");
@@ -198,9 +199,9 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     }
 
     // Step 2 - get table names
-    kDebug() << "KexiMigrate::performImport() GETTING TABLENAMES...";
+    qDebug() << "KexiMigrate::performImport() GETTING TABLENAMES...";
     if (!tableNames(tables)) {
-        kDebug() << "Couldnt get list of tables";
+        qDebug() << "Couldnt get list of tables";
         if (result)
             result->setStatus(
                 xi18n("Could not get a list of table names for data source \"%1\".",
@@ -210,7 +211,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 
     // Check if there are any tables
     if (tables.isEmpty()) {
-        kDebug() << "There were no tables to import";
+        qDebug() << "There were no tables to import";
         if (result)
             result->setStatus(
                 xi18n("No tables to import found in data source \"%1\".",
@@ -238,8 +239,8 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             foreach(const QString& tableName, kexiDBTables) {
                 tables.removeAt(tables.indexOf(tableName));
             }
-//kDebug() << "KexiDB-compat tables: " << kexiDBTables;
-//kDebug() << "non-KexiDB tables: " << tables;
+        //qDebug() << "KexiDB-compat tables: " << kexiDBTables;
+        //qDebug() << "non-KexiDB tables: " << tables;
         }
     }
 
@@ -356,7 +357,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         foreach(KexiDB::TableSchema* ts, d->tableSchemas) {
             ok = destConn->createTable(ts);
             if (!ok) {
-                kDebug() << "Failed to create a table " << ts->name();
+                qDebug() << "Failed to create a table " << ts->name();
                 destConn->debugError();
                 if (result)
                     result->setStatus(destConn,
@@ -424,18 +425,18 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                     && ts->name() != "kexi__userdata" //copy this too
                )
             {
-                kDebug() << "Won't copy data to system table" << ts->name();
+                qDebug() << "Won't copy data to system table" << ts->name();
 //! @todo copy kexi__db contents!
                 continue;
             }
             QString tsName = nativeNames.value(ts->name());
-            kDebug() << "Copying data for table: " << tsName;
+            qDebug() << "Copying data for table: " << tsName;
             if (tsName.isEmpty()) {
                 tsName = ts->name();
             }
             ok = drv_copyTable(tsName, destConn, ts);
             if (!ok) {
-                kDebug() << "Failed to copy table " << tsName;
+                qDebug() << "Failed to copy table " << tsName;
                 if (result)
                     result->setStatus(destConn,
                                       xi18n("Could not copy table \"%1\" to destination database.", tsName));
@@ -503,7 +504,7 @@ bool KexiMigrate::progressInitialise()
     int tableNumber = 1;
     foreach(const QString& tableName, tables) {
         if (drv_getTableSize(tableName, size)) {
-            kDebug() << "table:" << tableName << "size: " << (ulong)size;
+            qDebug() << "table:" << tableName << "size: " << (ulong)size;
             sum += size;
             emit progressPercent(tableNumber * 5 /* 5% */ / tables.count());
             tableNumber++;
@@ -512,7 +513,7 @@ bool KexiMigrate::progressInitialise()
         }
     }
 
-    kDebug() << "job size:" << (ulong)sum;
+    qDebug() << "job size:" << (ulong)sum;
     d->progressTotal = sum;
     d->progressTotal += tables.count() * NUM_OF_ROWS_PER_CREATE_TABLE;
     d->progressTotal = d->progressTotal * 105 / 100; //add 5 percent for above task 1)
@@ -528,7 +529,7 @@ void KexiMigrate::updateProgress(qulonglong step)
     if (d->progressDone >= d->progressNextReport) {
         int percent = (d->progressDone + 1) * 100 / d->progressTotal;
         d->progressNextReport = ((percent + 1) * d->progressTotal) / 100;
-        kDebug() << (ulong)d->progressDone << "/"
+        qDebug() << (ulong)d->progressDone << "/"
             << (ulong)d->progressTotal << " (" << percent << "%) next report at"
             << (ulong)d->progressNextReport;
         emit progressPercent(percent);
@@ -661,7 +662,7 @@ bool KexiMigrate::readTableSchema(const QString& originalName, KexiDB::TableSche
 bool KexiMigrate::tableNames(QStringList & tn)
 {
     //! @todo Cache list of table names
-    kDebug() << "Reading list of tables...";
+    qDebug() << "Reading list of tables...";
     return drv_tableNames(tn);
 }
 

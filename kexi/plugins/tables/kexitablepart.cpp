@@ -36,7 +36,7 @@
 #include <db/connection.h>
 #include <db/cursor.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kmessagebox.h>
 
 #include <QTabWidget>
@@ -97,7 +97,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
         = static_cast<KexiTablePart::TempData*>(window->data());
     if (!temp->table) {
         temp->table = win->project()->dbConnection()->tableSchema(item.name());
-        kDebug() << "schema is " << temp->table;
+        qDebug() << "schema is " << temp->table;
     }
 
     if (viewMode == Kexi::DesignViewMode) {

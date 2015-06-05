@@ -26,8 +26,6 @@
 #include <QKeyEvent>
 #include <QStyleOptionToolButton>
 
-#include <kdebug.h>
-
 #include <kexi_global.h>
 #include <kexiutils/styleproxy.h>
 

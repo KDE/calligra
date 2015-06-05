@@ -22,8 +22,6 @@
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-#include <kdebug.h>
-
 #include <db/connection.h>
 
 using namespace Scripting;
