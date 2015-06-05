@@ -182,13 +182,13 @@ public Q_SLOTS:
 
     /**
      * Show the widget using an animation, unless
-     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     * KexiUtils::graphicsEffectLevel() does not allow simple effects.
      */
     void animatedShow();
 
     /**
      * Hide the widget using an animation, unless
-     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     * KexiUtils::graphicsEffectLevel() does not allow simple effects.
      */
     void animatedHide();
 
