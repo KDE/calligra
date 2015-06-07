@@ -104,9 +104,10 @@ ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()));
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()));
+    //TODO: there was no default button configured, should there?
+//     connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()));
 }
 
 void ResourceAppointmentsSettingsDialog::slotOk()

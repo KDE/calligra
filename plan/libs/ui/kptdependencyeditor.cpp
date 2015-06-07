@@ -1964,10 +1964,6 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     m_view( view )
 {
     setWindowTitle( i18n("Settings") );
-    // QT5TODO: port to QDialog
-//     setButtons( Ok|Cancel );
-//     setDefaultButton( Ok );
-//     showButtonSeparator( true );
 
     QTabWidget *tab = new QTabWidget();
 
@@ -1983,7 +1979,7 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void DependencyeditorConfigDialog::slotOk()

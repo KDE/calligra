@@ -56,10 +56,6 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     m_treeview( treeview )
 {
     setWindowTitle( i18n("Settings") );
-    // QT5TODO: port to QDialog
-//     setButtons( Ok|Cancel );
-//     setDefaultButton( Ok );
-//     showButtonSeparator( true );
 
     QTabWidget *tab = new QTabWidget();
 
@@ -75,7 +71,7 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void AccountseditorConfigDialog::slotOk()

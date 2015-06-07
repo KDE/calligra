@@ -26,6 +26,7 @@
 
 #include "KoPageLayoutWidget.h"
 
+#include <QPushButton>
 #include <QCheckBox>
 #include <QDateTime>
 #include <QString>
@@ -42,10 +43,6 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     m_treeview( treeview )
 {
     setWindowTitle( i18n("Settings") );
-    // QT5TODO: port to QDialog
-//     setButtons( Ok|Cancel );
-//     setDefaultButton( Ok );
-//     showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel( this );
     switch ( treeview->startMode() ) {
         case CostBreakdownItemModel::StartMode_Project: 
@@ -92,10 +89,14 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableOkButton(bool)));
+}
+
+void AccountsviewConfigDialog::enableOkButton(bool enabled)
+{
+    button( QDialogButtonBox::Ok )->setEnabled( enabled );
 }
 
 

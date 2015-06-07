@@ -54,6 +54,7 @@
 #include <QModelIndex>
 #include <QPainter>
 #include <QTabWidget>
+#include <QPushButton>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -141,9 +142,9 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
     /*KPageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
 }
 
 void GanttViewSettingsDialog::slotOk()
@@ -831,7 +832,7 @@ MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBas
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
     /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
 }
 
 void MilestoneGanttViewSettingsDialog::slotOk()

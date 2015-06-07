@@ -50,7 +50,8 @@ public:
 
 public Q_SLOTS:
     void slotOk();
-    
+private Q_SLOTS:
+    void enableOkButton( bool enabled );
 private:
     ViewBase *m_view;
     AccountsTreeView *m_treeview;

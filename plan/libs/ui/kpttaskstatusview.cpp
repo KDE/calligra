@@ -36,6 +36,7 @@
 #include <QModelIndex>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QPushButton>
 #include <QTextBrowser>
 #include <QTextCursor>
 #include <QTextTableFormat>
@@ -416,8 +417,8 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, Task
     setCurrentPage( page );
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
 }
 
 //-----------------------------------
@@ -1359,8 +1360,8 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     addPrintingOptions();
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
 }
 
 //-----------------
@@ -1387,9 +1388,10 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    //TODO: there was no default button configured, should there?
+//     connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void ProjectStatusViewSettingsDialog::slotOk()
