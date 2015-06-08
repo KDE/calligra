@@ -545,6 +545,9 @@ QToolButton* KoResourceItemChooser::viewModeButton() const
 
 void KoResourceItemChooser::setSynced(bool sync)
 {
+    if(d->synced == sync)
+        return;
+
     d->synced = sync;
     KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {

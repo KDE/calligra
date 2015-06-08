@@ -33,7 +33,7 @@ KoResourceItemView::KoResourceItemView( QWidget * parent )
     horizontalHeader()->hide();
     verticalHeader()->setDefaultSectionSize( 20 );
     setContextMenuPolicy(Qt::DefaultContextMenu);
-    m_viewMode = FIXED_COLUMS;
+    setViewMode(FIXED_COLUMNS);
 }
 
 void KoResourceItemView::resizeEvent( QResizeEvent * event )
@@ -65,6 +65,20 @@ bool KoResourceItemView::viewportEvent( QEvent * event )
 void KoResourceItemView::setViewMode(KoResourceItemView::ViewMode mode)
 {
     m_viewMode = mode;
+
+    switch(m_viewMode) {
+        case FIXED_COLUMNS:
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Horizontal scrollbar is never needed
+            setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            break;
+        case FIXED_ROWS:
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Vertical scrollbar is never needed
+        default:
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+            setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    }
+
 }
 
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
@@ -84,7 +98,7 @@ void KoResourceItemView::updateView()
     int rowCount = model()->rowCount( QModelIndex() );
     int rowHeight, columnWidth;
 
-    if (m_viewMode == FIXED_COLUMS) {
+    if (m_viewMode == FIXED_COLUMNS) {
         columnWidth = viewport()->size().width() / columnCount;
 
         for( int i = 0; i < columnCount; ++i ) {

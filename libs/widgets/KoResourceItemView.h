@@ -34,7 +34,7 @@ class KoResourceItemView : public QTableView
 
 public:
     enum ViewMode{
-        FIXED_COLUMS,  /// The number of columns is fixed
+        FIXED_COLUMNS,  /// The number of columns is fixed
         FIXED_ROWS     /// The number of rows is fixed
     };
 
