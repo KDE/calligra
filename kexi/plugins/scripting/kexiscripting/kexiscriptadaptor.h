@@ -113,7 +113,7 @@ public Q_SLOTS:
     QObject* getConnection() {
         if (! m_kexidbmodule)
             m_kexidbmodule = Kross::Manager::self().module("kexidb");
-        ::KexiDB::Connection *connection = project() ? project()->dbConnection() : 0;
+        ::KDbConnection *connection = project() ? project()->dbConnection() : 0;
         if (m_kexidbmodule && connection) {
             QObject* result = 0;
             if (QMetaObject::invokeMethod(m_kexidbmodule, "connectionWrapper", Q_RETURN_ARG(QObject*, result), Q_ARG(QObject*, connection)))

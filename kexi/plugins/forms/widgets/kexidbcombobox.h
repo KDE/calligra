@@ -42,10 +42,10 @@ public:
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiDB::TableViewColumn *column() const;
+    virtual KDbTableViewColumn *column() const;
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const;
+    virtual KDbField *field() const;
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant origValue() const;
@@ -67,15 +67,15 @@ public:
 
     //! Reimplemented after KexiDBAutoField: jsut sets \a cinfo without initializing a subwidget.
     //! Initialization is performed by \ref setVisibleColumnInfo().
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
 
     /*! Used internally to set visible database column information.
      Reimplemented: performs initialization of the subwidget. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setVisibleColumnInfo(KDbQueryColumnInfo* cinfo);
 
     /*! \return visible database column information for this item.
      Reimplemented. */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
+    virtual KDbQueryColumnInfo* visibleColumnInfo() const;
 
     virtual QColor paletteBackgroundColor() const;
 
@@ -88,8 +88,8 @@ public:
     virtual void undoChanges();
 
 public Q_SLOTS:
-    virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
-    virtual void slotItemSelected(KexiDB::RecordData *record);
+    virtual void slotRowAccepted(KDbRecordData *record, int row);
+    virtual void slotItemSelected(KDbRecordData *record);
 
 protected Q_SLOTS:
     virtual void slotInternalEditorValueChanged(const QVariant& v);

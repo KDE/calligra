@@ -101,7 +101,7 @@ bool MigrateManagerInternal::lookupDrivers()
         connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAppQuits()));
     }
 //! @todo for Qt-only version check for KComponentData wrapper
-//  KexiDBWarn << "cannot work without KComponentData (KGlobal::mainComponent()==0)!";
+//  qWarning() << "cannot work without KComponentData (KGlobal::mainComponent()==0)!";
 //  setError("Driver Manager cannot work without KComponentData (KGlobal::mainComponent()==0)!");
 
     lookupDriversNeeded = false;
@@ -110,7 +110,7 @@ bool MigrateManagerInternal::lookupDrivers()
     foreach(KService::Ptr ptr, tlist) {
         const QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
         if (srv_name.isEmpty()) {
-            KexiDBWarn << "X-Kexi-MigrationDriverName must be set for migration driver"
+            qWarning() << "X-Kexi-MigrationDriverName must be set for migration driver"
             << ptr->property("Name").toString() << "service!\n -- skipped!";
             continue;
         }
@@ -118,7 +118,7 @@ bool MigrateManagerInternal::lookupDrivers()
             continue;
         }
 
-//! @todo could be merged. Copied from KexiDB::DriverManager.
+//! @todo could be merged. Copied from KDbDriverManager.
 //<COPIED>
         QString srv_ver_str = ptr->property("X-Kexi-KexiMigrationVersion").toString();
         QStringList lst(srv_ver_str.split('.'));
@@ -129,7 +129,7 @@ bool MigrateManagerInternal::lookupDrivers()
         if (ok)
             minor_ver = lst[1].toUInt(&ok);
         if (!ok) {
-            KexiDBWarn << "problem with detecting" << srv_name.toLower() << "driver's version -- skipping it!";
+            qWarning() << "problem with detecting" << srv_name.toLower() << "driver's version -- skipping it!";
             possibleProblems += QString("\"%1\" migration driver has unrecognized version; "
                                         "required driver version is \"%2.%3\"")
                                 .arg(srv_name.toLower())
@@ -137,7 +137,7 @@ bool MigrateManagerInternal::lookupDrivers()
             continue;
         }
         if (!KexiMigration::version().matches(major_ver, minor_ver)) {
-            KexiDBWarn << QString("'%1' driver"
+            qWarning() << QString("'%1' driver"
                                   " has version '%2' but required migration driver version is '%3.%4'\n"
                                   " -- skipping this driver!").arg(srv_name.toLower()).arg(srv_ver_str)
             .arg(KexiMigration::version().major).arg(KexiMigration::version().minor);
@@ -156,7 +156,7 @@ bool MigrateManagerInternal::lookupDrivers()
                 if (!m_services_by_mimetype.contains(mime)) {
                     m_services_by_mimetype.insert(mime, ptr);
                 } else {
-                    KexiDBWarn << "more than one driver for" << mime << "mime type!";
+                    qWarning() << "more than one driver for" << mime << "mime type!";
                 }
             }
         }

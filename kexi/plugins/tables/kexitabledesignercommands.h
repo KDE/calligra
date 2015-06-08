@@ -46,7 +46,7 @@ public:
 
     //! Used to collect actions data for AlterTableHandler
     //! Can return 0 if the action should not be passed to AlterTableHandler
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const {
+    virtual KDbAlterTableHandler::ActionBase* createAction() const {
         return 0;
     }
 
@@ -88,11 +88,11 @@ public:
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
     KProperty::ListData* m_oldListData, *m_listData;
 };
@@ -110,12 +110,12 @@ public:
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
+    KDbAlterTableHandler::RemoveFieldAction m_alterTableAction;
     KPropertySet* m_set;
     int m_fieldIndex;
 };
@@ -125,17 +125,17 @@ class InsertFieldCommand : public Command
 {
 public:
     InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                       int fieldIndex/*, const KexiDB::Field& field*/, const KPropertySet& set);
+                       int fieldIndex/*, const KDbField& field*/, const KPropertySet& set);
     virtual ~InsertFieldCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
+    KDbAlterTableHandler::InsertFieldAction *m_alterTableAction;
     KPropertySet m_set;
 };
 
@@ -162,7 +162,7 @@ public:
     virtual void undoInternal();
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     bool m_oldVisibility;
 };
 
@@ -179,7 +179,7 @@ public:
     virtual void undoInternal();
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     int m_row;
 };
 

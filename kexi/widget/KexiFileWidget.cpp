@@ -189,7 +189,7 @@ void KexiFileWidget::updateFilters()
     const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
     if (normalOpeningMode || normalSavingMode) {
-        d->addFilterForType(&filter, &allfilters, KexiDB::defaultFileBasedDriverMimeType());
+        d->addFilterForType(&filter, &allfilters, KDb::defaultFileBasedDriverMimeType());
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
         d->addFilterForType(&filter, &allfilters, "application/x-kexiproject-shortcut");

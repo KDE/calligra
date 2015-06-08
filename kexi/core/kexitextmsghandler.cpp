@@ -59,7 +59,7 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
 
 void KexiTextMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
 {
-    showMessageInternal(KexiDB::MessageHandler::Error, title, details);
+    showMessageInternal(KDbMessageHandler::Error, title, details);
 }
 
 void KexiTextMessageHandler::showMessageInternal(MessageType type,

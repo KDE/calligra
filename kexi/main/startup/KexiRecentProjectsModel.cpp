@@ -127,7 +127,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
                          pdata->constConnectionData()->fileName());
         }
         else {
-            KexiDB::DriverManager manager;
+            KDbDriverManager manager;
             return xi18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
                   manager.driverInfo(pdata->constConnectionData()->driverName).caption);
         }

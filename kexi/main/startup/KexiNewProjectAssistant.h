@@ -130,10 +130,10 @@ public:
         KexiNewProjectAssistant* parent);
     virtual ~KexiProjectDatabaseNameSelectionPage();
 
-    bool setConnection(KexiDB::ConnectionData* data);
+    bool setConnection(KDbConnectionData* data);
 
     KexiServerDBNamePage* contents;
-    QPointer<KexiDB::ConnectionData> conndataToShow;
+    QPointer<KDbConnectionData> conndataToShow;
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
 
@@ -180,7 +180,7 @@ protected:
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
+        const KDbConnectionData& cdata, const QString& databaseName,
         const QString& caption);
 
     class Private;

@@ -256,10 +256,10 @@ private:
     QProgressBar *m_importingProgressBar;
     bool m_dialogCancelled;
     KexiCSVInfoLabel *m_infoLbl;
-    KexiDB::Connection *m_conn; //!< (temp) database connection used for importing
+    KDbConnection *m_conn; //!< (temp) database connection used for importing
     KexiFieldListModel *m_fieldsListModel;
-    KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
-    KexiDB::PreparedStatement::Ptr m_importingStatement;
+    KDbTableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
+    KDbPreparedStatement::Ptr m_importingStatement;
     QList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
     bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
     bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview

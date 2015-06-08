@@ -73,7 +73,7 @@ public:
     KexiDBConnectionSet* connset;
     KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
-    KexiDB::DriverManager driverManager;
+    KDbDriverManager driverManager;
     KexiPart::Manager partManager;
 };
 
@@ -95,7 +95,7 @@ KexiRecentProjects* Kexi::recentProjects()
     return &KexiInternal::self()->recentProjects;
 }
 
-KexiDB::DriverManager& Kexi::driverManager()
+KDbDriverManager& Kexi::driverManager()
 {
     return KexiInternal::self()->driverManager;
 }
@@ -173,7 +173,7 @@ ObjectStatus::ObjectStatus(const QString& message, const QString& description)
     setStatus(message, description);
 }
 
-ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+ObjectStatus::ObjectStatus(KDbObject* dbObject, const QString& message, const QString& description)
         : msgHandler(0)
 {
     setStatus(dbObject, message, description);
@@ -192,7 +192,7 @@ const ObjectStatus& ObjectStatus::status() const
 bool ObjectStatus::error() const
 {
     return !message.isEmpty()
-           || (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
+           || (dynamic_cast<KDbObject*>((QObject*)dbObj) && dynamic_cast<KDbObject*>((QObject*)dbObj)->error());
 }
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)
@@ -202,7 +202,7 @@ void ObjectStatus::setStatus(const QString& message, const QString& description)
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbObject* dbObject, const QString& message, const QString& description)
 {
     if (dynamic_cast<QObject*>(dbObject)) {
         dbObj = dynamic_cast<QObject*>(dbObject);
@@ -211,7 +211,7 @@ void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, c
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbResultInfo* result, const QString& message, const QString& description)
 {
     if (result) {
         if (message.isEmpty())
@@ -227,7 +227,7 @@ void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message,
         clearStatus();
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
+void ObjectStatus::setStatus(KDbObject* dbObject, KDbResultInfo* result,
                              const QString& message, const QString& description)
 {
     if (!dbObject)
@@ -271,11 +271,11 @@ void ObjectStatus::append(const ObjectStatus& otherStatus)
 }
 
 //! @internal
-class ObjectStatusMessageHandler : public KexiDB::MessageHandler
+class ObjectStatusMessageHandler : public KDbMessageHandler
 {
 public:
     explicit ObjectStatusMessageHandler(ObjectStatus *status)
-            : KexiDB::MessageHandler()
+            : KDbMessageHandler()
             , m_status(status) {
     }
     virtual ~ObjectStatusMessageHandler() {
@@ -287,7 +287,7 @@ public:
         m_status->setStatus(title, details);
     }
 
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString())
+    virtual void showErrorMessageInternal(KDbObject *obj, const QString& msg = QString())
     {
         m_status->setStatus(obj, msg);
     }
@@ -295,7 +295,7 @@ public:
     ObjectStatus *m_status;
 };
 
-ObjectStatus::operator KexiDB::MessageHandler*()
+ObjectStatus::operator KDbMessageHandler*()
 {
     if (!msgHandler)
         msgHandler = new ObjectStatusMessageHandler(this);
@@ -373,12 +373,11 @@ QString Kexi::defaultFileBasedDriverIconName()
 {
     if (!isSpecialIconTheme()) {
         QMimeDatabase db;
-        QMimeType mimeType(db.mimeTypeForName(
-                                    KexiDB::defaultFileBasedDriverMimeType()));
+        QMimeType mimeType(db.mimeTypeForName(KDb::defaultFileBasedDriverMimeType()));
         if (mimeType.isValid()) {
             return mimeType.iconName();
         }
-        KexiDBWarn << KexiDB::defaultFileBasedDriverMimeType() << "mimetype not installed!";
+        qWarning() << KDb::defaultFileBasedDriverMimeType() << "mimetype not installed!";
     }
     return koIconName("breeze-kexi-file-database");
 }

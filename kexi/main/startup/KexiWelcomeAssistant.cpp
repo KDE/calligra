@@ -205,7 +205,7 @@ void KexiWelcomeAssistant::emitOpenProject(KexiProjectData *data)
 
 void KexiWelcomeAssistant::openProjectOrShowPasswordPage(KexiProjectData *data)
 {
-    KexiDB::ConnectionData *cdata = data->connectionData();
+    KDbConnectionData *cdata = data->connectionData();
     if (cdata) {
         if (cdata->passwordNeeded()) {
             d->projectData = data;

@@ -30,13 +30,13 @@ int main(int argc, char* argv[])
 
     KexiTableView tv;
 
-    KexiDB::TableViewData data;
-    KexiDB::Field f1("id", KexiDB::Field::Integer),
-    f2("name", KexiDB::Field::Text),
-    f3("age", KexiDB::Field::Integer);
-    data.addColumn(new KexiDB::TableViewColumn(f1));
-    data.addColumn(new KexiDB::TableViewColumn(f2));
-    data.addColumn(new KexiDB::TableViewColumn(f3));
+    KDbTableViewData data;
+    KDbField f1("id", KDbField::Integer),
+    f2("name", KDbField::Text),
+    f3("age", KDbField::Integer);
+    data.addColumn(new KDbTableViewColumn(f1));
+    data.addColumn(new KDbTableViewColumn(f2));
+    data.addColumn(new KDbTableViewColumn(f3));
 
     tv.setData(&data, false);
 

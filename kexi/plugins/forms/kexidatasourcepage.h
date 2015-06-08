@@ -66,7 +66,7 @@ Q_SIGNALS:
      has been changed. It's connected to the Form Manager.
      \a caption for this field is also provided (e.g. AutoField form widget use it) */
     void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
-                                            KexiDB::Field::Type type);
+                                            KDbField::Type type);
 
     /*! Signal emitted when 'insert fields' button has been clicked */
     void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
@@ -98,7 +98,7 @@ protected:
     QString m_noDataSourceAvailableMultiText;
     bool m_insideClearFormDataSourceSelection;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
-    KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
+    KDbTableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else
     KexiFieldListView* m_fieldListView;
 #endif

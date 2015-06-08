@@ -146,7 +146,7 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 //=====================================================================================
 
 KexiRelationsTableFieldList::KexiRelationsTableFieldList(
-    KexiDB::TableOrQuerySchema* tableOrQuerySchema,
+    KDbTableOrQuerySchema* tableOrQuerySchema,
     KexiRelationsScrollArea *scrollArea, QWidget *parent)
         : KexiFieldListView(parent, ShowAsterisk)
         , m_scrollArea(scrollArea)

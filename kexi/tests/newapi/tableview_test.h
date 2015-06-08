@@ -34,7 +34,7 @@ int tableViewTest()
         return 1;
     }
 
-    KexiDB::TableSchema *persons = conn->tableSchema("persons");
+    KDbTableSchema *persons = conn->tableSchema("persons");
     if (!persons) {
         conn->debugError();
         qDebug() << "tableViewTest(): !persons";
@@ -42,8 +42,8 @@ int tableViewTest()
     }
 
 // KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
-// KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
-    KexiDB::Cursor *cursor = conn->prepareQuery(*persons , cursor_options);
+// KDbCursor *cursor = conn->executeQuery( "select * from persons", KDbCursor::Buffered );
+    KDbCursor *cursor = conn->prepareQuery(*persons , cursor_options);
     if (!cursor) {
         conn->debugError();
         qDebug() << "tableViewTest(): !cursor";

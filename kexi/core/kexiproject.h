@@ -40,11 +40,11 @@
 #define KEXIPROJECT_VERSION_MAJOR 1
 #define KEXIPROJECT_VERSION_MINOR 0
 
-namespace KexiDB
-{
-class Connection;
-class Parser;
-}
+class QFileInfo;
+class KDbConnection;
+class KDbParser;
+class KexiMainWindow;
+class KexiWindow;
 
 namespace KexiPart
 {
@@ -58,16 +58,12 @@ struct MissingPart {
 typedef QList<MissingPart> MissingPartsList;
 }
 
-class QFileInfo;
-class KexiMainWindow;
-class KexiWindow;
-
 /**
  * @short A project's main controller.
  * It also contains connection data,
  * current file state, etc.
  */
-class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
+class KEXICORE_EXPORT KexiProject : public QObject, public KDbObject
 {
     Q_OBJECT
 
@@ -75,14 +71,14 @@ public:
     /*! Constructor 1. Creates a new object using \a pdata.
      \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
-    explicit KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
+    explicit KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler = 0);
 
     /*! Constructor 2. Like above but sets predefined connections \a conn.
      The connection should be created using the same connection data
      as pdata->connectionData(). The connection will become owned by created KexiProject
      object, so do not destroy it. */
-    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
-                KexiDB::Connection* conn);
+    KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler,
+                KDbConnection* conn);
 
     ~KexiProject();
 
@@ -114,7 +110,7 @@ public:
      If \a forceOverwrite is true, existing database project is silently overwritten.
      Connection is created (accessible then with KexiProject::dbConnection()).
 
-     Since KexiProject inherits KexiDB::Object, it is possible to get error message
+     Since KexiProject inherits KDbObject, it is possible to get error message
      and other information on error.
 
      \return true on success, false on failure, and cancelled when database exists
@@ -123,7 +119,7 @@ public:
 
     /*! \return true if there was error during last operation on the object. */
     bool error() const {
-        return KexiDB::Object::error();
+        return KDbObject::error();
     }
 
     /**
@@ -188,7 +184,7 @@ public:
     /**
      * @return the database connection associated with this project
      */
-    KexiDB::Connection *dbConnection() const;
+    KDbConnection *dbConnection() const;
 
     /**
      * @return the project's data
@@ -256,7 +252,7 @@ public:
      */
     KexiPart::MissingPartsList missingParts() const;
 
-    KexiDB::Parser* sqlParser();
+    KDbParser* sqlParser();
 
     /*! Shows dialog for creating new blank project,
      ans creates one. Dialog is not shown if option for automatic creation
@@ -265,12 +261,12 @@ public:
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
     static KexiProject* createBlankProject(bool &cancelled, const KexiProjectData& data,
-                                           KexiDB::MessageHandler* handler = 0);
+                                           KDbMessageHandler* handler = 0);
 
     /*! Drops project described by \a data. \return true on success.
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
     static tristate dropProject(const KexiProjectData& data,
-                                KexiDB::MessageHandler* handler, bool dontAsk = false);
+                                KDbMessageHandler* handler, bool dontAsk = false);
 
     //! Helper method to ask user "Could not  open file for reading and writing. Do you want to
     //! open the file as read only?". @return true if user agrees, false if user cancels opening.
@@ -289,14 +285,14 @@ public:
     /*! Loads current user's data block, referenced by \a objectID and \a dataID
      and puts it to \a dataString.
      \return true on success, false on failure and cancelled when there is no such data block
-     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::loadDataBlock(). */
+     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KDbConnection::loadDataBlock(). */
     tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
 
     /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
      The block will be stored in "kexi__userdata" table
      If there is already such record in the table, it's simply overwritten.
      \return true on success
-     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::storeDataBlock(). */
+     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KDbConnection::storeDataBlock(). */
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
 
     /*! Copies urrent user's data blocks referenced by \a sourceObjectID and pointed
@@ -306,13 +302,13 @@ public:
      Copied data blocks will have \a destObjectID object identifier assigned.
      Note that if \a dataID is not specified, all user data blocks found for the \a sourceObjectID
      will be copied.
-     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KexiDB::Connection::copyDataBlock(). */
+     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KDbConnection::copyDataBlock(). */
     bool copyUserDataBlock(int sourceObjectID, int destObjectID, const QString &dataID = QString());
 
     /*! Removes current user's data block referenced by \a objectID and \a dataID.
      \return true on success. Does not fail if the block does not exist.
      Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
-     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KexiDB::Connection::removeDataBlock(). */
+     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KDbConnection::removeDataBlock(). */
     bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:
@@ -352,7 +348,7 @@ protected:
 
 Q_SIGNALS:
     /** signal emitted on error */
-    void error(const QString &title, KexiDB::Object *obj);
+    void error(const QString &title, KDbObject *obj);
 
     /** signal emitted on error (not KexiDB-related) */
     void error(const QString &msg, const QString &desc);

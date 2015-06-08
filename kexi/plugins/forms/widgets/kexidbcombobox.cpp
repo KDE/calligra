@@ -55,7 +55,7 @@ public:
     KComboBox *paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle (because styles use <static_cast>)
     QSize sizeHint; //!< A cache for KexiDBComboBox::sizeHint(),
     //!< rebuilt by KexiDBComboBox::fontChange() and KexiDBComboBox::styleChange()
-    KexiDB::QueryColumnInfo* visibleColumnInfo;
+    KDbQueryColumnInfo* visibleColumnInfo;
     //! used for collecting subwidgets and their childrens (if isEditable is false)
     QList<QWidget*> subWidgetsWithDisabledEvents;
     bool isEditable; //!< true is the combo box is editable
@@ -88,12 +88,12 @@ KexiDBComboBox::~KexiDBComboBox()
     delete d;
 }
 
-KexiDB::TableViewColumn* KexiDBComboBox::column() const
+KDbTableViewColumn* KexiDBComboBox::column() const
 {
     return 0;
 }
 
-KexiDB::Field* KexiDBComboBox::field() const
+KDbField* KexiDBComboBox::field() const
 {
     return KexiDBAutoField::field();
 }
@@ -450,19 +450,19 @@ bool KexiDBComboBox::valueChanged()
 }
 
 void
-KexiDBComboBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+KexiDBComboBox::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
 }
 
-void KexiDBComboBox::setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBComboBox::setVisibleColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     d->visibleColumnInfo = cinfo;
     // we're assuming we already have columnInfo()
     setColumnInfoInternal(columnInfo(), d->visibleColumnInfo);
 }
 
-KexiDB::QueryColumnInfo* KexiDBComboBox::visibleColumnInfo() const
+KDbQueryColumnInfo* KexiDBComboBox::visibleColumnInfo() const
 {
     return d->visibleColumnInfo;
 }
@@ -569,14 +569,14 @@ void KexiDBComboBox::acceptRequested()
     signalValueChanged();
 }
 
-void KexiDBComboBox::slotRowAccepted(KexiDB::RecordData *record, int row)
+void KexiDBComboBox::slotRowAccepted(KDbRecordData *record, int row)
 {
     d->dataEnteredByHand = false;
     KexiComboBoxBase::slotRowAccepted(record, row);
     d->dataEnteredByHand = true;
 }
 
-void KexiDBComboBox::slotItemSelected(KexiDB::RecordData *record)
+void KexiDBComboBox::slotItemSelected(KDbRecordData *record)
 {
     KexiComboBoxBase::slotItemSelected(record);
 }

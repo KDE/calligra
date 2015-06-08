@@ -42,7 +42,7 @@ public:
               currentParams()
     {}
     ~Private() {}
-    KexiDB::Cursor *cursor;
+    KDbCursor *cursor;
     QList<QVariant> currentParams;
     /*! Used in storeNewData(), storeData() to decide whether
      we should ask other view to save changes.
@@ -71,15 +71,15 @@ KexiQueryView::~KexiQueryView()
     delete d;
 }
 
-tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
+tristate KexiQueryView::executeQuery(KDbQuerySchema *query)
 {
     if (!query)
         return false;
     KexiUtils::WaitCursor wait;
-    KexiDB::Cursor *oldCursor = d->cursor;
-    KexiDB::debug(query->parameters());
+    KDbCursor *oldCursor = d->cursor;
+    qDebug() << query->parameters();
     bool ok;
-    KexiDB::Connection * conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection * conn = KexiMainWindowIface::global()->project()->dbConnection();
     {
         KexiUtils::WaitCursorRemover remover;
         d->currentParams = KexiQueryParameters::getParameters(this,
@@ -116,7 +116,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     if (mode == Kexi::NoViewMode) {
-        KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(window()->schemaData());
+        KDbQuerySchema *querySchema = static_cast<KDbQuerySchema *>(window()->schemaData());
         const tristate result = executeQuery(querySchema);
         if (true != result)
             return result;
@@ -129,7 +129,7 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiQueryView::storeNewData(const KDbObject& sdata,
                                                 KexiView::StoreNewDataOptions options,
                                                 bool &cancel)
 {
