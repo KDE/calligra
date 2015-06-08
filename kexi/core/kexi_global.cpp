@@ -62,7 +62,7 @@ KEXICORE_EXPORT const char *Kexi::fullVersionString()
 
 KEXICORE_EXPORT unsigned int Kexi::stableVersionMajor()
 {
-    return (versionRelease() > 50 && versionMinor() == 9) 
+    return (versionRelease() > 50 && versionMinor() == 9)
         ? (versionMajor() + 1) // e.g. 2.9.70 -> 3.0.0
         : versionMajor(); // e.g. 2.3.70 -> 2.4.0 or // e.g. 2.4.0 -> 2.4.0
 }
@@ -71,7 +71,7 @@ KEXICORE_EXPORT unsigned int Kexi::stableVersionMinor()
 {
     if (versionRelease() > 50) {
         return (versionMinor() == 9)
-            ? 0 // e.g. 2.9.70 -> 3.0.0 
+            ? 0 // e.g. 2.9.70 -> 3.0.0
             : (versionMinor() + 1); // e.g. 2.3.70 -> 2.4.0
     }
     return versionMinor(); // e.g. 2.4.0 -> 2.4.0

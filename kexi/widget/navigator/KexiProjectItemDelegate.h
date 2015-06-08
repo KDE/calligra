@@ -25,7 +25,7 @@ class KexiProject;
 
 //! @short Item delegate for the Kexi navigator tree view
 /*! It's currently needed to validate input when renaming items
-    (KexiUtils::IdentifierValidator is used for this). 
+    (KexiUtils::IdentifierValidator is used for this).
     @todo In the future custom painting and/or editing may be added through this delegate. */
 class KexiProjectItemDelegate : public QStyledItemDelegate
 {

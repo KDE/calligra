@@ -118,16 +118,16 @@ void KexiWelcomeStatusBarGuiUpdater::update()
     QDateTime lastStatusBarUpdate = d->configGroup.readEntry("LastStatusBarUpdate", QDateTime());
     if (lastStatusBarUpdate.isValid()) {
         int minutes = lastStatusBarUpdate.secsTo(QDateTime::currentDateTime()) / 60;
-        
+
         if (minutes < GUI_UPDATE_INTERVAL) {
             qDebug() << "gui updated" << minutes << "min. ago, next auto-update in"
                 << (GUI_UPDATE_INTERVAL - minutes) << "min.";
             return;
         }
     }
-    
+
     d->configGroup.writeEntry("LastStatusBarUpdate", QDateTime::currentDateTime());
-    
+
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     f->waitForRedirect(this, SLOT(slotRedirectLoaded()));
 }
@@ -395,7 +395,7 @@ public:
         donated = false;
         //qDebug() << "totalFeedbackScore:" << totalFeedbackScore;
     }
-    
+
     ~Private() {
         delete msgWidget;
         if (!rccFname.isEmpty())  {
@@ -418,7 +418,7 @@ public:
         //qDebug() << score;
         return score;
     }
-    
+
     template<typename T>
     T widgetOfClass(T parent, const char *widgetName) const
     {
@@ -428,12 +428,12 @@ public:
         }
         return w;
     }
-    
+
     QWidget* widget(QWidget *parent, const char *widgetName) const
     {
         return widgetOfClass<QWidget*>(parent, widgetName);
     }
-    
+
     QObject* object(QObject *parent, const char *objectName) const
     {
         QObject *o = parent->findChild<QObject*>(objectName);
@@ -476,7 +476,7 @@ public:
         QObject::connect(animation, SIGNAL(destroyed()), w, SLOT(hide()));
         animation->start();
     }
-    
+
     QWidget* loadGui(const QString &guiFileName, QWidget *parentWidget = 0)
     {
         QString fname = findFilename(guiFileName);
@@ -541,7 +541,7 @@ public:
                 q, SLOT(showShareUsageInfo()));
         connect(statusWidget, "link_show_contribution_details", SIGNAL(linkActivated(QString)),
                 q, SLOT(showContributionDetails()));
-        
+
         setProperty(statusWidget, "donation_url", "visible", false);
         connect(statusWidget, "link_donate", SIGNAL(linkActivated(QString)),
                 q, SLOT(showDonation()));
@@ -563,7 +563,7 @@ public:
         }
         setUserProgress(progress);
     }
-    
+
     void updateContributionLinksVisibility()
     {
         KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
@@ -574,14 +574,14 @@ public:
         if (noneEnabled) {
             availableLinks++;
         }
-        setProperty(statusWidget, "share_more_usage_info", "visible", 
+        setProperty(statusWidget, "share_more_usage_info", "visible",
                     !noneEnabled && !allEnabled);
         if (!noneEnabled && !allEnabled) {
             availableLinks++;
         }
         setProperty(statusWidget, "link_share_more_usage_info", "text",
                     link_share_more_usage_info_mask.arg(totalFeedbackScore - currentFeedbackScore()));
-        
+
         setProperty(statusWidget, "lbl_contribute", "visible", availableLinks > 0);
     }
 
@@ -607,7 +607,7 @@ public:
         AlignToBar,
         AlignToWidget
     };
-    
+
     //! Aligns callout pointer position of msgWidget to widget named @a alignToWidgetName
     void setMessageWidgetCalloutPointerPosition(
         const QString& alignToWidgetName,
@@ -712,7 +712,7 @@ private:
     KexiWelcomeStatusBar *q;
     QMap<QString, QString> dict;
 };
-    
+
 KexiWelcomeStatusBar::KexiWelcomeStatusBar(QWidget* parent)
  : QWidget(parent), d(new Private(this))
 {
@@ -810,7 +810,7 @@ void KexiWelcomeStatusBar::showDonation()
     if (!sender()) {
         return;
     }
-    if (KMessageBox::Yes != KMessageBox::questionYesNo(this, 
+    if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
        xi18n("<para><title>Kexi may be totally free, but its development is costly.</title><nl/>"
             "<para>Power, hardware, office space, internet access, traveling for meetings - everything costs.</para>"
             "<para>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
@@ -849,7 +849,7 @@ void KexiWelcomeStatusBar::slotShareFeedback()
     d->msgWidget->animatedHide();
     KexiMainWindowIface::global()->userFeedbackAgent()
         ->setEnabledAreas(KexiUserFeedbackAgent::AllAreas);
-    
+
     d->animatedHide(d->statusWidget, "share_usage_info");
     d->animatedHide(d->statusWidget, "share_more_usage_info");
     d->animatedHide(d->statusWidget, "lbl_contribute");
@@ -871,7 +871,7 @@ void KexiWelcomeStatusBar::showContributionDetails()
                                   KexiWelcomeStatusBar::Private::AlignToWidget);
     d->contributionDetailsLayout->setColumnMinimumWidth(0, 6); // smaller
     d->contributionDetailsWidget = d->loadGui("contribution_details.ui");
-    
+
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     d->setProperty(d->contributionDetailsWidget, "group_share", "checked",
                    f->enabledAreas() != KexiUserFeedbackAgent::NoAreas);
@@ -880,7 +880,7 @@ void KexiWelcomeStatusBar::showContributionDetails()
                        .toString().arg(d->scores.value(KexiUserFeedbackAgent::BasicArea)));
 
     updateContributionGroupCheckboxes();
-    
+
     d->setProperty(d->contributionDetailsWidget, "group_system", "title",
                    d->property(d->contributionDetailsWidget, "group_system", "title")
                        .toString().arg(d->scores.value(KexiUserFeedbackAgent::SystemInfoArea)));
@@ -898,7 +898,7 @@ void KexiWelcomeStatusBar::showContributionDetails()
                        .toString().arg(d->scores.value(KexiUserFeedbackAgent::RegionalSettingsArea)));
     d->connect(d->contributionDetailsWidget, "group_regional_settings", SIGNAL(toggled(bool)),
                this, SLOT(slotShareContributionDetailsGroupToggled(bool)));
-                   
+
     d->detailsDataVisible = false;
     slotShareContributionDetailsToggled(
         d->property(d->contributionDetailsWidget, "group_share", "checked").toBool());
@@ -911,7 +911,7 @@ void KexiWelcomeStatusBar::showContributionDetails()
                this, SLOT(slotToggleContributionDetailsDataVisibility()));
 
     d->setProperty(d->contributionDetailsWidget, "label_where_is_info_sent", "visible", false);
-    
+
     ScrollArea *contributionDetailsArea = new ScrollArea(d->msgWidget);
     d->contributionDetailsLayout->addWidget(contributionDetailsArea, 1, 1);
     contributionDetailsArea->setWidget(d->contributionDetailsWidget);

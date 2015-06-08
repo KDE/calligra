@@ -149,7 +149,7 @@ private:
     ConnectionDataLVItem* addConnectionData(KDbConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
-    
+
     class Private;
     Private * const d;
 };

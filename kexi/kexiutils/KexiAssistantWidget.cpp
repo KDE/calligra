@@ -34,11 +34,11 @@ public:
         : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     void addPage(KexiAssistantPage* page) {
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
@@ -92,12 +92,12 @@ void KexiAssistantWidget::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
 }
-    
+
 void KexiAssistantWidget::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
 }
-    
+
 KexiAssistantPage* KexiAssistantWidget::currentPage() const
 {
     return dynamic_cast<KexiAssistantPage*>(d->lyr->currentWidget());

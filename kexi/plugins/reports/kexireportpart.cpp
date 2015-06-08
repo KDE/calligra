@@ -107,7 +107,7 @@ void KexiReportPart::initPartActions()
         win->addToolBarAction("report", action);
         d->toolboxActionsByName.insert(action->objectName(), action);
     }
-    
+
 }
 
 QString KexiReportPart::loadReport(const QString& name)
@@ -145,12 +145,12 @@ KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
     qDebug();
     const QString document(loadReport(window->partItem()->name()));
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-    
+
     QDomDocument doc;
     doc.setContent(document);
-    
+
     qDebug() << doc.toString();
-    
+
     QDomElement root = doc.documentElement();
     QDomElement korep = root.firstChildElement("report:content");
     QDomElement conn = root.firstChildElement("connection");

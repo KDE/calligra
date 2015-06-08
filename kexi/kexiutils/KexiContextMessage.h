@@ -46,19 +46,19 @@ public:
 
     //! Adds action. Does not take ownership.
     void addAction(QAction* action, ButtonAlignment alignment = AlignRight);
-    
+
     QList<QAction*> actions() const;
 
     //! @return alignment of button for action @a action.
     ButtonAlignment buttonAlignment(QAction* action) const;
 
-    //! Sets default action, i.e. button created with this action 
+    //! Sets default action, i.e. button created with this action
     //! will be the default button of the message.
     //! Does not take ownership.
     void setDefaultAction(QAction* action);
 
     QAction* defaultAction() const;
-    
+
     QWidget* contentsWidget() const;
 
 private:
@@ -76,7 +76,7 @@ public:
     //! Creates message widget constructed out of context message @a message.
     /*! Inserts itself into layout @a layout on top of the widget @a context.
        If @page is not 0 and @a message has any actions added,
-       all children of @a page widget will be visually disabled to indicate 
+       all children of @a page widget will be visually disabled to indicate
        modality of the message.
        The message widget will be automatically destroyed after triggering
        of any associated action.
@@ -134,7 +134,7 @@ private Q_SLOTS:
 private:
     void init(QWidget *page, QFormLayout* layout,
         QWidget *context, const KexiContextMessage& message);
-    
+
     //! Made private to disable addAction().
     void addAction(QAction* action) { Q_UNUSED(action); }
 

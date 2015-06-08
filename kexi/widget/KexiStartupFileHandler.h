@@ -111,7 +111,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void slotAccepted();
     void saveRecentDir();
-    
+
     void messageWidgetActionYesTriggered();
     void messageWidgetActionNoTriggered();
 

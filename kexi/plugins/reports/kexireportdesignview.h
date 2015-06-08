@@ -71,7 +71,7 @@ protected:
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
-    
+
 private Q_SLOTS:
     void slotDesignerPropertySetChanged();
 

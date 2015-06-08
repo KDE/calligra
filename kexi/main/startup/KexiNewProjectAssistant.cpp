@@ -94,7 +94,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     KexiTemplateCategoryInfo templateCategory;
     templateCategory.name = "blank";
     templateCategory.caption = xi18n("Blank Projects");
-    
+
     KexiTemplateInfo info;
     info.name = "blank";
     info.caption = xi18n("Blank database");
@@ -107,14 +107,14 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
     templateCategory.caption = futureI18n("Office Templates");
-    
+
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = xi18n("Contacts");
     info.description = futureI18n("Database for collecting and managing contacts");
     info.icon = koIcon("view-pim-contacts");
     templateCategory.addTemplate(info);
-    
+
     info = KexiTemplateInfo();
     info.name = "movie";
     info.caption = xi18n("Movie catalog");
@@ -411,7 +411,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     GLUE_WIDGET(m_projectSelector, contents->frm_dblist);
     contents->layout()->setContentsMargins(0, 0, 0, 0);
     m_projectSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    
+
     setContents(contents);
     setFocusWidget(contents->le_title);
 }
@@ -533,11 +533,11 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     KexiTemplateSelectionPage* templateSelectionPage() {
         return page<KexiTemplateSelectionPage>(&m_templateSelectionPage);
     }

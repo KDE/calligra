@@ -35,7 +35,7 @@
 #include <QPointer>
 
 class KexiAssistantPage::Private {
-public:    
+public:
     explicit Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
     {
     }
@@ -118,7 +118,7 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
-    
+
     d->cancelButton = new KexiCloseButton;
     connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);

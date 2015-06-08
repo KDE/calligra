@@ -21,64 +21,64 @@ int main(int argc, char *argv[])
     KexiMigration::KexiMigrate *m = mm.driver("Text");
 
     KDbConnectionData cd;
-    
+
     cd.setFileName("/home/piggz/tabdata.txt");
-    
+
     KexiMigration::Data d;
     d.source = &cd;
-    
+
     m->setData(&d);
-    
+
     m->connectSource();
-    
+
     KDbTableSchema ts;
-    
+
     if (!m->readTableSchema("tabdata.txt", ts))
     {
       qDebug() << "Unable to read schema";
       return 0;
     }
-    
+
     if (!m->readFromTable("tabdata.txt"))
     {
       qDebug() << "Unable to read from table";
       return 0;
     }
-    
+
     while(m->moveNext())
     {
         qDebug() << m->value(0) << m->value(1) << m->value(2);
     }
-    
+
     m->movePrevious();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
+
     m->moveNext();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
+
     m->movePrevious();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
+
     m->movePrevious();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
+
     m->movePrevious();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
+
     m->moveNext();
     qDebug() << m->value(0) << m->value(1) << m->value(2);
-    
-    
+
+
     //KSpread file test
-  
+
     KexiMigration::KexiMigrate *k = mm.driver("KSpread");
     cd.setFileName("/home/piggz/Documents/database.fods");
     k->setData(&d);
-    
+
     k->connectSource();
     QStringList tn;
     k->tableNames(tn);
-    
+
     qDebug() << tn;
     KDbTableSchema ts2;
     if (!k->readTableSchema("Names", ts2))
@@ -86,9 +86,9 @@ int main(int argc, char *argv[])
       qDebug() << "Unable to read schema";
       return 0;
     }
-    
+
     k->readFromTable("Names");
-    
+
     while(k->moveNext())
     {
         qDebug() << k->value(0) << k->value(1) << k->value(2);

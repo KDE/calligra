@@ -64,7 +64,7 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
     m_conn = 0;
     m_rows = 0;
     m_row = 0;
-    
+
     KDbDriverManager manager;
     setDriver(manager.driver("pqxx"));
 }
@@ -523,14 +523,14 @@ bool PqxxMigrate::drv_readFromTable(const QString & tableName)
     //qDebug();
     bool ret;
     ret = false;
-    
+
     try {
         ret = query(QString("SELECT * FROM %1").arg(m_conn->esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
             //qDebug() << m_rows;
         }
-        
+
     }
     catch (const std::exception &e) {
         qWarning();
@@ -551,14 +551,14 @@ bool PqxxMigrate::drv_moveNext()
    else
    {
         return false;
-   }     
+   }
 }
 
 bool PqxxMigrate::drv_movePrevious()
 {
     if (!m_res)
         return false;
-    
+
     if (m_row > 0) {
         m_row --;
         return true;
@@ -566,14 +566,14 @@ bool PqxxMigrate::drv_movePrevious()
     else
     {
         return false;
-    }  
+    }
 }
 
 bool PqxxMigrate::drv_moveFirst()
-{    
+{
     if (!m_res)
         return false;
-    
+
     m_row = 0;
     return true;
 }
@@ -582,7 +582,7 @@ bool PqxxMigrate::drv_moveLast()
 {
     if (!m_res)
         return false;
-    
+
     m_row = m_rows - 1;
     return true;
 }

@@ -8,7 +8,7 @@
 |
 | This document is expected to be independent of given KexiDB driver implementation,
 | but proposals are described here after certain decisions:
-| -drivers are (by current importance): SQLite (embedded), 
+| -drivers are (by current importance): SQLite (embedded),
 |  ODBC (universality reasons), Mysql (historical reasons), PostgreSQL
 |
 
@@ -16,15 +16,15 @@
 	Kexi objects like tables, forms, reports can be put in sort of relation diagram:
 	Easy example: form and report depends on table/query (or more tables and queries).
 
-	This dependency can be called inheriting when we wnat to reuse as many 
+	This dependency can be called inheriting when we wnat to reuse as many
 	as possible properties of parent 'object' in child 'object'.
 
-	Examples of these properties: table colors, columns widths, etc. can be 
+	Examples of these properties: table colors, columns widths, etc. can be
 	reused in forms/reports that use this its data.
 	Inherited values can be of course changed for 'child' objects if needed.
 
-	Other inherited properties example are custom error/warning messages 
+	Other inherited properties example are custom error/warning messages
 	(see kexidb_issuses doc, #1).
 
-	Properties inheritance makes database schema more rich and reduces required work 
+	Properties inheritance makes database schema more rich and reduces required work
 	for later stages of the database project.

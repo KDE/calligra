@@ -187,7 +187,7 @@ void KMessageWidgetFrame::paintCalloutPointer()
         return;
     QPainter painter(this);
     painter.setTransform(m_calloutPointerTransformation);
-    
+
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(bgBrush.color(), 1.0));
     painter.setBrush(bgBrush);

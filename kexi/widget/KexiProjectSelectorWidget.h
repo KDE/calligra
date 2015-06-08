@@ -70,7 +70,7 @@ public:
     QLabel *label() const;
 
     QTreeWidget* list() const;
-    
+
 Q_SIGNALS:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
@@ -82,7 +82,7 @@ protected Q_SLOTS:
 
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    
+
     class Private;
     Private * const d;
 

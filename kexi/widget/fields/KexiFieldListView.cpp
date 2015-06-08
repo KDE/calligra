@@ -109,7 +109,7 @@ QStringList KexiFieldListView::selectedFieldNames() const
             selectedFields.append(field);
         }
     }
-    
+
     return selectedFields;
 
 }

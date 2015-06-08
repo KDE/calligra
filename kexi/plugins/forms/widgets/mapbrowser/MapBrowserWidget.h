@@ -28,7 +28,7 @@
 #include "FormWidgetInterface.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-class MapBrowserWidget : public Marble::MarbleWidget, 
+class MapBrowserWidget : public Marble::MarbleWidget,
                          public KFormDesigner::FormWidgetInterface,
                          public KexiFormDataItemInterface
 {
@@ -46,16 +46,16 @@ public:
     inline QString dataSourcePartClass() const {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
-    
+
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
-    
+
     virtual void setInvalidState(const QString&);
-    
+
     virtual bool isReadOnly() const;
 
 public Q_SLOTS:
@@ -68,7 +68,7 @@ public Q_SLOTS:
     }
     void slotMapChanged();
     virtual void setReadOnly(bool);
-    
+
 protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
     void deserializeData(const QVariant& serialized);

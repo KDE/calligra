@@ -54,37 +54,37 @@ public:
     ActionDataRole,
     ActionPartClassRole
   };
-  
+
   ActionSelectorDialogTreeItem(QString label, QTreeWidget *parent)
   : QTreeWidgetItem(parent) {
       setText(0, label);
-      
+
   }
-  
+
   ActionSelectorDialogTreeItem(QString label, QTreeWidgetItem *parent)
           : QTreeWidgetItem(parent) {
               setText(0, label);
-              
+
   }
-  
+
   using QTreeWidgetItem::data;
   QVariant data(ActionRole role) {
       return QTreeWidgetItem::data(0, role);
   };
-  
+
   using QTreeWidgetItem::setData;
   void setData(ActionRole role, QVariant value) {
       QTreeWidgetItem::setData(0, role, value);
   }
-  
+
   QIcon icon() {
       return QTreeWidgetItem::icon(0);
   }
-  
+
   void setIcon(const QIcon& icon) {
       QTreeWidgetItem::setIcon(0, icon);
   }
-      
+
 };
 
 //---------------------------------------
@@ -102,7 +102,7 @@ ActionsListViewBase::~ActionsListViewBase()
 }
 
 QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, QTreeWidgetItem* parent)
-{   
+{
     Q_UNUSED(parent);
     QTreeWidgetItemIterator it(this);
     while (*it) {
@@ -310,12 +310,12 @@ public:
             itm->setIcon(koIcon("table"));
 
             QTreeWidgetItem *eitem = itm;
-            
+
             itm = new ActionSelectorDialogTreeItem(xi18nc("Note: use multiple rows if needed", "Copy to Clipboard\nAs Data Table"), eitem);
             itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "copyToClipboardAsCSV");
             itm->setIcon(koIcon("table"));
         }
-        
+
         itm = new ActionSelectorDialogTreeItem(xi18n("Create New Object"), this);
         itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "new");
         itm->setIcon(koIcon("document-new"));
@@ -330,7 +330,7 @@ public:
             itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "editText");
             itm->setIcon(noIcon);
         }
-        
+
         itm = new ActionSelectorDialogTreeItem( xi18n("Close View"), this);
         itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "close");
         itm->setIcon(koIcon("window-close"));
@@ -504,12 +504,12 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     // 3rd column: actions to execute
     d->actionToExecuteListView = new ActionToExecuteListView(d->secondAnd3rdColumnMainWidget);
     d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-    
+
     connect(d->actionToExecuteListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotActionToExecuteItemExecuted(QTreeWidgetItem*)));
     connect(d->actionToExecuteListView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(slotActionToExecuteItemSelected(QTreeWidgetItem*)));
-    
+
     d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
 
     d->actionToExecuteLbl = createSelectActionLabel(d->secondAnd3rdColumnMainWidget,
@@ -747,7 +747,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
             qWarning() << "No current category item";
         }
     }
-    
+
     return data; // No Action
 }
 

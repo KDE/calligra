@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -57,10 +57,10 @@ void KexiMobileWidget::databaseOpened(KexiProject *project)
         m_navWidget->setProject(project);
         qDebug() << "Project opened";
     } else {
-      qWarning() << "Project not opened";
-      if (project) {
-	qWarning() << project->errorMsg();
-      }
+        qWarning() << "Project not opened";
+        if (project) {
+            qWarning() << project->errorMsg();
+        }
     }
 
     setCurrentWidget(m_navWidget);
@@ -79,9 +79,9 @@ void KexiMobileWidget::setActiveObject(KexiWindow* win)
         delete m_objectPage;
     }
     m_objectPage = win;
-    
+
     addWidget(m_objectPage);
-    
+
     setCurrentWidget(m_objectPage);
 }
 

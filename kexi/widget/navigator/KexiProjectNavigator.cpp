@@ -249,11 +249,11 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
     d->itemsPartClass = itemsPartClass;
 
     d->model->setProject(prj, itemsPartClass, partManagerErrorMessages);
-    
+
     if (addAsSearchableModel) {
       KexiMainWindowIface::global()->addSearchableModel(d->model);
     }
-    
+
     d->list->expandAll();
     d->list->setRootIsDecorated(false);
     slotUpdateEmptyStateLabel();
@@ -284,7 +284,7 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
 {
     if (!d->list->currentIndex().isValid() || !(d->features & ContextMenus))
         return;
-    
+
     QModelIndex pointedIndex = d->list->indexAt(d->list->mapFromGlobal(event->globalPos()));
 
     KexiProjectModelItem *bit = static_cast<KexiProjectModelItem*>(pointedIndex.internalPointer());
@@ -361,7 +361,7 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
                     xi18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
                 d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createItemIconName()));
             }
-        #if 0 
+        #if 0
              } else {
             if (d->newObjectAction) {
                 d->newObjectAction->setText(xi18n("&Create Object..."));

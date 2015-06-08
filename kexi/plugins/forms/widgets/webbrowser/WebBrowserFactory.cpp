@@ -107,6 +107,6 @@ bool WebBrowserFactory::previewWidget(const QByteArray &classname,
     Q_UNUSED(widget);
     return true;
 }
-     
+
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
 
