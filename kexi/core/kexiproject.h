@@ -23,8 +23,9 @@
 
 #include <QObject>
 
-#include <db/tristate.h>
-#include <db/object.h>
+#include <KDbTristate>
+#include <KDbObject>
+
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"

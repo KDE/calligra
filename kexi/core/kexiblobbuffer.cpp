@@ -33,7 +33,7 @@
 #include <kimageio.h>
 #include <kglobal.h>
 
-#include <db/connection.h>
+#include <KDbConnection>
 
 Q_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
 

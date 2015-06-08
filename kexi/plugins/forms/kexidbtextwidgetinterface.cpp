@@ -19,8 +19,10 @@
 
 #include "kexidbtextwidgetinterface.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
-#include <db/queryschema.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
+
 #include <QPainter>
 
 KexiDBTextWidgetInterface::KexiDBTextWidgetInterface()

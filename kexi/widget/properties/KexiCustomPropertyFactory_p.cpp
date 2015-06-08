@@ -19,10 +19,11 @@
 
 #include "KexiCustomPropertyFactory_p.h"
 
-#include <QDebug>
-
 #include <KProperty>
-#include <kexiutils/identifier.h>
+
+#include <KDb>
+
+#include <QDebug>
 
 //! @todo
 #if 0 //TODO

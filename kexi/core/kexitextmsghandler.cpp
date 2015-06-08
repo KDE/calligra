@@ -18,9 +18,10 @@
 */
 
 #include "kexitextmsghandler.h"
-
 #include "kexi.h"
-#include <db/utils.h>
+
+#include <KDbUtils>
+
 #include <kexiutils/utils.h>
 
 class KexiTextMessageHandler::Private

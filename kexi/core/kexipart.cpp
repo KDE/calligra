@@ -25,14 +25,13 @@
 #include "KexiWindow.h"
 #include "KexiWindowData.h"
 #include "KexiView.h"
-
 #include "kexipartguiclient.h"
 #include "KexiMainWindowIface.h"
 #include "kexi.h"
-
-#include <db/connection.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
+
+#include <KDb>
+#include <KDbConnection>
 
 #include <kactioncollection.h>
 #include <kmessagebox.h>

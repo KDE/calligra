@@ -22,7 +22,7 @@
 
 #include "kexidatatable_export.h"
 
-#include <db/field.h>
+#include <KDbField>
 
 //! @short Text formatter used to format QVariant values to text for displaying and back to QVariant
 /*! Used by KexiInputTableEdit, KexiDateTableEdit, KexiTimeTableEdit, KexiDateTimeTableEdit,

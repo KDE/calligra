@@ -18,6 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kexiquerydesignersql.h"
+#include "kexiquerydesignersqleditor.h"
+#include "kexiquerypart.h"
+#include "kexisectionheader.h"
+#include <KexiIcon.h>
+#include <kexiutils/utils.h>
+#include <kexiproject.h>
+#include <KexiMainWindowIface.h>
+#include <KexiWindow.h>
+
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbParser>
+
+#include <kmessagebox.h>
+
 #include <QSplitter>
 #include <QTimer>
 #include <QLabel>
@@ -25,26 +41,6 @@
 #include <QToolTip>
 #include <QAction>
 #include <QDebug>
-
-#include <kmessagebox.h>
-
-#include <KexiIcon.h>
-
-#include <kexiutils/utils.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/parser/parser.h>
-
-#include <kexiproject.h>
-#include <KexiMainWindowIface.h>
-#include <KexiWindow.h>
-
-#include "kexiquerydesignersqleditor.h"
-#include "kexiquerydesignersql.h"
-#include "kexiquerypart.h"
-
-#include "kexisectionheader.h"
-
 
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {

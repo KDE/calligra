@@ -22,10 +22,12 @@
 #include <QString>
 #include <QStringList>
 
-#include <db/utils.h>
+#include <KDbUtils>
+
+#include <KoReportData.h>
+
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
-#include <KoReportData.h>
 
 class KexiMigrateReportData : public KoReportData
 {

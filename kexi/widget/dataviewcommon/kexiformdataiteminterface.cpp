@@ -19,8 +19,9 @@
 
 #include "kexiformdataiteminterface.h"
 #include <kexidataawareobjectiface.h>
-#include <db/queryschema.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
 
 KexiFormDataItemInterface::KexiFormDataItemInterface()
         : KexiDataItemInterface()

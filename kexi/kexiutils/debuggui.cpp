@@ -19,18 +19,17 @@
 
 #include "utils.h"
 #include "utils_p.h"
-
-#include <db/utils.h>
-
 #include <KexiIcon.h>
+
+#include <KDbUtils>
+
+#include <kguiitem.h>
 
 #include <QThread>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QTabWidget>
 #include <QDebug>
-
-#include <kguiitem.h>
 
 static DebugWindow* debugWindow = 0;
 static QTabWidget* debugWindowTab = 0;

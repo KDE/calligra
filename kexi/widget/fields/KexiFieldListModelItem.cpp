@@ -19,9 +19,10 @@
 
 
 #include "KexiFieldListModelItem.h"
-#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <KexiIcon.h>
+
+#include <KDbUtils>
 
 #include <KLocalizedString>
 

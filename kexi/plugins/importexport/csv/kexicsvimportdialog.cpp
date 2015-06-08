@@ -28,6 +28,41 @@
 
 #include "kexicsvimportdialog.h"
 #include "KexiCSVImportDialogModel.h"
+#include <KexiIcon.h>
+#include <kexiutils/utils.h>
+#include <core/kexi.h>
+#include <core/kexiproject.h>
+#include <core/kexipart.h>
+#include <core/kexipartinfo.h>
+#include <core/kexipartmanager.h>
+#include <core/KexiMainWindowIface.h>
+#include <core/kexiguimsghandler.h>
+#include <core/KexiWindow.h>
+#include <widget/kexicharencodingcombobox.h>
+#include <widget/KexiFileWidget.h>
+#include <kexiutils/KexiCommandLinkButton.h>
+#include <widget/KexiNameWidget.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectTreeView.h>
+#include <widget/fields/KexiFieldListView.h>
+#include <widget/fields/KexiFieldListModel.h>
+#include "kexicsvwidgets.h"
+#include <kexi_global.h>
+
+#include <KDb>
+#include <KDbObjectNameValidator>
+#include <KDbConnection>
+#include <KDbTableSchema>
+#include <KDbTransaction>
+#include <KDbTristate>
+#include <KDbUtils>
+
+#include <kmessagebox.h>
+#include <kcharsets.h>
+#include <knuminput.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KGuiItem>
 
 #include <QCheckBox>
 #include <QClipboard>
@@ -53,41 +88,6 @@
 #include <QProgressDialog>
 #include <QDialog>
 #include <QDebug>
-
-#include <kmessagebox.h>
-#include <kcharsets.h>
-#include <knuminput.h>
-#include <KLocalizedString>
-#include <KConfigGroup>
-#include <KGuiItem>
-
-#include <KexiIcon.h>
-#include <kexiutils/identifier.h>
-#include <kexiutils/utils.h>
-#include <core/kexi.h>
-#include <core/kexiproject.h>
-#include <core/kexipart.h>
-#include <core/kexipartinfo.h>
-#include <core/kexipartmanager.h>
-#include <core/KexiMainWindowIface.h>
-#include <core/kexiguimsghandler.h>
-#include <core/KexiWindow.h>
-#include <db/connection.h>
-#include <db/tableschema.h>
-#include <db/transaction.h>
-#include <db/tristate.h>
-#include <db/utils.h>
-#include <widget/kexicharencodingcombobox.h>
-#include <widget/KexiFileWidget.h>
-#include <kexiutils/KexiCommandLinkButton.h>
-#include <widget/KexiNameWidget.h>
-#include <widget/navigator/KexiProjectNavigator.h>
-#include <widget/navigator/KexiProjectTreeView.h>
-#include <kexidb/dbobjectnamevalidator.h>
-#include <widget/fields/KexiFieldListView.h>
-#include <widget/fields/KexiFieldListModel.h>
-#include "kexicsvwidgets.h"
-#include <kexi_global.h>
 
 #define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
 

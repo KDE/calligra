@@ -23,15 +23,15 @@
 #include "ui_KexiConnectionSelector.h"
 #include "kexiprjtypeselector.h"
 #include "kexidbconnectionwidget.h"
-
-#include <db/drivermanager.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
-
 #include <core/kexi.h>
 #include <KexiIcon.h>
 
+#include <KDbDriverManager>
+#include <KDbConnectionData>
+#include <KDbUtils>
+
+#include <KAboutData>
 #include <kurlcombobox.h>
 
 #include <QDebug>

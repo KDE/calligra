@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QFileInfo>
-#include <QDebug>
+#include <migration/keximigrate.h>
+#include <migration/migratemanager.h>
+#include <core/kexiprojectdata.h>
+
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbField>
+#include <KDbUtils>
 
 #include <kcomponentdata.h>
 
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/field.h>
-#include <db/utils.h>
-#include <migration/keximigrate.h>
-#include <migration/migratemanager.h>
-
-#include <core/kexiprojectdata.h>
+#include <QFileInfo>
+#include <QDebug>
 
 #include <iostream>
 

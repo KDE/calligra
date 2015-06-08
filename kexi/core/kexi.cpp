@@ -22,22 +22,22 @@
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
 #include "kexipartmanager.h"
-#include <kexiutils/identifier.h>
-#include <db/msghandler.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
-
 #include <KexiIcon.h>
+
+#include <KDb>
+#include <KDbMessageHandler>
+#include <KDbDriverManager>
+#include <KDbUtils>
+
+#include <kmessagebox.h>
+#include <KIconTheme>
+#include <KAboutData>
 
 #include <QPixmap>
 #include <QPixmapCache>
 #include <QLabel>
 #include <QMimeDatabase>
 #include <QMimeType>
-
-#include <kmessagebox.h>
-#include <KIconTheme>
-#include <KAboutData>
 
 using namespace Kexi;
 

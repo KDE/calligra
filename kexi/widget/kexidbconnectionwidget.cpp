@@ -19,16 +19,15 @@
  */
 
 #include "kexidbconnectionwidget.h"
-
 #include <kexi.h>
 #include <kexiguimsghandler.h>
-#include <db/connection.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
 #include <widget/KexiDBPasswordDialog.h>
 #include "kexidbdrivercombobox.h"
-
 #include <KexiIcon.h>
+
+#include <KDbConnection>
+#include <KDbUtils>
+#include <KDbDriverManager>
 
 #include <KStandardAction>
 

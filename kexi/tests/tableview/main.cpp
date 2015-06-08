@@ -19,14 +19,9 @@
 
 #include <kapplication.h>
 #include <kglobal.h>
+#include <KAboutData>
 
 #include <tableview/kexitableview.h>
-
-/*#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>*/
-#include <KAboutData>
 
 int main(int argc, char* argv[])
 {

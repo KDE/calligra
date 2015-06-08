@@ -19,14 +19,21 @@
 
 #include "KexiFileWidget.h"
 #include <kexi_global.h>
-
-#include <db/driver.h>
-#include <db/utils.h>
 #include <core/kexi.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiMigrateManagerInterface.h>
 #include <kexiutils/utils.h>
 #include <migration/migratemanager.h>
+
+#include <KDbDriver>
+#include <KDbUtils>
+
+#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <kfile.h>
+#include <kurlcombobox.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
 
 #include <QObject>
 #include <QPushButton>
@@ -37,14 +44,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QDebug>
-
-#include <kmessagebox.h>
-#include <KLocalizedString>
-
-#include <kfile.h>
-#include <kurlcombobox.h>
-#include <kactioncollection.h>
-#include <kfiledialog.h>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs

@@ -20,14 +20,14 @@
 */
 
 #include "keximigrate.h"
+#include <core/kexi.h>
+#include <core/kexiproject.h>
 
 #include <kinputdialog.h>
 
-#include <kexiutils/identifier.h>
-#include <core/kexi.h>
-#include <core/kexiproject.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
+#include <KDb>
+#include <KDbDriverManager>
+#include <KDbUtils>
 
 #include <QDebug>
 

@@ -19,12 +19,12 @@
 
 #include "KexiStartupFileHandler.h"
 #include <kexi_global.h>
-
-#include <db/driver.h>
-#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiContextMessage.h>
+
+#include <KDbDriver>
+#include <KDbUtils>
 
 #include <kmessagebox.h>
 #include <kfile.h>

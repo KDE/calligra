@@ -18,12 +18,12 @@
  */
 
 #include "KexiProjectSelectorWidget.h"
-
-#include <db/drivermanager.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
 #include <core/kexi.h>
 #include <KexiIcon.h>
+
+#include <KDbDriverManager>
+#include <KDbConnectionData>
+#include <KDbUtils>
 
 #include <KLocalizedString>
 
