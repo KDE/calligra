@@ -76,9 +76,9 @@ class KexiImagePropertyEditorDelegate : public KPropertyEditorCreatorInterface,
 {
 public:
     KexiImagePropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 #endif
@@ -87,7 +87,7 @@ class KexiIdentifierPropertyEditorDelegate : public KPropertyEditorCreatorInterf
 {
 public:
     KexiIdentifierPropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         Q_UNUSED(type);

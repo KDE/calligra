@@ -319,7 +319,7 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
             QPainter p(this);
             QStyleOptionFrameV2 option;
             initStyleOption(&option);
-            
+
             int leftMargin, topMargin, rightMargin, bottomMargin;
             getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
             QRect r( style()->subElementRect(QStyle::SE_LineEditContents, &option, this) );

@@ -428,7 +428,7 @@ Q_SIGNALS:
 
     //! emitted when state of 'save/cancel record changes' actions should be updated.
     void updateSaveCancelActions();
-    
+
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();

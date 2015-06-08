@@ -37,7 +37,7 @@ public:
     KRScriptFunctions(const KoReportData *, KDbConnection*);
 
     ~KRScriptFunctions();
-    
+
 private:
     KDbConnection *m_connection;
     const KoReportData *m_cursor;
@@ -47,7 +47,7 @@ private:
     QString m_where;
 public Q_SLOTS:
     void setWhere(const QString&);
-    
+
     qreal sum(const QString &);
     qreal avg(const QString &);
     qreal min(const QString &);

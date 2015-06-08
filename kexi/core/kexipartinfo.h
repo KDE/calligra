@@ -125,8 +125,8 @@ public:
     bool isExecuteSupported() const;
 
     /**
-     * \return true if the property editing facilities should 
-     * be displayed even if the item's property set 
+     * \return true if the property editing facilities should
+     * be displayed even if the item's property set
      * (KexiWindow::propertySet()) is 0.
      * False by default. It is set to true e.g. for table part.
      */

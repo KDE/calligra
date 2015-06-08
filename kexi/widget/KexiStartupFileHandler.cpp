@@ -84,7 +84,7 @@ public:
     QString defaultExtension;
     bool confirmOverwrites;
     QString recentDirClass;
-    
+
     QPointer<QEventLoop> messageWidgetLoop;
     //! Used in KexiStartupFileHandler::askForOverwriting() to remember path that
     //! was recently accepted for overwrite by the user.
@@ -139,7 +139,7 @@ void KexiStartupFileHandler::saveRecentDir()
 {
     if (!d->recentDirClass.isEmpty()) {
         qDebug() << d->recentDirClass;
-        
+
         QUrl dirUrl;
         if (d->requester)
             dirUrl = d->requester->url();

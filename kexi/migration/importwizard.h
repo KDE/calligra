@@ -70,7 +70,7 @@ protected Q_SLOTS:
 
 private:
     void parseArguments();
-    
+
     void setupIntro();
     void setupSrcConn();
     void setupSrcDB();

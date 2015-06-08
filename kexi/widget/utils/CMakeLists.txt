@@ -2,9 +2,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ut
 
 ########### next target ###############
 
-set(kexiguiutils_LIB_SRCS 
-   kexisharedactionclient.cpp 
-   kexidisplayutils.cpp 
+set(kexiguiutils_LIB_SRCS
+   kexisharedactionclient.cpp
+   kexidisplayutils.cpp
    kexitooltip.cpp
    kexicontextmenuutils.cpp
    kexidropdownbutton.cpp
@@ -17,7 +17,7 @@ if (KEXI_MOBILE)
 
 else ()
     list(APPEND kexiguiutils_LIB_SRCS
-        kexirecordnavigator.cpp 
+        kexirecordnavigator.cpp
     )
 endif ()
 

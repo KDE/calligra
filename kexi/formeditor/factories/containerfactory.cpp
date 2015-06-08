@@ -557,7 +557,7 @@ ContainerFactory::~ContainerFactory()
 {
 }
 
-QWidget* 
+QWidget*
 ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options)
@@ -646,7 +646,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 }
 
 bool
-ContainerFactory::previewWidget(const QByteArray &classname, 
+ContainerFactory::previewWidget(const QByteArray &classname,
     QWidget *widget, KFormDesigner::Container *container)
 {
     if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
@@ -724,7 +724,7 @@ ContainerFactory::saveSpecialProperty(const QByteArray &, const QString &name, c
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget()->parentWidget());
         KFormDesigner::FormIO::savePropertyElement(
             parentNode, parent, "attribute", "title", tab->tabText(tab->indexOf(w)));
-    } else if ((name == "stackIndex") 
+    } else if ((name == "stackIndex")
         && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget") || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
     {
         QStackedWidget *stack = dynamic_cast<QStackedWidget*>(w->parentWidget());

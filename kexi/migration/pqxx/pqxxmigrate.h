@@ -87,7 +87,7 @@ protected:
 
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
-                               
+
 
 private:
     //! perform a query on the database

@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -38,10 +38,10 @@ public:
     virtual ~KexiMobileMainWindow();
 
 public Q_SLOTS:
-    
+
     KexiWindow* openObject(KexiPart::Item* item);
-    
-    //KexiMainWindowIface Overrides    
+
+    //KexiMainWindowIface Overrides
     virtual void acceptProjectClosingRequested(bool& cancel);
     virtual void acceptPropertySetEditing();
     virtual KActionCollection* actionCollection() const;
@@ -76,20 +76,20 @@ public Q_SLOTS:
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString());
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
     virtual bool userMode() const;
-    
-    
+
+
 public Q_SLOTS:
     void slotOpenDatabase();
-    
+
 private:
     KexiMobileWidget *m_mobile;
     KexiMobileToolbar *m_toolbar;
     QAction *m_openFileAction;
     KexiProject *m_project;
     QHBoxLayout *m_layout;
-    
+
     void setupToolbar();
-    
+
     KexiProject* openProject(const QUrl &url);
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage);
 };

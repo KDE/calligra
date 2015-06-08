@@ -915,7 +915,7 @@ void Form::autoAssignTabStops()
         KFormDesigner::TabWidget *tab_w
                 = KFormDesigner::findParent<KFormDesigner::TabWidget>(
                     w, "KFormDesigner::TabWidget", page_w);
-        
+
         for (; it!=list.constEnd(); ++it) {
             QWidget *nextw = *it;
             if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where one is a child of another
@@ -1148,7 +1148,7 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
         && idOfPropertyCommand > 0
         && d->idOfPropertyCommand == idOfPropertyCommand)
     {
-        d->lastCommand->setValue(value); // just change the value, 
+        d->lastCommand->setValue(value); // just change the value,
                                          // to avoid multiple PropertyCommands that only differ by value
     }
     else {
@@ -1186,7 +1186,7 @@ void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
         && idOfPropertyCommand > 0
         && d->idOfPropertyCommand == idOfPropertyCommand)
     {
-        presentCommand->copyPropertyValuesFrom(*commandGroup); // just change the values, 
+        presentCommand->copyPropertyValuesFrom(*commandGroup); // just change the values,
                                                        // to avoid multiple CommandsGroups
                                                        // that only differ by values
         delete commandGroup;
@@ -1936,7 +1936,7 @@ void Form::pasteWidget()
         return;
     }
     QDomDocument doc;
-    if (!doc.setContent( mimeDataHasXmlUiFormat 
+    if (!doc.setContent( mimeDataHasXmlUiFormat
         ? QString::fromUtf8( mimeData->data(KFormDesigner::mimeType())) : mimeData->text() ))
     {
         return;
@@ -2206,7 +2206,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         }
         updatePropertyValue(tree, "vAlign");
     }
-    
+
     if (possibleValues.contains("WordBreak")) {
         // Create the wordbreak property
         KProperty *p = new KProperty("wordbreak",
@@ -2498,7 +2498,7 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
         WidgetInfo *winfo = library()->widgetInfoForClassName(obj->metaObject()->className());
         if (winfo) {
             winfo->factory()->resizeEditor(
-                d->inlineEditor, selectedWidget(), 
+                d->inlineEditor, selectedWidget(),
                 selectedWidget()->metaObject()->className());
         }
     }
