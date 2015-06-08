@@ -75,7 +75,7 @@ public:
     /*! \property KexiPushButton::hyperlinkTool
      * Sets the tool for opening hyperlinks
      * The valid values are described by the KexiUtils::OpenHyperlinkOptions::HyperlinkTool enum
-     * 
+     *
      * The default value is DefaultHyperlinkTool
      */
     void setHyperlinkTool(KexiUtils::OpenHyperlinkOptions::HyperlinkTool tool);

@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${
 
 ########### next target ###############
 
-set(kexidataviewcommon_LIB_SRCS 
+set(kexidataviewcommon_LIB_SRCS
    kexidataawareobjectiface.cpp
    kexidataawarepropertyset.cpp
    kexidataawareview.cpp

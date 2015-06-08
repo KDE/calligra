@@ -232,7 +232,7 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 class KexiSearchLineEditPopupItemDelegate : public QStyledItemDelegate
 {
 public:
-    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer) 
+    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer)
      : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
     {
     }
@@ -364,12 +364,12 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     // Moreover, sorting KexiCompleter::CaseInsensitivelySortedModel breaks
     // filtering so only table names are displayed.
     d->completer->setModelSorting(KexiCompleter::UnsortedModel);
-    
+
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
     treeView->setItemDelegate(
         d->delegate = new KexiSearchLineEditPopupItemDelegate(treeView, d->completer));
-    
+
     // forked initialization like in QLineEdit::setCompleter:
     d->completer->setWidget(this);
     if (hasFocus()) {
@@ -469,7 +469,7 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     if (!source.first.isValid())
         return;
     //qDebug() << source.second->searchableData(source.first, Qt::EditRole);
-    
+
     d->highlightSearchableObject(source);
     d->removeHighlightingForSearchableObject();
     if (source.second->activateSearchableObject(source.first)) {
@@ -610,7 +610,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         if (d->completer->popup() && d->completer->completionCount() > 1) {
             //qDebug() << "11111" << d->completer->completionPrefix()
             //          << d->completer->completionCount();
-            
+
             // more than one item on completion list, find exact match, if found, accept
             for (int i = 0; i < d->completer->completionCount(); i++) {
                 //qDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();

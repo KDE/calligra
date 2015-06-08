@@ -52,7 +52,7 @@ public:
 //    QString mimeType;
     QString itemIconName;
     QString objectName;
-    
+
     QString partClass;
     /*! Supported modes for dialogs created by this part.
     @see KexiPart::Info::supportedViewModes() */
@@ -61,7 +61,7 @@ public:
     /*! Supported modes for dialogs created by this part in user mode.
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
-    
+
     bool broken;
     bool isVisibleInNavigator;
     bool idStoredInPartDatabase;

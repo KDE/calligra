@@ -6,11 +6,11 @@ KEXI ALTER TABLE ISSUES
 - different databases have different set of altering capabilities
   (SQLite has no table altering capabilities at all; re-creation is needed:
   this has high cost in time and disk space for large tables)
-- we need to collect every detailed change made in Table Designer and apply 
+- we need to collect every detailed change made in Table Designer and apply
   these changes to existing table schema
-- in the case when a table is already filled with data, we need to perform 
-  tasks to move that data to a new structure, 
-  especially if database engine can't do it for us or if the engine 
+- in the case when a table is already filled with data, we need to perform
+  tasks to move that data to a new structure,
+  especially if database engine can't do it for us or if the engine
   wants simply drop the data because convertion cannot be done automatically
 - because of above issues, some work needs to be done at the client side
 
@@ -56,7 +56,7 @@ KEXI ALTER TABLE ISSUES
 
 
 3. How to perform table altering be re-creation:
-SQLite:  (taken from Ticket 236: Add RENAME TABLE 
+SQLite:  (taken from Ticket 236: Add RENAME TABLE
 	- will be easier to work around missing ALTER TABLE
 		http://www.sqlite.org/cvstrac/tktview?tn=236,8)
 	Currently the recommended method to ALTER TABLE is:
@@ -67,8 +67,8 @@ SQLite:  (taken from Ticket 236: Add RENAME TABLE
 	4. Create a new table.
 	5. Copy all data from the temporary table to the new table.
 
-For example, suppose you have a table named "t1" with columns 
-names "a", "b", and "c" and that you want to delete column "c" 
+For example, suppose you have a table named "t1" with columns
+names "a", "b", and "c" and that you want to delete column "c"
 from this table. The following steps illustrate how this could be done:
 
 BEGIN TRANSACTION;
@@ -80,7 +80,7 @@ INSERT INTO t1 SELECT a,b FROM t1_backup;
 DROP TABLE t1_backup;
 COMMIT;
 
-If the table name also changes on altering, it's easier to do the 
+If the table name also changes on altering, it's easier to do the
 altering (no temp. table needed):
 
 BEGIN TRANSACTION;

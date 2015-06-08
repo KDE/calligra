@@ -90,7 +90,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     connect(m_widgetDataSourceCombo->lineEdit(), SIGNAL(textChanged(QString)),
         this, SLOT(slotWidgetDataSourceTextChanged(QString)));
     mainLayout()->addWidget(m_widgetDataSourceCombo);
-    
+
     m_widgetDataSourceComboSpacer = addWidgetSpacer();
 
     //- Form's Data Source
@@ -296,7 +296,7 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
     if (isPartAcceptable && m_formDataSourceCombo->isSelectionValid())
     {
         KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
-            m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(), 
+            m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(),
             partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET

@@ -40,7 +40,7 @@
 #include <QDebug>
 #include <QCheckBox>
 #include <QTimer>
- 
+
 KexiMainWelcomePage::KexiMainWelcomePage(
    KexiWelcomeAssistant* assistant, QWidget* parent)
  : KexiAssistantPage(xi18nc("@title:window", "Welcome to Kexi"),
@@ -50,7 +50,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 {
     QWidget* contents = new QWidget;
     QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
-    
+
     m_recentProjects = new KexiCategorizedView;
     // do not alter background palette
     QPalette pal(m_recentProjects->palette());
@@ -67,10 +67,10 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(activated(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    
+
     m_statusBar = new KexiWelcomeStatusBar;
     contentsLyr->addWidget(m_statusBar);
-    
+
     setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
@@ -111,12 +111,12 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
         mainWindow->redirectMessagesTo(0);
     }
-    
+
     KexiMainWelcomePage* mainWelcomePage() {
         return page<KexiMainWelcomePage>(&m_mainWelcomePage, q);
     }

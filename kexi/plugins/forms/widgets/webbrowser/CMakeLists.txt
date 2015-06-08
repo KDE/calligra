@@ -1,6 +1,6 @@
 include_directories(    ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/forms/widgets/webbrowser ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main   )
 
-set(kformdesigner_webbrowser_PART_SRCS 
+set(kformdesigner_webbrowser_PART_SRCS
     WebBrowserWidget.cpp
     WebBrowserFactory.cpp)
 

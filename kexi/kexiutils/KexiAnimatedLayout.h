@@ -41,9 +41,9 @@ public Q_SLOTS:
     /*! Animation is performed while switching the widgets
         (assuming animations are enabled (see the explanation
         for @ref KexiAnimatedStackedLayout).
-        The new current widget must already be contained in this stacked layout. 
+        The new current widget must already be contained in this stacked layout.
         Because of the animation, changing current widget is asynchronous, i.e.
-        after this methods returns, current widget is not changed. 
+        after this methods returns, current widget is not changed.
         Connect to signal QStackedLayout::currentChanged(int index) to be notified
         about actual change of the current widget when animation finishes.
         @note this method is not virtual, so when calling it, make sure
@@ -54,7 +54,7 @@ public Q_SLOTS:
     //! Sets the current widget to be the specified index.
     /*! Animation is performed as for setCurrentWidget(). */
     void setCurrentIndex(int index);
-    
+
 private:
     class Private;
     Private* const d;

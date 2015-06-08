@@ -110,7 +110,7 @@ public:
     /*! \return database name.
      In fact, this is the same as KDbObject::name() */
     QString databaseName() const;
-   
+
     void setDatabaseName(const QString& dbName);
 
     /*! \return user-visible string better describing the project than just databaseName().

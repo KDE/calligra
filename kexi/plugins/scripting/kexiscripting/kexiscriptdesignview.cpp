@@ -64,7 +64,7 @@ public:
 
     /// Used to display statusmessages.
     QTextBrowser* statusbrowser;
-    
+
     /** The type of script
      *  executable = regular script that can be executed by the user
      *  module = a script which doesn't contain a 'main', only
@@ -257,7 +257,7 @@ void KexiScriptDesignView::updateProperties()
 
     if (!info) {
         // if interpreter isn't defined or invalid, try to fallback.
-        foreach (const QString& interpretername, 
+        foreach (const QString& interpretername,
             QStringList() << "python" << "ruby" << "qtscript" << "javascript" << "java")
         {
             info = manager->interpreterInfo(interpretername);

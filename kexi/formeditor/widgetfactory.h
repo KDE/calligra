@@ -50,9 +50,9 @@ class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
 {
 protected:
     InternalPropertyHandlerInterface();
-    
+
     virtual ~InternalPropertyHandlerInterface();
-    
+
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
@@ -196,10 +196,10 @@ public:
     //! Arguments used by Form::createInlineEditor() and startInlineEditing()
     /*! @a text is the text to display by default in the line edit.
        @a widget is the edited widget, @a geometry is the geometry the new line
-       edit should have, and @a alignment is Qt::Alignment of the new line edit. 
-       If @a useFrame is false (the default), the line edit has no frame. 
-       if @a multiLine is false (the default), the line edit has single line. 
-       @a background describes line edit's background. 
+       edit should have, and @a alignment is Qt::Alignment of the new line edit.
+       If @a useFrame is false (the default), the line edit has no frame.
+       if @a multiLine is false (the default), the line edit has single line.
+       @a background describes line edit's background.
        If @a execute is true (the default), createInlineEditor() will be executed. */
     class KFORMEDITOR_EXPORT InlineEditorCreationArguments {
     public:
@@ -218,7 +218,7 @@ public:
         bool transparentBackground;
     };
 
-    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 
+    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents
        of the widget directly within the Form,
        e.g. creates a line edit to change the text of a label. @a args is
        used to pass the arguments back to the caller.
@@ -313,13 +313,13 @@ protected:
     /*! This function creates a little dialog (a KEditListBox) to modify the contents
      of a list (of strings). It can be used to modify the contents
      of a combo box for instance. The modified list is copied
-     into \a list if the user presses "Ok" and true is returned. 
+     into \a list if the user presses "Ok" and true is returned.
      When user presses "Cancel" false is returned. */
     bool editList(QWidget *w, QStringList &list) const;
 
     /*! This function creates a little editor to modify rich text. It supports alignment,
      subscript and superscript and all basic formatting properties.
-     If the user presses "Ok", the edited text is put into @a text and true is returned. 
+     If the user presses "Ok", the edited text is put into @a text and true is returned.
      If the user presses "Cancel" false is returned. */
     bool editRichText(QWidget *w, QString &text) const;
 

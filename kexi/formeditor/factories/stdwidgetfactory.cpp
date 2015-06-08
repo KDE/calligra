@@ -128,7 +128,7 @@ private:
     StdWidgetFactory *m_factory;
 };
 
-EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container, 
+EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent,
                                        StdWidgetFactory *factory)
     : QAction(koIcon("document-edit"),
@@ -418,7 +418,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     //for EchoMode
     setPropertyDescription("passwordMode", xi18nc("Property: Password Mode for line edit", "Password Mode"));
     setPropertyDescription("squeezedTextEnabled", xi18nc("Property: Squeezed Text Mode for line edit", "Squeezed Text"));
-    
+
     //KTextEdit
     setPropertyDescription("tabStopWidth", xi18n("Tab Stop Width"));
     setPropertyDescription("tabChangesFocus", xi18n("Tab Changes Focus"));
@@ -519,7 +519,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 }
 
 bool
-StdWidgetFactory::previewWidget(const QByteArray &classname, 
+StdWidgetFactory::previewWidget(const QByteArray &classname,
                                 QWidget *widget, KFormDesigner::Container *)
 {
     Q_UNUSED(classname);
@@ -614,7 +614,7 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         }
         return true;
     }
-    else if (   args.classname == "KTextEdit" || args.classname == "KDateTimeWidget" 
+    else if (   args.classname == "KTextEdit" || args.classname == "KDateTimeWidget"
              || args.classname == "KTimeWidget" || args.classname == "KDateWidget"
              || args.classname == "KIntSpinBox")
     {
@@ -644,7 +644,7 @@ StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
 }
 
 bool
-StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget, 
+StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
                                    const QString &text, QString &oldText)
 {
     const QByteArray n(widget->metaObject()->className());
@@ -660,7 +660,7 @@ StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
 }
 
 void
-StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, 
+StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
                                const QByteArray &classname)
 {
     QSize s = widget->size();
@@ -695,8 +695,8 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
 }
 
 bool
-StdWidgetFactory::saveSpecialProperty(const QByteArray &classname, 
-                                      const QString &name, const QVariant &, 
+StdWidgetFactory::saveSpecialProperty(const QByteArray &classname,
+                                      const QString &name, const QVariant &,
                                       QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
 {
     if (name == "list_items" && classname == "KComboBox") {
@@ -743,7 +743,7 @@ StdWidgetFactory::saveSpecialProperty(const QByteArray &classname,
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
-StdWidgetFactory::saveListItem(QListWidgetItem *item, 
+StdWidgetFactory::saveListItem(QListWidgetItem *item,
                                QDomNode &parentNode, QDomDocument &domDoc)
 {
     QDomElement element = domDoc.createElement("item");
@@ -765,8 +765,8 @@ StdWidgetFactory::saveListItem(QListWidgetItem *item,
 #endif
 
 bool
-StdWidgetFactory::readSpecialProperty(const QByteArray &classname, 
-                                      QDomElement &node, QWidget *w, 
+StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
+                                      QDomElement &node, QWidget *w,
                                       KFormDesigner::ObjectTreeItem *item)
 {
     const QString tag( node.tagName() );

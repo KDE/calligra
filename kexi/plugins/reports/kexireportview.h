@@ -51,7 +51,7 @@ public:
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-    
+
     virtual void addNewRecordRequested();
     virtual void moveToFirstRecordRequested();
     virtual void moveToLastRecordRequested();
@@ -67,7 +67,7 @@ private:
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
     KoReportPage *m_reportPage;
-    
+
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif

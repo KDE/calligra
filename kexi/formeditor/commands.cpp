@@ -419,7 +419,7 @@ public:
 };
 }
 
-AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment, 
+AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment,
                                          const QWidgetList &list, Command *parent)
         : Command(parent), d( new Private )
 {
@@ -807,7 +807,7 @@ void AdjustSizeCommand::undo()
             item->widget()->resize(d->sizes[item->widget()->objectName().toLatin1().constData()]);
             if (d->type == SizeToGrid)
                 item->widget()->move(d->pos[item->widget()->objectName().toLatin1().constData()]);
-            d->form->selectWidget(item->widget(), 
+            d->form->selectWidget(item->widget(),
                 Form::AddToPreviousSelection | Form::LastSelection | Form::Raise); // restore selection
         }
     }
@@ -1206,8 +1206,8 @@ void PasteWidgetCommand::execute()
             }
             else {
                 moveWidgetBy(
-                    el, container, 
-                    QPoint(-minX, -minY) + d->pos // fix position by subtracting the original 
+                    el, container,
+                    QPoint(-minX, -minY) + d->pos // fix position by subtracting the original
                                                   // offset and adding the new one
                 );
             }
@@ -1491,8 +1491,8 @@ public:
 }
 
 DuplicateWidgetCommand::DuplicateWidgetCommand(
-    const Container& container, 
-    const QWidgetList &list, 
+    const Container& container,
+    const QWidgetList &list,
     const QPoint& copyToPoint,
     Command *parent)
         : Command(parent), d( new Private )
@@ -1671,7 +1671,7 @@ public:
 }
 
 InlineTextEditingCommand::InlineTextEditingCommand(
-    Form& form, QWidget *widget, const QByteArray &editedWidgetClass, 
+    Form& form, QWidget *widget, const QByteArray &editedWidgetClass,
     const QString &text, Command *parent)
  : Command(parent)
  , d( new Private )

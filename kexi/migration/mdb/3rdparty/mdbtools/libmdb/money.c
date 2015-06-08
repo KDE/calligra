@@ -25,7 +25,7 @@
 #endif
 
 #define MAXPRECISION 19
-/* 
+/*
 ** these routines are copied from the freetds project which does something
 ** very similar
 */
@@ -116,7 +116,7 @@ static char *array_to_string(unsigned char *array, unsigned int scale, int neg)
 {
 	char *s;
 	unsigned int top, i, j=0;
-	
+
 	for (top=MAXPRECISION;(top>0) && (top-1>scale) && !array[top-1];top--);
 
 	s = (char *) g_malloc(22);

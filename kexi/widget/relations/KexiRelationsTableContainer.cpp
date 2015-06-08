@@ -83,8 +83,8 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    
-    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
+
+    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu(QPoint)));
 
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),

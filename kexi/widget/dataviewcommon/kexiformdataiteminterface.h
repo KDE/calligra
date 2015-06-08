@@ -47,7 +47,7 @@ public:
     }
 
     /*! \return the class of the part for the widget's data source.
-     Data source part class means here types like "org.kexi-project.table" 
+     Data source part class means here types like "org.kexi-project.table"
      or "org.kexi-project.query" if the data source is set to object
      (as within form or subform)
      or is empty if the data source is set to table field or query column. */

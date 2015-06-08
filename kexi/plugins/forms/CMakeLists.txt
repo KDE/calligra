@@ -94,8 +94,8 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbdatepicker.cpp
   )
 
-    #obsolete	widgets/kexidbdoublespinbox.cpp
-    #obsolete	widgets/kexidbintspinbox.cpp
+    #obsolete    widgets/kexidbdoublespinbox.cpp
+    #obsolete    widgets/kexidbintspinbox.cpp
 
 add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 

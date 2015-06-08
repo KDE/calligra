@@ -43,7 +43,7 @@ public:
 
     virtual ~KexiSearchLineEdit();
 
-    /*! Add searchable model to the main window. This extends search to a new area. 
+    /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. */
     void addSearchableModel(KexiSearchableModel *model);
 
@@ -80,7 +80,7 @@ private:
     QString textBeforeSelection() const;
     QString textAfterSelection() const;
     int selectionEnd() const;
-    
+
     QPair<QModelIndex, KexiSearchableModel*> mapCompletionIndexToSource(const QModelIndex &index) const;
 
     class Private;

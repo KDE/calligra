@@ -67,7 +67,7 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     history = new KUndo2Stack();
     historyActionCollection->addAction("edit_undo", history->createUndoAction(historyActionCollection, "edit_undo"));
     historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
-    
+
     internalPropertyNames
         << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
         << "boundColumn" << "visibleColumn";

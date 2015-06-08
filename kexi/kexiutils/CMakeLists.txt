@@ -1,7 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
 
-include_directories( 
-  ${CMAKE_SOURCE_DIR}/kexi 
+include_directories(
+  ${CMAKE_SOURCE_DIR}/kexi
   ${CMAKE_CURRENT_SOURCE_DIR}/completer
 )
 
@@ -73,7 +73,7 @@ if(FALSE) # TODO: install when we move to independent place
     install( FILES  tristate.h utils.h kexiutils_export.h kexiutils_global.h
     styleproxy.h InternalPropertyMap.h
     SmallToolButton.h FlowLayout.h
-    kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h 
+    kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h
     KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif()

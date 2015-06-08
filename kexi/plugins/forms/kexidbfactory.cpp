@@ -604,7 +604,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.useFrame = true;
         args.multiLine = true;
 //! @todo
-#if 0 
+#if 0
         //copy a few properties
         KTextEdit *ed = dynamic_cast<KTextEdit *>(editor(w));
         ed->setLineWrapMode(textedit->lineWrapMode());

@@ -1,7 +1,7 @@
 
 include_directories(${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
 
-set(kexirelationdesignshape_PART_SRCS  
+set(kexirelationdesignshape_PART_SRCS
 kexirelationdesignshape.cpp
 kexirelationdesignfactory.cpp
 kexirelationdesignshapeplugin.cpp

@@ -62,7 +62,7 @@ void KexiTitleLabel::updateFont()
     if (!d->updateFontEnabled)
         return;
     KexiUtils::BoolBlocker guard(d->updateFontEnabled, false);
-    
+
     qreal factor;
     QRect geo = QApplication::desktop()->availableGeometry(this);
     QFont f = font();

@@ -18,7 +18,7 @@ Group: MainWindow
 
 # True if single click should open item in the Project Navigator.
 # Otherwise double click should be used to open item.
-# Meaningful when "single click to open files" option is set 
+# Meaningful when "single click to open files" option is set
 # in the Control Center.
 - SingleClickOpensItem [boolean] (default: false)
 
@@ -33,8 +33,8 @@ Group: Notification Messages
 
 -askBeforeOpeningFileReadOnly [boolean] (default: true)
 
-# If true, warning messages related to plugins, e.g. 
-# "Errors encountered during loading plugins" 
+# If true, warning messages related to plugins, e.g.
+# "Errors encountered during loading plugins"
 # will be displayed on the application's startup.
 -ShowWarningsRelatedToPluginsLoading [boolean] (default: true)
 
@@ -82,13 +82,13 @@ Group: KeyboardNavigation
 
 Group: Forms
 TODO:-overrideStyleName [string] (empty if do not override)
-TODO:-doNotFocusAutonumberFields [boolean] (true by default; when this and autoTabStop for a form is true, 
+TODO:-doNotFocusAutonumberFields [boolean] (true by default; when this and autoTabStop for a form is true,
                                          autonumber text fields are skipped)
                                          implement this in KexiFormView::afterSwitchFrom()
-TODO:-appendColonToAutoLabels [boolean] (true by default; when true, colon character is appended 
+TODO:-appendColonToAutoLabels [boolean] (true by default; when true, colon character is appended
                                       to autolabel text)
-TODO:-makeFirstCharacterUpperCaseInAutoLabels [boolean] (true by default; when true, first character 
-                                      in autolabel text is converted to upper case. 
+TODO:-makeFirstCharacterUpperCaseInAutoLabels [boolean] (true by default; when true, first character
+                                      in autolabel text is converted to upper case.
                                       Usable when no field's title is provided)
 TODO:-labelPositionInAutoLabels [enum: Left, Top] (Left by default)
 
@@ -100,7 +100,7 @@ TODO:-autoTabStop [boolean]
 
 Group: ImportExport
 # Default character encoding for MS Access MDB/MDE files (older than 2000).
-# Currently used by in Advanced Options of Importing Wizard. 
+# Currently used by in Advanced Options of Importing Wizard.
 # Useful if you are performing many imports of MS Access databases.
 # Valid values can be "cp 1250", "cp 1251", etc. Case insensitive.
 # If not provided, system default will be is assumed.
@@ -122,7 +122,7 @@ Group: ImportExport
 # Default text quote character used for exporting CSV (Comma-Separated Value) files.
 -DefaultTextQuoteForExportingCSVFiles [string] (default is ")
 
-# Import missing text values in CSV files as empty text ('' not NULL). 
+# Import missing text values in CSV files as empty text ('' not NULL).
 ImportNULLsAsEmptyText [boolean] (default: true)
 
 # Default character encoding for exporting CSV (Comma-Separated Value) files.
@@ -135,7 +135,7 @@ ImportNULLsAsEmptyText [boolean] (default: true)
 # Only used when StoreOptionsForCSVExportDialog option is true.
 -AddColumnNamesForExportingCSVFiles [string] (default: true)
 
-# Maximum number of rows that can be displayed in the CSV import dialog. 
+# Maximum number of rows that can be displayed in the CSV import dialog.
 # Used to decrease memory consumption.
 -MaximumRowsForPreviewInImportDialog [int] (default: 100)
 
@@ -144,27 +144,27 @@ ImportNULLsAsEmptyText [boolean] (default: true)
 -MaximumBytesForPreviewInImportDialog [int] (default: 10240)
 
 Group: Recent Dirs
-# A list of recently displayed directories in file dialogs related to CSV 
+# A list of recently displayed directories in file dialogs related to CSV
   import/export.
 -CSVImportExport [URL list]
 
-# A list of recently displayed directories in "Source database" file dialog 
+# A list of recently displayed directories in "Source database" file dialog
   of Project Migration
 -ProjectMigrationSourceDir [URL list]
 
-# A list of recently displayed directories in "Destination database" file 
+# A list of recently displayed directories in "Destination database" file
   dialog of Project Migration
 -ProjectMigrationDestinationDir [URL list]
 
-# A list of recently displayed directories in "Open existing project" 
+# A list of recently displayed directories in "Open existing project"
   and "Create new project" file dialog of Startup Dialog
 -OpenExistingOrCreateNewProject [URL list]
 
-# A list of recently displayed directories in file dialogs related to images 
+# A list of recently displayed directories in file dialogs related to images
   (e.g. images within forms).
 -LastVisitedImagePath [URL list]
 
-# A list of recent displayed directories in a file dialogs used for dowloading 
+# A list of recent displayed directories in a file dialogs used for dowloading
   example databases (Get Hot New Stuff)
 -DownloadExampleDatabases [URL list]
 

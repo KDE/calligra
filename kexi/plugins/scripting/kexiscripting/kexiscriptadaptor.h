@@ -124,7 +124,7 @@ public Q_SLOTS:
 
     /**
     * Returns a list of names of all items the part class provides. Possible
-    * classes are for example "org.kexi-project.table", "org.kexi-project.query", 
+    * classes are for example "org.kexi-project.table", "org.kexi-project.query",
     * "org.kexi-project.form" or "org.kexi-project.script".
     *
     * Python sample that prints all tables within the current project.
@@ -195,7 +195,7 @@ public Q_SLOTS:
     bool openItem(const QString& className, const QString& name, const QString& viewmode = QString(), QVariantMap args = QVariantMap()) {
         bool openingCancelled;
         KexiPart::Item *item = partItem(partClass(className), name);
-        KexiWindow* window = item 
+        KexiWindow* window = item
             ? mainWindow()->openObject(
                 item,
                 stringToViewMode(viewmode),

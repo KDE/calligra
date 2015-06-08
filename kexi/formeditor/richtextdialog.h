@@ -47,7 +47,7 @@ public Q_SLOTS:
     void slotActionTriggered(QAction* action);
     void slotCurrentCharFormatChanged(const QTextCharFormat& f);
 
-private:    
+private:
     class Private;
     Private* const d;
 };

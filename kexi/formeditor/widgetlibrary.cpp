@@ -483,8 +483,8 @@ WidgetLibrary::iconName(const QByteArray &classname)
 }
 
 bool
-WidgetLibrary::saveSpecialProperty(const QByteArray &classname, 
-    const QString &name, const QVariant &value, QWidget *w, 
+WidgetLibrary::saveSpecialProperty(const QByteArray &classname,
+    const QString &name, const QVariant &value, QWidget *w,
     QDomElement &parentNode, QDomDocument &parent)
 {
     loadFactories();
@@ -501,7 +501,7 @@ WidgetLibrary::saveSpecialProperty(const QByteArray &classname,
 }
 
 bool
-WidgetLibrary::readSpecialProperty(const QByteArray &classname, 
+WidgetLibrary::readSpecialProperty(const QByteArray &classname,
     QDomElement &node, QWidget *w, ObjectTreeItem *item)
 {
     loadFactories();

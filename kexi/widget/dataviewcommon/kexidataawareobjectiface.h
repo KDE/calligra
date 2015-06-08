@@ -681,7 +681,7 @@ protected:
 
     /*! for implementation as a signal */
     virtual void updateSaveCancelActions() = 0;
-    
+
     /*! Prototype for signal rowEditStarted(int), implemented by KexiFormScrollView. */
     virtual void rowEditStarted(int row) = 0;
 

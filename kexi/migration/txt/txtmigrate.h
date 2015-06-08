@@ -66,9 +66,9 @@ public:
 
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
-    
+
     virtual bool drv_moveFirst();
-    
+
     virtual bool drv_moveLast();
 
   private:
@@ -84,7 +84,7 @@ public:
     QVector<QStringList> m_FieldValues;
 
     long m_Row;
-    
+
     long m_FileRow;
 };
 
