@@ -22,14 +22,14 @@
 #define KEXIOPENPROJECTASSISTANT_H
 
 #include "KexiAssistantMessageHandler.h"
-
 #include <core/kexidbconnectionset.h>
-#include <db/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/utils.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
+
+#include <KDbConnectionData>
 
 class QTabWidget;
 class KexiProjectData;

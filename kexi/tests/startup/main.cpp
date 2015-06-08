@@ -21,11 +21,6 @@
 
 #include <kapplication.h>
 
-//#include <tableview/kexitableview.h>
-/*#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>*/
 #include <KAboutData>
 
 #include "main/startup/KexiStartupDialog.h"

@@ -22,7 +22,7 @@
 
 #include "kexiextwidgets_export.h"
 
-#include <db/queryschema.h>
+#include <KDbQuerySchema>
 
 //! @short Utilities providing GUI for getting query parameters
 class KEXIEXTWIDGETS_EXPORT KexiQueryParameters

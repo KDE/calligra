@@ -24,9 +24,9 @@
 #include "kexidatatable_export.h"
 #include "kexiinputtableedit.h"
 
-#include <db/field.h>
-#include <db/lookupfieldschema.h>
-#include <db/tristate.h>
+#include <KDbField>
+#include <KDbLookupFieldSchema>
+#include <KDbTristate>
 
 class KexiComboBoxPopup;
 namespace KexiDB {

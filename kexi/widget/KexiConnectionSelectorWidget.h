@@ -23,9 +23,10 @@
 
 #include "kexiextwidgets_export.h"
 #include <core/kexidbconnectionset.h>
-#include <db/driver.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
+
+#include <KDbDriver>
 
 #include <kabstractfilewidget.h>
 

@@ -20,7 +20,7 @@
 #ifndef KEXIASSISTANTMESSAGEHANDLER_H
 #define KEXIASSISTANTMESSAGEHANDLER_H
 
-#include <db/msghandler.h>
+#include <KDbMessageHandler>
 
 class KexiContextMessageWidget;
 

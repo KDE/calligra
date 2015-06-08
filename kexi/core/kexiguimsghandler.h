@@ -21,7 +21,8 @@
 #define KEXIGUIMSGHANDLER_H
 
 #include <core/kexi.h>
-#include <db/msghandler.h>
+
+#include <KDbMessageHandler>
 
 class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 {

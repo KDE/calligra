@@ -21,9 +21,10 @@
 #define KEXITABLEDESIGNERINTERVIEW_H
 
 #include <KProperty>
-#include <kexidb/alter.h>
-#include <core/kexitabledesignerinterface.h>
 
+#include <KDbAlter>
+
+#include <core/kexitabledesignerinterface.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 

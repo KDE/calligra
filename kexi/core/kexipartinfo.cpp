@@ -22,7 +22,8 @@
 #include "kexipartmanager.h"
 #include "KexiMainWindowIface.h"
 
-#include <db/global.h>
+#include <KDbGlobal>
+
 #include <kactioncollection.h>
 
 #include <QDebug>

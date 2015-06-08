@@ -18,14 +18,6 @@
 */
 
 #include "kexicelleditorfactory.h"
-
-#include <QSet>
-#include <QHash>
-#include <kglobal.h>
-
-#include <db/indexschema.h>
-#include <db/tableschema.h>
-#include <db/tableviewdata.h>
 #include "kexidatetableedit.h"
 #include "kexitimetableedit.h"
 #include "kexidatetimetableedit.h"
@@ -34,6 +26,15 @@
 #include "kexicomboboxtableedit.h"
 #include "kexiblobtableedit.h"
 #include "kexibooltableedit.h"
+
+#include <KDbIndexSchema>
+#include <KDbTableSchema>
+#include <KDbTableViewData>
+
+#include <kglobal.h>
+
+#include <QSet>
+#include <QHash>
 
 //============= KexiCellEditorFactoryItem ============
 

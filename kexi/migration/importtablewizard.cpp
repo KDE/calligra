@@ -22,25 +22,7 @@
 #include "keximigrate.h"
 #include "keximigratedata.h"
 #include "AlterSchemaWidget.h"
-
 #include <KexiIcon.h>
-
-#include <QSet>
-#include <QVBoxLayout>
-#include <QListWidget>
-#include <QStringList>
-#include <QProgressBar>
-#include <QCheckBox>
-#include <QMimeDatabase>
-#include <QMimeType>
-#include <QPushButton>
-#include <QDebug>
-
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <core/kexipartmanager.h>
@@ -57,6 +39,23 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameWidget.h>
+
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnectionData>
+#include <KDbUtils>
+#include <KDbDriverManager>
+
+#include <QSet>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QStringList>
+#include <QProgressBar>
+#include <QCheckBox>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QPushButton>
+#include <QDebug>
 
 using namespace KexiMigration;
 

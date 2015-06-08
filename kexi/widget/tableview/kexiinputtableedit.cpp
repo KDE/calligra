@@ -21,6 +21,15 @@
 #include "kexiinputtableedit.h"
 #include <kexi_global.h>
 
+#include <KDbField>
+#include <KDbFieldValidator>
+#include <KDbLongLongValidator>
+
+#include <kglobal.h>
+#include <kcolorscheme.h>
+#include <kcompletionbox.h>
+#include <knumvalidator.h>
+
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>
@@ -28,14 +37,6 @@
 #include <QLineEdit>
 #include <QLocale>
 #include <QDebug>
-
-#include <kglobal.h>
-#include <kcolorscheme.h>
-#include <kcompletionbox.h>
-#include <knumvalidator.h>
-#include <kexiutils/longlongvalidator.h>
-#include <db/field.h>
-#include <kexidb/fieldvalidator.h>
 
 //! @internal
 class MyLineEdit : public QLineEdit

@@ -23,10 +23,10 @@
 #include <QString>
 #include <QObject>
 
-#include <db/drivermanager.h>
-#include <db/schemadata.h>
-#include <db/tableschema.h>
-#include <db/queryschema.h>
+#include <KDbDriverManager>
+#include <KDbObject>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
 
 namespace Scripting
 {

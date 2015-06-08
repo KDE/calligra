@@ -18,13 +18,13 @@
 */
 
 #include "kexidataawareview.h"
-
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
 #include <core/KexiWindow.h>
-#include <db/roweditbuffer.h>
+
+#include <KDbRecordEditBuffer>
 
 #include <kactioncollection.h>
 

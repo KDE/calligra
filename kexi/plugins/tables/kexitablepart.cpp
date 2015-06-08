@@ -20,9 +20,7 @@
 */
 
 #include "kexitablepart.h"
-
 #include <KexiIcon.h>
-
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -33,12 +31,12 @@
 #include "kexilookupcolumnpage.h"
 #include <KexiWindow.h>
 
-#include <db/connection.h>
-#include <db/cursor.h>
+#include <KDbConnection>
+#include <KDbCursor>
 
-#include <QDebug>
 #include <kmessagebox.h>
 
+#include <QDebug>
 #include <QTabWidget>
 
 //! @internal

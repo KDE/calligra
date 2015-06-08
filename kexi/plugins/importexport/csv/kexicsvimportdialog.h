@@ -34,15 +34,16 @@
 #include <QPixmap>
 #include <QTextStream>
 #include <QEvent>
+#include <QModelIndex>
 #if QT_VERSION >= 0x040700
 # include <QElapsedTimer>
 #endif
 
 #include <kassistantdialog.h>
 
-#include <db/tristate.h>
-#include <db/connection.h>
-#include <QModelIndex>
+#include <KDbTristate>
+#include <KDbConnection>
+
 #include "kexicsvimportoptionsdlg.h"
 
 class QHBoxLayout;

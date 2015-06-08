@@ -17,9 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QFileInfo>
-#include <QPointer>
-#include <QDebug>
+#include <KexiIcon.h>
+#include <core/kexiproject.h>
+
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbField>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbIndexSchema>
+#include <KDbParser>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -27,18 +36,9 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
-#include <KexiIcon.h>
-
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/field.h>
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/indexschema.h>
-#include <db/parser/parser.h>
-#include <core/kexiproject.h>
+#include <QFileInfo>
+#include <QPointer>
+#include <QDebug>
 
 #include <iostream>
 

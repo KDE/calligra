@@ -21,11 +21,10 @@
 #include <kexi.h>
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
-
-#include <db/utils.h>
-#include <db/drivermanager.h>
-
 #include <KexiIcon.h>
+
+#include <KDbUtils>
+#include <KDbDriverManager>
 
 #include <kdatetime.h>
 

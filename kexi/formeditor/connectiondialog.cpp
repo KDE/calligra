@@ -19,22 +19,20 @@
 */
 
 #include "connectiondialog.h"
-
-#include <QLabel>
-#include <QRegExp>
-#include <QPushButton>
-
-#include <kmessagebox.h>
-#include <KLocalizedString>
-
 #include <KexiIcon.h>
 #include "kexitableview.h"
-
 #include "events.h"
 #include "form.h"
 #include "objecttree.h"
 
-#include <db/tableviewdata.h>
+#include <KDbTableViewData>
+
+#include <kmessagebox.h>
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QRegExp>
+#include <QPushButton>
 
 using namespace KFormDesigner;
 

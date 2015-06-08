@@ -20,13 +20,6 @@
 */
 
 #include "kexidbautofield.h"
-
-#include <QLabel>
-#include <QApplication>
-#include <QDebug>
-
-#include <KLocalizedString>
-
 #include "kexidbcheckbox.h"
 #include "kexidbimagebox.h"
 #include "kexidblabel.h"
@@ -35,11 +28,17 @@
 #include "kexidbcombobox.h"
 #include "KexiDBPushButton.h"
 #include "kexidbform.h"
-
 #include <kexi_global.h>
-#include <db/queryschema.h>
 #include <formeditor/utils.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
+
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QApplication>
+#include <QDebug>
 
 #define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
