@@ -144,7 +144,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         int index = m_categoryNameIndex.value(info->category);
         if (index >= 0 && index < m_templateCategories.count()) {
             QVariantList list;
-            list << index << info->caption; 
+            list << index << info->caption;
             return list;
         }
         return QVariantList();

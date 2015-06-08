@@ -43,7 +43,7 @@ static char *type_name[] = {"Form",
 	if (obj_type > 11) {
 		return NULL;
 	} else {
-		return type_name[obj_type]; 
+		return type_name[obj_type];
 	}
 }
 
@@ -106,7 +106,7 @@ GPtrArray *mdb_read_catalog (MdbHandle *mdb, int objtype)
 			entry->table_pg = atol(obj_id) & 0x00FFFFFF;
 			entry->flags = atol(obj_flags);
 			mdb->num_catalog++;
-			g_ptr_array_add(mdb->catalog, entry); 
+			g_ptr_array_add(mdb->catalog, entry);
 		}
 	}
 	

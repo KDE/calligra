@@ -394,7 +394,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                reportData = sourceData(tempData()->connectionDefinition);    
+                reportData = sourceData(tempData()->connectionDefinition);
             }
             if (!reportData) {
                 reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
