@@ -19,39 +19,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QVBoxLayout>
-#include <QDomDocument>
-#include <QTabWidget>
-#include <QAction>
-#include <QDebug>
-
-#include <kactionmenu.h>
-
+#include "kexiformpart.h"
 #include <KexiIcon.h>
-
 #include <KexiView.h>
 #include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <kexipartitem.h>
 #include <widget/KexiDataSourceComboBox.h>
-#include <db/connection.h>
-#include <db/fieldlist.h>
-#include <db/field.h>
 #include <kexiutils/utils.h>
-
 #include <kexi_global.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
 #include <formeditor/WidgetTreeWidget.h>
-
-#include <KProperty>
-
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiformmanager.h"
-#include "kexiformpart.h"
 #include "kexidatasourcepage.h"
+
+#include <KDbConnection>
+#include <KDbFieldList>
+#include <KDbField>
+
+#include <KProperty>
+
+#include <kactionmenu.h>
+
+#include <QVBoxLayout>
+#include <QDomDocument>
+#include <QTabWidget>
+#include <QAction>
+#include <QDebug>
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 

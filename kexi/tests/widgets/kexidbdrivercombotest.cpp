@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kcomponentdata.h>
 
-#include <db/drivermanager.h>
+#include <KDbDriverManager>
 #include <widget/kexidbdrivercombobox.h>
 
 /*

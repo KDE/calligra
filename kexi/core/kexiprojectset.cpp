@@ -20,10 +20,10 @@
 #include "kexiprojectset.h"
 #include "kexi.h"
 
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/msghandler.h>
-#include <db/drivermanager.h>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbMessageHandler>
+#include <KDbDriverManager>
 
 //! @internal
 class KexiProjectSetPrivate

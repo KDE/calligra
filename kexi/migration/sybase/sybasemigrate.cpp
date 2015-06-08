@@ -19,19 +19,19 @@
 
 #include "sybasemigrate.h"
 #include <migration/keximigrate_p.h>
+#include <migration/keximigratedata.h>
+
+#include <KDbCursor>
+#include <KDbField>
+#include <KDbUtils>
+#include <KDbDriverManager>
+#include <kexidb/drivers/sybase/sybaseconnection_p.cpp>
+#include <KDb>
 
 #include <QString>
 #include <QVariant>
 #include <QList>
 #include <QDebug>
-
-#include <migration/keximigratedata.h>
-#include <db/cursor.h>
-#include <db/field.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
-#include <kexidb/drivers/sybase/sybaseconnection_p.cpp>
-#include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
 

@@ -20,6 +20,18 @@
 */
 
 #include "KexiRelationsView.h"
+#include <KexiIcon.h>
+#include <kexiutils/utils.h>
+#include <kexiproject.h>
+#include <KexiMainWindowIface.h>
+#include "KexiRelationsScrollArea.h"
+#include "KexiRelationsConnection.h"
+
+#include <KDbConnection>
+#include <KDbUtils>
+
+#include <kcombobox.h>
+#include <KLocalizedString>
 
 #include <QTimer>
 #include <QHBoxLayout>
@@ -28,19 +40,6 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QDebug>
-
-#include <kcombobox.h>
-#include <KLocalizedString>
-
-#include <db/connection.h>
-#include <db/utils.h>
-
-#include <KexiIcon.h>
-#include <kexiutils/utils.h>
-#include <kexiproject.h>
-#include <KexiMainWindowIface.h>
-#include "KexiRelationsScrollArea.h"
-#include "KexiRelationsConnection.h"
 
 //! @internal
 class KexiRelationsView::Private

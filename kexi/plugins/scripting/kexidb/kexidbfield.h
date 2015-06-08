@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/drivermanager.h>
-#include <db/field.h>
+#include <KDbDriverManager>
+#include <KDbField>
 
 namespace Scripting
 {

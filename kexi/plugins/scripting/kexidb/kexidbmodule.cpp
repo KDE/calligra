@@ -24,11 +24,11 @@
 #include "kexidbfield.h"
 #include "kexidbschema.h"
 
-#include <db/driver.h>
-#include <db/connectiondata.h>
-#include <db/field.h>
-#include <db/tableschema.h>
-#include <db/queryschema.h>
+#include <KDbDriver>
+#include <KDbConnectionData>
+#include <KDbField>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
 
 #include <kconfiggroup.h>
 

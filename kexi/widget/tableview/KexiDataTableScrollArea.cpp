@@ -20,15 +20,13 @@
  */
 
 #include "KexiDataTableScrollArea.h"
-
-#include <QDebug>
-
-#include <db/connection.h>
-#include <db/cursor.h>
-
 #include "KexiDataTableScrollArea.h"
 #include "KexiDataTableView.h"
 
+#include <KDbConnection>
+#include <KDbCursor>
+
+#include <QDebug>
 
 KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
         : KexiTableScrollArea(0, parent)

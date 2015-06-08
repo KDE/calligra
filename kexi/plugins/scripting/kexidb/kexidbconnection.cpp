@@ -25,7 +25,7 @@
 #include "kexidbschema.h"
 #include "kexidbparser.h"
 
-#include <db/transaction.h>
+#include <KDbTransaction>
 
 #include <QDebug>
 

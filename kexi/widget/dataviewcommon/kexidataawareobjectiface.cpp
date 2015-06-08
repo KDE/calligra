@@ -24,6 +24,14 @@
 */
 
 #include "kexidataawareobjectiface.h"
+#include <KexiIcon.h>
+#include <kexi.h>
+#include <kexi_global.h>
+#include <kexiutils/utils.h>
+#include <widget/utils/kexirecordnavigator.h>
+
+#include <KDbRecordEditBuffer>
+#include <KDbValidator>
 
 #include <QDebug>
 #include <QScrollArea>
@@ -34,15 +42,6 @@
 #include <QKeyEvent>
 
 #include <kmessagebox.h>
-
-#include <KexiIcon.h>
-
-#include <kexi.h>
-#include <kexi_global.h>
-#include <kexiutils/utils.h>
-#include <widget/utils/kexirecordnavigator.h>
-#include <db/roweditbuffer.h>
-#include <db/validator.h>
 
 #include <limits.h>
 

@@ -25,9 +25,9 @@
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/tableviewdata.h>
+#include <KDbCursor>
+#include <KDbUtils>
+#include <KDbTableViewData>
 
 #include <QDebug>
 

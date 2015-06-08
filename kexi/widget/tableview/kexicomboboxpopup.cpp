@@ -24,11 +24,10 @@
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
-#include <db/connection.h>
-#include <db/lookupfieldschema.h>
-#include <db/expression.h>
-#include <db/parser/sqlparser.h>
-#include <db/cursor.h>
+#include <KDbConnection>
+#include <KDbLookupFieldSchema>
+#include <KDbExpression>
+#include <KDbCursor>
 
 #include <QDebug>
 #include <QEvent>

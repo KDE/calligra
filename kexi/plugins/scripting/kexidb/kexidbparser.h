@@ -24,8 +24,8 @@
 #include <QObject>
 #include <QPointer>
 
-#include <db/drivermanager.h>
-#include <db/parser/parser.h>
+#include <KDbDriverManager>
+#include <KDbParser>
 
 namespace Scripting
 {

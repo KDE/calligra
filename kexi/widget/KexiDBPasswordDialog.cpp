@@ -18,17 +18,15 @@
 */
 
 #include "KexiDBPasswordDialog.h"
+#include <KexiIcon.h>
+#include <kexiutils/utils.h>
 
-#include <QLabel>
-#include <QLineEdit>
+#include <KDbConnectionData>
 
 #include <KLocalizedString>
 
-#include <KexiIcon.h>
-
-#include <db/connectiondata.h>
-
-#include <kexiutils/utils.h>
+#include <QLabel>
+#include <QLineEdit>
 
 class KexiDBPasswordDialog::Private
 {

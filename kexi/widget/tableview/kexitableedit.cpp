@@ -21,15 +21,16 @@
 #include "kexitableedit.h"
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/tableview/KexiTableScrollArea.h>
-#include <db/field.h>
-#include <db/utils.h>
+
+#include <KDbField>
+#include <KDbUtils>
+
+#include <kglobal.h>
 
 #include <QPalette>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
-
-#include <kglobal.h>
 
 #ifdef KEXI_MOBILE
 KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)

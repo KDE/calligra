@@ -18,15 +18,15 @@
 */
 
 #include "KexiFieldListView.h"
+#include <kexidragobjects.h>
+#include <kexiutils/utils.h>
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
 #include <QPushButton>
 #include <QDebug>
-
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
-#include <kexiutils/utils.h>
 
 class KexiFieldListView::Private
 {

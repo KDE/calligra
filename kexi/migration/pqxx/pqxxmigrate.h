@@ -23,9 +23,8 @@
 
 #include <migration/keximigrate.h>
 
-//Kexi Includes
-#include <db/field.h>
-#include <db/connection.h>
+#include <KDbField>
+#include <KDbConnection>
 
 #include <pqxx/pqxx>
 

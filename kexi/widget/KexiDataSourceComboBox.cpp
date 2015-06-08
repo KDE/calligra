@@ -18,11 +18,7 @@
 */
 
 #include "KexiDataSourceComboBox.h"
-
-#include <QDebug>
-
 #include <KexiIcon.h>
-
 #include <kexi.h>
 #include <kexiproject.h>
 #include <kexipart.h>
@@ -30,7 +26,9 @@
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 
-#include <db/connection.h>
+#include <KDbConnection>
+
+#include <QDebug>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define ADD_DEFINEQUERY_ROW

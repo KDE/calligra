@@ -18,12 +18,12 @@
  */
 
 #include "KexiRecentProjects.h"
-
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/msghandler.h>
 #include "kexidbshortcutfile.h"
 #include "kexidbconnectionset.h"
+
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbMessageHandler>
 
 #include <kstandarddirs.h>
 

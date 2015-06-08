@@ -20,8 +20,9 @@
 #include "KexiNameDialog.h"
 #include "KexiNameWidget.h"
 #include <core/kexipartinfo.h>
-#include <db/connection.h>
 #include <kexi_global.h>
+
+#include <KDbConnection>
 
 #include <kiconloader.h>
 #include <kmessagebox.h>

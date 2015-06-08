@@ -28,6 +28,13 @@
 #define KEXITABLESCROLLAREA_H
 
 #include "kexidatatable_export.h"
+#include <widget/utils/kexirecordnavigator.h>
+#include <widget/utils/kexisharedactionclient.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
+
+#include <KDbTristate>
+#include <KDbTableViewData>
 
 #include <QScrollArea>
 #include <QVariant>
@@ -39,13 +46,6 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-
-#include <db/tristate.h>
-#include <db/tableviewdata.h>
-#include <widget/utils/kexirecordnavigator.h>
-#include <widget/utils/kexisharedactionclient.h>
-#include <widget/dataviewcommon/kexidataawareobjectiface.h>
-#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;

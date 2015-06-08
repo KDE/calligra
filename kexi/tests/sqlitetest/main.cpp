@@ -4,9 +4,9 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
-#include <db/connection.h>
-#include <db/drivermanager.h>
-#include <db/cursor.h>
+#include <KDbConnection>
+#include <KDbDriverManager>
+#include <KDbCursor>
 
 int main(int argc, char** argv)
 {

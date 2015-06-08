@@ -23,8 +23,8 @@
 
 #include "kexiinputtableedit.h"
 #include "kexicomboboxbase.h"
-#include <db/field.h>
-#include <db/lookupfieldschema.h>
+#include <KDbField>
+#include <KDbLookupFieldSchema>
 
 #include <QKeyEvent>
 #include <QEvent>

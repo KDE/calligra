@@ -20,8 +20,8 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 
-#include <db/tableschema.h>
-#include <db/queryschema.h>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
 
 #include <QDebug>
 

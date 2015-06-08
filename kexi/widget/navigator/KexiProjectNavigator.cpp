@@ -26,19 +26,6 @@
 #include "KexiProjectItemDelegate.h"
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
-
-#include <QPixmapCache>
-#include <QLabel>
-#include <QMenu>
-#include <QDialog>
-#include <QDebug>
-
-#include <kconfig.h>
-#include <kactioncollection.h>
-#include <kactionmenu.h>
-#include <KSharedConfig>
-#include <KLocalizedString>
-
 #include <KexiIcon.h>
 #include <kexi.h>
 #include <kexipart.h>
@@ -47,12 +34,25 @@
 #include <kexipartmanager.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/FlowLayout.h>
-#include <db/utils.h>
-#include <kexidb/dbobjectnamevalidator.h>
 #include <kexi_global.h>
+
+#include <KDb>
+#include <KDbUtils>
+#include <KDbObjectNameValidator>
+
+#include <kconfig.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <KSharedConfig>
+#include <KLocalizedString>
+
+#include <QPixmapCache>
+#include <QLabel>
+#include <QMenu>
+#include <QDialog>
+#include <QDebug>
 
 class KexiProjectNavigator::Private
 {

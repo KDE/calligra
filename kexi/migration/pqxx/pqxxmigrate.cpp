@@ -29,6 +29,12 @@
 #  include <postgres.h>
 #endif
 
+#include <KDbCursor>
+#include <KDbUtils>
+#include <KDbDriverManager>
+#include <KDb>
+#include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
+
 #include <QString>
 #include <QDebug>
 #include <QStringList>
@@ -36,12 +42,6 @@
 //! @todo I maybe should not use stl?
 #include <string>
 #include <vector>
-
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
-#include <kexiutils/identifier.h>
-#include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
 
 using namespace KexiDB;
 using namespace KexiMigration;

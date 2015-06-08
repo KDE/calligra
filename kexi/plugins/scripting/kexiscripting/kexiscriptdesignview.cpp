@@ -22,24 +22,23 @@
 
 #include "kexiscriptdesignview.h"
 #include "kexiscripteditor.h"
+#include <KexiIcon.h>
+#include <KexiMainWindowIface.h>
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
-#include <KexiIcon.h>
+#include <KDbConnection>
+
+#include <kfiledialog.h>
+#include <kactionmenu.h>
 
 #include <QSplitter>
 #include <QTimer>
 #include <QDomDocument>
 #include <QTextBrowser>
 #include <QDebug>
-
-#include <kfiledialog.h>
-#include <kactionmenu.h>
-
-#include <KexiMainWindowIface.h>
-#include <db/connection.h>
 
 /// @internal
 class KexiScriptDesignViewPrivate

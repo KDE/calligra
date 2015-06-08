@@ -19,8 +19,6 @@
 
 #include "kexicsvexport.h"
 #include "kexicsvwidgets.h"
-#include <db/cursor.h>
-#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -29,14 +27,17 @@
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
 
+#include <KDbCursor>
+#include <KDbUtils>
+
+#include <kapplication.h>
+#include <KLocalizedString>
+
 #include <QTextStream>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QDebug>
 #include <QSaveFile>
-
-#include <kapplication.h>
-#include <KLocalizedString>
 
 using namespace KexiCSVExport;
 

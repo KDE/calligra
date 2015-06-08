@@ -18,11 +18,10 @@
  ***************************************************************************/
 
 #include "kexidbdriver.h"
-
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-#include <db/connection.h>
+#include <KDbConnection>
 
 using namespace Scripting;
 

@@ -18,13 +18,6 @@
 */
 
 #include "kexidatasourcepage.h"
-
-#include <QLabel>
-#include <QHBoxLayout>
-
-#include <kfadewidgeteffect.h>
-#include <KLocalizedString>
-
 #include <KexiIcon.h>
 #include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiObjectInfoLabel.h>
@@ -32,11 +25,18 @@
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <db/connection.h>
 #include <kexiproject.h>
-
 #include <formeditor/commands.h>
+
+#include <KDbConnection>
+
 #include <KProperty>
+
+#include <kfadewidgeteffect.h>
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QHBoxLayout>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : KexiPropertyPaneViewBase(parent)

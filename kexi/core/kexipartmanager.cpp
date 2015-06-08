@@ -30,6 +30,7 @@
 #include <KAboutData>
 #include <kglobal.h>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 #include <KoServiceLocator.h>
 
@@ -39,10 +40,9 @@
 #include "kexistaticpart.h"
 #include "kexi_version.h"
 
-#include <db/connection.h>
-#include <db/cursor.h>
+#include <KDbConnection>
+#include <KDbCursor>
 #include <db/pluginloader.h>
-#include <KSharedConfig>
 
 using namespace KexiPart;
 
