@@ -40,7 +40,7 @@ static char date_fmt[64] = "%x %X";
 
 void mdb_set_date_fmt(const char *fmt)
 {
-		date_fmt[63] = 0; 
+		date_fmt[63] = 0;
 		strncpy(date_fmt, fmt, 63);
 }
 
@@ -423,7 +423,7 @@ mdb_fetch_row(MdbTableDef *table)
 void mdb_data_dump(MdbTableDef *table)
 {
 	unsigned int i;
-	char *bound_values[MDB_MAX_COLS]; 
+	char *bound_values[MDB_MAX_COLS];
 
 	for (i=0;i<table->num_cols;i++) {
 		bound_values[i] = (char *) g_malloc(256);
@@ -767,7 +767,7 @@ mdb_date_to_string(MdbHandle *mdb, int start)
 	time = (long int)(fabs(td - day) * 86400.0 + 0.5);
 	t.tm_hour = time / 3600;
 	t.tm_min = (time / 60) % 60;
-	t.tm_sec = time % 60; 
+	t.tm_sec = time % 60;
 	t.tm_year = 1 - 1900;
 
 	day += 693593; /* Days from 1/1/1 to 12/31/1899 */
@@ -922,7 +922,7 @@ int mdb_col_disp_size(MdbColumn *col)
 			return 20;
 		break;
 		case MDB_MEMO:
-			return 64000; 
+			return 64000;
 		break;
 		case MDB_MONEY:
 			return 21;
@@ -958,7 +958,7 @@ int mdb_col_fixed_size(MdbColumn *col)
 			return 4;
 		break;
 		case MDB_MEMO:
-			return -1; 
+			return -1;
 		break;
 		case MDB_MONEY:
 			return 8;

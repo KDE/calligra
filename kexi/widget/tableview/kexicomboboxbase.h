@@ -169,7 +169,7 @@ protected:
     //! Set to false as soon as the item corresponding with the current
     //! value is selected in the popup table. This avoids selecting item
     //! for origValue() and thus loosing the recent choice.
-    bool m_updatePopupSelectionOnShow; 
+    bool m_updatePopupSelectionOnShow;
     bool m_moveCursorToEndInInternalEditor_enabled;
     bool m_selectAllInInternalEditor_enabled;
     bool m_setValueInInternalEditor_enabled;

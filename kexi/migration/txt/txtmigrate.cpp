@@ -107,7 +107,7 @@ bool TxtMigrate::drv_moveNext()
     //qDebug();
   if (m_Row < m_FileRow)
   {
-   m_Row++; 
+   m_Row++;
   }
   else
   {

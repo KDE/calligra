@@ -94,7 +94,7 @@ KexiDBProgressBar::widget()
 
 bool KexiDBProgressBar::cursorAtStart()
 {
-    return false; 
+    return false;
 }
 
 bool KexiDBProgressBar::cursorAtEnd()

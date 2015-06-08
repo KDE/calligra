@@ -91,7 +91,7 @@ void WebBrowserWidget::setDataSource(const QString &ds)
 
 void WebBrowserWidget::hide_bar()
 {
-    m_pbar->setVisible(false);    
+    m_pbar->setVisible(false);
 }
 
 void WebBrowserWidget::setUrl(const QString& url)

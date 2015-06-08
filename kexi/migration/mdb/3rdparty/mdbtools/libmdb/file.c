@@ -26,7 +26,7 @@
 /*
 typedef struct {
 	int		pg_size;
-	guint16		row_count_offset; 
+	guint16		row_count_offset;
 	guint16		tab_num_rows_offset;
 	guint16		tab_num_cols_offset;
 	guint16		tab_num_idxs_offset;
@@ -43,7 +43,7 @@ typedef struct {
 	guint16         tab_col_offset_var;
 	guint16         tab_col_offset_fixed;
 	guint16         tab_row_col_num_offset;
-} MdbFormatConstants; 
+} MdbFormatConstants;
 */
 MdbFormatConstants MdbJet4Constants = {
 	4096, 0x0c, 16, 45, 47, 51, 55, 56, 63, 12, 15, 23, 5, 25, 59, 7, 21, 9
@@ -81,7 +81,7 @@ static char *mdb_find_file(const char *file_name)
 	/* no path, can't find file */
 	if (!mdbpath || !strlen(mdbpath)) return NULL;
 
-	dir = g_strsplit(mdbpath, ":", 0); 
+	dir = g_strsplit(mdbpath, ":", 0);
 	while (dir[i]) {
 		if (!strlen(dir[i])) continue;
 		tmpfname = g_strconcat(dir[i++], "/", file_name, NULL);
@@ -154,7 +154,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	if (!mdb->f->filename) { 
 		fprintf(stderr, "Can't alloc filename\n");
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	if (flags & MDB_WRITABLE) {
 		mdb->f->writable = TRUE;
@@ -170,7 +170,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	mdb->f->fd = open(mdb->f->filename, open_flags);
 
 	if (mdb->f->fd==-1) {
-		fprintf(stderr,"Couldn't open file %s\n",mdb->f->filename); 
+		fprintf(stderr,"Couldn't open file %s\n",mdb->f->filename);
 		mdb_close(mdb);
 		return NULL;
 	}
@@ -181,7 +181,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	}
 	if (mdb->pg_buf[0] != 0) {
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	mdb->f->jet_version = mdb_get_int32(mdb->pg_buf, 0x14);
 	if (IS_JET4(mdb)) {
@@ -191,7 +191,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	} else {
 		fprintf(stderr,"Unknown Jet version.\n");
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	mdb_iconv_init(mdb);
 

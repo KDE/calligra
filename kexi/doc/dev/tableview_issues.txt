@@ -21,7 +21,7 @@ Assumptions
   btw, KexiTableItem is oversized: KexiTableView  pointer is stored with each KexiTableItem :)
 
 result: for 1st step I keep KexiTableItem with some changes, code polishing
--	KexiTableItem is internal class so accessors will be removed; 
+-	KexiTableItem is internal class so accessors will be removed;
   shortly speaking - KexiTableItem is just a data structure
 
 
