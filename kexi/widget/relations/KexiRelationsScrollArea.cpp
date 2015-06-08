@@ -144,13 +144,13 @@ KexiRelationsScrollArea::~KexiRelationsScrollArea()
 }
 
 KexiRelationsTableContainer *
-KexiRelationsScrollArea::tableContainer(KexiDB::TableSchema *t) const
+KexiRelationsScrollArea::tableContainer(KDbTableSchema *t) const
 {
     return t ? d->tables.value(t->name()) : 0;
 }
 
 KexiRelationsTableContainer*
-KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &rect)
+KexiRelationsScrollArea::addTableContainer(KDbTableSchema *t, const QRect &rect)
 {
     if (!t)
         return 0;
@@ -165,7 +165,7 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
 
     c = new KexiRelationsTableContainer(d->areaWidget, this,
                                         /*! @todo what about query? */
-                                        new KexiDB::TableOrQuerySchema(t)
+                                        new KDbTableOrQuerySchema(t)
                                        );
     connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
     connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
@@ -233,25 +233,25 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
         return;
 
     /*! @todo what about query? */
-    KexiDB::TableSchema *masterTable = master->schema()->table();
+    KDbTableSchema *masterTable = master->schema()->table();
     /*! @todo what about query? */
-    KexiDB::TableSchema *detailsTable = details->schema()->table();
+    KDbTableSchema *detailsTable = details->schema()->table();
     if (!masterTable || !detailsTable)
         return;
 
     // ok, but we need to know where is the 'master' and where is the 'details' side:
-    KexiDB::Field *masterFld = masterTable->field(conn.masterField);
-    KexiDB::Field *detailsFld = detailsTable->field(conn.detailsField);
+    KDbField *masterFld = masterTable->field(conn.masterField);
+    KDbField *detailsFld = detailsTable->field(conn.detailsField);
     if (!masterFld || !detailsFld)
         return;
 
     if (!masterFld->isUniqueKey()) {
         if (detailsFld->isUniqueKey()) {
             //SWAP:
-            KexiDB::Field *tmpFld = masterFld;
+            KDbField *tmpFld = masterFld;
             masterFld = detailsFld;
             detailsFld = tmpFld;
-            KexiDB::TableSchema *tmpTable = masterTable;
+            KDbTableSchema *tmpTable = masterTable;
             masterTable = detailsTable;
             detailsTable = tmpTable;
             KexiRelationsTableContainer *tmp = master;
@@ -274,12 +274,12 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
     d->areaWidget->update();
 
     /*! @todo will be moved up to relation/query part as this is only visual class
-      KexiDB::TableSchema *mtable = d->conn->tableSchema(conn.srcTable);
-      KexiDB::TableSchema *ftable = d->conn->tableSchema(conn.rcvTable);
-      KexiDB::IndexSchema *forign = new KexiDB::IndexSchema(ftable);
+      KDbTableSchema *mtable = d->conn->tableSchema(conn.srcTable);
+      KDbTableSchema *ftable = d->conn->tableSchema(conn.rcvTable);
+      KDbIndexSchema *forign = new KDbIndexSchema(ftable);
 
       forign->addField(mtable->field(conn.srcField));
-      new KexiDB::Reference(forign, mtable->primaryKey());
+      new KDbReference(forign, mtable->primaryKey());
     */
 #if 0
     if (!interactive) {
@@ -513,7 +513,7 @@ void
 KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
 {
     KexiRelationsTableContainer* container = it.value();
-    KexiDB::TableSchema *ts = container->schema()->table();
+    KDbTableSchema *ts = container->schema()->table();
     //for all connections: find and remove all connected with this table
     for (ConnectionSetMutableIterator itConn(d->connectionViews);itConn.hasNext();) {
         KexiRelationsConnection* conn = itConn.next();
@@ -529,12 +529,12 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
 }
 
 void
-KexiRelationsScrollArea::hideAllTablesExcept(KexiDB::TableSchema::List* tables)
+KexiRelationsScrollArea::hideAllTablesExcept(KDbTableSchema::List* tables)
 {
 //! @todo what about queries?
     for (TablesHashMutableIterator it(d->tables); it.hasNext();) {
         it.next();
-        KexiDB::TableSchema *table = it.value()->schema()->table();
+        KDbTableSchema *table = it.value()->schema()->table();
         if (!table || tables->contains(table))
             continue;
         hideTableInternal(it);

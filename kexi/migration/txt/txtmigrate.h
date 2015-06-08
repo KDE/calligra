@@ -47,13 +47,13 @@ public:
     //! Get table names in source
     virtual bool drv_tableNames(QStringList& tablenames);
 
-    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*)
+    virtual bool drv_copyTable(const QString&, KDbConnection*, KDbTableSchema*)
     {
         return false;
     }
 
     //! Read schema for a given table
-    virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    virtual bool drv_readTableSchema(const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName);

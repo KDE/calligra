@@ -212,7 +212,7 @@ public:
      * Do not store the pointer after the window is closed to avoid dangling pointers.
     \see KexiPart::Part::currentQuery(KexiView*) KexiWindow::isDirty()
     */
-    virtual KexiDB::QuerySchema* unsavedQuery(int identifier) = 0;
+    virtual KDbQuerySchema* unsavedQuery(int identifier) = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.

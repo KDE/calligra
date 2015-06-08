@@ -420,7 +420,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     KConfigGroup tablesGroup(d->config->group("Tables"));
     const int defaultMaxLengthForTextFields = tablesGroup.readEntry("DefaultMaxLengthForTextFields", int(-1));
     if (defaultMaxLengthForTextFields >= 0) {
-        KexiDB::Field::setDefaultMaxLength(defaultMaxLengthForTextFields);
+        KDbField::setDefaultMaxLength(defaultMaxLengthForTextFields);
     }
     // --- /global config
 }
@@ -1237,7 +1237,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     d->action_tools_compact_database->setEnabled(
         !d->prj
         || (!readOnly && d->prj && d->prj->dbConnection()
-            && (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported))
+            && (d->prj->dbConnection()->driver()->features() & KDbDriver::CompactingDatabaseSupported))
     );
 
     //DOCKS
@@ -1277,7 +1277,7 @@ tristate KexiMainWindow::startup()
     return result;
 }
 
-static QString internalReason(KexiDB::Object *obj)
+static QString internalReason(KDbObject *obj)
 {
     const QString &s = obj->errorMsg();
     if (s.isEmpty())
@@ -1371,7 +1371,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& data, const QString&
 tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projectData)
 {
     QStringList mimetypes;
-    mimetypes.append(KexiDB::defaultFileBasedDriverMimeType());
+    mimetypes.append(KDb::defaultFileBasedDriverMimeType());
     QString fname;
     const QString startDir("kfiledialog:///OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
     const QString caption(xi18n("Select New Project's Location"));
@@ -2289,7 +2289,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     if (d->prj)
         return openProjectInExternalKexiInstance(aFileName, fileNameForConnectionData, dbName);
 
-    KexiDB::ConnectionData *cdata = 0;
+    KDbConnectionData *cdata = 0;
     if (!fileNameForConnectionData.isEmpty()) {
         cdata = Kexi::connset().connectionDataForFileName(fileNameForConnectionData);
         if (!cdata) {
@@ -2301,7 +2301,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
 }
 
 tristate KexiMainWindow::openProject(const QString& aFileName,
-                                     KexiDB::ConnectionData *cdata, const QString& dbName,
+                                     KDbConnectionData *cdata, const QString& dbName,
                                      const KexiProjectData::AutoOpenObjects& autoopenObjects)
 {
     if (d->prj) {
@@ -2334,7 +2334,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         }
         //file-based project
         qDebug() << "Project File: " << aFileName;
-        KexiDB::ConnectionData fileConnData;
+        KDbConnectionData fileConnData;
         fileConnData.setFileName(aFileName);
         QString detectedDriverName;
         int detectOptions = 0;
@@ -2375,7 +2375,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
 }
 
 tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileName,
-        KexiDB::ConnectionData *cdata, const QString& dbName)
+        KDbConnectionData *cdata, const QString& dbName)
 {
     QString fileNameForConnectionData;
     if (aFileName.isEmpty()) { //try .kexic file
@@ -2683,7 +2683,7 @@ tristate KexiMainWindow::getNewObjectInfo(
             messageWhenAskingForName, this);
         //check if that name is allowed
         d->nameDialog->widget()->addNameSubvalidator(
-            new KexiDB::ObjectNameValidator(project()->dbConnection()->driver()));
+            new KDbObjectNameValidator(project()->dbConnection()->driver()));
         d->nameDialog->setButtonText(KexiNameDialog::Ok, xi18nc("@action:button Save object", "Save"));
     } else {
         d->nameDialog->widget()->setMessageText(messageWhenAskingForName);
@@ -3012,7 +3012,7 @@ KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item)
     return item ? openedWindowFor(item->identifier()) : 0;
 }
 
-KexiDB::QuerySchema* KexiMainWindow::unsavedQuery(int queryId)
+KDbQuerySchema* KexiMainWindow::unsavedQuery(int queryId)
 {
     KexiWindow * queryWindow = openedWindowFor(queryId);
     if (!queryWindow || !queryWindow->isDirty()) {
@@ -3552,7 +3552,7 @@ void KexiMainWindow::slotToolsImportTables()
 void KexiMainWindow::slotToolsCompactDatabase()
 {
     KexiProjectData *data = 0;
-    KexiDB::Driver *drv = 0;
+    KDbDriver *drv = 0;
     const bool projectWasOpened = d->prj;
 
     if (!d->prj) {
@@ -3566,7 +3566,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
 //! @todo add support for server based if needed?
             return;
         }
-        KexiDB::ConnectionData cdata;
+        KDbConnectionData cdata;
         cdata.setFileName(dlg.selectedFileName());
 
         //detect driver name for the selected file
@@ -3579,7 +3579,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
 
         if (true == res && !detectedImportAction)
             drv = Kexi::driverManager().driver(cdata.driverName);
-        if (!drv || !(drv->features() & KexiDB::Driver::CompactingDatabaseSupported)) {
+        if (!drv || !(drv->features() & KDbDriver::CompactingDatabaseSupported)) {
             KMessageBox::information(this,
                                      xi18n("Compacting database file <filename>%1</filename> is not supported.",
                                           QDir::convertSeparators(cdata.fileName())));
@@ -3589,7 +3589,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
     } else {
         //sanity
         if (!(d->prj && d->prj->dbConnection()
-                && (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported)))
+                && (d->prj->dbConnection()->driver()->features() & KDbDriver::CompactingDatabaseSupported)))
             return;
 
         if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
@@ -3617,7 +3617,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
 }
 
 tristate KexiMainWindow::showProjectMigrationWizard(
-    const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata)
+    const QString& mimeType, const QString& databaseName, const KDbConnectionData *cdata)
 {
     //pass arguments
     QMap<QString, QString> args;
@@ -3625,7 +3625,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
     args.insert("databaseName", databaseName);
     if (cdata) { //pass ConnectionData serialized as a string...
         QString str;
-        KexiUtils::serializeMap(KexiDB::toMap(*cdata), str);
+        KDbUtils::serializeMap(cdata->toMap(), &str);
         args.insert("connectionData", str);
     }
 

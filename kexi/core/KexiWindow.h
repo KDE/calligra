@@ -149,9 +149,9 @@ public:
      or NULL if there is no view set (or the view has no set assigned). */
     KPropertySet *propertySet();
 
-    KexiDB::SchemaData* schemaData() const;
+    KDbObject* schemaData() const;
 
-    void setSchemaData(KexiDB::SchemaData* schemaData);
+    void setSchemaData(KDbObject* schemaData);
 
     //! Sets 'owned' property for schema data.
     //! If true, the window will delete the schema data before destruction.

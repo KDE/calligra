@@ -34,7 +34,7 @@ KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
     init();
 }
 
-KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor)
+KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KDbCursor *cursor)
         : KexiTableScrollArea(0, parent)
 {
     init();
@@ -51,7 +51,7 @@ KexiDataTableScrollArea::init()
     m_cursor = 0;
 }
 
-bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
+bool KexiDataTableScrollArea::setData(KDbCursor *cursor)
 {
     if (!cursor) {
         clearColumns();
@@ -82,7 +82,7 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
         return false;
     }
 
-    KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
+    KDbTableViewData *tv_data = new KDbTableViewData(m_cursor);
     KexiDataTableView* dataTable = qobject_cast<KexiDataTableView*>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);

@@ -39,7 +39,7 @@ int dbCreationTest()
         return 1;
     }*/
 
-    /* KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
+    /* KDbCursor *cursor = conn->executeQuery( "select * from osoby", KDbCursor::Buffered );
       qDebug()<<"executeQuery() = "<<!!cursor;
       if (cursor) {
         qDebug()<<"Cursor::moveLast() ---------------------";

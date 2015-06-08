@@ -66,12 +66,12 @@ class ProjectDataLVItem : public QTreeWidgetItem
 {
 public:
     ProjectDataLVItem(KexiProjectData *d,
-                      const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector)
+                      const KDbDriver::Info& info, KexiProjectSelectorWidget *selector)
             : QTreeWidgetItem(selector->list())
             , data(d)
     {
         int colnum = 0;
-        const KexiDB::ConnectionData *cdata = data->constConnectionData();
+        const KDbConnectionData *cdata = data->constConnectionData();
         if (selector->d->showProjectNameColumn)
             setText(colnum++, data->caption() + "  ");
 
@@ -206,10 +206,10 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
         qDebug() << "d->prj_set->error() !";
         return;
     }
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     KexiProjectData::List prjlist = d->prj_set->list();
     foreach(KexiProjectData* data, prjlist) {
-        KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
+        KDbDriver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
         if (!info.name.isEmpty()) {
             ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
             if (!d->selectable) {
@@ -286,13 +286,13 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
-        const KexiDB::ConnectionData& cdata,
+        const KDbConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
         , d(new Private)
 {
     setWindowTitle(xi18nc("@title:window", "Open Project"));
-    KexiDB::ConnectionData _cdata(cdata);
+    KDbConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
     setButtonGuiItem(Ok, KGuiItem(xi18n("&Open"), koIconName("document-open"),

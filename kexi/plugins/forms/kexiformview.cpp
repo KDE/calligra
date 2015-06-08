@@ -82,14 +82,14 @@ public:
 
     int resizeMode;
 
-    KexiDB::QuerySchema* query;
+    KDbQuerySchema* query;
 
     /*! True, if d->query is created as temporary object within this form.
      If user selected an existing, predefined (stored) query, d->queryIsOwned will be false,
      so the query object will not be destroyed. */
     bool queryIsOwned;
 
-    KexiDB::Cursor *cursor;
+    KDbCursor *cursor;
 
     /*! For new (empty) forms only:
      Our form's area will be resized more than once.
@@ -195,7 +195,7 @@ KexiFormView::KexiFormView(QWidget *parent, bool dbAware)
 KexiFormView::~KexiFormView()
 {
     if (d->cursor) {
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->deleteCursor(d->cursor);
         d->cursor = 0;
     }
@@ -208,7 +208,7 @@ void
 KexiFormView::deleteQuery()
 {
     if (d->cursor) {
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->deleteCursor(d->cursor);
         d->cursor = 0;
     }
@@ -273,7 +273,7 @@ void KexiFormView::initForm()
 
     const bool newForm = window()->id() < 0;
 
-    KexiDB::FieldList *fields = 0;
+    KDbFieldList *fields = 0;
 #ifndef NO_DSWIZARD
     if (newForm) {
         // Show the form wizard if this is a new Form
@@ -343,15 +343,15 @@ void KexiFormView::updateAutoFieldsDataSource()
     //(this data has not been stored in the form)
     QString dataSourceString(d->dbform->dataSource());
     QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::TableOrQuerySchema tableOrQuery(
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbTableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
     foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
         KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(item->widget());
         if (afWidget) {
-            KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo(afWidget->dataSource());
+            KDbQueryColumnInfo *colInfo = tableOrQuery.columnInfo(afWidget->dataSource());
             if (colInfo) {
                 afWidget->setColumnInfo(colInfo);
             }
@@ -368,8 +368,8 @@ void KexiFormView::updateValuesForSubproperties()
     //(this data has not been stored in the form)
     QString dataSourceString(d->dbform->dataSource());
     QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::TableOrQuerySchema tableOrQuery(
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbTableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
@@ -597,8 +597,8 @@ void KexiFormView::initDataSource()
 {
     deleteQuery();
 //! @todo also handle anonymous (not stored) queries provided as statements here
-    KexiDB::TableSchema *tableSchema = 0;
-    KexiDB::Connection *conn = 0;
+    KDbTableSchema *tableSchema = 0;
+    KDbConnection *conn = 0;
     QStringList sources;
     bool forceReadOnlyDataSource = false;
     QString dataSourceString(d->dbform->dataSource());
@@ -615,7 +615,7 @@ void KexiFormView::initDataSource()
             tableSchema = conn->tableSchema(dataSourceString);
             if (tableSchema) {
                 /* We will build a _minimud-> query schema from selected table fields. */
-                d->query = new KexiDB::QuerySchema();
+                d->query = new KDbQuerySchema();
                 d->queryIsOwned = true;
 
                 if (dataSourcePartClassString.isEmpty())
@@ -648,7 +648,7 @@ void KexiFormView::initDataSource()
 
     QSet<QString> invalidSources;
     if (ok) {
-        KexiDB::IndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
+        KDbIndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
         if (pkey) {
             //always add all fields from table's primary key
             // (don't worry about duplicates, unique list will be computed later)
@@ -669,7 +669,7 @@ void KexiFormView::initDataSource()
             //remove "queryname." if it was prepended
             if (!tableSchema && fieldName.startsWith(d->query->name() + QLatin1Char('.'), Qt::CaseInsensitive))
                 fieldName.remove(0, d->query->name().length() + 1);
-            KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
+            KDbField *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
             if (!f) {
                 /*! @todo show error */
                 //remove this widget from the set of data widgets in the provider
@@ -690,7 +690,7 @@ void KexiFormView::initDataSource()
             deleteQuery();
         }
         else {
-            KexiDB::debug(d->query->parameters());
+            qDebug() << d->query->parameters();
             // like in KexiQueryView::executeQuery()
             QList<QVariant> params;
             {
@@ -709,8 +709,8 @@ void KexiFormView::initDataSource()
 
     if (ok) {
 //! @todo PRIMITIVE!! data setting:
-//! @todo KexiDB::TableViewData is not a great name for data class here... rename/move?
-        KexiDB::TableViewData* data = new KexiDB::TableViewData(d->cursor);
+//! @todo KDbTableViewData is not a great name for data class here... rename/move?
+        KDbTableViewData* data = new KDbTableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
         data->preloadAllRows();
@@ -736,11 +736,11 @@ void KexiFormView::setFormModified()
     form()->setModified(true);
 }
 
-KexiDB::SchemaData* KexiFormView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiFormView::storeNewData(const KDbObject& sdata,
                                                KexiView::StoreNewDataOptions options,
                                                bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
+    KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
     //qDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
@@ -749,7 +749,7 @@ KexiDB::SchemaData* KexiFormView::storeNewData(const KexiDB::SchemaData& sdata,
     }
     if (!storeData()) {
         //failure: remove object's schema data to avoid garbage
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
         delete s;
         return 0;
@@ -765,8 +765,8 @@ KexiFormView::storeData(bool dontAsk)
 
     //-- first, store local BLOBs, so identifiers can be updated
 //! @todo remove unused data stored previously
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::TableSchema *blobsTable = conn->tableSchema("kexi__blobs");
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbTableSchema *blobsTable = conn->tableSchema("kexi__blobs");
     if (!blobsTable) { //compatibility check for older Kexi project versions
 //! @todo show message about missing kexi__blobs?
         return false;
@@ -774,10 +774,10 @@ KexiFormView::storeData(bool dontAsk)
     // Not all engines accept passing NULL to PKEY o_id, so we're omitting it.
     QStringList blobsFieldNamesWithoutID(blobsTable->names());
     blobsFieldNamesWithoutID.pop_front();
-    KexiDB::FieldList *blobsFieldsWithoutID = blobsTable->subList(blobsFieldNamesWithoutID);
+    KDbFieldList *blobsFieldsWithoutID = blobsTable->subList(blobsFieldNamesWithoutID);
 
-    KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
-                                            KexiDB::PreparedStatement::InsertStatement, *blobsFieldsWithoutID);
+    KDbPreparedStatement::Ptr st = conn->prepareStatement(
+                                            KDbPreparedStatement::InsertStatement, *blobsFieldsWithoutID);
     if (!st) {
         delete blobsFieldsWithoutID;
         //! @todo show message
@@ -1099,8 +1099,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     if (fields.isEmpty())
         return;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbTableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
                                             sourcePartClass == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query()) {
         qWarning() << "no such table/query" << sourceName;
@@ -1127,7 +1127,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     );
 
     foreach(const QString& field, fields) {
-        KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(field);
+        KDbQueryColumnInfo* column = tableOrQuery.columnInfo(field);
         if (!column) {
             qWarning() << "no such field" << field << "in table/query" << sourceName;
             continue;

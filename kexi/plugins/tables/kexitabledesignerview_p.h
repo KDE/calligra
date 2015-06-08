@@ -84,7 +84,7 @@ public:
     void setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
                                bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
 
-    bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
+    bool updatePropertiesVisibility(KDbField::Type fieldType, KPropertySet &set,
                                     KexiTableDesignerCommands::Command *commandGroup = 0);
 
     /*! \return message used to ask user for accepting saving the design.
@@ -96,13 +96,13 @@ public:
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
-    void updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set);
+    void updateIconForRecord(KDbRecordData &record, KPropertySet& set);
 
     KexiTableDesignerView* designerView;
 
     KexiTableScrollArea *view; //!< helper
 
-    KexiDB::TableViewData *data;
+    KDbTableViewData *data;
 
     KexiDataAwarePropertySet *sets;
 

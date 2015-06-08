@@ -24,7 +24,7 @@
 
 #include <QDebug>
 
-KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
+KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KDbConnection* conn)
 {
     m_cursor = kodata;
     m_connection = conn;
@@ -50,7 +50,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
     }
 
     qDebug() << sql;
-    KexiDB::Cursor *curs = m_connection->executeQuery(sql);
+    KDbCursor *curs = m_connection->executeQuery(sql);
 
     if (curs) {
         ret = curs->value(0).toDouble();

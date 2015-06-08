@@ -44,7 +44,7 @@ public:
 };
 
 KexiAssistantMessageHandler::KexiAssistantMessageHandler()
-    : KexiDB::MessageHandler(), d(new Private)
+    : KDbMessageHandler(), d(new Private)
 {
 }
 
@@ -93,7 +93,7 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
         b->mapToGlobal(QPoint(0, b->height() / 2)));
 }
 
-void KexiAssistantMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
+void KexiAssistantMessageHandler::showErrorMessageInternal(KDbObject *obj, const QString& msg)
 {
     if (!obj) {
         showErrorMessage(msg);

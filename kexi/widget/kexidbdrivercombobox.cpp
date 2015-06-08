@@ -31,14 +31,14 @@ public:
 };
 
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
-        const KexiDB::Driver::InfoHash& driversInfo, Options options)
+        const KDbDriver::InfoHash& driversInfo, Options options)
         : KComboBox(parent)
         , d(new Private)
 {
     //retrieve list of drivers and sort it: file-based first, then server-based
     QStringList captionsForFileBasedDrivers, captionsForServerBasedDrivers;
     QHash<QString, QString> fileBasedDriversDict, serverBasedDriversDict; //a map from caption to name
-    foreach(const KexiDB::Driver::Info& info, driversInfo) {
+    foreach(const KDbDriver::Info& info, driversInfo) {
         if (info.fileBased) {
             captionsForFileBasedDrivers += info.caption;
             fileBasedDriversDict[info.caption] = info.name.toLower();
@@ -52,7 +52,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
     //insert file-based
     if (options & ShowFileDrivers) {
         foreach(const QString &caption, captionsForFileBasedDrivers) {
-            const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
+            const KDbDriver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
             addItem(koIcon("application-x-executable"), info.caption);
             d->drivers.insert(info.caption, info.name.toLower());
@@ -61,7 +61,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
     //insert server-based
     if (options & ShowServerDrivers) {
         foreach(const QString &caption, captionsForServerBasedDrivers) {
-            const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
+            const KDbDriver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
             addItem(koIcon("application-x-executable"), info.caption);
             d->drivers.insert(info.caption, info.name.toLower());

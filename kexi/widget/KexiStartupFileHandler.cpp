@@ -209,7 +209,7 @@ void KexiStartupFileHandler::updateFilters()
     const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
     if (normalOpeningMode || normalSavingMode) {
-        mime = db.mimeTypeForName(KexiDB::defaultFileBasedDriverMimeType());
+        mime = db.mimeTypeForName(KDb::defaultFileBasedDriverMimeType());
         if (mime && !d->excludedMimeTypes.contains(mime.name().toLower())) {
             filter += KexiUtils::fileDialogFilterString(mime);
             allfilters += mime.globPatterns();

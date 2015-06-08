@@ -47,7 +47,7 @@ QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) cons
     
     if (role == Qt::DisplayRole) {
         if (m_data.length() > index.row()) {
-            const KexiDB::RecordData r( m_data[index.row()] );
+            const KDbRecordData r( m_data[index.row()] );
             if (r.size() <= index.column())
                 return QVariant();
             return r[index.column()];
@@ -67,7 +67,7 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
 
     if (orientation == Qt::Horizontal) {
         if (m_schema) {
-            KexiDB::Field *fld = m_schema->field(section);
+            KDbField *fld = m_schema->field(section);
             if (fld)
                 return m_schema->field(section)->captionOrName();
         }
@@ -91,7 +91,7 @@ int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
     return m_rowCount;
 }
 
-void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
+void AlterSchemaTableModel::setSchema(KDbTableSchema *ts)
 {
     m_schema = ts;
     qDebug() << m_schema->fieldCount();
@@ -102,7 +102,7 @@ void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
     emit layoutChanged();
 }
 
-void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData>& data)
+void AlterSchemaTableModel::setData(const QList<KDbRecordData>& data)
 {
     m_data = data;
 }

@@ -22,7 +22,7 @@
 
 using namespace Scripting;
 
-KexiDBField::KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner)
+KexiDBField::KexiDBField(QObject* parent, ::KDbField* field, bool owner)
         : QObject(parent)
         , m_field(field)
         , m_owner(owner)
@@ -42,7 +42,7 @@ const QString KexiDBField::type()
 }
 void KexiDBField::setType(const QString type)
 {
-    m_field->setType(::KexiDB::Field::typeForString(type));
+    m_field->setType(::KDbField::typeForString(type));
 }
 
 const QString KexiDBField::subType()

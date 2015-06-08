@@ -395,16 +395,16 @@ void KexiView::setDirty()
     setDirty(true);
 }
 
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiView::storeNewData(const KDbObject& sdata,
                                            KexiView::StoreNewDataOptions options,
                                            bool &cancel)
 {
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
+    QScopedPointer<KDbObject> new_schema(new KDbObject);
     *new_schema = sdata;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn->storeObjectSchemaData(*new_schema.data(), true)
         || !conn->removeDataBlock(new_schema->id()) // for sanity
         || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
@@ -416,16 +416,16 @@ KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
     return new_schema.take();
 }
 
-KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiView::copyData(const KDbObject& sdata,
                                         KexiView::StoreNewDataOptions options,
                                         bool &cancel)
 {
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
+    QScopedPointer<KDbObject> new_schema(new KDbObject);
     *new_schema = sdata;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn->storeObjectSchemaData(*new_schema.data(), true)
         || !conn->copyDataBlock(d->window->id(), new_schema->id())
         || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())

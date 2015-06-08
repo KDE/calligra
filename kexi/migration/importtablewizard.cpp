@@ -61,7 +61,7 @@ using namespace KexiMigration;
 
 #define ROWS_FOR_PREVIEW 3
 
-ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, QMap<QString, QString>* args, Qt::WFlags flags)
+ImportTableWizard::ImportTableWizard ( KDbConnection* curDB, QWidget* parent, QMap<QString, QString>* args, Qt::WFlags flags)
     : KAssistantDialog ( parent, flags ),
       m_args(args)
 {
@@ -180,7 +180,7 @@ void ImportTableWizard::setupSrcConn()
     QSet<QString> excludedFilters;
     //! @todo remove when support for kexi files as source prj is added in migration
     excludedFilters
-        << KexiDB::defaultFileBasedDriverMimeType()
+        << KDb::defaultFileBasedDriverMimeType()
         << "application/x-kexiproject-shortcut"
         << "application/x-kexi-connectiondata";
     m_srcConnSel->fileWidget->setExcludedFilters(excludedFilters);
@@ -353,7 +353,7 @@ void ImportTableWizard::arriveSrcDBPage()
         m_srcDBPageWidget->hide();
         qDebug() << "Looks like we need a project selector widget!";
 
-        KexiDB::ConnectionData* condata = m_srcConnSel->selectedConnectionData();
+        KDbConnectionData* condata = m_srcConnSel->selectedConnectionData();
         if (condata) {
             m_prjSet = new KexiProjectSet(condata);
             QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPageWidget);
@@ -420,7 +420,7 @@ void ImportTableWizard::arriveAlterTablePage()
     m_importTableName = m_tableListWidget->selectedItems().first()->text();
 #endif
 
-    KexiDB::TableSchema *ts = new KexiDB::TableSchema();
+    KDbTableSchema *ts = new KDbTableSchema();
     if (!m_migrateDriver->readTableSchema(m_importTableName, *ts)) {
         delete ts;
         return;
@@ -451,9 +451,9 @@ void ImportTableWizard::arriveAlterTablePage()
         KMessageBox::information(this,xi18n("No data has been found in table <resource>%1</resource>. Select different table or cancel importing.",
                                            m_importTableName));
     }
-    QList<KexiDB::RecordData> data;
+    QList<KDbRecordData> data;
     for (uint i = 0; i < ROWS_FOR_PREVIEW; ++i) {
-        KexiDB::RecordData row;
+        KDbRecordData row;
         row.resize(ts->fieldCount());
         for (uint j = 0; j < ts->fieldCount(); ++j) {
             row[j] = m_migrateDriver->value(j);
@@ -606,7 +606,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
         KexiMigration::Data* md = new KexiMigration::Data();
 
         if (fileBasedSrcSelected()) {
-            KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+            KDbConnectionData* conn_data = new KDbConnectionData();
             conn_data->setFileName(m_srcConnSel->selectedFileName());
             md->source = conn_data;
             md->sourceName.clear();
@@ -660,7 +660,7 @@ bool ImportTableWizard::doImport()
         return false;
     }
 
-    KexiDB::TableSchema* newSchema = m_alterSchemaWidget->newSchema();
+    KDbTableSchema* newSchema = m_alterSchemaWidget->newSchema();
     if (!newSchema) {
         msg.showErrorMessage(xi18n("No table was selected to import."));
         return false;
@@ -687,7 +687,7 @@ bool ImportTableWizard::doImport()
     QList<QVariant> row;
     unsigned int fieldCount = newSchema->fieldCount();
     m_migrateDriver->moveFirst();
-    KexiDB::TransactionGuard tg(*m_connection);
+    KDbTransactionGuard tg(*m_connection);
     if (m_connection->error()) {
         QApplication::restoreOverrideCursor();
         return false;

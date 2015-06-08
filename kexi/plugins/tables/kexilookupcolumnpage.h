@@ -29,11 +29,11 @@
 class KexiProject;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
-/*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does
+/*! It's data model is basically KDbLookupFieldSchema class, but the page does
  not create it directly but instead updates a property set that defines
  the field currently selected in the designer.
 
- @todo not all features of KexiDB::LookupFieldSchema class are displayed on this page yet
+ @todo not all features of KDbLookupFieldSchema class are displayed on this page yet
  */
 class KexiLookupColumnPage : public KexiPropertyPaneViewBase
 {

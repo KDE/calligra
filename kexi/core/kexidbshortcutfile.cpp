@@ -79,7 +79,7 @@ KexiDBConnShortcutFile::~KexiDBConnShortcutFile()
 {
 }
 
-bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData& data, QString* _groupKey)
+bool KexiDBConnShortcutFile::loadConnectionData(KDbConnectionData& data, QString* _groupKey)
 {
     KexiProjectData pdata(data);
     if (!pdata.load(fileName(), _groupKey))
@@ -88,7 +88,7 @@ bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData& data, QS
     return true;
 }
 
-bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& data,
+bool KexiDBConnShortcutFile::saveConnectionData(const KDbConnectionData& data,
         bool savePassword, QString* groupKey, bool overwriteFirstGroup)
 {
     KexiProjectData pdata(data);

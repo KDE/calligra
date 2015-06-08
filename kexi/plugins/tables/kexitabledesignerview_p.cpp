@@ -147,7 +147,7 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KPropertySet& set
     }
 }
 
-bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
+bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fieldType, KPropertySet &set,
         Command *commandGroup)
 {
     bool changed = false;
@@ -166,20 +166,20 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 
     prop = &set["objectType"];
     const bool isObjectTypeGroup
-        = set["type"].value().toInt() == (int)KexiDB::Field::BLOB; // used only for BLOBs
+        = set["type"].value().toInt() == (int)KDbField::BLOB; // used only for BLOBs
     visible = isObjectTypeGroup;
     setVisibilityIfNeeded(set, prop,  visible, changed, commandGroup);
 
     prop = &set["unsigned"];
-    visible = KexiDB::Field::isNumericType(fieldType);
+    visible = KDbField::isNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
     prop = &set["maxLength"];
-    visible = (fieldType == KexiDB::Field::Text);
+    visible = (fieldType == KDbField::Text);
     if (prop->isVisible() != visible) {
 //    prop->setVisible( visible );
         //update the length when it makes sense
-        const int lengthToSet = visible ? KexiDB::Field::defaultMaxLength() : 0;
+        const int lengthToSet = visible ? KDbField::defaultMaxLength() : 0;
         setPropertyValueIfNeeded(set, "maxLength", lengthToSet,
                                  commandGroup, false, false /*!rememberOldValue*/);
 //  if (lengthToSet != prop->value().toInt())
@@ -189,27 +189,27 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 #ifdef KEXI_SHOW_UNFINISHED
     prop = &set["precision"];
-    visible = KexiDB::Field::isFPNumericType(fieldType);
+    visible = KDbField::isFPNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 #endif
     prop = &set["visibleDecimalPlaces"];
-    visible = KexiDB::supportsVisibleDecimalPlacesProperty(fieldType);
+    visible = KDb::supportsVisibleDecimalPlacesProperty(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
     prop = &set["unique"];
-    visible = fieldType != KexiDB::Field::BLOB;
+    visible = fieldType != KDbField::BLOB;
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
     prop = &set["indexed"];
-    visible = fieldType != KexiDB::Field::BLOB;
+    visible = fieldType != KDbField::BLOB;
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
     prop = &set["allowEmpty"];
-    visible = KexiDB::Field::hasEmptyProperty(fieldType);
+    visible = KDbField::hasEmptyProperty(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
     prop = &set["autoIncrement"];
-    visible = KexiDB::Field::isAutoIncrementAllowed(fieldType);
+    visible = KDbField::isAutoIncrementAllowed(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
 //! @todo remove this when BLOB supports default value
@@ -224,7 +224,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 
 QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, bool skipWarning)
 {
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     bool ok;
     emptyTable = conn->isEmpty(*designerView->tempData()->table, ok) && ok;
     return xi18n("Do you want to save the design now?")
@@ -233,7 +233,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, 
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData &record, KPropertySet& set)
 {
     QVariant icon;
     if (!set["rowSource"].value().toString().isEmpty()

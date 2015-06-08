@@ -51,11 +51,11 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_columnTypeLabel = new QLabel(xi18n("Type"), this);
     m_columnPKeyLabel = new QLabel(xi18n("Primary Key"), this);
 
-    m_types = KexiDB::Field::typeNames();
+    m_types = KDbField::typeNames();
     m_types.removeFirst(); //Remove InvalidTypes
 
-    for (unsigned int i = KexiDB::Field::FirstType; i <= KexiDB::Field::LastType; ++i) {
-        m_columnType->addItem(KexiDB::Field::typeName(i), i);
+    for (unsigned int i = KDbField::FirstType; i <= KDbField::LastType; ++i) {
+        m_columnType->addItem(KDbField::typeName(i), i);
     }
 
     m_layout->addWidget(m_tableNameWidget, 0, 0, 2, 3);
@@ -83,7 +83,7 @@ AlterSchemaWidget::~AlterSchemaWidget()
     delete m_schema;
 }
 
-void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& suggestedCaption)
+void AlterSchemaWidget::setTableSchema(KDbTableSchema* ts, const QString& suggestedCaption)
 {
     if (!ts) {
         return;
@@ -101,7 +101,7 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& s
     tableClicked(m_model->index(0,0));
 }
 
-void AlterSchemaWidget::setData(const QList<KexiDB::RecordData>& data)
+void AlterSchemaWidget::setData(const QList<KDbRecordData>& data)
 {
     m_model->setData(data);
 }
@@ -115,7 +115,7 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
         m_columnType->setCurrentIndex(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName()));
 
         //Only set the pkey check enabled if the field type is integer
-        m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName())).toInt())));
+        m_columnPKey->setEnabled(KDbField::isIntegerType(KDbField::Type(m_columnType->itemData(m_types.indexOf(m_schema->field(m_selectedColumn)->typeName())).toInt())));
 
         m_columnPKey->setChecked(m_schema->field(m_selectedColumn)->isPrimaryKey());
     }
@@ -123,13 +123,13 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 
 void AlterSchemaWidget::typeActivated(int typ)
 {
-    m_schema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
+    m_schema->field(m_selectedColumn)->setType(KDbField::Type(m_columnType->itemData(typ).toInt()));
 
     //Only set the pkey check enabled if the field type is integer
-    m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt())));
+    m_columnPKey->setEnabled(KDbField::isIntegerType(KDbField::Type(m_columnType->itemData(typ).toInt())));
 
     //If the field type is not integer, then the field cannot be a pkey
-    if (!KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()))) {
+    if (!KDbField::isIntegerType(KDbField::Type(m_columnType->itemData(typ).toInt()))) {
         m_schema->field(m_selectedColumn)->setPrimaryKey(false);
     }
 }
@@ -139,14 +139,14 @@ void AlterSchemaWidget::pkeyClicked(bool pkey){
     m_schema->field(m_selectedColumn)->setPrimaryKey(pkey);
 }
 
-KexiDB::TableSchema* AlterSchemaWidget::newSchema()
+KDbTableSchema* AlterSchemaWidget::newSchema()
 {
     return m_schema;
 }
 
-KexiDB::TableSchema* AlterSchemaWidget::takeTableSchema()
+KDbTableSchema* AlterSchemaWidget::takeTableSchema()
 {
-    KexiDB::TableSchema *schema = m_schema;
+    KDbTableSchema *schema = m_schema;
     m_schema = 0;
     return schema;
 }

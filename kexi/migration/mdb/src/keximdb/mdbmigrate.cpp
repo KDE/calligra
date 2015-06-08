@@ -90,7 +90,7 @@ QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 bool MDBMigrate::drv_connect()
 {
     //qDebug() << "mdb_open:";
-    KexiDB::ConnectionData *data = this->data()->source;
+    KDbConnectionData *data = this->data()->source;
 
     // mdb_open takes a char*, not const char*, hence this nonsense.
     char *filename = qstrdup(QFile::encodeName(data->fileName()));
@@ -146,7 +146,7 @@ MdbTableDef* MDBMigrate::getTableDef(const QString& tableName)
 
 /* ************************************************************************** */
 bool MDBMigrate::drv_readTableSchema(const QString& originalName,
-                                     KexiDB::TableSchema& tableSchema)
+                                     KDbTableSchema& tableSchema)
 {
     // Get the column meta-data
     MdbTableDef *tableDef = getTableDef(originalName);
@@ -169,8 +169,8 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         QString fldID(KexiUtils::stringToIdentifier(fldName));
 
         // Field type
-        KexiDB::Field *fld =
-            new KexiDB::Field(fldID, type(col->col_type));
+        KDbField *fld =
+            new KDbField(fldID, type(col->col_type));
 
         //qDebug() << "size" << col->col_size << "type" << type(col->col_type);
         fld->setCaption(fldName);
@@ -242,7 +242,7 @@ QVariant MDBMigrate::toQVariant(const char* data, unsigned int len, int type)
 }
 
 bool MDBMigrate::drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable)
+                               KDbConnection *destConn, KDbTableSchema* dstTable)
 {
     MdbTableDef *tableDef = getTableDef(srcTable);
     if (!tableDef) {
@@ -319,63 +319,63 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
     return ok;
 }
 
-KexiDB::Field::Type MDBMigrate::type(int type)
+KDbField::Type MDBMigrate::type(int type)
 {
-    KexiDB::Field::Type kexiType;
+    KDbField::Type kexiType;
 
     switch (type) {
     case MDB_BOOL:
-        kexiType = KexiDB::Field::Boolean;
+        kexiType = KDbField::Boolean;
         break;
     case MDB_BYTE:
-        kexiType = KexiDB::Field::Byte;
+        kexiType = KDbField::Byte;
         break;
     case MDB_INT:
-        kexiType = KexiDB::Field::Integer;
+        kexiType = KDbField::Integer;
         break;
     case MDB_LONGINT:
-        kexiType = KexiDB::Field::BigInteger;
+        kexiType = KDbField::BigInteger;
         break;
     case MDB_MONEY:
 //! @todo temporary simplification
-        kexiType = KexiDB::Field::Double;
+        kexiType = KDbField::Double;
         break;
     case MDB_FLOAT:
-        kexiType = KexiDB::Field::Float;
+        kexiType = KDbField::Float;
         break;
     case MDB_DOUBLE:
-        kexiType = KexiDB::Field::Double;
+        kexiType = KDbField::Double;
         break;
     case MDB_SDATETIME:
-        kexiType = KexiDB::Field::DateTime;
+        kexiType = KDbField::DateTime;
         break;
     case MDB_TEXT:
-        kexiType = KexiDB::Field::LongText;
+        kexiType = KDbField::LongText;
         break;
     case MDB_OLE:
-        kexiType = KexiDB::Field::BLOB;
+        kexiType = KDbField::BLOB;
         break;
     case MDB_MEMO:
-        kexiType = KexiDB::Field::LongText;
+        kexiType = KDbField::LongText;
         break;
 //! @todo temporary simplification
     case MDB_NUMERIC:
-        kexiType = KexiDB::Field::Double;
+        kexiType = KDbField::Double;
         break;
     case MDB_REPID:
         // ?
     default:
-        kexiType = KexiDB::Field::InvalidType;
+        kexiType = KDbField::InvalidType;
     }
 
     // If we don't know what it is, hope it's text. :o)
-    if (kexiType == KexiDB::Field::InvalidType) {
-        return KexiDB::Field::LongText;
+    if (kexiType == KDbField::InvalidType) {
+        return KDbField::LongText;
     }
     return kexiType;
 }
 
-bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef)
+bool MDBMigrate::getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef)
 {
     if (!tableDef) {
         return false;
@@ -408,7 +408,7 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
     QVector<int> key_col_num(idx->num_keys);
 
     // MDBTools counts columns from 1 - subtract 1 where necessary
-    KexiDB::IndexSchema* p_idx = new KexiDB::IndexSchema(table);
+    KDbIndexSchema* p_idx = new KDbIndexSchema(table);
 
     for (unsigned int i = 0; i < idx->num_keys; i++) {
         key_col_num[i] = idx->key_col_num[i];
@@ -422,7 +422,7 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
     // ... and add it to the table definition
     // but only if the PK has only one field, so far :o(
 
-    KexiDB::Field *f;
+    KDbField *f;
     if (idx->num_keys == 1 && (f = table->field(idx->key_col_num[0] - 1))) {
         f->setPrimaryKey(true);
     } else {

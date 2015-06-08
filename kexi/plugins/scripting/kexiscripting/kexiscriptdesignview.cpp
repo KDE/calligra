@@ -436,11 +436,11 @@ bool KexiScriptDesignView::loadData()
     return true;
 }
 
-KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiScriptDesignView::storeNewData(const KDbObject& sdata,
                                                        KexiView::StoreNewDataOptions options,
                                                        bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
+    KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
     qDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
@@ -451,7 +451,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     if (! storeData()) {
         qWarning() << "Failed to store the data.";
         //failure: remove object's schema data to avoid garbage
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
         delete s;
         return 0;

@@ -34,7 +34,7 @@ public:
     ~KexiTextFormatter();
 
     //! Assigns \a field to the formatter. This affects its behaviour.
-    void setField(KexiDB::Field* field);
+    void setField(KDbField* field);
 
     /*! \return string converted from \a value.
      A field schema set using setField() is used to perform the formatting.

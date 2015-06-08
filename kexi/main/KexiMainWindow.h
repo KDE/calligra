@@ -32,14 +32,10 @@
 #include <QTabWidget>
 
 class QPaintEvent;
+class KDbObject;
+class KDbConnectionData;
 class KexiProjectData;
 class KexiMainWidget;
-
-namespace KexiDB
-{
-class Object;
-class ConnectionData;
-}
 namespace KexiPart
 {
 class Info;
@@ -228,7 +224,7 @@ public Q_SLOTS:
     virtual QList<QVariant> currentParametersForQuery(int queryId) const;
 
     /*! Implemented for KexiMainWindowIface. */
-    virtual KexiDB::QuerySchema *unsavedQuery(int queryId);
+    virtual KDbQuerySchema *unsavedQuery(int queryId);
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
@@ -256,7 +252,7 @@ public Q_SLOTS:
      * If connection shortcut has been found and \a dbName is not provided,
       'kexi --skip-dialog file.kexic' is executed (or the connection is opened
       directly if there's no porject opened in the current Kexi main window. */
-    tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata,
+    tristate openProject(const QString& aFileName, KDbConnectionData *cdata,
                          const QString& dbName = QString(),
                          const KexiProjectData::AutoOpenObjects& autoopenObjects = KexiProjectData::AutoOpenObjects());
 
@@ -418,7 +414,7 @@ protected:
                                        Kexi::ViewMode prevViewMode, KexiPart::Part *curWindowPart, Kexi::ViewMode curViewMode);
 
     /*! Used in openProject when running another Kexi process is required. */
-    tristate openProjectInExternalKexiInstance(const QString& aFileName, KexiDB::ConnectionData *cdata, const QString& dbName);
+    tristate openProjectInExternalKexiInstance(const QString& aFileName, KDbConnectionData *cdata, const QString& dbName);
 
     /*! Used in openProject when running another Kexi process is required. */
     tristate openProjectInExternalKexiInstance(const QString& aFileName, const QString& fileNameForConnectionData, const QString& dbName);
@@ -572,7 +568,7 @@ protected Q_SLOTS:
      If \a mimeType and \a databaseName are not empty, the wizard will only ask about
      parameters of destination project and skip pages related to source project.
      \a cdata connection data can be also provided to preselect server-based connections. */
-    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata = 0);
+    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName, const KDbConnectionData *cdata = 0);
 
     //! Receives "selectionChanged()" signal from navigator to update some actions.
     void slotPartItemSelectedInNavigator(KexiPart::Item* item);

@@ -22,7 +22,7 @@
 
 using namespace Scripting;
 
-KexiDBConnectionData::KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner)
+KexiDBConnectionData::KexiDBConnectionData(QObject* parent, ::KDbConnectionData* data, bool owner)
         : QObject(parent)
         , m_data(data)
         , m_owner(owner)

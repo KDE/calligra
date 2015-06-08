@@ -66,8 +66,8 @@ public:
 
 /*================================================================*/
 
-ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *data,
-        const KexiDB::Driver::Info& info, QTreeWidget* list)
+ConnectionDataLVItem::ConnectionDataLVItem(KDbConnectionData *data,
+        const KDbDriver::Info& info, QTreeWidget* list)
         : QTreeWidgetItem(list)
         , m_data(data)
 {
@@ -78,7 +78,7 @@ ConnectionDataLVItem::~ConnectionDataLVItem()
 {
 }
 
-void ConnectionDataLVItem::update(const KexiDB::Driver::Info& info)
+void ConnectionDataLVItem::update(const KDbDriver::Info& info)
 {
     setText(0, m_data->caption + "  ");
     const QString sfile = xi18n("File");
@@ -110,7 +110,7 @@ public:
     KAbstractFileWidget::OperationMode fileAccessType;
     QStackedWidget *stack;
     QPointer<KexiDBConnectionSet> conn_set;
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     bool conn_sel_shown; //!< helper
     bool file_sel_shown;
     bool confirmOverwrites;
@@ -190,11 +190,11 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
     if (btn == d->prjTypeSelector->option_file) { //file-based prj type
         showSimpleConn();
     } else if (btn == d->prjTypeSelector->option_server) { //server-based prj type
-        if (KexiDB::hasDatabaseServerDrivers()) {
+        if (KDbDriverManager().hasDatabaseServerDrivers()) {
             if (!d->conn_sel_shown) {
                 d->conn_sel_shown = true;
                 //show connections (on demand):
-                foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
+                foreach(KDbConnectionData* connData, d->conn_set->list()) {
                     addConnectionData(connData);
                     //   else {
                     //this error should be more verbose:
@@ -232,9 +232,9 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
     }
 }
 
-ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KexiDB::ConnectionData* data)
+ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KDbConnectionData* data)
 {
-    const KexiDB::Driver::Info info(d->manager.driverInfo(data->driverName));
+    const KDbDriver::Info info(d->manager.driverInfo(data->driverName));
     return new ConnectionDataLVItem(data, info, d->remote->list);
 }
 
@@ -273,7 +273,7 @@ KexiConnectionSelectorWidget::ConnectionType KexiConnectionSelectorWidget::selec
     return (d->stack->currentWidget() == fileWidget) ? FileBased : ServerBased;
 }
 
-KexiDB::ConnectionData* KexiConnectionSelectorWidget::selectedConnectionData() const
+KDbConnectionData* KexiConnectionSelectorWidget::selectedConnectionData() const
 {
     QList<QTreeWidgetItem *> items = d->remote->list->selectedItems();
     if (items.isEmpty())
@@ -374,7 +374,7 @@ bool KexiConnectionSelectorWidget::confirmOverwrites() const
 
 void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
 {
-    KexiDB::ConnectionData data;
+    KDbConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
                                KGuiItem(xi18n("&Add"), koIconName("dialog-ok"), xi18n("Add database connection")));
     dlg.setWindowTitle(xi18nc("@title:window", "Add a New Database Connection"));
@@ -382,8 +382,8 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
         return;
 
     //store this conn. data
-    KexiDB::ConnectionData *newData
-        = new KexiDB::ConnectionData(*dlg.currentProjectData().connectionData());
+    KDbConnectionData *newData
+        = new KDbConnectionData(*dlg.currentProjectData().connectionData());
     if (!d->conn_set->addConnectionData(newData)) {
         //! @todo msg?
         delete newData;
@@ -415,7 +415,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
         //! @todo msg?
         return;
     }
-    const KexiDB::Driver::Info info(d->manager.driverInfo(item->data()->driverName));
+    const KDbDriver::Info info(d->manager.driverInfo(item->data()->driverName));
     item->update(info);
     slotConnectionSelectionChanged(); //to update descr. edit
 }

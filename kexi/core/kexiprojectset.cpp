@@ -41,24 +41,24 @@ public:
     KexiProjectData::List list;
 };
 
-KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
+KexiProjectSet::KexiProjectSet(KDbMessageHandler* handler)
+        : KDbObject(handler)
         , d(new KexiProjectSetPrivate())
 {
 }
 
-KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData* conndata,
-                               KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
+KexiProjectSet::KexiProjectSet(KDbConnectionData* conndata,
+                               KDbMessageHandler* handler)
+        : KDbObject(handler)
         , d(new KexiProjectSetPrivate())
 {
     Q_ASSERT(conndata);
-    KexiDB::Driver *drv = Kexi::driverManager().driver(conndata->driverName);
+    KDbDriver *drv = Kexi::driverManager().driver(conndata->driverName);
     if (!drv) {
         setError(&Kexi::driverManager());
         return;
     }
-    KexiDB::Connection *conn = drv->createConnection(*conndata);
+    KDbConnection *conn = drv->createConnection(*conndata);
     if (!conn) {
         setError(drv);
         return;
