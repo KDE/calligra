@@ -22,20 +22,18 @@
 #include "KexiStartup.h"
 #include "KexiPasswordPage.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/KexiLinkWidget.h>
-#include <db/utils.h>
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexi.h>
-
 #include <KexiIcon.h>
 
-#include <QTabWidget>
+#include <KDbUtils>
 
+#include <QTabWidget>
 #include <QTimer>
 #include <QVBoxLayout>
 

@@ -20,11 +20,11 @@
 
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
 #include <drivers/xbase/xbaseexport.h>
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
 #include <KLocalizedString>
 

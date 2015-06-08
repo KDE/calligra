@@ -18,14 +18,6 @@
 */
 
 #include "kexilookupcolumnpage.h"
-
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QDebug>
-
-#include <kiconloader.h>
-#include <KLocalizedString>
-
 #include <KexiIcon.h>
 
 #include <widget/properties/KexiPropertyPaneViewBase.h>
@@ -33,10 +25,19 @@
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <db/connection.h>
 #include <kexiproject.h>
 
+#include <KDbConnection>
+
 #include <KProperty>
+
+#include <kiconloader.h>
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QDebug>
+
 
 QString partClassToType(const QString& partClass)
 {

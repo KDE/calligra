@@ -20,7 +20,8 @@
 #define SIMPLEFIELD_H
 
 #include <QString>
-#include <db/queryschema.h>
+
+#include <KDbQueryColumnInfo>
 
 class KoXmlWriter;
 

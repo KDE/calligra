@@ -20,9 +20,9 @@
 #include "KexiProjectItemDelegate.h"
 #include "KexiProjectModel.h"
 #include "KexiProjectModelItem.h"
-
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
+
+#include <KDb>
 
 #include <QLineEdit>
 

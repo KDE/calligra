@@ -21,9 +21,10 @@
 #ifndef KEXIPARTMANAGER_H
 #define KEXIPARTMANAGER_H
 
-#include <db/object.h>
 #include "kexistaticpart.h"
 #include "kexiinternalpart.h"
+
+#include <KDbObject>
 
 namespace KexiDB
 {

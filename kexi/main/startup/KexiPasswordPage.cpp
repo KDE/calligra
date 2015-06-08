@@ -19,7 +19,8 @@
 
 #include "KexiPasswordPage.h"
 #include <widget/KexiPasswordWidget.h>
-#include <db/connectiondata.h>
+
+#include <KDbConnectionData>
 
 #include <KLocalizedString>
 

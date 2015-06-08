@@ -19,20 +19,7 @@
 
 #include "kexitabledesignerview_p.h"
 #include "kexitabledesignerview.h"
-
-#include <kactioncollection.h>
-#include <KLocalizedString>
-
-#include <KPropertySet>
-
 #include <kexi_global.h>
-#include <db/cursor.h>
-#include <db/tableschema.h>
-#include <db/connection.h>
-#include <db/utils.h>
-#include <db/roweditbuffer.h>
-#include <db/error.h>
-#include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -41,6 +28,19 @@
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
 #include "kexitabledesignercommands.h"
+
+#include <KPropertySet>
+
+#include <KDbCursor>
+#include <KDbTableSchema>
+#include <KDbConnection>
+#include <KDbUtils>
+#include <KDbRecordEditBuffer>
+#include <KDbError>
+#include <KDb>
+
+#include <kactioncollection.h>
+#include <KLocalizedString>
 
 #include <QDebug>
 

@@ -18,9 +18,9 @@
  */
 
 #include "kexitextformatter.h"
-
 #include <widget/utils/kexidatetimeformatter.h>
-#include <db/utils.h>
+
+#include <KDbUtils>
 
 #include <QLocale>
 

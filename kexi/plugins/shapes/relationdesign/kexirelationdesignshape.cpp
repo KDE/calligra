@@ -18,10 +18,6 @@
 
 #include "kexirelationdesignshape.h"
 #include "KoViewConverter.h"
-#include <db/connection.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
-#include <db/queryschema.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
@@ -29,6 +25,11 @@
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
+
+#include <KDbConnection>
+#include <KDbDriverManager>
+#include <KDbUtils>
+#include <KDbQuerySchema>
 
 #include <QPainter>
 #include <QDebug>

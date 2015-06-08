@@ -22,9 +22,11 @@
 
 #include <QPointer>
 
-#include <kexidb/alter.h>
-#include <KPropertySet>
 #include <kundo2command.h>
+
+#include <KDbAlter>
+
+#include <KPropertySet>
 
 #include "kexitabledesignerview.h"
 

@@ -26,7 +26,7 @@
 #include <QMap>
 
 #include <kexi_global.h>
-#include <db/tristate.h>
+#include <KDbTristate>
 
 #include "KexiMigrateManagerInterface.h"
 #include "kexisharedactionhost.h"

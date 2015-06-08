@@ -21,7 +21,8 @@
 #define KEXIDBDRIVERCOMBOBOX_H
 
 #include "kexiextwidgets_export.h"
-#include <db/driver.h>
+
+#include <KDbDriver>
 
 #include <QHash>
 

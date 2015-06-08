@@ -20,8 +20,9 @@
 #ifndef KEXI_MIGRATE_MNGR_P_H
 #define KEXI_MIGRATE_MNGR_P_H
 
-#include <db/object.h>
 #include <QMap>
+
+#include <KDbObject>
 
 namespace KexiMigration
 {

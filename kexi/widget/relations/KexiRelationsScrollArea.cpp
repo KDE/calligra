@@ -18,6 +18,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KexiRelationsScrollArea.h"
+#include "KexiRelationsView.h"
+#include "KexiRelationsConnection.h"
+#include <kexi.h>
+
+#include <KDbTableSchema>
+#include <KDbIndexSchema>
+#include <KDbUtils>
+
+#include <KLocalizedString>
+
 #include <QPainter>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -26,17 +37,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
-
-#include <KLocalizedString>
-
-#include <db/tableschema.h>
-#include <db/indexschema.h>
-#include <db/utils.h>
-
-#include "KexiRelationsScrollArea.h"
-#include "KexiRelationsView.h"
-#include "KexiRelationsConnection.h"
-#include <kexi.h>
 
 //! @internal
 class KexiRelationsScrollArea::Private

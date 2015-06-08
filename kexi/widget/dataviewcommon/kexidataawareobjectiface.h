@@ -31,7 +31,7 @@
 #include <core/kexidataiteminterface.h>
 #include <kexiutils/KexiContextMessage.h>
 
-#include <db/tableviewdata.h>
+#include <KDbTableViewData>
 
 #include <QPointer>
 #include <QList>

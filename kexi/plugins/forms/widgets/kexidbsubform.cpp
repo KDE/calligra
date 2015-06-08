@@ -19,17 +19,18 @@
 */
 
 #include "kexidbsubform.h"
-
 #include "kexidbform.h"
 #include "kexiformmanager.h"
 #include "kexiformview.h"
-#include <db/utils.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <formeditor/formIO.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
+
+#include <KDbUtils>
+
 #include <QFrame>
 #include <QSet>
 

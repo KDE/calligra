@@ -21,9 +21,7 @@
 #include "kexitabledesignerview_p.h"
 #include "kexilookupcolumnpage.h"
 #include "kexitabledesignercommands.h"
-
 #include <KexiIcon.h>
-#include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -35,13 +33,14 @@
 
 #include <KPropertySet>
 
-#include <db/cursor.h>
-#include <db/tableschema.h>
-#include <db/connection.h>
-#include <db/utils.h>
-#include <db/roweditbuffer.h>
-#include <db/error.h>
-#include <db/lookupfieldschema.h>
+#include <KDb>
+#include <KDbCursor>
+#include <KDbTableSchema>
+#include <KDbConnection>
+#include <KDbUtils>
+#include <KDbRecordEditBuffer>
+#include <KDbError>
+#include <KDbLookupFieldSchema>
 
 #include <ktoggleaction.h>
 #include <kmessagebox.h>

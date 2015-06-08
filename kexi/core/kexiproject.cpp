@@ -25,17 +25,15 @@
 
 #include <KLocalizedString>
 
-#include <kexiutils/identifier.h>
-
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/driver.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
-#include <db/parser/parser.h>
-#include <db/msghandler.h>
-#include <db/dbproperties.h>
-#include <kexiutils/utils.h>
+#include <KDb>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbDriver>
+#include <KDbDriverManager>
+#include <KDbUtils>
+#include <KDbParser>
+#include <KDbMessageHandler>
+#include <KDbProperties>
 
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
@@ -48,6 +46,7 @@
 #include "kexi.h"
 #include "kexiblobbuffer.h"
 #include "kexiguimsghandler.h"
+#include <kexiutils/utils.h>
 
 #include <assert.h>
 

@@ -19,6 +19,24 @@
 */
 
 #include "kexidbimagebox.h"
+#include <KexiIcon.h>
+#include <widget/utils/kexidropdownbutton.h>
+#include <kexiutils/utils.h>
+#include <formeditor/widgetlibrary.h>
+#include <formeditor/utils.h>
+#include <kexi_global.h>
+#include "kexidbutils.h"
+#include "kexiformpart.h"
+#include "kexiformmanager.h"
+
+#include <KDbField>
+#include <KDbUtils>
+#include <KDbQuerySchema>
+
+#include <kiconloader.h>
+#include <kimageio.h>
+#include <KLocalizedString>
+#include <kiconeffect.h>
 
 #include <QApplication>
 #include <QPixmap>
@@ -26,33 +44,12 @@
 #include <QStyleOptionFocusRect>
 #include <QStyleOptionFrameV3>
 #include <QClipboard>
-
 #include <QFile>
 #include <QBuffer>
 #include <QPainter>
 #include <QMimeDatabase>
 #include <QStandardPaths>
 #include <QDebug>
-
-#include <kiconloader.h>
-#include <kimageio.h>
-#include <KLocalizedString>
-
-#include <kiconeffect.h>
-
-#include <KexiIcon.h>
-#include <widget/utils/kexidropdownbutton.h>
-#include <kexiutils/utils.h>
-#include <db/field.h>
-#include <db/utils.h>
-#include <db/queryschema.h>
-#include <formeditor/widgetlibrary.h>
-#include <formeditor/utils.h>
-#include <kexi_global.h>
-
-#include "kexidbutils.h"
-#include "kexiformpart.h"
-#include "kexiformmanager.h"
 
 //! @internal
 struct KexiDBImageBox_Static {

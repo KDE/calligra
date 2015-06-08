@@ -22,11 +22,12 @@
 
 #include <QPointer>
 
+#include <KDbDriver>
+
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <db/driver.h>
 
 class QLabel;
 class KAboutData;

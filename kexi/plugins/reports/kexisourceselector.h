@@ -21,8 +21,10 @@
 
 #include <QWidget>
 
-#include <db/connection.h>
+#include <KDbConnection>
+
 #include <KoReportData.h>
+
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
 

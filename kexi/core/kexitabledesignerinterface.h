@@ -21,8 +21,11 @@
 #define KEXITABLEDESIGNERINTERFACE_H
 
 #include "kexicore_export.h"
+
+#include <KDbTristate>
+
 #include <KProperty>
-#include <db/tristate.h>
+
 #include <QVariant>
 
 class QByteArray;

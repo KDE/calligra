@@ -22,10 +22,11 @@
 #ifndef KEXIMIGRATIONIMPORTWIZARD_H
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
-#include <kassistantdialog.h>
-
-#include <db/tristate.h>
 #include "migratemanager.h"
+
+#include <KDbTristate>
+
+#include <kassistantdialog.h>
 
 #include <QLabel>
 

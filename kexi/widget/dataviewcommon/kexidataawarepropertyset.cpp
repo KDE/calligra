@@ -19,11 +19,12 @@
 
 #include "kexidataawarepropertyset.h"
 #include "kexidataawareobjectiface.h"
-
 #include <kexi_global.h>
-#include <KProperty>
 #include <core/KexiView.h>
-#include <db/tableviewdata.h>
+
+#include <KProperty>
+
+#include <KDbTableViewData>
 
 #include <QDebug>
 

@@ -21,7 +21,8 @@
 #define TABLEVIEW_TEST_H
 
 #include <widget/tableview/KexiDataTableScrollArea.h>
-#include <db/cursor.h>
+
+#include <KDbCursor>
 
 #include <QDesktopWidget>
 #include <QDebug>

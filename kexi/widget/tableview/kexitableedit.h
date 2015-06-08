@@ -24,7 +24,7 @@
 #include "kexidatatable_export.h"
 #include <core/kexidataiteminterface.h>
 
-#include <db/tableviewdata.h>
+#include <KDbTableViewData>
 
 #include <QVariant>
 #include <QKeyEvent>

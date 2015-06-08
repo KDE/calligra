@@ -22,6 +22,29 @@
 #include "importwizard.h"
 #include "keximigrate.h"
 #include "importoptionsdlg.h"
+#include <core/KexiMainWindowIface.h>
+#include <core/kexidbconnectionset.h>
+#include <core/kexi.h>
+#include <kexiutils/utils.h>
+#include <kexidbdrivercombobox.h>
+#include <kexitextmsghandler.h>
+#include <widget/kexicharencodingcombobox.h>
+#include <widget/kexiprjtypeselector.h>
+#include <widget/KexiFileWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
+#include <widget/KexiDBPasswordDialog.h>
+#include <widget/KexiStartupFileHandler.h>
+#include <KexiIcon.h>
+
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnectionData>
+#include <KDbUtils>
+#include <KDb>
+
+#include <kmessagebox.h>
 
 #include <QLabel>
 #include <QLayout>
@@ -36,29 +59,6 @@
 #include <QMimeType>
 #include <QPushButton>
 #include <QDebug>
-
-#include <kmessagebox.h>
-
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
-#include <core/KexiMainWindowIface.h>
-#include <core/kexidbconnectionset.h>
-#include <core/kexi.h>
-#include <kexiutils/utils.h>
-#include <kexiutils/identifier.h>
-#include <kexidbdrivercombobox.h>
-#include <kexitextmsghandler.h>
-#include <widget/kexicharencodingcombobox.h>
-#include <widget/kexiprjtypeselector.h>
-#include <widget/KexiFileWidget.h>
-#include <widget/KexiConnectionSelectorWidget.h>
-#include <widget/KexiProjectSelectorWidget.h>
-#include <widget/KexiDBTitlePage.h>
-#include <widget/KexiDBPasswordDialog.h>
-#include <widget/KexiStartupFileHandler.h>
-#include <KexiIcon.h>
 
 using namespace KexiMigration;
 

@@ -18,6 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KexiRelationsTableContainer_p.h"
+#include "KexiRelationsScrollArea.h"
+#include <kexidragobjects.h>
+
+#include <KDbTableSchema>
+#include <KDbUtils>
+
 #include <QLabel>
 #include <QPushButton>
 #include <QPoint>
@@ -27,12 +34,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QDebug>
-
-#include <db/tableschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
-#include "KexiRelationsTableContainer_p.h"
-#include "KexiRelationsScrollArea.h"
 
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
     const QString& text, QWidget *parent)
