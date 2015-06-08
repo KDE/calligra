@@ -73,7 +73,7 @@ public:
     QSplitter *splitter;
     //! For internal use, this pointer is usually copied to TempData structure,
     //! when switching out of this view (then it's cleared).
-    KexiDB::QuerySchema *parsedQuery;
+    KDbQuerySchema *parsedQuery;
     //! For internal use, statement passed in switching to this view
     QString origStatement;
     //! needed to remember height for both modes, between switching
@@ -260,9 +260,9 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         d->justSwitchedFromNoViewMode = true;
     }
     KexiQueryPart::TempData * temp = tempData();
-    KexiDB::QuerySchema *query = temp->query();
+    KDbQuerySchema *query = temp->query();
     if (!query) {//try to just get saved schema, instead of temporary one
-        query = dynamic_cast<KexiDB::QuerySchema *>(window()->schemaData());
+        query = dynamic_cast<KDbQuerySchema *>(window()->schemaData());
     }
 
     if (mode != 0/*failure only if it is switching from prev. view*/ && !query) {
@@ -274,10 +274,10 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
         if (temp->queryChangedInPreviousView()) {
-            KexiDB::Connection::SelectStatementOptions options;
-            options.identifierEscaping = KexiDB::Driver::EscapeKexi;
+            KDbConnection::SelectStatementOptions options;
+            options.identifierEscaping = KDbDriver::EscapeKexi;
             options.addVisibleLookupColumns = false;
-            d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
+            d->origStatement = KDb::selectStatement(0, *query, options).trimmed();
         }
     }
     if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
@@ -312,12 +312,12 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
     }
 
     qDebug();
-    KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
+    KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     const bool ok = parser->parse(sqlText);
     delete d->parsedQuery;
     d->parsedQuery = parser->query();
     if (!d->parsedQuery || !ok || !parser->error().type().isEmpty()) {
-        KexiDB::ParserError err = parser->error();
+        KDbParserError err = parser->error();
         setStatusError(err.error());
         d->editor->jump(err.at());
         delete d->parsedQuery;
@@ -356,7 +356,7 @@ KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
     return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
 
-KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
                                                            KexiView::StoreNewDataOptions options,
                                                            bool &cancel)
 {
@@ -365,14 +365,14 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
     //here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
     const bool queryOK = slotCheckQuery();
     bool ok = true;
-    KexiDB::SchemaData* query = 0;
+    KDbObject* query = 0;
     if (queryOK) {
         if (d->parsedQuery) {
             query = d->parsedQuery; //will be returned, so: don't keep it
             d->parsedQuery = 0;
         }
         else { //empty query
-            query = new KexiDB::SchemaData(); //just empty
+            query = new KDbObject(); //just empty
         }
     }
     else { //the query is not ok
@@ -383,10 +383,10 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
             cancel = true;
             return 0;
         }
-        query = new KexiDB::SchemaData(); //just empty
+        query = new KDbObject(); //just empty
     }
 
-    (KexiDB::SchemaData&)*query = sdata; //copy main attributes
+    (KDbObject&)*query = sdata; //copy main attributes
 
     ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
              *query, true /*newObject*/);

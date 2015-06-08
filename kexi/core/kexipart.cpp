@@ -228,7 +228,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
                                         info()->supportedViewModes(), *this, item);
 
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KexiDB::SchemaData sdata(project->idForClass(info()->partClass()));
+    KDbObject sdata(project->idForClass(info()->partClass()));
     sdata.setName(item.name());
     sdata.setCaption(item.caption());
     sdata.setDescription(item.description());
@@ -321,23 +321,23 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     return window;
 }
 
-KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+KDbObject* Part::loadSchemaData(KexiWindow *window, const KDbObject& sdata,
         Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
-    KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
+    KDbObject *new_schema = new KDbObject();
     *new_schema = sdata;
     if (ownedByWindow)
         *ownedByWindow = true;
     return new_schema;
 }
 
-void Part::loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+void Part::loadAndSetSchemaData(KexiWindow *window, const KDbObject& sdata,
     Kexi::ViewMode viewMode)
 {
     bool schemaDataOwned = true;
-    KexiDB::SchemaData* sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
+    KDbObject* sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
     window->setSchemaData(sd);
     window->setSchemaDataOwned(schemaDataOwned);
 }
@@ -364,7 +364,7 @@ void Part::initInstanceActions()
 
 tristate Part::remove(KexiPart::Item &item)
 {
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn)
         return false;
     return conn->removeObject(item.identifier());
@@ -412,7 +412,7 @@ const Kexi::ObjectStatus& Part::lastOperationStatus() const
     return d->status;
 }
 
-KexiDB::QuerySchema* Part::currentQuery(KexiView* view)
+KDbQuerySchema* Part::currentQuery(KexiView* view)
 {
     Q_UNUSED(view);
     return 0;

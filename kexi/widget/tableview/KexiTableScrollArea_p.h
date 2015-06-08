@@ -72,8 +72,8 @@ public:
     KexiTableScrollArea *tv;
     KexiTableScrollAreaWidget *scrollAreaWidget;
 
-    //! editors: one for each column (indexed by KexiDB::TableViewColumn)
-    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
+    //! editors: one for each column (indexed by KDbTableViewColumn)
+    QHash<KDbTableViewColumn*, KexiTableEdit*> editors;
     int rowHeight;
     QTimer *pUpdateTimer;
     bool editOnDoubleClick;

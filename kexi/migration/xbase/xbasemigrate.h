@@ -43,7 +43,7 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
     
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-      const QString& originalName, KexiDB::TableSchema& tableSchema);
+      const QString& originalName, KDbTableSchema& tableSchema);
     
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -51,16 +51,16 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
     virtual bool drv_disconnect();
 
     virtual bool drv_copyTable(const QString& srcTable, 
-      KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+      KDbConnection *destConn, KDbTableSchema* dstTable);
 
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
 
   private:
-    KexiDB::Field::Type type(char xBaseColumnType);
+    KDbField::Type type(char xBaseColumnType);
 
     //! Sets and existing constraints on the field
-    void getConstraints(const QString& tableName, KexiDB::Field* fld);
+    void getConstraints(const QString& tableName, KDbField* fld);
 
     //! Returns a list of index files corresponding to the specific fieldName
     QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);

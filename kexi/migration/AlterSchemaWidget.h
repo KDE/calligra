@@ -28,11 +28,8 @@ class QTableView;
 class QComboBox;
 class QCheckBox;
 class QLabel;
+class KDbTableSchema;
 class KexiNameWidget;
-
-namespace KexiDB {
-class TableSchema;
-}
 
 namespace KexiMigration {
 
@@ -43,11 +40,11 @@ class AlterSchemaWidget : public QWidget
         explicit AlterSchemaWidget(QWidget* parent = 0);
         ~AlterSchemaWidget();
 
-        void setTableSchema(KexiDB::TableSchema *schema, const QString &suggestedCaption = QString());
-        void setData(const QList<KexiDB::RecordData>& data);
+        void setTableSchema(KDbTableSchema *schema, const QString &suggestedCaption = QString());
+        void setData(const QList<KDbRecordData>& data);
 
-        KexiDB::TableSchema* newSchema();
-        KexiDB::TableSchema* takeTableSchema();
+        KDbTableSchema* newSchema();
+        KDbTableSchema* takeTableSchema();
 
         KexiNameWidget* nameWidget();
         bool nameExists(const QString &name) const;
@@ -69,7 +66,7 @@ class AlterSchemaWidget : public QWidget
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
 
-        KexiDB::TableSchema *m_schema;
+        KDbTableSchema *m_schema;
 
         int m_selectedColumn;
 

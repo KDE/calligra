@@ -32,8 +32,8 @@
 
 \b Usage: \n
 \code
-  KexiDB::DriverManager manager;
-  KexiDB::Driver::InfoHash drvs = manager.driversInfo();
+  KDbDriverManager manager;
+  KDbDriver::InfoHash drvs = manager.driversInfo();
 
   KexiDBDriverComboBox* combo = new KexiDBDriverComboBox(drvs, true, 0);
 \endcode
@@ -56,12 +56,12 @@ public:
 
         The combobox is populated with the names of the drivers in
         \a driversInfo.  A suitable value for \a driversInfo can be obtained
-        from KexiDB::DriverManager::driversInfo().
+        from KDbDriverManager::driversInfo().
 
         If \a includeFileBasedDrivers is set to false, then only those drivers
         that are for database servers (those which have X-Kexi-DriverType=Network
         in their .desktop file) are shown. */
-    KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo,
+    KexiDBDriverComboBox(QWidget* parent, const KDbDriver::InfoHash& driversInfo,
                          Options options = ShowAll);
 
     ~KexiDBDriverComboBox();

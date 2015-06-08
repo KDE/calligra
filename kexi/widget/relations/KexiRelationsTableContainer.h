@@ -28,14 +28,10 @@
 #include <QFrame>
 #include <QStringList>
 
+class KDbTableOrQuerySchema;
 class KexiRelationsScrollArea;
 class KexiRelationViewTable;
 class KexiRelationViewTableContainerHeader;
-
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
 
 //! @short Provides a frame displaying single table or query in relation view.
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsTableContainer : public QFrame
@@ -46,13 +42,13 @@ public:
     KexiRelationsTableContainer(
         QWidget* parent,
         KexiRelationsScrollArea *scrollArea,
-        KexiDB::TableOrQuerySchema *schema);
+        KDbTableOrQuerySchema *schema);
 
     virtual ~KexiRelationsTableContainer();
 
     int globalY(const QString &field);
 
-    KexiDB::TableOrQuerySchema* schema() const;
+    KDbTableOrQuerySchema* schema() const;
 
     int right() const {
         return x() + width() - 1;
@@ -70,7 +66,7 @@ Q_SIGNALS:
     void endDrag();
     void gotFocus();
     void contextMenuRequest(const QPoint& pos);
-    void fieldsDoubleClicked(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void fieldsDoubleClicked(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
 public Q_SLOTS:
     void setFocus();

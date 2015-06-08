@@ -68,7 +68,7 @@ KexiInternalPart::~KexiInternalPart()
 }
 
 //static
-KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const QString &className)
+KexiInternalPart* KexiInternalPart::part(KDbMessageHandler *msgHdr, const QString &className)
 {
     KexiInternalPart *part = Kexi::partManager().internalPartForClass(className);
     if (!part) {
@@ -81,7 +81,7 @@ KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const Q
 
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const QString &className,
-        const char* widgetClass, KexiDB::MessageHandler *msgHdr,
+        const char* widgetClass, KDbMessageHandler *msgHdr,
         QWidget *parent, const char *objName, QMap<QString, QString>* args)
 {
     KexiInternalPart *part = KexiInternalPart::part(msgHdr, className);
@@ -114,7 +114,7 @@ KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
 
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const QString &className,
-                                                KexiDB::MessageHandler *msgHdr,
+                                                KDbMessageHandler *msgHdr,
                                                 QWidget *parent, const char *objName,
                                                 QMap<QString, QString>* args)
 {
@@ -124,7 +124,7 @@ QWidget* KexiInternalPart::createWidgetInstance(const QString &className,
 //static
 KexiWindow* KexiInternalPart::createKexiWindowInstance(
     const QString &className,
-    KexiDB::MessageHandler *msgHdr, const char *objName)
+    KDbMessageHandler *msgHdr, const char *objName)
 {
     KexiInternalPart *part = KexiInternalPart::part(msgHdr, className);
     if (!part) {
@@ -136,7 +136,7 @@ KexiWindow* KexiInternalPart::createKexiWindowInstance(
 
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
-        const char* dialogClass, KexiDB::MessageHandler *msgHdr,
+        const char* dialogClass, KDbMessageHandler *msgHdr,
         const char *objName, QMap<QString, QString>* args)
 {
     KexiInternalPart *part = KexiInternalPart::part(msgHdr, className);
@@ -164,7 +164,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
 
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
-                                                     KexiDB::MessageHandler *msgHdr, const char *objName,
+                                                     KDbMessageHandler *msgHdr, const char *objName,
                                                      QMap<QString, QString>* args)
 {
     return createModalDialogInstance(className, 0, msgHdr, objName, args);

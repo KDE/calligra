@@ -46,7 +46,7 @@ public:
 
 protected:
     //! Creates recent projects container.
-    explicit KexiRecentProjects(KexiDB::MessageHandler* handler = 0);
+    explicit KexiRecentProjects(KDbMessageHandler* handler = 0);
 
     void addProjectDataInternal(KexiProjectData *data);
 

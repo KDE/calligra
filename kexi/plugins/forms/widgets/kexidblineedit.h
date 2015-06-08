@@ -77,7 +77,7 @@ public:
 
     //! \return true if editor's value is empty (not necessary null).
     //! Only few data types can accept "EMPTY" property
-    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! (use KDbField::hasEmptyProperty() to check this).
     //! Used for checking if a given constraint within table or form is met.
     virtual bool valueIsEmpty();
 
@@ -100,7 +100,7 @@ public:
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_copy", "edit_paste", etc.

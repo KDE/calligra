@@ -38,8 +38,8 @@ int main(int argc, char* argv[])
     /* KexiTableView tv;
       app.setMainWidget(&tv);
 
-      KexiDB::TableViewData data;
-      KexiDB::TableViewColumn col;
+      KDbTableViewData data;
+      KDbTableViewColumn col;
       col.type = QVariant::Int; col.caption = "Id"; data.addColumn( col );
       col.type = QVariant::String; col.caption = "Name"; data.addColumn( col );
       col.type = QVariant::Int; col.caption = "Age"; data.addColumn( col );
@@ -48,14 +48,14 @@ int main(int argc, char* argv[])
 
     //some connection data
     KexiDBConnectionSet connset;
-    KexiDB::ConnectionData *conndata;
-    conndata = new KexiDB::ConnectionData();
+    KDbConnectionData *conndata;
+    conndata = new KDbConnectionData();
     conndata->name = "My connection 1";
     conndata->driverName = "mysql";
     conndata->hostName = "host.net";
     conndata->userName = "user";
     connset.addConnectionData(conndata);
-    conndata = new KexiDB::ConnectionData();
+    conndata = new KDbConnectionData();
     conndata->name = "My connection 2";
     conndata->driverName = "mysql";
     conndata->hostName = "myhost.org";

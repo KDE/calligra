@@ -54,15 +54,15 @@ class KexiCellEditorFactoryPrivate
 public:
     KexiCellEditorFactoryPrivate() {
         // Initialize standard editor cell editor factories
-        registerItem(*new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB);
-        registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date);
-        registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time);
-        registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime);
-        registerItem(*new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum);
-        registerItem(*new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean);
-        registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "QIcon");
+        registerItem(*new KexiBlobEditorFactoryItem(), KDbField::BLOB);
+        registerItem( *new KexiDateEditorFactoryItem(), KDbField::Date);
+        registerItem( *new KexiTimeEditorFactoryItem(), KDbField::Time);
+        registerItem( *new KexiDateTimeEditorFactoryItem(), KDbField::DateTime);
+        registerItem(*new KexiComboBoxEditorFactoryItem(), KDbField::Enum);
+        registerItem(*new KexiBoolEditorFactoryItem(), KDbField::Boolean);
+        registerItem(*new KexiKIconTableEditorFactoryItem(), KDbField::Text, "QIcon");
         //default type
-        registerItem(*new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType);
+        registerItem(*new KexiInputEditorFactoryItem(), KDbField::InvalidType);
     }
     ~KexiCellEditorFactoryPrivate() {
         qDeleteAll(items);
@@ -89,7 +89,7 @@ public:
         item = items_by_type.value(key(type, QString()));
         if (item)
             return item;
-        return items_by_type.value(key(KexiDB::Field::InvalidType, QString()));
+        return items_by_type.value(key(KDbField::InvalidType, QString()));
     }
 
     QSet<KexiCellEditorFactoryItem*> items; //!< list of editor factory items (for later destroy)
@@ -114,7 +114,7 @@ void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint t
     KexiCellEditorFactory_static->registerItem(item, type, subType);
 }
 
-static bool hasEnumType(const KexiDB::TableViewColumn &column)
+static bool hasEnumType(const KDbTableViewColumn &column)
 {
     /*not db-aware case*/
     if (column.relatedData())
@@ -122,7 +122,7 @@ static bool hasEnumType(const KexiDB::TableViewColumn &column)
     /*db-aware case*/
     if (!column.field() || !column.field()->table())
         return false;
-    KexiDB::LookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema(*column.field());
+    KDbLookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema(*column.field());
     if (!lookupFieldSchema)
         return false;
     if (lookupFieldSchema->rowSource().name().isEmpty())
@@ -130,9 +130,9 @@ static bool hasEnumType(const KexiDB::TableViewColumn &column)
     return true;
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &column, QWidget* parent)
+KexiTableEdit* KexiCellEditorFactory::createEditor(KDbTableViewColumn &column, QWidget* parent)
 {
-    KexiDB::Field *realField;
+    KDbField *realField;
     if (column.visibleLookupColumnInfo()) {
         realField = column.visibleLookupColumnInfo()->field;
     } else {
@@ -143,7 +143,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
 
     if (hasEnumType(column)) {
         //--we need to create combo box because of relationship:
-        item = KexiCellEditorFactory::item(KexiDB::Field::Enum);
+        item = KexiCellEditorFactory::item(KDbField::Enum);
     } else {
         item = KexiCellEditorFactory::item(realField->type(), realField->subType());
     }
@@ -152,15 +152,15 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
 #if 0
     //--check if we need to create combo box because of relationship:
     //WARNING: it's assumed that indices are one-field long
-    KexiDB::TableSchema *table = f.table();
+    KDbTableSchema *table = f.table();
     if (table) {
         //find index that contain this field
-        KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
+        KDbIndexSchema::ListIterator it = table->indicesIterator();
         for (;it.current();++it) {
-            KexiDB::IndexSchema *idx = it.current();
+            KDbIndexSchema *idx = it.current();
             if (idx->fields()->contains(&f)) {
                 //find details-side rel. for this index
-                KexiDB::Relationship *rel = idx->detailsRelationships()->first();
+                KDbRelationship *rel = idx->detailsRelationships()->first();
                 if (rel) {
 
                 }

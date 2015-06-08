@@ -80,8 +80,8 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
     //qDebug() << orientation << section << role;
     switch (orientation) {
     case Qt::Horizontal: {
-        KexiDB::TableViewData *data = qobject_cast<KexiTableScrollArea*>(QObject::parent())->data();
-        KexiDB::TableViewColumn *col = data->visibleColumn(section);
+        KDbTableViewData *data = qobject_cast<KexiTableScrollArea*>(QObject::parent())->data();
+        KDbTableViewColumn *col = data->visibleColumn(section);
         if (!col) {
             return QVariant();
         }
@@ -99,7 +99,7 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
             break;
         }
         case Qt::ToolTipRole: {
-            KexiDB::Field *f = col->field();
+            KDbField *f = col->field();
             return f ? f->description() : QString();
         }
         }

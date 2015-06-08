@@ -25,10 +25,7 @@
 #include <core/kexidataiteminterface.h>
 #include <QWidget>
 
-namespace KexiDB
-{
-class Field;
-}
+class KDbField;
 
 //! An interface for declaring form widgets to be data-aware.
 class KEXIDATAVIEWCOMMON_EXPORT KexiFormDataItemInterface : public KexiDataItemInterface
@@ -99,10 +96,10 @@ public:
     virtual void setReadOnly(bool readOnly) = 0;
 
     //! \return database column information for this item
-    virtual KexiDB::Field* field() const;
+    virtual KDbField* field() const;
 
     //! \return database column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const {
+    virtual KDbQueryColumnInfo* columnInfo() const {
         return m_columnInfo;
     }
 
@@ -110,19 +107,19 @@ public:
      Reimplement if you need to do additional actions,
      e.g. set data validator based on field type. Don't forget about
      calling superclass implementation. */
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo) {
         m_columnInfo = cinfo;
     }
 
     /*! Used internally to set visible database column information.
      Reimplemented in KexiDBComboBox: except for combo box, this does nothing. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setVisibleColumnInfo(KDbQueryColumnInfo* cinfo) {
         Q_UNUSED(cinfo);
     }
 
     /*! \return visible database column information for this item.
      Except for combo box, this is exactly the same as columnInfo(). */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const {
+    virtual KDbQueryColumnInfo* visibleColumnInfo() const {
         return columnInfo();
     }
 
@@ -163,7 +160,7 @@ public:
 protected:
     QString m_dataSource;
     QString m_dataSourcePartClass;
-    KexiDB::QueryColumnInfo* m_columnInfo;
+    KDbQueryColumnInfo* m_columnInfo;
     KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
     KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()
     bool m_displayDefaultValue; //!< used by setDisplayDefaultValue()

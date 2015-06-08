@@ -30,12 +30,8 @@
 #include <KDbQuerySchema>
 #include <KDbConnection>
 
-namespace KexiDB
-{
-class QuerySchema;
-class Connection;
-}
-
+class KDbQuerySchema;
+class KDbConnection;
 
 //! @short Kexi Query Designer Plugin.
 class KexiQueryPart : public KexiPart::Part
@@ -50,15 +46,15 @@ public:
 
     //! @short Temporary data kept in memory while switching between Query Window's views
     class TempData : public KexiWindowData,
-                public KexiDB::Connection::TableSchemaChangeListenerInterface
+                public KDbConnection::TableSchemaChangeListenerInterface
     {
     public:
-        TempData(KexiWindow* parent, KexiDB::Connection *conn);
+        TempData(KexiWindow* parent, KDbConnection *conn);
         virtual ~TempData();
         virtual tristate closeListener();
         void clearQuery();
         void unregisterForTablesSchemaChanges();
-        void registerTableSchemaChanges(KexiDB::QuerySchema *q);
+        void registerTableSchemaChanges(KDbQuerySchema *q);
 
         /*! Assigns query \a query for this data.
          Existing query (available using query()) is deleted but only
@@ -66,19 +62,19 @@ public:
          \a query can be 0.
          If \a query is equal to existing query, nothing is performed.
         */
-        void setQuery(KexiDB::QuerySchema *query);
+        void setQuery(KDbQuerySchema *query);
 
         //! \return query associated with this data
-        KexiDB::QuerySchema *query() const {
+        KDbQuerySchema *query() const {
             return m_query;
         }
 
         //! Takes query associated with this data (without deleting) and returns it.
         //! After this call query() == 0
-        KexiDB::QuerySchema *takeQuery();
+        KDbQuerySchema *takeQuery();
 
         //! Connection used for retrieving definition of the query
-        KexiDB::Connection *conn;
+        KDbConnection *conn;
 
         /*! @return true if \a query member has changed in previous view.
          Used on view switching. We're checking this flag to see if we should
@@ -91,18 +87,18 @@ public:
         void setQueryChangedInPreviousView(bool set);
 
     private:
-        KexiDB::QuerySchema *m_query;
+        KDbQuerySchema *m_query;
         bool m_queryChangedInPreviousView;
     };
 
     //! Implemented for KexiPart::Part.
-    virtual KexiDB::QuerySchema* currentQuery(KexiView* view);
+    virtual KDbQuerySchema* currentQuery(KexiView* view);
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
 
     /*! Renames stored data pointed by \a item to \a newName.
-     Reimplemented to mark the query obsolete by using KexiDB::Connection::setQuerySchemaObsolete(). */
+     Reimplemented to mark the query obsolete by using KDbConnection::setQuerySchemaObsolete(). */
     virtual tristate rename(KexiPart::Item & item, const QString& newName);
 
 protected:
@@ -115,8 +111,8 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
-            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KDbObject* loadSchemaData(KexiWindow *window,
+            const KDbObject& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
 };
 
 #endif

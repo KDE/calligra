@@ -113,7 +113,7 @@ protected Q_SLOTS:
 
 protected:
     void init();
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
     virtual void paintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent* e);
 

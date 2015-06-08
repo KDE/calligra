@@ -140,7 +140,7 @@ void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
         KexiContextMenuUtils::updateTitle(
             menu,
             d->iface->columnInfo()->captionOrAliasOrName(),
-            KexiDB::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
+            KDb::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
         : false;
 
     updatePopupMenuActions(menu);

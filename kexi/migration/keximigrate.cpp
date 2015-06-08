@@ -31,7 +31,6 @@
 
 #include <QDebug>
 
-using namespace KexiDB;
 using namespace KexiMigration;
 
 class KexiMigrate::Private
@@ -67,14 +66,14 @@ public:
     QMap<QByteArray, QString> propertyCaptions;
 
     //! KexiDB driver. For instance, it is used for escaping identifiers
-    QPointer<KexiDB::Driver> kexiDBDriver;
+    QPointer<KDbDriver> kexiDBDriver;
 
     /* private */
 
     //! Table schemas from source DB
-    QList<KexiDB::TableSchema*> tableSchemas;
+    QList<KDbTableSchema*> tableSchemas;
 
-    QList<KexiDB::TableSchema*> kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
+    QList<KDbTableSchema*> kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
 
     KexiProject *destPrj;
 
@@ -126,8 +125,8 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
     if (result)
         result->clearStatus();
 
-    KexiDB::DriverManager drvManager;
-    KexiDB::Driver *destDriver = drvManager.driver(
+    KDbDriverManager drvManager;
+    KDbDriver *destDriver = drvManager.driver(
                                      d->migrateData->destination->connectionData()->driverName);
     if (!destDriver) {
         result->setStatus(&drvManager,
@@ -140,7 +139,7 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
     // existing project but for server-based projects we need to ask now.
     if (destDriver->isFileDriver())
         return true; //nothing to check
-    KexiDB::Connection *tmpConn
+    KDbConnection *tmpConn
         = destDriver->createConnection(*d->migrateData->destination->connectionData());
     if (!tmpConn || destDriver->error() || !tmpConn->connect()) {
         delete tmpConn;
@@ -156,8 +155,8 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
 
 bool KexiMigrate::isSourceAndDestinationDataSourceTheSame() const
 {
-    KexiDB::ConnectionData* sourcedata = d->migrateData->source;
-    KexiDB::ConnectionData* destinationdata = d->migrateData->destination->connectionData();
+    KDbConnectionData* sourcedata = d->migrateData->source;
+    KDbConnectionData* destinationdata = d->migrateData->destination->connectionData();
     return (
                sourcedata && destinationdata &&
                d->migrateData->sourceName == d->migrateData->destination->databaseName() && // same database name
@@ -176,8 +175,8 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     if (result)
         result->clearStatus();
 
-    KexiDB::DriverManager drvManager;
-    KexiDB::Driver *destDriver = drvManager.driver(
+    KDbDriverManager drvManager;
+    KDbDriver *destDriver = drvManager.driver(
                                      d->migrateData->destination->connectionData()->driverName);
     if (!destDriver) {
         result->setStatus(&drvManager,
@@ -231,7 +230,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     if (kexi__objects_exists) {
         tristate res = drv_queryStringListFromSQL(
                            QString::fromLatin1("SELECT o_name FROM kexi__objects WHERE o_type=%1")
-                           .arg((int)KexiDB::TableObjectType), 0, kexiDBTables, -1);
+                           .arg(int(KDb::TableObjectType)), 0, kexiDBTables, -1);
         if (res == true) {
             // prepend KexiDB-compatible tables to 'tables' list, so we'll copy KexiDB-compatible tables first,
             // to make sure existing IDs will not be in conflict with IDs newly generated for non-KexiDB tables
@@ -253,7 +252,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         // this is a non-KexiDB table: generate schema from native data source
         const QString tableIdentifier(KexiUtils::stringToIdentifier(tableCaption.toLower()));
         nativeNames.insert(tableIdentifier, tableCaption);
-        KexiDB::TableSchema *tableSchema = new KexiDB::TableSchema(tableIdentifier);
+        KDbTableSchema *tableSchema = new KDbTableSchema(tableIdentifier);
         tableSchema->setCaption(tableCaption);   //caption is equal to the original name
 
         if (!drv_readTableSchema(tableCaption, *tableSchema)) {
@@ -275,15 +274,15 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     // - create copies of non-KexiDB tables
     delete d->destPrj;
     d->destPrj = new KexiProject(*d->migrateData->destination,
-                                result ? (KexiDB::MessageHandler*)*result : 0);
+                                result ? (KDbMessageHandler*)*result : 0);
     bool ok = true == d->destPrj->create(true /*forceOverwrite*/);
 
-    KexiDB::Connection *destConn = 0;
+    KDbConnection *destConn = 0;
 
     if (ok)
         ok = (destConn = d->destPrj->dbConnection());
 
-    KexiDB::Transaction trans;
+    KDbTransaction trans;
     if (ok) {
         trans = destConn->beginTransaction();
         if (trans.isNull()) {
@@ -312,7 +311,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             if (true == drv_fetchRecordFromSQL(
                         QString::fromLatin1(
                             "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects "
-                            "WHERE o_name='%1' AND o_type=%2").arg(tableName).arg((int)KexiDB::TableObjectType),
+                            "WHERE o_name='%1' AND o_type=%2").arg(tableName).arg(int(KDb::TableObjectType)),
                         data, firstRecord)
                     && destConn->setupObjectSchemaData(data, *t))
             {
@@ -330,7 +329,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                             ok = false;
                         break;
                     }
-                    KexiDB::Field* f = destConn->setupField(data);
+                    KDbField* f = destConn->setupField(data);
                     if (f)
                         t->addField(f);
                     else
@@ -354,7 +353,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 
     // Step 7 - Create the non-KexiDB-compatible tables: new IDs will be assigned to them
     if (ok) {
-        foreach(KexiDB::TableSchema* ts, d->tableSchemas) {
+        foreach(KDbTableSchema* ts, d->tableSchemas) {
             ok = destConn->createTable(ts);
             if (!ok) {
                 qDebug() << "Failed to create a table " << ts->name();
@@ -376,7 +375,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     if (ok) {
         //add compatible tables to the list, so data will be copied, if needed
         if (d->migrateData->keepData) {
-            foreach(KexiDB::TableSchema* table,
+            foreach(KDbTableSchema* table,
                     d->kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport) {
                 d->tableSchemas.append(table);
             }
@@ -413,7 +412,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 d->tableSchemas.append(destConn->tableSchema("kexi__fields"));
         }
 
-        foreach(KexiDB::TableSchema *ts, d->tableSchemas) {
+        foreach(KDbTableSchema *ts, d->tableSchemas) {
             if (!ok)
                 break;
             if (destConn->driver()->isSystemObjectName(ts->name())
@@ -538,9 +537,9 @@ void KexiMigrate::updateProgress(qulonglong step)
 
 //=============================================================================
 // Prompt the user to choose a field type
-KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
+KDbField::Type KexiMigrate::userType(const QString& fname)
 {
-    const QStringList typeNames(KexiDB::Field::typeNames());
+    const QStringList typeNames(KDbField::typeNames());
     bool ok;
     const QString res(KInputDialog::getItem(xi18n("Field Type"),
         xi18n("The data type for field <resource>%1</resource> could not be determined. "
@@ -549,9 +548,9 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 
     if (!ok || res.isEmpty())
 //! @todo OK?
-        return KexiDB::Field::Text;
+        return KDbField::Text;
 
-    return KexiDB::intToFieldType(int(KexiDB::Field::FirstType) + typeNames.indexOf(res));
+    return KDb::intToFieldType(int(KDbField::FirstType) + typeNames.indexOf(res));
 }
 
 
@@ -561,12 +560,12 @@ QString KexiMigrate::drv_escapeIdentifier(const QString& str) const
     return d->kexiDBDriver ? d->kexiDBDriver->escapeIdentifier(str) : str;
 }
 
-KexiDB::Driver *KexiMigrate::driver()
+KDbDriver *KexiMigrate::driver()
 {
     return d->kexiDBDriver;
 }
 
-void KexiMigrate::setDriver(KexiDB::Driver *driver)
+void KexiMigrate::setDriver(KDbDriver *driver)
 {
     d->kexiDBDriver = driver;
 }
@@ -654,7 +653,7 @@ bool KexiMigrate::connectSource()
   return drv_connect();
 }
 
-bool KexiMigrate::readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+bool KexiMigrate::readTableSchema(const QString& originalName, KDbTableSchema& tableSchema)
 {
   return drv_readTableSchema(originalName, tableSchema);
 }

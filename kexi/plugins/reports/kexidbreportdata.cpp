@@ -27,7 +27,7 @@
 class KexiDBReportData::Private
 {
 public:
-    explicit Private(KexiDB::Connection *pDb)
+    explicit Private(KDbConnection *pDb)
       : cursor(0), connection(pDb), originalSchema(0), copySchema(0)
     {
     }
@@ -41,14 +41,14 @@ public:
 
     QString objectName;
 
-    KexiDB::Cursor *cursor;
-    KexiDB::Connection *connection;
-    KexiDB::QuerySchema *originalSchema;
-    KexiDB::QuerySchema *copySchema;
+    KDbCursor *cursor;
+    KDbConnection *connection;
+    KDbQuerySchema *originalSchema;
+    KDbQuerySchema *copySchema;
 };
 
 KexiDBReportData::KexiDBReportData (const QString &objectName,
-                                    KexiDB::Connection * pDb)
+                                    KDbConnection * pDb)
         : d(new Private(pDb))
 {
     d->objectName = objectName;
@@ -57,7 +57,7 @@ KexiDBReportData::KexiDBReportData (const QString &objectName,
 
 KexiDBReportData::KexiDBReportData(const QString& objectName,
                                    const QString& partClass,
-                                   KexiDB::Connection* pDb)
+                                   KDbConnection* pDb)
         : d(new Private(pDb))
 {
     d->objectName = objectName;
@@ -69,7 +69,7 @@ void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
     if (d->copySchema) {
         if (sorting.isEmpty())
             return;
-        KexiDB::OrderByColumnList order;
+        KDbOrderByColumnList order;
         for (int i = 0; i < sorting.count(); i++) {
             order.appendField(*d->copySchema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
         }
@@ -82,7 +82,7 @@ void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
 void KexiDBReportData::addExpression(const QString& field, const QVariant& value, int relation)
 {
     if (d->copySchema) {
-        KexiDB::Field *fld = d->copySchema->findTableField(field);
+        KDbField *fld = d->copySchema->findTableField(field);
         if (fld) {
             d->copySchema->addToWhereExpression(fld, value, relation);
         }
@@ -148,21 +148,21 @@ bool KexiDBReportData::getSchema(const QString& partClass)
                 && d->connection->tableSchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a table..";
-            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->tableSchema(d->objectName)));
+            d->originalSchema = new KDbQuerySchema(*(d->connection->tableSchema(d->objectName)));
         }
         else if ((partClass.isEmpty() || partClass == "org.kexi-project.query")
                  && d->connection->querySchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a query..";
             d->connection->querySchema(d->objectName)->debug();
-            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->querySchema(d->objectName)));
+            d->originalSchema = new KDbQuerySchema(*(d->connection->querySchema(d->objectName)));
         }
 
         if (d->originalSchema) {
             qDebug() << "Original:" << d->connection->selectStatement(*d->originalSchema);
             d->originalSchema->debug();
 
-            d->copySchema = new KexiDB::QuerySchema(*d->originalSchema);
+            d->copySchema = new KDbQuerySchema(*d->originalSchema);
             d->copySchema->debug();
             qDebug() << "Copy:" << d->connection->selectStatement(*d->copySchema);
         }
@@ -183,8 +183,8 @@ int KexiDBReportData::fieldNumber ( const QString &fld ) const
     if (!d->cursor || !d->cursor->query()) {
         return -1;
     }
-    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
-        d->cursor->query()->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    const KDbQueryColumnInfo::Vector fieldsExpanded(
+        d->cursor->query()->fieldsExpanded(KDbQuerySchema::Unique));
     for (int i = 0; i < fieldsExpanded.size() ; ++i) {
         if (0 == QString::compare(fld, fieldsExpanded[i]->aliasOrName(), Qt::CaseInsensitive)) {
             return i;
@@ -199,8 +199,8 @@ QStringList KexiDBReportData::fieldNames() const
         return QStringList();
     }
     QStringList names;
-    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
-        d->originalSchema->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    const KDbQueryColumnInfo::Vector fieldsExpanded(
+        d->originalSchema->fieldsExpanded(KDbQuerySchema::Unique));
     for (int i = 0; i < fieldsExpanded.size(); i++) {
 //! @todo in some Kexi mode captionOrAliasOrName() would be used here (more user-friendly)
         names.append(fieldsExpanded[i]->aliasOrName());
@@ -268,7 +268,7 @@ qint64 KexiDBReportData::recordCount() const
 {
     if ( d->copySchema )
     {
-        return KexiDB::rowCount ( *d->copySchema );
+        return KDb::recordCount ( *d->copySchema );
     }
     else
     {
@@ -378,7 +378,7 @@ QStringList KexiDBReportData::dataSources() const
         QList<int> tids = d->connection->tableIds();
         qs << "";
         for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = d->connection->tableSchema(tids[i]);
+            KDbTableSchema* tsc = d->connection->tableSchema(tids[i]);
             if (tsc)
                 qs << tsc->name();
         }
@@ -386,7 +386,7 @@ QStringList KexiDBReportData::dataSources() const
         QList<int> qids = d->connection->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = d->connection->querySchema(qids[i]);
+            KDbQuerySchema* qsc = d->connection->querySchema(qids[i]);
             if (qsc)
                 qs << qsc->name();
         }

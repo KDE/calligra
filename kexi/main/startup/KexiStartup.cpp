@@ -222,7 +222,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (!args)
         return true;
 
-    KexiDB::ConnectionData cdata;
+    KDbConnectionData cdata;
 
     const QString connectionShortcutFileName(args->getOption("connection"));
     if (!connectionShortcutFileName.isEmpty()) {
@@ -274,8 +274,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (cdata.driverName.isEmpty())
         fileDriverSelected = true;
     else {
-        KexiDB::DriverManager dm;
-        KexiDB::Driver::Info dinfo = dm.driverInfo(cdata.driverName);
+        KDbDriverManager dm;
+        KDbDriver::Info dinfo = dm.driverInfo(cdata.driverName);
         if (dinfo.name.isEmpty()) {
             //driver name provided explicitly, but not found
             KMessageBox::sorry(0, dm.errorMsg());
@@ -397,7 +397,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
         if (createDB) {
             if (cdata.driverName.isEmpty())
-                cdata.driverName = KexiDB::defaultFileBasedDriverName();
+                cdata.driverName = KDb::defaultFileBasedDriverId();
             KexiStartupData::setProjectData(new KexiProjectData(cdata, prjName)); //dummy
         } else {
             if (fileDriverSelected) {
@@ -608,7 +608,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     }
 
     if (!KexiStartupData::projectData()) {
-        cdata = KexiDB::ConnectionData(); //clear
+        cdata = KDbConnectionData(); //clear
 
         KexiStartupData::setAction(ShowWelcomeScreen);
         return true;
@@ -671,7 +671,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 cdata.driverName = detectedDriverName;
                 KexiStartupData::setProjectData(new KexiProjectData(cdata, selFile));
             } else if (d->startupDialog->selectedExistingConnection()) {
-                KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
+                KDbConnectionData *cdata = d->startupDialog->selectedExistingConnection();
                 //ok, now we will try to show projects for this connection to the user
                 bool cancelled;
                 KexiStartupData::setProjectData(selectProject(cdata, cancelled));
@@ -881,7 +881,7 @@ tristate KexiStartupHandler::detectActionForFile(
 }
 
 KexiProjectData*
-KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent)
+KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool& cancelled, QWidget *parent)
 {
     clearStatus();
     cancelled = false;

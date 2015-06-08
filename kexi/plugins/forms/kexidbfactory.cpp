@@ -399,13 +399,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     //for autofield's type: inherit i18n from KexiDB
     setValueDescription("Auto", futureI18nc("AutoField editor's type", "Auto"));
-    setValueDescription("Text", KexiDB::Field::typeName(KexiDB::Field::Text));
-    setValueDescription("Integer", KexiDB::Field::typeName(KexiDB::Field::Integer));
-    setValueDescription("Double", KexiDB::Field::typeName(KexiDB::Field::Double));
-    setValueDescription("Boolean", KexiDB::Field::typeName(KexiDB::Field::Boolean));
-    setValueDescription("Date", KexiDB::Field::typeName(KexiDB::Field::Date));
-    setValueDescription("Time", KexiDB::Field::typeName(KexiDB::Field::Time));
-    setValueDescription("DateTime", KexiDB::Field::typeName(KexiDB::Field::DateTime));
+    setValueDescription("Text", KDbField::typeName(KDbField::Text));
+    setValueDescription("Integer", KDbField::typeName(KDbField::Integer));
+    setValueDescription("Double", KDbField::typeName(KDbField::Double));
+    setValueDescription("Boolean", KDbField::typeName(KDbField::Boolean));
+    setValueDescription("Date", KDbField::typeName(KDbField::Date));
+    setValueDescription("Time", KDbField::typeName(KDbField::Time));
+    setValueDescription("DateTime", KDbField::typeName(KDbField::DateTime));
     setValueDescription("MultiLineText", xi18nc("AutoField editor's type", "Multiline Text"));
     setValueDescription("ComboBox", xi18nc("AutoField editor's type", "Drop-Down List"));
     setValueDescription("Image", xi18nc("AutoField editor's type", "Image"));
