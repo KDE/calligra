@@ -705,9 +705,9 @@ void KexiDBImageBox::updatePixmap()
             KIconEffect::semiTransparent(pm);
         }
         KexiDBImageBox_static->pixmap = new QPixmap(pm);
-        KexiDBImageBox_static->small = new QPixmap( 
+        KexiDBImageBox_static->small = new QPixmap(
             KexiDBImageBox_static->pixmap->scaled(
-                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2, 
+                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2,
                 Qt::KeepAspectRatio, Qt::SmoothTransformation) );
     }
 }

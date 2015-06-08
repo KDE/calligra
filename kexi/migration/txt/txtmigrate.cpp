@@ -56,7 +56,7 @@ bool TxtMigrate::drv_disconnect()
     delete m_DataFile;
     m_DataFile = 0;
   }
-  
+
   return true;
 }
 
@@ -86,7 +86,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
     delete m_DataFile;
     m_DataFile = 0;
   }
-  
+
   m_DataFile = new QFile(m_Folder + '/' + tableName);
 
   //qDebug() << m_DataFile->fileName();
@@ -107,7 +107,7 @@ bool TxtMigrate::drv_moveNext()
     //qDebug();
   if (m_Row < m_FileRow)
   {
-   m_Row++; 
+   m_Row++;
   }
   else
   {
@@ -137,7 +137,7 @@ QVariant TxtMigrate::drv_value(uint i)
 {
     //qDebug() << m_Row;
     //qDebug() << m_LastLine;
-    
+
     if (m_Row >= 0)   {
         return QVariant(m_FieldValues[m_Row][i]);
     }

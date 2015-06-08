@@ -43,7 +43,7 @@ static char *type_name[] = {"Form",
 	if (obj_type > 11) {
 		return NULL;
 	} else {
-		return type_name[obj_type]; 
+		return type_name[obj_type];
 	}
 }
 
@@ -97,8 +97,8 @@ GPtrArray *mdb_read_catalog (MdbHandle *mdb, int objtype)
 	while (mdb_fetch_row(table)) {
 		type = atoi(obj_type);
 		if (objtype==MDB_ANY || type == objtype) {
-			
-			
+
+
 			entry = (MdbCatalogEntry *) g_malloc0(sizeof(MdbCatalogEntry));
 			entry->mdb = mdb;
 			strcpy(entry->object_name, obj_name);
@@ -106,17 +106,17 @@ GPtrArray *mdb_read_catalog (MdbHandle *mdb, int objtype)
 			entry->table_pg = atol(obj_id) & 0x00FFFFFF;
 			entry->flags = atol(obj_flags);
 			mdb->num_catalog++;
-			g_ptr_array_add(mdb->catalog, entry); 
+			g_ptr_array_add(mdb->catalog, entry);
 		}
 	}
-	
- 
+
+
 	mdb_free_tabledef(table);
 
 	return mdb->catalog;
 }
 
-void 
+void
 mdb_dump_catalog(MdbHandle *mdb, int obj_type)
 {
 	unsigned int i;

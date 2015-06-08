@@ -8,7 +8,7 @@ include_directories(
 )
 
 #build a shared library
-set(kexihandler_report_SRCS 
+set(kexihandler_report_SRCS
     kexireports.cpp
     kexireportpart.cpp
     kexireportview.cpp
@@ -23,7 +23,7 @@ if (KEXI_MOBILE)
 else ()
   list(APPEND kexihandler_report_SRCS
         keximigratereportdata.cpp
-  ) 
+  )
 endif ()
 
 
@@ -46,7 +46,7 @@ target_link_libraries(kexihandler_report
 )
 
 if (KEXI_MOBILE)
-  
+
 else ()
     target_link_libraries (kexihandler_report
     keximain

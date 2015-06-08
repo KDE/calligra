@@ -34,7 +34,7 @@ namespace KexiPart
 class Info;
 
 //! @short The base class for Kexi frontend parts (plugins)
-//! @see KexiPart::Part KexiInternalPart 
+//! @see KexiPart::Part KexiInternalPart
 class KEXICORE_EXPORT PartBase : public QObject, protected KexiUtils::InternalPropertyMap
 {
     Q_OBJECT
@@ -89,7 +89,7 @@ protected:
      @param parent parent of this plugin
      @param list extra arguments passed to the plugin
     */
-    PartBase(QObject *parent, 
+    PartBase(QObject *parent,
         const QVariantList& list);
 
     /*! Sets Info structure for this part. */

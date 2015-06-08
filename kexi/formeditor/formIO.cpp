@@ -184,7 +184,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     //custom properties
     QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
     QHash<QByteArray, QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
-    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin(); 
+    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin();
         it != itEnd; ++it)
     {
         headerPropertiesEl.setAttribute(it.key(), it.value());
@@ -736,7 +736,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVaria
 }
 
 void
-FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, 
+FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName,
     const QString &property, const QVariant &value)
 {
     QDomElement propertyE = domDoc.createElement(tagName);
@@ -955,7 +955,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
             tclass, domDoc, "property", "buddy",
             dynamic_cast<QLabel*>(item->widget())->buddy()->objectName());
     }
-    
+
     if (names.contains("paletteBackgroundColor")) {
         savePropertyElement(
             tclass, domDoc, "property", "paletteBackgroundColor",
@@ -1159,7 +1159,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
         if (el.hasAttribute("rowspan")) { // widget spans multiple cells
             if (layout) {
                 layout->addWidget(
-                    w, 
+                    w,
                     el.attribute("row").toInt(), el.attribute("column").toInt(),
                     el.attribute("rowspan").toInt(), el.attribute("colspan").toInt());
 //! @todo alignment attribute?

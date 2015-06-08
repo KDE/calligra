@@ -18,8 +18,8 @@
  */
 
 /*
- * code for handling searchable arguments (sargs) used primary by the sql 
- * engine to support where clause handling.  The sargs are configured in 
+ * code for handling searchable arguments (sargs) used primary by the sql
+ * engine to support where clause handling.  The sargs are configured in
  * a tree with AND/OR operators connecting the child nodes. NOT operations
  * have only one child on the left side.  Logical operators (=,<,>,etc..)
  * have no children.
@@ -41,7 +41,7 @@ mdb_sql_walk_tree(MdbSargNode *node, MdbSargTreeFunc func, gpointer data)
 	if (node->left) mdb_sql_walk_tree(node->left, func, data);
 	if (node->right) mdb_sql_walk_tree(node->right, func, data);
 }
-int 
+int
 mdb_test_string(MdbSargNode *node, char *s)
 {
 int rc;
@@ -76,7 +76,7 @@ int mdb_test_int(MdbSargNode *node, gint32 i)
 {
 	switch (node->op) {
 		case MDB_EQUAL:
-			
+
 			if (node->value.i == i) return 1;
 			break;
 		case MDB_GT:
@@ -106,9 +106,9 @@ mdb_find_indexable_sargs(MdbSargNode *node, gpointer data)
 
 	if (node->op == MDB_OR || node->op == MDB_NOT) return 1;
 
-	/* 
+	/*
 	 * right now all we do is look for sargs that are anded together from
-	 * the root.  Later we may put together OR ops into a range, and then 
+	 * the root.  Later we may put together OR ops into a range, and then
 	 * range scan the leaf pages. That is col1 = 2 or col1 = 4 becomes
 	 * col1 >= 2 and col1 <= 4 for the purpose of index scans, and then
 	 * extra rows are thrown out when the row is tested against the main
@@ -116,18 +116,18 @@ mdb_find_indexable_sargs(MdbSargNode *node, gpointer data)
 	 * scanning anyway.
 	 *
 	 * also, later we should support the NOT operator, but it's generally
-	 * a pretty worthless test for indexes, ie NOT col1 = 3, we are 
+	 * a pretty worthless test for indexes, ie NOT col1 = 3, we are
 	 * probably better off table scanning.
 	 */
 	if (mdb_is_relational_op(node->op) && node->col) {
-		
+
 		sarg.op = node->op;
 		sarg.value = node->value;
 		mdb_add_sarg(node->col, &sarg);
 	}
 	return 0;
 }
-int 
+int
 mdb_test_sarg(MdbHandle *mdb, MdbColumn *col, MdbSargNode *node, MdbField *field)
 {
 	char tmpbuf[256];
@@ -185,7 +185,7 @@ mdb_test_sarg_node(MdbHandle *mdb, MdbSargNode *node, MdbField *fields, int num_
 			return (node->value.i);
 		}
 		elem = mdb_find_field(col->col_num, fields, num_fields);
-		if (!mdb_test_sarg(mdb, col, node, &fields[elem])) 
+		if (!mdb_test_sarg(mdb, col, node, &fields[elem]))
 			return 0;
 	} else { /* logical op */
 		switch (node->op) {
@@ -207,7 +207,7 @@ mdb_test_sarg_node(MdbHandle *mdb, MdbSargNode *node, MdbField *fields, int num_
 	}
 	return 1;
 }
-int 
+int
 mdb_test_sargs(MdbTableDef *table, MdbField *fields, int num_fields)
 {
 	MdbSargNode *node;
@@ -231,7 +231,7 @@ int i;
 		sarg = g_ptr_array_index (col->sargs, i);
 		if (!mdb_test_sarg(mdb, col, sarg, offset, len)) {
 			/* sarg didn't match, no sense going on */
-			return 0;	
+			return 0;
 		}
 	}
 

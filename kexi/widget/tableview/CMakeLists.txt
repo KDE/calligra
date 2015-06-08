@@ -14,16 +14,16 @@ set(kexidatatable_LIB_SRCS
    KexiDataTableScrollArea.cpp
    KexiTableScrollAreaWidget.cpp
    kexicelleditorfactory.cpp
-   kexitableedit.cpp 
-   kexiinputtableedit.cpp 
-   kexiblobtableedit.cpp 
-   kexibooltableedit.cpp 
-   kexicomboboxbase.cpp 
-   kexicomboboxtableedit.cpp 
-   kexicomboboxpopup.cpp 
-   kexidatetableedit.cpp 
-   kexitimetableedit.cpp 
-   kexidatetimetableedit.cpp 
+   kexitableedit.cpp
+   kexiinputtableedit.cpp
+   kexiblobtableedit.cpp
+   kexibooltableedit.cpp
+   kexicomboboxbase.cpp
+   kexicomboboxtableedit.cpp
+   kexicomboboxpopup.cpp
+   kexidatetableedit.cpp
+   kexitimetableedit.cpp
+   kexidatetimetableedit.cpp
    kexitextformatter.cpp
 )
 

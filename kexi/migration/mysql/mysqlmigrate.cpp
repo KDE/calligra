@@ -501,7 +501,7 @@ bool MySQLMigrate::drv_moveFirst()
 {
     if (!m_mysqlres)
         return false;
-    
+
     m_row = 0;
     getRow();
     return true;
@@ -511,7 +511,7 @@ bool MySQLMigrate::drv_moveLast()
 {
     if (!m_mysqlres)
         return false;
-    
+
     m_row = m_rows - 1;
     getRow();
     return true;
@@ -521,7 +521,7 @@ bool MySQLMigrate::drv_moveNext()
 {
     if (!m_mysqlres)
         return false;
-    
+
     if (m_row < m_rows - 1) {
         m_row ++;
         getRow();
@@ -530,14 +530,14 @@ bool MySQLMigrate::drv_moveNext()
     else
     {
         return false;
-    }     
+    }
 }
 
 bool MySQLMigrate::drv_movePrevious()
 {
     if (!m_mysqlres)
         return false;
-    
+
     if (m_row > 0) {
         m_row --;
         getRow();
@@ -546,26 +546,26 @@ bool MySQLMigrate::drv_movePrevious()
     else
     {
         return false;
-    }  
+    }
 }
 
 bool MySQLMigrate::drv_readFromTable(const QString& tableName)
 {
     //qDebug();
-    
+
     if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(tableName) + '`')) {
         qWarning() << "Unable to execute SQL";
         return false;
     }
-    
+
     m_mysqlres = mysql_store_result(d->mysql);
     if(!m_mysqlres) {
         return false;
     }
-    
+
     m_rows = mysql_num_rows(m_mysqlres);
     //qDebug() << m_rows;
-    
+
     return true;
 }
 
@@ -578,7 +578,7 @@ QVariant MySQLMigrate::drv_value(uint i)
     else {
         qWarning() << "No record";
     }
-    
+
     return val;
 }
 
@@ -590,7 +590,7 @@ void MySQLMigrate::getRow()
     }
     else {
         qWarning() << "No result";
-        m_dataRow = 0;   
+        m_dataRow = 0;
     }
 }
 

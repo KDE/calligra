@@ -44,7 +44,7 @@ class WebBrowserWidget : public QWidget,
                          public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
-    
+
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(QString url READ url WRITE setUrl)
@@ -53,7 +53,7 @@ class WebBrowserWidget : public QWidget,
     Q_PROPERTY(QIcon icon READ icon)
     Q_PROPERTY(bool modified READ modified)
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
-     
+
 public:
     explicit WebBrowserWidget(QWidget *parent = 0);
     ~WebBrowserWidget();
@@ -69,7 +69,7 @@ public:
 
         return m_view->url().toString();
     }
-    
+
     inline bool modified() const {
 
          return m_view->isModified();
@@ -84,17 +84,17 @@ public:
 
         return m_view->zoomFactor();
     }
-  
-    inline QIcon icon() const 
+
+    inline QIcon icon() const
     {
         return m_view->icon();
     }
-    
+
     inline qreal textScale () const
     {
       return m_view->textSizeMultiplier();
-    }  
-    
+    }
+
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
@@ -103,7 +103,7 @@ public:
     virtual void clear();
     void updateToolBar();
     bool isReadOnly() const;
-    virtual void setReadOnly(bool readOnly);  
+    virtual void setReadOnly(bool readOnly);
     virtual void setInvalidState(const QString& displayText);
 
 public Q_SLOTS:
@@ -113,9 +113,9 @@ public Q_SLOTS:
     void setZoomFactor(qreal factor);
     void setTextScale(qreal scale);
     void hide_bar();
-    
+
 protected:
-    virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
     void setUrl(const QUrl& url);
     bool m_readOnly;
 
@@ -132,4 +132,4 @@ private:
     QHBoxLayout* h_layout;
 };
 
-#endif 
+#endif

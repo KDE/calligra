@@ -60,7 +60,7 @@ InternalPropertyHandlerInterface::~InternalPropertyHandlerInterface()
 
 WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(
     const QByteArray& _classname, QWidget *_widget, Container *_container)
-    : classname(_classname), widget(_widget), container(_container), 
+    : classname(_classname), widget(_widget), container(_container),
       geometry(_widget ? _widget->geometry() : QRect()),
       alignment( Qt::AlignLeft ),
       useFrame( false ), multiLine( false ), execute( true ), transparentBackground( false )
@@ -203,7 +203,7 @@ void WidgetFactory::changeProperty(Form *form, QWidget *widget, const char *name
         widget->setProperty(name, value);
     }
     else {
-        // If eg multiple labels are selected, 
+        // If eg multiple labels are selected,
         // we only want to change the text of one of them (the one the user cliked on)
         if (widget) {
             widget->setProperty(name, value);
@@ -220,7 +220,7 @@ WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
 {
     if (multiple) {
         return property == "font" || property == "paletteBackgroundColor" || property == "enabled"
-               || property == "paletteForegroundColor" || property == "cursor" 
+               || property == "paletteForegroundColor" || property == "cursor"
                || property == "paletteBackgroundPixmap";
     }
 

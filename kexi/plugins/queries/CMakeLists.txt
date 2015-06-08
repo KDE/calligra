@@ -4,10 +4,10 @@ include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMA
 
 ########### next target ###############
 
-set(kexihandler_query_PART_SRCS 
-   kexiquerypart.cpp 
-   kexiquerydesignersql.cpp 
-   kexiquerydesignerguieditor.cpp 
+set(kexihandler_query_PART_SRCS
+   kexiquerypart.cpp
+   kexiquerydesignersql.cpp
+   kexiquerydesignerguieditor.cpp
    kexiqueryview.cpp )
 
 add_library(kexihandler_query MODULE ${kexihandler_query_PART_SRCS})

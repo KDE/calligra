@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.h from Qt 4.7
 
    This library is free software; you can redistribute it and/or

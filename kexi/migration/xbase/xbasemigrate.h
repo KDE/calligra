@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -36,21 +36,21 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
   public:
     xBaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~xBaseMigrate();
-    
+
   protected:
     //! Driver specific function to return table names
     virtual bool drv_tableNames(QStringList& tablenames);
-    
+
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
       const QString& originalName, KDbTableSchema& tableSchema);
-    
+
     //! Driver specific connection implementation
     virtual bool drv_connect();
-    
+
     virtual bool drv_disconnect();
 
-    virtual bool drv_copyTable(const QString& srcTable, 
+    virtual bool drv_copyTable(const QString& srcTable,
       KDbConnection *destConn, KDbTableSchema* dstTable);
 
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );

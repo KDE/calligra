@@ -73,15 +73,15 @@ public:
     void addAction(const QString& toolBarName, QAction *action);
 
     bool mainMenuVisible() const;
-    
+
     QRect tabRect(int index) const { return tabBar()->tabRect(index); }
 
     KHelpMenu *helpMenu() const;
 
     void addSearchableModel(KexiSearchableModel *model);
-    
+
     KToolBar *createToolBar(const char *name, const QString& caption);
-    
+
     void setCurrentTab(const QString& name);
 
     //! Sets current tab to @a index, counting from first visible (non-Kexi) tab.
@@ -89,9 +89,9 @@ public:
     void setCurrentTab(int index);
 
     void hideTab(const QString& name);
-    
+
     void showTab(const QString& name);
-    
+
     bool isTabVisible(const QString& name) const;
 
     bool isRolledUp();
@@ -225,10 +225,10 @@ public:
             // Why 0.91208791? I knew you're curious. There are some algorithms in Oxygen
             // to make color a bit lighter. They are not in the public API nor they are simple.
             // So the number was computed by me to find the proper value for the color
-            // (the accuracy is quite OK). 
-            // It's also related to the fact that Oxygen's menus have gradient background. 
+            // (the accuracy is quite OK).
+            // It's also related to the fact that Oxygen's menus have gradient background.
             // A lot of computation happens under the mask...
-            c.setHsv(h, s, v * 0.91208791, a); 
+            c.setHsv(h, s, v * 0.91208791, a);
             painter->fillRect(option->rect.x() + 6, option->rect.y() + 6,
                               option->rect.width() - 12, option->rect.height() - 12,
                               c);
@@ -268,13 +268,13 @@ public:
     void setContent(QWidget *contentWidget) {
         if (m_menuWidget && m_persistentlySelectedAction) {
             m_menuWidget->setPersistentlySelectedAction(
-                m_persistentlySelectedAction, 
+                m_persistentlySelectedAction,
                 m_persistentlySelectedAction->persistentlySelected());
         }
         /*if (m_menuWidget->persistentlySelectedAction())
             qDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
         KexiFadeWidgetEffect *fadeEffect = 0;
-        
+
         if (m_contentWidget && contentWidget) {
             fadeEffect = new KexiFadeWidgetEffect(m_content);
         }
@@ -303,7 +303,7 @@ public:
         if (fadeEffect) {
             if (m_contentWidget)
                 m_contentLayout->update();
-            
+
             QTimer::singleShot(10, fadeEffect, SLOT(start()));
         }
     }
@@ -491,7 +491,7 @@ public:
 class KexiTabbedToolBarStyle;
 
 //! Tab bar reimplementation for KexiTabbedToolBar.
-/*! The main its purpose is to alter the width of "Kexi" tab. 
+/*! The main its purpose is to alter the width of "Kexi" tab.
 */
 class KexiTabbedToolBarTabBar : public KTabBar
 {
@@ -660,7 +660,7 @@ public:
 };
 
 //! Tab bar reimplementation for KexiTabbedToolBar.
-/*! The main its purpose is to alter the width of "Kexi" tab. 
+/*! The main its purpose is to alter the width of "Kexi" tab.
 */
 KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : KTabBar(parent)
@@ -916,7 +916,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
 //! @todo move to report plugin
     tbar = d->createToolBar("report", xi18n("Report Design"));
-    
+
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
     setCurrentWidget(widget(KEXITABBEDTOOLBAR_SPACER_TAB_INDEX + 1)); // the default
     setFocusPolicy(Qt::NoFocus);
@@ -1665,7 +1665,7 @@ public:
     }
 
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
-                          KexiDockWidget *dockWidget, bool visible) 
+                          KexiDockWidget *dockWidget, bool visible)
     {
         KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
@@ -1904,7 +1904,7 @@ public:
 
     //! Indicates if project navigator should be visible
     bool isProjectNavigatorVisible;
-    
+
     //! Indicates if the main menu should be visible
     bool isMainMenuVisible;
 

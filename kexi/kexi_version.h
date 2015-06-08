@@ -91,7 +91,7 @@ KEXICORE_EXPORT unsigned int versionRelease();
  */
 KEXICORE_EXPORT const char *versionString();
 /**
- * @return the Kexi version string (versionString()) but appends extra information 
+ * @return the Kexi version string (versionString()) but appends extra information
  * such as "(git 4e06281 master)" if available.
  */
 KEXICORE_EXPORT const char *fullVersionString();

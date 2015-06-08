@@ -377,7 +377,7 @@ KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool ne
 
     set->addProperty(prop = new KProperty("maxLength", (uint)field.maxLength(),
                                                      xi18n("Max Length")));
-    
+
     set->addProperty(prop  = new KProperty("maxLengthIsDefault",
                                field.maxLengthStrategy() == KDbField::DefaultMaxLength));
     prop->setVisible(false); //always hidden
@@ -641,13 +641,13 @@ void KexiTableDesignerView::slotBeforeCellChanged(
                     oldName, propertySetForRecord->property("name").value().toString(),
                     oldCaption, newValue.toString()), 0, this
             );
-            
+
             //we need to create the action now as set["name"] will be changed soon.
             //Child 1 is the caption
             /*ChangeFieldPropertyCommand *changeCaptionCommand = */
                 (void)new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, this,
                           *propertySetForRecord, "caption", oldCaption, newValue);
-            
+
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
             propertySetForRecord->changeProperty("name",
@@ -813,7 +813,7 @@ void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
         if (fieldType == KDbField::Text) {
             maxLength = KDbField::defaultMaxLength();
         }
-        
+
         KDbField field( //tmp
             fieldName,
             fieldType,
@@ -826,7 +826,7 @@ void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
             description);
 
         // reasonable case for boolean type: set notNull flag and "false" as default value
-        switch (fieldType) {     
+        switch (fieldType) {
             case KDbField::Boolean:
                 field.setNotNull(true);
                 field.setDefaultValue(QVariant(false));
@@ -1282,7 +1282,7 @@ static void copyAlterTableActions(const KUndo2Command* command,
     for (int i = 0; i < command->childCount(); ++i) {
             copyAlterTableActions(command->child(i), actions);
     }
-    
+
     const Command* cmd = dynamic_cast<const Command*>(command);
     if (!cmd) {
         qWarning() << "cmd is not of type 'Command'!";

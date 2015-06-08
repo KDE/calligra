@@ -202,7 +202,7 @@ public:
     QSet<KexiPart::Item*> unstoredItems;
     //! helper for getting unique
     //! temporary identifiers for unstored items
-    int tempPartItemID_Counter; 
+    int tempPartItemID_Counter;
     KDbParser* sqlParser;
     int versionMajor;
     int versionMinor;

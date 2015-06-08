@@ -23,7 +23,7 @@
 #include "dmalloc.h"
 #endif
 
-static guint32 
+static guint32
 mdb_map_find_next0(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	guint32 pgnum, i, usage_bitlen;
@@ -42,7 +42,7 @@ mdb_map_find_next0(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guin
 	/* didn't find anything */
 	return 0;
 }
-static int 
+static int
 mdb_map_find_next1(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	guint32 map_ind, max_map_pgs, offset, usage_bitlen;
@@ -70,7 +70,7 @@ mdb_map_find_next1(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guin
 		if(mdb_read_alt_pg(mdb, map_pg) != mdb->fmt->pg_size) {
 			fprintf(stderr, "Oops! didn't get a full page at %d\n", map_pg);
 			exit(1);
-		} 
+		}
 
 		usage_bitmap = mdb->alt_pg_buf + 4;
 		for (i=offset; i<usage_bitlen; i++) {
@@ -83,7 +83,7 @@ mdb_map_find_next1(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guin
 	/* didn't find anything */
 	return 0;
 }
-guint32 
+guint32
 mdb_map_find_next(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	if (map[0] == 0) {
@@ -101,7 +101,7 @@ mdb_alloc_page(MdbTableDef *table)
 	printf("Allocating new page\n");
 	return 0;
 }
-guint32 
+guint32
 mdb_map_find_next_freepage(MdbTableDef *table, int row_size)
 {
 	MdbCatalogEntry *entry = table->entry;
@@ -111,10 +111,10 @@ mdb_map_find_next_freepage(MdbTableDef *table, int row_size)
 	int free_space;
 
 	do {
-		pgnum = mdb_map_find_next(mdb, 
-				table->free_usage_map, 
+		pgnum = mdb_map_find_next(mdb,
+				table->free_usage_map,
 				table->freemap_sz, cur_pg);
-		
+
 		if (!pgnum) {
 			/* allocate new page */
 			pgnum = mdb_alloc_page(table);
@@ -124,10 +124,10 @@ mdb_map_find_next_freepage(MdbTableDef *table, int row_size)
 
 		mdb_read_pg(mdb, pgnum);
 		free_space = mdb_pg_get_freespace(mdb);
-		
+
 	} while (free_space < row_size);
 
-	
+
 
 	return pgnum;
 }

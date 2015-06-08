@@ -190,7 +190,7 @@ public:
 Container::Container(Container *toplevel, QWidget *container, QObject *parent)
         : QObject(parent)
         , d(new Private(toplevel, container))
-{    
+{
     QByteArray classname = container->metaObject()->className();
     if ((classname == "HBox") || (classname == "Grid") || (classname == "VBox") ||
             (classname == "HFlow")  || (classname == "VFlow"))
@@ -402,7 +402,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 d->form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
         }
 #endif
-        else if (d->selectionOrInsertingStarted() 
+        else if (d->selectionOrInsertingStarted()
                    && s == widget()
                    && !d->toplevel
                    && (mev->modifiers() != Qt::ControlModifier)
@@ -414,7 +414,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             d->updateSelectionOrInsertingRectangle(mev->pos());
 
 //! @todo?            if (d->form->formWidget())
-//! @todo?                d->form->formWidget()->drawRect(r, 1); 
+//! @todo?                d->form->formWidget()->drawRect(r, 1);
 
             d->state = Private::DoingNothing;
             return true;
@@ -570,7 +570,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             if (!d->moving)
                 return true;
             // we simulate a mouse move event to update screen
-            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, 
+            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove,
                                                d->moving->mapFromGlobal(QCursor::pos()),
                                                Qt::NoButton,
                                                Qt::LeftButton,
@@ -780,7 +780,7 @@ QWidget* Container::topLevelWidget() const
 {
     if (d->toplevel)
         return d->toplevel->widget();
-    
+
     return widget();
 }
 
@@ -1160,7 +1160,7 @@ void Container::selectionWidgetsForRectangle(const QPoint& secondPoint)
             continue;
         if (w->geometry().intersects( d->selectionOrInsertingRectangle() ) && w != widget()) {
             if (widgetToSelect) {
-                selectWidget(widgetToSelect, 
+                selectWidget(widgetToSelect,
                     Form::AddToPreviousSelection | Form::Raise | Form::MoreWillBeSelected);
             }
             widgetToSelect = w; //select later
@@ -1168,7 +1168,7 @@ void Container::selectionWidgetsForRectangle(const QPoint& secondPoint)
     }
     if (widgetToSelect) {
         //the last one left
-        selectWidget(widgetToSelect, 
+        selectWidget(widgetToSelect,
             Form::AddToPreviousSelection | Form::Raise | Form::LastSelection);
     }
 

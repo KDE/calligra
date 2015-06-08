@@ -91,7 +91,7 @@ QVariant KexiTemplatesModel::data(const QModelIndex& index, int role) const
         int index = d->categoryNameIndex.value(info->category);
         if (index >= 0 && index < d->templateCategories.count()) {
             QVariantList list;
-            list << index << info->caption; 
+            list << index << info->caption;
             return list;
         }
         return QVariantList();

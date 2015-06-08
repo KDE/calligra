@@ -38,7 +38,7 @@ KexiServerDriverNotFoundMessage::KexiServerDriverNotFoundMessage(QWidget *parent
         setCalloutPointerDirection(KMessageWidget::NoPointer);
         setWordWrap(true);
         setClickClosesMessage(false);
-        setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);        
+        setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 KexiServerDriverNotFoundMessage::~KexiServerDriverNotFoundMessage()

@@ -70,7 +70,7 @@ Info::Private::Private(const KService::Ptr& aPtr)
     if (textView) {
         supportedUserViewModes |= Kexi::TextViewMode;
     }
-    
+
     isVisibleInNavigator = false;
     getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
     isVisibleInNavigator = !isVisibleInNavigator;
@@ -130,12 +130,12 @@ Info::Info(KService::Ptr ptr)
 Info::Info(const QString &partClass, const QString &itemIconName,
            const QString &objectName)
         : d(new Private)
-{                       
+{
     d->partClass = partClass;
     d->itemIconName = itemIconName;
     d->objectName = objectName;
-}                       
-                       
+}
+
 Info::~Info()
 {
     delete d;

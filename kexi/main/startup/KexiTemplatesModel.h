@@ -49,7 +49,7 @@ private:
     class Private;
     Private* const d;
 };
- 
+
 class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

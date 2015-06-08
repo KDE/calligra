@@ -158,7 +158,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 
         m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
-    } 
+    }
     connect(m_reportDesigner, SIGNAL(itemInserted(QString)), this, SIGNAL(itemInserted(QString)));
 
     m_scrollArea->setWidget(m_reportDesigner);

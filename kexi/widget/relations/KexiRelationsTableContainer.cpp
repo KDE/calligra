@@ -83,8 +83,8 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    
-    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
+
+    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu(QPoint)));
 
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
@@ -103,7 +103,7 @@ KDbTableOrQuerySchema* KexiRelationsTableContainer::schema() const
 
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-  emit gotFocus();  
+  emit gotFocus();
   emit contextMenuRequest(d->fieldList->mapToGlobal(p));
 }
 

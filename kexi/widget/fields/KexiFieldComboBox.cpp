@@ -43,7 +43,7 @@ public:
     }
     QPointer<KexiProject> prj;
     QPointer<KexiFieldListModel> model;
-    
+
     QString tableOrQueryName;
     QString fieldOrExpression;
 
@@ -101,7 +101,7 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
 
     delete d->model;
     d->model = new KexiFieldListModel(this, ShowEmptyItem);
-    
+
     d->model->setSchema(&tableOrQuery);
     setModel(d->model);
 
@@ -146,7 +146,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 //! @todo show 'the item doesn't match' info?
         return;
     }
-    
+
     setCurrentIndex(index);
     lineEdit()->setText(d->fieldOrExpression);
     qDebug() << index << currentText() << currentIndex() << lineEdit()->text();

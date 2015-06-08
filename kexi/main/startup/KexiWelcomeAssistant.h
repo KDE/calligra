@@ -43,7 +43,7 @@ public:
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
     void updateRecentProjects();
 
 Q_SIGNALS:
@@ -71,7 +71,7 @@ public:
     ~KexiWelcomeAssistant();
 
     KexiRecentProjects* projects();
-    
+
 public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);

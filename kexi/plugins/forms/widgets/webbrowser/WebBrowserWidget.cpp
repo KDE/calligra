@@ -57,7 +57,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     v_layout->addWidget(m_view);
     v_layout->addLayout(h_layout);
     setLayout(v_layout);
-  
+
     if (!designMode()){
         m_pbar =new QProgressBar();
         h_layout->addWidget(m_pbar);
@@ -73,7 +73,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     connect(m_view,SIGNAL(loadProgress(int)),m_pbar,SLOT(setValue(int)));
     connect(m_view,SIGNAL(loadFinished(bool)),SLOT(hide_bar()));
 }
-  
+
 WebBrowserWidget::~WebBrowserWidget()
 {
 
@@ -91,7 +91,7 @@ void WebBrowserWidget::setDataSource(const QString &ds)
 
 void WebBrowserWidget::hide_bar()
 {
-    m_pbar->setVisible(false);    
+    m_pbar->setVisible(false);
 }
 
 void WebBrowserWidget::setUrl(const QString& url)
@@ -170,10 +170,10 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
     if (isReadOnly())
         return;
     m_urlChanged_enabled = false;
-    
+
     if (removeOld) {
         setUrl(add.toString());
-    }       
+    }
     else {
         setUrl(KexiDataItemInterface::originalValue().toString() + add.toString());
     }
