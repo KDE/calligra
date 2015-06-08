@@ -106,7 +106,7 @@ public:
         Warning,
         Error
     };
-    
+
     enum CalloutPointerDirection {
         NoPointer,
         Up,
@@ -197,7 +197,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void animatedShowFinished();
     void animatedHideFinished();
-    
+
 protected:
     virtual void paintEvent(QPaintEvent *event);
 

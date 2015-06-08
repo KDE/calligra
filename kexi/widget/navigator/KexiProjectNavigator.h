@@ -161,7 +161,7 @@ protected Q_SLOTS:
     void slotExecuteItem(const QModelIndex &item);
     void slotSelectionChanged(const QModelIndex& i);
     void slotSettingsChanged(int);
-    
+
     void slotNewObject();
     void slotOpenObject();
     void slotDesignObject();

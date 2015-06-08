@@ -27,7 +27,7 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/kexislider.h>
 
-//! @short A db-aware slider 
+//! @short A db-aware slider
 class KEXIFORMUTILS_EXPORT KexiDBSlider : public KexiSlider,
                                           public KexiFormDataItemInterface,
                                           public KFormDesigner::FormWidgetInterface

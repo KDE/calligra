@@ -27,7 +27,7 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <QProgressBar>
 
-//! @short A db-aware Progress bar 
+//! @short A db-aware Progress bar
 class KEXIFORMUTILS_EXPORT KexiDBProgressBar : public QProgressBar,
                                                public KexiFormDataItemInterface,
                                                public KFormDesigner::FormWidgetInterface

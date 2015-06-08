@@ -142,7 +142,7 @@ public:
      * @see idForClass()
      */
     QString classForId(int classId) const;
-    
+
     /**
      * @return all items of a type \a i in this project
      */
@@ -373,7 +373,7 @@ private:
      If so, error message is set and false is returned. */
     bool checkWritable();
 
-    /*! Retrieves basic information (class, id, name, caption) 
+    /*! Retrieves basic information (class, id, name, caption)
      about all items of all types for this project.
      @return true on success. */
     bool retrieveItems();

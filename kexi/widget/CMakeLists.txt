@@ -1,7 +1,7 @@
 add_subdirectory( utils )
 add_subdirectory( dataviewcommon )
 add_subdirectory( relations )
-  
+
 if(KEXI_MOBILE)
 
 else()
@@ -55,8 +55,8 @@ else ()
   list(APPEND kexiextendedwidgets_LIB_SRCS
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
-    kexidbconnectionwidget.cpp 
-# TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
+    kexidbconnectionwidget.cpp
+# TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator)
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
@@ -99,7 +99,7 @@ if (KEXI_MOBILE)
 else()
   target_link_libraries(
     kexiextendedwidgets
-    
+
     )
 endif()
 

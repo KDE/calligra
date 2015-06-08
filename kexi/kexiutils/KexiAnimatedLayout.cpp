@@ -118,6 +118,6 @@ void KexiAnimatedLayout::setCurrentIndex(int index)
     QWidget *w = widget(index);
     if (!w)
         return;
-    
+
     setCurrentWidget(w);
 }

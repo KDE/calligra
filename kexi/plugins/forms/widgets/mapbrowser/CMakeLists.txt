@@ -5,11 +5,11 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs
     ${CMAKE_SOURCE_DIR}/libs/main
     ${MARBLE_INCLUDE_DIR}
-    
+
 )
 
 
-set(kformdesigner_mapbrowser_PART_SRCS 
+set(kformdesigner_mapbrowser_PART_SRCS
     MapBrowserWidget.cpp
     MapBrowserFactory.cpp)
 
@@ -28,8 +28,8 @@ target_link_libraries(
     kexiformutils
     kexidataviewcommon
     ${MARBLE_LIBRARIES}
-    
-    
+
+
     Qt5::Core
     Qt5::Gui
     Qt5::Xml

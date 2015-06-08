@@ -258,7 +258,7 @@ public:
         ExecuteCommand = 1      //!< command is executed in addCommand()
     };
 
-    /*! Adds a command @a command in the form's undo/redo stack and returns true. 
+    /*! Adds a command @a command in the form's undo/redo stack and returns true.
      If @a command is merged with the existing command and deleted, false is returned. */
     bool addCommand(Command *command, AddCommandOption option = ExecuteCommand);
 
@@ -266,7 +266,7 @@ public:
     /*! Takes care about the case when the same property of the same object is changed
      one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
-                            const QVariant &value, const QByteArray &propertyName, 
+                            const QVariant &value, const QByteArray &propertyName,
                             AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
@@ -276,7 +276,7 @@ public:
     //! Adds @a commandGroup to the undo/redo stack.
     /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
      about the case when the same properties of the same list of objects is changed
-     one-after-one. In this case only values of the command in the present command group 
+     one-after-one. In this case only values of the command in the present command group
      on the stack are changed and @a commandGroup is deleted.*/
     void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
                                  AddCommandOption addOption, uint idOfPropertyCommand = 0);
@@ -287,7 +287,7 @@ public:
      the original reason for adding widget. */
     const Command* executingCommand() const;
 
-    /*! \return tabstops list. It contains all the widgets that can have focus 
+    /*! \return tabstops list. It contains all the widgets that can have focus
      (i.e. no labels, etc.) in the order of the tabs.*/
     ObjectTreeList* tabStops();
 
@@ -375,7 +375,7 @@ public:
 
     //! selection flags used in methods like selectWidget()
     enum WidgetSelectionFlag {
-        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity, 
+        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity,
                                       //!< do not use with ReplacePreviousSelection
         ReplacePreviousSelection = 1, //!< replace the actually selected widget(s)
         MoreWillBeSelected = 0,       //!< indicates that more selections will be added
@@ -400,7 +400,7 @@ public:
     //! @return action from related action collection
     QAction* action(const QString& name);
 
-    void createPropertyCommandsInDesignMode(QWidget* widget, 
+    void createPropertyCommandsInDesignMode(QWidget* widget,
                                             const QHash<QByteArray, QVariant> &propValues,
                                             Command *parentCommand, bool addToActiveForm = true);
 
@@ -412,9 +412,9 @@ public:
     bool isRedoing() const;
 
 public Q_SLOTS:
-    /*! Called when the user presses a widget item of the toolbox. 
+    /*! Called when the user presses a widget item of the toolbox.
       The form enters into "widget inserting" state.
-      Prepares all form's widgets for creation of a new widget 
+      Prepares all form's widgets for creation of a new widget
       (i.e. temporarily changes their cursor). */
     void enterWidgetInsertingState(const QByteArray &classname);
 
@@ -441,15 +441,15 @@ public Q_SLOTS:
      The form widget is always selected alone. */
     void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
 
-    /*! Sets all widgets @a widgets to be the selected for this Form. 
+    /*! Sets all widgets @a widgets to be the selected for this Form.
      Form widget, if present is omitted. */
     void selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags);
 
-    /*! Sets all widgets with @a names to be the selected for this Form. 
+    /*! Sets all widgets with @a names to be the selected for this Form.
      Form widget, if present is omitted. */
     void selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags);
 
-    /*! Removes selection for widget \a w. 
+    /*! Removes selection for widget \a w.
      The widget is removed from the Container's list
      and its resize handle is removed as well. */
     void deselectWidget(QWidget *w);
@@ -509,13 +509,13 @@ public Q_SLOTS:
     void editConnections();
 
     void alignWidgetsToLeft();
-    
+
     void alignWidgetsToRight();
-    
+
     void alignWidgetsToTop();
-    
+
     void alignWidgetsToBottom();
-    
+
     void alignWidgetsToGrid();
 
     void adjustSizeToGrid();
@@ -648,7 +648,7 @@ protected:
     void updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags);
 
 #ifdef KFD_SIGSLOTS
-    //! Sets connection buffer to @a b, which will be owned by the form. 
+    //! Sets connection buffer to @a b, which will be owned by the form.
     //! The previous buffer will be deleted, if there is any.
     void setConnectionBuffer(ConnectionBuffer *b);
 #endif

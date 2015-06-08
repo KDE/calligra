@@ -62,15 +62,15 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     KexiMainImportExportPage* mainPage() {
         return page<KexiMainImportExportPage>(&m_mainImportExportPage, q);
     }
-    
+
     template <class C>
     C* page(QPointer<C>* p, KexiImportExportAssistant *parent = 0) {
         if (p->isNull()) {
@@ -81,7 +81,7 @@ public:
     }
 
     QPointer<KexiMainImportExportPage> m_mainImportExportPage;
-    
+
     KexiImportExportAssistant *q;
 };
 
@@ -104,7 +104,7 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
 {
     delete d;
 }
-       
+
 void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);

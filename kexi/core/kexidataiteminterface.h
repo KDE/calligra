@@ -208,7 +208,7 @@ public:
     virtual void handleAction(const QString& actionName);
 
     virtual bool isComboBox() const;
-    
+
     virtual QWidget* internalEditor() const;
 
     //! Called (e.g. by KexiDataItemInterface) to change invalid value so it is valid.

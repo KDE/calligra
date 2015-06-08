@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.cpp from Qt 4.7
 
    Based on oxygenhelper.cpp
@@ -2241,7 +2241,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect.setX(opt.rect.width() - opt.lineWidth);
         opt.rect.setWidth(opt.lineWidth);
         style()->drawControl(QStyle::CE_ShapedFrame, &opt, &p);
-        
+
         /*
         QStyleOption opt;
         opt.initFrom(this);

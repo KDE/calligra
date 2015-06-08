@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu_p.h from Qt 4.7
 
    based on oxygenhelper.h
@@ -116,7 +116,7 @@ public:
     ColorCache m_backgroundRadialColorCache;
     ColorMap m_lowThreshold;
     ColorMap m_highThreshold;
-                                
+
     KComponentData _componentData;
     KSharedConfigPtr _config;
     qreal _contrast;
@@ -264,7 +264,7 @@ public:
     bool hasFrame;
 
     QPointer<KexiMenuWidgetAction> previousPersistentlySelectedAction;
-    
+
     //! True if persistent selections are enabled. False by default.
     //bool persistentSelectionsEnabled;
 

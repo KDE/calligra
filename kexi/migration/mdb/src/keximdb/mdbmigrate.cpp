@@ -126,7 +126,7 @@ MdbTableDef* MDBMigrate::getTableDef(const QString& tableName)
     MdbTableDef *tableDef = 0;
 
     //qDebug() << tableName;
-    
+
     // Look through each entry in the catalog...
     for (unsigned int i = 0; i < m_mdb->num_catalog; i++) {
         MdbCatalogEntry* dbObject =

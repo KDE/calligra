@@ -42,7 +42,7 @@ mdb_debug(int klass, char *fmt, ...)
 	va_list ap;
 
 	if (!optset) load_options();
-	if (klass & opts) {	
+	if (klass & opts) {
     	va_start(ap, fmt);
     	vfprintf (stdout,fmt, ap);
     	va_end(ap);

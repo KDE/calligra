@@ -53,7 +53,7 @@ Q_SIGNALS:
     void next(KexiAssistantPage* page);
     void cancelled(KexiAssistantPage* page);
 
-private Q_SLOTS:    
+private Q_SLOTS:
     void slotLinkActivated(const QString& link);
     void slotCancel();
 

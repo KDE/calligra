@@ -41,9 +41,9 @@ class KEXIUTILS_EXPORT KexiCategorySingleSelectionModel : public QItemSelectionM
 {
 public:
     explicit KexiCategorySingleSelectionModel(QAbstractItemModel* model);
-    
+
     using QItemSelectionModel::select;
-    
+
     //! Reimplemented to disable full category selections.
     //! Shouldn't be needed in KDElibs >= 4.5,
     //! where KexiTemplatesCategoryDrawer::mouseButtonPressed() works.

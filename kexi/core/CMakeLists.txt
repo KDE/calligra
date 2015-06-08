@@ -4,36 +4,36 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_
 
 ########### next target ###############
 
-set(kexicore_LIB_SRCS 
-   kexi_global.cpp 
-   kexi.cpp 
-   kexiaboutdata.cpp 
+set(kexicore_LIB_SRCS
+   kexi_global.cpp
+   kexi.cpp
+   kexiaboutdata.cpp
    KexiMainWindowIface.cpp
    KexiStandardAction.cpp
-   kexidbconnectionset.cpp 
-   kexiprojectset.cpp 
-   kexiactionproxy.cpp 
-   kexisharedactionhost.cpp 
+   kexidbconnectionset.cpp
+   kexiprojectset.cpp
+   kexiactionproxy.cpp
+   kexisharedactionhost.cpp
    kexiactioncategories.cpp
-   kexiproject.cpp 
-   KexiWindow.cpp 
-   KexiWindowData.cpp 
-   KexiView.cpp 
-   kexipartmanager.cpp 
-   kexipartinfo.cpp 
-   kexipartitem.cpp 
+   kexiproject.cpp
+   KexiWindow.cpp
+   KexiWindowData.cpp
+   KexiView.cpp
+   kexipartmanager.cpp
+   kexipartinfo.cpp
+   kexipartitem.cpp
    kexipartbase.cpp
    kexipart.cpp
-   kexiprojectdata.cpp 
-   KexiRecentProjects.cpp 
-   kexiinternalpart.cpp 
-   kexidragobjects.cpp 
-   kexistartupdata.cpp 
-   kexiguimsghandler.cpp 
-   kexitextmsghandler.cpp 
-   kexidataiteminterface.cpp 
-   kexidbshortcutfile.cpp 
-   kexiblobbuffer.cpp 
+   kexiprojectdata.cpp
+   KexiRecentProjects.cpp
+   kexiinternalpart.cpp
+   kexidragobjects.cpp
+   kexistartupdata.cpp
+   kexiguimsghandler.cpp
+   kexitextmsghandler.cpp
+   kexidataiteminterface.cpp
+   kexidbshortcutfile.cpp
+   kexiblobbuffer.cpp
    kexistaticpart.cpp
    kexitabledesignerinterface.cpp
    kexisearchandreplaceiface.cpp

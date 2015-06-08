@@ -31,7 +31,7 @@ class KPropertySet;
 class KexiObjectInfoLabel;
 
 //! @short A base class for propety pane's tabs.
-/*! Defines vertical layout and offers info label on the top. 
+/*! Defines vertical layout and offers info label on the top.
  Use mainLayout() to access the QVBoxLayout object.
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyPaneViewBase : public QWidget

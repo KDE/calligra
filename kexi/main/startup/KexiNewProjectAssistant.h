@@ -47,7 +47,7 @@ public:
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
 protected Q_SLOTS:
     void slotItemClicked(const QModelIndex& index);
 private:
@@ -61,7 +61,7 @@ class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,
 public:
     explicit KexiProjectStorageTypeSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectStorageTypeSelectionPage();
-    
+
     bool fileTypeSelected() const { return m_fileTypeSelected; }
 private Q_SLOTS:
     void buttonClicked();
@@ -85,7 +85,7 @@ public:
     KexiDBTitlePage* contents;
     KexiStartupFileHandler *fileHandler;
     QPointer<KexiContextMessageWidget> messageWidget;
-private Q_SLOTS:    
+private Q_SLOTS:
     void titleTextChanged(const QString & text);
     void askForOverwriting(const KexiContextMessage& message);
 private:
@@ -100,7 +100,7 @@ class KexiProjectCreationPage : public KexiAssistantPage
 public:
     explicit KexiProjectCreationPage(QWidget* parent = 0);
     virtual ~KexiProjectCreationPage();
-    
+
     QProgressBar* m_progressBar;
 };
 
@@ -113,7 +113,7 @@ public:
 
     KexiConnectionSelectorWidget* connSelector;
 private:
-	QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
+    QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;
