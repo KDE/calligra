@@ -18,16 +18,16 @@
 */
 
 #include "kexidataprovider.h"
+#include <kexiutils/utils.h>
+#include <kexi_global.h>
 
-#include <QWidget>
-#include <QDebug>
+#include <KDbTableViewData>
+#include <KDbQuerySchema>
 
 #include <KLocalizedString>
 
-#include <db/tableviewdata.h>
-#include <db/queryschema.h>
-#include <kexiutils/utils.h>
-#include <kexi_global.h>
+#include <QWidget>
+#include <QDebug>
 
 KexiFormDataProvider::KexiFormDataProvider()
         : KexiDataItemChangesListener()

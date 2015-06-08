@@ -28,7 +28,7 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-#include <db/field.h>
+#include <KDbField>
 
 #include <QWidget>
 #include <QLabel>

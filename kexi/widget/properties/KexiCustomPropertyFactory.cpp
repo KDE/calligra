@@ -19,10 +19,11 @@
 
 #include "KexiCustomPropertyFactory.h"
 #include "KexiCustomPropertyFactory_p.h"
-#include <kexiutils/identifier.h>
 
 #include <KPropertyFactory>
 #include <KCustomProperty>
+
+#include <KDb>
 
 #if 0
 //! @internal

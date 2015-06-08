@@ -21,8 +21,10 @@
 #define KEXIDBPASSWORDDIALOG_H
 
 #include "kexiextwidgets_export.h"
+
+#include <KDbTristate>
+
 #include <kpassworddialog.h>
-#include <db/tristate.h>
 
 class KexiProjectData;
 class KexiProjectData;

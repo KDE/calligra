@@ -19,9 +19,10 @@
 
 #include "kexidbshortcutfile.h"
 #include <core/kexiprojectdata.h>
-#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
+
+#include <KDbConnectionData>
 
 #include <QDebug>
 #include <QDir>

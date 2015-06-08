@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef KRSCRIPTFUNCTIONS_H
 #define KRSCRIPTFUNCTIONS_H
+
 #include <QObject>
 #include <QString>
-#include <db/connection.h>
-#include <db/cursor.h>
+
+#include <KDbConnection>
+#include <KDbCursor>
+
 #include <KoReportData.h>
 
 /**

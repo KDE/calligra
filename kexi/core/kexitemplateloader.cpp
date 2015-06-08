@@ -19,7 +19,8 @@
 
 #include "kexitemplateloader.h"
 #include "kexi.h"
-#include <db/utils.h>
+
+#include <KDbUtils>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>

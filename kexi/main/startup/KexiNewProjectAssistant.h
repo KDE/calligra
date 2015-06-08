@@ -25,13 +25,14 @@
 #include "KexiAssistantMessageHandler.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <core/kexidbconnectionset.h>
-#include <db/connectiondata.h>
-#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
+
+#include <KDbConnectionData>
+#include <KDbMessageHandler>
 
 #include <QPointer>
 

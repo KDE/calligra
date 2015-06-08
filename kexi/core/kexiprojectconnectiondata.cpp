@@ -17,14 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <sys/types.h>
-#include <unistd.h>
+#include "kexiprojectconnectiondata.h"
+
+#include <KDbConnectionData>
+#include <KDbDriverManager>
 
 #include <QDomDocument>
 
-#include <db/connectiondata.h>
-#include <db/drivermanager.h>
-#include "kexiprojectconnectiondata.h"
+#include <sys/types.h>
+#include <unistd.h>
 
 class KexiProjectConnectionData::Private
 {

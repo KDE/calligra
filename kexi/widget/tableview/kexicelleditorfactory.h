@@ -23,9 +23,9 @@
 #include "kexidatatable_export.h"
 #include <kexi_global.h>
 
-#include <QWidget>
+#include <KDbField>
 
-#include <db/field.h>
+#include <QWidget>
 
 class KexiCellEditorFactoryItem;
 class KexiTableEdit;

@@ -20,6 +20,12 @@
 
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
+#include <kexiutils/utils.h>
+#include <kexiutils/styleproxy.h>
+
+#include <KDbFieldValidator>
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
 #include <QMenu>
 #include <QPainter>
@@ -28,12 +34,6 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QFontDatabase>
-
-#include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
-#include <kexidb/fieldvalidator.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
 
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator

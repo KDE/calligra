@@ -21,10 +21,10 @@
 #define KexiStartupDialog_h
 
 #include "keximain_export.h"
-
 #include <kexi_global.h>
-#include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
+
+#include <KDbConnectionData>
 
 #include <kpagedialog.h>
 

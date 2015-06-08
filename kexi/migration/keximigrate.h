@@ -24,8 +24,8 @@
 
 #include "keximigratedata.h"
 
-#include <db/tableschema.h>
-#include <db/connection.h>
+#include <KDbTableSchema>
+#include <KDbConnection>
 
 #include <QVariantList>
 #include <QByteArray>

@@ -25,16 +25,7 @@
 #include <QLabel>
 
 class QLineEdit;
-
-namespace KexiDB
-{
-class Validator;
-}
-
-namespace KexiUtils
-{
-class MultiValidator;
-}
+class KDbValidator;
 
 //! A widget displaying object's name and caption and allowing editing.
 //! @see KexiNameDialog
@@ -89,7 +80,7 @@ public:
 
     /*! Adds subvalidator for name field. In fact it is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
-     \sa MultiValidator::addSubvalidator(). */
+     \sa KDbMultiValidator::addSubvalidator(). */
     void addNameSubvalidator(KexiDB::Validator* validator, bool owned = true);
 
     /*! \return true if name text cannot be empty (true by default). */

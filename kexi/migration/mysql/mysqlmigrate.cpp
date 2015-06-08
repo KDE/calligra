@@ -29,7 +29,15 @@
 
 #include "mysqlmigrate.h"
 #include <migration/keximigrate_p.h>
+#include <migration/keximigratedata.h>
+
+#include <KDbCursor>
+#include <KDbField>
+#include <KDbUtils>
+#include <KDbDriverManager>
+#include <KDb>
 #include <kexidb/drivers/mysql/mysqldriver_global.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.cpp>
 
 #include <QString>
 #include <QRegExp>
@@ -43,14 +51,6 @@
 #include <mysql_version.h>
 #include <mysql.h>
 #define BOOL bool
-
-#include <migration/keximigratedata.h>
-#include <db/cursor.h>
-#include <db/field.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
-#include <kexidb/drivers/mysql/mysqlconnection_p.cpp>
-#include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
 
