@@ -29,7 +29,7 @@ namespace KexiMigration
 
 /*! Internal class of driver manager.
 */
-class MigrateManagerInternal : public QObject, public KexiDB::Object
+class MigrateManagerInternal : public QObject, public KDbObject
 {
     Q_OBJECT
 public:

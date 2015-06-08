@@ -50,8 +50,8 @@ int main(int argc, char** argv)
     KApplication* app = new KApplication(true, true);
 
     // Look for installed database drivers
-    KexiDB::DriverManager manager;
-    KexiDB::Driver::InfoHash drvs = manager.driversInfo();
+    KDbDriverManager manager;
+    KDbDriver::InfoHash drvs = manager.driversInfo();
 
     // Set up a combo box and a quit widget in a new container
     QWidget* vbox = new QWidget();

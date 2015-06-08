@@ -22,9 +22,7 @@
 
 #include <kexiutils/KexiAssistantPage.h>
 
-namespace KexiDB {
-    class ConnectionData;
-}
+class KDbConnectionData;
 
 //! An assistant page with a form for entering a password
 class KexiPasswordPage : public KexiAssistantPage
@@ -85,12 +83,12 @@ public:
     /**
      * Set username, server and optionally the password based on the @a data connection data.
      */
-    void setConnectionData(const KexiDB::ConnectionData &data);
+    void setConnectionData(const KDbConnectionData &data);
 
     /**
      * Updates connection data @a data based on entered password.
      */
-    void updateConnectionData(KexiDB::ConnectionData *data);
+    void updateConnectionData(KDbConnectionData *data);
 
 private:
     void init();

@@ -119,8 +119,8 @@ tristate KexiTablePart::remove(KexiPart::Item &item)
     if (!project || !project->dbConnection())
         return false;
 
-    KexiDB::Connection *conn = project->dbConnection();
-    KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
+    KDbConnection *conn = project->dbConnection();
+    KDbTableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {
         tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
@@ -138,8 +138,8 @@ tristate KexiTablePart::remove(KexiPart::Item &item)
 
 tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
 {
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbTableSchema *sch = conn->tableSchema(item.identifier());
     if (!sch)
         return false;
     tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
@@ -152,7 +152,7 @@ tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
     return conn->alterTableName(*sch, newName);
 }
 
-KexiDB::SchemaData* KexiTablePart::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sdata,
                               Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
@@ -163,16 +163,16 @@ KexiDB::SchemaData* KexiTablePart::loadSchemaData(KexiWindow *window, const Kexi
 }
 
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
-    QWidget *parent, KexiDB::Connection& conn,
-    KexiDB::TableSchema& table, const QString& msg)
+    QWidget *parent, KDbConnection& conn,
+    KDbTableSchema& table, const QString& msg)
 {
-    QSet<KexiDB::Connection::TableSchemaChangeListenerInterface*>* listeners
+    QSet<KDbConnection::TableSchemaChangeListenerInterface*>* listeners
         = conn.tableSchemaChangeListeners(table);
     if (!listeners || listeners->isEmpty())
         return true;
 
     QString openedObjectsStr = "<list>";
-    foreach(KexiDB::Connection::TableSchemaChangeListenerInterface* iface, *listeners) {
+    foreach(KDbConnection::TableSchemaChangeListenerInterface* iface, *listeners) {
         openedObjectsStr += QString("<item>%1</item>").arg(iface->listenerInfoString);
     }
     openedObjectsStr += "</list>";
@@ -223,8 +223,8 @@ void KexiTablePart::setupCustomPropertyPanelTabs(QTabWidget *tab)
         /*
           connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(QCString,QCString)),
             KFormDesigner::FormManager::self(), SLOT(setFormDataSource(QCString,QCString)));
-          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
-            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KDbField::Type)),
+            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(QString,QString,KDbField::Type)));
           connect(d->dataSourcePage, SIGNAL(insertAutoFields(QString,QString,QStringList)),
             KFormDesigner::FormManager::self(), SLOT(insertAutoFields(QString,QString,QStringList)));*/
     }

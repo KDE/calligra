@@ -400,7 +400,7 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
 }
 
 void KexiFormManager::setDataSourceFieldOrExpression(
-    const QString& string, const QString& caption, KexiDB::Field::Type type)
+    const QString& string, const QString& caption, KDbField::Type type)
 {
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget)

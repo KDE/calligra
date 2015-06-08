@@ -95,7 +95,7 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
     if (d->tableOrQueryName.isEmpty() || !d->prj)
         return;
 
-    KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
+    KDbTableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
@@ -182,7 +182,7 @@ QString KexiFieldComboBox::fieldOrExpression() const
 int KexiFieldComboBox::indexOfField() const
 {
     qDebug();
-    KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
+    KDbTableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return -1;
 

@@ -26,10 +26,7 @@
 
 #include "kexicore_export.h"
 
-namespace KexiDB
-{
-class Connection;
-}
+class KDbConnection;
 
 //! Application-wide buffer for local BLOB data like pixmaps.
 /*! For now only pixmaps are supported
@@ -90,7 +87,7 @@ public:
     //! Access to KexiBLOBBuffer singleton
     static KexiBLOBBuffer* self();
 
-    static void setConnection(KexiDB::Connection *conn);
+    static void setConnection(KDbConnection *conn);
 
     //! Object handle used by KexiBLOBBuffer
     class KEXICORE_EXPORT Handle

@@ -134,12 +134,12 @@ void ChangeFieldPropertyCommand::undoInternal()
         m_oldValue, m_oldListData);
 }
 
-KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction() const
+KDbAlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction() const
 {
     if (m_alterTableAction.propertyName() == "subType") {//skip these properties
         return 0;
     }
-    return new KexiDB::AlterTableHandler::ChangeFieldPropertyAction(m_alterTableAction);
+    return new KDbAlterTableHandler::ChangeFieldPropertyAction(m_alterTableAction);
 }
 
 //--------------------------------------------------------
@@ -186,25 +186,25 @@ QString RemoveFieldCommand::debugString() const
            + QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
-KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction() const
+KDbAlterTableHandler::ActionBase* RemoveFieldCommand::createAction() const
 {
-    return new KexiDB::AlterTableHandler::RemoveFieldAction(m_alterTableAction);
+    return new KDbAlterTableHandler::RemoveFieldAction(m_alterTableAction);
 }
 
 //--------------------------------------------------------
 
 InsertFieldCommand::InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                                       int fieldIndex/*, const KexiDB::Field& field*/, const KPropertySet& set)
+                                       int fieldIndex/*, const KDbField& field*/, const KPropertySet& set)
         : Command(parent, view)
-        , m_alterTableAction(0) //fieldIndex, new KexiDB::Field(field) /*deep copy*/)
+        , m_alterTableAction(0) //fieldIndex, new KDbField(field) /*deep copy*/)
         , m_set(set)   //? new KPropertySet(*set) : 0 )
 {
-    KexiDB::Field *f = view->buildField(m_set);
+    KDbField *f = view->buildField(m_set);
     if (f)
-        m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(
+        m_alterTableAction = new KDbAlterTableHandler::InsertFieldAction(
             fieldIndex, f, set["uid"].value().toInt());
     else //null action
-        m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(true);
+        m_alterTableAction = new KDbAlterTableHandler::InsertFieldAction(true);
     
     setText(kundo2_i18n("Insert table field \"%1\"", m_set["caption"].value().toString()));
 }
@@ -224,9 +224,9 @@ void InsertFieldCommand::undoInternal()
     m_view->clearRow(m_alterTableAction->index());  //m_alterTableAction.index() );
 }
 
-KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
+KDbAlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
 {
-    return new KexiDB::AlterTableHandler::InsertFieldAction(*m_alterTableAction);
+    return new KDbAlterTableHandler::InsertFieldAction(*m_alterTableAction);
 }
 
 QString InsertFieldCommand::debugString() const

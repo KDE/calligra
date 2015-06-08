@@ -25,11 +25,7 @@
 
 #include <QModelIndex>
 
-namespace KexiDB
-{
-    class TableOrQuerySchema;
-}
-
+class KDbTableOrQuerySchema;
 
 //! Flags used to alter models behaviour and appearance
 enum KexiFieldListOption {
@@ -52,7 +48,7 @@ public:
     
     /*! Sets table or query schema \a schema.
     The schema object will be owned by the KexiFieldListView object. */
-    void setSchema(KexiDB::TableOrQuerySchema* schema);
+    void setSchema(KDbTableOrQuerySchema* schema);
     
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

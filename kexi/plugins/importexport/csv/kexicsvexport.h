@@ -54,7 +54,7 @@ public:
  @param rowCount row count of the input data or -1 if the row cound has not yet been computed
  @param predefinedTextStream text stream that should be used instead of writing to a file
 */
-bool exportData(KexiDB::TableOrQuerySchema& tableOrQuery, const Options& options,
+bool exportData(KDbTableOrQuerySchema& tableOrQuery, const Options& options,
                 int rowCount = -1,  QTextStream *predefinedTextStream = 0);
 
 }

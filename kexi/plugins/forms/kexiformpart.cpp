@@ -172,7 +172,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
 
 #ifndef NO_DSWIZARD
 void
-KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
+KexiFormPart::generateForm(KDbFieldList *list, QDomDocument &domDoc)
 {
     //this form generates a .ui from FieldList list
     //basically that is a Label and a LineEdit for each field
@@ -352,9 +352,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
                 KexiFormManager::self(),
                 SLOT(setFormDataSource(QString,QString)));
         connect(d->dataSourcePage,
-                SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
+                SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KDbField::Type)),
                 KexiFormManager::self(),
-                SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+                SLOT(setDataSourceFieldOrExpression(QString,QString,KDbField::Type)));
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),

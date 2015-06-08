@@ -55,7 +55,7 @@ class KexiDBParser : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
+    KexiDBParser(KexiDBConnection* connection, ::KDbParser* parser, bool owner);
     virtual ~KexiDBParser();
 
 public Q_SLOTS:
@@ -85,7 +85,7 @@ public Q_SLOTS:
 
 private:
     QPointer<KexiDBConnection> m_connection;
-    ::KexiDB::Parser* m_parser;
+    ::KDbParser* m_parser;
     bool m_owner;
 };
 

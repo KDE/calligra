@@ -21,7 +21,7 @@
 #include "utils_p.h"
 #include <KexiIcon.h>
 
-#include <KDbUtils>
+#include <KDb>
 
 #include <kguiitem.h>
 
@@ -177,8 +177,8 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 {
     Q_UNUSED(parent);
-    KexiDB::setDebugGUIHandler(addKexiDBDebug);
-    KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
+    KDb::setDebugGUIHandler(addKexiDBDebug);
+    KDb::setAlterTableActionDebugHandler(addAlterTableActionDebug);
 
     // (this is internal code - do not use i18n() here)
     debugWindow = new DebugWindow(parent);

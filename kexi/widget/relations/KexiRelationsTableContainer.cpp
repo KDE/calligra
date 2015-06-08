@@ -51,7 +51,7 @@ public:
 KexiRelationsTableContainer::KexiRelationsTableContainer(
     QWidget* parent,
     KexiRelationsScrollArea *scrollArea,
-    KexiDB::TableOrQuerySchema *schema)
+    KDbTableOrQuerySchema *schema)
         : QFrame(parent)
         , d(new Private)
 {
@@ -96,7 +96,7 @@ KexiRelationsTableContainer::~KexiRelationsTableContainer()
     delete d;
 }
 
-KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
+KDbTableOrQuerySchema* KexiRelationsTableContainer::schema() const
 {
     return d->fieldList->schema();
 }

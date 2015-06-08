@@ -65,7 +65,7 @@ MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         , m_mysqlres(0)
         , m_dataRow(0)
 {
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     setDriver(manager.driver("mysql"));
 }
 
@@ -95,7 +95,7 @@ bool MySQLMigrate::drv_disconnect()
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
 bool MySQLMigrate::drv_readTableSchema(
-    const QString& originalName, KexiDB::TableSchema& tableSchema)
+    const QString& originalName, KDbTableSchema& tableSchema)
 {
 //! @todo IDEA: ask for user input for captions
 
@@ -116,10 +116,10 @@ bool MySQLMigrate::drv_readTableSchema(
         QString fldName(fields[i].name);
         QString fldID(KexiUtils::stringToIdentifier(fldName.toLower()));
 
-        KexiDB::Field *fld =
-            new KexiDB::Field(fldID, type(originalName, &fields[i]));
+        KDbField *fld =
+            new KDbField(fldID, type(originalName, &fields[i]));
 
-        if (fld->type() == KexiDB::Field::Enum) {
+        if (fld->type() == KDbField::Enum) {
             QStringList values = examineEnumField(originalName, &fields[i]);
         }
 
@@ -199,7 +199,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
 /*! Fetches single record from result obtained
  by running \a sqlStatement. */
 tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KexiDB::RecordData& data, bool &firstRecord)
+        KDbRecordData& data, bool &firstRecord)
 {
     if (firstRecord || !m_mysqlres) {
         if (m_mysqlres) {
@@ -234,8 +234,8 @@ tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
 }
 
 /*! Copy MySQL table to KexiDB database */
-bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                 KexiDB::TableSchema* dstTable)
+bool MySQLMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn,
+                                 KDbTableSchema* dstTable)
 {
     qDebug() << drv_escapeIdentifier(srcTable);
     if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable) + '`'))
@@ -246,7 +246,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
         return true;
     }
     MYSQL_ROW row;
-    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
+    const KDbQueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
     while ((row = mysql_fetch_row(res))) {
         const int numFields = qMin((int)fieldsExpanded.count(), (int)mysql_num_fields(res));
         QList<QVariant> vals;
@@ -256,7 +256,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
             return false;
         }
         for (int i = 0; i < numFields; i++)
-            vals.append(KexiDB::cstringToVariant(row[i], fieldsExpanded.at(i)->field, (int)lengths[i]));
+            vals.append(KDb::cstringToVariant(row[i], fieldsExpanded.at(i)->field, (int)lengths[i]));
         if (!destConn->insertRecord(*dstTable, vals)) {
             mysql_free_result(res);
             return false;
@@ -291,11 +291,11 @@ bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
 }
 
 //! Convert a MySQL type to a KexiDB type, prompting user if necessary.
-KexiDB::Field::Type MySQLMigrate::type(const QString& table,
+KDbField::Type MySQLMigrate::type(const QString& table,
                                        const MYSQL_FIELD *fld)
 {
     // Field type
-    KexiDB::Field::Type kexiType = KexiDB::Field::InvalidType;
+    KDbField::Type kexiType = KDbField::InvalidType;
 
     switch (fld->type) {
         // These are in the same order as mysql_com.h.
@@ -303,46 +303,46 @@ KexiDB::Field::Type MySQLMigrate::type(const QString& table,
     case FIELD_TYPE_DECIMAL:    // DECIMAL or NUMERIC
         break;
     case FIELD_TYPE_TINY:       // TINYINT (-2^7..2^7-1 or 2^8)
-        kexiType = KexiDB::Field::Byte;
+        kexiType = KDbField::Byte;
         break;
     case FIELD_TYPE_SHORT:      // SMALLINT (-2^15..2^15-1 or 2^16)
-        kexiType = KexiDB::Field::ShortInteger;
+        kexiType = KDbField::ShortInteger;
         break;
     case FIELD_TYPE_LONG:       // INTEGER (-2^31..2^31-1 or 2^32)
-        kexiType = KexiDB::Field::Integer;
+        kexiType = KDbField::Integer;
         break;
     case FIELD_TYPE_FLOAT:      // FLOAT
-        kexiType = KexiDB::Field::Float;
+        kexiType = KDbField::Float;
         break;
     case FIELD_TYPE_DOUBLE:     // DOUBLE or REAL (8 byte)
-        kexiType = KexiDB::Field::Double;
+        kexiType = KDbField::Double;
         break;
     case FIELD_TYPE_NULL:       // WTF?
         break;
     case FIELD_TYPE_TIMESTAMP:  // TIMESTAMP (promote?)
-        kexiType = KexiDB::Field::DateTime;
+        kexiType = KDbField::DateTime;
         break;
     case FIELD_TYPE_LONGLONG:   // BIGINT (-2^63..2^63-1 or 2^64)
     case FIELD_TYPE_INT24:      // MEDIUMINT (-2^23..2^23-1 or 2^24) (promote)
-        kexiType = KexiDB::Field::BigInteger;
+        kexiType = KDbField::BigInteger;
         break;
     case FIELD_TYPE_DATE:       // DATE
-        kexiType = KexiDB::Field::Date;
+        kexiType = KDbField::Date;
         break;
     case FIELD_TYPE_TIME:       // TIME
-        kexiType = KexiDB::Field::Time;
+        kexiType = KDbField::Time;
         break;
     case FIELD_TYPE_DATETIME:   // DATETIME
-        kexiType = KexiDB::Field::DateTime;
+        kexiType = KDbField::DateTime;
         break;
     case FIELD_TYPE_YEAR:       // YEAR (promote)
-        kexiType = KexiDB::Field::ShortInteger;
+        kexiType = KDbField::ShortInteger;
         break;
     case FIELD_TYPE_NEWDATE:    // WTF?
     case FIELD_TYPE_ENUM:       // ENUM
         // If MySQL did what it's documentation said it did, we would come here
         // for enum fields ...
-        kexiType = KexiDB::Field::Enum;
+        kexiType = KDbField::Enum;
         break;
     case FIELD_TYPE_SET:        // SET
         //! @todo: Support set column type
@@ -357,16 +357,16 @@ KexiDB::Field::Type MySQLMigrate::type(const QString& table,
         if (fld->flags & ENUM_FLAG) {
             // ... instead we come here, using the ENUM_FLAG which is supposed to
             // be deprecated! Duh.
-            kexiType = KexiDB::Field::Enum;
+            kexiType = KDbField::Enum;
             break;
         }
         kexiType = examineBlobField(table, fld);
         break;
     default:
-        kexiType = KexiDB::Field::InvalidType;
+        kexiType = KDbField::InvalidType;
     }
 
-    if (kexiType == KexiDB::Field::InvalidType) {
+    if (kexiType == KDbField::InvalidType) {
         return userType(table + '.' + QString::fromUtf8(fld->name));
     }
     return kexiType;
@@ -378,9 +378,9 @@ KexiDB::Field::Type MySQLMigrate::type(const QString& table,
     field or a text field.  It also considers the length of CHAR and VARCHAR
     fields to see whether Text or LongText is the appropriate Kexi field type.
     Assumes fld is a CHAR, VARCHAR, one of the BLOBs or TEXTs.
-    \return KexiDB::Field::Text, KexiDB::Field::LongText or KexiDB::Field::BLOB
+    \return KDbField::Text, KDbField::LongText or KDbField::BLOB
 */
-KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
+KDbField::Type MySQLMigrate::examineBlobField(const QString& table,
         const MYSQL_FIELD* fld)
 {
     QString mysqlType;
@@ -389,7 +389,7 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
 
     if (!d->executeSQL(query)) {
         // Huh? MySQL wont tell us what kind of field it is! Lets guess.
-        return KexiDB::Field::LongText;
+        return KDbField::LongText;
     }
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
@@ -405,11 +405,11 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
     qDebug() << "considering" << mysqlType;
     if (mysqlType.contains("blob", Qt::CaseInsensitive)) {
         // Doesn't matter how big it is, it's binary
-        return KexiDB::Field::BLOB;
+        return KDbField::BLOB;
     } else if (fld->length < 200) {
-        return KexiDB::Field::Text;
+        return KDbField::Text;
     }
-    return KexiDB::Field::LongText;
+    return KDbField::LongText;
 }
 
 //! Get the strings that identify values in an enum field
@@ -483,7 +483,7 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
     return values;
 }
 
-void MySQLMigrate::getConstraints(int flags, KexiDB::Field* fld)
+void MySQLMigrate::getConstraints(int flags, KDbField* fld)
 {
     fld->setPrimaryKey(flags & PRI_KEY_FLAG);
     fld->setAutoIncrement(flags & AUTO_INCREMENT_FLAG);
@@ -492,7 +492,7 @@ void MySQLMigrate::getConstraints(int flags, KexiDB::Field* fld)
     //! @todo: Keys and uniqueness
 }
 
-void MySQLMigrate::getOptions(int flags, KexiDB::Field* fld)
+void MySQLMigrate::getOptions(int flags, KDbField* fld)
 {
     fld->setUnsigned(flags & UNSIGNED_FLAG);
 }

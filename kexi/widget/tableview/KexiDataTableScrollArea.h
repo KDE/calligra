@@ -24,10 +24,7 @@
 
 #include "KexiTableScrollArea.h"
 
-namespace KexiDB
-{
-class Cursor;
-}
+class KDbCursor;
 
 /**
  * Database-aware table widget.
@@ -48,7 +45,7 @@ public:
      and Connection::executeQuery()), otherwise the table view remain not filled with data.
      Cursor \a cursor will not be owned by this object.
      */
-    KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor);
+    KexiDataTableScrollArea(QWidget *parent, KDbCursor *cursor);
 
     ~KexiDataTableScrollArea();
 
@@ -56,11 +53,11 @@ public:
 
     /*! Fills table view with data using \a cursor. \return true on success.
      Cursor \a cursor will not be owned by this object. */
-    bool setData(KexiDB::Cursor *cursor);
+    bool setData(KDbCursor *cursor);
 
     /*! \return cursor used as data source for this table view,
      or NULL if no valid cursor is defined. */
-    KexiDB::Cursor *cursor() {
+    KDbCursor *cursor() {
         return m_cursor;
     }
 
@@ -81,7 +78,7 @@ protected:
 
 private:
     //db stuff
-    KexiDB::Cursor *m_cursor;
+    KDbCursor *m_cursor;
 };
 
 #endif

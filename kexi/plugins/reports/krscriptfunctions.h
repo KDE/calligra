@@ -34,12 +34,12 @@ class KRScriptFunctions : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptFunctions(const KoReportData *, KexiDB::Connection*);
+    KRScriptFunctions(const KoReportData *, KDbConnection*);
 
     ~KRScriptFunctions();
     
 private:
-    KexiDB::Connection *m_connection;
+    KDbConnection *m_connection;
     const KoReportData *m_cursor;
     QString m_source;
     qreal math(const QString &, const QString &);

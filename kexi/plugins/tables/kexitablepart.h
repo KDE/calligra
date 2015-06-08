@@ -49,15 +49,15 @@ public:
     {
     public:
         explicit TempData(QObject* parent);
-        KexiDB::TableSchema *table;
+        KDbTableSchema *table;
         /*! true, if \a table member has changed in previous view. Used on view switching.
          We're checking this flag to see if we should refresh data for DataViewMode. */
     bool tableSchemaChangedInPreviousView;
     };
 
     static tristate askForClosingObjectsUsingTableSchema(
-        QWidget *parent, KexiDB::Connection& conn,
-        KexiDB::TableSchema& table, const QString& msg);
+        QWidget *parent, KDbConnection& conn,
+        KDbTableSchema& table, const QString& msg);
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
@@ -75,7 +75,7 @@ protected:
 
     virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+    virtual KDbObject* loadSchemaData(KexiWindow *window, const KDbObject& sdata,
             Kexi::ViewMode viewMode, bool *ownedByWindow);
 
 private:

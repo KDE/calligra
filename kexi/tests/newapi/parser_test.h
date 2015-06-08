@@ -29,10 +29,10 @@ int parserTest(const QString &st, const QStringList &params)
         return 1;
     }
 
-    KexiDB::Parser parser(conn);
+    KDbParser parser(conn);
 
     const bool ok = parser.parse(st);
-    KexiDB::QuerySchema *q = parser.query();
+    KDbQuerySchema *q = parser.query();
     QList<QVariant> variantParams;
     foreach(const QString param, params)
     variantParams.append(param.toLocal8Bit());
@@ -40,7 +40,7 @@ int parserTest(const QString &st, const QStringList &params)
         cout << q->debugString().toLatin1().constData() << '\n';
         cout << "-STATEMENT:\n" << conn->selectStatement(*q, variantParams).toLatin1().constData() << '\n';
     } else {
-        KexiDB::ParserError err = parser.error();
+        KDbParserError err = parser.error();
         qDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
         .arg(err.type()).arg(err.at());
         r = 1;

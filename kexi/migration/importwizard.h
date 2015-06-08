@@ -38,10 +38,6 @@ namespace Kexi
 class ObjectStatus;
 }
 
-namespace KexiDB
-{
-}
-
 namespace KexiMigration
 {
 

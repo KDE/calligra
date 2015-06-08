@@ -57,7 +57,7 @@ protected:
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiInputTableEdit::KexiInputTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
     init();
@@ -131,7 +131,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     m_lineedit->end(false);
 #endif
     if (!m_lineedit->validator()) {
-        QValidator *validator = new KexiDB::FieldValidator(*field(), m_lineedit);
+        QValidator *validator = new KDbFieldValidator(*field(), m_lineedit);
         validator->setObjectName("KexiInputTableEdit-validator");
         m_lineedit->setValidator(validator);
     }
@@ -191,7 +191,7 @@ bool KexiInputTableEdit::valueIsEmpty()
 
 QVariant KexiInputTableEdit::value()
 {
-    if (field()->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+    if (field()->isFPNumericType()) {//==KDbField::Double || m_type==KDbField::Float) {
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
         if (m_decsym != '.')
@@ -202,7 +202,7 @@ QVariant KexiInputTableEdit::value()
     } else if (field()->isIntegerType()) {
 //! @todo check constraints
         bool ok;
-        if (KexiDB::Field::BigInteger == field()->type()) {
+        if (KDbField::BigInteger == field()->type()) {
             if (field()->isUnsigned()) {
                 const quint64 result = m_lineedit->text().toULongLong(&ok);
                 return ok ? QVariant(result) : QVariant();
@@ -211,7 +211,7 @@ QVariant KexiInputTableEdit::value()
                 return ok ? QVariant(result) : QVariant();
             }
         }
-        if (KexiDB::Field::Integer == field()->type()) {
+        if (KDbField::Integer == field()->type()) {
             if (field()->isUnsigned()) {
                 const uint result = m_lineedit->text().toUInt(&ok);
                 return ok ? QVariant(result) : QVariant();

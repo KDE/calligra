@@ -59,27 +59,27 @@ int main(int argc, char** argv)
 
     // write the code for testing migration here
     // Start with a driver manager
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     KexiMigration::MigrateManager migrateManager;
 
     qDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
-    KexiDB::Driver *destDriver = manager.driver(KexiDB::defaultFileBasedDriverName() //file based
+    KDbDriver *destDriver = manager.driver(KDb::defaultFileBasedDriverId() //file based
                                                );
     if (!destDriver || manager.error()) {
         qDebug() << "Manager error...";
         manager.debugError();
     }
 
-    KexiDB::ConnectionData *cdata;
+    KDbConnectionData *cdata;
     QString dbname;
 
-    cdata = new KexiDB::ConnectionData();
+    cdata = new KDbConnectionData();
 
     // set destination file name here.
     //! TODO User should be able to specify this
-    cdata->driverName = KexiDB::defaultFileBasedDriverName();
+    cdata->driverName = KDb::defaultFileBasedDriverId();
 
     //! TODO User should be able to specify this
     dbname = destinationDatabase;
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
     md->destination = new KexiProjectData(*cdata, dbname);
 
     // Setup XBase connection data
-    KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+    KDbConnectionData* conn_data = new KDbConnectionData();
     conn_data->setFileName(xBaseSourceDirectory);
 
     md->source = conn_data;

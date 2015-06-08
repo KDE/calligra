@@ -31,14 +31,14 @@
 class KexiDBPasswordDialog::Private
 {
  public:
-    explicit Private(KexiDB::ConnectionData* data);
+    explicit Private(KDbConnectionData* data);
     ~Private();
 
-    KexiDB::ConnectionData *cdata;
+    KDbConnectionData *cdata;
     bool showConnectionDetailsRequested;
 };
 
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
+KexiDBPasswordDialog::Private::Private(KDbConnectionData* data)
     : cdata(data)
     , showConnectionDetailsRequested(false)
 {
@@ -48,7 +48,7 @@ KexiDBPasswordDialog::Private::~Private()
 {
 }
 
-KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata,
+KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& cdata,
                                            Flags flags)
         : KPasswordDialog(parent,
             ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags))
@@ -122,7 +122,7 @@ void KexiDBPasswordDialog::slotShowConnectionDetails()
 }
 
 //static
-tristate KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent)
+tristate KexiDBPasswordDialog::getPasswordIfNeeded(KDbConnectionData *data, QWidget *parent)
 {
     if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
         //ask for password

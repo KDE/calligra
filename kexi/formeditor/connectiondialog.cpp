@@ -45,8 +45,8 @@ public:
     Form *form;
     ConnectionBuffer *buffer;
     KexiTableView  *table;
-    KexiDB::TableViewData  *data;
-    KexiDB::TableViewData *widgetsColumnData,
+    KDbTableViewData  *data;
+    KDbTableViewData *widgetsColumnData,
     *slotsColumnData, *signalsColumnData;
     QLabel  *pixmapLabel, *textLabel;
     QPushButton *addButton, *removeButton;
@@ -98,7 +98,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     //setStatusOk();
 
     // And the KexiTableView ////////
-    d->data = new KexiDB::TableViewData();
+    d->data = new KDbTableViewData();
     d->table = new KexiTableView(0, frame, "connections_tableview");
     d->table->setSpreadSheetMode(true);
     d->table->setInsertingEnabled(true);
@@ -109,8 +109,8 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 
     connect(d->table, SIGNAL(cellSelected(int,int)),
             this, SLOT(slotCellSelected(int,int)));
-    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
-            this, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
+    connect(d->table->data(), SIGNAL(rowInserted(KDbRecordData*,bool)),
+            this, SLOT(slotRowInserted(KDbRecordData*,bool)));
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
@@ -138,28 +138,28 @@ ConnectionDialog::~ConnectionDialog()
 void
 ConnectionDialog::initTable()
 {
-    KexiDB::TableViewColumn *col0 = new KexiDB::TableViewColumn(xi18n("OK?"), KexiDB::Field::Text);
+    KDbTableViewColumn *col0 = new KDbTableViewColumn(xi18n("OK?"), KDbField::Text);
     col0->field()->setSubType("QIcon");
     col0->setReadOnly(true);
     col0->field()->setDescription(xi18n("Connection correctness"));
     d->data->addColumn(col0);
 
-    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn(xi18n("Sender"), KexiDB::Field::Enum);
-    d->widgetsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col1 = new KDbTableViewColumn(xi18n("Sender"), KDbField::Enum);
+    d->widgetsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col1->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col1);
 
-    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn(xi18n("Signal"), KexiDB::Field::Enum);
-    d->signalsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col2 = new KDbTableViewColumn(xi18n("Signal"), KDbField::Enum);
+    d->signalsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col2->setRelatedData(d->signalsColumnData);
     d->data->addColumn(col2);
 
-    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn(xi18n("Receiver"), KexiDB::Field::Enum);
+    KDbTableViewColumn *col3 = new KDbTableViewColumn(xi18n("Receiver"), KDbField::Enum);
     col3->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col3);
 
-    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn(xi18n("Slot"), KexiDB::Field::Enum);
-    d->slotsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col4 = new KDbTableViewColumn(xi18n("Slot"), KDbField::Enum);
+    d->slotsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col4->setRelatedData(d->slotsColumnData);
     d->data->addColumn(col4);
 
@@ -168,10 +168,10 @@ ConnectionDialog::initTable()
     d->table->maximizeColumnsWidth(c);
     d->table->setColumnResizeEnabled(4, true);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
-            this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
-    connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
-    connect(d->table, SIGNAL(itemSelected(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
+            this, SLOT(slotCellChanged(KDbRecordData*,int,QVariant,KDbResultInfo*)));
+    connect(d->data, SIGNAL(rowUpdated(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
+    connect(d->table, SIGNAL(itemSelected(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
 }
 
 void ConnectionDialog::exec()
@@ -183,7 +183,7 @@ void ConnectionDialog::exec()
 void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
-    KexiDB::RecordData *record = d->table->itemAt(row);
+    KDbRecordData *record = d->table->itemAt(row);
     if (!record)
         return;
     if (col == 2) // signal col
@@ -192,7 +192,7 @@ void ConnectionDialog::slotCellSelected(int row, int col)
         updateSlotList(record);
 }
 
-void ConnectionDialog::slotRowInserted(KexiDB::RecordData* item, bool)
+void ConnectionDialog::slotRowInserted(KDbRecordData* item, bool)
 {
     d->buffer->append(new Connection());
     checkConnection(item);
@@ -203,7 +203,7 @@ ConnectionDialog::slotOk()
 {
     // First we update our buffer contents
     for (int i = 0; i < d->table->rows(); i++) {
-        KexiDB::RecordData *record = d->table->itemAt(i);
+        KDbRecordData *record = d->table->itemAt(i);
         Connection *c = d->buffer->at(i);
 
         c->setSender((*record)[1].toString());
@@ -223,7 +223,7 @@ ConnectionDialog::updateTableData()
 {
     // First we update the columns data
     foreach (ObjectTreeItem *item, *d->form->objectTree()->hash()) {
-        KexiDB::RecordData *record = d->widgetsColumnData->createItem();
+        KDbRecordData *record = d->widgetsColumnData->createItem();
         (*record)[0] = item->name();
         (*record)[1] = (*record)[0];
         d->widgetsColumnData->append(record);
@@ -231,7 +231,7 @@ ConnectionDialog::updateTableData()
 
     // Then we fill the columns with the form connections
     foreach (Connection *c, *d->form->connectionBuffer()) {
-        KexiDB::RecordData *record = d->table->data()->createItem();
+        KDbRecordData *record = d->table->data()->createItem();
         (*record)[1] = c->sender();
         (*record)[2] = c->signal();
         (*record)[3] = c->receiver();
@@ -243,7 +243,7 @@ ConnectionDialog::updateTableData()
 }
 
 void
-ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
+ConnectionDialog::setStatusOk(KDbRecordData *record)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is OK.")));
@@ -262,7 +262,7 @@ ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
+ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *record)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is invalid.")) + msg);
@@ -281,7 +281,7 @@ ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant&, KexiDB::ResultInfo*)
+ConnectionDialog::slotCellChanged(KDbRecordData *record, int col, QVariant&, KDbResultInfo*)
 {
     switch (col) {
         // sender changed, we clear siganl and slot
@@ -299,7 +299,7 @@ ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant&
 }
 
 void
-ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
+ConnectionDialog::updateSlotList(KDbRecordData *record)
 {
     d->slotsColumnData->deleteAllRows();
     QString widget = (*record)[1].toString();
@@ -324,7 +324,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
         if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
             continue;
 
-        KexiDB::RecordData *record = d->slotsColumnData->createItem();
+        KDbRecordData *record = d->slotsColumnData->createItem();
         (*record)[0] = QString::fromLatin1(method.signature());
         (*record)[1] = (*record)[0];
         d->slotsColumnData->append(record);
@@ -332,7 +332,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
+ConnectionDialog::updateSignalList(KDbRecordData *record)
 {
     ObjectTreeItem *tree = d->form->objectTree()->lookup((*record)[1].toString());
     if (!tree || !tree->widget())
@@ -343,7 +343,7 @@ ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
     foreach(const QMetaMethod &method, list) {
-        KexiDB::RecordData *record = d->signalsColumnData->createItem();
+        KDbRecordData *record = d->signalsColumnData->createItem();
         (*record)[0] = QString::fromLatin1(method.signature());
         (*record)[1] = (*record)[0];
         d->signalsColumnData->append(record);
@@ -351,7 +351,7 @@ ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::checkConnection(KexiDB::RecordData *record)
+ConnectionDialog::checkConnection(KDbRecordData *record)
 {
     // First we check if one column is empty
     for (int i = 1; i < 5; i++) {
@@ -403,7 +403,7 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
         return;
 
     Connection *c = new Connection(connection);
-    KexiDB::RecordData *record = d->table->data()->createItem();
+    KDbRecordData *record = d->table->data()->createItem();
     (*record)[1] = c->sender();
     (*record)[2] = c->signal();
     (*record)[3] = c->receiver();

@@ -56,7 +56,7 @@ public:
     QBoxLayout  *layout;
     QLabel  *label;
     QString  caption;
-    KexiDB::Field::Type fieldTypeInternal;
+    KDbField::Type fieldTypeInternal;
     QString fieldCaptionInternal;
     QBrush baseBrush; //!< needed because for unbound mode editor==0
     QBrush textBrush; //!< needed because for unbound mode editor==0
@@ -96,7 +96,7 @@ KexiDBAutoField::~KexiDBAutoField()
 void
 KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 {
-    d->fieldTypeInternal = KexiDB::Field::InvalidType;
+    d->fieldTypeInternal = KDbField::InvalidType;
     d->layout = 0;
     setSubwidget(0);
     d->label = new QLabel(text, this);
@@ -242,7 +242,7 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
         }
         d->label->setAlignment(align);
         if (d->widgetType == Boolean
-                || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !designMode())) {
+                || (d->widgetType == Auto && fieldTypeInternal() == KDbField::InvalidType && !designMode())) {
             d->label->hide();
         } else {
             d->label->show();
@@ -446,14 +446,14 @@ KexiDBAutoField::clear()
 void
 KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 {
-    d->fieldTypeInternal = (KexiDB::Field::Type)kexiDBFieldType;
-    KexiDB::Field::Type fieldType;
+    d->fieldTypeInternal = (KDbField::Type)kexiDBFieldType;
+    KDbField::Type fieldType;
     //find real fied type to use
-    if (d->fieldTypeInternal == KexiDB::Field::InvalidType) {
+    if (d->fieldTypeInternal == KDbField::InvalidType) {
         if (visibleColumnInfo())
-            fieldType = KexiDB::Field::Text;
+            fieldType = KDbField::Text;
         else
-            fieldType = KexiDB::Field::InvalidType;
+            fieldType = KDbField::InvalidType;
     } else
         fieldType = d->fieldTypeInternal;
 
@@ -478,27 +478,27 @@ KexiDBAutoField::setFieldCaptionInternal(const QString& text)
 }
 
 void
-KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+KexiDBAutoField::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     setColumnInfoInternal(cinfo, cinfo);
 }
 
 void
-KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo)
+KexiDBAutoField::setColumnInfoInternal(KDbQueryColumnInfo* cinfo, KDbQueryColumnInfo* visibleColumnInfo)
 {
     // change widget type depending on field type
     if (d->widgetType_property == Auto) {
         WidgetType newWidgetType = Auto;
-        KexiDB::Field::Type fieldType;
+        KDbField::Type fieldType;
         if (cinfo)
             fieldType = visibleColumnInfo->field->type();
         else if (dataSource().isEmpty())
-            fieldType = KexiDB::Field::InvalidType;
+            fieldType = KDbField::InvalidType;
         else
-            fieldType = KexiDB::Field::Text;
+            fieldType = KDbField::Text;
 
-        if (fieldType != KexiDB::Field::InvalidType) {
+        if (fieldType != KDbField::InvalidType) {
             newWidgetType = KexiDBAutoField::widgetTypeForFieldType(fieldType);
         }
         if (d->widgetType != newWidgetType || newWidgetType == Auto) {
@@ -516,33 +516,33 @@ KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::Q
 
 //static
 KexiDBAutoField::WidgetType
-KexiDBAutoField::widgetTypeForFieldType(KexiDB::Field::Type type)
+KexiDBAutoField::widgetTypeForFieldType(KDbField::Type type)
 {
     switch (type) {
-    case KexiDB::Field::Integer:
-    case KexiDB::Field::ShortInteger:
-    case KexiDB::Field::BigInteger:
+    case KDbField::Integer:
+    case KDbField::ShortInteger:
+    case KDbField::BigInteger:
         return Integer;
-    case  KexiDB::Field::Boolean:
+    case  KDbField::Boolean:
         return Boolean;
-    case KexiDB::Field::Float:
-    case KexiDB::Field::Double:
+    case KDbField::Float:
+    case KDbField::Double:
         return Double;
-    case KexiDB::Field::Date:
+    case KDbField::Date:
         return Date;
-    case KexiDB::Field::DateTime:
+    case KDbField::DateTime:
         return DateTime;
-    case KexiDB::Field::Time:
+    case KDbField::Time:
         return Time;
-    case KexiDB::Field::Text:
+    case KDbField::Text:
         return Text;
-    case KexiDB::Field::LongText:
+    case KDbField::LongText:
         return MultiLineText;
-    case KexiDB::Field::Enum:
+    case KDbField::Enum:
         return ComboBox;
-    case KexiDB::Field::InvalidType:
+    case KDbField::InvalidType:
         return Auto;
-    case KexiDB::Field::BLOB:
+    case KDbField::BLOB:
         return Image;
     default:
         break;

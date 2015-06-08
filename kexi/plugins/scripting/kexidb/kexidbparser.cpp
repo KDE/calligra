@@ -24,7 +24,7 @@
 
 using namespace Scripting;
 
-KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner)
+KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KDbParser* parser, bool owner)
         : QObject(connection)
         , m_connection(connection)
         , m_parser(parser)
@@ -54,13 +54,13 @@ const QString KexiDBParser::operation()
 
 QObject* KexiDBParser::table()
 {
-    ::KexiDB::TableSchema* t = m_parser->table();
+    ::KDbTableSchema* t = m_parser->table();
     return t ? new KexiDBTableSchema(this, t, false) : 0;
 }
 
 QObject* KexiDBParser::query()
 {
-    ::KexiDB::QuerySchema* q = m_parser->query();
+    ::KDbQuerySchema* q = m_parser->query();
     return q ? new KexiDBQuerySchema(this, q, false) : 0;
 }
 

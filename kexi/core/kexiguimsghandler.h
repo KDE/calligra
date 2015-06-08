@@ -24,15 +24,15 @@
 
 #include <KDbMessageHandler>
 
-class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
+class KEXICORE_EXPORT KexiGUIMessageHandler : public KDbMessageHandler
 {
 public:
     explicit KexiGUIMessageHandler(QWidget *parent = 0);
     virtual ~KexiGUIMessageHandler();
 
-    using KexiDB::MessageHandler::showErrorMessage;
+    using KDbMessageHandler::showErrorMessage;
 
-    void showErrorMessage(const QString&, const QString&, KexiDB::Object *obj);
+    void showErrorMessage(const QString&, const QString&, KDbObject *obj);
     void showErrorMessage(Kexi::ObjectStatus *status);
     void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 
@@ -51,13 +51,13 @@ public:
                                             const QString& dontShowAgainName = QString());
 
 protected:
-    using KexiDB::MessageHandler::showErrorMessageInternal;
+    using KDbMessageHandler::showErrorMessageInternal;
 
     virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+    virtual void showErrorMessageInternal(KDbObject *obj, const QString& msg = QString());
 
     /*! Interactively asks a question using KMessageBox.
-     See KexiDB::MessageHandler::askQuestionInternal() for details. */
+     See KDbMessageHandler::askQuestionInternal() for details. */
     virtual int askQuestionInternal(const QString& message,
                                     KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
                                     const KGuiItem &buttonYes = KStandardGuiItem::yes(),

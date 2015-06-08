@@ -60,7 +60,7 @@ public:
     QHash<Id_t, Item*> inMemoryItems; //!< for unstored BLOBs
     QHash<Id_t, Item*> storedItems; //!< for stored items
     QHash<QString, Item*> itemsByURL;
-    QPointer<KexiDB::Connection> conn;
+    QPointer<KDbConnection> conn;
 };
 
 //-----------------
@@ -295,17 +295,17 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
             return KexiBLOBBuffer::Handle(item);
         //retrieve stored BLOB:
         assert(d->conn);
-        KexiDB::TableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
+        KDbTableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
         if (!blobsTable) {
             //! @todo err msg
             return KexiBLOBBuffer::Handle();
         }
         /*  QStringList where;
             where << "o_id";
-            KexiDB::PreparedStatement::Ptr st = d->conn->prepareStatement(
-              KexiDB::PreparedStatement::SelectStatement, *blobsTable, where);*/
+            KDbPreparedStatement::Ptr st = d->conn->prepareStatement(
+              KDbPreparedStatement::SelectStatement, *blobsTable, where);*/
 //! @todo use PreparedStatement
-        KexiDB::QuerySchema schema;
+        KDbQuerySchema schema;
         schema.addField(blobsTable->field("o_data"));
         schema.addField(blobsTable->field("o_name"));
         schema.addField(blobsTable->field("o_caption"));
@@ -313,7 +313,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         schema.addField(blobsTable->field("o_folder_id"));
         schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((qint64)id));
 
-        KexiDB::RecordData recordData;
+        KDbRecordData recordData;
         tristate res = d->conn->querySingleRecord(
                            schema,
                            recordData);
@@ -381,7 +381,7 @@ void KexiBLOBBuffer::insertItem(Item *item)
         d->inMemoryItems.insert(item->id, item);
 }
 
-void KexiBLOBBuffer::setConnection(KexiDB::Connection *conn)
+void KexiBLOBBuffer::setConnection(KDbConnection *conn)
 {
     KexiBLOBBuffer::self()->d->conn = conn;
 }

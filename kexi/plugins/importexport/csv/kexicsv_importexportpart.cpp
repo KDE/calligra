@@ -73,7 +73,7 @@ bool KexiCSVImportExportPart::executeCommand(const char* commandName,
         KexiCSVExport::Options options;
         if (!options.assign(*args))
             return false;
-        KexiDB::TableOrQuerySchema tableOrQuery(
+        KDbTableOrQuerySchema tableOrQuery(
             KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
         QTextStream *stream = 0;
         if (args->contains("textStream"))

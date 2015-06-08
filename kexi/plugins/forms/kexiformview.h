@@ -38,9 +38,6 @@
 
 class KexiFormPart;
 class KexiFormPartTempData;
-namespace KexiDB
-{
-}
 namespace KFormDesigner
 {
 class Container;
@@ -128,7 +125,7 @@ protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual KPropertySet* propertySet();
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
     virtual tristate storeData(bool dontAsk = false);

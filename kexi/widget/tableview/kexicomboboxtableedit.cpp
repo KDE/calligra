@@ -57,14 +57,14 @@ public:
     KexiComboBoxPopup *popup;
     int currentEditorWidth;
     QSize totalSize;
-    KexiDB::TableViewColumn* visibleTableViewColumn;
+    KDbTableViewColumn* visibleTableViewColumn;
     KexiTableEdit* internalEditor;
     int arrowWidth;
 };
 
 //======================================================
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiComboBoxBase()
         , KexiInputTableEdit(column, parent)
         , d(new Private())
@@ -91,11 +91,11 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
     delete d;
 }
 
-void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+void KexiComboBoxTableEdit::createInternalEditor(KDbQuerySchema& schema)
 {
     if (!m_column->visibleLookupColumnInfo() || d->visibleTableViewColumn/*sanity*/)
         return;
-    const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo()->field->type();
+    const KDbField::Type t = m_column->visibleLookupColumnInfo()->field->type();
 //! @todo subtype?
     KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
     if (!item || item->className() == "KexiInputTableEdit")
@@ -103,13 +103,13 @@ void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
     //special cases: BLOB, Bool datatypes
 //! @todo
     //find real type to display
-    KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo();
-    KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+    KDbQueryColumnInfo *ci = m_column->visibleLookupColumnInfo();
+    KDbQueryColumnInfo *visibleLookupColumnInfo = 0;
     if (ci->indexForVisibleLookupValue() != -1) {
         //Lookup field is defined
         visibleLookupColumnInfo = schema.expandedOrInternalField(ci->indexForVisibleLookupValue());
     }
-    d->visibleTableViewColumn = new KexiDB::TableViewColumn(schema, *ci, visibleLookupColumnInfo);
+    d->visibleTableViewColumn = new KDbTableViewColumn(schema, *ci, visibleLookupColumnInfo);
 //! todo set d->internalEditor visible and use it to enable data entering by hand
     d->internalEditor = KexiCellEditorFactory::createEditor(*d->visibleTableViewColumn, 0);
     m_lineedit->hide();
@@ -204,7 +204,7 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
         KexiInputTableEdit::setupContents(p, focused, val, txt, align, x, y_offset, w, h);
     }
     if (!val.isNull()) {
-        KexiDB::TableViewData *relData = column()->relatedData();
+        KDbTableViewData *relData = column()->relatedData();
         if (relData) {
             int rowToHighlight;
             txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
@@ -288,7 +288,7 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString& s)
 
 int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 {
-    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
+    KDbTableViewData *relData = column() ? column()->relatedData() : 0;
     if (lookupFieldSchema() || relData) {
         // in 'lookupFieldSchema' or  or 'related table data' model
         // we're assuming val is already the text, not the index

@@ -36,9 +36,9 @@ public:
     KexiDBConnectionSetPrivate()
             : maxid(-1) {
     }
-    KexiDB::ConnectionData::List list;
+    QList<KDbConnectionData*> list;
     QHash<QString, QString> filenamesForData;
-    QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
+    QHash<QString, KDbConnectionData*> dataForFilenames;
     int maxid;
 };
 
@@ -53,7 +53,7 @@ KexiDBConnectionSet::~KexiDBConnectionSet()
     delete d;
 }
 
-bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const QString& _filename)
+bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QString& _filename)
 {
     if (!data)
         return false;
@@ -92,15 +92,15 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
     return result;
 }
 
-void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename)
+void KexiDBConnectionSet::addConnectionDataInternal(KDbConnectionData *data, const QString& filename)
 {
     d->filenamesForData.insert(key(*data), filename);
     d->dataForFilenames.insert(filename, data);
     d->list.append(data);
 }
 
-bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
-        const KexiDB::ConnectionData &newData)
+bool KexiDBConnectionSet::saveConnectionData(KDbConnectionData *oldData,
+        const KDbConnectionData &newData)
 {
     if (!oldData)
         return false;
@@ -123,7 +123,7 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
     return true;
 }
 
-void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
+void KexiDBConnectionSet::removeConnectionDataInternal(KDbConnectionData *data)
 {
     const QString filename(d->filenamesForData.value(key(*data)));
     d->filenamesForData.remove(key(*data));
@@ -132,7 +132,7 @@ void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *d
     delete data;
 }
 
-bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
+bool KexiDBConnectionSet::removeConnectionData(KDbConnectionData *data)
 {
     if (!data)
         return false;
@@ -146,7 +146,7 @@ bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
     return true;
 }
 
-const KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
+QList<KDbConnectionData*> KexiDBConnectionSet::list() const
 {
     return d->list;
 }
@@ -165,7 +165,7 @@ void KexiDBConnectionSet::load()
     foreach(const QString &dir, dirs) {
         QDirIterator it(dir, QStringList() << "*.kexic");
         while (it.hasNext()) {
-            KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
+            KDbConnectionData *data = new KDbConnectionData();
             KexiDBConnShortcutFile shortcutFile(it.next());
             if (!shortcutFile.loadConnectionData(*data)) {
                 delete data;
@@ -177,18 +177,18 @@ void KexiDBConnectionSet::load()
    }
 }
 
-QString KexiDBConnectionSet::fileNameForConnectionData(const KexiDB::ConnectionData &data) const
+QString KexiDBConnectionSet::fileNameForConnectionData(const KDbConnectionData &data) const
 {
     return d->filenamesForData.value(key(data));
 }
 
-KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
+KDbConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
 {
     return d->dataForFilenames.value(fileName);
 }
 
 // static
-QString KexiDBConnectionSet::key(const KexiDB::ConnectionData &data)
+QString KexiDBConnectionSet::key(const KDbConnectionData &data)
 {
     return data.driverName.toLower() + ','
         + data.userName.toLower() + ','

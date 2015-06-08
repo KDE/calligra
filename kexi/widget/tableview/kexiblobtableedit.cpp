@@ -69,7 +69,7 @@ public:
 
 //======================================================
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
@@ -486,7 +486,7 @@ public:
     QCache<QString, QPixmap> pixmapCache;
 };
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiKIconTableEdit::KexiKIconTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {

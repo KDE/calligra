@@ -1319,7 +1319,7 @@ bool Form::isNameValid(const QString &name) const
 //! @todo add to the undo buffer
     QWidget *w = d->selected.first();
     //also update widget's name in QObject member
-    if (!KexiDB::isIdentifier(name)) {
+    if (!KDb::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            xi18n("Could not rename widget \"%1\" to \"%2\" because "
                                 "\"%3\" is not a valid name (identifier) for a widget.",

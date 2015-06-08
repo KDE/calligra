@@ -97,8 +97,8 @@ tristate KexiQueryPart::remove(KexiPart::Item &item)
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())
         return false;
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KexiDB::QuerySchema *sch = conn->querySchema(item.identifier());
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbQuerySchema *sch = conn->querySchema(item.identifier());
     if (sch)
         return conn->dropQuery(sch);
     //last chance: just remove item
@@ -113,8 +113,8 @@ void KexiQueryPart::initInstanceActions()
 {
 }
 
-KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
-    KexiWindow *window, const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode,
+KDbObject* KexiQueryPart::loadSchemaData(
+    KexiWindow *window, const KDbObject& sdata, Kexi::ViewMode viewMode,
     bool *ownedByWindow)
 {
     KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
@@ -122,9 +122,9 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
     if (!loadDataBlock(window, sqlText, "sql")) {
         return 0;
     }
-    KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
+    KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     parser->parse(sqlText);
-    KexiDB::QuerySchema *query = parser->query();
+    KDbQuerySchema *query = parser->query();
     //error?
     if (!query) {
         if (viewMode == Kexi::TextViewMode) {
@@ -140,7 +140,7 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
         return 0;
     }
     query->debug();
-    (KexiDB::SchemaData&)*query = sdata; //copy main attributes
+    (KDbObject&)*query = sdata; //copy main attributes
 
     temp->registerTableSchemaChanges(query);
     if (ownedByWindow)
@@ -150,7 +150,7 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
     return query;
 }
 
-KexiDB::QuerySchema *KexiQueryPart::currentQuery(KexiView* view)
+KDbQuerySchema *KexiQueryPart::currentQuery(KexiView* view)
 {
     if (!view)
         return 0;
@@ -185,9 +185,9 @@ tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
 
 //----------------
 
-KexiQueryPart::TempData::TempData(KexiWindow* window, KexiDB::Connection *conn)
+KexiQueryPart::TempData::TempData(KexiWindow* window, KDbConnection *conn)
         : KexiWindowData(window)
-        , KexiDB::Connection::TableSchemaChangeListenerInterface()
+        , KDbConnection::TableSchemaChangeListenerInterface()
         , m_query(0)
         , m_queryChangedInPreviousView(false)
 {
@@ -212,11 +212,11 @@ void KexiQueryPart::TempData::unregisterForTablesSchemaChanges()
     conn->unregisterForTablesSchemaChanges(*this);
 }
 
-void KexiQueryPart::TempData::registerTableSchemaChanges(KexiDB::QuerySchema *q)
+void KexiQueryPart::TempData::registerTableSchemaChanges(KDbQuerySchema *q)
 {
     if (!q)
         return;
-    foreach(KexiDB::TableSchema* table, *q->tables()) {
+    foreach(KDbTableSchema* table, *q->tables()) {
         conn->registerForTableSchemaChanges(*this, *table);
     }
 }
@@ -227,20 +227,20 @@ tristate KexiQueryPart::TempData::closeListener()
     return KexiMainWindowIface::global()->closeWindow(window);
 }
 
-KexiDB::QuerySchema *KexiQueryPart::TempData::takeQuery()
+KDbQuerySchema *KexiQueryPart::TempData::takeQuery()
 {
-    KexiDB::QuerySchema *query = m_query;
+    KDbQuerySchema *query = m_query;
     m_query = 0;
     return query;
 }
 
-void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
+void KexiQueryPart::TempData::setQuery(KDbQuerySchema *query)
 {
     if (m_query && m_query == query)
         return;
     if (m_query
             /* query not owned by window */
-            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KexiDB::SchemaData*>(m_query)))
+            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KDbObject*>(m_query)))
     {
         delete m_query;
     }

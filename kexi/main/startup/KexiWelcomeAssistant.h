@@ -92,7 +92,7 @@ protected:
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
+        const KDbConnectionData& cdata, const QString& databaseName,
         const QString& caption);
 
     friend class KexiMainWelcomePage;

@@ -99,7 +99,7 @@ public:
      You should test if project set was properly loaded using projectSet()->error().
     */
     KexiProjectSelectorDialog(QWidget *parent,
-                              const KexiDB::ConnectionData& cdata,
+                              const KDbConnectionData& cdata,
                               bool showProjectNameColumn = true, bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorDialog();

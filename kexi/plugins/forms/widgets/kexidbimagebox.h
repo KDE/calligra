@@ -206,7 +206,7 @@ protected:
     QByteArray data() const;
 
     virtual void contextMenuEvent(QContextMenuEvent * e);
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
     virtual void paintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent* e);
     virtual bool eventFilter(QObject * watched, QEvent * e);

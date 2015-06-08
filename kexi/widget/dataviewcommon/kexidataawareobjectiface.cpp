@@ -99,14 +99,14 @@ void KexiDataAwareObjectInterface::clearVariables()
     m_currentItem = 0;
 }
 
-void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool owner)
+void KexiDataAwareObjectInterface::setData(KDbTableViewData *data, bool owner)
 {
     const bool theSameData = m_data && m_data == data;
     if (m_owner && m_data && m_data != data/*don't destroy if it's the same*/) {
         qDebug() << "destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
-        m_itemIterator = KexiDB::TableViewData::Iterator();
+        m_itemIterator = KDbTableViewData::Iterator();
     }
     m_owner = owner;
     m_data = data;
@@ -121,7 +121,7 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     if (horizontalHeader()) {
         int i = 0;
         horizontalHeader()->setResizeMode(QHeaderView::Interactive); // set before using resizeSection()
-        foreach(KexiDB::TableViewColumn *col, *m_data->columns()) {
+        foreach(KDbTableViewColumn *col, *m_data->columns()) {
             if (col->isVisible()) {
                 int w = col->width();
                 if (w == 0) {
@@ -153,15 +153,15 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
             QObject::connect(m_data, SIGNAL(destroying()), thisObject, SLOT(slotDataDestroying()));
             QObject::connect(m_data, SIGNAL(rowsDeleted(QList<int>)),
                              thisObject, SLOT(slotRowsDeleted(QList<int>)));
-            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
-                             thisObject, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
+            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KDbRecordData&,KDbResultInfo*,bool)),
+                             thisObject, SLOT(slotAboutToDeleteRow(KDbRecordData&,KDbResultInfo*,bool)));
             QObject::connect(m_data, SIGNAL(rowDeleted()), thisObject, SLOT(slotRowDeleted()));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool))); //not db-aware
-            QObject::connect(m_data, SIGNAL(rowRepaintRequested(KexiDB::RecordData&)),
-                             thisObject, SLOT(slotRowRepaintRequested(KexiDB::RecordData&)));
+            QObject::connect(m_data, SIGNAL(rowInserted(KDbRecordData*,bool)),
+                             thisObject, SLOT(slotRowInserted(KDbRecordData*,bool)));
+            QObject::connect(m_data, SIGNAL(rowInserted(KDbRecordData*,uint,bool)),
+                             thisObject, SLOT(slotRowInserted(KDbRecordData*,uint,bool))); //not db-aware
+            QObject::connect(m_data, SIGNAL(rowRepaintRequested(KDbRecordData&)),
+                             thisObject, SLOT(slotRowRepaintRequested(KDbRecordData&)));
             QObject::connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
                              thisObject, SLOT(vScrollBarValueChanged(int)));
         }
@@ -584,14 +584,14 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 qDebug() << "NOW insert item is current";
 #endif
                 m_currentItem = m_insertItem;
-                m_itemIterator = KexiDB::TableViewData::Iterator();
+                m_itemIterator = KDbTableViewData::Iterator();
             } else {
 #ifdef setCursorPosition_DEBUG
                 qDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 int _i = 0;
                 qDebug() << "m_curRow:" << m_curRow;
-                for (KexiDB::TableViewData::Iterator ii = m_data->constBegin();
+                for (KDbTableViewData::Iterator ii = m_data->constBegin();
                      ii != m_data->constEnd(); ++ii)
                 {
                     qDebug() << _i << (ulong)(*ii)
@@ -839,7 +839,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     KexiUtils::Setter<bool> acceptRowEditSetter(&m_inside_acceptEditor, false);
 
     QVariant newval;
-    KexiDB::Validator::Result res = KexiDB::Validator::Ok;
+    KDbValidator::Result res = KDbValidator::Ok;
     QString msg, desc;
     bool setNull = false;
 
@@ -850,7 +850,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     if (valueChanged) {
         if (!m_editor->valueIsValid()) {
             //used e.g. for date or time values - the value can be null but not necessary invalid
-            res = KexiDB::Validator::Error;
+            res = KDbValidator::Error;
             //! @todo allow displaying user-defined warning
             showEditorContextMessage(
                         m_editor,
@@ -861,9 +861,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         else if (m_editor->valueIsNull()) {//null value entered
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
                 qDebug() << "NULL NOT ALLOWED!";
-                res = KexiDB::Validator::Error;
-                msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-                      + "\n\n" + KexiDB::msgYouCanImproveData();
+                res = KDbValidator::Error;
+                msg = KDbValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+                      + "\n\n" + KDbTableViewData::messageYouCanImproveData();
                 desc = xi18n("The column's constraint is declared as NOT NULL (required).");
             } else {
                 qDebug() << "NULL VALUE WILL BE SET";
@@ -874,9 +874,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             if (m_editor->field()->hasEmptyProperty()) {
                 if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
                     qDebug() << "EMPTY NOT ALLOWED!";
-                    res = KexiDB::Validator::Error;
-                    msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-                          + "\n\n" + KexiDB::msgYouCanImproveData();
+                    res = KDbValidator::Error;
+                    msg = KDbValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+                          + "\n\n" + KDbTableViewData::messageYouCanImproveData();
                     desc = xi18n("The column's constraint is declared as NOT EMPTY (text should be filled).");
                 } else {
                     qDebug() << "EMPTY VALUE WILL BE SET";
@@ -884,9 +884,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             } else {
                 if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
                     qDebug() << "NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
-                    res = KexiDB::Validator::Error;
-                    msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-                          + "\n\n" + KexiDB::msgYouCanImproveData();
+                    res = KDbValidator::Error;
+                    msg = KDbValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+                          + "\n\n" + KDbTableViewData::messageYouCanImproveData();
                     desc = xi18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
                 } else {
                     qDebug() << "NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
@@ -898,12 +898,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         else {
             // try to fixup the value before accepting, e.g. trim the text
             if (!m_editor->fixup()) {
-                res = KexiDB::Validator::Error;
+                res = KDbValidator::Error;
             }
             if (m_errorMessagePopup) {
                 m_errorMessagePopup->animatedHide();
             }
-            if (res != KexiDB::Validator::Ok) {
+            if (res != KDbValidator::Ok) {
                 //! @todo display message related to failed fixup if needed
             }
             //! @todo after fixup we may want to apply validation rules again
@@ -916,12 +916,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         return false;
     }
 
-    KexiDB::TableViewColumn *currentTVColumn = column(m_curCol);
+    KDbTableViewColumn *currentTVColumn = column(m_curCol);
 
     //try to get the value entered:
-    if (res == KexiDB::Validator::Ok) {
+    if (res == KDbValidator::Ok) {
         if (   (!setNull && !valueChanged)
-            || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull()))
+            || (m_editor->field()->type() != KDbField::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull()))
         {
             qDebug() << "VALUE NOT CHANGED.";
             removeEditor();
@@ -936,7 +936,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
         //Check other validation rules:
         //1. check using validator
-        KexiDB::Validator *validator = currentTVColumn->validator();
+        KDbValidator *validator = currentTVColumn->validator();
         if (validator) {
             res = validator->check(currentTVColumn->field()->captionOrName(),
                                    newval, msg, desc);
@@ -944,19 +944,19 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     }
 
     //show the validation result if not OK:
-    if (res == KexiDB::Validator::Error) {
+    if (res == KDbValidator::Error) {
         if (!msg.isEmpty()) {
             if (desc.isEmpty())
                 KMessageBox::sorry(dynamic_cast<QWidget*>(this), msg);
             else
                 KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
         }
-    } else if (res == KexiDB::Validator::Warning) {
+    } else if (res == KDbValidator::Warning) {
         //! @todo: message
         KMessageBox::messageBox(dynamic_cast<QWidget*>(this), KMessageBox::Sorry, msg + "\n" + desc);
     }
 
-    if (res == KexiDB::Validator::Ok) {
+    if (res == KDbValidator::Ok) {
         //2. check using signal
         //send changes to the backend
         QVariant visibleValue;
@@ -974,7 +974,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             m_data->rowEditBuffer()->debug();
         } else {
             qDebug() << "------ CHANGE FAILED";
-            res = KexiDB::Validator::Error;
+            res = KDbValidator::Error;
 
             //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
             //if this is true, d->pEditor is NULL.
@@ -996,13 +996,13 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         }
     }
 
-    if (res == KexiDB::Validator::Ok) {
+    if (res == KDbValidator::Ok) {
         removeEditor();
         /*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol,
                              m_currentItem->at(realFieldNumber));
         /*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol);
     }
-    if (res == KexiDB::Validator::Ok) {
+    if (res == KDbValidator::Ok) {
         if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting) {
             m_inside_acceptEditor = false;
             acceptRowEdit();
@@ -1103,30 +1103,30 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
     }
 }
 
-KexiDB::RecordData* KexiDataAwareObjectInterface::insertEmptyRow(int pos)
+KDbRecordData* KexiDataAwareObjectInterface::insertEmptyRow(int pos)
 {
     if (!acceptRowEdit() || !isEmptyRowInsertingEnabled()
             || (pos != -1 && pos >= (rowCount() + (isInsertingEnabled() ? 1 : 0))))
         return 0;
 
-    KexiDB::RecordData *newRecord = m_data->createItem();
+    KDbRecordData *newRecord = m_data->createItem();
     insertItem(newRecord, pos);
     return newRecord;
 }
 
-void KexiDataAwareObjectInterface::beginInsertItem(KexiDB::RecordData *newRecord, int pos)
+void KexiDataAwareObjectInterface::beginInsertItem(KDbRecordData *newRecord, int pos)
 {
     Q_UNUSED(newRecord);
     Q_UNUSED(pos);
 }
 
-void KexiDataAwareObjectInterface::endInsertItem(KexiDB::RecordData *newRecord, int pos)
+void KexiDataAwareObjectInterface::endInsertItem(KDbRecordData *newRecord, int pos)
 {
     Q_UNUSED(newRecord);
     Q_UNUSED(pos);
 }
 
-void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int pos)
+void KexiDataAwareObjectInterface::insertItem(KDbRecordData *newRecord, int pos)
 {
     const bool changeCurrentRecord = pos == -1 || pos == m_curRow;
     if (changeCurrentRecord) {
@@ -1147,12 +1147,12 @@ void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int
     endInsertItem(newRecord, pos);
 }
 
-void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData* record, bool repaint)
+void KexiDataAwareObjectInterface::slotRowInserted(KDbRecordData* record, bool repaint)
 {
     slotRowInserted(record, m_data->indexOf(record), repaint);
 }
 
-void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record*/, uint pos, bool repaint)
+void KexiDataAwareObjectInterface::slotRowInserted(KDbRecordData * /*record*/, uint pos, bool repaint)
 {
     if (repaint && (int)pos < rowCount()) {
         updateWidgetContentsSize();
@@ -1241,13 +1241,13 @@ void KexiDataAwareObjectInterface::reloadData()
 
 int KexiDataAwareObjectInterface::columnType(int col)
 {
-    KexiDB::TableViewColumn* c = m_data ? column(col) : 0;
-    return c ? c->field()->type() : KexiDB::Field::InvalidType;
+    KDbTableViewColumn* c = m_data ? column(col) : 0;
+    return c ? c->field()->type() : KDbField::InvalidType;
 }
 
 bool KexiDataAwareObjectInterface::columnEditable(int col)
 {
-    KexiDB::TableViewColumn* c = m_data ? column(col) : 0;
+    KDbTableViewColumn* c = m_data ? column(col) : 0;
     return c ? (! c->isReadOnly()) : false;
 }
 
@@ -1314,8 +1314,8 @@ void KexiDataAwareObjectInterface::setEmptyRowInsertingEnabled(bool set)
     /*emit*/ reloadActions();
 }
 
-void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiDB::RecordData& record,
-        KexiDB::ResultInfo* /*result*/, bool repaint)
+void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KDbRecordData& record,
+        KDbResultInfo* /*result*/, bool repaint)
 {
     if (repaint) {
         m_rowWillBeDeleted = m_data->indexOf(&record);
@@ -1341,13 +1341,13 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
     }
 }
 
-bool KexiDataAwareObjectInterface::beforeDeleteItem(KexiDB::RecordData*)
+bool KexiDataAwareObjectInterface::beforeDeleteItem(KDbRecordData*)
 {
     //always return
     return true;
 }
 
-void KexiDataAwareObjectInterface::beginRemoveItem(KexiDB::RecordData *record, int pos)
+void KexiDataAwareObjectInterface::beginRemoveItem(KDbRecordData *record, int pos)
 {
     Q_UNUSED(record);
     Q_UNUSED(pos);
@@ -1358,7 +1358,7 @@ void KexiDataAwareObjectInterface::endRemoveItem(int pos)
     Q_UNUSED(pos);
 }
 
-bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
+bool KexiDataAwareObjectInterface::deleteItem(KDbRecordData* record)
 {
     if (!record || !beforeDeleteItem(record))
         return false;
@@ -1380,12 +1380,12 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
     return true;
 }
 
-KexiDB::TableViewColumn* KexiDataAwareObjectInterface::column(int column)
+KDbTableViewColumn* KexiDataAwareObjectInterface::column(int column)
 {
     return m_data->column(column);
 }
 
-bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol)
+bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KDbTableViewColumn& tvcol)
 {
     if (m_rowEditing >= 0 && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
         return m_data->rowEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
@@ -1396,10 +1396,10 @@ bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColu
 const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
                                                               bool useDefaultValueIfPossible)
 {
-    KexiDB::RecordData *currentItem = row < int(m_data->count()) ? m_data->at(row) : m_insertItem;
+    KDbRecordData *currentItem = row < int(m_data->count()) ? m_data->at(row) : m_insertItem;
     //qDebug() << m_insertItem << m_currentItem << currentItem;
     if (m_rowEditing >= 0 && row == m_rowEditing && m_data->rowEditBuffer()) {
-        KexiDB::TableViewColumn* tvcol = column(col);
+        KDbTableViewColumn* tvcol = column(col);
         if (tvcol->isDBAware()) {
             //get the stored value
             const int realFieldNumber = fieldNumberForColumn(col);
@@ -1433,7 +1433,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
 void KexiDataAwareObjectInterface::startEditOrToggleValue()
 {
     if (!isReadOnly() && columnEditable(m_curCol)) {
-        if (columnType(m_curCol) == KexiDB::Field::Boolean) {
+        if (columnType(m_curCol) == KDbField::Boolean) {
             boolToggled();
         } else {
             startEditCurrentCell();
@@ -1455,7 +1455,7 @@ void KexiDataAwareObjectInterface::boolToggled()
 void KexiDataAwareObjectInterface::slotDataDestroying()
 {
     m_data = 0;
-    m_itemIterator = KexiDB::TableViewData::Iterator();
+    m_itemIterator = KDbTableViewData::Iterator();
 }
 
 void KexiDataAwareObjectInterface::addNewRecordRequested()
@@ -1471,7 +1471,7 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
     // find first column that is not autoincrement
     int columnToSelect = 0;
     int i = 0;
-    foreach(KexiDB::TableViewColumn *col, *data()->columns()) {
+    foreach(KDbTableViewColumn *col, *data()->columns()) {
         if (!col->field()->isAutoIncrement()) {
             columnToSelect = i;
             break;
@@ -1622,7 +1622,7 @@ void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e)
     updateCell(m_curRow, m_curCol);
 }
 
-int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo)
+int KexiDataAwareObjectInterface::showErrorMessageForResult(const KDbResultInfo& resultInfo)
 {
     QWidget *thisWidget = dynamic_cast<QWidget*>(this);
     if (resultInfo.allowToDiscardChanges) {
@@ -1649,7 +1649,7 @@ void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
     if (!m_data)
         return;
     for (uint i = 0; i < m_data->columnCount(); i++) {
-        KexiDB::TableViewColumn* tvCol = m_data->column(i);
+        KDbTableViewColumn* tvCol = m_data->column(i);
         if (tvCol->columnInfo() && tvCol->columnInfo()->indexForVisibleLookupValue() != -1)
             // retrieve visible value from lookup field
             m_indicesForVisibleValues[ i ] = tvCol->columnInfo()->indexForVisibleLookupValue();
@@ -1783,7 +1783,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
         //we're at "insert" record, and searching forward: no chances to find something
         return false;
     }
-    KexiDB::TableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
+    KDbTableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
                                    ? m_data->constBegin() : m_itemIterator /*start from the current cell*/);
     if (startFromLastRowAndCol)
         it += (m_data->columnCount() - 1);
@@ -1841,7 +1841,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 
     // search
     const int prevRow = m_curRow;
-    KexiDB::RecordData *record = 0;
+    KDbRecordData *record = 0;
     while ((it != m_data->constEnd() && (record = *it))) {
         for (; forward ? col <= lastColumn : col >= lastColumn;
                 col = forward ? (col + 1) : (col - 1)) {
