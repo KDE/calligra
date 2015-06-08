@@ -214,7 +214,7 @@ void KFormDesigner::copyToClipboard(const QString& xml)
     cb->setMimeData(data);
 }
 
-void KFormDesigner::widgetsToXML(QDomDocument& doc, 
+void KFormDesigner::widgetsToXML(QDomDocument& doc,
     QHash<QByteArray, QByteArray>& containers,
     QHash<QByteArray, QByteArray>& parents,
     const Form& form, const QWidgetList &list)

@@ -264,9 +264,9 @@ void KexiFormView::initForm()
 
     setForm(
         new KFormDesigner::Form(
-            KexiFormManager::self()->library(), 
+            KexiFormManager::self()->library(),
             viewMode() == Kexi::DataViewMode ? KFormDesigner::Form::DataMode : KFormDesigner::Form::DesignMode,
-            *KexiMainWindowIface::global()->actionCollection(), 
+            *KexiMainWindowIface::global()->actionCollection(),
             *KexiFormManager::self()->widgetActionGroup())
     );
     form()->createToplevel(d->dbform, d->dbform);
@@ -1145,7 +1145,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 
         KFormDesigner::ObjectTreeItem *newWidgetItem
             = form()->objectTree()->hash()->value(insertCmd->widgetName());
-        KexiDBAutoField* newWidget = newWidgetItem 
+        KexiDBAutoField* newWidget = newWidgetItem
             ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
         widgetsToSelect.append(newWidget);
         KFormDesigner::PropertyCommandGroup *subGroup
@@ -1205,7 +1205,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     if (widgetsToSelect.count() > 1) {
         form()->selectWidget(0);
         foreach (QWidget *w, widgetsToSelect) {
-            form()->selectWidget(w, 
+            form()->selectWidget(w,
                 KFormDesigner::Form::AddToPreviousSelection | KFormDesigner::Form::DontRaise);
         }
     }

@@ -12,7 +12,7 @@ add_library(keximigrate_txt MODULE ${keximigrate_txtmigrate_PART_SRCS})
 
 
 
-target_link_libraries(keximigrate_txt  
+target_link_libraries(keximigrate_txt
     keximigrate
     kexiutils
 

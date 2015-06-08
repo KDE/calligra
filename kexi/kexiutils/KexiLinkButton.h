@@ -40,10 +40,10 @@ public:
     explicit KexiLinkButton(const QPixmap &pixmap, QWidget* parent = 0);
 
     virtual ~KexiLinkButton();
-    
+
     /*! If true, foreground color of the current palette is always used for painting
         the button's icon. This is done by replacing color.
-        The foreground color is QPalette::Text by default, and can be changed 
+        The foreground color is QPalette::Text by default, and can be changed
         using setForegroundRole().
         The icon is expected to be monochrome.
         Works well also after palette change.
@@ -55,7 +55,7 @@ public:
     bool usesForegroundColor() const;
 
     void setIcon(const QIcon &icon);
-    
+
 protected:
     virtual void changeEvent(QEvent* event);
 

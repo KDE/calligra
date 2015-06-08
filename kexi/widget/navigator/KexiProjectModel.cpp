@@ -33,7 +33,7 @@ class KexiProjectModel::Private {
 public:
     Private();
     ~Private();
-    
+
     //!Part class to display
     QString itemsPartClass;
     KexiProjectModelItem *rootItem;
@@ -44,7 +44,7 @@ public:
 
 KexiProjectModel::Private::Private() : rootItem(0), objectsCount(0)
 {
-    
+
 }
 
 KexiProjectModel::Private::~Private()
@@ -72,7 +72,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     d->itemsPartClass = itemsPartClass;
 
     d->rootItem = new KexiProjectModelItem(prj ? prj->data()->databaseName() : QString());
-    
+
     KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
     if (!plist)
         return;
@@ -80,7 +80,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
-        
+
         if (!d->itemsPartClass.isEmpty() && info->partClass() != d->itemsPartClass)
             continue;
 
@@ -179,7 +179,7 @@ QModelIndex KexiProjectModel::parent(const QModelIndex& index) const
 
      if (!parentItem)
          return QModelIndex();
-     
+
      if (parentItem == d->rootItem)
          return QModelIndex();
 
@@ -199,7 +199,7 @@ QModelIndex KexiProjectModel::index(int row, int column, const QModelIndex& pare
     } else {
         parentItem = static_cast<KexiProjectModelItem*>(parent.internalPointer());
     }
-    
+
     KexiProjectModelItem *childItem = parentItem->child(row);
     if (childItem) {
         return createIndex(row, column, childItem);
@@ -283,7 +283,7 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 {
     //qDebug() << item.name();
     QModelIndex idx;
-  
+
     KexiProjectModelItem *parent = modelItemFromName(item.partClass());
 
     if (parent) {
@@ -313,14 +313,14 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
     QModelIndex idx;
     KexiProjectModelItem *mitm = modelItemFromItem(item);
     KexiProjectModelItem *parent =0;
-    
+
     if (mitm) {
         //qDebug() << "Got model item from item";
         parent = mitm->parent();
     } else {
         //qDebug() << "Unable to get model item from item";
     }
-    
+
     if (parent) {
         idx = indexFromItem(parent);
         beginRemoveRows(idx, 0,0);

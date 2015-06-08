@@ -87,7 +87,7 @@ void KexiContextMessage::addAction(QAction* action, ButtonAlignment alignment)
         d->leftButtonAlignment.insert(action);
     }
 }
-    
+
 QList<QAction*> KexiContextMessage::actions() const
 {
     return d->actions;
@@ -339,7 +339,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
             return true;
         }
     }
-    
+
     if (watched == d->page && event->type() == QEvent::Resize) {
         //qDebug() << "RESIZE:" << watched;
         if (d->trackedWidget) {
@@ -378,7 +378,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Drop:
     case QEvent::EnabledChange:
     case QEvent::Enter:
-#ifdef QT_KEYPAD_NAVIGATION 
+#ifdef QT_KEYPAD_NAVIGATION
     case QEvent::EnterEditFocus:
     case QEvent::LeaveEditFocus:
 #endif

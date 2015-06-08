@@ -65,7 +65,7 @@ class KexiProjectDatabaseSelectionPage : public KexiAssistantPage
 public:
     explicit KexiProjectDatabaseSelectionPage(KexiOpenProjectAssistant* parent);
     ~KexiProjectDatabaseSelectionPage();
-    
+
     bool setConnection(KDbConnectionData* data);
 
     KexiProjectSelectorWidget* projectSelector;

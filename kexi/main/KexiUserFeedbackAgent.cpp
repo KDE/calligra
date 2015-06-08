@@ -64,9 +64,9 @@ public:
      , redirectChecked(false)
     {
     }
-    
+
     void updateData();
-    
+
     KConfigGroup configGroup;
     KexiUserFeedbackAgent::Areas areas;
     KexiUserFeedbackAgent::Areas sentDataInThisSession;
@@ -222,16 +222,16 @@ void KexiUserFeedbackAgent::Private::updateData()
     SYSTEM_INFO sysInfo;
     char* releaseStr;
     releaseStr = new char[6]; // "xx.xx\0"
-    
+
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&versionInfo);
     GetSystemInfo(&sysInfo);
-    
+
     snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
     ADD("os_release", releaseStr, SystemInfoArea);
-    
+
     delete [6] releaseStr;
-    
+
     switch(sysInfo.wProcessorArchitecture) {
     case PROCESSOR_ARCHITECTURE_AMD64:
         ADD("os_machine", "x86_64", SystemInfoArea);
@@ -281,7 +281,7 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
     if (d->configGroup.readEntry("RegionalSettings", false)) {
         d->areas |= RegionalSettingsArea;
     }
-    
+
     // load or create uid
     QString uidString = d->configGroup.readEntry("Uid", QString());
     d->uid = QUuid(uidString);
@@ -371,7 +371,7 @@ void KexiUserFeedbackAgent::sendData()
         }
     }
     qDebug() << postData;
-    
+
     KIO::Job* sendJob = KIO::storedHttpPost(postData, QUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");

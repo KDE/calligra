@@ -27,7 +27,7 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <kdatepicker.h>
 
-//! @short A db-aware DatePicker 
+//! @short A db-aware DatePicker
 class KEXIFORMUTILS_EXPORT KexiDBDatePicker : public KDatePicker,
                                               public KexiFormDataItemInterface,
                                               public KFormDesigner::FormWidgetInterface

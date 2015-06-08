@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
-   
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -59,7 +59,7 @@ static QString openedString(const QDateTime& _opened)
     const KDateTime opened = KDateTime(_opened);
     if (!opened.isValid() || opened >= cur)
         return QString();
-    
+
     const int days = opened.daysTo(cur);
     if (days <= 1 && opened.secsTo(cur) < 24*60*60) {
         const int minutes = opened.secsTo(cur) / 60;

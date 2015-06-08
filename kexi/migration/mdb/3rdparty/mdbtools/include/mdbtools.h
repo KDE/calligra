@@ -151,7 +151,7 @@ enum {
 enum {
 	MDB_IDX_UNIQUE = 0x01,
 	MDB_IDX_IGNORENULLS = 0x02,
-	MDB_IDX_REQUIRED = 0x08 
+	MDB_IDX_REQUIRED = 0x08
 };
 
 #define IS_JET4(mdb) (mdb->f->jet_version==MDB_VER_JET4)
@@ -173,7 +173,7 @@ typedef struct {
 	unsigned char needs_scale;
 	unsigned char needs_quotes;
 } MdbBackendType;
-		
+
 typedef struct {
 	 MdbBackendType *types_table;
 } MdbBackend;
@@ -289,9 +289,9 @@ typedef struct {
 	GPtrArray	*idx_sarg_cache;
 	unsigned char   is_fixed;
 	int		query_order;
-	/* col_num is the current column order, 
+	/* col_num is the current column order,
 	 * does not include deletes */
-	int		col_num;	
+	int		col_num;
 	int		cur_value_start;
 	int 		cur_value_len;
 	/* MEMO/OLE readers */
@@ -304,7 +304,7 @@ typedef struct {
 	/* info needed for handling deleted/added columns */
 	int 		fixed_offset;
 	unsigned int	var_col_num;
-	/* row_col_num is the row column number order, 
+	/* row_col_num is the row column number order,
 	 * including deleted columns */
 	int		row_col_num;
 } MdbColumn;
@@ -323,7 +323,7 @@ typedef struct {
 	int start_pos;
 	int offset;
 	int len;
-	guint16 idx_starts[2000];	
+	guint16 idx_starts[2000];
 	unsigned char cache_value[256];
 } MdbIndexPage;
 

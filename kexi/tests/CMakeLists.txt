@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
     If (KEXI_MOBILE)
-    
+
     else()
         add_subdirectory( newapi )
         add_subdirectory( migration )

@@ -400,7 +400,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
             }
             m_preRenderer->setSourceData(reportData);
-            
+
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
 
@@ -416,7 +416,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 if (m_functions) {
                     delete m_functions;
                 }
-                
+
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
@@ -425,7 +425,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 qDebug() << "=======================================Deleting old document";
                 delete m_reportDocument;
             }
-            
+
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
                 m_pageCount = m_reportDocument->pages();

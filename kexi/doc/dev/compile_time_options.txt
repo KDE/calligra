@@ -19,8 +19,8 @@ within Table Designer) will be hidded for Kexi, to avoid user confusion.
 * KEXI_SHOW_UNIMPLEMENTED
 Type: defined/undefined
 Default: undefined
-Description: If defined, forces to show menu entries and dialogs just to give 
-impression about development plans of Kexi Team. 
+Description: If defined, forces to show menu entries and dialogs just to give
+impression about development plans of Kexi Team.
 Only recommended for test/development versions.
 
 * KEXI_SCRIPTS_SUPPORT
@@ -37,8 +37,8 @@ Default: undefined
 * KEXI_NO_MIGRATION
 Type: defined/undefined
 Default: undefined
-Description: If defined, data/project migration support for Kexi 
-(available in Tools>Migration menu) will be disabled; else: support will 
+Description: If defined, data/project migration support for Kexi
+(available in Tools>Migration menu) will be disabled; else: support will
 be enabled.
 
 * KEXI_NO_SUBFORM
@@ -49,22 +49,22 @@ Description: If defined, subform widget will not be available
 * KEXI_NO_AUTOFIELD_WIDGET
 Type: defined/undefined, temporary
 Default: undefined for 1.x, defined for 2.x
-Description: If defined, autofield (KexiDBFieldEdit) widget will not be available, 
+Description: If defined, autofield (KexiDBFieldEdit) widget will not be available,
 nor dragging fields from "data source" will be available
 
 * KEXI_DEBUG_GUI
 Type: defined/undefined
 Default: defined (but should be undefined for final releases)
-Description: If defined, showInternalDebugger=true (in [General] group) 
-can be specified to display KexiDB Debugger. 
+Description: If defined, showInternalDebugger=true (in [General] group)
+can be specified to display KexiDB Debugger.
 In the future the window will be probably used for debugging other features
 like scripts or macros. This option is useful for Kexi Developers.
 
-Also shows additional "Show Form UI Code" action in form's design mode. 
-This is useful for debugging: after executing the action, 
-a dialog with current (after changes) and original form's 
-GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
-and look for possible problems. The "current" XML code will be saved when "save" 
+Also shows additional "Show Form UI Code" action in form's design mode.
+This is useful for debugging: after executing the action,
+a dialog with current (after changes) and original form's
+GUI XML code will be presented in a tabbed dialog, so you can compare what changed
+and look for possible problems. The "current" XML code will be saved when "save"
 action is executed. TODO: it will be merged with Internal Debuger window.
 
 * KEXI_PROJECT_TEMPLATES

@@ -320,7 +320,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
             qWarning() << "id=" << id << "stored=" << stored
-                << ": res!=true || recordData.size()<4; res==" << res.toString() 
+                << ": res!=true || recordData.size()<4; res==" << res.toString()
                 << "recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();
         }
