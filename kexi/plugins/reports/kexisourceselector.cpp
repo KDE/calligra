@@ -54,7 +54,7 @@ public:
 #endif
     }
 
-    KexiDB::Connection *conn;
+    KDbConnection *conn;
 
     QVBoxLayout *layout;
     QComboBox *sourceType;

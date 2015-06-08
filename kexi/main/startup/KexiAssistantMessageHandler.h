@@ -24,7 +24,7 @@
 
 class KexiContextMessageWidget;
 
-class KexiAssistantMessageHandler : public KexiDB::MessageHandler
+class KexiAssistantMessageHandler : public KDbMessageHandler
 {
 public:
     KexiAssistantMessageHandler();
@@ -32,12 +32,12 @@ public:
     ~KexiAssistantMessageHandler();
 
 protected:
-    //! Implementation for KexiDB::MessageHandler.
+    //! Implementation for KDbMessageHandler.
     virtual void showErrorMessageInternal(const QString &msg,
                                           const QString &details = QString());
 
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+    //! Implementation for KDbMessageHandler.
+    virtual void showErrorMessageInternal(KDbObject *obj, const QString& msg = QString());
 
     virtual QWidget* calloutWidget() const = 0;
 

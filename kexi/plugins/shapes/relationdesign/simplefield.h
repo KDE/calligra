@@ -29,7 +29,7 @@ class SimpleField
 {
 public:
     SimpleField();
-    explicit SimpleField(KexiDB::QueryColumnInfo *);
+    explicit SimpleField(KDbQueryColumnInfo *);
     void save(KoXmlWriter &writer);
 
     QString name;

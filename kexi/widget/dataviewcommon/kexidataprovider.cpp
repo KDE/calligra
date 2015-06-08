@@ -86,7 +86,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
     }
 }
 
-void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
+void KexiFormDataProvider::fillDataItems(KDbRecordData& record, bool cursorAtNewRow)
 {
     qDebug() << "record.count=" << record.count()
              << "\nRECORD=";
@@ -136,8 +136,8 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
     if (!m_duplicatedItems) {
         //build (once) a set of duplicated data items (having the same fields assigned)
         //so we can later check if an item is duplicated with a cost of o(1)
-        QHash<KexiDB::Field*, int> tmpDuplicatedItems;
-        QHash<KexiDB::Field*, int>::const_iterator it_dup;
+        QHash<KDbField*, int> tmpDuplicatedItems;
+        QHash<KDbField*, int>::const_iterator it_dup;
         foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
             if (!dataItemIface->columnInfo() || !dataItemIface->columnInfo()->field)
                 continue;
@@ -150,11 +150,11 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
                 count = it_dup.value();
             tmpDuplicatedItems.insert(dataItemIface->columnInfo()->field, ++count);
         }
-        m_duplicatedItems = new QSet<KexiDB::Field*>();
+        m_duplicatedItems = new QSet<KDbField*>();
         for (it_dup = tmpDuplicatedItems.constBegin(); it_dup != tmpDuplicatedItems.constEnd(); ++it_dup) {
             if (it_dup.value() > 1) {
                 m_duplicatedItems->insert(it_dup.key());
-                qDebug() << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name()
+                qDebug() << "duplicated item: " << static_cast<KDbField*>(it_dup.key())->name()
                     << " (" << it_dup.value() << " times)";
             }
         }
@@ -181,24 +181,24 @@ bool KexiFormDataProvider::cursorAtNewRow() const
 }
 
 void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSources,
-        KexiDB::QuerySchema* query)
+        KDbQuerySchema* query)
 {
     //fill m_fieldNumbersForDataItems mapping from data item to field number
     //(needed for fillDataItems)
-    KexiDB::QueryColumnInfo::Vector fieldsExpanded;
+    KDbQueryColumnInfo::Vector fieldsExpanded;
 // uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
 
     if (query) {
-        fieldsExpanded = query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields);
+        fieldsExpanded = query->fieldsExpanded(KDbQuerySchema::WithInternalFields);
 //  dataFieldsCount = fieldsExpanded.count();
-        QHash<KexiDB::QueryColumnInfo*, int> columnsOrder(query->columnsOrder());
-        for (QHash<KexiDB::QueryColumnInfo*, int>::const_iterator it
+        QHash<KDbQueryColumnInfo*, int> columnsOrder(query->columnsOrder());
+        for (QHash<KDbQueryColumnInfo*, int>::const_iterator it
                 = columnsOrder.constBegin(); it != columnsOrder.constEnd(); ++it) {
             qDebug() << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
                 << it.value();
         }
         foreach(KexiFormDataItemInterface *item, m_dataItems) {
-            KexiDB::QueryColumnInfo* ci = query->columnInfo(item->dataSource());
+            KDbQueryColumnInfo* ci = query->columnInfo(item->dataSource());
             int index = ci ? columnsOrder[ ci ] : -1;
             qDebug() << "query->columnsOrder()[ " << (ci ? ci->field->name() : QString()) << " ] = " << index
                 << " (dataSource: " << item->dataSource() << ", name="
@@ -232,7 +232,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         }
         uint fieldNumber = m_fieldNumbersForDataItems[ item ];
         if (query) {
-            KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
+            KDbQueryColumnInfo *ci = fieldsExpanded[fieldNumber];
             item->setColumnInfo(ci);
             qDebug() << "- item=" << dynamic_cast<QObject*>(item)->objectName()
                 << " dataSource=" << item->dataSource()
@@ -240,7 +240,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
             const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
             if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)fieldsExpanded.count()) {
                 //there's lookup column defined: set visible column as well
-                KexiDB::QueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
+                KDbQueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
                 if (visibleColumnInfo) {
                     item->setVisibleColumnInfo(visibleColumnInfo);
 

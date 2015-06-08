@@ -26,10 +26,6 @@
 
 #include <KDbObject>
 
-namespace KexiDB
-{
-}
-
 namespace KexiPart
 {
 class Info;
@@ -46,7 +42,7 @@ typedef QHash<QString, Part*> PartDict;
  *
  * It creates instances only when needed.
  */
-class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
+class KEXICORE_EXPORT Manager : public QObject, public KDbObject
 {
     Q_OBJECT
 
@@ -109,7 +105,7 @@ private:
     Private* const d;
 
     friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
-    friend KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler*, const QString&);
+    friend KexiInternalPart* KexiInternalPart::part(KDbMessageHandler*, const QString&);
 };
 
 }

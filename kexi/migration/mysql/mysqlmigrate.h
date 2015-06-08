@@ -36,17 +36,17 @@ public:
     explicit MySQLMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~MySQLMigrate();
 
-    KexiDB::Field::Type type(const QString& table, const MYSQL_FIELD* t);
+    KDbField::Type type(const QString& table, const MYSQL_FIELD* t);
 
-    KexiDB::Field::Type examineBlobField(const QString& table,
+    KDbField::Type examineBlobField(const QString& table,
                                          const MYSQL_FIELD* fld);
 
     QStringList examineEnumField(const QString& table,
                                  const MYSQL_FIELD* fld);
 
-    void getConstraints(int mysqlConstraints, KexiDB::Field* fld);
+    void getConstraints(int mysqlConstraints, KDbField* fld);
 
-    void getOptions(int flags, KexiDB::Field* fld);
+    void getOptions(int flags, KDbField* fld);
 
 protected:
     //! Driver specific function to return table names
@@ -54,7 +54,7 @@ protected:
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -66,10 +66,10 @@ protected:
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord);
+                                            KDbRecordData& data, bool &firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+                               KDbConnection *destConn, KDbTableSchema* dstTable);
 
     virtual bool drv_progressSupported() {
         return true;

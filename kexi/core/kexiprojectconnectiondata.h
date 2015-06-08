@@ -29,12 +29,12 @@ class QDomDocument;
 /**
  * This class aims to provide
  * methods to store/load database settings
- * especially for file based engines. Extends KexiDB::ConnectionData with
+ * especially for file based engines. Extends KDbConnectionData with
  * additional information (selected driver name and database name)
  * that allows fully-automatic reconnect eg. on next application startup.
  */
 
-class KEXICORE_EXPORT KexiProjectConnectionData: public KexiDB::ConnectionData
+class KEXICORE_EXPORT KexiProjectConnectionData: public KDbConnectionData
 {
 public:
 

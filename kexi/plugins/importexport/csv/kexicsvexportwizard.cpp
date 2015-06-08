@@ -69,10 +69,10 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     QString captionOrName;
     KexiGUIMessageHandler msgh(this);
     if (m_options.useTempQuery) {
-        m_tableOrQuery = new KexiDB::TableOrQuerySchema(KexiMainWindowIface::global()->unsavedQuery(options.itemId));
+        m_tableOrQuery = new KDbTableOrQuerySchema(KexiMainWindowIface::global()->unsavedQuery(options.itemId));
         captionOrName = KexiMainWindowIface::global()->project()->dbConnection()->querySchema(m_options.itemId)->captionOrName();
     } else {
-        m_tableOrQuery = new KexiDB::TableOrQuerySchema(
+        m_tableOrQuery = new KDbTableOrQuerySchema(
             KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
         captionOrName = m_tableOrQuery->captionOrName();
     }
@@ -100,8 +100,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     }
 
     QString text = "\n" + captionOrName;
-    int m_rowCount = KexiDB::rowCount(*m_tableOrQuery);
-    int columns = KexiDB::fieldCount(*m_tableOrQuery);
+    int m_rowCount = KDb::recordCount(*m_tableOrQuery);
+    int columns = KDb::fieldCount(*m_tableOrQuery);
     text += "\n";
     if (m_rowCount > 0)
         text += xi18n("(rows: %1, columns: %2)", m_rowCount, columns);

@@ -26,26 +26,20 @@
 
 class QDragMoveEvent;
 class QDropEvent;
+class KProperty;
+class KPropertySet;
+class KDbConnection;
+class KDbQuerySchema;
+class KDbTableSchema;
+class KDbTableOrQuerySchema;
+class KDbResultInfo;
+class KDbRecordData;
 class KexiRelationsView;
 class KexiRelationsTableContainer;
 class KexiRelationsConnection;
-
 namespace KexiPart
 {
 class Item;
-}
-
-class KProperty;
-class KPropertySet;
-
-namespace KexiDB
-{
-class Connection;
-class QuerySchema;
-class TableSchema;
-class TableOrQuerySchema;
-class ResultInfo;
-class RecordData;
 }
 
 //! Design view of the Query Designer
@@ -70,7 +64,7 @@ protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
@@ -97,10 +91,10 @@ protected:
     /*! Helper: allocates and initializes new table view's row. Doesn't insert it, just returns.
      \a tableName and \a fieldName should be provided.
      \a visible flag sets value for "Visible" column. */
-    KexiDB::RecordData* createNewRow(const QString& tableName, const QString& fieldName,
+    KDbRecordData* createNewRow(const QString& tableName, const QString& fieldName,
                                      bool visible) const;
 
-    KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
+    KDbBaseExpr* parseExpressionString(const QString& fullString, int& token,
                                             bool allowRelationalOperator);
 
     /*! @internal generates smallest unique alias */
@@ -109,22 +103,22 @@ protected:
     void updatePropertiesVisibility(KPropertySet& buf);
 
 protected Q_SLOTS:
-    void slotDragOverTableRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
-    void slotDroppedAtRow(KexiDB::RecordData *record, int row,
-                          QDropEvent *ev, KexiDB::RecordData*& newRecord);
+    void slotDragOverTableRow(KDbRecordData *record, int row, QDragMoveEvent* e);
+    void slotDroppedAtRow(KDbRecordData *record, int row,
+                          QDropEvent *ev, KDbRecordData*& newRecord);
     //! Reaction on appending a new item after deleting one
     void slotNewItemAppendedForAfterDeletingInSpreadSheetMode();
-    void slotTableAdded(KexiDB::TableSchema &t);
-    void slotTableHidden(KexiDB::TableSchema &t);
+    void slotTableAdded(KDbTableSchema &t);
+    void slotTableHidden(KDbTableSchema &t);
 
     //! Called before cell change in tableview.
-    void slotBeforeCellChanged(KexiDB::RecordData* record, int colnum,
-                               QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeCellChanged(KDbRecordData* record, int colnum,
+                               QVariant& newValue, KDbResultInfo* result);
 
-    void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
+    void slotRowInserted(KDbRecordData* record, uint row, bool repaint);
     void slotTablePositionChanged(KexiRelationsTableContainer*);
     void slotAboutConnectionRemove(KexiRelationsConnection*);
-    void slotAppendFields(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void slotAppendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
     /*! Loads layout of relation GUI diagram. */
     bool loadLayout();
@@ -132,18 +126,18 @@ protected Q_SLOTS:
     /*! Stores layout of relation GUI diagram. */
     bool storeLayout();
 
-    void showTablesForQuery(KexiDB::QuerySchema *query);
+    void showTablesForQuery(KDbQuerySchema *query);
     //! @internal
     void showFieldsOrRelationsForQueryInternal(
-        KexiDB::QuerySchema *query, bool showFields, bool showRelations, KexiDB::ResultInfo& result);
+        KDbQuerySchema *query, bool showFields, bool showRelations, KDbResultInfo& result);
     //! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, true)
-    void showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
+    void showFieldsAndRelationsForQuery(KDbQuerySchema *query, KDbResultInfo& result);
     //! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, false)
-    void showFieldsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
+    void showFieldsForQuery(KDbQuerySchema *query, KDbResultInfo& result);
     //! convenience method equal to showFieldsOrRelationsForQueryInternal(query, false, true)
-    void showRelationsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
+    void showRelationsForQuery(KDbQuerySchema *query, KDbResultInfo& result);
 
-    void addConnection(KexiDB::Field *masterField, KexiDB::Field *detailsField);
+    void addConnection(KDbField *masterField, KDbField *detailsField);
 
     void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
@@ -152,23 +146,23 @@ protected Q_SLOTS:
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 
 private:
-    void slotBeforeColumnCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeColumnCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeTableCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeTableCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeVisibleCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeVisibleCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeTotalsCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeTotalsCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeSortingCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeSortingCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeCriteriaCellChanged(KexiDB::RecordData *record,
-        QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeCriteriaCellChanged(KDbRecordData *record,
+        QVariant& newValue, KDbResultInfo* result);
 
     class Private;
     Private * const d;

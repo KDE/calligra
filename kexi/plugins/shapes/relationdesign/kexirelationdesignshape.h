@@ -23,12 +23,9 @@
 #include <KoFrameShape.h>
 #include "simplefield.h"
 
-namespace KexiDB
-{
-class Connection;
-class ConnectionData;
-class TableOrQuerySchema;
-}
+class KDbConnection;
+class KDbConnectionData;
+class KDbTableOrQuerySchema;
 
 #define KEXIRELATIONDEISGNSHAPEID "KexiRelationDesignShape"
 
@@ -47,12 +44,12 @@ public:
 
     virtual void setSize(const QSizeF &size);
 
-    void setConnectionData(KexiDB::ConnectionData *);
-    KexiDB::ConnectionData *connectionData();
+    void setConnectionData(KDbConnectionData *);
+    KDbConnectionData *connectionData();
 
     void setRelation(const QString &);
 
-    KexiDB::Connection *connection();
+    KDbConnection *connection();
 
 protected:
     // reimplemented
@@ -67,9 +64,9 @@ private:
     QVector<SimpleField *> m_fieldData;
 
     //Other data
-    KexiDB::ConnectionData *m_connectionData;
-    KexiDB::Connection *m_connection;
-    KexiDB::TableOrQuerySchema *m_relationSchema;
+    KDbConnectionData *m_connectionData;
+    KDbConnection *m_connection;
+    KDbTableOrQuerySchema *m_relationSchema;
 
 };
 

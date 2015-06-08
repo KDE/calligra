@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     //Text File Test
     KexiMigration::KexiMigrate *m = mm.driver("Text");
 
-    KexiDB::ConnectionData cd;
+    KDbConnectionData cd;
     
     cd.setFileName("/home/piggz/tabdata.txt");
     
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     
     m->connectSource();
     
-    KexiDB::TableSchema ts;
+    KDbTableSchema ts;
     
     if (!m->readTableSchema("tabdata.txt", ts))
     {
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     k->tableNames(tn);
     
     qDebug() << tn;
-    KexiDB::TableSchema ts2;
+    KDbTableSchema ts2;
     if (!k->readTableSchema("Names", ts2))
     {
       qDebug() << "Unable to read schema";

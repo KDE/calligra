@@ -71,10 +71,10 @@ public:
         installEventFilter(this);
         setBottomMarginInternal(0);
     }
-    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
+    virtual void setData(KDbTableViewData *data, bool owner = true) {
         KexiTableScrollArea::setData(data, owner);
     }
-    bool setData(KexiDB::Cursor *cursor) {
+    bool setData(KDbCursor *cursor) {
         return KexiDataTableScrollArea::setData(cursor);
     }
 };
@@ -96,11 +96,11 @@ public:
     }
 
     KexiComboBoxPopup_KexiTableView *tv;
-    KexiDB::Field *int_f; //!< @todo remove this -temporary
-    KexiDB::QuerySchema* privateQuery;
+    KDbField *int_f; //!< @todo remove this -temporary
+    KDbQuerySchema* privateQuery;
     int max_rows;
     //! Columns that should be kept visible; the others should be hidden.
-    //! Used when query is used as the row source type (KexiDB::LookupFieldSchema::RowSource::Query).
+    //! Used when query is used as the row source type (KDbLookupFieldSchema::RowSource::Query).
     //! We're doing this in this case because it's hard to alter the query to remove columns.
     QList<uint> visibleColumnsToShow;
 };
@@ -109,7 +109,7 @@ public:
 
 const int KexiComboBoxPopup::defaultMaxRows = 8;
 
-KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column)
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KDbTableViewColumn &column)
         : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
@@ -118,7 +118,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &c
     setData(&column, 0);
 }
 
-KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KDbField &field)
         : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
@@ -149,17 +149,17 @@ void KexiComboBoxPopup::init()
     d->tv->setLineWidth(0);
     installEventFilter(this);
 
-    connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*,int,int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
+    connect(d->tv, SIGNAL(itemReturnPressed(KDbRecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KDbRecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*,int,int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
+    connect(d->tv, SIGNAL(itemMouseReleased(KDbRecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KDbRecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*,int,int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
+    connect(d->tv, SIGNAL(itemDblClicked(KDbRecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KDbRecordData*,int,int)));
 }
 
-void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *field)
+void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
 {
     d->visibleColumnsToShow.clear();
     if (column && !field)
@@ -176,7 +176,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         return;
     }
     // case 2: lookup field
-    KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
+    KDbLookupFieldSchema *lookupFieldSchema = 0;
     if (field->table())
         lookupFieldSchema = field->table()->lookupFieldSchema(*field);
     delete d->privateQuery;
@@ -185,10 +185,10 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
     if (!visibleColumns.isEmpty() && lookupFieldSchema->boundColumn() >= 0) {
         const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
-        KexiDB::Cursor *cursor = 0;
+        KDbCursor *cursor = 0;
         switch (lookupFieldSchema->rowSource().type()) {
-        case KexiDB::LookupFieldSchema::RowSource::Table: {
-            KexiDB::TableSchema *lookupTable
+        case KDbLookupFieldSchema::RowSource::Table: {
+            KDbTableSchema *lookupTable
             = field->table()->connection()->tableSchema(lookupFieldSchema->rowSource().name());
             if (!lookupTable)
 //! @todo errmsg
@@ -197,19 +197,19 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
                 /*qDebug() << "--- Orig query: ";
                 lookupTable->query()->debug();
                 qDebug() << field->table()->connection()->selectStatement(*lookupTable->query());*/
-                d->privateQuery = new KexiDB::QuerySchema(*lookupTable->query());
+                d->privateQuery = new KDbQuerySchema(*lookupTable->query());
             } else {
                 // Create a simple SELECT query that contains only needed columns,
                 // that is visible and bound ones. The bound columns are placed on the end.
                 // Don't do this if one or more visible or bound columns cannot be found.
-                const KexiDB::QueryColumnInfo::Vector fieldsExpanded(lookupTable->query()->fieldsExpanded());
-                d->privateQuery = new KexiDB::QuerySchema;
+                const KDbQueryColumnInfo::Vector fieldsExpanded(lookupTable->query()->fieldsExpanded());
+                d->privateQuery = new KDbQuerySchema;
                 bool columnsFound = true;
                 QList<uint> visibleAndBoundColumns = visibleColumns;
                 visibleAndBoundColumns.append(lookupFieldSchema->boundColumn());
                 qDebug() << visibleAndBoundColumns;
                 foreach (uint index, visibleAndBoundColumns) {
-                    KexiDB::QueryColumnInfo *columnInfo = fieldsExpanded.value(index);
+                    KDbQueryColumnInfo *columnInfo = fieldsExpanded.value(index);
                     if (columnInfo && columnInfo->field) {
                         d->privateQuery->addField(columnInfo->field);
                     }
@@ -233,8 +233,8 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
             }
             break;
         }
-        case KexiDB::LookupFieldSchema::RowSource::Query: {
-            KexiDB::QuerySchema *lookupQuery
+        case KDbLookupFieldSchema::RowSource::Query: {
+            KDbQuerySchema *lookupQuery
             = field->table()->connection()->querySchema(lookupFieldSchema->rowSource().name());
             if (!lookupQuery)
 //! @todo errmsg
@@ -243,7 +243,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
                 /*qDebug() << "--- Orig query: ";
                 lookupQuery->debug();
                 qDebug() << field->table()->connection()->selectStatement(*lookupQuery);*/
-                d->privateQuery = new KexiDB::QuerySchema(*lookupQuery);
+                d->privateQuery = new KDbQuerySchema(*lookupQuery);
             } else {
                 d->visibleColumnsToShow = visibleColumns;
                 qSort(d->visibleColumnsToShow); // because we will depend on a sorted list
@@ -255,33 +255,33 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         }
         if (multipleLookupColumnJoined && d->privateQuery) {
             // append column computed using multiple columns
-            const KexiDB::QueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
+            const KDbQueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
             uint fieldsExpandedSize(fieldsExpanded.size());
-            KexiDB::BaseExpr *expr = 0;
+            KDbBaseExpr *expr = 0;
             QList<uint>::ConstIterator it(visibleColumns.constBegin());
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
-                KexiDB::QueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
+                KDbQueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
                 if (!ci) {
                     qWarning() << *it << ">= fieldsExpandedSize";
                     continue;
                 }
-                KexiDB::VariableExpr *fieldExpr
-                = new KexiDB::VariableExpr(ci->field->table()->name() + "." + ci->field->name());
+                KDbVariableExpr *fieldExpr
+                = new KDbVariableExpr(ci->field->table()->name() + "." + ci->field->name());
                 fieldExpr->field = ci->field;
                 fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
                 if (expr) {
 //! @todo " " separator hardcoded...
 //! @todo use SQL sub-parser here...
-                    KexiDB::ConstExpr *constExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, " ");
-                    expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
-                    expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
+                    KDbConstExpr *constExpr = new KDbConstExpr(CHARACTER_STRING_LITERAL, " ");
+                    expr = new KDbBinaryExpr(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
+                    expr = new KDbBinaryExpr(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
                 } else
                     expr = fieldExpr;
             }
             expr->debug();
             kDebug() << expr->toString(0);
 
-            KexiDB::Field *f = new KexiDB::Field();
+            KDbField *f = new KDbField();
             f->setExpression(expr);
             d->privateQuery->addField(f);
 #if 0 //does not work yet
@@ -310,18 +310,18 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
         return;
     }
 
-    qWarning() << "no column relatedData \n - moving to setData(KexiDB::Field &)";
+    qWarning() << "no column relatedData \n - moving to setData(KDbField &)";
 
     // case 3: enum hints
     d->tv->setColumnsResizeEnabled(true);   //only needed when using single column
 
-//! @todo THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
-    d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
-    KexiDB::TableViewData *data = new KexiDB::TableViewData();
-    data->addColumn(new KexiDB::TableViewColumn(*d->int_f));
+//! @todo THIS IS PRIMITIVE: we'd need to employ KDbReference here!
+    d->int_f = new KDbField(field->name(), KDbField::Text);
+    KDbTableViewData *data = new KDbTableViewData();
+    data->addColumn(new KDbTableViewColumn(*d->int_f));
     const QVector<QString> hints(field->enumHints());
     for (int i = 0; i < hints.size(); i++) {
-        KexiDB::RecordData *record = data->createItem();
+        KDbRecordData *record = data->createItem();
         (*record)[0] = QVariant(hints[i]);
         qDebug() << "added: '" << hints[i] << "'";
         data->append(record);
@@ -330,7 +330,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
     updateSize();
 }
 
-void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
+void KexiComboBoxPopup::setDataInternal(KDbTableViewData *data, bool owner)
 {
     if (d->tv->data())
         d->tv->data()->disconnect(this);
@@ -360,7 +360,7 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     else {
         // row source type is Query
         // Set width to 0 and disable resizing of columns that shouldn't be visible
-        const KexiDB::QueryColumnInfo::Vector fieldsExpanded(d->tv->cursor()->query()->fieldsExpanded());
+        const KDbQueryColumnInfo::Vector fieldsExpanded(d->tv->cursor()->query()->fieldsExpanded());
         QList<uint>::ConstIterator visibleColumnsToShowIt = d->visibleColumnsToShow.constBegin();
         for (uint i = 0; i < uint(fieldsExpanded.count()); ++i) {
             bool show = visibleColumnsToShowIt != d->visibleColumnsToShow.constEnd() && i == *visibleColumnsToShowIt;
@@ -405,7 +405,7 @@ int KexiComboBoxPopup::maxRows() const
     return d->max_rows;
 }
 
-void KexiComboBoxPopup::slotTVItemAccepted(KexiDB::RecordData *record, int row, int)
+void KexiComboBoxPopup::slotTVItemAccepted(KDbRecordData *record, int row, int)
 {
     hide();
     emit rowAccepted(record, row);

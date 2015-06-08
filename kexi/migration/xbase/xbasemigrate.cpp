@@ -43,7 +43,7 @@ K_EXPORT_KEXIMIGRATE_DRIVER(xBaseMigrate, xbase)
 xBaseMigrate::xBaseMigrate(QObject *parent, const QVariantList& args) :
   KexiMigrate(parent, args)
 {
-  KexiDB::DriverManager manager;
+  KDbDriverManager manager;
   setDriver(manager.driver("xbase"));
 }
 
@@ -60,7 +60,7 @@ bool xBaseMigrate::drv_connect()
 {
   // Get the xbase directory path
   Data* migrationData = data();
-  KexiDB::ConnectionData* dataSource = migrationData->source;
+  KDbConnectionData* dataSource = migrationData->source;
   QString dbPath = dataSource->dbPath();
 
   QDir xBaseDirectory( dbPath );
@@ -132,14 +132,14 @@ bool xBaseMigrate::drv_disconnect()
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
 bool xBaseMigrate::drv_readTableSchema(
-  const QString& originalName, KexiDB::TableSchema& tableSchema)
+  const QString& originalName, KDbTableSchema& tableSchema)
 {
   // Steps
   // 1. Get the number of fields
   // 2. for i = 1 to no_of_fields
   // 3.	 Get the fieldName of the i th	field
   // 4.	 Generate a fieldId
-  // 5.	 Create a KexiDB::Field object, using the fieldId and the fieldType ( you may need to write a type conversion function here )
+  // 5.	 Create a KDbField object, using the fieldId and the fieldType ( you may need to write a type conversion function here )
   // 6.	 Examine enum fields of any
   // 7.	 Set the caption of the field
   // 8.	 Set other properties of the field ( pertaining to constraints like pkey, unique etc, and  AutoIncrement etc )
@@ -157,10 +157,10 @@ bool xBaseMigrate::drv_readTableSchema(
     QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
     QString fldID( KexiUtils::stringToIdentifier( fldName.toLower() ) );
 
-    KexiDB::Field *fld =
-        new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
+    KDbField *fld =
+        new KDbField( fldID, type( tableDbf->GetFieldType( i ) ) );
 
-    if ( fld->type() == KexiDB::Field::Text ) {
+    if ( fld->type() == KDbField::Text ) {
       uint len = tableDbf->GetFieldLen(i);
       if (len < 255) { // limit for small lengths only
           fld->setMaxLength(len);
@@ -191,8 +191,8 @@ bool xBaseMigrate::drv_tableNames(QStringList& tableNames)
 }
 
 /*! Copy xBase table to KexiDB database */
-bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-  KexiDB::TableSchema* dstTable)
+bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn,
+  KDbTableSchema* dstTable)
 {
   // Steps
   // 1. for all records in the table
@@ -210,7 +210,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
   xbLong numRecords = tableDbf->NoOfRecords();
 
-  const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
+  const KDbQueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
   // records are indexed from 1
   for ( xbULong i = 1; i <= (xbULong)numRecords ; ++i ) {
     tableDbf->GetRecord( i );
@@ -230,10 +230,10 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
       #endif
   
       switch ( type( tableDbf->GetFieldType( j ) ) ) {
-        case KexiDB::Field::Date:
+        case KDbField::Date:
           val = QDate::fromString( data, "yyyyMMdd" );
           break;
-        case KexiDB::Field::Boolean:
+        case KDbField::Boolean:
           switch(data[0]) {
             case 'Y': case 'y': case 'T': case 't':
               val = true;
@@ -246,7 +246,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
               break;
           }
           break;
-        case KexiDB::Field::BLOB:
+        case KDbField::BLOB:
         #ifdef XB_MEMO_FIELDS
           blobFieldLength = tableDbf->GetMemoFieldLen(j);
           memoBuffer = new char[blobFieldLength];
@@ -258,7 +258,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
           if ( ( returnCode = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
             qDebug()<<"Error reading blob field. Error code: "<<returnCode; // make error message more verbose
           } else {
-            val = KexiDB::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
+            val = KDb::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
           }
           #ifdef XB_LOCKING_ON
             tableDbf->LockMemoFile( F_SETLK, F_UNLCK );
@@ -270,7 +270,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
         #endif
 
         default:
-          val = KexiDB::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) ) ;
+          val = KDb::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) ) ;
           break;
       }
       vals.append( val );
@@ -283,38 +283,38 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
   return true;
 }
 
-KexiDB::Field::Type KexiMigration::xBaseMigrate::type(char xBaseColumnType)
+KDbField::Type KexiMigration::xBaseMigrate::type(char xBaseColumnType)
 {
-  KexiDB::Field::Type kexiType = KexiDB::Field::InvalidType;
+  KDbField::Type kexiType = KDbField::InvalidType;
 
   switch( xBaseColumnType ) {
     case XB_CHAR_FLD:
-      kexiType = KexiDB::Field::Text;
+      kexiType = KDbField::Text;
       break;
     case XB_LOGICAL_FLD:
-      kexiType = KexiDB::Field::Boolean;
+      kexiType = KDbField::Boolean;
       break;
     case XB_NUMERIC_FLD:
-      kexiType = KexiDB::Field::Float;
+      kexiType = KDbField::Float;
       break;
     case XB_DATE_FLD:
-      kexiType = KexiDB::Field::Date;
+      kexiType = KDbField::Date;
       break;
     case XB_MEMO_FLD:
-      kexiType = KexiDB::Field::BLOB;
+      kexiType = KDbField::BLOB;
       break;
     case XB_FLOAT_FLD:
-      kexiType = KexiDB::Field::Double;
+      kexiType = KDbField::Double;
       break;
     default:
-      kexiType = KexiDB::Field::InvalidType;
+      kexiType = KDbField::InvalidType;
       break;
   }
 
   return kexiType;
 }
 
-void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiDB::Field* fld)
+void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbField* fld)
 {
   // 1. Get the names of the index files
   // 2. Create appropriate xbIndex type object ( xbNdx or xbNtx ) depending on extension

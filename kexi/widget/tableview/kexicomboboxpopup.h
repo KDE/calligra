@@ -22,16 +22,12 @@
 
 #include <QFrame>
 
+class KDbField;
+class KDbRecordData;
+class KDbTableViewColumn;
+class KDbTableViewData;
 class KexiComboBoxPopupPrivate;
 class KexiTableScrollArea;
-namespace KexiDB
-{
-class Field;
-class RecordData;
-class TableViewColumn;
-class TableViewData;
-}
-class QEvent;
 
 //! Internal class for displaying popup table view
 class KexiComboBoxPopup : public QFrame
@@ -43,10 +39,10 @@ public:
      If the column is lookup column, it's definition is used to display
      one or more column within the popup. Otherwise column.field() is used
      to display single-column data. */
-    KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column);
+    KexiComboBoxPopup(QWidget* parent, KDbTableViewColumn &column);
 
     /*! Alternative constructor supporting lookup fields and enum hints. */
-    KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
+    KexiComboBoxPopup(QWidget* parent, KDbField &field);
 
     virtual ~KexiComboBoxPopup();
 
@@ -62,7 +58,7 @@ public:
     static const int defaultMaxRows;
 
 Q_SIGNALS:
-    void rowAccepted(KexiDB::RecordData *record, int row);
+    void rowAccepted(KDbRecordData *record, int row);
     void cancelled();
     void hidden();
 
@@ -71,7 +67,7 @@ public Q_SLOTS:
     void updateSize(int minWidth = 0);
 
 protected Q_SLOTS:
-    void slotTVItemAccepted(KexiDB::RecordData *record, int row, int col);
+    void slotTVItemAccepted(KDbRecordData *record, int row, int col);
     void slotDataReloadRequested();
 
 protected:
@@ -81,10 +77,10 @@ protected:
 
     //! The main function for setting data; data can be set either by passing \a column or \a field.
     //! The second case is used for lookup
-    void setData(KexiDB::TableViewColumn *column, KexiDB::Field *field);
+    void setData(KDbTableViewColumn *column, KDbField *field);
 
     //! used by setData()
-    void setDataInternal(KexiDB::TableViewData *data, bool owner = true);   //!< helper
+    void setDataInternal(KDbTableViewData *data, bool owner = true);   //!< helper
 
     KexiComboBoxPopupPrivate * const d;
 

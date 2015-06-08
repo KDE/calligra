@@ -117,14 +117,14 @@ void KexiPasswordPage::setDatabaseName(const QString& databaseName)
     d->widget->setDatabaseName(databaseName);
 }
 
-void KexiPasswordPage::setConnectionData(const KexiDB::ConnectionData &data)
+void KexiPasswordPage::setConnectionData(const KDbConnectionData &data)
 {
     setPassword(data.savePassword ? data.password : QString());
     setUserName(data.userName);
     setServer(data.serverInfoString(false));
 }
 
-void KexiPasswordPage::updateConnectionData(KexiDB::ConnectionData *data)
+void KexiPasswordPage::updateConnectionData(KDbConnectionData *data)
 {
     if (data) {
         data->password = password();

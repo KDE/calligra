@@ -26,7 +26,7 @@ SimpleField::SimpleField()
     notnull = false;
 }
 
-SimpleField::SimpleField(KexiDB::QueryColumnInfo *col)
+SimpleField::SimpleField(KDbQueryColumnInfo *col)
 {
     name = col->aliasOrName();
     type = col->field->typeName();

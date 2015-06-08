@@ -115,7 +115,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
     connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
             this, SLOT(slotItemRenamed(KexiPart::Item,QString)));
 
-    KexiDB::Connection *conn = d->prj->dbConnection();
+    KDbConnection *conn = d->prj->dbConnection();
     if (!conn)
         return;
 

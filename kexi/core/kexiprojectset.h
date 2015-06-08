@@ -26,26 +26,23 @@
 #include <KDbObject>
 
 class KexiProjectSetPrivate;
-namespace KexiDB
-{
-class MessageHandler;
-}
+class KDbMessageHandler;
 
 /*! @short Stores information about multiple kexi project-data items */
-class KEXICORE_EXPORT KexiProjectSet : public KexiDB::Object
+class KEXICORE_EXPORT KexiProjectSet : public KDbObject
 {
 public:
 
     /*! Creates empty project set. Use addProjectData to add a project data.
       \a handler can be provided to receive error messages. */
-    explicit KexiProjectSet(KexiDB::MessageHandler* handler = 0);
+    explicit KexiProjectSet(KDbMessageHandler* handler = 0);
 
     /*! Creates project set filled with all projects found using \a conndata.
     There may be error during project list retrieving - use appropriate
-    KexiDB::Object::error(), and similar methods to get error message.
+    KDbObject::error(), and similar methods to get error message.
     \a handler can be provided to receive error messages. */
-    explicit KexiProjectSet(KexiDB::ConnectionData* conndata,
-                            KexiDB::MessageHandler* handler = 0);
+    explicit KexiProjectSet(KDbConnectionData* conndata,
+                            KDbMessageHandler* handler = 0);
 
     ~KexiProjectSet();
 

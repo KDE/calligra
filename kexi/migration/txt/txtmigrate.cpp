@@ -66,13 +66,13 @@ bool TxtMigrate::drv_tableNames(QStringList& tablenames)
   return true;
 }
 
-bool TxtMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+bool TxtMigrate::drv_readTableSchema(const QString& originalName, KDbTableSchema& tableSchema)
 {
   if (drv_readFromTable(originalName))
   {
     for (uint i = 0; i < (uint)m_FieldNames.count(); ++i)
     {
-      tableSchema.addField( new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text) );
+      tableSchema.addField( new KDbField(m_FieldNames[i], KDbField::Text) );
     }
     tableSchema.setName(originalName);
     return true;

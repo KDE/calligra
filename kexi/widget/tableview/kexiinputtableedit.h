@@ -37,7 +37,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    explicit KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiInputTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
 
@@ -48,7 +48,7 @@ public:
 
     //! \return true if editor's value is empty (not null).
     //! Only few field types can accept "EMPTY" property
-    //! (check this with KexiDB::Field::hasEmptyProperty()),
+    //! (check this with KDbField::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();

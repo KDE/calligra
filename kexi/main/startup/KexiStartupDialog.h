@@ -111,7 +111,7 @@ public:
       (if "Open Existing" tab was selected and this connection data was clicked).
       Returns NULL if no such selection has been made or other tab was selected.
     */
-    KexiDB::ConnectionData* selectedExistingConnection() const;
+    KDbConnectionData* selectedExistingConnection() const;
 
 public Q_SLOTS:
     virtual void done(int r);

@@ -22,6 +22,7 @@
 
 #include "kexicore_export.h"
 
+#include <QObject>
 #include <KDbConnectionData>
 
 class KexiDBConnectionSetPrivate;
@@ -44,36 +45,36 @@ public:
      saveConnectionData() is called automatically, if there's no \a filename provided
      or the filename is already used, a new unique will be generated.
      \return true on successful creating corresponding .kexic file */
-    bool addConnectionData(KexiDB::ConnectionData *data, const QString& filename = QString());
+    bool addConnectionData(KDbConnectionData *data, const QString& filename = QString());
 
     /*! Saves changes made to \a oldData to a file which name has been provided by addConnectionData().
      This function does nothing if \a oldData hasn't been added to this set.
      \return true on success (data is then copied from \a newData to \a oldData) */
-    bool saveConnectionData(KexiDB::ConnectionData *oldData, const KexiDB::ConnectionData &newData);
+    bool saveConnectionData(KDbConnectionData *oldData, const KDbConnectionData &newData);
 
     /*! Removed \a data from this set.
      \return true on successful removing of corresponding .kexic file */
-    bool removeConnectionData(KexiDB::ConnectionData *data);
+    bool removeConnectionData(KDbConnectionData *data);
 
     /*! \return the list of connection data items. */
-    const KexiDB::ConnectionData::List& list() const;
+    QList<KDbConnectionData*> list() const;
 
     /*! \return a filename of a connection data file for \a data. */
-    QString fileNameForConnectionData(const KexiDB::ConnectionData &data) const;
+    QString fileNameForConnectionData(const KDbConnectionData &data) const;
 
     /*! \return a connection data for a .kexic shortcut filename.
      0 is returned if the filename does not match. */
-    KexiDB::ConnectionData* connectionDataForFileName(const QString& fileName) const;
+    KDbConnectionData* connectionDataForFileName(const QString& fileName) const;
 
     /*! \return key for connection data @a data, basically a comma-separated string with
      all properties serialized: "driverName,userName,...". Used in internal structures. */
-    static QString key(const KexiDB::ConnectionData &data);
+    static QString key(const KDbConnectionData &data);
 
 private:
     /*! Removes all connection data items from this set. */
     void clear();
-    void addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename);
-    void removeConnectionDataInternal(KexiDB::ConnectionData *data);
+    void addConnectionDataInternal(KDbConnectionData *data, const QString& filename);
+    void removeConnectionDataInternal(KDbConnectionData *data);
 
     KexiDBConnectionSetPrivate * const d;
 };

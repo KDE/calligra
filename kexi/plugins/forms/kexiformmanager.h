@@ -62,13 +62,13 @@ public Q_SLOTS:
     void setFormDataSource(const QString& mime, const QString& name);
 
     /*! Receives signal from KexiDataSourcePage about changed widget's data source.
-     This is because we couldn't pass objects like KexiDB::QueryColumnInfo.
+     This is because we couldn't pass objects like KDbQueryColumnInfo.
 
      Also sets following things in KexiDBAutoField:
      - caption related to the data source
      - data type related to the data source */
     void setDataSourceFieldOrExpression(const QString& string, const QString& caption,
-                                        KexiDB::Field::Type type);
+                                        KDbField::Type type);
 
     /*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
     void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,

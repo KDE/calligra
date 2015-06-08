@@ -54,13 +54,13 @@ KexiProjectConnectionData::Private::~Private()
 
 }
 
-KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData(), d(new Private())
+KexiProjectConnectionData::KexiProjectConnectionData(): KDbConnectionData(), d(new Private())
 {
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &host,
                                                      unsigned short int rport, const QString& user, const QString &pass, const QString& file)
-    : KexiDB::ConnectionData(), d(new Private(driverName, databaseName))
+    : KDbConnectionData(), d(new Private(driverName, databaseName))
 {
 
     hostName = host;
@@ -71,7 +71,7 @@ KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, 
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, const QString &fileName)
-    : KexiDB::ConnectionData(), d(new Private(driverName, QString()))
+    : KDbConnectionData(), d(new Private(driverName, QString()))
 {
     setFileName(fileName);
 }

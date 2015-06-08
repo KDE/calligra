@@ -29,18 +29,12 @@
 #include <kexiformview.h>
 
 class QDomDocument;
-
 namespace KFormDesigner
 {
 class Form;
 class WidgetTreeWidget;
 }
-
-namespace KexiDB
-{
-class FieldList;
-}
-
+class KDbFieldList;
 class KexiDataSourcePage;
 
 class KexiFormPartTempData : public KexiWindowData
@@ -76,7 +70,7 @@ public:
     KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
 
 #ifndef NO_DSWIZARD
-    void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
+    void generateForm(KDbFieldList *list, QDomDocument &domDoc);
 #endif
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,

@@ -39,19 +39,19 @@ class KexiFileWidget;
 class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
-    ConnectionDataLVItem(KexiDB::ConnectionData *data,
-                         const KexiDB::Driver::Info& info, QTreeWidget* list);
+    ConnectionDataLVItem(KDbConnectionData *data,
+                         const KDbDriver::Info& info, QTreeWidget* list);
     ~ConnectionDataLVItem();
 
-    void update(const KexiDB::Driver::Info& info);
+    void update(const KDbDriver::Info& info);
 
     using QTreeWidgetItem::data;
-    KexiDB::ConnectionData *data() const {
+    KDbConnectionData *data() const {
         return m_data;
     }
 
 protected:
-    KexiDB::ConnectionData *m_data;
+    KDbConnectionData *m_data;
 };
 
 //! @short Widget that allows to select a database connection (file- or server-based)
@@ -88,7 +88,7 @@ public:
      has been selected.
      @see selectedConnectionType()
     */
-    KexiDB::ConnectionData* selectedConnectionData() const;
+    KDbConnectionData* selectedConnectionData() const;
 
     /*! \return the name of database file, if file-based connection was selected.
      Returns null string if no selection has been made or server-based connection
@@ -146,7 +146,7 @@ protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
 private:
-    ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
+    ConnectionDataLVItem* addConnectionData(KDbConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
     

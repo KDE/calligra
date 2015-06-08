@@ -466,7 +466,7 @@ void KexiProjectNavigator::slotRename()
         return;
     }
     dialog.widget()->addNameSubvalidator( //check if new name is allowed
-        new KexiDB::ObjectNameValidator(d->model->project()->dbConnection()->driver()));
+        new KDbObjectNameValidator(d->model->project()->dbConnection()->driver()));
     dialog.widget()->setCaptionText(partItem->caption());
     dialog.widget()->setNameText(partItem->name());
     dialog.setWindowTitle(

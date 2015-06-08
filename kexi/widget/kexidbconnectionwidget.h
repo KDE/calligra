@@ -51,7 +51,7 @@ public:
     /*! Sets connection data \a data.
      \a shortcutFileName is only used to check if the file is writable
      (if no, "save changes" button will be disabled). */
-    void setData(const KexiDB::ConnectionData& data,
+    void setData(const KDbConnectionData& data,
                  const QString& shortcutFileName = QString());
 
     KexiProjectData data();
@@ -111,7 +111,7 @@ public:
      (if no, "save changes" button will be disabled). */
     void setData(const KexiProjectData& data, const QString& shortcutFileName = QString());
 
-    void setData(const KexiDB::ConnectionData& data,
+    void setData(const KDbConnectionData& data,
                  const QString& shortcutFileName = QString());
 
     KexiProjectData currentProjectData();
@@ -158,7 +158,7 @@ public:
      (if no, "save changes" button will be disabled).
      The shortcut file is in .KEXIC format.
      See above constructor for more details. */
-    KexiDBConnectionDialog(QWidget* parent, const KexiDB::ConnectionData& data,
+    KexiDBConnectionDialog(QWidget* parent, const KDbConnectionData& data,
                            const QString& shortcutFileName = QString(),
                            const KGuiItem& acceptButtonGuiItem = KGuiItem());
 

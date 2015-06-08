@@ -31,16 +31,12 @@
 
 class QLabel;
 class KAboutData;
+class KDbDriverManager;
 class KexiRecentProjects;
 
 namespace KexiPart
 {
 class Manager;
-}
-
-namespace KexiDB
-{
-class DriverManager;
 }
 
 namespace Kexi
@@ -72,7 +68,7 @@ KEXICORE_EXPORT KexiDBConnectionSet& connset();
 KEXICORE_EXPORT KexiRecentProjects* recentProjects();
 
 //! shared driver manager
-KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
+KEXICORE_EXPORT KDbDriverManager& driverManager();
 
 //! shared part manager
 KEXICORE_EXPORT KexiPart::Manager& partManager();
@@ -101,7 +97,7 @@ public:
 
     ObjectStatus(const QString& message, const QString& description);
 
-    ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
+    ObjectStatus(KDbObject* dbObject, const QString& message, const QString& description);
 
     ~ObjectStatus();
 
@@ -113,13 +109,13 @@ public:
 
     //! Note: for safety, \a dbObject needs to be derived from QObject,
     //! otherwise it won't be assigned
-    void setStatus(KexiDB::Object* dbObject,
+    void setStatus(KDbObject* dbObject,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KexiDB::ResultInfo* result,
+    void setStatus(KDbResultInfo* result,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
+    void setStatus(KDbObject* dbObject, KDbResultInfo* result,
                    const QString& message = QString(), const QString& description = QString());
 
     void clearStatus();
@@ -128,30 +124,30 @@ public:
 
     void append(const ObjectStatus& otherStatus);
 
-    KexiDB::Object *dbObject() const {
-        return dynamic_cast<KexiDB::Object*>((QObject*)dbObj);
+    KDbObject *dbObject() const {
+        return dynamic_cast<KDbObject*>((QObject*)dbObj);
     }
 
     //! Helper returning pseudo handler that just updates this ObjectStatus object
     //! by receiving a message
-    operator KexiDB::MessageHandler*();
+    operator KDbMessageHandler*();
 
     QString message, description;
 protected:
-    QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
-    KexiDB::MessageHandler* msgHandler;
+    QPointer<QObject> dbObj; //! This is in fact KDbObject
+    KDbMessageHandler* msgHandler;
 };
 
 /*! \return icon name for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
- @see KexiDB::defaultFileBasedDriverMimeType() */
+ @see KDb::defaultFileBasedDriverMimeType() */
 KEXICORE_EXPORT QString defaultFileBasedDriverIconName();
 
 /*! \return icon for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
  If contains special workaround to properly load mimetype icon according to current theme,
  at least needed for Breeze.
- @see KexiDB::defaultFileBasedDriverIconName() */
+ @see KDb::defaultFileBasedDriverIconName() */
 KEXICORE_EXPORT QIcon defaultFileBasedDriverIcon();
 
 /*! \return icon name for database servers. */

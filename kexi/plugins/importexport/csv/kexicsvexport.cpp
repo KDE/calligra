@@ -75,14 +75,14 @@ bool Options::assign(QMap<QString, QString>& args)
 
 //------------------------------------
 
-bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
+bool KexiCSVExport::exportData(KDbTableOrQuerySchema& tableOrQuery,
                                const Options& options, int rowCount, QTextStream *predefinedTextStream)
 {
-    KexiDB::Connection* conn = tableOrQuery.connection();
+    KDbConnection* conn = tableOrQuery.connection();
     if (!conn)
         return false;
 
-    KexiDB::QuerySchema* query = tableOrQuery.query();
+    KDbQuerySchema* query = tableOrQuery.query();
     QList<QVariant> queryParams;
     if (!query) {
         query = tableOrQuery.table()->query();
@@ -92,7 +92,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     }
 
     if (rowCount == -1)
-        rowCount = KexiDB::rowCount(tableOrQuery, queryParams);
+        rowCount = KDb::recordCount(tableOrQuery, queryParams);
     if (rowCount == -1)
         return false;
 
@@ -104,7 +104,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //! @todo OPTIMIZATION: use fieldsExpanded(true /*UNIQUE*/)
 //! @todo OPTIMIZATION? (avoid multiple data retrieving) look for already fetched data within KexiProject..
 
-    KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
+    KDbQueryColumnInfo::Vector fields(query->fieldsExpanded(KDbQuerySchema::WithInternalFields));
     QString buffer;
 
     QScopedPointer<QSaveFile> kSaveFile;
@@ -175,7 +175,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 // bool isInteger[fieldsCount]; //cache for faster checks
 // bool isFloatingPoint[fieldsCount]; //cache for faster checks
     for (uint i = 0; i < fieldsCount; i++) {
-        KexiDB::QueryColumnInfo* ci;
+        KDbQueryColumnInfo* ci;
         const int indexForVisibleLookupValue = fields[i]->indexForVisibleLookupValue();
         if (-1 != indexForVisibleLookupValue) {
             ci = query->expandedOrInternalField(indexForVisibleLookupValue);
@@ -186,11 +186,11 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         }
 
         isText[i] = ci->field->isTextType();
-        isDateTime[i] = ci->field->type() == KexiDB::Field::DateTime;
-        isTime[i] = ci->field->type() == KexiDB::Field::Time;
-        isBLOB[i] = ci->field->type() == KexiDB::Field::BLOB;
+        isDateTime[i] = ci->field->type() == KDbField::DateTime;
+        isTime[i] = ci->field->type() == KDbField::Time;
+        isBLOB[i] = ci->field->type() == KDbField::BLOB;
 //  isInteger[i] = fields[i]->field->isIntegerType()
-//   || fields[i]->field->type()==KexiDB::Field::Boolean;
+//   || fields[i]->field->type()==KDbField::Boolean;
 //  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
     }
 
@@ -212,7 +212,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     }
 
     KexiGUIMessageHandler handler;
-    KexiDB::Cursor *cursor = conn->executeQuery(*query, queryParams);
+    KDbCursor *cursor = conn->executeQuery(*query, queryParams);
     if (!cursor) {
         handler.showErrorMessage(conn);
         _ERR;
@@ -242,10 +242,10 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 APPEND(cursor->value(real_i).toTime().toString(Qt::ISODate));
             } else if (isBLOB[real_i]) { //BLOB is escaped in a special way
                 if (hasTextQuote)
-//! @todo add options to suppport other types from KexiDB::BLOBEscapingType enum...
-                    APPEND(textQuote + KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote);
+//! @todo add options to suppport other types from KDbBLOBEscapingType enum...
+                    APPEND(textQuote + KDb::escapeBLOB(cursor->value(real_i).toByteArray(), KDb::BLOBEscapeHex) + textQuote);
                 else
-                    APPEND(KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex));
+                    APPEND(KDb::escapeBLOB(cursor->value(real_i).toByteArray(), KDb::BLOBEscapeHex));
             } else {//other types
                 APPEND(cursor->value(real_i).toString());
             }

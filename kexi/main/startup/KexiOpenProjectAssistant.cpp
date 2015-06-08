@@ -32,6 +32,7 @@
 #include <KexiIcon.h>
 
 #include <KDbUtils>
+#include <KDbDriverManager>
 
 #include <QTabWidget>
 #include <QTimer>
@@ -100,7 +101,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
     }
 
     if (index == 1) {
-        if (KexiDB::hasDatabaseServerDrivers()) {
+        if (KDbDriverManager().hasDatabaseServerDrivers()) {
             if (!connSelector) {
                 // server-based:
                 connSelectorLayout->setContentsMargins(0, KexiUtils::marginHint() * 2, 0, 0);
@@ -171,7 +172,7 @@ KexiProjectDatabaseSelectionPage::~KexiProjectDatabaseSelectionPage()
 {
 }
 
-bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* data)
+bool KexiProjectDatabaseSelectionPage::setConnection(KDbConnectionData* data)
 {
     if (conndataToShow != data) {
         projectSelector->setProjectSet(0);
@@ -262,7 +263,7 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
                 d->m_projectOpenPage->fileSelector->fileWidget->highlightedFile());
         }
         else { // server-based
-            KexiDB::ConnectionData *cdata
+            KDbConnectionData *cdata
                 = d->m_projectOpenPage->connSelector->selectedConnectionData();
             if (cdata) {
                 if (cdata->passwordNeeded()) {
@@ -277,7 +278,7 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         }
     }
     else if (page == d->m_passwordPage) {
-        KexiDB::ConnectionData *cdata
+        KDbConnectionData *cdata
             = d->projectOpenPage()->connSelector->selectedConnectionData();
         d->passwordPage()->updateConnectionData(cdata);
         if (cdata && d->projectDatabaseSelectionPage()->setConnection(cdata)) {

@@ -249,9 +249,9 @@ void KexiLookupColumnPage::clearBoundColumnSelection()
 
 void KexiLookupColumnPage::slotBoundColumnSelected()
 {
-// KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+// KDbField::Type dataType = KDbField::InvalidType;
 //! @todo this should also work for expressions
-    /*disabled KexiDB::Field *field = d->fieldListView->schema()->field( d->boundColumnCombo->fieldOrExpression() );
+    /*disabled KDbField *field = d->fieldListView->schema()->field( d->boundColumnCombo->fieldOrExpression() );
       if (field)
         dataType = field->type();
     */
@@ -281,7 +281,7 @@ void KexiLookupColumnPage::clearVisibleColumnSelection()
 
 void KexiLookupColumnPage::slotVisibleColumnSelected()
 {
-// KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+// KDbField::Type dataType = KDbField::InvalidType;
 //! @todo this should also work for expressions
 
     // update property set
@@ -299,7 +299,7 @@ void KexiLookupColumnPage::slotRowSourceChanged()
     bool rowSourceFound = false;
     QString name = d->rowSourceCombo->selectedName();
     if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") && d->rowSourceCombo->isSelectionValid()) {
-        KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
+        KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
             d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 //! @todo disabled   d->fieldListView->setSchema( tableOrQuery );

@@ -34,11 +34,7 @@
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"
 
-
-namespace KexiDB
-{
-class Connection;
-}
+class KDbConnection;
 
 typedef QHash<QString, KexiRelationsTableContainer*> TablesHash;
 typedef QMutableHashIterator<QString, KexiRelationsTableContainer*> TablesHashMutableIterator;
@@ -79,11 +75,11 @@ public:
      If \a rect is valid, table widget geometry will be initialized.
      \return added table container or 0 on failure.
      */
-    KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t,
+    KexiRelationsTableContainer* addTableContainer(KDbTableSchema *t,
             const QRect &rect = QRect());
 
     /*! \return table container for table \a t. */
-    KexiRelationsTableContainer * tableContainer(KexiDB::TableSchema *t) const;
+    KexiRelationsTableContainer * tableContainer(KDbTableSchema *t) const;
 
     //! Adds a connection \a _conn to the area. This changes only visual representation.
     void addConnection(const SourceConnection& _conn);
@@ -111,7 +107,7 @@ Q_SIGNALS:
     void tableViewGotFocus();
     void connectionViewGotFocus();
     void emptyAreaGotFocus();
-    void tableHidden(KexiDB::TableSchema& t);
+    void tableHidden(KDbTableSchema& t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
 
@@ -127,7 +123,7 @@ public Q_SLOTS:
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
+    void hideAllTablesExcept(KDbTableSchema::List* tables);
 
     //! removes selected table or connection
     void removeSelectedObject();

@@ -79,7 +79,7 @@ public:
     int currentLocalSortColumn;
     Qt::SortOrder localSortOrder;
     //! Used in selectCellInternal() to avoid fetching the same record twice
-    KexiDB::RecordData *previousRecord;
+    KDbRecordData *previousRecord;
 };
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
@@ -350,20 +350,20 @@ void KexiFormScrollView::updateWidgetContentsSize()
     //! @todo
 }
 
-void KexiFormScrollView::slotRowRepaintRequested(KexiDB::RecordData& record)
+void KexiFormScrollView::slotRowRepaintRequested(KDbRecordData& record)
 {
     Q_UNUSED(record);
     //! @todo
 }
 
-void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, bool repaint)
+void KexiFormScrollView::slotRowInserted(KDbRecordData* record, bool repaint)
 {
     Q_UNUSED(record);
     Q_UNUSED(repaint);
     //! @todo
 }
 
-void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint)
+void KexiFormScrollView::slotRowInserted(KDbRecordData* record, uint row, bool repaint)
 {
     Q_UNUSED(record);
     Q_UNUSED(row);
@@ -474,7 +474,7 @@ void KexiFormScrollView::initDataContents()
     }
 }
 
-KexiDB::TableViewColumn* KexiFormScrollView::column(int col)
+KDbTableViewColumn* KexiFormScrollView::column(int col)
 {
     const int id = fieldNumberForColumn(col);
     return (id >= 0) ? m_data->column(id) : 0;

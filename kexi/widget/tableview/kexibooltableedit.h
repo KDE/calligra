@@ -32,7 +32,7 @@ class KexiBoolTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    explicit KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiBoolTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiBoolTableEdit();
 
@@ -41,7 +41,7 @@ public:
 
     //! \return true if editor's value is empty (not null).
     //! Only few field types can accept "EMPTY" property
-    //! (check this with KexiDB::Field::hasEmptyProperty()),
+    //! (check this with KDbField::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();

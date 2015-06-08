@@ -48,7 +48,7 @@ public:
 
     QPointer<KexiView> view;
     KexiDataAwareObjectInterface* dataObject;
-    QPointer<KexiDB::TableViewData> currentTVData;
+    QPointer<KDbTableViewData> currentTVData;
 
     int row; //!< used to know if a new row is selected in slotCellSelected()
 };
@@ -59,7 +59,7 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         , d(new Private(view, dataObject))
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
-    d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiDB::TableViewData*)));
+    d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KDbTableViewData*)));
     d->dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
     slotDataSet(d->dataObject->data());
     const bool wasDirty = view->isDirty();
@@ -73,7 +73,7 @@ KexiDataAwarePropertySet::~KexiDataAwarePropertySet()
     delete d;
 }
 
-void KexiDataAwarePropertySet::slotDataSet(KexiDB::TableViewData *data)
+void KexiDataAwarePropertySet::slotDataSet(KDbTableViewData *data)
 {
     if (!d->currentTVData.isNull()) {
         d->currentTVData->disconnect(this);
@@ -84,8 +84,8 @@ void KexiDataAwarePropertySet::slotDataSet(KexiDB::TableViewData *data)
         connect(d->currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
         connect(d->currentTVData, SIGNAL(rowsDeleted(QList<int>)),
                 this, SLOT(slotRowsDeleted(QList<int>)));
-        connect(d->currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
-                this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
+        connect(d->currentTVData, SIGNAL(rowInserted(KDbRecordData*,uint,bool)),
+                this, SLOT(slotRowInserted(KDbRecordData*,uint,bool)));
         connect(d->currentTVData, SIGNAL(reloadRequested()),
                 this, SLOT(slotReloadRequested()));
     }
@@ -237,7 +237,7 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &_rows)
     d->view->propertySetSwitched();
 }
 
-void KexiDataAwarePropertySet::slotRowInserted(KexiDB::RecordData*, uint pos, bool /*repaint*/)
+void KexiDataAwarePropertySet::slotRowInserted(KDbRecordData*, uint pos, bool /*repaint*/)
 {
     d->view->setDirty();
     if (pos > 0) {
@@ -258,7 +258,7 @@ void KexiDataAwarePropertySet::slotCellSelected(int row, int col)
     d->view->propertySetSwitched();
 }
 
-KPropertySet* KexiDataAwarePropertySet::findPropertySetForItem(const KexiDB::RecordData& record)
+KPropertySet* KexiDataAwarePropertySet::findPropertySetForItem(const KDbRecordData& record)
 {
     if (d->currentTVData.isNull())
         return 0;
