@@ -20,22 +20,54 @@
 
 #include "KexiMainWindow.h"
 #include <config-kexi.h>
-#include <unistd.h>
+#include "kexiactionproxy.h"
+#include "kexipartmanager.h"
+#include "kexipart.h"
+#include "kexipartinfo.h"
+#include "kexipartguiclient.h"
+#include "kexiproject.h"
+#include "kexiprojectdata.h"
+#include "kexi.h"
+#include "kexistatusbar.h"
+#include "kexiinternalpart.h"
+#include "kexiactioncategories.h"
+#include "kexifinddialog.h"
+#include "kexisearchandreplaceiface.h"
+#include "KexiBugReportDialog.h"
+#include <kexiutils/utils.h>
+#include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiCloseButton.h>
+#include <kexi_version.h>
+#include <core/KexiWindow.h>
+#include <core/KexiRecentProjects.h>
+#include <KexiIcon.h>
+#include <kexi_global.h>
+#include <widget/properties/KexiPropertyEditorView.h>
+#include <widget/utils/kexirecordnavigator.h>
+#include <widget/utils/KexiDockableWidget.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
+#include <widget/KexiFileWidget.h>
+#include <widget/KexiNameDialog.h>
+#include <widget/KexiNameWidget.h>
+#include <migration/migratemanager.h>
+#include <widget/KexiDBPasswordDialog.h>
+#include "startup/KexiStartup.h"
+#include "startup/KexiNewProjectAssistant.h"
+#include "startup/KexiOpenProjectAssistant.h"
+#include "startup/KexiWelcomeAssistant.h"
+#include "startup/KexiImportExportAssistant.h"
+#include "startup/KexiStartupDialog.h"
 
-#include <QApplication>
-#include <QFile>
-#include <QTimer>
-#include <QObject>
-#include <QProcess>
-#include <QToolButton>
-#include <QAction>
-#include <QDebug>
+#include <KDbConnection>
+#include <KDbUtils>
+#include <KDbCursor>
+#include <KDbAdmin>
+#include <KDbDriverManager>
+#include <KDbObjectNameValidator>
 
-#include <QHash>
-#include <QDockWidget>
-#include <QShortcut>
-#include <QStylePainter>
-#include <QScopedPointer>
+#include <KPropertyEditorView>
+#include <KPropertySet>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -54,58 +86,21 @@
 #include <kmultitabbar.h>
 #include <KLocalizedString>
 
-#include <db/connection.h>
-#include <db/utils.h>
-#include <db/cursor.h>
-#include <db/admin.h>
-#include <db/drivermanager.h>
-#include <kexidb/dbobjectnamevalidator.h>
-#include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
-#include <kexiutils/KexiCloseButton.h>
-#include <kexi_version.h>
+#include <QApplication>
+#include <QFile>
+#include <QTimer>
+#include <QObject>
+#include <QProcess>
+#include <QToolButton>
+#include <QAction>
+#include <QDebug>
+#include <QHash>
+#include <QDockWidget>
+#include <QShortcut>
+#include <QStylePainter>
+#include <QScopedPointer>
 
-#include <core/KexiWindow.h>
-#include <core/KexiRecentProjects.h>
-
-#include "kexiactionproxy.h"
-#include "kexipartmanager.h"
-#include "kexipart.h"
-#include "kexipartinfo.h"
-#include "kexipartguiclient.h"
-#include "kexiproject.h"
-#include "kexiprojectdata.h"
-#include "kexi.h"
-#include "kexistatusbar.h"
-#include "kexiinternalpart.h"
-#include "kexiactioncategories.h"
-#include "kexifinddialog.h"
-#include "kexisearchandreplaceiface.h"
-#include "KexiBugReportDialog.h"
-
-#include <kexi_global.h>
-
-#include <widget/properties/KexiPropertyEditorView.h>
-#include <widget/utils/kexirecordnavigator.h>
-#include <widget/utils/KexiDockableWidget.h>
-#include <widget/navigator/KexiProjectNavigator.h>
-#include <widget/navigator/KexiProjectModel.h>
-#include <widget/KexiFileWidget.h>
-#include <widget/KexiNameDialog.h>
-#include <widget/KexiNameWidget.h>
-#include <migration/migratemanager.h>
-#include <widget/KexiDBPasswordDialog.h>
-#include <KPropertyEditorView>
-#include <KPropertySet>
-
-#include "startup/KexiStartup.h"
-#include "startup/KexiNewProjectAssistant.h"
-#include "startup/KexiOpenProjectAssistant.h"
-#include "startup/KexiWelcomeAssistant.h"
-#include "startup/KexiImportExportAssistant.h"
-#include "startup/KexiStartupDialog.h"
-
-#include <KexiIcon.h>
+#include <unistd.h>
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) qDebug()

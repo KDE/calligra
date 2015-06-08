@@ -24,8 +24,8 @@
 
 #include <KPropertySet>
 
-#include <db/RecordData.h>
-#include <db/tableviewdata.h>
+#include <KDbRecordData>
+#include <KDbTableViewData>
 
 #include <QList>
 #include <QByteArray>

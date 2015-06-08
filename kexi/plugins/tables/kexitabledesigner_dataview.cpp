@@ -19,13 +19,14 @@
 
 #include "kexitabledesigner_dataview.h"
 
-#include <db/connection.h>
-#include <db/cursor.h>
 #include <kexiutils/utils.h>
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include <KexiMainWindowIface.h>
 #include <kexi_global.h>
+
+#include <KDbConnection>
+#include <KDbCursor>
 
 KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
         : KexiDataTableView(parent, true/*db-aware*/)

@@ -18,17 +18,12 @@
 */
 
 #include "KexiStartup.h"
-
 #include "kexi.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
-
-#include <db/utils.h>
-#include <db/driver.h>
-#include <db/drivermanager.h>
 #include <core/kexipartmanager.h>
 #include <kexiutils/utils.h>
 #include <widget/KexiConnectionSelectorWidget.h>
@@ -36,20 +31,23 @@
 #include <widget/KexiDBPasswordDialog.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
-
 #include <KexiIcon.h>
+
+#include <KDbUtils>
+#include <KDbDriver>
+#include <KDbDriverManager>
 
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
-
-#include <unistd.h>
 
 #include <QDebug>
 #include <QApplication>
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QProgressDialog>
+
+#include <unistd.h>
 
 //! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION

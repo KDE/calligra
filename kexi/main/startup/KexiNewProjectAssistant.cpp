@@ -20,21 +20,16 @@
  */
 
 #include "KexiNewProjectAssistant.h"
-
 #include "ui_KexiServerDBNamePage.h"
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
 #include "KexiStartup.h"
 #include "KexiPasswordPage.h"
-
 #include <kexi.h>
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexiguimsghandler.h>
 #include <kexitextmsghandler.h>
-#include <db/utils.h>
-#include <db/object.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
@@ -42,8 +37,11 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
-
 #include <KexiIcon.h>
+
+#include <KDbUtils>
+#include <KDbObject>
+#include <KDb>
 
 #include <kiconloader.h>
 #include <kfiledialog.h>

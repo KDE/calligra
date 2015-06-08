@@ -18,8 +18,18 @@
 */
 
 #include "altertable.h"
+#include <main/KexiMainWindow.h>
+#include <core/KexiWindow.h>
+#include <core/KexiView.h>
+#include <core/kexipartitem.h>
+#include <core/kexitabledesignerinterface.h>
+#include <core/kexiinternalpart.h>
+#include <kexiutils/utils.h>
 
-#include <unistd.h>
+#include <KDbConnection>
+#include <KDbUtils>
+
+#include <KAboutData>
 
 #include <QApplication>
 #include <QFile>
@@ -28,17 +38,7 @@
 #include <QClipboard>
 #include <QDebug>
 
-#include <KAboutData>
-
-#include <main/KexiMainWindow.h>
-#include <core/KexiWindow.h>
-#include <core/KexiView.h>
-#include <core/kexipartitem.h>
-#include <core/kexitabledesignerinterface.h>
-#include <core/kexiinternalpart.h>
-#include <kexiutils/utils.h>
-#include <db/connection.h>
-#include <db/utils.h>
+#include <unistd.h>
 
 QString testFilename;
 QFile testFile;

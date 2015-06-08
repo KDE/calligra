@@ -20,16 +20,15 @@
 
 #include "kexiinternalpart.h"
 #include "kexipartmanager.h"
-
 #include "KexiWindow.h"
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 #include <kexi_global.h>
 
-#include <KLocalizedString>
-
-#include <db/msghandler.h>
+#include <KDbMessageHandler>
 #include <db/pluginloader.h>
+
+#include <KLocalizedString>
 
 #include <QDebug>
 #include <QDialog>

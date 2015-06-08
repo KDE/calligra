@@ -22,8 +22,8 @@
 
 #include <QObject>
 
-#include <db/cursor.h>
-#include <db/roweditbuffer.h>
+#include <KDbCursor>
+#include <KDbRecordEditBuffer>
 
 namespace Scripting
 {

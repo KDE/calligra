@@ -20,8 +20,6 @@
 
 #include "kexicsvexportwizard.h"
 #include "kexicsvwidgets.h"
-#include <db/cursor.h>
-#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -32,6 +30,13 @@
 #include <widget/KexiFileWidget.h>
 #include <KexiIcon.h>
 
+#include <KDbCursor>
+#include <KDbUtils>
+
+#include <kglobal.h>
+#include <KSharedConfig>
+#include <KLocalizedString>
+
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QClipboard>
@@ -41,10 +46,6 @@
 #include <QPushButton>
 #include <QDialog>
 #include <QDebug>
-
-#include <kglobal.h>
-#include <KSharedConfig>
-#include <KLocalizedString>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)

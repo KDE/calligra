@@ -19,7 +19,7 @@
 
 #include "AlterSchemaTableModel.h"
 
-#include <db/tableschema.h>
+#include <KDbTableSchema>
 
 #include <QDebug>
 

@@ -18,7 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
+#include <kexiutils/utils.h>
+#include <kexidragobjects.h>
+#include "KexiRelationsTableContainer.h"
+#include "KexiRelationsTableContainer_p.h"
+#include "KexiRelationsScrollArea.h"
+
+#include <KDbTableSchema>
+#include <KDbUtils>
 
 #include <QPushButton>
 #include <QPoint>
@@ -27,13 +34,7 @@
 #include <QScrollBar>
 #include <QDebug>
 
-#include <kexiutils/utils.h>
-#include <db/tableschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
-#include "KexiRelationsTableContainer.h"
-#include "KexiRelationsTableContainer_p.h"
-#include "KexiRelationsScrollArea.h"
+#include <stdlib.h>
 
 class KexiRelationsTableContainer::Private
 {

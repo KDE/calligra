@@ -21,7 +21,7 @@
 #include "KexiTableScrollArea.h"
 #include <KexiIcon.h>
 
-#include <db/tableviewcolumn.h>
+#include <KDbTableViewColumn>
 
 #include <QDebug>
 

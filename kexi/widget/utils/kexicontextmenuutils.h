@@ -22,7 +22,8 @@
 
 #include "kexiguiutils_export.h"
 #include <kexi_global.h>
-#include <db/queryschema.h>
+
+#include <KDbQuerySchema>
 
 #include <QMenu>
 

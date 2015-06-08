@@ -19,20 +19,18 @@
 */
 
 #include "kexiquerypart.h"
-
-#include <QDebug>
-
+#include "kexiqueryview.h"
+#include "kexiquerydesignerguieditor.h"
+#include "kexiquerydesignersql.h"
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 
-#include <db/cursor.h>
-#include <db/parser/parser.h>
+#include <KDbCursor>
+#include <KDbParser>
 
-#include "kexiqueryview.h"
-#include "kexiquerydesignerguieditor.h"
-#include "kexiquerydesignersql.h"
+#include <QDebug>
 
 //------------------------------------------------
 

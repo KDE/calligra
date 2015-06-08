@@ -19,19 +19,19 @@
 
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
-
 #include "KexiWindow.h"
 #include "kexiproject.h"
 #include "kexipartinfo.h"
-#include <KPropertySet>
-
-#include <db/connection.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
 
 #include <widgetutils/KoGroupButton.h>
+
+#include <KPropertySet>
+
+#include <KDbConnection>
+#include <KDbUtils>
 
 #include <kactioncollection.h>
 

@@ -18,10 +18,10 @@
 */
 
 #include "kexiguimsghandler.h"
-
 #include "kexi.h"
-#include <db/utils.h>
 #include <kexiutils/utils.h>
+
+#include <KDbUtils>
 
 #include <kmessagebox.h>
 

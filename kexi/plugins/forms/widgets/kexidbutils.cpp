@@ -18,25 +18,22 @@
 */
 
 #include "kexidbutils.h"
-
-#include <QApplication>
-#include <QFontMetrics>
-#include <QMenu>
+#include <KexiIcon.h>
+#include <formeditor/widgetlibrary.h>
+#include <kexiutils/utils.h>
+#include "kexiformpart.h"
+#include "kexiformmanager.h"
+#include <widget/utils/kexicontextmenuutils.h>
 
 #include <kiconloader.h>
 #include <kiconeffect.h>
 
-#include <db/queryschema.h>
-#include <db/utils.h>
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
-#include <KexiIcon.h>
-
-#include <formeditor/widgetlibrary.h>
-#include <kexiutils/utils.h>
-#include "../kexiformpart.h"
-#include "../kexiformmanager.h"
-#include <widget/utils/kexicontextmenuutils.h>
-
+#include <QApplication>
+#include <QFontMetrics>
+#include <QMenu>
 
 class KexiDBWidgetContextMenuExtender::Private
 {

@@ -19,6 +19,10 @@
 */
 
 #include "kexidblabel.h"
+#include <kexiutils/utils.h>
+#include <formeditor/utils.h>
+
+#include <KDbField>
 
 #include <QPainter>
 #include <qdrawutil.h>
@@ -27,10 +31,6 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QDebug>
-
-#include <db/field.h>
-#include <kexiutils/utils.h>
-#include <formeditor/utils.h>
 
 //! @internal
 class KexiDBLabel::Private

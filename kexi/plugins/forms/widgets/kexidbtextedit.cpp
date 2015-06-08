@@ -21,8 +21,9 @@
 
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
-#include <db/queryschema.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
 
 #include <kapplication.h>
 #include <kstandardshortcut.h>

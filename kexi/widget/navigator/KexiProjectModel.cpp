@@ -19,13 +19,13 @@
 
 #include "KexiProjectModel.h"
 #include "KexiProjectModelItem.h"
-
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
 #include <kexipartmanager.h>
-#include <db/utils.h>
+
+#include <KDbUtils>
 
 #include <QDebug>
 

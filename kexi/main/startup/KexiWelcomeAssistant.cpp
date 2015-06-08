@@ -22,18 +22,18 @@
 #include "KexiWelcomeStatusBar.h"
 #include "KexiPasswordPage.h"
 #include "KexiMainWindow.h"
-
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <db/utils.h>
-#include <db/object.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
+
+#include <KDbUtils>
+#include <KDbObject>
+#include <KDb>
 
 #include <KLocalizedString>
 

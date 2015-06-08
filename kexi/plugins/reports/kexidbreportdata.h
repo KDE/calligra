@@ -22,8 +22,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <db/cursor.h>
-#include <db/utils.h>
+#include <KDbCursor>
+#include <KDbUtils>
 
 #include <KoReportData.h>
 

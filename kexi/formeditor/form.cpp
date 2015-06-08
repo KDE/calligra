@@ -20,26 +20,6 @@
 */
 
 #include "form_p.h"
-
-#include <QApplication>
-#include <QClipboard>
-#include <QLabel>
-#include <QDomDocument>
-#include <QLineEdit>
-#include <QMenu>
-#include <QAction>
-#include <QDebug>
-
-#include <kundo2stack.h>
-
-#include <kmessagebox.h>
-#include <kactioncollection.h>
-#include <kfontdialog.h>
-#include <ktextedit.h>
-#include <KLocalizedString>
-
-#include <KexiIcon.h>
-
 #include "WidgetInfo.h"
 #include "FormWidget.h"
 #include "container.h"
@@ -52,9 +32,27 @@
 #include "widgetwithsubpropertiesinterface.h"
 #include "tabstopdialog.h"
 #include <kexiutils/utils.h>
-#include <kexiutils/identifier.h>
+#include <KexiIcon.h>
 
-#include <db/utils.h>
+#include <kundo2stack.h>
+
+#include <KDb>
+#include <KDbUtils>
+
+#include <kmessagebox.h>
+#include <kactioncollection.h>
+#include <kfontdialog.h>
+#include <ktextedit.h>
+#include <KLocalizedString>
+
+#include <QApplication>
+#include <QClipboard>
+#include <QLabel>
+#include <QDomDocument>
+#include <QLineEdit>
+#include <QMenu>
+#include <QAction>
+#include <QDebug>
 
 using namespace KFormDesigner;
 

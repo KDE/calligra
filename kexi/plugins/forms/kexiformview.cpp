@@ -19,6 +19,35 @@
 */
 
 #include "kexiformview.h"
+#include <formeditor/form.h>
+#include <formeditor/formIO.h>
+#include <formeditor/objecttree.h>
+#include <formeditor/container.h>
+#include <formeditor/commands.h>
+#include <formeditor/widgetwithsubpropertiesinterface.h>
+#include <formeditor/WidgetTreeWidget.h>
+#include <kexi.h>
+#include <kexi_global.h>
+#include <kexidragobjects.h>
+#include <widget/kexiqueryparameters.h>
+#include <kexiutils/utils.h>
+#include <KexiMainWindowIface.h>
+#include "widgets/kexidbform.h"
+#include "kexiformscrollview.h"
+#include "kexidatasourcepage.h"
+#include "kexiformmanager.h"
+#include "widgets/kexidbautofield.h"
+
+#include <KDbField>
+#include <KDbFieldList>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbUtils>
+#include <KDbPreparedStatement>
+#include <KDbTableViewData>
+
+#include <KPropertySet>
+#include <KProperty>
 
 #include <QFileInfo>
 #include <QFocusEvent>
@@ -28,37 +57,6 @@
 #include <QApplication>
 #include <QScrollBar>
 #include <QDebug>
-
-#include <formeditor/form.h>
-#include <formeditor/formIO.h>
-#include <formeditor/objecttree.h>
-#include <formeditor/container.h>
-#include <formeditor/commands.h>
-#include <formeditor/widgetwithsubpropertiesinterface.h>
-#include <formeditor/WidgetTreeWidget.h>
-
-#include <kexi.h>
-#include <kexi_global.h>
-#include <kexidragobjects.h>
-#include <db/field.h>
-#include <db/fieldlist.h>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/preparedstatement.h>
-#include <db/tableviewdata.h>
-#include <widget/kexiqueryparameters.h>
-#include <kexiutils/utils.h>
-#include <KexiMainWindowIface.h>
-
-#include <KPropertySet>
-#include <KProperty>
-
-#include "widgets/kexidbform.h"
-#include "kexiformscrollview.h"
-#include "kexidatasourcepage.h"
-#include "kexiformmanager.h"
-#include "widgets/kexidbautofield.h"
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 

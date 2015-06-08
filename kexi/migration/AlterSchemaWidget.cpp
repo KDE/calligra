@@ -17,6 +17,16 @@
 */
 
 #include "AlterSchemaWidget.h"
+#include <KexiIcon.h>
+#include <KexiMainWindowIface.h>
+#include <kexiproject.h>
+#include <KexiWindow.h>
+#include <widget/KexiNameWidget.h>
+
+#include <KDb>
+#include <KDbConnection>
+
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QTableView>
@@ -24,18 +34,6 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QDebug>
-
-#include <KLocalizedString>
-
-#include <db/tableschema.h>
-
-#include <KexiIcon.h>
-#include <KexiMainWindowIface.h>
-#include <kexiproject.h>
-#include <db/connection.h>
-#include <KexiWindow.h>
-#include <kexiutils/identifier.h>
-#include <widget/KexiNameWidget.h>
 
 using namespace KexiMigration;
 

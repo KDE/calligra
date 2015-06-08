@@ -18,20 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexiproject.h>
-#include <db/connection.h>
-#include <db/parser/parser.h>
-#include <db/cursor.h>
-#include <KexiMainWindowIface.h>
-#include <kexiutils/utils.h>
-#include <KexiWindow.h>
-
 #include "kexiqueryview.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerypart.h"
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/kexiqueryparameters.h>
+#include <kexiproject.h>
+#include <KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
+#include <KexiWindow.h>
+
+#include <KDbConnection>
+#include <KDbParser>
+#include <KDbCursor>
 
 //! @internal
 class KexiQueryView::Private

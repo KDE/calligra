@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/connection.h>
-#include <db/connectiondata.h>
+#include <KDbConnection>
+#include <KDbConnectionData>
 
 namespace Scripting
 {

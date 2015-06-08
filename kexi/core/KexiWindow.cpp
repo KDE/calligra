@@ -22,18 +22,17 @@
 #include "KexiWindowData.h"
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
-
 #include "kexipart.h"
 #include "kexistaticpart.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexiproject.h"
-
-#include <db/connection.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
+
+#include <KDbConnection>
+#include <KDbUtils>
 
 #include <QStackedWidget>
 #include <QEvent>

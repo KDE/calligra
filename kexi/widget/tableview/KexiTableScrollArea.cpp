@@ -24,6 +24,24 @@
    Original Project: buX (www.bux.at)
 */
 
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollArea_p.h"
+#include "KexiTableScrollAreaWidget.h"
+#include "KexiTableScrollAreaHeader.h"
+#include "KexiTableScrollAreaHeaderModel.h"
+#include "kexitableedit.h"
+#include <kexi_global.h>
+#include <kexiutils/utils.h>
+#include "kexicelleditorfactory.h"
+#include <widget/utils/kexidisplayutils.h>
+#include <KexiIcon.h>
+
+#include <KDbCursor>
+#include <KDbValidator>
+
+#include <kcolorscheme.h>
+#include <KLocalizedString>
+
 #include <QPainter>
 #include <QTimer>
 #include <QMenu>
@@ -47,28 +65,9 @@
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
-
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
 #endif
-
-#include <kcolorscheme.h>
-#include <KLocalizedString>
-
-#include <KexiIcon.h>
-
-#include "KexiTableScrollArea.h"
-#include "KexiTableScrollArea_p.h"
-#include "KexiTableScrollAreaWidget.h"
-#include "KexiTableScrollAreaHeader.h"
-#include "KexiTableScrollAreaHeaderModel.h"
-#include "kexitableedit.h"
-#include <kexi_global.h>
-#include <kexiutils/utils.h>
-#include "kexicelleditorfactory.h"
-#include <widget/utils/kexidisplayutils.h>
-#include <db/cursor.h>
-#include <db/validator.h>
 
 //#define KEXITABLEVIEW_DEBUG
 //#define KEXITABLEVIEW_DEBUG_PAINT
