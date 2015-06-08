@@ -103,7 +103,7 @@ public:
     virtual void clear();
     void updateToolBar();
     bool isReadOnly() const;
-    virtual void setReadOnly(bool readOnly);  
+    virtual void setReadOnly(bool readOnly);
     virtual void setInvalidState(const QString& displayText);
 
 public Q_SLOTS:
@@ -115,7 +115,7 @@ public Q_SLOTS:
     void hide_bar();
     
 protected:
-    virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
     void setUrl(const QUrl& url);
     bool m_readOnly;
 

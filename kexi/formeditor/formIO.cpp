@@ -184,7 +184,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     //custom properties
     QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
     QHash<QByteArray, QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
-    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin(); 
+    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin();
         it != itEnd; ++it)
     {
         headerPropertiesEl.setAttribute(it.key(), it.value());

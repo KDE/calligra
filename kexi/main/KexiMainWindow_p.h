@@ -228,7 +228,7 @@ public:
             // (the accuracy is quite OK). 
             // It's also related to the fact that Oxygen's menus have gradient background. 
             // A lot of computation happens under the mask...
-            c.setHsv(h, s, v * 0.91208791, a); 
+            c.setHsv(h, s, v * 0.91208791, a);
             painter->fillRect(option->rect.x() + 6, option->rect.y() + 6,
                               option->rect.width() - 12, option->rect.height() - 12,
                               c);

@@ -205,12 +205,12 @@ typedef struct {
 	unsigned char *free_map;
 	/* reference count */
 	int refs;
-} MdbFile; 
+} MdbFile;
 
 /* offset to row count on data pages...version dependant */
 typedef struct {
 	ssize_t		pg_size;
-	guint16		row_count_offset; 
+	guint16		row_count_offset;
 	guint16		tab_num_rows_offset;
 	guint16		tab_num_cols_offset;
 	guint16		tab_num_idxs_offset;
@@ -227,7 +227,7 @@ typedef struct {
 	guint16		tab_col_offset_var;
 	guint16		tab_col_offset_fixed;
 	guint16		tab_row_col_num_offset;
-} MdbFormatConstants; 
+} MdbFormatConstants;
 
 typedef struct {
 	MdbFile       *f;
@@ -251,7 +251,7 @@ typedef struct {
 	iconv_t	iconv_in;
 	iconv_t	iconv_out;
 #endif
-} MdbHandle; 
+} MdbHandle;
 
 typedef struct {
 	MdbHandle	*mdb;

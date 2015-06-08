@@ -382,7 +382,7 @@ void KexiFormView::updateValuesForSubproperties()
         if (subpropIface && subpropIface->subwidget() && item->subproperties()) {
             QWidget *subwidget = subpropIface->subwidget();
             QHash<QString, QVariant>* subprops = item->subproperties();
-            for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); 
+            for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin();
                 subpropIt != subprops->constEnd(); ++subpropIt)
             {
                 //qDebug() << "delayed setting of the subproperty: widget="
