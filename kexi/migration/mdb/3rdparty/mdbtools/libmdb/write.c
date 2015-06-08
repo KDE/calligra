@@ -270,7 +270,7 @@ mdb_pack_row4(MdbTableDef *table, unsigned char *row_buffer, unsigned int num_fi
 	unsigned int i;
 
 	row_buffer[pos++] = num_fields & 0xff;
-	row_buffer[pos++] = (num_fields >> 8) & 0xff; 
+	row_buffer[pos++] = (num_fields >> 8) & 0xff;
 
 	/* Fixed length columns */
 	for (i=0;i<num_fields;i++) {

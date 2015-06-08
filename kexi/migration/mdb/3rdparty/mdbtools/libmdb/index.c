@@ -93,7 +93,7 @@ mdb_read_indices(MdbTableDef *table)
 		pidx = (MdbIndex *) g_malloc0(sizeof(MdbIndex));
 		pidx->table = table;
 		pidx->index_num = mdb_get_int16(tmpbuf, 4);
-		pidx->index_type = tmpbuf[type_offset]; 
+		pidx->index_type = tmpbuf[type_offset];
 		g_ptr_array_add(table->indices, pidx);
 	}
 	g_free(tmpbuf);
@@ -107,7 +107,7 @@ mdb_read_indices(MdbTableDef *table)
 		}
 		tmpbuf = g_malloc(name_sz);
 		read_pg_if_n(mdb, tmpbuf, &cur_pos, name_sz);
-		mdb_unicode2ascii(mdb, tmpbuf, name_sz, pidx->name, MDB_MAX_OBJ_NAME); 
+		mdb_unicode2ascii(mdb, tmpbuf, name_sz, pidx->name, MDB_MAX_OBJ_NAME);
 		g_free(tmpbuf);
 		
 	}
@@ -393,7 +393,7 @@ mdb_index_find_next_on_page(MdbHandle *mdb, MdbIndexPage *ipg)
 	}
 
 	
-	if (ipg->idx_starts[ipg->start_pos + 1]==0) return 0; 
+	if (ipg->idx_starts[ipg->start_pos + 1]==0) return 0;
 	ipg->len = ipg->idx_starts[ipg->start_pos+1] - ipg->idx_starts[ipg->start_pos];
 	ipg->start_pos++;
 	
@@ -404,7 +404,7 @@ void mdb_index_page_reset(MdbIndexPage *ipg)
 {
 	ipg->offset = 0xf8; /* start byte of the index entries */
 	ipg->start_pos=0;
-	ipg->len = 0; 
+	ipg->len = 0;
 	ipg->idx_starts[0]=0;
 }
 void mdb_index_page_init(MdbIndexPage *ipg)
@@ -502,7 +502,7 @@ mdb_index_read_bottom_pg(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 			return 0;
 	} else {
 		ipg = &(chain->pages[chain->cur_depth - 1]);
-		ipg->len = 0; 
+		ipg->len = 0;
 	}
 
 	mdb_read_pg(mdb, ipg->pg);
@@ -773,7 +773,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 		} else {
 			switch (sarg->op) {
 				case MDB_EQUAL:
-					if (not_all_equal) return 2; 
+					if (not_all_equal) return 2;
 					else return 1;
 					break;
 				case MDB_LIKE:
@@ -799,7 +799,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 		} else {
 			switch (sarg->op) {
 				case MDB_EQUAL:
-					if (not_all_equal) return 3; 
+					if (not_all_equal) return 3;
 					else return 2;
 					break;
 				case MDB_LIKE:

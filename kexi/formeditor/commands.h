@@ -62,7 +62,7 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c);
 protected:
     //! Used to block execution of redo() once, on ading the command to the stack.
     void blockRedoOnce();
@@ -72,7 +72,7 @@ protected:
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c);
 
 //! Command is used when changing a property for one or more widgets. 
 class KFORMEDITOR_EXPORT PropertyCommand : public Command
@@ -121,7 +121,7 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c);
 protected:
     void init();
     class Private;
@@ -129,7 +129,7 @@ protected:
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c);
 
 //! Command used when moving multiples widgets at the same time, while holding Ctrl or Shift.
 /*! You need to supply a list of widget names, and the position of the cursor before moving. Use setPos()
@@ -156,14 +156,14 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &c);
 protected:
     class Private;
     Private * const d;
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &c);
 
 //! Command used when an "Align Widgets position" action is activated.
 /* You just need to give the list of widget names (the selected ones), and the
@@ -184,14 +184,14 @@ public:
     
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AlignWidgetsCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AlignWidgetsCommand &c);
 protected:
     class Private;
     Private * const d;
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AlignWidgetsCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AlignWidgetsCommand &c);
 
 //! Command used when an "Adjust Widgets Size" action is activated.
 /*! You just need to give the list of widget names (the selected ones), 
@@ -220,7 +220,7 @@ public:
     
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AdjustSizeCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AdjustSizeCommand &c);
 protected:
     QSize getSizeFromChildren(ObjectTreeItem *item);
 
@@ -230,7 +230,7 @@ protected:
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AdjustSizeCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const AdjustSizeCommand &c);
 
 //! Command used when switching the layout of a container.
 /*! It remembers the old pos of every widget inside the container. */
@@ -251,14 +251,14 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c);
 protected:
     class Private;
     Private * const d;
 };
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c);
 
 //! Command used when inserting a widget using toolbar or menu. 
 /*! You only have to give the parent Container and the widget pos.
@@ -292,7 +292,7 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c);
 protected:
     void init();
 
@@ -324,7 +324,7 @@ public:
     
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PasteWidgetCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PasteWidgetCommand &c);
 
 protected:
     /*! Internal function used to change the coordinates of a widget to \a newPos
@@ -372,7 +372,7 @@ public:
     
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DeleteWidgetCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DeleteWidgetCommand &c);
 protected:
     class Private;
     Private * const d;
@@ -399,7 +399,7 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DuplicateWidgetCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DuplicateWidgetCommand &c);
 protected:
     class Private;
     Private * const d;
@@ -425,7 +425,7 @@ public:
     
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CutWidgetCommand &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CutWidgetCommand &c);
 protected:
     class Private;
     Private * const d2;
@@ -449,7 +449,7 @@ public:
 
     virtual void debug() const;
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c);
 protected:
     class Private;
     Private * const d;
@@ -494,7 +494,7 @@ protected:
 };
 
 //! qDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InlineTextEditingCommand &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InlineTextEditingCommand &c);
 
 class KFORMEDITOR_EXPORT InsertPageCommand : public Command
 {

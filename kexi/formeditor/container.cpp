@@ -414,7 +414,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             d->updateSelectionOrInsertingRectangle(mev->pos());
 
 //! @todo?            if (d->form->formWidget())
-//! @todo?                d->form->formWidget()->drawRect(r, 1); 
+//! @todo?                d->form->formWidget()->drawRect(r, 1);
 
             d->state = Private::DoingNothing;
             return true;
