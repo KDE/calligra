@@ -590,7 +590,7 @@ void MySQLMigrate::getRow()
     }
     else {
         qWarning() << "No result";
-        m_dataRow = 0;   
+        m_dataRow = 0;
     }
 }
 
