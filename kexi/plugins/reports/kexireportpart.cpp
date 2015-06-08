@@ -113,13 +113,13 @@ void KexiReportPart::initPartActions()
 QString KexiReportPart::loadReport(const QString& name)
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    KexiDB::Connection *conn;
+    KDbConnection *conn;
     if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {
         qDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
         return QString();
     }
     QString src, did;
-    KexiDB::SchemaData sd;
+    KDbObject sd;
 
     if (conn->loadObjectSchemaData(win->project()->idForClass("org.kexi-project.report"), name, sd) != true
         && conn->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true /* compat. */)

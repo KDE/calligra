@@ -84,7 +84,7 @@ public:
     KexiDBConnectionSet *connSet;
     KexiFileWidget *openExistingFileWidget; //! embedded file widget
     KexiConnectionSelectorWidget *openExistingConnWidget;
-    KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
+    KDbConnectionData* selectedExistingConnection; //! helper for returning selected connection
 
     //! true if the dialog contain single page, not tabs
     bool singlePage;
@@ -430,7 +430,7 @@ QString KexiStartupDialog::selectedFileName() const
         return QString();
 }
 
-KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
+KDbConnectionData* KexiStartupDialog::selectedExistingConnection() const
 {
     return d->selectedExistingConnection;
 }

@@ -182,7 +182,7 @@ bool castStringToQVariant(const QString& string, const QCString& type, QVariant&
     }
     const QVariant::Type vtype = typeNameToQVariantType(type);
     bool ok;
-    result = KexiDB::stringToVariant(string, vtype, ok);
+    result = KDb::stringToVariant(string, vtype, &ok);
     return ok;
 }
 
@@ -241,7 +241,7 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
     QCString propertyType(testFileLine[3].toLatin1());
     QString propertyValueString(testFileLine[4]);
     if (propertyName == "type")
-        newValue = (int)KexiDB::Field::typeForString(testFileLine[4]);
+        newValue = (int)KDbField::typeForString(testFileLine[4]);
     else {
         if (!castStringToQVariant(propertyValueString, propertyType, newValue)) {
             showError(QString("Could not set property '%1' value '%2' of type '%3'")
@@ -257,11 +257,11 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
     if (propertyName == "type") {
         //clean subtype name, e.g. from "longText" to "LongText", because dropdown list is case-sensitive
         QString realSubTypeName;
-        if (KexiDB::Field::BLOB == KexiDB::Field::typeForString(testFileLine[4]))
+        if (KDbField::BLOB == KDbField::typeForString(testFileLine[4]))
 //! @todo hardcoded!
             realSubTypeName = "image";
         else
-            realSubTypeName = KexiDB::Field::typeString(KexiDB::Field::typeForString(testFileLine[4]));
+            realSubTypeName = KDbField::typeString(KDbField::typeForString(testFileLine[4]));
         designerIface->changeFieldPropertyForRow(row, "subType", realSubTypeName, 0, true);
     }
     return true;

@@ -58,9 +58,9 @@ class KexiDBFieldList : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
+    KexiDBFieldList(QObject* parent, ::KDbFieldList* fieldlist, bool owner);
     virtual ~KexiDBFieldList();
-    ::KexiDB::FieldList* fieldlist() {
+    ::KDbFieldList* fieldlist() {
         return m_fieldlist;
     }
 
@@ -95,7 +95,7 @@ public Q_SLOTS:
     QObject* subList(QVariantList list);
 
 private:
-    ::KexiDB::FieldList* m_fieldlist;
+    ::KDbFieldList* m_fieldlist;
     bool m_owner;
 };
 

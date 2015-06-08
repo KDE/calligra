@@ -123,7 +123,7 @@ void KexiRelationDesignTool::changeUrlPressed()
 
     int res = m_dbDialog->exec();
     qDebug() << res;
-    KexiDB::ConnectionData *_cd = m_dbDialog->selectedExistingConnection();
+    KDbConnectionData *_cd = m_dbDialog->selectedExistingConnection();
 
     if (_cd) {
         m_fileLabel->setText(_cd->description);
@@ -133,9 +133,9 @@ void KexiRelationDesignTool::changeUrlPressed()
         qDebug() << m_dbDialog->selectedFileName();
         m_fileLabel->setText(m_dbDialog->selectedFileName());
 
-        _cd = new KexiDB::ConnectionData();
+        _cd = new KDbConnectionData();
         _cd->setFileName(m_dbDialog->selectedFileName());
-        _cd->driverName = KexiDB::defaultFileBasedDriverName().toLocal8Bit();
+        _cd->driverName = KDb::defaultFileBasedDriverId().toLocal8Bit();
     }
 
     m_relationDesign->setConnectionData(_cd);
@@ -151,7 +151,7 @@ void KexiRelationDesignTool::updateCombo()
 
 QStringList KexiRelationDesignTool::queryList()
 {
-    KexiDB::Connection *conn = m_relationDesign->connection();
+    KDbConnection *conn = m_relationDesign->connection();
 
     //Get the list of queries in the database
     QStringList qs;
@@ -159,7 +159,7 @@ QStringList KexiRelationDesignTool::queryList()
         QList<int> tids = conn->tableIds();
         qs << "";
         for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema *tsc = conn->tableSchema(tids[i]);
+            KDbTableSchema *tsc = conn->tableSchema(tids[i]);
             if (tsc)
                 qs << tsc->name();
         }
@@ -167,7 +167,7 @@ QStringList KexiRelationDesignTool::queryList()
         QList<int> qids = conn->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema *qsc = conn->querySchema(qids[i]);
+            KDbQuerySchema *qsc = conn->querySchema(qids[i]);
             if (qsc)
                 qs << qsc->name();
         }

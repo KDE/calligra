@@ -27,7 +27,7 @@ int schemaTest()
         return 1;
     }
 
-    KexiDB::TableSchema *t = conn->tableSchema("persons");
+    KDbTableSchema *t = conn->tableSchema("persons");
     if (t)
         t->debug();
     else
@@ -40,8 +40,8 @@ int schemaTest()
     /*
     // some tests
       {
-        KexiDB::Field::ListIterator iter = t->fieldsIterator();
-        KexiDB::Field::List *lst = t->fields();
+        KDbField::ListIterator iter = t->fieldsIterator();
+        KDbField::List *lst = t->fields();
         lst->clear();
         for (;iter.current();++iter) {
           qDebug() << "FIELD=" << iter.current()->name();

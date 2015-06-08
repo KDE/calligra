@@ -29,10 +29,8 @@
 #include <QKeyEvent>
 #include <QEvent>
 
+class KDbTableViewColumn;
 class KexiComboBoxPopup;
-namespace KexiDB {
-class TableViewColumn;
-}
 
 /*! @short Drop-down cell editor.
 */
@@ -41,16 +39,16 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, virtual public KexiComb
     Q_OBJECT
 
 public:
-    explicit KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiComboBoxTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiComboBoxTableEdit();
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::TableViewColumn *column() const {
+    virtual KDbTableViewColumn *column() const {
         return m_column;
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const {
+    virtual KDbField *field() const {
         return m_column->field();
     }
 
@@ -98,7 +96,7 @@ public:
     /*! \return total size of this editor, including popup button. */
     virtual QSize totalSize() const;
 
-    virtual void createInternalEditor(KexiDB::QuerySchema& schema);
+    virtual void createInternalEditor(KDbQuerySchema& schema);
 
     /*! Reimplemented after KexiInputTableEdit. */
     virtual void handleAction(const QString& actionName);
@@ -120,10 +118,10 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotButtonClicked();
-    void slotRowAccepted(KexiDB::RecordData *record, int row) {
+    void slotRowAccepted(KDbRecordData *record, int row) {
         KexiComboBoxBase::slotRowAccepted(record, row);
     }
-    void slotItemSelected(KexiDB::RecordData* record) {
+    void slotItemSelected(KDbRecordData* record) {
         KexiComboBoxBase::slotItemSelected(record);
     }
     void slotInternalEditorValueChanged(const QVariant& v) {

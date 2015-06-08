@@ -77,7 +77,7 @@ tristate KexiTableDesigner_DataView::afterSwitchFrom(Kexi::ViewMode mode)
 
     if (tempData()->tableSchemaChangedInPreviousView) {
         KexiUtils::WaitCursor wait;
-        KexiDB::Cursor *c
+        KDbCursor *c
         = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
               *tempData()->table);
         if (!c)

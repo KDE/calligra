@@ -130,7 +130,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
   if (col>=0 && row>=0) {
     KexiTableEdit *editor = m_tableView->tableEditorWidget( col );
     const bool insertRowSelected = m_tableView->isInsertingEnabled() && row==m_tableView->rowCount();
-    KexiDB::RecordData *record = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
+    KDbRecordData *record = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
     if (editor && record && (col < (int)record->count())) {
       int w = m_tableView->columnWidth( col );
       int h = m_tableView->rowHeight();
@@ -139,7 +139,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
       int align = SingleLine | AlignVCenter;
       QString txtValue;
       QVariant cellValue;
-      KexiDB::TableViewColumn *tvcol = m_tableView->column(col);
+      KDbTableViewColumn *tvcol = m_tableView->column(col);
       if (!m_tableView->getVisibleLookupValue(cellValue, editor, record, tvcol))
         cellValue = insertRowSelected ? editor->displayedField()->defaultValue() : record->at(col); //display default value if available
       const bool focused = m_tableView->selectedItem() == record && col == m_tableView->currentColumn();
@@ -164,7 +164,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 
 //-----------------------------------------
 
-KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* parent)
+KexiTableScrollArea::KexiTableScrollArea(KDbTableViewData* data, QWidget* parent)
         : QScrollArea(parent)
         , KexiRecordNavigatorHandler()
         , KexiSharedActionClient()
@@ -177,7 +177,7 @@ KexiTableScrollArea::KexiTableScrollArea(KexiDB::TableViewData* data, QWidget* p
     d->scrollAreaWidget = new KexiTableScrollAreaWidget(this);
     setWidget(d->scrollAreaWidget);
 
-    m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
+    m_data = new KDbTableViewData(); //to prevent crash because m_data==0
     m_owner = true;                   //-this will be deleted if needed
 
     viewport()->setFocusPolicy(Qt::WheelFocus);
@@ -248,7 +248,7 @@ KexiTableScrollArea::~KexiTableScrollArea()
 {
     cancelRowEdit();
 
-    KexiDB::TableViewData *data = m_data;
+    KDbTableViewData *data = m_data;
     m_data = 0;
     if (m_owner) {
         if (data)
@@ -414,7 +414,7 @@ QRect KexiTableScrollArea::viewportGeometry() const
 }
 
 //internal
-inline void KexiTableScrollArea::paintRow(KexiDB::RecordData *record,
+inline void KexiTableScrollArea::paintRow(KDbRecordData *record,
                                     QPainter *pb, int r, int rowp, int cx, int cy,
                                     int colfirst, int collast, int maxwc)
 {
@@ -577,7 +577,7 @@ void KexiTableScrollArea::drawContents(QPainter *p)
         rowp = rowPos(r); // 'insert' row's position
     } else {
         if (rowfirst >= 0) {
-            QList<KexiDB::RecordData*>::ConstIterator it(m_data->constBegin());
+            QList<KDbRecordData*>::ConstIterator it(m_data->constBegin());
             it += rowfirst;//move to 1st row
             rowp = rowPos(rowfirst); // row position
             for (r = rowfirst;r <= rowlast; r++, ++it, rowp += d->rowHeight) {
@@ -593,10 +593,10 @@ void KexiTableScrollArea::drawContents(QPainter *p)
     paintEmptyArea(p, cx, cy, cw, ch);
 }
 
-bool KexiTableScrollArea::isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value)
+bool KexiTableScrollArea::isDefaultValueDisplayed(KDbRecordData *record, int col, QVariant* value)
 {
     const bool cursorAtInsertRowOrEditingNewRow = (record == m_insertItem || (m_newRowEditing && m_currentItem == record));
-    KexiDB::TableViewColumn *tvcol;
+    KDbTableViewColumn *tvcol;
     if (cursorAtInsertRowOrEditingNewRow
             && (tvcol = m_data->column(col))
             && hasDefaultValueAt(*tvcol)
@@ -609,7 +609,7 @@ bool KexiTableScrollArea::isDefaultValueDisplayed(KexiDB::RecordData *record, in
     return false;
 }
 
-void KexiTableScrollArea::paintCell(QPainter* p, KexiDB::RecordData *record, int row, int col, const QRect &cr, bool print)
+void KexiTableScrollArea::paintCell(QPainter* p, KDbRecordData *record, int row, int col, const QRect &cr, bool print)
 {
     Q_UNUSED(print);
 
@@ -650,7 +650,7 @@ void KexiTableScrollArea::paintCell(QPainter* p, KexiDB::RecordData *record, int
         //qDebug() << "we're at INSERT row...";
     }
 
-    KexiDB::TableViewColumn *tvcol = m_data->column(col);
+    KDbTableViewColumn *tvcol = m_data->column(col);
 
     QVariant cellValue;
     if (col < (int)record->count()) {
@@ -860,7 +860,7 @@ void KexiTableScrollArea::contentsMouseDoubleClickEvent(QMouseEvent *e)
     m_contentsMousePressEvent_dblClick = false;
 
     if (m_currentItem) {
-        if (d->editOnDoubleClick && columnEditable(m_curCol) && columnType(m_curCol) != KexiDB::Field::Boolean) {
+        if (d->editOnDoubleClick && columnEditable(m_curCol) && columnType(m_curCol) != KDbField::Boolean) {
             KexiTableEdit *edit = tableEditorWidget(m_curCol, /*ignoreMissingEditor=*/true);
             if (edit && edit->handleDoubleClick()) {
                 //nothing to do: editors like BLOB editor has custom handling of double clicking
@@ -894,7 +894,7 @@ void KexiTableScrollArea::contentsMousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::RightButton) {
         showContextMenu(e->globalPos());
     } else if (e->button() == Qt::LeftButton) {
-        if (columnType(m_curCol) == KexiDB::Field::Boolean && columnEditable(m_curCol)) {
+        if (columnType(m_curCol) == KDbField::Boolean && columnEditable(m_curCol)) {
             //only accept clicking on the [x] rect (copied from KexiBoolTableEdit::setupContents())
             int s = qMax(d->rowHeight - 5, 12);
             s = qMin(d->rowHeight - 3, s);
@@ -1103,7 +1103,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
             e->accept();
             return;
         } else if (k == Qt::Key_Return || k == Qt::Key_Enter) {
-            if (columnType(m_curCol) == KexiDB::Field::Boolean) {
+            if (columnType(m_curCol) == KDbField::Boolean) {
                 boolToggled();
             } else {
                 acceptEditor();
@@ -1154,13 +1154,13 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
         if (e->isAccepted())
             return;
     } else if (k == Qt::Key_Backspace && nobtn) {
-        if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol)) {
+        if (!ro && columnType(curCol) != KDbField::Boolean && columnEditable(curCol)) {
             const CreateEditorFlags flags = DefaultCreateEditorFlags | ReplaceOldValue;
             createEditor(curRow, curCol, QString(), flags);
         }
     } else if (k == Qt::Key_Space) {
         if (nobtn && !ro && columnEditable(curCol)) {
-            if (columnType(curCol) == KexiDB::Field::Boolean) {
+            if (columnType(curCol) == KDbField::Boolean) {
                 boolToggled();
             } else
                 printable = true; //just space key
@@ -1223,7 +1223,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
     }
     //finally: we've printable char:
     if (printable && !ro) {
-        KexiDB::TableViewColumn *tvcol = m_data->column(curCol);
+        KDbTableViewColumn *tvcol = m_data->column(curCol);
         if (tvcol->acceptsFirstChar(e->text()[0])) {
             qDebug() << "ev pressed: acceptsFirstChar()==true";
             const CreateEditorFlags flags = DefaultCreateEditorFlags | ReplaceOldValue;
@@ -1259,7 +1259,7 @@ KexiDataItemInterface *KexiTableScrollArea::editor(int col, bool ignoreMissingEd
 {
     if (!m_data || col < 0 || col >= columnCount())
         return 0;
-    KexiDB::TableViewColumn *tvcol = m_data->column(col);
+    KDbTableViewColumn *tvcol = m_data->column(col);
 
     //find the editor for this column
     KexiTableEdit *editor = d->editors.value(tvcol);
@@ -1349,7 +1349,7 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
         if (isInsertingEnabled() && row == rowCount()) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
-            KexiDB::RecordData *insertItem = m_insertItem;
+            KDbRecordData *insertItem = m_insertItem;
             beginInsertItem(insertItem, row);
             //'insert' row editing: show another row after that:
             m_data->append(insertItem);
@@ -1455,7 +1455,7 @@ void KexiTableScrollArea::dragMoveEvent(QDragMoveEvent *e)
         if ((p.y() % d->rowHeight) > (d->rowHeight*2 / 3)) {
             row++;
         }
-        KexiDB::RecordData *record = m_data->at(row);
+        KDbRecordData *record = m_data->at(row);
         emit dragOverRow(record, row, e);
         if (e->isAccepted()) {
             if (m_dragIndicatorLine >= 0 && m_dragIndicatorLine != row) {
@@ -1495,8 +1495,8 @@ void KexiTableScrollArea::dropEvent(QDropEvent *e)
         if ((p.y() % d->rowHeight) > (d->rowHeight*2 / 3)) {
             row++;
         }
-        KexiDB::RecordData *record = m_data->at(row);
-        KexiDB::RecordData *newRecord = 0;
+        KDbRecordData *record = m_data->at(row);
+        KDbRecordData *newRecord = 0;
         emit droppedAtRow(record, row, e, newRecord);
         if (newRecord) {
             const int realRow = (row == m_curRow ? -1 : row);
@@ -1762,10 +1762,10 @@ void KexiTableScrollArea::deleteCurrentRow()
     ensureCellVisible(m_curRow, -1);
 }
 
-KexiDB::RecordData* KexiTableScrollArea::insertEmptyRow(int pos)
+KDbRecordData* KexiTableScrollArea::insertEmptyRow(int pos)
 {
     const int previousRow = m_curRow;
-    KexiDB::RecordData* data = KexiDataAwareObjectInterface::insertEmptyRow(pos);
+    KDbRecordData* data = KexiDataAwareObjectInterface::insertEmptyRow(pos);
     // update header selection
     d->verticalHeader->setCurrentIndex(
                 d->verticalHeader->selectionModel()->model()->index(m_curRow, m_curCol));
@@ -1787,7 +1787,7 @@ void KexiTableScrollArea::updateAfterAcceptRowEdit()
 }
 
 bool KexiTableScrollArea::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-        KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const
+        KDbRecordData *record, KDbTableViewColumn *tvcol) const
 {
     if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue() != -1
             && edit->columnInfo()->indexForVisibleLookupValue() < (int)record->count()) {
@@ -1816,7 +1816,7 @@ void KexiTableScrollArea::removeEditor()
     viewport()->setFocus();
 }
 
-void KexiTableScrollArea::slotRowRepaintRequested(KexiDB::RecordData& record)
+void KexiTableScrollArea::slotRowRepaintRequested(KDbRecordData& record)
 {
     updateRow(m_data->indexOf(&record));
 }
@@ -1834,7 +1834,7 @@ KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog
 
     QPainter p(&printer);
 
-    KexiDB::RecordData *i;
+    KDbRecordData *i;
     int width = leftMargin;
     for (int col = 0; col < columnCount(); col++) {
         p.fillRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, QBrush(Qt::gray));
@@ -1880,7 +1880,7 @@ KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog
 }
 #endif
 
-KexiDB::Field* KexiTableScrollArea::field(int column) const
+KDbField* KexiTableScrollArea::field(int column) const
 {
     if (!m_data || !m_data->column(column))
         return 0;
@@ -1906,7 +1906,7 @@ void KexiTableScrollArea::adjustColumnWidthToContents(int column)
     if (indexOfVisibleColumn < 0)
         return;
 
-    QList<KexiDB::RecordData*>::ConstIterator it(m_data->constBegin());
+    QList<KDbRecordData*>::ConstIterator it(m_data->constBegin());
     if (it != m_data->constEnd() && (*it)->count() <= indexOfVisibleColumn)
         return;
 
@@ -2300,7 +2300,7 @@ void KexiTableScrollArea::setHighlightedRow(int row)
     }
 }
 
-KexiDB::RecordData *KexiTableScrollArea::highlightedItem() const
+KDbRecordData *KexiTableScrollArea::highlightedItem() const
 {
     return d->highlightedRow == -1 ? 0 : m_data->at(d->highlightedRow);
 }
@@ -2397,7 +2397,7 @@ QString KexiTableScrollArea::whatsThisText(const QPoint &pos) const
         return xi18nc("@info:whatsthis", "Record navigator.");
     }
     const int col = columnAt(pos.x() - leftMargin);
-    KexiDB::Field *f = col == -1 ? 0 : field(col);
+    KDbField *f = col == -1 ? 0 : field(col);
     if (!f) {
         return QString();
     }
@@ -2427,7 +2427,7 @@ QAbstractItemModel* KexiTableScrollArea::headerModel() const
     return d->headerModel;
 }
 
-void KexiTableScrollArea::beginInsertItem(KexiDB::RecordData *newRecord, int pos)
+void KexiTableScrollArea::beginInsertItem(KDbRecordData *newRecord, int pos)
 {
     Q_UNUSED(newRecord);
     KexiTableScrollAreaHeaderModel* headerModel
@@ -2435,7 +2435,7 @@ void KexiTableScrollArea::beginInsertItem(KexiDB::RecordData *newRecord, int pos
     headerModel->beginInsertRows(headerModel->index(pos, 0).parent(), pos, pos);
 }
 
-void KexiTableScrollArea::endInsertItem(KexiDB::RecordData *newRecord, int pos)
+void KexiTableScrollArea::endInsertItem(KDbRecordData *newRecord, int pos)
 {
     Q_UNUSED(newRecord);
     Q_UNUSED(pos);
@@ -2444,7 +2444,7 @@ void KexiTableScrollArea::endInsertItem(KexiDB::RecordData *newRecord, int pos)
     headerModel->endInsertRows();
 }
 
-void KexiTableScrollArea::beginRemoveItem(KexiDB::RecordData *record, int pos)
+void KexiTableScrollArea::beginRemoveItem(KDbRecordData *record, int pos)
 {
     Q_UNUSED(record);
     KexiTableScrollAreaHeaderModel* headerModel

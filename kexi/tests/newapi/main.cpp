@@ -52,8 +52,8 @@ int cursor_options = 0;
 bool db_name_required = true;
 
 QPointer<KexiProject> project;
-QPointer<KexiDB::Connection> conn;
-QPointer<KexiDB::Driver> driver;
+QPointer<KDbConnection> conn;
+QPointer<KDbDriver> driver;
 KApplication *app = 0;
 KComponentData *instance = 0;
 
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 
     drv_name = args->arg(0);
 
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     QStringList names = manager.driverNames();
     qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
@@ -183,7 +183,7 @@ int main(int argc, char** argv)
     }
 
     //get driver
-    const KexiDB::Driver::Info drv_info = manager.driverInfo(drv_name);
+    const KDbDriver::Info drv_info = manager.driverInfo(drv_name);
     driver = manager.driver(drv_name);
     if (drv_info.name.isEmpty() || manager.error()) {
         manager.debugError();
@@ -202,7 +202,7 @@ int main(int argc, char** argv)
     if (!db_name.isEmpty()) {
         //additional switches:
         if (args->isSet("buffered-cursors")) {
-            cursor_options |= KexiDB::Cursor::Buffered;
+            cursor_options |= KDbCursor::Buffered;
         }
         KexiProjectData project_data;
         project_data.setDatabaseName(db_name);
@@ -276,8 +276,8 @@ int main(int argc, char** argv)
 //    if (conn && !conn->disconnect())
 //        r = 1;
 
-// qDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount();
-// qDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount();
+// qDebug() << "!!! KDbTransaction::globalcount == " << KDbTransaction::globalCount();
+// qDebug() << "!!! KDbTransactionData::globalcount == " << KDbTransactionData::globalCount();
 
     delete app;
 

@@ -152,7 +152,7 @@ void KexiNameDialog::slotTextChanged()
 
 bool KexiNameDialog::canOverwrite()
 {
-    KexiDB::SchemaData tmp_sdata;
+    KDbObject tmp_sdata;
     tristate result = d->project->dbConnection()->loadObjectSchemaData(
                           d->project->idForClass(d->part->info()->partClass()),
                           widget()->nameText(), tmp_sdata);

@@ -26,11 +26,8 @@
 #include "kexicore_export.h"
 
 class KexiDataItemInterface;
-namespace KexiDB
-{
-class Field;
-class QueryColumnInfo;
-}
+class KDbField;
+class KDbQueryColumnInfo;
 
 //! An helper class used to react on KexiDataItemInterface objects' changes.
 class KEXICORE_EXPORT KexiDataItemChangesListener
@@ -78,13 +75,13 @@ public:
                   const QVariant* visibleValue = 0);
 
     //! \return field information for this item
-    virtual KexiDB::Field *field() const = 0;
+    virtual KDbField *field() const = 0;
 
     //! \return column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const = 0;
+    virtual KDbQueryColumnInfo* columnInfo() const = 0;
 
     //! Used internally to set column information.
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) = 0;
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo) = 0;
 
     //! Sets listener. No need to reimplement this.
     virtual void installListener(KexiDataItemChangesListener* listener);
@@ -105,7 +102,7 @@ public:
 
     //! \return true if editor's value is empty (not necessary null).
     //! Only few data types can accept "EMPTY" property
-    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! (use KDbField::hasEmptyProperty() to check this).
     //! Used for checking if a given constraint within table of form is met.
     virtual bool valueIsEmpty() = 0;
 

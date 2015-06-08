@@ -25,7 +25,7 @@
 
 using namespace Scripting;
 
-KexiDBDriver::KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver)
+KexiDBDriver::KexiDBDriver(QObject* parent, ::KDbDriver* driver)
         : QObject(parent)
         , m_driver(driver)
 {
@@ -83,7 +83,7 @@ uint KexiDBDriver::connectionCount()
 
 //! @todo
 /*QObject* KexiDBDriver::connection(uint index) {
-    QSet<KexiDB::Connection*> list = m_driver->connectionsList();
+    QSet<KDbConnection*> list = m_driver->connectionsList();
     return (index < list.count()) ? list.at(index) : 0;
 }*/
 

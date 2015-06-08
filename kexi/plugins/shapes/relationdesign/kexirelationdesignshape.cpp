@@ -182,7 +182,7 @@ void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverte
     painter.restore();
 }
 
-void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
+void KexiRelationDesignShape::setConnectionData(KDbConnectionData *cd)
 {
     if (m_connectionData != cd) {
 
@@ -194,10 +194,10 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
         }
         m_connectionData = cd;
 
-        KexiDB::DriverManager dm;
+        KDbDriverManager dm;
 
         qDebug() << m_connectionData->driverName;
-        KexiDB::Driver *_driver = dm.driver(m_connectionData->driverName);
+        KDbDriver *_driver = dm.driver(m_connectionData->driverName);
 
         if (_driver) {
             m_connection = _driver->createConnection(*m_connectionData);
@@ -221,12 +221,12 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData *cd)
     }
 }
 
-KexiDB::ConnectionData *KexiRelationDesignShape::connectionData()
+KDbConnectionData *KexiRelationDesignShape::connectionData()
 {
     return m_connectionData;
 }
 
-KexiDB::Connection *KexiRelationDesignShape::connection()
+KDbConnection *KexiRelationDesignShape::connection()
 {
     return m_connection;
 }
@@ -242,15 +242,15 @@ void KexiRelationDesignShape::setRelation(const QString &rel)
         if (m_connection && m_connection->isConnected()) {
             if (m_connection->tableSchema(m_relation)) {
                 qDebug() << m_relation <<  " is a table..";
-                m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->tableSchema(m_relation));
+                m_relationSchema = new KDbTableOrQuerySchema(m_connection->tableSchema(m_relation));
             } else if (m_connection->querySchema(m_relation)) {
                 qDebug() << m_relation <<  " is a query..";
-                m_relationSchema = new KexiDB::TableOrQuerySchema(m_connection->querySchema(m_relation));
+                m_relationSchema = new KDbTableOrQuerySchema(m_connection->querySchema(m_relation));
             }
         }
         if (m_relationSchema) { //We have the schema, so lets lets paint it
-            KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
-            foreach(KexiDB::QueryColumnInfo * column, columns) {
+            KDbQueryColumnInfo::Vector columns = m_relationSchema->columns(true);
+            foreach(KDbQueryColumnInfo * column, columns) {
                 m_fieldData.append(new SimpleField(column));
             }
         }

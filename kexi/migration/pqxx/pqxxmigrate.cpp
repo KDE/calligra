@@ -43,7 +43,6 @@
 #include <string>
 #include <vector>
 
-using namespace KexiDB;
 using namespace KexiMigration;
 
 /*
@@ -66,7 +65,7 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
     m_rows = 0;
     m_row = 0;
     
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     setDriver(manager.driver("pqxx"));
 }
 //==================================================================================
@@ -81,7 +80,7 @@ PqxxMigrate::~PqxxMigrate()
 //any any other attributes required by kexi
 //helped by reading the 'tables' test program
 bool PqxxMigrate::drv_readTableSchema(
-    const QString& originalName, KexiDB::TableSchema& tableSchema)
+    const QString& originalName, KDbTableSchema& tableSchema)
 {
     //Perform a query on the table to get some data
     //qDebug();
@@ -91,12 +90,12 @@ bool PqxxMigrate::drv_readTableSchema(
     //Loop round the fields
     for (uint i = 0; i < (uint)m_res->columns(); i++) {
         QString fldName(m_res->column_name(i));
-        KexiDB::Field::Type fldType = type(m_res->column_type(i), fldName);
+        KDbField::Type fldType = type(m_res->column_type(i), fldName);
         QString fldID(KexiUtils::stringToIdentifier(fldName));
         const pqxx::oid toid = tableOid(originalName);
         if (toid == 0)
             return false;
-        KexiDB::Field *f = new KexiDB::Field(fldID, fldType);
+        KDbField *f = new KDbField(fldID, fldType);
         f->setCaption(fldName);
         f->setPrimaryKey(primaryKey(toid, i));
         f->setUniqueKey(uniqueKey(toid, i));
@@ -123,39 +122,39 @@ bool PqxxMigrate::drv_tableNames(QStringList& tableNames)
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
-KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
+KDbField::Type PqxxMigrate::type(int t, const QString& fname)
 {
     switch (t) {
     case UNKNOWNOID:
-        return KexiDB::Field::InvalidType;
+        return KDbField::InvalidType;
     case BOOLOID:
-        return KexiDB::Field::Boolean;
+        return KDbField::Boolean;
     case INT2OID:
-        return KexiDB::Field::ShortInteger;
+        return KDbField::ShortInteger;
     case INT4OID:
-        return KexiDB::Field::Integer;
+        return KDbField::Integer;
     case INT8OID:
-        return KexiDB::Field::BigInteger;
+        return KDbField::BigInteger;
     case FLOAT4OID:
-        return KexiDB::Field::Float;
+        return KDbField::Float;
     case FLOAT8OID:
-        return KexiDB::Field::Double;
+        return KDbField::Double;
     case NUMERICOID:
-        return KexiDB::Field::Double;
+        return KDbField::Double;
     case DATEOID:
-        return KexiDB::Field::Date;
+        return KDbField::Date;
     case TIMEOID:
-        return KexiDB::Field::Time;
+        return KDbField::Time;
     case TIMESTAMPOID:
-        return KexiDB::Field::DateTime;
+        return KDbField::DateTime;
     case BYTEAOID:
-        return KexiDB::Field::BLOB;
+        return KDbField::BLOB;
     case BPCHAROID:
-        return KexiDB::Field::Text;
+        return KDbField::Text;
     case VARCHAROID:
-        return KexiDB::Field::Text;
+        return KDbField::Text;
     case TEXTOID:
-        return KexiDB::Field::LongText;
+        return KDbField::LongText;
     }
 
     //Ask the user what to do with this field
@@ -389,7 +388,7 @@ tristate PqxxMigrate::drv_queryStringListFromSQL(
 }
 
 tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KexiDB::RecordData& data, bool &firstRecord)
+        KDbRecordData& data, bool &firstRecord)
 {
     if (firstRecord || !m_res) {
         if (m_res)
@@ -410,14 +409,14 @@ tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
     const int numFields = m_fetchRecordFromSQL_iter.size();
     data.resize(numFields);
     for (int i = 0; i < numFields; i++)
-        data[i] = KexiDB::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i));
+        data[i] = KDb::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i)); //!< @todo KEXI3
     return true;
 }
 
 //=========================================================================
 /*! Copy PostgreSQL table to KexiDB database */
-bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                KexiDB::TableSchema* dstTable)
+bool PqxxMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn,
+                                KDbTableSchema* dstTable)
 {
     std::vector<std::string> R;
 
@@ -426,19 +425,19 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
     pqxx::tablereader stream(T, (srcTable.toLatin1().constData()));
 
     //Loop round each row, reading into a vector of strings
-    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
+    const KDbQueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
     for (int n = 0; (stream >> R); ++n) {
         QList<QVariant> vals;
         std::vector<std::string>::const_iterator i, end(R.end());
         int index = 0;
         for (i = R.begin(); i != end; ++i, index++) {
-            if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::BLOB
-                    || fieldsExpanded.at(index)->field->type() == KexiDB::Field::LongText) {
-                vals.append(KexiDB::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
-            } else if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::Boolean) {
+            if (fieldsExpanded.at(index)->field->type() == KDbField::BLOB
+                    || fieldsExpanded.at(index)->field->type() == KDbField::LongText) {
+                vals.append(KDb::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
+            } else if (fieldsExpanded.at(index)->field->type() == KDbField::Boolean) {
                 vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
             } else
-                vals.append(KexiDB::cstringToVariant((*i).c_str(),
+                vals.append(KDb::cstringToVariant((*i).c_str(),
                                                      fieldsExpanded.at(index)->field, (*i).size()));
         }
         if (!destConn->insertRecord(*dstTable, vals))

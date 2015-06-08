@@ -39,9 +39,10 @@
 #include <widget/KexiProjectSelectorWidget.h>
 #include <KexiIcon.h>
 
+#include <KDb>
 #include <KDbUtils>
 #include <KDbObject>
-#include <KDb>
+#include <KDbDriverManager>
 
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -330,7 +331,7 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-    if (KexiDB::hasDatabaseServerDrivers()) {
+    if (KDbDriverManager().hasDatabaseServerDrivers()) {
         QVBoxLayout *lyr = new QVBoxLayout;
         connSelector = new KexiConnectionSelectorWidget(
             Kexi::connset(),
@@ -419,7 +420,7 @@ KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
 {
 }
 
-bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
+bool KexiProjectDatabaseNameSelectionPage::setConnection(KDbConnectionData* data)
 {
     m_projectSelector->setProjectSet(0);
     conndataToShow = 0;
@@ -612,13 +613,13 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
             return;
         }
         //file-based project
-        KexiDB::ConnectionData cdata;
-        cdata.driverName = KexiDB::defaultFileBasedDriverName();
+        KDbConnectionData cdata;
+        cdata.driverName = KDb::defaultFileBasedDriverId();
         cdata.setFileName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
         createProject(cdata, cdata.fileName(), d->titleSelectionPage()->contents->le_title->text());
     }
     else if (page == d->m_projectConnectionSelectionPage) {
-        KexiDB::ConnectionData *cdata
+        KDbConnectionData *cdata
             = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
         if (cdata) {
             if (cdata->passwordNeeded()) {
@@ -632,7 +633,7 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         }
     }
     else if (page == d->m_passwordPage) {
-        KexiDB::ConnectionData *cdata
+        KDbConnectionData *cdata
             = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
         d->passwordPage()->updateConnectionData(cdata);
         if (cdata && d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
@@ -653,7 +654,7 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
 }
 
 void KexiNewProjectAssistant::createProject(
-    const KexiDB::ConnectionData& cdata, const QString& databaseName,
+    const KDbConnectionData& cdata, const QString& databaseName,
     const QString& caption)
 {
     KexiProjectData new_data(cdata, databaseName, caption);

@@ -181,7 +181,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 #endif
         }
         if (shortcutPath.isEmpty()) {
-            const KexiDB::ConnectionData *conn = newData->constConnectionData();
+            const KDbConnectionData *conn = newData->constConnectionData();
             if (conn->fileName().isEmpty()) {// server-based
                 shortcutPath = path + newData->databaseName();
                 if (!conn->hostName.isEmpty()) {
@@ -225,7 +225,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
     return result;
 }
 
-KexiRecentProjects::KexiRecentProjects(KexiDB::MessageHandler* handler)
+KexiRecentProjects::KexiRecentProjects(KDbMessageHandler* handler)
     : KexiProjectSet(handler)
     , d(new Private(this))
 {

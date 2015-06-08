@@ -36,7 +36,7 @@ class KexiFieldListModel::Private
 public:
     Private();
     ~Private();
-    KexiDB::TableOrQuerySchema* schema;
+    KDbTableOrQuerySchema* schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
     QList<KexiFieldListModelItem*> items;
@@ -63,7 +63,7 @@ KexiFieldListModel::~KexiFieldListModel()
     delete d;
 }
 
-void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListModel::setSchema(KDbTableOrQuerySchema* schema)
 {
     if (schema && d->schema == schema)
         return;
@@ -76,10 +76,10 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     qDeleteAll(d->items);
     d->items.clear();
     KexiFieldListModelItem *item = 0;
-    KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
+    KDbQueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
     for (int i = -2; i < count; i++) {
-        KexiDB::QueryColumnInfo *colinfo = 0;
+        KDbQueryColumnInfo *colinfo = 0;
         if (i == -2) {
             if (!(d->options & ShowEmptyItem))
                 continue;

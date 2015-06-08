@@ -33,7 +33,7 @@
 class KexiDBReportData : public KoReportData
 {
 public:
-    KexiDBReportData(const QString &objectName, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &objectName, KDbConnection *conn);
 
     /*!
      * @a partClass specifies @a objectName type: a table or query.
@@ -42,7 +42,7 @@ public:
      * -"org.kexi-project.query"
      * -empty QString() - attempt to resolve @a objectName
      */
-    KexiDBReportData(const QString &objectName, const QString& partClass, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &objectName, const QString& partClass, KDbConnection *conn);
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;

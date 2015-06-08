@@ -35,7 +35,7 @@ int cursorsTest()
         return 1;
     }
 
-    KexiDB::Cursor *cursor = conn->executeQuery("select * from persons", cursor_options);
+    KDbCursor *cursor = conn->executeQuery("select * from persons", cursor_options);
     qDebug() << "executeQuery() = " << !!cursor;
     if (!cursor)
         return 1;

@@ -108,7 +108,7 @@ void KexiDBTextEdit::setInvalidState(const QString& displayText)
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 //! @todo how about rich text?
-    if (m_columnInfo && m_columnInfo->field->type() == KexiDB::Field::Boolean) {
+    if (m_columnInfo && m_columnInfo->field->type() == KDbField::Boolean) {
 //! @todo temporary solution for booleans!
         KTextEdit::setHtml(add.toBool() ? "1" : "0");
     } else {
@@ -222,7 +222,7 @@ void KexiDBTextEdit::clear()
     document()->clear();
 }
 
-void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBTextEdit::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     if (!cinfo) {
@@ -230,7 +230,7 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         return;
     }
 
-    if (cinfo->field->type() == KexiDB::Field::Text) {
+    if (cinfo->field->type() == KDbField::Text) {
         if (!designMode()) {
             if (cinfo->field->maxLength() > 0) {
                 m_length = cinfo->field->maxLength();

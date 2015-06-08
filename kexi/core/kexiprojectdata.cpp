@@ -22,6 +22,7 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
+#include <KDbUtils>
 #include <KDbDriverManager>
 #include <KDbConnectionData>
 
@@ -58,7 +59,7 @@ public:
             : userMode(false)
             , readOnly(false) {}
 
-    KexiDB::ConnectionData connData;
+    KDbConnectionData connData;
     QDateTime lastOpened;
     bool userMode;
     bool readOnly;
@@ -95,7 +96,7 @@ KexiProjectData::AutoOpenObjects& KexiProjectData::AutoOpenObjects::operator=(
 
 KexiProjectData::KexiProjectData()
         : QObject(0)
-        , KexiDB::SchemaData()
+        , KDbObject()
         , formatVersion(0)
         , d(new KexiProjectDataPrivate())
 {
@@ -103,9 +104,9 @@ KexiProjectData::KexiProjectData()
 }
 
 KexiProjectData::KexiProjectData(
-    const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption)
+    const KDbConnectionData &cdata, const QString& dbname, const QString& caption)
         : QObject(0)
-        , KexiDB::SchemaData()
+        , KDbObject()
         , formatVersion(0)
         , d(new KexiProjectDataPrivate())
 {
@@ -117,7 +118,7 @@ KexiProjectData::KexiProjectData(
 
 KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
         : QObject(0)
-        , KexiDB::SchemaData()
+        , KDbObject()
         , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
@@ -132,7 +133,7 @@ KexiProjectData::~KexiProjectData()
 
 KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
 {
-    static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
+    static_cast<KDbObject&>(*this) = static_cast<const KDbObject&>(pdata);
     //deep copy
     autoopenObjects = pdata.autoopenObjects;
     formatVersion = pdata.formatVersion;
@@ -140,26 +141,26 @@ KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
     return *this;
 }
 
-KexiDB::ConnectionData* KexiProjectData::connectionData()
+KDbConnectionData* KexiProjectData::connectionData()
 {
     return &d->connData;
 }
 
-const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
+const KDbConnectionData* KexiProjectData::constConnectionData() const
 {
     return &d->connData;
 }
 
 QString KexiProjectData::databaseName() const
 {
-    return KexiDB::SchemaData::name();
+    return KDbObject::name();
 }
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
     //qDebug() << dbName;
     //qDebug() << *this;
-    KexiDB::SchemaData::setName(dbName);
+    KDbObject::setName(dbName);
 }
 
 bool KexiProjectData::userMode() const
@@ -179,12 +180,12 @@ void KexiProjectData::setLastOpened(const QDateTime& lastOpened)
 }
 QString KexiProjectData::description() const
 {
-    return KexiDB::SchemaData::description();
+    return KDbObject::description();
 }
 
 void KexiProjectData::setDescription(const QString& desc)
 {
-    return KexiDB::SchemaData::setDescription(desc);
+    return KDbObject::setDescription(desc);
 }
 
 QString KexiProjectData::infoString(bool nobr) const
@@ -262,8 +263,8 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     formatVersion = _formatVersion;
     d->connData.hostName = cg.readEntry("server"); //empty allowed, means localhost
     if (isDatabaseShortcut) {
-        KexiDB::DriverManager driverManager;
-        const KexiDB::Driver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
+        KDbDriverManager driverManager;
+        const KDbDriver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
         if (dinfo.name.isEmpty()) {
             //! @todo ERR: "No valid driver for "engine" found
             return false;
@@ -307,7 +308,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     if (formatVersion >= 2) {
         //qDebug() << cg.hasKey("encryptedPassword");
         d->connData.password = cg.readEntry("encryptedPassword");
-        KexiUtils::simpleDecrypt(d->connData.password);
+        KexiUtils::simpleDecrypt(&d->connData.password);
     }
     if (d->connData.password.isEmpty()) {//no "encryptedPassword", for compatibility
         //UNSAFE
@@ -421,7 +422,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
             cg.writeEntry("password", d->connData.password);
         } else {
             QString encryptedPassword = d->connData.password;
-            KexiUtils::simpleCrypt(encryptedPassword);
+            KDbUtils::simpleCrypt(&encryptedPassword);
             cg.writeEntry("encryptedPassword", encryptedPassword);
             encryptedPassword.fill(' '); //for security
         }
@@ -438,7 +439,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
 
 QString KexiProjectData::name() const
 {
-    return KexiDB::SchemaData::name();
+    return KDbObject::name();
 }
 
 KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)

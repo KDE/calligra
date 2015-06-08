@@ -29,7 +29,7 @@
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
 
-#include <KDbUtils>
+#include <KDb>
 
 #include <QFrame>
 #include <QSet>
@@ -102,10 +102,10 @@ KexiDBSubForm::setFormName(const QString &name)
     if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
         return;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     // we check if there is a form with this name
-    int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
+    int id = KDb::idForObjectName(*conn, name, KexiPart::FormObjectType);
     if ((id == 0) || (id == view->window()->id())) // == our form
         return; // because of recursion when loading
 

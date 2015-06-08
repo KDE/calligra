@@ -44,7 +44,7 @@ public:
     }
 
 
-    KexiDB::TableOrQuerySchema* schema;
+    KDbTableOrQuerySchema* schema;
     KexiFieldListModel *model;
     KexiFieldListOptions options;
 };
@@ -67,7 +67,7 @@ KexiFieldListView::~KexiFieldListView()
     delete d;
 }
 
-void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListView::setSchema(KDbTableOrQuerySchema* schema)
 {
     if (schema && d->schema == schema)
         return;
@@ -88,7 +88,7 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
     setModel(d->model);
 }
 
-KexiDB::TableOrQuerySchema* KexiFieldListView::schema() const {
+KDbTableOrQuerySchema* KexiFieldListView::schema() const {
     return d->schema;
 }
 

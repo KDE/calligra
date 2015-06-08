@@ -13,7 +13,7 @@ Assumptions
 1. Now, I dont think about yet about features like data editing, sorting etc. 
   so, I try to forget about KexiTableList, until sorting will be readded.
 
-2. I will try to reimpl. KexiTableView to accept (reuse) raw data offered internally by KexiDB::Cursor:
+2. I will try to reimpl. KexiTableView to accept (reuse) raw data offered internally by KDbCursor:
    const char ** recordData() const;
   This is easy at least for buffered read-only data. So, we also consider that cursor used as datasource
   is buffered.

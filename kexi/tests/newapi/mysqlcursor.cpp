@@ -11,7 +11,7 @@
 int main(int argc, char * argv[])
 {
     KComponentData componentData("newapi");
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     QStringList names = manager.driverNames();
     qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
@@ -22,14 +22,14 @@ int main(int argc, char * argv[])
     }
 
     //get driver
-    KexiDB::Driver *driver = manager.driver("mySQL");
+    KDbDriver *driver = manager.driver("mySQL");
     if (manager.error()) {
         qDebug() << manager.errorMsg();
         return 1;
     }
 
     //connection data that can be later reused
-    KexiDB::ConnectionData conn_data;
+    KDbConnectionData conn_data;
 
     conn_data.userName = "root";
     if (argc > 1)
@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
         conn_data.password = "mysql";
     conn_data.hostName = "localhost";
 
-    KexiDB::Connection *conn = driver->createConnection(conn_data);
+    KDbConnection *conn = driver->createConnection(conn_data);
     if (driver->error()) {
         qDebug() << driver->errorMsg();
         return 1;
@@ -53,11 +53,11 @@ int main(int argc, char * argv[])
     }
 
     qDebug() << "Creating first cursor";
-    KexiDB::Cursor *c = conn->executeQuery("select * from Applications");
+    KDbCursor *c = conn->executeQuery("select * from Applications");
     if (!c)
         qDebug() << conn->errorMsg();
     qDebug() << "Creating second cursor";
-    KexiDB::Cursor *c2 = conn->executeQuery("select * from Applications");
+    KDbCursor *c2 = conn->executeQuery("select * from Applications");
     if (!c2)
         qDebug() << conn->errorMsg();
 
@@ -103,7 +103,7 @@ int main(int argc, char * argv[])
         qDebug() << "Cursor: Value(1)" << c->value(1).toString();
     }
 #if 0
-    KexiDB::Table *t = conn->tableSchema("persons");
+    KDbTable *t = conn->tableSchema("persons");
     if (t)
         t->debug();
     t = conn->tableSchema("cars");

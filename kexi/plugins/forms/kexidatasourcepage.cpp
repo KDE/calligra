@@ -295,7 +295,7 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
         || partClass == QLatin1String("org.kexi-project.query");
     if (isPartAcceptable && m_formDataSourceCombo->isSelectionValid())
     {
-        KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
+        KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
             m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(), 
             partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
@@ -327,13 +327,13 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
 
 void KexiDataSourcePage::slotFieldSelected()
 {
-    KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+    KDbField::Type dataType = KDbField::InvalidType;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
-    KexiDB::Field *field = m_tableOrQuerySchema->field(
+    KDbField *field = m_tableOrQuerySchema->field(
                                m_widgetDataSourceCombo->fieldOrExpression());  //temp
 #else
 //! @todo this should also work for expressions
-    KexiDB::Field *field = m_fieldListView->schema()->field(
+    KDbField *field = m_fieldListView->schema()->field(
                                m_widgetDataSourceCombo->fieldOrExpression());
 #endif
     if (field)

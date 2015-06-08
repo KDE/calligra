@@ -23,10 +23,7 @@
 
 #include <widget/tableview/KexiDataTableView.h>
 
-namespace KexiDB
-{
-class QuerySchema;
-}
+class KDbQuerySchema;
 
 class KexiQueryView : public KexiDataTableView
 {
@@ -42,7 +39,7 @@ public:
 protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
 
@@ -52,7 +49,7 @@ protected:
      \return true on success, false on failure and cancelled when user has
      cancelled execution (for example when she pressed the Cancel button
      of the "Enter Query Parameter" input dialog. */
-    tristate executeQuery(KexiDB::QuerySchema *query);
+    tristate executeQuery(KDbQuerySchema *query);
 
     class Private;
     Private * const d;
