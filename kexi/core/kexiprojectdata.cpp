@@ -19,22 +19,22 @@
 */
 
 #include "kexiprojectdata.h"
+#include <kexiutils/utils.h>
+#include <kexi_global.h>
 
-#include <sys/types.h>
-#include <unistd.h>
-
-#include <QDir>
-#include <QStringList>
-#include <QDebug>
+#include <KDbDriverManager>
+#include <KDbConnectionData>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
 
-#include <db/drivermanager.h>
-#include <db/connectiondata.h>
-#include <kexiutils/utils.h>
-#include <kexi_global.h>
+#include <QDir>
+#include <QStringList>
+#include <QDebug>
+
+#include <sys/types.h>
+#include <unistd.h>
 
 //! Version of the KexiProjectData format.
 #define KEXIPROJECTDATA_FORMAT 3

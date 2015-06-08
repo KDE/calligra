@@ -23,14 +23,17 @@
 #include <QObject>
 #include <QMetaObject>
 #include <QAction>
+
 #include <kross/core/manager.h>
+
+#include <KDbConnection>
+
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
-#include <db/connection.h>
 
 /**
 * Adaptor class that provides Kexi specific functionality to

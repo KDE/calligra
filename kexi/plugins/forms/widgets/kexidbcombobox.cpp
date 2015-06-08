@@ -19,7 +19,12 @@
 
 #include "kexidbcombobox.h"
 #include "kexidblineedit.h"
-#include "../kexiformscrollview.h"
+#include "kexiformscrollview.h"
+#include <widget/tableview/kexicomboboxpopup.h>
+#include <widget/tableview/kexicelleditorfactory.h>
+#include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
 
 #include <kcombobox.h>
 
@@ -30,11 +35,6 @@
 #include <qdrawutil.h>
 #include <QCursor>
 #include <QList>
-
-#include <db/queryschema.h>
-#include <widget/tableview/kexicomboboxpopup.h>
-#include <widget/tableview/kexicelleditorfactory.h>
-#include <kexiutils/utils.h>
 
 //! @internal
 class KexiDBComboBox::Private

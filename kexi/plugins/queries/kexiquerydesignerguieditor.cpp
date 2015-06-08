@@ -19,28 +19,6 @@
 */
 
 #include "kexiquerydesignerguieditor.h"
-
-#include <QDomDocument>
-#include <QRegExp>
-#include <QSplitter>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QSet>
-#include <QLocale>
-#include <QDebug>
-
-#include <kmessagebox.h>
-#include <KLocalizedString>
-
-#include <db/field.h>
-#include <db/queryschema.h>
-#include <db/connection.h>
-#include <db/parser/parser.h>
-#include <db/parser/sqlparser.h>
-#include <db/utils.h>
-#include <db/roweditbuffer.h>
-#include <db/tableviewdata.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -53,13 +31,35 @@
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
 #include <widget/relations/KexiRelationsView.h>
 #include <widget/relations/KexiRelationsTableContainer.h>
-#include <KProperty>
-#include <KPropertySet>
 #include "kexiquerypart.h"
 #include "kexiqueryview.h"
 #include <KexiWindow.h>
 #include <KexiWindowData.h>
 #include <kexi_global.h>
+
+#include <KDbField>
+#include <KDbQuerySchema>
+#include <KDbConnection>
+#include <KDbParser>
+#include <KDbUtils>
+#include <KDbRecordEditBuffer>
+#include <KDbTableViewData>
+#include <KDb>
+
+#include <KProperty>
+#include <KPropertySet>
+
+#include <kmessagebox.h>
+#include <KLocalizedString>
+
+#include <QDomDocument>
+#include <QRegExp>
+#include <QSplitter>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QSet>
+#include <QLocale>
+#include <QDebug>
 
 //! @todo remove KEXI_NO_QUERY_TOTALS later
 #define KEXI_NO_QUERY_TOTALS

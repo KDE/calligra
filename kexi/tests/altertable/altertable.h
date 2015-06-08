@@ -21,7 +21,8 @@
 #define AlterTableTester_H
 
 #include <QUrlOperator>
-#include <db/tristate.h>
+
+#include <KDbTristate>
 
 class KexiTableDesignerInterface;
 class KexiWindow;

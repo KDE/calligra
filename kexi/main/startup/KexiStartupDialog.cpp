@@ -23,8 +23,9 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
-#include <db/utils.h>
 #include <KexiIcon.h>
+
+#include <KDbUtils>
 
 #include <kcomponentdata.h>
 #include <kconfig.h>

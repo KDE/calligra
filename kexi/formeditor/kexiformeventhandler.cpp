@@ -18,21 +18,21 @@
 */
 
 #include "kexiformeventhandler.h"
-
-#include <QWidget>
-#include <QAction>
-#include <QDebug>
-
-#include <kactioncollection.h>
-
-#include <db/tableviewdata.h>
-#include <db/queryschema.h>
 #include <KexiMainWindowIface.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 #include <kexipartmanager.h>
 #include <kexiproject.h>
+
+#include <KDbTableViewData>
+#include <KDbQuerySchema>
+
+#include <kactioncollection.h>
+
+#include <QWidget>
+#include <QAction>
+#include <QDebug>
 
 KexiFormEventAction::ActionData::ActionData()
 {

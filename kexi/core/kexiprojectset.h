@@ -20,10 +20,10 @@
 #ifndef KEXIPROJECTSET_H
 #define KEXIPROJECTSET_H
 
-#include <db/connectiondata.h>
-#include <db/object.h>
-
 #include "kexiprojectdata.h"
+
+#include <KDbConnectionData>
+#include <KDbObject>
 
 class KexiProjectSetPrivate;
 namespace KexiDB

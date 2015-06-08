@@ -19,11 +19,15 @@
 #ifndef KEXIREPORTVIEW_H
 #define KEXIREPORTVIEW_H
 
-#include <core/KexiView.h>
-#include <db/connection.h>
-#include "kexireportpart.h"
-#include <KoReportRendererBase.h>
 #include <QGraphicsView>
+
+#include <KDbConnection>
+
+#include <KoReportRendererBase.h>
+
+#include <core/KexiView.h>
+#include <core/KexiRecordNavigatorHandler.h>
+#include "kexireportpart.h"
 
 class KoReportPreRenderer;
 class ORODocument;
@@ -33,8 +37,6 @@ class KRScriptFunctions;
 #ifndef KEXI_MOBILE
 class KexiRecordNavigator;
 #endif
-
-#include <core/KexiRecordNavigatorHandler.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>

@@ -22,7 +22,7 @@
 
 #include "kexicore_export.h"
 
-#include <db/connectiondata.h>
+#include <KDbConnectionData>
 
 class KexiDBConnectionSetPrivate;
 

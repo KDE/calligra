@@ -18,17 +18,18 @@
 
 #include "kexirelationdesigntool.h"
 #include "kexirelationdesignshape.h"
+#include "kexi/main/startup/KexiStartupDialog.h"
+#include <KoSelection.h>
+#include <KoCanvasBase.h>
+#include <KexiIcon.h>
 
 #ifdef __GNUC__
 #warning replace KexiStartupDialog by the new assistant
 #else
 #pragma WARNING( replace KexiStartupDialog by the new assistant )
 #endif
-#include "kexi/main/startup/KexiStartupDialog.h"
-#include <db/utils.h>
-#include <KoSelection.h>
-#include <KoCanvasBase.h>
-#include <KexiIcon.h>
+
+#include <KDbUtils>
 
 #include <kcombobox.h>
 

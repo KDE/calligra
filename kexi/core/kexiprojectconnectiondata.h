@@ -20,7 +20,9 @@
 #ifndef KEXIPROJECTCONNECTIONDATA_H
 #define KEXIPROJECTCONNECTIONDATA_H
 
-#include <db/connectiondata.h>
+#include "kexicore_export.h"
+
+#include <KDbConnectionData>
 
 class QDomElement;
 class QDomDocument;

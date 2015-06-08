@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-#include <db/tableschema.h>
+#include <KDbTableSchema>
 
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"

@@ -18,19 +18,19 @@
 */
 
 #include "KexiFieldComboBox.h"
-
-#include <QPushButton>
-#include <QPoint>
-#include <QDebug>
-
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexidragobjects.h>
 #include <kexiproject.h>
 #include <kexi_global.h>
 #include "KexiFieldListModel.h"
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbUtils>
+
+#include <QPushButton>
+#include <QPoint>
+#include <QDebug>
 
 //! @internal
 class KexiFieldComboBox::Private

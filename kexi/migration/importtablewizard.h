@@ -20,8 +20,10 @@
 #ifndef IMPORTTABLEWIZARD_H
 #define IMPORTTABLEWIZARD_H
 
-#include <kassistantdialog.h>
 #include <kexidb/kexidb_export.h>
+
+#include <kassistantdialog.h>
+
 #include <QPointer>
 
 class KexiConnectionSelectorWidget;

@@ -24,10 +24,11 @@
 #include <QObject>
 #include <QMap>
 
-#include <db/tristate.h>
-#include <db/pluginloader.h>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexipartbase.h"
+
+#include <KDbTristate>
+#include <db/pluginloader.h>
 
 class KActionCollection;
 class KexiWindow;

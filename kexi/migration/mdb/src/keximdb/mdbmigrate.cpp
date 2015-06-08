@@ -21,15 +21,15 @@
 #include "mdbmigrate.h"
 #include <migration/keximigrate_p.h>
 
+#include <KDb>
+
+#include <KLocalizedString>
+
 #include <QFile>
 #include <QVariant>
 #include <QDateTime>
 #include <QList>
 #include <QDebug>
-
-#include <KLocalizedString>
-
-#include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
 

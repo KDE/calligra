@@ -18,11 +18,11 @@
  */
 
 #include "kexiprjtypeselector.h"
-
 #include <KexiIcon.h>
-#include <db/driver.h>
-#include <db/utils.h>
 #include <core/kexi.h>
+
+#include <KDbDriver>
+#include <KDbUtils>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
         : QWidget(parent)

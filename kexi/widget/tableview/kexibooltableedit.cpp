@@ -19,7 +19,7 @@
 
 #include "kexibooltableedit.h"
 
-#include <db/field.h>
+#include <KDbField>
 
 #include <QPainter>
 #include <QApplication>

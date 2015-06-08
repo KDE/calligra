@@ -18,13 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QStyle>
-
-#include <kactioncollection.h>
-#include <KLocalizedString>
-
+#include "kexidbfactory.h"
 #include <KexiIcon.h>
-
 #include <formeditor/container.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
@@ -34,14 +29,11 @@
 #include <core/kexi.h>
 #include <core/kexipart.h>
 #include <core/KexiMainWindowIface.h>
-#include <db/utils.h>
-#include <db/connection.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
 #include <kexi_global.h>
-
 #include "kexiformview.h"
 #include "widgets/kexidbautofield.h"
 #include "widgets/kexidbcheckbox.h"
@@ -61,10 +53,15 @@
 # include "widgets/kexidbsubform.h"
 #endif
 #include "kexidataawarewidgetinfo.h"
-
-#include "kexidbfactory.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
+#include <KDbUtils>
+#include <KDbConnection>
+
+#include <kactioncollection.h>
+#include <KLocalizedString>
+
+#include <QStyle>
 #include <QFontMetrics>
 //////////////////////////////////////////
 

@@ -19,6 +19,19 @@
  */
 
 #include "KexiMobileMainWindow.h"
+#include "KexiMobileWidget.h"
+#include "KexiMobileToolbar.h"
+#include "KexiMobileNavigator.h"
+#include <KexiIcon.h>
+#include <kexipart.h>
+#include <kexipartinfo.h>
+#include <KexiWindow.h>
+#include <KexiView.h>
+#include <core/KexiRecordNavigatorHandler.h>
+
+#include <KDbDriverManager>
+
+#include <ktoolbar.h>
 
 #include <QMenu>
 #include <QMenuBar>
@@ -28,21 +41,6 @@
 #include <QMimeType>
 #include <QDebug>
 #include <QFileDialog>
-
-#include "KexiMobileWidget.h"
-#include "KexiMobileToolbar.h"
-#include "KexiMobileNavigator.h"
-
-#include <db/drivermanager.h>
-
-#include <KexiIcon.h>
-
-#include <kexipart.h>
-#include <kexipartinfo.h>
-#include <KexiWindow.h>
-#include <KexiView.h>
-#include <core/KexiRecordNavigatorHandler.h>
-#include <ktoolbar.h>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {

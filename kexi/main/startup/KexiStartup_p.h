@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QString>
 
-#include <db/tristate.h>
+#include <KDbTristate>
 
 class KProcess;
 class QProgressDialog;

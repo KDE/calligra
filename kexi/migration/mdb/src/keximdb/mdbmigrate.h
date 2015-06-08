@@ -24,8 +24,10 @@
 #include <mdbtools.h>
 
 #include <migration/keximigrate.h>
-#include <db/field.h>
-#include <db/connection.h>
+
+#include <KDbField>
+#include <KDbConnection>
+
 #include <QByteArray>
 
 namespace KexiMigration

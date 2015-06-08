@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <db/connection.h>
+#include <KDbConnection>
 
 namespace Scripting
 {

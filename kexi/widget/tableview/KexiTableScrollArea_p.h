@@ -30,9 +30,9 @@
 #include "KexiTableScrollArea.h"
 #include "KexiTableScrollAreaHeader.h"
 #include "KexiTableScrollAreaHeaderModel.h"
-
-#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
+
+#include <KDbRecordEditBuffer>
 
 #include <QTimer>
 #include <QLabel>

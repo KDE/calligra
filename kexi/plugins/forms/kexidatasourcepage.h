@@ -22,8 +22,8 @@
 #include "kexiformutils_export.h"
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 
-#include <db/field.h>
-#include <db/utils.h>
+#include <KDbField>
+#include <KDbUtils>
 
 #include <KPropertySet>
 

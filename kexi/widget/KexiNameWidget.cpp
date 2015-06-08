@@ -18,18 +18,17 @@
 */
 
 #include "KexiNameWidget.h"
+#include <core/kexi.h>
 
-#include <QLabel>
-#include <QGridLayout>
-#include <QLineEdit>
+#include <KDbValidator>
+#include <KDb>
 
 #include <kmessagebox.h>
 #include <KLocalizedString>
 
-#include <db/validator.h>
-#include <kexiutils/identifier.h>
-#include <kexiutils/multivalidator.h>
-#include <core/kexi.h>
+#include <QLabel>
+#include <QGridLayout>
+#include <QLineEdit>
 
 class KexiNameWidget::Private
 {
@@ -43,7 +42,7 @@ public:
     QLineEdit* le_caption;
     QLineEdit* le_name;
     QGridLayout* lyr;
-    KexiUtils::MultiValidator *validator;
+    KDbMultiValidator *validator;
     QString nameWarning, captionWarning;
     QString originalNameText;
 
@@ -117,7 +116,7 @@ void KexiNameWidget::init(
     d->le_name->setClearButtonEnabled(true);
     KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(0);
     idValidator->setLowerCaseForced(true);
-    d->le_name->setValidator(d->validator = new KexiUtils::MultiValidator(idValidator, this));
+    d->le_name->setValidator(d->validator = new KDbMultiValidator(idValidator, this));
     d->lyr->addWidget(d->le_name, 2, 1);
 
     setFocusProxy(d->le_caption);

@@ -24,7 +24,7 @@
 
 #include "kformdesigner_export.h"
 
-#include <db/tristate.h>
+#include <KDbTristate>
 
 #include <QHash>
 

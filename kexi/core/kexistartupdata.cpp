@@ -20,9 +20,8 @@
 #include "kexistartupdata.h"
 #include "kexi.h"
 
-#include <db/driver.h>
-#include <db/drivermanager.h>
-
+#include <KDbDriver>
+#include <KDbDriverManager>
 
 class KexiStartupData::Private
 {

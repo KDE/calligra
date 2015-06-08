@@ -23,7 +23,7 @@
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <db/connection.h>
+#include <KDbConnection>
 
 #include <QUrl>
 

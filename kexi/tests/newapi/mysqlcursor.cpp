@@ -1,12 +1,12 @@
 
-#include <QDebug>
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbCursor>
 
 #include <kcomponentdata.h>
 
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>
+#include <QDebug>
 
 int main(int argc, char * argv[])
 {

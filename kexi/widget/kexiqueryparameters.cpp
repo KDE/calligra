@@ -18,15 +18,15 @@
 */
 
 #include "kexiqueryparameters.h"
+#include <kexi_global.h>
+#include "utils/kexidatetimeformatter.h"
+
+#include <KDbQuerySchemaParameter>
+#include <KDbUtils>
 
 #include <kinputdialog.h>
 #include <knumvalidator.h>
 #include <KLocalizedString>
-
-#include <db/queryschemaparameter.h>
-#include <db/utils.h>
-#include <kexi_global.h>
-#include "utils/kexidatetimeformatter.h"
 
 #include <QDebug>
 

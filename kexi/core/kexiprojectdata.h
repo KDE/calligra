@@ -22,8 +22,9 @@
 #define KEXIPROJECTDATA_H
 
 #include "kexicore_export.h"
-#include <db/connectiondata.h>
-#include <db/schemadata.h>
+
+#include <KDbConnectionData>
+#include <KDbObject>
 
 #include <QDateTime>
 #include <QList>
