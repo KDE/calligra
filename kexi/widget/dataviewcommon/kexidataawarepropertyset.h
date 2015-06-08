@@ -30,11 +30,9 @@
 #include <QList>
 #include <QByteArray>
 
+class KDbTableViewData;
 class KexiView;
 class KexiDataAwareObjectInterface;
-namespace KexiDB {
-class TableViewData;
-}
 
 /*! This helper class handles data changes of a single
  object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside
@@ -79,7 +77,7 @@ public:
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KPropertySet* findPropertySetForItem(const KexiDB::RecordData& record);
+    KPropertySet* findPropertySetForItem(const KDbRecordData& record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
      This is used e.g. in the Table Designer to find a row by field name.
@@ -124,7 +122,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     /*! Handles table view's data source changes. */
-    void slotDataSet(KexiDB::TableViewData *data);
+    void slotDataSet(KDbTableViewData *data);
 
     //! Called on row delete in a tableview.
     void slotRowDeleted();
@@ -133,7 +131,7 @@ protected Q_SLOTS:
     void slotRowsDeleted(const QList<int> &rows);
 
     //! Called on \a row insertion in a tableview.
-    void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
+    void slotRowInserted(KDbRecordData* record, uint pos, bool repaint);
 
     //! Called on selecting another cell in a tableview.
     void slotCellSelected(int row, int col);

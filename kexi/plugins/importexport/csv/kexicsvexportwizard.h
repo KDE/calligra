@@ -36,10 +36,7 @@ class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiCharacterEncodingComboBox;
 class KPageWidgetItem;
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
+class KDbTableOrQuerySchema;
 
 /*! @short Kexi CSV export wizard
  Supports exporting to a file and to a clipboard. */
@@ -104,7 +101,7 @@ protected:
     KexiCSVTextQuoteComboBox* m_textQuote;
     KexiCharacterEncodingComboBox *m_characterEncodingCombo;
     QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
-    KexiDB::TableOrQuerySchema* m_tableOrQuery;
+    KDbTableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
     bool m_cancelled;
 };

@@ -25,8 +25,8 @@
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
 
+#include <KDb>
 #include <KDbCursor>
-#include <KDbUtils>
 #include <KDbTableViewData>
 
 #include <QDebug>
@@ -35,7 +35,7 @@ class KexiDataTableView::Private
 {
 public:
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString,
-                            KexiDB::TransactionGuard *tg)
+                            KDbTransactionGuard *tg)
     {
         if (transaction.isNull()) {
             transaction = KexiMainWindowIface::global()->project()->dbConnection()->beginTransaction();
@@ -45,7 +45,7 @@ public:
             objectID, dataID, dataString);
     }
 
-    KexiDB::Transaction transaction;
+    KDbTransaction transaction;
 };
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, bool dbAware)
@@ -62,7 +62,7 @@ KexiDataTableView::KexiDataTableView(QWidget *parent, bool dbAware)
     KexiDataAwareView::init(view, view, view);
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
+KexiDataTableView::KexiDataTableView(QWidget *parent, KDbCursor *cursor)
         : KexiDataAwareView(parent)
         , d(new Private)
 {
@@ -75,7 +75,7 @@ KexiDataTableView::~KexiDataTableView()
     delete d;
 }
 
-bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
+bool KexiDataTableView::loadTableViewSettings(KDbTableViewData* data)
 {
     Q_ASSERT(data);
     const int id = window()->id();
@@ -88,12 +88,12 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
         }
         else if (true == res) {
             bool ok;
-            const QList<int> columnWidths = KexiDB::deserializeIntList(columnWidthsString, &ok);
+            const QList<int> columnWidths = KDb::deserializeIntList(columnWidthsString, &ok);
             if (!ok) {
                 qWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
                 return false;
             }
-            KexiDB::TableViewColumn::List* columns = data->columns();
+            KDbTableViewColumn::List* columns = data->columns();
             if (columnWidths.count() == columns->count()) {
                 int i = 0;
                 foreach (int width, columnWidths) {
@@ -108,7 +108,7 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
 }
 
 void
-KexiDataTableView::setData(KexiDB::Cursor *c)
+KexiDataTableView::setData(KDbCursor *c)
 {
     if (!dynamic_cast<KexiDataTableScrollArea*>(mainWidget()))
         return;
@@ -132,7 +132,7 @@ bool KexiDataTableView::saveSettings()
 #pragma WARNING(TODO save only if changed)
 #endif
     bool ok = true;
-    KexiDB::TransactionGuard tg;
+    KDbTransactionGuard tg;
     if (dynamic_cast<KexiDataTableScrollArea*>(mainWidget())) { // db-aware
         KexiTableScrollArea* tv = tableView();
         const int id = window()->id();
@@ -146,7 +146,7 @@ bool KexiDataTableView::saveSettings()
                 widths.append(QString::number(tv->columnWidth(i)));
             }
             if (   !equal
-                && !d->storeUserDataBlock(id, "columnWidths", KexiDB::variantToString(widths), &tg))
+                && !d->storeUserDataBlock(id, "columnWidths", KDb::variantToString(widths), &tg))
             {
                 return false;
             }

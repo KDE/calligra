@@ -25,12 +25,9 @@
 
 #include <KexiView.h>
 
-namespace KexiDB
-{
-class Connection;
-class TableSchema;
-class TableOrQuerySchema;
-}
+class KDbConnection;
+class KDbTableSchema;
+class KDbTableOrQuerySchema;
 
 //! A Kexi view for displaying relationships.
 /*! It is used for within Query Designer
@@ -62,17 +59,17 @@ public:
     void objectRenamed(const QString &mime, const QString& name, const QString& newName);
 
 Q_SIGNALS:
-    void tableAdded(KexiDB::TableSchema& t);
-    void tableHidden(KexiDB::TableSchema& t);
+    void tableAdded(KDbTableSchema& t);
+    void tableHidden(KDbTableSchema& t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
-    void appendFields(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void appendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
 public Q_SLOTS:
     /*! Adds a table \a t to the area. This changes only visual representation.
      If \a rect is valid, table widget rgeometry will be initialized.
      */
-    void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
+    void addTable(KDbTableSchema *t, const QRect &rect = QRect());
 
     //! Adds a connection \a con to the area. This changes only visual representation.
     void addConnection(const SourceConnection& conn);
@@ -86,7 +83,7 @@ public Q_SLOTS:
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
+    void hideAllTablesExcept(KDbTableSchema::List* tables);
 
 protected Q_SLOTS:
     void slotAddTable();
@@ -99,7 +96,7 @@ protected Q_SLOTS:
     void appendSelectedFields();
     void openSelectedTable();
     void designSelectedTable();
-    void slotTableHidden(KexiDB::TableSchema &table);
+    void slotTableHidden(KDbTableSchema &table);
     void aboutToShowPopupMenu();
 
 protected:

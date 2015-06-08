@@ -25,13 +25,9 @@
 
 #include <KDbTristate>
 
-class KexiProjectData;
-class KexiProjectData;
 class KCmdLineArgs;
-namespace KexiDB
-{
-class ConnectionData;
-}
+class KDbConnectionData;
+class KexiProjectData;
 
 /*! Handles startup actions for Kexi application.
 */
@@ -84,7 +80,7 @@ public:
       Returns NULL and sets cancelled to true if the dialog was cancelled.
       Returns NULL and sets cancelled to false if there was an error.
     */
-    KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
+    KexiProjectData* selectProject(KDbConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotSaveShortcutFileChanges();

@@ -127,30 +127,30 @@ class KexiCSVImportStatic
 {
 public:
     KexiCSVImportStatic()
-     : types(QVector<KexiDB::Field::Type>()
-        << KexiDB::Field::Text
-        << KexiDB::Field::Integer
-        << KexiDB::Field::Double
-        << KexiDB::Field::Boolean
-        << KexiDB::Field::Date
-        << KexiDB::Field::Time
-        << KexiDB::Field::DateTime)
+     : types(QVector<KDbField::Type>()
+        << KDbField::Text
+        << KDbField::Integer
+        << KDbField::Double
+        << KDbField::Boolean
+        << KDbField::Date
+        << KDbField::Time
+        << KDbField::DateTime)
     {
-        typeNames.insert(KexiDB::Field::Text, KexiDB::Field::typeGroupName(KexiDB::Field::TextGroup));
-        typeNames.insert(KexiDB::Field::Integer, KexiDB::Field::typeGroupName(KexiDB::Field::IntegerGroup));
-        typeNames.insert(KexiDB::Field::Double, KexiDB::Field::typeGroupName(KexiDB::Field::FloatGroup));
-        typeNames.insert(KexiDB::Field::Boolean, KexiDB::Field::typeName(KexiDB::Field::Boolean));
-        typeNames.insert(KexiDB::Field::Date, KexiDB::Field::typeName(KexiDB::Field::Date));
-        typeNames.insert(KexiDB::Field::Time, KexiDB::Field::typeName(KexiDB::Field::Time));
-        typeNames.insert(KexiDB::Field::DateTime, KexiDB::Field::typeName(KexiDB::Field::DateTime));
+        typeNames.insert(KDbField::Text, KDbField::typeGroupName(KDbField::TextGroup));
+        typeNames.insert(KDbField::Integer, KDbField::typeGroupName(KDbField::IntegerGroup));
+        typeNames.insert(KDbField::Double, KDbField::typeGroupName(KDbField::FloatGroup));
+        typeNames.insert(KDbField::Boolean, KDbField::typeName(KDbField::Boolean));
+        typeNames.insert(KDbField::Date, KDbField::typeName(KDbField::Date));
+        typeNames.insert(KDbField::Time, KDbField::typeName(KDbField::Time));
+        typeNames.insert(KDbField::DateTime, KDbField::typeName(KDbField::DateTime));
         for (int i = 0; i < types.size(); ++i) {
             indicesForTypes.insert(types[i], i);
         }
     }
 
-    const QVector<KexiDB::Field::Type> types;
-    QHash<KexiDB::Field::Type, QString> typeNames;
-    QHash<KexiDB::Field::Type, int> indicesForTypes;
+    const QVector<KDbField::Type> types;
+    QHash<KDbField::Type, QString> typeNames;
+    QHash<KDbField::Type, int> indicesForTypes;
 };
 
 Q_GLOBAL_STATIC(KexiCSVImportStatic, kexiCSVImportStatic)
@@ -188,16 +188,16 @@ public:
         m_uniquenessTest.clear();
     }
 
-    KexiDB::Field::Type detectedType(int col) const
+    KDbField::Type detectedType(int col) const
     {
-        return m_detectedTypes.value(col, KexiDB::Field::InvalidType);
+        return m_detectedTypes.value(col, KDbField::InvalidType);
     }
 
-    void setDetectedType(int col, KexiDB::Field::Type type)
+    void setDetectedType(int col, KDbField::Type type)
     {
         if (m_detectedTypes.count() <= col) {
             for (int i = m_detectedTypes.count(); i < col; ++i) { // append missing bits
-                m_detectedTypes.append(KexiDB::Field::InvalidType);
+                m_detectedTypes.append(KDbField::InvalidType);
             }
             m_detectedTypes.append(type);
         }
@@ -228,7 +228,7 @@ public:
 private:
     //! vector of detected types
     //! @todo more types
-    QList<KexiDB::Field::Type> m_detectedTypes;
+    QList<KDbField::Type> m_detectedTypes;
 
     //! m_detectedUniqueColumns[i]==true means that i-th column has unique values
     //! (only for numeric type)
@@ -432,7 +432,7 @@ void KexiCSVImportDialog::next()
             m_partItemForSavedTable->setName(m_newTableWidget->nameText());
 
             KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
-            KexiDB::SchemaData tmp;
+            KDbObject tmp;
             tristate res = m_conn->loadObjectSchemaData(
                     project->idForClass(part->info()->partClass()),
                     m_newTableWidget->nameText(),
@@ -460,13 +460,13 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
     }
 
     button(NextButton)->setEnabled(true);
-    KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
+    KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
             KexiMainWindowIface::global()->project()->dbConnection(),
             item->identifier()
             );
     m_tableCaptionLabel->setText(tableOrQuery->captionOrName());
     m_tableNameLabel->setText(tableOrQuery->name());
-    m_rowCountLabel->setText(QString::number(KexiDB::rowCount(*tableOrQuery)));
+    m_rowCountLabel->setText(QString::number(KDb::recordCount(*tableOrQuery)));
     m_colCountLabel->setText(QString::number(tableOrQuery->fieldCount()));
 
     delete m_fieldsListModel;
@@ -726,7 +726,7 @@ void KexiCSVImportDialog::createTableNamePage()
     m_tableNameWidget->setObjectName("m_tableNameWidget");
     QWidget *page1=new QWidget(m_tableNameWidget);
     m_newTableWidget = new KexiNameWidget(QString(), page1);
-    m_newTableWidget->addNameSubvalidator(new KexiDB::ObjectNameValidator(
+    m_newTableWidget->addNameSubvalidator(new KDbObjectNameValidator(
                 KexiMainWindowIface::global()->project()->dbConnection()->driver()));
     QVBoxLayout *l=new QVBoxLayout(page1);
     l->addWidget(m_newTableWidget);
@@ -908,7 +908,7 @@ void KexiCSVImportDialog::fillTable()
     m_columnsAdjusted = true;
 
     if (m_primaryKeyColumn >= 0 && m_primaryKeyColumn < m_table->columnCount()) {
-        if (KexiDB::Field::Integer != d->detectedType(m_primaryKeyColumn)) {
+        if (KDbField::Integer != d->detectedType(m_primaryKeyColumn)) {
             m_primaryKeyColumn = -1;
         }
     }
@@ -1334,10 +1334,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 
 void KexiCSVImportDialog::updateColumnText(int col)
 {
-    KexiDB::Field::Type detectedType = d->detectedType(col);
-    if (detectedType == KexiDB::Field::InvalidType) {
-        d->setDetectedType(col, KexiDB::Field::Text); //entirely empty column
-        detectedType = KexiDB::Field::Text;
+    KDbField::Type detectedType = d->detectedType(col);
+    if (detectedType == KDbField::InvalidType) {
+        d->setDetectedType(col, KDbField::Text); //entirely empty column
+        detectedType = KDbField::Text;
     }
 
     m_table->setHeaderData(col, Qt::Horizontal,
@@ -1369,53 +1369,53 @@ void KexiCSVImportDialog::updateColumnText(int col)
 void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
 {
     int intValue;
-    KexiDB::Field::Type type = d->detectedType(col);
-    if (row == 1 || type != KexiDB::Field::Text) {
+    KDbField::Type type = d->detectedType(col);
+    if (row == 1 || type != KDbField::Text) {
         bool found = false;
-        if (text.isEmpty() && type == KexiDB::Field::InvalidType)
+        if (text.isEmpty() && type == KDbField::InvalidType)
             found = true; //real type should be found later
         //detect type because it's 1st row or all prev. rows were not text
         //-FP number? (trying before "number" type is a must)
-        if (!found && (row == 1 || type == KexiDB::Field::Integer || type == KexiDB::Field::Double
-                                || type == KexiDB::Field::InvalidType))
+        if (!found && (row == 1 || type == KDbField::Integer || type == KDbField::Double
+                                || type == KDbField::InvalidType))
         {
             bool ok = text.isEmpty() || m_fpNumberRegExp1.exactMatch(text) || m_fpNumberRegExp2.exactMatch(text);
-            if (ok && (row == 1 || type == KexiDB::Field::InvalidType))
+            if (ok && (row == 1 || type == KDbField::InvalidType))
             {
-                d->setDetectedType(col, KexiDB::Field::Double);
+                d->setDetectedType(col, KDbField::Double);
                 found = true; //yes
             }
         }
         //-number?
-        if (!found && (row == 1 || type == KexiDB::Field::Integer || type == KexiDB::Field::InvalidType)) {
+        if (!found && (row == 1 || type == KDbField::Integer || type == KDbField::InvalidType)) {
             bool ok = text.isEmpty();//empty values allowed
             if (!ok)
                 intValue = text.toInt(&ok);
-            if (ok && (row == 1 || type == KexiDB::Field::InvalidType)) {
-                d->setDetectedType(col, KexiDB::Field::Integer);
+            if (ok && (row == 1 || type == KDbField::InvalidType)) {
+                d->setDetectedType(col, KDbField::Integer);
                 found = true; //yes
             }
         }
         //-date?
-        if (!found && (row == 1 || type == KexiDB::Field::Date || type == KexiDB::Field::InvalidType)) {
-            if ((row == 1 || type == KexiDB::Field::InvalidType)
+        if (!found && (row == 1 || type == KDbField::Date || type == KDbField::InvalidType)) {
+            if ((row == 1 || type == KDbField::InvalidType)
                     && (text.isEmpty() || m_dateRegExp.exactMatch(text))) {
-                d->setDetectedType(col, KexiDB::Field::Date);
+                d->setDetectedType(col, KDbField::Date);
                 found = true; //yes
             }
         }
         //-time?
-        if (!found && (row == 1 || type == KexiDB::Field::Time || type == KexiDB::Field::InvalidType)) {
-            if ((row == 1 || type == KexiDB::Field::InvalidType)
+        if (!found && (row == 1 || type == KDbField::Time || type == KDbField::InvalidType)) {
+            if ((row == 1 || type == KDbField::InvalidType)
                  && (text.isEmpty() || m_timeRegExp1.exactMatch(text) || m_timeRegExp2.exactMatch(text)))
             {
-                d->setDetectedType(col, KexiDB::Field::Time);
+                d->setDetectedType(col, KDbField::Time);
                 found = true; //yes
             }
         }
         //-date/time?
-        if (!found && (row == 1 || type == KexiDB::Field::Time || type == KexiDB::Field::InvalidType)) {
-            if (row == 1 || type == KexiDB::Field::InvalidType) {
+        if (!found && (row == 1 || type == KDbField::Time || type == KDbField::InvalidType)) {
+            if (row == 1 || type == KDbField::InvalidType) {
                 bool detected = text.isEmpty();
                 if (!detected) {
                     const QStringList dateTimeList(text.split(' '));
@@ -1432,14 +1432,14 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
                     detected = ok;
                 }
                 if (detected) {
-                    d->setDetectedType(col, KexiDB::Field::DateTime);
+                    d->setDetectedType(col, KDbField::DateTime);
                     found = true; //yes
                 }
             }
         }
-        if (!found && type == KexiDB::Field::InvalidType && !text.isEmpty()) {
+        if (!found && type == KDbField::InvalidType && !text.isEmpty()) {
             //eventually, a non-emptytext after a while
-            d->setDetectedType(col, KexiDB::Field::Text);
+            d->setDetectedType(col, KDbField::Text);
             found = true; //yes
         }
         //default: text type (already set)
@@ -1448,7 +1448,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
     type = d->detectedType(col);
     qDebug() << type;
 
-    if (type == KexiDB::Field::Integer) {
+    if (type == KDbField::Integer) {
         // check uniqueness for this value
         QList<int> *list = d->uniquenessTest(col);
         if (text.isEmpty()) {
@@ -1532,7 +1532,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
         if ((m_prevColumnForSetText + 1) < col) { //skipped one or more columns
                                                   //before this: save NULLs first
             for (int i = m_prevColumnForSetText + 1; i < col; i++) {
-                if (m_options.nullsImportedAsEmptyTextChecked && KexiDB::Field::isTextType(d->detectedType(i-1))) {
+                if (m_options.nullsImportedAsEmptyTextChecked && KDbField::isTextType(d->detectedType(i-1))) {
                     m_tmpValues << QString("");
                 } else {
                     m_tmpValues << QVariant();
@@ -1541,11 +1541,11 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
         }
         m_prevColumnForSetText = col;
 
-        const KexiDB::Field::Type detectedType = d->detectedType(col-1);
-        if (detectedType == KexiDB::Field::Integer) {
+        const KDbField::Type detectedType = d->detectedType(col-1);
+        if (detectedType == KDbField::Integer) {
             m_tmpValues << (text.isEmpty() ? QVariant() : text.toInt());
 //! @todo what about time and float/double types and different integer subtypes?
-        } else if (detectedType == KexiDB::Field::Double) {
+        } else if (detectedType == KDbField::Double) {
             //replace ',' with '.'
             QByteArray t(text.toLatin1());
             const int textLen = t.length();
@@ -1556,7 +1556,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
                 }
             }
             m_tmpValues << (t.isEmpty() ? QVariant() : t.toDouble());
-        } else if (detectedType == KexiDB::Field::Boolean) {
+        } else if (detectedType == KDbField::Boolean) {
             const QString t(text.trimmed().toLower());
             if (t.isEmpty())
                 m_tmpValues << QVariant();
@@ -1564,19 +1564,19 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
                 m_tmpValues << QVariant(false);
             else
                 m_tmpValues << QVariant(true); //anything nonempty
-        } else if (detectedType == KexiDB::Field::Date) {
+        } else if (detectedType == KDbField::Date) {
             QDate date;
             if (parseDate(text, date))
                 m_tmpValues << date;
             else
                 m_tmpValues << QVariant();
-        } else if (detectedType == KexiDB::Field::Time) {
+        } else if (detectedType == KDbField::Time) {
             QTime time;
             if (parseTime(text, time))
                 m_tmpValues << time;
             else
                 m_tmpValues << QVariant();
-        } else if (detectedType == KexiDB::Field::DateTime) {
+        } else if (detectedType == KDbField::DateTime) {
             QStringList dateTimeList(text.split(' '));
             if (dateTimeList.count() < 2)
                 dateTimeList = text.split('T'); //also support ISODateTime's "T" separator
@@ -1692,9 +1692,9 @@ void KexiCSVImportDialog::formatChanged(int index)
 {
     if (index < 0 || index >= kexiCSVImportStatic->types.size())
         return;
-    KexiDB::Field::Type type = kexiCSVImportStatic->types[index];
+    KDbField::Type type = kexiCSVImportStatic->types[index];
     d->setDetectedType(m_tableView->currentIndex().column(), type);
-    m_primaryKeyField->setEnabled(KexiDB::Field::Integer == type);
+    m_primaryKeyField->setEnabled(KDbField::Integer == type);
     m_primaryKeyField->setChecked(m_primaryKeyColumn == m_tableView->currentIndex().column() && m_primaryKeyField->isEnabled());
     updateColumnText(m_tableView->currentIndex().column());
 }
@@ -1757,10 +1757,10 @@ void KexiCSVImportDialog::currentCellChanged(const QModelIndex &cur, const QMode
 {
     if (prev.column() == cur.column() || !cur.isValid())
         return;
-    const KexiDB::Field::Type type = d->detectedType(cur.column());
+    const KDbField::Type type = d->detectedType(cur.column());
     m_formatCombo->setCurrentIndex(kexiCSVImportStatic->indicesForTypes.value(type, -1));
     m_formatLabel->setText(xi18n("Format for column %1:", cur.column() + 1));
-    m_primaryKeyField->setEnabled(KexiDB::Field::Integer == type);
+    m_primaryKeyField->setEnabled(KDbField::Integer == type);
     m_primaryKeyField->blockSignals(true); //block to disable executing slotPrimaryKeyFieldToggled()
     m_primaryKeyField->setChecked(m_primaryKeyColumn == cur.column());
     m_primaryKeyField->blockSignals(false);
@@ -1827,7 +1827,7 @@ void KexiCSVImportDialog::import()
     }
 
     if (m_newTable) {
-        m_destinationTableSchema = new KexiDB::TableSchema(m_partItemForSavedTable->name());
+        m_destinationTableSchema = new KDbTableSchema(m_partItemForSavedTable->name());
         m_destinationTableSchema->setCaption(m_partItemForSavedTable->caption());
         m_destinationTableSchema->setDescription(m_partItemForSavedTable->description());
         const uint numCols(m_table->columnCount());
@@ -1868,11 +1868,11 @@ void KexiCSVImportDialog::import()
                 fieldName += QString::number(num);
                 fieldCaption += QString::number(num);
             }
-            KexiDB::Field *field = new KexiDB::Field(
+            KDbField *field = new KDbField(
                 fieldName,
-                KexiDB::Field::Integer,
-                KexiDB::Field::NoConstraints,
-                KexiDB::Field::NoOptions,
+                KDbField::Integer,
+                KDbField::NoConstraints,
+                KDbField::NoOptions,
                 0, 0, //uint length=0, uint precision=0,
                 QVariant(), //QVariant defaultValue=QVariant(),
                 fieldCaption
@@ -1911,17 +1911,17 @@ void KexiCSVImportDialog::import()
                     fieldCaption += (" " + QString::number(i));
                 }
             }
-            KexiDB::Field::Type detectedType = d->detectedType(col);
+            KDbField::Type detectedType = d->detectedType(col);
 //! @todo what about time and float/double types and different integer subtypes?
 //! @todo what about long text?
-            if (detectedType == KexiDB::Field::InvalidType) {
-                detectedType = KexiDB::Field::Text;
+            if (detectedType == KDbField::InvalidType) {
+                detectedType = KDbField::Text;
             }
-            KexiDB::Field *field = new KexiDB::Field(
+            KDbField *field = new KDbField(
                 fieldName,
                 detectedType,
-                KexiDB::Field::NoConstraints,
-                KexiDB::Field::NoOptions,
+                KDbField::NoConstraints,
+                KDbField::NoOptions,
                 0, 0, //uint length=0, uint precision=0,
                 QVariant(), //QVariant defaultValue=QVariant(),
                 fieldCaption
@@ -1957,13 +1957,13 @@ void KexiCSVImportDialog::import()
         return;
     }
 
-    KexiDB::Transaction transaction = m_conn->beginTransaction();
+    KDbTransaction transaction = m_conn->beginTransaction();
     if (transaction.isNull()) {
         msg.showErrorMessage(m_conn);
         raiseErrorInAccept(project, m_partItemForSavedTable);
         return;
     }
-    KexiDB::TransactionGuard tg(transaction);
+    KDbTransactionGuard tg(transaction);
 
     //-create physical table
     if (m_newTable && !m_conn->createTable(m_destinationTableSchema, false /*allowOverwrite*/)) {
@@ -1973,7 +1973,7 @@ void KexiCSVImportDialog::import()
     }
 
     m_importingStatement = m_conn->prepareStatement(
-                               KexiDB::PreparedStatement::InsertStatement, *m_destinationTableSchema);
+                               KDbPreparedStatement::InsertStatement, *m_destinationTableSchema);
     if (!m_importingStatement) {
         msg.showErrorMessage(m_conn);
         raiseErrorInAccept(project, m_partItemForSavedTable);

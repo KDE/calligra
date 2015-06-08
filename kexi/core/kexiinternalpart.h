@@ -28,11 +28,7 @@
 class QDialog;
 class KexiWindow;
 class KexiView;
-
-namespace KexiDB
-{
-class MessageHandler;
-}
+class KDbMessageHandler;
 
 /**
  * @short A prototype for Kexi Internal Parts (plugins) implementation.
@@ -62,12 +58,12 @@ public:
      state (e.g. result or status information) back to this argument.
      Created widget will have assigned \a parent widget and \a objName name. */
     static QWidget* createWidgetInstance(const QString &className, const char* widgetClass,
-                                         KexiDB::MessageHandler *msgHdr,
+                                         KDbMessageHandler *msgHdr,
                                          QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! For convenience. */
     static QWidget* createWidgetInstance(const QString &className,
-                                         KexiDB::MessageHandler *msgHdr,
+                                         KDbMessageHandler *msgHdr,
                                          QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! Creates a new KexiWindow instance. If such instance already exists,
@@ -78,7 +74,7 @@ public:
      The window is assigned to the main window,
      and \a objName name is set. */
     static KexiWindow* createKexiWindowInstance(const QString &className,
-            KexiDB::MessageHandler *msgHdr, const char *objName = 0);
+            KDbMessageHandler *msgHdr, const char *objName = 0);
 
     /*! Creates a new modal dialog instance (QDialog or a subclass).
      If such instance already exists, and is unique (see uniqueWindow())
@@ -94,12 +90,12 @@ public:
      The dialog is assigned to the main window,
      and \a objName name is set. */
     static QDialog* createModalDialogInstance(const QString &className,
-            const char* dialogClass, KexiDB::MessageHandler *msgHdr,
+            const char* dialogClass, KDbMessageHandler *msgHdr,
             const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! Adeded For convenience. */
     static QDialog* createModalDialogInstance(const QString &className,
-            KexiDB::MessageHandler *msgHdr, const char *objName = 0,
+            KDbMessageHandler *msgHdr, const char *objName = 0,
             QMap<QString, QString>* args = 0);
 
     /*! Executes a command \a commandName (usually nonvisual) using part pointed by \a className.
@@ -108,7 +104,7 @@ public:
                                const char* commandName, QMap<QString, QString>* args = 0);
 
     /*! \return internal part pointed by \a className. Shouldn't be usable. */
-    static KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const QString &className);
+    static KexiInternalPart* part(KDbMessageHandler *msgHdr, const QString &className);
 
     /*! \return true if the part can create only one (unique) window. */
     bool uniqueWindow() const;

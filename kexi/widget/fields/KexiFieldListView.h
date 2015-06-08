@@ -26,10 +26,7 @@
 
 #include <QListView>
 
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
+class KDbTableOrQuerySchema;
 
 /*! This widget provides a list of fields from a table or query.
 */
@@ -43,10 +40,10 @@ public:
 
     /*! Sets table or query schema \a schema.
      The schema object will be owned by the KexiFieldListView object. */
-    void setSchema(KexiDB::TableOrQuerySchema* schema);
+    void setSchema(KDbTableOrQuerySchema* schema);
 
     /*! \return table or query schema schema set for this widget. */
-    KexiDB::TableOrQuerySchema* schema() const;
+    KDbTableOrQuerySchema* schema() const;
 
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;

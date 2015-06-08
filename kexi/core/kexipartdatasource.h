@@ -21,11 +21,8 @@
 #define KEXIPARTDATASOURCE_H
 
 class KexiProject;
-namespace KexiDB
-{
-class FieldList;
-class Cursor;
-}
+class KDbFieldList;
+class KDbCursor;
 
 namespace KexiPart
 {
@@ -50,12 +47,12 @@ public:
      * @returns a list of fileds for the datasource
      * @arg id is the document id for the source
      */
-    virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &i) = 0;
+    virtual KDbFieldList *fields(KexiProject *project, const KexiPart::Item &i) = 0;
 
     /**
      * @returns the cursor
      */
-    virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer) = 0;
+    virtual KDbCursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer) = 0;
 
     /**
      * @returns the part providing this datasource

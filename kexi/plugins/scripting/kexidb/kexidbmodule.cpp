@@ -75,7 +75,7 @@ const QStringList KexiDBModule::driverNames()
 
 QObject* KexiDBModule::driver(const QString& drivername)
 {
-    QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
+    QPointer< ::KDbDriver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
     if (! driver) {
         qWarning() << "No such driver '%1'" << drivername;
         return 0;
@@ -104,7 +104,7 @@ const QString KexiDBModule::mimeForFile(const QString& filename)
 
 QObject* KexiDBModule::createConnectionData()
 {
-    return new KexiDBConnectionData(this, new ::KexiDB::ConnectionData(), true);
+    return new KexiDBConnectionData(this, new ::KDbConnectionData(), true);
 }
 
 QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
@@ -131,7 +131,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         }
 
         KConfigGroup config(&_config, groupkey);
-        ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+        ::KDbConnectionData* data = new ::KDbConnectionData();
         int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
         data->setFileName(QString());
         data->caption = config.readEntry("caption");
@@ -166,7 +166,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         return 0;
     }
 
-    ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+    ::KDbConnectionData* data = new ::KDbConnectionData();
     data->setFileName(filename);
     data->driverName = drivername;
     return new KexiDBConnectionData(this, data, true);
@@ -174,22 +174,22 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
 QObject* KexiDBModule::field()
 {
-    return new KexiDBField(this, new ::KexiDB::Field(), true);
+    return new KexiDBField(this, new ::KDbField(), true);
 }
 
 QObject* KexiDBModule::tableSchema(const QString& tablename)
 {
-    return new KexiDBTableSchema(this, new ::KexiDB::TableSchema(tablename), true);
+    return new KexiDBTableSchema(this, new ::KDbTableSchema(tablename), true);
 }
 
 QObject* KexiDBModule::querySchema()
 {
-    return new KexiDBQuerySchema(this, new ::KexiDB::QuerySchema(), true);
+    return new KexiDBQuerySchema(this, new ::KDbQuerySchema(), true);
 }
 
 QObject* KexiDBModule::connectionWrapper(QObject* connection)
 {
-    ::KexiDB::Connection* c = dynamic_cast< ::KexiDB::Connection* >(connection);
+    ::KDbConnection* c = dynamic_cast< ::KDbConnection* >(connection);
     return c ? new KexiDBConnection(c) : 0;
 }
 

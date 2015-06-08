@@ -24,9 +24,6 @@
 
 #include <kcombobox.h>
 
-namespace KexiDB
-{
-}
 class KexiProject;
 
 /*! This widget provides a list of fields from a table or query

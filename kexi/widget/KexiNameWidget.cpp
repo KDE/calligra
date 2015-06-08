@@ -288,7 +288,7 @@ bool KexiNameWidget::checkValidity()
     }
     QString dummy, message, details;
     if (d->validator->check(dummy, d->le_name->text(), message, details)
-            == KexiDB::Validator::Error)
+            == KDbValidator::Error)
     {
         KMessageBox::detailedSorry(0, message, details);
         d->le_name->setFocus();
@@ -297,12 +297,12 @@ bool KexiNameWidget::checkValidity()
     return true;
 }
 
-KexiDB::Validator *KexiNameWidget::nameValidator() const
+KDbValidator *KexiNameWidget::nameValidator() const
 {
     return d->validator;
 }
 
-void KexiNameWidget::addNameSubvalidator(KexiDB::Validator* validator, bool owned)
+void KexiNameWidget::addNameSubvalidator(KDbValidator* validator, bool owned)
 {
     d->validator->addSubvalidator(validator, owned);
 }

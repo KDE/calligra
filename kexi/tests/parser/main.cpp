@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     QByteArray drv_name(argv[1]);
     QByteArray db_name = QString(argv[2]).toLower().toLatin1();
 
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     QStringList names = manager.driverNames();
     qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
@@ -38,17 +38,17 @@ int main(int argc, char **argv)
     }
 
     //get driver
-    KexiDB::Driver *driver = manager.driver(drv_name);
+    KDbDriver *driver = manager.driver(drv_name);
     if (!driver || manager.error()) {
         qDebug() << manager.errorMsg();
         return 1;
     }
 
     //connection data that can be later reused
-    KexiDB::ConnectionData conn_data;
+    KDbConnectionData conn_data;
     conn_data.setFileName(db_name);
 
-    KexiDB::Connection *conn = driver->createConnection(conn_data);
+    KDbConnection *conn = driver->createConnection(conn_data);
     if (!conn || driver->error()) {
         qDebug() << "error: " << driver->errorMsg();
         return 1;
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    KexiDB::Parser *parser = new KexiDB::Parser(conn);
+    KDbParser *parser = new KDbParser(conn);
 
     std::string cmd;
     while (cmd != "quit") {
@@ -70,19 +70,19 @@ int main(int argc, char **argv)
         getline(std::cin, cmd);
         parser->parse(cmd.c_str());
         switch (parser->operation()) {
-        case KexiDB::Parser::OP_Error:
+        case KDbParser::OP_Error:
             qDebug() << "***********************";
             qDebug() << "* error               *";
             qDebug() << "***********************";
             break;
-        case KexiDB::Parser::OP_CreateTable: {
+        case KDbParser::OP_CreateTable: {
             qDebug() << "Schema of table: " << parser->table()->name();
             parser->table()->debug();
             break;
         }
-        case KexiDB::Parser::OP_Select: {
+        case KDbParser::OP_Select: {
             qDebug() << "Select statement: ";
-            KexiDB::QuerySchema *q = parser->query();
+            KDbQuerySchema *q = parser->query();
             q->debug();
             delete q;
             break;

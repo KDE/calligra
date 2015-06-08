@@ -95,8 +95,8 @@ void KexiMobileMainWindow::slotOpenDatabase()
 
 KexiProject *KexiMobileMainWindow::openProject(const QUrl &url)
 {
-    KexiDB::DriverManager driverManager;
-    KexiDB::Driver *driver = 0;
+    KDbDriverManager driverManager;
+    KDbDriver *driver = 0;
 
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForUrl(url);

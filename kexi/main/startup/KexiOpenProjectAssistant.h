@@ -66,10 +66,10 @@ public:
     explicit KexiProjectDatabaseSelectionPage(KexiOpenProjectAssistant* parent);
     ~KexiProjectDatabaseSelectionPage();
     
-    bool setConnection(KexiDB::ConnectionData* data);
+    bool setConnection(KDbConnectionData* data);
 
     KexiProjectSelectorWidget* projectSelector;
-    QPointer<KexiDB::ConnectionData> conndataToShow;
+    QPointer<KDbConnectionData> conndataToShow;
 
 private:
     KexiProjectSet *m_projectSetToShow;

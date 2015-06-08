@@ -83,7 +83,7 @@ public:
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
      (see fieldNumberForColumn()). */
-    virtual KexiDB::TableViewColumn* column(int col);
+    virtual KDbTableViewColumn* column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
@@ -180,14 +180,14 @@ public Q_SLOTS:
     }
 
 Q_SIGNALS:
-    void itemChanged(KexiDB::RecordData*, int row, int col);
-    void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
-    void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
+    void itemChanged(KDbRecordData*, int row, int col);
+    void itemChanged(KDbRecordData*, int row, int col, QVariant oldValue);
+    void itemDeleteRequest(KDbRecordData*, int row, int col);
     void currentItemDeleteRequest();
     void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     void dataRefreshed();
-    void dataSet(KexiDB::TableViewData *data);
-    void itemSelected(KexiDB::RecordData*);
+    void dataSet(KDbTableViewData *data);
+    void itemSelected(KDbRecordData*);
     void cellSelected(int row, int col);
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
@@ -199,24 +199,24 @@ Q_SIGNALS:
     bool resized();
 
 protected Q_SLOTS:
-    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
+    //! Handles KDbTableViewData::rowRepaintRequested() signal
+    virtual void slotRowRepaintRequested(KDbRecordData& record);
 
-    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
+    //! Handles KDbTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    virtual void slotAboutToDeleteRow(KDbRecordData& record, KDbResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KDbTableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
+    //! Handles KDbTableViewData::rowInserted() signal to repaint when needed.
+    virtual void slotRowInserted(KDbRecordData* record, bool repaint);
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
+    virtual void slotRowInserted(KDbRecordData* record, uint row, bool repaint);
 
     virtual void slotRowsDeleted(const QList<int>&);
 
@@ -225,7 +225,7 @@ protected Q_SLOTS:
     }
 
     /*! Reloads data for this widget.
-     Handles KexiDB::TableViewData::reloadRequested() signal. */
+     Handles KDbTableViewData::reloadRequested() signal. */
     virtual void reloadData() {
         KexiDataAwareObjectInterface::reloadData();
     }

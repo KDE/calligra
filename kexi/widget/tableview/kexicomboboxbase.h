@@ -28,10 +28,8 @@
 #include <KDbLookupFieldSchema>
 #include <KDbTristate>
 
+class KDbTableViewColumn;
 class KexiComboBoxPopup;
-namespace KexiDB {
-class TableViewColumn;
-}
 
 /*! @short A base class for handling data-aware combo boxes.
  This class is used by KexiComboBoxTableEdit and KexiDBComboBox.
@@ -43,10 +41,10 @@ public:
     virtual ~KexiComboBoxBase();
 
     //! \return column related to this combo; for KexiComboBoxTableEdit 0 is returned here
-    virtual KexiDB::TableViewColumn *column() const = 0;
+    virtual KDbTableViewColumn *column() const = 0;
 
     //! \return database field related to this combo
-    virtual KexiDB::Field *field() const = 0;
+    virtual KDbField *field() const = 0;
 
     //! \return the original value
     virtual QVariant origValue() const = 0;
@@ -71,10 +69,10 @@ public:
     void showPopup();
 
     //! Call this from slot
-    virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
+    virtual void slotRowAccepted(KDbRecordData *record, int row);
 
     //! Call this from slot
-    virtual void slotItemSelected(KexiDB::RecordData*);
+    virtual void slotItemSelected(KDbRecordData*);
 
     //! Call this from slot
     void slotInternalEditorValueChanged(const QVariant &v);
@@ -87,7 +85,7 @@ protected:
 
     //! Used to select row item for a user-entered value \a v.
     //! Only for "lookup table" mode.
-    KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
+    KDbRecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
 
     /*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
      If \a allowNulls is true, NULL is returend if no matched column found, else:
@@ -102,7 +100,7 @@ protected:
     void setValueOrTextInInternalEditor(const QVariant& value);
 
     //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
-    KexiDB::LookupFieldSchema* lookupFieldSchema() const;
+    KDbLookupFieldSchema* lookupFieldSchema() const;
 
     int rowToHighlightForLookupTable() const;
 

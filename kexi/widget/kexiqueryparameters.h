@@ -29,7 +29,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryParameters
 {
 public:
     /*! Asks for query parameters using KInputDialog, one dialog per query parameter
-     (see @ref KexiDB::QuerySchema::parameters()). The type of each dialog depends
+     (see @ref KDbQuerySchema::parameters()). The type of each dialog depends
      on the type of query parameter.
      \return list of values obtained from the user
      \a ok is set to true on success and to false on failure. */
@@ -39,8 +39,8 @@ public:
     //! @todo support defaults
     //! @todo support validation rules, e.g. min/max value, unsigned
     //! @todo support Enum type (list of strings, need support for keys and user-visible strings)
-    static QList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver,
-                                         KexiDB::QuerySchema& querySchema, bool &ok);
+    static QList<QVariant> getParameters(QWidget *parent, const KDbDriver &driver,
+                                         KDbQuerySchema& querySchema, bool &ok);
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H

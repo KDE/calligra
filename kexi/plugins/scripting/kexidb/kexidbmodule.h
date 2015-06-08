@@ -81,11 +81,11 @@ public Q_SLOTS:
     QObject* querySchema();
 
 private Q_SLOTS:
-    //! Wraps a KexiDB::Connection into a KexiDBConnection
+    //! Wraps a KDbConnection into a KexiDBConnection
     QObject* connectionWrapper(QObject* connection);
 
 private:
-    ::KexiDB::DriverManager m_drivermanager;
+    ::KDbDriverManager m_drivermanager;
 };
 
 }

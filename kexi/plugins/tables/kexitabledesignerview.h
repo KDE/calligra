@@ -28,15 +28,10 @@
 #include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 
-namespace KexiDB
-{
-class RecordData;
-}
-class KexiTableDesignerViewPrivate;
-class KUndo2Command;
-
+class KDbRecordData;
 class KPropertySet;
-
+class KUndo2Command;
+class KexiTableDesignerViewPrivate;
 namespace KexiTableDesignerCommands
 {
 class Command;
@@ -114,7 +109,7 @@ public:
     void changePropertyVisibility(int fieldUID, const QByteArray& propertyName, bool visible);
 
     /*! Builds table field's schema by looking at the \a set. */
-    KexiDB::Field * buildField(const KPropertySet &set) const;
+    KDbField * buildField(const KPropertySet &set) const;
 
     /*! Creates temporary table for the current design and returns debug string for it. */
     virtual QString debugStringForCurrentTableSchema(tristate& result);
@@ -139,17 +134,17 @@ protected Q_SLOTS:
     void slotAboutToShowContextMenu();
 
     //! Called before cell change in tableview.
-    void slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
-                               QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeCellChanged(KDbRecordData *record, int colnum,
+                               QVariant& newValue, KDbResultInfo* result);
 
     //! Called on row change in a tableview.
-    void slotRowUpdated(KexiDB::RecordData *record);
+    void slotRowUpdated(KDbRecordData *record);
 
     //! Called before row inserting in tableview.
     void slotRowInserted();
 
     //! Called before row deleting in tableview.
-    void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
+    void slotAboutToDeleteRow(KDbRecordData& record, KDbResultInfo* result, bool repaint);
 
     /*! Called after any property has been changed in the current property set,
      to perform some actions (like updating other dependent properties) */
@@ -178,7 +173,7 @@ protected:
      The property set will be asigned to \a row, and owned by this dialog.
      If \a newOne is true, the property set will be marked as newly created.
      \return newly created property set. */
-    KPropertySet* createPropertySet(int row, const KexiDB::Field& field, bool newOne = false);
+    KPropertySet* createPropertySet(int row, const KDbField& field, bool newOne = false);
 
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
@@ -191,12 +186,12 @@ protected:
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
 
     /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
-    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* copyData(const KDbObject& sdata,
                                           KexiView::StoreNewDataOptions options,
                                           bool &cancel);
 
@@ -211,11 +206,11 @@ protected:
      This is used in the altertable test suite (kexi/tests/altertable).
      \return true on successful schema creating, false on failure and cancelled when there
      was a problem with user's design (and user has been informed about it). */
-    tristate buildSchema(KexiDB::TableSchema &schema, bool beSilent = false);
+    tristate buildSchema(KDbTableSchema &schema, bool beSilent = false);
 
-    /*! Builds action list usable for KexiDB::AlterTableHandler by looking at undo buffer
+    /*! Builds action list usable for KDbAlterTableHandler by looking at undo buffer
      of commands' history. Used in storeData() */
-    tristate buildAlterTableActions(KexiDB::AlterTableHandler::ActionList &actions);
+    tristate buildAlterTableActions(KDbAlterTableHandler::ActionList &actions);
 
     /*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
      Assigns primary key icon and value for property set \a propertySet,
@@ -226,7 +221,7 @@ protected:
                           KexiTableDesignerCommands::Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
-    void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
+    void getSubTypeListData(KDbField::TypeGroup fieldTypeGroup,
                             QStringList& stringsList, QStringList& namesList);
 
     /*! Adds history command \a command to the undo/redo buffer.

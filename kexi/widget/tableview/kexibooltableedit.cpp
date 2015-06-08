@@ -26,7 +26,7 @@
 #include <QClipboard>
 #include <QDebug>
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
     qDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();

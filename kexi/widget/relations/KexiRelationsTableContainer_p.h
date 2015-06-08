@@ -31,11 +31,7 @@
 class KexiRelationsScrollArea;
 class KexiRelationViewTable;
 class KexiRelationViewTableContainerHeader;
-
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
+class KDbTableOrQuerySchema;
 
 //! @internal A field list widget used in table container to show fields
 class KexiRelationsTableFieldList : public KexiFieldListView
@@ -43,7 +39,7 @@ class KexiRelationsTableFieldList : public KexiFieldListView
     Q_OBJECT
 
 public:
-    KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema* tableOrQuerySchema,
+    KexiRelationsTableFieldList(KDbTableOrQuerySchema* tableOrQuerySchema,
                                 KexiRelationsScrollArea *scrollArea, QWidget *parent = 0);
     virtual ~KexiRelationsTableFieldList();
 

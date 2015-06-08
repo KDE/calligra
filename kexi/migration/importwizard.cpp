@@ -118,7 +118,7 @@ public:
     QPushButton* importOptionsButton;
     QMap<QString, QString> *args;
     QString predefinedDatabaseName, predefinedMimeType;
-    KexiDB::ConnectionData *predefinedConnectionData;
+    KDbConnectionData *predefinedConnectionData;
     MigrateManager migrateManager; //!< object lives here, so status messages can be globally preserved
 
     //! Encoding for source db. Currently only used for MDB driver.
@@ -197,10 +197,13 @@ void ImportWizard::parseArguments()
         d->predefinedDatabaseName = (*d->args)["databaseName"];
         d->predefinedMimeType = (*d->args)["mimeType"];
         if (d->args->contains("connectionData")) {
-            d->predefinedConnectionData = new KexiDB::ConnectionData();
-            KexiDB::fromMap(
-                KexiUtils::deserializeMap((*d->args)["connectionData"]), *d->predefinedConnectionData
-            );
+            bool ok;
+            d->predefinedConnectionData = new KDbConnectionData(
+                KDbUtils::deserializeMap((*d->args)["connectionData"]), &ok);
+            if (!ok) {
+                delete d->predefinedConnectionData;
+                d->predefinedConnectionData = 0;
+            }
         }
     }
     d->args->clear();
@@ -239,7 +242,7 @@ void ImportWizard::setupIntro()
         QMimeDatabase db;
         QMimeType mime = db.mimeTypeForName(d->predefinedMimeType);
         if (!mime.isValid()) {
-            KexiDBWarn << QString("'%1' mimetype not installed!").arg(d->predefinedMimeType);
+            qWarning() << QString("'%1' mimetype not installed!").arg(d->predefinedMimeType);
         }
         msg = xi18nc("@info",
                     "Database Importing Assistant is about to import <filename>%1</filename> file "
@@ -276,7 +279,7 @@ void ImportWizard::setupSrcConn()
 
     QSet<QString> excludedFilters;
 //! @todo remove when support for kexi files as source prj is added in migration
-    excludedFilters += KexiDB::defaultFileBasedDriverMimeType();
+    excludedFilters += KDb::defaultFileBasedDriverMimeType();
     excludedFilters += "application/x-kexiproject-shortcut";
     excludedFilters += "application/x-kexi-connectiondata";
     d->srcConn->fileWidget->setExcludedFilters(excludedFilters);
@@ -303,8 +306,8 @@ void ImportWizard::setupDstType()
 {
     d->dstTypePageWidget = new QWidget(this);
 
-    KexiDB::DriverManager manager;
-    KexiDB::Driver::InfoHash drvs = manager.driversInfo();
+    KDbDriverManager manager;
+    KDbDriver::InfoHash drvs = manager.driversInfo();
 
     QVBoxLayout *vbox = new QVBoxLayout(d->dstTypePageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
@@ -550,7 +553,7 @@ void ImportWizard::arriveSrcDBPage()
             d->srcProjectSelector->label()->setText(xi18n("Select source database you wish to import:"));
         }
         d->srcDBPageWidget->hide();
-        KexiDB::ConnectionData* condata = d->srcConn->selectedConnectionData();
+        KDbConnectionData* condata = d->srcConn->selectedConnectionData();
         Q_ASSERT(condata);
         Q_ASSERT(d->prjSet);
         d->srcProjectSelector->setProjectSet(d->prjSet);
@@ -714,14 +717,14 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     KexiUtils::WaitCursor wait;
 
     // Start with a driver manager
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
 
     //qDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
-    KexiDB::Driver *destDriver = manager.driver(
+    KDbDriver *destDriver = manager.driver(
                                      d->dstConn->selectedConnectionData() ? d->dstConn->selectedConnectionData()->driverName //server based
-                                     : KexiDB::defaultFileBasedDriverName()
+                                     : KDb::defaultFileBasedDriverId()
                                      // : d->dstTypeCombo->currentText() //file based
                                  );
     if (!destDriver || manager.error()) {
@@ -731,7 +734,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     }
 
     // Set up destination connection data
-    KexiDB::ConnectionData *cdata = 0;
+    KDbConnectionData *cdata = 0;
     QString dbname;
     if (!result.error()) {
         if (d->dstConn->selectedConnectionData()) {
@@ -743,9 +746,9 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         else {
             //file-based project
             qDebug() << "File Destination...";
-            cdata = new KexiDB::ConnectionData();
+            cdata = new KDbConnectionData();
             cdata->caption = d->dstNewDBTitleLineEdit->text();
-            cdata->driverName = KexiDB::defaultFileBasedDriverName();
+            cdata->driverName = KDb::defaultFileBasedDriverId();
             dbname = d->dstTitlePageWidget->file_requester->url().toLocalFile();
             cdata->setFileName(dbname);
             qDebug() << "Current file name: " << dbname;
@@ -800,7 +803,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         KexiMigration::Data* md = new KexiMigration::Data();
         md->destination = new KexiProjectData(*cdata, dbname);
         if (fileBasedSrcSelected()) {
-            KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+            KDbConnectionData* conn_data = new KDbConnectionData();
             conn_data->setFileName(selectedSourceFileName());
             md->source = conn_data;
             md->sourceName.clear();
@@ -917,7 +920,7 @@ void ImportWizard::next()
             return;
         }
 
-        KexiDB::ConnectionData* condata = d->srcConn->selectedConnectionData();
+        KDbConnectionData* condata = d->srcConn->selectedConnectionData();
         if (!fileBasedSrcSelected() && !condata) {
             KMessageBox::sorry(this, xi18n("Select source database."));
             return;
@@ -967,7 +970,7 @@ void ImportWizard::next()
         if (!fileBasedDstSelected()) {
             // make sure we have password if needed
             tristate passwordNeeded = false;
-            KexiDB::ConnectionData* condata = d->dstConn->selectedConnectionData();
+            KDbConnectionData* condata = d->dstConn->selectedConnectionData();
             if (condata->password.isNull()) {
                 passwordNeeded = KexiDBPasswordDialog::getPasswordIfNeeded(condata, this);
             }

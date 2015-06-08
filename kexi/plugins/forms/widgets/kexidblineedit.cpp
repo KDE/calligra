@@ -283,7 +283,7 @@ void KexiDBLineEdit::clear()
         QLineEdit::clear();
 }
 
-void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBLineEdit::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     m_textFormatter.setField( cinfo ? cinfo->field : 0 );
@@ -291,9 +291,9 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     if (!cinfo)
         return;
 
-//! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
+//! @todo handle input mask (via QLineEdit::setInputMask()) using a special KDbFieldInputMask class
     delete m_readWriteValidator;
-    KexiDB::FieldValidator* fieldValidator = new KexiDB::FieldValidator(*cinfo->field, this);
+    KDbFieldValidator* fieldValidator = new KDbFieldValidator(*cinfo->field, this);
     if (m_internalReadOnly) {
         m_readWriteValidator = fieldValidator;
     }

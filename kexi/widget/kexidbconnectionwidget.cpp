@@ -202,7 +202,7 @@ void KexiDBConnectionWidget::setData(const KexiProjectData& data, const QString&
     setDataInternal(data, false /*!connectionOnly*/, shortcutFileName);
 }
 
-void KexiDBConnectionWidget::setData(const KexiDB::ConnectionData& data, const QString& shortcutFileName)
+void KexiDBConnectionWidget::setData(const KDbConnectionData& data, const QString& shortcutFileName)
 {
     KexiProjectData pdata(data);
     setDataInternal(pdata, true /*connectionOnly*/, shortcutFileName);
@@ -302,7 +302,7 @@ void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QStri
     detailsWidget->descriptionEdit->setText(data.description());
 }
 
-void KexiDBConnectionTabWidget::setData(const KexiDB::ConnectionData& data,
+void KexiDBConnectionTabWidget::setData(const KDbConnectionData& data,
                                         const QString& shortcutFileName)
 {
     mainWidget->setData(data, shortcutFileName);
@@ -359,7 +359,7 @@ bool KexiDBConnectionTabWidget::savePasswordOptionSelected() const
 
 void KexiDBConnectionTabWidget::slotTestConnection()
 {
-    KexiDB::ConnectionData connectionData = *currentProjectData().connectionData();
+    KDbConnectionData connectionData = *currentProjectData().connectionData();
     bool savePasswordChecked = connectionData.savePassword;
     if (!savePasswordChecked) {
         connectionData.password = mainWidget->passwordEdit->text(); //not saved otherwise
@@ -374,8 +374,7 @@ void KexiDBConnectionTabWidget::slotTestConnection()
         }
     }
     KexiGUIMessageHandler msgHandler;
-    KexiDB::connectionTestDialog(this, connectionData,
-                                 msgHandler);
+    KDb::connectionTestDialog(this, connectionData, &msgHandler);
 }
 
 void KexiDBConnectionTabWidget::slotSocketComboboxToggled(bool on)
@@ -405,7 +404,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
 }
 
 KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
-        const KexiDB::ConnectionData& data,
+        const KDbConnectionData& data,
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
         : QDialog(parent)
         , d(new Private)

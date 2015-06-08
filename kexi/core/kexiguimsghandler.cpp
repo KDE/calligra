@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
-        : KexiDB::MessageHandler(parent)
+        : KDbMessageHandler(parent)
 {
 }
 
@@ -35,7 +35,7 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 }
 
 void
-KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
+KexiGUIMessageHandler::showErrorMessageInternal(KDbObject *obj, const QString& msg)
 {
     QString _msg(msg);
     if (!obj) {
@@ -43,7 +43,7 @@ KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QStri
         return;
     }
     QString details;
-    KexiDB::getHTMLErrorMesage(obj, _msg, details);
+    KDb::getHTMLErrorMesage(*obj, &_msg, &details);
     showErrorMessageInternal(_msg, details);
 }
 
@@ -60,7 +60,7 @@ KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &det
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details,
-                                             KexiDB::Object *obj)
+                                             KDbObject *obj)
 {
     QString _msg(msg);
     if (!obj) {
@@ -68,7 +68,7 @@ void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &
         return;
     }
     QString _details(details);
-    KexiDB::getHTMLErrorMesage(obj, _msg, _details);
+    KDb::getHTMLErrorMesage(*obj, _msg, _details);
     showErrorMessage(_msg, _details);
 }
 

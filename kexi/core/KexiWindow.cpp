@@ -65,7 +65,7 @@ public:
         setSchemaData(0);
     }
 
-    void setSchemaData(KexiDB::SchemaData* data)
+    void setSchemaData(KDbObject* data)
     {
         if (schemaDataOwned) {
             delete schemaData;
@@ -73,7 +73,7 @@ public:
         schemaData = data;
     }
 
-    bool setupSchemaData(KexiDB::SchemaData *sdata, KexiPart::Item *item,
+    bool setupSchemaData(KDbObject *sdata, KexiPart::Item *item,
                          KexiView::StoreNewDataOptions options) const
     {
         sdata->setName(item->name());
@@ -106,7 +106,7 @@ public:
     int id;
     QPointer<KexiPart::Part> part;
     KexiPart::Item *item;
-    KexiDB::SchemaData* schemaData;
+    KDbObject* schemaData;
     bool schemaDataOwned;
     QPointer<KexiView> newlySelectedView; //!< Used in isDirty(), temporary set in switchToViewMode()
     //!< during view setup, when a new view is not yet raised.
@@ -607,12 +607,12 @@ KexiWindow::propertySet()
     return v->propertySet();
 }
 
-void KexiWindow::setSchemaData(KexiDB::SchemaData* schemaData)
+void KexiWindow::setSchemaData(KDbObject* schemaData)
 {
     d->setSchemaData(schemaData);
 }
 
-KexiDB::SchemaData* KexiWindow::schemaData() const
+KDbObject* KexiWindow::schemaData() const
 {
     return d->schemaData;
 }
@@ -694,7 +694,7 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     }
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KexiDB::SchemaData sdata(project->idForClass(d->part->info()->partClass()));
+    KDbObject sdata(project->idForClass(d->part->info()->partClass()));
     if (!d->setupSchemaData(&sdata, d->item, options)) {
         return false;
     }
@@ -735,13 +735,13 @@ tristate KexiWindow::storeData(bool dontAsk)
         xi18n("Saving object's data failed."),"");
 
     //save changes using transaction
-    KexiDB::Transaction transaction = KexiMainWindowIface::global()
+    KDbTransaction transaction = KexiMainWindowIface::global()
                                       ->project()->dbConnection()->beginTransaction();
     if (transaction.isNull()) {
         storeData_ERR;
         return false;
     }
-    KexiDB::TransactionGuard tg(transaction);
+    KDbTransactionGuard tg(transaction);
 
     const tristate res = v->storeData(dontAsk);
     if (~res) //trans. will be cancelled
@@ -771,13 +771,13 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     }
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KexiDB::SchemaData sdata(project->idForClass(d->part->info()->partClass()));
+    KDbObject sdata(project->idForClass(d->part->info()->partClass()));
     if (!d->setupSchemaData(&sdata, item, options)) {
         return false;
     }
 
     bool cancel = false;
-    KexiDB::SchemaData *newSchemaData;
+    KDbObject *newSchemaData;
     if (isDirty()) { // full save of new data
         newSchemaData = v->storeNewData(sdata, options, cancel);
     }

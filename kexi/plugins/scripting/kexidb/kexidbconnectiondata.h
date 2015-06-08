@@ -37,9 +37,9 @@ class KexiDBConnectionData : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
+    KexiDBConnectionData(QObject* parent, ::KDbConnectionData* data, bool owner);
     virtual ~KexiDBConnectionData();
-    ::KexiDB::ConnectionData* data() {
+    ::KDbConnectionData* data() {
         return m_data;
     }
 
@@ -112,7 +112,7 @@ public Q_SLOTS:
     const QString serverInfoString() const;
 
 private:
-    ::KexiDB::ConnectionData* m_data;
+    ::KDbConnectionData* m_data;
     QString m_dbname;
     bool m_owner;
 };

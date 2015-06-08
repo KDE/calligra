@@ -41,7 +41,7 @@ class KexiProjectDataPrivate;
 
  @todo make it value-based class
 */
-class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
+class KEXICORE_EXPORT KexiProjectData : public QObject, public KDbObject
 {
 public:
     typedef QList<KexiProjectData*> List;
@@ -69,7 +69,7 @@ public:
       for file-based onces because in this case name is equal to database's filename
       (cdata.dbFileName()).
       @a caption is for setting project's caption. */
-    explicit KexiProjectData(const KexiDB::ConnectionData &cdata,
+    explicit KexiProjectData(const KDbConnectionData &cdata,
                              const QString& dbname = QString(), const QString& caption = QString());
 
     /*! Constructs a copy of \a pdata */
@@ -103,12 +103,12 @@ public:
      project settings. */
     bool userMode() const;
 
-    KexiDB::ConnectionData* connectionData();
+    KDbConnectionData* connectionData();
 
-    const KexiDB::ConnectionData* constConnectionData() const;
+    const KDbConnectionData* constConnectionData() const;
 
     /*! \return database name.
-     In fact, this is the same as KexiDB::SchemaData::name() */
+     In fact, this is the same as KDbObject::name() */
     QString databaseName() const;
    
     void setDatabaseName(const QString& dbName);

@@ -52,7 +52,7 @@ public:
     KComboBox *tableCombo;
     QPushButton *btnAdd;
     KexiRelationsScrollArea *scrollArea;
-    KexiDB::Connection *conn;
+    KDbConnection *conn;
 
     QMenu *tableQueryPopup //!< over table/query
     , *connectionPopup //!< over connection
@@ -149,8 +149,8 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
             this, SLOT(tableContextMenuRequest(QPoint)));
     connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(QPoint)),
             this, SLOT(connectionContextMenuRequest(QPoint)));
-    connect(d->scrollArea, SIGNAL(tableHidden(KexiDB::TableSchema&)),
-            this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
+    connect(d->scrollArea, SIGNAL(tableHidden(KDbTableSchema&)),
+            this, SLOT(slotTableHidden(KDbTableSchema&)));
     connect(d->scrollArea, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
             this, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)));
     connect(d->scrollArea, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
@@ -198,12 +198,12 @@ KexiRelationsView::slotAddTable()
     if (d->tableCombo->currentIndex() == -1)
         return;
     const QString tname = d->tableCombo->itemText(d->tableCombo->currentIndex());
-    KexiDB::TableSchema *t = d->conn->tableSchema(tname);
+    KDbTableSchema *t = d->conn->tableSchema(tname);
     addTable(t);
 }
 
 void
-KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
+KexiRelationsView::addTable(KDbTableSchema *t, const QRect &rect)
 {
     if (!t)
         return;
@@ -212,8 +212,8 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         qDebug() << "adding table" << t->name();
         if (!c)
             return;
-        connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&,QStringList)),
-                this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)));
+        connect(c, SIGNAL(fieldsDoubleClicked(KDbTableOrQuerySchema&,QStringList)),
+                this, SIGNAL(appendFields(KDbTableOrQuerySchema&,QStringList)));
     }
 
     const QString tname = t->name().toLower();
@@ -347,7 +347,7 @@ QSize KexiRelationsView::sizeHint() const
     return d->scrollArea->sizeHint();
 }
 
-void KexiRelationsView::slotTableHidden(KexiDB::TableSchema &table)
+void KexiRelationsView::slotTableHidden(KDbTableSchema &table)
 {
     const QString &t = table.name().toLower();
     int i;
@@ -469,7 +469,7 @@ KexiRelationsView::objectRenamed(const QString &mime, const QString& name,
 }
 
 void
-KexiRelationsView::hideAllTablesExcept(KexiDB::TableSchema::List* tables)
+KexiRelationsView::hideAllTablesExcept(KDbTableSchema::List* tables)
 {
     d->scrollArea->hideAllTablesExcept(tables);
 }
