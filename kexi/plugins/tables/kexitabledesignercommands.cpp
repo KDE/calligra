@@ -205,7 +205,7 @@ InsertFieldCommand::InsertFieldCommand(Command* parent, KexiTableDesignerView* v
             fieldIndex, f, set["uid"].value().toInt());
     else //null action
         m_alterTableAction = new KDbAlterTableHandler::InsertFieldAction(true);
-    
+
     setText(kundo2_i18n("Insert table field \"%1\"", m_set["caption"].value().toString()));
 }
 

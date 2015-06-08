@@ -108,7 +108,7 @@ void KexiFormDataProvider::fillDataItems(KDbRecordData& record, bool cursorAtNew
         if (indexForVisibleLookupValue != -1 && (int)record.size() > indexForVisibleLookupValue)
             visibleLookupValue = record.at(indexForVisibleLookupValue);
             qDebug() << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value()
-            << " data=" << value 
+            << " data=" << value
             << (indexForVisibleLookupValue != -1
                  ? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
                  .arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())

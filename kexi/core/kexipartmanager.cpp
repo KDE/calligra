@@ -70,7 +70,7 @@ Manager::Private::Private(Manager *manager_)
     : manager(manager_)
     , lookupDone(false)
     , lookupResult(false)
-{  
+{
 }
 
 Manager::Private::~Private()

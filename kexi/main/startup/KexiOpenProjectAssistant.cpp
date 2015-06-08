@@ -68,14 +68,14 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     //connect(fileSelector->fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
     connect(fileSelector->fileWidget, SIGNAL(fileHighlighted()),
             this, SLOT(next()));
-                      
+
     m_connSelectorWidget = new QWidget;
     tabWidget->addTab(m_connSelectorWidget, Kexi::serverIcon(),
                       xi18nc("@title:tab", "Projects Stored on Database Server"));
 
     setFocusWidget(tabWidget);
     setContents(tabWidget);
-    
+
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     // delayed opening:
     QTimer::singleShot(500, this, SLOT(init()));
@@ -206,11 +206,11 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     KexiMainOpenProjectPage* projectOpenPage() {
         return page<KexiMainOpenProjectPage>(&m_projectOpenPage);
     }

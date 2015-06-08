@@ -405,7 +405,7 @@ void KexiFormManager::setDataSourceFieldOrExpression(
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget)
         return;
-    
+
     KPropertySet& set = formViewWidget->form()->propertySet();
     if (!set.contains("dataSource"))
         return;

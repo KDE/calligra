@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core   )
 
 ########### next target ###############
 
-set(kexirelationsview_LIB_SRCS 
+set(kexirelationsview_LIB_SRCS
    KexiRelationsScrollArea.cpp
    KexiRelationsConnection.cpp
    KexiRelationsTableContainer.cpp

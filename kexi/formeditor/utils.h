@@ -130,9 +130,9 @@ KFORMEDITOR_EXPORT void copyToClipboard(const QString& xml);
 
 //! Recursively saves widget list @a list and form @a form to @a doc XML document
 /*! @a containers hash is filled with containers found within the widget list,
- and @a parents is filled with the parent widgets found within the widget list. 
+ and @a parents is filled with the parent widgets found within the widget list.
  USed in DeleteWidgetCommand ctor. */
-KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc, 
+KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc,
     QHash<QByteArray, QByteArray>& containers,
     QHash<QByteArray, QByteArray>& parents,
     const Form& form, const QWidgetList &list);
@@ -154,7 +154,7 @@ class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
 //! @return @a value aligned to the nearest multiple of gridSize
 KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
 
-//! Paint semitransparent widget frame. 
+//! Paint semitransparent widget frame.
 //! For example it is useful for design mode to show geometry of label that has no visible frames.
 KFORMEDITOR_EXPORT void paintWidgetFrame(QPainter& p, const QRect& geometry);
 

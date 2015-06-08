@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -137,13 +137,13 @@ bool xBaseMigrate::drv_readTableSchema(
   // Steps
   // 1. Get the number of fields
   // 2. for i = 1 to no_of_fields
-  // 3.	 Get the fieldName of the i th	field
-  // 4.	 Generate a fieldId
-  // 5.	 Create a KDbField object, using the fieldId and the fieldType ( you may need to write a type conversion function here )
-  // 6.	 Examine enum fields of any
-  // 7.	 Set the caption of the field
-  // 8.	 Set other properties of the field ( pertaining to constraints like pkey, unique etc, and  AutoIncrement etc )
-  // 9.	 Add the field to the TableSchema
+  // 3.     Get the fieldName of the i th    field
+  // 4.     Generate a fieldId
+  // 5.     Create a KDbField object, using the fieldId and the fieldType ( you may need to write a type conversion function here )
+  // 6.     Examine enum fields of any
+  // 7.     Set the caption of the field
+  // 8.     Set other properties of the field ( pertaining to constraints like pkey, unique etc, and  AutoIncrement etc )
+  // 9.     Add the field to the TableSchema
   // 10. end for
 
   // Get table path
@@ -196,12 +196,12 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
 {
   // Steps
   // 1. for all records in the table
-  // 2.	num_fields = number of fields in the table
-  // 3.	for each field in the table
-  // 4.	    get the length of the field in the table
-  // 5.	    Append the field to the variant list ( vals )
-  // 6.	end for
-  // 7.	Insert the record into the destinationConnection into the destinationTable
+  // 2.    num_fields = number of fields in the table
+  // 3.    for each field in the table
+  // 4.        get the length of the field in the table
+  // 5.        Append the field to the variant list ( vals )
+  // 6.    end for
+  // 7.    Insert the record into the destinationConnection into the destinationTable
   // 8. end for
 
   // get dbf pointer for table
@@ -228,7 +228,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
         char* memoBuffer = 0;
         int returnCode;
       #endif
-  
+
       switch ( type( tableDbf->GetFieldType( j ) ) ) {
         case KDbField::Date:
           val = QDate::fromString( data, "yyyyMMdd" );
@@ -322,19 +322,19 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbFi
   // 4. Check the expression of the index to crosscheck whether this is indeed the index file on the required field.
   // 5. Determine the index type ( unique or not )
   // 6. Set appropriate properties to the field
-  
+
   // Create a base class pointer to an xbIndex
   xbIndex* index = 0;
-  
+
   QStringList indexFileNames = getIndexFileNames(tableName, fld->name());
-  
+
   if ( indexFileNames.isEmpty() ) {
     // no index files exist for this field
     return;
   }
-  
+
   foreach( const QString& indexFileName, indexFileNames ) {
-  
+
     // get dbf pointer for table
     QString tablePath = m_tableNamePathMap.value( tableName );
     xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
@@ -343,7 +343,7 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbFi
     // currently done by checking extension.
     //! @TODO Check mimetype instead
     QString fileExtension = indexFileName.right( 3 );
-  
+
     if ( fileExtension.toLower() == "ndx" ) {
       index = new xbNdx( tableDbf );
     } else if ( fileExtension.toLower() == "ntx" ) {
@@ -353,22 +353,22 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbFi
       qDebug()<<"Couldn't recognize extension";
       return;
     }
-  
+
     if ( index->OpenIndex( indexFileName.toLatin1().constData() ) != XB_NO_ERROR ) {
       qDebug()<<"Couldn't open index file"<<indexFileName;
       return;
     }
-  
+
     // verfiy if this index is on the required field
     char buf[256];
     index->GetExpression( buf, 256 );
     QString expressionName = QString::fromLatin1( buf );
-  
+
     if ( expressionName.toLower() != fld->name() ) {
       qDebug()<<"Expression mismatch in "<<indexFileName;
       continue;
     }
-  
+
     // all is well, set the index
     if ( index->UniqueIndex() == XB_UNIQUE ) {
       fld->setUniqueKey( true );
@@ -390,27 +390,27 @@ QStringList KexiMigration::xBaseMigrate::getIndexFileNames(const QString& tableN
   // The current policy uses the xbsql ( http://www.quaking.demon.co.uk/xbsql/ ) semantics for determining
   // the filenames of the index files
   // index files are assumed to be of the type <tablename>_<fieldname>.ndx or .ntx
-  
+
   // Though the current semantics allows only one index on a field ( actually two, considering we can
   // have both .ndx and .ntx index, there can be multiple indices, hence a list of filenames is returned
   // (Note: Kexi fields support only a single index. But we have a separate IndexSchema class ...)
-  
+
   QString dbPath = data()->source->dbPath();
   QDir xBaseDirectory( dbPath );
-  
+
   QString fileName = tableName + '_' + fieldName;
-  
+
   QStringList indexFilters;
   indexFilters<<fileName+'*'; // filter all files of the form <tableName>_<fieldName>
-  
+
   xBaseDirectory.setNameFilters( indexFilters );
   QStringList fileNameList = xBaseDirectory.entryList();
-  
+
   QStringList absolutePathNames;
   foreach( const QString& fileName, fileNameList ) {
     absolutePathNames<<xBaseDirectory.filePath( fileName );
   }
-  
+
   return absolutePathNames;
 }
 

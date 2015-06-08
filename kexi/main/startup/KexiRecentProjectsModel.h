@@ -46,7 +46,7 @@ public:
 private:
     const KexiRecentProjects* m_projects;
 };
- 
+
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

@@ -41,10 +41,10 @@ QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) cons
 {
     if (!index.isValid())
         return QVariant();
-    
+
     if (index.column() >= (int)m_schema->fieldCount())
         return QVariant();
-    
+
     if (role == Qt::DisplayRole) {
         if (m_data.length() > index.row()) {
             const KDbRecordData r( m_data[index.row()] );

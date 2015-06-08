@@ -226,7 +226,7 @@ public:
     virtual void dropEvent(QDropEvent *e);
 
     KFormDesigner::Container *container() const { return m_container; }
-    
+
 Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);

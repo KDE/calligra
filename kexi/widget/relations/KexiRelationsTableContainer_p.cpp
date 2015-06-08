@@ -179,7 +179,7 @@ int KexiRelationsTableFieldList::globalY(const QString &item)
 {
     QAbstractItemModel *themodel = model();
     QModelIndex idx;
-    
+
     for (int i = 0; i < themodel->rowCount(); ++i) {
         idx = themodel->index(i, 0);
         QVariant data = themodel->data(idx);
@@ -187,13 +187,13 @@ int KexiRelationsTableFieldList::globalY(const QString &item)
             break;
         }
     }
-    
+
     if (idx.isValid()) {
         QRect r = this->rectForIndex(idx);
         int y = r.y() + r.height()/2;
-        
+
         //Not sure what this line is supposed to do...is it to check if the item is visible?
-        if (visualRect(idx).y() > viewport()->height()){   
+        if (visualRect(idx).y() > viewport()->height()){
             y = 0;
         } else if (y == 0) {
             y = height();
@@ -218,31 +218,31 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     QString srcTable;
     QStringList srcFields;
     QString srcField;
-    
+
     if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         event->ignore();
         return;
     }
-    
+
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query"){
         event->ignore();
         return;
     }
-    
+
     if (srcFields.count() != 1) {
         event->ignore();
         return;
     }
-    
+
     srcField = srcFields[0];
-    
+
     if (srcTable == schema()->name()) {
         event->ignore();
         return;
     }
-        
+
     QString f = model()->data(receiver, Qt::DisplayRole).toString();
-    
+
     //qDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
@@ -253,7 +253,7 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 {
     //qDebug();
     QModelIndex idx = indexAt(event->pos());
-    
+
     if (!idx.isValid() || !KexiFieldDrag::canDecode(event)) {
         event->ignore();
         return;
@@ -262,15 +262,15 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
     QString srcTable;
     QStringList srcFields;
     QString srcField;
-    
+
     if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         return;
     }
-    
+
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query") {
         return;
     }
-    
+
     if (srcFields.count() != 1) {
         return;
     }

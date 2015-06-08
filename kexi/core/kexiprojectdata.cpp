@@ -257,7 +257,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         //! @todo ERR: "No valid "engine" field specified for %1 section" group
         return false;
     }
-    
+
     // verification OK, now applying the values:
     d->connData.driverName = driverName;
     formatVersion = _formatVersion;

@@ -51,7 +51,7 @@ MdbTableDef *mdb_alloc_tabledef(MdbCatalogEntry *entry)
 	table->entry=entry;
 	strcpy(table->name, entry->object_name);
 
-	return table;	
+	return table;
 }
 void mdb_free_tabledef(MdbTableDef *table)
 {
@@ -96,7 +96,7 @@ MdbTableDef *mdb_read_table(MdbCatalogEntry *entry)
 	pg_row = mdb_get_int32(pg_buf, fmt->tab_usage_map_offset);
 	mdb_find_pg_row(mdb, pg_row, &buf, &row_start, &(table->map_sz));
 	table->usage_map = g_memdup((char*)buf + row_start, table->map_sz);
-	if (mdb_get_option(MDB_DEBUG_USAGE)) 
+	if (mdb_get_option(MDB_DEBUG_USAGE))
 		buffer_dump(buf, row_start, table->map_sz);
 	mdb_debug(MDB_DEBUG_USAGE,"usage map found on page %ld row %d start %d len %d",
 		pg_row >> 8, pg_row & 0xff, row_start, table->map_sz);
@@ -129,7 +129,7 @@ MdbTableDef *mdb_read_table_by_name(MdbHandle *mdb, gchar *table_name, int obj_t
 }
 
 
-guint32 
+guint32
 read_pg_if_32(MdbHandle *mdb, int *cur_pos)
 {
 	char c[4];
@@ -137,7 +137,7 @@ read_pg_if_32(MdbHandle *mdb, int *cur_pos)
 	read_pg_if_n(mdb, c, cur_pos, 4);
 	return mdb_get_int32(c, 0);
 }
-guint16 
+guint16
 read_pg_if_16(MdbHandle *mdb, int *cur_pos)
 {
 	char c[2];
@@ -158,7 +158,7 @@ read_pg_if_8(MdbHandle *mdb, int *cur_pos)
  * page cursor as needed.  In the case that buf in NULL, pages
  * are still advanced and the page cursor is still updated.
  */
-void * 
+void *
 read_pg_if_n(MdbHandle *mdb, void *buf, int *cur_pos, size_t len)
 {
 	char *buf_char = (char *)buf;
@@ -209,18 +209,18 @@ GPtrArray *mdb_read_columns(MdbTableDef *table)
 	unsigned int i;
 	int cur_pos;
 	size_t name_sz;
-	
+
 	table->columns = g_ptr_array_new();
 
 	col = (unsigned char *) g_malloc(fmt->tab_col_entry_size);
 
-	cur_pos = fmt->tab_cols_start_offset + 
+	cur_pos = fmt->tab_cols_start_offset +
 		(table->num_real_idxs * fmt->tab_ridx_entry_size);
 
 	/* new code based on patch submitted by Tim Nelson 2000.09.27 */
 
-	/* 
-	** column attributes 
+	/*
+	** column attributes
 	*/
 	for (i=0;i<table->num_cols;i++) {
 #ifdef MDB_DEBUG
@@ -232,17 +232,17 @@ GPtrArray *mdb_read_columns(MdbTableDef *table)
 
 		pcol->col_type = col[0];
 
-		
+
 		pcol->col_num = col[fmt->col_num_offset];
 
-		
-		
-		pcol->var_col_num = mdb_get_int16(col, fmt->tab_col_offset_var);
-		
 
-		
+
+		pcol->var_col_num = mdb_get_int16(col, fmt->tab_col_offset_var);
+
+
+
 		pcol->row_col_num = mdb_get_int16(col, fmt->tab_row_col_num_offset);
-		
+
 
 		/* FIXME: can this be right in Jet3 and Jet4? */
 		if (pcol->col_type == MDB_NUMERIC) {
@@ -250,27 +250,27 @@ GPtrArray *mdb_read_columns(MdbTableDef *table)
 			pcol->col_scale = col[12];
 		}
 
-		
+
 		pcol->is_fixed = col[fmt->col_fixed_offset] & 0x01 ? 1 : 0;
 
-		
+
 		pcol->fixed_offset = mdb_get_int16(col, fmt->tab_col_offset_fixed);
-		
-		
+
+
 
 		if (pcol->col_type != MDB_BOOL) {
-			
+
 			pcol->col_size = mdb_get_int16(col, fmt->col_size_offset);
 		} else {
 			pcol->col_size=0;
 		}
-		
+
 		g_ptr_array_add(table->columns, pcol);
 	}
 
 	g_free (col);
 
-	/* 
+	/*
 	** column names - ordered the same as the column attributes table
 	*/
 	for (i=0;i<table->num_cols;i++) {
@@ -321,7 +321,7 @@ guint32 pgnum;
 
 	for (i=0;i<table->num_cols;i++) {
 		col = g_ptr_array_index(table->columns,i);
-	
+
 		fprintf(stdout,"column %d Name: %-20s Type: %s(%d)\n",
 			i, col->name,
 			mdb_get_coltype_string(mdb->default_backend, col->col_type),

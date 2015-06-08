@@ -203,11 +203,11 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette,
                                                QPalette::ColorRole role = QPalette::ButtonText);
 
-/*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps 
+/*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps
  that have to reflect the foreground color. */
 KEXIUTILS_EXPORT void replaceColors(QPixmap* original, const QColor& color);
 
-/*! Replaces colors in image @a original using @a color color. Used for coloring bitmaps 
+/*! Replaces colors in image @a original using @a color color. Used for coloring bitmaps
  that have to reflect the foreground color. */
 KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
 

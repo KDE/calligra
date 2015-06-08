@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -36,15 +36,15 @@ class KexiMobileNavigator : public QWidget
 public:
     explicit KexiMobileNavigator(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~KexiMobileNavigator();
-    
+
     void setProject(KexiProject*);
 
 private Q_SLOTS:
     void slotOpenItem(KexiPart::Item *item);
-    
+
 Q_SIGNALS:
     void openItem(KexiPart::Item *item);
-    
+
 private:
     KexiProject *m_project;
     KexiProjectModel* m_reportModel;

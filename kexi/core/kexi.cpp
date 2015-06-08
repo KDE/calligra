@@ -154,7 +154,7 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
     const char *const id =
         (mode == DataViewMode) ? koIconNameCStr("state_data") :
         (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
-        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        (mode == TextViewMode) ? koIconNameCStr("state_sql"):
         0;
 
     return QLatin1String(id);

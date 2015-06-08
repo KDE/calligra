@@ -4,12 +4,12 @@ Main goals:
 
 **************************
 
-Workflow importing : 
+Workflow importing :
 Step 1:
 	a)
 		Project->Import
 			-> File
-			-> Connection 
+			-> Connection
 		==> All  types
 
 	b)
@@ -29,7 +29,7 @@ Step 3:
 	*) Allowing source specific configuration, eg range selection in a spreadsheet
 
 Step 4:
-	*) loading import GUI plugin for destination kexi mimetype 
+	*) loading import GUI plugin for destination kexi mimetype
 	*) Allow the user to choose how to import
 			eg for tables:  import new table,
 					append data to an existing table
@@ -40,7 +40,7 @@ Step 5:
 		*	: GUI plugin is responsible for importing directly or loading an additional, NON visual plugin
 Step 6:
 	*) DONE
-	
+
 
 **************************
 

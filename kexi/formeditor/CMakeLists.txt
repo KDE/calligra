@@ -4,7 +4,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/wi
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
-# Disable list widget because we need to replace it with QTreeWidget 
+# Disable list widget because we need to replace it with QTreeWidget
 # which uses very different API compared to Q3ListView.
 # todo: re-add QTreeWidget?
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
@@ -17,7 +17,7 @@ add_definitions(-DKEXI_NO_PIXMAPCOLLECTION)
 
 ########### next target ###############
 
-set(kformdesigner_LIB_SRCS 
+set(kformdesigner_LIB_SRCS
    container.cpp
    resizehandle.cpp
    widgetfactory.cpp
@@ -53,7 +53,7 @@ set(kformdesigner_LIBS
 )
 
 if(KFD_SIGSLOTS)
-  add_definitions( 
+  add_definitions(
     -DKFD_SIGSLOTS=1
   )
   list(APPEND kformdesigner_LIB_SRCS connectiondialog.cpp)

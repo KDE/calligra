@@ -35,28 +35,28 @@ public:
     explicit KexiLinkWidget(QWidget* parent = 0);
 
     KexiLinkWidget(const QString& link, const QString& linkText, QWidget* parent = 0);
-    
+
     virtual ~KexiLinkWidget();
 
     QString link() const;
 
     QString linkText() const;
-    
+
     QString format() const;
 
 public Q_SLOTS:
     void setLink(const QString& link);
-    
+
     void setLinkText(const QString& linkText);
 
-    //! Sets format for the button. 
-    /*! Format defines user-visible text written around the link. 
+    //! Sets format for the button.
+    /*! Format defines user-visible text written around the link.
         Use "%L" as a placeholder for the link, e.g. when format
         is "‹ %L" and link text is "Back", the widget will show "‹ Back"
         where "Back" is a link. By default format is empty, what means
         only the link is displayed. */
     void setFormat(const QString& format);
-    
+
 protected:
     virtual void changeEvent(QEvent* event);
 
