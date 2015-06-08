@@ -103,7 +103,7 @@ KDbTableOrQuerySchema* KexiRelationsTableContainer::schema() const
 
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-  emit gotFocus();  
+  emit gotFocus();
   emit contextMenuRequest(d->fieldList->mapToGlobal(p));
 }
 

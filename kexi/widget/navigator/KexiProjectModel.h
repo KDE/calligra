@@ -109,7 +109,7 @@ private:
     //! @return index of first part item within children of parentIndex (recursively)
     QModelIndex firstChildPartItem(const QModelIndex &parentIndex) const;
 
-    class Private;  
+    class Private;
     Private * const d;
 };
 
