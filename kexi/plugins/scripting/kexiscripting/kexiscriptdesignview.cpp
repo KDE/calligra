@@ -33,6 +33,7 @@
 
 #include <kfiledialog.h>
 #include <kactionmenu.h>
+#include <KMessageBox>
 
 #include <QSplitter>
 #include <QTimer>

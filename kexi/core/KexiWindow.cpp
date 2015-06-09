@@ -35,6 +35,7 @@
 #include <KDbUtils>
 
 #include <KStandardGuiItem>
+#include <KMessageBox>
 
 #include <QStackedWidget>
 #include <QEvent>

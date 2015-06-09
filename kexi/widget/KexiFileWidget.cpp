@@ -28,7 +28,7 @@
 #include <KDbDriver>
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KLocalizedString>
 #include <kfile.h>
 #include <kurlcombobox.h>
