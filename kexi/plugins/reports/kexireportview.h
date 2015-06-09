@@ -50,7 +50,7 @@ public:
     ~KexiReportView();
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     virtual void addNewRecordRequested();
     virtual void moveToFirstRecordRequested();

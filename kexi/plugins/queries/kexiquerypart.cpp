@@ -61,9 +61,10 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
     return data;
 }
 
-KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPart::Item &item,
+KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPart::Item *item,
                                     Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     Q_UNUSED(item);
     Q_UNUSED(window);
     //qDebug();
@@ -78,8 +79,8 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
         view->setObjectName("guieditor");
         //needed for updating tables combo box:
         KexiProject *prj = KexiMainWindowIface::global()->project();
-        connect(prj, SIGNAL(newItemStored(KexiPart::Item&)),
-                view, SLOT(slotNewItemStored(KexiPart::Item&)));
+        connect(prj, SIGNAL(newItemStored(KexiPart::Item*)),
+                view, SLOT(slotNewItemStored(KexiPart::Item*)));
         connect(prj, SIGNAL(itemRemoved(KexiPart::Item)),
                 view, SLOT(slotItemRemoved(KexiPart::Item)));
         connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
@@ -92,17 +93,17 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
     return view;
 }
 
-tristate KexiQueryPart::remove(KexiPart::Item &item)
+tristate KexiQueryPart::remove(KexiPart::Item *item)
 {
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())
         return false;
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KDbQuerySchema *sch = conn->querySchema(item.identifier());
+    KDbQuerySchema *sch = conn->querySchema(item->identifier());
     if (sch)
         return conn->dropQuery(sch);
     //last chance: just remove item
-    return conn->removeObject(item.identifier());
+    return conn->removeObject(item->identifier());
 }
 
 void KexiQueryPart::initPartActions()
@@ -173,13 +174,14 @@ KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiW
     return Part::i18nMessage(englishMessage, window);
 }
 
-tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
+tristate KexiQueryPart::rename(KexiPart::Item *item, const QString& newName)
 {
+    Q_ASSERT(item);
     Q_UNUSED(newName);
     if (!KexiMainWindowIface::global()->project()->dbConnection())
         return false;
     KexiMainWindowIface::global()->project()->dbConnection()
-    ->setQuerySchemaObsolete(item.name());
+        ->setQuerySchemaObsolete(item->name());
     return true;
 }
 

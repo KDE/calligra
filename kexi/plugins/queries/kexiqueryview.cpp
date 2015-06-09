@@ -131,7 +131,7 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
 
 KDbObject* KexiQueryView::storeNewData(const KDbObject& sdata,
                                                 KexiView::StoreNewDataOptions options,
-                                                bool &cancel)
+                                                bool *cancel)
 {
     KexiView * view = window()->viewThatRecentlySetDirtyFlag();
     if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))

@@ -34,7 +34,7 @@ public:
     AlterTableTester();
     ~AlterTableTester();
 
-    tristate run(bool &closeAppRequested);
+    tristate run(bool *closeAppRequested);
 
 protected Q_SLOTS:
     void slotFinishedCopying(QNetworkOperation*);

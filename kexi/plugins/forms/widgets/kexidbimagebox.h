@@ -190,11 +190,11 @@ Q_SIGNALS:
     void idChanged(long id);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool* valueIsNull, bool* valueIsReadOnly);
 
     void handleInsertFromFileAction(const QUrl &url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
-    void handleSaveAsAction(const QString& fileName);
+    void handleAboutToSaveAsAction(QString* origFilename, QString* fileExtension, bool*& dataIsEmpty);
+    void handleSaveAsAction(const QString* fileName);
     void handleCutAction();
     void handleCopyAction();
     void handlePasteAction();

@@ -328,7 +328,7 @@ void KexiRelationsView::openSelectedTable()
     bool openingCancelled;
     KexiMainWindowIface::global()->openObject(
         "kexi/table", d->scrollArea->focusedTableContainer()->schema()->name(),
-        Kexi::DataViewMode, openingCancelled);
+        Kexi::DataViewMode, &openingCancelled);
 }
 
 void KexiRelationsView::designSelectedTable()
@@ -339,7 +339,7 @@ void KexiRelationsView::designSelectedTable()
     bool openingCancelled;
     KexiMainWindowIface::global()->openObject(
         "kexi/table", d->scrollArea->focusedTableContainer()->schema()->name(),
-        Kexi::DesignViewMode, openingCancelled);
+        Kexi::DesignViewMode, &openingCancelled);
 }
 
 QSize KexiRelationsView::sizeHint() const

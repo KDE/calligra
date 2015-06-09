@@ -66,7 +66,7 @@ protected:
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KDbRecordData& data, bool &firstRecord);
+                                            KDbRecordData* data, bool *firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
                                KDbConnection *destConn, KDbTableSchema* dstTable);
@@ -75,7 +75,7 @@ protected:
         return true;
     }
 
-    virtual bool drv_getTableSize(const QString& table, quint64& size);
+    virtual bool drv_getTableSize(const QString& table, quint64* size);
 
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
