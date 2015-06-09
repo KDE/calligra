@@ -247,7 +247,7 @@ void ImportWizard::setupIntro()
         msg = xi18nc("@info",
                     "Database Importing Assistant is about to import <filename>%1</filename> file "
                     "of type <resource>%2</resource> into a Kexi project.",
-                    QDir::convertSeparators(d->predefinedDatabaseName), mime.isValid() ? mime.comment() : "???");
+                    QDir::toNativeSeparators(d->predefinedDatabaseName), mime.isValid() ? mime.comment() : "???");
     } else {
         msg = xi18n("Database Importing Assistant allows you to import an existing database "
                    "into a Kexi project.");
