@@ -219,8 +219,8 @@ KexiView::KexiView(QWidget *parent)
         , d(new Private(this))
 {
     QWidget *wi = this;
-    while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow"))
-        ;
+    while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow")) {
+    }
     d->window = (wi && wi->inherits("KexiWindow")) ? static_cast<KexiWindow*>(wi) : 0;
     if (d->window) {
         //init view mode number for this view (obtained from window where this view is created)

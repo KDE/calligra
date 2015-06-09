@@ -2805,10 +2805,12 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
 
         d->setSyncAction();
 
-        if (d->currentAction->menu())
-            ; /*d->popupAction(d->currentAction, 0, true);*/
-        else
+        if (d->currentAction->menu()) {
+            /*d->popupAction(d->currentAction, 0, true);*/
+        }
+        else {
             d->activateAction(d->currentAction, QAction::Trigger);
+        }
         key_consumed = true;
         break; }
 

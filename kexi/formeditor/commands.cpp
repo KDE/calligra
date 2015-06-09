@@ -1154,8 +1154,8 @@ void PasteWidgetCommand::execute()
     if (el.isNull())
         return;
     QDomNode n;
-    for (n = el.nextSibling(); !n.isNull() && n.toElement().tagName() != "widget"; n = n.nextSibling())
-        ;
+    for (n = el.nextSibling(); !n.isNull() && n.toElement().tagName() != "widget"; n = n.nextSibling()) {
+    }
     if (n.isNull()) {
         // only one "widget" child tag, so we can paste it at cursor pos
         QDomElement el = domDoc.firstChildElement("UI").firstChildElement("widget").toElement();
