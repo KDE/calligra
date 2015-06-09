@@ -335,7 +335,7 @@ void KexiCSVInfoLabel::setFileName(const QString& fileName)
 {
     if (!d->fnameLbl)
         return;
-    d->fnameLbl->setText(QDir::convertSeparators(fileName));
+    d->fnameLbl->setText(QDir::toNativeSeparators(fileName));
     if (!fileName.isEmpty()) {
         d->iconLbl->setPixmap(
             KIO::pixmapForUrl(QUrl(fileName), 0, KIconLoader::Desktop));
