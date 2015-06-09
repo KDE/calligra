@@ -43,7 +43,7 @@
 #include <KDbLookupFieldSchema>
 
 #include <ktoggleaction.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kundo2command.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>

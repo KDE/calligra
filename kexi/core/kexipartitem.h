@@ -21,8 +21,11 @@
 #ifndef KEXIPARTITEM_H
 #define KEXIPARTITEM_H
 
-#include <QHash>
+#include "kexicore_export.h"
 #include <kexi_global.h>
+
+#include <QString>
+#include <QHash>
 
 namespace KexiPart
 {
