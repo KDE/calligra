@@ -119,24 +119,21 @@ QString KexiReportPart::loadReport(const QString& name)
         qDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
         return QString();
     }
-    QString src, did;
     KDbObject sd;
-
-    if (conn->loadObjectSchemaData(win->project()->idForClass("org.kexi-project.report"), name, sd) != true
-        && conn->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true /* compat. */)
+    if (conn->loadObjectData(win->project()->idForClass("org.kexi-project.report"), name, &sd) != true
+        && conn->loadObjectData(win->project()->idForClass("uk.co.piggz.report"), name, &sd) != true /* compat. */)
     {
         qWarning() << "failed to load schema data";
         return QString();
     }
-
     qDebug() << "***Object ID:" << sd.id();
 
-    if (   win->project()->dbConnection()->loadDataBlock(sd.id(), src, "layout") == true
-        || win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true /* compat */)
+    QString src;
+    if (   win->project()->dbConnection()->loadDataBlock(sd.id(), &src, "layout") == true
+        || win->project()->dbConnection()->loadDataBlock(sd.id(), &src, "pgzreport_layout") == true /* compat */)
     {
         return src;
     }
-
     qWarning() << "Unable to load document";
     return QString();
 }

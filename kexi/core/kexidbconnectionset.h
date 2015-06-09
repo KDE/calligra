@@ -67,7 +67,7 @@ public:
     KDbConnectionData* connectionDataForFileName(const QString& fileName) const;
 
     /*! \return key for connection data @a data, basically a comma-separated string with
-     all properties serialized: "driverName,userName,...". Used in internal structures. */
+     all properties serialized: "driverId,userName,...". Used in internal structures. */
     static QString key(const KDbConnectionData &data);
 
 private:

@@ -157,7 +157,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
     mdb_read_columns(tableDef);
     //qDebug() << "#cols = " << tableDef->num_cols;
 
-    /*! Convert column data to Kexi TableSchema
+    /*! Convert column data to Kexi KDbTableSchema
         Nice mix of terminology here, MDBTools has columns, Kexi has fields. */
     for (unsigned int i = 0; i < tableDef->num_cols; i++) {
         MdbColumn *col = static_cast<MdbColumn*>(g_ptr_array_index(tableDef->columns, i));
@@ -166,7 +166,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         QString fldName = QString::fromUtf8(col->name);
         //qDebug() << "got column" << fldName << col->name;
 
-        QString fldID(KexiUtils::stringToIdentifier(fldName));
+        QString fldID(KDb::stringToIdentifier(fldName));
 
         // Field type
         KDbField *fld =
@@ -404,7 +404,7 @@ bool MDBMigrate::getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef)
 
     qDebug() << "num_keys" << idx->num_keys;
 
-    //! Create the KexiDB IndexSchema ...
+    //! Create the KdbIndexSchema ...
     QVector<int> key_col_num(idx->num_keys);
 
     // MDBTools counts columns from 1 - subtract 1 where necessary
@@ -426,7 +426,7 @@ bool MDBMigrate::getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef)
     if (idx->num_keys == 1 && (f = table->field(idx->key_col_num[0] - 1))) {
         f->setPrimaryKey(true);
     } else {
-        //! @todo: How to add a composite PK to a TableSchema?
+        //! @todo: How to add a composite PK to a KDbTableSchema?
     }
 
     mdb_free_indices(tableDef->indices);

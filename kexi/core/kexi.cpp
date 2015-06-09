@@ -163,25 +163,25 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 //--------------------------------------------------------------------------------
 
 ObjectStatus::ObjectStatus()
-        : msgHandler(0)
+        : m_resultable(0), m_msgHandler(0)
 {
 }
 
 ObjectStatus::ObjectStatus(const QString& message, const QString& description)
-        : msgHandler(0)
+        : m_resultable(0), m_msgHandler(0)
 {
     setStatus(message, description);
 }
 
-ObjectStatus::ObjectStatus(KDbObject* dbObject, const QString& message, const QString& description)
-        : msgHandler(0)
+ObjectStatus::ObjectStatus(KDbResultable* resultable, const QString& message, const QString& description)
+        : m_resultable(0), m_msgHandler(0)
 {
-    setStatus(dbObject, message, description);
+    setStatus(resultable, message, description);
 }
 
 ObjectStatus::~ObjectStatus()
 {
-    delete msgHandler;
+    delete m_msgHandler;
 }
 
 const ObjectStatus& ObjectStatus::status() const
@@ -192,51 +192,64 @@ const ObjectStatus& ObjectStatus::status() const
 bool ObjectStatus::error() const
 {
     return !message.isEmpty()
-           || (dynamic_cast<KDbObject*>((QObject*)dbObj) && dynamic_cast<KDbObject*>((QObject*)dbObj)->error());
+           || (m_resultable && m_resultable->result().isError());
 }
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)
 {
-    this->dbObj = 0;
+    m_resultable = 0;
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KDbObject* dbObject, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbResultable* resultable, const QString& message, const QString& description)
 {
-    if (dynamic_cast<QObject*>(dbObject)) {
-        dbObj = dynamic_cast<QObject*>(dbObject);
-    }
+    m_resultable = resultable;
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KDbResultInfo* result, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbResultInfo* resultInfo, const QString& message, const QString& description)
 {
-    if (result) {
+    if (resultInfo) {
         if (message.isEmpty())
-            this->message = result->msg;
+            this->message = resultInfo->msg;
         else
-            this->message = message + " " + result->msg;
+            this->message = message + " " + resultInfo->msg;
 
         if (description.isEmpty())
-            this->description = result->desc;
+            this->description = resultInfo->desc;
         else
-            this->description = description + " " + result->desc;
+            this->description = description + " " + resultInfo->desc;
     } else
         clearStatus();
 }
 
-void ObjectStatus::setStatus(KDbObject* dbObject, KDbResultInfo* result,
+void ObjectStatus::setStatus(KDbResultable* resultable, KDbResultInfo* resultInfo,
                              const QString& message, const QString& description)
 {
-    if (!dbObject)
-        setStatus(result, message, description);
-    else if (!result)
-        setStatus(dbObject, message, description);
+    if (!resultable)
+        setStatus(resultInfo, message, description);
+    else if (!resultInfo)
+        setStatus(resultable, message, description);
     else {
-        setStatus(dbObject, message, description);
-        setStatus(result, this->message, this->description);
+        setStatus(resultable, message, description);
+        setStatus(resultInfo, this->message, this->description);
+    }
+}
+
+void ObjectStatus::setStatus(const KDbResult &result, KDbResultInfo* resultInfo,
+                             const QString& message, const QString& description)
+{
+    //! @todo KEXI3 test this
+    if (!result.isError()) {
+        setStatus(resultInfo, message, description);
+    }
+    else {
+        KDbResult r = result;
+        r.prependMessage(message);
+        r.prependMessage(description);
+        setStatus(resultInfo, result.messageTitle(), result.message());
     }
 }
 
@@ -281,15 +294,23 @@ public:
     virtual ~ObjectStatusMessageHandler() {
     }
 
-    virtual void showErrorMessageInternal(const QString &title,
-                                          const QString &details = QString())
+    virtual void showErrorMessage(KDbMessageHandler::MessageType messageType,
+                                  const QString &msg,
+                                  const QString &details = QString(),
+                                  const QString &caption = QString())
     {
-        m_status->setStatus(title, details);
+        Q_UNUSED(messageType);
+        Q_UNUSED(caption);
+        m_status->setStatus(msg, details);
     }
 
-    virtual void showErrorMessageInternal(KDbObject *obj, const QString& msg = QString())
+    virtual void showErrorMessage(const KDbResult& result,
+                                  KDbMessageHandler::MessageType messageType = KDbMessageHandler::Error,
+                                  const QString& msg = QString(),
+                                  const QString& caption = QString())
     {
-        m_status->setStatus(obj, msg);
+        Q_UNUSED(messageType);
+        m_status->setStatus(result, 0, caption, msg);
     }
 
     ObjectStatus *m_status;
@@ -297,9 +318,9 @@ public:
 
 ObjectStatus::operator KDbMessageHandler*()
 {
-    if (!msgHandler)
-        msgHandler = new ObjectStatusMessageHandler(this);
-    return msgHandler;
+    if (!m_msgHandler)
+        m_msgHandler = new ObjectStatusMessageHandler(this);
+    return m_msgHandler;
 }
 
 void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)

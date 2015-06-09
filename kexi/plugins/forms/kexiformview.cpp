@@ -447,7 +447,7 @@ KexiFormView::loadForm()
 
     // normal load
     QString data;
-    loadDataBlock(data);
+    loadDataBlock(&data);
     KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, data);
 
     //"autoTabStops" property is loaded -set it within the form tree as well

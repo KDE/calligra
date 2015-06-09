@@ -114,7 +114,7 @@ public:
     static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src,
                                       bool preview = false);
 
-    static bool loadFormFromString(Form *form, QWidget *container, QString &src,
+    static bool loadFormFromString(Form *form, QWidget *container, QString *src,
                                    bool preview = false);
 
     /*! Loads the .ui file \a filename in the Form \a form. If \a filename is null or not given,

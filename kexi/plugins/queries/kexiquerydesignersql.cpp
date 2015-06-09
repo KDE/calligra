@@ -284,7 +284,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
         //no valid query delivered or query has not been modified:
         // just load sql text, no matter if it's valid
-        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
+        if (!loadDataBlock(&d->origStatement, "sql", true /*canBeEmpty*/))
             return false;
     }
 
@@ -390,9 +390,7 @@ KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
 
     (KDbObject&)*query = sdata; //copy main attributes
 
-    ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
-             *query, true /*newObject*/);
-
+    ok = KexiMainWindowIface::global()->project()->dbConnection()->storeNewObjectData(query);
     if (ok) {
         ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(query->id()); // for sanity
     }

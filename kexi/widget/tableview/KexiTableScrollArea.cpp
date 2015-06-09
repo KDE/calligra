@@ -1078,7 +1078,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
     const int k = e->key();
     const bool ro = isReadOnly();
     QWidget *w = focusWidget();
-    if (!w || (w != viewport() && w != this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w)))) {
+    if (!w || (w != viewport() && w != this && (!m_editor || !KDbUtils::hasParent(dynamic_cast<QObject*>(m_editor), w)))) {
         //don't process stranger's events
         e->ignore();
         return;
@@ -2390,10 +2390,10 @@ bool KexiTableScrollArea::event(QEvent *e)
 QString KexiTableScrollArea::whatsThisText(const QPoint &pos) const
 {
     const int leftMargin = verticalHeaderVisible() ? d->verticalHeader->width() : 0;
-    if (KexiUtils::hasParent(d->verticalHeader, childAt(pos))) {
+    if (KDbUtils::hasParent(d->verticalHeader, childAt(pos))) {
         return xi18nc("@info:whatsthis", "Contains a pointer to the currently selected record.");
     }
-    else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
+    else if (KDbUtils::hasParent(navPanelWidget(), childAt(pos))) {
         return xi18nc("@info:whatsthis", "Record navigator.");
     }
     const int col = columnAt(pos.x() - leftMargin);

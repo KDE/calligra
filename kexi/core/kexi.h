@@ -97,7 +97,7 @@ public:
 
     ObjectStatus(const QString& message, const QString& description);
 
-    ObjectStatus(KDbObject* dbObject, const QString& message, const QString& description);
+    ObjectStatus(KDbResultable* resultable, const QString& message, const QString& description);
 
     ~ObjectStatus();
 
@@ -109,13 +109,16 @@ public:
 
     //! Note: for safety, \a dbObject needs to be derived from QObject,
     //! otherwise it won't be assigned
-    void setStatus(KDbObject* dbObject,
+    void setStatus(KDbResultable* resultable,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KDbResultInfo* result,
+    void setStatus(KDbResultInfo* resultInfo,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KDbObject* dbObject, KDbResultInfo* result,
+    void setStatus(KDbResultable* resultable, KDbResultInfo* resultInfo,
+                   const QString& message = QString(), const QString& description = QString());
+
+    void setStatus(const KDbResult& result, KDbResultInfo* resultInfo,
                    const QString& message = QString(), const QString& description = QString());
 
     void clearStatus();
@@ -124,9 +127,7 @@ public:
 
     void append(const ObjectStatus& otherStatus);
 
-    KDbObject *dbObject() const {
-        return dynamic_cast<KDbObject*>((QObject*)dbObj);
-    }
+    const KDbResultable* resultable() const { return m_resultable; }
 
     //! Helper returning pseudo handler that just updates this ObjectStatus object
     //! by receiving a message
@@ -134,8 +135,8 @@ public:
 
     QString message, description;
 protected:
-    QPointer<QObject> dbObj; //! This is in fact KDbObject
-    KDbMessageHandler* msgHandler;
+    KDbResultable* m_resultable;
+    KDbMessageHandler* m_msgHandler;
 };
 
 /*! \return icon name for default file-based driver

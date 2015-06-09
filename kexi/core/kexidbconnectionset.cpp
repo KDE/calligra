@@ -57,11 +57,13 @@ bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QStri
 {
     if (!data)
         return false;
+/*! @todo KEXI3
     if (data->id < 0)
         data->id = d->maxid + 1;
-    //! @todo check for id-duplicates
-
+    @todo check for id-duplicates
     d->maxid = qMax(d->maxid, data->id);
+*/
+    d->maxid++;
 
     QString filename(_filename);
     bool generateUniqueFilename = filename.isEmpty()
@@ -72,13 +74,14 @@ bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QStri
                       + "/kexi/connections/";
         if (dir.isEmpty())
             return false;
-        QString baseFilename(dir + (data->hostName.isEmpty() ? "localhost" : data->hostName));
+        QString baseFilename(dir + (data->hostName().isEmpty() ? "localhost" : data->hostName()));
         int i = 0;
         while (KStandardDirs::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic"))
             i++;
         if (!KStandardDirs::exists(dir)) {
             //make 'connections' dir and protect it
-            if (!QDir().mkpath(dir, 0700))
+            //! @todo KEXI3 set permission of the created dirs to 0700
+            if (!QDir().mkpath(dir))
                 return false;
             //! @todo change permission of every created subdir, see KStandardDirs::makeDir() create
             QFile(dir).setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
@@ -109,7 +112,7 @@ bool KexiDBConnectionSet::saveConnectionData(KDbConnectionData *oldData,
     if (filename.isEmpty())
         return false;
     KexiDBConnShortcutFile shortcutFile(filename);
-    if (!shortcutFile.saveConnectionData(newData, newData.savePassword)) // true/*savePassword*/))
+    if (!shortcutFile.saveConnectionData(newData, newData.savePassword()))
         return false;
     if (oldData != &newData) {
         *oldData = newData;
@@ -190,11 +193,11 @@ KDbConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString&
 // static
 QString KexiDBConnectionSet::key(const KDbConnectionData &data)
 {
-    return data.driverName.toLower() + ','
-        + data.userName.toLower() + ','
-        + data.hostName.toLower() + ','
-        + QString::number(data.port) + ','
-        + QString::number(data.useLocalSocketFile) + ','
-        + data.localSocketFileName + ','
-        + data.fileName();
+    return data.driverId().toLower() + ','
+        + data.userName().toLower() + ','
+        + data.hostName().toLower() + ','
+        + QString::number(data.port()) + ','
+        + QString::number(data.useLocalSocketFile()) + ','
+        + data.localSocketFileName() + ','
+        + data.databaseName();
 }

@@ -42,7 +42,7 @@ typedef QHash<QString, Part*> PartDict;
  *
  * It creates instances only when needed.
  */
-class KEXICORE_EXPORT Manager : public QObject, public KDbObject
+class KEXICORE_EXPORT Manager : public QObject, public KDbObject, public KDbResultable
 {
     Q_OBJECT
 
