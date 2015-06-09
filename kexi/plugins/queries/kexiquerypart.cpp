@@ -120,7 +120,7 @@ KDbObject* KexiQueryPart::loadSchemaData(
 {
     KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
     QString sqlText;
-    if (!loadDataBlock(window, sqlText, "sql")) {
+    if (!loadDataBlock(window, &sqlText, "sql")) {
         return 0;
     }
     KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();

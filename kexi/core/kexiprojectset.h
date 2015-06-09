@@ -23,13 +23,13 @@
 #include "kexiprojectdata.h"
 
 #include <KDbConnectionData>
-#include <KDbObject>
+#include <KDbResult>
 
 class KexiProjectSetPrivate;
 class KDbMessageHandler;
 
 /*! @short Stores information about multiple kexi project-data items */
-class KEXICORE_EXPORT KexiProjectSet : public KDbObject
+class KEXICORE_EXPORT KexiProjectSet : public KDbResultable
 {
 public:
 
@@ -44,7 +44,7 @@ public:
     explicit KexiProjectSet(KDbConnectionData* conndata,
                             KDbMessageHandler* handler = 0);
 
-    ~KexiProjectSet();
+    virtual ~KexiProjectSet();
 
     /*! Adds \a data as project data.
     \a data will be owned by this object. */

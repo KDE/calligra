@@ -61,12 +61,12 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
         if (formDataItem->parentDataItemInterface()) //item with parent interface: collect parent instead...
             continue;
 #if 0 //! @todo reenable when subform is moved to KexiDBForm
-        KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(widget, "KexiDBForm"); //form's surface...
+        KexiDBForm *dbForm = KDbUtils::findParent<KexiDBForm>(widget, "KexiDBForm"); //form's surface...
         if (dbForm != m_mainWidget) //only set data for this form's data items
             continue;
 #else
         //tmp: reject widgets within subforms
-        //if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
+        //if (KDbUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
         //    continue;
         if (KexiUtils::parentIs(widget, "KexiDBSubForm"))
             continue;

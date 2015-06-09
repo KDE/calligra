@@ -59,7 +59,7 @@ public:
     bool getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef);
 
     //! Reimplemented to add support for "sourceDatabaseHasNonUnicodeEncoding" property
-    //! @todo this should be in Connection class but Migration framework has no such yet!
+    //! @todo this should be in KDbConnection class but Migration framework has no such yet!
     virtual QVariant propertyValue(const QByteArray& propName);
 
 protected:
