@@ -62,7 +62,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
              "<para>Database file <filename>%1</filename> appears to be created by a version of Microsoft Access older than 2000.</para>"
              "<para>In order to properly import national characters, you may need to choose a proper text encoding "
              "if the database was created on a computer with a different character set.</para>",
-             QDir::convertSeparators(databaseFile)),
+             QDir::toNativeSeparators(databaseFile)),
         plainPage);
     lbl->setAlignment(Qt::AlignLeft);
     lbl->setWordWrap(true);
