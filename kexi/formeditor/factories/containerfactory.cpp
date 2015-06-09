@@ -782,8 +782,7 @@ ContainerFactory::isPropertyVisibleInternal(const QByteArray &classname,
             child widgets become frozen when checked==true */
             (KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "checkable" && property != "checked")) &&
 #endif
-            true
-            ;
+            true;
     } else if (classname == "KFDTabWidget") {
         ok = (KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"));
     }

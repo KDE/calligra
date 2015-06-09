@@ -270,7 +270,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
         #endif
 
         default:
-          val = KDb::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) ) ;
+          val = KDb::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) );
           break;
       }
       vals.append( val );

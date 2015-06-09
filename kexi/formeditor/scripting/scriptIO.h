@@ -56,10 +56,8 @@ public:
 
 protected:
     ScriptIO() {
-        ;
     }
     ~ScriptIO() {
-        ;
     }
 };
 
