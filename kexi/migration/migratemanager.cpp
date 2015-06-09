@@ -48,7 +48,7 @@ MigrateManagerInternal* MigrateManagerInternal::s_self = 0L;
  Temporary, needed because MigrateManagerInternal::m_drivers is autodeleted
  drivers currently own KexiMigrate::Data members so these are destroyed when
  last MigrateManager instance is deleted. Remove this hack when
- KexiMigrate is split into Driver and Connection. */
+ KexiMigrate is split into KDbDriver and KDbConnection. */
 MigrateManager __manager;
 
 MigrateManagerInternal::MigrateManagerInternal() /* protected */
@@ -105,7 +105,7 @@ bool MigrateManagerInternal::lookupDrivers()
 //  setError("Driver Manager cannot work without KComponentData (KGlobal::mainComponent()==0)!");
 
     lookupDriversNeeded = false;
-    clearError();
+    clearResult();
     KService::List tlist = KoServiceLocator::instance()->entries("Kexi/MigrationDriver");
     foreach(KService::Ptr ptr, tlist) {
         const QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
@@ -179,7 +179,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
         return 0;
     }
 
-    clearError();
+    clearResult();
     KexiDBDbg << "loading" << name;
 
     KexiMigrate *drv = name.isEmpty() ? 0 : m_drivers.value(name.toLatin1().toLower());
@@ -256,7 +256,7 @@ MigrateManager::~MigrateManager()
 
 const QStringList MigrateManager::driverNames()
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
         qWarning() << "lookupDrivers failed";
         return QStringList();
@@ -274,7 +274,7 @@ const QStringList MigrateManager::driverNames()
 
 QString MigrateManager::driverForMimeType(const QString &mimeType)
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
         qWarning() << "lookupDrivers failed";
         setError(d_int);
@@ -292,7 +292,7 @@ QString MigrateManager::driverForMimeType(const QString &mimeType)
 
 KexiMigrate* MigrateManager::driver(const QString& name)
 {
-    clearError();
+    clearResult();
     KexiMigrate *drv = d_int->driver(name);
     if (d_int->error()) {
         qWarning() << "Error:" << name << d_int->errorMsg();
@@ -340,7 +340,7 @@ QString MigrateManager::possibleProblemsInfoMsg() const
 
 QList<QString> MigrateManager::supportedFileMimeTypes()
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
         qWarning() << "lookupDrivers failed";
         return QStringList();

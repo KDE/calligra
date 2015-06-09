@@ -101,8 +101,9 @@ bool MySQLMigrate::drv_readTableSchema(
 
     //Perform a query on the table to get some data
     tableSchema.setName(originalName);
-    QString query = QString("SELECT * FROM ") + drv_escapeIdentifier(originalName) + " LIMIT 0";
-    if (!d->executeSQL(query))
+    KDbEscapedString sql = KDbEscapedString("SELECT * FROM %1 LIMIT 0")
+            .arg(drv_escapeIdentifier(originalName);
+    if (!d->executeSQL(sql))
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
@@ -114,7 +115,7 @@ bool MySQLMigrate::drv_readTableSchema(
 
     for (unsigned int i = 0; i < numFlds; i++) {
         QString fldName(fields[i].name);
-        QString fldID(KexiUtils::stringToIdentifier(fldName.toLower()));
+        QString fldID(KDb::stringToIdentifier(fldName.toLower()));
 
         KDbField *fld =
             new KDbField(fldID, type(originalName, &fields[i]));

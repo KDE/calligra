@@ -22,6 +22,8 @@
 #include "kexidbconnectionset.h"
 
 #include <KDbDriver>
+#include <KDbDriverManager>
+#include <KDbDriverMetaData>
 #include <KDbConnection>
 #include <KDbMessageHandler>
 
@@ -39,7 +41,7 @@ class KexiRecentProjects::Private
 {
 public:
     explicit Private(KexiRecentProjects *qq)
-        : q(qq), loaded(false)
+        : q(qq), handler(0), loaded(false)
     {
     }
     ~Private()
@@ -51,6 +53,7 @@ public:
              bool deleteDuplicate = false);
 
     KexiRecentProjects *q;
+    KDbMessageHandler* handler;
     bool loaded;
     QString path;
     QMap<QString, KexiProjectData*> projectsForKey;
@@ -99,7 +102,7 @@ void KexiRecentProjects::Private::load()
 
 static QString key(const KexiProjectData& data)
 {
-    return KexiDBConnectionSet::key(*data.constConnectionData())
+    return KexiDBConnectionSet::key(data.constConnectionData())
         + ',' + data.databaseName();
 }
 
@@ -181,23 +184,22 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 #endif
         }
         if (shortcutPath.isEmpty()) {
-            const KDbConnectionData *conn = newData->constConnectionData();
-            if (conn->fileName().isEmpty()) {// server-based
-                shortcutPath = path + newData->databaseName();
-                if (!conn->hostName.isEmpty()) {
-                    shortcutPath += '_' + conn->hostName;
-                }
-            }
-            else {
+            KDbConnectionData conn = newData->constConnectionData();
+            if (KDbDriverManager().driverMetaData(conn.driverId())->isFileBased()) {
                 shortcutPath = path + QFileInfo(newData->databaseName()).fileName();
                 QFileInfo fi(shortcutPath);
                 if (!fi.suffix().isEmpty()) {
                     shortcutPath.chop(fi.suffix().length() + 1);
                 }
+            } else {
+                shortcutPath = path + newData->databaseName();
+                if (!conn.hostName().isEmpty()) {
+                    shortcutPath += '_' + conn.hostName();
+                }
             }
             int suffixNumber = 0;
             QString suffixNumberString;
-            while (true) { // add "_{number}" to ensure uniqueness
+            forever { // add "_{number}" to ensure uniqueness
                 if (!QFile::exists(shortcutPath + suffixNumberString + QLatin1String(".kexis")))
                     break;
                 suffixNumber++;
@@ -216,8 +218,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 #endif
     bool result = true;
     if (existingShortcutPath.isEmpty()) {
-        result = newData->save(shortcutPath, false // !savePassword
-                              );
+        result = newData->save(shortcutPath, false /* !savePassword */);
     }
 #ifdef KexiRecentProjects_DEBUG
     qDebug() << "result:" << result;
@@ -226,9 +227,10 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 }
 
 KexiRecentProjects::KexiRecentProjects(KDbMessageHandler* handler)
-    : KexiProjectSet(handler)
+    : KexiProjectSet()
     , d(new Private(this))
 {
+    d->handler = handler;
 }
 
 KexiRecentProjects::~KexiRecentProjects()

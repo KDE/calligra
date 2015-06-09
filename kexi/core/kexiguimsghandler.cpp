@@ -168,3 +168,11 @@ int KexiGUIMessageHandler::askQuestionInternal(const QString& message,
                                        dontShowAskAgainName, options);
     }
 }
+
+
+void KexiGUIMessageHandler::showErrorMessage(KDbMessageHandler::MessageType messageType,
+                                             const QString &msg, const QString &details,
+                                             const QString &caption)
+{
+    showMessage(type, msg, details);
+}

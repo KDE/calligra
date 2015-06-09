@@ -450,7 +450,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::stringToIdentifier(capt).toLower();
+        QString captionAsId = KDb::stringToIdentifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;

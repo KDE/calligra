@@ -1176,7 +1176,7 @@ void KexiMainWindow::invalidateProjectWideActions()
 {
     const bool has_window = currentWindow();
     const bool window_dirty = currentWindow() && currentWindow()->isDirty();
-    const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
+    const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->options()->isReadOnly();
 
     //PROJECT MENU
     d->action_save->setEnabled(has_window && window_dirty && !readOnly);
@@ -1411,7 +1411,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 
 void KexiMainWindow::updateReadOnlyState()
 {
-    const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
+    const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->options()->isReadOnly();
     d->statusBar->setReadOnlyFlag(readOnly);
     if (d->navigator) {
         d->navigator->setReadOnly(readOnly);
@@ -1950,7 +1950,7 @@ void KexiMainWindow::updateAppCaption()
         if (d->appCaptionPrefix.isEmpty()) {
             d->appCaptionPrefix = d->prj->data()->databaseName();
         }
-        if (d->prj->dbConnection()->isReadOnly()) {
+        if (d->prj->dbConnection()->options()->isReadOnly()) {
             d->appCaptionPrefix = xi18nc("<project-name> (read only)", "%1 (read only)", d->appCaptionPrefix);
         }
     }
@@ -3629,7 +3629,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
     QMap<QString, QString> args;
     args.insert("mimeType", mimeType);
     args.insert("databaseName", databaseName);
-    if (cdata) { //pass ConnectionData serialized as a string...
+    if (cdata) { //pass KDbConnectionData serialized as a string...
         QString str;
         KDbUtils::serializeMap(cdata->toMap(), &str);
         args.insert("connectionData", str);
