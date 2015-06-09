@@ -34,7 +34,7 @@
 #include <KDbConnection>
 #include <KDbCursor>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QTabWidget>

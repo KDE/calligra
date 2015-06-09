@@ -26,7 +26,7 @@
 #include <KDbDriver>
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kfile.h>
 #include <kurlcombobox.h>
 #include <kactioncollection.h>

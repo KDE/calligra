@@ -37,7 +37,7 @@
 #include <KDbDriver>
 #include <KDbDriverManager>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 

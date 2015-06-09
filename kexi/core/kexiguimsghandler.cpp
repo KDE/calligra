@@ -23,7 +23,7 @@
 
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
         : KDbMessageHandler(parent)

@@ -49,7 +49,7 @@
 #include <KProperty>
 #include <KPropertySet>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KLocalizedString>
 
 #include <QDomDocument>

@@ -22,7 +22,9 @@
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
 #include "kexiscriptadaptor.h"
-
+#include <kexipart.h>
+#include <kexipartitem.h>
+#include <KexiIcon.h>
 #include <KexiView.h>
 #include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
@@ -32,12 +34,10 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 
-#include <kexipart.h>
-#include <kexipartitem.h>
-#include <KexiIcon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
+#include <KMessageBox>
 
 #include <QDebug>
 
