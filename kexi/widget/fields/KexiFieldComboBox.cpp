@@ -222,7 +222,7 @@ void KexiFieldComboBox::focusOutEvent(QFocusEvent *e)
 {
     KComboBox::focusOutEvent(e);
     // accept changes if the focus is moved
-    if (!KexiUtils::hasParent(this, focusWidget())) {
+    if (!KDbUtils::hasParent(this, focusWidget())) {
         //(a check needed because drop-down listbox also causes a focusout)
         slotReturnPressed(currentText());
     }

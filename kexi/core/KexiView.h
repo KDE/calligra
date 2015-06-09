@@ -208,15 +208,15 @@ protected:
      Default implementation:
      - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData().
+       using KDbConnection::storeNewObjectData().
      Reimplement this for your needs.
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
        (by calling KexiView::storeNewData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
-       or using Connection::storeObjectSchemaData() or more specialized method.
-       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
-       (TableSchema inherits SchemaData) to store more information than
+       or using KDbConnection::storeNewObjectData() or more specialized method.
+       For example KexiTableDesignerView uses KDbConnection::createTable(KDbTableSchema) for this
+       (KDbTableSchema inherits SchemaData) to store more information than
        just schema data. You should use such subclasses if needed.
 
      Should return newly created schema data object on success.
@@ -233,16 +233,16 @@ protected:
      Default implementation:
      - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData()
+       using KDbConnection::storeNewObjectData()
      - makes a full copy of data and user data.
      Reimplement this for your needs.
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
        (by calling KexiView::copyData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
-       or using Connection::storeObjectSchemaData() or more specialized method.
-       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
-       (TableSchema inherits SchemaData) to store more information than
+       or using KDbConnection::storeNewObjectData() or more specialized method.
+       For example KexiTableDesignerView uses KDbConnection::createTable(KDbTableSchema) for this
+       (KDbTableSchema inherits SchemaData) to store more information than
       just schema data. Then it copies data table on the server side.
       You should use such subclasses if needed.
 
@@ -258,14 +258,14 @@ protected:
      and \a dataString is set to null string. The default is false.
      \return true on success
      \sa storeDataBlock(). */
-    bool loadDataBlock(QString &dataString, const QString& dataID = QString(),
+    bool loadDataBlock(QString *dataString, const QString& dataID = QString(),
                        bool canBeEmpty = false);
 
     /*! Tells this view to store data changes on the backend.
      Called by KexiWindow::storeData().
      Default implementation:
      - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData().
+       using KDbConnection::storeObjectData().
      If \a dontAsk is true, no question dialog will
      be shown to the user. The default is false.
 

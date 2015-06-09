@@ -175,7 +175,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
 void
 KexiFormPart::generateForm(KDbFieldList *list, QDomDocument &domDoc)
 {
-    //this form generates a .ui from FieldList list
+    //this form generates a .ui from KDbFieldList list
     //basically that is a Label and a LineEdit for each field
     domDoc = QDomDocument("UI");
     QDomElement uiElement = domDoc.createElement("UI");

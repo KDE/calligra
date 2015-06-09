@@ -468,7 +468,7 @@ tristate KexiWindow::switchToViewMode(
         }
         if (!designModePreloadedForTextModeHack) {
             const bool wasDirty = view->isDirty(); // remember and restore the flag if the view was clean
-            res = view->beforeSwitchTo(newViewMode, dontStore);
+            res = view->beforeSwitchTo(newViewMode, &dontStore);
             if (!wasDirty) {
                 view->setDirty(false);
             }
@@ -517,7 +517,7 @@ tristate KexiWindow::switchToViewMode(
         d->currentViewMode = Kexi::NoViewMode; //SAFE?
     }
     bool wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
-    res = newView->beforeSwitchTo(newViewMode, dontStore);
+    res = newView->beforeSwitchTo(newViewMode, &dontStore);
     if (!wasDirty) {
         newView->setDirty(false);
     }
@@ -585,7 +585,7 @@ tristate KexiWindow::switchToViewMode(Kexi::ViewMode newViewMode)
     if (!d->switchToViewModeEnabled)
         return false;
     bool dummy;
-    return switchToViewMode(newViewMode, 0, dummy);
+    return switchToViewMode(newViewMode, 0, &dummy);
 }
 
 void KexiWindow::setFocus()
@@ -647,7 +647,7 @@ bool KexiWindow::eventFilter(QObject *obj, QEvent *e)
     }*/
     if ((e->type() == QEvent::FocusIn && KexiMainWindowIface::global()->currentWindow() == this)
             || e->type() == QEvent::MouseButtonPress) {
-        if (d->stack->currentWidget() && KexiUtils::hasParent(d->stack->currentWidget(), obj)) {
+        if (d->stack->currentWidget() && KDbUtils::hasParent(d->stack->currentWidget(), obj)) {
             //pass the activation
             activate();
         }
@@ -703,7 +703,7 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     }
 
     bool cancel = false;
-    d->schemaData = v->storeNewData(sdata, options, cancel);
+    d->schemaData = v->storeNewData(sdata, options, &cancel);
     if (cancel)
         return cancelled;
     if (!d->schemaData) {
@@ -782,12 +782,12 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     bool cancel = false;
     KDbObject *newSchemaData;
     if (isDirty()) { // full save of new data
-        newSchemaData = v->storeNewData(sdata, options, cancel);
+        newSchemaData = v->storeNewData(sdata, options, &cancel);
     }
     else { // there were no changes; full copy of the data is enough
            // - gives better performance (e.g. tables are copied on server side)
            // - works without bothering the user (no unnecessary questions)
-        newSchemaData = v->copyData(sdata, options, cancel);
+        newSchemaData = v->copyData(sdata, options, &cancel);
     }
 
     if (cancel) {
@@ -824,7 +824,7 @@ void KexiWindow::activate()
 {
     KexiView *v = selectedView();
     //qDebug() << "focusWidget(): " << focusWidget()->name();
-    if (!KexiUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
+    if (!KDbUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
         //ah, focused widget is not in this view, move focus:
         if (v)
             v->setFocus();

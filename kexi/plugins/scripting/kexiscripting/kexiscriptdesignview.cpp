@@ -385,7 +385,7 @@ void KexiScriptDesignView::execute()
 bool KexiScriptDesignView::loadData()
 {
     QString data;
-    if (! loadDataBlock(data)) {
+    if (!loadDataBlock(&data)) {
         qDebug() << "no DataBlock";
         return false;
     }

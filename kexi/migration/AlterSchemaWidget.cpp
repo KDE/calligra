@@ -172,7 +172,7 @@ QString AlterSchemaWidget::suggestedItemCaption(const QString& baseCaption)
             newCaption = baseCaption + QString::number(n);
         }
 
-        if (nameExists(KexiUtils::stringToIdentifier(newCaption))) {
+        if (nameExists(KDb::stringToIdentifier(newCaption))) {
             n++;
             continue; //stored exists!
         } else {

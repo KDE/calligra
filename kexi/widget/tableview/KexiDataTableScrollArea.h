@@ -41,8 +41,8 @@ public:
 
     /*! Creates a table widget and fills it using data from \a cursor.
      Cursor will be opened (with open()) if it is not yet opened.
-     Cursor must be defined on query schema, not raw statement (see Connection::prepareQuery()
-     and Connection::executeQuery()), otherwise the table view remain not filled with data.
+     Cursor must be defined on query schema, not raw statement (see KDbConnection::prepareQuery()
+     and KDbConnection::executeQuery()), otherwise the table view remain not filled with data.
      Cursor \a cursor will not be owned by this object.
      */
     KexiDataTableScrollArea(QWidget *parent, KDbCursor *cursor);

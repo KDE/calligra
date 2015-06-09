@@ -20,8 +20,6 @@
 #ifndef KEXI_MIGRATE_P_H
 #define KEXI_MIGRATE_P_H
 
-#include <db/pluginloader.h>
-
 //! Implementation of driver's static version information and plugin entry point.
 #define K_EXPORT_KEXIMIGRATE_DRIVER( class_name, internal_name ) \
     KEXI_EXPORT_PLUGIN("keximigrate", class_name, internal_name, \

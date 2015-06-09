@@ -167,7 +167,7 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
     Q_UNUSED(checked);
     if (!d->enableSlotButtonToggled)
         return;
-    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //QObject *view = KDbUtils::findParent<QObject*>(this, "KexiView");
     //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));
@@ -179,7 +179,7 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
 {
     if (!d->enableSlotActionToggled)
         return;
-    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //QObject *view = KDbUtils::findParent<QObject*>(this, "KexiView");
     //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));

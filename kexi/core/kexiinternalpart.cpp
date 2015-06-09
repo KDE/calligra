@@ -26,7 +26,6 @@
 #include <kexi_global.h>
 
 #include <KDbMessageHandler>
-#include <db/pluginloader.h>
 
 #include <KLocalizedString>
 
@@ -73,7 +72,7 @@ KexiInternalPart* KexiInternalPart::part(KDbMessageHandler *msgHdr, const QStrin
     KexiInternalPart *part = Kexi::partManager().internalPartForClass(className);
     if (!part) {
         if (msgHdr) {
-            msgHdr->showErrorMessage(&Kexi::partManager());
+            msgHdr->showErrorMessage(Kexi::partManager().result());
         }
     }
     return part;

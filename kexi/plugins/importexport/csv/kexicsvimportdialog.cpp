@@ -433,10 +433,10 @@ void KexiCSVImportDialog::next()
 
             KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
             KDbObject tmp;
-            tristate res = m_conn->loadObjectSchemaData(
+            tristate res = m_conn->loadObjectData(
                     project->idForClass(part->info()->partClass()),
                     m_newTableWidget->nameText(),
-                    tmp);
+                    &tmp);
             if (res == true) {
                 KMessageBox::information(this,
                         "<p>"
@@ -1889,7 +1889,7 @@ void KexiCSVImportDialog::import()
                 uint i = 0;
                 do {
                     fieldCaption = xi18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1);
-                    fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                    fieldName = KDb::stringToIdentifier(fieldCaption);
                     if (!m_destinationTableSchema->field(fieldName)) {
                         break;
                     }
@@ -1897,7 +1897,7 @@ void KexiCSVImportDialog::import()
                 } while (true);
             }
             else {
-                fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                fieldName = KDb::stringToIdentifier(fieldCaption);
                 if (m_destinationTableSchema->field(fieldName)) {
                     QString fixedFieldName;
                     uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names

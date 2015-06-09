@@ -64,7 +64,7 @@ void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool dis
 void KexiFormDataItemInterface::cancelEditor()
 {
     QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
-    KexiFormScrollView* view = KexiUtils::findParent<KexiFormScrollView*>(parentWidget);
+    KexiFormScrollView* view = KDbUtils::findParent<KexiFormScrollView*>(parentWidget);
     if (view)
         view->cancelEditor();
 }
@@ -73,7 +73,7 @@ void KexiFormDataItemInterface::cancelEditor()
 void KexiFormDataItemInterface::cancelEditor()
 {
     QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
-    KexiDataAwareObjectInterface *dataAwareObject = KexiUtils::findParentByType<KexiDataAwareObjectInterface*>(parentWidget);
+    KexiDataAwareObjectInterface *dataAwareObject = KDbUtils::findParentByType<KexiDataAwareObjectInterface*>(parentWidget);
     if (dataAwareObject)
         dataAwareObject->cancelEditor();
 }
