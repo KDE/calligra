@@ -358,7 +358,7 @@ bool KexiFileWidget::checkSelectedFile()
     if (mode() & KFile::ExistingOnly) {
         if (!fi.exists()) {
             KMessageBox::error(this, "<qt>" + xi18n("The file \"%1\" does not exist.",
-                                                   QDir::convertSeparators(d->highlightedUrl.toLocalFile())));
+                                                   QDir::toNativeSeparators(d->highlightedUrl.toLocalFile())));
             return false;
         } else if (mode() & KFile::File) {
             if (!fi.isFile()) {
@@ -366,7 +366,7 @@ bool KexiFileWidget::checkSelectedFile()
                 return false;
             } else if (!fi.isReadable()) {
                 KMessageBox::error(this, "<qt>" + xi18n("The file \"%1\" is not readable.",
-                                                       QDir::convertSeparators(d->highlightedUrl.path())));
+                                                       QDir::toNativeSeparators(d->highlightedUrl.path())));
                 return false;
             }
         }
@@ -384,7 +384,7 @@ bool KexiFileWidget::askForOverwriting(const QString& filePath, QWidget *parent)
         return true;
     const int res = KMessageBox::warningYesNo(parent,
                     xi18n("The file \"%1\" already exists.\n"
-                         "Do you want to overwrite it?", QDir::convertSeparators(filePath)), QString(),
+                         "Do you want to overwrite it?", QDir::toNativeSeparators(filePath)), QString(),
                     KGuiItem(xi18n("Overwrite")), KStandardGuiItem::no());
     if (res == KMessageBox::Yes)
         return true;
