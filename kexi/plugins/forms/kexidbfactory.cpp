@@ -664,7 +664,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
             bool openingCancelled;
             KexiMainWindowIface::global()->openObject(
                 "org.kexi-project.form", subform->formName(), Kexi::DesignViewMode,
-                openingCancelled);
+                &openingCancelled);
         }
         return true;
     }

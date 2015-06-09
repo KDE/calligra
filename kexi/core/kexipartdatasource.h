@@ -47,12 +47,12 @@ public:
      * @returns a list of fileds for the datasource
      * @arg id is the document id for the source
      */
-    virtual KDbFieldList *fields(KexiProject *project, const KexiPart::Item &i) = 0;
+    virtual KDbFieldList *fields(KexiProject *project, const KexiPart::Item &item) = 0;
 
     /**
      * @returns the cursor
      */
-    virtual KDbCursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer) = 0;
+    virtual KDbCursor *cursor(KexiProject *project, const KexiPart::Item &item, bool buffer) = 0;
 
     /**
      * @returns the part providing this datasource

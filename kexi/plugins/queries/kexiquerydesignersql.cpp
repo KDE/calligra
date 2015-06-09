@@ -194,10 +194,11 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
     d->lblStatus->setText(text);
 }
 
-tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
+    Q_ASSERT(dontStore);
 //! @todo
-    dontStore = true;
+    *dontStore = true;
     if (mode == Kexi::DesignViewMode || mode == Kexi::DataViewMode) {
         QString sqlText = d->editor->text().trimmed();
         KexiQueryPart::TempData * temp = tempData();
@@ -358,8 +359,9 @@ KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
 
 KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
                                                            KexiView::StoreNewDataOptions options,
-                                                           bool &cancel)
+                                                           bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options);
 
     //here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
@@ -380,7 +382,7 @@ KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
                                          0, KStandardGuiItem::yes(), KStandardGuiItem::no(),
                                          "askBeforeSavingInvalidQueries"/*config entry*/))
         {
-            cancel = true;
+            *cancel = true;
             return 0;
         }
         query = new KDbObject(); //just empty

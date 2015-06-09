@@ -32,15 +32,15 @@ int main(int argc, char **argv)
     qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
         qDebug() << *it;
-    if (manager.error()) {
-        qDebug() << manager.errorMsg();
+    if (manager.result().isError()) {
+        qDebug() << manager.result();
         return 1;
     }
 
     //get driver
     KDbDriver *driver = manager.driver(drv_name);
-    if (!driver || manager.error()) {
-        qDebug() << manager.errorMsg();
+    if (!driver || manager.result().isError()) {
+        qDebug() << manager.result();
         return 1;
     }
 
@@ -49,8 +49,8 @@ int main(int argc, char **argv)
     conn_data.setFileName(db_name);
 
     KDbConnection *conn = driver->createConnection(conn_data);
-    if (!conn || driver->error()) {
-        qDebug() << "error: " << driver->errorMsg();
+    if (!conn || driver->result().isError()) {
+        qDebug() << "error: " << driver->result();
         return 1;
     }
     if (!conn->connect()) {

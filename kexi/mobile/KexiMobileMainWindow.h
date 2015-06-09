@@ -42,7 +42,7 @@ public Q_SLOTS:
     KexiWindow* openObject(KexiPart::Item* item);
 
     //KexiMainWindowIface Overrides
-    virtual void acceptProjectClosingRequested(bool& cancel);
+    virtual void acceptProjectClosingRequested(bool *cancel);
     virtual void acceptPropertySetEditing();
     virtual KActionCollection* actionCollection() const;
     virtual void addSearchableModel(KexiSearchableModel*);
@@ -55,11 +55,12 @@ public Q_SLOTS:
     virtual KexiWindow* currentWindow() const;
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
     virtual QWidget* focusWidget() const;
-    virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
+    virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part,
+                                      bool *allowOverwriting, const QString& messageWhenAskingForName = QString());
     virtual void highlightObject(const QString& mime, const QString& name);
-    virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
-    virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
-    virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
+    virtual bool newObject(KexiPart::Info* info, bool *openingCancelled);
+    virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
+    virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool *openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
     virtual tristate printItem(KexiPart::Item* item);
     virtual tristate printPreviewForItem(KexiPart::Item* item);
     virtual KexiProject* project();

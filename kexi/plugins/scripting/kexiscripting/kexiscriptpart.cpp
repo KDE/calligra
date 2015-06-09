@@ -192,14 +192,15 @@ void KexiScriptPart::initInstanceActions()
 
 KexiView* KexiScriptPart::createView(QWidget *parent,
                                      KexiWindow *window,
-                                     KexiPart::Item &item,
+                                     KexiPart::Item *item,
                                      Kexi::ViewMode viewMode,
                                      QMap<QString, QVariant>* staticObjectArgs)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(staticObjectArgs);
     qDebug() << "............. createView";
-    QString partname = item.name();
+    QString partname = item->name();
     if (! partname.isNull()) {
         Kross::Action *action = d->action(partname);
 #if 0

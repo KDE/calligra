@@ -325,7 +325,7 @@ KexiPart::Part* KexiView::part() const
     return d->window ? d->window->part() : 0;
 }
 
-tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool & dontStore)
+tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);
@@ -397,8 +397,9 @@ void KexiView::setDirty()
 
 KDbObject* KexiView::storeNewData(const KDbObject& sdata,
                                            KexiView::StoreNewDataOptions options,
-                                           bool &cancel)
+                                           bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
     QScopedPointer<KDbObject> new_schema(new KDbObject);
@@ -418,8 +419,9 @@ KDbObject* KexiView::storeNewData(const KDbObject& sdata,
 
 KDbObject* KexiView::copyData(const KDbObject& sdata,
                                         KexiView::StoreNewDataOptions options,
-                                        bool &cancel)
+                                        bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
     QScopedPointer<KDbObject> new_schema(new KDbObject);

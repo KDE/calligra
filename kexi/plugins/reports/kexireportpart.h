@@ -45,7 +45,8 @@ public:
     virtual ~KexiReportPart();
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* win,
-                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+                                 KexiPart::Item *item, Kexi::ViewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);

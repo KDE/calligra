@@ -433,7 +433,7 @@ bool MDBMigrate::getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef)
     return true;
 }
 
-bool MDBMigrate::drv_getTableSize(const QString& table, qulonglong& size)
+bool MDBMigrate::drv_getTableSize(const QString& table, quint64& size)
 {
     // Get the column meta-data, which contains the table size
     MdbTableDef *tableDef = getTableDef(table);

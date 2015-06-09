@@ -438,12 +438,12 @@ bool KexiScriptDesignView::loadData()
 
 KDbObject* KexiScriptDesignView::storeNewData(const KDbObject& sdata,
                                                        KexiView::StoreNewDataOptions options,
-                                                       bool &cancel)
+                                                       bool *cancel)
 {
     KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
     qDebug() << "new id:" << s->id();
 
-    if (!s || cancel) {
+    if (!s || *cancel) {
         delete s;
         return 0;
     }

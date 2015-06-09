@@ -53,13 +53,13 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a window. \a args arguments can be passed. */
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode,
+                                 KexiPart::Item *item, Kexi::ViewMode viewMode,
                                  QMap<QString, QVariant>* args) = 0;
 
 protected:
     //! unused by static parts
     KexiView* createView(QWidget *parent, KexiWindow* window,
-                         KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode);
+                         KexiPart::Item *item, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 };
 
 }
