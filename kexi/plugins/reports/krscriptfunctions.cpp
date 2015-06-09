@@ -43,7 +43,7 @@ void KRScriptFunctions::setWhere(const QString&w)
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
     qreal ret;
-    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')' ;
+    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')';
 
     if (!m_where.isEmpty()) {
         sql += " WHERE(" + m_where + ')';

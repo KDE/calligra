@@ -333,8 +333,8 @@ protected:
                 }
                 else { // replace color
                     colPos += qstrlen("color:");
-                    for (;colPos < a.length() && a[colPos] == ' '; colPos++)
-                        ;
+                    for (;colPos < a.length() && a[colPos] == ' '; colPos++) {
+                    }
                     if (colPos < a.length() && a[colPos] == '#') {
                         colPos++;
                         int i = colPos;

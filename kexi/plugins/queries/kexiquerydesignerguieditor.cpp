@@ -1739,8 +1739,8 @@ void KexiQueryDesignerGuiEditor::slotAppendFields(
         return;
     int row_num;
     //find last filled row in the GUI table
-    for (row_num = d->sets->size() - 1; row_num >= 0 && !d->sets->at(row_num); row_num--)
-        ;
+    for (row_num = d->sets->size() - 1; row_num >= 0 && !d->sets->at(row_num); row_num--) {
+    }
     row_num++; //after
     //add row
     KDbRecordData *newRecord = createNewRow(table->name(), fieldName, true /* visible*/);
