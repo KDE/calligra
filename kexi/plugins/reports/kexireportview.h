@@ -23,7 +23,7 @@
 
 #include <KDbConnection>
 
-#include <KoReportRendererBase.h>
+#include <KoReportRendererBase>
 
 #include <core/KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>

@@ -23,7 +23,7 @@
 
 #include <KDbConnection>
 
-#include <KoReportData.h>
+#include <KoReportData>
 
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
