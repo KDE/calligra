@@ -243,7 +243,7 @@ KexiView::KexiView(QWidget *parent)
         d->mainLyr->addWidget(d->topBarHWidget);
         QHBoxLayout *topBarHLyr = new QHBoxLayout(d->topBarHWidget); //needed unless KexiFlowLayout properly handles contents margins
         topBarHLyr->setContentsMargins(0, 0, 0, 0);
-        topBarHLyr->addSpacing(QDialog::marginHint() / 2);
+        topBarHLyr->addSpacing(KexiUtils::spacingHint() / 2);
         d->topBarLyr = new KexiFlowLayout(topBarHLyr, 0, 2);
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
