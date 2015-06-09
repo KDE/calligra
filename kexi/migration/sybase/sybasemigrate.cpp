@@ -187,12 +187,14 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
 /*! Fetches single record from result obtained
  by running \a sqlStatement. */
 tristate SybaseMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KDbRecordData& data, bool &firstRecord)
+        KDbRecordData* data, bool *firstRecord)
 {
-    if (firstRecord) {
+    Q_ASSERT(data);
+    Q_ASSERT(firstRecord);
+    if (*firstRecord) {
         if (!query(sqlStatement))
             return false;
-        firstRecord = false;
+        *firstRecord = false;
     }
 
     RETCODE returnCode = dbnextrow(d->dbProcess);
@@ -203,9 +205,9 @@ tristate SybaseMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
         return r;
     }
     const int numFields = dbnumcols(d->dbProcess);
-    data.resize(numFields);
+    data->resize(numFields);
     for (int i = 0; i < numFields; i++) {
-        data[i] = value(i);   //ok? utf8?
+        (*data)[i] = value(i);   //ok? utf8?
     }
     return true;
 }
@@ -239,13 +241,14 @@ bool SybaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCo
     return true;
 }
 
-bool SybaseMigrate::drv_getTableSize(const QString& table, quint64& size)
+bool SybaseMigrate::drv_getTableSize(const QString& table, quint64 *size)
 {
+    Q_ASSERT(size);
     if (!query("SELECT COUNT(*) FROM " + drv_escapeIdentifier(table)))
         return false;
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
         //! @todo check result valid
-        size = value(0).toULongLong();
+        *size = value(0).toULongLong();
     }
     return true;
 }

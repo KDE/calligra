@@ -188,17 +188,17 @@ bool castStringToQVariant(const QString& string, const QCString& type, QVariant&
 
 // returns a number parsed from argument; if argument is i or i++, variableI is used
 // 'ok' is set to false on failure
-static int getNumber(const QString& argument, bool& ok)
+static int getNumber(const QString& argument, bool *ok)
 {
     int result;
-    ok = true;
+    *ok = true;
     if (argument == "i" || argument == "i++") {
         result = variableI;
         if (argument == "i++")
             variableI++;
     } else {
-        result = argument.toInt(&ok);
-        if (!ok) {
+        result = argument.toInt(ok);
+        if (!*ok) {
             showError(QString("Invalid value '%1'").arg(argument));
             return -1;
         }
@@ -250,7 +250,7 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
         }
     }
     bool ok;
-    int row = getNumber(testFileLine[1], ok) - 1;
+    int row = getNumber(testFileLine[1], &ok) - 1;
     if (!ok)
         return false;
     designerIface->changeFieldPropertyForRow(row, propertyName, newValue, 0, true);
@@ -465,9 +465,10 @@ bool AlterTableTester::closeWindow(KexiWindow* window)
 }
 
 //! Processes test file
-tristate AlterTableTester::run(bool &closeAppRequested)
+tristate AlterTableTester::run(bool *closeAppRequested)
 {
-    closeAppRequested = false;
+    Q_ASSERT(closeAppRequested);
+    *closeAppRequested = false;
     while (!m_finishedCopying)
         qApp->processEvents(300);
 
@@ -493,7 +494,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         return false;
     }
     bool openingCancelled;
-    KexiWindow* window = win->openObject(item, Kexi::DesignViewMode, openingCancelled);
+    KexiWindow* window = win->openObject(item, Kexi::DesignViewMode, &openingCancelled);
     if (!window) {
         showError(QString("Could not open table '%1'").arg(item->name()));
         return false;
@@ -531,7 +532,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
                 if (!checkItemsNumber(2))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
                 designerIface->deleteRow(row, true);
@@ -540,7 +541,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
                 if (!checkItemsNumber(3))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
                 designerIface->insertField(row, testFileLine[2], true);
@@ -549,7 +550,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
                 if (!checkItemsNumber(2))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
                 designerIface->insertEmptyRow(row, true);
@@ -617,7 +618,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         } else if (command == "quit") {
             if (!checkItemsNumber(1) || !closeWindow(window))
                 return false;
-            closeAppRequested = true;
+            *closeAppRequested = true;
             qDebug() << QString("Quitting the application...");
             break;
         } else {
@@ -681,7 +682,7 @@ int main(int argc, char *argv[])
     //QObject::connect(win, SIGNAL(projectOpened()), &tester, SLOT(run()));
 
     bool closeAppRequested;
-    res = tester.run(closeAppRequested);
+    res = tester.run(&closeAppRequested);
     if (true != res) {
         if (false == res)
             qWarning() << QString("Running test for file '%1' failed.").arg(testFilename);

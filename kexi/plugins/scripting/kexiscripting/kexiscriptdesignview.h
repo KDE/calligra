@@ -82,7 +82,7 @@ public:
      */
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
 
     /**
      * Try to store the modified data in the already opened and

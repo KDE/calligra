@@ -34,6 +34,8 @@
 #include <KDbConnection>
 #include <KDbUtils>
 
+#include <KStandardGuiItem>
+
 #include <QStackedWidget>
 #include <QEvent>
 #include <QCloseEvent>
@@ -127,14 +129,14 @@ public:
 //----------------------------------------------------------
 
 KexiWindow::KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes,
-                       KexiPart::Part& part, KexiPart::Item& item)
+                       KexiPart::Part *part, KexiPart::Item *item)
         : QWidget(parent)
         , KexiActionProxy(this, KexiMainWindowIface::global())
         , d(new Private(this))
         , m_destroying(false)
 {
-    d->part = &part;
-    d->item = &item;
+    d->part = part;
+    d->item = item;
     d->supportedViewModes = supportedViewModes;
     createSubwidgets();
 #ifndef KEXI_NO_CTXT_HELP
@@ -409,8 +411,9 @@ bool KexiWindow::isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newView
 tristate KexiWindow::switchToViewMode(
     Kexi::ViewMode newViewMode,
     QMap<QString, QVariant>* staticObjectArgs,
-    bool& proposeOpeningInTextViewModeBecauseOfProblems)
+    bool *proposeOpeningInTextViewModeBecauseOfProblems)
 {
+    Q_ASSERT(proposeOpeningInTextViewModeBecauseOfProblems);
     KexiMainWindowIface::global()->acceptPropertySetEditing();
 
     const bool designModePreloadedForTextModeHack = isDesignModePreloadedForTextModeHackUsed(newViewMode);
@@ -419,7 +422,7 @@ tristate KexiWindow::switchToViewMode(
         /* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
         bool _proposeOpeningInTextViewModeBecauseOfProblems = false; // used because even if opening the view failed,
         // text view can be opened
-        res = switchToViewMode(Kexi::DesignViewMode, staticObjectArgs, _proposeOpeningInTextViewModeBecauseOfProblems);
+        res = switchToViewMode(Kexi::DesignViewMode, staticObjectArgs, &_proposeOpeningInTextViewModeBecauseOfProblems);
         if ((!res && !_proposeOpeningInTextViewModeBecauseOfProblems) || ~res)
             return res;
     }
@@ -493,9 +496,9 @@ tristate KexiWindow::switchToViewMode(
         d->creatingViewsMode = newViewMode;
         KexiPart::StaticPart *staticPart = dynamic_cast<KexiPart::StaticPart*>((KexiPart::Part*)d->part);
         if (staticPart)
-            newView = staticPart->createView(this, this, *d->item, newViewMode, staticObjectArgs);
+            newView = staticPart->createView(this, this, d->item, newViewMode, staticObjectArgs);
         else
-            newView = d->part->createView(this, this, *d->item, newViewMode, staticObjectArgs);
+            newView = d->part->createView(this, this, d->item, newViewMode, staticObjectArgs);
         KexiUtils::removeWaitCursor();
         if (!newView) {
             //js TODO error?
@@ -518,7 +521,7 @@ tristate KexiWindow::switchToViewMode(
     if (!wasDirty) {
         newView->setDirty(false);
     }
-    proposeOpeningInTextViewModeBecauseOfProblems
+    *proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);
@@ -538,7 +541,7 @@ tristate KexiWindow::switchToViewMode(
     if (!wasDirty) {
         newView->setDirty(false);
     }
-    proposeOpeningInTextViewModeBecauseOfProblems
+    *proposeOpeningInTextViewModeBecauseOfProblems
         = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);

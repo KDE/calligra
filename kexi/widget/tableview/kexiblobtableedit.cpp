@@ -86,8 +86,8 @@ KexiBlobTableEdit::KexiBlobTableEdit(KDbTableViewColumn &column, QWidget *parent
                                           "pixmaplabel");
     d->button->setMenu(d->menu);
 
-    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
+    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool*,bool*)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool*,bool*)));
     connect(d->menu, SIGNAL(insertFromFileRequested(QUrl)),
             this, SLOT(handleInsertFromFileAction(QUrl)));
     connect(d->menu, SIGNAL(saveAsRequested(QString)),
@@ -270,11 +270,14 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const QUrl &url)
     //emit acceptRequested();
 }
 
-void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+void KexiBlobTableEdit::handleAboutToSaveAsAction(QString *origFilename, QString *fileExtension, bool *dataIsEmpty)
 {
+    Q_ASSERT(origFilename);
+    Q_ASSERT(fileExtension);
+    Q_ASSERT(dataIsEmpty);
     Q_UNUSED(origFilename);
     Q_UNUSED(fileExtension);
-    dataIsEmpty = valueIsEmpty();
+    *dataIsEmpty = valueIsEmpty();
 //! @todo no fname stored for now
 }
 
@@ -393,11 +396,13 @@ QSize KexiBlobTableEdit::totalSize() const
     return d->totalSize;
 }
 
-void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly)
 {
+    Q_ASSERT(valueIsNull);
+    Q_ASSERT(valueIsReadOnly);
     emit editRequested();
-    valueIsNull = this->valueIsNull();
-    valueIsReadOnly = d->readOnly || isReadOnly();
+    *valueIsNull = this->valueIsNull();
+    *valueIsReadOnly = d->readOnly || isReadOnly();
 }
 
 void KexiBlobTableEdit::signalEditRequested()

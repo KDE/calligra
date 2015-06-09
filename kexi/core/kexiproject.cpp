@@ -68,6 +68,7 @@ class KexiProject::Private
 public:
     explicit Private(KexiProject *qq)
             : q(qq)
+            , handler(0)
             , data(0)
             , tempPartItemID_Counter(-1)
             , sqlParser(0)
@@ -109,11 +110,11 @@ public:
         return name.isNull() ? "" : name;
     }
 
-    bool setNameOrCaption(KexiPart::Item& item,
+    bool setNameOrCaption(KexiPart::Item* item,
                           const QString* _newName,
                           const QString* _newCaption)
     {
-        q->clearError();
+        q->clearResult();
         if (data->userMode()) {
             return false;
         }
@@ -122,12 +123,12 @@ public:
         QString newName;
         if (_newName) {
             newName = _newName->trimmed();
-            KDbMessageTitle et(q);
+            KDbMessageTitleSetter ts(q);
             if (newName.isEmpty()) {
                 q->setError(xi18n("Could not set empty name for this object."));
                 return false;
             }
-            if (q->itemForClass(item.partClass(), newName) != 0) {
+            if (q->itemForClass(item->partClass(), newName) != 0) {
                 q->setError(xi18n("Could not use this name. Object with name \"%1\" already exists.",
                               newName));
                 return false;
@@ -139,10 +140,10 @@ public:
         }
 
         KDbMessageTitle et(q,
-                                xi18n("Could not rename object \"%1\".", item.name()));
+                                xi18n("Could not rename object \"%1\".", item->name()));
         if (!q->checkWritable())
             return false;
-        KexiPart::Part *part = q->findPartFor(item);
+        KexiPart::Part *part = q->findPartFor(*item);
         if (!part)
             return false;
         KDbTransactionGuard tg(*connection);
@@ -157,7 +158,7 @@ public:
             }
             if (!connection->executeSQL("UPDATE kexi__objects SET o_name="
                                         + connection->driver()->valueToSQL(KDbField::Text, newName)
-                                        + " WHERE o_id=" + QString::number(item.identifier())))
+                                        + " WHERE o_id=" + QString::number(item->identifier())))
             {
                 q->setError(connection);
                 return false;
@@ -166,7 +167,7 @@ public:
         if (_newCaption) {
             if (!connection->executeSQL("UPDATE kexi__objects SET o_caption="
                                         + connection->driver()->valueToSQL(KDbField::Text, newCaption)
-                                        + " WHERE o_id=" + QString::number(item.identifier())))
+                                        + " WHERE o_id=" + QString::number(item->identifier())))
             {
                 q->setError(connection);
                 return false;
@@ -176,20 +177,21 @@ public:
             q->setError(connection);
             return false;
         }
-        QString oldName(item.name());
+        QString oldName(item->name());
         if (_newName) {
-            item.setName(newName);
-            emit q->itemRenamed(item, oldName);
+            item->setName(newName);
+            emit q->itemRenamed(*item, oldName);
         }
-        QString oldCaption(item.caption());
+        QString oldCaption(item->caption());
         if (_newCaption) {
-            item.setCaption(newCaption);
-            emit q->itemCaptionChanged(item, oldCaption);
+            item->setCaption(newCaption);
+            emit q->itemCaptionChanged(*item, oldCaption);
         }
         return true;
     }
 
     KexiProject *q;
+    KDbMessageHandler* handler;
     QPointer<KDbConnection> connection;
     QPointer<KexiProjectData> data;
     QString error_title;
@@ -213,15 +215,16 @@ public:
 //---------------------------
 
 KexiProject::KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler)
-        : QObject(), Object(handler)
+        : QObject(), KDbObject(), KDbResultable()
         , d(new Private(this))
 {
     d->data = new KexiProjectData(pdata);
+    d->handler = handler;
 }
 
 KexiProject::KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler,
                          KDbConnection* conn)
-        : QObject(), Object(handler)
+        : QObject(), KDbObject(), KDbResultable()
         , d(new Private(this))
 {
     d->data = new KexiProjectData(pdata);
@@ -229,7 +232,7 @@ KexiProject::KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handle
         d->connection = conn;
     else
         qWarning() << "passed connection's data ("
-            << conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
+            << conn->data().serverInfoString() << ") is not compatible with project's conn. data ("
             << d->data->connectionData()->serverInfoString() << ")";
 }
 
@@ -276,17 +279,17 @@ tristate
 KexiProject::openInternal(bool *incompatibleWithKexi)
 {
     if (!Kexi::partManager().infoList()) {
-        setError(&Kexi::partManager());
+        m_result = Kexi::partManager().result();
         return cancelled;
     }
     if (incompatibleWithKexi)
         *incompatibleWithKexi = false;
-    //qDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
+    //qDebug() << d->data->databaseName() << d->data->connectionData()->driverId();
     KDbMessageTitle et(this,
                             xi18n("Could not open project \"%1\".", d->data->databaseName()));
 
-    if (!d->data->connectionData()->fileName().isEmpty()) {
-        QFileInfo finfo(d->data->connectionData()->fileName());
+    if (!d->data->connectionData()->databaseName().isEmpty()) {
+        QFileInfo finfo(d->data->connectionData()->databaseName());
         if (!d->data->isReadOnly() && !finfo.isWritable()) {
             if (KexiProject::askForOpeningNonWritableFileAsReadOnly(0, finfo)) {
                 d->data->setReadOnly(true);
@@ -308,12 +311,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
             return cancelled;
         }
         qWarning() << "!d->connection->useDatabase() "
-                   << d->data->databaseName() << " " << d->data->connectionData()->driverName;
+                   << d->data->databaseName() << " " << d->data->connectionData()->driverId();
 
-        if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
+        if (d->connection->result().code() == ERR_NO_DB_PROPERTY) {
 //<temp>
 //! @todo this is temporary workaround as we have no import driver for SQLite
-            if (/*supported?*/ !d->data->connectionData()->driverName.startsWith(QLatin1String("sqlite"), Qt::CaseInsensitive)) {
+            if (/*supported?*/ !d->data->connectionData()->driverId().contains("sqlite")) {
 //</temp>
                 if (incompatibleWithKexi)
                     *incompatibleWithKexi = true;
@@ -321,13 +324,13 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
                 KDbMessageTitle et(this,
                     xi18n("Database project %1 does not appear to have been created using Kexi and cannot be opened. "
                          "It is an SQLite file created using other tools.", d->data->infoString()));
-                setError(d->connection);
+                m_result = d->connection->result();
             }
             closeConnection();
             return false;
         }
 
-        setError(d->connection);
+        m_result = d->connection->result();
         closeConnection();
         return false;
     }
@@ -352,14 +355,14 @@ KexiProject::create(bool forceOverwrite)
         if (!forceOverwrite)
             return cancelled;
         if (!d->connection->dropDatabase(d->data->databaseName())) {
-            setError(d->connection);
+            m_result = d->connection->result();
             closeConnection();
             return false;
         }
         //qDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
     }
     if (!d->connection->createDatabase(d->data->databaseName())) {
-        setError(d->connection);
+        m_result = d->connection->result();
         closeConnection();
         return false;
     }
@@ -367,7 +370,7 @@ KexiProject::create(bool forceOverwrite)
     // and now: open
     if (!d->connection->useDatabase(d->data->databaseName())) {
         qWarning() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
-        setError(d->connection);
+        m_result = d->connection->result();
         closeConnection();
         return false;
     }
@@ -399,7 +402,7 @@ KexiProject::create(bool forceOverwrite)
     //</add some metadata>
 
     if (!Kexi::partManager().infoList()) {
-        setError(&Kexi::partManager());
+        m_result = Kexi::partManager().result();
         return cancelled;
     }
     return initProject();
@@ -587,15 +590,14 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 bool
 KexiProject::createConnection()
 {
+    clearResult();
     if (d->connection)
         return true;
 
-    clearError();
     KDbMessageTitle et(this);
-
-    KDbDriver *driver = Kexi::driverManager().driver(d->data->connectionData()->driverName);
+    KDbDriver *driver = Kexi::driverManager().driver(d->data->connectionData()->driverId());
     if (!driver) {
-        setError(&Kexi::driverManager());
+        m_result = Kexi::driverManager().result();
         return false;
     }
 
@@ -604,14 +606,14 @@ KexiProject::createConnection()
         connectionOptions |= KDbDriver::ReadOnlyConnection;
     d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
     if (!d->connection) {
-        qWarning() << driver->errorMsg();
-        setError(driver);
+        qWarning() << driver->result();
+        m_result = driver->result();
         return false;
     }
 
     if (!d->connection->connect()) {
-        setError(d->connection);
-        qWarning() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
+        m_result = d->connection->result();
+        qWarning() << "error connecting: " << (d->connection ? d->connection->result() : KDbResult());
         closeConnection();
         return false;
     }
@@ -626,11 +628,12 @@ KexiProject::createConnection()
 bool
 KexiProject::closeConnection()
 {
+    clearResult();
     if (!d->connection)
         return true;
 
     if (!d->connection->disconnect()) {
-        setError(d->connection);
+        m_result = d->connection->result();
         return false;
     }
 
@@ -755,20 +758,22 @@ KexiProject::itemsForClass(const QString &partClass)
 }
 
 void
-KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
+KexiProject::getSortedItems(KexiPart::ItemList* list, KexiPart::Info *i)
 {
-    list.clear();
+    Q_ASSERT(list);
+    list->clear();
     KexiPart::ItemDict* dict = items(i);
     if (!dict)
         return;
     foreach(KexiPart::Item *item, *dict) {
-      list.append(item);
+      list->append(item);
     }
 }
 
 void
-KexiProject::getSortedItemsForClass(KexiPart::ItemList& list, const QString &partClass)
+KexiProject::getSortedItemsForClass(KexiPart::ItemList *list, const QString &partClass)
 {
+    Q_ASSERT(list);
     KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
     getSortedItems(list, info);
 }
@@ -790,7 +795,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 
     dict->insert(item->identifier(), item);
     //let's update e.g. navigator
-    emit newItemStored(*item);
+    emit newItemStored(item);
 }
 
 KexiPart::Item*
@@ -835,33 +840,33 @@ KexiProject::item(int identifier)
 
 KexiPart::Part *KexiProject::findPartFor(const KexiPart::Item& item)
 {
-    clearError();
+    clearResult();
     KDbMessageTitle et(this);
     KexiPart::Part *part = Kexi::partManager().partForClass(item.partClass());
     if (!part) {
         qWarning() << "!part: " << item.partClass();
-        setError(&Kexi::partManager());
+        m_result = Kexi::partManager().result();
     }
     return part;
 }
 
-KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item,
+KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item *item,
                                     Kexi::ViewMode viewMode, QMap<QString, QVariant>* staticObjectArgs)
 {
-    clearError();
+    clearResult();
     if (viewMode != Kexi::DataViewMode && data()->userMode())
         return 0;
 
     KDbMessageTitle et(this);
-    KexiPart::Part *part = findPartFor(item);
+    KexiPart::Part *part = findPartFor(*item);
     if (!part)
         return 0;
     KexiWindow *window  = part->openInstance(parent, item, viewMode, staticObjectArgs);
     if (!window) {
         if (part->lastOperationStatus().error())
-            setError(xi18n("Opening object \"%1\" failed.", item.name()) + "<br>"
-                     + part->lastOperationStatus().message,
-                     part->lastOperationStatus().description);
+            m_result = KDbResult(xi18n("Opening object \"%1\" failed.\n%2%3", item->name(),
+                                 part->lastOperationStatus().message,
+                                 part->lastOperationStatus().description));
         return 0;
     }
     return window;
@@ -871,44 +876,45 @@ KexiWindow* KexiProject::openObject(QWidget* parent, const QString &partClass,
                                     const QString& name, Kexi::ViewMode viewMode)
 {
     KexiPart::Item *it = itemForClass(partClass, name);
-    return it ? openObject(parent, *it, viewMode) : 0;
+    return it ? openObject(parent, it, viewMode) : 0;
 }
 
 bool KexiProject::checkWritable()
 {
     if (!d->connection->isReadOnly())
         return true;
-    setError(xi18n("This project is opened as read only."));
+    m_result = KDbResultxi18n("This project is opened as read only.");
     return false;
 }
 
-bool KexiProject::removeObject(KexiPart::Item& item)
+bool KexiProject::removeObject(KexiPart::Item *item)
 {
-    clearError();
+    Q_ASSERT(item);
+    clearResult();
     if (data()->userMode())
         return false;
 
     KDbMessageTitle et(this);
     if (!checkWritable())
         return false;
-    KexiPart::Part *part = findPartFor(item);
+    KexiPart::Part *part = findPartFor(*item);
     if (!part)
         return false;
-    if (!item.neverSaved() && !part->remove(item)) {
+    if (!item->neverSaved() && !part->remove(item)) {
         //! @todo check for errors
         return false;
     }
-    if (!item.neverSaved()) {
+    if (!item->neverSaved()) {
         KDbTransactionGuard tg(*d->connection);
         if (!tg.transaction().active()) {
             setError(d->connection);
             return false;
         }
-        if (!d->connection->removeObject(item.identifier())) {
+        if (!d->connection->removeObject(item->identifier())) {
             setError(d->connection);
             return false;
         }
-        if (!removeUserDataBlock(item.identifier())) {
+        if (!removeUserDataBlock(item->identifier())) {
             setError(ERR_DELETE_SERVER_ERROR, xi18n("Could not remove object's user data."));
             return false;
         }
@@ -917,30 +923,30 @@ bool KexiProject::removeObject(KexiPart::Item& item)
             return false;
         }
     }
-    emit itemRemoved(item);
+    emit itemRemoved(*item);
 
     //now: remove this item from cache
     if (part->info()) {
         KexiPart::ItemDict *dict = d->itemDicts.value(part->info()->partClass());
-        if (!(dict && dict->remove(item.identifier())))
-            d->unstoredItems.remove(&item);//remove temp.
+        if (!(dict && dict->remove(item->identifier())))
+            d->unstoredItems.remove(item);//remove temp.
     }
     return true;
 }
 
-bool KexiProject::renameObject(KexiPart::Item& item, const QString& newName)
+bool KexiProject::renameObject(KexiPart::Item *item, const QString& newName)
 {
     return d->setNameOrCaption(item, &newName, 0);
 }
 
-bool KexiProject::setObjectCaption(KexiPart::Item& item, const QString& newCaption)
+bool KexiProject::setObjectCaption(KexiPart::Item *item, const QString& newCaption)
 {
     return d->setNameOrCaption(item, 0, &newCaption);
 }
 
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedCaption)
 {
-    clearError();
+    clearResult();
     if (data()->userMode())
         return 0;
 
@@ -1011,6 +1017,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Part *part, const QString& suggestedCaption)
 {
+    Q_ASSERTR(part);
     return createPartItem(part->info(), suggestedCaption);
 }
 
@@ -1036,10 +1043,11 @@ const char warningNoUndo[] = I18N_NOOP("Warning: entire project's data will be r
 
 /*static*/
 KexiProject*
-KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
+KexiProject::createBlankProject(bool *cancelled, const KexiProjectData& data,
                                 KDbMessageHandler* handler)
 {
-    cancelled = false;
+    Q_ASSERT(cancelled);
+    *cancelled = false;
     KexiProject *prj = new KexiProject(data, handler);
 
     tristate res = prj->create(false);
@@ -1053,7 +1061,7 @@ KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
 //! @todo add serverInfoString() for server-based prj
         {
             delete prj;
-            cancelled = true;
+            *cancelled = true;
             return 0;
         }
         res = prj->create(true/*overwrite*/);
@@ -1092,7 +1100,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 
 bool KexiProject::checkProject(const QString& singlePartClass)
 {
-    clearError();
+    clearResult();
 
 //! @todo catch errors!
     if (!d->connection->isDatabaseUsed()) {

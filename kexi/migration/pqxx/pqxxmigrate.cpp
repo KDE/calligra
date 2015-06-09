@@ -388,15 +388,17 @@ tristate PqxxMigrate::drv_queryStringListFromSQL(
 }
 
 tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KDbRecordData& data, bool &firstRecord)
+        KDbRecordData* data, bool *firstRecord)
 {
-    if (firstRecord || !m_res) {
+    Q_ASSERT(data);
+    Q_ASSERT(firstRecord);
+    if (*firstRecord || !m_res) {
         if (m_res)
             clearResultInfo();
         if (!query(sqlStatement))
             return false;
         m_fetchRecordFromSQL_iter = m_res->begin();
-        firstRecord = false;
+        *firstRecord = false;
     } else
         ++m_fetchRecordFromSQL_iter;
 
@@ -405,11 +407,10 @@ tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
         return cancelled;
     }
 
-    std::string result;
     const int numFields = m_fetchRecordFromSQL_iter.size();
-    data.resize(numFields);
+    data->resize(numFields);
     for (int i = 0; i < numFields; i++)
-        data[i] = KDb::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i)); //!< @todo KEXI3
+        (*data)[i] = KDb::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i)); //!< @todo KEXI3
     return true;
 }
 

@@ -136,14 +136,15 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
-        bool visible, bool &changed, Command *commandGroup)
+        bool visible, bool *changed, Command *commandGroup)
 {
+    Q_ASSERT(changed);
     if (prop->isVisible() != visible) {
         if (commandGroup) {
                 new ChangePropertyVisibilityCommand(commandGroup, designerView, set, prop->name(), visible);
         }
         prop->setVisible(visible);
-        changed = true;
+        *changed = true;
     }
 }
 
@@ -222,13 +223,14 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fie
     return changed;
 }
 
-QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, bool skipWarning)
+QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, bool skipWarning)
 {
+    Q_ASSERT(emptyTable);
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     bool ok;
     emptyTable = conn->isEmpty(*designerView->tempData()->table, ok) && ok;
     return xi18n("Do you want to save the design now?")
-           + ((emptyTable || skipWarning) ? QString() :
+           + ((*emptyTable || skipWarning) ? QString() :
               (QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design",
                       designerView->window()).toString()));
 }

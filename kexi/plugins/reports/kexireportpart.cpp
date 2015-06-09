@@ -79,8 +79,9 @@ KLocalizedString KexiReportPart::i18nMessage(
 }
 
 KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
-                                     KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+                                     KexiPart::Item *item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(item);
 

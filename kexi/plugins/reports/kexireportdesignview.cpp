@@ -82,12 +82,12 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
 
 KDbObject* KexiReportDesignView::storeNewData(const KDbObject& sdata,
                                                        KexiView::StoreNewDataOptions options,
-                                                       bool &cancel)
+                                                       bool *cancel)
 {
     KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
     qDebug() << "new id:" << s->id();
 
-    if (!s || cancel) {
+    if (!s || *cancel) {
         delete s;
         return 0;
     }
@@ -130,10 +130,10 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     return false;
 }
 
-tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     qDebug() << mode;
-    dontStore = true;
+    *dontStore = true;
     if (m_reportDesigner && mode == Kexi::DataViewMode) {
         qDebug() << "Saving temp data";
         tempData()->reportDefinition = m_reportDesigner->document();

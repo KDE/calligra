@@ -248,8 +248,8 @@ protected Q_SLOTS:
 
 protected:
     //! Used by KexiPart::Part
-    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
-               KexiPart::Item& item);
+    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part *part,
+               KexiPart::Item *item);
 
     //! Used by KexiInternalPart
     KexiWindow();
@@ -259,7 +259,7 @@ protected:
      Only used for parts of class KexiPart::StaticPart. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode,
                               QMap<QString, QVariant>* staticObjectArgs,
-                              bool& proposeOpeningInTextViewModeBecauseOfProblems);
+                              bool *proposeOpeningInTextViewModeBecauseOfProblems);
 
     void registerWindow();
 

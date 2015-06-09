@@ -119,9 +119,10 @@ KexiMigrate::~KexiMigrate()
 }
 
 bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
-        bool& acceptingNeeded)
+        bool *acceptingNeeded)
 {
-    acceptingNeeded = false;
+    Q_ASSERT(acceptingNeeded);
+    *acceptingNeeded = false;
     if (result)
         result->clearStatus();
 
@@ -146,7 +147,7 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
         return true;
     }
     if (tmpConn->databaseExists(d->migrateData->destination->databaseName())) {
-        acceptingNeeded = true;
+        *acceptingNeeded = true;
     }
     tmpConn->disconnect();
     delete tmpConn;
@@ -312,7 +313,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                         QString::fromLatin1(
                             "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects "
                             "WHERE o_name='%1' AND o_type=%2").arg(tableName).arg(int(KDb::TableObjectType)),
-                        data, firstRecord)
+                        &data, &firstRecord)
                     && destConn->setupObjectSchemaData(data, *t))
             {
 //! @todo to reuse Connection::setupTableSchema()'s statement somehow...
@@ -323,7 +324,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                                         "f_options, f_default, f_order, f_caption, f_help"
                                         " FROM kexi__fields WHERE t_id=%1 ORDER BY f_order").arg(t->id()));
                 while (ok) {
-                    tristate res = drv_fetchRecordFromSQL(sql, data, firstRecord);
+                    tristate res = drv_fetchRecordFromSQL(sql, &data, &firstRecord);
                     if (res != true) {
                         if (false == res)
                             ok = false;
@@ -491,7 +492,6 @@ bool KexiMigrate::performExport(Kexi::ObjectStatus* result)
 // Progress functions
 bool KexiMigrate::progressInitialise()
 {
-    qulonglong sum = 0, size;
     emit progressPercent(0);
 
     //! @todo Don't copy table names here
@@ -501,8 +501,10 @@ bool KexiMigrate::progressInitialise()
 
     // 1) Get the number of rows/bytes to import
     int tableNumber = 1;
+    quint64 sum = 0;
     foreach(const QString& tableName, tables) {
-        if (drv_getTableSize(tableName, size)) {
+        quint64 size;
+        if (drv_getTableSize(tableName, &size)) {
             qDebug() << "table:" << tableName << "size: " << (ulong)size;
             sum += size;
             emit progressPercent(tableNumber * 5 /* 5% */ / tables.count());
@@ -512,7 +514,7 @@ bool KexiMigrate::progressInitialise()
         }
     }
 
-    qDebug() << "job size:" << (ulong)sum;
+    qDebug() << "job size:" << sum;
     d->progressTotal = sum;
     d->progressTotal += tables.count() * NUM_OF_ROWS_PER_CREATE_TABLE;
     d->progressTotal = d->progressTotal * 105 / 100; //add 5 percent for above task 1)

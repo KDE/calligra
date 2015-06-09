@@ -124,7 +124,7 @@ KexiProject *KexiMobileMainWindow::openProject(const QUrl &url)
 KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
 {
     bool cancelled;
-    KexiWindow* win = openObject(item, Kexi::DataViewMode, cancelled);
+    KexiWindow* win = openObject(item, Kexi::DataViewMode, &cancelled);
 
     if (!cancelled)
         return win;
@@ -134,9 +134,10 @@ KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
 
 
 KexiWindow *
-KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
+KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled,
                                  QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
+    Q_ASSERT(openingCancelled);
     qDebug() << "KexiMobileMainWindow::openObject";
 
     KexiWindow *window = 0;
@@ -146,7 +147,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
             *errorMessage = xi18nc(
                                 "opening is not allowed in \"data view/design view/text view\" mode",
                                 "opening is not allowed in \"%1\" mode", Kexi::nameForViewMode(viewMode));
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
     qDebug() << m_project << item;
@@ -160,7 +161,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 #endif
 
     //Create the window
-    window = m_project->openObject(m_mobile, *item, viewMode, staticObjectArgs);
+    window = m_project->openObject(m_mobile, item, viewMode, staticObjectArgs);
     if (window) {
         m_mobile->setActiveObject(window);
     }
@@ -208,7 +209,7 @@ bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode v
 
 //========KexiMainWindowIFace====================
 
-void KexiMobileMainWindow::acceptProjectClosingRequested(bool& cancel)
+void KexiMobileMainWindow::acceptProjectClosingRequested(bool *cancel)
 {
 
 }
@@ -268,7 +269,9 @@ QWidget* KexiMobileMainWindow::focusWidget() const
     return 0;
 }
 
-tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName)
+tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part,
+                                                bool *allowOverwriting,
+                                                const QString& messageWhenAskingForName)
 {
     return false;
 }
@@ -278,12 +281,14 @@ void KexiMobileMainWindow::highlightObject(const QString& mime, const QString& n
 
 }
 
-bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool& openingCancelled)
+bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool *openingCancelled)
 {
     return false;
 }
 
-KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs)
+KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name,
+                                             Kexi::ViewMode viewMode, bool *openingCancelled,
+                                             QMap< QString, QVariant >* staticObjectArgs)
 {
     return 0;
 }

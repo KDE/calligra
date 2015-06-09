@@ -40,10 +40,9 @@ public:
     KexiTablePart(QObject *parent, const QVariantList &);
     virtual ~KexiTablePart();
 
-    virtual tristate remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item *item);
 
-    virtual tristate rename(KexiPart::Item &item,
-                            const QString& newName);
+    virtual tristate rename(KexiPart::Item *item, const QString& newName);
 
     class TempData : public KexiWindowData
     {
@@ -68,7 +67,8 @@ protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+                                 KexiPart::Item *item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();

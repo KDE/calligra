@@ -155,8 +155,9 @@ KexiFormPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
-                                   KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+                                   KexiPart::Item *item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
@@ -166,7 +167,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
         return 0;
 
     KexiFormView *view = new KexiFormView(parent, win->project()->dbConnection());
-    view->setObjectName(item.name().toLatin1());
+    view->setObjectName(item->name().toLatin1());
     return view;
 }
 

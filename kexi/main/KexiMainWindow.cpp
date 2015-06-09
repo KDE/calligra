@@ -1449,7 +1449,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
             }
             // * NEW
             if (info->value("action") == "new") {
-                if (!newObject(i, openingCancelled) && !openingCancelled) {
+                if (!newObject(i, &openingCancelled) && !openingCancelled) {
                     not_found_msg += "<li>";
                     not_found_msg += (xi18n("cannot create object of type \"%1\"", info->value("type")) +
                                       internalReason(d->prj) + "<br></li>");
@@ -1526,7 +1526,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 continue; //sanity
 
             QString openObjectMessage;
-            if (!openObject(item, viewMode, openingCancelled, 0, &openObjectMessage)
+            if (!openObject(item, viewMode, &openingCancelled, 0, &openObjectMessage)
                     && (!openingCancelled || !openObjectMessage.isEmpty())) {
                 not_found_msg += (QString("<li>\"") + info->value("name") + "\" - ");
                 if (openObjectMessage.isEmpty())
@@ -1588,7 +1588,7 @@ tristate KexiMainWindow::closeProject()
     {
         // make sure the project can be closed
         bool cancel = false;
-        emit acceptProjectClosingRequested(cancel);
+        emit acceptProjectClosingRequested(&cancel);
         if (cancel)
             return cancelled;
     }
@@ -1837,10 +1837,10 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(newObject(KexiPart::Info*)));
         connect(d->navigator, SIGNAL(removeItem(KexiPart::Item*)),
                 this, SLOT(removeObject(KexiPart::Item*)));
-        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*,QString,bool&)),
-                this, SLOT(renameObject(KexiPart::Item*,QString,bool&)));
-        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*,QString,bool&)),
-                this, SLOT(setObjectCaption(KexiPart::Item*,QString,bool&)));
+        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*,QString,bool*)),
+                this, SLOT(renameObject(KexiPart::Item*,QString,bool*)));
+        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*,QString,bool*)),
+                this, SLOT(setObjectCaption(KexiPart::Item*,QString,bool*)));
         connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
@@ -1866,7 +1866,7 @@ void KexiMainWindow::setupProjectNavigator()
         d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
 
     }
-    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item&)));
+    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item*)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item*)));
     connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
 
     d->navigator->setFocus();
@@ -3062,7 +3062,7 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
 
 KexiWindow *
 KexiMainWindow::openObject(const QString& partClass, const QString& name,
-                           Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs)
+                           Kexi::ViewMode viewMode, bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs)
 {
     KexiPart::Item *item = d->prj->itemForClass(partClass, name);
     if (!item)
@@ -3071,9 +3071,10 @@ KexiMainWindow::openObject(const QString& partClass, const QString& name,
 }
 
 KexiWindow *
-KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
+KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled,
                            QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
+    Q_ASSERT(openingCancelled)
     if (!d->prj || !item) {
         return 0;
     }
@@ -3083,7 +3084,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
             *errorMessage = xi18nc(
                                 "opening is not allowed in \"data view/design view/text view\" mode",
                                 "opening is not allowed in \"%1\" mode", Kexi::nameForViewMode(viewMode));
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
     qDebug() << d->prj << item;
@@ -3095,14 +3096,14 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
     if (pendingType != Private::NoJob) {
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
 #else
     KexiWindow *window = openedWindowFor(item);
 #endif
     int previousItemId = currentWindow() ? currentWindow()->partItem()->identifier() : 0;
-    openingCancelled = false;
+    *openingCancelled = false;
 
     bool alreadyOpened = false;
     KexiWindowContainer *windowContainer = 0;
@@ -3143,7 +3144,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #ifndef KEXI_NO_PENDING_DIALOGS
         d->addItemToPendingWindows(item, Private::WindowOpeningJob);
 #endif
-        window = d->prj->openObject(windowContainer, *item, viewMode, staticObjectArgs);
+        window = d->prj->openObject(windowContainer, item, viewMode, staticObjectArgs);
         if (window) {
             windowContainer->setWindow(window);
             // update text and icon
@@ -3205,15 +3206,16 @@ KexiWindow *
 KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode)
 {
     bool openingCancelled;
-    return openObjectFromNavigator(item, viewMode, openingCancelled);
+    return openObjectFromNavigator(item, viewMode, &openingCancelled);
 }
 
 KexiWindow *
 KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode,
-                                        bool &openingCancelled)
+                                        bool *openingCancelled)
 {
+    Q_ASSERT(openingCancelled);
     if (!openingAllowed(item, viewMode)) {
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
     if (!d->prj || !item)
@@ -3222,13 +3224,13 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
     if (pendingType != Private::NoJob) {
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
 #else
     KexiWindow *window = openedWindowFor(item);
 #endif
-    openingCancelled = false;
+    *openingCancelled = false;
     if (window) {
         if (activateWindow(*window)) {
             return window;
@@ -3265,13 +3267,14 @@ tristate KexiMainWindow::closeObject(KexiPart::Item* item)
     return closeWindow(window);
 }
 
-bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
+bool KexiMainWindow::newObject(KexiPart::Info *info, bool* openingCancelled)
 {
+    Q_ASSERT(openingCancelled);
     if (d->userMode) {
-        openingCancelled = true;
+        *openingCancelled = true;
         return false;
     }
-    openingCancelled = false;
+    *openingCancelled = false;
     if (!d->prj || !info)
         return false;
     KexiPart::Part *part = Kexi::partManager().partForClass(info->partClass());
@@ -3285,7 +3288,7 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
     }
 
     if (!it->neverSaved()) { //only add stored objects to the browser
-        d->navigator->model()->slotAddItem(*it);
+        d->navigator->model()->slotAddItem(it);
     }
     return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
@@ -3362,7 +3365,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     d->pageSetupWindows.remove(dataItemID);
 #endif
 
-    if (!d->prj->removeObject(*item)) {
+    if (!d->prj->removeObject(item)) {
         //! @todo better msg
         showSorryMessage(xi18n("Could not remove object."));
         return false;
@@ -3370,16 +3373,17 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     return true;
 }
 
-void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName, bool &success)
+void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName, bool *success)
 {
+    Q_ASSERT(success);
     if (d->userMode) {
-        success = false;
+        *success = false;
         return;
     }
     QString newName = _newName.trimmed();
     if (newName.isEmpty()) {
         showSorryMessage(xi18n("Could not set empty name for this object."));
-        success = false;
+        *success = false;
         return;
     }
 
@@ -3407,10 +3411,11 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
     }
 }
 
-void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &success)
+void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool *success)
 {
+    Q_ASSERT(success);
     if (d->userMode) {
-        success = false;
+        *success = false;
         return;
     }
     QString newCaption = _newCaption.trimmed();
@@ -3419,13 +3424,14 @@ void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newC
     enableMessages(true);
     if (!res) {
         showErrorMessage(d->prj, xi18n("Setting caption for object \"%1\" failed.", newCaption));
-        success = false;
+        *success = false;
         return;
     }
 }
 
-void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString& /*oldName*/)
+void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString& oldName)
 {
+    Q_UNUSED(oldName);
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(&item, pendingType);
@@ -3544,7 +3550,7 @@ void KexiMainWindow::slotToolsImportTables()
         if (!destinationTableName.isEmpty()) {
             QString partClass = "org.kexi-project.table";
             bool openingCancelled;
-            KexiMainWindow::openObject(partClass, destinationTableName, Kexi::DataViewMode, openingCancelled);
+            KexiMainWindow::openObject(partClass, destinationTableName, Kexi::DataViewMode, &openingCancelled);
         }
     }
 }
@@ -3938,7 +3944,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
         return false;
     bool openingCancelled;
     printingWindow = openObject(printingPartItem, Kexi::DesignViewMode,
-                                openingCancelled, &staticObjectArgs);
+                                &openingCancelled, &staticObjectArgs);
     if (openingCancelled)
         return cancelled;
     if (!printingWindow) //sanity

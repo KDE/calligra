@@ -101,8 +101,8 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
-    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
+    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool*,bool*)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool*,bool*)));
     connect(m_contextMenu, SIGNAL(insertFromFileRequested(QUrl)),
             this, SLOT(handleInsertFromFileAction(QUrl)));
     connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
@@ -362,19 +362,22 @@ void KexiDBImageBox::handleInsertFromFileAction(const QUrl &url)
 }
 
 void KexiDBImageBox::handleAboutToSaveAsAction(
-    QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+    QString* origFilename, QString* fileExtension, bool *dataIsEmpty)
 {
+    Q_ASSERT(origFilename);
+    Q_ASSERT(fileExtension);
+    Q_ASSERT(dataIsEmpty);
     if (data().isEmpty()) {
         qWarning() << "no pixmap!";
-        dataIsEmpty = false;
+        *dataIsEmpty = false;
         return;
     }
     if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
-        origFilename = m_data.originalFileName();
-        if (!origFilename.isEmpty())
-            origFilename = QString("/") + origFilename;
+        *origFilename = m_data.originalFileName();
+        if (!origFilename->isEmpty())
+            *origFilename = QString("/") + origFilename;
         if (!m_data.mimeType().isEmpty())
-            fileExtension = KImageIO::typeForMime(m_data.mimeType()).first().toLower();
+            *fileExtension = KImageIO::typeForMime(m_data.mimeType()).first().toLower();
     }
 }
 
@@ -463,14 +466,16 @@ void KexiDBImageBox::handleShowPropertiesAction()
     //! @todo
 }
 
-void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool* valueIsNull, bool* valueIsReadOnly)
 {
-    valueIsNull = !(
+    Q_ASSERT(valueIsNull);
+    Q_ASSERT(valueIsReadOnly);
+    *valueIsNull = !(
                          (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
                       || (!dataSource().isEmpty() && !this->valueIsNull())  /*db-aware pixmap available*/
                   );
     // read-only if static pixmap or db-aware pixmap for read-only widget:
-    valueIsReadOnly =
+    *valueIsReadOnly =
            (!designMode() && dataSource().isEmpty())
         || (!dataSource().isEmpty() && isReadOnly())
         || (designMode() && !dataSource().isEmpty());

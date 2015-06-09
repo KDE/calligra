@@ -35,7 +35,7 @@ public:
     KexiTablePart::TempData* tempData() const;
 
 protected:
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 };
