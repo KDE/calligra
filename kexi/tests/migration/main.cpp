@@ -65,11 +65,9 @@ int main(int argc, char** argv)
     qDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
-    KDbDriver *destDriver = manager.driver(KDb::defaultFileBasedDriverId() //file based
-                                               );
-    if (!destDriver || manager.error()) {
-        qDebug() << "Manager error...";
-        manager.debugError();
+    KDbDriver *destDriver = manager.driver(KDb::defaultFileBasedDriverId());
+    if (!destDriver || manager.result().isError()) {
+        qDebug() << "Manager error:" << manager.result();
     }
 
     KDbConnectionData *cdata;
@@ -83,7 +81,7 @@ int main(int argc, char** argv)
 
     //! TODO User should be able to specify this
     dbname = destinationDatabase;
-    cdata->setFileName(dbname);
+    cdata->setDatabaseName(dbname);
     qDebug() << "Current file name: " << dbname;
 
 

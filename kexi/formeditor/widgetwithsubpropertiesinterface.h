@@ -56,7 +56,7 @@ public:
 
     //! \return a value of widget's subproperty. \a ok is set to true on success
     //! and to false on failure.
-    QVariant subproperty(const char * name, bool &ok) const;
+    QVariant subproperty(const char * name, bool *ok) const;
 
     //! Sets a subproperty value \a value for a subproperty \a name
     //! \return true on successful setting and false when there

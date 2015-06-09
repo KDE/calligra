@@ -192,14 +192,16 @@ public Q_SLOTS:
     * Kexi.windowWidget().setDirty(True)
     * \endcode
     */
-    bool openItem(const QString& className, const QString& name, const QString& viewmode = QString(), QVariantMap args = QVariantMap()) {
+    bool openItem(const QString& className, const QString& name, const QString& viewmode = QString(),
+                  QVariantMap args = QVariantMap())
+    {
         bool openingCancelled;
         KexiPart::Item *item = partItem(partClass(className), name);
         KexiWindow* window = item
             ? mainWindow()->openObject(
                 item,
                 stringToViewMode(viewmode),
-                openingCancelled,
+                &openingCancelled,
                 args.isEmpty() ? 0 : &args
               )
             : 0;

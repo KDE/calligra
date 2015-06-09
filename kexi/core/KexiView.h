@@ -178,7 +178,7 @@ protected:
      (probably after showing some info messages), you need to return cancelled.
      Set \a dontStore to true (it's false by default) if you want to avoid data storing
      by storeData() or storeNewData(). */
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     /*! called by KexiWindow::switchToViewMode() right after window is switched to new mode
      By default does nothing. Reimplement this if you need to do something
@@ -213,7 +213,7 @@ protected:
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
-       (by calling KexiView::storeNewData(const KDbObject&, KexiView::StoreNewDataOptions,bool&))
+       (by calling KexiView::storeNewData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
        or using Connection::storeObjectSchemaData() or more specialized method.
        For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
        (TableSchema inherits SchemaData) to store more information than
@@ -223,7 +223,7 @@ protected:
      In this case, do not store schema object yourself (make a deep copy if needed). */
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                     KexiView::StoreNewDataOptions options,
-                                    bool &cancel);
+                                    bool *cancel);
 
     /*! Tells this view to fully copy existing object's data pointed by \a sdata on the backend.
      For example, for database tables it whould copy metadata, copy \a sdata, so the copy will
@@ -239,7 +239,7 @@ protected:
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
-       (by calling KexiView::copyData(const KDbObject&, KexiView::StoreNewDataOptions,bool&))
+       (by calling KexiView::copyData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
        or using Connection::storeObjectSchemaData() or more specialized method.
        For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
        (TableSchema inherits SchemaData) to store more information than
@@ -250,7 +250,7 @@ protected:
      In this case, do not store schema object yourself (make deep copy if needed). */
     virtual KDbObject* copyData(const KDbObject& sdata,
                                           KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+                                          bool *cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.

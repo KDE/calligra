@@ -99,7 +99,7 @@ public:
      In this case you should ask about accepting database overwriting.
      Used in ImportWizard::import(). */
     bool checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
-            bool& acceptingNeeded);
+            bool* acceptingNeeded);
 
     /*! Checks if the source- and the destination databases are identical.
     \return true if they are identical else false. */
@@ -230,8 +230,8 @@ protected:
      \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KDbRecordData& data,
-                                            bool &firstRecord) {
+                                            KDbRecordData* data,
+                                            bool *firstRecord) {
         Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
         return cancelled;
     }
@@ -263,7 +263,7 @@ protected:
 
       \return size of the specified table
     */
-    virtual bool drv_getTableSize(const QString&, quint64&) {
+    virtual bool drv_getTableSize(const QString&, quint64*) {
         return false;
     }
 

@@ -146,9 +146,9 @@ KDbConnectionData* KexiProjectData::connectionData()
     return &d->connData;
 }
 
-const KDbConnectionData* KexiProjectData::constConnectionData() const
+KDbConnectionData KexiProjectData::constConnectionData() const
 {
-    return &d->connData;
+    return d->connData;
 }
 
 QString KexiProjectData::databaseName() const
@@ -437,16 +437,10 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
     return true;
 }
 
-QString KexiProjectData::name() const
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& data)
 {
-    return KDbObject::name();
-}
-
-KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)
-{
-    dbg.space() << "KexiProjectData" << "databaseName=" << d.databaseName()
-        << "lastOpened=" << d.lastOpened() << "description=" << d.description()
-        << "driverName=" << d.constConnectionData()->driverName
-        << "filename=" << d.constConnectionData()->fileName();
+    dbg.space() << "KexiProjectData" << "databaseName=" << data.databaseName()
+        << "lastOpened=" << data.lastOpened() << "description=" << data.description()
+        << "connectionData=(" << data.constConnectionData() << ")";
     return dbg.space();
 }

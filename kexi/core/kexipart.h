@@ -28,7 +28,6 @@
 #include "kexipartbase.h"
 
 #include <KDbTristate>
-#include <db/pluginloader.h>
 
 class KActionCollection;
 class KexiWindow;
@@ -100,7 +99,7 @@ public:
      \a viewMode is one of Kexi::ViewMode enum.
      \a staticObjectArgs can be passed for static Kexi Parts.
      The new widget will be a child of \a parent. */
-    KexiWindow* openInstance(QWidget* parent, KexiPart::Item &item,
+    KexiWindow* openInstance(QWidget* parent, KexiPart::Item *item,
                              Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
@@ -118,7 +117,7 @@ public:
 
      Default implementation just removes object from kexi__* system structures
      at the database backend using KDbConnection::removeObject(). */
-    virtual tristate remove(KexiPart::Item & item);
+    virtual tristate remove(KexiPart::Item *item);
 
     /*! Renames stored data pointed by \a item to \a newName
      (example: table name is altered in the database).
@@ -131,7 +130,7 @@ public:
      You shouldn't use by hand transactions here.
 
      Default implementation does nothing and returns true. */
-    virtual tristate rename(KexiPart::Item &item, const QString& newName);
+    virtual tristate rename(KexiPart::Item *item, const QString& newName);
 
     /*! Creates and returns a new temporary data for a window  \a window.
      This method is called on openInstance() once per dialog.
@@ -142,7 +141,7 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a dialog. */
     virtual KexiView* createView(QWidget *parent, KexiWindow *window,
-                                 KexiPart::Item &item,
+                                 KexiPart::Item *item,
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 

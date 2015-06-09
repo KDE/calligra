@@ -240,7 +240,7 @@ bool KexiProjectModel::setItemCaption(KexiPart::Item *item, const QString& newCa
         return false;
     }
     bool ok = true;
-    emit changeItemCaption(item, newCaption, ok);
+    emit changeItemCaption(item, newCaption, &ok);
     return ok;
 }
 
@@ -279,18 +279,18 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info *info,
     return item;
 }
 
-void KexiProjectModel::slotAddItem(KexiPart::Item& item)
+void KexiProjectModel::slotAddItem(KexiPart::Item *item)
 {
     //qDebug() << item.name();
     QModelIndex idx;
 
-    KexiProjectModelItem *parent = modelItemFromName(item.partClass());
+    KexiProjectModelItem *parent = modelItemFromName(item->partClass());
 
     if (parent) {
         //qDebug() << "Got Parent" << parent->data(0);
         idx = indexFromItem(parent);
         beginInsertRows(idx, 0,0);
-        addItem(parent->partInfo(), &item, parent);
+        addItem(parent->partInfo(), item, parent);
         parent->sortChildren();
         endInsertRows();
     }

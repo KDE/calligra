@@ -136,7 +136,7 @@ void MapBrowserWidget::slotMapChanged()
 
 void MapBrowserWidget::resizeEvent(QResizeEvent *event)
 {
-    KexiUtils::BoolBlocker guard(m_slotMapChanged_enabled, false);
+    KexiUtils::BoolBlocker guard(&m_slotMapChanged_enabled, false);
     Marble::MarbleWidget::resizeEvent(event);
 }
 

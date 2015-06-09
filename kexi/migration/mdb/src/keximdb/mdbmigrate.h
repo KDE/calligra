@@ -83,7 +83,7 @@ protected:
     virtual bool drv_progressSupported() {
         return true;
     }
-    virtual bool drv_getTableSize(const QString& table, qulonglong& size);
+    virtual bool drv_getTableSize(const QString& table, quint64 *size);
 
 private:
     void initBackend();

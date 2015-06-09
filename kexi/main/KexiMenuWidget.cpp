@@ -412,17 +412,6 @@ bool KexiMenuWidgetAction::persistentlySelected() const
     return d->persistentlySelected;
 }
 
-// from qobject_p.h
-class QBoolBlocker
-{
-public:
-    inline QBoolBlocker(bool &b, bool value=true):block(b), reset(b){block = value;}
-    inline ~QBoolBlocker(){block = reset; }
-private:
-    bool &block;
-    bool reset;
-};
-
 KexiMenuWidget *KexiMenuWidgetPrivate::mouseDown = 0;
 int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 
@@ -1201,7 +1190,7 @@ bool KexiMenuWidgetPrivate::mouseEventTaken(QMouseEvent *e)
 
 void KexiMenuWidgetPrivate::activateCausedStack(const QList<QPointer<QWidget> > &causedStack, QAction *action, QAction::ActionEvent action_e, bool self)
 {
-    QBoolBlocker guard(activationRecursionGuard);
+    KexiUtils::BoolBlocker guard(&activationRecursionGuard, true);
     if(self)
         action->activate(action_e);
 

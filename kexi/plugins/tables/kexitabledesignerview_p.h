@@ -82,7 +82,7 @@ public:
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
     void setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
-                               bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
+                               bool visible, bool *changed, KexiTableDesignerCommands::Command *commandGroup);
 
     bool updatePropertiesVisibility(KDbField::Type fieldType, KPropertySet &set,
                                     KexiTableDesignerCommands::Command *commandGroup = 0);
@@ -91,7 +91,7 @@ public:
      \a emptyTable is set to true if the table designed contains no rows.
      If \a skipWarning is true, no warning about data loss is appended (useful when
      only non-physical altering actions will be performed). */
-    QString messageForSavingChanges(bool &emptyTable, bool skipWarning = false);
+    QString messageForSavingChanges(bool *emptyTable, bool skipWarning = false);
 
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,

@@ -84,8 +84,9 @@ KexiWindowData* KexiTablePart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
-                                    KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+                                    KexiPart::Item *item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;
@@ -94,7 +95,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
     KexiTablePart::TempData *temp
         = static_cast<KexiTablePart::TempData*>(window->data());
     if (!temp->table) {
-        temp->table = win->project()->dbConnection()->tableSchema(item.name());
+        temp->table = win->project()->dbConnection()->tableSchema(item->name());
         qDebug() << "schema is " << temp->table;
     }
 
@@ -113,14 +114,14 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
     return 0;
 }
 
-tristate KexiTablePart::remove(KexiPart::Item &item)
+tristate KexiTablePart::remove(KexiPart::Item *item)
 {
     KexiProject *project = KexiMainWindowIface::global()->project();
     if (!project || !project->dbConnection())
         return false;
 
     KDbConnection *conn = project->dbConnection();
-    KDbTableSchema *sch = conn->tableSchema(item.identifier());
+    KDbTableSchema *sch = conn->tableSchema(item->identifier());
 
     if (sch) {
         tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
@@ -133,23 +134,24 @@ tristate KexiTablePart::remove(KexiPart::Item &item)
         return conn->dropTable(sch);
     }
     //last chance: just remove item
-    return conn->removeObject(item.identifier());
+    return conn->removeObject(item->identifier());
 }
 
-tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
+tristate KexiTablePart::rename(KexiPart::Item *item, const QString& newName)
 {
+    Q_ASSERT(item);
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KDbTableSchema *sch = conn->tableSchema(item.identifier());
-    if (!sch)
+    KDbTableSchema *schema = conn->tableSchema(item->identifier());
+    if (!schema)
         return false;
     tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
-        KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+        KexiMainWindowIface::global()->thisWidget(), *conn, *schema,
         xi18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
-             sch->name()));
+             schema->name()));
     if (res != true) {
         return res;
     }
-    return conn->alterTableName(*sch, newName);
+    return conn->alterTableName(*schema, newName);
 }
 
 KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sdata,

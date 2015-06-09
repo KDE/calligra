@@ -42,7 +42,7 @@ public:
     KexiQueryPart(QObject *parent, const QVariantList &);
     virtual ~KexiQueryPart();
 
-    virtual tristate remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item *item);
 
     //! @short Temporary data kept in memory while switching between Query Window's views
     class TempData : public KexiWindowData,
@@ -99,13 +99,13 @@ public:
 
     /*! Renames stored data pointed by \a item to \a newName.
      Reimplemented to mark the query obsolete by using KDbConnection::setQuerySchemaObsolete(). */
-    virtual tristate rename(KexiPart::Item & item, const QString& newName);
+    virtual tristate rename(KexiPart::Item *item, const QString& newName);
 
 protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 KexiPart::Item *item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();

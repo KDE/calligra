@@ -591,8 +591,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 }
 
 tristate
-KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
+    Q_ASSERT(dontStore);
     qDebug() << mode;
 
     if (!d->dataTable->dataAwareObject()->acceptRowEdit())
@@ -610,7 +611,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
         }
         if (tempData()->queryChangedInPreviousView() || !tempData()->query()) {
             //remember current design in a temporary structure
-            dontStore = true;
+            *dontStore = true;
             QString errMsg;
             //build schema; problems are not allowed
             if (!buildSchema(&errMsg)) {
@@ -621,7 +622,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
         //! @todo
         return true;
     } else if (mode == Kexi::TextViewMode) {
-        dontStore = true;
+        *dontStore = true;
         if (tempData()->queryChangedInPreviousView() || !tempData()->query()) {
             //remember current design in a temporary structure
             //build schema; ignore problems
@@ -716,11 +717,12 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 KDbObject*
 KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& sdata,
                                          KexiView::StoreNewDataOptions options,
-                                         bool &cancel)
+                                         bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options);
     if (!d->dataTable->dataAwareObject()->acceptRowEdit()) {
-        cancel = true;
+        *cancel = true;
         return 0;
     }
     QString errMsg;
@@ -729,7 +731,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& sdata,
         //only rebuild schema if it has not been rebuilt previously
         if (!buildSchema(&errMsg)) {
             KMessageBox::sorry(this, errMsg);
-            cancel = true;
+            *cancel = true;
             return 0;
         }
     }

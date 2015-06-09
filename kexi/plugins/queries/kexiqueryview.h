@@ -41,7 +41,7 @@ protected:
 
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
 
     virtual tristate storeData(bool dontAsk = false);
 

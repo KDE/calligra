@@ -93,13 +93,14 @@ QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char *
     return KexiUtils::findPropertyWithSuperclasses(d->subwidget, name);
 }
 
-QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool &ok) const
+QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool *&ok) const
 {
+    Q_ASSERT(ok);
     if (!d->subwidget || d->subproperties.contains(name)) {
-        ok = false;
+        *ok = false;
         return QVariant();
     }
-    ok = true;
+    *ok = true;
     return d->subwidget->property(name);
 }
 

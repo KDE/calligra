@@ -32,10 +32,11 @@
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
-        const KDbDriver &driver, KDbQuerySchema& querySchema, bool &ok)
+        const KDbDriver &driver, KDbQuerySchema& querySchema, bool *ok)
 {
+    Q_ASSERT(ok);
     Q_UNUSED(driver);
-    ok = false;
+    *ok = false;
     const KDbQuerySchemaParameterList params(querySchema.parameters());
     QList<QVariant> values;
     const QString caption(xi18nc("Enter Query Parameter Value", "Enter Parameter Value"));
@@ -51,8 +52,8 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 //! @todo add support for unsigned parameter here
             KDb::getLimitsForType((*it).type, &minValue, &maxValue);
             const int result = KInputDialog::getInteger(
-                                   caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, &ok, parent);
-            if (!ok)
+                                   caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, ok, parent);
+            if (!*ok)
                 return QList<QVariant>(); //cancelled
             values.append(result);
             break;
@@ -61,8 +62,8 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
             QStringList list;
             list << xi18nc("Boolean True - Yes", "Yes") << xi18nc("Boolean False - No", "No");
             const QString result = KInputDialog::getItem(
-                                       caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
-            if (!ok || result.isEmpty())
+                                       caption, (*it).message, list, 0/*current*/, false /*!editable*/, ok, parent);
+            if (!*ok || result.isEmpty())
                 return QList<QVariant>(); //cancelled
             values.append(result == list.first());
             break;
@@ -70,10 +71,10 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         case KDbField::Date: {
                 KexiDateFormatter df;
                 const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
+                                           caption, (*it).message, QString(), ok, parent, 0/*name*/,
 //! @todo add validator
                                            0/*validator*/, df.inputMask());
-                if (!ok)
+                if (!*ok)
                     return QList<QVariant>(); //cancelled
                 values.append(df.fromString(result));
                 break;
@@ -82,10 +83,10 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                 KexiDateFormatter df;
                 KexiTimeFormatter tf;
                 const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
+                                           caption, (*it).message, QString(), ok, parent, 0/*name*/,
 //! @todo add validator
                                            0/*validator*/, KexiDateTimeFormatter::inputMask(df, tf));
-                if (!ok)
+                if (!*ok)
                     return QList<QVariant>(); //cancelled
                 values.append(KexiDateTimeFormatter::fromString(df, tf, result));
                 break;
@@ -93,10 +94,10 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         case KDbField::Time: {
                 KexiTimeFormatter tf;
                 const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
+                                           caption, (*it).message, QString(), ok, parent, 0/*name*/,
 //! @todo add validator
                                            0/*validator*/, tf.inputMask());
-                if (!ok)
+                if (!*ok)
                     return QList<QVariant>(); //cancelled
                 values.append(tf.fromString(result));
                 break;
@@ -107,13 +108,13 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
             KDoubleValidator validator(0);
             const QString textResult(
                 KInputDialog::getText(caption, (*it).message, QString(),
-                                      &ok, parent, &validator));
-            if (!ok || textResult.isEmpty())
+                                      ok, parent, &validator));
+            if (!*ok || textResult.isEmpty())
                 return QList<QVariant>(); //cancelled
 //! @todo this value will be still rounded: consider storing them as a decimal type
 //!    (e.g. using a special qint64+decimalplace class)
-            const double result = textResult.toDouble(&ok); //this is also good for float (to avoid rounding)
-            if (!ok)
+            const double result = textResult.toDouble(ok); //this is also good for float (to avoid rounding)
+            if (!*ok)
                 return QList<QVariant>();
             values.append(result);
             break;
@@ -121,8 +122,8 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         case KDbField::Text:
         case KDbField::LongText: {
             const QString result = KInputDialog::getText(
-                                       caption, (*it).message, QString(), &ok, parent);
-            if (!ok)
+                                       caption, (*it).message, QString(), ok, parent);
+            if (!*ok)
                 return QList<QVariant>(); //cancelled
             values.append(result);
             break;
@@ -137,7 +138,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
             return QList<QVariant>();
         }
     }
-    ok = true;
+    *ok = true;
     return values;
 }
 

@@ -881,7 +881,7 @@ tristate KexiStartupHandler::detectActionForFile(
 }
 
 KexiProjectData*
-KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool& cancelled, QWidget *parent)
+KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool *cancelled, QWidget *parent)
 {
     clearStatus();
     cancelled = false;

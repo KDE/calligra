@@ -377,7 +377,7 @@ void KexiComboBoxTableEdit::selectAll()
 
 void KexiComboBoxTableEdit::setValueInInternalEditor(const QVariant& value)
 {
-    KexiUtils::BoolBlocker guard(m_slotInternalEditorValueChanged_enabled, false);
+    KexiUtils::BoolBlocker guard(&m_slotInternalEditorValueChanged_enabled, false);
     m_lineedit->setText(value.toString());
 }
 
