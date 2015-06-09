@@ -24,6 +24,8 @@
 #include <QDebug>
 
 #include <KLocalizedString>
+#include <KStandardGuiItem>
+#include <KMessageBox>
 
 #include <KDb>
 #include <KDbConnection>

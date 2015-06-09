@@ -34,7 +34,7 @@
 #include <KDbConnection>
 
 #include <kactioncollection.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QDebug>
 
