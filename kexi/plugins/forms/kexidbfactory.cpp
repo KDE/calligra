@@ -875,7 +875,7 @@ KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QByteArray &class
 void
 KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
-    KexiFormView *formView = KexiUtils::findParent<KexiFormView*>((QWidget*)sender());
+    KexiFormView *formView = KDbUtils::findParent<KexiFormView*>((QWidget*)sender());
     if (formView) {
         changeProperty(formView->form(), formView, "pixmapId", (uint)/*! @todo unsafe */id);
         formView->setUnsavedLocalBLOB(formView->form()->selectedWidget(), id);

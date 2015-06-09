@@ -179,7 +179,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KDbConnectionData* data)
         conndataToShow = 0;
         if (data) {
             m_projectSetToShow = new KexiProjectSet(data, m_assistant);
-            if (m_projectSetToShow->error()) {
+            if (m_projectSetToShow->result().isError()) {
                 delete m_projectSetToShow;
                 m_projectSetToShow = 0;
                 return false;

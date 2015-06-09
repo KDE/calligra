@@ -24,8 +24,6 @@
 
 #include "WidgetInfo.h"
 
-#include <db/pluginloader.h>
-
 #include <QVariant>
 
 class QWidget;

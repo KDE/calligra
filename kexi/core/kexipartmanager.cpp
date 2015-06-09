@@ -32,8 +32,6 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-#include <KoServiceLocator.h>
-
 #include "kexipart.h"
 #include "kexiinternalpart.h"
 #include "kexipartinfo.h"
@@ -42,7 +40,6 @@
 
 #include <KDbConnection>
 #include <KDbCursor>
-#include <db/pluginloader.h>
 
 using namespace KexiPart;
 
@@ -82,14 +79,14 @@ Manager::Private::~Private()
 template <typename PartClass>
 PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
 {
-    manager->clearError();
+    manager->clearResult();
     if (!i)
         return 0;
     if (!manager->lookup())
         return 0;
 
     if (i->isBroken()) {
-        manager->setError(i->errorMessage());
+        manager->m_result = KDbResult(i->errorMessage());
         return 0;
     }
 
@@ -103,7 +100,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
                       i->objectName(),
                       loader.majorVersion(),
                       KEXI_PART_VERSION));
-            manager->setError(i->errorMessage());
+            manager->m_result = KDbResult(i->errorMessage());
             return 0;
         }
         p = loader.createPlugin<PartClass>(manager);
@@ -111,7 +108,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
             qWarning() << "failed";
             i->setBroken(true, xi18nc("@info", "Error while loading plugin <resource>%1</resource>",
                                      i->objectName()));
-            manager->setError(i->errorMessage());
+            manager->m_result = KDbResult(i->errorMessage());
             return 0;
         }
         p->setInfo(i);
@@ -124,7 +121,7 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
 //---
 
 Manager::Manager(QObject *parent)
-    : QObject(parent), d(new Private(this))
+    : QObject(parent), KDbObject(), KDbResultable(), d(new Private(this))
 {
 }
 
@@ -152,18 +149,18 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         qWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        m_serverErrorMsg = xi18nc("@info", "No <resource>%1</resource> service type installed.",
-                                 QLatin1String("Kexi/Handler"));
-        setError(appIncorrectlyInstalledMessage());
+        m_result = KDbResult(appIncorrectlyInstalledMessage());
+        m_result.setServerMessage(xi18nc("@info", "No <resource>%1</resource> service type installed.",
+                                         QLatin1String("Kexi/Handler")));
         return false;
     }
 
     KConfigGroup cg(KSharedConfig::openConfig()->group("Parts"));
     if (qApp && !cg.hasKey("Order")) {
-        m_serverErrorMsg = xi18nc("@info",
-                                 "Missing or invalid default application configuration. No <resource>%1</resource> key.",
-                                 QLatin1String("Parts/Order"));
-        setError(appIncorrectlyInstalledMessage());
+        m_result = KDbResult(appIncorrectlyInstalledMessage());
+        m_result.setServerMessage(xi18nc("@info",
+                                         "Missing or invalid default application configuration. No <resource>%1</resource> key.",
+                                         QLatin1String("Parts/Order")));
         return false;
     }
     const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order
@@ -223,9 +220,9 @@ bool Manager::lookup()
     return true;
 }
 
-Part* Manager::part(Info *i)
+Part* Manager::part(Info *info)
 {
-    Part *p = d->part<Part>(i, d->parts);
+    Part *p = d->part<Part>(info, d->parts);
     if (p) {
         emit partLoaded(p);
     }
@@ -258,7 +255,7 @@ Info* Manager::infoForClass(const QString &className)
     Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
     if (i)
         return i;
-    setError(xi18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
+    m_result = KDbResult(xi18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
     return 0;
 }
 

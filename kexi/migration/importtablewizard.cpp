@@ -680,14 +680,14 @@ bool ImportTableWizard::doImport()
                                   newSchema->name()));
         return false;
     }
-    m_alterSchemaWidget->takeTableSchema(); //m_connection takes ownership of the TableSchema object
+    m_alterSchemaWidget->takeTableSchema(); //m_connection takes ownership of the KDbTableSchema object
 
     //Import the data
     QApplication::setOverrideCursor(Qt::BusyCursor);
     QList<QVariant> row;
     unsigned int fieldCount = newSchema->fieldCount();
     m_migrateDriver->moveFirst();
-    KDbTransactionGuard tg(*m_connection);
+    KDbTransactionGuard tg(m_connection);
     if (m_connection->error()) {
         QApplication::restoreOverrideCursor();
         return false;

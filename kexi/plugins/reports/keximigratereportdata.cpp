@@ -44,7 +44,7 @@ public:
     QString qstrName;
     QString qstrQuery;
     bool valid;
-    KDbTableSchema TableSchema;
+    KDbTableSchema tableSchema;
     KDbTableOrQuerySchema *schema;
     KexiMigration::KexiMigrate *kexiMigrate;
     qint64 position;
@@ -70,10 +70,10 @@ KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
         QStringList names;
 
         if (d->valid) {
-            d->valid = d->kexiMigrate->readTableSchema(extConn[2], d->TableSchema);
+            d->valid = d->kexiMigrate->readTableSchema(extConn[2], d->tableSchema);
         }
         if (d->valid) {
-            d->schema = new KDbTableOrQuerySchema(d->TableSchema);
+            d->schema = new KDbTableOrQuerySchema(d->tableSchema);
         }
         d->valid = d->kexiMigrate->tableNames(names);
         if (d->valid && names.contains(extConn[2])) {

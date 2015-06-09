@@ -536,7 +536,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     }
 
     // Add sorting information (ORDER BY) - we can do that only now
-    //  after all QueryColumnInfo items are instantiated
+    //  after all KDbQueryColumnInfo items are instantiated
     KDbOrderByColumnList orderByColumns;
     it = d->data->constBegin();
     int fieldNumber = -1; //field number (empty rows are omitted)
@@ -657,7 +657,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             }
             // Invalid queries case:
             // KexiWindow::switchToViewMode() first opens DesignViewMode,
-            // and then KexiQueryPart::loadSchemaData() doesn't allocate QuerySchema object
+            // and then KexiQueryPart::loadSchemaData() doesn't allocate KDbQuerySchema object
             // do we're carefully looking at window()->schemaData()
             KDbQuerySchema * q = dynamic_cast<KDbQuerySchema *>(window()->schemaData());
             if (q) {
@@ -738,8 +738,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& sdata,
     }
     (KDbObject&)*temp->query() = sdata; //copy main attributes
 
-    bool ok = d->conn->storeObjectSchemaData(
-                  *temp->query(), true /*newObject*/);
+    bool ok = d->conn->storeNewObjectData(temp->query());
     if (ok) {
         ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(temp->query()->id()); // for sanity
     }
@@ -866,8 +865,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     && binary->right()->toVariable()
                     && (leftField = query->findTableField(binary->left()->toString(0)))
                     && (rightField = query->findTableField(binary->right()->toString(0)))) {
-//! @todo move this check to parser on QuerySchema creation
-//!       or to QuerySchema creation (WHERE expression should be then simplified
+//! @todo move this check to parser on KDbQuerySchema creation
+//!       or to KDbQuerySchema creation (WHERE expression should be then simplified
 //!       by removing joins
 
                 //this is relationship defined as following JOIN: [table1.]field1 = [table2.]field2
@@ -1079,7 +1078,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 {
     QString xml;
 //! @todo if (!loadDataBlock( xml, "query_layout" )) {
-    loadDataBlock(xml, "query_layout");
+    loadDataBlock(&xml, "query_layout");
     //! @todo errmsg
     if (xml.isEmpty()) {
         //in a case when query layout was not saved, build layout by hand
@@ -1691,7 +1690,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KDbRecordData *re
         if (e) {
             QString tokenStr;
             if (token != '=') {
-                KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
+                KDbBinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
                 tokenStr = be.tokenToString(0) + " ";
             }
             if (set) {

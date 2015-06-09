@@ -266,7 +266,7 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
 }
 
 bool
-FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool preview)
+FormIO::loadFormFromString(Form *form, QWidget *container, QString *src, bool preview)
 {
     QString errMsg;
     int errLine;
@@ -277,7 +277,7 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 #endif
 
     QDomDocument inBuf;
-    bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
+    bool parsed = inBuf.setContent(*src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
         qWarning() << errMsg;

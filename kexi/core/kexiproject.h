@@ -108,7 +108,7 @@ public:
 
     /*! Creates new, empty project using project data.
      If \a forceOverwrite is true, existing database project is silently overwritten.
-     Connection is created (accessible then with KexiProject::dbConnection()).
+     KDbConnection is created (accessible then with KexiProject::dbConnection()).
 
      Since KexiProject inherits KDbObject, it is possible to get error message
      and other information on error.
@@ -220,7 +220,7 @@ public:
      If \a suggestedCaption is not empty, it will be set as a caption
      (with number suffix, to avoid duplicated, e.g. "employees7"
      for "employees" sugested name). Name will be then built based
-     on this caption using KexiUtils::stringToIdentifier().
+     on this caption using KDb::stringToIdentifier().
 
      This method is used before creating new object.
      \return newly created part item or NULL on any error. */
@@ -388,6 +388,7 @@ private:
 
     friend class KexiMainWindow;
     friend class KexiWindow;
+    friend class Private;
 };
 
 #endif

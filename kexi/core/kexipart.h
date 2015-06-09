@@ -221,7 +221,7 @@ protected:
     virtual KDbObject* loadSchemaData(KexiWindow *window,
             const KDbObject& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
-    bool loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID = QString());
+    bool loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID = QString());
 
     /*! Creates shared action for action collection declared
      for 'instance actions' of this part.

@@ -115,7 +115,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     d->view = dynamic_cast<KexiTableScrollArea*>(mainWidget());
 
     d->data = new KDbTableViewData();
-    if (conn->isReadOnly())
+    if (conn->options()->isReadOnly())
         d->data->setReadOnly(true);
     d->data->setInsertingEnabled(false);
 
@@ -185,7 +185,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     d->view->contextMenu()->insertAction(
         d->view->contextMenu()->actions()[1], d->action_toggle_pkey); //add at the beginning as 2nd
     d->view->contextMenu()->insertSeparator(d->view->contextMenu()->actions()[2]);   //as 3rd
-    setAvailable("tablepart_toggle_pkey", !conn->isReadOnly());
+    setAvailable("tablepart_toggle_pkey", !conn->options()->isReadOnly());
 
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
     plugSharedAction("edit_undo", this, SLOT(slotUndo()));
@@ -308,7 +308,7 @@ KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool ne
 {
     QString typeName = "KDbField::" + field.typeGroupString();
     KPropertySet *set = new KPropertySet(d->sets, typeName);
-    if (KexiMainWindowIface::global()->project()->dbConnection()->isReadOnly())
+    if (KexiMainWindowIface::global()->project()->dbConnection()->options()->isReadOnly())
         set->setReadOnly(true);
 
     KProperty *prop;
@@ -470,7 +470,7 @@ void KexiTableDesignerView::updateActions(bool activated)
     /*! \todo check if we can set pkey for this column type (eg. BLOB?) */
     setAvailable("tablepart_toggle_pkey",
                  propertySet() != 0
-                 && !KexiMainWindowIface::global()->project()->dbConnection()->isReadOnly());
+                 && !KexiMainWindowIface::global()->project()->dbConnection()->options()->isReadOnly());
     if (!propertySet())
         return;
     KPropertySet &set = *propertySet();
@@ -651,7 +651,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
             propertySetForRecord->changeProperty("name",
-                                                 KexiUtils::stringToIdentifier(newValue.toString()));
+                                                 KDb::stringToIdentifier(newValue.toString()));
 
             //Child 2 is the name
             /*ChangeFieldPropertyCommand *changeNameCommand =*/
@@ -806,7 +806,7 @@ void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
         QString description(record->at(COLUMN_ID_DESC).toString());
 
 //! @todo check uniqueness:
-        QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
+        QString fieldName(KDb::stringToIdentifier(fieldCaption));
 
         KDbField::Type fieldType = KDb::intToFieldType(intFieldType);
         uint maxLength = 0;
