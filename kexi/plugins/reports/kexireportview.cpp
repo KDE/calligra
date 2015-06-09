@@ -18,12 +18,25 @@
  */
 
 #include "kexireportview.h"
-#include <KoReportPage.h>
 #include "kexidbreportdata.h"
-
 #ifndef KEXI_MOBILE
+#include <widget/utils/kexirecordnavigator.h>
 #include "keximigratereportdata.h"
 #endif
+#include <core/KexiWindow.h>
+#include <core/KexiMainWindowIface.h>
+#include <KexiIcon.h>
+#include "../scripting/kexiscripting/kexiscriptadaptor.h"
+
+#include <KoReportPage>
+#include <renderobjects>
+#include <KoReportPreRenderer>
+#include "krscriptfunctions.h"
+
+#include <kio/netaccess.h>
+#include <krun.h>
+#include <kactionmenu.h>
+#include <kfiledialog.h>
 
 #include <QLayout>
 #include <QPainter>
@@ -31,24 +44,6 @@
 #include <QPrinter>
 #include <QGraphicsScene>
 #include <QDebug>
-
-#include "krscriptfunctions.h"
-#include <kfiledialog.h>
-#include <kio/netaccess.h>
-#include <krun.h>
-#include <kactionmenu.h>
-
-#include <KexiIcon.h>
-#include <renderobjects.h>
-#include <KoReportPreRenderer.h>
-
-#ifndef KEXI_MOBILE
-#include <widget/utils/kexirecordnavigator.h>
-#endif
-
-#include <core/KexiWindow.h>
-#include <core/KexiMainWindowIface.h>
-#include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
