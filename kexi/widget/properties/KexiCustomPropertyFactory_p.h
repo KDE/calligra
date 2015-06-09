@@ -64,7 +64,7 @@ public:
 
 public Q_SLOTS:
     /*! Reimplemented: sets \a value but it is converted to identifier
-     using KexiUtils::stringToIdentifier().
+     using KDb::stringToIdentifier().
      If \a value is empty string, this method has no effect. */
     virtual void setValue(const QString &value);
 };

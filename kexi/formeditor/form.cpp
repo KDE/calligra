@@ -918,7 +918,7 @@ void Form::autoAssignTabStops()
 
         for (; it!=list.constEnd(); ++it) {
             QWidget *nextw = *it;
-            if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where one is a child of another
+            if (KDbUtils::hasParent(w, nextw)) // do not group (sort) widgets where one is a child of another
                 break;
             if (nextw->y() >= (w->y() + 20))
                 break;

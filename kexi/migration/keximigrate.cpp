@@ -251,7 +251,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 || tableCaption.startsWith(QLatin1String("kexi__"), Qt::CaseInsensitive)) //tables at KexiProject level, e.g. "kexi__blobs"
             continue;
         // this is a non-KexiDB table: generate schema from native data source
-        const QString tableIdentifier(KexiUtils::stringToIdentifier(tableCaption.toLower()));
+        const QString tableIdentifier(KDb::stringToIdentifier(tableCaption.toLower()));
         nativeNames.insert(tableIdentifier, tableCaption);
         KDbTableSchema *tableSchema = new KDbTableSchema(tableIdentifier);
         tableSchema->setCaption(tableCaption);   //caption is equal to the original name
@@ -306,17 +306,17 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         d->kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport.clear();
         foreach(const QString& tableName, kexiDBTables) {
             //load the schema from kexi__objects and kexi__fields
-            TableSchema *t = new TableSchema();
-            RecordData data;
+            KDbTableSchema *t = new KDbTableSchema();
+            KDbRecordData data;
             bool firstRecord = true;
             if (true == drv_fetchRecordFromSQL(
                         QString::fromLatin1(
                             "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects "
                             "WHERE o_name='%1' AND o_type=%2").arg(tableName).arg(int(KDb::TableObjectType)),
                         &data, &firstRecord)
-                    && destConn->setupObjectSchemaData(data, *t))
+                    && destConn->setupObjectData(data, t))
             {
-//! @todo to reuse Connection::setupTableSchema()'s statement somehow...
+//! @todo to reuse KDbConnection::setupTableSchema()'s statement somehow...
                 //load schema for every field and add it
                 firstRecord = true;
                 QString sql(

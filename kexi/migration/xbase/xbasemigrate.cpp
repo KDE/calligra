@@ -143,7 +143,7 @@ bool xBaseMigrate::drv_readTableSchema(
   // 6.     Examine enum fields of any
   // 7.     Set the caption of the field
   // 8.     Set other properties of the field ( pertaining to constraints like pkey, unique etc, and  AutoIncrement etc )
-  // 9.     Add the field to the TableSchema
+  // 9.     Add the field to the KDbTableSchema
   // 10. end for
 
   // Get table path
@@ -155,7 +155,7 @@ bool xBaseMigrate::drv_readTableSchema(
 
   for( xbShort i = 0; i < numFlds; ++i ) {
     QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
-    QString fldID( KexiUtils::stringToIdentifier( fldName.toLower() ) );
+    QString fldID( KDb::stringToIdentifier( fldName.toLower() ) );
 
     KDbField *fld =
         new KDbField( fldID, type( tableDbf->GetFieldType( i ) ) );
@@ -393,7 +393,7 @@ QStringList KexiMigration::xBaseMigrate::getIndexFileNames(const QString& tableN
 
   // Though the current semantics allows only one index on a field ( actually two, considering we can
   // have both .ndx and .ntx index, there can be multiple indices, hence a list of filenames is returned
-  // (Note: Kexi fields support only a single index. But we have a separate IndexSchema class ...)
+  // (Note: Kexi fields support only a single index. But we have a separate KDbIndexSchema class ...)
 
   QString dbPath = data()->source->dbPath();
   QDir xBaseDirectory( dbPath );

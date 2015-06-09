@@ -101,7 +101,7 @@ Part::Part(QObject *parent,
     : PartBase(parent, list)
     , d(new Private())
 {
-    d->instanceName = KexiUtils::stringToIdentifier(
+    d->instanceName = KDb::stringToIdentifier(
         instanceName.isEmpty()
         ? xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                 "Use '_' character instead of spaces. First character should be a..z character. "
@@ -226,18 +226,18 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
 
     d->status.clearStatus();
     KexiWindow *window = new KexiWindow(parent,
-                                        info()->supportedViewModes(), *this, item);
+                                        info()->supportedViewModes(), this, item);
 
     KexiProject *project = KexiMainWindowIface::global()->project();
     KDbObject sdata(project->idForClass(info()->partClass()));
-    sdata.setName(item.name());
-    sdata.setCaption(item.caption());
-    sdata.setDescription(item.description());
+    sdata.setName(item->name());
+    sdata.setCaption(item->caption());
+    sdata.setDescription(item->description());
 
     /*! @todo js: apply settings for caption displaying method; there can be option for
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
-    window->setId(item.identifier()); //not needed, but we did it
+    window->setId(item->identifier()); //not needed, but we did it
     window->setWindowIcon(QIcon::fromTheme(window->itemIconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
@@ -248,7 +248,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
     }
     window->setData(windowData);
 
-    if (!item.neverSaved()) {
+    if (!item->neverSaved()) {
         //we have to load schema data for this dialog
         loadAndSetSchemaData(window, sdata, viewMode);
         if (!window->schemaData()) {
@@ -267,7 +267,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
                                                xi18n("Could not load object's definition."), xi18n("Object design may be corrupted."));
             d->status.append(
                 Kexi::ObjectStatus(xi18n("You can delete \"%1\" object and create it again.",
-                                        item.name()), QString()));
+                                        item->name()), QString()));
 
             window->close();
             delete window;
@@ -277,7 +277,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
 
     bool switchingFailed = false;
     bool dummy;
-    tristate res = window->switchToViewMode(viewMode, staticObjectArgs, dummy);
+    tristate res = window->switchToViewMode(viewMode, staticObjectArgs, &dummy);
     if (!res) {
         tristate askForOpeningInTextModeRes
         = d->askForOpeningInTextMode(window, item, window->supportedViewModes(), viewMode);
@@ -317,7 +317,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
     //dirty only if it's a new object
     if (window->selectedView()) {
         window->selectedView()->setDirty(
-            internalPropertyValue("newObjectsAreDirty", false).toBool() ? item.neverSaved() : false);
+            internalPropertyValue("newObjectsAreDirty", false).toBool() ? item->neverSaved() : false);
     }
     return window;
 }
@@ -343,12 +343,13 @@ void Part::loadAndSetSchemaData(KexiWindow *window, const KDbObject& sdata,
     window->setSchemaDataOwned(schemaDataOwned);
 }
 
-bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID)
+bool Part::loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID)
 {
     if (!KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(
                 window->id(), dataString, dataID)) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
-                                       xi18n("Could not load object's data."), xi18n("Data identifier: \"%1\".", dataID));
+                                       xi18n("Could not load object's data."),
+                                       xi18n("Data identifier: \"%1\".", dataID));
         d->status.append(*window);
         return false;
     }

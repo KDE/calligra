@@ -406,7 +406,7 @@ KDbObject* KexiView::storeNewData(const KDbObject& sdata,
     *new_schema = sdata;
 
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
+    if (!conn->storeNewObjectData(new_schema.data())
         || !conn->removeDataBlock(new_schema->id()) // for sanity
         || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
        )
@@ -428,7 +428,7 @@ KDbObject* KexiView::copyData(const KDbObject& sdata,
     *new_schema = sdata;
 
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
+    if (!conn->storeNewObjectData(new_schema.data())
         || !conn->copyDataBlock(d->window->id(), new_schema->id())
         || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
        )
@@ -444,22 +444,23 @@ tristate KexiView::storeData(bool dontAsk)
     Q_UNUSED(dontAsk);
     if (!d->window || !d->window->schemaData())
         return false;
-    if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*d->window->schemaData(), false /*existing object*/)) {
+    if (!KexiMainWindowIface::global()->project()
+            ->dbConnection()->storeObjectData(d->window->schemaData()))
+    {
         return false;
     }
     setDirty(false);
     return true;
 }
 
-bool KexiView::loadDataBlock(QString &dataString, const QString& dataID, bool canBeEmpty)
+bool KexiView::loadDataBlock(QString *dataString, const QString& dataID, bool canBeEmpty)
 {
     if (!d->window)
         return false;
     const tristate res = KexiMainWindowIface::global()->project()->dbConnection()
                          ->loadDataBlock(d->window->id(), dataString, dataID);
     if (canBeEmpty && ~res) {
-        dataString.clear();
+        dataString->clear();
         return true;
     }
     return res == true;
@@ -496,9 +497,9 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
 //            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
 //            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())
 //            << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
-        if (KexiUtils::hasParent(this, o)) {
+        if (KDbUtils::hasParent(this, o)) {
             if (e->type() == QEvent::FocusOut && qApp->focusWidget()
-                    && !KexiUtils::hasParent(this, qApp->focusWidget())) {
+                    && !KDbUtils::hasParent(this, qApp->focusWidget())) {
                 //focus out: when currently focused widget is not a parent of this view
                 emit focus(false);
             } else if (e->type() == QEvent::FocusIn) {
@@ -507,11 +508,11 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
             if (e->type() == QEvent::FocusOut) {
 //    qDebug() << focusWidget()->className() << " " << focusWidget()->name();
 //    qDebug() << o->className() << " " << o->name();
-                KexiView *v = KexiUtils::findParent<KexiView*>(o);
+                KexiView *v = KDbUtils::findParent<KexiView*>(o);
                 if (v) {
                     while (v->d->parentView)
                         v = v->d->parentView;
-                    if (KexiUtils::hasParent(this, static_cast<QWidget*>(v->focusWidget())))
+                    if (KDbUtils::hasParent(this, static_cast<QWidget*>(v->focusWidget())))
                         v->d->lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
                 }
             }

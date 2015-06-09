@@ -50,20 +50,41 @@ public:
     virtual void showWarningContinueMessage(const QString &title, const QString &details = QString(),
                                             const QString& dontShowAgainName = QString());
 
+    /*! Shows error message with @a title (it is not caption) and details. */
+    virtual void showErrorMessage(
+        KDbMessageHandler::MessageType messageType,
+        const QString &msg,
+        const QString &details = QString(),
+        const QString &caption = QString()
+    );
+
+    /*! Shows error message with @a msg text. Existing error message from @a obj object
+     is also copied, if present. */
+    virtual void showErrorMessage(
+        const KDbResult& result,
+        KDbMessageHandler::MessageType messageType = Error,
+        const QString& msg = QString(),
+        const QString& caption = QString()
+    );
+
+    /*! Interactively asks a question. For GUI version, message boxes are used.
+     @a defaultResult is returned in case when no message handler is installed.
+     @a message should contain translated string.
+     Value of ButtonCode is returned.
+     Reimplement this. This implementation does nothing, just returns @a defaultResult. */
+    virtual KDbMessageHandler::ButtonCode askQuestion(
+            KDbMessageHandler::QuestionType messageType,
+            const QString& message,
+            const QString &caption = QString(),
+            KDbMessageHandler::ButtonCode defaultResult = KDbMessageHandler::Yes,
+            const KDbGuiItem &buttonYes = KDbGuiItem(),
+            const KDbGuiItem &buttonNo = KDbGuiItem(),
+            const QString &dontShowAskAgainName = QString(),
+            KDbMessageHandler::Options options = 0,
+            KDbMessageHandler* msgHandler = 0);
+
 protected:
-    using KDbMessageHandler::showErrorMessageInternal;
-
-    virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
-    virtual void showErrorMessageInternal(KDbObject *obj, const QString& msg = QString());
-
-    /*! Interactively asks a question using KMessageBox.
-     See KDbMessageHandler::askQuestionInternal() for details. */
-    virtual int askQuestionInternal(const QString& message,
-                                    KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                                    const KGuiItem &buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem &buttonNo = KStandardGuiItem::no(),
-                                    const QString &dontShowAskAgainName = QString(),
-                                    KMessageBox::Options options = KMessageBox::Notify);
+    //using KDbMessageHandler::showErrorMessage;
 };
 
 #endif

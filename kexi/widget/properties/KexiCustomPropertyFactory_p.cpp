@@ -98,7 +98,7 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
         qWarning() << "Value cannot be empty. This call has no effect.";
         return;
     }
-    const QString identifier(KexiUtils::stringToIdentifier(value));
+    const QString identifier(KDb::stringToIdentifier(value));
     if (identifier != value)
         qDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
     KPropertyStringEditor::setValue(identifier);

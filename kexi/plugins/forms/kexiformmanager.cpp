@@ -297,7 +297,7 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
     if (!_signals.isEmpty()) {
         const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
         const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
-        KexiFormView *formView = KexiUtils::findParent<KexiFormView*>(widget);
+        KexiFormView *formView = KDbUtils::findParent<KexiFormView*>(widget);
 
         foreach(const QMetaMethod& method, _signals) {
             if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {

@@ -25,6 +25,7 @@
 #include <KDbUtils>
 #include <KDbDriverManager>
 #include <KDbConnectionData>
+#include <KDbDriverMetaData>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -112,7 +113,7 @@ KexiProjectData::KexiProjectData(
 {
     setObjectName("KexiProjectData");
     d->connData = cdata;
-    setDatabaseName(cdata.dbFileName().isEmpty() ? dbname : cdata.dbFileName());
+    setDatabaseName(cdata.databaseName().isEmpty() ? dbname : cdata.databaseName());
     setCaption(caption);
 }
 
@@ -190,7 +191,7 @@ void KexiProjectData::setDescription(const QString& desc)
 
 QString KexiProjectData::infoString(bool nobr) const
 {
-    if (d->connData.fileName().isEmpty()) {
+    if (d->connData.databaseName().isEmpty()) {
         //server-based
         return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
                + (nobr ? " <nobr>" : " ") + xi18nc("database connection", "(connection %1)",
@@ -198,7 +199,7 @@ QString KexiProjectData::infoString(bool nobr) const
     }
     //file-based
     return QString(nobr ? "<nobr>" : "")
-           + QString("\"%1\"").arg(d->connData.fileName()) + (nobr ? "</nobr>" : "");
+           + QString("\"%1\"").arg(d->connData.databaseName()) + (nobr ? "</nobr>" : "");
 }
 
 void KexiProjectData::setReadOnly(bool set)
@@ -252,29 +253,30 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         return false;
     }
 
-    QString driverName = cg.readEntry("engine").toLower();
+    const QString driverName = cg.readEntry("engine").toLower();
     if (driverName.isEmpty()) {
         //! @todo ERR: "No valid "engine" field specified for %1 section" group
         return false;
     }
 
     // verification OK, now applying the values:
-    d->connData.driverName = driverName;
+    // -- "engine" is backward compatible simple name, not a driver ID
+    d->connData.setDriverId(QString::fromLatin1("org.kde.kdb.") + driverName);
     formatVersion = _formatVersion;
-    d->connData.hostName = cg.readEntry("server"); //empty allowed, means localhost
+    d->connData.setHostName(cg.readEntry("server")); //empty allowed, means localhost
     if (isDatabaseShortcut) {
         KDbDriverManager driverManager;
-        const KDbDriver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
-        if (dinfo.name.isEmpty()) {
+        const KDbDriverMetaData *driverMetaData = driverManager.driverMetaData(d->connData.driverId());
+        if (!driverMetaData) {
             //! @todo ERR: "No valid driver for "engine" found
             return false;
         }
-        const bool fileBased = dinfo.fileBased
-                && QString::compare(dinfo.name, d->connData.driverName, Qt::CaseInsensitive) == 0;
+        const bool fileBased = driverMetaData->isFileBased()
+                && driverMetaData->id() == d->connData.driverId();
         setCaption(cg.readEntry("caption"));
         setDescription(cg.readEntry("comment"));
-        d->connData.description.clear();
-        d->connData.caption.clear(); /* connection name is not specified... */
+        d->connData.setCaption(QString()); /* connection name is not specified... */
+        d->connData.setDescription(QString());
         if (fileBased) {
             QString fn(cg.readEntry("name"));
             if (!fn.isEmpty()) {
@@ -286,35 +288,36 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                     }
                     fn = home + fn.mid(homeVar.length());
                 }
-                d->connData.setFileName(fn);
-                setDatabaseName(d->connData.dbFileName());
+                d->connData.setDatabaseName(fn);
+                setDatabaseName(d->connData.databaseName());
             }
         }
         else {
             setDatabaseName(cg.readEntry("name"));
         }
     } else { // connection
-        d->connData.setFileName(QString());
+        d->connData.setDatabaseName(QString());
         setCaption(QString());
-        d->connData.caption = cg.readEntry("caption");
+        d->connData.setCaption(cg.readEntry("caption"));
         setDescription(QString());
-        d->connData.description = cg.readEntry("comment");
+        d->connData.setDescription(cg.readEntry("comment"));
         setDatabaseName(QString());   /* db name is not specified... */
     }
-    d->connData.port = cg.readEntry("port", 0);
-    d->connData.useLocalSocketFile = cg.readEntry("useLocalSocketFile", true);
-    d->connData.localSocketFileName = cg.readEntry("localSocketFile");
-    d->connData.savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
+    d->connData.setPort(cg.readEntry("port", 0));
+    d->connData.setUseLocalSocketFile(cg.readEntry("useLocalSocketFile", true));
+    d->connData.setLocalSocketFileName(cg.readEntry("localSocketFile"));
+    d->connData.setSavePassword(cg.hasKey("password") || cg.hasKey("encryptedPassword"));
     if (formatVersion >= 2) {
         //qDebug() << cg.hasKey("encryptedPassword");
-        d->connData.password = cg.readEntry("encryptedPassword");
-        KexiUtils::simpleDecrypt(&d->connData.password);
+        QString password = cg.readEntry("encryptedPassword");
+        KDbUtils::simpleDecrypt(&password);
+        d->connData.setPassword(password);
     }
-    if (d->connData.password.isEmpty()) {//no "encryptedPassword", for compatibility
+    if (d->connData.password().isEmpty()) {//no "encryptedPassword", for compatibility
         //UNSAFE
-        d->connData.password = cg.readEntry("password");
+        d->connData.setPassword(cg.readEntry("password"));
     }
-    d->connData.userName = cg.readEntry("user");
+    d->connData.setUserName(cg.readEntry("user"));
     QString lastOpenedStr(cg.readEntry("lastOpened"));
     if (!lastOpenedStr.isEmpty()) {
         QDateTime lastOpened(QDateTime::fromString(lastOpenedStr, Qt::ISODate));
@@ -324,6 +327,27 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     }
     /*! @todo add "options=", eg. as string list? */
     return true;
+}
+
+//! @return a simple driver name (as used by Kexi <= 2.x) for KDb's driver ID
+//! or empty string if matching name not found.
+//! Example: "sqlite" name is returned for "org.kde.kdb.sqlite" ID.
+static QString driverIdToKexi2DriverName(const QString &driverId)
+{
+    QString prefix = "org.kde.kdb.";
+    if (!driverId.startsWith(prefix)) {
+        return QString();
+    }
+    QString suffix = driverId.mid(prefix.length());
+    if (suffix == "sqlite"
+        || suffix == "mysql"
+        || suffix == "postgresql"
+        || suffix == "xbase"
+        || suffix == "sybase")
+    {
+        return suffix;
+    }
+    return QString();
 }
 
 bool KexiProjectData::save(const QString& fileName, bool savePassword,
@@ -374,19 +398,19 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
 
     config.group(groupKey).deleteGroup();
     cg = config.group(groupKey);
-    const bool fileBased = !d->connData.fileName().isEmpty();
+    const bool fileBased = KDbDriverManager().driverMetaData(d->connData.driverId())->isFileBased();
     if (thisIsConnectionData) {
         cg.writeEntry("type", "connection");
-        if (!d->connData.caption.isEmpty())
-            cg.writeEntry("caption", d->connData.caption);
-        if (!d->connData.description.isEmpty())
-            cg.writeEntry("comment", d->connData.description);
+        if (!d->connData.caption().isEmpty())
+            cg.writeEntry("caption", d->connData.caption());
+        if (!d->connData.description().isEmpty())
+            cg.writeEntry("comment", d->connData.description());
     } else { //database
         cg.writeEntry("type", "database");
         if (!caption().isEmpty())
             cg.writeEntry("caption", caption());
         if (fileBased) {
-            QString fn(d->connData.fileName());
+            QString fn(d->connData.databaseName());
             if (!QDir::homePath().isEmpty() && fn.startsWith(QDir::homePath())) {
                 // replace prefix if == $HOME
                 fn = fn.mid(QDir::homePath().length());
@@ -403,25 +427,29 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
             cg.writeEntry("comment", description());
     }
 
-    cg.writeEntry("engine", d->connData.driverName.toLower());
+    QString engine = driverIdToKexi2DriverName(d->connData.driverId());
+    if (engine.isEmpty()) {
+        engine = d->connData.driverId();
+    }
+    cg.writeEntry("engine", engine);
     if (!fileBased) {
-        if (!d->connData.hostName.isEmpty())
-            cg.writeEntry("server", d->connData.hostName);
+        if (!d->connData.hostName().isEmpty())
+            cg.writeEntry("server", d->connData.hostName());
 
-        if (d->connData.port != 0)
-            cg.writeEntry("port", int(d->connData.port));
-        cg.writeEntry("useLocalSocketFile", d->connData.useLocalSocketFile);
-        if (!d->connData.localSocketFileName.isEmpty())
-            cg.writeEntry("localSocketFile", d->connData.localSocketFileName);
-        if (!d->connData.userName.isEmpty())
-            cg.writeEntry("user", d->connData.userName);
+        if (d->connData.port() != 0)
+            cg.writeEntry("port", int(d->connData.port()));
+        cg.writeEntry("useLocalSocketFile", d->connData.useLocalSocketFile());
+        if (!d->connData.localSocketFileName().isEmpty())
+            cg.writeEntry("localSocketFile", d->connData.localSocketFileName());
+        if (!d->connData.userName().isEmpty())
+            cg.writeEntry("user", d->connData.userName());
     }
 
-    if (savePassword || d->connData.savePassword) {
+    if (savePassword || d->connData.savePassword()) {
         if (realFormatVersion < 2) {
-            cg.writeEntry("password", d->connData.password);
+            cg.writeEntry("password", d->connData.password());
         } else {
-            QString encryptedPassword = d->connData.password;
+            QString encryptedPassword = d->connData.password();
             KDbUtils::simpleCrypt(&encryptedPassword);
             cg.writeEntry("encryptedPassword", encryptedPassword);
             encryptedPassword.fill(' '); //for security

@@ -304,7 +304,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
             where << "o_id";
             KDbPreparedStatement::Ptr st = d->conn->prepareStatement(
               KDbPreparedStatement::SelectStatement, *blobsTable, where);*/
-//! @todo use PreparedStatement
+//! @todo use KDbPreparedStatement
         KDbQuerySchema schema;
         schema.addField(blobsTable->field("o_data"));
         schema.addField(blobsTable->field("o_name"));
