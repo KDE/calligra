@@ -204,8 +204,9 @@ tristate SybaseMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
     }
     const int numFields = dbnumcols(d->dbProcess);
     data.resize(numFields);
-    for (int i = 0; i < numFields; i++)
-        data[i] = value(i) ;   //ok? utf8?
+    for (int i = 0; i < numFields; i++) {
+        data[i] = value(i);   //ok? utf8?
+    }
     return true;
 }
 
@@ -327,7 +328,7 @@ bool SybaseMigrate::primaryKey(const QString& tableName, const QString& fieldNam
     // indid  -> index Id.
     // id   -> The id of the table on which this index exists
 
-    QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2048 !=0 ) ").arg(drv_escapeIdentifier(tableName))  ;
+    QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2048 !=0 ) ").arg(drv_escapeIdentifier(tableName));
 
     if (!query(sqlStatement)) {
         return false;
@@ -374,7 +375,7 @@ bool SybaseMigrate::uniqueKey(const QString& tableName, const QString& fieldName
     // id   -> The id of the table on which this index exists
 
     QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2 !=0 ) ")
-                           .arg(drv_escapeIdentifier(tableName)) ;
+                           .arg(drv_escapeIdentifier(tableName));
     if (!query(sqlStatement)) {
         return false;
     }
@@ -425,7 +426,7 @@ QString SybaseMigrate::value(int pos) const
     // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
     long int pointerLength = qMax(columnDataLength , (long int)512);
 
-    BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+    BYTE* columnValue = new unsigned char[pointerLength + 1];
 
     // convert to string representation. All values are convertible to string
     dbconvert(d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos), columnDataLength , (SYBCHAR), columnValue, -2);
@@ -465,7 +466,7 @@ QList<KDbIndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QString& 
 
     QList<KDbIndexSchema*> indexList;
     QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1')")
-                           .arg(drv_escapeIdentifier(tableName)) ;
+                           .arg(drv_escapeIdentifier(tableName));
 
     if (!query(sqlStatement)) {
         return QList<KDbIndexSchema*>();

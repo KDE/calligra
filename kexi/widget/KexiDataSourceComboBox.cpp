@@ -194,15 +194,15 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 #ifdef ADD_DEFINEQUERY_ROW
         i++; /*skip 'define query' row*/
 #endif
-        for (; i < d->firstQueryIndex() && name >= itemText(i); i++)
-            ;
+        for (; i < d->firstQueryIndex() && name >= itemText(i); i++) {
+        }
         insertItem(i, d->tableIcon, name);
         completionObject()->addItem(name);
         d->tablesCount++;
     } else if (item.partClass() == "org.kexi-project.query") {
         int i;
-        for (i = d->firstQueryIndex(); i < count() && name >= itemText(i); i++)
-            ;
+        for (i = d->firstQueryIndex(); i < count() && name >= itemText(i); i++) {
+        }
         insertItem(i, d->queryIcon, name);
         completionObject()->addItem(name);
     }
