@@ -41,7 +41,7 @@
 #include <QHeaderView>
 #include <QKeyEvent>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <limits.h>
 

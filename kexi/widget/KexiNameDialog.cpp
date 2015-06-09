@@ -25,7 +25,7 @@
 #include <KDbConnection>
 
 #include <kiconloader.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QGridLayout>

@@ -44,7 +44,7 @@
 #include <KDbUtils>
 #include <KDb>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QLabel>
 #include <QLayout>

@@ -32,7 +32,7 @@
 #include <KDbConnection>
 #include <KDbParser>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QSplitter>
 #include <QTimer>

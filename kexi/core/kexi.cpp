@@ -29,7 +29,7 @@
 #include <KDbDriverManager>
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KIconTheme>
 #include <KAboutData>
 

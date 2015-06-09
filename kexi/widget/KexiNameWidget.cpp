@@ -23,7 +23,7 @@
 #include <KDbValidator>
 #include <KDb>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KLocalizedString>
 
 #include <QLabel>

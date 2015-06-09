@@ -37,6 +37,7 @@
 #include <krun.h>
 #include <kactionmenu.h>
 #include <kfiledialog.h>
+#include <KMessageBox>
 
 #include <QLayout>
 #include <QPainter>

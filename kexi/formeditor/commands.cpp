@@ -25,7 +25,7 @@
 #include <QStackedWidget>
 #include <QDebug>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kacceleratormanager.h>
 #include <KLocalizedString>
 

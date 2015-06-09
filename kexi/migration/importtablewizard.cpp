@@ -46,6 +46,8 @@
 #include <KDbUtils>
 #include <KDbDriverManager>
 
+#include <KMessageBox>
+
 #include <QSet>
 #include <QVBoxLayout>
 #include <QListWidget>
