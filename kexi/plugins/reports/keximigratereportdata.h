@@ -24,7 +24,7 @@
 
 #include <KDbUtils>
 
-#include <KoReportData.h>
+#include <KoReportData>
 
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>

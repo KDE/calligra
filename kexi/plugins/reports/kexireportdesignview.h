@@ -21,10 +21,12 @@
 #define KEXIREPORTDESIGNVIEW_H
 
 #include <core/KexiView.h>
-#include <KPropertySet>
 #include <kexireportpart.h>
-#include <koreport/wrtembed/KoReportDesigner.h>
-#include <KoReportData.h>
+
+#include <KPropertySet>
+
+#include <KoReportDesigner>
+#include <KoReportData>
 
 class QScrollArea;
 class KexiSourceSelector;

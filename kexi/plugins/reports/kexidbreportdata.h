@@ -25,7 +25,7 @@
 #include <KDbCursor>
 #include <KDbUtils>
 
-#include <KoReportData.h>
+#include <KoReportData>
 
 /**
 
