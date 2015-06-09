@@ -13,6 +13,7 @@
   <name xml:lang="es">Sheets</name>
   <name xml:lang="fi">Sheets</name>
   <name xml:lang="fr">Sheets</name>
+  <name xml:lang="gl">Sheets</name>
   <name xml:lang="ia">Sheets</name>
   <name xml:lang="it">Sheets</name>
   <name xml:lang="ja">Sheets</name>
@@ -33,6 +34,7 @@
   <summary xml:lang="es">Hoja de cálculo</summary>
   <summary xml:lang="fi">Taulukkolaskenta</summary>
   <summary xml:lang="fr">Tableur</summary>
+  <summary xml:lang="gl">Follas de cálculo</summary>
   <summary xml:lang="ia">Folio de calculo electronic</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
   <summary xml:lang="ja">スプレッドシート</summary>
@@ -75,6 +77,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>

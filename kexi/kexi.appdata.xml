@@ -18,6 +18,7 @@
   <name xml:lang="ia">Kexi</name>
   <name xml:lang="it">Kexi</name>
   <name xml:lang="ja">Kexi</name>
+  <name xml:lang="nb">Kexi</name>
   <name xml:lang="nl">Kexi</name>
   <name xml:lang="pl">Kexi</name>
   <name xml:lang="pt">Kexi</name>
@@ -39,6 +40,7 @@
   <summary xml:lang="ia">Creator de base de datos</summary>
   <summary xml:lang="it">Creazione di basi di dati</summary>
   <summary xml:lang="ja">データベース作成</summary>
+  <summary xml:lang="nb">Databaseoppretting</summary>
   <summary xml:lang="nl">Database aanmaken</summary>
   <summary xml:lang="pl">Tworzenie baz danych</summary>
   <summary xml:lang="pt">Criador de Bases de Dados</summary>
@@ -61,6 +63,7 @@
     <p xml:lang="fi">Kexillä luodaan tietokantoja visuaalisesti. Se on osa Calligra-ohjelmistoa. Sen avulla voi suunnitella tietokantasovelluksia, lisätä ja muokata tietoja, suorittaa kyselyjä ja käsitellä tietoja. Voit luoda lomakkeita mukauttaaksesi tietojesi käyttöliittymää. Kaikki tietokantaoliot – taulukot, kyselyt, lomakkeet ja raportit – tallennetaan tietokantaan, joten tiedon jako ja suunnittelu on helppoa.</p>
     <p xml:lang="fr">Kexi est un créateur de base de données visuel, faisant partie de la suite Calligra. Il peut être utilisé pour concevoir des applications de base de données, insérer et éditer des données, effectuer des requêtes, et traiter des données. Des formulaires peuvent être créés pour fournir une interface personnalisée pour vos données. Tous les objets de bases de données (tables, requêtes, formulaires, rapports) sont stockés dans la base de données, rendant facile le partage de données et de design.</p>
     <p xml:lang="it">Kexi è uno strumento visuale per la creaazione di basi di dati, parte di Calligra Suite. Può essere utilizzato per progettare applicazioni che usano basi di dati, inserire e modificare dati, eseguire query ed elaborare dati. Puoi creare moduli per fornire un'interfaccia personalizzata ai tuoi dati. Tutti gli oggetti di una base di dati - tabelle, query, moduli, report - sono memorizzati nella base di dati stessa, semplificando la condivisione dei dati e la progettazione.</p>
+    <p xml:lang="nb">Kexi er en visuell database-oppretter, en del av Calligra-suiten. Det kan brukes til å utforme databaseprogrammer, sette inn og redigere data, utføre spørringer og behandle data. Et egendefinert grensesnitt mot dine data kan lages ved hjelp av skjemaer. Alle database-objekter lagres i databasen – tabeller, spørringer, skjemaer, rapporter – det  gjør det enkelt å dele data og utforming.</p>
     <p xml:lang="nl">Kexi is een maakprogramma van een database op een visuele manier, onderdeel van de Calligra Suite. Het kan gebruikt worden voor het ontwerpen van toepassingen met een database, gegevens invoeren en bewerken, zoekopdrachten uitvoeren en gegevens verwerken. Formulieren kunnen gemaakt worden om een aangepast interface naar uw gegevens te bieden. Alle database-objecten - tabellen, zoekopdrachten, formulieren, rapporten - worden opgeslagen in de database, waarmee het gemakkelijk wordt gegevens en ontwerp te delen.</p>
     <p xml:lang="pl">Kexi, część pakietu Calligra, to aplikacja do wizualnego tworzenia bazdanych. Można jej używać do opracowywania programów bazodanowych,wstawiania, edycji i przetwarzania danych, a także do wykonywania zapytań.Dostęp do danych można zapewniać przy pomocy formularzy. Wszystkie obiektybazy danych, tabele, zapytania, formularze i raporty, są przechowywane wbazie danych, co czyni je łatwymi do współdzielenia i opracowywania.</p>
     <p xml:lang="pt">O Kexi é um criador de bases de dados visuais, que faz parte do pacote Calligra. Pode ser usado para desenhar aplicações de bases de dados, inserir e editar dados, executar pesquisas e processar os dados. Poderá criar formulários para oferecer uma interface personalizada para os seus dados. Todos os objectos da base de dados - tabelas, pesquisas, formulários, relatórios - são guardados na base de dados, tornando simples a partilha e o desenho dos dados.</p>
@@ -78,9 +81,11 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
+    <p xml:lang="nb">Funksjoner:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
@@ -99,6 +104,7 @@
       <li xml:lang="fr">Conception complètement visuelle pour les tables, requêtes, formulaires et rapports</li>
       <li xml:lang="it">Progettazione completamente visuale di tabelle, query e report</li>
       <li xml:lang="ja">テーブル、クエリー、フォームおよびレポートをすべて視覚的にでデザインできます</li>
+      <li xml:lang="nb">Fullstendig visuell utforming for tabeller, spøøringer, skjemaer og rapporter</li>
       <li xml:lang="nl">Volledige visueel ontwerpen van tabellen, zoekopdrachten, formulieren en rapporten</li>
       <li xml:lang="pl">W pełni wizualna możliwość tworzenia tabel, zapytań, formularzy i raportów</li>
       <li xml:lang="pt">Desenhadores visuais completos para tabelas, pesquisas, formulários e relatórios</li>
@@ -117,6 +123,7 @@
       <li xml:lang="fr">Exécution de requêtes, prise en charge des requêtes paramétrées</li>
       <li xml:lang="it">Esecuzione di query, supporto per le query parametriche</li>
       <li xml:lang="ja">クエリーの実行、パラメータ化クエリーのサポート</li>
+      <li xml:lang="nb">Kjøre spørriner, støtte for parametriserte spørringer</li>
       <li xml:lang="nl">Zoekopdrachten uitvoeren, ondersteuning voor zoekopdrachten met parameters</li>
       <li xml:lang="pl">Wykonywanie zapytań, obsługa dla zapytań parametrycznych</li>
       <li xml:lang="pt">Execução de pesquisas, suporte para pesquisas parametrizadas</li>
@@ -135,6 +142,7 @@
       <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL et MS SQL Server</li>
       <li xml:lang="it">Supporta le basi di dati SQLite, MySQL, PostgreSQL e MS SQL Server</li>
       <li xml:lang="ja">SQLite, MySQL, PostgreSQL そして MS SQL Server データベースをサポートします</li>
+      <li xml:lang="nb">Støtter databasene SQLite, MySQL, PostgreSQL og MS SQL Server</li>
       <li xml:lang="nl">Ondersteunt databases SQLite, MySQL, PostgreSQL en MS SQL Server</li>
       <li xml:lang="pl">Obsługa SQLite, MySQL, PostgreSQL oraz baz danych MS SQL Server</li>
       <li xml:lang="pt">Suporta bases de dados SQLite, MySQL, PostgreSQL e MS SQL Server</li>
@@ -152,6 +160,7 @@
       <li xml:lang="fr">Le seul outil graphique multi plate-formes pouvant importer les bases de données de MS Access</li>
       <li xml:lang="it">Il solo strumento grafico multipiattaforma in grado di importare basi di dati MS Access</li>
       <li xml:lang="ja">インポートするだけで MS Access データベースにマルチプラットホームのグラフィカルツールを提供</li>
+      <li xml:lang="nb">Det eneste grafiske multiplattform-verktøy for å importere data fra MS Access-databaser</li>
       <li xml:lang="nl">Het enige multiplatform grafische hulpmiddel die gegevens importeert uit MS Access databases</li>
       <li xml:lang="pl">Jedyne graficzne narzędzie wieloplatformowe importujące dane z baz danych MS Access</li>
       <li xml:lang="pt">A única ferramenta gráfica multi-plataforma que consegue importar bases de dados MS Access</li>
@@ -169,6 +178,7 @@
       <li xml:lang="fr">Prend en charge la conception de requêtes dans une vue SQL dédiée</li>
       <li xml:lang="it">Supporta la progettazione di query in una vista SQL dedicata</li>
       <li xml:lang="ja">専用の SQL ビューでクエリのデザインをサポート</li>
+      <li xml:lang="nb">Støtter utforming av spørringer i en egen SQL-visning</li>
       <li xml:lang="nl">Ondersteunt ontwerp van zoekopdrachten in een gerichte SQL-weergave</li>
       <li xml:lang="pl">Obsługuje zapytania w widoku przeznaczonym dla SQL</li>
       <li xml:lang="pt">Suporta o desenho de pesquisas numa área de SQL dedicada</li>
@@ -186,6 +196,7 @@
       <li xml:lang="fr">Conception et affichage de données relationnelles à l'aide de listes déroulantes (colonnes de consultation)</li>
       <li xml:lang="it">Progettazione e visualizzazione dei dati relazionali utilizzando caselle combinate (colonne di ricerca)</li>
       <li xml:lang="ja">コンボボックスを使用した関係データのデザインと表示(参照列)</li>
+      <li xml:lang="nb">Utforming og visning av relasjonsdata vhja kombo-bokser (oppslagskolonner)</li>
       <li xml:lang="nl">Ontwerpen en tonen van relationele gegevens met gebruik van keuzelijsten (kolommen voor opzoeken)</li>
       <li xml:lang="pl">Opracowywanie i wyświetlanie danych relacyjnych przy użyciu pól rozwijanych (kolumn wyszukiwania)</li>
       <li xml:lang="pt">Desenho e apresentação de dados relacionais com listas (colunas de pesquisa)</li>
@@ -204,6 +215,7 @@
       <li xml:lang="fr">Saisie directe de données ou import utilisant le format CSV</li>
       <li xml:lang="it">Inserimento diretto dei dati o importazione utilizzando il formato CSV</li>
       <li xml:lang="ja">CSV を使用したダイレクトデータの入力もしくはインポート</li>
+      <li xml:lang="nb">Direkte datainnskriving eller import med CSV-format</li>
       <li xml:lang="nl">Directe invoer van gegevens of importeren met het CSV-format</li>
       <li xml:lang="pl">Bezpośrednie wprowadzanie danych lub importowanie ich z postaci CSV</li>
       <li xml:lang="pt">Introdução ou importação directa de dados com o formato CSV</li>
@@ -221,6 +233,7 @@
       <li xml:lang="fr">Mode utilisateur verrouillé, vous permettant de désactiver toutes les commandes liées à la modification de la conception de votre projet</li>
       <li xml:lang="it">Modalità utente bloccata, che ti consente di disattivare tutti i comandi in grado di modificare la struttura del tuo progetto.</li>
       <li xml:lang="ja">プロジェクトデザインの編集スイッチをオフにする事でユーザモードへのロックダウンが可能</li>
+      <li xml:lang="nb">Låst brukermodus, slik at du kan slå av alle kommandoer som gjelder endring av prosjektets utforming</li>
       <li xml:lang="nl">Vergrendelde gebruikersodus, waarmee u alle commando's uitschakelt die zijn gerelateerd aan bewerken en ontwerpen van uw project</li>
       <li xml:lang="pl">Zamknięty tryb użytkownika, umożliwiający wyłączenie wszystkich poleceń związanych z edytowaniem twojego projektu</li>
       <li xml:lang="pt">Modo reduzido de utilizador, permitindo-lhe desligar todos os comandos relacionados com a edição do desenho do seu projecto</li>
@@ -238,6 +251,7 @@
       <li xml:lang="fr">Pilotage par scripts utilisant les les langages JavaScript, Python ou Ruby (expérimental)</li>
       <li xml:lang="it">Creazione script utilizzando i linguaggi di programmazione JavaScript, Python o Ruby (sperimentale)</li>
       <li xml:lang="ja">JavaScript, Python や Ruby を使用してのスクリプティング(実験的)</li>
+      <li xml:lang="nb">Skripting ved bruk av JavaScript, Python eller Ruby programmeringsspråk (eksperimentelt)</li>
       <li xml:lang="nl">Scripting met de programmeertalen JavaScript, Python of Ruby (experimenteel)</li>
       <li xml:lang="pl">Skrypty wykorzystujące języki programowania JavaScript, Python lub Ruby (eksperymentalnie)</li>
       <li xml:lang="pt">Programável através das linguagens JavaScript, Python ou Ruby (experimental)</li>
@@ -265,6 +279,7 @@
       <caption xml:lang="fr">Affichage de tables stockant des images</caption>
       <caption xml:lang="it">Vista tabella per archiviare immagini</caption>
       <caption xml:lang="ja">イメージを格納するテーブルビュー</caption>
+      <caption xml:lang="nb">Tabellvisning som lagrer bilder</caption>
       <caption xml:lang="nl">Tabelweergave bij opslaan van afbeeldingen</caption>
       <caption xml:lang="pl">Przechowywanie obrazów w widoku tabeli</caption>
       <caption xml:lang="pt">A área da tabela permite guardar as imagens</caption>
@@ -286,6 +301,7 @@
       <caption xml:lang="fr">Concepteur de formulaires</caption>
       <caption xml:lang="it">Progettazione moduli</caption>
       <caption xml:lang="ja">フォームデザイナー</caption>
+      <caption xml:lang="nb">Skjemautformer</caption>
       <caption xml:lang="nl">Ontwerper van formulieren</caption>
       <caption xml:lang="pl">Opracowywanie formularzy</caption>
       <caption xml:lang="pt">Desenhador de Formulários</caption>
