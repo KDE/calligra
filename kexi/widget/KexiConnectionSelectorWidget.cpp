@@ -32,6 +32,7 @@
 #include <KDbUtils>
 
 #include <KAboutData>
+#include <KMessageBox>
 #include <kurlcombobox.h>
 
 #include <QDebug>

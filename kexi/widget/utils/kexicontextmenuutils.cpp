@@ -24,7 +24,7 @@
 
 #include <kfiledialog.h>
 #include <kimageio.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kactioncollection.h>
 #include <KLocalizedString>
 

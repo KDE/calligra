@@ -57,7 +57,7 @@
 #include <KDbTristate>
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kcharsets.h>
 #include <knuminput.h>
 #include <KLocalizedString>

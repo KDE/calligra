@@ -39,7 +39,7 @@
 #include <KDb>
 #include <KDbUtils>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kactioncollection.h>
 #include <kfontdialog.h>
 #include <ktextedit.h>
