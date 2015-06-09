@@ -58,14 +58,17 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
     d->groupName = n;
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
-    : d(new Private(&i, 0, p))
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiProjectModelItem *p)
+    : d(new Private(i, 0, p))
 {
+    Q_ASSERT(i);
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
-    : d(new Private(&i, &item, p))
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *item, KexiProjectModelItem *p)
+    : d(new Private(i, item, p))
 {
+    Q_ASSERT(i);
+    Q_ASSERT(item);
     d->icon = SmallIcon(i.itemIconName(), KIconLoader::SizeSmall);
 }
 

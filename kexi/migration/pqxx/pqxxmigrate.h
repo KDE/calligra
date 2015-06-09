@@ -65,7 +65,7 @@ protected:
     \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KDbRecordData& data, bool &firstRecord);
+                                            KDbRecordData *data, bool *firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
                                KDbConnection *destConn, KDbTableSchema* dstTable);

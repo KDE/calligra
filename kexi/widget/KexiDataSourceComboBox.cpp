@@ -108,8 +108,8 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
         return;
 
     //needed for updating contents of the combo box
-    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)),
-            this, SLOT(slotNewItemStored(KexiPart::Item&)));
+    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item*)),
+            this, SLOT(slotNewItemStored(KexiPart::Item*)));
     connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
             this, SLOT(slotItemRemoved(KexiPart::Item)));
     connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),

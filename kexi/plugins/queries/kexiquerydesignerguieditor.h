@@ -61,12 +61,12 @@ public Q_SLOTS:
 protected:
     void initTableColumns(); //!< Called just once.
     void initTableRows(); //!< Called to have all rows empty.
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
     virtual tristate storeData(bool dontAsk = false);
 
     /*! Updates data in columns depending on tables that are currently inserted.

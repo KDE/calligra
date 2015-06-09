@@ -52,7 +52,7 @@ public:
     }
 
     //! Helper, used in Part::openInstance()
-    tristate askForOpeningInTextMode(KexiWindow *window, KexiPart::Item &item,
+    tristate askForOpeningInTextMode(KexiWindow *window, KexiPart::Item *item,
                                      Kexi::ViewModes supportedViewModes, Kexi::ViewMode viewMode) {
         if (viewMode != Kexi::TextViewMode
                 && supportedViewModes & Kexi::TextViewMode
@@ -65,7 +65,7 @@ public:
                 singleStatusString.prepend(QString("\n\n") + xi18n("Details:") + " ");
             if (KMessageBox::No == KMessageBox::questionYesNo(0,
                     ((viewMode == Kexi::DesignViewMode)
-                     ? xi18n("Object \"%1\" could not be opened in Design View.", item.name())
+                     ? xi18n("Object \"%1\" could not be opened in Design View.", item->name())
                      : xi18n("Object could not be opened in Data View.")) + "\n"
                     + xi18n("Do you want to open it in Text View?") + singleStatusString, 0,
                     KStandardGuiItem::open(), KStandardGuiItem::cancel())) {
@@ -214,9 +214,10 @@ void Part::setActionAvailable(const char *action_name, bool avail)
     KexiMainWindowIface::global()->setActionAvailable(action_name, avail);
 }
 
-KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::ViewMode viewMode,
+KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::ViewMode viewMode,
                                QMap<QString, QVariant>* staticObjectArgs)
 {
+    Q_ASSERT(item);
     //now it's the time for creating instance actions
     if (!d->instanceActionsInitialized) {
         initInstanceActions();
@@ -362,12 +363,13 @@ void Part::initInstanceActions()
 {
 }
 
-tristate Part::remove(KexiPart::Item &item)
+tristate Part::remove(KexiPart::Item *item)
 {
+    Q_ASSERT(item);
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn)
         return false;
-    return conn->removeObject(item.identifier());
+    return conn->removeObject(item->identifier());
 }
 
 KexiWindowData* Part::createWindowData(KexiWindow* window)
@@ -390,7 +392,7 @@ QString Part::whatsThis() const
     return d->whatsThis;
 }
 
-tristate Part::rename(KexiPart::Item &item, const QString& newName)
+tristate Part::rename(KexiPart::Item *item, const QString& newName)
 {
     Q_UNUSED(item);
     Q_UNUSED(newName);

@@ -44,10 +44,11 @@ bool KexiFormEventAction::ActionData::isEmpty() const
 }
 
 KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
-    QString& actionType, QString& actionArg, bool& ok) const
+    QString& actionType, QString& actionArg, bool *ok) const
 {
+    Q_ASSERT(ok);
     const int idx = string.indexOf(':');
-    ok = false;
+    *ok = false;
     if (idx == -1)
         return 0;
     const QString _actionType = string.left(idx);
@@ -119,11 +120,11 @@ void KexiFormEventAction::slotTrigger()
         if (part->info()->isExecuteSupported())
             part->execute(item, parent());
         else
-            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, &actionCancelled);
     } else {
 //! @todo react on failure...
         if (d->actionOption == "open")
-            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, &actionCancelled);
         else if (d->actionOption == "execute")
             part->execute(item, parent());
         else if (d->actionOption == "print") {
@@ -145,15 +146,15 @@ void KexiFormEventAction::slotTrigger()
             if (part->info()->isDataExportSupported())
                 KexiMainWindowIface::global()->executeCustomActionForObject(item, d->actionOption);
         } else if (d->actionOption == "new")
-            KexiMainWindowIface::global()->newObject(part->info(), actionCancelled);
+            KexiMainWindowIface::global()->newObject(part->info(), &actionCancelled);
         else if (d->actionOption == "design")
-            KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, &actionCancelled);
         else if (d->actionOption == "editText")
-            KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, &actionCancelled);
         else if (d->actionOption == "close") {
             tristate res = KexiMainWindowIface::global()->closeObject(item);
             if (~res)
-                actionCancelled = true;
+                *actionCancelled = true;
         }
     }
 }

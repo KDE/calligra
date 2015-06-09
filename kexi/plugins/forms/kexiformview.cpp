@@ -467,8 +467,9 @@ KexiFormView::slotPropertySetSwitched()
 }
 
 tristate
-KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
+    Q_ASSERT(dontStore);
     if (mode != viewMode()) {
         if (viewMode() == Kexi::DataViewMode) {
             if (!d->scrollView->acceptRowEdit())
@@ -483,7 +484,7 @@ KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
     }
 
     // we don't store on db, but in our TempData
-    dontStore = true;
+    *dontStore = true;
     if (isDirty() && (mode == Kexi::DataViewMode) && form()->objectTree()) {
         KexiFormPartTempData* temp = tempData();
         if (!KFormDesigner::FormIO::saveFormToString(form(), temp->tempForm))
@@ -738,12 +739,13 @@ void KexiFormView::setFormModified()
 
 KDbObject* KexiFormView::storeNewData(const KDbObject& sdata,
                                                KexiView::StoreNewDataOptions options,
-                                               bool &cancel)
+                                               bool *cancel)
 {
+    Q_ASSERT(cancel);
     KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
     //qDebug() << "new id:" << s->id();
 
-    if (!s || cancel) {
+    if (!s || *cancel) {
         delete s;
         return 0;
     }

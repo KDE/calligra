@@ -199,16 +199,18 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
 /*! Fetches single record from result obtained
  by running \a sqlStatement. */
 tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KDbRecordData& data, bool &firstRecord)
+        KDbRecordData* data, bool *firstRecord)
 {
-    if (firstRecord || !m_mysqlres) {
+    Q_ASSERT(data);
+    Q_ASSERT(firstRecord);
+    if (*firstRecord || !m_mysqlres) {
         if (m_mysqlres) {
             mysql_free_result(m_mysqlres);
             m_mysqlres = 0;
         }
         if (!d->executeSQL(sqlStatement) || !(m_mysqlres = mysql_use_result(d->mysql)))
             return false;
-        firstRecord = false;
+        *firstRecord = false;
     }
 
     MYSQL_ROW row = mysql_fetch_row(m_mysqlres);
@@ -227,9 +229,9 @@ tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
         m_mysqlres = 0;
         return false;
     }
-    data.resize(numFields);
+    data->resize(numFields);
     for (int i = 0; i < numFields; i++)
-        data[i] = QString::fromUtf8(row[i], lengths[i]);  //ok? utf8?
+        (*data)[i] = QString::fromUtf8(row[i], lengths[i]);  //ok? utf8?
     return true;
 }
 
@@ -272,8 +274,9 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
     return true;
 }
 
-bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
+bool MySQLMigrate::drv_getTableSize(const QString& table, quint64 *size)
 {
+    Q_ASSERT(size);
     if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table) + '`'))
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
@@ -284,7 +287,7 @@ bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
     MYSQL_ROW row;
     while ((row = mysql_fetch_row(res))) {
         //! @todo check result valid
-        size = QString(row[0]).toULongLong();
+        *size = QString(row[0]).toULongLong();
     }
     mysql_free_result(res);
     return true;

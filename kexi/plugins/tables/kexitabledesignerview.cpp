@@ -555,7 +555,7 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
     updateActions();
 }
 
-tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     if (!d->view->acceptRowEdit())
         return false;
@@ -1308,8 +1308,9 @@ tristate KexiTableDesignerView::buildAlterTableActions(
 
 KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& sdata,
                                                         KexiView::StoreNewDataOptions options,
-                                                        bool &cancel)
+                                                        bool *cancel)
 {
+    Q_ASSERT(cancel);
     if (tempData()->table || window()->schemaData()) //must not be
         return 0;
 
@@ -1320,7 +1321,7 @@ KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& sdata,
     tempData()->table->setDescription(sdata.description());
 
     tristate res = buildSchema(*tempData()->table);
-    cancel = ~res;
+    *cancel = ~res;
 
     //FINALLY: create table:
     if (res == true) {
@@ -1348,8 +1349,9 @@ KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& sdata,
 
 KDbObject* KexiTableDesignerView::copyData(const KDbObject& sdata,
                                                      KexiView::StoreNewDataOptions options,
-                                                     bool &cancel)
+                                                     bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options);
     Q_UNUSED(cancel);
 

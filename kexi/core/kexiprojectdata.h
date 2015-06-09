@@ -97,15 +97,13 @@ public:
 
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
-    QString name() const;
-
     /*! \return true if there is the User Mode set in internal
      project settings. */
     bool userMode() const;
 
     KDbConnectionData* connectionData();
 
-    const KDbConnectionData* constConnectionData() const;
+    KDbConnectionData constConnectionData() const;
 
     /*! \return database name.
      In fact, this is the same as KDbObject::name() */
@@ -153,6 +151,6 @@ private:
     KexiProjectDataPrivate * const d;
 };
 
-KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d);
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& data);
 
 #endif
