@@ -351,8 +351,8 @@ void KexiRelationsView::slotTableHidden(KDbTableSchema &table)
 {
     const QString &t = table.name().toLower();
     int i;
-    for (i = 0; i < d->tableCombo->count() && t > d->tableCombo->itemText(i).toLower(); i++)
-        ;
+    for (i = 0; i < d->tableCombo->count() && t > d->tableCombo->itemText(i).toLower(); i++) {
+    }
     d->tableCombo->insertItem(i, table.name());
     if (!d->tableCombo->isEnabled()) {
         d->tableCombo->setCurrentIndex(0);
@@ -422,8 +422,8 @@ KexiRelationsView::objectCreated(const QString &mime, const QString& name)
         const int count = d->tableCombo->count();
         QString strName(name);
         int i = 0;
-        for (; i < count && d->tableCombo->itemText(i) <= strName; i++)
-            ;
+        for (; i < count && d->tableCombo->itemText(i) <= strName; i++) {
+        }
         d->tableCombo->insertItem(i, name);
     }
 }
@@ -459,8 +459,8 @@ KexiRelationsView::objectRenamed(const QString &mime, const QString& name,
             if (d->tableCombo->itemText(i) == name) {
                 d->tableCombo->removeItem(i);
                 int j = 0;
-                for (; j < count && d->tableCombo->itemText(j) <= newName; j++)
-                    ;
+                for (; j < count && d->tableCombo->itemText(j) <= newName; j++) {
+                }
                 d->tableCombo->insertItem(j, newName);
                 break;
             }
