@@ -80,7 +80,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     //! Emitted when actions availability should be performed. Just connect this signal
     //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
-    void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void updateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly);
 
     /*! Emitted before "insertFromFile" action was requested. */
     void insertFromFileRequested(const QUrl &url);
@@ -88,7 +88,7 @@ Q_SIGNALS:
     /*! Emitted before "saveAs" action was requested.
      You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
      If \a dataIsEmpty is false, saving will be cancelled. */
-    void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    void aboutToSaveAsRequested(QString *origFilename, QString *fileExtension, bool *dataIsEmpty);
 
     //! Emitted when "saveAs" action was requested
     void saveAsRequested(const QString& fileName);

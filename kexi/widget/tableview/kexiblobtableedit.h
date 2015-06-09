@@ -75,10 +75,10 @@ public:
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly);
 
     void handleInsertFromFileAction(const QUrl &url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    void handleAboutToSaveAsAction(QString *origFilename, QString *fileExtension, bool *dataIsEmpty);
     void handleSaveAsAction(const QString& fileName);
     void handleCutAction();
     void handleCopyAction();

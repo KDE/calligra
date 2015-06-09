@@ -806,15 +806,15 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     // from ktabwidget.cpp
     //! @todo QTabWidget::setTabBar() should be added with this code
-    connect(tabBar(), SIGNAL(contextMenu( int, const QPoint & )), SLOT(contextMenu( int, const QPoint & )));
-    connect(tabBar(), SIGNAL(tabDoubleClicked( int )), SLOT(mouseDoubleClick( int )));
+    connect(tabBar(), SIGNAL(contextMenu(int,QPoint)), SLOT(contextMenu(int,QPoint&)));
+    connect(tabBar(), SIGNAL(tabDoubleClicked(int)), SLOT(mouseDoubleClick(int)));
     connect(tabBar(), SIGNAL(newTabRequest()), this, SIGNAL(mouseDoubleClick())); // #185487
-    connect(tabBar(), SIGNAL(mouseMiddleClick( int )), SLOT(mouseMiddleClick( int )));
+    connect(tabBar(), SIGNAL(mouseMiddleClick(int)), SLOT(mouseMiddleClick(int)));
     connect(tabBar(), SIGNAL(initiateDrag( int )), SLOT(initiateDrag( int )));
-    connect(tabBar(), SIGNAL(testCanDecode(const QDragMoveEvent *, bool & )), SIGNAL(testCanDecode(const QDragMoveEvent *, bool & )));
-    connect(tabBar(), SIGNAL(receivedDropEvent( int, QDropEvent * )), SLOT(receivedDropEvent( int, QDropEvent * )));
-    connect(tabBar(), SIGNAL(moveTab( int, int )), SLOT(moveTab( int, int )));
-    connect(tabBar(), SIGNAL(tabCloseRequested( int )), SLOT(closeRequest( int )));
+    connect(tabBar(), SIGNAL(testCanDecode(QDragMoveEvent*,bool*)), SIGNAL(testCanDecode(QDragMoveEvent*,bool*)));
+    connect(tabBar(), SIGNAL(receivedDropEvent(int,QDropEvent*)), SLOT(receivedDropEvent(int,QDropEvent*)));
+    connect(tabBar(), SIGNAL(moveTab(int,int)), SLOT(moveTab(int,int)));
+    connect(tabBar(), SIGNAL(tabCloseRequested(int)), SLOT(closeRequest(int)));
 
     setMouseTracking(true); // for mouseMoveEvent()
     setWhatsThis(xi18n("Task-oriented toolbar. Groups commands using tabs."));

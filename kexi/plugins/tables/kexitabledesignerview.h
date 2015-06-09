@@ -175,7 +175,7 @@ protected:
      \return newly created property set. */
     KPropertySet* createPropertySet(int row, const KDbField& field, bool newOne = false);
 
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
@@ -188,12 +188,12 @@ protected:
     */
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool cancel);
 
     /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
     virtual KDbObject* copyData(const KDbObject& sdata,
                                           KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+                                          bool *cancel);
 
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.

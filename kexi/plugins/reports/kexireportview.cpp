@@ -371,7 +371,7 @@ void KexiReportView::slotExportAsWebPage()
     }
 }
 
-tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);

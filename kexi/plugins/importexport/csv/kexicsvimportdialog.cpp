@@ -1801,7 +1801,7 @@ void KexiCSVImportDialog::accept()
             KexiMainWindowIface::global()->closeObject(m_partItemForSavedTable);
         }
         KexiMainWindowIface::global()->openObject(m_partItemForSavedTable,
-                                                  Kexi::DataViewMode, openingCancelled);
+                                                  Kexi::DataViewMode, &openingCancelled);
         KAssistantDialog::accept();
     }
     else {

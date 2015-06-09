@@ -92,12 +92,12 @@ public:
     bool setItemCaption(KexiPart::Item *item, const QString& newCaption);
 
 public Q_SLOTS:
-    void slotAddItem(KexiPart::Item& item);
+    void slotAddItem(KexiPart::Item *item);
     void slotRemoveItem(const KexiPart::Item &item);
 
 Q_SIGNALS:
-    void renameItem(KexiPart::Item *item, const QString& newName, bool &succes);
-    void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool &succes);
+    void renameItem(KexiPart::Item *item, const QString& newName, bool *succes);
+    void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool *succes);
     void highlightSearchedItem(const QModelIndex &index);
     void activateSearchedItem(const QModelIndex &index);
 

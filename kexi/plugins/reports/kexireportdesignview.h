@@ -40,7 +40,7 @@ public:
 
     ~KexiReportDesignView();
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     void triggerAction(const QString &);
 
@@ -70,7 +70,7 @@ protected:
     virtual tristate storeData(bool dontAsk = false);
     virtual KDbObject* storeNewData(const KDbObject& sdata,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
 
 private Q_SLOTS:
     void slotDesignerPropertySetChanged();

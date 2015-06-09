@@ -199,12 +199,13 @@ public Q_SLOTS:
      \a errorMessage, if not 0, points to a string that can be set to error message
      if one encountered. */
     virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-                                   bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
+                                   bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
                                    QString* errorMessage = 0);
 
     //! For convenience
     virtual KexiWindow* openObject(const QString& partClass, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0);
+                                   Kexi::ViewMode viewMode, bool *openingCancelled,
+                                   QMap<QString, QVariant>* staticObjectArgs = 0);
 
     /*! Closes the object for \a item.
      \return true on success (closing can be dealyed though), false on failure and cancelled
@@ -320,7 +321,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
-    void acceptProjectClosingRequested(bool& cancel);
+    void acceptProjectClosingRequested(bool *cancel);
 
     //! Emitted before closing the project (and destroying all it's data members).
     //! You can do you cleanup of your structures here.
@@ -382,7 +383,7 @@ protected:
      \a cancelled will be set to true (false otherwise).
      \a shortcutFileName, if not 0, will be set to a shortcut filename
      (in case when server database project was selected). */
-    KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
+    KexiProjectData* createBlankProjectData(bool *cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
 
     /*! Reimplemented from KexiSharedActionHost:
      accepts only KexiDockBase and KexiWindow subclasses.  */
@@ -453,7 +454,7 @@ protected Q_SLOTS:
      in view mode other than \a viewMode, the mode is not changed.
      \sa KexiProjectNavigator::openOrActivateItem() */
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item,
-                                        Kexi::ViewMode viewMode, bool &openingCancelled);
+                                        Kexi::ViewMode viewMode, bool openingCancelled);
 
     //! For convenience
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode);
@@ -461,19 +462,19 @@ protected Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
-    virtual bool newObject(KexiPart::Info *info, bool& openingCancelled);
+    virtual bool newObject(KexiPart::Info *info, bool *openingCancelled);
 
     //! For convenience
     bool newObject(KexiPart::Info *info) {
         bool openingCancelled;
-        return newObject(info, openingCancelled);
+        return newObject(info, &openingCancelled);
     }
 
     //! For convenience
     KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
                            QMap<QString, QVariant>* staticObjectArgs = 0) {
         bool openingCancelled;
-        return openObject(item, viewMode, openingCancelled, staticObjectArgs);
+        return openObject(item, viewMode, &openingCancelled, staticObjectArgs);
     }
 
     /*! Removes object pointed by \a item from current project.
@@ -484,12 +485,12 @@ protected Q_SLOTS:
     /*! Renames object pointed by \a item to a new name \a _newName.
      Sets \a success to false on failure. Used as a slot connected
      to KexiProjectNavigator::renameItem() signal. */
-    void renameObject(KexiPart::Item *item, const QString& _newName, bool &succes);
+    void renameObject(KexiPart::Item *item, const QString& _newName, bool *succes);
 
     /*! Changes caption of object pointed by \a item to \a _newCaption.
      Sets \a success to false on failure. Used as a slot connected
      to KexiProjectNavigator::changeItemCaption() signal. */
-    void setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &succes);
+    void setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool *succes);
 
     /*! Reaction for object rename (signalled by KexiProject).
      If this item has opened window, it's caption is updated,

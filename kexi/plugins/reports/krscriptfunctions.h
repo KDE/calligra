@@ -25,7 +25,7 @@
 #include <KDbConnection>
 #include <KDbCursor>
 
-#include <KoReportData.h>
+#include <KoReportData>
 
 /**
  @author

@@ -76,8 +76,7 @@ bool KexiDataTableScrollArea::setData(KDbCursor *cursor)
     }
 
     if (!m_cursor->isOpened() && !m_cursor->open()) {
-        qWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
-        m_cursor->debug();
+        qWarning() << "Cannot open cursor\n--aborting setData().\n" << *m_cursor;
         clearColumns();
         return false;
     }

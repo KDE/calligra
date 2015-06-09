@@ -76,7 +76,7 @@ public:
          \a ok is set to true on success and to false on failure. On failure no other
          values are passed.
          \return part info if action type is "table", "query", etc., or 0 for "kaction" type. */
-        KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool& ok) const;
+        KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool *ok) const;
 
         //! \return true if the action is empty
         bool isEmpty() const;

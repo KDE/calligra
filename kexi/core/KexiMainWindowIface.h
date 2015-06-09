@@ -111,7 +111,7 @@ public:
 // Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
-    virtual void acceptProjectClosingRequested(bool& cancel) = 0;
+    virtual void acceptProjectClosingRequested(bool *cancel) = 0;
 
     //! Emitted before closing the project (and destroying all it's data members).
     //! You can do you cleanup of your structures here.
@@ -124,16 +124,16 @@ public:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
-    virtual bool newObject(KexiPart::Info *info, bool& openingCancelled) = 0;
+    virtual bool newObject(KexiPart::Info *info, bool *openingCancelled) = 0;
 
     //! Opens object pointed by \a item in a view \a viewMode
     virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-                                   bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
+                                   bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
                                    QString* errorMessage = 0) = 0;
 
     //! For convenience
     virtual KexiWindow* openObject(const QString& mime, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled,
+                                   Kexi::ViewMode viewMode, bool *openingCancelled,
                                    QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.

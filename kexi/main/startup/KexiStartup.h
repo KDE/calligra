@@ -80,7 +80,7 @@ public:
       Returns NULL and sets cancelled to true if the dialog was cancelled.
       Returns NULL and sets cancelled to false if there was an error.
     */
-    KexiProjectData* selectProject(KDbConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
+    KexiProjectData* selectProject(KDbConnectionData *cdata, bool *cancelled, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotSaveShortcutFileChanges();

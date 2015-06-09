@@ -25,6 +25,7 @@
 
 #include <KDbTristate>
 #include <KDbObject>
+#include <KDbResult>
 
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
@@ -59,11 +60,10 @@ typedef QList<MissingPart> MissingPartsList;
 }
 
 /**
- * @short A project's main controller.
- * It also contains connection data,
- * current file state, etc.
+ * @brief A single project's controller and data structure.
+ * It contains data connection, state, etc.
  */
-class KEXICORE_EXPORT KexiProject : public QObject, public KDbObject
+class KEXICORE_EXPORT KexiProject : public QObject, public KDbObject, public KDbResultable
 {
     Q_OBJECT
 
@@ -117,11 +117,6 @@ public:
      but \a forceOverwrite is false. */
     tristate create(bool forceOverwrite = false);
 
-    /*! \return true if there was error during last operation on the object. */
-    bool error() const {
-        return KDbObject::error();
-    }
-
     /**
      * @return true if a we are connected to a database
      */
@@ -158,13 +153,13 @@ public:
      * Puts a list of items of a type \a i in this project into \a list.
      * You can then sort this list using ItemList::sort().
      */
-    void getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
+    void getSortedItems(KexiPart::ItemList  *list, KexiPart::Info *i);
 
     /**
      * Puts a sorted list of items of a class \a partClass into \a list.
      * You can then sort this list using ItemList::sort().
      */
-    void getSortedItemsForClass(KexiPart::ItemList& list, const QString &partClass);
+    void getSortedItemsForClass(KexiPart::ItemList *list, const QString &partClass);
 
     /**
      * @return item of class \a partClass and name \a name
@@ -195,7 +190,7 @@ public:
      \a staticObjectArgs can be passed for static object
      (only works when part for this item is of type KexiPart::StaticPart).
      The new widget will be a child of \a parent. */
-    KexiWindow* openObject(QWidget* parent, KexiPart::Item& item,
+    KexiWindow* openObject(QWidget* parent, KexiPart::Item *item,
                            Kexi::ViewMode viewMode = Kexi::DataViewMode,
                            QMap<QString, QVariant>* staticObjectArgs = 0);
 
@@ -205,15 +200,15 @@ public:
 
     /*! Remove a part instance pointed by \a item.
      \return true on success. */
-    bool removeObject(KexiPart::Item& item);
+    bool removeObject(KexiPart::Item* item);
 
     /*! Renames a part instance pointed by \a item to a new name \a newName.
      \return true on success. */
-    bool renameObject(KexiPart::Item& item, const QString& newName);
+    bool renameObject(KexiPart::Item* item, const QString& newName);
 
     /*! Renames a part instance pointed by \a item to a new name \a newName.
      \return true on success. */
-    bool setObjectCaption(KexiPart::Item& item, const QString& newCaption);
+    bool setObjectCaption(KexiPart::Item* item, const QString& newCaption);
 
     /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
@@ -260,7 +255,7 @@ public:
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    static KexiProject* createBlankProject(bool &cancelled, const KexiProjectData& data,
+    static KexiProject* createBlankProject(bool *cancelled, const KexiProjectData& data,
                                            KDbMessageHandler* handler = 0);
 
     /*! Drops project described by \a data. \return true on success.
@@ -319,7 +314,7 @@ protected:
 
     bool initProject();
 
-    //! Used in open() and open(bool&).
+    //! Used in open() and open(bool*).
     tristate openInternal(bool *incompatibleWithKexi);
 
     /*! Kexi itself can define a number of internal database objects (mostly data structures),
@@ -354,7 +349,7 @@ Q_SIGNALS:
     void error(const QString &msg, const QString &desc);
 
     /** New \a item has been stored. */
-    void newItemStored(KexiPart::Item& item);
+    void newItemStored(KexiPart::Item *item);
 
     /** instance pointed by \a item is removed */
     void itemRemoved(const KexiPart::Item &item);
