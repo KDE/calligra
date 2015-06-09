@@ -1767,7 +1767,7 @@ QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
     if (list.count() == 1) // only the separator or some other text
         return list[0];
-    list[0].clear() ; // the join below will provide the separator
+    list[0].clear(); // the join below will provide the separator
 #endif
 
     return list.join(QDir::separator());
