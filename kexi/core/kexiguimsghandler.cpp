@@ -24,6 +24,7 @@
 #include <KDbUtils>
 
 #include <KMessageBox>
+#include <KLocalizedString>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
         : KDbMessageHandler(parent)

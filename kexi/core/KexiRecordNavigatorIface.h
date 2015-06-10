@@ -20,6 +20,7 @@
 #ifndef KEXIRECORDNAVIGATORIFACE_H
 #define KEXIRECORDNAVIGATORIFACE_H
 
+#include <QtGlobal>
 #include "kexicore_export.h"
 
 class KexiRecordNavigatorHandler;

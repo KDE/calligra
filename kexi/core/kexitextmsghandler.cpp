@@ -19,10 +19,11 @@
 
 #include "kexitextmsghandler.h"
 #include "kexi.h"
+#include <kexiutils/utils.h>
 
 #include <KDbUtils>
 
-#include <kexiutils/utils.h>
+#include <KLocalizedString>
 
 class KexiTextMessageHandler::Private
 {
