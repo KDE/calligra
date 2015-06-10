@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kapplication.h>
+#include <QApplication>
+
 #include <kglobal.h>
 #include <KAboutData>
 

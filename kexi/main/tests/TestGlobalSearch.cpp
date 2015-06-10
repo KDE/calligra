@@ -26,9 +26,7 @@
 #include <kexiutils/KexiTester.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 
-#include <kglobal.h>
-#include <kapplication.h>
-
+#include <QApplication>
 #include <QtTest>
 #include <QtTest/qtestkeyboard.h>
 #include <QtTest/qtestmouse.h>

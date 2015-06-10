@@ -18,7 +18,6 @@
 */
 
 #include "kexi.h"
-#include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
 #include "kexipartmanager.h"

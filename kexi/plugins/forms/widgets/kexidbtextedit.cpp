@@ -25,9 +25,9 @@
 
 #include <KDbQuerySchema>
 
-#include <kapplication.h>
 #include <kstandardshortcut.h>
 
+#include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QLabel>
