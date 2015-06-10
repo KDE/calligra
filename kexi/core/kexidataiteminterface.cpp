@@ -20,6 +20,7 @@
 #include "kexidataiteminterface.h"
 
 #include <QDebug>
+#include <QPointer>
 
 KexiDataItemChangesListener::KexiDataItemChangesListener()
 {
