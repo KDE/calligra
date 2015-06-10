@@ -72,8 +72,6 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
         , d(new Private)
 {
     setWindowTitle(i18n("Insert Link"));
-    // QT5TODO: port to QDialog
-//     setButtons(Ok | Cancel);
     setFaceType(List);
 
     // link for web or ftp
@@ -177,11 +175,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     connect(d->cellText, SIGNAL(textChanged(QString)), this,
             SLOT(setText(QString)));
 
-    // QT5TODO: port to QDialog
-//     showButtonSeparator(true);
     d->internetText->setFocus();
     resize(400, 300);
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 LinkDialog::~LinkDialog()
