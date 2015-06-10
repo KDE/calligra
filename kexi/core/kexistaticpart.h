@@ -33,7 +33,7 @@ namespace KexiPart
 class KEXICORE_EXPORT StaticPartInfo : public Info
 {
 public:
-    StaticPartInfo(const QString& partClass, const QString& itemIcon,
+    StaticPartInfo(const QString& pluginId, const QString& itemIcon,
                    const QString& objectName);
     ~StaticPartInfo();
 
@@ -46,7 +46,7 @@ protected:
 class KEXICORE_EXPORT StaticPart : public Part
 {
 public:
-    StaticPart(const QString& partClass, const QString& itemIcon,
+    StaticPart(const QString& pluginId, const QString& itemIcon,
                const QString& objectName);
     virtual ~StaticPart();
 

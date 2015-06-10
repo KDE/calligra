@@ -91,7 +91,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
 {
     QString itemName;
     QString itemClass;
-    QString itemIconName;
+    QString iconName;
     Qt::ItemFlags itemFlags = flags();
     WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
     ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(d->data) : d->data;
@@ -127,7 +127,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 //qDebug() << "d->customSortingKey" << d->customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
-                itemIconName = koIconName("tabwidget_tab");
+                iconName = koIconName("tabwidget_tab");
             }
         }
     }
@@ -138,9 +138,9 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     if (itemClass.isEmpty()) {
         itemClass = d->data->className();
     }
-    if (itemIconName.isEmpty()) {
+    if (iconName.isEmpty()) {
         if (widgetTreeWidget) {
-            itemIconName = widgetTreeWidget->iconNameForClass(d->data->widget()->metaObject()->className());
+            iconName = widgetTreeWidget->iconNameForClass(d->data->widget()->metaObject()->className());
         }
     }
     // set:
@@ -149,8 +149,8 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     }
     setText(0, itemName);
     setText(1, itemClass);
-    if (!itemIconName.isEmpty()) {
-        QPixmap icon(SmallIcon(itemIconName));
+    if (!iconName.isEmpty()) {
+        QPixmap icon(SmallIcon(iconName));
         if (!(itemFlags & Qt::ItemIsSelectable)) {
             KIconEffect::semiTransparent(icon);
         }

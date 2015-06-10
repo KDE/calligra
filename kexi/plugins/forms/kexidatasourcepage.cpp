@@ -239,10 +239,10 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-    const QString partClass(m_formDataSourceCombo->selectedPartClass());
-    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
+    const QString pluginId(m_formDataSourceCombo->selectedPluginId());
+    if (pluginId == "org.kexi-project.table" || pluginId == "org.kexi-project.query") {
         if (m_formDataSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(partClass, m_formDataSourceCombo->selectedName());
+            emit jumpToObjectRequested(pluginId, m_formDataSourceCombo->selectedName());
     }
 }
 
@@ -259,17 +259,17 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 #endif
 }
 
-void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
+void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePluginId, const QString& sourceName,
         const QString& fieldName)
 {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
-    Q_UNUSED(sourcePartClass);
+    Q_UNUSED(sourcePluginId);
     Q_UNUSED(sourceName);
     Q_UNUSED(fieldName);
 #else
     QStringList selectedFields;
     selectedFields.append(fieldName);
-    emit insertAutoFields(sourcePartClass, sourceName, selectedFields);
+    emit insertAutoFields(sourcePluginId, sourceName, selectedFields);
 #endif
 }
 
@@ -288,16 +288,16 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
 {
     if (!m_formDataSourceCombo->project())
         return;
-    const QString partClass(m_formDataSourceCombo->selectedPartClass());
+    const QString pluginId(m_formDataSourceCombo->selectedPluginId());
     bool dataSourceFound = false;
     QString name(m_formDataSourceCombo->selectedName());
-    const bool isPartAcceptable = partClass == QLatin1String("org.kexi-project.table")
-        || partClass == QLatin1String("org.kexi-project.query");
-    if (isPartAcceptable && m_formDataSourceCombo->isSelectionValid())
+    const bool isIdAcceptable = pluginId == QLatin1String("org.kexi-project.table")
+        || pluginId == QLatin1String("org.kexi-project.query");
+    if (isIdAcceptable && m_formDataSourceCombo->isSelectionValid())
     {
         KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
             m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(),
-            partClass == "org.kexi-project.table");
+            pluginId == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
             m_tableOrQuerySchema = tableOrQuery;
@@ -305,7 +305,7 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
             m_fieldListView->setSchema(tableOrQuery);
 #endif
             dataSourceFound = true;
-            m_widgetDataSourceCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
+            m_widgetDataSourceCombo->setTableOrQuery(name, pluginId == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -322,7 +322,7 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
 #endif
     }
     updateSourceFieldWidgetsAvailability();
-    emit formDataSourceChanged(partClass, name);
+    emit formDataSourceChanged(pluginId, name);
 }
 
 void KexiDataSourcePage::slotFieldSelected()
@@ -346,9 +346,9 @@ void KexiDataSourcePage::slotFieldSelected()
     );
 }
 
-void KexiDataSourcePage::setFormDataSource(const QString& partClass, const QString& name)
+void KexiDataSourcePage::setFormDataSource(const QString& pluginId, const QString& name)
 {
-    m_formDataSourceCombo->setDataSource(partClass, name);
+    m_formDataSourceCombo->setDataSource(pluginId, name);
 }
 
 #define KexiDataSourcePage_FADE 1

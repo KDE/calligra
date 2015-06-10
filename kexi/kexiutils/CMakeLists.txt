@@ -24,6 +24,7 @@ set(kexiutils_LIB_SRCS
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
   KexiTester.cpp
+  KexiJsonTrader.cpp
 
   completer/KexiCompleter.cpp
   KexiPushButton.cpp

@@ -127,7 +127,7 @@ public:
 
     void append(const ObjectStatus& otherStatus);
 
-    const KDbResultable* resultable() const { return m_resultable; }
+    KDbResultable* resultable() const { return m_resultable; }
 
     //! Helper returning pseudo handler that just updates this ObjectStatus object
     //! by receiving a message

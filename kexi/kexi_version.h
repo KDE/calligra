@@ -140,6 +140,6 @@ KEXICORE_EXPORT QString stableVersionString();
  * files every time you are increasing this value.
  */
 
-#define KEXI_PART_VERSION 2
+#define KEXI_PART_VERSION 3
 
 #endif /* _KEXI_VERSION_ */

@@ -431,10 +431,10 @@ void KexiCSVImportDialog::next()
             m_partItemForSavedTable->setCaption(m_newTableWidget->captionText());
             m_partItemForSavedTable->setName(m_newTableWidget->nameText());
 
-            KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
+            KexiPart::Part *part = Kexi::partManager().partForPluginId("org.kexi-project.table");
             KDbObject tmp;
             tristate res = m_conn->loadObjectData(
-                    project->idForClass(part->info()->partClass()),
+                    project->typeIdForPluginId(part->info()->pluginId()),
                     m_newTableWidget->nameText(),
                     &tmp);
             if (res == true) {
@@ -538,7 +538,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
                     }
                 }
             }
-            KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
+            KexiPart::Part *part = Kexi::partManager().partForPluginId("org.kexi-project.table");
             if (!part) {
                 msg.showErrorMessage(&Kexi::partManager());
                 return;
@@ -787,8 +787,8 @@ void KexiCSVImportDialog::createImportPage()
         m_fromLabel->setIcon(koIconName("edit-paste"));
     }
     m_toLabel = new KexiCSVInfoLabel(xi18n("To table:"), m_importWidget, true);
-    KexiPart::Info *partInfo = Kexi::partManager().infoForClass("org.kexi-project.table");
-    m_toLabel->setIcon(partInfo->itemIconName());
+    KexiPart::Info *partInfo = Kexi::partManager().infoForPluginId("org.kexi-project.table");
+    m_toLabel->setIcon(partInfo->iconName());
 
     m_importProgressLabel = new QLabel(m_importWidget);
     m_importingProgressBar = new QProgressBar(m_importWidget);
@@ -1951,7 +1951,7 @@ void KexiCSVImportDialog::import()
     m_importInProgress = true;
     button(BackButton)->setEnabled(false);
     button(FinishButton)->setEnabled(false);
-    KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
+    KexiPart::Part *part = Kexi::partManager().partForPluginId("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
         return;

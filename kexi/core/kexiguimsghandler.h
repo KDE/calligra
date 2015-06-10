@@ -32,9 +32,11 @@ public:
 
     using KDbMessageHandler::showErrorMessage;
 
-    void showErrorMessage(const QString&, const QString&, KDbObject *obj);
+    void showErrorMessage(const QString &message, const QString &details, KDbResultable *resultable);
+    void showErrorMessage(const QString &message, KDbResultable *resultable);
     void showErrorMessage(Kexi::ObjectStatus *status);
     void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
+    void showErrorMessage(const QString &title, const QString &details);
 
     /*! Displays a "Sorry" message with \a title text and optional \a details. */
     void showSorryMessage(const QString &title, const QString &details = QString());
@@ -74,7 +76,7 @@ public:
      Reimplement this. This implementation does nothing, just returns @a defaultResult. */
     virtual KDbMessageHandler::ButtonCode askQuestion(
             KDbMessageHandler::QuestionType messageType,
-            const QString& message,
+            const QString &message,
             const QString &caption = QString(),
             KDbMessageHandler::ButtonCode defaultResult = KDbMessageHandler::Yes,
             const KDbGuiItem &buttonYes = KDbGuiItem(),
