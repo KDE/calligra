@@ -229,8 +229,7 @@ void TableTool::sheetsBtnClicked()
 {
     QPointer<KPageDialog> dialog = new KPageDialog();
     dialog->setWindowTitle(i18n("Sheets"));
-    // QT5TODO: port to QDialog
-//     dialog->setButtons(KDialog::Ok);
+    dialog->setStandardButtons(QDialogButtonBox::Ok);
     dialog->setFaceType(KPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
     dialog->layout()->addWidget(editor);
