@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
                 if (e == QDialog::Accepted) {
                     qDebug() << "Selected conn. type: " << (sel.selectedConnectionType() == KexiConnSelectorWidget::FileBased ? "File based" : "Server based");
                     if (sel.selectedConnectionType() == KexiConnSelectorWidget::ServerBased) {
-                        qDebug() << "SERVER: " << sel.selectedConnectionData()->serverInfoString();
+                        qDebug() << "SERVER: " << sel.selectedConnectionData()->toUserVisibleString();
                     }
                 }
 #endif
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
             if (!selFile.isEmpty())
                 qDebug() << "Project File: " << selFile;
             else if (startup.selectedExistingConnection()) {
-                qDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString();
+                qDebug() << "Existing connection: " << startup.selectedExistingConnection()->toUserVisibleString();
                 //ok, now we are trying to show daabases for this conenction to this user
                 //! @todo
             }
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
             const KexiProjectData *data = startup.selectedProjectData();
             if (data) {
                 qDebug() << "Selected project: database=" << data->databaseName()
-                << " connection=" << data->constConnectionData()->serverInfoString();
+                << " connection=" << data->constConnectionData()->toUserVisibleString();
             }
         }
     }

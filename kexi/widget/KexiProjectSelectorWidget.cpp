@@ -87,11 +87,11 @@ public:
 
             QString conn;
             if (cdata->caption.isEmpty()) {
-                conn = cdata->serverInfoString();
+                conn = cdata->toUserVisibleString();
             }
             else {
                 conn = xi18nc("caption: server_info", "%1: %2",
-                             cdata->caption, cdata->serverInfoString());
+                             cdata->caption, cdata->toUserVisibleString());
             }
             setText(3, conn + "  ");
         }
@@ -299,7 +299,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
                                   xi18n("Open Database Connection")));
 
     d->sel->label()->setText(xi18n("Select a project on <resource>%1</resource> database server to open:",
-                                 _cdata.serverInfoString(false)));
+                                 _cdata.toUserVisibleString(KDbConnectionData::NoUserVisibleStringOption)));
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()

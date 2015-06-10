@@ -88,7 +88,7 @@ void ConnectionDataLVItem::update(const KDbDriver::Info& info)
         setText(1, sfile + " (" + drvname + ")  ");
     else
         setText(1, drvname + "  ");
-    setText(2, (info.fileBased ? (QString("<") + sfile.toLower() + ">") : m_data->serverInfoString(true)) + "  ");
+    setText(2, (info.fileBased ? (QString("<") + sfile.toLower() + ">") : m_data->toUserVisibleString()) + "  ");
 }
 
 /*================================================================*/
@@ -432,7 +432,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
             xi18n(
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
-                item->data()->serverInfoString(true)),
+                item->data()->toUserVisibleString()),
             QString(), //caption
             KStandardGuiItem::remove(), KStandardGuiItem::cancel(),
             QString(), //dont'ask name
