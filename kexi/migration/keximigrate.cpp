@@ -194,7 +194,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         qDebug() << "Couldnt connect to database server";
         if (result)
             result->setStatus(xi18n("Could not connect to data source \"%1\".",
-                                   d->migrateData->source->serverInfoString()), "");
+                                   d->migrateData->source->toUserVisibleString()), "");
         return false;
     }
 
@@ -205,7 +205,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         if (result)
             result->setStatus(
                 xi18n("Could not get a list of table names for data source \"%1\".",
-                     d->migrateData->source->serverInfoString()), "");
+                     d->migrateData->source->toUserVisibleString()), "");
         return false;
     }
 
@@ -215,7 +215,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         if (result)
             result->setStatus(
                 xi18n("No tables to import found in data source \"%1\".",
-                     d->migrateData->source->serverInfoString()), "");
+                     d->migrateData->source->toUserVisibleString()), "");
         return false;
     }
 
@@ -262,7 +262,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 result->setStatus(
                     xi18n(
                         "Could not import project from data source \"%1\". Error reading table \"%2\".",
-                        d->migrateData->source->serverInfoString(), tableCaption), QString());
+                        d->migrateData->source->toUserVisibleString(), tableCaption), QString());
             return false;
         }
         //yeah, got a table
@@ -390,7 +390,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             if (result)
                 result->setStatus(d->destPrj,
                                   xi18n("Could not import project from data source \"%1\".",
-                                       d->migrateData->source->serverInfoString()));
+                                       d->migrateData->source->toUserVisibleString()));
         }
     }
 
@@ -464,7 +464,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     if (result && result->error())
         result->setStatus(destConn,
                           xi18n("Could not import data from data source \"%1\".",
-                               d->migrateData->source->serverInfoString()));
+                               d->migrateData->source->toUserVisibleString()));
     if (destConn) {
         destConn->debugError();
         destConn->rollbackTransaction(trans);
