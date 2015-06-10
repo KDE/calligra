@@ -21,13 +21,21 @@
 #include "kis_tangent_tilt_option.h"
 
 #include <kis_properties_configuration.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_spacing_option_widget.h>
+#include <kis_pressure_size_option.h>
+#include <kis_curve_option_widget.h>
+#include <kis_airbrush_option.h>
+//#include <kis_compositeop_option.h>
+#include "kis_texture_option.h"
+#include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
+#include "kis_pressure_texture_strength_option.h"
 
 
 
@@ -39,19 +47,20 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     
 
 //    addPaintOpOption(new KisCompositeOpOption(true)); No composite opp... for now.
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    //addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     
-    addPaintOpOption(new KisTangentTiltOption());
+    addPaintOpOption(new KisTangentTiltOption(), i18n("Tangent Tilt"));
     
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
-    addMirrorOption();
+    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
+    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPressureScatterOptionWidget());
-
-    addTextureOptions();
-
+    addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    
+    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 }
 
 KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget() { }
