@@ -25,6 +25,7 @@
 
 class QModelIndex;
 class QVariant;
+class QString;
 
 class KEXICORE_EXPORT KexiSearchableModel
 {

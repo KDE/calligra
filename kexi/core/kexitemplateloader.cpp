@@ -29,6 +29,7 @@
 #include <kcomponentdata.h>
 
 #include <QDir>
+#include <QIcon>
 #include <QStandardPaths>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
