@@ -72,22 +72,10 @@ public:
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project() = 0;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KActionCollection* actionCollection() const = 0;
-#else
-#pragma WARNING( TODO virtual KActionCollection* actionCollection() const = 0; )
-#endif
-#endif
+//! @todo KEXI3 virtual KActionCollection* actionCollection() const = 0;
     virtual KActionCollection* actionCollection() const = 0;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual QWidget* focusWidget() const = 0;
-#else
-#pragma WARNING( TODO virtual QWidget* focusWidget() const = 0; )
-#endif
-#endif
+//! @todo KEXI3 virtual QWidget* focusWidget() const = 0;
     virtual QWidget* focusWidget() const = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */

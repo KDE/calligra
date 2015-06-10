@@ -665,11 +665,7 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
 {
     QWidget *pw = w->parentWidget();
     if (classname == "KFDTabWidget" || pw->parentWidget()->inherits("QTabWidget")) {
-#ifdef __GNUC__
-#warning port this: setWidget(pw->parentWidget(), m_container->toplevel());
-#else
-#pragma WARNING( port this: setWidget(pw->parentWidget(), m_container->toplevel()); )
-#endif
+//! @todo KEXI3 port this: setWidget(pw->parentWidget(), m_container->toplevel());
 #if 0
         if (pw->parentWidget()->inherits("QTabWidget")) {
             setWidget(pw->parentWidget(), m_container->toplevel());
@@ -689,11 +685,7 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
             )
     {
         QStackedWidget *stack = dynamic_cast<QStackedWidget*>(pw);
-#ifdef __GNUC__
-#warning port this: setWidget( pw, container->form()->objectTree()->lookup(stack->objectName())->parent()->container() );
-#else
-#pragma WARNING( port this: setWidget( pw, container->form()->objectTree()->lookup(stack->objectName())->parent()->container() ); )
-#endif
+//! @todo KEXI3 port this: setWidget( pw, container->form()->objectTree()->lookup(stack->objectName())->parent()->container() );
 #if 0
         setWidget(
             pw,

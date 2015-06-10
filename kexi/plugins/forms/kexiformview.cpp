@@ -926,11 +926,7 @@ KexiFormView::enableFormActions()
     setAvailable("formpart_connections", true);
     setAvailable("formpart_taborder", true);
 
-#ifdef __GNUC__
-#warning "Port this.."
-#else
-#pragma WARNING( Port this.. )
-#endif
+//! @todo KEXI3 Port this..
 //! @todo    setAvailable("edit_paste", KFormDesigner::FormManager::self()->isPasteEnabled());
 }
 
