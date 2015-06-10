@@ -609,9 +609,9 @@ void ImportWizard::arriveImportingPage()
 {
     d->importingPageWidget->hide();
     if (checkUserInput()) {
-        // KEXI3 user2Button->setEnabled(true);
+        //! @todo KEXI3 user2Button->setEnabled(true);
     } else {
-        // KEXI3 user2Button->setEnabled(false);
+        //! @todo KEXI3 user2Button->setEnabled(false);
     }
 
     d->lblImportingTxt->setText(xi18n(
@@ -985,9 +985,9 @@ void ImportWizard::next()
     } else if (currentPage() == d->importingPageItem) {
         if (!d->importExecuted) {
             d->importOptionsButton->hide();
-            // KEXI3 user2Button->setEnabled(false);
-            // KEXI3 user1Button->setEnabled(false);
-            // KEXI3 user3Button->setEnabled(false);
+            //! @todo KEXI3 user2Button->setEnabled(false);
+            //! @todo KEXI3 user1Button->setEnabled(false);
+            //! @todo KEXI3 user3Button->setEnabled(false);
             d->lblImportingTxt->setText(xi18n("Importing in progress..."));
             tristate res = import();
             if (true == res) {
@@ -995,8 +995,8 @@ void ImportWizard::next()
                     xi18n("Database has been imported into Kexi project \"%1\".",
                          d->dstNewDBNameLineEdit->text()));
                 enableButtonCancel(false);
-                // KEXI3 user3Button->setEnabled(false);
-                // KEXI3 user1Button->setEnabled(true);
+                //! @todo KEXI3 user3Button->setEnabled(false);
+                //! @todo KEXI3 user1Button->setEnabled(true);
                 d->openImportedProjectCheckBox->show();
                 next();
                 return;
@@ -1005,8 +1005,8 @@ void ImportWizard::next()
             d->progressBar->hide();
 
             enableButtonCancel(true);
-            // KEXI3 user3Button->setEnabled(true);
-            // KEXI3 user1Button->setEnabled(false);
+            //! @todo KEXI3 user3Button->setEnabled(true);
+            //! @todo KEXI3 user1Button->setEnabled(false);
 
             d->openImportedProjectCheckBox->hide();
             if (!res)
