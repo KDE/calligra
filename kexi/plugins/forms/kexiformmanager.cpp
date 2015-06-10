@@ -125,16 +125,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 
     d->widgetTree = widgetTree;
     if (d->widgetTree) {
-#ifdef __GNUC__
-#warning "Port this: connect()"
-#else
-#pragma WARNING( Port this: connect() )
-#endif
-#ifdef __GNUC__
-#warning "Port code related to KFormDesigner::FormManager::m_treeview here"
-#else
-#pragma WARNING( Port code related to KFormDesigner::FormManager::m_treeview here )
-#endif
+//! @todo KEXI3 Port this: connect()
+//! @todo KEXI3 Port code related to KFormDesigner::FormManager::m_treeview here
 //! @todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
 //! @todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
     }
