@@ -109,7 +109,7 @@ public Q_SLOTS:
     const QString dbFileName() const;
 
     /** Return a user-friendly string representation. */
-    const QString serverInfoString() const;
+    const QString toUserVisibleString() const;
 
 private:
     ::KDbConnectionData* m_data;
