@@ -27,14 +27,14 @@ set(kexicore_LIB_SRCS
    kexiprojectdata.cpp
    KexiRecentProjects.cpp
    kexiinternalpart.cpp
-   kexidragobjects.cpp
+   #TODO KEXI3 kexidragobjects.cpp
    kexistartupdata.cpp
    kexiguimsghandler.cpp
    kexitextmsghandler.cpp
    kexidataiteminterface.cpp
    kexidbshortcutfile.cpp
    kexiblobbuffer.cpp
-   kexistaticpart.cpp
+   #TODO KEXI3 kexistaticpart.cpp
    kexitabledesignerinterface.cpp
    kexisearchandreplaceiface.cpp
    kexitemplateloader.cpp
