@@ -182,9 +182,7 @@ Inspector::Inspector(const Cell& cell)
 {
     setFaceType(Tabbed);
     setWindowTitle("Inspector");
-    // QT5TODO: port to QDialog
-//     setButtons(Close);
-//     setDefaultButton(Close);
+    setStandardButtons(QDialogButtonBox::Close);
 
     d->cell = cell;
     d->style = cell.style();
