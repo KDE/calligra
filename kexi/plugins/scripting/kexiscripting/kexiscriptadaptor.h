@@ -133,11 +133,11 @@ public Q_SLOTS:
     * print Kexi.items("table")
     * \endcode
     */
-    QStringList items(const QString& className) {
+    QStringList items(const QString& pluginId) {
         QStringList list;
         if (project()) {
             KexiPart::ItemList l;
-            project()->getSortedItemsForClass(l, partClass(className).toUtf8());
+            project()->getSortedItemsForPluginId(l, pluginId(pluginId).toUtf8());
             l.sort();
             foreach(KexiPart::Item* i, l) {
                 list << i->name();
@@ -147,39 +147,39 @@ public Q_SLOTS:
     }
 
     /**
-    * Returns the caption for the item defined with \p className and \p name .
+    * Returns the caption for the item defined with \p pluginId and \p name .
     */
-    QString itemCaption(const QString& className, const QString& name) const {
-        KexiPart::Item *item = partItem(partClass(className), name);
+    QString itemCaption(const QString& pluginId, const QString& name) const {
+        KexiPart::Item *item = partItem(pluginId(pluginId), name);
         return item ? item->caption() : QString();
     }
 
     /**
-    * Set the caption for the item defined with \p className and \p name .
+    * Set the caption for the item defined with \p pluginId and \p name .
     */
-    void setItemCaption(const QString& className, const QString& name, const QString& caption) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    void setItemCaption(const QString& pluginId, const QString& name, const QString& caption) {
+        if (KexiPart::Item *item = partItem(pluginId(pluginId), name))
             item->setCaption(caption);
     }
 
     /**
     * Returns the description for the item defined with \p className and \p name .
     */
-    QString itemDescription(const QString& className, const QString& name) const {
-        KexiPart::Item *item = partItem(partClass(className), name);
+    QString itemDescription(const QString& pluginId, const QString& name) const {
+        KexiPart::Item *item = partItem(pluginId(pluginId), name);
         return item ? item->description() : QString();
     }
 
     /**
     * Set the description for the item defined with \p className and \p name .
     */
-    void setItemDescription(const QString& className, const QString& name, const QString& description) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    void setItemDescription(const QString& pluginId, const QString& name, const QString& description) {
+        if (KexiPart::Item *item = partItem(pluginId(pluginId), name))
             item->setDescription(description);
     }
 
     /**
-    * Open an item. A window for the item defined with \p className and \p name will
+    * Open an item. A window for the item defined with \p pluginId and \p name will
     * be opened and we switch to it. The \p viewmode could be for example "data" (the
     * default), "design" or "text" while the \args are optional arguments passed
     * to the item.
@@ -192,11 +192,11 @@ public Q_SLOTS:
     * Kexi.windowWidget().setDirty(True)
     * \endcode
     */
-    bool openItem(const QString& className, const QString& name, const QString& viewmode = QString(),
+    bool openItem(const QString& pluginId, const QString& name, const QString& viewmode = QString(),
                   QVariantMap args = QVariantMap())
     {
         bool openingCancelled;
-        KexiPart::Item *item = partItem(partClass(className), name);
+        KexiPart::Item *item = partItem(pluginId(pluginId), name);
         KexiWindow* window = item
             ? mainWindow()->openObject(
                 item,
@@ -220,26 +220,26 @@ public Q_SLOTS:
     * Kexi.closeItem("table","table1")
     * \endcode
     */
-    bool closeItem(const QString& className, const QString& name) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool closeItem(const QString& pluginId, const QString& name) {
+        if (KexiPart::Item *item = partItem(pluginId(pluginId), name))
             return mainWindow()->closeObject(item) == true;
         return false;
     }
 
     /**
-    * Print the item defined with \p className and \p name .
+    * Print the item defined with \p pluginId and \p name .
     */
-    bool printItem(const QString& className, const QString& name, bool preview = false) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool printItem(const QString& pluginId, const QString& name, bool preview = false) {
+        if (KexiPart::Item *item = partItem(pluginId(pluginId), name))
             return (preview ? mainWindow()->printPreviewForItem(item) : mainWindow()->printItem(item)) == true;
         return false;
     }
 
     /**
-    * Executes custom action for the item defined with \p className and \p name .
+    * Executes custom action for the item defined with \p pluginId and \p name .
     */
-    bool executeItem(const QString& className, const QString& name, const QString& actionName) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool executeItem(const QString& pluginId, const QString& name, const QString& actionName) {
+        if (KexiPart::Item *item = partItem(pluginId(pluginId), name))
             return mainWindow()->executeCustomActionForObject(item, actionName) == true;
         return false;
     }
@@ -293,11 +293,11 @@ private:
     KexiView* currentView() const {
         return currentWindow() ? currentWindow()->selectedView() : 0;
     }
-    KexiPart::Item* partItem(const QString& className, const QString& name) const {
-        return project() ? project()->itemForClass(partClass(className), name) : 0;
+    KexiPart::Item* partItem(const QString& pluginId, const QString& name) const {
+        return project() ? project()->itemForPluginId(pluginId(pluginId), name) : 0;
     }
-    QString partClass(const QString& partClass) const {
-        return partClass.contains('.') ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
+    QString pluginId(const QString& pluginId) const {
+        return pluginId.contains('.') ? pluginId : (QString::fromLatin1("org.kexi-project.")+pluginId);
     }
     QString viewModeToString(Kexi::ViewMode mode, const QString& defaultViewMode = QString()) const {
         switch (mode) {

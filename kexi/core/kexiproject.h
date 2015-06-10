@@ -54,7 +54,7 @@ class Info;
 
 struct MissingPart {
     QString name;
-    QString className;
+    QString id;
 };
 typedef QList<MissingPart> MissingPartsList;
 }
@@ -123,20 +123,22 @@ public:
     bool isConnected();
 
     /**
-     * @return internal identifier for part class @a partClass.
-     * -1 is returned if the class is unknown.
-     * While the part classes are unique strings like :org.kexi-project.table",
-     * the identifiers are specific to the given physically stored project,
-     * because sets of parts can differ from between various Kexi installations.
+     * @return internal numeric type identifier for plugin ID @a pluginId.
+     * -1 is returned if the ID is unknown.
+     * While the plugin IDs are unique strings like "org.kexi-project.table",
+     * the type identifiers are specific to the given physically stored project
+     * because sets of plugins can differ from between various Kexi installations
+     * and configurations.
+     * @see pluginIdForTypeId()
      */
-    int idForClass(const QString &partClass) const;
+    int typeIdForPluginId(const QString &pluginId) const;
 
     /**
-     * @return part class for internal identifier.
-     * Empty string is returned if the class is unknown.
-     * @see idForClass()
+     * @return plugin ID for a numeric type ID @a typeId.
+     * Empty string is returned if the plugin ID is unknown.
+     * @see typeIdForPluginId()
      */
-    QString classForId(int classId) const;
+    QString pluginIdForTypeId(int typeId) const;
 
     /**
      * @return all items of a type \a i in this project
@@ -144,10 +146,10 @@ public:
     KexiPart::ItemDict* items(KexiPart::Info *i);
 
     /**
-     * @return all items of a class \a partClass in this project
+     * @return all items of a plugin ID \a pluginId in this project
      * It is a convenience function.
      */
-    KexiPart::ItemDict* itemsForClass(const QString &partClass);
+    KexiPart::ItemDict* itemsForPluginId(const QString &pluginId);
 
     /**
      * Puts a list of items of a type \a i in this project into \a list.
@@ -156,15 +158,15 @@ public:
     void getSortedItems(KexiPart::ItemList  *list, KexiPart::Info *i);
 
     /**
-     * Puts a sorted list of items of a class \a partClass into \a list.
-     * You can then sort this list using ItemList::sort().
+     * Puts a sorted list of items that use a plugin ID \a pluginId into \a list.
+     * You can then sort this list using KexiPart::ItemList::sort().
      */
-    void getSortedItemsForClass(KexiPart::ItemList *list, const QString &partClass);
+    void getSortedItemsForPluginId(KexiPart::ItemList *list, const QString &pluginId);
 
     /**
-     * @return item of class \a partClass and name \a name
+     * @return item corresponding with plugin ID \a pluginId and name \a name
      */
-    KexiPart::Item* itemForClass(const QString &partClass, const QString &name);
+    KexiPart::Item* itemForPluginId(const QString &pluginId, const QString &name);
 
     /**
      * @return item of type \a i and name \a name
@@ -195,7 +197,7 @@ public:
                            QMap<QString, QVariant>* staticObjectArgs = 0);
 
     //! For convenience
-    KexiWindow* openObject(QWidget* parent, const QString &partClass,
+    KexiWindow* openObject(QWidget* parent, const QString &pluginId,
                            const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
     /*! Remove a part instance pointed by \a item.
@@ -368,20 +370,20 @@ private:
      If so, error message is set and false is returned. */
     bool checkWritable();
 
-    /*! Retrieves basic information (class, id, name, caption)
+    /*! Retrieves basic information (pluginId, typeId, name, caption)
      about all items of all types for this project.
      @return true on success. */
     bool retrieveItems();
 
     /**
      * Checks project's kexi__part table.
-     * @a singlePartClass can be provided to only check specified part.
+     * @a singlePluginId can be provided to only check specified part.
      * Internal identifiers of part(s) are remembered.
      *
      * Use @ref missingParts() to get a list of missing parts.
-     * @see idForClass()
+     * @see typeIdForPluginId()
      */
-    bool checkProject(const QString& singlePartClass = QString());
+    bool checkProject(const QString& singlePluginId = QString());
 
     class Private;
     Private * const d;

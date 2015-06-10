@@ -119,7 +119,7 @@ public:
         }
         KexiSmallToolButton* menuButton = new KexiSmallToolButton(
                          QIcon(),
-                         window->part()->info()->instanceCaption() + " ",
+                         window->part()->info()->name() + " ",
                          topBarHWidget);
         menuButton->setToolTip(xi18n("Menu for the current window"));
         menuButton->setWhatsThis(xi18n("Shows menu for the current window."));

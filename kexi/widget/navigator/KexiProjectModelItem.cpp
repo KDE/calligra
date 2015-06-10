@@ -69,7 +69,7 @@ KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *it
 {
     Q_ASSERT(i);
     Q_ASSERT(item);
-    d->icon = SmallIcon(i.itemIconName(), KIconLoader::SizeSmall);
+    d->icon = SmallIcon(i.iconName(), KIconLoader::SizeSmall);
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()
@@ -224,7 +224,7 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& nam
     KexiProjectModelItem* itm = 0;
 
     foreach(KexiProjectModelItem *child, d->childItems) {
-        if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->partClass() == name) || (child->d->groupName == name)) {
+        if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->pluginId() == name) || (child->d->groupName == name)) {
                 itm = child;
         } else {
                 itm = child->modelItemFromName(name);

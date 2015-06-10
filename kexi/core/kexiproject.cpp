@@ -54,17 +54,17 @@
 
 #include <assert.h>
 
-//! @return real part class for @a partClass and @a partMime
+//! @return a real plugin ID for @a pluginId and @a partMime
 //! for compatibility with Kexi 1.x
-static QString realPartClass(const QString &partClass, const QString &partMime)
+static QString realPluginId(const QString &pluginId, const QString &partMime)
 {
-    if (partClass.startsWith(QLatin1String("http://"))) {
+    if (pluginId.startsWith(QLatin1String("http://"))) {
         // for compatibility with Kexi 1.x
         // part mime was used at the time
         return QLatin1String("org.kexi-project.")
                + QString(partMime).remove("kexi/");
     }
-    return partClass;
+    return pluginId;
 }
 
 class KexiProject::Private
@@ -95,13 +95,13 @@ public:
         unstoredItems.clear();
     }
 
-    void saveClassId(const QString& partClass, int id)
+    void savePluginId(const QString& pluginId, int typeId)
     {
-        if (!classIds.contains(partClass) && !classNames.contains(id)) {
-            classIds.insert(partClass, id);
-            classNames.insert(id, partClass);
+        if (!typeIds.contains(pluginId) && !pluginIdsForTypeIds.contains(typeId)) {
+            typeIds.insert(pluginId, typeId);
+            pluginIdsForTypeIds.insert(typeId, pluginId);
         }
-//! @todo what to do with extra ids for the same part or extra class name for the same ID?
+//! @todo what to do with extra plugin IDs for the same type ID or extra type ID name for the plugin ID?
     }
 
     //! @return user name for the current project
@@ -132,7 +132,7 @@ public:
                 q->m_result = KDbResult(xi18n("Could not set empty name for this object."));
                 return false;
             }
-            if (q->itemForClass(item->partClass(), newName) != 0) {
+            if (q->itemForPluginId(item->pluginId(), newName) != 0) {
                 q->m_result = KDbResult(
                     xi18n("Could not use this name. Object with name \"%1\" already exists.",
                           newName));
@@ -205,9 +205,9 @@ public:
     QString error_title;
     KexiPart::MissingPartsList missingParts;
 
-    QHash<QString, int> classIds;
-    QHash<int, QString> classNames;
-    //! a cache for item() method, indexed by project part's ids
+    QHash<QString, int> typeIds;
+    QHash<int, QString> pluginIdsForTypeIds;
+    //! a cache for item() method, indexed by plugin IDs
     QHash<QString, KexiPart::ItemDict*> itemDicts;
     QSet<KexiPart::Item*> unstoredItems;
     //! helper for getting unique
@@ -237,7 +237,7 @@ KexiProject::KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handle
 {
     d->data = new KexiProjectData(pdata);
     d->handler = handler;
-    if (d->data->connectionData() == d->connection->data())
+    if (*d->data->connectionData() == d->connection->data())
         d->connection = conn;
     else
         qWarning() << "passed connection's data ("
@@ -545,13 +545,13 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
             partsTableOk = d->connection->createTable(t_parts, true/*replaceExisting*/);
 
             QScopedPointer<KDbFieldList> fl(t_parts->subList("p_id", "p_name", "p_mime", "p_url"));
-#define INSERT_RECORD(id, groupName, name) \
+#define INSERT_RECORD(typeId, groupName, name) \
             if (partsTableOk) { \
-                partsTableOk = d->connection->insertRecord(fl.data(), QVariant(int(KexiPart::id)), \
+                partsTableOk = d->connection->insertRecord(fl.data(), QVariant(int(KexiPart::typeId)), \
                     QVariant(groupName), \
                     QVariant("kexi/" name), QVariant("org.kexi-project." name)); \
                 if (partsTableOk) { \
-                    d->saveClassId("org.kexi-project." name, int(KexiPart::id)); \
+                    d->savePluginId("org.kexi-project." name, int(KexiPart::typeId)); \
                 } \
             }
 
@@ -689,7 +689,7 @@ KexiProject::items(KexiPart::Info *i)
         return 0;
 
     //trying in cache...
-    KexiPart::ItemDict *dict = d->itemDicts.value(i->partClass());
+    KexiPart::ItemDict *dict = d->itemDicts.value(i->id());
     if (dict)
         return dict;
     if (d->itemsRetrieved)
@@ -707,29 +707,29 @@ bool KexiProject::retrieveItems()
     if (!cursor)
         return 0;
 
-    int recentPartId = -1000;
-    QString partClass;
+    int recentTypeId = -1000;
     KexiPart::ItemDict *dict = 0;
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         bool ok;
-        int partId = cursor->value(3).toInt(&ok);
-        if (!ok || partId <= 0) {
-            qWarning() << "object of unknown type" << cursor->value(3) << "id=" << cursor->value(0)
+        int typeId = cursor->value(3).toInt(&ok);
+        if (!ok || typeId <= 0) {
+            qWarning() << "object of unknown type id" << cursor->value(3) << "id=" << cursor->value(0)
                        << "name=" <<  cursor->value(1);
             continue;
         }
-        if (recentPartId == partId) {
-            if (partClass.isEmpty()) // still the same unknown part id
+        QString pluginId;
+        if (recentTypeId == typeId) {
+            if (pluginId.isEmpty()) // still the same unknown plugin ID
                 continue;
         }
         else {
-            // new part id: create next part items dict if it's id for a known class
-            recentPartId = partId;
-            partClass = classForId( partId );
-            if (partClass.isEmpty())
+            // a new type ID: create another plugin items dict if it's an ID for a known type
+            recentTypeId = typeId;
+            pluginId = pluginIdForTypeId(typeId);
+            if (pluginId.isEmpty())
                 continue;
             dict = new KexiPart::ItemDict();
-            d->itemDicts.insert(partClass, dict);
+            d->itemDicts.insert(pluginId, dict);
         }
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
@@ -738,7 +738,7 @@ bool KexiProject::retrieveItems()
         {
             KexiPart::Item *it = new KexiPart::Item();
             it->setIdentifier(ident);
-            it->setPartClass(partClass);
+            it->setPluginId(pluginId);
             it->setName(objName);
             it->setCaption(cursor->value(2).toString());
             dict->insert(it->identifier(), it);
@@ -750,20 +750,20 @@ bool KexiProject::retrieveItems()
     return true;
 }
 
-int KexiProject::idForClass(const QString &partClass) const
+int KexiProject::typeIdForPluginId(const QString &pluginId) const
 {
-    return d->classIds.value(partClass, -1);
+    return d->typeIds.value(pluginId, -1);
 }
 
-QString KexiProject::classForId(int classId) const
+QString KexiProject::pluginIdForTypeId(int typeId) const
 {
-    return d->classNames.value(classId);
+    return d->pluginIdsForTypeIds.value(typeId);
 }
 
 KexiPart::ItemDict*
-KexiProject::itemsForClass(const QString &partClass)
+KexiProject::itemsForPluginId(const QString &pluginId)
 {
-    KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+    KexiPart::Info *info = Kexi::partManager().infoForPluginId(pluginId);
     return items(info);
 }
 
@@ -781,10 +781,10 @@ KexiProject::getSortedItems(KexiPart::ItemList* list, KexiPart::Info *i)
 }
 
 void
-KexiProject::getSortedItemsForClass(KexiPart::ItemList *list, const QString &partClass)
+KexiProject::getSortedItemsForPluginId(KexiPart::ItemList *list, const QString &pluginId)
 {
     Q_ASSERT(list);
-    KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+    KexiPart::Info *info = Kexi::partManager().infoForPluginId(pluginId);
     getSortedItems(list, info);
 }
 
@@ -809,11 +809,11 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 }
 
 KexiPart::Item*
-KexiProject::itemForClass(const QString &partClass, const QString &name)
+KexiProject::itemForPluginId(const QString &pluginId, const QString &name)
 {
-    KexiPart::ItemDict *dict = itemsForClass(partClass);
+    KexiPart::ItemDict *dict = itemsForPluginId(pluginId);
     if (!dict) {
-        qWarning() << "no part class=" << partClass;
+        qWarning() << "no part class=" << pluginId;
         return 0;
     }
     foreach(KexiPart::Item *item, *dict) {
@@ -852,9 +852,9 @@ KexiPart::Part *KexiProject::findPartFor(const KexiPart::Item& item)
 {
     clearResult();
     KDbMessageTitleSetter et(this);
-    KexiPart::Part *part = Kexi::partManager().partForClass(item.partClass());
+    KexiPart::Part *part = Kexi::partManager().partForPluginId(item.pluginId());
     if (!part) {
-        qWarning() << "!part: " << item.partClass();
+        qWarning() << "!part: " << item.pluginId();
         m_result = Kexi::partManager().result();
     }
     return part;
@@ -882,10 +882,10 @@ KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item *item,
     return window;
 }
 
-KexiWindow* KexiProject::openObject(QWidget* parent, const QString &partClass,
+KexiWindow* KexiProject::openObject(QWidget* parent, const QString &pluginId,
                                     const QString& name, Kexi::ViewMode viewMode)
 {
-    KexiPart::Item *it = itemForClass(partClass, name);
+    KexiPart::Item *it = itemForPluginId(pluginId, name);
     return it ? openObject(parent, it, viewMode) : 0;
 }
 
@@ -937,7 +937,7 @@ bool KexiProject::removeObject(KexiPart::Item *item)
 
     //now: remove this item from cache
     if (part->info()) {
-        KexiPart::ItemDict *dict = d->itemDicts.value(part->info()->partClass());
+        KexiPart::ItemDict *dict = d->itemDicts.value(part->info()->pluginId());
         if (!(dict && dict->remove(item->identifier())))
             d->unstoredItems.remove(item);//remove temp.
     }
@@ -970,7 +970,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     KexiPart::ItemDict *dict = items(info);
     if (!dict) {
       dict = new KexiPart::ItemDict();
-      d->itemDicts.insert(info->partClass(), dict);
+      d->itemDicts.insert(info->pluginId(), dict);
     }
     QSet<QString> storedItemNames;
     foreach(KexiPart::Item* item, *dict) {
@@ -1011,13 +1011,13 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
         return 0;
 
     QString new_caption(suggestedCaption.isEmpty()
-        ? part->info()->instanceCaption() : suggestedCaption);
+        ? part->info()->name() : suggestedCaption);
     if (n >= 1)
         new_caption += QString::number(n);
 
     KexiPart::Item *item = new KexiPart::Item();
     item->setIdentifier(--d->tempPartItemID_Counter);  //temporary
-    item->setPartClass(info->partClass());
+    item->setPluginId(info->pluginId());
     item->setName(new_name);
     item->setCaption(new_caption);
     item->setNeverSaved(true);
@@ -1109,7 +1109,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
     return prj.dbConnection()->dropDatabase();
 }
 
-bool KexiProject::checkProject(const QString& singlePartClass)
+bool KexiProject::checkProject(const QString& singlePluginId)
 {
     clearResult();
 
@@ -1121,8 +1121,8 @@ bool KexiProject::checkProject(const QString& singlePartClass)
     bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
     if (containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
         KDbEscapedString sql = KDbEscapedString("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
-        if (!singlePartClass.isEmpty()) {
-            sql.append(KDbEscapedString(" WHERE p_url=%1").arg(d->connection->escapeString(singlePartClass)));
+        if (!singlePluginId.isEmpty()) {
+            sql.append(KDbEscapedString(" WHERE p_url=%1").arg(d->connection->escapeString(singlePluginId)));
         }
         KDbCursor *cursor = d->connection->executeQuery(sql);
         if (!cursor) {
@@ -1132,32 +1132,32 @@ bool KexiProject::checkProject(const QString& singlePartClass)
 
         bool saved = false;
         for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-            const QString partMime( cursor->value(2).toString() );
-            QString partClass( cursor->value(3).toString() );
-            partClass = realPartClass(partClass, partMime);
-            if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
-                partClass = QLatin1String("org.kexi-project.report");
+            const QString partMime(cursor->value(2).toString());
+            QString pluginId(cursor->value(3).toString());
+            pluginId = realPluginId(pluginId, partMime);
+            if (pluginId == QLatin1String("uk.co.piggz.report")) { // compatibility
+                pluginId = QLatin1String("org.kexi-project.report");
             }
-            KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+            KexiPart::Info *info = Kexi::partManager().infoForPluginId(pluginId);
             bool ok;
-            const int classId = cursor->value(0).toInt(&ok);
-            if (!ok || classId <= 0) {
-                qWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+            const int typeId = cursor->value(0).toInt(&ok);
+            if (!ok || typeId <= 0) {
+                qWarning() << "Invalid type ID" << typeId << "; part with ID" << pluginId << "will not be used";
             }
-            if (info && ok && classId > 0) {
-                d->saveClassId(partClass, classId);
+            if (info && ok && typeId > 0) {
+                d->savePluginId(pluginId, typeId);
                 saved = true;
             }
             else {
                 KexiPart::MissingPart m;
                 m.name = cursor->value(1).toString();
-                m.className = partClass;
+                m.id = pluginId;
                 d->missingParts.append(m);
             }
         }
 
         d->connection->deleteCursor(cursor);
-        if (!saved && !singlePartClass.isEmpty()) {
+        if (!saved && !singlePluginId.isEmpty()) {
             return false; // failure is single part class was not found
         }
     }
@@ -1171,26 +1171,26 @@ int KexiProject::generatePrivateID()
 
 bool KexiProject::createIdForPart(const KexiPart::Info& info)
 {
-    int p_id = idForClass(info.partClass());
-    if (p_id > 0) {
+    int typeId = typeIdForPluginId(info.pluginId());
+    if (typeId > 0) {
         return true;
     }
     // try again, perhaps the id is already created
-    if (checkProject(info.partClass())) {
+    if (checkProject(info.pluginId())) {
         return true;
     }
 
     // Find first available custom part ID by taking the greatest
     // existing custom ID (if it exists) and adding 1.
-    p_id = int(KexiPart::UserObjectType);
-    tristate success = d->connection->querySingleNumber(KDbEscapedString("SELECT max(p_id) FROM kexi__parts"), &p_id);
+    typeId = int(KexiPart::UserObjectType);
+    tristate success = d->connection->querySingleNumber(KDbEscapedString("SELECT max(p_id) FROM kexi__parts"), &typeId);
     if (!success) {
         // Couldn't read part id's from the kexi__parts table
         return false;
     } else {
         // Got a maximum part ID, or there were no parts
-        p_id = p_id + 1;
-        p_id = qMax(p_id, (int)KexiPart::UserObjectType);
+        typeId = typeId + 1;
+        typeId = qMax(typeId, (int)KexiPart::UserObjectType);
     }
 
     //this part's ID is not stored within kexi__parts:
@@ -1209,16 +1209,16 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
    //qDebug() << *it << " " << part()->info()->ptr()->property(*it).toString();
     if (!d->connection->insertRecord(
                 fl.data(),
-                QVariant(p_id),
-                QVariant(info.ptr()->untranslatedGenericName()),
-                QVariant(QString::fromLatin1("kexi/") + info.objectName()/*ok?*/),
-                QVariant(info.partClass() /*always ok?*/)))
+                QVariant(typeId),
+                QVariant(info.untranslatedGroupName()),
+                QVariant(QString::fromLatin1("kexi/") + info.typeName()/*ok?*/),
+                QVariant(info.id() /*always ok?*/)))
     {
         return false;
     }
 
     //qDebug() << "insert success!";
-    d->saveClassId(info.partClass(), p_id);
+    d->savePluginId(info.id(), typeId);
     //qDebug() << "new id is: " << p_id;
     return true;
 }

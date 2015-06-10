@@ -44,29 +44,29 @@ public:
     //! \return global project that is used to retrieve schema informationm for this combo box.
     KexiProject* project() const;
 
-    //! \return name of selected table or query. Can return null string.
+    //! \return name plugin ID of selected item (usually a table or a query). Can return an empty string.
     //! You should use isSelectionValid() to check validity of the input.
-    QString selectedPartClass() const;
+    QString selectedPluginId() const;
 
-    //! \return name of selected table or query. Can return null string or nonexisting name,
+    //! \return name of selected table or query. Can return an empty string or nonexisting name,
     //! so you should use isSelectionValid() to check validity of the input.
     QString selectedName() const;
 
     //! \return true if current selection is valid
     bool isSelectionValid() const;
 
-    /*! \return index of item of part class \a partClass and name \a name.
+    /*! \return index of item identified by a plugin ID \a pluginId and name \a name.
      Returs -1 of no such item exists. */
-    int findItem(const QString& partClass, const QString& name);
+    int findItem(const QString& pluginId, const QString& name);
 
 public Q_SLOTS:
     //! Sets global project that is used to retrieve schema informationm for this combo box.
     //! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
     void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
 
-    /*! Sets item for data source described by \a partClass and \a name.
-     If \a partClass is empty, either "org.kexi-project.table" and "org.kexi-project.query" are tried. */
-    void setDataSource(const QString& partClass, const QString& name);
+    /*! Sets item for data source described by \a pluginId and \a name.
+     If \a pluginId is empty, either "org.kexi-project.table" and "org.kexi-project.query" are tried. */
+    void setDataSource(const QString& pluginId, const QString& name);
 
 Q_SIGNALS:
     //! Emitted whenever data source changes.

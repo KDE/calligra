@@ -105,13 +105,13 @@ public:
      items for only one part class are displayed. In the latter case, no group (parent)
      items are displayed.
      Previous items are removed. */
-    void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
+    void setProject(KexiProject* prj, const QString& itemsPluginId = QString(),
                     QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
      empty (i.e. all part classes are displayed). */
-    QString itemsPartClass() const;
+    QString itemsPluginId() const;
 
     KexiPart::Item* selectedPartItem() const;
 

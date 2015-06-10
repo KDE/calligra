@@ -21,7 +21,7 @@
 #include "kexipart.h"
 #include "kexipartinfo.h"
 #include "kexipartitem.h"
-#include "kexistaticpart.h"
+//! @todo KEXI3 #include "kexistaticpart.h"
 #include "KexiWindow.h"
 #include "KexiWindowData.h"
 #include "KexiView.h"
@@ -112,13 +112,14 @@ Part::Part(QObject *parent,
     d->whatsThis = whatsThis;
 }
 
+/*! @todo KEXI3
 Part::Part(QObject* parent, StaticPartInfo *info)
     : PartBase(parent, QVariantList())
         , d(new Private())
 {
     setObjectName("StaticPart");
     setInfo(info);
-}
+}*/
 
 Part::~Part()
 {
@@ -229,16 +230,16 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
                                         info()->supportedViewModes(), this, item);
 
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KDbObject sdata(project->idForClass(info()->partClass()));
-    sdata.setName(item->name());
-    sdata.setCaption(item->caption());
-    sdata.setDescription(item->description());
+    KDbObject object(project->typeIdForPluginId(info()->pluginId()));
+    object.setName(item->name());
+    object.setCaption(item->caption());
+    object.setDescription(item->description());
 
     /*! @todo js: apply settings for caption displaying method; there can be option for
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
     window->setId(item->identifier()); //not needed, but we did it
-    window->setWindowIcon(QIcon::fromTheme(window->itemIconName()));
+    window->setWindowIcon(QIcon::fromTheme(window->iconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
@@ -250,7 +251,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
 
     if (!item->neverSaved()) {
         //we have to load schema data for this dialog
-        loadAndSetSchemaData(window, sdata, viewMode);
+        loadAndSetSchemaData(window, object, viewMode);
         if (!window->schemaData()) {
             //last chance:
             if (false == d->askForOpeningInTextMode(
@@ -259,7 +260,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
                 return 0;
             }
             viewMode = Kexi::TextViewMode;
-            loadAndSetSchemaData(window, sdata, viewMode);
+            loadAndSetSchemaData(window, object, viewMode);
         }
         if (!window->schemaData()) {
             if (!d->status.error())
@@ -426,7 +427,7 @@ KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiP
     Q_ASSERT(item);
     Q_ASSERT(part);
     if (part)
-        return item->name() + " : " + part->info()->instanceCaption();
+        return item->name() + " : " + part->info()->name();
     return item->name();
 }
 
@@ -447,8 +448,7 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
 {
     Q_UNUSED(partInstanceClient);
     setObjectName(
-        part->info()->objectName()
-        + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
+        part->info()->id() + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
 }
 
 GUIClient::~GUIClient()
