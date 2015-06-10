@@ -58,11 +58,7 @@ public:
         QList<QByteArray> actions;
         actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
             << "edit_undo" << "edit_redo" << "edit_select_all";
-#ifdef __GNUC__
-#warning TODO plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
-#else
-#pragma WARNING( TODO plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj)); )
-#endif
+//! @todo KEXI3 plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
 #endif
     }
 };
@@ -115,16 +111,8 @@ KexiEditor::KexiEditor(QWidget *parent)
 qobject_cast<KTextEditor::ConfigInterface*>( d->view );
     configIface->setConfigValue("dynamic-word-wrap", true);
 
-#ifdef __GNUC__
-#warning TODO Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
-#else
-#pragma WARNING( TODO Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) ); )
-#endif
-#ifdef __GNUC__
-#warning TODO d->view->setContextMenu(pop);
-#else
-#pragma WARNING( TODO d->view->setContextMenu(pop); )
-#endif
+//! @todo KEXI3 Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
+//! @todo KEXI3 d->view->setContextMenu(pop);
     d->view->setContextMenu(d->view->defaultContextMenu());
 
     connect(d->doc, SIGNAL(textChanged(KTextEditor::Document*)),
@@ -262,11 +250,7 @@ void KexiEditor::clearUndoRedo()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
     //! @todo how to remove undo/redo from a KTextEdit?
 #else
-#ifdef __GNUC__
-#warning TODO KexiEditor::clearUndoRedo()
-#else
-#pragma WARNING( TODO KexiEditor::clearUndoRedo() )
-#endif
+//! @todo KEXI3 KexiEditor::clearUndoRedo()
 #endif
 }
 

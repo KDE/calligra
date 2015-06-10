@@ -126,11 +126,7 @@ KexiTableScrollArea* KexiDataTableView::tableView() const
 
 bool KexiDataTableView::saveSettings()
 {
-#ifdef __GNUC__
-#warning TODO save only if changed
-#else
-#pragma WARNING(TODO save only if changed)
-#endif
+//! @todo KEXI3 save only if changed
     bool ok = true;
     KDbTransactionGuard tg;
     if (dynamic_cast<KexiDataTableScrollArea*>(mainWidget())) { // db-aware

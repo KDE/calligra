@@ -292,11 +292,7 @@ QString KexiStartupFileDialog::selectedFile() const
   qDebug() << "prev selectedFile() == " << path;
   qDebug() << "locationEdit == " << locationEdit()->currentText().trimmed();
   //make sure user-entered path is acceped:
-#ifdef __GNUC__
-#warning TODO? setSelection( locationEdit()->currentText().trimmed() );
-#else
-#pragma WARNING( TODO? setSelection( locationEdit()->currentText().trimmed() ); )
-#endif
+//! @todo KEXI3 setSelection( locationEdit()->currentText().trimmed() );
 // path = KFileWidget::selectedFile();
   path = locationEdit()->currentText().trimmed();
   qDebug() << "selectedFile() == " << path;

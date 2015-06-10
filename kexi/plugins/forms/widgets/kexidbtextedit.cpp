@@ -150,11 +150,7 @@ void KexiDBTextEdit::slotTextChanged()
         if (t.length() > (int)m_length) {
             m_slotTextChanged_enabled = false;
             if (acceptRichText()) {
-#ifdef __GNUC__
-#warning todo setHtml(t.left(m_length));
-#else
-#pragma WARNING(todo setHtml(t.left(m_length));
-#endif
+//! @todo KEXI3 setHtml(t.left(m_length));
             }
             else {
                 setPlainText(t.left(m_length));
@@ -185,12 +181,7 @@ bool KexiDBTextEdit::isReadOnly() const
 void KexiDBTextEdit::setReadOnly(bool readOnly)
 {
     KTextEdit::setReadOnly(readOnly);
-#ifdef __GNUC__
-#warning TODO KexiDBTextEdit::setReadOnly() - bg color
-#else
-#pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
-#endif
-//! @todo
+//! @todo KEXI3 KexiDBTextEdit::setReadOnly() - bg color
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly

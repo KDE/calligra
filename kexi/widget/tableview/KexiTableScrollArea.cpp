@@ -104,11 +104,7 @@ KexiTableScrollArea::Appearance::Appearance(QWidget *widget)
 
 //-----------------------------------------
 
-#ifdef __GNUC__
-#warning TODO KexiTableViewCellToolTip
-#else
-#pragma WARNING( TODO KexiTableViewCellToolTip )
-#endif
+//! @todo KEXI3 KexiTableViewCellToolTip
 /* TODO
 KexiTableViewCellToolTip::KexiTableViewCellToolTip( KexiTableView * tableView )
  : QToolTip()
@@ -237,11 +233,7 @@ KexiTableScrollArea::KexiTableScrollArea(KDbTableViewData* data, QWidget* parent
     setAppearance(d->appearance); //refresh
     d->setSpreadSheetMode(false);
 
-#ifdef __GNUC__
-#warning TODO d->cellToolTip = new KexiTableViewCellToolTip(this);
-#else
-#pragma WARNING( TODO d->cellToolTip = new KexiTableViewCellToolTip(this); )
-#endif
+//! @todo KEXI3 d->cellToolTip = new KexiTableViewCellToolTip(this);
 }
 
 KexiTableScrollArea::~KexiTableScrollArea()
@@ -1026,11 +1018,7 @@ bool KexiTableScrollArea::shortCutPressed(QKeyEvent *e, const QString &action_na
     if (action) {
         if (!action->isEnabled())//this action is disabled - don't process it!
             return false;
-#ifdef __GNUC__
-#warning OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
-#else
-#pragma WARNING( OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() ) )
-#endif
+//! @todo KEXI3 (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
         if (action->shortcut().primary() == QKeySequence(e->key() | e->modifiers())
                 || (action->shortcut().alternate() == QKeySequence(e->key() | e->modifiers())))
         {

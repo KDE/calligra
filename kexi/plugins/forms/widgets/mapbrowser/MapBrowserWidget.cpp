@@ -31,7 +31,7 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
     m_internalReadOnly(false)
 {
 #ifndef Q_CC_MSVC
-#warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
+//! @todo KEXI3 this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
 #endif
   setMapThemeId("earth/srtm/srtm.dgml");
   m_defaultZoom = 1200; // with this value "more or less" entire earth fits the window. Please check the MarbleWidget::setZoom documentation for more info.
