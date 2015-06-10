@@ -279,7 +279,7 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                     expr = fieldExpr;
             }
             expr->debug();
-            kDebug() << expr->toString(0);
+            qDebug() << expr->toString(0);
 
             KDbField *f = new KDbField();
             f->setExpression(expr);
