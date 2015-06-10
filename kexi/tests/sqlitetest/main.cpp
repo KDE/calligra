@@ -1,8 +1,7 @@
 #include <QDebug>
+#include <QApplication>
 
 #include <KAboutData>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 
 #include <KDbConnection>
 #include <KDbDriverManager>

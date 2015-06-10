@@ -30,9 +30,9 @@
 #include <KDbCursor>
 #include <KDbUtils>
 
-#include <kapplication.h>
 #include <KLocalizedString>
 
+#include <QApplication>
 #include <QTextStream>
 #include <QCheckBox>
 #include <QClipboard>

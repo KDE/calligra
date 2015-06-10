@@ -30,12 +30,10 @@
 #include <KDbIndexSchema>
 #include <KDbParser>
 
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kcomponentdata.h>
-#include <kiconloader.h>
-#include <kaboutdata.h>
+#include <KIconLoader>
+#include <KAboutData>
 
+#include <QApplication>
 #include <QFileInfo>
 #include <QPointer>
 #include <QDebug>

@@ -132,7 +132,7 @@ static QString appIncorrectlyInstalledMessage()
 {
     return xi18nc("@info", "<application>%1</application> could have been incorrectly "
                            "installed or started. The application will be closed.",
-                           QGuiApplication::applicationDisplayName());
+                           QApplication::applicationDisplayName());
 }
 
 //! @return a string list @a list with removed whitespace from the beginning and end of each string.
