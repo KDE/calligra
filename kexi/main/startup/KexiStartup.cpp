@@ -904,7 +904,7 @@ KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool *cancelled, QWi
     if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
         KexiGUIMessageHandler msgh;
         QString msg(xi18n("Could not load list of available projects for <resource>%1</resource> database server.",
-                         cdata->serverInfoString(true)));
+                         cdata->toUserVisibleString()));
         if (prjdlg.projectSet()) {
             msgh.showErrorMessage(prjdlg.projectSet(), msg);
         }
