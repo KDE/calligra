@@ -18,8 +18,7 @@
 */
 
 #include <QDebug>
-
-#include <kapplication.h>
+#include <QApplication>
 
 #include <KAboutData>
 

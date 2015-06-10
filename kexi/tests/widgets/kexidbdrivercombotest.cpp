@@ -25,9 +25,8 @@
 #include <QPushButton>
 #include <QDebug>
 #include <Q3VBoxLayout>
+#include <QApplication>
 
-#include <kcmdlineargs.h>
-#include <kapplication.h>
 #include <kcomponentdata.h>
 
 #include <KDbDriverManager>
