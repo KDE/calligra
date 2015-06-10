@@ -56,12 +56,12 @@ KexiDBReportData::KexiDBReportData (const QString &objectName,
 }
 
 KexiDBReportData::KexiDBReportData(const QString& objectName,
-                                   const QString& partClass,
+                                   const QString& pluginId,
                                    KDbConnection* pDb)
         : d(new Private(pDb))
 {
     d->objectName = objectName;
-    getSchema(partClass);
+    getSchema(pluginId);
 }
 
 void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
@@ -135,7 +135,7 @@ bool KexiDBReportData::close()
     return true;
 }
 
-bool KexiDBReportData::getSchema(const QString& partClass)
+bool KexiDBReportData::getSchema(const QString& pluginId)
 {
     if (d->connection)
     {
@@ -144,13 +144,13 @@ bool KexiDBReportData::getSchema(const QString& partClass)
         delete d->copySchema;
         d->copySchema = 0;
 
-        if ((partClass.isEmpty() || partClass == "org.kexi-project.table")
+        if ((pluginId.isEmpty() || pluginId == "org.kexi-project.table")
                 && d->connection->tableSchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a table..";
             d->originalSchema = new KDbQuerySchema(*(d->connection->tableSchema(d->objectName)));
         }
-        else if ((partClass.isEmpty() || partClass == "org.kexi-project.query")
+        else if ((pluginId.isEmpty() || pluginId == "org.kexi-project.query")
                  && d->connection->querySchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a query..";

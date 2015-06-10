@@ -81,14 +81,14 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         if (!info->isVisibleInNavigator())
             continue;
 
-        if (!d->itemsPartClass.isEmpty() && info->partClass() != d->itemsPartClass)
+        if (!d->itemsPartClass.isEmpty() && info->pluginId() != d->itemsPartClass)
             continue;
 
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
-        //qDebug() << info->partClass() << info->objectName();
+        //qDebug() << info->pluginId() << info->objectName();
         KexiProjectModelItem *groupItem = 0;
-        if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
+        if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->pluginId()*/) {
             groupItem = addGroup(info, d->rootItem);
             if (!groupItem) {
                 continue;
@@ -284,7 +284,7 @@ void KexiProjectModel::slotAddItem(KexiPart::Item *item)
     //qDebug() << item.name();
     QModelIndex idx;
 
-    KexiProjectModelItem *parent = modelItemFromName(item->partClass());
+    KexiProjectModelItem *parent = modelItemFromName(item->pluginId());
 
     if (parent) {
         //qDebug() << "Got Parent" << parent->data(0);

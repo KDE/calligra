@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +21,10 @@
 #ifndef KEXIPARTMANAGER_H
 #define KEXIPARTMANAGER_H
 
-#include "kexistaticpart.h"
+//! @todo KEXI3 #include "kexistaticpart.h"
 #include "kexiinternalpart.h"
 
-#include <KDbObject>
+#include <KDbResult>
 
 namespace KexiPart
 {
@@ -42,7 +42,7 @@ typedef QHash<QString, Part*> PartDict;
  *
  * It creates instances only when needed.
  */
-class KEXICORE_EXPORT Manager : public QObject, public KDbObject, public KDbResultable
+class KEXICORE_EXPORT Manager : public QObject, /*public KDbObject,*/ public KDbResultable
 {
     Q_OBJECT
 
@@ -54,29 +54,29 @@ public:
     ~Manager();
 
     /**
-     * \return a part object for specified class name, e.g. "org.kexi-project.table"
-     * @note For compatibility, if a string without any dot is provided, "org.kexi-project."
-     *       will be prepended to the class name.
-     * Dlopens a part using KexiPart::Info if needed. Return 0 if loading failed.
+     * \return a part object for specified plugin ID @a pluginId, e.g. "org.kexi-project.table"
+     * @note For compatibility with Kexi <= 2, if a string without any dot is provided, "org.kexi-project."
+     *       will be prepended to the ID.
+     * Dynamically loads a plugin using KexiPart::Info if needed. Returns 0 if loading failed.
      */
-    Part *partForClass(const QString& className);
+    Part *partForPluginId(const QString& pluginId);
 
     /**
      * \return a part object for specified info. Dlopens a part using KexiPart::Info
      * if needed. Return 0 if loading failed.
      */
-    Part *part(Info *);
+    Part *part(Info *info);
 
     /**
-     * \return the info for a corresponding internal class name, e.g. "org.kexi-project.table"
-     * @note For compatibility, if a string without any dot is provided, "org.kexi-project."
-     *       will be prepended to the class name.
+     * \return the info for a corresponding plugin ID, e.g. "org.kexi-project.table"
+     * @note For compatibility with Kexi <= 2, if a string without any dot is provided, "org.kexi-project."
+     *       will be prepended to the ID.
      */
-    Info *infoForClass(const QString& className);
+    Info *infoForPluginId(const QString& pluginId);
 
     /**
-     * @return a list of the available KexiParts in well-defined order
-     * Can return 0 if plugins were not found (what means the installation is broken).
+     * @return a list of the available KexiParts-based plugins in a well-defined order
+     * Can return 0 if no plugins have been found, what means the installation is broken.
      */
     PartInfoList* infoList();
 
@@ -86,10 +86,10 @@ Q_SIGNALS:
 
 protected:
     //! Used by StaticPart
-    void insertStaticPart(KexiPart::StaticPart* part);
+    //! @todo KEXI3 void insertStaticPart(KexiPart::StaticPart* part);
 
     //! Used by KexiInternalPart
-    KexiInternalPart* internalPartForClass(const QString& className);
+    KexiInternalPart* internalPartForPluginId(const QString& pluginId);
 
 private:
     /**
@@ -98,13 +98,15 @@ private:
      */
     bool lookup();
 
+    template <typename PartClass>
+    PartClass* part(Info *info, QHash<QString, PartClass*> *partDict);
+
     Q_DISABLE_COPY(Manager)
 
     class Private;
-
     Private* const d;
 
-    friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
+    //! @todo KEXI3 friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
     friend KexiInternalPart* KexiInternalPart::part(KDbMessageHandler*, const QString&);
 };
 

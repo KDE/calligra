@@ -33,7 +33,7 @@ public:
     using KexiGUIMessageHandler::showMessage;
 
 protected:
-    using KexiGUIMessageHandler::showErrorMessageInternal;
+    using KexiGUIMessageHandler::showErrorMessage;
 
     virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
     virtual void showMessageInternal(MessageType type, const QString &title, const QString &details,

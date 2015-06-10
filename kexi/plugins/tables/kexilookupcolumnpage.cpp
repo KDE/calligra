@@ -39,14 +39,14 @@
 #include <QDebug>
 
 
-QString partClassToType(const QString& partClass)
+QString pluginIdToTypeName(const QString& pluginId)
 {
-    if (partClass == "org.kexi-project.table")
+    if (pluginId == "org.kexi-project.table")
         return "table";
-    else if (partClass == "org.kexi-project.query")
+    else if (pluginId == "org.kexi-project.query")
         return "query";
 //! @todo more types
-    return partClass;
+    return pluginId;
 }
 
 QString typeToPartClass(const QString& type)
@@ -295,19 +295,19 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 {
     if (!d->rowSourceCombo->project())
         return;
-    QString partClass(d->rowSourceCombo->selectedPartClass());
+    QString pluginId(d->rowSourceCombo->selectedPluginId());
     bool rowSourceFound = false;
     QString name = d->rowSourceCombo->selectedName();
-    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") && d->rowSourceCombo->isSelectionValid()) {
+    if ((pluginId == "org.kexi-project.table" || pluginId == "org.kexi-project.query") && d->rowSourceCombo->isSelectionValid()) {
         KDbTableOrQuerySchema *tableOrQuery = new KDbTableOrQuerySchema(
-            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), partClass == "org.kexi-project.table");
+            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), pluginId == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 //! @todo disabled   d->fieldListView->setSchema( tableOrQuery );
             /*tmp*/
             delete tableOrQuery;
             rowSourceFound = true;
-            d->boundColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
-            d->visibleColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
+            d->boundColumnCombo->setTableOrQuery(name, pluginId == "org.kexi-project.table");
+            d->visibleColumnCombo->setTableOrQuery(name, pluginId == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -323,7 +323,7 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 
     //update property set
     if (d->hasPropertySet()) {
-        d->changeProperty("rowSourceType", partClassToType(partClass));
+        d->changeProperty("rowSourceType", pluginIdToTypeName(pluginId));
         d->changeProperty("rowSource", name);
     }
 //! @todo update d->propertySet ^^
@@ -357,10 +357,10 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 
 void KexiLookupColumnPage::slotGotoSelectedRowSource()
 {
-    const QString partClass( d->rowSourceCombo->selectedPartClass() );
-    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
+    const QString pluginId(d->rowSourceCombo->selectedPluginId());
+    if (pluginId == "org.kexi-project.table" || pluginId == "org.kexi-project.query") {
         if (d->rowSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(partClass, d->rowSourceCombo->selectedName());
+            emit jumpToObjectRequested(pluginId, d->rowSourceCombo->selectedName());
     }
 }
 

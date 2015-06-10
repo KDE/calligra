@@ -46,20 +46,19 @@ public:
         m_dataSource = ds;
     }
 
-    /*! \return the class of the part for the widget's data source.
-     Data source part class means here types like "org.kexi-project.table"
-     or "org.kexi-project.query" if the data source is set to object
-     (as within form or subform)
+    /*! \return the plugin ID of the part for the widget's data source.
+     It means IDs like "org.kexi-project.table" or "org.kexi-project.query" if the data
+     source is set to object (as within form or subform)
      or is empty if the data source is set to table field or query column. */
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePluginId() const {
         return m_dataSourcePartClass;
     }
 
-    /*! Sets the class of the part for the data widget's data source.
-     Data source usually means here a "org.kexi-project.table" or "org.kexi-project.query".
-     @see dataSourcePartClass() */
-    inline void setDataSourcePartClass(const QString &partClass) {
-        m_dataSourcePartClass = partClass;
+    /*! Sets the plugin ID of the part for the data widget's data source.
+     It usually means here a "org.kexi-project.table" or "org.kexi-project.query".
+     @see dataSourcePluginId() */
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        m_dataSourcePartClass = pluginId;
     }
 
     /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()

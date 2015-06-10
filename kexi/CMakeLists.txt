@@ -27,6 +27,8 @@ add_definitions(
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kexi\")
 
+set(KEXI_PLUGIN_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/kexi)
+
 #no default: add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )

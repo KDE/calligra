@@ -352,9 +352,9 @@ void KexiDBTextEdit::setDataSource(const QString &ds)
     updateTextForDataSource();
 }
 
-void KexiDBTextEdit::setDataSourcePartClass(const QString &partClass)
+void KexiDBTextEdit::setDataSourcePluginId(const QString &pluginId)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     updateTextForDataSource();
 }
 

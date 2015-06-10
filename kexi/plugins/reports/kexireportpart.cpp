@@ -120,8 +120,8 @@ QString KexiReportPart::loadReport(const QString& name)
         return QString();
     }
     KDbObject sd;
-    if (conn->loadObjectData(win->project()->idForClass("org.kexi-project.report"), name, &sd) != true
-        && conn->loadObjectData(win->project()->idForClass("uk.co.piggz.report"), name, &sd) != true /* compat. */)
+    if (conn->loadObjectData(win->project()->typeIdForPluginId("org.kexi-project.report"), name, &sd) != true
+        && conn->loadObjectData(win->project()->typeIdForPluginId("uk.co.piggz.report"), name, &sd) != true /* compat. */)
     {
         qWarning() << "failed to load schema data";
         return QString();
