@@ -29,6 +29,7 @@
 
 #include "gemini/ViewModeSwitchEvent.h"
 
+#include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPart.h>

@@ -77,7 +77,7 @@ void KexiCloseButton::paintEvent(QPaintEvent *e)
         QToolButton::paintEvent(e);
     }
     QStyleOptionButton option;
-    option.init(this);
+    option.initFrom(this);
     KIcon icon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &option, this));
     QPainter p(this);
     const int metric = style()->pixelMetric(QStyle::PM_SmallIconSize, &option, this);

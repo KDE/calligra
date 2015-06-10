@@ -29,6 +29,9 @@
 #include <KoStopGradient.h>
 #include <KoPattern.h>
 
+#include "kis_dom_utils.h"
+
+
 #include "psd.h"
 #include "kis_global.h"
 #include "kis_psd_layer_style.h"
@@ -236,7 +239,7 @@ QString strokeFillTypeToString(psd_fill_type position)
     return result;
 }
 
-QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style)
+QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style) const
 {
     QVector <KoPattern*> allPatterns;
 
@@ -269,10 +272,9 @@ QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patt
     }
 }
 
-
-void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 {
-    KIS_ASSERT_RECOVER_RETURN(!m_stylesVector.isEmpty());
+    KIS_ASSERT_RECOVER(!m_stylesVector.isEmpty()) { return QDomDocument(); }
 
     QVector<KoPattern*> allPatterns;
 
@@ -288,9 +290,13 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.enterList("Patterns");
 
         foreach (KoPattern *pattern, allPatterns) {
-            if (!patternToUuidMap.contains(pattern)) {
-                QString uuid = w.writePattern("", pattern);
-                patternToUuidMap.insert(pattern, uuid);
+            if (pattern) {
+                if (!patternToUuidMap.contains(pattern)) {
+                    QString uuid = w.writePattern("", pattern);
+                    patternToUuidMap.insert(pattern, uuid);
+                }
+            } else {
+                qWarning() << "WARNING: KisAslLayerStyleSerializer::saveToDevice: saved pattern is null!";
             }
         }
 
@@ -312,7 +318,7 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.enterDescriptor("Lefx", "", "Lefx");
 
         w.writeUnitFloat("Scl ", "#Prc", 100);
-        w.writeBoolean("masterFXSwitch", true);
+        w.writeBoolean("masterFXSwitch", style->isEnabled());
 
 
         // Drop Shadow
@@ -672,8 +678,53 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
         w.leaveDescriptor();
     }
 
+    return w.document();
+}
+
+inline QDomNode findNodeByClassId(const QString &classId, QDomNode parent) {
+    return KisDomUtils::findElementByAttibute(parent, "node", "classId", classId);
+}
+
+void replaceAllChildren(QDomNode src, QDomNode dst)
+{
+    QDomNode node;
+
+    do {
+        node = dst.lastChild();
+        dst.removeChild(node);
+
+    } while(!node.isNull());
+
+
+    node = src.firstChild();
+    while(!node.isNull()) {
+        dst.appendChild(node);
+        node = src.firstChild();
+    }
+
+    src.parentNode().removeChild(src);
+}
+
+QDomDocument KisAslLayerStyleSerializer::formPsdXmlDocument() const
+{
+    QDomDocument doc = formXmlDocument();
+
+    QDomNode nullNode = findNodeByClassId("null", doc.documentElement());
+    QDomNode stylNode = findNodeByClassId("Styl", doc.documentElement());
+    QDomNode lefxNode = findNodeByClassId("Lefx", stylNode);
+
+    replaceAllChildren(lefxNode, nullNode);
+
+    return doc;
+}
+
+void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
+{
+    QDomDocument doc = formXmlDocument();
+    if (doc.isNull()) return ;
+
     KisAslWriter writer;
-    writer.writeFile(device, w.document());
+    writer.writeFile(device, doc);
 }
 
 void convertAndSetBlendMode(const QString &mode,
@@ -833,6 +884,12 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
 
     if (!pattern) {
         qWarning() << "WARNING: ASL style contains inexistent pattern reference!";
+
+        QImage dumbImage(32, 32, QImage::Format_ARGB32);
+        dumbImage.fill(Qt::red);
+        KoPattern *dumbPattern = new KoPattern(dumbImage, "invalid", "");
+        registerPatternObject(dumbPattern);
+        pattern = dumbPattern;
     }
 
     setPattern(pattern);
@@ -874,6 +931,8 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
 {
     CONN_TEXT_RADDR("/null/Nm  ", setName, style, KisPSDLayerStyle);
     CONN_TEXT_RADDR("/null/Idnt", setPsdUuid, style, KisPSDLayerStyle);
+
+    CONN_BOOL("/masterFXSwitch", setEnabled, style, KisPSDLayerStyle, prefix);
 
     psd_layer_effects_drop_shadow *dropShadow = style->dropShadow();
 
@@ -1118,7 +1177,6 @@ void KisAslLayerStyleSerializer::newStyleStarted(bool isPsdStructure)
     KisPSDLayerStyle *currentStyle = m_stylesVector.last().data();
 
     psd_layer_effects_context *context = currentStyle->context();
-    context->global_angle = 0;
     context->keep_original = 0;
 
     QString prefix = isPsdStructure ? "/null" : "/Styl/Lefx";
@@ -1147,17 +1205,27 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     }
 }
 
-void KisAslLayerStyleSerializer::readFromPSDSection(QIODevice *device)
+void KisAslLayerStyleSerializer::registerPSDPattern(const QDomDocument &doc)
 {
+    KisAslCallbackObjectCatcher catcher;
+    catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+
+    //KisAslObjectCatcher c2;
+    KisAslXmlParser parser;
+    parser.parseXML(doc, catcher);
+}
+
+void KisAslLayerStyleSerializer::readFromPSDXML(const QDomDocument &doc)
+{
+    // The caller prepares the document using th efollowing code
+    //
+    // KisAslReader reader;
+    // QDomDocument doc = reader.readLfx2PsdSection(device);
+
     m_stylesVector.clear();
 
     //m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
     m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, true));
-
-    KisAslReader reader;
-    QDomDocument doc = reader.readLfx2PsdSection(device);
-
-    //qDebug() << ppVar(doc.toString());
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

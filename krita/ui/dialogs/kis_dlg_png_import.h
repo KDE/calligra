@@ -1,6 +1,5 @@
-/* This file is part of the KDE project
- *
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+/*
+ * Copyright (C) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,14 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_DLG_PNG_IMPORT_H
+#define KIS_DLG_PNG_IMPORT_H
 
-#include <klocale.h>
+#include <kdialog.h>
+#include <QString>
 
-#include "kis_rate_option_widget.h"
-#include "kis_rate_option.h"
+#include "ui_wdgdlgpngimport.h"
 
-KisRateOptionWidget::KisRateOptionWidget(const QString& label, const QString& /*sliderLabel*/, const QString& name, bool checked):
-    KisCurveOptionWidget(new KisRateOption(name, label, checked))
+
+class KisDlgPngImport : public KDialog
 {
-    KisCurveOptionWidget::setConfigurationPage(curveWidget());
-}
+    Q_OBJECT
+
+public:
+    KisDlgPngImport(const QString &path, const QString &colorModelID, const QString &colorDepthID, QWidget *parent = 0);
+    QString profile() const;
+
+private:
+
+    Ui_WdgDlgPngImport dlgWidget;
+
+};
+
+#endif // KIS_DLG_PNG_IMPORT_H

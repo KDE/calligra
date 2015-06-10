@@ -134,7 +134,7 @@
       <li xml:lang="bs">Prilagodljiv korisnički interfejs sa gdje se moze slobodno  staviti alatne trake i dockers</li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
       <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
-      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y acoplables que se pueden posicionar libremente en cualquier lugar.</li>
+      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y paneles que se pueden posicionar libremente en cualquier lugar.</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
@@ -154,7 +154,7 @@
       <li xml:lang="bs">Sloj lučki radnik za jednostavno rukovanje složenim dokumentima , uključujući pregled sličica , podršku za grupiranje oblika putem drag and drop , kontroliranje vidljivost oblika ili zaključavanje</li>
       <li xml:lang="ca">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig.</li>
       <li xml:lang="en-GB">Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or locking</li>
-      <li xml:lang="es">Acoplable de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas, soporte para la agrupación de figuras mediante la operación de arrastrar y soltar, control de la visibilidad de las figuras o bloqueo.</li>
+      <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas, soporte para la agrupación de figuras mediante la operación de arrastrar y soltar, control de la visibilidad de las figuras o bloqueo.</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes de prévisualisation, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
@@ -300,7 +300,7 @@
       <li xml:lang="bs">Extensible pisanjem dodataka za novim alatima , oblika i modnog brenda Dockers</li>
       <li xml:lang="ca">Ampliable mitjançant l'escriptura de connectors per eines noves, formes i acobladors</li>
       <li xml:lang="en-GB">Extensible by writing plugins for new tools, shapes and dockers</li>
-      <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y acoplables</li>
+      <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y paneles</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>

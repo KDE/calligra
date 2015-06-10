@@ -152,7 +152,7 @@ KexiDockWidget::KexiDockWidget(const QString & title, QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 
     QStyleOptionDockWidgetV2 dockOpt;
-    dockOpt.init(this);
+    dockOpt.initFrom(this);
     const int addSpacing = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, &dockOpt, this);
 
     QWidget *titleBar = new QWidget;
@@ -181,7 +181,7 @@ void KexiDockWidget::paintEvent(QPaintEvent *pe)
     QStylePainter p(this);
     if (isFloating()) {
         QStyleOptionFrame framOpt;
-        framOpt.init(this);
+        framOpt.initFrom(this);
         p.drawPrimitive(QStyle::PE_FrameDockWidget, framOpt);
     }
 

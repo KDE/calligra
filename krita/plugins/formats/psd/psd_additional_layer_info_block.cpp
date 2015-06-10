@@ -23,13 +23,14 @@
 #include <asl/kis_offset_on_exit_verifier.h>
 
 #include <asl/kis_asl_reader_utils.h>
-
 #include <asl/kis_asl_reader.h>
-#include <kis_asl_layer_style_serializer.h>
+#include <asl/kis_asl_writer_utils.h>
+#include <asl/kis_asl_writer.h>
+#include <asl/kis_asl_patterns_writer.h>
 
 
-
-PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
+PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader& header)
+    : m_header(header)
 {
 }
 
@@ -163,19 +164,13 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
 
         }
         else if (key == "lfx2") {
-            KisAslLayerStyleSerializer serializer;
-            serializer.readFromPSDSection(io);
-
-            QVector<KisPSDLayerStyleSP> styles = serializer.styles();
-
-            if (styles.size() == 1) {
-                layerStyle = styles.first();
-            } else {
-                qWarning() << "WARNING: Couldn't read layer style!";
-            }
+            KisAslReader reader;
+            layerStyleXml = reader.readLfx2PsdSection(io);
         }
         else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
-
+            KisAslReader reader;
+            QDomDocument pattern = reader.readPsdSectionPattern(io, blockSize);
+            embeddedPatterns << pattern;
         }
         else if (key == "Anno") {
 
@@ -331,11 +326,6 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
         else if (key == "FEid") {
 
         }
-
-    }
-
-    if (layerStyle && !unicodeLayerName.isEmpty()) {
-        layerStyle->setName(unicodeLayerName);
     }
 }
 
@@ -349,4 +339,61 @@ bool PsdAdditionalLayerInfoBlock::valid()
 {
 
     return true;
+}
+
+void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice* io, const QString &layerName)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("luni", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> layerNameSizeTag(io, 2);
+    KisAslWriterUtils::writeUnicodeString(layerName, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice* io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lsct", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> sectionTypeSizeTag(io, 2);
+    SAFE_WRITE_EX(io, (quint32)sectionType);
+
+    QString realBlendModeKey = isPassThrough ? QString("pass") : blendModeKey;
+
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lfx2", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> lfx2SizeTag(io, 2);
+
+    try {
+        KisAslWriter writer;
+        writer.writePsdLfx2SectionEx(io, stylesXmlDoc);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style lfx2 block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
+}
+
+void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice* io, const QDomDocument &patternsXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("Patt", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> pattSizeTag(io, 2);
+
+    try {
+        KisAslPatternsWriter writer(patternsXmlDoc, io);
+        writer.writePatterns();
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style patterns block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
 }

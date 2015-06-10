@@ -61,8 +61,10 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/slider_and_spin_box_sync.cpp
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
+    dialogs/kis_dlg_png_import.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -117,7 +119,7 @@ set(kritaui_LIB_SRCS
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
+    kis_paintop_settings_widget.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -368,6 +370,7 @@ endif()
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
@@ -515,6 +518,6 @@ install( FILES
 #    canvas/kis_perspective_grid_manager.h
     kis_paintop_option.h
     kis_paintop_options_model.h
-    kis_paintop_options_widget.h
+    kis_paintop_settings_widget.h
     processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

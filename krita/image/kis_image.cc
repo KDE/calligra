@@ -59,6 +59,7 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
+#include "kis_memory_statistics_server.h"
 
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
@@ -80,6 +81,8 @@
 #include "kis_wrapped_rect.h"
 
 #include "kis_layer_projection_plane.h"
+
+#include "kis_update_time_monitor.h"
 
 
 // #define SANITY_CHECKS
@@ -185,6 +188,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
     }
 
+    connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
 KisImage::~KisImage()
@@ -1343,6 +1347,8 @@ KisNodeSP KisImage::isolatedModeRoot() const
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
+    KisUpdateTimeMonitor::instance()->reportJobStarted(data);
+
     if (m_d->scheduler) {
         m_d->scheduler->addJob(id, data);
     }
@@ -1472,6 +1478,8 @@ void KisImage::enableUIUpdates()
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
+    KisUpdateTimeMonitor::instance()->reportUpdateFinished(rc);
+
     if (!m_d->disableUIUpdateSignals) {
         emit sigImageUpdated(rc);
     }

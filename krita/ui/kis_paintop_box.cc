@@ -52,7 +52,7 @@
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <kis_action.h>
 
 #include "kis_canvas2.h"
@@ -476,7 +476,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     if (!m_paintopOptionWidgets.contains(paintop))
-        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
+        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 

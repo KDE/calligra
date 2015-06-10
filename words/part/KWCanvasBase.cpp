@@ -38,6 +38,7 @@
 #include <KoGridData.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
+#include <KoUnit.h>
 
 #include <KoAnnotationLayoutManager.h>
 

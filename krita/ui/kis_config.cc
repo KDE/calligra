@@ -378,7 +378,8 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
 
 QString KisConfig::monitorProfile(int screen) const
 {
-    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "");
+    // Note: keep this in sync with the default profile for the RGB colorspaces!
+    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "sRGB-elle-V2-srgbtrc.icc");
     //qDebug() << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
@@ -663,16 +664,6 @@ qint32 KisConfig::maxNumberOfThreads(bool defaultValue) const
 void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 {
     m_cfg.writeEntry("maxthreads", maxThreads);
-}
-
-qint32 KisConfig::maxTilesInMem(bool defaultValue) const
-{
-    return (defaultValue ? 5000 : m_cfg.readEntry("maxtilesinmem", 5000));
-}
-
-void KisConfig::setMaxTilesInMem(qint32 tiles) const
-{
-    m_cfg.writeEntry("maxtilesinmem", tiles);
 }
 
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
@@ -1188,12 +1179,12 @@ void KisConfig::setUseOcio(bool useOCIO) const
 
 int KisConfig::favoritePresets(bool defaultValue) const
 {
-    return (defaultValue ? 10 : m_cfg.readEntry("favoritePresets", 10));
+    return (defaultValue ? 10 : m_cfg.readEntry("numFavoritePresets", 10));
 }
 
 void KisConfig::setFavoritePresets(const int value)
 {
-    m_cfg.writeEntry("favoritePresets", value);
+    m_cfg.writeEntry("numFavoritePresets", value);
 }
 
 
