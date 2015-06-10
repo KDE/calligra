@@ -58,7 +58,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
     setPrompt(xi18nc("@info", "Supply a password below."));
 
     if ((flags & ShowDetailsButton)) {
-        // KEXI3 OK?
+        //! @todo KEXI3 OK?
         buttonBox()->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel
                                         | QDialogButtonBox::Help);
         QPushButton *detailsButton = buttonBox()->button(QDialogButtonBox::Help);
@@ -93,7 +93,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
     buttonBox()->button(QDialogButtonBox::Ok)->setText(xi18n("&Open"));
     connect(buttonBox()->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(slotOkOrDetailsButtonClicked()))
-    // KEXI3 buttonBox()->button(QDialogButtonBox::Ok)->setIcon(koIcon("document-open");
+    //! @todo KEXI3 buttonBox()->button(QDialogButtonBox::Ok)->setIcon(koIcon("document-open");
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()
