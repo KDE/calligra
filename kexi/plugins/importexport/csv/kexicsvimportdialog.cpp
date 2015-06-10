@@ -281,7 +281,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     setSizeGripEnabled(true);
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 
-    // KEXI3 ?
+    //! @todo KEXI3 ?
     KGuiItem::assign(button(ConfigureButton), KStandardGuiItem::configure());
 
     button(FinishButton)->setEnabled(false);

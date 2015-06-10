@@ -517,9 +517,9 @@ void ImportTableWizard::arriveProgressPage()
 {
     m_progressLbl->setText(xi18nc("@info", "Please wait while the table is imported."));
 
-    // KEXI3 user1Button->setEnabled(false);
-    // KEXI3 user2Button->setEnabled(false);
-    // KEXI3 user3Button->setEnabled(false);
+    //! @todo KEXI3 user1Button->setEnabled(false);
+    //! @todo KEXI3 user2Button->setEnabled(false);
+    //! @todo KEXI3 user3Button->setEnabled(false);
 
     connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(slotCancelClicked()));
@@ -545,8 +545,8 @@ void ImportTableWizard::arriveFinishPage()
                                   m_alterSchemaWidget->nameWidget()->nameText()));
     }
 
-    // KEXI3 user2Button->setEnabled(false);
-    // KEXI3 user3Button->setEnabled(false);
+    //! @todo KEXI3 user2Button->setEnabled(false);
+    //! @todo KEXI3 user3Button->setEnabled(false);
     buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
 }
 
