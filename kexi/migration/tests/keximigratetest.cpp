@@ -18,8 +18,7 @@
 */
 
 #include <migration/importwizard.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
+#include <QApplication>
 #include <KAboutData>
 
 /*

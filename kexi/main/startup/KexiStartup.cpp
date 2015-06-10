@@ -38,7 +38,6 @@
 #include <KDbDriverManager>
 
 #include <KMessageBox>
-#include <kcmdlineargs.h>
 #include <KLocalizedString>
 
 #include <QDebug>
