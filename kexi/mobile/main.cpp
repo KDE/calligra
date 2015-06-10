@@ -18,8 +18,7 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <KApplication>
-#include <kcmdlineargs.h>
+#include <QApplication>
 #include <KAboutData>
 
 #include "KexiMobileMainWindow.h"

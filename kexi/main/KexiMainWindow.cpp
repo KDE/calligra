@@ -69,8 +69,6 @@
 #include <KPropertyEditorView>
 #include <KPropertySet>
 
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
