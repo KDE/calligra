@@ -342,7 +342,7 @@ void KexiFormView::updateAutoFieldsDataSource()
     //-inherit data types
     //(this data has not been stored in the form)
     QString dataSourceString(d->dbform->dataSource());
-    QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
+    QString dataSourcePartClassString(d->dbform->dataSourcePluginId());
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KDbTableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
@@ -367,7 +367,7 @@ void KexiFormView::updateValuesForSubproperties()
     //-inherit data types
     //(this data has not been stored in the form)
     QString dataSourceString(d->dbform->dataSource());
-    QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
+    QString dataSourcePartClassString(d->dbform->dataSourcePluginId());
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KDbTableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
@@ -609,7 +609,7 @@ void KexiFormView::initDataSource()
         d->scrollView->setMainDataSourceWidget(d->dbform);
         sources = d->scrollView->usedDataSources();
         conn = KexiMainWindowIface::global()->project()->dbConnection();
-        QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
+        QString dataSourcePartClassString(d->dbform->dataSourcePluginId());
         if (dataSourcePartClassString.isEmpty() /*table type is the default*/
             || dataSourcePartClassString == "org.kexi-project.table")
         {
@@ -620,7 +620,7 @@ void KexiFormView::initDataSource()
                 d->queryIsOwned = true;
 
                 if (dataSourcePartClassString.isEmpty())
-                    d->dbform->setDataSourcePartClass("org.kexi-project.table"); //update for compatibility
+                    d->dbform->setDataSourcePluginId("org.kexi-project.table"); //update for compatibility
             }
         }
 
@@ -636,7 +636,7 @@ void KexiFormView::initDataSource()
                 d->queryIsOwned = false;
                 ok = d->query != 0;
                 if (ok && dataSourcePartClassString.isEmpty())
-                    d->dbform->setDataSourcePartClass("org.kexi-project.query"); //update for compatibility
+                    d->dbform->setDataSourcePluginId("org.kexi-project.query"); //update for compatibility
                 // query results are read-only
 //! @todo There can be read-write queries, e.g. simple "SELECT * FROM...". Add a checking function to KexiDB.
                 forceReadOnlyDataSource = true;

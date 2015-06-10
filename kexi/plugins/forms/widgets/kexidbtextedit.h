@@ -48,8 +48,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
@@ -94,7 +94,7 @@ public:
 public Q_SLOTS:
     void setDataSource(const QString &ds);
 
-    void setDataSourcePartClass(const QString &partClass);
+    void setDataSourcePluginId(const QString &pluginId);
 
     virtual void setReadOnly(bool readOnly);
 

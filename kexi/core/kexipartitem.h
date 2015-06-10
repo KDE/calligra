@@ -53,10 +53,10 @@ public:
         m_id = id;
     }
 
-    QString partClass() const {
+    QString pluginId() const {
         return m_class;
     }
-    void setPartClass(const QString &_class) {
+    void setPluginId(const QString &_class) {
         m_class = _class;
     }
 

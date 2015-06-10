@@ -179,7 +179,7 @@ KoReportData* KexiSourceSelector::sourceData()
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal" && d->internalSource->isSelectionValid()) {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPartClass(), d->conn);
+        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPluginId(), d->conn);
         return d->kexiDBData;
     }
 

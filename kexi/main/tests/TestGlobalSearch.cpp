@@ -125,7 +125,7 @@ void TestGlobalSearch::testGlobalSearch()
     KexiPart::Item* selectedPartItem = projectNavigator->selectedPartItem();
     QVERIFY(selectedPartItem);
     QCOMPARE(selectedPartItem->name(), QLatin1String("cars"));
-    QCOMPARE(selectedPartItem->partClass(), QLatin1String("org.kexi-project.form"));
+    QCOMPARE(selectedPartItem->pluginId(), QLatin1String("org.kexi-project.form"));
 
     if (m_goToEventLoop) {
         result = kapp->exec();

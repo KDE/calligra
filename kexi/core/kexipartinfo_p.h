@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@ namespace KexiPart
 class Info::Private
 {
 public:
-    Private(const KService::Ptr& aPtr);
+    Private(Info *info, const QJsonObject &rootObject);
 
     //! used in StaticItem class
     Private();
@@ -45,15 +45,11 @@ public:
             *target = val.toBool();
     }
 
-    KService::Ptr ptr;
     QString errorMessage;
-    QString instanceCaption;
     QString groupName;
-//    QString mimeType;
-    QString itemIconName;
-    QString objectName;
+    QString untranslatedGroupName;
+    QString typeName;
 
-    QString partClass;
     /*! Supported modes for dialogs created by this part.
     @see KexiPart::Info::supportedViewModes() */
     Kexi::ViewModes supportedViewModes;
@@ -62,9 +58,13 @@ public:
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
 
-    bool broken;
+    int majorVersion;
+    int minorVersion;
+
     bool isVisibleInNavigator;
-    bool idStoredInPartDatabase;
+    bool isDataExportSupported;
+    bool isPrintingSupported;
+    bool isExecuteSupported;
     bool isPropertyEditorAlwaysVisibleInDesignMode;
 };
 }
