@@ -152,14 +152,14 @@ public:
     void restoreDesignTabAndActivateIfNeeded(const QString &tabName);
 
     //! Shows design tab again when switching between objects or views.
-    void restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode, int previousItemId);
+    void restoreDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode, int previousItemId);
 
     //! Sets currently visible design tab when switching to design view, according to object type opened.
-    virtual void activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode);
+    virtual void activateDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode);
 
-    //! Hides design tabs when they are closed (depending on class @a partClass).
-    //! If @a partClass is empty, all tabs get hidden.
-    virtual void hideDesignTab(int itemId, const QString &partClass = QString());
+    //! Hides design tabs when they are closed (depending on ID @a pluginId).
+    //! If @a pluginId is empty, all tabs get hidden.
+    virtual void hideDesignTab(int itemId, const QString &pluginId = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
@@ -201,7 +201,7 @@ public Q_SLOTS:
                                    QString* errorMessage = 0);
 
     //! For convenience
-    virtual KexiWindow* openObject(const QString& partClass, const QString& name,
+    virtual KexiWindow* openObject(const QString& pluginId, const QString& name,
                                    Kexi::ViewMode viewMode, bool *openingCancelled,
                                    QMap<QString, QVariant>* staticObjectArgs = 0);
 
@@ -233,7 +233,7 @@ public Q_SLOTS:
                                       const QString& messageWhenAskingForName = QString());
 
     /*! Implemented for KexiMainWindow */
-    virtual void highlightObject(const QString& partClass, const QString& name);
+    virtual void highlightObject(const QString& pluginId, const QString& name);
 
     /*! Opens project pointed by \a projectData.
      Application state (e.g. actions) is updated.
@@ -429,8 +429,8 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
-    //! Activates design tab when switching to design view, according to \a partClass.
-    void activateDesignTab(const QString &partClass);
+    //! Activates design tab when switching to design view, according to \a pluginId.
+    void activateDesignTab(const QString &pluginId);
 
 protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);

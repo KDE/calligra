@@ -377,7 +377,7 @@ void KexiFormManager::enableAction(const char* name, bool enable)
     formViewWidget->setAvailable(translateName(name).toLatin1(), enable);
 }
 
-void KexiFormManager::setFormDataSource(const QString& partClass, const QString& name)
+void KexiFormManager::setFormDataSource(const QString& pluginId, const QString& name)
 {
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget)
@@ -386,12 +386,12 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
     if (!formWidget)
         return;
 
-    QString oldDataSourcePartClass(formWidget->dataSourcePartClass());
+    QString oldDataSourcePartClass(formWidget->dataSourcePluginId());
     QString oldDataSource(formWidget->dataSource());
-    if (partClass != oldDataSourcePartClass || name != oldDataSource) {
+    if (pluginId != oldDataSourcePartClass || name != oldDataSource) {
         QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", name);
-        propValues.insert("dataSourcePartClass", partClass);
+        propValues.insert("dataSourcePartClass", pluginId);
         KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
             xi18n("Set Form's Data Source to \"%1\"", name));
         formViewWidget->form()->createPropertyCommandsInDesignMode(
@@ -454,7 +454,7 @@ void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command
             const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
             if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())
                 d->part->dataSourcePage()->setFormDataSource(
-                    formWidget->dataSourcePartClass(), formWidget->dataSource());
+                    formWidget->dataSourcePluginId(), formWidget->dataSource());
         }
     }
 }

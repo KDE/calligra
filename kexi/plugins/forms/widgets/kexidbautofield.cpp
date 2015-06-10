@@ -652,7 +652,7 @@ KexiDBAutoField::setFocusPolicy(Qt::FocusPolicy policy)
 void
 KexiDBAutoField::updateInformationAboutUnboundField()
 {
-    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
+    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePluginId().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
         d->label->setText(futureI18nc2("Unbound Auto Field", "%1 (unbound)", objectName()));
     }

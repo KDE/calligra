@@ -57,7 +57,7 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
         return 0;
     KexiPart::Info *info = 0;
     if (_actionType != "kaction" && _actionType != "currentForm") {
-        info = Kexi::partManager().infoForClass(QString("org.kexi-project.%1").arg(_actionType));
+        info = Kexi::partManager().infoForPluginId(QString("org.kexi-project.%1").arg(_actionType));
         if (!info)
             return 0;
     }
@@ -108,7 +108,7 @@ void KexiFormEventAction::slotTrigger()
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
-    KexiPart::Part* part = Kexi::partManager().partForClass(
+    KexiPart::Part* part = Kexi::partManager().partForPluginId(
                                QString("org.kexi-project.%1").arg(d->actionName));
     if (!part)
         return;

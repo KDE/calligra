@@ -656,7 +656,7 @@ bool ImportTableWizard::doImport()
         return false;
     }
 
-    KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
+    KexiPart::Part *part = Kexi::partManager().partForPluginId("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
         return false;

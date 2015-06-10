@@ -36,20 +36,20 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 }
 
 void
-KexiGUIMessageHandler::showErrorMessageInternal(KDbObject *obj, const QString& msg)
+KexiGUIMessageHandler::showErrorMessage(const QString& msg, KDbResultable* resultable)
 {
     QString _msg(msg);
-    if (!obj) {
-        showErrorMessageInternal(_msg);
+    if (!resultable) {
+        showErrorMessage(_msg, QString());
         return;
     }
     QString details;
-    KDb::getHTMLErrorMesage(*obj, &_msg, &details);
-    showErrorMessageInternal(_msg, details);
+    KDb::getHTMLErrorMesage(*resultable, &_msg, &details);
+    showErrorMessage(_msg, details);
 }
 
 void
-KexiGUIMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
+KexiGUIMessageHandler::showErrorMessage(const QString &title, const QString &details)
 {
     showMessage(Error, title, details);
 }
@@ -61,15 +61,15 @@ KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &det
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details,
-                                             KDbObject *obj)
+                                             KDbResultable *resultable)
 {
     QString _msg(msg);
-    if (!obj) {
+    if (!resultable) {
         showErrorMessage(_msg, details);
         return;
     }
     QString _details(details);
-    KDb::getHTMLErrorMesage(*obj, _msg, _details);
+    KDb::getHTMLErrorMesage(*resultable, &_msg, &_details);
     showErrorMessage(_msg, _details);
 }
 
@@ -98,9 +98,9 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
                 desc = status->description;
             }
         }
-        showErrorMessage(msg, desc, status->dbObject());
+        showErrorMessage(msg, desc, status->resultable());
     } else {
-        showErrorMessage(message);
+        showErrorMessage(message, QString());
     }
     status->clearStatus();
 }
@@ -150,30 +150,82 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
                                        KMessageBox::Notify | KMessageBox::AllowLink);
 }
 
-int KexiGUIMessageHandler::askQuestionInternal(const QString& message,
-                                               KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                                               const KGuiItem &buttonYes,
-                                               const KGuiItem &buttonNo,
-                                               const QString &dontShowAskAgainName,
-                                               KMessageBox::Options options)
+static KGuiItem toGuiItem(const KDbGuiItem &item)
 {
-    Q_UNUSED(defaultResult);
-    if (KMessageBox::WarningContinueCancel == dlgType) {
-        return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
-                message, QString(), buttonYes, KStandardGuiItem::cancel(),
-                dontShowAskAgainName, options);
+    KGuiItem result;
+    if (item.hasProperty("text")) {
+        result.setText(item.property("text").toString());
     }
-    else {
-        return KMessageBox::messageBox(m_messageHandlerParentWidget,
-                                       dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
-                                       dontShowAskAgainName, options);
+    if (item.hasProperty("icon")) {
+        result.setIcon(item.property("icon").value<QIcon>());
     }
+    if (item.hasProperty("iconName")) {
+        result.setIconName(item.property("iconName").toString());
+    }
+    if (item.hasProperty("toolTip")) {
+        result.setToolTip(item.property("toolTip").toString());
+    }
+    if (item.hasProperty("whatsThis")) {
+        result.setWhatsThis(item.property("whatsThis").toString());
+    }
+    return result;
 }
 
+KDbMessageHandler::ButtonCode KexiGUIMessageHandler::askQuestion(
+                                       KDbMessageHandler::QuestionType messageType,
+                                       const QString &message,
+                                       const QString &caption,
+                                       KDbMessageHandler::ButtonCode defaultResult,
+                                       const KDbGuiItem &buttonYes,
+                                       const KDbGuiItem &buttonNo,
+                                       const QString &dontShowAskAgainName,
+                                       KDbMessageHandler::Options options,
+                                       KDbMessageHandler* msgHandler)
+
+//                                               KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+//                                               const KGuiItem &buttonYes,
+//                                               const KGuiItem &buttonNo,
+//                                               const QString &dontShowAskAgainName,
+//                                               KMessageBox::Options options)
+{
+    Q_UNUSED(defaultResult);
+    Q_UNUSED(msgHandler);
+    KMessageBox::Options kmsgboxOptions = 0;
+    if (options <= (KDbMessageHandler::Notify|KDbMessageHandler::AllowLink|KDbMessageHandler::Dangerous)) {
+        kmsgboxOptions = static_cast<KMessageBox::Options>(int(options));
+    }
+
+    if (KDbMessageHandler::WarningContinueCancel == messageType) {
+        return static_cast<KDbMessageHandler::ButtonCode>(
+            KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
+                message, caption, toGuiItem(buttonYes), KStandardGuiItem::cancel(),
+                dontShowAskAgainName, kmsgboxOptions));
+    }
+    else {
+        return static_cast<KDbMessageHandler::ButtonCode>(
+                    KMessageBox::messageBox(m_messageHandlerParentWidget,
+                                       static_cast<KMessageBox::DialogType>(messageType),
+                                       message, caption, toGuiItem(buttonYes),
+                                       toGuiItem(buttonNo),
+                                       KStandardGuiItem::cancel(),
+                                       dontShowAskAgainName, kmsgboxOptions));
+    }
+}
 
 void KexiGUIMessageHandler::showErrorMessage(KDbMessageHandler::MessageType messageType,
                                              const QString &msg, const QString &details,
                                              const QString &caption)
 {
-    showMessage(type, msg, details);
+    Q_UNUSED(caption);
+    showMessage(messageType, msg, details);
+}
+
+void KexiGUIMessageHandler::showErrorMessage(const KDbResult& result,
+                                             KDbMessageHandler::MessageType messageType,
+                                             const QString& msg,
+                                             const QString& caption)
+{
+    Q_UNUSED(result);
+    Q_UNUSED(caption);
+    showMessage(messageType, result.message() + '\n' + msg, QString());
 }

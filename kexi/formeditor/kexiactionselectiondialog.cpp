@@ -52,7 +52,7 @@ public:
   enum ActionRole{
     ActionCategoryRole = Qt::UserRole + 1,
     ActionDataRole,
-    ActionPartClassRole
+    ActionPluginIdRole
   };
 
   ActionSelectorDialogTreeItem(QString label, QTreeWidget *parent)
@@ -225,11 +225,11 @@ public:
                 KexiPart::Part *part = Kexi::partManager().part(info);
                 if (!info->isVisibleInNavigator() || !part)
                     continue;
-                itm = new ActionSelectorDialogTreeItem(part->info()->instanceCaption(), this );
+                itm = new ActionSelectorDialogTreeItem(part->info()->name(), this );
                 itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "navObject");
-                itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, info->objectName());
-                itm->setData(ActionSelectorDialogTreeItem::ActionPartClassRole, info->partClass());
-                itm->setIcon(QIcon::fromTheme(part->info()->itemIconName()));
+                itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, info->typeName());
+                itm->setData(ActionSelectorDialogTreeItem::ActionPluginIdRole, info->pluginId());
+                itm->setIcon(QIcon::fromTheme(part->info()->iconName()));
             }
         }
 
@@ -265,12 +265,12 @@ public:
     }
 
     //! Updates actions
-    void showActionsForPartClass(const QString& partClass) {
-        if (m_currentPartClass == partClass)
+    void showActionsForPluginId(const QString& pluginId) {
+        if (m_currentPluginId == pluginId)
             return;
-        m_currentPartClass = partClass;
+        m_currentPluginId = pluginId;
         clear();
-        KexiPart::Part *part = Kexi::partManager().partForClass(m_currentPartClass);
+        KexiPart::Part *part = Kexi::partManager().partForPluginId(m_currentPluginId);
         if (!part)
             return;
         Kexi::ViewModes supportedViewModes = part->info()->supportedViewModes();
@@ -339,7 +339,7 @@ public:
         setSortingEnabled(true);
     }
 
-    QString m_currentPartClass;
+    QString m_currentPluginId;
 };
 
 //-------------------------------------
@@ -681,12 +681,12 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
             //hide column #3
             d->setActionToExecuteSectionVisible(false);
         } else if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "navObject") {
-            QString partClass = categoryItm->data(ActionSelectorDialogTreeItem::ActionPartClassRole).toString();
-            d->selectActionToBeExecutedLabel->setText(d->selectActionToBeExecutedMessage(partClass));
-            if (d->objectsListView->itemsPartClass() != partClass) {
+            QString pluginId = categoryItm->data(ActionSelectorDialogTreeItem::ActionPluginIdRole).toString();
+            d->selectActionToBeExecutedLabel->setText(d->selectActionToBeExecutedMessage(pluginId));
+            if (d->objectsListView->itemsPluginId() != pluginId) {
                 QString errorString;
-                d->objectsListView->setProject(KexiMainWindowIface::global()->project(), partClass, &errorString, false);
-                d->actionToExecuteListView->showActionsForPartClass(partClass);
+                d->objectsListView->setProject(KexiMainWindowIface::global()->project(), pluginId, &errorString, false);
+                d->actionToExecuteListView->showActionsForPluginId(pluginId);
                 d->setActionToExecuteSectionVisible(false);
             }
             if (d->secondAnd3rdColumnStack->currentWidget() != d->secondAnd3rdColumnMainWidget) {
@@ -735,7 +735,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
             ActionSelectorDialogTreeItem *actionToExecute = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionToExecuteListView->currentItem());
             if (d->objectsListView && actionToExecute && !actionToExecute->data(ActionSelectorDialogTreeItem::ActionDataRole).toString().isEmpty()) {
                 KexiPart::Item* partItem = d->objectsListView->selectedPartItem();
-                KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForClass(partItem->partClass()) : 0;
+                KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForPluginId(partItem->pluginId()) : 0;
                 if (partInfo) {
                     // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
                     data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());

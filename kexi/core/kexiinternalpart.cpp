@@ -69,7 +69,7 @@ KexiInternalPart::~KexiInternalPart()
 //static
 KexiInternalPart* KexiInternalPart::part(KDbMessageHandler *msgHdr, const QString &className)
 {
-    KexiInternalPart *part = Kexi::partManager().internalPartForClass(className);
+    KexiInternalPart *part = Kexi::partManager().internalPartForPluginId(className);
     if (!part) {
         if (msgHdr) {
             msgHdr->showErrorMessage(Kexi::partManager().result());

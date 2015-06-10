@@ -56,7 +56,7 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
     data->listenerInfoString = xi18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>",
-                                     window->part()->info()->instanceCaption(),
+                                     window->part()->info()->name(),
                                      window->partItem()->name());
     return data;
 }
