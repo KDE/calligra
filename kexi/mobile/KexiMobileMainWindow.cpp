@@ -195,15 +195,15 @@ bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode v
     //1 Load the part
     //2 Return true if the part loads AND the part supports the view mode AND the viewmode is Data
 
-    KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part * part = Kexi::partManager().part(item);
     if (!part) {
         if (errorMessage) {
             *errorMessage = Kexi::partManager().errorMsg();
         }
     }
-    qDebug() << part << item->partClass();
+    qDebug() << part << item->pluginId();
     /*if (part)
-        qDebug() << item->partClass() << part->supportedUserViewModes();*/
+        qDebug() << item->pluginId() << part->supportedUserViewModes();*/
     return part /*&& (part->supportedUserViewModes() & viewMode)*/ && (viewMode == Kexi::DataViewMode);
 }
 

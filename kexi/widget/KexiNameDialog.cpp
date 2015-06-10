@@ -154,7 +154,7 @@ bool KexiNameDialog::canOverwrite()
 {
     KDbObject tmp_sdata;
     tristate result = d->project->dbConnection()->loadObjectData(
-                          d->project->idForClass(d->part->info()->partClass()),
+                          d->project->typeIdForPluginId(d->part->info()->pluginId()),
                           widget()->nameText(), tmp_sdata);
     if (result == cancelled) {
         return true;

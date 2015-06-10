@@ -1857,16 +1857,16 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KPropertySet& set, KPropert
 
 void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
 {
-    d->relations->objectCreated(item.partClass(), item.name());
+    d->relations->objectCreated(item.pluginId(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 {
-    d->relations->objectDeleted(item.partClass(), item.name());
+    d->relations->objectDeleted(item.pluginId(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-    d->relations->objectRenamed(item.partClass(), oldName, item.name());
+    d->relations->objectRenamed(item.pluginId(), oldName, item.name());
 }
 

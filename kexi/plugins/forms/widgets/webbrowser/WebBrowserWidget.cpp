@@ -79,9 +79,9 @@ WebBrowserWidget::~WebBrowserWidget()
 
 }
 
-void WebBrowserWidget::setDataSourcePartClass(const QString &ds)
+void WebBrowserWidget::setDataSourcePluginId(const QString &ds)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(ds);
+    KexiFormDataItemInterface::setDataSourcePluginId(ds);
 }
 
 void WebBrowserWidget::setDataSource(const QString &ds)

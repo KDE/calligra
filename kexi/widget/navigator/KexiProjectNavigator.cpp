@@ -100,7 +100,7 @@ public:
     bool singleClick;
     bool readOnly;
     KexiProjectModel *model;
-    QString itemsPartClass;
+    QString itemsPluginId;
 };
 
 KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
@@ -246,7 +246,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
 void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass,
                                       QString* partManagerErrorMessages, bool addAsSearchableModel)
 {
-    d->itemsPartClass = itemsPartClass;
+    d->itemsPluginId = itemsPartClass;
 
     d->model->setProject(prj, itemsPartClass, partManagerErrorMessages);
 
@@ -259,9 +259,9 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
     slotUpdateEmptyStateLabel();
 }
 
-QString KexiProjectNavigator::itemsPartClass() const
+QString KexiProjectNavigator::itemsPluginId() const
 {
-  return d->itemsPartClass;
+  return d->itemsPluginId;
 }
 
 KexiProjectNavigator::~KexiProjectNavigator()
@@ -358,8 +358,8 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
             d->prevSelectedPartInfo = it->partInfo();
             if (d->newObjectAction) {
                 d->newObjectAction->setText(
-                    xi18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
-                d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createItemIconName()));
+                    xi18n("&Create Object: %1...", it->partInfo()->name() ));
+                d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createIconName()));
             }
         #if 0
              } else {
@@ -453,7 +453,7 @@ void KexiProjectNavigator::slotRename()
         return;
     }
     KexiPart::Info *info = partModelItem->partInfo();
-    KexiPart::Part *part = Kexi::partManager().partForClass(partItem->partClass());
+    KexiPart::Part *part = Kexi::partManager().partForPluginId(partItem->pluginId());
     if (!info || !part) {
         return;
     }
@@ -471,7 +471,7 @@ void KexiProjectNavigator::slotRename()
     dialog.widget()->setNameText(partItem->name());
     dialog.setWindowTitle(
         xi18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>", partItem->name()));
-    dialog.setDialogIcon(info->itemIconName());
+    dialog.setDialogIcon(info->iconName());
     dialog.setAllowOverwriting(true);
 
     bool overwriteNeeded;
@@ -687,10 +687,10 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
 {
     clear();
     QString title_text(partItem->name());
-    if (partInfo && !partInfo->instanceCaption().isEmpty()) {
-        title_text += (" : " + partInfo->instanceCaption());
+    if (partInfo && !partInfo->name().isEmpty()) {
+        title_text += (" : " + partInfo->name());
     }
-    addTitle(QIcon::fromTheme(partInfo->itemIconName()), title_text);
+    addTitle(QIcon::fromTheme(partInfo->iconName()), title_text);
 
     if (m_actionCollection->action("open_object")
             && m_actionCollection->action("open_object")->isEnabled()

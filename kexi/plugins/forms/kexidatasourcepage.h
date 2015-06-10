@@ -50,7 +50,7 @@ public Q_SLOTS:
 
     //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
-    void setFormDataSource(const QString& partClass, const QString& name);
+    void setFormDataSource(const QString& pluginId, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KPropertySet* propertySet);
@@ -80,7 +80,7 @@ protected Q_SLOTS:
     void slotGotoSelected();
     void slotInsertSelectedFields();
     void slotFieldListViewSelectionChanged();
-    void slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
+    void slotFieldDoubleClicked(const QString& sourcePluginId, const QString& sourceName,
                                 const QString& fieldName);
 
 protected:

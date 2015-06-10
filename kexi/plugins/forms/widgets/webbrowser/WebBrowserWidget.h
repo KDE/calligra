@@ -61,8 +61,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     inline QString url() const {
@@ -108,7 +108,7 @@ public:
 
 public Q_SLOTS:
     void setDataSource(const QString &ds);
-    void setDataSourcePartClass(const QString &ds);
+    void setDataSourcePluginId(const QString &ds);
     void setUrl(const QString& url);
     void setZoomFactor(qreal factor);
     void setTextScale(qreal scale);

@@ -1435,7 +1435,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
     //ok, now open "autoopen: objects
     if (d->prj) {
         foreach(KexiProjectData::ObjectInfo* info, d->prj->data()->autoopenObjects) {
-            KexiPart::Info *i = Kexi::partManager().infoForClass(info->value("type"));
+            KexiPart::Info *i = Kexi::partManager().infoForPluginId(info->value("type"));
             if (!i) {
                 not_found_msg += "<li>";
                 if (!info->value("name").isEmpty())
@@ -2134,9 +2134,9 @@ void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWin
             //on opening new dialog it can be 0; we don't want this
             d->updatePropEditorVisibility(currentWindow()->currentViewMode());
 
-            restoreDesignTabIfNeeded(window->partItem()->partClass(), window->currentViewMode(),
+            restoreDesignTabIfNeeded(window->partItem()->pluginId(), window->currentViewMode(),
                                      prevWindow ? prevWindow->partItem()->identifier() : 0);
-            activateDesignTabIfNeeded(window->partItem()->partClass(),
+            activateDesignTabIfNeeded(window->partItem()->pluginId(),
                                       window->currentViewMode());
         }
     }
@@ -2593,7 +2593,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
                               currentWindow()->partItem()->name()),
                          xi18n("Selected view (%1) is not supported by this object type (%2).",
                               Kexi::nameForViewMode(viewMode),
-                              currentWindow()->part()->info()->instanceCaption()));
+                              currentWindow()->part()->info()->name()));
         return false;
     }
     updateCustomPropertyPanelTabs(currentWindow()->part(), prevViewMode,
@@ -2622,10 +2622,10 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         // when user moved to data view and then immediately to design view.
         origTabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
     }
-    restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode,
+    restoreDesignTabIfNeeded(currentWindow()->partItem()->pluginId(), viewMode,
                              currentWindow()->partItem()->identifier());
     if (viewMode == Kexi::DesignViewMode) {
-        activateDesignTab(currentWindow()->partItem()->partClass());
+        activateDesignTab(currentWindow()->partItem()->pluginId());
         // Restore the saved tab to the orig one. restoreDesignTabIfNeeded() saved tools tab probably.
         d->tabsToActivateOnShow.insert(currentWindow()->partItem()->identifier(), origTabToActivate);
     }
@@ -2691,7 +2691,7 @@ tristate KexiMainWindow::getNewObjectInfo(
     d->nameDialog->widget()->setCaptionText(partItem->caption());
     d->nameDialog->widget()->setNameText(partItem->name());
     d->nameDialog->setWindowTitle(xi18nc("@title:window", "Save Object As"));
-    d->nameDialog->setDialogIcon(info->itemIconName());
+    d->nameDialog->setDialogIcon(info->iconName());
     d->nameDialog->setAllowOverwriting(allowOverwriting);
     if (!originalName.isEmpty()) {
         d->nameDialog->setValidator(new SaveAsObjectNameValidator(originalName));
@@ -2920,7 +2920,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     }
 
     const int window_id = window->id(); //remember now, because removeObject() can destruct partitem object
-    const QString window_partClass = window->partItem()->partClass();
+    const QString window_pluginId = window->partItem()->pluginId();
     if (remove_on_closing) {
         //we won't save this object, and it was never saved -remove it
         if (!removeObject(window->partItem(), true)) {
@@ -2984,7 +2984,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     showDesignTabIfNeeded(0);
 
     if (currentWindow()) {
-        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->pluginId(),
                                  currentWindow()->currentViewMode(),
                                  0);
     }
@@ -3048,23 +3048,23 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
     //! @todo this can be more complex once we deliver ACLs...
     if (!d->userMode)
         return true;
-    KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part * part = Kexi::partManager().partForPluginId(item->pluginId());
     if (!part) {
         if (errorMessage) {
             *errorMessage = Kexi::partManager().errorMsg();
         }
     }
-    qDebug() << part << item->partClass();
+    qDebug() << part << item->pluginId();
     if (part)
-        qDebug() << item->partClass() << part->info()->supportedUserViewModes();
+        qDebug() << item->pluginId() << part->info()->supportedUserViewModes();
     return part && (part->info()->supportedUserViewModes() & viewMode);
 }
 
 KexiWindow *
-KexiMainWindow::openObject(const QString& partClass, const QString& name,
+KexiMainWindow::openObject(const QString& pluginId, const QString& name,
                            Kexi::ViewMode viewMode, bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs)
 {
-    KexiPart::Item *item = d->prj->itemForClass(partClass, name);
+    KexiPart::Item *item = d->prj->itemForPluginId(pluginId, name);
     if (!item)
         return 0;
     return openObject(item, viewMode, openingCancelled, staticObjectArgs);
@@ -3116,7 +3116,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *
             activateWindow(*window);
         alreadyOpened = true;
     } else {
-        KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
+        KexiPart::Part *part = Kexi::partManager().partForPluginId(item->pluginId());
         d->updatePropEditorVisibility(viewMode, part ? part->info() : 0);
         //update tabs before opening
         updateCustomPropertyPanelTabs(currentWindow() ? currentWindow()->part() : 0,
@@ -3127,13 +3127,13 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *
         windowContainer = new KexiWindowContainer(d->mainWidget->tabWidget());
         const int tabIndex = d->mainWidget->tabWidget()->addTab(
             windowContainer,
-            QIcon::fromTheme(part ? part->info()->itemIconName() : QString()),
+            QIcon::fromTheme(part ? part->info()->iconName() : QString()),
             KexiWindow::windowTitleForItem(*item));
         d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(item, part));
         QString whatsThisText;
         if (part) {
             whatsThisText = xi18n("Tab for \"%1\" (%2).",
-                                 item->captionOrName(), part->info()->instanceCaption());
+                                 item->captionOrName(), part->info()->name());
         }
         else {
             whatsThisText = xi18n("Tab for \"%1\".", item->captionOrName());
@@ -3187,8 +3187,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *
         currentWindow()->selectedView()->propertySetSwitched();
     }
     invalidateProjectWideActions();
-    restoreDesignTabIfNeeded(item->partClass(), viewMode, previousItemId);
-    activateDesignTabIfNeeded(item->partClass(), viewMode);
+    restoreDesignTabIfNeeded(item->pluginId(), viewMode, previousItemId);
+    activateDesignTabIfNeeded(item->pluginId(), viewMode);
     QString origTabToActivate;
     if (prevWindow) {
         // Save the orig tab for prevWindow that was stored in the restoreDesignTabIfNeeded() call above
@@ -3237,7 +3237,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         }
     }
     //if DataViewMode is not supported, try Design, then Text mode (currently useful for script part)
-    KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part *part = Kexi::partManager().partForPluginId(item->pluginId());
     if (!part)
         return 0;
     if (viewMode == Kexi::DataViewMode && !(part->info()->supportedViewModes() & Kexi::DataViewMode)) {
@@ -3277,7 +3277,7 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool* openingCancelled)
     *openingCancelled = false;
     if (!d->prj || !info)
         return false;
-    KexiPart::Part *part = Kexi::partManager().partForClass(info->partClass());
+    KexiPart::Part *part = Kexi::partManager().part(info);
     if (!part)
         return false;
 
@@ -3300,7 +3300,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     if (!d->prj || !item)
         return false;
 
-    KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part *part = Kexi::partManager().partForPluginId(item->pluginId());
     if (!part)
         return false;
 
@@ -3311,7 +3311,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                       "<nl/>%1 <resource>%2</resource><nl/>"
                       "<nl/><note>If you click <interface>Delete</interface>, "
                       "you will not be able to undo the deletion.</note>",
-                      part->info()->instanceCaption(), item->name()),
+                      part->info()->name(), item->name()),
                 xi18nc("@title:window Delete Object %1.",
                       "Delete <resource>%1</resource>?", item->name()),
                 KGuiItem(xi18n("Delete"), koIconName("edit-delete")),
@@ -3548,9 +3548,9 @@ void KexiMainWindow::slotToolsImportTables()
 
         QString destinationTableName(args["destinationTableName"]);
         if (!destinationTableName.isEmpty()) {
-            QString partClass = "org.kexi-project.table";
+            QString pluginId = "org.kexi-project.table";
             bool openingCancelled;
-            KexiMainWindow::openObject(partClass, destinationTableName, Kexi::DataViewMode, &openingCancelled);
+            KexiMainWindow::openObject(pluginId, destinationTableName, Kexi::DataViewMode, &openingCancelled);
         }
     }
 }
@@ -3666,7 +3666,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
 
 tristate KexiMainWindow::executeItem(KexiPart::Item* item)
 {
-    KexiPart::Info *info = item ? Kexi::partManager().infoForClass(item->partClass()) : 0;
+    KexiPart::Info *info = item ? Kexi::partManager().infoForPluginId(item->pluginId()) : 0;
     if ((! info) || (! info->isExecuteSupported()))
         return false;
     KexiPart::Part *part = Kexi::partManager().part(info);
@@ -3728,7 +3728,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
 bool KexiMainWindow::checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args)
 {
     //! @todo: handle tables
-    if (item->partClass() != "org.kexi-project.query") {
+    if (item->pluginId() != "org.kexi-project.query") {
         return true;
     }
 
@@ -3853,7 +3853,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 {
     if (!item)
         return false;
-    KexiPart::Info *info = Kexi::partManager().infoForClass(item->partClass());
+    KexiPart::Info *info = Kexi::partManager().infoForPluginId(item->pluginId());
     if (!info->isPrintingSupported())
         return false;
 
@@ -4085,12 +4085,12 @@ void KexiMainWindow::slotGetNewStuff()
 #endif
 }
 
-void KexiMainWindow::highlightObject(const QString& partClass, const QString& name)
+void KexiMainWindow::highlightObject(const QString& pluginId, const QString& name)
 {
     slotViewNavigator();
     if (!d->prj)
         return;
-    KexiPart::Item *item = d->prj->itemForClass(partClass, name);
+    KexiPart::Item *item = d->prj->itemForPluginId(pluginId, name);
     if (!item)
         return;
     if (d->navigator) {
@@ -4162,12 +4162,12 @@ void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
     }
 }
 
-void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode,
+void KexiMainWindow::restoreDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode,
                                               int previousItemId)
 {
-    //qDebug() << partClass << viewMode << previousItemId;
+    //qDebug() << pluginId << viewMode << previousItemId;
     if (viewMode == Kexi::DesignViewMode) {
-        switch (d->prj->idForClass(partClass)) {
+        switch (d->prj->typeIdForPluginId(pluginId)) {
         case KexiPart::FormObjectType: {
             hideDesignTab(previousItemId, "org.kexi-project.report");
             restoreDesignTabAndActivateIfNeeded("form");
@@ -4187,12 +4187,12 @@ void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::Vi
     }
 }
 
-void KexiMainWindow::activateDesignTab(const QString &partClass)
+void KexiMainWindow::activateDesignTab(const QString &pluginId)
 {
     if (!d->tabbedToolBar) {
         return;
     }
-    switch (d->prj->idForClass(partClass)) {
+    switch (d->prj->typeIdForPluginId(pluginId)) {
     case KexiPart::FormObjectType:
         d->tabbedToolBar->setCurrentTab("form");
         break;
@@ -4203,23 +4203,23 @@ void KexiMainWindow::activateDesignTab(const QString &partClass)
     }
 }
 
-void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
+void KexiMainWindow::activateDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode)
 {
     if (!d->tabbedToolBar) {
         return;
     }
     const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
-    //qDebug() << partClass << viewMode << tabToActivate;
+    //qDebug() << pluginId << viewMode << tabToActivate;
 
     if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
-        activateDesignTab(partClass);
+        activateDesignTab(pluginId);
     }
     else {
         d->tabbedToolBar->setCurrentTab(tabToActivate);
     }
 }
 
-void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
+void KexiMainWindow::hideDesignTab(int itemId, const QString &pluginId)
 {
     if (!d->tabbedToolBar) {
         return;
@@ -4232,7 +4232,7 @@ void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
         //qDebug() << "d->tabsToActivateOnShow.insert" << itemId << currentTab;
         d->tabsToActivateOnShow.insert(itemId, currentTab);
     }
-    switch (d->prj->idForClass(partClass)) {
+    switch (d->prj->typeIdForPluginId(pluginId)) {
     case KexiPart::FormObjectType:
         d->tabbedToolBar->hideTab("form");
         break;
@@ -4250,7 +4250,7 @@ void KexiMainWindow::showDesignTabIfNeeded(int previousItemId)
     if (d->insideCloseWindow && d->tabbedToolBar)
         return;
     if (currentWindow()) {
-        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->pluginId(),
                                  currentWindow()->currentViewMode(), previousItemId);
     } else {
         hideDesignTab(previousItemId);

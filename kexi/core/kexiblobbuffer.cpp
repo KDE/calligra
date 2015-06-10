@@ -60,7 +60,8 @@ public:
     QHash<Id_t, Item*> inMemoryItems; //!< for unstored BLOBs
     QHash<Id_t, Item*> storedItems; //!< for stored items
     QHash<QString, Item*> itemsByURL;
-    QPointer<KDbConnection> conn;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnection>
+    KDbConnection *conn;
 };
 
 //-----------------
@@ -172,7 +173,7 @@ static QString formatFromMimeType(const QString& mimeType, const QString& defaul
     if (!mime.isValid()) {
         return defaultType;
     }
-    return mime->mainExtension().mid(1); // without '.'
+    return mime.preferredSuffix();
 }
 
 QByteArray KexiBLOBBuffer::Item::data() const
@@ -241,7 +242,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QUrl &url)
     QFileInfo fi(url.fileName());
     QString caption(fi.baseName().replace('_', ' ').simplified());
     QMimeDatabase db;
-    const QMimeType mimeType(db.mimeTypeForNameAndData(fileName, data));
+    const QMimeType mimeType(db.mimeTypeForFileNameAndData(fileName, data));
 
     item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType.name());
     insertItem(item);
@@ -314,9 +315,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((qint64)id));
 
         KDbRecordData recordData;
-        tristate res = d->conn->querySingleRecord(
-                           schema,
-                           recordData);
+        tristate res = d->conn->querySingleRecord(&schema, &recordData);
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
             qWarning() << "id=" << id << "stored=" << stored

@@ -445,9 +445,9 @@ void KexiDBLineEdit::setDataSource(const QString &ds)
     updateTextForDataSource();
 }
 
-void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
+void KexiDBLineEdit::setDataSourcePluginId(const QString &pluginId)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     updateTextForDataSource();
 }
 

@@ -23,7 +23,7 @@
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 #include "kexipart.h"
-#include "kexistaticpart.h"
+//! @todo KEXI3 #include "kexistaticpart.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexiproject.h"
@@ -376,7 +376,7 @@ void KexiWindow::setDirty(bool dirty)
     dirtyChanged(d->viewThatRecentlySetDirtyFlag); //update
 }
 
-QString KexiWindow::itemIconName()
+QString KexiWindow::iconName()
 {
     if (!d->part || !d->part->info()) {
         KexiView *v = selectedView();
@@ -385,7 +385,7 @@ QString KexiWindow::itemIconName()
         }
         return QString();
     }
-    return d->part->info()->itemIconName();
+    return d->part->info()->iconName();
 }
 
 KexiPart::GUIClient* KexiWindow::guiClient() const
@@ -495,10 +495,11 @@ tristate KexiWindow::switchToViewMode(
         KexiUtils::setWaitCursor();
         //ask the part to create view for the new mode
         d->creatingViewsMode = newViewMode;
+/*! @todo KEXI3 StaticPart
         KexiPart::StaticPart *staticPart = dynamic_cast<KexiPart::StaticPart*>((KexiPart::Part*)d->part);
         if (staticPart)
             newView = staticPart->createView(this, this, d->item, newViewMode, staticObjectArgs);
-        else
+        else*/
             newView = d->part->createView(this, this, d->item, newViewMode, staticObjectArgs);
         KexiUtils::removeWaitCursor();
         if (!newView) {
@@ -698,13 +699,13 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     }
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KDbObject sdata(project->idForClass(d->part->info()->partClass()));
-    if (!d->setupSchemaData(&sdata, d->item, options)) {
+    KDbObject object(project->typeIdForPluginId(d->part->info()->pluginId()));
+    if (!d->setupSchemaData(&object, d->item, options)) {
         return false;
     }
 
     bool cancel = false;
-    d->schemaData = v->storeNewData(sdata, options, &cancel);
+    d->schemaData = v->storeNewData(object, options, &cancel);
     if (cancel)
         return cancelled;
     if (!d->schemaData) {
@@ -712,7 +713,7 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
         return false;
     }
 
-    if (project->idForClass(part()->info()->partClass()) < 0) {
+    if (project->typeIdForPluginId(part()->info()->pluginId()) < 0) {
         if (!project->createIdForPart(*part()->info()))
             return false;
     }
@@ -775,20 +776,20 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     }
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
-    KDbObject sdata(project->idForClass(d->part->info()->partClass()));
-    if (!d->setupSchemaData(&sdata, item, options)) {
+    KDbObject object(project->typeIdForPluginId(d->part->info()->pluginId()));
+    if (!d->setupSchemaData(&object, item, options)) {
         return false;
     }
 
     bool cancel = false;
     KDbObject *newSchemaData;
     if (isDirty()) { // full save of new data
-        newSchemaData = v->storeNewData(sdata, options, &cancel);
+        newSchemaData = v->storeNewData(object, options, &cancel);
     }
     else { // there were no changes; full copy of the data is enough
            // - gives better performance (e.g. tables are copied on server side)
            // - works without bothering the user (no unnecessary questions)
-        newSchemaData = v->copyData(sdata, options, &cancel);
+        newSchemaData = v->copyData(object, options, &cancel);
     }
 
     if (cancel) {
@@ -800,7 +801,7 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     }
     setSchemaData(newSchemaData); // deletes previous schema if owned
 
-    if (project->idForClass(part()->info()->partClass()) < 0) {
+    if (project->typeIdForPluginId(part()->info()->pluginId()) < 0) {
         if (!project->createIdForPart(*part()->info()))
             return false;
     }

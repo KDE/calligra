@@ -36,13 +36,13 @@ public:
     KexiDBReportData(const QString &objectName, KDbConnection *conn);
 
     /*!
-     * @a partClass specifies @a objectName type: a table or query.
+     * @a pluginId specifies type of @a objectName, a table or query.
      * Types accepted:
      * -"org.kexi-project.table"
      * -"org.kexi-project.query"
      * -empty QString() - attempt to resolve @a objectName
      */
-    KexiDBReportData(const QString &objectName, const QString& partClass, KDbConnection *conn);
+    KexiDBReportData(const QString &objectName, const QString& pluginId, KDbConnection *conn);
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;
@@ -74,7 +74,7 @@ private:
     class Private;
     Private * const d;
 
-    bool getSchema(const QString& partClass = QString());
+    bool getSchema(const QString& pluginId = QString());
 };
 
 #endif
