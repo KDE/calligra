@@ -1605,16 +1605,8 @@ tristate KexiMainWindow::closeProject()
     }
     if (d->nav) {
         if (d->propEditor) {
-#ifdef __GNUC__
-#warning TODO   if (d->openedWindowsCount() == 0)
-#else
-#pragma WARNING( TODO   if (d->openedWindowsCount() == 0) )
-#endif
-#ifdef __GNUC__
-#warning TODO    makeWidgetDockVisible(d->propEditorTabWidget);
-#else
-#pragma WARNING( TODO    makeWidgetDockVisible(d->propEditorTabWidget); )
-#endif
+//! @todo KEXI3 if (d->openedWindowsCount() == 0)
+//! @todo KEXI3 makeWidgetDockVisible(d->propEditorTabWidget);
             KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
             KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
             if (ds)
@@ -2829,11 +2821,7 @@ tristate KexiMainWindow::closeWindowForTab(int tabIndex)
 
 tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, bool doNotSaveChanges)
 {
-#ifdef __GNUC__
-#warning TODO KexiMainWindow::closeWindow()
-#else
-#pragma WARNING( TODO KexiMainWindow::closeWindow() )
-#endif
+//! @todo KEXI3 KexiMainWindow::closeWindow()
     ///@note Q_UNUSED layoutTaskBar
     Q_UNUSED(layoutTaskBar);
 

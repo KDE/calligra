@@ -72,6 +72,6 @@ KexiNewStuff::createUploadFile(const QString &)
 {
     return true;
 }
-
 #endif
-#warning noi18n # added to disable message extraction in Messages.sh
+
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

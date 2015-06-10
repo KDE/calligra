@@ -166,12 +166,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     connect(m_listbox, SIGNAL(currentChanged(QListBoxItem*)), this, SLOT(updateItemProperties(QListBoxItem*)));
 
     //// Init dialog and display it ////////////////////////
-#ifdef __GNUC__
-#warning "setInitialSize() unavailable on kde 4"
-#else
-#pragma WARNING( setInitialSize() unavailable on kde 4 )
-#endif
-// setInitialSize(QSize(500, 300), true);
+//! @todo KEXI3 not available in kdelibs4: setInitialSize(QSize(500, 300), true);
 }
 
 int
@@ -464,4 +459,4 @@ EditListViewDialog::MoveRowDown()
 
 }
 
-#warning noi18n # added to disable message extraction in Messages.sh
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

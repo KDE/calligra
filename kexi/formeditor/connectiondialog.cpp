@@ -442,4 +442,4 @@ ConnectionDialog::removeItem()
     d->table->deleteItem(d->table->selectedItem());
 }
 
-#warning noi18n # added to disable message extraction in Messages.sh
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

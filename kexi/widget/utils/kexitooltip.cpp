@@ -23,11 +23,7 @@
 #include <QFont>
 #include <QToolTip>
 
-#ifdef __GNUC__
-#warning KexiToolTip ported to Qt4 but not tested
-#else
-#pragma WARNING( KexiToolTip ported to Qt4 but not tested )
-#endif
+//! @todo KEXI3 KexiToolTip ported to Qt4 but not tested
 
 class KexiToolTip::Private
 {

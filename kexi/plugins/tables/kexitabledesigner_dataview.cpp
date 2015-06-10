@@ -44,11 +44,7 @@ KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 {
-#ifdef __GNUC__
-#warning TODO crash
-#else
-#pragma WARNING( TODO crash )
-#endif
+//! @todo KEXI3 crash
     /*TODO
       if (dynamic_cast<KexiDataTableView*>(tableView())
         && dynamic_cast<KexiDataTableView*>(tableView())->cursor())

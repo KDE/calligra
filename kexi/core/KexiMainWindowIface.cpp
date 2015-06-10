@@ -21,11 +21,8 @@
 #include "KexiMainWindowIface.h"
 
 //Q_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
-#ifdef __GNUC__
-#warning not threadsafe
-#else
-#pragma WARNING( not threadsafe )
-#endif
+
+//! @todo KEXI3 not threadsafe
 KexiMainWindowIface* kexiMainWindow = 0;
 
 KexiMainWindowIface::KexiMainWindowIface()
