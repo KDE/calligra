@@ -54,11 +54,7 @@ public:
     //! and optionally adds shortcut that will receive shortcut for \a action
     //! at global scope of the dialog \a parent.
     void setActionAndShortcut(QAction *action, QWidget* parent, const char* member) {
-#ifdef __GNUC__
-#warning not tested: setActionAndShortcut::setActionAndShortcut()
-#else
-#pragma WARNING( not tested: setActionAndShortcut::setActionAndShortcut() )
-#endif
+//! @todo KEXI3 not tested: setActionAndShortcut::setActionAndShortcut()
         if (!action)
             return;
         QObject::connect(parent, member, action, SLOT(trigger()));

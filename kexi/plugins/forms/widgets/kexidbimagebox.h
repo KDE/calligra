@@ -128,11 +128,7 @@ public:
     /*! Overridden to change the policy behaviour a bit:
      NoFocus is returned regardless the real focus flag
      if the data source is empty (see dataSource()). */
-#ifdef __GNUC__
-#warning TODO focusPolicy() is not virtual!
-#else
-#pragma WARNING( TODO focusPolicy() is not virtual! )
-#endif
+//! @todo KEXI3 focusPolicy() is not virtual!
     Qt::FocusPolicy focusPolicy() const;
 
     //! \return the internal focus policy value, i.e. the one unrelated to data source presence.

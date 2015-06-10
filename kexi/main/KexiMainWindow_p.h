@@ -1609,9 +1609,7 @@ public:
             break;
           }
           else if (action->text().toLower().trimmed() == itemText.toLower().trimmed()) {
-    #ifdef __GNUC__
-    #warning OK? this should only hide menu item, not global action... action->setVisible(false);
-    #endif
+//! @todo KEXI3 OK? this should only hide menu item, not global action... action->setVisible(false);
             action->setVisible(false);
             if (alsoSeparator)
               nowHideSeparator = true; //continue look to find separtator, if present
@@ -1623,11 +1621,7 @@ public:
 
       void disableMenuItem(const QString& menuName, const QString& itemText)
       {
-    #ifdef __GNUC__
-    #warning reimplement disableMenuItem()
-    #else
-    #pragma WARNING( reimplement disableMenuItem() )
-    #endif
+//! @todo KEXI3 reimplement disableMenuItem()
         Q3PopupMenu *pm = popups[menuName.toLatin1()];
         if (!pm)
           return;

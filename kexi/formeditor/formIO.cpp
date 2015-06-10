@@ -52,11 +52,7 @@
 #include "widgetwithsubpropertiesinterface.h"
 #include "formIO.h"
 
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo KEXI3 TODO pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
 #endif
@@ -222,11 +218,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
         tabstop.appendChild(tabStopText);
     }
 
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo KEXI3 TODO pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     // Save the Form 's PixmapCollection
     form->pixmapCollection()->save(uiElement);
