@@ -241,8 +241,8 @@ KexiProject::KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handle
         d->connection = conn;
     else
         qWarning() << "passed connection's data ("
-            << conn->data().serverInfoString() << ") is not compatible with project's conn. data ("
-            << d->data->connectionData()->serverInfoString() << ")";
+            << conn->data().toUserVisibleString() << ") is not compatible with project's conn. data ("
+            << d->data->connectionData()->toUserVisibleString() << ")";
 }
 
 KexiProject::~KexiProject()
@@ -1068,7 +1068,7 @@ KexiProject::createBlankProject(bool *cancelled, const KexiProjectData& data,
                     "Do you want to replace it with a new, blank one?",
                     prj->data()->infoString()) + "\n" + i18n(warningNoUndo) + "</qt>",
                 QString(), KGuiItem(xi18n("Replace")), KStandardGuiItem::cancel()))
-//! @todo add serverInfoString() for server-based prj
+//! @todo add toUserVisibleString() for server-based prj
         {
             delete prj;
             *cancelled = true;

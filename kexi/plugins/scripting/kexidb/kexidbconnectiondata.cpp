@@ -142,8 +142,8 @@ const QString KexiDBConnectionData::dbFileName() const
 {
     return m_data->dbFileName();
 }
-const QString KexiDBConnectionData::serverInfoString() const
+const QString KexiDBConnectionData::toUserVisibleString() const
 {
-    return m_data->serverInfoString(true);
+    return m_data->toUserVisibleString();
 }
 

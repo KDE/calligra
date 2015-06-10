@@ -236,7 +236,7 @@ void ImportWizard::setupIntro()
         msg = xi18nc("@info",
                     "Database Importing Assistant is about to import <resource>%1</resource> database "
                     "(connection <resource>%2</resource>) into a Kexi project.",
-                   d->predefinedDatabaseName, d->predefinedConnectionData->serverInfoString());
+                   d->predefinedDatabaseName, d->predefinedConnectionData->toUserVisibleString());
     } else if (!d->predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
         QMimeDatabase db;
@@ -932,7 +932,7 @@ void ImportWizard::next()
             if (fileBasedSrcSelected())
                 dbname = selectedSourceFileName();
             else
-                dbname = condata ? condata->serverInfoString() : QString();
+                dbname = condata ? condata->toUserVisibleString() : QString();
             KMessageBox::error(this,
                                dbname.isEmpty() ?
                                xi18n("Could not import database. This type is not supported.")

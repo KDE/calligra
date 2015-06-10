@@ -195,7 +195,7 @@ QString KexiProjectData::infoString(bool nobr) const
         //server-based
         return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
                + (nobr ? " <nobr>" : " ") + xi18nc("database connection", "(connection %1)",
-                                                  d->connData.serverInfoString()) + (nobr ? "</nobr>" : "");
+                                                  d->connData.toUserVisibleString()) + (nobr ? "</nobr>" : "");
     }
     //file-based
     return QString(nobr ? "<nobr>" : "")
