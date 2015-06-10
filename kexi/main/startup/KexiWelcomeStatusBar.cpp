@@ -969,7 +969,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->countryMask = lbl->text();
                 }
                 value = d->countryMask
-                    .arg(f->value(name).toString() /*! @todo KEXI3 port KLocale::global()->countryCodeToName(f->value(name).toString()) */)
+                    .arg(f->value(name).toString() /*!< @todo KEXI3 port KLocale::global()->countryCodeToName(f->value(name).toString()) */)
                     .arg(f->value(name).toString());
             }
             else if (name == QLatin1String("language")) {
@@ -977,7 +977,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
                     d->languageMask = lbl->text();
                 }
                 value = d->languageMask
-                    .arg(f->value(name).toString() /*! @todo KEXI3 port KLocale::global()->languageCodeToName(f->value(name).toString()) */)
+                    .arg(f->value(name).toString() /*!< @todo KEXI3 port KLocale::global()->languageCodeToName(f->value(name).toString()) */)
                     .arg(f->value(name).toString());
             }
             else {
