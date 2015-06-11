@@ -353,7 +353,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     // Add library translation files
     KLocale *locale = KLocale::global();
     if ( locale ) {
-        // QT5TODO
+        // QT5TODO: ensure proper loading of catalogs
 //         locale->insertCatalog( "planlibs" );
 #ifdef PLAN_KDEPIMLIBS_FOUND
 //         locale->insertCatalog( "kabc" );
