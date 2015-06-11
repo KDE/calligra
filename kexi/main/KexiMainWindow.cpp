@@ -50,7 +50,7 @@
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
-#include <migration/migratemanager.h>
+//! @todo KEXI3 #include <migration/migratemanager.h>
 #include <widget/KexiDBPasswordDialog.h>
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
@@ -4249,10 +4249,13 @@ KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 
 KexiMigrateManagerInterface* KexiMainWindow::migrateManager()
 {
+/*! @todo KEXI3
     if (d->migrateManager.isNull()) {
         d->migrateManager.reset(new KexiMigration::MigrateManager());
     }
     return d->migrateManager.data();
+    */
+    return 0;
 }
 
 void KexiMainWindow::toggleFullScreen(bool isFullScreen)
