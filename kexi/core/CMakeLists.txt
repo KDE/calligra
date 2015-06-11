@@ -24,6 +24,7 @@ set(kexicore_LIB_SRCS
    kexipartitem.cpp
    kexipartbase.cpp
    kexipart.cpp
+   kexipartguiclient.cpp
    kexiprojectdata.cpp
    KexiRecentProjects.cpp
    kexiinternalpart.cpp
