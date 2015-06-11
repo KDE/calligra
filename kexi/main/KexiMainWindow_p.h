@@ -1928,7 +1928,7 @@ public:
 
     KexiUserFeedbackAgent userFeedback;
 
-    QScopedPointer<KexiMigration::MigrateManager> migrateManager;
+    //! @todo KEXI3 QScopedPointer<KexiMigration::MigrateManager> migrateManager;
 
 private:
     //! @todo move to KexiProject
