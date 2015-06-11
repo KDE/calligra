@@ -29,10 +29,10 @@
 #include <KDbConnection>
 #include <KDbCursor>
 
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QApplication>
 #include <QDebug>

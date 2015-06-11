@@ -74,7 +74,6 @@
 #include <ktoggleaction.h>
 #include <kstandardshortcut.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
