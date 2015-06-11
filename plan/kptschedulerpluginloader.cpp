@@ -28,6 +28,7 @@
 #include <kdebug.h>
 
 #include <QPluginLoader>
+#include <QLocale>
 
 
 namespace KPlato
@@ -41,7 +42,36 @@ SchedulerPluginLoader::SchedulerPluginLoader(QObject * parent)
 SchedulerPluginLoader::~SchedulerPluginLoader()
 {
 }
- 
+
+static
+QJsonValue readLocalValue(const QJsonObject &json, const QString &key)
+{
+    // start with language_country
+    const QString localeName = QLocale().name();
+
+    QString localKey = key + QLatin1Char('[') + localeName + QLatin1Char(']');
+    QJsonObject::ConstIterator it = json.constFind(localKey);
+    if (it != json.constEnd()) {
+        return it.value();
+    }
+
+    // drop _country
+    const int separatorIndex = localeName.indexOf(QLatin1Char('_'));
+    if (separatorIndex != -1) {
+        const int localKeySeparatorIndex = key.length() + 1 + separatorIndex;
+        localKey[localKeySeparatorIndex] = QLatin1Char(']');
+        localKey.truncate(localKeySeparatorIndex + 1);
+       it = json.constFind(localKey);
+        if (it != json.constEnd()) {
+            return it.value();
+        }
+    }
+
+    // default to unlocalized value
+    return json.value(key);
+}
+
+
 void SchedulerPluginLoader::loadAllPlugins()
 {
     kDebug(planDbg()) << "Load all plugins";
@@ -61,9 +91,8 @@ void SchedulerPluginLoader::loadAllPlugins()
         if (plugin) {
             QJsonObject json = pluginLoader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();
-            // QT5TODO: get localized variant of Name & Description
-            const QString name = json.value("Name").toString();
-            const QString comment = json.value("Description").toString();
+            const QString name = readLocalValue(json, QLatin1String("Name")).toString();
+            const QString comment = readLocalValue(json, QLatin1String("Description")).toString();
 
             kDebug(planDbg()) << "Load plugin:" << name << ", " << comment;
             plugin->setName( name );
