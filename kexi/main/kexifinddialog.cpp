@@ -23,7 +23,6 @@
 #include <KStandardAction>
 #include <kcombobox.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
 

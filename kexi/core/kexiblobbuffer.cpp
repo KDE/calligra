@@ -31,7 +31,6 @@
 #include <QDebug>
 
 #include <kimageio.h>
-#include <kglobal.h>
 
 #include <KDbConnection>
 
