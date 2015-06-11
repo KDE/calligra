@@ -19,7 +19,6 @@
 
 #include <QApplication>
 
-#include <kglobal.h>
 #include <KAboutData>
 
 #include <tableview/kexitableview.h>

@@ -25,8 +25,6 @@
 #include <KDbField>
 #include <KDbUtils>
 
-#include <kglobal.h>
-
 #include <QPalette>
 #include <QPainter>
 #include <QKeyEvent>

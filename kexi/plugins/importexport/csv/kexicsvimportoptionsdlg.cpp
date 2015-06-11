@@ -22,7 +22,6 @@
 #include <kexiutils/utils.h>
 
 #include <kconfig.h>
-#include <kglobal.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>

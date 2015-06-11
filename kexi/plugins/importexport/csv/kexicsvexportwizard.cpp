@@ -33,7 +33,6 @@
 #include <KDbCursor>
 #include <KDbUtils>
 
-#include <kglobal.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
 
