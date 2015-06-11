@@ -430,33 +430,3 @@ KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiP
         return item->name() + " : " + part->info()->name();
     return item->name();
 }
-
-//-------------------------------------------------------------------------
-
-class GUIClient::Private
-{
-public:
-    Private() : actionCollection(static_cast<QObject*>(0)) {}
-    KActionCollection actionCollection;
-};
-
-
-
-GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
-        : QObject(part)
-        , d(new Private)
-{
-    Q_UNUSED(partInstanceClient);
-    setObjectName(
-        part->info()->id() + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
-}
-
-GUIClient::~GUIClient()
-{
-    delete d;
-}
-
-KActionCollection* GUIClient::actionCollection() const
-{
-    return &d->actionCollection;
-}
