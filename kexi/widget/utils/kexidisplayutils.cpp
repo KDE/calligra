@@ -25,7 +25,6 @@
 #include <QImage>
 #include <QWidget>
 
-#include <kglobal.h>
 #include <kcolorscheme.h>
 #include <KLocalizedString>
 
