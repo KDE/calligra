@@ -41,8 +41,6 @@ class Manager;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
-
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
     AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
