@@ -322,12 +322,6 @@ ObjectStatus::operator KDbMessageHandler*()
     return m_msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
-{
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KCmdLineArgs::addCmdLineOptions(kexi_options());
-}
-
 void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_text,
                               QString* line1, QString* line2)
 {
