@@ -29,8 +29,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QDebug>
-
-#include <kimageio.h>
+#include <QImageReader>
 
 #include <KDbConnection>
 
@@ -150,11 +149,11 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 {
 //! @todo ...
     if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
-        const QStringList types(KImageIO::typeForMime(mimeType));
-        if (   types.isEmpty()
-            || !KImageIO::isSupported(mimeType, KImageIO::Reading)
-            || !m_pixmap->loadFromData(*m_data, types.first().toLatin1())
-           )
+        const QMimeDatabase db;
+        const QMimeType mime(db.mimeTypeForName(mimeType));
+        if (!mime.isValid()
+            || !QImageReader::supportedMimeTypes().contains(mimeType.toLatin1())
+            || !m_pixmap->loadFromData(*m_data, mime.preferredSuffix().toLatin1()))
         {
             //! @todo inform about error?
         }
@@ -165,12 +164,12 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 
 /*! @return Extension for QPixmap::save() from @a mimeType.
     @todo default PNG ok? */
-static QString formatFromMimeType(const QString& mimeType, const QString& defaultType = "PNG")
+static QString formatFromMimeType(const QString& mimeType, const QString& defaultFormat = "PNG")
 {
     QMimeDatabase db;
     const QMimeType mime = db.mimeTypeForName(mimeType);
     if (!mime.isValid()) {
-        return defaultType;
+        return defaultFormat;
     }
     return mime.preferredSuffix();
 }
