@@ -31,8 +31,6 @@
 #include <KDbTableSchema>
 #include <KDbTableViewData>
 
-#include <kglobal.h>
-
 #include <QSet>
 #include <QHash>
 
