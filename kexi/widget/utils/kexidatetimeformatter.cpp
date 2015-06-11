@@ -19,7 +19,6 @@
 
 #include "kexidatetimeformatter.h"
 
-#include <kglobal.h>
 #include <KLocalizedString>
 
 #include <QLineEdit>

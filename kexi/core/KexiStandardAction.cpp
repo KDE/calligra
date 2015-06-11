@@ -21,7 +21,6 @@
 
 #include <KexiIcon.h>
 
-#include <kglobal.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
 

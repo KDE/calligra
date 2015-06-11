@@ -23,7 +23,6 @@
 #include <KDbUtils>
 
 #include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
@@ -31,6 +30,7 @@
 #include <QDir>
 #include <QIcon>
 #include <QStandardPaths>
+#include <QApplication>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)
@@ -62,9 +62,9 @@ void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
 {
     KexiTemplateInfoList list;
-//! @todo OK? KGlobal::mainComponent().componentName()
-    const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
-    QLocale locale;
+//! @todo KEXI3 KAboutData::applicationData().componentName() OK?
+    const QString subdir = KAboutData::applicationData().componentName() + "/templates";
+    const QLocale locale;
     QString lang(QLocale::languageToString(locale.language()));
     QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subdir));
     while (true) {
