@@ -43,12 +43,8 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     m_node( &task )
 {
     setWindowTitle( i18n("Task Settings") );
-    // QT5TODO: port to QDialog
-//     setButtons( Ok|Cancel );
-//     setDefaultButton( Ok );
     setFaceType( KPageDialog::Tabbed );
-    // QT5TODO: port to QDialog
-//     showButtonSeparator( true );
+
     KVBox *page;
 
     // Create all the tabs.
@@ -74,18 +70,21 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     m_descriptionTab->namefield->hide();
     m_descriptionTab->namelabel->hide();
 
-    // QT5TODO: port to QDialog
-//     enableButtonOk(false);
+    setButtonOkEnabled(false);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
-    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), this, SLOT(enableButtonOk(bool)));
+    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), this, SLOT(setButtonOkEnabled(bool)));
     connect(m_resourcesTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
     connect(m_documentsTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
     connect(m_costTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
     connect(m_descriptionTab, SIGNAL(textChanged(bool)), m_generalTab, SLOT(checkAllFieldsFilled()));
 
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
+}
+
+void TaskDialog::setButtonOkEnabled(bool enabled) {
+    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(enabled);
 }
 
 void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem */*prev*/ )
@@ -141,19 +140,14 @@ MacroCommand *TaskDialog::buildCommand() {
     return m;
 }
 
-void TaskDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
-        if (!m_generalTab->ok())
-            return;
-        if (!m_resourcesTab->ok())
-            return;
-        if (!m_descriptionTab->ok())
-            return;
-        accept();
-    } else {
-    // QT5TODO: port to QDialog
-//         KDialog::slotButtonClicked(button);
-    }
+void TaskDialog::accept() {
+    if (!m_generalTab->ok())
+        return;
+    if (!m_resourcesTab->ok())
+        return;
+    if (!m_descriptionTab->ok())
+        return;
+    KPageDialog::accept();
 }
 
 //---------------------------
