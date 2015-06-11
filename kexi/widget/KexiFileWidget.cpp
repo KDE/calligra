@@ -23,7 +23,7 @@
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiMigrateManagerInterface.h>
 #include <kexiutils/utils.h>
-#include <migration/migratemanager.h>
+//! @todo KEXI3 #include <migration/migratemanager.h>
 
 #include <KDbDriver>
 #include <KDbUtils>
