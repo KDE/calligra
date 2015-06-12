@@ -295,15 +295,15 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //static
 int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 {
+    const bool appExisted = QCoreApplication::instance();
 
-    bool GUIenabled = true;
-//! @todo switch GUIenabled off when needed
-    bool kappExisted = kapp;
-    KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
+    //! @todo use non-GUI app when needed
+    QApplication *app = new QApplication(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
-        if (!kappExisted) {
+        if (!appExisted) {
             delete app;
         }
         return (~res) ? 0 : 1;
