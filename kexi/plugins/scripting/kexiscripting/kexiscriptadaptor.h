@@ -137,7 +137,7 @@ public Q_SLOTS:
         QStringList list;
         if (project()) {
             KexiPart::ItemList l;
-            project()->getSortedItemsForPluginId(l, pluginId(pluginId).toUtf8());
+            project()->getSortedItemsForPluginId(&l, pluginId(pluginId).toUtf8());
             l.sort();
             foreach(KexiPart::Item* i, l) {
                 list << i->name();
