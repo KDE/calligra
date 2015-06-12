@@ -114,7 +114,7 @@ void KexiNameWidget::init(
     le_captionSizePolicy.setHorizontalStretch(1);
     d->le_name->setSizePolicy(le_captionSizePolicy);
     d->le_name->setClearButtonEnabled(true);
-    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(0);
+    KDbIdentifierValidator *idValidator = new KDbIdentifierValidator(0);
     idValidator->setLowerCaseForced(true);
     d->le_name->setValidator(d->validator = new KDbMultiValidator(idValidator, this));
     d->lyr->addWidget(d->le_name, 2, 1);
