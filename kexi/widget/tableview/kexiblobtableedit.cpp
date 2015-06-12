@@ -264,7 +264,6 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const QUrl &url)
         return;
     }
     f.close();
-// m_valueMimeType = KImageIO::mimeType( fileName );
     setValueInternal(ba, true);
     signalEditRequested();
     //emit acceptRequested();

@@ -235,16 +235,17 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, 
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData &record, KPropertySet& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *record, KPropertySet *set)
 {
     QVariant icon;
-    if (!set["rowSource"].value().toString().isEmpty()
-            && !set["rowSourceType"].value().toString().isEmpty()) {
+    if (!set->property("rowSource").value().toString().isEmpty()
+        && !set->property("rowSourceType").value().toString().isEmpty())
+    {
         icon = "combo";
     }
     //show/hide icon in the table
-    view->data()->clearRowEditBuffer();
-    view->data()->updateRowEditBuffer(&record, COLUMN_ID_ICON, icon);
-    view->data()->saveRowChanges(record, true);
+    view->data()->clearRecordEditBuffer();
+    view->data()->updateRecordEditBuffer(record, COLUMN_ID_ICON, icon);
+    view->data()->saveRecordChanges(record, true);
 }
 

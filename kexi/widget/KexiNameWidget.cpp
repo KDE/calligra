@@ -287,7 +287,7 @@ bool KexiNameWidget::checkValidity()
         return false;
     }
     QString dummy, message, details;
-    if (d->validator->check(dummy, d->le_name->text(), message, details)
+    if (d->validator->check(dummy, d->le_name->text(), &message, &details)
             == KDbValidator::Error)
     {
         KMessageBox::detailedSorry(0, message, details);
