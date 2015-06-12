@@ -32,8 +32,8 @@
 #include <KLocalizedString>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <kactioncollection.h>
-#include <kfiledialog.h>
+#include <KActionCollection>
+#include <KFileDialog>
 
 #include <QObject>
 #include <QPushButton>

@@ -69,7 +69,7 @@
 #include <KPropertyEditorView>
 #include <KPropertySet>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
 #include <kstandardshortcut.h>
@@ -79,9 +79,10 @@
 #include <ktogglefullscreenaction.h>
 #include <kiconloader.h>
 #include <khelpmenu.h>
-#include <kfiledialog.h>
+#include <KFileDialog>
 #include <kmultitabbar.h>
 #include <KLocalizedString>
+#include <KAboutData>
 
 #include <QApplication>
 #include <QFile>

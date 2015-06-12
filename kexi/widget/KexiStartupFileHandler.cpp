@@ -29,8 +29,8 @@
 #include <KMessageBox>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <kactioncollection.h>
-#include <kfiledialog.h>
+#include <KActionCollection>
+#include <KFileDialog>
 #include <kurlrequester.h>
 #include <KLocalizedString>
 

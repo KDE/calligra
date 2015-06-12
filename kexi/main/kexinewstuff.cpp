@@ -21,7 +21,7 @@
 
 #include <QDebug>
 #include <ktar.h>
-#include <kfiledialog.h>
+#include <KFileDialog>
 #include <KSharedConfig>
 #include <KLocalizedString>
 

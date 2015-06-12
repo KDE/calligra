@@ -29,7 +29,7 @@
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QApplication>
 #include <QIcon>

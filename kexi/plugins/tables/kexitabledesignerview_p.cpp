@@ -39,7 +39,7 @@
 #include <KDbError>
 #include <KDb>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
 #include <QDebug>

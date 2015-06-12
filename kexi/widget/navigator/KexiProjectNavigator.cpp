@@ -26,6 +26,7 @@
 #include "KexiProjectItemDelegate.h"
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
+#include <widget/utils/kexicontextmenuutils.h>
 #include <KexiIcon.h>
 #include <kexi.h>
 #include <kexipart.h>
@@ -43,10 +44,11 @@
 #include <KDbObjectNameValidator>
 
 #include <kconfig.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <kactionmenu.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <QPixmapCache>
 #include <QLabel>

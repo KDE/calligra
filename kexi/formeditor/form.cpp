@@ -40,7 +40,7 @@
 #include <KDbUtils>
 
 #include <KMessageBox>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <kfontdialog.h>
 #include <ktextedit.h>
 #include <KLocalizedString>

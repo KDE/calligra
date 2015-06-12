@@ -26,6 +26,7 @@
 #include <QVariant>
 #include <QClipboard>
 #include <QDebug>
+#include <QLineEdit>
 
 #include <kexiutils/utils.h>
 
