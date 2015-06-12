@@ -1,6 +1,10 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
+   Contains code from kglobalsettings.cpp:
+   Copyright (C) 2000, 2006 David Faure <faure@kde.org>
+   Copyright (C) 2008 Friedrich W. H. Kossebau <kossebau@kde.org>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -23,6 +27,8 @@
 
 #include <QPainter>
 #include <QImage>
+#include <QImageReader>
+#include <QImageWriter>
 #include <QIcon>
 #include <QMetaProperty>
 #include <QFocusEvent>
@@ -40,6 +46,7 @@
 #include <QFontDatabase>
 #include <QTextCodec>
 #include <QDebug>
+#include <QFileDialog>
 
 #include <KRun>
 #include <KToolInvocation>
@@ -50,6 +57,15 @@
 
 #if HAVE_LANGINFO_H
 #include <langinfo.h>
+#endif
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+
+static QRgb qt_colorref2qrgb(COLORREF col)
+{
+    return qRgb(GetRValue(col), GetGValue(col), GetBValue(col));
+}
 #endif
 
 using namespace KexiUtils;
@@ -262,6 +278,39 @@ QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool 
     for (QStringList::ConstIterator it = mimeStrings.constBegin(); it != endIt; ++it)
         ret += fileDialogFilterString(*it, kdeFormat);
     return ret;
+}
+
+//! @internal
+static QFileDialog* getImageDialog(QWidget *parent, const QString &caption, const QUrl &directory,
+                                   const QList<QByteArray> supportedMimeTypes)
+{
+    QFileDialog *dialog = new QFileDialog(parent, caption);
+    dialog->setDirectoryUrl(directory);
+    const QStringList mimeTypeFilters
+        = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(supportedMimeTypes);
+    dialog->setMimeTypeFilters(mimeTypeFilters);
+    return dialog;
+}
+
+QUrl KexiUtils::getOpenImageUrl(QWidget *parent, const QString &caption, const QUrl &directory)
+{
+    QScopedPointer<QFileDialog> dialog(
+        getImageDialog(parent, caption.isEmpty() ? i18n("Open") : caption, directory,
+                       QImageReader::supportedMimeTypes()));
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->exec();
+    return dialog->selectedUrls().value(0);
+}
+
+QUrl KexiUtils::getSaveImageUrl(QWidget *parent, const QString &caption, const QUrl &directory)
+{
+    QScopedPointer<QFileDialog> dialog(
+        getImageDialog(parent, caption.isEmpty() ? i18n("Save") : caption, directory,
+                       QImageWriter::supportedMimeTypes()));
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->exec();
+    return dialog->selectedUrls().value(0);
 }
 
 QColor KexiUtils::blendedColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
@@ -837,4 +886,54 @@ Q_GLOBAL_STATIC(GraphicEffectsLevel, g_graphicEffectsLevel)
 GraphicEffects KexiUtils::graphicEffectsLevel()
 {
     return g_graphicEffectsLevel->value;
+}
+
+bool KexiUtils::activateItemsOnSingleClick(QWidget *widget)
+{
+    QStyle *style = widget ? widget->style() : QApplication::style();
+    return style->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, widget);
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::inactiveTitleColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("inactiveBackground", QColor(224, 223, 222));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::inactiveTextColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("inactiveForeground", QColor(75, 71, 67));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::activeTitleColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("activeBackground", QColor(48, 174, 232));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::activeTextColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("activeForeground", QColor(255, 255, 255));
+#endif
 }
