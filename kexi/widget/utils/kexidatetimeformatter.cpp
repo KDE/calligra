@@ -307,7 +307,7 @@ QTime KexiTimeFormatter::fromString(const QString& str) const
             hour = d->hmsRegExp->cap(1).toInt();
             min = d->hmsRegExp->cap(2).toInt();
             sec = d->hmsRegExp->cap(3).toInt();
-            if (d->ampmpos >= 0 && d->hmsRegExp->numCaptures() > 3)
+            if (d->ampmpos >= 0 && d->hmsRegExp->captureCount() > 3)
                 pm = d->hmsRegExp->cap(4).trimmed().toLower() == "pm";
             tryWithoutSeconds = false;
         }
@@ -318,7 +318,7 @@ QTime KexiTimeFormatter::fromString(const QString& str) const
         hour = d->hmRegExp->cap(1).toInt();
         min = d->hmRegExp->cap(2).toInt();
         sec = 0;
-        if (d->ampmpos >= 0 && d->hmRegExp->numCaptures() > 2)
+        if (d->ampmpos >= 0 && d->hmRegExp->captureCount() > 2)
             pm = d->hmsRegExp->cap(4).toLower() == "pm";
     }
 
