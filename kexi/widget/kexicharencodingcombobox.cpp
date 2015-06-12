@@ -18,13 +18,14 @@
  */
 
 #include "kexicharencodingcombobox.h"
+#include <kexiutils/utils.h>
+
+#include <kcharsets.h>
+#include <KLocalizedString>
 
 #include <QTextCodec>
 #include <QLocale>
 #include <QDebug>
-
-#include <kcharsets.h>
-#include <KLocalizedString>
 
 class KexiCharacterEncodingComboBox::Private {
 public:
