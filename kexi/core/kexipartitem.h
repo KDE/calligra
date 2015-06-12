@@ -130,7 +130,7 @@ typedef QList<KexiPart::Item*>::iterator ItemListIterator;
 /*!
  @short Part item list with special sorting method (by item name).
 
- Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
+ Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList *list, KexiPart::Info *i);
  so you can call sort() on the list to sort it by item name.
 */
 class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item*>
