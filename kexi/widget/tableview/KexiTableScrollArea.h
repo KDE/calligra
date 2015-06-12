@@ -32,6 +32,7 @@
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <core/KexiRecordNavigatorHandler.h>
+#include <config-kexi.h>
 
 #include <KDbTristate>
 #include <KDbTableViewData>
@@ -218,7 +219,7 @@ public:
 
     void updateViewportMargins();
 
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
     // printing
     // void  setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
     void  print(QPrinter &printer, QPrintDialog &printDialog);
