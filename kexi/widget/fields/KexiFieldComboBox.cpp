@@ -19,7 +19,6 @@
 
 #include "KexiFieldComboBox.h"
 #include <kexiutils/utils.h>
-#include <kexidragobjects.h>
 #include <kexiproject.h>
 #include <kexi_global.h>
 #include "KexiFieldListModel.h"

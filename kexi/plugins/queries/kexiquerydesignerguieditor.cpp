@@ -23,7 +23,7 @@
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiinternalpart.h>
-#include <kexidragobjects.h>
+/*! @todo KEXI3 Port #include <kexidragobjects.h>
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include <kexi.h>
@@ -1224,8 +1224,10 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KDbRecordData * /*record*/, int /*r
     QString srcTable;
     QStringList srcFields;
 
+    /*! @todo KEXI3 Port kexidragobjects.cpp
     if (!KexiFieldDrag::decode(ev, &sourcePartClass, &srcTable, &srcFields))
         return;
+    */
 
     if (srcFields.count() != 1) {
         return;

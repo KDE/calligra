@@ -28,7 +28,7 @@
 #include <formeditor/WidgetTreeWidget.h>
 #include <kexi.h>
 #include <kexi_global.h>
-#include <kexidragobjects.h>
+//! @todo KEXI3 Port #include <kexidragobjects.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
@@ -1055,9 +1055,10 @@ KexiFormView::updateDataSourcePage()
 void
 KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 {
+/*! @todo KEXI3 Port kexidragobjects.cpp
     if (KexiFieldDrag::canDecode(e)) {
         e->setAccepted(true);
-    }
+    }*/
 }
 
 void
