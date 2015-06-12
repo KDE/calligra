@@ -40,10 +40,10 @@ class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
     ConnectionDataLVItem(KDbConnectionData *data,
-                         const KDbDriver::Info& info, QTreeWidget* list);
+                         const KDbDriverManager& driverMetaData, QTreeWidget* list);
     ~ConnectionDataLVItem();
 
-    void update(const KDbDriver::Info& info);
+    void update(const KDbDriverManager& driverMetaData);
 
     using QTreeWidgetItem::data;
     KDbConnectionData *data() const {

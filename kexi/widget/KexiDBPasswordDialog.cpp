@@ -68,7 +68,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
         connect(detailsButton, SIGNAL(clicked()),
                 this, SLOT(slotOkOrDetailsButtonClicked()))
     }
-    /*  msg += cdata.userName.isEmpty() ?
+    /*  msg += cdata.username().isEmpty() ?
           "<p>"+xi18n("Please enter the password.")
           : "<p>"+xi18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
 
@@ -83,10 +83,11 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
     setDomain(srv);
 
     QString usr;
-    if (cdata.userName.isEmpty())
+    if (cdata.userName().isEmpty()) {
         usr = xi18nc("unspecified user", "(unspecified)");
-    else
-        usr = cdata.userName;
+    } else {
+        usr = cdata.userName();
+    }
     setUsernameReadOnly(true);
     setUsername(usr);
 
@@ -108,10 +109,10 @@ bool KexiDBPasswordDialog::showConnectionDetailsRequested() const
 
 void KexiDBPasswordDialog::slotOkOrDetailsButtonClicked()
 {
-    d->cdata->password = password();
+    d->cdata->setPassword(password());
     QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
     if (!userEdit->isReadOnly()) {
-        d->cdata->userName = userEdit->text();
+        d->cdata->setUserName(userEdit->text());
     }
 }
 
@@ -124,7 +125,7 @@ void KexiDBPasswordDialog::slotShowConnectionDetails()
 //static
 tristate KexiDBPasswordDialog::getPasswordIfNeeded(KDbConnectionData *data, QWidget *parent)
 {
-    if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
+    if (data->passwordNeeded() && data->password().isNull() /* null means missing password */) {
         //ask for password
         KexiDBPasswordDialog pwdDlg(parent, *data, KexiDBPasswordDialog::ServerReadOnly);
         return QDialog::Accepted == pwdDlg.exec() ? tristate(true): cancelled;
