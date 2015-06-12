@@ -93,7 +93,7 @@ public:
         Q_UNUSED(type);
         Q_UNUSED(option);
         Q_UNUSED(index);
-        return new KexiIdentifierPropertyEdit(parent);
+        return new KexiIdentifierPropertyEditor(parent);
     }
 };
 

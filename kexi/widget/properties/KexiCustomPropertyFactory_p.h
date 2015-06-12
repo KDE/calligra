@@ -21,6 +21,7 @@
 #define KEXICUSTOMPROPFACTORY_P_H
 
 //! @todo #include <kexiblobbuffer.h>
+#include <KPropertyStringEditor>
 
 #if 0 // todo
 //! Kexi-specific image editor for property editor's item
@@ -53,14 +54,14 @@ protected:
 
  @todo move this to the KProperty library (when KexiUtils moves to Calligra Libs)
  */
-class KexiIdentifierPropertyEdit : public KPropertyStringEditor
+class KexiIdentifierPropertyEditor : public KPropertyStringEditor
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 
 public:
-    explicit KexiIdentifierPropertyEdit(QWidget *parent = 0);
-    virtual ~KexiIdentifierPropertyEdit();
+    explicit KexiIdentifierPropertyEditor(QWidget *parent = 0);
+    virtual ~KexiIdentifierPropertyEditor();
 
 public Q_SLOTS:
     /*! Reimplemented: sets \a value but it is converted to identifier
