@@ -129,6 +129,7 @@ public:
     enum StoreNewDataOption {
         OverwriteExistingData = 1 //!< Overwerite existing object in storeNewData()
     };
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
     QString defaultIconName() const;
 
@@ -136,8 +137,6 @@ public:
 
     /*! For KexiQueryView */
     virtual QList<QVariant> currentParameters() const;
-
-    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
 public Q_SLOTS:
     virtual void setFocus();
