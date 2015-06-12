@@ -77,8 +77,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
     driversComboLyr->setMargin(0);
-    d->driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(),
-            KexiDBDriverComboBox::ShowServerDrivers);
+    d->driversCombo = new KexiDBDriverComboBox(frmEngine, KexiDBDriverComboBox::ShowServerDrivers);
     driversComboLyr->addWidget(d->driversCombo);
     frmEngine->setFocusProxy(d->driversCombo);
     lblEngine->setBuddy(d->driversCombo);
@@ -162,7 +161,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
         dbGroupBox->setTitle(xi18n("Database"));
     }
 //! @todo what if there's no such driver name?
-    d->driversCombo->setDriverName(d->data.connectionData()->driverName);
+    d->driversCombo->setCurrentDriverId(d->data.connectionData()->driverId());
     hostEdit->setText(d->data.connectionData()->hostName);
     if (d->data.connectionData()->hostName.isEmpty()) {
         localhostRBtn->setChecked(true);
@@ -332,7 +331,7 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
         data.setDescription(detailsWidget->descriptionEdit->toPlainText());
         data.setDatabaseName(mainWidget->nameCombo->currentText());
     }
-    data.connectionData()->driverName = mainWidget->driversCombo()->selectedDriverName();
+    data.connectionData()->setDriverId(mainWidget->driversCombo()->currentDriverId());
     data.connectionData()->hostName =
         (mainWidget->remotehostRBtn->isChecked()/*remote*/)
         ? mainWidget->hostEdit->text() : QString();
