@@ -29,6 +29,7 @@
 #include <KDbConnection>
 
 #include <QDebug>
+#include <QLineEdit>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define ADD_DEFINEQUERY_ROW
