@@ -58,6 +58,7 @@ public:
     const KexiProject *project;
     const KexiPart::Part *part;
     KexiNameDialogValidator *validator;
+    QDialogButtonBox *buttonBox;
     bool checkIfObjectExists;
     bool allowOverwriting;
     bool overwriteNeeded;
@@ -118,14 +119,14 @@ void KexiNameDialog::init()
     connect(d->widget, SIGNAL(messageChanged()), this, SLOT(updateSize()));
 
     // buttons
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
+    QPushButton *okButton = d->buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     okButton->setEnabled(true);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    mainLayout->addWidget(buttonBox);
+    connect(d->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(d->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(d->buttonBox);
 
     updateSize();
     slotTextChanged();
@@ -147,7 +148,7 @@ void KexiNameDialog::slotTextChanged()
     {
         enable = false;
     }
-    button(QDialogButtonBox::Ok)->setEnabled(enable);
+    d->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
 
 bool KexiNameDialog::canOverwrite()
@@ -260,3 +261,7 @@ void KexiNameDialog::setValidator(KexiNameDialogValidator *validator)
     d->validator = validator;
 }
 
+QDialogButtonBox* KexiNameDialog::buttonBox()
+{
+    return d->buttonBox;
+}
