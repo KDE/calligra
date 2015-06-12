@@ -69,7 +69,7 @@ public:
         return m_data->count();
     }
 
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
 //  virtual void print(KPrinter &printer);
 #endif
 
