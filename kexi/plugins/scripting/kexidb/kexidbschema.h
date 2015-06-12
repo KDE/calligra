@@ -58,7 +58,7 @@ class KexiDBSchema : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBSchema(QObject* parent, const QString& name, ::KDbObject* schema, ::KDbFieldList* fieldlist, bool owner);
+    KexiDBSchema(QObject* parent, const QString& name, KDbObject* schema, KDbFieldList* fieldlist, bool owner);
     virtual ~KexiDBSchema();
 
 public Q_SLOTS:
@@ -82,8 +82,8 @@ public Q_SLOTS:
     QObject* fieldlist();
 
 protected:
-    ::KDbObject* m_schema;
-    ::KDbFieldList* m_fieldlist;
+    KDbObject* m_schema;
+    KDbFieldList* m_fieldlist;
     bool m_owner;
 };
 
@@ -94,9 +94,9 @@ class KexiDBTableSchema : public KexiDBSchema
 {
     Q_OBJECT
 public:
-    KexiDBTableSchema(QObject* parent, ::KDbTableSchema* tableschema, bool owner);
+    KexiDBTableSchema(QObject* parent, KDbTableSchema* tableschema, bool owner);
     virtual ~KexiDBTableSchema();
-    ::KDbTableSchema* tableschema();
+    KDbTableSchema* tableschema();
 
 public Q_SLOTS:
     /** Return the \a KexiDBQuerySchema object that represents a
@@ -111,9 +111,9 @@ class KexiDBQuerySchema : public KexiDBSchema
 {
     Q_OBJECT
 public:
-    KexiDBQuerySchema(QObject* parent, ::KDbQuerySchema* queryschema, bool owner);
+    KexiDBQuerySchema(QObject* parent, KDbQuerySchema* queryschema, bool owner);
     virtual ~KexiDBQuerySchema();
-    ::KDbQuerySchema* queryschema();
+    KDbQuerySchema* queryschema();
 
 private:
     /** Returns the SQL-statement of this query schema. */

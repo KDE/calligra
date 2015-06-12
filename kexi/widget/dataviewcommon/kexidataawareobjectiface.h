@@ -835,7 +835,7 @@ protected:
     KDbRecordData *m_currentItem;
 
     //! data iterator
-    KDbTableViewData::Iterator m_itemIterator;
+    KDbTableViewDataIterator m_itemIterator;
 
     //! record's data for inserting
     KDbRecordData *m_insertItem;

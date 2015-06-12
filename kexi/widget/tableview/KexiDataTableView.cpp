@@ -93,7 +93,7 @@ bool KexiDataTableView::loadTableViewSettings(KDbTableViewData* data)
                 qWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
                 return false;
             }
-            KDbTableViewColumn::List* columns = data->columns();
+            QList<KDbTableViewColumn*>* columns = data->columns();
             if (columnWidths.count() == columns->count()) {
                 int i = 0;
                 foreach (int width, columnWidths) {

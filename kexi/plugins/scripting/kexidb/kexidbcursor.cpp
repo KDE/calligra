@@ -27,7 +27,7 @@
 
 using namespace Scripting;
 
-KexiDBCursor::KexiDBCursor(QObject* parent, ::KDbCursor* cursor, bool owner)
+KexiDBCursor::KexiDBCursor(QObject* parent, KDbCursor* cursor, bool owner)
         : QObject(parent)
         , m_cursor(cursor)
         , m_owner(owner)
@@ -112,13 +112,13 @@ QVariant KexiDBCursor::value(uint index)
 
 bool KexiDBCursor::setValue(uint index, QVariant value)
 {
-    ::KDbQuerySchema* query = m_cursor->query();
+    KDbQuerySchema* query = m_cursor->query();
     if (! query) {
         qWarning() << "Invalid query, index=" << index << " value=" << value;
         return false;
     }
 
-    ::KDbQueryColumnInfo* column = query->fieldsExpanded().at(index);
+    KDbQueryColumnInfo* column = query->fieldsExpanded().at(index);
     if (! column) {
         qWarning() << "Invalid column, index=" << index << " value=" << value;
         return false;

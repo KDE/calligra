@@ -295,7 +295,7 @@ void KexiDataAwareView::reloadActions()
 //! @todo Move this to the table part
     d->dataAwareObject->contextMenu()->clear();
     if (!d->dataAwareObject->contextMenuTitleText().isEmpty()) {
-        d->dataAwareObject->contextMenu()->addTitle(
+        d->dataAwareObject->contextMenu()->addSection(
             d->dataAwareObject->contextMenuTitleIcon(),
             d->dataAwareObject->contextMenuTitleText());
     }
@@ -428,8 +428,8 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 {
     if (!dataAwareObject() || !dataAwareObject()->data())
         return false;
-    const KDbTableViewColumn::List *columns = dataAwareObject()->data()->columns();
-    foreach(KDbTableViewColumn *col, *columns) {
+    const QList<KDbTableViewColumn*> *columns = dataAwareObject()->data()->columns();
+    foreach(const KDbTableViewColumn *col, *columns) {
         if (!col->isVisible())
             continue;
         columnNames.append(col->field()->name());
@@ -472,12 +472,12 @@ bool KexiDataAwareView::isDataEditingInProgress() const
 {
     if (!d->dataAwareObject->rowEditing()
         || !d->dataAwareObject->data()
-        || !d->dataAwareObject->data()->rowEditBuffer())
+        || !d->dataAwareObject->data()->recordEditBuffer())
     {
         return false;
     }
     // true if edit buffer is not empty or at least there is editor with changed value
-    return !d->dataAwareObject->data()->rowEditBuffer()->isEmpty()
+    return !d->dataAwareObject->data()->recordEditBuffer()->isEmpty()
            || (d->dataAwareObject->editor() && d->dataAwareObject->editor()->valueChanged());
 }
 

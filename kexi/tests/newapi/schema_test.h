@@ -29,12 +29,12 @@ int schemaTest()
 
     KDbTableSchema *t = conn->tableSchema("persons");
     if (t)
-        t->debug();
+        qDebug() << *t;
     else
         qDebug() << "!persons";
     t = conn->tableSchema("cars");
     if (t)
-        t->debug();
+        qDebug() << *t;
     else
         qDebug() << "!cars";
     /*
