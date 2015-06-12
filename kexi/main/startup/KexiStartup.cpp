@@ -36,6 +36,7 @@
 #include <KDbUtils>
 #include <KDbDriver>
 #include <KDbDriverManager>
+#include <KDbDriverMetaData>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -273,14 +274,14 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (cdata.driverName.isEmpty())
         fileDriverSelected = true;
     else {
-        KDbDriverManager dm;
-        KDbDriver::Info dinfo = dm.driverInfo(cdata.driverName);
-        if (dinfo.name.isEmpty()) {
+        KDbDriverManager manager;
+        const KDbDriverMetaData *driverMetaData = manager.driverMetaData(cdata.driverId());
+        if (!driverMetaData) {
             //driver name provided explicitly, but not found
-            KMessageBox::sorry(0, dm.errorMsg());
+            KMessageBox::sorry(0, manager.result().message());
             return false;
         }
-        fileDriverSelected = dinfo.fileBased;
+        fileDriverSelected = driverMetaData->isFileBased();
     }
 
     bool projectFileExists = false;
@@ -340,7 +341,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             delete d->passwordDialog;
             d->passwordDialog = new KexiDBPasswordDialog(0, cdata, KexiDBPasswordDialog::ShowDetailsButton);
             if (connDataOptionsSpecified) {
-                if (cdata.userName.isEmpty()) {
+                if (cdata.userName().isEmpty()) {
                     d->passwordDialog->setUsername(QString());
                     d->passwordDialog->setUsernameReadOnly(false);
                     QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(d->passwordDialog, "QLineEdit", "userEdit");
