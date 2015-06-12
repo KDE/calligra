@@ -1254,9 +1254,11 @@ tristate KexiMainWindow::startup()
     case KexiStartupHandler::CreateBlankProject:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
         break;
+#ifdef KEXI_PROJECT_TEMPLATES
     case KexiStartupHandler::CreateFromTemplate:
         result = createProjectFromTemplate(*Kexi::startupHandler().projectData());
         break;
+#endif
     case KexiStartupHandler::OpenProject:
         result = openProject(*Kexi::startupHandler().projectData());
         break;
@@ -1367,6 +1369,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& data, const QString&
 
 tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projectData)
 {
+#ifdef KEXI_PROJECT_TEMPLATES
     QStringList mimetypes;
     mimetypes.append(KDb::defaultFileBasedDriverMimeType());
     QString fname;
@@ -1404,6 +1407,9 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
     }
 
     return openProject(fname, 0, QString(), projectData.autoopenObjects/*copy*/);
+#else
+    return false;
+#endif
 }
 
 void KexiMainWindow::updateReadOnlyState()
