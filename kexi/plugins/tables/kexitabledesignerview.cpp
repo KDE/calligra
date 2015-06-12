@@ -45,7 +45,7 @@
 #include <ktoggleaction.h>
 #include <KMessageBox>
 #include <kundo2command.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
 #include <QByteArray>
@@ -220,7 +220,7 @@ KexiTableDesignerView::~KexiTableDesignerView()
 void KexiTableDesignerView::initData()
 {
     //add column data
-    d->data->deleteAllRows();
+    d->data->deleteAllRecords();
     uint tableFieldCount = 0;
     d->primaryKeyExists = false;
 

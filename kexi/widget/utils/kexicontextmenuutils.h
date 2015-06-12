@@ -23,8 +23,6 @@
 #include "kexiguiutils_export.h"
 #include <kexi_global.h>
 
-#include <KDbQuerySchema>
-
 #include <QMenu>
 
 class KActionCollection;

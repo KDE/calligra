@@ -26,7 +26,7 @@
 #include <QDebug>
 
 #include <kservice.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
 #include <KoServiceLocator.h>

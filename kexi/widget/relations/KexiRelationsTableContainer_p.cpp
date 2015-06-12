@@ -21,6 +21,7 @@
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"
 #include <kexidragobjects.h>
+#include <kexiutils/utils.h>
 
 #include <KDbTableSchema>
 #include <KDbUtils>

@@ -26,6 +26,8 @@
 #include "KexiTableScrollArea.h"
 #include "kexi.h"
 
+#include <KDbTableSchema>
+
 #include <QDebug>
 
 KexiComboBoxBase::KexiComboBoxBase()
