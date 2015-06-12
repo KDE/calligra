@@ -27,6 +27,7 @@ target_link_libraries(
     KProperty
 
     KF5::KIOWidgets
+    KF5::XmlGui #KActionCollection...
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
