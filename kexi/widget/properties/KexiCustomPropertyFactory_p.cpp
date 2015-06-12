@@ -22,6 +22,7 @@
 #include <KProperty>
 
 #include <KDb>
+#include <KDbIdentifierValidator>
 
 #include <QDebug>
 
@@ -80,7 +81,7 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
 
 //----------------------------------------------------------------
 
-KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
+KexiIdentifierPropertyEditor::KexiIdentifierPropertyEditor(QWidget *parent)
         : KPropertyStringEditor(parent)
 {
     KDbIdentifierValidator *val = new KDbIdentifierValidator(this);
@@ -88,11 +89,11 @@ KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
     val->setObjectName("KexiIdentifierPropertyEdit Validator");
 }
 
-KexiIdentifierPropertyEdit::~KexiIdentifierPropertyEdit()
+KexiIdentifierPropertyEditor::~KexiIdentifierPropertyEditor()
 {
 }
 
-void KexiIdentifierPropertyEdit::setValue(const QString &value)
+void KexiIdentifierPropertyEditor::setValue(const QString &value)
 {
     if (value.isEmpty()) {
         qWarning() << "Value cannot be empty. This call has no effect.";
