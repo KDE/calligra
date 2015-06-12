@@ -257,7 +257,7 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
             // append a column computed using multiple columns
             const KDbQueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
             uint fieldsExpandedSize(fieldsExpanded.size());
-            KDbExpression *expr = 0;
+            KDbExpression expr;
             QList<uint>::ConstIterator it(visibleColumns.constBegin());
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
                 KDbQueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
@@ -265,21 +265,20 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                     qWarning() << *it << ">= fieldsExpandedSize";
                     continue;
                 }
-                KDbVariableExpression *fieldExpr
-                    = new KDbVariableExpression(ci->field->table()->name() + "." + ci->field->name());
+                KDbVariableExpression fieldExpr(ci->field->table()->name() + "." + ci->field->name());
                 //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->field = ci->field;
                 //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
-                if (expr) {
+                if (expr.isValid()) {
 //! @todo " " separator hardcoded...
 //! @todo use SQL sub-parser here...
-                    KDbConstExpression *constExpr = new KDbConstExpression(CHARACTER_STRING_LITERAL, " ");
-                    expr = new KDbBinaryExpression(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
-                    expr = new KDbBinaryExpression(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
+                    KDbConstExpression constExpr(KDbToken::CHARACTER_STRING_LITERAL, " ");
+                    expr = KDbBinaryExpression(constExpr, KDbToken::CONCATENATION, expr);
+                    expr = KDbBinaryExpression(fieldExpr, KDbToken::CONCATENATION, expr);
                 } else {
                     expr = fieldExpr;
                 }
             }
-            qDebug() << *expr;
+            qDebug() << expr;
 
             KDbField *f = new KDbField();
             f->setExpression(expr);
@@ -325,7 +324,7 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
 //! @todo THIS IS PRIMITIVE: we'd need to employ KDbReference here!
     d->int_f = new KDbField(field->name(), KDbField::Text);
     KDbTableViewData *data = new KDbTableViewData();
-    data->addColumn(new KDbTableViewColumn(*d->int_f));
+    data->addColumn(new KDbTableViewColumn(d->int_f));
     const QVector<QString> hints(field->enumHints());
     for (int i = 0; i < hints.size(); i++) {
         KDbRecordData *record = data->createItem();

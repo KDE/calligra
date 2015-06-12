@@ -437,8 +437,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             QString criteriaStr = (*set)["criteria"].value().toString();
             QByteArray alias((*set)["alias"].value().toByteArray());
             if (!criteriaStr.isEmpty()) {
-                int token;
-                KDbExpression *criteriaExpr = parseExpressionString(criteriaStr, token,
+                KDbToken token;
+                KDbExpression *criteriaExpr = parseExpressionString(criteriaStr, &token,
                                                  true/*allowRelationalOperator*/);
                 if (!criteriaExpr) {//for sanity
                     if (errMsg)
@@ -448,10 +448,10 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                 }
                 //build relational expression for column variable
                 KDbVariableExpression *varExpr = new KDbVariableExpression(fieldAndTableName);
-                criteriaExpr = new KDbBinaryExpression(KexiDBExpr_Relational, varExpr, token, criteriaExpr);
+                criteriaExpr = new KDbBinaryExpression(varExpr, token, criteriaExpr);
                 //critera ok: add it to WHERE section
                 if (whereExpr)
-                    whereExpr = new KDbBinaryExpression(KexiDBExpr_Logical, whereExpr, AND, criteriaExpr);
+                    whereExpr = new KDbBinaryExpression(whereExpr, KDbToken::AND, criteriaExpr);
                 else //first expr.
                     whereExpr = criteriaExpr;
             }
@@ -859,7 +859,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
         qDebug() << eItem->toString(0);
         KDbBinaryExpression* binary = eItem->toBinary();
-        if (binary && eItem->exprClass() == KexiDBExpr_Relational) {
+        if (binary && eItem->expressionClass() == KDb::RelationalExpression) {
             KDbField *leftField = 0, *rightField = 0;
             if (eItem->token() == '='
                     && binary->left()->toVariable()
@@ -1300,38 +1300,38 @@ QByteArray KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 
 //! @todo this is primitive, temporary: reuse SQL parser
 KDbExpression*
-KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int& token,
+KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDbToken *token,
         bool allowRelationalOperator)
 {
     QString str = fullString.trimmed();
     int len = 0;
     //KDbExpression *expr = 0;
     //1. get token
-    token = 0;
+    *token = KDbToken();
     //2-char-long tokens
     if (str.startsWith(QLatin1String(">="))) {
-        token = GREATER_OR_EQUAL;
+        *token = KDbToken::GREATER_OR_EQUAL;
         len = 2;
     } else if (str.startsWith(QLatin1String("<="))) {
-        token = LESS_OR_EQUAL;
+        *token = KDbToken::LESS_OR_EQUAL;
         len = 2;
     } else if (str.startsWith(QLatin1String("<>"))) {
-        token = NOT_EQUAL;
+        *token = KDbToken::NOT_EQUAL;
         len = 2;
     } else if (str.startsWith(QLatin1String("!="))) {
-        token = NOT_EQUAL2;
+        *token = KDbToken::NOT_EQUAL2;
         len = 2;
     } else if (str.startsWith(QLatin1String("=="))) {
-        token = '=';
+        *token = '=';
         len = 2;
     } else if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
-        token = LIKE;
+        *token = KDbToken::LIKE;
         len = 5;
     }
     else if (str.startsWith(QLatin1String("NOT "),  Qt::CaseInsensitive)) {
         str = str.mid(4).trimmed();
         if (str.startsWith(QLatin1String("LIKE "),  Qt::CaseInsensitive)) {
-            token = NOT_LIKE;
+            *token = KDbToken::NOT_LIKE;
             len = 5;
         }
         else {
@@ -1367,11 +1367,11 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
                 (str.startsWith(QLatin1Char('"')) && str.endsWith(QLatin1Char('"')))
                 || (str.startsWith(QLatin1Char('\'')) && str.endsWith(QLatin1Char('\''))))
        ) {
-        valueExpr = new KDbConstExpression(CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
+        valueExpr = new KDbConstExpression(KDbToken::CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
     } else if (str.startsWith(QLatin1Char('[')) && str.endsWith(QLatin1Char(']'))) {
         valueExpr = new KDbQueryParameterExpression(str.mid(1, str.length() - 2));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch(str)) {
-        valueExpr = new KDbConstExpression(DATE_CONST, QDate::fromString(
+        valueExpr = new KDbConstExpression(KDbToken::DATE_CONST, QDate::fromString(
                                               re.cap(1).rightJustified(4, '0') + "-" + re.cap(2).rightJustified(2, '0')
                                               + "-" + re.cap(3).rightJustified(2, '0'), Qt::ISODate));
     } else if ((re = QRegExp("(\\d{1,2}):(\\d{1,2})")).exactMatch(str)
@@ -1379,7 +1379,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
         QString res = re.cap(1).rightJustified(2, '0') + ":" + re.cap(2).rightJustified(2, '0')
                       + ":" + re.cap(3).rightJustified(2, '0');
 //  qDebug() << res;
-        valueExpr = new KDbConstExpression(TIME_CONST, QTime::fromString(res, Qt::ISODate));
+        valueExpr = new KDbConstExpression(KDbToken::TIME_CONST, QTime::fromString(res, Qt::ISODate));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})")).exactMatch(str)
                || (re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch(str)) {
         QString res = re.cap(1).rightJustified(4, '0') + "-" + re.cap(2).rightJustified(2, '0')
@@ -1405,16 +1405,16 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
             const int right = str.mid(pos + 1).toInt(&ok);
             if (!ok)
                 return 0;
-            valueExpr = new KDbConstExpression(REAL_CONST, QPoint(left, right)); //decoded to QPoint
+            valueExpr = new KDbConstExpression(KDbToken::REAL_CONST, QPoint(left, right)); //decoded to QPoint
         } else {
             //integer const
             const qint64 val = str.toLongLong(&ok);
             if (!ok)
                 return 0;
-            valueExpr = new KDbConstExpression(INTEGER_CONST, val);
+            valueExpr = new KDbConstExpression(KDbToken::INTEGER_CONST, val);
         }
     } else if (str.toLower() == "null") {
-        valueExpr = new KDbConstExpression(SQL_NULL, QVariant());
+        valueExpr = new KDbConstExpression(KDbToken::SQL_NULL, QVariant());
     } else {//identfier
         if (!KDb::isIdentifier(str))
             return 0;
@@ -1667,7 +1667,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KDbRecordData *re
     QString operatorStr, argStr;
     KDbExpression* e = 0;
     const QString str = newValue.toString().trimmed();
-    int token;
+    KDbToken token;
     QString field, table;
     KPropertySet *set = d->sets->findPropertySetForItem(*record);
     if (set) {
@@ -1686,13 +1686,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KDbRecordData *re
             result->msg = xi18n("Could not set criteria for empty record");
     }
     else if (str.isEmpty()
-             || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
+             || (e = parseExpressionString(str, &token, true/*allowRelationalOperator*/)))
     {
         if (e) {
             QString tokenStr;
-            if (token != '=') {
-                KDbBinaryExpression be(KexiDBExpr_Relational, 0, token, 0);
-                tokenStr = be.tokenToString(0) + " ";
+            if (token.value() != '=') {
+                tokenStr = token.toString() + " ";
             }
             if (set) {
                 (*set)["criteria"] = QString(tokenStr + e->toString(0)); //print it prettier
