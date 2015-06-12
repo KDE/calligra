@@ -397,7 +397,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
             this, SLOT(next()));
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
-    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    KDbIdentifierValidator *idValidator = new KDbIdentifierValidator(this);
     idValidator->setLowerCaseForced(true);
     contents->le_dbname->setValidator(idValidator);
     m_projectSelector = new KexiProjectSelectorWidget(

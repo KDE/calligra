@@ -83,7 +83,7 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
 KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
         : KPropertyStringEditor(parent)
 {
-    KexiUtils::IdentifierValidator *val = new KexiUtils::IdentifierValidator(this);
+    KDbIdentifierValidator *val = new KDbIdentifierValidator(this);
     setValidator(val);
     val->setObjectName("KexiIdentifierPropertyEdit Validator");
 }
