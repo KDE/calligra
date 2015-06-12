@@ -59,7 +59,7 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent)
         , d(new Private())
 {
     setInsertPolicy(NoInsert);
-    setCompletionMode(KGlobalSettings::CompletionPopupAuto);
+    setCompletionMode(KCompletion::CompletionPopupAuto);
 
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)),
