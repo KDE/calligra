@@ -33,6 +33,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 KexiNameDialogValidator::KexiNameDialogValidator()
 {
@@ -48,7 +49,12 @@ class KexiNameDialog::Private
 {
 
 public:
-    Private() {}
+    Private()
+        : validator(0)
+        , checkIfObjectExists(false)
+        , allowOverwriting(false)
+    {
+    }
     ~Private() {
         delete validator;
     }
@@ -68,8 +74,7 @@ KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
         : QDialog(parent)
         , d(new Private)
 {
-    setMainWidget(new QWidget(this));
-    d->widget = new KexiNameWidget(message, mainWidget());
+    d->widget = new KexiNameWidget(message, this);
     init();
 }
 
@@ -80,9 +85,7 @@ KexiNameDialog::KexiNameDialog(const QString& message,
         : QDialog(parent)
         , d(new Private)
 {
-    setMainWidget(new QWidget(this));
-    d->widget = new KexiNameWidget(message, nameLabel, nameText,
-                                  captionLabel, captionText, mainWidget());
+    d->widget = new KexiNameWidget(message, nameLabel, nameText, captionLabel, captionText);
     init();
 }
 
@@ -93,12 +96,8 @@ KexiNameDialog::~KexiNameDialog()
 
 void KexiNameDialog::init()
 {
-    d->checkIfObjectExists = false;
-    d->allowOverwriting = false;
-    d->validator = 0;
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(d->widget);
 
     QGridLayout *lyr = new QGridLayout;
     mainLayout->addLayout(lyr);
@@ -153,10 +152,10 @@ void KexiNameDialog::slotTextChanged()
 
 bool KexiNameDialog::canOverwrite()
 {
-    KDbObject tmp_sdata;
+    KDbObject tmpObject;
     tristate result = d->project->dbConnection()->loadObjectData(
                           d->project->typeIdForPluginId(d->part->info()->pluginId()),
-                          widget()->nameText(), tmp_sdata);
+                          widget()->nameText(), &tmpObject);
     if (result == cancelled) {
         return true;
     }
@@ -164,7 +163,7 @@ bool KexiNameDialog::canOverwrite()
         qWarning() << "Cannot load object schema data for" << widget()->nameText();
         return false;
     }
-    if (widget()->originalNameText() == tmp_sdata.name()) {
+    if (widget()->originalNameText() == tmpObject.name()) {
         return true;
     }
     if (!d->allowOverwriting) {

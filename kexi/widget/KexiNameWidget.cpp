@@ -20,7 +20,7 @@
 #include "KexiNameWidget.h"
 #include <core/kexi.h>
 
-#include <KDbValidator>
+#include <KDbIdentifierValidator>
 #include <KDb>
 
 #include <KMessageBox>

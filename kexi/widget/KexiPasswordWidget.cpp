@@ -20,6 +20,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "KexiPasswordWidget.h"
+#include <kexiutils/utils.h>
 
 #include <QCheckBox>
 #include <QLabel>
