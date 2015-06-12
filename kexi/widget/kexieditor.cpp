@@ -26,6 +26,7 @@
 
 #include <QList>
 #include <QMenu>
+#include <QVBoxLayout>
 
 //uncomment this to enable KTextEdit-based editor
 //#define KTEXTEDIT_BASED_SQL_EDITOR
