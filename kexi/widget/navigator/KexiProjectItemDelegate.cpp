@@ -23,6 +23,7 @@
 #include <kexiutils/utils.h>
 
 #include <KDb>
+#include <KDbIdentifierValidator>
 
 #include <QLineEdit>
 
@@ -77,7 +78,7 @@ QWidget* KexiProjectItemDelegate::createEditor(
 {
     QWidget *editor = QStyledItemDelegate::createEditor(parent, option, index);
     if (qobject_cast<QLineEdit*>(editor)) { // sanity check
-        KexiUtils::IdentifierValidator *validator = new KexiUtils::IdentifierValidator(editor);
+        KDbIdentifierValidator *validator = new KDbIdentifierValidator(editor);
         validator->setLowerCaseForced(true);
         qobject_cast<QLineEdit*>(editor)->setValidator(validator);
     }
