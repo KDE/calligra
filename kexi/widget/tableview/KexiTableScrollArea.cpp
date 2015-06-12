@@ -35,6 +35,7 @@
 #include "kexicelleditorfactory.h"
 #include <widget/utils/kexidisplayutils.h>
 #include <KexiIcon.h>
+#include <config-kexi.h>
 
 #include <KDbCursor>
 #include <KDbValidator>
@@ -65,7 +66,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
 #include <QPrinter>
 #endif
 
@@ -1809,11 +1810,10 @@ void KexiTableScrollArea::slotRowRepaintRequested(KDbRecordData& record)
     updateRow(m_data->indexOf(&record));
 }
 
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
 void
 KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog*/)
 {
-#if 0
     int leftMargin = printer.margins().width() + 2 + d->rowHeight;
     int topMargin = printer.margins().height() + 2;
 // int bottomMargin = topMargin + ( printer.realPageSize()->height() * printer.resolution() + 36 ) / 72;
@@ -1864,7 +1864,6 @@ KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog
     p.drawLine(leftMargin, topMargin, leftMargin, yOffset);
     p.drawLine(leftMargin, topMargin, right - 1, topMargin);
     p.end();
-#endif
 }
 #endif
 
