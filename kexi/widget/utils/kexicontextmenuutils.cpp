@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +51,10 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
         : QMenu(parent)
         , d(new Private(this))
 {
-    addTitle(QString());
+    // default title section
+    addSection(QString());
+    QString iconName = "pixmaplabel"; //!< @todo pixmaplabel icon is hardcoded...
+    updateTitle(this, QString(), iconName);
 
     d->actionCollection.addAction("insert",
                                   d->insertFromFileAction = new QAction(
@@ -92,10 +95,13 @@ KexiImageContextMenu::~KexiImageContextMenu()
     delete d;
 }
 
+
 void KexiImageContextMenu::insertFromFile()
 {
-    QUrl url(KFileDialog::getImageOpenUrl(
-                 QUrl("kfiledialog:///LastVisitedImagePath"), this, xi18n("Insert Image From File")));
+    QUrl dir;
+    //QUrl("kfiledialog:///LastVisitedImagePath"), this, ));
+    QUrl url = KexiUtils::getOpenImageUrl(this, xi18nc("@title", "Insert Image From File"), dir);
+
     //! @todo download the file if remote, then set fileName properly
     if (!url.isValid()) {
         //focus the app again to avoid annoying the user with unfocused main window
@@ -120,7 +126,7 @@ void KexiImageContextMenu::saveAs()
 {
     QString origFilename, fileExtension;
     bool dataIsEmpty = false;
-    emit aboutToSaveAsRequested(origFilename, fileExtension, dataIsEmpty);
+    emit aboutToSaveAsRequested(&origFilename, &fileExtension, &dataIsEmpty);
 
     if (dataIsEmpty) {
         qWarning() << "no data!";
@@ -135,29 +141,27 @@ void KexiImageContextMenu::saveAs()
     }
 
     //! @todo add originalFileName! (requires access to KRecentDirs)
-    QString fileName = KFileDialog::getSaveFileName(
-                           QUrl("kfiledialog:///LastVisitedImagePath"),
-                           KImageIO::pattern(KImageIO::Writing), this, xi18n("Save Image to File"));
-    if (fileName.isEmpty())
-        return;
-
-    if (QFileInfo(fileName).completeSuffix().isEmpty())
-        fileName += (QString(".") + fileExtension);
-    qDebug() << fileName;
-    QUrl url;
-    url.setPath(fileName);
-
-    QFile f(fileName);
-    if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this,
-            xi18n("<para>File <filename>%1</filename> already exists.</para>"
-                 "<para>Do you want to replace it with a new one?</para>",
-                 QDir::toNativeSeparators(fileName)), 0,
-            KGuiItem(xi18n("&Replace")), KGuiItem(xi18n("&Don't Replace")))) {
+    //! @todo support remote URLs
+    // QUrl("kfiledialog:///LastVisitedImagePath"),
+    QUrl dir;
+    QUrl url = KexiUtils::getSaveImageUrl(this, xi18nc("@title", "Save Image to File"), dir);
+    if (!url.isValid()) {
         return;
     }
 
-//! @todo use QUrl?
-    emit saveAsRequested(fileName);
+    if (QFileInfo(url.toLocalFile()).completeSuffix().isEmpty()) {
+        url.setPath(url.toLocalFile() + QLatin1Char('.') + fileExtension);
+    }
+    qDebug() << url;
+    QFile f(url.toLocalFile());
+    if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this,
+            xi18n("<para>File <filename>%1</filename> already exists.</para>"
+                 "<para>Do you want to replace it with a new one?</para>",
+                 QDir::toNativeSeparators(url.toString())), 0,
+            KGuiItem(xi18n("&Replace")), KGuiItem(xi18n("&Don't Replace")))) {
+        return;
+    }
+    emit saveAsRequested(url);
 }
 
 void KexiImageContextMenu::cut()
@@ -189,7 +193,7 @@ void KexiImageContextMenu::updateActionsAvailability()
 {
     bool valueIsNull = true;
     bool valueIsReadOnly = true;
-    emit updateActionsAvailabilityRequested(valueIsNull, valueIsReadOnly);
+    emit updateActionsAvailabilityRequested(&valueIsNull, &valueIsReadOnly);
 
     d->insertFromFileAction->setEnabled(!valueIsReadOnly);
     d->saveAsAction->setEnabled(!valueIsNull);
@@ -221,26 +225,28 @@ bool KexiImageContextMenu::updateTitle(QMenu *menu, const QString& title,
 bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
                                        const QString& objectTypeName, const QString& iconName)
 {
-    if (!menu || objectName.isEmpty() || objectTypeName.isEmpty())
+    if (!menu || objectTypeName.isEmpty())
         return false;
     //try to find title action
     QList<QAction *> actions = menu->actions();
     if (actions.isEmpty())
         return false;
-    QAction * action = actions.first();
-
-    /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
-     (see doc/dev/settings.txt) */
-    QString realTitle(xi18nc("Object name : Object type", "%1 : %2",
-                            objectName[0].toUpper() + objectName.mid(1),
-                            objectTypeName));
-
-    menu->addSection(QIcon::fromTheme(iconName), realTitle, action /*before old*/);
-    if (dynamic_cast<QWidgetAction*>(action)
-        && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
-    {
-        menu->removeAction(action);
+    QAction *titleAction = actions.first();
+    //! @todo KEXI3 test this
+    if (titleAction && titleAction->isSeparator()) {
+        titleAction->setIcon(QIcon::fromTheme(iconName));
+        /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
+         (see doc/dev/settings.txt) */
+        QString realTitle;
+        if (objectName.isEmpty()) {
+            realTitle = objectTypeName;
+        }
+        else {
+            realTitle = xi18nc("Object name : Object type", "%1 : %2",
+                               objectName[0].toUpper() + objectName.mid(1),
+                               objectTypeName);
+        }
+        titleAction->setText(realTitle);
     }
     return true;
 }
-

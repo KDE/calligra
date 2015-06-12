@@ -190,7 +190,7 @@ protected Q_SLOTS:
 
     void handleInsertFromFileAction(const QUrl &url);
     void handleAboutToSaveAsAction(QString* origFilename, QString* fileExtension, bool*& dataIsEmpty);
-    void handleSaveAsAction(const QString* fileName);
+    bool handleSaveAsAction(const QUrl &url);
     void handleCutAction();
     void handleCopyAction();
     void handlePasteAction();

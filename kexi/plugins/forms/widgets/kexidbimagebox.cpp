@@ -104,8 +104,8 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
             this, SLOT(slotUpdateActionsAvailabilityRequested(bool*,bool*)));
     connect(m_contextMenu, SIGNAL(insertFromFileRequested(QUrl)),
             this, SLOT(handleInsertFromFileAction(QUrl)));
-    connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
-            this, SLOT(handleSaveAsAction(QString)));
+    connect(m_contextMenu, SIGNAL(saveAsRequested(QUrl)),
+            this, SLOT(handleSaveAsAction(QUrl)));
     connect(m_contextMenu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(m_contextMenu, SIGNAL(copyRequested()),
@@ -151,8 +151,6 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
         m_value = KexiDataItemInterface::originalValue().toByteArray();
     bool ok = !m_value.isEmpty();
     if (ok) {
-        ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
-        ///ok = KImageIO::canRead( type );
         ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true;
         if (loadPixmap) {
             m_currentScaledPixmap = QPixmap(); // clear cache
@@ -380,20 +378,22 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
     }
 }
 
-void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
+bool KexiDBImageBox::handleSaveAsAction(const QUrl &url)
 {
-    QFile f(fileName);
+    //! @todo handle remote URLs
+    QFile f(url.toLocalFile());
     if (!f.open(QIODevice::WriteOnly)) {
         //! @todo err msg
-        return;
+        return false;
     }
     f.write(data());
     if (f.error() != QFile::NoError) {
         //! @todo err msg
         f.close();
-        return;
+        return false;
     }
     f.close();
+    return true;
 }
 
 void KexiDBImageBox::handleCutAction()
