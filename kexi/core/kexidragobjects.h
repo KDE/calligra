@@ -23,6 +23,7 @@
 
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QDrag>
 
 #include "kexicore_export.h"
 

@@ -18,7 +18,6 @@
 */
 
 #include "KexiFieldListView.h"
-#include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 
 #include <KDbTableSchema>
