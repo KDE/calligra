@@ -23,7 +23,7 @@
 
 #include <QApplication>
 #include <QToolTip>
-#include <QStyle>
+#include <QProxyStyle>
 #include <QStyleOptionHeader>
 #include <QMouseEvent>
 #include <QHelpEvent>
@@ -36,11 +36,11 @@
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableScrollAreaHeader.
-class KexiTableScrollAreaHeaderStyle : public KexiUtils::StyleProxy
+class KexiTableScrollAreaHeaderStyle : public QProxyStyle
 {
 public:
-    KexiTableScrollAreaHeaderStyle(QStyle *parentStyle, KexiTableScrollAreaHeader *widget)
-            : KexiUtils::StyleProxy(parentStyle, widget)
+    KexiTableScrollAreaHeaderStyle(QStyle *parentStyle)
+            : QProxyStyle(parentStyle)
     {
     }
     virtual ~KexiTableScrollAreaHeaderStyle() {}
@@ -87,11 +87,11 @@ public:
                     newOption.state &= (0xffffffff ^ QStyle::State_MouseOver);
                     //qDebug() << newOption.rect;
                 }
-                StyleProxy::drawControl(ce, &newOption, painter, widget);
+                QProxyStyle::drawControl(ce, &newOption, painter, widget);
                 return;
             }
         }
-        StyleProxy::drawControl(ce, option, painter, widget);
+        QProxyStyle::drawControl(ce, option, painter, widget);
     }
 };
 
@@ -147,7 +147,8 @@ void KexiTableScrollAreaHeader::styleChanged()
         setStyle(0);
         delete static_cast<QStyle*>(d->privateStyle);
     }
-    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style(), this));
+    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style()));
+    d->privateStyle->setParent(this);
     d->styleChangeEnabled = true;
 }
 
