@@ -33,6 +33,9 @@
 #include <KDbRecordEditBuffer>
 #include <KDbValidator>
 
+#include <KMessageBox>
+#include <KLocalizedString>
+
 #include <QDebug>
 #include <QScrollArea>
 #include <QScrollBar>
@@ -40,8 +43,6 @@
 #include <QStyle>
 #include <QHeaderView>
 #include <QKeyEvent>
-
-#include <KMessageBox>
 
 #include <limits.h>
 

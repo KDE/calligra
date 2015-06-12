@@ -31,7 +31,7 @@
 #include <QDebug>
 
 #include <ktoggleaction.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <kpagedialog.h>
 #include <ktextedit.h>
 #include <ktoolbar.h>

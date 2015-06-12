@@ -21,7 +21,7 @@
 
 #include <KexiIcon.h>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
 #include <QHash>

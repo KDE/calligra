@@ -28,7 +28,7 @@
 #include <KDbTableViewData>
 #include <KDbQuerySchema>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QWidget>
 #include <QAction>

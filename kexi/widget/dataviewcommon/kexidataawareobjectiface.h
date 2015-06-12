@@ -36,6 +36,7 @@
 #include <QPointer>
 #include <QList>
 #include <QDebug>
+#include <QIcon>
 
 class QHeaderView;
 class QScrollBar;

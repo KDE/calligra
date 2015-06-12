@@ -33,7 +33,7 @@
 #include <KDbConnection>
 #include <KDbUtils>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QDebug>
 #include <QDialog>
