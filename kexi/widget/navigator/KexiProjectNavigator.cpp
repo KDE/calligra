@@ -509,7 +509,7 @@ void KexiProjectNavigator::updateItemName(KexiPart::Item& item, bool dirty)
 
 void KexiProjectNavigator::slotSettingsChanged(int)
 {
-    d->singleClick = KGlobalSettings::singleClick();
+    d->singleClick = KexiUtils::activateItemsOnSingleClick(this);
 }
 
 void KexiProjectNavigator::selectItem(KexiPart::Item& item)
