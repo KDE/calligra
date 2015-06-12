@@ -77,8 +77,9 @@ void KexiInputTableEdit::init()
     //init settings
     QLocale locale;
     m_decsym = locale.decimalPoint();
-    if (m_decsym.isEmpty())
+    if (m_decsym.isNull()) {
         m_decsym = '.';//default
+    }
 
     //create layer for internal editor
     QHBoxLayout *lyr =  new QHBoxLayout(this);
