@@ -85,7 +85,7 @@ private Q_SLOTS:
     QObject* connectionWrapper(QObject* connection);
 
 private:
-    ::KDbDriverManager m_drivermanager;
+    KDbDriverManager m_drivermanager;
 };
 
 }

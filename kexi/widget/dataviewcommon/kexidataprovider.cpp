@@ -86,11 +86,11 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
     }
 }
 
-void KexiFormDataProvider::fillDataItems(KDbRecordData& record, bool cursorAtNewRow)
+void KexiFormDataProvider::fillDataItems(KDbRecordData *record, bool cursorAtNewRow)
 {
-    qDebug() << "record.count=" << record.count()
-             << "\nRECORD=";
-    record.debug();
+    Q_ASSERT(record);
+    qDebug() << "record.count=" << record->count()
+             << "\nRECORD=" << *record;
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
             = m_fieldNumbersForDataItems.constBegin();
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {
@@ -101,12 +101,12 @@ void KexiFormDataProvider::fillDataItems(KDbRecordData& record, bool cursorAtNew
         }
         //1. Is this a value with a combo box (lookup)?
         int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
-        if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue >= (int)record.count()) //sanity
+        if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue >= record->count()) //sanity
             indexForVisibleLookupValue = -1; //no
-        const QVariant value(record.at(it.value()));
+        const QVariant value(record->at(it.value()));
         QVariant visibleLookupValue;
-        if (indexForVisibleLookupValue != -1 && (int)record.size() > indexForVisibleLookupValue)
-            visibleLookupValue = record.at(indexForVisibleLookupValue);
+        if (indexForVisibleLookupValue != -1 && (int)record->count() > indexForVisibleLookupValue)
+            visibleLookupValue = record->at(indexForVisibleLookupValue);
             qDebug() << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value()
             << " data=" << value
             << (indexForVisibleLookupValue != -1
@@ -215,9 +215,9 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
     //update data sources set (some of them may be removed)
     QSet<QString> tmpUsedDataSources;
 
-    if (query)
-        query->debug();
-
+    if (query) {
+        qDebug() << *query;
+    }
     m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
                                              // because setColumnInfo() can activate it
     for (QList<KexiFormDataItemInterface*>::iterator it(m_dataItems.begin());
@@ -250,7 +250,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                         item->internalEditor()->installEventFilter(m_mainWidget);
                     }
 
-                    qDebug() << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
+                    qDebug() << "ALSO SET visibleColumn=" << *visibleColumnInfo
                         << "\n at position " << indexForVisibleLookupValue;
                 }
             }

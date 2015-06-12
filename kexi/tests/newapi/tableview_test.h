@@ -43,7 +43,7 @@ int tableViewTest()
 
 // KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
 // KDbCursor *cursor = conn->executeQuery( "select * from persons", KDbCursor::Buffered );
-    KDbCursor *cursor = conn->prepareQuery(*persons , cursor_options);
+    KDbCursor *cursor = conn->prepareQuery(persons , cursor_options);
     if (!cursor) {
         conn->debugError();
         qDebug() << "tableViewTest(): !cursor";

@@ -224,7 +224,7 @@ bool KexiProjectModel::renameItem(KexiPart::Item *item, const QString& newName)
     }
     QModelIndex origIndex = indexFromItem(i);
     bool ok = true;
-    emit renameItem(item, newName, ok);
+    emit renameItem(item, newName, &ok);
     if (ok) {
         emit layoutAboutToBeChanged();
         i->parent()->sortChildren();
@@ -275,7 +275,7 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info *info,
     if (!info->isVisibleInNavigator())
         return 0;
 
-    KexiProjectModelItem *item = new KexiProjectModelItem(*info, parent);
+    KexiProjectModelItem *item = new KexiProjectModelItem(info, parent);
     return item;
 }
 
@@ -303,7 +303,7 @@ KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Info *info, KexiPart::
                                                 KexiProjectModelItem *parent) const
 {
     d->objectsCount++;
-    KexiProjectModelItem *i = new KexiProjectModelItem(*info, *item, parent);
+    KexiProjectModelItem *i = new KexiProjectModelItem(info, item, parent);
     parent->appendChild(i);
     return i;
 }

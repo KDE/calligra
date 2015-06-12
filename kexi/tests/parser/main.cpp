@@ -76,14 +76,18 @@ int main(int argc, char **argv)
             qDebug() << "***********************";
             break;
         case KDbParser::OP_CreateTable: {
-            qDebug() << "Schema of table: " << parser->table()->name();
-            parser->table()->debug();
+            if (parser->table()) {
+                qDebug() << "Schema of table: " << parser->table()->name();
+                qDebug() << *parser->table();
+            }
             break;
         }
         case KDbParser::OP_Select: {
             qDebug() << "Select statement: ";
             KDbQuerySchema *q = parser->query();
-            q->debug();
+            if (q) {
+                qDebug() << *q;
+            }
             delete q;
             break;
         }

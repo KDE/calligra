@@ -100,7 +100,7 @@ public:
     KDbQuerySchema* privateQuery;
     int max_rows;
     //! Columns that should be kept visible; the others should be hidden.
-    //! Used when query is used as the row source type (KDbLookupFieldSchema::RowSource::Query).
+    //! Used when query is used as the row source type (KDbLookupFieldSchema::RecordSource::Query).
     //! We're doing this in this case because it's hard to alter the query to remove columns.
     QList<uint> visibleColumnsToShow;
 };
@@ -186,16 +186,16 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
         const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
         KDbCursor *cursor = 0;
-        switch (lookupFieldSchema->rowSource().type()) {
-        case KDbLookupFieldSchema::RowSource::Table: {
+        switch (lookupFieldSchema->recordSource().type()) {
+        case KDbLookupFieldSchema::RecordSource::Table: {
             KDbTableSchema *lookupTable
-            = field->table()->connection()->tableSchema(lookupFieldSchema->rowSource().name());
+            = field->table()->connection()->tableSchema(lookupFieldSchema->recordSource().name());
             if (!lookupTable)
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
                 /*qDebug() << "--- Orig query: ";
-                lookupTable->query()->debug();
+                qDebug() << *lookupTable->query();
                 qDebug() << field->table()->connection()->selectStatement(*lookupTable->query());*/
                 d->privateQuery = new KDbQuerySchema(*lookupTable->query());
             } else {
@@ -220,44 +220,44 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                 }
                 if (columnsFound) {
                     // proper data source: bound + visible columns
-                    cursor = field->table()->connection()->prepareQuery(*d->privateQuery);
+                    cursor = field->table()->connection()->prepareQuery(d->privateQuery);
                     /*qDebug() << "--- Composed query:";
-                    d->privateQuery->debug();
+                    qDebug() << *d->privateQuery;
                     qDebug() << field->table()->connection()->selectStatement(*d->privateQuery);*/
                 } else {
                     // for sanity
                     delete d->privateQuery;
                     d->privateQuery = 0;
-                    cursor = field->table()->connection()->prepareQuery(*lookupTable);
+                    cursor = field->table()->connection()->prepareQuery(lookupTable);
                 }
             }
             break;
         }
-        case KDbLookupFieldSchema::RowSource::Query: {
+        case KDbLookupFieldSchema::RecordSource::Query: {
             KDbQuerySchema *lookupQuery
-            = field->table()->connection()->querySchema(lookupFieldSchema->rowSource().name());
+            = field->table()->connection()->querySchema(lookupFieldSchema->recordSource().name());
             if (!lookupQuery)
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
                 /*qDebug() << "--- Orig query: ";
-                lookupQuery->debug();
+                qDebug() << *lookupQuery;
                 qDebug() << field->table()->connection()->selectStatement(*lookupQuery);*/
                 d->privateQuery = new KDbQuerySchema(*lookupQuery);
             } else {
                 d->visibleColumnsToShow = visibleColumns;
                 qSort(d->visibleColumnsToShow); // because we will depend on a sorted list
-                cursor = field->table()->connection()->prepareQuery(*lookupQuery);
+                cursor = field->table()->connection()->prepareQuery(lookupQuery);
             }
             break;
         }
         default:;
         }
         if (multipleLookupColumnJoined && d->privateQuery) {
-            // append column computed using multiple columns
+            // append a column computed using multiple columns
             const KDbQueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
             uint fieldsExpandedSize(fieldsExpanded.size());
-            KDbBaseExpr *expr = 0;
+            KDbExpression *expr = 0;
             QList<uint>::ConstIterator it(visibleColumns.constBegin());
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
                 KDbQueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
@@ -265,25 +265,33 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                     qWarning() << *it << ">= fieldsExpandedSize";
                     continue;
                 }
-                KDbVariableExpr *fieldExpr
-                = new KDbVariableExpr(ci->field->table()->name() + "." + ci->field->name());
-                fieldExpr->field = ci->field;
-                fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
+                KDbVariableExpression *fieldExpr
+                    = new KDbVariableExpression(ci->field->table()->name() + "." + ci->field->name());
+                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->field = ci->field;
+                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
                 if (expr) {
 //! @todo " " separator hardcoded...
 //! @todo use SQL sub-parser here...
-                    KDbConstExpr *constExpr = new KDbConstExpr(CHARACTER_STRING_LITERAL, " ");
-                    expr = new KDbBinaryExpr(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
-                    expr = new KDbBinaryExpr(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
-                } else
+                    KDbConstExpression *constExpr = new KDbConstExpression(CHARACTER_STRING_LITERAL, " ");
+                    expr = new KDbBinaryExpression(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
+                    expr = new KDbBinaryExpression(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
+                } else {
                     expr = fieldExpr;
+                }
             }
-            expr->debug();
-            qDebug() << expr->toString(0);
+            qDebug() << *expr;
 
             KDbField *f = new KDbField();
             f->setExpression(expr);
             d->privateQuery->addField(f);
+            QString errorMessage, errorDescription;
+            //! @todo KEXI3 check d->privateQuery->validate()
+            if (!d->privateQuery->validate(&errorMessage, &errorDescription)) {
+                qWarning() << "error in query:" << d->privateQuery << "\n"
+                           << "errorMessage:" << errorMessage
+                           << "\nerrorDescription:" << errorDescription;
+                return;
+            }
 #if 0 //does not work yet
 // <remove later>
 //! @todo temp: improved display by hiding all columns except the computed one
@@ -293,9 +301,8 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
 // </remove later>
 #endif
 //! @todo ...
-            qDebug() << "--- Private query: ";
-            d->privateQuery->debug();
-            cursor = field->table()->connection()->prepareQuery(*d->privateQuery);
+            qDebug() << "--- Private query:" << *d->privateQuery;
+            cursor = field->table()->connection()->prepareQuery(d->privateQuery);
         }
         if (!cursor)
 //! @todo errmsg

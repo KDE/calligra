@@ -25,7 +25,7 @@
 
 using namespace Scripting;
 
-KexiDBDriver::KexiDBDriver(QObject* parent, ::KDbDriver* driver)
+KexiDBDriver::KexiDBDriver(QObject* parent, KDbDriver* driver)
         : QObject(parent)
         , m_driver(driver)
 {
