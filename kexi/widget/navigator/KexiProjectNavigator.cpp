@@ -687,12 +687,9 @@ KexiItemMenu::~KexiItemMenu()
 
 void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
 {
-    clear();
-    QString title_text(partItem->name());
-    if (partInfo && !partInfo->name().isEmpty()) {
-        title_text += (" : " + partInfo->name());
-    }
-    addTitle(QIcon::fromTheme(partInfo->iconName()), title_text);
+    addSection(partInfo->name());
+    KexiContextMenuUtils::updateTitle(this, partItem->name(), partInfo->name(),
+                                      partInfo->iconName());
 
     if (m_actionCollection->action("open_object")
             && m_actionCollection->action("open_object")->isEnabled()

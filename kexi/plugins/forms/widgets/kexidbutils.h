@@ -51,13 +51,10 @@ public:
     //! Perform context menu exec() for @a globalPos. QMenu is used
     void exec(QMenu *menu, const QPoint &globalPos);
 
-    //! Creates title for context menu \a menu
-    void createTitle(QMenu *menu);
+    //! Creates actions for context menu \a menu
+    void updateActions(QMenu *menu);
 
-    //! Enables or disables context menu actions for @a menu that can modify the value.
-    void updatePopupMenuActions(QMenu *menu);
-
-    /*! Updates title for context menu based on data item \a iface caption or name
+        /*! Updates title for context menu based on data item \a iface caption or name
      Used in createTitle(QMenu *menu) and KexiDBImageBox.
      \return true is the title has been added. */
     static bool updateContextMenuTitleForDataItem(QMenu *menu, KexiDataItemInterface* iface,
