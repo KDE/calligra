@@ -26,6 +26,7 @@
 #include <QClipboard>
 #include <QScrollBar>
 #include <QDebug>
+#include <QLineEdit>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>

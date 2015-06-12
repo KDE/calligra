@@ -22,6 +22,9 @@
 
 #include "kexiguiutils_export.h"
 
+#include <QDate>
+#include <QDateTime>
+#include <QVariant>
 
 //! @short Date formatter used by KexiDateTableEdit and KexiDateTimeTableEdit
 class KEXIGUIUTILS_EXPORT KexiDateFormatter

@@ -58,7 +58,7 @@
 #include <KDbUtils>
 #include <KDbConnection>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
 #include <QStyle>

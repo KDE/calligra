@@ -17,13 +17,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-#include <drivers/xbase/xbaseexport.h>
 
 #include <KDbTableSchema>
 #include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <KLocalizedString>

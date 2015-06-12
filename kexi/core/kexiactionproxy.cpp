@@ -22,7 +22,7 @@
 #include "kexiactionproxy_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QDebug>
 #include <QWidget>

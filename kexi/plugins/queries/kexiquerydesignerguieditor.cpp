@@ -45,6 +45,7 @@
 #include <KDbRecordEditBuffer>
 #include <KDbTableViewData>
 #include <KDb>
+#include <KDbExpression>
 
 #include <KProperty>
 #include <KPropertySet>

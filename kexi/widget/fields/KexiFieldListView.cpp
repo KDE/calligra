@@ -23,6 +23,7 @@
 
 #include <KDbTableSchema>
 #include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <QPushButton>

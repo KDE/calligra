@@ -26,11 +26,13 @@
 
 #include <KDbTableSchema>
 #include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <QPushButton>
 #include <QPoint>
 #include <QDebug>
+#include <QLineEdit>
 
 //! @internal
 class KexiFieldComboBox::Private
