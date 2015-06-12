@@ -25,6 +25,7 @@
 
 #include <KLocalizedString>
 
+#include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
 
