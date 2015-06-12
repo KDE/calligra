@@ -68,18 +68,18 @@ public:
 /*================================================================*/
 
 ConnectionDataLVItem::ConnectionDataLVItem(KDbConnectionData *data,
-        const KDbDriver::Info& info, QTreeWidget* list)
+                                           const driverMetaData &driverMetaData, QTreeWidget* list)
         : QTreeWidgetItem(list)
         , m_data(data)
 {
-    update(info);
+    update(driverMetaData);
 }
 
 ConnectionDataLVItem::~ConnectionDataLVItem()
 {
 }
 
-void ConnectionDataLVItem::update(const KDbDriver::Info& info)
+void ConnectionDataLVItem::update(const KDbDriverManager& driverMetaData)
 {
     setText(0, m_data->caption + "  ");
     const QString sfile = xi18n("File");
@@ -235,8 +235,8 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
 
 ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KDbConnectionData* data)
 {
-    const KDbDriver::Info info(d->manager.driverInfo(data->driverName));
-    return new ConnectionDataLVItem(data, info, d->remote->list);
+    const KDbDriverMetaData* metaData = d->manager.driverMetaData(data->driverId());
+    return new ConnectionDataLVItem(data, metaData, d->remote->list);
 }
 
 void KexiConnectionSelectorWidget::showSimpleConn()

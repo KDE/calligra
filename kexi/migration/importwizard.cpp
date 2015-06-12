@@ -305,10 +305,6 @@ void ImportWizard::setupSrcDB()
 void ImportWizard::setupDstType()
 {
     d->dstTypePageWidget = new QWidget(this);
-
-    KDbDriverManager manager;
-    KDbDriver::InfoHash drvs = manager.driversInfo();
-
     QVBoxLayout *vbox = new QVBoxLayout(d->dstTypePageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
