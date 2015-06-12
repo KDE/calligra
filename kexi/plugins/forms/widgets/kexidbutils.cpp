@@ -40,15 +40,10 @@ class KexiDBWidgetContextMenuExtender::Private
 public:
     explicit Private(KexiDataItemInterface* iface_)
       : iface(iface_)
-      , contextMenuHasTitle(false)
     {
     }
 
     KexiDataItemInterface* iface;
-    QPointer<QMenu> contextMenu;
-    QPointer<QAction> titleAction;
-    bool contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
-
 };
 
 
@@ -118,38 +113,27 @@ KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 
 void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)
 {
-    QMenu kmenu;
-    foreach(QAction* action, menu->actions()) {
-        kmenu.addAction(action);
-    }
-    createTitle(&kmenu);
-    kmenu.exec(globalPos);
+    updateActions(menu);
+    menu->exec(globalPos);
 }
 
-void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
+void KexiDBWidgetContextMenuExtender::updateActions(QMenu *menu)
 {
     if (!menu)
         return;
 
+    // title
     QString icon;
     if (dynamic_cast<QWidget*>(d->iface)) {
         icon = KexiFormManager::self()->library()->iconName(
                    dynamic_cast<QWidget*>(d->iface)->metaObject()->className());
     }
-    d->contextMenuHasTitle = d->iface->columnInfo() ?
-        KexiContextMenuUtils::updateTitle(
-            menu,
-            d->iface->columnInfo()->captionOrAliasOrName(),
-            KDb::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
-        : false;
+    KexiContextMenuUtils::updateTitle(
+        menu, d->iface->columnInfo()->captionOrAliasOrName(),
+        KDb::simplifiedTypeName(*d->iface->columnInfo()->field), icon);
 
-    updatePopupMenuActions(menu);
-}
-
-void KexiDBWidgetContextMenuExtender::updatePopupMenuActions(QMenu *menu)
-{
+    // actions
     const bool readOnly = d->iface->isReadOnly();
-
     foreach(QAction* action, menu->actions()) {
         const QString text(action->text());
         if (text.startsWith(QObject::tr("Cu&t")) /*do not use i18n()!*/
