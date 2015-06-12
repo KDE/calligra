@@ -64,7 +64,7 @@ class KexiDBConnection : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnection(::KDbConnection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
+    KexiDBConnection(KDbConnection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
     virtual ~KexiDBConnection();
 
 public Q_SLOTS:
@@ -157,7 +157,7 @@ public Q_SLOTS:
     QObject* parser();
 
 private:
-    ::KDbConnection* m_connection;
+    KDbConnection* m_connection;
     QPointer<KexiDBConnectionData> m_connectiondata;
     QPointer<KexiDBDriver> m_driver;
 };

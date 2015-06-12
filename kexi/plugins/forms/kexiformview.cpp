@@ -714,7 +714,7 @@ void KexiFormView::initDataSource()
         KDbTableViewData* data = new KDbTableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
-        data->preloadAllRows();
+        data->preloadAllRecords();
 
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //   int resultCount = -1;

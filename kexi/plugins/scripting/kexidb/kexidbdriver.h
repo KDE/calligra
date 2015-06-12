@@ -59,7 +59,7 @@ class KexiDBDriver : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBDriver(QObject* parent, ::KDbDriver* driver);
+    KexiDBDriver(QObject* parent, KDbDriver* driver);
     virtual ~KexiDBDriver();
 
 public Q_SLOTS:
@@ -99,7 +99,7 @@ public Q_SLOTS:
     //! @todo QObject* connection(uint index);
 
 private:
-    ::KDbDriver* m_driver;
+    KDbDriver* m_driver;
 };
 
 }

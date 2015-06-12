@@ -29,7 +29,7 @@ using namespace Scripting;
  *KexiDBSchema
  */
 
-KexiDBSchema::KexiDBSchema(QObject* parent, const QString& name, ::KDbObject* schema, ::KDbFieldList* fieldlist, bool owner)
+KexiDBSchema::KexiDBSchema(QObject* parent, const QString& name, KDbObject* schema, KDbFieldList* fieldlist, bool owner)
         : QObject(parent)
         , m_schema(schema)
         , m_fieldlist(fieldlist)
@@ -75,7 +75,7 @@ QObject* KexiDBSchema::fieldlist()
  * KexiDBTableSchema
  */
 
-KexiDBTableSchema::KexiDBTableSchema(QObject* parent, ::KDbTableSchema* tableschema, bool owner)
+KexiDBTableSchema::KexiDBTableSchema(QObject* parent, KDbTableSchema* tableschema, bool owner)
         : KexiDBSchema(parent, "KexiDBTableSchema", tableschema, tableschema, owner)
 {
 }
@@ -86,9 +86,9 @@ KexiDBTableSchema::~KexiDBTableSchema()
         delete tableschema();
 }
 
-::KDbTableSchema* KexiDBTableSchema::tableschema()
+KDbTableSchema* KexiDBTableSchema::tableschema()
 {
-    return static_cast< ::KDbTableSchema* >(m_schema);
+    return static_cast< KDbTableSchema* >(m_schema);
 }
 
 QObject* KexiDBTableSchema::query()
@@ -100,7 +100,7 @@ QObject* KexiDBTableSchema::query()
  * KexiDBQuerySchema
  */
 
-KexiDBQuerySchema::KexiDBQuerySchema(QObject* parent, ::KDbQuerySchema* queryschema, bool owner)
+KexiDBQuerySchema::KexiDBQuerySchema(QObject* parent, KDbQuerySchema* queryschema, bool owner)
         : KexiDBSchema(parent, "KexiDBQuerySchema", queryschema, queryschema, owner)
 {
 }
@@ -111,27 +111,27 @@ KexiDBQuerySchema::~KexiDBQuerySchema()
         delete queryschema();
 }
 
-::KDbQuerySchema* KexiDBQuerySchema::queryschema()
+KDbQuerySchema* KexiDBQuerySchema::queryschema()
 {
-    return static_cast< ::KDbQuerySchema* >(m_schema);
+    return static_cast< KDbQuerySchema* >(m_schema);
 }
 
 const QString KexiDBQuerySchema::statement() const
 {
-    return static_cast< ::KDbQuerySchema* >(m_schema)->statement();
+    return static_cast< KDbQuerySchema* >(m_schema)->statement();
 }
 
 void KexiDBQuerySchema::setStatement(const QString& statement)
 {
-    static_cast< ::KDbQuerySchema* >(m_schema)->setStatement(statement);
+    static_cast< KDbQuerySchema* >(m_schema)->setStatement(statement);
 }
 
 bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
 {
-    ::KDbBaseExpr* oldexpr = static_cast< ::KDbQuerySchema* >(m_schema)->whereExpression();
+    KDbExpression* oldexpr = static_cast< KDbQuerySchema* >(m_schema)->whereExpression();
     Q_UNUSED(oldexpr);
 
-    ///@todo use ::KDbParser for such kind of parser-functionality.
+    ///@todo use KDbParser for such kind of parser-functionality.
     QString s = whereexpression;
     QRegExp re("[\"',]{1,1}");
     while (true) {
@@ -157,7 +157,7 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
             s.clear();
         }
 
-        ::KDbField* field = static_cast< ::KDbQuerySchema* >(m_schema)->field(key);
+        KDbField* field = static_cast< KDbQuerySchema* >(m_schema)->field(key);
         if (! field) {
             qWarning() << QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(key).arg(m_schema->name());
             return false;
@@ -169,7 +169,7 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
             return false;
         }
 
-        static_cast< ::KDbQuerySchema* >(m_schema)->addToWhereExpression(field, v);
+        static_cast< KDbQuerySchema* >(m_schema)->addToWhereExpression(field, v);
     }
     return true;
 }

@@ -123,7 +123,7 @@ static bool hasEnumType(const KDbTableViewColumn &column)
     KDbLookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema(*column.field());
     if (!lookupFieldSchema)
         return false;
-    if (lookupFieldSchema->rowSource().name().isEmpty())
+    if (lookupFieldSchema->recordSource().name().isEmpty())
         return false;
     return true;
 }

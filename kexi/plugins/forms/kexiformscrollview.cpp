@@ -151,7 +151,7 @@ void KexiFormScrollView::selectCellInternal(int previousRow, int previousColumn)
     //m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
     if (m_currentItem) {
         if (m_currentItem != d->previousRecord) {
-            fillDataItems(*m_currentItem, cursorAtNewRow());
+            fillDataItems(m_currentItem, cursorAtNewRow());
             d->previousRecord = m_currentItem;
             QWidget *w = 0;
             if (m_curCol >= 0 && m_curCol < dbFormWidget()->orderedDataAwareWidgets()->count()) {
@@ -279,7 +279,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
     const bool startRowEdit = rowEditing() == -1; //remember if we're starting record edit
     if (startRowEdit) {
         //we're starting record editing session
-        m_data->clearRowEditBuffer();
+        m_data->clearRecordEditBuffer();
         setRowEditing(row);
         //indicate on the vheader that we are editing:
         if (verticalHeader()) {
@@ -538,7 +538,7 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
     recordNavigator()->showEditingIndicator(false);
     dbFormWidget()->editedItem = 0;
     //update visible data because there could be auto-filled (eg. autonumber) fields
-    fillDataItems(*m_currentItem, cursorAtNewRow());
+    fillDataItems(m_currentItem, cursorAtNewRow());
     d->previousRecord = m_currentItem;
     KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
     if (item) {

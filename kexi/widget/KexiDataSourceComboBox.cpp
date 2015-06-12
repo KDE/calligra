@@ -70,7 +70,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
         , d(new Private())
 {
     setInsertPolicy(NoInsert);
-    setCompletionMode(KGlobalSettings::CompletionPopupAuto);
+    setCompletionMode(KCompletion::CompletionPopupAuto);
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
     connect(this, SIGNAL(returnPressed(QString)),

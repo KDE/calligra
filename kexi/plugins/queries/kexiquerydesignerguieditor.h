@@ -94,7 +94,7 @@ protected:
     KDbRecordData* createNewRow(const QString& tableName, const QString& fieldName,
                                      bool visible) const;
 
-    KDbBaseExpr* parseExpressionString(const QString& fullString, int& token,
+    KDbExpression* parseExpressionString(const QString& fullString, int& token,
                                             bool allowRelationalOperator);
 
     /*! @internal generates smallest unique alias */

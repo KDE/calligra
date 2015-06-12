@@ -145,7 +145,7 @@ public:
     QPoint recentCellWithToolTip;
 
     /*! Table cell tooltip */
-    KexiTableViewCellToolTip *cellToolTip;
+    //! @todo KEXI3 KexiTableViewCellToolTip *cellToolTip;
 
     /*! A rubber band for displaying drag indicator. */
     QRubberBand *dragIndicatorRubberBand;
