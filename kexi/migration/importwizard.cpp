@@ -350,7 +350,7 @@ void ImportWizard::setupDstTitle()
     d->dstTitlePageWidget->formLayout->setWidget(2, QFormLayout::LabelRole, d->dstNewDBNameLabel);
     d->dstNewDBNameLineEdit = new QLineEdit(d->dstTitlePageWidget);
     d->dstNewDBNameLineEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    KDbIdentifierValidator *idValidator = new KDbIdentifierValidator(this);
     idValidator->setLowerCaseForced(true);
     d->dstNewDBNameLineEdit->setValidator(idValidator);
     d->dstTitlePageWidget->formLayout->setWidget(2, QFormLayout::FieldRole, d->dstNewDBNameLineEdit);
