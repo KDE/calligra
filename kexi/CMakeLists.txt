@@ -14,6 +14,7 @@ option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to 
 
 # Experimental:
 option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
+option(KEXI_TABLE_PRINT_SUPPORT "Experimental: Enable printing of tabular view in Kexi" OFF) # broken since Kexi 2
 option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF) # broken since Kexi 2
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
