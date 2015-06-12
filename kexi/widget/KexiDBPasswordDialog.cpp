@@ -64,9 +64,8 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
         QPushButton *detailsButton = buttonBox()->button(QDialogButtonBox::Help);
         connect(detailsButton, SIGNAL(clicked()),
                 this, SLOT(slotShowConnectionDetails()));
-        detailsButton->setText(xi18n("&Details" + " >>"));
-        connect(detailsButton, SIGNAL(clicked()),
-                this, SLOT(slotOkOrDetailsButtonClicked()))
+        detailsButton->setText(xi18n("&Details >>"));
+        connect(detailsButton, SIGNAL(clicked()), this, SLOT(slotOkOrDetailsButtonClicked()));
     }
     /*  msg += cdata.username().isEmpty() ?
           "<p>"+xi18n("Please enter the password.")
@@ -93,7 +92,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& c
 
     buttonBox()->button(QDialogButtonBox::Ok)->setText(xi18n("&Open"));
     connect(buttonBox()->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-            this, SLOT(slotOkOrDetailsButtonClicked()))
+            this, SLOT(slotOkOrDetailsButtonClicked()));
     //! @todo KEXI3 buttonBox()->button(QDialogButtonBox::Ok)->setIcon(koIcon("document-open");
 }
 
