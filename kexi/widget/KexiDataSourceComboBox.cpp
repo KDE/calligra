@@ -133,7 +133,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
         if (!partInfo)
             return;
         KexiPart::ItemList list;
-        prj->getSortedItems(list, partInfo);
+        prj->getSortedItems(&list, partInfo);
         list.sort();
         d->tablesCount = 0;
         foreach(KexiPart::Item *item, list) {
@@ -149,7 +149,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
         if (!partInfo)
             return;
         KexiPart::ItemList list;
-        prj->getSortedItems(list, partInfo);
+        prj->getSortedItems(&list, partInfo);
         list.sort();
         foreach(KexiPart::Item *item, list) {
             addItem(d->queryIcon, item->name()); //or caption()?
