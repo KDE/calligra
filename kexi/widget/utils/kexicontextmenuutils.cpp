@@ -19,17 +19,18 @@
 
 #include "kexicontextmenuutils.h"
 #include <core/KexiMainWindowIface.h>
-
+#include <kexiutils/utils.h>
 #include <KexiIcon.h>
+#include <config-kexi.h>
 
-#include <kfiledialog.h>
-#include <kimageio.h>
 #include <KMessageBox>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
 
+#include <QDir>
 #include <QUrl>
 #include <QAction>
+#include <QFileInfo>
 
 //! @internal
 class KexiImageContextMenu::Private
