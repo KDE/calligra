@@ -54,7 +54,7 @@ KDbLookupFieldSchema *KexiComboBoxBase::lookupFieldSchema() const
 {
     if (field() && field()->table()) {
         KDbLookupFieldSchema *lookupFieldSchema = field()->table()->lookupFieldSchema(*field());
-        if (lookupFieldSchema && !lookupFieldSchema->rowSource().name().isEmpty())
+        if (lookupFieldSchema && !lookupFieldSchema->recordSource().name().isEmpty())
             return lookupFieldSchema;
     }
     return 0;
@@ -75,7 +75,7 @@ int KexiComboBoxBase::rowToHighlightForLookupTable() const
     KDbTableViewData *tvData = popup()->tableView()->data();
     const int boundColumn = boundColumnIndex();
     int row = -1;
-    for (KDbTableViewData::Iterator it(tvData->constBegin()); it != tvData->constEnd(); ++it) {
+    for (KDbTableViewDataIterator it(tvData->begin()); it != tvData->end(); ++it) {
         row++;
         KDbRecordData* record = *it;
         if (record->at(boundColumn).toInt(&ok) == rowUid && ok)
@@ -175,9 +175,9 @@ KDbRecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(const QV
     const int visibleColumn = visibleColumnIndex();
     if (-1 == visibleColumn)
         return 0;
-    KDbTableViewData::Iterator it(lookupData->constBegin());
+    KDbTableViewDataIterator it(lookupData->begin());
     int row;
-    for (row = 0;it != lookupData->constEnd();++it, row++) {
+    for (row = 0;it != lookupData->end();++it, row++) {
         if (valueIsText) {
             if ((*it)->at(visibleColumn).toString().trimmed().compare(txt, Qt::CaseInsensitive) == 0)
                 break;
@@ -211,8 +211,8 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     //.trimmed() is not generic!
 
     const QString txt(str.trimmed());
-    KDbTableViewData::Iterator it(relData->constBegin());
-    for (*row = 0;it != relData->constEnd();++it, (*row)++) {
+    KDbTableViewDataIterator it(relData->begin());
+    for (*row = 0;it != relData->end();++it, (*row)++) {
         const QString s((*it)->at(lookInColumn).toString());
         if (s.trimmed().compare(txt, Qt::CaseInsensitive) == 0)
             return s;
@@ -234,8 +234,8 @@ int KexiComboBoxBase::boundColumnIndex() const
     if (!lookupFieldSchema()) {
         return -1;
     }
-    switch (lookupFieldSchema()->rowSource().type()) {
-    case KDbLookupFieldSchema::RowSource::Table:
+    switch (lookupFieldSchema()->recordSource().type()) {
+    case KDbLookupFieldSchema::RecordSource::Table:
         // When the row source is Table we have hardcoded columns: <visible>, <bound>
         return lookupFieldSchema()->visibleColumns().count();
     default:;
@@ -250,8 +250,8 @@ int KexiComboBoxBase::visibleColumnIndex() const
     if (!lookupFieldSchema() || lookupFieldSchema()->visibleColumns().isEmpty()) {
         return -1;
     }
-    switch (lookupFieldSchema()->rowSource().type()) {
-    case KDbLookupFieldSchema::RowSource::Table:
+    switch (lookupFieldSchema()->recordSource().type()) {
+    case KDbLookupFieldSchema::RecordSource::Table:
         // When the row source is Table we have hardcoded columns: <visible>, <bound>
         return lookupFieldSchema()->visibleColumn(0);
     default:;

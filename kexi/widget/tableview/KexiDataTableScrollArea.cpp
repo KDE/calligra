@@ -65,7 +65,7 @@ bool KexiDataTableScrollArea::setData(KDbCursor *cursor)
 
     if (!m_cursor->query()) {
         qWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
-        m_cursor->debug();
+        qDebug() << *m_cursor;
         clearColumns();
         return false;
     }
@@ -94,7 +94,7 @@ bool KexiDataTableScrollArea::setData(KDbCursor *cursor)
     setWindowTitle(windowTitle);
 
     //PRIMITIVE!! data setting:
-    tv_data->preloadAllRows();
+    tv_data->preloadAllRecords();
 
     KexiTableScrollArea::setData(tv_data);
     return true;

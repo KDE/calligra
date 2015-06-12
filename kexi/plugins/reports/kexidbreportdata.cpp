@@ -154,16 +154,16 @@ bool KexiDBReportData::getSchema(const QString& pluginId)
                  && d->connection->querySchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a query..";
-            d->connection->querySchema(d->objectName)->debug();
+            qDebug() << *d->connection->querySchema(d->objectName);
             d->originalSchema = new KDbQuerySchema(*(d->connection->querySchema(d->objectName)));
         }
 
         if (d->originalSchema) {
             qDebug() << "Original:" << d->connection->selectStatement(*d->originalSchema);
-            d->originalSchema->debug();
+            qDebug() << *d->originalSchema;
 
             d->copySchema = new KDbQuerySchema(*d->originalSchema);
-            d->copySchema->debug();
+            qDebug() << *d->copySchema;
             qDebug() << "Copy:" << d->connection->selectStatement(*d->copySchema);
         }
 

@@ -107,12 +107,12 @@ void KexiDataAwareObjectInterface::setData(KDbTableViewData *data, bool owner)
         qDebug() << "destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
-        m_itemIterator = KDbTableViewData::Iterator();
+        m_itemIterator = KDbTableViewDataIterator();
     }
     m_owner = owner;
     m_data = data;
     if (m_data)
-        m_itemIterator = m_data->constBegin();
+        m_itemIterator = m_data->begin();
 
     //qDebug() << "using shared data";
     //add columns
@@ -175,7 +175,7 @@ void KexiDataAwareObjectInterface::setData(KDbTableViewData *data, bool owner)
         if (!m_insertItem) {//first setData() call - add 'insert' item
             m_insertItem = m_data->createItem();
         } else {//just reinit
-            m_insertItem->init(m_data->columnCount());
+            m_insertItem->resize(m_data->columnCount());
         }
     }
 
@@ -204,7 +204,7 @@ void KexiDataAwareObjectInterface::initDataContents()
         int curRow = -1, curCol = -1;
         if (m_data->columnCount() > 0) {
             if (rowCount() > 0) {
-                m_itemIterator = m_data->constBegin();
+                m_itemIterator = m_data->begin();
                 m_currentItem = *m_itemIterator;
                 curRow = 0;
                 curCol = 0;
@@ -273,7 +273,7 @@ bool KexiDataAwareObjectInterface::sort()
 
     //locate current record
     if (!m_currentItem) {
-        m_itemIterator = m_data->constBegin();
+        m_itemIterator = m_data->begin();
         m_currentItem = *m_itemIterator;
         m_curRow = 0;
         if (!m_currentItem)
@@ -585,15 +585,15 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 qDebug() << "NOW insert item is current";
 #endif
                 m_currentItem = m_insertItem;
-                m_itemIterator = KDbTableViewData::Iterator();
+                m_itemIterator = KDbTableViewDataIterator();
             } else {
 #ifdef setCursorPosition_DEBUG
                 qDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 int _i = 0;
                 qDebug() << "m_curRow:" << m_curRow;
-                for (KDbTableViewData::Iterator ii = m_data->constBegin();
-                     ii != m_data->constEnd(); ++ii)
+                for (KDbTableViewDataIterator ii = m_data->begin();
+                     ii != m_data->end(); ++ii)
                 {
                     qDebug() << _i << (ulong)(*ii)
                              << (ii == m_itemIterator ? "CURRENT" : "")
@@ -607,11 +607,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                     && m_curRow == (rowCount() - 1))
                 {
                     //moving from the 'insert item' to the last item
-                    m_itemIterator = m_data->constBegin();
+                    m_itemIterator = m_data->begin();
                     m_itemIterator += (m_data->count() - 1);
                 }
                 else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow) {
-                    m_itemIterator = m_data->constBegin();
+                    m_itemIterator = m_data->begin();
                 }
                 else if (   !newRowInserted && !forceSet && m_currentItem != m_insertItem
                          && oldRow >= 0 && (oldRow + 1) == m_curRow)
@@ -624,11 +624,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                     --m_itemIterator; // just move back
                 }
                 else { //move at:
-                    m_itemIterator = m_data->constBegin();
+                    m_itemIterator = m_data->begin();
                     m_itemIterator += m_curRow;
                 }
                 if (!*m_itemIterator) { //sanity
-                    m_itemIterator = m_data->constBegin();
+                    m_itemIterator = m_data->begin();
                     m_itemIterator += m_curRow;
                 }
                 m_currentItem = *m_itemIterator;
@@ -668,7 +668,7 @@ void KexiDataAwareObjectInterface::selectCellInternal(int previousRow, int previ
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-    if (m_rowEditing == -1 || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit)
+    if (m_rowEditing == -1 || /*sanity*/!m_data->recordEditBuffer() || m_inside_acceptRowEdit)
         return true;
     if (m_inside_acceptEditor) {
         m_internal_acceptsRowEditAfterCellAccepting = true;
@@ -688,24 +688,20 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     bool success = true;
     const bool inserting = m_newRowEditing;
 
-    if (m_data->rowEditBuffer()->isEmpty() && !m_newRowEditing) {
+    if (m_data->recordEditBuffer()->isEmpty() && !m_newRowEditing) {
         qDebug() << "-- NOTHING TO ACCEPT!!!";
     } else {//not empty edit buffer or new row to insert:
         if (m_newRowEditing) {
-            qDebug() << "-- INSERTING: ";
-            m_data->rowEditBuffer()->debug();
-            success = m_data->saveNewRow(*m_currentItem);
+            qDebug() << "-- INSERTING:" << *m_data->recordEditBuffer();
+            success = m_data->saveNewRecord(m_currentItem);
         }
         else {
             if (success) {
                 //accept changes for this row:
-                qDebug() << "-- UPDATING: ";
-                m_data->rowEditBuffer()->debug();
-                qDebug() << "-- BEFORE: ";
-                m_currentItem->debug();
-                success = m_data->saveRowChanges(*m_currentItem);
-                qDebug() << "-- AFTER: ";
-                m_currentItem->debug();
+                qDebug() << "-- UPDATING:" << *m_data->recordEditBuffer();
+                qDebug() << "-- BEFORE:" << *m_currentItem;
+                success = m_data->saveRecordChanges(m_currentItem);
+                qDebug() << "-- AFTER:" << *m_currentItem;
             }
         }
     }
@@ -781,7 +777,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
         //  because the row was not yet stored.
     }
 
-    m_data->clearRowEditBuffer();
+    m_data->clearRecordEditBuffer();
     updateAfterCancelRowEdit();
 
     //indicate on the vheader that we are not editing
@@ -940,7 +936,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         KDbValidator *validator = currentTVColumn->validator();
         if (validator) {
             res = validator->check(currentTVColumn->field()->captionOrName(),
-                                   newval, msg, desc);
+                                   newval, &msg, &desc);
         }
     }
 
@@ -967,17 +963,16 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             visibleValue = m_editor->visibleValue(); //visible value for lookup field
         }
         //should be also added to the buffer
-        if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
-                                           newval, /*allowSignals*/true,
-                                           currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
+        if (m_data->updateRecordEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
+                                              &newval, /*allowSignals*/true,
+                                              currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
         {
-            qDebug() << "------ EDIT BUFFER CHANGED TO:";
-            m_data->rowEditBuffer()->debug();
+            qDebug() << "------ EDIT BUFFER CHANGED TO:" << *m_data->recordEditBuffer();
         } else {
             qDebug() << "------ CHANGE FAILED";
             res = KDbValidator::Error;
 
-            //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
+            //now: there might be called cancelEditor() in updateRecordEditBuffer() handler,
             //if this is true, d->pEditor is NULL.
 
             if (m_editor && m_data->result().column >= 0 && m_data->result().column < columnCount()) {
@@ -1140,10 +1135,10 @@ void KexiDataAwareObjectInterface::insertItem(KDbRecordData *newRecord, int pos)
     }
 
     beginInsertItem(newRecord, pos);
-    m_data->insertRow(*newRecord, pos, true /*repaint*/);
+    m_data->insertRecord(newRecord, pos, true /*repaint*/);
 
     // always update iterator since the list was modified...
-    m_itemIterator = m_data->constBegin();
+    m_itemIterator = m_data->begin();
     m_itemIterator += m_curRow;
     endInsertItem(newRecord, pos);
 }
@@ -1195,7 +1190,7 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
     const bool repaintLater = repaint && m_spreadSheetMode;
     const int oldRows = rowCount();
 
-    bool res = m_data->deleteAllRows(repaint && !repaintLater);
+    bool res = m_data->deleteAllRecords(repaint && !repaintLater);
 
     if (res) {
         if (m_spreadSheetMode) {
@@ -1366,7 +1361,7 @@ bool KexiDataAwareObjectInterface::deleteItem(KDbRecordData* record)
 
     const int pos = m_data->indexOf(record);
     beginRemoveItem(record, pos);
-    bool result = m_data->deleteRow(*record, true /*repaint*/);
+    bool result = m_data->deleteRecord(record, true /*repaint*/);
     endRemoveItem(pos);
     if (!result) {
         showErrorMessageForResult(m_data->result());
@@ -1388,8 +1383,8 @@ KDbTableViewColumn* KexiDataAwareObjectInterface::column(int column)
 
 bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KDbTableViewColumn& tvcol)
 {
-    if (m_rowEditing >= 0 && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
-        return m_data->rowEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
+    if (m_rowEditing >= 0 && m_data->recordEditBuffer() && m_data->recordEditBuffer()->isDBAware()) {
+        return m_data->recordEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
     }
     return false;
 }
@@ -1399,7 +1394,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
 {
     KDbRecordData *currentItem = row < int(m_data->count()) ? m_data->at(row) : m_insertItem;
     //qDebug() << m_insertItem << m_currentItem << currentItem;
-    if (m_rowEditing >= 0 && row == m_rowEditing && m_data->rowEditBuffer()) {
+    if (m_rowEditing >= 0 && row == m_rowEditing && m_data->recordEditBuffer()) {
         KDbTableViewColumn* tvcol = column(col);
         if (tvcol->isDBAware()) {
             //get the stored value
@@ -1411,14 +1406,14 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
             const QVariant *storedValue = &currentItem->at(realFieldNumber);
 
             //db-aware data: now, try to find a buffered value (or default one)
-            const QVariant *cv = m_data->rowEditBuffer()->at(*tvcol->columnInfo(),
+            const QVariant *cv = m_data->recordEditBuffer()->at(*tvcol->columnInfo(),
                                  storedValue->isNull() && useDefaultValueIfPossible);
             if (cv)
                 return cv;
             return storedValue;
         }
         //not db-aware data:
-        const QVariant *cv = m_data->rowEditBuffer()->at(tvcol->field()->name());
+        const QVariant *cv = m_data->recordEditBuffer()->at(tvcol->field()->name());
         if (cv)
             return cv;
     }
@@ -1456,7 +1451,7 @@ void KexiDataAwareObjectInterface::boolToggled()
 void KexiDataAwareObjectInterface::slotDataDestroying()
 {
     m_data = 0;
-    m_itemIterator = KDbTableViewData::Iterator();
+    m_itemIterator = KDbTableViewDataIterator();
 }
 
 void KexiDataAwareObjectInterface::addNewRecordRequested()
@@ -1784,8 +1779,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
         //we're at "insert" record, and searching forward: no chances to find something
         return false;
     }
-    KDbTableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
-                                   ? m_data->constBegin() : m_itemIterator /*start from the current cell*/);
+    KDbTableViewDataIterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
+                                   ? m_data->begin() : m_itemIterator /*start from the current cell*/);
     if (startFromLastRowAndCol)
         it += (m_data->columnCount() - 1);
     int firstCharacter;
@@ -1843,7 +1838,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     // search
     const int prevRow = m_curRow;
     KDbRecordData *record = 0;
-    while ((it != m_data->constEnd() && (record = *it))) {
+    while ((it != m_data->end() && (record = *it))) {
         for (; forward ? col <= lastColumn : col >= lastColumn;
                 col = forward ? (col + 1) : (col - 1)) {
             const QVariant cell(record->at(m_indicesForVisibleValues[ col ]));
@@ -1866,7 +1861,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
             ++it;
             ++row;
         } else {
-            if (m_data->constBegin() == it) {
+            if (m_data->begin() == it) {
                 break;
             } else {
                 --it;
