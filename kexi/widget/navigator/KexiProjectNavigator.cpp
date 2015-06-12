@@ -143,7 +143,8 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
 
     d->lyr->addWidget(d->list);
 
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(slotSettingsChanged(int)));
+    //! @todo KEXI3 port from KGlobalSettings::Private::_k_slotNotifyChange:
+    //!             connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(slotSettingsChanged(int)));
     slotSettingsChanged(0);
 
     connect(d->list, SIGNAL(pressed(QModelIndex)), this,SLOT(slotSelectionChanged(QModelIndex)));

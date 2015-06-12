@@ -20,7 +20,7 @@
 
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"
-#include <kexidragobjects.h>
+//! @todo KEXI3 Port #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 
 #include <KDbTableSchema>
@@ -212,6 +212,9 @@ void KexiRelationsTableFieldList::dragEnterEvent(QDragEnterEvent* event)
 
 void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
 {
+//! @todo KEXI3 Port kexidragobjects.cpp
+    Q_UNUSED(event);
+#if 0
     QModelIndex receiver = indexAt(event->pos());
     if (!receiver.isValid() || !KexiFieldDrag::canDecode(event))
         return;
@@ -247,12 +250,15 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     //qDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
+#endif
 }
-
 
 void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 {
     //qDebug();
+//! @todo KEXI3 Port kexidragobjects.cpp
+    Q_UNUSED(event);
+#if 0
     QModelIndex idx = indexAt(event->pos());
 
     if (!idx.isValid() || !KexiFieldDrag::canDecode(event)) {
@@ -290,6 +296,7 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 
     //qDebug() << srcTable << ":" << srcField << schema()->name() << ":" << rcvField;
     event->accept();
+#endif
 }
 
 void KexiRelationsTableFieldList::slotContentsMoving(int, int)
