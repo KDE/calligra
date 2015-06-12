@@ -140,14 +140,14 @@ KDbObject* KexiQueryPart::loadSchemaData(
         //! @todo
         return 0;
     }
-    query->debug();
+    qDebug() << *query;
     (KDbObject&)*query = sdata; //copy main attributes
 
     temp->registerTableSchemaChanges(query);
     if (ownedByWindow)
         *ownedByWindow = false;
 
-    query->debug();
+    qDebug() << *query;
     return query;
 }
 

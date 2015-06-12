@@ -574,7 +574,7 @@ void KexiTableScrollArea::drawContents(QPainter *p)
             it += rowfirst;//move to 1st row
             rowp = rowPos(rowfirst); // row position
             for (r = rowfirst;r <= rowlast; r++, ++it, rowp += d->rowHeight) {
-    //   (*it)->debug();
+    //   qDebug() << *it;
                 paintRow(*it, p, r, rowp, cx, cy, colfirst, collast, maxwc);
             }
         }
@@ -1020,9 +1020,7 @@ bool KexiTableScrollArea::shortCutPressed(QKeyEvent *e, const QString &action_na
         if (!action->isEnabled())//this action is disabled - don't process it!
             return false;
 //! @todo KEXI3 (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
-        if (action->shortcut().primary() == QKeySequence(e->key() | e->modifiers())
-                || (action->shortcut().alternate() == QKeySequence(e->key() | e->modifiers())))
-        {
+        if (action->shortcut() == QKeySequence(e->key() | e->modifiers())) {
             //special cases when we need to override editor's shortcut
             if (overrideEditorShortcutNeeded(e)) {
                 return true;
@@ -1332,7 +1330,7 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
     const bool startRowEdit = rowEditing() == -1; //remember if we're starting row edit
     if (startRowEdit) {
         //we're starting row editing session
-        m_data->clearRowEditBuffer();
+        m_data->clearRecordEditBuffer();
         setRowEditing(row);
         //indicate on the vheader that we are editing:
         if (isInsertingEnabled() && row == rowCount()) {
@@ -1781,8 +1779,8 @@ bool KexiTableScrollArea::getVisibleLookupValue(QVariant& cellValue, KexiTableEd
     if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue() != -1
             && edit->columnInfo()->indexForVisibleLookupValue() < (int)record->count()) {
         const QVariant *visibleFieldValue = 0;
-        if (m_currentItem == record && m_data->rowEditBuffer()) {
-            visibleFieldValue = m_data->rowEditBuffer()->at(
+        if (m_currentItem == record && m_data->recordEditBuffer()) {
+            visibleFieldValue = m_data->recordEditBuffer()->at(
                                     *tvcol->visibleLookupColumnInfo(), false/*!useDefaultValueIfPossible*/);
         }
 

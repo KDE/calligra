@@ -22,7 +22,7 @@
 
 using namespace Scripting;
 
-KexiDBFieldList::KexiDBFieldList(QObject* parent, ::KDbFieldList* fieldlist, bool owner)
+KexiDBFieldList::KexiDBFieldList(QObject* parent, KDbFieldList* fieldlist, bool owner)
         : QObject(parent)
         , m_fieldlist(fieldlist)
         , m_owner(owner)
@@ -43,13 +43,13 @@ uint KexiDBFieldList::fieldCount()
 
 QObject* KexiDBFieldList::field(uint index)
 {
-    ::KDbField* field = m_fieldlist->field(index);
+    KDbField* field = m_fieldlist->field(index);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
 QObject* KexiDBFieldList::fieldByName(const QString& name)
 {
-    ::KDbField* field = m_fieldlist->field(name);
+    KDbField* field = m_fieldlist->field(name);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
@@ -97,8 +97,8 @@ bool KexiDBFieldList::setFields(QObject* fieldlist)
     KexiDBFieldList* list = dynamic_cast<KexiDBFieldList*>(fieldlist);
     if (! list) return false;
     list->clear();
-    ::KDbFieldList* fl = list->fieldlist();
-    foreach(::KDbField *field, *fl->fields()) {
+    KDbFieldList* fl = list->fieldlist();
+    foreach(KDbField *field, *fl->fields()) {
         m_fieldlist->addField(field);
     }
     return true;
@@ -110,7 +110,7 @@ QObject* KexiDBFieldList::subList(QVariantList list)
     foreach(const QVariant& v, list) {
         sl.append(v.toString());
     }
-    ::KDbFieldList* fl = m_fieldlist->subList(sl);
+    KDbFieldList* fl = m_fieldlist->subList(sl);
     return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }
 

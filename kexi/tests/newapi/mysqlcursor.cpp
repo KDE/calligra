@@ -103,12 +103,12 @@ int main(int argc, char * argv[])
         qDebug() << "Cursor: Value(1)" << c->value(1).toString();
     }
 #if 0
-    KDbTable *t = conn->tableSchema("persons");
+    KDbTableSchema *t = conn->tableSchema("persons");
     if (t)
-        t->debug();
+        qDebug() << *t;
     t = conn->tableSchema("cars");
     if (t)
-        t->debug();
+        qDebug() << *t;
 
 // conn->tableNames();
 

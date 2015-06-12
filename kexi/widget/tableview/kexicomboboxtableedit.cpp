@@ -110,7 +110,7 @@ void KexiComboBoxTableEdit::createInternalEditor(KDbQuerySchema& schema)
         //Lookup field is defined
         visibleLookupColumnInfo = schema.expandedOrInternalField(ci->indexForVisibleLookupValue());
     }
-    d->visibleTableViewColumn = new KDbTableViewColumn(schema, *ci, visibleLookupColumnInfo);
+    d->visibleTableViewColumn = new KDbTableViewColumn(schema, ci, visibleLookupColumnInfo);
 //! todo set d->internalEditor visible and use it to enable data entering by hand
     d->internalEditor = KexiCellEditorFactory::createEditor(*d->visibleTableViewColumn, 0);
     m_lineedit->hide();

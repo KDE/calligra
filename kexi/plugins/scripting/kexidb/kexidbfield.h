@@ -36,9 +36,9 @@ class KexiDBField : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBField(QObject* parent, ::KDbField* field, bool owner);
+    KexiDBField(QObject* parent, KDbField* field, bool owner);
     virtual ~KexiDBField();
-    ::KDbField* field() {
+    KDbField* field() {
         return m_field;
     }
 
@@ -133,7 +133,7 @@ public Q_SLOTS:
     void setDefaultValue(const QVariant& defaultvalue);
 
 private:
-    ::KDbField* m_field;
+    KDbField* m_field;
     bool m_owner;
 };
 
