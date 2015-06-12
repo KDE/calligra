@@ -57,11 +57,11 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption,
     d->lyr->setSpacing(0);
 
     d->lbl_b = new QWidget(this);
-    d->lbl_bLyr = new QHBoxLayout(lbl_b);
-    lbl_bLyr->setMargin(0);
+    d->lbl_bLyr = new QHBoxLayout(d->lbl_b);
+    d->lbl_bLyr->setMargin(0);
     d->lyr->addWidget(d->lbl_b);
     d->lbl = new QLabel(caption, d->lbl_b);
-    d->lbl_bLyr->addWidget(lbl);
+    d->lbl_bLyr->addWidget(d->lbl);
     d->lbl->setContentsMargins(6, 0, 0, 0);
     d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->lbl->setAutoFillBackground(true);
