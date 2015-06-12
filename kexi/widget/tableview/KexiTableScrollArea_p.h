@@ -39,6 +39,7 @@
 #include <QList>
 #include <QHash>
 #include <QRubberBand>
+#include <QToolTip>
 
 class KexiTableScrollAreaWidget;
 class KexiTableEdit;
@@ -46,6 +47,7 @@ class QLabel;
 
 //! @short a dynamic tooltip for table view cells
 /*! @internal */
+/*! @todo KEXI3 KexiTableViewCellToolTip
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
@@ -56,6 +58,7 @@ protected:
 
     KexiTableScrollArea *m_tableView;
 };
+*/
 
 /*! KexiTableView's internal structures
  @internal */

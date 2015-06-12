@@ -34,7 +34,6 @@
 #include <KDbQuerySchema>
 
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <KLocalizedString>
 #include <kiconeffect.h>
 

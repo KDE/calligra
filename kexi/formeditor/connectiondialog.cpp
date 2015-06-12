@@ -301,7 +301,7 @@ ConnectionDialog::slotCellChanged(KDbRecordData *record, int col, QVariant&, KDb
 void
 ConnectionDialog::updateSlotList(KDbRecordData *record)
 {
-    d->slotsColumnData->deleteAllRows();
+    d->slotsColumnData->deleteAllRecords();
     QString widget = (*record)[1].toString();
     QString signal = (*record)[2].toString();
 
@@ -338,7 +338,7 @@ ConnectionDialog::updateSignalList(KDbRecordData *record)
     if (!tree || !tree->widget())
         return;
 
-    d->signalsColumnData->deleteAllRows();
+    d->signalsColumnData->deleteAllRecords();
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));

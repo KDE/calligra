@@ -23,7 +23,7 @@
 #define KFORMDESIGNERFORM_P_H
 
 #include <kundo2stack.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include "resizehandle.h"
 #include "commands.h"

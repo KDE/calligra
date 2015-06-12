@@ -21,7 +21,7 @@
 #include "KexiCustomPropertyFactory_p.h"
 
 #include <KPropertyFactory>
-#include <KCustomProperty>
+//! @todo KEXI3 #include <KCustomProperty>
 
 #include <KDb>
 

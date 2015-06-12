@@ -36,7 +36,7 @@
 #include <kio/netaccess.h>
 #include <krun.h>
 #include <kactionmenu.h>
-#include <kfiledialog.h>
+#include <KFileDialog>
 #include <KMessageBox>
 
 #include <QLayout>

@@ -31,7 +31,7 @@
 
 #include <KDbConnection>
 
-#include <kfiledialog.h>
+#include <KFileDialog>
 #include <kactionmenu.h>
 #include <KMessageBox>
 

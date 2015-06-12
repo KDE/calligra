@@ -25,7 +25,7 @@
 
 #include <KDbGlobal>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QStringList>
 #include <QDebug>

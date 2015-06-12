@@ -26,9 +26,10 @@
 
 #include <KDbRecordEditBuffer>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QDebug>
+#include <QMenu>
 
 class KexiDataAwareView::Private
 {
