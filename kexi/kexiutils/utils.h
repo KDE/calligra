@@ -29,6 +29,7 @@
 #include <QFrame>
 #include <QFontDatabase>
 #include <QMimeType>
+#include <QUrl>
 
 #include <KIconLoader>
 
@@ -121,6 +122,25 @@ KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObjectWithInherited(
 //! \return a list of enum keys for meta property \a metaProperty.
 KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProperty);
 
+//! Convert a list @a list of @a SourceType type to another list of @a DestinationType
+//! type using @a convertMethod method
+/*!
+ Example:
+@code
+    QList<QByteArray> list = ....;
+    QStringList result = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(list);
+@endcode */
+template <typename SourceType, typename DestinationType,
+          DestinationType (*convertMethod)(const SourceType&)>
+QList<DestinationType> convertTypes(const QList<SourceType> &list)
+{
+    QList<DestinationType> result;
+    foreach(const SourceType &element, list) {
+        result.append(convertMethod(element));
+    }
+    return result;
+}
+
 /*! Sets "wait" cursor with 1 second delay (or 0 seconds if noDelay is true).
  Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
 KEXIUTILS_EXPORT void setWaitCursor(bool noDelay = false);
@@ -174,6 +194,20 @@ KEXIUTILS_EXPORT QString fileDialogFilterString(const QString& mimeName, bool kd
 /*! Like QString fileDialogFilterString(const QMimeType &mime, bool kdeFormat = true)
  but returns a list of filter strings. */
 KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
+
+/*! Creates a modal file dialog which returns the selected url of image filr to open
+    or an empty string if none was chosen.
+ Like KFileDialog::getImageOpenUrl(). */
+//! @todo KEXI3 add equivalent of kfiledialog:///
+KEXIUTILS_EXPORT QUrl getOpenImageUrl(QWidget *parent = 0, const QString &caption = QString(),
+                                      const QUrl &directory = QUrl());
+
+/*! Creates a modal file dialog with returns the selected url of image file to save
+    or an empty string if none was chosen.
+ Like KFileDialog::getSaveUrl(). */
+//! @todo KEXI3 add equivalent of kfiledialog:///
+KEXIUTILS_EXPORT QUrl getSaveImageUrl(QWidget *parent = 0, const QString &caption = QString(),
+                                      const QUrl &directory = QUrl());
 
 /*! A global setting for minimal readable font.
  \a init is a widget that should be passed if no qApp->mainWidget() is available yet.
@@ -482,8 +516,32 @@ enum GraphicEffect {
 Q_DECLARE_FLAGS(GraphicEffects, GraphicEffect)
 
 //! @return the desired level of effects on the GUI.
-//! A copy of KGlobalSettings::graphicEffectsLevel() needed for porting from kdelibs4.
+//! @note A copy of KGlobalSettings::graphicEffectsLevel() needed for porting from kdelibs4.
 KEXIUTILS_EXPORT GraphicEffects graphicEffectsLevel();
+
+//! @return the inactive titlebar background color
+//! @note A copy of KGlobalSettings::inactiveTitleColor() needed for porting from kdelibs4.
+KEXIUTILS_EXPORT QColor inactiveTitleColor();
+
+//! @return the inactive titlebar text (foreground) color
+//! @note A copy of KGlobalSettings::inactiveTextColor() needed for porting from kdelibs4.
+KEXIUTILS_EXPORT QColor inactiveTextColor();
+
+//! @return the active titlebar background color
+//! @note A copy of KGlobalSettings::activeTitleColor() needed for porting from kdelibs4.
+KEXIUTILS_EXPORT QColor activeTitleColor();
+
+//! @return the active titlebar text (foreground) color
+//! @note A copy of KGlobalSettings::activeTextColor() needed for porting from kdelibs4.
+KEXIUTILS_EXPORT QColor activeTextColor();
+
+/*! @return @c true if whether the app runs in a single click mode (the default).
+    @c false if returned if the app runs in double click mode.
+    This information is taken from @a widget widget's style. If there is no widget
+    specified, QApplication::style() is used.
+    @note This is a replacement for bool KGlobalSettings::singleClick().
+*/
+KEXIUTILS_EXPORT bool activateItemsOnSingleClick(QWidget *widget = 0);
 
 } //namespace KexiUtils
 
