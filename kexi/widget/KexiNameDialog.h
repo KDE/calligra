@@ -26,6 +26,7 @@
 
 #include <QDialog>
 
+class QDialogButtonBox;
 class KexiNameWidget;
 class KexiNameDialog;
 
@@ -58,6 +59,8 @@ public:
     virtual ~KexiNameDialog();
 
     KexiNameWidget* widget() const;
+
+    QDialogButtonBox* buttonBox();
 
     void setDialogIcon(const QString &iconName);
 
