@@ -629,7 +629,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         } else if (r == KexiStartupDialog::ImportResult) {
             KexiStartupData::setAction(ImportProject);
             return true;
-        } else if (r == KexiStartupDialog::CreateFromTemplateResult) {
+        }
+#ifdef KEXI_PROJECT_TEMPLATES
+        else if (r == KexiStartupDialog::CreateFromTemplateResult) {
             const QString selFile(d->startupDialog->selectedFileName());
             cdata.setFileName(selFile);
             QString detectedDriverName;
@@ -643,12 +645,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 return false;
             cdata.driverName = detectedDriverName;
             KexiStartupData::setProjectData(new KexiProjectData(cdata, selFile));
-#ifdef KEXI_PROJECT_TEMPLATES
             KexiStartupData::projectData()->autoopenObjects = d->startupDialog->autoopenObjects();
-#endif
             KexiStartupData::setAction(CreateFromTemplate);
             return true;
-        } else if (r == KexiStartupDialog::OpenExistingResult) {
+        }
+#endif
+        else if (r == KexiStartupDialog::OpenExistingResult) {
             const QString selFile(d->startupDialog->selectedFileName());
             if (!selFile.isEmpty()) {
                 //file-based project
