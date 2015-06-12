@@ -19,7 +19,6 @@
 */
 
 #include <kexiutils/utils.h>
-#include <kexidragobjects.h>
 #include "KexiRelationsTableContainer.h"
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"
