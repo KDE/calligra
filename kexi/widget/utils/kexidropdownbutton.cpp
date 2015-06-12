@@ -19,7 +19,7 @@
 
 #include "kexidropdownbutton.h"
 
-#include <QStyle>
+#include <QProxyStyle>
 #include <QStyleOption>
 #include <QPainter>
 #include <QApplication>
@@ -30,11 +30,11 @@
 #include <kexiutils/styleproxy.h>
 
 //! @internal A style that removes menu indicator from KexiDropDownButton.
-class KexiDropDownButtonStyle : public KexiUtils::StyleProxy
+class KexiDropDownButtonStyle : public QProxyStyle
 {
 public:
-    explicit KexiDropDownButtonStyle(QStyle *parentStyle, QObject * parent = 0)
-            : KexiUtils::StyleProxy(parentStyle, parent)
+    explicit KexiDropDownButtonStyle(QStyle *parentStyle)
+            : QProxyStyle(parentStyle)
     {
     }
     virtual ~KexiDropDownButtonStyle() {}
@@ -46,10 +46,10 @@ public:
             QStyleOptionToolButton newOption(*qstyleoption_cast<const QStyleOptionToolButton *>(option));
             newOption.features &= ~QStyleOptionToolButton::HasMenu;
 
-            StyleProxy::drawComplexControl(control, &newOption, painter, widget);
+            QProxyStyle::drawComplexControl(control, &newOption, painter, widget);
             return;
         }
-        StyleProxy::drawComplexControl(control, option, painter, widget);
+        QProxyStyle::drawComplexControl(control, option, painter, widget);
     }
 
     virtual int styleHint( StyleHint hint, const QStyleOption * option = 0, const QWidget * widget = 0, QStyleHintReturn * returnData = 0 ) const
@@ -57,7 +57,7 @@ public:
         if (hint == QStyle::SH_ToolButton_PopupDelay) {
             return 0;
         }
-        return StyleProxy::styleHint(hint, option, widget, returnData);
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
     }
 };
 
@@ -66,8 +66,9 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
         : QToolButton(parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style(), this);
+    KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style());
     setStyle(s);
+    s->setParent(this);
 //! @todo get this from a KStyle
 //! @todo use subControlRect
     /*TODO
