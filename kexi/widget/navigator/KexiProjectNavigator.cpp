@@ -42,6 +42,7 @@
 #include <KDb>
 #include <KDbUtils>
 #include <KDbObjectNameValidator>
+#include <KDbConnection>
 
 #include <kconfig.h>
 #include <KActionCollection>
@@ -54,7 +55,10 @@
 #include <QLabel>
 #include <QMenu>
 #include <QDialog>
+#include <QDialogButtonBox>
 #include <QDebug>
+#include <QContextMenuEvent>
+#include <QPushButton>
 
 class KexiProjectNavigator::Private
 {
@@ -462,7 +466,7 @@ void KexiProjectNavigator::slotRename()
     KexiNameDialog dialog(
         xi18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
         this);
-    dialog.setButtonText(KexiNameDialog::Ok, xi18nc("@action:button Rename object", "Rename"));
+    dialog.buttonBox()->button(QDialogButtonBox::Ok)->setText(xi18nc("@action:button Rename object", "Rename"));
     if (!d->model->project()) {
         qWarning() << "No KexiProject assigned!";
         return;
