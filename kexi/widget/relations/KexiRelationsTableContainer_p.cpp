@@ -42,10 +42,10 @@ KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
 {
     setAutoFillBackground(true);
     setContentsMargins(2, 2, 2, 2);
-    m_activeBG = KGlobalSettings::activeTitleColor();
-    m_activeFG = KGlobalSettings::activeTextColor();
-    m_inactiveBG = KGlobalSettings::inactiveTitleColor();
-    m_inactiveFG = KGlobalSettings::inactiveTextColor();
+    m_activeBG = KexiUtils::activeTitleColor();
+    m_activeFG = KexiUtils::activeTextColor();
+    m_inactiveBG = KexiUtils::inactiveTitleColor();
+    m_inactiveFG = KexiUtils::inactiveTextColor();
 
     installEventFilter(this);
 }
