@@ -225,7 +225,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_KexiDBCheckBox"
             << "library_widget_KexiDBImageBox"
             << QString() //sep
-            << "library_widget_KPushButton"
+            << "library_widget_KexiDBPushButton"
             << QString() //sep
             << "library_widget_KexiFrame"
             << "library_widget_QGroupBox"
