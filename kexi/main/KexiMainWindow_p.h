@@ -35,6 +35,9 @@
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <QTabWidget>
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
+#include <QStackedLayout>
 
 #include <KToolBar>
 #include <KHelpMenu>
@@ -43,10 +46,12 @@
 
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
+#include "KexiMenuWidget.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/styleproxy.h>
 #include <kexiutils/KexiTester.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/KexiFadeWidgetEffect.h>
 #include <core/kexi.h>
 
 class KexiProjectNavigator;
@@ -154,12 +159,6 @@ private:
     QVBoxLayout *lyr;
 };
 
-#include <KFadeWidgetEffect>
-#include <QGraphicsOpacityEffect>
-#include <QPropertyAnimation>
-#include <QStackedLayout>
-#include "KexiMenuWidget.h"
-
 class EmptyMenuContentWidget : public QWidget
 {
 public:
@@ -183,21 +182,6 @@ public:
         }
         QWidget::changeEvent(e);
     }
-};
-
-class KexiFadeWidgetEffect : public KFadeWidgetEffect
-{
-    Q_OBJECT
-public:
-    explicit KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
-    : KFadeWidgetEffect(destWidget)
-    , m_duration(duration)
-    {
-    }
-public Q_SLOTS:
-    void start() { KFadeWidgetEffect::start(m_duration); }
-private:
-    int m_duration;
 };
 
 //! A style proxy for KexiMenuWidget
