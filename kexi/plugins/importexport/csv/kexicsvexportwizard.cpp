@@ -122,7 +122,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         m_fileSaveWidget->setAdditionalFilters(csvMimeTypes().toSet());
         m_fileSaveWidget->setDefaultExtension("csv");
         m_fileSaveWidget->setLocationText(
-            KexiUtils::stringToFileName(captionOrName));
+            KDbUtils::stringToFileName(captionOrName));
         m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, xi18n("Enter Name of File You Want to Save Data To"));
         addPage(m_fileSavePage);
         connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
