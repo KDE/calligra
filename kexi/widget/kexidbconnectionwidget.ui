@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>431</height>
+    <height>434</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout1">
@@ -104,7 +104,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="passwordEdit">
+       <widget class="KLineEdit" name="passwordEdit">
         <property name="echoMode">
          <enum>QLineEdit::Password</enum>
         </property>
@@ -127,7 +127,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="userEdit"/>
+       <widget class="KLineEdit" name="userEdit"/>
       </item>
       <item row="4" column="1">
        <layout class="QHBoxLayout" name="horizontalLayoutSavePassword">
@@ -185,7 +185,7 @@
        </widget>
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="QLineEdit" name="titleEdit"/>
+       <widget class="KLineEdit" name="titleEdit"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="titleLabel">
@@ -204,7 +204,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="KPushButton" name="btnLoadDBList">
+       <widget class="QPushButton" name="btnLoadDBList">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
           <horstretch>0</horstretch>
@@ -368,7 +368,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="hostEdit">
+       <widget class="KLineEdit" name="hostEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -393,11 +393,7 @@
       <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="KIntNumInput" name="customPortEdit" native="true">
-          <property name="minValue" stdset="0">
-           <number>0</number>
-          </property>
-         </widget>
+         <widget class="QSpinBox" name="customPortEdit"/>
         </item>
         <item>
          <spacer name="horizontalSpacer">
@@ -431,22 +427,12 @@
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <header location="global">KComboBox</header>
   </customwidget>
   <customwidget>
-   <class>QLineEdit</class>
+   <class>KLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header location="global">KLineEdit</header>
   </customwidget>
  </customwidgets>
  <tabstops>

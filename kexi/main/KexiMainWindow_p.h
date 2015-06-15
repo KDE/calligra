@@ -492,7 +492,7 @@ class KexiTabbedToolBarStyle;
 //! Tab bar reimplementation for KexiTabbedToolBar.
 /*! The main its purpose is to alter the width of "Kexi" tab.
 */
-class KexiTabbedToolBarTabBar : public KTabBar
+class KexiTabbedToolBarTabBar : public QTabBar
 {
     Q_OBJECT
 public:
@@ -662,7 +662,7 @@ public:
 /*! The main its purpose is to alter the width of "Kexi" tab.
 */
 KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
-    : KTabBar(parent)
+    : QTabBar(parent)
 {
     setObjectName("tabbar");
     customStyle = new KexiTabbedToolBarStyle(style(), this);
@@ -675,12 +675,12 @@ KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
 
 QSize KexiTabbedToolBarTabBar::originalTabSizeHint(int index) const
 {
-    return KTabBar::tabSizeHint(index);
+    return QTabBar::tabSizeHint(index);
 }
 
 QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 {
-    QSize s = KTabBar::tabSizeHint(index);
+    QSize s = QTabBar::tabSizeHint(index);
     QStyleOptionTab ot;
     ot.initFrom(this);
     QFont f(font());

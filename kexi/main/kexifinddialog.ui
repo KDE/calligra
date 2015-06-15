@@ -222,7 +222,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="KPushButton" name="m_btnFind">
+      <widget class="QPushButton" name="m_btnFind">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -244,7 +244,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="m_btnClose">
+      <widget class="QPushButton" name="m_btnClose">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -257,7 +257,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="m_btnReplace">
+      <widget class="QPushButton" name="m_btnReplace">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -270,7 +270,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="m_btnReplaceAll">
+      <widget class="QPushButton" name="m_btnReplaceAll">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -314,17 +314,12 @@
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
+   <header location="global">KComboBox</header>
   </customwidget>
   <customwidget>
    <class>KHistoryComboBox</class>
    <extends>KComboBox</extends>
-   <header>khistorycombobox.h</header>
+   <header location="global">KHistoryComboBox</header>
   </customwidget>
  </customwidgets>
  <tabstops>

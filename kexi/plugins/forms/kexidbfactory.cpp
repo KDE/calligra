@@ -138,7 +138,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setInheritedClassName("KTextEdit");
         wi->addAlternateClassName("QTextEdit", true/*override*/);
         wi->addAlternateClassName("KTextEdit", true/*override*/);
-        wi->setIncludeFileName("ktextedit.h");
+        wi->setIncludeFileName("KTextEdit");
         wi->setName(xi18nc("Text Editor widget", "Text Editor"));
         wi->setNamePrefix(
             xi18nc("A prefix for identifiers of text editor widgets. Based on that, identifiers such as "
