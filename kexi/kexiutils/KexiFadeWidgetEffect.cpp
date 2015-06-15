@@ -19,15 +19,15 @@
 
 */
 
-#include "kfadewidgeteffect.h"
-#include "kfadewidgeteffect_p.h"
+#include "KexiFadeWidgetEffect.h"
+#include "KexiFadeWidgetEffect_p.h"
 
 #include <QtCore/QEvent>
 #include <QPaintEngine>
 #include <QPainter>
 #include <QStyle>
 
-KFadeWidgetEffectPrivate::KFadeWidgetEffectPrivate(QWidget *_destWidget)
+KexiFadeWidgetEffectPrivate::KexiFadeWidgetEffectPrivate(QWidget *_destWidget)
     : destWidget(_destWidget), disabled(false)
 {
 }
@@ -36,7 +36,7 @@ KFadeWidgetEffectPrivate::KFadeWidgetEffectPrivate(QWidget *_destWidget)
 // Fast transitions. Read:
 // http://techbase.kde.org/Development/Tutorials/Graphics/Performance
 // for further information on why not use setOpacity.
-QPixmap KFadeWidgetEffectPrivate::transition(const QPixmap &from, const QPixmap &to, qreal amount) const
+QPixmap KexiFadeWidgetEffectPrivate::transition(const QPixmap &from, const QPixmap &to, qreal amount) const
 {
     const int value = int(0xff * amount);
 
@@ -93,12 +93,11 @@ QPixmap KFadeWidgetEffectPrivate::transition(const QPixmap &from, const QPixmap 
     }
 }
 
-KFadeWidgetEffect::KFadeWidgetEffect(QWidget *destWidget)
+KexiFadeWidgetEffect::KexiFadeWidgetEffect(QWidget *destWidget)
     : QWidget(destWidget ? destWidget->parentWidget() : 0),
-      d_ptr(new KFadeWidgetEffectPrivate(destWidget))
+      d(new KexiFadeWidgetEffectPrivate(destWidget))
 {
-    Q_D(KFadeWidgetEffect);
-    d->q_ptr = this;
+    d->q = this;
     Q_ASSERT(destWidget && destWidget->parentWidget());
     if (!destWidget || !destWidget->parentWidget() || !destWidget->isVisible() ||
             !style()->styleHint(QStyle::SH_Widget_Animate, 0, this)) {
@@ -115,23 +114,21 @@ KFadeWidgetEffect::KFadeWidgetEffect(QWidget *destWidget)
     show();
 }
 
-KFadeWidgetEffect::~KFadeWidgetEffect()
+KexiFadeWidgetEffect::~KexiFadeWidgetEffect()
 {
-    delete d_ptr;
+    delete d;
 }
 
-void KFadeWidgetEffectPrivate::finished()
+void KexiFadeWidgetEffect::finished()
 {
-    Q_Q(KFadeWidgetEffect);
-    destWidget->setUpdatesEnabled(false);
-    q->hide();
-    q->deleteLater();
-    destWidget->setUpdatesEnabled(true);
+    d->destWidget->setUpdatesEnabled(false);
+    hide();
+    deleteLater();
+    d->destWidget->setUpdatesEnabled(true);
 }
 
-void KFadeWidgetEffect::start(int duration)
+void KexiFadeWidgetEffect::start(int duration)
 {
-    Q_D(KFadeWidgetEffect);
     if (d->disabled) {
         deleteLater();
         return;
@@ -141,12 +138,9 @@ void KFadeWidgetEffect::start(int duration)
     d->timeLine.start();
 }
 
-void KFadeWidgetEffect::paintEvent(QPaintEvent *)
+void KexiFadeWidgetEffect::paintEvent(QPaintEvent *)
 {
-    Q_D(KFadeWidgetEffect);
     QPainter p(this);
     p.drawPixmap(rect(), d->transition(d->oldPixmap, d->newPixmap, d->timeLine.currentValue()));
     p.end();
 }
-
-#include "moc_kfadewidgeteffect.cpp"
