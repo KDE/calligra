@@ -568,8 +568,9 @@ protected Q_SLOTS:
      cancelled on cancellation, and false on failure.
      If \a mimeType and \a databaseName are not empty, the wizard will only ask about
      parameters of destination project and skip pages related to source project.
-     \a cdata connection data can be also provided to preselect server-based connections. */
-    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName, const KDbConnectionData *cdata = 0);
+     \a cdata, if valid (isValid()) is used preselect server-based connections. */
+    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
+                                        const KDbConnectionData &cdata);
 
     //! Receives "selectionChanged()" signal from navigator to update some actions.
     void slotPartItemSelectedInNavigator(KexiPart::Item* item);

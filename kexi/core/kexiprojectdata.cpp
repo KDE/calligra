@@ -147,9 +147,9 @@ KDbConnectionData* KexiProjectData::connectionData()
     return &d->connData;
 }
 
-KDbConnectionData KexiProjectData::constConnectionData() const
+const KDbConnectionData* KexiProjectData::connectionData() const
 {
-    return d->connData;
+    return &d->connData;
 }
 
 QString KexiProjectData::databaseName() const
@@ -469,6 +469,6 @@ KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& data)
 {
     dbg.space() << "KexiProjectData" << "databaseName=" << data.databaseName()
         << "lastOpened=" << data.lastOpened() << "description=" << data.description()
-        << "connectionData=(" << data.constConnectionData() << ")";
+        << "connectionData=(" << data << ")";
     return dbg.space();
 }
