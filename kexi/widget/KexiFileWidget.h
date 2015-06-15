@@ -47,6 +47,7 @@ public:
     };
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
     KexiFileWidget(
         const QUrl &startDirOrVariable, Mode mode, QWidget *parent);
 

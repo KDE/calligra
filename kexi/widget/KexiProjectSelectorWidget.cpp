@@ -364,7 +364,7 @@ void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pda
 void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
 {
     KPageDialog::showEvent(event);
-    KPageDialog::centerOnScreen(this);
+    //! @todo KPageDialog::centerOnScreen(this);
 }
 
 KexiProjectSet* KexiProjectSelectorDialog::projectSet() const

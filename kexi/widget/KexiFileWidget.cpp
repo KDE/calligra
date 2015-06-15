@@ -63,7 +63,7 @@ public:
     {
         QMimeDatabase db;
         const QMimeType mime = db.mimeTypeForName(mimeName);
-        if (mime && !excludedMimeTypes.contains(mime.name().toLower())) {
+        if (mime.isValid() && !excludedMimeTypes.contains(mime.name().toLower())) {
             *filter += KexiUtils::fileDialogFilterString(mime);
             *allfilters += mime.globPatterns();
             return true;
@@ -90,7 +90,8 @@ KexiFileWidget::KexiFileWidget(
 {
     qDebug() << startDirOrVariable.scheme();
     if (startDirOrVariable.scheme() == "kfiledialog") {
-        KFileDialog::getStartUrl(startDirOrVariable, d->recentDirClass);
+//! @todo KEXI3 test it
+        KFileWidget::getStartUrl(startDirOrVariable, d->recentDirClass);
     }
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setMode(mode);
@@ -305,10 +306,12 @@ bool KexiFileWidget::checkSelectedFile()
 
         d->highlightedUrl = baseUrl();
         const QString firstUrl(locationEdit()->lineEdit()->text());   // FIXME: find first...
-        if (QDir::isAbsolutePath(firstUrl))
+        if (QDir::isAbsolutePath(firstUrl)) {
             d->highlightedUrl = QUrl::fromLocalFile(firstUrl);
-        else
-            d->highlightedUrl.addPath(firstUrl);
+        } else {
+            d->highlightedUrl = d->highlightedUrl.adjusted(QUrl::StripTrailingSlash);
+            d->highlightedUrl.setPath(d->highlightedUrl.path() + '/' + firstUrl);
+        }
     }
 
     qDebug() << "d->highlightedUrl: " << d->highlightedUrl;
