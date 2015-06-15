@@ -270,9 +270,9 @@ void ImportWizard::setupSrcConn()
     QVBoxLayout *vbox = new QVBoxLayout(d->srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    d->srcConn = new KexiConnectionSelectorWidget(Kexi::connset(),
+    d->srcConn = new KexiConnectionSelectorWidget(&Kexi::connset(),
                                                  "kfiledialog:///ProjectMigrationSourceDir",
-                                                 KAbstractFileWidget::Opening, d->srcConnPageWidget);
+                                                 KFileWidget::Opening, d->srcConnPageWidget);
 
     d->srcConn->hideConnectonIcon();
     d->srcConn->showSimpleConn();
@@ -375,9 +375,9 @@ void ImportWizard::setupDst()
     QVBoxLayout *vbox = new QVBoxLayout(d->dstPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    d->dstConn = new KexiConnectionSelectorWidget(Kexi::connset(),
+    d->dstConn = new KexiConnectionSelectorWidget(&Kexi::connset(),
                                                  "kfiledialog:///ProjectMigrationDestinationDir",
-                                                 KAbstractFileWidget::Saving, d->dstPageWidget);
+                                                 KFileWidget::Saving, d->dstPageWidget);
     d->dstConn->hideHelpers();
 
     vbox->addWidget(d->dstConn);

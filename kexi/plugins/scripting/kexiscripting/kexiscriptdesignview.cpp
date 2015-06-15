@@ -209,13 +209,23 @@ void KexiScriptDesignView::slotImport()
     foreach(const QString &interpreter, Kross::Manager::self().interpreters()) {
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
-    const QString file = KFileDialog::getOpenFileName(
-        QUrl("kfiledialog:///kexiscriptingdesigner"),
-        filters.join(" "), this, xi18nc("@title:window", "Import Script"));
-    if (file.isEmpty())
+    //! @todo KEXI3 add equivalent of kfiledialog:///
+    //! @todo KEXI3 multiple filters
+    // for now support jsut one filter
+    QString filterString;
+    if (filters.count() == 1) {
+        const QMimeDatabase db;
+        const QString filterString = db.mimeTypeForName(filters.first()).filterString();
+    }
+    //QUrl("kfiledialog:///kexiscriptingdesigner"),
+    const QUrl result = QFileDialog::getOpenFileUrl(this, xi18nc("@title:window", "Import Script"),
+                                                    QUrl(), filterString);
+    if (!result.isValid()) {
         return;
-    QFile f(file);
-    if (! f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    }
+    //! @todo support remote files?
+    QFile f(result.toLocalFile());
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         KMessageBox::sorry(this,
             xi18nc("@info", "Could not read <filename>%1</filename>.", file));
         return;

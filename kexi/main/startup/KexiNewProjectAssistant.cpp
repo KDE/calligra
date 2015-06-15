@@ -54,12 +54,6 @@
 #include <QProgressBar>
 #include <QFileInfo>
 
-// added because of lack of krecentdirs.h
-namespace KRecentDirs
-{
-    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
-};
-
 class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
 {
 public:
@@ -335,9 +329,9 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
     if (KDbDriverManager().hasDatabaseServerDrivers()) {
         QVBoxLayout *lyr = new QVBoxLayout;
         connSelector = new KexiConnectionSelectorWidget(
-            Kexi::connset(),
+            &Kexi::connset(),
             "kfiledialog:///OpenExistingOrCreateNewProject",
-            KAbstractFileWidget::Saving);
+            KFileWidget::Saving);
         lyr->addWidget(connSelector);
         connSelector->showAdvancedConn();
         connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
