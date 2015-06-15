@@ -36,13 +36,6 @@ public:
     //! used in StaticItem class
     Private();
 
-    void getBooleanProperty(const KService::Ptr& aPtr, const char* name, bool* target)
-    {
-        QVariant val = aPtr->property(name, QVariant::Bool);
-        if (val.isValid())
-            *target = val.toBool();
-    }
-
     QString errorMessage;
     QString groupName;
     QString untranslatedGroupName;
