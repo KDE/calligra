@@ -38,7 +38,7 @@ namespace KFormDesigner {
 /**
 * A single widget which represents a small rectangle for resizing a form widget.
 */
-class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
+class KFORMDESIGNER_EXPORT ResizeHandle : public QWidget
 {
 public:
     enum HandlePos {

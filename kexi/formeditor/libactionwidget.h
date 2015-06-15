@@ -34,7 +34,7 @@ class WidgetInfo;
 /**
  * KToggleAction subclass which remembers the matching class name.
  */
-class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
+class KFORMDESIGNER_EXPORT LibActionWidget : public KToggleAction
 {
     Q_OBJECT
 public:

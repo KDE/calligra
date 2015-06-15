@@ -35,7 +35,7 @@ class WidgetFactory;
 class WidgetLibrary;
 
 //! A class providing properties of widget classes offered by a factory
-class KFORMEDITOR_EXPORT WidgetInfo
+class KFORMDESIGNER_EXPORT WidgetInfo
 {
 public:
     explicit WidgetInfo(WidgetFactory *f);
