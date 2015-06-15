@@ -64,6 +64,7 @@ public:
     Private() { }
 
     KexiDBConnectionTabWidget *tabWidget;
+    QDialogButtonBox *buttonBox;
 };
 
 //---------
@@ -99,26 +100,25 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
     hbox->addStretch(2);
-    d->btnSaveChanges = new QPushButton(
-        KGuiItem(
-            xi18n("Save Changes"), "document-save",
-            xi18n("Save all changes made to this connection information"),
-            xi18n("Save all changes made to this connection information. "
-                 "You can later reuse this information.")),
-        frmBottom);
+    d->btnSaveChanges = new QPushButton(frmBottom);
+    KGuiItem::assign(d->btnSaveChanges,
+                     KGuiItem(xi18n("Save Changes"), "document-save",
+                              xi18n("Save all changes made to this connection information"),
+                              xi18n("Save all changes made to this connection information. "
+                                    "You can later reuse this information.")));
     d->btnSaveChanges->setObjectName("savechanges");
     hbox->addWidget(d->btnSaveChanges);
     hbox->addSpacing(KexiUtils::spacingHint());
     QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
     d->btnSaveChanges->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    d->btnTestConnection = new QPushButton(
+    d->btnTestConnection = new QPushButton(frmBottom);
 //! @todo add Test Connection icon
-        KGuiItem(xi18n("&Test Connection"), QString(),
-                 xi18n("Test database connection"),
-                 xi18n("Tests database connection. "
-                      "You can check validity of connection information.")),
-        frmBottom);
+    KGuiItem::assign(d->btnTestConnection,
+                     KGuiItem(xi18n("&Test Connection"), QString(),
+                              xi18n("Test database connection"),
+                              xi18n("Tests database connection. "
+                                    "You can check validity of connection information.")));
     d->btnTestConnection->setObjectName("testConnection");
     hbox->addWidget(d->btnTestConnection);
     setTabOrder(d->btnSaveChanges, d->btnTestConnection);
@@ -444,15 +444,15 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
         d->tabWidget->mainWidget->nameCombo->setFocus();
 
     // buttons
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    KGuiItem::assign(button(QDialogButtonBox::Ok),
+    d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
+    connect(d->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(d->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    KGuiItem::assign(d->buttonBox->button(QDialogButtonBox::Ok),
                      acceptButtonGuiItem.text().isEmpty()
                      ? KGuiItem(xi18n("&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
                      : acceptButtonGuiItem
                     );
-    mainLayout->addWidget(buttonBox);
+    mainLayout->addWidget(d->buttonBox);
 
     adjustSize();
     resize(width(), d->tabWidget->height());

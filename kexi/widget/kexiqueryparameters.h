@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,12 +28,12 @@
 class KEXIEXTWIDGETS_EXPORT KexiQueryParameters
 {
 public:
-    /*! Asks for query parameters using KInputDialog, one dialog per query parameter
+    /*! Asks for query parameters using a QInputDialog, one dialog per query parameter
      (see @ref KDbQuerySchema::parameters()). The type of each dialog depends
      on the type of query parameter.
      \return list of values obtained from the user
      \a ok is set to true on success and to false on failure. */
-    //! @todo do not use KInputDialog - switch to more powerful custom dialog
+    //! @todo do not use QInputDialog - switch to more powerful custom dialog
     //! @todo offer option to display one dialog (form) with all the parameters
     //! @todo support more types (using validators)
     //! @todo support defaults

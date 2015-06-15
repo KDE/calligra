@@ -80,8 +80,9 @@ private:
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
 
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for lastExportPathOrVariable
     QUrl getExportUrl(const QString &mimetype, const QString &caption,
-                      const QString &lastExportPath, const QString &extension);
+                      const QString &lastExportPathOrVariable, const QString &extension);
 
 private Q_SLOTS:
     void slotPrintReport();

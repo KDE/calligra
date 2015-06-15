@@ -237,8 +237,12 @@ QUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     }
 
     // loop until an url has been chosen or the file selection has been cancelled
+    const QMimeDatabase db;
+    const QString filterString = db.mimeTypeForName(mimetype).filterString();
+
     while (true) {
-        result = KFileDialog::getSaveUrl(QUrl(defaultSavePath), mimetype, this, caption);
+        QUrl result = QFileDialog::getSaveFileUrl(this, caption, QUrl::fromLocalFile(defaultSavePath),
+                                             filterString);
 
         // not cancelled?
         if (result.isValid()) {
