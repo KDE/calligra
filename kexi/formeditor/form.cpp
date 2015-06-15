@@ -41,8 +41,8 @@
 
 #include <KMessageBox>
 #include <KActionCollection>
-#include <kfontdialog.h>
-#include <ktextedit.h>
+#include <QFontDialog>
+#include <KTextEdit>
 #include <KLocalizedString>
 
 #include <QApplication>

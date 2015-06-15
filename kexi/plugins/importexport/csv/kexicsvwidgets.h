@@ -20,7 +20,7 @@
 #ifndef KEXI_CSVWIDGETS_H
 #define KEXI_CSVWIDGETS_H
 
-#include <kcombobox.h>
+#include <KComboBox>
 
 class QLabel;
 class QFrame;

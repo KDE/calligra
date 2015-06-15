@@ -25,8 +25,8 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include <kguiitem.h>
-#include <kstandardguiitem.h>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 #include <KGuiItem>
 #include <KStandardGuiItem>
 #include <KLocalizedString>

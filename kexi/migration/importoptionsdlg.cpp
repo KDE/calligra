@@ -22,7 +22,7 @@
 
 #include <KexiIcon.h>
 
-#include <kconfig.h>
+#include <KConfig>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>

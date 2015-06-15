@@ -22,7 +22,7 @@
 
 #include "kexiextwidgets_export.h"
 
-#include <kcombobox.h>
+#include <KComboBox>
 
 class KexiProject;
 

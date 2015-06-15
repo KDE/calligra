@@ -25,7 +25,7 @@
 #include <QImage>
 #include <QWidget>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 #include <KLocalizedString>
 
 //! A color for displaying default values or autonumbers

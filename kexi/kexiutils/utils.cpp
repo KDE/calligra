@@ -50,8 +50,8 @@
 
 #include <KRun>
 #include <KToolInvocation>
-#include <kiconeffect.h>
-#include <kcolorscheme.h>
+#include <KIconEffect>
+#include <KColorScheme>
 #include <KLocalizedString>
 #include <KConfigGroup>
 

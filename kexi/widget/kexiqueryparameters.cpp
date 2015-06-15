@@ -24,11 +24,11 @@
 #include <KDbQuerySchemaParameter>
 #include <KDbUtils>
 
-#include <kinputdialog.h>
 #include <knumvalidator.h>
 #include <KLocalizedString>
 
 #include <QDebug>
+#include <QInputDialog>
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,

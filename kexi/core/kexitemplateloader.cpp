@@ -22,10 +22,10 @@
 
 #include <KDbUtils>
 
-#include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kcomponentdata.h>
+#include <KStandardDirs>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
 
 #include <QDir>
 #include <QIcon>

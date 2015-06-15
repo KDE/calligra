@@ -34,8 +34,8 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KSharedConfig>
 #include <KMessageBox>
 

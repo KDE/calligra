@@ -19,11 +19,12 @@
 
 #ifdef HAVE_KNEWSTUFF
 
-#include <QDebug>
-#include <ktar.h>
-#include <KFileDialog>
+#include <KTar>
 #include <KSharedConfig>
 #include <KLocalizedString>
+
+#include <QDebug>
+#include <QFileDialog>
 
 #include "kexinewstuff.h"
 

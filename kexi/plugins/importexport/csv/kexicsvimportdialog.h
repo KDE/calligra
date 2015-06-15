@@ -35,7 +35,7 @@
 #include <QTextStream>
 #include <QEvent>
 #include <QModelIndex>
-# include <QElapsedTimer>
+#include <QElapsedTimer>
 
 #include <kassistantdialog.h>
 

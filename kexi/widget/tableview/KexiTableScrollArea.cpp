@@ -40,7 +40,7 @@
 #include <KDbCursor>
 #include <KDbValidator>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 #include <KLocalizedString>
 
 #include <QPainter>

@@ -21,7 +21,7 @@
 
 #include <QEvent>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 
 class KexiLinkWidget::Private
 {

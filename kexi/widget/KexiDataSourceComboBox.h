@@ -21,7 +21,7 @@
 #define KEXIDATASOURCECOMBOBOX_H
 
 #include "kexiextwidgets_export.h"
-#include <kcombobox.h>
+#include <KComboBox>
 
 class KexiProject;
 namespace KexiPart
