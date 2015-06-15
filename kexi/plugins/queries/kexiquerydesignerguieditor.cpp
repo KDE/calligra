@@ -1143,9 +1143,8 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
         d->conn->setQuerySchemaObsolete(window()->schemaData()->name());
 
     KDbConnection::SelectStatementOptions options;
-    options.identifierEscaping = KDbDriver::EscapeKexi | KDbDriver::EscapeAsNecessary;
     options.addVisibleLookupColumns = false;
-    QString sqlText = KDb::selectStatement(0, *temp->query(), options);
+    QString sqlText = KDb::selectStatement(temp->query(), options);
     if (!storeDataBlock(sqlText, "sql")) {
         return false;
     }

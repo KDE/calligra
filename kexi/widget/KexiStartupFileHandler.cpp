@@ -425,7 +425,7 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
 void KexiStartupFileHandler::updateUrl(const QString &name)
 {
     QUrl url = d->requester->url();
-    QString fn = KexiUtils::stringToFileName(name);
+    QString fn = KDbUtils::stringToFileName(name);
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url = url.adjusted(QUrl::RemoveFilename);
