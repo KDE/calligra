@@ -93,7 +93,7 @@ using namespace KFormDesigner;
 
 // FormIO itself
 
-KFORMEDITOR_EXPORT uint KFormDesigner::version()
+KFORMDESIGNER_EXPORT uint KFormDesigner::version()
 {
     return KFORMDESIGNER_VERSION;
 }

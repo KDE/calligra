@@ -54,7 +54,7 @@ typedef QList<QAction *> ActionList;
  * You call WidgetLibrary functions instead of calling directly factories.
  * See WidgetFactory for a description of the functions.
  */
-class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
+class KFORMDESIGNER_EXPORT WidgetLibrary : public QObject
 {
     Q_OBJECT
 

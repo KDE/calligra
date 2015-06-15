@@ -88,7 +88,7 @@ void Command::debug() const
 }
 
 //! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c)
 {
     dbg.nospace() << "Command";
     const int count = c.childCount();
@@ -294,7 +294,7 @@ QVariant PropertyCommand::oldValue() const
     return d->oldValues.constBegin().value();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
 {
     dbg.nospace() << "PropertyCommand text=" << c.text() << "widgets=" << c.oldValues().keys()
         << "value=" << c.value() << "oldValues=" << c.oldValues().values();
@@ -395,7 +395,7 @@ QPoint GeometryPropertyCommand::oldPos() const
     return d->oldPos;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPropertyCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPropertyCommand &c)
 {
     dbg.nospace() << "GeometryPropertyCommand pos=" << c.pos() << "oldPos=" << c.oldPos()
         << "widgets=" << c.d->names;
@@ -561,7 +561,7 @@ void AlignWidgetsCommand::undo()
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidgetsCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidgetsCommand &c)
 {
     dbg.nospace() << "AlignWidgetsCommand text=" << c.text() << "form=" << c.d->form->widget()->objectName()
         << "widgets=" << c.d->pos.keys();
@@ -813,7 +813,7 @@ void AdjustSizeCommand::undo()
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AdjustSizeCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AdjustSizeCommand &c)
 {
     dbg.nospace() << "AdjustSizeCommand text=" << c.text() << "form="
         << c.d->form->widget()->objectName() << "widgets=" << c.d->sizes.keys();
@@ -1039,7 +1039,7 @@ void InsertWidgetCommand::undo()
     container->deleteWidget(widget);
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertWidgetCommand &c)
 {
     dbg.nospace() << "InsertWidgetCommand text=" << c.text() << "generatedName=" << c.d->widgetName
         << "container=" << c.d->containerName
@@ -1362,7 +1362,7 @@ PasteWidgetCommand::fixNames(QDomElement &el)
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PasteWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PasteWidgetCommand &c)
 {
     dbg.nospace() << "PasteWidgetCommand pos=" << c.d->pos
         << "widgets=" << c.d->names << "container=" << c.d->containerName
@@ -1459,7 +1459,7 @@ void DeleteWidgetCommand::undo()
     d->form->setInteractiveMode(true);
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DeleteWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DeleteWidgetCommand &c)
 {
     dbg.nospace() << "DeleteWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName();
@@ -1531,7 +1531,7 @@ void DuplicateWidgetCommand::undo()
     d->pasteCommand->undo();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DuplicateWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DuplicateWidgetCommand &c)
 {
     dbg.nospace() << "DuplicateWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName();
@@ -1596,7 +1596,7 @@ void CutWidgetCommand::undo()
     cb->setMimeData( d2->data ); // restore prev. clipboard contents
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
 {
     dbg.nospace() << "CutWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName()
@@ -1642,7 +1642,7 @@ void PropertyCommandGroup::execute()
     KUndo2Command::redo();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommandGroup &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommandGroup &c)
 {
     dbg.nospace() << "PropertyCommandGroup" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1764,7 +1764,7 @@ QString InlineTextEditingCommand::oldText() const
     return d->oldText;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineTextEditingCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineTextEditingCommand &c)
 {
     dbg.nospace() << "InlineTextEditingCommand" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1895,7 +1895,7 @@ void InsertPageCommand::undo(const QString& name)
     delete com;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertPageCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertPageCommand &c)
 {
     dbg.nospace() << "InsertPageCommand" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1973,7 +1973,7 @@ QString RemovePageCommand::pageName() const
     return d->pageName;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const RemovePageCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const RemovePageCommand &c)
 {
     dbg.nospace() << "RemovePageCommand" << static_cast<const Command&>(c);
     return dbg.space();

@@ -36,7 +36,7 @@ class ResizeHandleSet;
 * a set of resize handles (for resizing widgets)
 * @author Joseph Wenninger
 */
-class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
+class KFORMDESIGNER_EXPORT ResizeHandleSet: public QObject
 {
     Q_OBJECT
 

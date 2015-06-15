@@ -334,7 +334,7 @@ void FormPrivate::initPropertiesDescription()
     propValCaption["RightToLeft"] = xi18n("Right to Left");
 }
 
-KProperty::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
+KPropertyListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
 {
     QStringList names;
     foreach (const QString& name, list) {
@@ -353,5 +353,5 @@ KProperty::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStri
             names.append(n);
         }
     }
-    return new KProperty::ListData(list, names);
+    return new KPropertyListData(list, names);
 }
