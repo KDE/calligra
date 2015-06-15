@@ -30,7 +30,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="le_title">
+      <widget class="KLineEdit" name="le_title">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>1</horstretch>
@@ -133,13 +133,13 @@
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <extends>QWidget</extends>
+   <header location="global">KUrlRequester</header>
   </customwidget>
   <customwidget>
-   <class>QLineEdit</class>
+   <class>KLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header location="global">KLineEdit</header>
   </customwidget>
  </customwidgets>
  <resources/>
