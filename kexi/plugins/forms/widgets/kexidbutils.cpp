@@ -25,8 +25,8 @@
 #include "kexiformmanager.h"
 #include <widget/utils/kexicontextmenuutils.h>
 
-#include <kiconloader.h>
-#include <kiconeffect.h>
+#include <KIconLoader>
+#include <KIconEffect>
 
 #include <KDbQuerySchema>
 #include <KDbUtils>

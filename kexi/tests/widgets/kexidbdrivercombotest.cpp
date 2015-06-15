@@ -27,7 +27,7 @@
 #include <Q3VBoxLayout>
 #include <QApplication>
 
-#include <kcomponentdata.h>
+#include <KComponentData>
 
 #include <KDbDriverManager>
 #include <widget/kexidbdrivercombobox.h>

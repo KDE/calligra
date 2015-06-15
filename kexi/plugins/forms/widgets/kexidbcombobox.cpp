@@ -26,7 +26,7 @@
 
 #include <KDbQuerySchema>
 
-#include <kcombobox.h>
+#include <KComboBox>
 
 #include <QDebug>
 #include <QApplication>

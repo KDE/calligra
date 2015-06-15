@@ -25,7 +25,7 @@
 #include <KDbFieldValidator>
 #include <KDbLongLongValidator>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 

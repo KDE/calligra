@@ -27,8 +27,8 @@
 
 #include <KDbUtils>
 
-#include <kcomponentdata.h>
-#include <kconfig.h>
+#include <KComponentData>
+#include <KConfig>
 #include <KSharedConfig>
 #include <KLocalizedString>
 

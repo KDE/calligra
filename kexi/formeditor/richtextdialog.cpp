@@ -26,10 +26,10 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
-#include <ktoolbar.h>
-#include <kfontrequester.h>
-#include <kcolorcombo.h>
-#include <ktextedit.h>
+#include <KToolBar>
+#include <KFontRequester>
+#include <KColorCombo>
+#include <KTextEdit>
 #include <KLocalizedString>
 
 using namespace KFormDesigner;

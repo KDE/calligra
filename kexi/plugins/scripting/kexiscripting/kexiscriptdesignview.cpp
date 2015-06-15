@@ -31,8 +31,7 @@
 
 #include <KDbConnection>
 
-#include <KFileDialog>
-#include <kactionmenu.h>
+#include <KActionMenu>
 #include <KMessageBox>
 
 #include <QSplitter>
@@ -40,6 +39,7 @@
 #include <QDomDocument>
 #include <QTextBrowser>
 #include <QDebug>
+#include <QFileDialog>
 
 /// @internal
 class KexiScriptDesignViewPrivate

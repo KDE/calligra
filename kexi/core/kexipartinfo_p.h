@@ -23,8 +23,6 @@
 
 #include "kexipartinfo.h"
 
-#include <kservice.h>
-
 #include <QAction>
 
 namespace KexiPart

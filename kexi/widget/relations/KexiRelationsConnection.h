@@ -25,6 +25,8 @@
 
 #include <QString>
 
+class QRect;
+class QPoint;
 class QPainter;
 class KexiRelationsTableContainer;
 class KexiRelationsScrollArea;

@@ -27,8 +27,8 @@
 #include <KDbConnectionData>
 #include <KDbDriverMetaData>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QDir>

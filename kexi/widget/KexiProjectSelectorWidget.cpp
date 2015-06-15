@@ -22,10 +22,12 @@
 #include <KexiIcon.h>
 
 #include <KDbDriverManager>
+#include <KDbDriverMetaData>
 #include <KDbConnectionData>
 #include <KDbUtils>
 
 #include <KLocalizedString>
+#include <KGuiItem>
 
 #include <QDebug>
 #include <QLabel>

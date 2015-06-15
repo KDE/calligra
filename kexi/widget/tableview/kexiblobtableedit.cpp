@@ -25,7 +25,7 @@
 #include <widget/utils/kexidropdownbutton.h>
 #include <widget/utils/kexicontextmenuutils.h>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <KLocalizedString>
 
 #include <QDebug>

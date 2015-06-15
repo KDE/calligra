@@ -25,7 +25,6 @@
 #include <QMenu>
 #include <QDebug>
 
-#include <kservice.h>
 #include <KActionCollection>
 #include <KLocalizedString>
 

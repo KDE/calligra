@@ -35,8 +35,7 @@
 
 #include <kio/netaccess.h>
 #include <krun.h>
-#include <kactionmenu.h>
-#include <KFileDialog>
+#include <KActionMenu>
 #include <KMessageBox>
 
 #include <QLayout>
@@ -45,6 +44,8 @@
 #include <QPrinter>
 #include <QGraphicsScene>
 #include <QDebug>
+#include <QFileDialog>
+#include <QMimeDatabase>
 
 KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)

@@ -32,7 +32,7 @@
 //#define KTEXTEDIT_BASED_SQL_EDITOR
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-# include <ktextedit.h>
+# include <KTextEdit>
 #else
 # include <ktexteditor/document.h>
 # include <ktexteditor/view.h>

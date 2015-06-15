@@ -23,7 +23,7 @@
 #include <QContextMenuEvent>
 #include <QDebug>
 
-#include <kiconeffect.h>
+#include <KIconEffect>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>

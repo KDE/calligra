@@ -19,7 +19,7 @@
 
 #include "KexiStartup_p.h"
 
-#include <kstandarddirs.h>
+#include <KStandardDirs>
 #include <kprocess.h>
 #include <kde_file.h>
 #include <KLocalizedString>
