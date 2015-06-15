@@ -30,7 +30,7 @@
 #include <KDbTableSchema>
 #include <KDbQuerySchema>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QDebug>
 #include <QMimeDatabase>

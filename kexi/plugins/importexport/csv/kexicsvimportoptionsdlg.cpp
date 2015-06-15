@@ -21,7 +21,7 @@
 #include <widget/kexicharencodingcombobox.h>
 #include <kexiutils/utils.h>
 
-#include <kconfig.h>
+#include <KConfig>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>

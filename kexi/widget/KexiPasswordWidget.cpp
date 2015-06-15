@@ -30,8 +30,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include <kcombobox.h>
-#include <kiconloader.h>
+#include <KComboBox>
+#include <KIconLoader>
 #include <ktitlewidget.h>
 
 #include "ui_KexiPasswordWidget.h"

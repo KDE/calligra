@@ -33,7 +33,7 @@
 
 #include "KexiMenuWidget.h"
 
-#include <kcomponentdata.h>
+#include <KComponentData>
 #include <KSharedConfig>
 
 #include <QStyleOption>

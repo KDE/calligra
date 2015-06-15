@@ -27,12 +27,14 @@
 #include <KDbUtils>
 
 #include <KMessageBox>
-#include <kfile.h>
-#include <kurlcombobox.h>
+#include <KFileWidget>
+#include <KFile>
+#include <KUrlComboBox>
 #include <KActionCollection>
-#include <KFileDialog>
-#include <kurlrequester.h>
+//removed in KEXI3 #include <KFileDialog>
+#include <KUrlRequester>
 #include <KLocalizedString>
+#include <KRecentDirs>
 
 #include <QDebug>
 #include <QEvent>
@@ -41,12 +43,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>
-
-// added because of lack of krecentdirs.h
-namespace KRecentDirs
-{
-    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
-};
 
 //! @internal
 class KexiStartupFileHandler::Private

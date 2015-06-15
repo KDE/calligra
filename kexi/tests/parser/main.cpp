@@ -4,7 +4,7 @@
 #include <QFileInfo>
 #include <QDebug>
 
-#include <kcomponentdata.h>
+#include <KComponentData>
 
 #include <KDbDriverManager>
 #include <KDbDriver>

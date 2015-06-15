@@ -27,8 +27,8 @@
 
 #include <KexiIcon.h>
 
-#include <kacceleratormanager.h>
-#include <kstandardguiitem.h>
+#include <KAcceleratorManager>
+#include <KStandardGuiItem>
 #include <KLocalizedString>
 
 #include <QGridLayout>

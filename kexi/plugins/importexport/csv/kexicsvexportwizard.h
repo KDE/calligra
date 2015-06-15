@@ -21,7 +21,7 @@
 #ifndef KEXI_CSVEXPORTWIZARD_H
 #define KEXI_CSVEXPORTWIZARD_H
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #include "kexicsvexport.h"

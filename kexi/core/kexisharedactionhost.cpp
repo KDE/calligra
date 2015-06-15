@@ -26,9 +26,9 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <kguiitem.h>
-#include <ktoggleaction.h>
-#include <kactionmenu.h>
+#include <KGuiItem>
+#include <KToggleAction>
+#include <KActionMenu>
 #include <KActionCollection>
 
 #include <QApplication>

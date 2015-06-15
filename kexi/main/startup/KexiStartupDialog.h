@@ -26,7 +26,7 @@
 
 #include <KDbConnectionData>
 
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 class KexiProjectData;
 class KexiDBConnectionSet;

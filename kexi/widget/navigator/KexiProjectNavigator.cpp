@@ -44,9 +44,9 @@
 #include <KDbObjectNameValidator>
 #include <KDbConnection>
 
-#include <kconfig.h>
+#include <KConfig>
 #include <KActionCollection>
-#include <kactionmenu.h>
+#include <KActionMenu>
 #include <KSharedConfig>
 #include <KLocalizedString>
 #include <KConfigGroup>

@@ -25,9 +25,9 @@
 #include "KexiIcon.h"
 #include <kexiutils/utils.h>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 #include <KStandardAction>
-#include <kstandardguiitem.h>
+#include <KStandardGuiItem>
 
 #include <QDebug>
 #include <QEvent>

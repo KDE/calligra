@@ -32,7 +32,7 @@
 
 #include <KProperty>
 
-#include <kfadewidgeteffect.h>
+#include <KFadeWidgetEffect>
 #include <KLocalizedString>
 
 #include <QLabel>

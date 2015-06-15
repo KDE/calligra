@@ -22,7 +22,7 @@
 
 #include "kexiextwidgets_export.h"
 
-#include <kfilewidget.h>
+#include <KFileWidget>
 
 #include <QSet>
 
