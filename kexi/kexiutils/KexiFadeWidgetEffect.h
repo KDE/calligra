@@ -55,8 +55,9 @@ public:
      * that gets faded out.
      *
      * \param destWidget The widget that will change and should fade to the new look.
+     * \param defaultDuration The duration of the animation activated by start() in milliseconds.
      */
-    KexiFadeWidgetEffect(QWidget *destWidget);
+    KexiFadeWidgetEffect(QWidget *destWidget, int defaultDuration = 250);
 
     /**
      * Destructor.
@@ -73,7 +74,14 @@ public Q_SLOTS:
      *
      * \param duration The duration of the animation in milliseconds.
      */
-    void start(int duration = 250);
+    void start(int duration);
+
+    /**
+     * Starts the animation with default duration specified in ctor.
+     *
+     * Call this function after all visual changes are done.
+     */
+    void start();
 
 protected:
     /**

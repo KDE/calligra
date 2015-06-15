@@ -40,6 +40,7 @@ public:
     QPixmap newPixmap;
     QWidget *destWidget;
     bool disabled;
+    int defaultDuration;
 };
 
 #endif // KEXIFADEWIDGETEFFECT_P_H
