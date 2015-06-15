@@ -26,7 +26,7 @@
 namespace KFormDesigner
 {
 
-class KFORMEDITOR_EXPORT KFDPixmapEdit : public KPropertyPixmapEditor
+class KFORMDESIGNER_EXPORT KFDPixmapEdit : public KPropertyPixmapEditor
 {
     Q_OBJECT
 

@@ -38,7 +38,7 @@ class Item;
  - application's global actions like "edit->copy" (QAction-based)
  - opening/printing/executing of selected object (table/query/form/script/macrto, etc.)
 */
-class KFORMEDITOR_EXPORT KexiActionSelectionDialog : public QDialog
+class KFORMDESIGNER_EXPORT KexiActionSelectionDialog : public QDialog
 {
     Q_OBJECT
 public:

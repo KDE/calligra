@@ -59,7 +59,7 @@ class ResizeHandleSet;
   It takes care of widget selection and pasting widgets.
  **/
 //! A simple class representing a form
-class KFORMEDITOR_EXPORT Form : public QObject
+class KFORMDESIGNER_EXPORT Form : public QObject
 {
     Q_OBJECT
 

@@ -44,7 +44,7 @@ class Form;
 class WidgetLibrary;
 
 //! Used by WidgetFactory
-class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
+class KFORMDESIGNER_EXPORT InternalPropertyHandlerInterface
 {
 protected:
     InternalPropertyHandlerInterface();
@@ -134,7 +134,7 @@ protected:
   See the standard factories in formeditor/factories for an example of factories,
   and how to deal with complex widgets (eg tabwidget).
   */
-class KFORMEDITOR_EXPORT WidgetFactory : public QObject,
+class KFORMDESIGNER_EXPORT WidgetFactory : public QObject,
                                          public InternalPropertyHandlerInterface
 {
     Q_OBJECT
@@ -199,7 +199,7 @@ public:
        if @a multiLine is false (the default), the line edit has single line.
        @a background describes line edit's background.
        If @a execute is true (the default), createInlineEditor() will be executed. */
-    class KFORMEDITOR_EXPORT InlineEditorCreationArguments {
+    class KFORMDESIGNER_EXPORT InlineEditorCreationArguments {
     public:
         InlineEditorCreationArguments(
             const QByteArray& _classname, QWidget *_widget, Container *_container);

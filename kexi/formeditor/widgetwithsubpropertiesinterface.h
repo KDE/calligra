@@ -34,7 +34,7 @@ namespace KFormDesigner
  of its internal editor. For example, if the autofield is of type Image Box,
  the Image Box widget has some specific properties like "lineWidth".
  Such properties are provided by the parent KexiDBAutoField object as subproperties. */
-class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
+class KFORMDESIGNER_EXPORT WidgetWithSubpropertiesInterface
 {
 public:
     WidgetWithSubpropertiesInterface();
