@@ -92,6 +92,9 @@ target_link_libraries(
 
     KDb
     KProperty
+
+    KF5::TextWidgets # KTextEdit
+    KF5::KIOFileWidgets # KFileWidget
 )
 
 if (KEXI_MOBILE)
