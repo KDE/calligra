@@ -288,7 +288,7 @@ void KexiScriptDesignView::updateProperties()
 
     QStringList types;
     types << "executable" << "module" << "object";
-    KProperty::ListData* typelist = new KProperty::ListData(types, types);
+    KPropertyListData* typelist = new KPropertyListData(types, types);
     KProperty* t = new KProperty(
         "type", // name
         typelist, // ListData
@@ -303,7 +303,7 @@ void KexiScriptDesignView::updateProperties()
 
     qDebug() << interpreters;
 
-    KProperty::ListData* proplist = new KProperty::ListData(interpreters, interpreters);
+    KPropertyListData* proplist = new KPropertyListData(interpreters, interpreters);
     KProperty* prop = new KProperty(
         "language", // name
         proplist, // ListData
