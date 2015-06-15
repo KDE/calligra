@@ -28,12 +28,13 @@
 #include <KexiIcon.h>
 
 #include <KDbDriverManager>
+#include <KDbDriverMetaData>
 #include <KDbConnectionData>
 #include <KDbUtils>
 
 #include <KAboutData>
 #include <KMessageBox>
-#include <kurlcombobox.h>
+#include <KUrlComboBox>
 
 #include <QDebug>
 #include <QDialog>

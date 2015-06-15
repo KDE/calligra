@@ -23,13 +23,12 @@
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 
-#include <kinputdialog.h>
-
 #include <KDb>
 #include <KDbDriverManager>
 #include <KDbUtils>
 
 #include <QDebug>
+#include <QInputDialog>
 
 using namespace KexiMigration;
 

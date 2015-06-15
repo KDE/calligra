@@ -26,7 +26,7 @@
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
 #include <formeditor/FormWidgetInterface.h>
-#include <ktextedit.h>
+#include <KTextEdit>
 #include <QPaintEvent>
 
 class DataSourceLabel;

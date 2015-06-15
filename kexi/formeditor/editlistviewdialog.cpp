@@ -16,13 +16,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <Qheader.h>
+
+#include <QHeader>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDebug>
 
-#include <klistview.h>
-#include <Klistbox.h>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>

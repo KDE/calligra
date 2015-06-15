@@ -26,7 +26,7 @@
 #include <QDebug>
 
 #include <KMessageBox>
-#include <kacceleratormanager.h>
+#include <KAcceleratorManager>
 #include <KLocalizedString>
 
 #include "kformdesigner_export.h"

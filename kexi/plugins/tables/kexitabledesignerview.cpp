@@ -42,7 +42,7 @@
 #include <KDbError>
 #include <KDbLookupFieldSchema>
 
-#include <ktoggleaction.h>
+#include <KToggleAction>
 #include <KMessageBox>
 #include <kundo2command.h>
 #include <KActionCollection>

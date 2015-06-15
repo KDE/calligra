@@ -23,7 +23,7 @@
 
 #include <KDb>
 
-#include <kguiitem.h>
+#include <KGuiItem>
 
 #include <QThread>
 #include <QHeaderView>

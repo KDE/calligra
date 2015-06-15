@@ -44,8 +44,9 @@
 #include <KDbObject>
 #include <KDbDriverManager>
 
-#include <kiconloader.h>
-#include <KFileDialog>
+#include <KIconLoader>
+#include <QFileDialog>
+#include <KRecentDirs>
 
 #include <QDebug>
 #include <QLayout>

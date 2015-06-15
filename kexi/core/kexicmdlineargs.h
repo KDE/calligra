@@ -22,7 +22,6 @@
 #ifndef KEXICMDLINEARGS_H
 #define KEXICMDLINEARGS_H
 
-#include <kcmdlineargs.h>
 #include <KLocalizedString>
 
 static KCmdLineOptions kexi_options()

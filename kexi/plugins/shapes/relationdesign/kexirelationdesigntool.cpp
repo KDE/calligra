@@ -26,7 +26,7 @@
 
 #include <KDbUtils>
 
-#include <kcombobox.h>
+#include <KComboBox>
 
 #include <QVBoxLayout>
 #include <QToolButton>

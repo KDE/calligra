@@ -24,7 +24,7 @@
 #include "kformdesigner_export.h"
 
 #include <QLabel>
-#include <kdialog.h>
+#include <QDialog>
 
 class QLabel;
 class KDbResultInfo;

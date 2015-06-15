@@ -70,17 +70,16 @@
 #include <KPropertySet>
 
 #include <KActionCollection>
-#include <kactionmenu.h>
-#include <ktoggleaction.h>
-#include <kstandardshortcut.h>
-#include <kconfig.h>
-#include <kshortcutsdialog.h>
-#include <kedittoolbar.h>
-#include <ktogglefullscreenaction.h>
-#include <kiconloader.h>
-#include <khelpmenu.h>
-#include <KFileDialog>
-#include <kmultitabbar.h>
+#include <KActionMenu>
+#include <KToggleAction>
+#include <KStandardShortcut>
+#include <KConfig>
+#include <KShortcutsDialog>
+#include <KEditToolBar>
+#include <KToggleFullScreenAction>
+#include <KIconLoader>
+#include <KHelpMenu>
+#include <KMultiTabBar>
 #include <KLocalizedString>
 #include <KAboutData>
 
@@ -97,6 +96,7 @@
 #include <QShortcut>
 #include <QStylePainter>
 #include <QScopedPointer>
+#include <QFileDialog>
 
 #include <unistd.h>
 

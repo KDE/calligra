@@ -23,9 +23,9 @@
 #include <KexiMainWindowIface.h>
 
 #include <KIO/Job>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KAboutData>
-#include <kdeversion.h>
+#include <kwidgetsaddons_version.h> // no kdeversion.h anymore but this is nice enough here
 #include <KSharedConfig>
 #include <KLocalizedString>
 

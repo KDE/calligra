@@ -30,7 +30,7 @@
 #include <KDbConnection>
 #include <KDbUtils>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <KLocalizedString>
 
 #include <QTimer>

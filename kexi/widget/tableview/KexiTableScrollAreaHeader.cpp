@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <QDebug>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
 

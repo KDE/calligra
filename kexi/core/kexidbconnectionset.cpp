@@ -20,7 +20,7 @@
 #include "kexidbconnectionset.h"
 #include "kexidbshortcutfile.h"
 
-#include <kstandarddirs.h>
+#include <KStandardDirs>
 
 #include <QDebug>
 #include <QDirIterator>

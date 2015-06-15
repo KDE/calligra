@@ -27,7 +27,7 @@
 #include <KDbConnection>
 #include <KDbMessageHandler>
 
-#include <kstandarddirs.h>
+#include <KStandardDirs>
 
 #include <QDebug>
 #include <QDir>

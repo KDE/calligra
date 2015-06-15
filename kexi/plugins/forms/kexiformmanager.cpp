@@ -30,11 +30,11 @@
 #include <QAction>
 #include <QDebug>
 
-#include <ktoggleaction.h>
+#include <KToggleAction>
 #include <KActionCollection>
-#include <kpagedialog.h>
-#include <ktextedit.h>
-#include <ktoolbar.h>
+#include <KPageDialog>
+#include <KTextEdit>
+#include <KToolBar>
 #include <KSharedConfig>
 
 #include <formeditor/form.h>

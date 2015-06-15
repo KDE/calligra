@@ -26,7 +26,7 @@
 #include <QVector>
 #include <QLineEdit>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <kio/global.h>
 #include <KLocalizedString>
 

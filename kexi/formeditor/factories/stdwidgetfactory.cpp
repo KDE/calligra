@@ -41,8 +41,8 @@
 #include <QDebug>
 
 #include <knuminput.h>
-#include <kcombobox.h>
-#include <ktextedit.h>
+#include <KComboBox>
+#include <KTextEdit>
 #include <KLocalizedString>
 
 #include <KexiIcon.h>

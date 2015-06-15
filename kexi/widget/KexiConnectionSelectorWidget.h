@@ -26,14 +26,14 @@
 #include <kexiutils/KexiContextMessage.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-#include <KDbDriver>
-
-#include <kabstractfilewidget.h>
+#include <KFileWidget>
 
 #include <QPointer>
 #include <QTreeWidgetItem>
 
+class QAbstractButton;
 class KexiFileWidget;
+class KDbDriverMetaData;
 
 //! helper class
 class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
