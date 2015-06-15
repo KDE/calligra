@@ -88,7 +88,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
     KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
-    bool fileBased = !pdata->constConnectionData()->dbFileName().isEmpty();
+    bool fileBased = !pdata->connectionData()->dbFileName().isEmpty();
     QString opened(openedString(pdata->lastOpened()));
     if (!opened.isEmpty())
         opened.prepend('\n');
@@ -98,7 +98,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         if (fileBased) {
             QString n = pdata->caption().trimmed();
             if (n.isEmpty())
-                n = pdata->constConnectionData()->dbFileName();
+                n = pdata->connectionData()->dbFileName();
             return QString(n + opened);
         }
         else {
@@ -121,12 +121,12 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
             return xi18nc("File database <file>", "File database %1",
-                         pdata->constConnectionData()->fileName());
+                         pdata->connectionData()->fileName());
         }
         else {
             KDbDriverManager manager;
             return xi18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
-                  manager.driverInfo(pdata->constConnectionData()->driverName).caption);
+                  manager.driverInfo(pdata->connectionData()->driverName).caption);
         }
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
