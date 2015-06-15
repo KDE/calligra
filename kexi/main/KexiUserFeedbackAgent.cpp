@@ -97,10 +97,11 @@ void KexiUserFeedbackAgent::Private::updateData()
     ADD("app_ver_minor", Kexi::versionMinor(), BasicArea);
     ADD("app_ver_release", Kexi::versionRelease(), BasicArea);
 
-    ADD("kde_ver", KDE::versionString(), BasicArea);
-    ADD("kde_ver_major", KDE::versionMajor(), BasicArea);
-    ADD("kde_ver_minor", KDE::versionMinor(), BasicArea);
-    ADD("kde_ver_release", KDE::versionRelease(), BasicArea);
+    //! @TODO KEXI3 For kde_ver_* use runtime information like KDE::versionMajor(), not the macro (KF5 libs lack it unfortunately)
+    ADD("kde_ver", KWIDGETSADDONS_VERSION_STRING, BasicArea);
+    ADD("kde_ver_major", KWIDGETSADDONS_VERSION_MAJOR, BasicArea);
+    ADD("kde_ver_minor", KWIDGETSADDONS_VERSION_MINOR, BasicArea);
+    ADD("kde_ver_release", KWIDGETSADDONS_VERSION_PATCH, BasicArea);
 #ifdef Q_OS_LINUX
     {
         ADD("os", "linux", SystemInfoArea);
