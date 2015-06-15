@@ -78,15 +78,15 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
     Command* parent, KexiTableDesignerView* view,
     const KPropertySet& set, const QByteArray& propertyName,
     const QVariant& oldValue, const QVariant& newValue,
-    KProperty::ListData* const oldListData,
-    KProperty::ListData* const newListData)
+    KPropertyListData* const oldListData,
+    KPropertyListData* const newListData)
         : Command(parent, view)
         , m_alterTableAction(
             propertyName == "name" ? oldValue.toString() : set.property("name").value().toString(),
             propertyName, newValue, set["uid"].value().toInt())
         , m_oldValue(oldValue)
-        , m_oldListData(oldListData ? new KProperty::ListData(*oldListData) : 0)
-        , m_listData(newListData ? new KProperty::ListData(*newListData) : 0)
+        , m_oldListData(oldListData ? new KPropertyListData(*oldListData) : 0)
+        , m_listData(newListData ? new KPropertyListData(*newListData) : 0)
 {
     setText(kundo2_i18n("Change \"%1\" property for table field from \"%2\" to \"%3\"",
                         m_alterTableAction.propertyName(),

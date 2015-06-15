@@ -94,8 +94,8 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     KProperty& property = set[propertyName];
 
     //remember because we'll change list data soon
-    KProperty::ListData *oldListData = property.listData() ?
-            new KProperty::ListData(*property.listData()) : 0;
+    KPropertyListData *oldListData = property.listData() ?
+            new KPropertyListData(*property.listData()) : 0;
     if (slist && nlist) {
         if (slist->isEmpty() || nlist->isEmpty()) {
             property.setListData(0);

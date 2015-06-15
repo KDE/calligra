@@ -95,13 +95,13 @@ public:
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int row,
                                            const QByteArray& propertyName, const QVariant& newValue,
-                                           KProperty::ListData* const listData, bool addCommand);
+                                           KPropertyListData* const listData, bool addCommand);
 
     /*! Changes property \a propertyName to \a newValue.
      Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
      Used by ChangeFieldPropertyCommand to change field's property. */
     void changeFieldProperty(int fieldUID, const QByteArray& propertyName,
-                             const QVariant& newValue, KProperty::ListData* const listData = 0,
+                             const QVariant& newValue, KPropertyListData* const listData = 0,
                              bool addCommand = false);
 
     /*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
