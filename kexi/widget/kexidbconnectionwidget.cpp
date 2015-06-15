@@ -163,26 +163,26 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
     }
 //! @todo what if there's no such driver name?
     d->driversCombo->setCurrentDriverId(d->data.connectionData()->driverId());
-    hostEdit->setText(d->data.connectionData()->hostName);
-    if (d->data.connectionData()->hostName.isEmpty()) {
+    hostEdit->setText(d->data.connectionData()->hostName());
+    if (d->data.connectionData()->hostName().isEmpty()) {
         localhostRBtn->setChecked(true);
     }
     else {
         remotehostRBtn->setChecked(true);
     }
     slotLocationRadioClicked();
-    if (d->data.connectionData()->port != 0) {
+    if (d->data.connectionData()->port() != 0) {
         chkPortDefault->setChecked(false);
-        customPortEdit->setValue(d->data.connectionData()->port);
+        customPortEdit->setValue(d->data.connectionData()->port());
     } else {
         chkPortDefault->setChecked(true);
         /* @todo default port # instead of 0 */
         customPortEdit->setValue(0);
     }
-    userEdit->setText(d->data.connectionData()->userName);
-    passwordEdit->setText(d->data.connectionData()->password);
+    userEdit->setText(d->data.connectionData()->userName());
+    passwordEdit->setText(d->data.connectionData()->password());
     if (d->connectionOnly)
-        titleEdit->setText(d->data.connectionData()->caption);
+        titleEdit->setText(d->data.connectionData()->caption());
     else
         titleEdit->setText(d->data.caption());
 
@@ -193,7 +193,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
             d->btnSaveChanges->setEnabled(false);
         }
     }
-    chkSavePassword->setChecked(d->data.connectionData()->savePassword);
+    chkSavePassword->setChecked(d->data.connectionData()->savePassword());
     adjustSize();
 }
 
@@ -294,10 +294,10 @@ KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
 void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
 {
     mainWidget->setData(data, shortcutFileName);
-    detailsWidget->chkUseSocket->setChecked(data.constConnectionData()->useLocalSocketFile);
-    detailsWidget->customSocketEdit->setUrl(data.constConnectionData()->localSocketFileName);
+    detailsWidget->chkUseSocket->setChecked(data.connectionData()->useLocalSocketFile());
+    detailsWidget->customSocketEdit->setUrl(data.connectionData()->localSocketFileName());
     detailsWidget->customSocketEdit->setEnabled(detailsWidget->chkUseSocket->isChecked());
-    detailsWidget->chkSocketDefault->setChecked(data.constConnectionData()->localSocketFileName.isEmpty());
+    detailsWidget->chkSocketDefault->setChecked(data.connectionData()->localSocketFileName().isEmpty());
     detailsWidget->chkSocketDefault->setEnabled(detailsWidget->chkUseSocket->isChecked());
     detailsWidget->descriptionEdit->setText(data.description());
 }
@@ -306,12 +306,12 @@ void KexiDBConnectionTabWidget::setData(const KDbConnectionData& data,
                                         const QString& shortcutFileName)
 {
     mainWidget->setData(data, shortcutFileName);
-    detailsWidget->chkUseSocket->setChecked(data.useLocalSocketFile);
-    detailsWidget->customSocketEdit->setUrl(data.localSocketFileName);
+    detailsWidget->chkUseSocket->setChecked(data.useLocalSocketFile());
+    detailsWidget->customSocketEdit->setUrl(data.localSocketFileName());
     detailsWidget->customSocketEdit->setEnabled(detailsWidget->chkUseSocket->isChecked());
-    detailsWidget->chkSocketDefault->setChecked(data.localSocketFileName.isEmpty());
+    detailsWidget->chkSocketDefault->setChecked(data.localSocketFileName().isEmpty());
     detailsWidget->chkSocketDefault->setEnabled(detailsWidget->chkUseSocket->isChecked());
-    detailsWidget->descriptionEdit->setText(data.description);
+    detailsWidget->descriptionEdit->setText(data.description());
 }
 
 KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
@@ -322,32 +322,32 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
 
     // collect data from the form's fields
     if (mainWidget->connectionOnly()) {
-        data.connectionData()->caption = mainWidget->titleEdit->text();
+        data.connectionData()->setCaption(mainWidget->titleEdit->text());
         data.setCaption(QString());
-        data.connectionData()->description = detailsWidget->descriptionEdit->toPlainText();
+        data.connectionData()->setDescription(detailsWidget->descriptionEdit->toPlainText());
         data.setDatabaseName(QString());
     } else {
-        data.connectionData()->caption.clear(); /* connection name is not specified... */
+        data.connectionData()->caption().clear(); /* connection name is not specified... */
         data.setCaption(mainWidget->titleEdit->text());
         data.setDescription(detailsWidget->descriptionEdit->toPlainText());
         data.setDatabaseName(mainWidget->nameCombo->currentText());
     }
     data.connectionData()->setDriverId(mainWidget->driversCombo()->currentDriverId());
-    data.connectionData()->hostName =
+    data.connectionData()->setHostName(
         (mainWidget->remotehostRBtn->isChecked()/*remote*/)
-        ? mainWidget->hostEdit->text() : QString();
-    data.connectionData()->port = mainWidget->chkPortDefault->isChecked()
-                                  ? 0 : mainWidget->customPortEdit->value();
-    data.connectionData()->localSocketFileName = detailsWidget->chkSocketDefault->isChecked()
-            ? QString() : detailsWidget->customSocketEdit->url().toLocalFile();
-    data.connectionData()->useLocalSocketFile = detailsWidget->chkUseSocket->isChecked();
+        ? mainWidget->hostEdit->text() : QString());
+    data.connectionData()->setPort(mainWidget->chkPortDefault->isChecked()
+                                   ? 0 : mainWidget->customPortEdit->value());
+    data.connectionData()->setLocalSocketFileName(detailsWidget->chkSocketDefault->isChecked()
+            ? QString() : detailsWidget->customSocketEdit->url().toLocalFile());
+    data.connectionData()->setUseLocalSocketFile(detailsWidget->chkUseSocket->isChecked());
 //UNSAFE!!!!
-    data.connectionData()->userName = mainWidget->userEdit->text();
+    data.connectionData()->setUserName(mainWidget->userEdit->text());
     if (mainWidget->chkSavePassword->isChecked()) {
         // avoid keeping potentially wrong password that then will be re-used
-        data.connectionData()->password = mainWidget->passwordEdit->text();
+        data.connectionData()->setPassword(mainWidget->passwordEdit->text());
     }
-    data.connectionData()->savePassword = mainWidget->chkSavePassword->isChecked();
+    data.connectionData()->setSavePassword(mainWidget->chkSavePassword->isChecked());
     /*! @todo add "options=", eg. as string list? */
     return data;
 }
@@ -360,14 +360,14 @@ bool KexiDBConnectionTabWidget::savePasswordOptionSelected() const
 void KexiDBConnectionTabWidget::slotTestConnection()
 {
     KDbConnectionData connectionData = *currentProjectData().connectionData();
-    bool savePasswordChecked = connectionData.savePassword;
+    bool savePasswordChecked = connectionData.savePassword();
     if (!savePasswordChecked) {
-        connectionData.password = mainWidget->passwordEdit->text(); //not saved otherwise
+        connectionData.setPassword(mainWidget->passwordEdit->text()); //not saved otherwise
     }
     if (mainWidget->passwordEdit->text().isEmpty()) {
-        connectionData.password = QString::null;
+        connectionData.setPassword(QString::null);
         if (savePasswordChecked) {
-            connectionData.savePassword = false; //for getPasswordIfNeeded()
+            connectionData.setSavePassword(false); //for getPasswordIfNeeded()
         }
         if (~KexiDBPasswordDialog::getPasswordIfNeeded(&connectionData,this)) {
             return;
