@@ -81,8 +81,8 @@ public:
     ChangeFieldPropertyCommand(Command* parent, KexiTableDesignerView* view,
                                const KPropertySet& set, const QByteArray& propertyName,
                                const QVariant& oldValue, const QVariant& newValue,
-                               KProperty::ListData* const oldListData = 0,
-                               KProperty::ListData* const newListData = 0);
+                               KPropertyListData* const oldListData = 0,
+                               KPropertyListData* const newListData = 0);
 
     virtual ~ChangeFieldPropertyCommand();
 
@@ -94,7 +94,7 @@ public:
 protected:
     KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
-    KProperty::ListData* m_oldListData, *m_listData;
+    KPropertyListData* m_oldListData, *m_listData;
 };
 
 //! @short Undo/redo command used when a field is removed from a table
