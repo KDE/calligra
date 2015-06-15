@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -69,7 +69,8 @@ public:
 /*================================================================*/
 
 ConnectionDataLVItem::ConnectionDataLVItem(KDbConnectionData *data,
-                                           const driverMetaData &driverMetaData, QTreeWidget* list)
+                                           const KDbDriverMetaData &driverMetaData,
+                                           QTreeWidget* list)
         : QTreeWidgetItem(list)
         , m_data(data)
 {
@@ -80,16 +81,20 @@ ConnectionDataLVItem::~ConnectionDataLVItem()
 {
 }
 
-void ConnectionDataLVItem::update(const KDbDriverManager& driverMetaData)
+void ConnectionDataLVItem::update(const KDbDriverMetaData &driverMetaData)
 {
-    setText(0, m_data->caption + "  ");
+    setText(0, m_data->caption() + "  ");
     const QString sfile = xi18n("File");
-    QString drvname = info.caption.isEmpty() ? m_data->driverName : info.caption;
-    if (info.fileBased)
-        setText(1, sfile + " (" + drvname + ")  ");
-    else
-        setText(1, drvname + "  ");
-    setText(2, (info.fileBased ? (QString("<") + sfile.toLower() + ">") : m_data->toUserVisibleString()) + "  ");
+    QString driverName = driverMetaData.name();
+    QString column1;
+    if (driverMetaData.isFileBased()) {
+        column1 = xi18nc("file (driver name)", "%1 (%2)", sfile, driverName);
+    } else {
+        column1 = driverName;
+    }
+    setText(1, column1 + "  ");
+    setText(2, (driverMetaData.isFileBased() ? QString("<%1>").arg(sfile.toLower())
+                                             : m_data->toUserVisibleString()) + "  ");
 }
 
 /*================================================================*/
@@ -109,7 +114,7 @@ public:
     QWidget* openExistingWidget;
     KexiPrjTypeSelector* prjTypeSelector;
     QString startDirOrVariable;
-    KAbstractFileWidget::OperationMode fileAccessType;
+    KFileWidget::OperationMode fileAccessType;
     QStackedWidget *stack;
     QPointer<KexiDBConnectionSet> conn_set;
     KDbDriverManager manager;
@@ -123,12 +128,13 @@ public:
 /*================================================================*/
 
 KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
-    KexiDBConnectionSet& conn_set,
-    const QString& startDirOrVariable, KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent)
+    KexiDBConnectionSet *conn_set,
+    const QString& startDirOrVariable, KFileWidget::OperationMode fileAccessType, QWidget* parent)
     : QWidget(parent)
     , d(new Private())
 {
-    d->conn_set = &conn_set;
+    Q_ASSERT(conn_set);
+    d->conn_set = conn_set;
     d->startDirOrVariable = startDirOrVariable;
     d->fileAccessType = fileAccessType;
     m_errorMessagePopup = 0;
@@ -236,8 +242,9 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
 
 ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KDbConnectionData* data)
 {
-    const KDbDriverMetaData* metaData = d->manager.driverMetaData(data->driverId());
-    return new ConnectionDataLVItem(data, metaData, d->remote->list);
+    const KDbDriverMetaData* driverMetaData = d->manager.driverMetaData(data->driverId());
+    return driverMetaData ?
+                new ConnectionDataLVItem(data, *driverMetaData, d->remote->list) : 0;
 }
 
 void KexiConnectionSelectorWidget::showSimpleConn()
@@ -247,7 +254,7 @@ void KexiConnectionSelectorWidget::showSimpleConn()
         d->file_sel_shown = true;
         fileWidget = new KexiFileWidget(
             QUrl(d->startDirOrVariable),
-            d->fileAccessType == KAbstractFileWidget::Opening
+            d->fileAccessType == KFileWidget::Opening
             ? KexiFileWidget::Opening : KexiFileWidget::SavingFileBasedDB,
             d->stack);
         fileWidget->setOperationMode(d->fileAccessType);
@@ -331,8 +338,9 @@ void KexiConnectionSelectorWidget::slotConnectionSelectionChanged()
     d->remote->btn_edit->setEnabled(item);
     d->remote->btn_remove->setEnabled(item);
     QString desc;
-    if (item)
-        desc = item->data()->description;
+    if (item) {
+        desc = item->data()->description();
+    }
     d->descGroupBoxPaintBlocker->setEnabled(desc.isEmpty());
     d->remote->descriptionLabel->setText(desc);
     slotConnectionSelected();
@@ -413,9 +421,11 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
         //! @todo msg?
         return;
     }
-    const KDbDriver::Info info(d->manager.driverInfo(item->data()->driverName));
-    item->update(info);
-    slotConnectionSelectionChanged(); //to update descr. edit
+    const KDbDriverMetaData *driverMetaData = d->manager.driverMetaData(item->data()->driverId());
+    if (driverMetaData) {
+        item->update(*driverMetaData);
+        slotConnectionSelectionChanged(); //to update descr. edit
+    }
 }
 
 void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()

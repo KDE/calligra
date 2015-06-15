@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -35,15 +35,15 @@ class QAbstractButton;
 class KexiFileWidget;
 class KDbDriverMetaData;
 
-//! helper class
+//! An item for a single database connection
 class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
     ConnectionDataLVItem(KDbConnectionData *data,
-                         const KDbDriverManager& driverMetaData, QTreeWidget* list);
+                         const KDbDriverMetaData &driverMetaData, QTreeWidget* list);
     ~ConnectionDataLVItem();
 
-    void update(const KDbDriverManager& driverMetaData);
+    void update(const KDbDriverMetaData& driverMetaData);
 
     using QTreeWidgetItem::data;
     KDbConnectionData *data() const {
@@ -73,9 +73,11 @@ public:
      to users. \a startDirOrVariable can be provided to specify a start dir for file browser
      (it can also contain a configuration variable name with "kfiledialog:///" prefix
      as described in KRecentDirs documentation). */
-    KexiConnectionSelectorWidget(KexiDBConnectionSet& conn_set,
-                           const QString& startDirOrVariable,
-                           KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
+    KexiConnectionSelectorWidget(KexiDBConnectionSet *conn_set,
+                                 const QString& startDirOrVariable,
+                                 KFileWidget::OperationMode fileAccessType,
+                                 QWidget* parent = 0);
 
     virtual ~KexiConnectionSelectorWidget();
 

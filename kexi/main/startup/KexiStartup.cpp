@@ -489,7 +489,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                             const int res = d->connDialog->exec();
                             if (res == QDialog::Accepted) {
                                 //get (possibly changed) prj data
-                                cdata = *d->connDialog->currentProjectData().constConnectionData();
+                                cdata = *d->connDialog->currentProjectData().connectionData();
                             } else {
                                 cancel = true;
                                 break;

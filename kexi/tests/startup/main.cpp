@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
             const KexiProjectData *data = startup.selectedProjectData();
             if (data) {
                 qDebug() << "Selected project: database=" << data->databaseName()
-                << " connection=" << data->constConnectionData()->toUserVisibleString();
+                << " connection=" << data->connectionData()->toUserVisibleString();
             }
         }
     }

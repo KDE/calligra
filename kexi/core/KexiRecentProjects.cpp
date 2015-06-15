@@ -102,7 +102,7 @@ void KexiRecentProjects::Private::load()
 
 static QString key(const KexiProjectData& data)
 {
-    return KexiDBConnectionSet::key(data.constConnectionData())
+    return KexiDBConnectionSet::key(*data.connectionData())
         + ',' + data.databaseName();
 }
 
@@ -184,7 +184,7 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
 #endif
         }
         if (shortcutPath.isEmpty()) {
-            KDbConnectionData conn = newData->constConnectionData();
+            KDbConnectionData conn = *newData->connectionData();
             if (KDbDriverManager().driverMetaData(conn.driverId())->isFileBased()) {
                 shortcutPath = path + QFileInfo(newData->databaseName()).fileName();
                 QFileInfo fi(shortcutPath);
