@@ -37,7 +37,7 @@ class QVariant;
 class QLabel;
 
 //! A blank widget displayed when class is not supported
-class KFORMEDITOR_EXPORT CustomWidget : public QWidget
+class KFORMDESIGNER_EXPORT CustomWidget : public QWidget
 {
     Q_OBJECT
 
@@ -63,7 +63,7 @@ class Container;
 #define KFORMDESIGNER_VERSION 2
 
 //! \return KFormDesigner API version number for this library. This information is stored
-KFORMEDITOR_EXPORT uint version();
+KFORMDESIGNER_EXPORT uint version();
 
 /** This class act as a namespace for all .ui files related functions, ie saving/loading .ui files.
     You don't need to create a FormIO object, as all methods are static.\n
@@ -71,7 +71,7 @@ KFORMEDITOR_EXPORT uint version();
     properties, and pixmaps(pixmap-related code was taken from Qt Designer).
  **/
 //! A class to save/load forms from .ui files
-class KFORMEDITOR_EXPORT FormIO : public QObject
+class KFORMDESIGNER_EXPORT FormIO : public QObject
 {
     Q_OBJECT
 

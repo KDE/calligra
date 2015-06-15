@@ -81,7 +81,7 @@ public:
 
     void addValueCaption(const QByteArray &value, const QString &caption);
 
-    KProperty::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+    KPropertyListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
     //! Sets color of selected widget(s) to value of @a p.
     //! @a roleMethod can be backgroundColor or foregroundColor.

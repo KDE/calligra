@@ -38,7 +38,7 @@ class Info;
 
  @see KexiFormPart::slotAssignAction()
  */
-class KFORMEDITOR_EXPORT KexiFormEventHandler
+class KFORMDESIGNER_EXPORT KexiFormEventHandler
 {
 public:
     KexiFormEventHandler();
@@ -57,12 +57,12 @@ private:
 };
 
 //! @internal form-level action for handling "on click" actions
-class KFORMEDITOR_EXPORT KexiFormEventAction : public QAction
+class KFORMDESIGNER_EXPORT KexiFormEventAction : public QAction
 {
     Q_OBJECT
 public:
     //! A structure used in currentActionName()
-    class KFORMEDITOR_EXPORT ActionData
+    class KFORMDESIGNER_EXPORT ActionData
     {
     public:
         ActionData();

@@ -30,7 +30,7 @@ namespace KFormDesigner
  of the widget and other behaviour depending on whether the parent form is in design or data mode
  and edting mode.
  */
-class KFORMEDITOR_EXPORT FormWidgetInterface
+class KFORMDESIGNER_EXPORT FormWidgetInterface
 {
 public:
     //! Initializes the interface. The design flag is set to false by default.

@@ -33,7 +33,7 @@ namespace KFormDesigner
 class ObjectTreeItem;
 
 //! @short An item in WidgetTreeWidget associated with an ObjectTreeItem.
-class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
+class KFORMDESIGNER_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
 {
 public:
     /*! Flags for loadTree() */
@@ -85,7 +85,7 @@ private:
  The actually selected widgets are written bold
  and selected. Clicking on items selects the corresponding widgets on the form.
  */
-class KFORMEDITOR_EXPORT WidgetTreeWidget : public QTreeWidget
+class KFORMDESIGNER_EXPORT WidgetTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 

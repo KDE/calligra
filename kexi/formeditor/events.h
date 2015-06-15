@@ -30,7 +30,7 @@ class QDomNode;
 namespace KFormDesigner
 {
 
-class KFORMEDITOR_EXPORT Connection
+class KFORMDESIGNER_EXPORT Connection
 {
 public:
     Connection(const QString &sender, const QString &signal,
@@ -56,7 +56,7 @@ private:
 
 typedef QList<Connection*> ConnectionList;
 
-class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
+class KFORMDESIGNER_EXPORT ConnectionBuffer : public ConnectionList
 {
 public:
     ConnectionBuffer();

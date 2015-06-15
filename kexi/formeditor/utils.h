@@ -58,7 +58,7 @@ type* findParent(QObject* o, const char* className, QObject* &prevPrev)
 }
 
 //! A tab widget providing information about height of the tab bar.
-class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
+class KFORMDESIGNER_EXPORT TabWidget : public TabWidgetBase
 {
     Q_OBJECT
 public:
@@ -111,34 +111,34 @@ protected:
 
 /*! This function is used to remove all the child widgets from a list, and
   keep only the "toplevel" ones. */
-KFORMEDITOR_EXPORT void removeChildrenFromList(QWidgetList &list);
+KFORMDESIGNER_EXPORT void removeChildrenFromList(QWidgetList &list);
 
-KFORMEDITOR_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
+KFORMDESIGNER_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
 
 //! \return the size of \a w children
 /*! This can be used eg to get widget's sizeHint. */
-KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass = "QWidget");
+KFORMDESIGNER_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass = "QWidget");
 
 //! @return mimetype for the forms XML format
 inline QString mimeType() { return "application/x-kexi-form"; }
 
 //! @returns deep copy of the current clipboard contents (for all formats)
-KFORMEDITOR_EXPORT QMimeData *deepCopyOfClipboardData();
+KFORMDESIGNER_EXPORT QMimeData *deepCopyOfClipboardData();
 
 //! Copies @a xml data to the clipboard both in the plain text format and forms XML format
-KFORMEDITOR_EXPORT void copyToClipboard(const QString& xml);
+KFORMDESIGNER_EXPORT void copyToClipboard(const QString& xml);
 
 //! Recursively saves widget list @a list and form @a form to @a doc XML document
 /*! @a containers hash is filled with containers found within the widget list,
  and @a parents is filled with the parent widgets found within the widget list.
  USed in DeleteWidgetCommand ctor. */
-KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc,
+KFORMDESIGNER_EXPORT void widgetsToXML(QDomDocument& doc,
     QHash<QByteArray, QByteArray>& containers,
     QHash<QByteArray, QByteArray>& parents,
     const Form& form, const QWidgetList &list);
 
 //! QActionGroup extended by action() method.
-class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
+class KFORMDESIGNER_EXPORT ActionGroup : public QActionGroup
 {
     public:
         explicit ActionGroup( QObject * parent );
@@ -152,11 +152,11 @@ class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
 };
 
 //! @return @a value aligned to the nearest multiple of gridSize
-KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
+KFORMDESIGNER_EXPORT int alignValueToGrid(int value, int gridSize);
 
 //! Paint semitransparent widget frame.
 //! For example it is useful for design mode to show geometry of label that has no visible frames.
-KFORMEDITOR_EXPORT void paintWidgetFrame(QPainter& p, const QRect& geometry);
+KFORMDESIGNER_EXPORT void paintWidgetFrame(QPainter& p, const QRect& geometry);
 
 }
 

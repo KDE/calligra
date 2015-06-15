@@ -35,7 +35,7 @@ class Form;
 //! Base interface for all main form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary
  because you cannot inherit QWidget twice, and we want form widgets to be any widget. */
-class KFORMEDITOR_EXPORT FormWidget
+class KFORMDESIGNER_EXPORT FormWidget
 {
 public:
     FormWidget();
