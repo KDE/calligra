@@ -38,7 +38,7 @@ class Connection;
 
 /*! This dialog is used to edit the connections of a form. It uses KexiTableView for this. There is also a details widget (icon + text)) that shows correctness
   of current connection.  */
-class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
+class KFORMDESIGNER_EXPORT ConnectionDialog : public KDialog
 {
     Q_OBJECT
 

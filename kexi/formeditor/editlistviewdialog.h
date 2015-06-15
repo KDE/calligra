@@ -45,7 +45,7 @@ namespace KFormDesigner
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
-class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
+class KFORMDESIGNER_EXPORT EditListViewDialog : public KPageDialog
 {
     Q_OBJECT
 

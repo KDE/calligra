@@ -50,7 +50,7 @@ typedef QHash<QString, ObjectTreeItem*> ObjectTreeHash;
  Holds the properties of a widget (classname, name, parent, children ..).
  @author Lucijan Busch <lucijan@kde.org>
  */
-class KFORMEDITOR_EXPORT ObjectTreeItem
+class KFORMDESIGNER_EXPORT ObjectTreeItem
 {
 public:
     ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container = 0);
@@ -118,7 +118,7 @@ private:
 
 /*! @short Represents all the objects available within a form.
  This class holds ObjectTreeItem for each widget in a Form. */
-class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
+class KFORMDESIGNER_EXPORT ObjectTree : public ObjectTreeItem
 {
 public:
     ObjectTree(const QString &className = QString(), const QString &name = QString(),
