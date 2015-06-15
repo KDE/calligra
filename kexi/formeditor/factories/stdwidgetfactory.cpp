@@ -257,9 +257,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 
     KFormDesigner::WidgetInfo *wSpinBox = new KFormDesigner::WidgetInfo(this);
     wSpinBox->setIconName(koIconName("spin"));
-    wSpinBox->setClassName("KIntSpinBox");
-    wSpinBox->addAlternateClassName("QSpinBox");
-    wSpinBox->setIncludeFileName("knuminput.h");
+    wSpinBox->setClassName("QSpinBox");
+    wSpinBox->addAlternateClassName("KIntSpinBox");
+    wSpinBox->setIncludeFileName("qspinbox.h");
     wSpinBox->setName(/* no i18n needed */ "Spin Box");
     wSpinBox->setNamePrefix(/* no i18n needed */ "spinBox");
     wSpinBox->setDescription(/* no i18n needed */ "A spin box widget");
@@ -269,7 +269,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wComboBox->setIconName(koIconName("combo"));
     wComboBox->setClassName("KComboBox");
     wComboBox->addAlternateClassName("QComboBox");
-    wComboBox->setIncludeFileName("kcombobox.h");
+    wComboBox->setIncludeFileName("KComboBox");
     wComboBox->setName(/* no i18n needed */ "Combo Box");
     wComboBox->setNamePrefix(/* no i18n needed */ "comboBox");
     wComboBox->setDescription(/* no i18n needed */ "A combo box widget");
@@ -310,7 +310,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wTextEdit->setIconName(koIconName("textedit"));
     wTextEdit->setClassName("KTextEdit");
     wTextEdit->addAlternateClassName("QTextEdit");
-    wTextEdit->setIncludeFileName("ktextedit.h");
+    wTextEdit->setIncludeFileName("KTextEdit");
     wTextEdit->setName(/* no i18n needed */ "Text Editor");
     wTextEdit->setNamePrefix(/* no i18n needed */ "textEditor");
     wTextEdit->setDescription(/* no i18n needed */ "A simple single-page rich text editor");
