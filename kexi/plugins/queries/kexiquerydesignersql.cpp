@@ -278,7 +278,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
             KDbConnection::SelectStatementOptions options;
             options.identifierEscaping = KDbDriver::EscapeKexi;
             options.addVisibleLookupColumns = false;
-            d->origStatement = KDb::selectStatement(0, *query, options).trimmed();
+            d->origStatement = KDb::selectStatement(query, options);
         }
     }
     if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
