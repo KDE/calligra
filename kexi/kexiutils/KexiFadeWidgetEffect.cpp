@@ -93,11 +93,12 @@ QPixmap KexiFadeWidgetEffectPrivate::transition(const QPixmap &from, const QPixm
     }
 }
 
-KexiFadeWidgetEffect::KexiFadeWidgetEffect(QWidget *destWidget)
+KexiFadeWidgetEffect::KexiFadeWidgetEffect(QWidget *destWidget, int defaultDuration)
     : QWidget(destWidget ? destWidget->parentWidget() : 0),
       d(new KexiFadeWidgetEffectPrivate(destWidget))
 {
     d->q = this;
+    d->defaultDuration = defaultDuration;
     Q_ASSERT(destWidget && destWidget->parentWidget());
     if (!destWidget || !destWidget->parentWidget() || !destWidget->isVisible() ||
             !style()->styleHint(QStyle::SH_Widget_Animate, 0, this)) {
@@ -136,6 +137,11 @@ void KexiFadeWidgetEffect::start(int duration)
     d->newPixmap = QPixmap::grabWidget(d->destWidget);
     d->timeLine.setDuration(duration);
     d->timeLine.start();
+}
+
+void KexiFadeWidgetEffect::start()
+{
+    start(d->defaultDuration);
 }
 
 void KexiFadeWidgetEffect::paintEvent(QPaintEvent *)
