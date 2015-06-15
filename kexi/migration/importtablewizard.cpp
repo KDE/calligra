@@ -172,9 +172,9 @@ void ImportTableWizard::setupSrcConn()
     QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    m_srcConnSel = new KexiConnectionSelectorWidget(Kexi::connset(),
+    m_srcConnSel = new KexiConnectionSelectorWidget(&Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationSourceDir",
-                                           KAbstractFileWidget::Opening, m_srcConnPageWidget);
+                                           KFileWidget::Opening, m_srcConnPageWidget);
 
     m_srcConnSel->hideConnectonIcon();
     m_srcConnSel->showSimpleConn();

@@ -364,8 +364,8 @@ void KexiStartupDialog::setupPageOpenExisting()
     lyr->setSpacing(KexiUtils::spacingHint());
     lyr->setMargin(0);
 
-    d->openExistingConnWidget = new KexiConnectionSelectorWidget(*d->connSet,
-            "kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
+    d->openExistingConnWidget = new KexiConnectionSelectorWidget(d->connSet,
+            "kfiledialog:///OpenExistingOrCreateNewProject", KFileWidget::Opening,
             pageOpenExistingWidget);
     d->openExistingConnWidget->setObjectName("KexiConnectionSelectorWidget");
     d->openExistingConnWidget->hideConnectonIcon();

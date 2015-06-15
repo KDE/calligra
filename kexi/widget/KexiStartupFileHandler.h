@@ -53,9 +53,11 @@ public:
     };
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
+/* removed in KEXI3
     KexiStartupFileHandler(
-        const QUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);
+        const QUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);*/
 
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
     KexiStartupFileHandler(
         const QUrl &startDirOrVariable, Mode mode, KUrlRequester *requester);
 
@@ -85,7 +87,7 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    void setLocationText(const QString& fn);
+//removed in KEXI3    void setLocationText(const QString& fn);
 
     //! Sets default extension which will be added after accepting
     //! if user didn't provided one. This method is usable when there is

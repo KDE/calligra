@@ -57,9 +57,9 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     tabWidget->addTab(m_fileSelectorWidget, Kexi::defaultFileBasedDriverIcon(),
                       xi18nc("@title:tab", "Projects Stored in File"));
     fileSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
+        &Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Opening);
+        KFileWidget::Opening);
     fileSelector->hide(); // delayed opening
     fileSelector->showSimpleConn();
     fileSelector->layout()->setContentsMargins(0, 0, 0, 0);
@@ -112,9 +112,9 @@ void KexiMainOpenProjectPage::tabChanged(int index)
                 connSelectorLayout->addWidget(connSelectorLabel);
                 connSelectorLayout->addSpacing(KexiUtils::marginHint());
                 connSelector = new KexiConnectionSelectorWidget(
-                    Kexi::connset(),
+                    &Kexi::connset(),
                     "kfiledialog:///OpenExistingOrCreateNewProject",
-                    KAbstractFileWidget::Opening);
+                    KFileWidget::Opening);
                 connSelectorLayout->addWidget(connSelector);
 
                 connSelector->showAdvancedConn();

@@ -348,9 +348,10 @@ void RenameTabAction::slotTriggered()
         return;
     QWidget *w = m_receiver->currentWidget();
     bool ok;
-    QString name = KInputDialog::getText(xi18n("New Page Title"),
+    QString name = QInputDialog::getText(w->topLevelWidget(), xi18nc("@window:title", "New Page Title"),
                                          xi18n("Enter a new title for the current page:"),
-                                         m_receiver->tabText(m_receiver->indexOf(w)), &ok, w->topLevelWidget());
+                                         QLineEdit::Normal,
+                                         m_receiver->tabText(m_receiver->indexOf(w)), &ok);
     if (ok)
         m_receiver->setTabText(m_receiver->indexOf(w), name);
 }
