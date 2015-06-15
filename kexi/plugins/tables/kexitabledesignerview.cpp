@@ -1412,7 +1412,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 
     if (res == true) {
         res = KexiTablePart::askForClosingObjectsUsingTableSchema(
-                  this, *conn, *tempData()->table,
+                  this, conn, *tempData()->table,
                   xi18n("You are about to change the design of table \"%1\" "
                        "but following objects using this table are opened:",
                        tempData()->table->name()));
@@ -1735,7 +1735,7 @@ void KexiTableDesignerView::deleteRow(int row, bool addCommand)
 
 void KexiTableDesignerView::changeFieldPropertyForRow(int row,
         const QByteArray& propertyName, const QVariant& newValue,
-        KProperty::ListData* const listData, bool addCommand)
+        KPropertyListData* const listData, bool addCommand)
 {
 #ifdef KEXI_DEBUG_GUI
     KDb::alterTableActionDebugGUI(QString("** changeFieldProperty: \"")
@@ -1753,7 +1753,7 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
         if (listData->keys.isEmpty())
             property.setListData(0);
         else
-            property.setListData(new KProperty::ListData(*listData));
+            property.setListData(new KPropertyListData(*listData));
     }
     if (propertyName != "type") //delayed type update (we need to have subtype set properly)
         property.setValue(newValue);
@@ -1804,7 +1804,7 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
 
 void KexiTableDesignerView::changeFieldProperty(int fieldUID,
         const QByteArray& propertyName, const QVariant& newValue,
-        KProperty::ListData* const listData, bool addCommand)
+        KPropertyListData* const listData, bool addCommand)
 {
     //find a property by UID
     const int row = d->sets->findRowForPropertyValue("uid", fieldUID);
