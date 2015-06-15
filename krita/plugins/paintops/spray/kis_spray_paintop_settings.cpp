@@ -51,7 +51,7 @@ int KisSprayPaintOpSettings::rate() const
 QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline || mode == CursorColorOutline) {
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
         path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));

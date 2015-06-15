@@ -31,7 +31,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
 QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline) {
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline || mode == CursorColorOutline) {
 
         QRectF ellipse(0, 0, 3, 3);
         ellipse.translate(-ellipse.center());

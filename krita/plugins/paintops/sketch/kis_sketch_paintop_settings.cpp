@@ -55,7 +55,7 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
     KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
     QPainterPath path;
 
-    if (widget && (mode == CursorIsOutline || mode == CursorIsCircleOutline)) {
+    if (widget && (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline || mode == CursorColorOutline)) {
         KisBrushSP brush = widget->brush();
         // just circle supported
         qreal diameter = qMax(brush->width(), brush->height());

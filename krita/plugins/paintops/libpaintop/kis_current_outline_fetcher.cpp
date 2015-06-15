@@ -65,7 +65,8 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
                                                     const KisPaintOpSettings *settings,
                                                     const QPainterPath &originalOutline,
                                                     qreal additionalScale,
-                                                    qreal additionalRotation) const
+                                                    qreal additionalRotation,
+                                                    bool tilt, qreal tiltcenterx, qreal tiltcentery) const
 {
     if (d->isDirty) {
         if (d->sizeOption) {
@@ -90,11 +91,11 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     qreal rotation = additionalRotation;
     MirrorProperties mirrorProperties;
 
-    if (d->sizeOption) {
+    if (d->sizeOption && tilt == false) {
         scale *= d->sizeOption->apply(info);
     }
 
-    if (d->rotationOption) {
+    if (d->rotationOption && tilt == false) {
         rotation += d->rotationOption->apply(info);
     }
 
@@ -118,6 +119,7 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     }
 
     QPointF hotSpot = originalOutline.boundingRect().center();
+    if (tilt==true) { hotSpot.setX(tiltcenterx);hotSpot.setY(tiltcentery);}
 
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());
     QTransform S = QTransform::fromScale(xFlip * scale, yFlip * scale);
