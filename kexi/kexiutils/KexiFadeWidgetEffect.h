@@ -18,37 +18,37 @@
 
 */
 
-#ifndef KFADEWIDGETEFFECT_H
-#define KFADEWIDGETEFFECT_H
+#ifndef KEXIFADEWIDGETEFFECT_H
+#define KEXIFADEWIDGETEFFECT_H
 
-#include <kdelibs4support_export.h>
+#include <kexiutils_export.h>
 #include <QWidget>
 
-class KFadeWidgetEffectPrivate;
+class KexiFadeWidgetEffectPrivate;
 
-/** \class KFadeWidgetEffect kfadewidgeteffect.h KFadeWidgetEffect
+/** \class KexiFadeWidgetEffect KexiFadeWidgetEffect.h KexiFadeWidgetEffect
  * \brief Animates changes fading the new UI over the old look.
  *
  * This widget will put itself above the widget that will change and show a fading transition from
  * the old to the new UI. It will delete itself after the animation is finished.
  * Example:
  * \code
- * KFadeWidgetEffect *animation = new KFadeWidgetEffect(widgetThatWillChange);
+ * KexiFadeWidgetEffect *animation = new KexiFadeWidgetEffect(widgetThatWillChange);
  * // do changes on widgetThatWillChange
  * // ...
  * animation->start();
  * \endcode
  *
- * \note The widget that changes needs to have a parent widget. KFadeWidgetEffect does not work
+ * \note The widget that changes needs to have a parent widget. KexiFadeWidgetEffect does not work
  * for toplevel widgets (windows).
  *
  * \author Matthias Kretz <kretz@kde.org>
  * \since 4.1
  */
-class KDELIBS4SUPPORT_DEPRECATED_EXPORT KFadeWidgetEffect : public QWidget
+class KEXIUTILS_EXPORT KexiFadeWidgetEffect : public QWidget
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(KFadeWidgetEffect)
+
 public:
     /**
      * Create the animation widget. Takes a snapshot of the \p destWidget to use as old image
@@ -56,15 +56,16 @@ public:
      *
      * \param destWidget The widget that will change and should fade to the new look.
      */
-    KFadeWidgetEffect(QWidget *destWidget);
+    KexiFadeWidgetEffect(QWidget *destWidget);
 
     /**
      * Destructor.
      *
-     * \warning KFadeWidgetEffect deletes itself after the animation is finished.
+     * \warning KexiFadeWidgetEffect deletes itself after the animation is finished.
      */
-    ~KFadeWidgetEffect();
+    ~KexiFadeWidgetEffect();
 
+public Q_SLOTS:
     /**
      * Starts the animation.
      *
@@ -83,10 +84,10 @@ protected:
     /**
      * \internal
      */
-    KFadeWidgetEffectPrivate *const d_ptr;
+    KexiFadeWidgetEffectPrivate *const d;
 
-private:
-    Q_PRIVATE_SLOT(d_func(), void finished())
+private Q_SLOTS:
+    void finished();
 };
 
-#endif // KFADEWIDGETEFFECT_H
+#endif

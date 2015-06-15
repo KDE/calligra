@@ -25,9 +25,10 @@ set(kexiutils_LIB_SRCS
   KexiCategorizedView.cpp
   KexiTester.cpp
   KexiJsonTrader.cpp
+  KexiPushButton.cpp
+  KexiFadeWidgetEffect.cpp
 
   completer/KexiCompleter.cpp
-  KexiPushButton.cpp
 )
 
 if (KEXI_MOBILE)
