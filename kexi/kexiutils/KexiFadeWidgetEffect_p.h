@@ -18,22 +18,20 @@
 
 */
 
-#ifndef KFADEWIDGETEFFECT_P_H
-#define KFADEWIDGETEFFECT_P_H
+#ifndef KEXIFADEWIDGETEFFECT_P_H
+#define KEXIFADEWIDGETEFFECT_P_H
 
-#include "kfadewidgeteffect.h"
+#include "KexiFadeWidgetEffect.h"
 
 #include <QtCore/QTimeLine>
 #include <QPixmap>
 
-class KFadeWidgetEffectPrivate
+class KexiFadeWidgetEffectPrivate
 {
-    Q_DECLARE_PUBLIC(KFadeWidgetEffect)
-protected:
-    KFadeWidgetEffectPrivate(QWidget *_destWidget);
-    KFadeWidgetEffect *q_ptr;
+public:
+    KexiFadeWidgetEffectPrivate(QWidget *_destWidget);
+    KexiFadeWidgetEffect *q;
 
-private:
     QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount) const;
     void finished();
 
@@ -44,4 +42,4 @@ private:
     bool disabled;
 };
 
-#endif // KFADEWIDGETEFFECT_P_H
+#endif // KEXIFADEWIDGETEFFECT_P_H
