@@ -291,14 +291,14 @@ protected:
      */
     virtual bool checkPassword();
 
-private:
-    Q_PRIVATE_SLOT(d, void activated( const QString& userName ))
-    Q_PRIVATE_SLOT(d, void updateFields())
+private slots:
+    void activated(const QString& userName);
+    void updateFields();
 
 private:
-    class KexiPasswordWidgetPrivate;
-    friend class KexiPasswordWidgetPrivate;
-    KexiPasswordWidgetPrivate* const d;
+    class Private;
+    //friend class Private;
+    Private* const d;
 
     Q_DISABLE_COPY(KexiPasswordWidget)
 };
