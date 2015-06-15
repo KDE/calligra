@@ -37,23 +37,13 @@
 #include "ui_KexiPasswordWidget.h"
 
 /** @internal */
-class KexiPasswordWidget::KexiPasswordWidgetPrivate
+class KexiPasswordWidget::Private
 {
 public:
-    explicit KexiPasswordWidgetPrivate(KexiPasswordWidget *q)
-        : q(q),
-          userEditCombo(0),
-          pixmapLabel(0),
-          commentRow(0)
-    {}
-
-    void activated( const QString& userName );
-
-    void updateFields();
-    void init();
+    explicit Private(KexiPasswordWidget *q, const KexiPasswordWidgetFlags& flags);
 
     KexiPasswordWidget *q;
-    KexiPasswordWidgetFlags m_flags;
+    KexiPasswordWidgetFlags flags;
     Ui_KexiPasswordWidget ui;
     QMap<QString,QString> knownLogins;
     KComboBox* userEditCombo;
@@ -61,12 +51,70 @@ public:
     unsigned int commentRow;
 };
 
+KexiPasswordWidget::Private::Private(KexiPasswordWidget *q, const KexiPasswordWidgetFlags& flags)
+    : q(q),
+      userEditCombo(0),
+      pixmapLabel(0),
+      commentRow(0)
+{
+    this->flags = flags;
+    ui.setupUi( q );
+    ui.errorMessage->setHidden(true);
+
+    // Row 4: Username field
+    if (flags & KexiPasswordWidget::ShowUsernameLine) {
+        ui.userEdit->setFocus();
+        QObject::connect(ui.userEdit, SIGNAL(returnPressed()), ui.passEdit, SLOT(setFocus()));
+        q->setFocusProxy(ui.userEdit);
+    }
+    else {
+        ui.userNameLabel->hide();
+        ui.userEdit->hide();
+        ui.passEdit->setFocus();
+        q->setFocusProxy(ui.passEdit);
+    }
+
+    if (!(flags & KexiPasswordWidget::ShowAnonymousLoginCheckBox)) {
+        ui.anonymousCheckBox->hide();
+        ui.anonymousLabel->hide();
+    }
+    else {
+        QObject::connect(ui.anonymousCheckBox, SIGNAL(stateChanged(int)), q, SLOT(updateFields()));
+    }
+
+    if (!(flags & KexiPasswordWidget::ShowDatabaseNameLine)) {
+        q->showDatabaseName(false);
+    }
+
+    if (!(flags & KexiPasswordWidget::ShowDomainLine)) {
+        ui.domainLabel->hide();
+        ui.domainEdit->hide();
+    }
+
+    if (!(flags & KexiPasswordWidget::ShowKeepPassword)) {
+        ui.keepCheckBox->hide();
+        ui.keepCheckBoxLabel->hide();
+    }
+
+    q->updateFields();
+
+    QRect desktop = QApplication::desktop()->screenGeometry(q->topLevelWidget());
+    q->setMinimumWidth(qMin(1000, qMax(q->sizeHint().width(), desktop.width() / 4)));
+    if ( ( flags & KexiPasswordWidget::ShowIcon ) ) {
+        q->setPixmap(QIcon::fromTheme("dialog-password").pixmap(KIconLoader::SizeHuge));
+    }
+
+    QObject::connect(ui.userEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
+    QObject::connect(ui.domainEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
+    QObject::connect(ui.passEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
+}
+
+// ---
+
 KexiPasswordWidget::KexiPasswordWidget(QWidget* parent ,
                                        const KexiPasswordWidgetFlags& flags)
-   : QWidget(parent), d(new KexiPasswordWidgetPrivate(this))
+   : QWidget(parent), d(new Private(this, flags))
 {
-    d->m_flags = flags;
-    d->init();
 }
 
 KexiPasswordWidget::~KexiPasswordWidget()
@@ -88,76 +136,22 @@ static void setLineEditReadOnly(QLineEdit *edit, bool readOnly)
     edit->setFont(f);
 }
 
-void KexiPasswordWidget::KexiPasswordWidgetPrivate::updateFields()
+void KexiPasswordWidget::updateFields()
 {
-    if (q->anonymousMode()) {
-        ui.userEdit->setEnabled( false );
-        ui.nameEdit->setEnabled( false );
-        ui.domainEdit->setEnabled( false );
-        ui.passEdit->setEnabled( false );
-        ui.keepCheckBox->setEnabled( false );
+    if (anonymousMode()) {
+        d->ui.userEdit->setEnabled( false );
+        d->ui.nameEdit->setEnabled( false );
+        d->ui.domainEdit->setEnabled( false );
+        d->ui.passEdit->setEnabled( false );
+        d->ui.keepCheckBox->setEnabled( false );
     }
     else {
-        setLineEditReadOnly(ui.userEdit, m_flags & KexiPasswordWidget::UsernameReadOnly);
-        setLineEditReadOnly(ui.nameEdit, m_flags & KexiPasswordWidget::DatabaseNameReadOnly);
-        setLineEditReadOnly(ui.domainEdit, m_flags & KexiPasswordWidget::DomainReadOnly);
-
-        ui.passEdit->setEnabled( true );
-        ui.keepCheckBox->setEnabled( true );
+        setLineEditReadOnly(d->ui.userEdit, d->flags & KexiPasswordWidget::UsernameReadOnly);
+        setLineEditReadOnly(d->ui.nameEdit, d->flags & KexiPasswordWidget::DatabaseNameReadOnly);
+        setLineEditReadOnly(d->ui.domainEdit, d->flags & KexiPasswordWidget::DomainReadOnly);
+        d->ui.passEdit->setEnabled( true );
+        d->ui.keepCheckBox->setEnabled( true );
     }
-}
-
-void KexiPasswordWidget::KexiPasswordWidgetPrivate::init()
-{
-    ui.setupUi( q );
-    ui.errorMessage->setHidden(true);
-
-    // Row 4: Username field
-    if ( m_flags & KexiPasswordWidget::ShowUsernameLine ) {
-        ui.userEdit->setFocus();
-        QObject::connect( ui.userEdit, SIGNAL(returnPressed()), ui.passEdit, SLOT(setFocus()) );
-        q->setFocusProxy(ui.userEdit);
-    }
-    else {
-        ui.userNameLabel->hide();
-        ui.userEdit->hide();
-        ui.passEdit->setFocus();
-        q->setFocusProxy(ui.passEdit);
-    }
-
-    if (!(m_flags & KexiPasswordWidget::ShowAnonymousLoginCheckBox)) {
-        ui.anonymousCheckBox->hide();
-        ui.anonymousLabel->hide();
-    }
-    else {
-        QObject::connect( ui.anonymousCheckBox, SIGNAL(stateChanged(int)), q, SLOT(updateFields()) );
-    }
-
-    if (!(m_flags & KexiPasswordWidget::ShowDatabaseNameLine )) {
-        q->showDatabaseName(false);
-    }
-
-    if (!(m_flags & KexiPasswordWidget::ShowDomainLine )) {
-        ui.domainLabel->hide();
-        ui.domainEdit->hide();
-    }
-
-    if (!(m_flags & KexiPasswordWidget::ShowKeepPassword)) {
-        ui.keepCheckBox->hide();
-        ui.keepCheckBoxLabel->hide();
-    }
-
-    updateFields();
-
-    QRect desktop = QApplication::desktop()->screenGeometry(q->topLevelWidget());
-    q->setMinimumWidth(qMin(1000, qMax(q->sizeHint().width(), desktop.width() / 4)));
-    if ( ( m_flags & KexiPasswordWidget::ShowIcon ) ) {
-        q->setPixmap(QIcon::fromTheme("dialog-password").pixmap(KIconLoader::SizeHuge));
-    }
-
-    QObject::connect(ui.userEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
-    QObject::connect(ui.domainEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
-    QObject::connect(ui.passEdit, SIGNAL(returnPressed()), q, SIGNAL(returnPressed()));
 }
 
 void KexiPasswordWidget::setPixmap(const QPixmap &pixmap)
@@ -188,7 +182,7 @@ void KexiPasswordWidget::setUsername(const QString& user)
     if ( user.isEmpty() )
         return;
 
-    d->activated(user);
+    activated(user);
     if ( d->ui.userEdit->isVisibleTo( this ) )
     {
         d->ui.passEdit->setFocus();
@@ -342,9 +336,9 @@ void KexiPasswordWidget::setPassword(const QString &p)
 void KexiPasswordWidget::setUsernameReadOnly(bool readOnly)
 {
     setLineEditReadOnly(d->ui.userEdit, readOnly);
-    d->m_flags |= KexiPasswordWidget::UsernameReadOnly;
+    d->flags |= KexiPasswordWidget::UsernameReadOnly;
     if (readOnly) {
-        d->m_flags ^= KexiPasswordWidget::UsernameReadOnly;
+        d->flags ^= KexiPasswordWidget::UsernameReadOnly;
     }
 
     if ( readOnly && d->ui.userEdit->hasFocus() ) {
@@ -366,9 +360,9 @@ void KexiPasswordWidget::setDatabaseName(const QString& databaseName)
 void KexiPasswordWidget::setDatabaseNameReadOnly(bool readOnly)
 {
     setLineEditReadOnly(d->ui.nameEdit, readOnly);
-    d->m_flags |= KexiPasswordWidget::DatabaseNameReadOnly;
+    d->flags |= KexiPasswordWidget::DatabaseNameReadOnly;
     if (readOnly) {
-        d->m_flags ^= KexiPasswordWidget::DatabaseNameReadOnly;
+        d->flags ^= KexiPasswordWidget::DatabaseNameReadOnly;
     }
 
     if ( readOnly && d->ui.userEdit->hasFocus() ) {
@@ -394,7 +388,7 @@ void KexiPasswordWidget::setKnownLogins( const QMap<QString, QString>& knownLogi
         d->ui.formLayout->removeWidget(d->ui.userEdit);
         delete d->ui.userEdit;
         d->userEditCombo = new KComboBox(true, this);
-        d->ui.userEdit = qobject_cast<QLineEdit*>(d->userEditCombo->lineEdit());
+        d->ui.userEdit = qobject_cast<KLineEdit*>(d->userEditCombo->lineEdit());
         d->ui.userNameLabel->setBuddy( d->userEditCombo );
         d->ui.formLayout->setWidget( d->commentRow, QFormLayout::FieldRole, d->userEditCombo );
         setTabOrder( d->ui.userEdit, d->ui.anonymousCheckBox );
@@ -412,11 +406,11 @@ void KexiPasswordWidget::setKnownLogins( const QMap<QString, QString>& knownLogi
              this, SLOT(activated(QString)) );
 }
 
-void KexiPasswordWidget::KexiPasswordWidgetPrivate::activated( const QString& userName )
+void KexiPasswordWidget::activated(const QString& userName)
 {
-    QMap<QString, QString>::ConstIterator it = knownLogins.constFind( userName );
-    if ( it != knownLogins.constEnd() ) {
-        q->setPassword( it.value() );
+    QMap<QString, QString>::ConstIterator it = d->knownLogins.constFind( userName );
+    if ( it != d->knownLogins.constEnd() ) {
+        setPassword( it.value() );
     }
 }
 
