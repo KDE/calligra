@@ -542,10 +542,11 @@ KDbField::Type KexiMigrate::userType(const QString& fname)
 {
     const QStringList typeNames(KDbField::typeNames());
     bool ok;
-    const QString res(KInputDialog::getItem(xi18n("Field Type"),
-        xi18n("The data type for field <resource>%1</resource> could not be determined. "
-             "Please select one of the following data types.", fname),
-        typeNames, 0, false/*!editable*/, &ok));
+    const QString res
+        = QInputDialog::getItem(this, xi18nc("@title:window", "Field Type"),
+            xi18n("The data type for field <resource>%1</resource> could not be determined. "
+                  "Please select one of the following data types.", fname),
+            typeNames, 0, false/* !editable */, &ok);
 
     if (!ok || res.isEmpty())
 //! @todo OK?
@@ -553,8 +554,6 @@ KDbField::Type KexiMigrate::userType(const QString& fname)
 
     return KDb::intToFieldType(int(KDbField::FirstType) + typeNames.indexOf(res));
 }
-
-
 
 QString KexiMigrate::drv_escapeIdentifier(const QString& str) const
 {

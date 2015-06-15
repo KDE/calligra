@@ -99,6 +99,7 @@ KexiImageContextMenu::~KexiImageContextMenu()
 void KexiImageContextMenu::insertFromFile()
 {
     QUrl dir;
+    //! @todo KEXI3 add equivalent of kfiledialog:///
     //QUrl("kfiledialog:///LastVisitedImagePath"), this, ));
     QUrl url = KexiUtils::getOpenImageUrl(this, xi18nc("@title", "Insert Image From File"), dir);
 
@@ -140,8 +141,8 @@ void KexiImageContextMenu::saveAs()
         fileExtension = "png";
     }
 
-    //! @todo add originalFileName! (requires access to KRecentDirs)
     //! @todo support remote URLs
+    //! @todo KEXI3 add equivalent of kfiledialog:///
     // QUrl("kfiledialog:///LastVisitedImagePath"),
     QUrl dir;
     QUrl url = KexiUtils::getSaveImageUrl(this, xi18nc("@title", "Save Image to File"), dir);

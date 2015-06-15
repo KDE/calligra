@@ -55,16 +55,16 @@ KexiNewStuff::install(const QString &fileName)
         return false;
     }
     const KArchiveDirectory *archiveDir = archive.directory();
-    const QString destDir = KFileDialog::getExistingDirectory(
-                                "kfiledialog:///DownloadExampleDatabases", parentWidget(),
-                                xi18n("Choose Directory Where to Install Example Database"));
+    //! @todo KEXI3 add equivalent of kfiledialog:///
+    //"kfiledialog:///DownloadExampleDatabases"
+    const QString destDir = QFileDialog::getExistingDirectory(
+        parentWidget(), QString(), xi18n("Choose Directory Where to Install Example Database"));
     if (destDir.isEmpty()) {
         qWarning() << "Destination-directory is empty.";
         return false;
     }
     archiveDir->copyTo(destDir);
     archive.close();
-
     return true;
 }
 
