@@ -103,7 +103,7 @@ public:
 
     KDbConnectionData* connectionData();
 
-    KDbConnectionData constConnectionData() const;
+    const KDbConnectionData* connectionData() const;
 
     /*! \return database name.
      In fact, this is the same as KDbObject::name() */

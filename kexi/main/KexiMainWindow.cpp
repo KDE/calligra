@@ -1315,7 +1315,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
             {
                 const bool anotherProjectAlreadyOpened = prj;
                 tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata",
-                               projectData.databaseName(), projectData.constConnectionData());
+                               projectData.databaseName(), projectData.connectionData());
 
                 if (!anotherProjectAlreadyOpened) //the project could have been opened within this instance
                     return res;
@@ -1373,34 +1373,43 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
     QStringList mimetypes;
     mimetypes.append(KDb::defaultFileBasedDriverMimeType());
     QString fname;
+    //! @todo KEXI3 add equivalent of kfiledialog:///
     const QString startDir("kfiledialog:///OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
-    const QString caption(xi18n("Select New Project's Location"));
+    const QString caption(xi18nc("@window:title", "Select New Project's Location"));
 
     while (true) {
         if (fname.isEmpty() &&
-                !projectData.constConnectionData()->dbFileName().isEmpty()) {
+                !projectData.connectionData()->dbFileName().isEmpty()) {
             //propose filename from db template name
-            fname = projectData.constConnectionData()->dbFileName();
+            fname = projectData.connectionData()->dbFileName();
         }
         const bool specialDir = fname.isEmpty();
         qDebug() << fname << ".............";
-        KFileDialog dlg(specialDir ? QUrl(startDir) : QUrl(),
+        QFileDialog dlg(specialDir ? QUrl(startDir) : QUrl(),
                         QString(), this);
         dlg.setModal(true);
         dlg.setMimeFilter(mimetypes);
         if (!specialDir)
-            dlg.setSelection(fname);   // may also be a filename
-        dlg.setOperationMode(KFileDialog::Saving);
+            dlg.selectUrl(QUrl::fromLocalFile(fname);   // may also be a filename
+        dlg.setFileMode(QFileDialog::ExistingFile);
+        dlg.setFileMode(QFileDialog::AcceptOpen);
         dlg.setWindowTitle(caption);
-        dlg.exec();
-        fname = dlg.selectedFile();
-        if (fname.isEmpty())
+        if (QDialog::Accepted != dlg.exec()) {
             return cancelled;
-        if (KexiFileWidget::askForOverwriting(fname, this))
+        }
+        if (dlg.selectedFiles().isEmpty() {
+            return cancelled;
+        }
+        fname = dlg.selectedFiles().first();
+        if (fname.isEmpty()) {
+            return cancelled;
+        }
+        if (KexiFileWidget::askForOverwriting(fname, this)) {
             break;
+        }
     }
 
-    QFile sourceFile(projectData.constConnectionData()->fileName());
+    QFile sourceFile(projectData.connectionData()->fileName());
     if (!sourceFile.copy(fname)) {
 //! @todo show error from with QFile::FileError
         return false;
@@ -3614,15 +3623,15 @@ void KexiMainWindow::slotToolsCompactDatabase()
 }
 
 tristate KexiMainWindow::showProjectMigrationWizard(
-    const QString& mimeType, const QString& databaseName, const KDbConnectionData *cdata)
+    const QString& mimeType, const QString& databaseName, const KDbConnectionData &cdata)
 {
     //pass arguments
     QMap<QString, QString> args;
     args.insert("mimeType", mimeType);
     args.insert("databaseName", databaseName);
-    if (cdata) { //pass KDbConnectionData serialized as a string...
+    if (cdata.isValid()) { //pass KDbConnectionData serialized as a string...
         QString str;
-        KDbUtils::serializeMap(cdata->toMap(), &str);
+        KDbUtils::serializeMap(cdata.toMap(), &str);
         args.insert("connectionData", str);
     }
 
