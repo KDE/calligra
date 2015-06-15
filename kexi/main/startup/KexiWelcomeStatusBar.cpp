@@ -26,10 +26,10 @@
 #include <kexiutils/KexiContextMessage.h>
 #include "KexiUserFeedbackAgent.h"
 
-#include <kcolorscheme.h>
-#include <kstandardguiitem.h>
-#include <kfadewidgeteffect.h>
-#include <kconfiggroup.h>
+#include <KColorScheme>
+#include <KStandardGuiItem>
+#include <KFadeWidgetEffect>
+#include <KConfigGroup>
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <kcodecs.h>

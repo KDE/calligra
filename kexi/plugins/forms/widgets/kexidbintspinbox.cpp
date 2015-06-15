@@ -20,8 +20,6 @@
 
 #include "kexidbintspinbox.h"
 
-#include <knumvalidator.h>
-
 KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent)
         : KIntSpinBox(parent) , KexiFormDataItemInterface()
 {

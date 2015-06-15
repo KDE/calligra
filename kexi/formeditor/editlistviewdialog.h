@@ -24,7 +24,7 @@
 
 #include <QHash>
 #include <QToolButton>
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 class QListView;
 class QListViewItem;

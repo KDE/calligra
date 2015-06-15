@@ -27,6 +27,8 @@
 
 #include <kexiprojectdata.h>
 
+#include <KGuiItem>
+
 #include <QTabWidget>
 #include <QDialog>
 

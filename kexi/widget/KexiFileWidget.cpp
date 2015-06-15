@@ -30,10 +30,11 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <kfile.h>
-#include <kurlcombobox.h>
+#include <KFile>
+#include <KFileFilterCombo>
+#include <KUrlComboBox>
 #include <KActionCollection>
-#include <KFileDialog>
+#include <KRecentDirs>
 
 #include <QObject>
 #include <QPushButton>
@@ -44,12 +45,8 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QDebug>
-
-// added because of lack of krecentdirs.h
-namespace KRecentDirs
-{
-    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
-};
+#include <QFileDialog>
+#include <QLineEdit>
 
 //! @internal
 class KexiFileWidget::Private

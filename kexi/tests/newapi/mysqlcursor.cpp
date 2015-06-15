@@ -4,7 +4,7 @@
 #include <KDbConnection>
 #include <KDbCursor>
 
-#include <kcomponentdata.h>
+#include <KComponentData>
 
 #include <QDebug>
 

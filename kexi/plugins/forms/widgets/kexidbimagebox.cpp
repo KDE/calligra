@@ -33,9 +33,9 @@
 #include <KDbUtils>
 #include <KDbQuerySchema>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <kiconeffect.h>
+#include <KIconEffect>
 
 #include <QApplication>
 #include <QPixmap>

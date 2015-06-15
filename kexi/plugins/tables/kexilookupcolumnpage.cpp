@@ -31,7 +31,7 @@
 
 #include <KProperty>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <KLocalizedString>
 
 #include <QLabel>

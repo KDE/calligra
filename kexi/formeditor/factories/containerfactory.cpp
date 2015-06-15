@@ -31,8 +31,8 @@
 #include <QFileInfo>
 #include <QAction>
 #include <QDebug>
+#include <QInputDialog>
 
-#include <kinputdialog.h>
 #include <KLocalizedString>
 
 #include "containerfactory.h"

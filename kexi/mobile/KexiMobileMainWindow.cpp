@@ -31,7 +31,7 @@
 
 #include <KDbDriverManager>
 
-#include <ktoolbar.h>
+#include <KToolBar>
 
 #include <QMenu>
 #include <QMenuBar>

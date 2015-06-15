@@ -36,8 +36,8 @@
 #include <QScopedPointer>
 #include <QTabWidget>
 
-#include <ktoolbar.h>
-#include <khelpmenu.h>
+#include <KToolBar>
+#include <KHelpMenu>
 
 #include <KexiIcon.h>
 
@@ -154,7 +154,7 @@ private:
     QVBoxLayout *lyr;
 };
 
-#include <kfadewidgeteffect.h>
+#include <KFadeWidgetEffect>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QStackedLayout>
@@ -482,7 +482,6 @@ public:
     int lowestIndex;
 };
 
-#include <ktabbar.h>
 #include <KSharedConfig>
 
 #include <QTabBar>

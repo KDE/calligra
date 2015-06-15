@@ -28,7 +28,7 @@
 #include <KDbField>
 #include <KDbUtils>
 
-#include <kcomponentdata.h>
+#include <KComponentData>
 
 #include <QFileInfo>
 #include <QDebug>

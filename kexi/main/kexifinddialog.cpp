@@ -19,10 +19,10 @@
 
 #include "kexifinddialog.h"
 
-#include <kstandardguiitem.h>
+#include <KStandardGuiItem>
 #include <KStandardAction>
-#include <kcombobox.h>
-#include <kconfiggroup.h>
+#include <KComboBox>
+#include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
 

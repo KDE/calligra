@@ -43,7 +43,7 @@
 
 #include <KProperty>
 
-#include <kactionmenu.h>
+#include <KActionMenu>
 
 #include <QVBoxLayout>
 #include <QDomDocument>

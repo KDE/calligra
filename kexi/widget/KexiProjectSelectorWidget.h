@@ -24,7 +24,7 @@
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 #include <QTreeWidget>
 

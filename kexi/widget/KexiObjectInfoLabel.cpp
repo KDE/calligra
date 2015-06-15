@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <KLocalizedString>
 
 class KexiObjectInfoLabel::Private

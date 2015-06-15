@@ -24,6 +24,7 @@
 #include <widget/KexiDBPasswordDialog.h>
 #include "kexidbdrivercombobox.h"
 #include <KexiIcon.h>
+#include <kexiutils/utils.h>
 
 #include <KDbConnection>
 #include <KDbUtils>

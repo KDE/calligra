@@ -32,7 +32,7 @@
 #include <QStyleOptionFrameV2>
 #include <QLineEdit>
 
-#include <kguiitem.h>
+#include <KGuiItem>
 #include <KLocalizedString>
 
 #include "kexirecordnavigator.h"

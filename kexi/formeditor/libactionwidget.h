@@ -24,7 +24,7 @@
 #include "kformdesigner_export.h"
 #include "utils.h"
 
-#include <ktoggleaction.h>
+#include <KToggleAction>
 
 namespace KFormDesigner
 {

@@ -38,7 +38,7 @@
 #include <QDebug>
 
 #include <KoFileDialog.h>
-#include <kacceleratormanager.h>
+#include <KAcceleratorManager>
 #include <KLocalizedString>
 
 #include <kexiutils/utils.h>
