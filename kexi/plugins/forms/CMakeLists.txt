@@ -120,9 +120,3 @@ target_link_libraries(
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiformutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-########### install files ###############
-
-install( FILES  kformdesigner_kexidbfactory.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  kexiformhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

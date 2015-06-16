@@ -63,7 +63,3 @@ install(TARGETS keximigrate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 if(FALSE) # TODO: install when we move to independent place
     install( FILES  keximigrate.h keximigratedata.h migratemanager.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb COMPONENT Devel)
 endif()
-
-install( FILES  keximigration_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-

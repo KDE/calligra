@@ -15,7 +15,4 @@ target_link_libraries(kexihandler_migration   kexicore keximigrate )
 
 install(TARGETS kexihandler_migration  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  keximigrationhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS kexihandler_migration  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

@@ -26,6 +26,4 @@ target_link_libraries(
     Qt5::Gui
 )
 
-install(TARGETS kexirelationdesignshape  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install( FILES kexirelationdesignshape.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-
+install(TARGETS kexirelationdesignshape  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
