@@ -21,5 +21,4 @@ target_link_libraries(
     KDb
 )
 
-install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
+install(TARGETS keximigrate_pqxx  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

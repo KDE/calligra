@@ -32,5 +32,4 @@ if(MSVC)
    set_target_properties(kexihandler_csv_importexport PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
 endif()
 
-install(TARGETS kexihandler_csv_importexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(TARGETS kexi_csvimportexportplugin  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
