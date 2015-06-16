@@ -33,7 +33,4 @@ if(MSVC)
 endif()
 
 install(TARGETS kexihandler_csv_importexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES  kexicsv_importexporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS kexi_csvimportexportplugin  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

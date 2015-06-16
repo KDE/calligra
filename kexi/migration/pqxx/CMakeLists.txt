@@ -23,7 +23,3 @@ target_link_libraries(
 
 install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  keximigrate_pqxx.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

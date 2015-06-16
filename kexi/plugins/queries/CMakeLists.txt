@@ -32,7 +32,3 @@ target_link_libraries(
 
 install(TARGETS kexihandler_query  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  kexiqueryhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
