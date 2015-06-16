@@ -53,7 +53,3 @@ target_link_libraries(keximigrate_mdb
 
 install(TARGETS keximigrate_mdb  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  keximdb/keximigrate_mdb.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

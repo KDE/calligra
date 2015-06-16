@@ -13,7 +13,3 @@ target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES}
 
 install(TARGETS keximigrate_sybase  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  keximigrate_sybase.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
