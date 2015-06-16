@@ -1,28 +1,22 @@
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib  ${CMAKE_CURRENT_SOURCE_DIR})
-
-
-
-########### next target ###############
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi
+    ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget
+    ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(MARBLE_FOUND)
   add_subdirectory(widgets/mapbrowser)
 endif()
 
-
-
-########### next target ###############
-
 if(QT_QTWEBKIT_FOUND)
   add_subdirectory(widgets/webbrowser)
 endif()
 
-set(kexihandler_form_PART_SRCS kexiforms.cpp )
+# the main plugin
+set(kexi_formplugin_SRCS kexiforms.cpp)
 
-add_library(kexihandler_form MODULE ${kexihandler_form_PART_SRCS})
+add_library(kexi_formplugin MODULE ${kexi_formplugin_SRCS})
+kcoreaddons_desktop_to_json(kexi_tableplugin kexi_formplugin.desktop)
 
-target_link_libraries(
-    kexihandler_form
+target_link_libraries(kexi_formplugin
     kexicore
     kexiguiutils
     kexidatatable
@@ -35,32 +29,30 @@ target_link_libraries(
 
 install(TARGETS kexi_formplugin DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
 
-
-########### next target ###############
-
-set(kformdesigner_kexidbwidgets_PART_SRCS kexidbfactory.cpp )
+# the form widgets plugin
+set(kformdesigner_kexidbwidgets_PART_SRCS kexidbfactory.cpp)
 
 add_library(kformdesigner_kexidbwidgets MODULE ${kformdesigner_kexidbwidgets_PART_SRCS})
+kcoreaddons_desktop_to_json(kformdesigner_kexidbfactory kformdesigner_kexidbfactory.desktop)
 
+target_link_libraries(kformdesigner_kexidbwidgets
+    PRIVATE
+        kformdesigner
+        kexiformutils
+        kexicore
+        kexiguiutils
+        kexidataviewcommon
+        kexidatatable
+        kexiextendedwidgets
 
+        KDb
 
-target_link_libraries(
-    kformdesigner_kexidbwidgets
-    kformdesigner
-    kexiformutils
-    kexicore
-    kexiguiutils
-    kexidataviewcommon
-    kexidatatable
-    kexiextendedwidgets
-
-    KDb
-
-    Qt5::Gui
+        Qt5::Gui
 )
 
 install(TARGETS kformdesigner_kexidbwidgets DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
 
+# the form utils lib
 set(kexiformutils_LIB_SRCS
  #  kexiformdataiteminterface.cpp
    kexidataawarewidgetinfo.cpp
@@ -89,7 +81,7 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbslider.cpp
   widgets/kexidbprogressbar.cpp
   widgets/kexidbdatepicker.cpp
-  )
+)
 
     #obsolete    widgets/kexidbdoublespinbox.cpp
     #obsolete    widgets/kexidbintspinbox.cpp
@@ -98,22 +90,23 @@ add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
 generate_export_header(kexiformutils)
 
-target_link_libraries(
-    kexiformutils
-    kexicore
-    kexiextendedwidgets
-    kformdesigner
-    kexiutils
-    kexidataviewcommon
-    kexidatatable
-    kexiguiutils
+target_link_libraries(kexiformutils
+    PRIVATE
+        kexicore
+        kexiextendedwidgets
+        kformdesigner
+        kexiutils
+        kexidataviewcommon
+        kexidatatable
+        kexiguiutils
 
-    KDb
-    KProperty
+        KDb
+        KProperty
 
-    Qt5::Gui
-    Qt5::Xml
+        Qt5::Gui
+        Qt5::Xml
 )
 
-set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION}
+                      SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
 install(TARGETS kexiformutils  ${INSTALL_TARGETS_DEFAULT_ARGS})

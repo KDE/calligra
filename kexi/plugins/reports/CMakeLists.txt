@@ -1,5 +1,3 @@
-project(reports)
-
 include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kexi
@@ -7,8 +5,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi/widget
 )
 
-#build a shared library
-set(kexihandler_report_SRCS
+# the main plugin
+set(kexi_reportplugin_SRCS
     kexireports.cpp
     kexireportpart.cpp
     kexireportview.cpp
@@ -21,36 +19,38 @@ set(kexihandler_report_SRCS
 if (KEXI_MOBILE)
 
 else ()
-  list(APPEND kexihandler_report_SRCS
+  list(APPEND kexi_reportplugin_SRCS
         keximigratereportdata.cpp
   )
 endif ()
 
+qt5_wrap_cpp(kexi_reportplugin_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
 
-qt5_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+add_library(kexi_reportplugin MODULE ${kexi_reportplugin_SRCS})
+kcoreaddons_desktop_to_json(kexi_reportplugin kexi_reportplugin.desktop)
 
-add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
+target_link_libraries(kexi_reportplugin
+    PRIVATE
+        kexicore
+        kexiguiutils
+        kexiextendedwidgets
 
-target_link_libraries(kexihandler_report
-    Qt5::Gui
-    Qt5::Script
-    kexicore
+        KDb
+        KReport
+        KProperty
 
-    KDb
-    KProperty
-    KReport
+        KF5::KrossCore
 
-    kexiguiutils
-    KF5::KrossCore
-    kexiextendedwidgets
+        Qt5::Gui
+        Qt5::Script
 )
 
 if (KEXI_MOBILE)
 
 else ()
-    target_link_libraries (kexihandler_report
-    keximain
-    keximigrate
+    target_link_libraries(kexi_reportplugin
+        keximain
+        keximigrate
     )
 endif ()
 

@@ -7,25 +7,29 @@ include_directories(
     ${KOKROSS_INCLUDES}
 )
 
-########### next target ###############
-
-set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
-qt5_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
-add_library(kexihandler_script MODULE ${kexihandler_script_PART_SRCS})
-target_link_libraries(
-    kexihandler_script
-    kexiextendedwidgets
-    kokross
-    kexicore
-    kexiutils
-
-    KDb
-    KProperty
-
-    KF5::KIOWidgets
-    Qt5::Gui
+# the main plugin
+set(kexi_scriptplugin_SRCS
+    kexiscriptpart.cpp
+    kexiscripteditor.cpp
+    kexiscriptdesignview.cpp
 )
 
-########### install files ###############
+qt5_wrap_cpp(kexi_scriptplugin_SRCS kexiscriptadaptor.h)
 
+add_library(kexi_scriptplugin MODULE ${kexi_scriptplugin_SRCS})
+kcoreaddons_desktop_to_json(kexi_scriptplugin kexi_scriptplugin.desktop)
+
+target_link_libraries(kexi_scriptplugin
+    PRIVATE
+        kexiextendedwidgets
+        kokross
+        kexicore
+        kexiutils
+
+        KDb
+        KProperty
+
+        KF5::KIOWidgets
+        Qt5::Gui
+)
 install(TARGETS kexi_scriptplugin DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
