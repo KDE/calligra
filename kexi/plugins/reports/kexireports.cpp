@@ -18,4 +18,4 @@
 
 #include "kexireportpart.h"
 
-K_EXPORT_KEXIPART_PLUGIN(KexiReportPart, report)
+KEXIPART_PLUGIN_FACTORY(KexiReportPart, "kexi_reportplugin.json")

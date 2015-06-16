@@ -32,7 +32,7 @@
 
 #include <QDebug>
 
-//------------------------------------------------
+KEXIPART_PLUGIN_FACTORY(KexiQueryPart, "kexi_queryplugin.json")
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
   : KexiPart::Part(parent,
@@ -258,8 +258,3 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 {
     m_queryChangedInPreviousView = set;
 }
-
-//----------------
-
-K_EXPORT_KEXIPART_PLUGIN( KexiQueryPart, query )
-
