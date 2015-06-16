@@ -41,6 +41,8 @@
 
 #include <QDebug>
 
+KEXIPART_PLUGIN_FACTORY(KexiScriptPart, "kexi_scriptplugin.json")
+
 /// \internal
 class KexiScriptPart::Private
 {
@@ -235,6 +237,3 @@ KLocalizedString KexiScriptPart::i18nMessage(
         return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
-
-K_EXPORT_KEXIPART_PLUGIN( KexiScriptPart, script )
-
