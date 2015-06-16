@@ -32,12 +32,13 @@
 #include <KexiWindow.h>
 
 #include <KDbConnection>
-#include <KDbCursor>
 
 #include <KMessageBox>
 
 #include <QDebug>
 #include <QTabWidget>
+
+KEXIPART_PLUGIN_FACTORY(KexiTablePart, "kexi_tableplugin.json")
 
 //! @internal
 class KexiTablePart::Private
@@ -252,8 +253,3 @@ KexiTablePart::TempData::TempData(QObject* parent)
         , tableSchemaChangedInPreviousView(true /*to force reloading on startup*/)
 {
 }
-
-//----------------
-
-K_EXPORT_KEXIPART_PLUGIN( KexiTablePart, table )
-
