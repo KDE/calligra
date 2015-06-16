@@ -34,7 +34,10 @@ public:
 };
 
 KisTangentTiltOption::KisTangentTiltOption()
-: KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+: KisPaintOpOption(KisPaintOpOption::GENERAL, false),
+            m_canvasAngle(0.0),
+            m_canvasAxisXMirrored(false),
+            m_canvasAxisYMirrored(false)
 {
     m_checkable = false;
     m_options = new KisTangentTiltOptionWidget();
@@ -159,11 +162,12 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     
     //subtract/add the rotation of the canvas.
-    int threesixty = 0;
-    if (info.canvasRotation()<0) {
-        threesixty = 360;
+    
+    if (info.canvasRotation()!=m_canvasAngle) {
+       m_canvasAngle=info.canvasRotation();
     }
-    direction = direction-info.canvasRotation()+threesixty;
+    
+    direction = direction-m_canvasAngle;
 
     //limit the direction/elevation
     
@@ -216,6 +220,9 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
         vertical = halfvalue-(fabs(vertical)*halfvalue);
     }
     
+    if (m_canvasAxisXMirrored) {horizontal = maxvalue-horizontal;}
+    if (m_canvasAxisYMirrored) {vertical = maxvalue-vertical;}
+    
     depth = sin(elevation)*maxvalue;
     
     //assign right components to correct axes.
@@ -253,6 +260,10 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
     else if (setting->getInt(TANGENT_TYPE)== 2) {
         m_options->optionRotation->setChecked(true);
     }
+    
+    m_canvasAngle = setting->getDouble("runtimeCanvasRotation", 0.0);//in degrees please.
+    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
     
     m_options->spinElevationMin->setValue(setting->getInt(TANGENT_EV_MIN, 0));
     m_options->spinElevationMax->setValue(setting->getInt(TANGENT_EV_MAX, 90));

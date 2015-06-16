@@ -75,7 +75,6 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
         QLineF tiltAngle(realOutline.boundingRect().center(), realOutline.boundingRect().topLeft());
         tiltAngle.setLength(50*(1-info.tiltElevation(info, 60.0, 60.0, true)));
         tiltAngle.setAngle(360.0-fmod(KisPaintInformation::tiltDirection(info, true)*360.0+270.0,360.0) );
-        //qDebug()<<info.canvasRotation();
         tiltLine.moveTo(tiltAngle.p1());
         tiltLine.lineTo(tiltAngle.p2());
 

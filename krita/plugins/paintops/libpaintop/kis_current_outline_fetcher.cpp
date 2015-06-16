@@ -97,6 +97,8 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
 
     if (d->rotationOption && tilt == false) {
         rotation += d->rotationOption->apply(info);
+    } else if (d->rotationOption && tilt == true) {
+        rotation += settings->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     }
 
     qreal xFlip = 1.0;

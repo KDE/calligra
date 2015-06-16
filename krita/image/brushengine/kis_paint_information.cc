@@ -165,7 +165,12 @@ int KisPaintInformation::canvasRotation() const
 
 void KisPaintInformation::setCanvasRotation(int rot)
 {
-    d->canvasRotation=rot;
+    if (rot<0) {
+        d->canvasRotation= 360- (rot % 360);
+    } else {
+        d->canvasRotation= rot % 360;
+    }
+    
 } 
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
