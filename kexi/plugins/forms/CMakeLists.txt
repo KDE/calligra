@@ -33,7 +33,7 @@ target_link_libraries(
     KProperty
 )
 
-install(TARGETS kexihandler_form  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kexi_formplugin DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -59,10 +59,7 @@ target_link_libraries(
     Qt5::Gui
 )
 
-install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### next target ###############
+install(TARGETS kformdesigner_kexidbwidgets DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
 
 set(kexiformutils_LIB_SRCS
  #  kexiformdataiteminterface.cpp
