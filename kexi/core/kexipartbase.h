@@ -21,10 +21,11 @@
 #ifndef KEXIPARTBASE_H
 #define KEXIPARTBASE_H
 
-#include <QObject>
-#include <KLocalizedString>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
+
+#include <KLocalizedString>
+#include <KPluginFactory>
 
 class QTabWidget;
 class KexiWindow;
@@ -101,14 +102,12 @@ protected:
     Private * const d;
 
     friend class Manager;
-    //friend class ::KexiWindow;
-    //friend class GUIClient;
 };
 
 } // namespace KexiPart
 
 //! Implementation of plugin's entry point
-#define K_EXPORT_KEXIPART_PLUGIN( class_name, internal_name ) \
-    KEXI_EXPORT_PLUGIN( "kexihandler", class_name, internal_name, KEXI_PART_VERSION, 0, 0 )
+#define KEXIPART_PLUGIN_FACTORY(class_name, name) \
+    K_PLUGIN_FACTORY_WITH_JSON(class_name ## Factory, name, registerPlugin<class_name>();)
 
 #endif
