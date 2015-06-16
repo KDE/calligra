@@ -25,6 +25,8 @@
 #include <core/kexipart.h>
 #include <kexiutils/utils.h>
 
+KEXIPART_PLUGIN_FACTORY(KexiCSVImportExportPart, "kexi_csvimportexportplugin.json")
+
 KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
@@ -82,5 +84,3 @@ bool KexiCSVImportExportPart::executeCommand(const char* commandName,
     }
     return false;
 }
-
-K_EXPORT_KEXIPART_PLUGIN( KexiCSVImportExportPart, csv_importexport )
