@@ -25,8 +25,6 @@
 
 #include "ui_reportgroupsectionswidget.h"
 
-#include "KoReportDesigner.h"
-
 #include <QSplitter>
 #include <QStandardItemModel>
 #include <QStandardItem>

@@ -23,7 +23,7 @@
 
 #include "kplatoui_export.h"
 
-#include <KoReportData.h>
+#include <KReport/KoReportData>
 
 #include "kptitemmodelbase.h"
 #include "kptnodechartmodel.h"

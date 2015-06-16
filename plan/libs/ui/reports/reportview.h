@@ -31,7 +31,9 @@
 
 #include "ui_reportnavigator.h"
 
-#include <KoReportRendererBase.h>
+#include <KoReportRendererBase>
+
+#include <KDialog>
 
 class KoDocument;
 class KoShape;
