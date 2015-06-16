@@ -45,8 +45,3 @@ target_link_libraries(
 
 install(TARGETS kformdesigner_stdwidgets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
