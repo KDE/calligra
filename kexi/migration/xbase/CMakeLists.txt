@@ -17,6 +17,4 @@ target_link_libraries(
     ${XBase_LIBRARIES}
 )
 
-install(TARGETS keximigrate_xbase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
 install(TARGETS keximigrate_xbase DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
