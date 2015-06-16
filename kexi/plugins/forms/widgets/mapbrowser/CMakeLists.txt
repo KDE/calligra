@@ -39,9 +39,6 @@ install(TARGETS kformdesigner_mapbrowser  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_
 
 ########### install files ###############
 
-install( FILES  kformdesigner_mapbrowser.desktop DESTINATION
-        ${SERVICES_INSTALL_DIR}/calligra)
-
 ecm_install_icons(ICONS
     16-actions-map_browser.png
     22-actions-map_browser.png
