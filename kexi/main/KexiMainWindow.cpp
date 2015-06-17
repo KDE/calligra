@@ -473,11 +473,8 @@ KexiWindow* KexiMainWindow::windowForTab(int tabIndex) const
 void KexiMainWindow::setupMainMenuActionShortcut(QAction * action)
 {
     if (!action->shortcut().isEmpty()) {
-        if (!action->shortcut().primary().isEmpty()) {
-            (void)new KexiMainMenuActionShortcut(action->shortcut().primary(), this, action);
-        }
-        if (!action->shortcut().alternate().isEmpty()) {
-            (void)new KexiMainMenuActionShortcut(action->shortcut().alternate(), this, action);
+        foreach(const QKeySequence &shortcut, action->shortcuts()) {
+            (void)new KexiMainMenuActionShortcut(shortcut, action, this);
         }
     }
 }
@@ -494,7 +491,7 @@ QAction * KexiMainWindow::addAction(const char *name, const QIcon &icon, const Q
     actionCollection()->addAction(name, action);
     if (shortcut) {
         action->setShortcut(QKeySequence(shortcut));
-        QShortcut *s = new QShortcut(action->shortcut().primary(), this);
+        QShortcut *s = new QShortcut(action->shortcut(), this);
         connect(s, SIGNAL(activated()), action, SLOT(trigger()));
     }
     return action;
@@ -515,7 +512,7 @@ void KexiMainWindow::setupActions()
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
     addThreeDotsToActionText(action);
-    action->setShortcut(KStandardShortcut::openNew());
+    action->setShortcuts(KStandardShortcut::openNew());
     action->setToolTip(xi18n("Create a new project"));
     action->setWhatsThis(
         xi18n("Creates a new project. Currently opened project is not affected."));
@@ -930,13 +927,14 @@ void KexiMainWindow::setupActions()
     d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
     ac->addAction("full_screen", d->action_window_fullscreen);
     QList<QKeySequence> shortcuts;
-    QKeySequence shortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
-    shortcuts = shortcut.toList();
+    shortcuts << d->action_window_fullscreen->shortcut() << QKeySequence("F11");
     d->action_window_fullscreen->setShortcuts(shortcuts);
-    QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
+    QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut(), this);
     connect(s, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
-    QShortcut *sa = new QShortcut(d->action_window_fullscreen->shortcut().alternate(), this);
-    connect(sa, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
+    if (d->action_window_fullscreen->shortcuts().count() > 1) {
+        QShortcut *sa = new QShortcut(d->action_window_fullscreen->shortcuts().value(1), this);
+        connect(sa, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
+    }
 
     //SETTINGS MENU
 //! @todo put 'configure keys' into settings view
