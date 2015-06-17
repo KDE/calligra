@@ -34,10 +34,10 @@
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 # include <KTextEdit>
 #else
-# include <ktexteditor/document.h>
-# include <ktexteditor/view.h>
-# include <ktexteditor/editorchooser.h>
-# include <ktexteditor/configinterface.h>
+# include <KTextEditor/Document>
+# include <KTextEditor/Editor>
+# include <KTextEditor/View>
+# include <KTextEditor/ConfigInterface>
 #endif
 
 /** Used for the shared action framework to redirect shared actions like
@@ -95,7 +95,7 @@ KexiEditor::KexiEditor(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(fr);
     layout->setContentsMargins(2, 2, 2, 2);
 
-    KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor *editor = KTextEditor::Editor::instance();
     if (!editor)
         return;
 //! @todo error handling!
@@ -108,8 +108,7 @@ KexiEditor::KexiEditor(QWidget *parent)
     d->view->action("file_save")->setEnabled(false);
     // set word wrap by default
     KTextEditor::ConfigInterface *configIface
-        =
-qobject_cast<KTextEditor::ConfigInterface*>( d->view );
+            = qobject_cast<KTextEditor::ConfigInterface*>(d->view);
     configIface->setConfigValue("dynamic-word-wrap", true);
 
 //! @todo KEXI3 Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
@@ -201,7 +200,10 @@ void KexiEditor::slotConfigureEditor()
 #else
     if (!d->doc)
         return;
-    d->doc->editor()->configDialog(this);
+    KTextEditor::Editor *editor = KTextEditor::Editor::instance();
+    if (!editor)
+        return;
+    editor->configDialog(this);
 //! @todo use d->doc->editor()->writeConfig() or KTextEditor::ConfigInterface to save changes
 #endif
 }
