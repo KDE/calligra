@@ -165,10 +165,13 @@ KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sd
     return KexiMainWindowIface::global()->project()->dbConnection()->tableSchema(sdata.name());
 }
 
+//static
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     QWidget *parent, KDbConnection *conn,
     KDbTableSchema *table, const QString& msg)
 {
+    Q_ASSERT(conn);
+    Q_ASSERT(table);
     QSet<KDbConnection::TableSchemaChangeListenerInterface*>* listeners
         = conn->tableSchemaChangeListeners(table);
     if (!listeners || listeners->isEmpty())
