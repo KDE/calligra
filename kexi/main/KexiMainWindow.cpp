@@ -248,6 +248,16 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
         QWidget::paintEvent(event);
 }
 
+void KexiMainWindowTabWidget::mousePressEvent(QMouseEvent *event)
+{
+    //! @todo KEXI3 test KexiMainWindowTabWidget's contextMenu event port from KTabWidget
+    if (event->button() == Qt::RightButton) {
+        int tab = tabBar()->tabAt(event->pos());
+        showContextMenuForTab(tab, tabBar()->mapToGlobal(event->pos()));
+    }
+    QTabWidget::mousePressEvent(event);
+}
+
 void KexiMainWindowTabWidget::closeTab()
 {
     dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
@@ -275,15 +285,16 @@ tristate KexiMainWindowTabWidget::closeAllTabs()
     return alternateResult;
 }
 
-void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
+void KexiMainWindowTabWidget::showContextMenuForTab(int index, const QPoint& point)
 {
     QMenu menu;
-    menu.addAction(m_closeAction);
+    if (index >= 0) {
+        menu.addAction(m_closeAction);
+    }
     menu.addAction(m_closeAllTabsAction);
 //! @todo add "&Detach Tab"
     setTabIndexFromContextMenu(index);
     menu.exec(point);
-    QTabWidget::contextMenu(index, point);
 }
 
 void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
