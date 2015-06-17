@@ -1477,7 +1477,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 {
     QDomElement images = domDoc.firstChildElement("UI").firstChildElement("images");
     if (images.isNull())
-        return 0;
+        return QPixmap();
 
     QDomElement image;
     for (QDomNode n = images.firstChild(); !n.isNull(); n = n.nextSibling()) {
