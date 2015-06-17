@@ -203,6 +203,8 @@ public:
     }
 };
 
+//! @todo KEXI3 is KexiMenuWidgetStyle needed?
+#if 0
 //! A style proxy for KexiMenuWidget
 class KexiMenuWidgetStyle : public KexiUtils::StyleProxy
 {
@@ -239,6 +241,7 @@ public:
         KexiUtils::StyleProxy::drawControl(element, option, painter, widget);
     }
 };
+#endif
 
 //! Main menu
 class KexiMainMenu : public QWidget
@@ -351,12 +354,15 @@ protected:
             hlyr->setMargin(0);
             m_menuWidget = new KexiMenuWidget;
             QString styleName(m_menuWidget->style()->objectName());
+//! @todo KEXI3 is KexiMenuWidgetStyle needed?
+#if 0
             if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
                 && styleName == "oxygen")
             {
                 KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
                 m_menuWidget->setStyle(customStyle);
             }
+#endif
             m_menuWidget->installEventFilter(this);
             m_menuWidget->setFocusPolicy(Qt::StrongFocus);
             setFocusProxy(m_menuWidget);
@@ -513,11 +519,11 @@ static bool isSpecificTabStyle(const QString &styleName)
 }
 
 //! Style proxy for KexiTabbedToolBar, to get the "Kexi" tab style right.
-class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
+class KexiTabbedToolBarStyle : public QProxyStyle
 {
 public:
-    explicit KexiTabbedToolBarStyle(QStyle *style, QObject *parent = 0)
-      : KexiUtils::StyleProxy(style, parent)
+    explicit KexiTabbedToolBarStyle(QStyle *style)
+      : QProxyStyle(style)
     {
     }
     virtual ~KexiTabbedToolBarStyle() {
@@ -525,11 +531,11 @@ public:
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *painter, const QWidget *widget = 0) const
     {
-        const QString styleName(parentStyle()->objectName());
+        const QString styleName(baseStyle()->objectName());
         qreal origOpacity = -1.0;
         if (element == CE_TabBarTab) {
-            const QStyleOptionTabV2* opt
-                = qstyleoption_cast<const QStyleOptionTabV2*>(option);
+            const QStyleOptionTabV3* opt
+                = qstyleoption_cast<const QStyleOptionTabV3*>(option);
             const QTabBar* tabBar = qobject_cast<const QTabBar*>(widget);
             KexiTabbedToolBar* tbar = tabBar
                 ? qobject_cast<KexiTabbedToolBar*>(tabBar->parentWidget()) : 0;
@@ -546,7 +552,7 @@ public:
                     }
                 }
 
-                QStyleOptionTabV2 newOpt(*opt);
+                QStyleOptionTabV3 newOpt(*opt);
                 const bool specificStyle = isSpecificTabStyle(styleName);
                 newOpt.text = (specificStyle ? " " : "")
                         + tabBar->tabText(index)
@@ -557,7 +563,7 @@ public:
                 {
                     if (tbar->mainMenuVisible())
                         newOpt.state &= ~QStyle::State_HasFocus;
-                    KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
+                    QProxyStyle::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
                     return;
                 }
                 else if (index == 0) {
@@ -582,7 +588,7 @@ public:
                     newOpt.palette.setBrush(QPalette::Window, bg);
                     newOpt.palette.setBrush(QPalette::Button, // needed e.g. for Plastique style
                                             bg);
-                    KexiUtils::StyleProxy::drawControl(element, &newOpt, painter, widget);
+                    QProxyStyle::drawControl(element, &newOpt, painter, widget);
                     painter->setFont(origFont);
                     if (!mouseOver || tbar->mainMenuVisible() || styleName == "gtk+") {
                         return;
@@ -613,12 +619,12 @@ public:
                         painter->setOpacity(0.5);
                     }
                     (newOpt.state |= State_Active) ^= State_Active;
-                    KexiUtils::StyleProxy::drawControl(element, &newOpt, painter, widget);
+                    QProxyStyle::drawControl(element, &newOpt, painter, widget);
                     if (origOpacity != -1.0) {
                         // restore opacity and draw labels using full this opacity
                         painter->setOpacity(origOpacity);
                         if (index > 0) {
-                            KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
+                            QProxyStyle::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
                         }
                     }
                     return;
@@ -628,13 +634,13 @@ public:
         else if (element == CE_ToolBar) {
             return;
         }
-        KexiUtils::StyleProxy::drawControl(element, option, painter, widget);
+        QProxyStyle::drawControl(element, option, painter, widget);
     }
 
     virtual void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                          QPainter *painter, const QWidget *widget = 0) const
+                               QPainter *painter, const QWidget *widget = 0) const
     {
-        const QString styleName(parentStyle()->objectName());
+        const QString styleName(baseStyle()->objectName());
         if (element == PE_FrameTabWidget) {
             return;
         }
@@ -649,7 +655,7 @@ public:
         if (element == QStyle::PE_PanelToolBar || element == QStyle::PE_FrameMenu) {
             return;
         }
-        KexiUtils::StyleProxy::drawPrimitive(element, option, painter, widget);
+        QProxyStyle::drawPrimitive(element, option, painter, widget);
     }
 
     virtual int pixelMetric(PixelMetric metric, const QStyleOption* option = 0,
@@ -657,7 +663,7 @@ public:
     {
         if (metric == QStyle::PM_SmallIconSize)
             return KIconLoader::SizeMedium;
-        return KexiUtils::StyleProxy::pixelMetric(metric, option, widget);
+        return QProxyStyle::pixelMetric(metric, option, widget);
     }
 };
 
@@ -668,7 +674,8 @@ KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : QTabBar(parent)
 {
     setObjectName("tabbar");
-    customStyle = new KexiTabbedToolBarStyle(style(), this);
+    customStyle = new KexiTabbedToolBarStyle(style());
+    customStyle->setParent(this);
     setStyle(customStyle);
     installEventFilter(parent);
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
