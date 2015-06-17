@@ -34,7 +34,7 @@ namespace KFormDesigner
 class WidgetFactory;
 class WidgetLibrary;
 
-//! A class providing properties of widget classes offered by a factory
+//! A class providing properties of a single widget class offered by a factory
 class KFORMDESIGNER_EXPORT WidgetInfo
 {
 public:
