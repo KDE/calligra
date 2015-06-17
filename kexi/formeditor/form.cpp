@@ -1442,7 +1442,7 @@ void Form::addWidget(QWidget *w)
     // show only properties shared by widget (properties chosen by factory)
     bool isTopLevel = isTopLevelWidget(w);
 
-    for (KPropertySet::Iterator it(d->propertySet); it.current(); ++it) {
+    for (KPropertySetIterator it(d->propertySet); it.current(); ++it) {
         //qDebug() << it.current();
         if (!isPropertyVisible(it.current()->name(), isTopLevel, classname)) {
             it.current()->setVisible(false);
@@ -1558,10 +1558,10 @@ void Form::createPropertiesForWidget(QWidget *w)
             }
             else {
                 int realType = subwinfo->customTypeForProperty(propertyName);
-                if (realType == KoProperty::Invalid || realType == KoProperty::Auto) {
+                if (realType == KProperty::Invalid || realType == KProperty::Auto) {
                     realType = meta.type();
                 }
-                newProp = new KoProperty::Property(
+                newProp = new KProperty(
                     propertyName,
                     // assign current or older value
                     oldValueExists ? modifiedPropertiesIt.value() : subwidget->property(propertyName),
@@ -1576,8 +1576,8 @@ void Form::createPropertiesForWidget(QWidget *w)
             if (!isPropertyVisible(propertyName, isTopLevel))
                 newProp->setVisible(false);
 //! @todo
-            if (newProp->type() == KoProperty::Invalid) {
-                newProp->setType(KoProperty::String);
+            if (newProp->type() == KProperty::Invalid) {
+                newProp->setType(KProperty::String);
             }
 
             d->propertySet.addProperty(newProp);

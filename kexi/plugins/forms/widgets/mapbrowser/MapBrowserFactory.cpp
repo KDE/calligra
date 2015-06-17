@@ -20,13 +20,12 @@
 
 #include "MapBrowserWidget.h"
 #include "MapBrowserFactory.h"
-
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
-
 #include <KexiIcon.h>
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+
+#include <KProperty>
+#include <KPropertySet>
 
 #include <KLocalizedString>
 
@@ -107,15 +106,15 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     return true;
 }
 
-void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w)
+void MapBrowserFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget* w)
 {
     KFormDesigner::WidgetFactory::setPropertyOptions(set, info, w);
 
-    KoProperty::Property *property = &set["latitude"];
+    KProperty *property = &set["latitude"];
     if (!property->isNull()) {
         property->setCaption(xi18n("Latitude"));
         property->setDescription(xi18n("Latitude"));
-        property->setType(KoProperty::Double);
+        property->setType(KProperty::Double);
         property->setOption("precision", 7);
         property->setOption("min", -90);
         property->setOption("max", 90);
@@ -127,7 +126,7 @@ void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesi
         property->setCaption(xi18n("Longitude"));
         property->setDescription(xi18n("Longitude"));
         property->setOption("precision", 7);
-        property->setType(KoProperty::Double);
+        property->setType(KProperty::Double);
         property->setOption("min", -180);
         property->setOption("max", 180);
         property->setOption("unit", QString::fromUtf8("°"));
@@ -140,7 +139,7 @@ void MapBrowserFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesi
 
         property->setCaption(xi18n("Theme"));
         property->setDescription(xi18n("Theme"));
-        property->setType(KoProperty::List);
+        property->setType(KProperty::List);
         property->setListData(themes, themes);
     }
 
