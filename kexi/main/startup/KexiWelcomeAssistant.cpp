@@ -114,7 +114,7 @@ public:
 
     ~Private()
     {
-        mainWindow->redirectMessagesTo(0);
+        mainWindow->setRedirection(0);
     }
 
     KexiMainWelcomePage* mainWelcomePage() {
@@ -156,7 +156,7 @@ KexiWelcomeAssistant::KexiWelcomeAssistant(
  , d(new Private(this))
 {
     d->mainWindow = parent;
-    d->mainWindow->redirectMessagesTo(this);
+    d->mainWindow->setRedirection(this);
     d->messageWidgetActionNo = 0;
     d->messageWidgetActionTryAgain = 0;
     d->projects = projects;

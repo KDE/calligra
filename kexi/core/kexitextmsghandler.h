@@ -27,18 +27,17 @@
 class KEXICORE_EXPORT KexiTextMessageHandler : public KexiGUIMessageHandler
 {
 public:
-    KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
+    KexiTextMessageHandler(QString *messageTarget, QString *detailsTarget);
     virtual ~KexiTextMessageHandler();
 
     using KexiGUIMessageHandler::showMessage;
-
-protected:
     using KexiGUIMessageHandler::showErrorMessage;
 
-    virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
-    virtual void showMessageInternal(MessageType type, const QString &title, const QString &details,
-                                     const QString& dontShowAgainName = QString());
+    virtual void showErrorMessage(const QString &title, const QString &details = QString());
+    virtual void showMessage(MessageType type, const QString &title, const QString &details,
+                             const QString& dontShowAgainName = QString());
 
+protected:
     class Private;
     Private* const d;
 };
