@@ -2080,10 +2080,10 @@ void KexiMenuWidgetPrivate::updateLogoPixmap()
     else {
         isLight = KexiUtils::isLightColorScheme();
     }
-    const QString calligraLogo = KStandardDirs::locate("data",
-        isLight
-         ? "kexi/pics/calligra-logo-white-glow.png"
-         : "kexi/pics/calligra-logo-black-glow.png");
+    const QString calligraLogo = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        isLight ? "kexi/pics/calligra-logo-white-glow.png"
+                : "kexi/pics/calligra-logo-black-glow.png");
     calligraLogoPixmap = QPixmap(calligraLogo);
 }
 
