@@ -147,6 +147,8 @@ void WidgetFactory::disableFilter(QWidget *w, Container *container)
 
 bool WidgetFactory::editList(QWidget *w, QStringList &list) const
 {
+    //! @todo KEXI3 port to QDialog
+#if 0
     QDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
@@ -173,6 +175,7 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
         list = edit->items();
         return true;
     }
+#endif
     return false;
 }
 
