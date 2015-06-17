@@ -89,6 +89,11 @@ public Q_SLOTS:
      */
     void unregisterSection(KoSection *section);
 
+    /**
+     * Setting all sections end bound cursor to move with text inserting
+     */
+    void allowMovingEndBound();
+
 protected:
     KoSectionManagerPrivate * const d_ptr;
 

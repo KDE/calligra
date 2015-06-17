@@ -83,6 +83,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
 #include <KoSectionUtils.h>
+#include <KoSectionManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -444,6 +445,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
         //kDebug(32500) << range->id();
     //}
 
+    if (!rootCallChecker) {
+	// Allow to move end bounds of sections with inserting text
+	KoTextDocument(cursor.block().document()).sectionManager()->allowMovingEndBound();
+    }
 }
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
@@ -844,6 +849,8 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
         KoSectionUtils::sectionEndings(format) << new KoSectionEnd(section));
 
     cursor.setBlockFormat(format);
+
+    section->setKeepEndBound(true); // This bound should stop moving with new text
 }
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)

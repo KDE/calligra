@@ -146,6 +146,15 @@ void KoSectionManager::unregisterSection(KoSection* section)
     invalidate();
 }
 
+void KoSectionManager::allowMovingEndBound()
+{
+    Q_D(KoSectionManager);
+    QSet<KoSection *>::iterator it = d->registeredSections.begin();
+    for (; it != d->registeredSections.end(); it++) {
+	(*it)->setKeepEndBound(false);
+    }
+}
+
 QStandardItemModel *KoSectionManager::update(bool needModel)
 {
     Q_D(KoSectionManager);
@@ -157,8 +166,6 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
 
     QSet<KoSection *>::iterator it = d->registeredSections.begin();
     for (; it != d->registeredSections.end(); it++) {
-        (*it)->setBeginPos(-1);
-        (*it)->setEndPos(-1);
         (*it)->setLevel(-1);
     }
 
@@ -178,7 +185,6 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
 
         foreach (KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
             curLevel++;
-            sec->setBeginPos(block.position());
             sec->setLevel(curLevel);
 
             d->sectionNames()[sec->name()] = sec;
@@ -195,8 +201,6 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
 
         foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
             curLevel--;
-            sec->correspondingSection()->setEndPos(block.position() + block.length());
-
             if (needModel) {
                 curChain.pop();
             }

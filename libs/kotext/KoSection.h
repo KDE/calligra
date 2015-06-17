@@ -93,10 +93,16 @@ private:
     Q_DECLARE_PRIVATE(KoSection)
 
     void setSectionEnd(KoSectionEnd *sectionEnd);
-    void setBeginPos(int pos);
-    void setEndPos(int pos);
     void setLevel(int level);
 
+    /** Specifies if end bound of section should stay on place when inserting text.
+     * Used by KoTextLoader on document loading.
+     *
+     * @see QTextCursor::setKeepPositionOnInsert(bool)
+     */
+    void setKeepEndBound(bool state);
+
+    friend class KoTextLoader;
     friend class KoSectionManager;
     friend class KoSectionEnd;
 };

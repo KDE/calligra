@@ -62,7 +62,8 @@ public:
 
     QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
     int level; //< level of the section in document, root sections have 0 level
-    QPair<int, int> bounds; //< start and end position of section in QDocument
+    QTextCursor boundingCursorStart; // This cursor points to the start of the section
+    QTextCursor boundingCursorEnd; // This cursor points to the end of the section (excluding paragraph symbol)
 
     KoTextInlineRdf *inlineRdf;
 };
@@ -72,6 +73,12 @@ KoSection::KoSection(const QTextCursor &cursor)
 {
     Q_D(KoSection);
     d->manager->registerSection(this);
+
+    d->boundingCursorStart = cursor;
+    d->boundingCursorStart.setKeepPositionOnInsert(true); // Start cursor should stay on place
+
+    d->boundingCursorEnd = cursor;
+    d->boundingCursorEnd.setKeepPositionOnInsert(false); // and end one should move
 }
 
 KoSection::~KoSection()
@@ -89,8 +96,10 @@ QString KoSection::name() const
 QPair<int, int> KoSection::bounds() const
 {
     Q_D(const KoSection);
-    d->manager->update();
-    return d->bounds;
+    return QPair<int, int>(
+	d->boundingCursorStart.position(),
+	d->boundingCursorEnd.position()
+    );
 }
 
 int KoSection::level() const
@@ -185,22 +194,16 @@ void KoSection::setSectionEnd(KoSectionEnd* sectionEnd)
     d->sectionEnd.reset(sectionEnd);
 }
 
-void KoSection::setBeginPos(int pos)
-{
-    Q_D(KoSection);
-    d->bounds.first = pos;
-}
-
-void KoSection::setEndPos(int pos)
-{
-    Q_D(KoSection);
-    d->bounds.second = pos;
-}
-
 void KoSection::setLevel(int level)
 {
     Q_D(KoSection);
     d->level = level;
+}
+
+void KoSection::setKeepEndBound(bool state)
+{
+    Q_D(KoSection);
+    d->boundingCursorEnd.setKeepPositionOnInsert(state);
 }
 
 KoTextInlineRdf *KoSection::inlineRdf() const
