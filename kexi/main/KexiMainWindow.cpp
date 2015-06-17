@@ -1956,7 +1956,7 @@ void KexiMainWindow::updateAppCaption()
         }
     }
 
-    setWindowTitle(QDialog::makeStandardCaption(d->appCaptionPrefix, this));
+    setWindowTitle(KexiUtils::makeStandardCaption(d->appCaptionPrefix));
 }
 
 bool KexiMainWindow::queryClose()
