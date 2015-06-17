@@ -100,16 +100,6 @@ public:
 
 //---------------------------------
 
-static bool stripQuotes(const QString &item, QString &name)
-{
-    if (item.left(1) == "\"" && item.right(1) == "\"") {
-        name = item.mid(1, item.length() - 2);
-        return true;
-    }
-    name = item;
-    return false;
-}
-
 void updateProgressBar(QProgressDialog *pd, char *buffer, int buflen)
 {
     char *p = buffer;
@@ -125,9 +115,9 @@ void updateProgressBar(QProgressDialog *pd, char *buffer, int buflen)
                 line += *p;
             --i; --p;
             const int percent = line.toInt(&ok);
-            if (ok && percent >= 0 && percent <= 100 && pd->progressBar()->value() < percent) {
+            if (ok && percent >= 0 && percent <= 100 && pd->value() < percent) {
 //    qDebug() << percent;
-                pd->progressBar()->setValue(percent);
+                pd->setValue(percent);
                 qApp->processEvents(QEventLoop::AllEvents, 100);
             }
         }
@@ -141,22 +131,30 @@ KexiStartupHandler::KexiStartupHandler()
         , KexiStartupData()
         , d(new Private())
 {
-    // Q_GLOBAL_STATIC is cleaned up *after* QApplication is gone
-    // but we have to cleanup before -> use qAddPostRoutine
-    qAddPostRoutine(Kexi::_startupHandler.destroy);
-
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAboutToAppQuit()));
 }
 
 KexiStartupHandler::~KexiStartupHandler()
 {
-    qRemovePostRoutine(Kexi::_startupHandler.destroy); // post routine is installed!
+    qAddPostRoutine(Kexi::_destroyStartupHandler); // post routine is installed!
     delete d;
 }
 
 void KexiStartupHandler::slotAboutToAppQuit()
 {
     d->destroyGui();
+}
+
+//! @todo KEXI3 port getAutoopenObjects()
+#if 0
+static bool stripQuotes(const QString &item, QString &name)
+{
+    if (item.left(1) == "\"" && item.right(1) == "\"") {
+        name = item.mid(1, item.length() - 2);
+        return true;
+    }
+    name = item;
+    return false;
 }
 
 bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name)
@@ -214,6 +212,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
     } //for
     return atLeastOneFound;
 }
+#endif
 
 tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 {
