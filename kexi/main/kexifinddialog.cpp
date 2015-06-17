@@ -18,6 +18,7 @@
 */
 
 #include "kexifinddialog.h"
+#include <kexiutils/utils.h>
 
 #include <KStandardGuiItem>
 #include <KStandardAction>

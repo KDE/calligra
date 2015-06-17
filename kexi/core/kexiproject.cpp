@@ -1199,7 +1199,7 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
     if (!ts)
         return false;
     QScopedPointer<KDbFieldList> fl(ts->subList("p_id", "p_name", "p_mime", "p_url"));
-    //qDebug() << "fieldlist: " << (fl ? fl->debugString() : QString());
+    //qDebug() << "fieldlist: " << (fl ? *fl : QString());
     if (!fl)
         return false;
 

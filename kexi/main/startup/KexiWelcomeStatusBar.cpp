@@ -24,18 +24,18 @@
 #include <kexi_version.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiContextMessage.h>
+#include <kexiutils/KexiFadeWidgetEffect.h>
 #include "KexiUserFeedbackAgent.h"
 
 #include <KColorScheme>
 #include <KStandardGuiItem>
-#include <KFadeWidgetEffect>
 #include <KConfigGroup>
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <kcodecs.h>
-#include <kde_file.h>
 #include <KSharedConfig>
 #include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QEvent>
@@ -230,7 +230,7 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
         return;
     }
     QCryptographicHash md5(QCryptographicHash::Md5);
-    if (!md5.addData(file)) {
+    if (!md5.addData(&file)) {
         qWarning() << "could not check MD5 for file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
         return;
@@ -474,7 +474,7 @@ public:
         QWidget *w = widget(parent, widgetName);
         if (!w)
             return;
-        KFadeWidgetEffect *animation = new KFadeWidgetEffect(w);
+        KexiFadeWidgetEffect *animation = new KexiFadeWidgetEffect(w);
         QObject::connect(animation, SIGNAL(destroyed()), w, SLOT(hide()));
         animation->start();
     }

@@ -19,15 +19,15 @@
 
 #include "KexiStartup_p.h"
 
-#include <KStandardDirs>
-#include <kprocess.h>
-#include <kde_file.h>
+#include <KProcess>
 #include <KLocalizedString>
 
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
 #include <QProgressDialog>
+#include <QStandardPaths>
+#include <qplatformdefs.h>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
         : m_filePath(filePath)

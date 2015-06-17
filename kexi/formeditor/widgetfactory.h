@@ -25,6 +25,7 @@
 #include "WidgetInfo.h"
 
 #include <QVariant>
+#include <QRect>
 
 class QWidget;
 class QListWidget;

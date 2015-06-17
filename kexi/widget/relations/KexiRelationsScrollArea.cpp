@@ -25,6 +25,7 @@
 
 #include <KDbTableSchema>
 #include <KDbIndexSchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <KLocalizedString>
@@ -529,7 +530,7 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
 }
 
 void
-KexiRelationsScrollArea::hideAllTablesExcept(KDbTableSchema::List* tables)
+KexiRelationsScrollArea::hideAllTablesExcept(QList<KDbTableSchema*>* tables)
 {
 //! @todo what about queries?
     for (TablesHashMutableIterator it(d->tables); it.hasNext();) {

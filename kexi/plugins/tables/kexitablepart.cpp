@@ -126,7 +126,7 @@ tristate KexiTablePart::remove(KexiPart::Item *item)
 
     if (sch) {
         tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
-            KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+            KexiMainWindowIface::global()->thisWidget(), conn, sch,
             xi18n("You are about to remove table <resource>%1</resource> but following objects using this table are opened:",
                  sch->name()));
         if (res != true) {
@@ -146,13 +146,13 @@ tristate KexiTablePart::rename(KexiPart::Item *item, const QString& newName)
     if (!schema)
         return false;
     tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
-        KexiMainWindowIface::global()->thisWidget(), *conn, *schema,
+        KexiMainWindowIface::global()->thisWidget(), conn, schema,
         xi18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
              schema->name()));
     if (res != true) {
         return res;
     }
-    return conn->alterTableName(*schema, newName);
+    return conn->alterTableName(schema, newName);
 }
 
 KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sdata,
@@ -166,11 +166,11 @@ KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sd
 }
 
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
-    QWidget *parent, KDbConnection& conn,
-    KDbTableSchema& table, const QString& msg)
+    QWidget *parent, KDbConnection *conn,
+    KDbTableSchema *table, const QString& msg)
 {
     QSet<KDbConnection::TableSchemaChangeListenerInterface*>* listeners
-        = conn.tableSchemaChangeListeners(table);
+        = conn->tableSchemaChangeListeners(table);
     if (!listeners || listeners->isEmpty())
         return true;
 
@@ -187,7 +187,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     tristate res;
     if (r == KMessageBox::Yes) {
         //try to close every window
-        res = conn.closeAllTableSchemaChangeListeners(table);
+        res = conn->closeAllTableSchemaChangeListeners(table);
         if (res != true) //do not expose closing errors twice; just cancel
             res = cancelled;
     } else
@@ -253,3 +253,5 @@ KexiTablePart::TempData::TempData(QObject* parent)
         , tableSchemaChangedInPreviousView(true /*to force reloading on startup*/)
 {
 }
+
+#include "kexitablepart.moc"

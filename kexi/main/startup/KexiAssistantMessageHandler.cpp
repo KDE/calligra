@@ -26,6 +26,7 @@
 #include <KexiIcon.h>
 
 #include <KLocalizedString>
+#include <KStandardGuiItem>
 
 #include <QAction>
 

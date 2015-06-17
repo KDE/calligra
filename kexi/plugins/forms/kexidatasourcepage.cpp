@@ -25,14 +25,15 @@
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
+#include <kexiutils/KexiFadeWidgetEffect.h>
 #include <kexiproject.h>
 #include <formeditor/commands.h>
 
 #include <KDbConnection>
+#include <KDbTableOrQuerySchema>
 
 #include <KProperty>
 
-#include <KFadeWidgetEffect>
 #include <KLocalizedString>
 
 #include <QLabel>
@@ -364,9 +365,9 @@ void KexiDataSourcePage::assignPropertySet(KPropertySet* propertySet)
 
 //! @todo
 #if KexiDataSourcePage_FADE
-    KFadeWidgetEffect *animation = 0;
+    KexiFadeWidgetEffect *animation = 0;
     if (isVisible())
-        animation = new KFadeWidgetEffect(this);
+        animation = new KexiFadeWidgetEffect(this);
 #endif
     QString objectClassName;
     if (propertySet) {

@@ -237,3 +237,5 @@ KLocalizedString KexiScriptPart::i18nMessage(
         return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
+
+#include "kexiscriptpart.moc"

@@ -53,6 +53,7 @@
 #include <KDbObjectNameValidator>
 #include <KDbConnection>
 #include <KDbTableSchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbTransaction>
 #include <KDbTristate>
 #include <KDbUtils>

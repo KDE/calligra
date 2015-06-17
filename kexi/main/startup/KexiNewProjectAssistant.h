@@ -133,7 +133,8 @@ public:
     bool setConnection(KDbConnectionData* data);
 
     KexiServerDBNamePage* contents;
-    QPointer<KDbConnectionData> conndataToShow;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnectionData>
+    KDbConnectionData* conndataToShow;
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
 

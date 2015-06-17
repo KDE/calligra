@@ -25,6 +25,7 @@
 #include <kexiutils/utils.h>
 
 #include <KDbTableSchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <QPainter>
