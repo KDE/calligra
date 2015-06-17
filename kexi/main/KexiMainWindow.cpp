@@ -1358,7 +1358,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     Kexi::recentProjects()->addProjectData(*d->prj->data());
     updateReadOnlyState();
     invalidateActions();
-    enableMessages(false);
+    setMessagesEnabled(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
     d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
@@ -1485,7 +1485,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 if (!newObject(i, &openingCancelled) && !openingCancelled) {
                     not_found_msg += "<li>";
                     not_found_msg += (xi18n("cannot create object of type \"%1\"", info->value("type")) +
-                                      internalReason(d->prj) + "<br></li>");
+                                      internalReason(d->prj->result()) + "<br></li>");
                 } else
                     d->wasAutoOpen = true;
                 continue;
@@ -1517,7 +1517,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                     not_found_msg += xi18n("script not found");
                 else
                     not_found_msg += xi18n("object not found");
-                not_found_msg += (internalReason(d->prj) + "<br></li>");
+                not_found_msg += (internalReason(d->prj->result()) + "<br></li>");
                 continue;
             }
             // * EXECUTE, PRINT, PRINT PREVIEW
@@ -1525,7 +1525,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 tristate res = executeItem(item);
                 if (false == res) {
                     not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + xi18n("cannot execute object") +
-                                      internalReason(d->prj) + "<br></li>");
+                                      internalReason(d->prj->result()) + "<br></li>");
                 }
                 continue;
             }
@@ -1534,7 +1534,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 tristate res = printItem(item);
                 if (false == res) {
                     not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot print object") +
-                                      internalReason(d->prj) + "<br></li>");
+                                      internalReason(d->prj->result()) + "<br></li>");
                 }
                 continue;
             }
@@ -1542,7 +1542,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 tristate res = printPreviewForItem(item);
                 if (false == res) {
                     not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot make print preview of object") +
-                                      internalReason(d->prj) + "<br></li>");
+                                      internalReason(d->prj->result()) + "<br></li>");
                 }
                 continue;
             }
@@ -1566,14 +1566,14 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                     not_found_msg += xi18n("cannot open object");
                 else
                     not_found_msg += openObjectMessage;
-                not_found_msg += internalReason(d->prj) + "<br></li>";
+                not_found_msg += internalReason(d->prj->result()) + "<br></li>";
                 continue;
             } else {
                 d->wasAutoOpen = true;
             }
         }
     }
-    enableMessages(true);
+    setMessagesEnabled(true);
 
     if (!not_found_msg.isEmpty())
         showErrorMessage(xi18n("You have requested selected objects to be automatically opened "
@@ -3430,11 +3430,11 @@ void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newC
         return;
     }
     QString newCaption = _newCaption.trimmed();
-    enableMessages(false); //to avoid double messages
-    const bool res = d->prj->setObjectCaption(*item, newCaption);
-    enableMessages(true);
+    setMessagesEnabled(false); //to avoid double messages
+    const bool res = d->prj->setObjectCaption(item, newCaption);
+    setMessagesEnabled(true);
     if (!res) {
-        showErrorMessage(d->prj, xi18n("Setting caption for object \"%1\" failed.", newCaption));
+        showErrorMessage(xi18n("Setting caption for object \"%1\" failed.", newCaption), d->prj);
         *success = false;
         return;
     }
