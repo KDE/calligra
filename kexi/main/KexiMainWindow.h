@@ -25,7 +25,7 @@
 
 #include "keximain_export.h"
 
-#include <kmainwindow.h>
+#include <KMainWindow>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
 
@@ -54,11 +54,14 @@ public Q_SLOTS:
     tristate closeAllTabs();
 
 protected:
-    //! Implemented to add context menu
-    void contextMenu(int index, const QPoint& point);
+    //! Shows context menu for tab at @a index at point @a point.
+    //! If @a index is -1, context menu for empty area is requested.
+    void showContextMenuForTab(int index, const QPoint& point);
 
     //! Reimplemented to hide frame when no tabs are displayed
     virtual void paintEvent(QPaintEvent * event);
+
+    virtual void mousePressEvent(QMouseEvent *event);
 
     KexiMainWidget *m_mainWidget;
     QAction *m_closeAction;
