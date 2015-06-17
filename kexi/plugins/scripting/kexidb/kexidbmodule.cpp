@@ -133,42 +133,46 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         KConfigGroup config(&_config, groupkey);
         KDbConnectionData* data = new KDbConnectionData();
         int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
-        data->setFileName(QString());
-        data->caption = config.readEntry("caption");
-        data->description = config.readEntry("comment");
+        data->setDatabaseName(QString());
+        data->setCaption(config.readEntry("caption"));
+        data->setDescription(config.readEntry("comment"));
         QString dbname = config.readEntry("name");
-        data->driverName = config.readEntry("engine");
-        data->hostName = config.readEntry("server");
-        data->port = config.readEntry("port", 0);
-        data->useLocalSocketFile = config.readEntry("useLocalSocketFile", false);
-        data->localSocketFileName = config.readEntry("localSocketFile");
+        data->setDriverId(config.readEntry("engine"));
+        data->setHostName(config.readEntry("server"));
+        data->setPort(config.readEntry("port", 0));
+        data->setUseLocalSocketFile(config.readEntry("useLocalSocketFile", false));
+        data->setLocalSocketFileName(config.readEntry("localSocketFile"));
 
         if (version >= 2 && config.hasKey("encryptedPassword")) {
-            data->password = config.readEntry("encryptedPassword");
-            uint len = data->password.length();
-            for (uint i = 0; i < len; i++)
-                data->password[i] = QChar(data->password[i].unicode() - 47 - i);
+            QString password(config.readEntry("encryptedPassword"));
+            uint len = password.length();
+            for (uint i = 0; i < len; i++) {
+                password[i] = QChar(password[i].unicode() - 47 - i);
+            }
+            data->setPassword(password);
         }
-        if (data->password.isEmpty())
-            data->password = config.readEntry("password");
+        if (data->password().isEmpty()) {
+            data->setPassword(config.readEntry("password"));
+        }
 
-        data->savePassword = ! data->password.isEmpty();
-        data->userName = config.readEntry("user");
+        data->setSavePassword(!data->password().isEmpty());
+        data->setUserName(config.readEntry("user"));
 
         KexiDBConnectionData* c = new KexiDBConnectionData(this, data, true);
         c->setDatabaseName(dbname);
         return c;
     }
 
-    QString const drivername = m_drivermanager.lookupByMime(mimename);
-    if (drivername.isEmpty()) {
+    const QStringList driverIds = m_drivermanager.driverIdsForMimeType(mimename);
+    if (driverIds.isEmpty()) {
         qDebug() << "No driver, filename=" << filename << "mimename=" << mimename;
         return 0;
     }
 
     KDbConnectionData* data = new KDbConnectionData();
-    data->setFileName(filename);
-    data->driverName = drivername;
+    data->setDatabaseName(filename);
+    //! @todo there can be more than one driver
+    data->setDriverId(driverIds.first());
     return new KexiDBConnectionData(this, data, true);
 }
 

@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
     //connection data that can be later reused
     KDbConnectionData conn_data;
-    conn_data.setFileName(db_name);
+    conn_data.setDatabaseName(db_name);
 
     KDbConnection *conn = driver->createConnection(conn_data);
     if (!conn || driver->result().isError()) {
