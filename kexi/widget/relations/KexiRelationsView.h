@@ -83,7 +83,7 @@ public Q_SLOTS:
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KDbTableSchema::List* tables);
+    void hideAllTablesExcept(QList<KDbTableSchema*>* tables);
 
 protected Q_SLOTS:
     void slotAddTable();

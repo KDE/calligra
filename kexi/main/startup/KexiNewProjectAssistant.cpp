@@ -43,16 +43,18 @@
 #include <KDbUtils>
 #include <KDbObject>
 #include <KDbDriverManager>
+#include <KDbIdentifierValidator>
 
 #include <KIconLoader>
-#include <QFileDialog>
 #include <KRecentDirs>
+#include <KStandardGuiItem>
 
 #include <QDebug>
 #include <QLayout>
 #include <QCheckBox>
 #include <QProgressBar>
 #include <QFileInfo>
+#include <QFileDialog>
 
 class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
 {

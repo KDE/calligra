@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QVariant>
 #include <QTextStream>
+#include <QDomElement>
 
 #include "form.h"
 #include "container.h"

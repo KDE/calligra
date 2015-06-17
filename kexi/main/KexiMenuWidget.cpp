@@ -32,7 +32,6 @@
 #include <KColorScheme>
 #include <KColorUtils>
 #include <KIconLoader>
-#include <KStandardDirs>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 #include <KLocalizedString>

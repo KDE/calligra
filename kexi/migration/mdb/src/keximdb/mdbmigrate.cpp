@@ -417,7 +417,7 @@ bool MDBMigrate::getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef)
         p_idx->addField(table->field(idx->key_col_num[i] - 1));
     }
 
-    //qDebug() << p_idx->debugString();
+    //qDebug() << *p_idx;
 
     // ... and add it to the table definition
     // but only if the PK has only one field, so far :o(

@@ -20,17 +20,7 @@
 */
 
 #include "widgetlibrary.h"
-
-#include <QDomDocument>
-#include <QMenu>
-#include <QDebug>
-
-#include <KActionCollection>
-#include <KLocalizedString>
-
-#include <KoServiceLocator.h>
 #include <KexiIcon.h>
-
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 #include "libactionwidget.h"
@@ -40,7 +30,12 @@
 #include "FormWidgetInterface.h"
 #include "objecttree.h"
 
-#include <kexi_global.h>
+#include <KActionCollection>
+#include <KLocalizedString>
+
+#include <QDomDocument>
+#include <QMenu>
+#include <QDebug>
 
 namespace KFormDesigner
 {

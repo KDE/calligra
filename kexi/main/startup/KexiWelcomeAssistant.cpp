@@ -40,6 +40,7 @@
 #include <QDebug>
 #include <QCheckBox>
 #include <QTimer>
+#include <QHBoxLayout>
 
 KexiMainWelcomePage::KexiMainWelcomePage(
    KexiWelcomeAssistant* assistant, QWidget* parent)

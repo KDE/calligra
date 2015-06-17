@@ -32,6 +32,7 @@
 
 #include <KDbCursor>
 #include <KDbUtils>
+#include <KDbTableOrQuerySchema>
 
 #include <KSharedConfig>
 #include <KLocalizedString>
