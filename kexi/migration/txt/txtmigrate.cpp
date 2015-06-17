@@ -62,7 +62,7 @@ bool TxtMigrate::drv_disconnect()
 
 bool TxtMigrate::drv_tableNames(QStringList& tablenames)
 {
-  tablenames << data()->source->dbFileName();
+  tablenames << data()->source->databaseName();
   return true;
 }
 
