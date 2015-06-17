@@ -193,7 +193,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KDbConnectionData* data)
     if (conndataToShow) {
         setDescription(
             xi18nc("@info", "Select project on database server <resource>%1 (%2)</resource> to open.",
-                  conndataToShow->caption, conndataToShow->toUserVisibleString()));
+                  conndataToShow->caption(), conndataToShow->toUserVisibleString()));
     }
     return true;
 }

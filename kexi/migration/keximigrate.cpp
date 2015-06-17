@@ -164,7 +164,7 @@ bool KexiMigrate::isSourceAndDestinationDataSourceTheSame() const
                sourcedata->hostName == destinationdata->hostName && // same host
                sourcedata->fileName() == destinationdata->fileName() && // same filename
                sourcedata->dbPath() == destinationdata->dbPath() && // same database path
-               sourcedata->dbFileName() == destinationdata->dbFileName() // same database filename
+               sourcedata->databaseName() == destinationdata->databaseName() // same database filename
            );
 }
 

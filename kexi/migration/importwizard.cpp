@@ -939,7 +939,7 @@ void ImportWizard::next()
         if (!fileBasedSrcSelected()) {
             // make sure we have password if needed
             tristate passwordNeeded = false;
-            if (condata->password.isNull()) {
+            if (condata->password().isEmpty()) {
                 passwordNeeded = KexiDBPasswordDialog::getPasswordIfNeeded(condata, this);
             }
             bool ok = passwordNeeded != cancelled;
@@ -967,7 +967,7 @@ void ImportWizard::next()
             // make sure we have password if needed
             tristate passwordNeeded = false;
             KDbConnectionData* condata = d->dstConn->selectedConnectionData();
-            if (condata->password.isNull()) {
+            if (condata->password().isEmpty()) {
                 passwordNeeded = KexiDBPasswordDialog::getPasswordIfNeeded(condata, this);
             }
             bool ok = passwordNeeded != cancelled;
