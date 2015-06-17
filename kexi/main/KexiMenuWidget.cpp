@@ -66,6 +66,8 @@ const int calligraLogoPixmapInternalWidth = 100;
 const int calligraLogoPixmapInternalHeight = 71;
 const char calligraUrl[] = "http://www.calligra.org";
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
  : _componentData("oxygen", 0, KComponentData::SkipMainComponentRegistration)
@@ -356,6 +358,7 @@ void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
 }
 
 // </oxygen>
+#endif // 0
 
 class KexiMenuWidgetActionPrivate
 {
@@ -416,9 +419,15 @@ int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 
 void KexiMenuWidgetPrivate::init()
 {
+//! @todo KEXI3 port OxygenHelper
+#if 0
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
     bespin = oxygenHelper ? false : q->style()->objectName() == "bespin";
     qtcurve = oxygenHelper ? false : q->style()->objectName() == "qtcurve";
+#else
+    bespin = q->style()->objectName() == "bespin";
+    qtcurve = q->style()->objectName() == "qtcurve";
+#endif
 
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);
@@ -2193,11 +2202,14 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     QPainter p(this);
     QRegion emptyArea = QRegion(rect());
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
     if (d->oxygenHelper) {
         //d->oxygenHelper->renderWindowBackground(&p, rect(), this, palette());
         d->oxygenHelper->renderMenuBackground(&p, rect(), this, palette());
 //        d->oxygenHelper->drawFloatFrame(&p, rect(), palette().window().color(), true);
     }
+#endif
 
     QStyleOptionMenuItem menuOpt;
     menuOpt.initFrom(this);
@@ -2273,9 +2285,12 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
         bool transparentBackground = !(opt.state & QStyle::State_Selected);
+//! @todo KEXI3 port OxygenHelper
+#if 0
         if (d->oxygenHelper && action->isSeparator()) {
             transparentBackground = false;
         }
+#endif
         if (transparentBackground) {
             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
             if (!d->bespin) {
