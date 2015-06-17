@@ -34,10 +34,10 @@
 #include "pixmapcollection.h"
 #endif
 
-#include <kexiutils/styleproxy.h>
-
 #include <KPropertySet>
 #include <KProperty>
+
+#include <QProxyStyle>
 
 class QStyleOption;
 
@@ -47,10 +47,10 @@ namespace KFormDesigner
 class ObjectTree;
 
 //! Used to alter the widget's style at design time
-class DesignModeStyle : public KexiUtils::StyleProxy
+class DesignModeStyle : public QProxyStyle
 {
 public:
-    explicit DesignModeStyle(QStyle* parentStyle, QObject *parent = 0);
+    explicit DesignModeStyle(QStyle* parentStyle);
 
     //! Reimplemented to remove handling of the State_MouseOver state.
     virtual void drawControl(ControlElement element, const QStyleOption *option,

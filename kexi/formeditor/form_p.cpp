@@ -28,8 +28,8 @@
 
 using namespace KFormDesigner;
 
-DesignModeStyle::DesignModeStyle(QStyle* parentStyle, QObject *parent)
-    : KexiUtils::StyleProxy(parentStyle, parent)
+DesignModeStyle::DesignModeStyle(QStyle* parentStyle)
+    : QProxyStyle(parentStyle)
 {
 }
 
@@ -37,7 +37,7 @@ void DesignModeStyle::drawControl(ControlElement element, const QStyleOption *op
                                   QPainter *p, const QWidget *w) const
 {
     QStyleOption *so = alterOption(element, option);
-    KexiUtils::StyleProxy::drawControl(element, so ? so : option, p, w);
+    QProxyStyle::drawControl(element, so ? so : option, p, w);
     delete so;
 }
 
