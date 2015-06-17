@@ -84,3 +84,5 @@ bool KexiCSVImportExportPart::executeCommand(const char* commandName,
     }
     return false;
 }
+
+#include "kexicsv_importexportpart.moc"

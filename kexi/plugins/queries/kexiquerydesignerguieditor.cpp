@@ -979,7 +979,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     const int columnPosition = columnsOrder.value(column);
                     record = d->data->at(columnPosition);
                     rowPropertySet = d->sets->at(columnPosition);
-                    qDebug() << "\tSetting \"" << orderByColumn->debugString() << "\" sorting for record #"
+                    qDebug() << "\tSetting \"" << *orderByColumn << "\" sorting for record #"
                         << columnPosition;
                 }
             }
@@ -991,7 +991,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             d->dataTable->dataAwareObject()->insertItem(record, row_num);
             rowPropertySet = createPropertySet(row_num, tableName, field->name(), true /*newOne*/);
             propertySetSwitched();
-            qDebug() << "\tSetting \"" << orderByColumn->debugString() << "\" sorting for invisible field"
+            qDebug() << "\tSetting \"" << *orderByColumn << "\" sorting for invisible field"
                 << field->name() << ", table " << tableName << " -row #" << row_num;
             row_num++;
         }

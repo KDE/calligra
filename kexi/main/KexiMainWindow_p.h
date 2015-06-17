@@ -38,21 +38,40 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QStackedLayout>
+#include <QProxyStyle>
+#include <QStyleOptionTabV3>
+#include <QTabBar>
+#include <QTimer>
+#include <QDockWidget>
+#include <QShortcut>
 
 #include <KToolBar>
 #include <KHelpMenu>
-
-#include <KexiIcon.h>
+#include <KAboutData>
+#include <KActionCollection>
+#include <KMultiTabBar>
+#include <KActionMenu>
 
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
 #include "KexiMenuWidget.h"
+#include "kexifinddialog.h"
+#include "kexistatusbar.h"
+#include "KexiStartup.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/styleproxy.h>
 #include <kexiutils/KexiTester.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiFadeWidgetEffect.h>
+#include <widget/utils/KexiDockableWidget.h>
+#include <widget/properties/KexiPropertyEditorView.h>
+#include <widget/KexiNameDialog.h>
 #include <core/kexi.h>
+#include <core/KexiWindow.h>
+#include <core/kexipartmanager.h>
+#include <core/kexipartinfo.h>
+#include <KexiIcon.h>
+#include <kde_file.h>
 
 class KexiProjectNavigator;
 
@@ -1931,7 +1950,9 @@ class KexiMainMenuActionShortcut : public QShortcut
 {
     Q_OBJECT
 public:
-    KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
+    KexiMainMenuActionShortcut(const QKeySequence& key, QAction *action, QWidget *parent);
+
+    virtual ~KexiMainMenuActionShortcut();
 
 protected Q_SLOTS:
     //! Triggers associated action only when this action is enabled

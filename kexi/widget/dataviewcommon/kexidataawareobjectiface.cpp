@@ -597,11 +597,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 {
                     qDebug() << _i << (ulong)(*ii)
                              << (ii == m_itemIterator ? "CURRENT" : "")
-                             << (*ii)->debugString();
+                             << *(*ii);
                     _i++;
                 }
                 qDebug() << "~" << m_curRow << (ulong)(*m_itemIterator)
-                         << (*m_itemIterator)->debugString();
+                         << *(*m_itemIterator);
 #endif
                 if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
                     && m_curRow == (rowCount() - 1))

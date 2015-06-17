@@ -51,6 +51,7 @@
 #include <QByteArray>
 #include <QHash>
 #include <QDebug>
+#include <QMenu>
 
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"
@@ -559,6 +560,7 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
 
 tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
+    Q_ASSERT(dontStore);
     if (!d->view->acceptRowEdit())
         return false;
     tristate res = true;
@@ -577,7 +579,7 @@ tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontSt
             int r = KMessageBox::warningYesNoCancel(this,
                 xi18n("Saving changes for existing table design is now required.")
                 + "\n"
-                + d->messageForSavingChanges(emptyTable, /*skip warning?*/!isPhysicalAlteringNeeded()),
+                + d->messageForSavingChanges(&emptyTable, /*skip warning?*/!isPhysicalAlteringNeeded()),
                 QString(),
                 KStandardGuiItem::save(), KStandardGuiItem::discard(), KStandardGuiItem::cancel(),
                 QString(),
@@ -586,8 +588,8 @@ tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontSt
                 res = cancelled;
             else
                 res = true;
-            dontStore = (r != KMessageBox::Yes);
-            if (!dontStore)
+            *dontStore = (r != KMessageBox::Yes);
+            if (!*dontStore)
                 d->dontAskOnStoreData = true;
         }
 //</temporary>
@@ -837,7 +839,7 @@ void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
             default:;
         }
 
-        qDebug() << field.debugString();
+        qDebug() << field;
 
         //create a new property set:
         KPropertySet *newSet = createPropertySet(row, field, true);
@@ -1091,7 +1093,7 @@ KDbField * KexiTableDesignerView::buildField(const KPropertySet &set) const
 {
     //create a map of property values
     qDebug() << set["type"].value();
-    QMap<QByteArray, QVariant> values(KPropertyValues(set));
+    QMap<QByteArray, QVariant> values(set.propertyValues());
     //remove internal values, to avoid creating custom field's properties
     KDbField *field = new KDbField();
 
@@ -1109,7 +1111,7 @@ KDbField * KexiTableDesignerView::buildField(const KPropertySet &set) const
     }
     //assign properties to the field
     // (note that "objectType" property will be saved as custom property)
-    if (!KDb::setFieldProperties(*field, values)) {
+    if (!KDb::setFieldProperties(field, values)) {
         delete field;
         return 0;
     }
@@ -1230,7 +1232,7 @@ tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilen
                                                     );
                 d->view->data()->updateRecordEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
                     QVariant(KDbField::IntegerGroup - 1/*counting from 0*/));
-                if (!d->view->data()->saveRecordChanges(*d->view->selectedItem(), true)) {
+                if (!d->view->data()->saveRecordChanges(d->view->selectedItem(), true)) {
                     return cancelled;
                 }
                 slotTogglePrimaryKey();
@@ -1393,14 +1395,14 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 //!< @todo this is temporary flag before we switch entirely to real alter table
     bool realAlterTableCanBeUsed = false;
     if (res == true) {
-        alterTableHandler = new KDbAlterTableHandler(*conn);
+        alterTableHandler = new KDbAlterTableHandler(conn);
         alterTableHandler->setActions(actions);
 
         if (!d->tempStoreDataUsingRealAlterTable) {
             //only compute requirements
             KDbAlterTableHandler::ExecutionArguments args;
             args.onlyComputeRequirements = true;
-            (void)alterTableHandler->execute(tempData()->table->name(), args);
+            (void)alterTableHandler->execute(tempData()->table->name(), &args);
             res = args.result;
             if (   res == true
                 && 0 == (args.requirements & (0xffff ^ KDbAlterTableHandler::SchemaAlteringRequired)))
@@ -1412,10 +1414,10 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 
     if (res == true) {
         res = KexiTablePart::askForClosingObjectsUsingTableSchema(
-                  this, conn, *tempData()->table,
+                  this, conn, tempData()->table,
                   xi18n("You are about to change the design of table \"%1\" "
-                       "but following objects using this table are opened:",
-                       tempData()->table->name()));
+                        "but following objects using this table are opened:",
+                        tempData()->table->name()));
     }
 
     if (res == true) {
@@ -1426,7 +1428,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
             // - inform about removing the current table and ask for confirmation
             if (!d->dontAskOnStoreData && !dontAsk) {
                 bool emptyTable;
-                const QString msg = d->messageForSavingChanges(emptyTable);
+                const QString msg = d->messageForSavingChanges(&emptyTable);
                 if (!emptyTable) {
                     if (KMessageBox::No == KMessageBox::questionYesNo(this, msg))
                         res = cancelled;
@@ -1445,17 +1447,17 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
             res = buildSchema(*newTable);
             qDebug() << "BUILD SCHEMA:" << *newTable;
 
-            res = conn->alterTable(*tempData()->table, *newTable);
+            res = conn->alterTable(tempData()->table, newTable);
             if (res != true)
                 window()->setStatus(conn, "");
         } else {
             KDbAlterTableHandler::ExecutionArguments args;
-            newTable = alterTableHandler->execute(tempData()->table->name(), args);
+            newTable = alterTableHandler->execute(tempData()->table->name(), &args);
             res = args.result;
             qDebug() << "ALTER TABLE EXECUTE: "
             << res.toString();
             if (true != res) {
-                alterTableHandler->debugError();
+                qDebug() << alterTableHandler->result();
                 window()->setStatus(alterTableHandler, "");
             }
         }
@@ -1619,9 +1621,10 @@ QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result
     static_cast<KDbObject&>(tempTable)
         = static_cast<KDbObject&>(*tempData()->table);
     result = buildSchema(tempTable, true /*beSilent*/);
-    if (true != result)
+    if (true != result) {
         return QString();
-    return tempTable.debugString(false /*without name*/);
+    }
+    return KDbUtils::debugString(tempTable);
 }
 
 // -- low-level actions used by undo/redo framework
@@ -1858,13 +1861,13 @@ bool KexiTableDesignerView::isPhysicalAlteringNeeded()
         return true;
 
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KDbAlterTableHandler *alterTableHandler = new KDbAlterTableHandler(*conn);
+    KDbAlterTableHandler *alterTableHandler = new KDbAlterTableHandler(conn);
     alterTableHandler->setActions(actions);
 
     //only compute requirements
     KDbAlterTableHandler::ExecutionArguments args;
     args.onlyComputeRequirements = true;
-    (void)alterTableHandler->execute(tempData()->table->name(), args);
+    (void)alterTableHandler->execute(tempData()->table->name(), &args);
     res = args.result;
     delete alterTableHandler;
     if (   res == true

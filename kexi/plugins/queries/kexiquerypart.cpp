@@ -258,3 +258,5 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 {
     m_queryChangedInPreviousView = set;
 }
+
+#include "kexiquerypart.moc"

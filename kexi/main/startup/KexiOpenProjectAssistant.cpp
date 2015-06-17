@@ -149,6 +149,7 @@ KexiMainOpenProjectPage::~KexiMainOpenProjectPage()
 KexiProjectDatabaseSelectionPage::KexiProjectDatabaseSelectionPage(
    KexiOpenProjectAssistant* parent)
  : KexiAssistantPage(xi18nc("@title:window", "Open Project on Database Server"), QString(), parent)
+ , conndataToShow(0)
  , m_assistant(parent)
 {
     setBackButtonVisible(true);

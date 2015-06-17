@@ -24,6 +24,7 @@
 #include "KexiRelationsScrollArea.h"
 
 #include <KDbTableSchema>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <QPushButton>

@@ -23,18 +23,14 @@
 #include "migratemanager_p.h"
 #include "keximigrate.h"
 #include "keximigrate_p.h"
-
 #include <core/KexiMainWindowIface.h>
 
-#include <KoServiceLocator.h>
-
-#include <kservice.h>
 #include <KLocalizedString>
-
-#include <assert.h>
 
 #include <QDebug>
 #include <QApplication>
+
+#include <assert.h>
 
 //remove debug
 #undef KexiDBDbg

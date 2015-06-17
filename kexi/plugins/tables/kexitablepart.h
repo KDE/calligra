@@ -55,8 +55,8 @@ public:
     };
 
     static tristate askForClosingObjectsUsingTableSchema(
-        QWidget *parent, KDbConnection& conn,
-        KDbTableSchema& table, const QString& msg);
+        QWidget *parent, KDbConnection *conn,
+        KDbTableSchema *table, const QString& msg);
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;

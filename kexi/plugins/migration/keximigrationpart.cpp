@@ -53,3 +53,5 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     w->setObjectName(objName);
     return w;
 }
+
+#include "keximigrationpart.moc"

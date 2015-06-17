@@ -17,6 +17,7 @@
 */
 
 #include "keximigratereportdata.h"
+#include <KDbTableOrQuerySchema>
 
 class KexiMigrateReportData::Private
 {

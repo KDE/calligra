@@ -574,12 +574,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     }
 
     if (createDB) {
-        bool creationNancelled;
+        bool creationCancelled;
         KexiGUIMessageHandler gui;
-        KexiProject *prj = KexiProject::createBlankProject(creationNancelled, *projectData(), &gui);
+        KexiProject *prj = KexiProject::createBlankProject(&creationCancelled, *projectData(), &gui);
         bool ok = prj != 0;
         delete prj;
-        if (creationNancelled)
+        if (creationCancelled)
             return cancelled;
         if (!alsoOpenDB) {
             if (ok) {
@@ -637,8 +637,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             cdata.setFileName(selFile);
             QString detectedDriverName;
             KexiStartupData::Import importData = KexiStartupData::importActionData();
-            const tristate res = detectActionForFile(&importData, &detectedDriverName,
-                                 cdata.driverName, selFile);
+            const tristate res = detectActionForFile(&importData, &detectedDriverId,
+                                 cdata.driverId(), selFile);
             if (true != res)
                 return res;
             KexiStartupData::setImportActionData(importData);
@@ -658,8 +658,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 cdata.setFileName(selFile);
                 QString detectedDriverName;
                 KexiStartupData::Import importData = KexiStartupData::importActionData();
-                const tristate res = detectActionForFile(&importData, &detectedDriverName,
-                                     cdata.driverName, selFile);
+                const tristate res = detectActionForFile(&importData, &detectedDriverId,
+                                     cdata.driverId(), selectedFile);
                 if (true != res)
                     return res;
                 KexiStartupData::setImportActionData(importData);
@@ -676,7 +676,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 KDbConnectionData *cdata = d->startupDialog->selectedExistingConnection();
                 //ok, now we will try to show projects for this connection to the user
                 bool cancelled;
-                KexiStartupData::setProjectData(selectProject(cdata, cancelled));
+                KexiStartupData::setProjectData(selectProject(cdata, &cancelled));
                 if ((!KexiStartupData::projectData() && !cancelled) || cancelled) {
                     //try again
                     return init(0, 0);
@@ -886,7 +886,7 @@ KexiProjectData*
 KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool *cancelled, QWidget *parent)
 {
     clearStatus();
-    cancelled = false;
+    *cancelled = false;
     if (!cdata)
         return 0;
     if (!cdata->savePassword && cdata->password.isEmpty()) {
@@ -896,7 +896,7 @@ KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool *cancelled, QWi
         if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
 
         } else {
-            cancelled = true;
+            *cancelled = true;
             return 0;
         }
     }
@@ -916,7 +916,7 @@ KexiStartupHandler::selectProject(KDbConnectionData *cdata, bool *cancelled, QWi
         return 0;
     }
     if (prjdlg.exec() != QDialog::Accepted) {
-        cancelled = true;
+        *cancelled = true;
         return 0;
     }
     if (prjdlg.selectedProjectData()) {
