@@ -35,10 +35,8 @@ public Q_SLOTS:
     virtual void accept();
 
 private:
-    KAboutData *copyAboutData();
     void collectData();
 
-    KAboutData *m_aboutData;
     QString m_op_sys;
     QString m_rep_platform;
     Q_DISABLE_COPY(KexiBugReportDialog)
