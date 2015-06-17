@@ -974,4 +974,3 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
                            QDir::toNativeSeparators(fileName)));
     }
 }
-

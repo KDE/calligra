@@ -50,9 +50,11 @@ tristate SQLite2ToSQLite3Migration::run()
     if (m_run)
         return false;
     m_run = true;
-    const QString ksqlite2to3_app = KStandardDirs::findExe("ksqlite2to3");
-    if (ksqlite2to3_app.isEmpty())
+    const QString ksqlite2to3_app = QStandardPaths::findExecutable("ksqlite2to3");
+    if (ksqlite2to3_app.isEmpty()) {
+        qWarning() << "ksqlite2to3 executable not found";
         return false;
+    }
 
     QFileInfo fi(m_filePath);
     if (fi.isSymLink()) {
@@ -60,7 +62,7 @@ tristate SQLite2ToSQLite3Migration::run()
         fi = QFileInfo(m_filePath);
     }
     //remember permissions of m_filePath
-    m_restoreStat = (0 == KDE_stat(QFile::encodeName(m_filePath), &m_st));
+    m_restoreStat = (0 == QT_STAT(QFile::encodeName(m_filePath), &m_st));
 
     m_process = new KProcess(this, "process");
     *m_process << ksqlite2to3_app << m_filePath;
