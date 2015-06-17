@@ -46,11 +46,12 @@ KexiTextMessageHandler::Private::~Private()
 
 }
 
-KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)
+KexiTextMessageHandler::KexiTextMessageHandler(QString *messageTarget, QString *detailsTarget)
         : KexiGUIMessageHandler(0)
-        ,d(new Private(&messageTarget, &detailsTarget))
+        ,d(new Private(messageTarget, detailsTarget))
 {
-
+    Q_ASSERT(messageTarget);
+    Q_ASSERT(detailsTarget);
 }
 
 KexiTextMessageHandler::~KexiTextMessageHandler()
@@ -58,20 +59,31 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
     delete d;
 }
 
-void KexiTextMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
+void KexiTextMessageHandler::showErrorMessage(const QString &title, const QString &details)
 {
-    showMessageInternal(KDbMessageHandler::Error, title, details);
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(title, details);
+        return;
+    }
+    showMessage(KDbMessageHandler::Error, title, details);
 }
 
-void KexiTextMessageHandler::showMessageInternal(MessageType type,
-                                                 const QString &title, const QString &details,
-                                                 const QString& dontShowAgainName)
+void KexiTextMessageHandler::showMessage(MessageType type,
+                                         const QString &title, const QString &details,
+                                         const QString& dontShowAgainName)
 {
     Q_UNUSED(type);
     Q_UNUSED(dontShowAgainName);
-    if (!m_enableMessages)
+    if (!messagesEnabled()) {
         return;
-
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showMessage(type, title, details, dontShowAgainName);
+        return;
+    }
     //'wait' cursor is a nonsense now
     KexiUtils::removeWaitCursor();
 
