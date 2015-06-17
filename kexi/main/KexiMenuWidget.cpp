@@ -396,10 +396,8 @@ KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, Q
     QScopedPointer<QAction> tmp(KStandardAction::create(id, 0, 0, 0));
     setIcon(tmp->icon());
     setText(tmp->text());
-    setShortcut(tmp->shortcut(DefaultShortcut), DefaultShortcut);
-    setShortcut(tmp->shortcut(ActiveShortcut), ActiveShortcut);
+    setShortcut(tmp->shortcut());
 }
-
 
 void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
