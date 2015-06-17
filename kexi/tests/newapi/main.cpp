@@ -162,7 +162,7 @@ int main(int argc, char** argv)
     if (gui) {
         app = new KApplication(true);
         app->setWindowIcon(koIcon("table"));
-        instance = new KComponentData(KGlobal::mainComponent());
+        instance = new KComponentData(KAboutData::applicationData().displayName());
         KIconLoader::global()->addAppDir("kexi");
     } else {
         instance = new KComponentData(prgname);
