@@ -144,8 +144,8 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 #endif
     d->maxTypeNameTextWidth = 0;
     QFontMetrics fm(font());
-    for (uint i = 1; i <= (uint)types.count(); i++) {
-        types[i-1] = KDbField::typeGroupName(i);
+    for (int i = KDbField::TextGroup; i <= types.count(); i++) {
+        types[i-1] = KDbField::typeGroupName(KDb::intToFieldTypeGroup(i));
         d->maxTypeNameTextWidth = qMax(d->maxTypeNameTextWidth, fm.width(types[i-1]));
     }
     col->field()->setEnumHints(types);
@@ -1682,10 +1682,13 @@ void KexiTableDesignerView::insertFieldInternal(int row, KPropertySet* set, //co
     }
     d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_CAPTION,
                          set ? (*set)["caption"].value() : QVariant(caption));
-    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE,
-                         set ? (int)KDbField::typeGroup((*set)["type"].value().toInt()) - 1/*counting from 0*/
-                         : (((int)KDbField::TextGroup) - 1)/*default type, counting from 0*/
-                        );
+    KDbField::TypeGroup tg;
+    if (set) {
+        tg = KDbField::typeGroup(KDb::intToFieldType((*set)["type"].value().toInt()));
+    } else {
+        tg = KDbField::TextGroup; // default type
+    }
+    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE, int(tg) - 1);
     d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_DESC,
                          set ? (*set)["description"].value() : QVariant());
     if (!addCommand) {
@@ -1766,7 +1769,7 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
     if (propertyName == "type") {
         d->slotPropertyChanged_subType_enabled = false;
         d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE,
-                                             int(KDbField::typeGroup(newValue.toInt())) - 1);
+            int(KDbField::typeGroup(KDb::intToFieldType(newValue.toInt()))) - 1);
         d->view->data()->saveRecordChanges(record);
         d->addHistoryCommand_in_slotRowUpdated_enabled = true;
         property.setValue(newValue); //delayed type update (we needed to have subtype set properly)
@@ -1877,4 +1880,3 @@ bool KexiTableDesignerView::isPhysicalAlteringNeeded()
     }
     return true;
 }
-
