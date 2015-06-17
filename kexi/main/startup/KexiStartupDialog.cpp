@@ -167,7 +167,7 @@ void KexiStartupDialog::showEvent(QShowEvent *e)
     //just some cleanup
     d->result = -1;
 
-    QDialog::centerOnScreen(this);
+    //! @todo QDialog::centerOnScreen(this);
 }
 
 int KexiStartupDialog::result() const
