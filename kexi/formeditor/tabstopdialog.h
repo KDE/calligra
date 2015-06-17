@@ -45,6 +45,8 @@ public:
 
     bool autoTabStops() const;
 
+    using QDialog::exec;
+
 public Q_SLOTS:
     int exec(KFormDesigner::Form *form);
 
