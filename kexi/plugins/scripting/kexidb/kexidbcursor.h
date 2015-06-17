@@ -62,8 +62,7 @@ class KexiDBConnection;
  * connection = driver.createConnection(connectiondata)
  * if not connection.connect(): raise "Failed to connect"
  * if not connection.useDatabase( connectiondata.databaseName() ):
- *     if not connection.useDatabase( connectiondata.fileName() ):
- *         raise "Failed to use database"
+ *     raise "Failed to use database"
  *
  * table = connection.tableSchema("emp")
  * query = table.query()

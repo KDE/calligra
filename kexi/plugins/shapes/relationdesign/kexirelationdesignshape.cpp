@@ -208,7 +208,7 @@ void KexiRelationDesignShape::setConnectionData(KDbConnectionData *cd)
 
         if (m_connection) {
             if (m_connection->connect()) {
-                if (m_connection->useDatabase(m_connectionData->dbFileName())) {
+                if (m_connection->useDatabase(m_connectionData->databaseName())) {
                     m_database = m_connection->currentDatabase();
                 }
             } else {

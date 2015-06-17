@@ -1325,7 +1325,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
             {
                 const bool anotherProjectAlreadyOpened = prj;
                 tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata",
-                               projectData.databaseName(), projectData.connectionData());
+                                   projectData.databaseName(), *projectData.connectionData());
 
                 if (!anotherProjectAlreadyOpened) //the project could have been opened within this instance
                     return res;
@@ -1390,9 +1390,9 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 
     while (true) {
         if (fname.isEmpty() &&
-                !projectData.connectionData()->dbFileName().isEmpty()) {
+                !projectData.connectionData()->databaseName().isEmpty()) {
             //propose filename from db template name
-            fname = projectData.connectionData()->dbFileName();
+            fname = projectData.connectionData()->databaseName();
         }
         const bool specialDir = fname.isEmpty();
         qDebug() << fname << ".............";
@@ -2258,7 +2258,7 @@ tristate KexiMainWindow::createNewProject(const KexiProjectData &projectData)
     //qDebug() << "new project created ---";
     if (d->prj) {
         res = openProjectInExternalKexiInstance(
-                prj->data()->connectionData()->fileName(),
+                prj->data()->connectionData()->databaseName(),
                 prj->data()->connectionData(),
                 prj->data()->databaseName());
         Kexi::recentProjects()->addProjectData(*prj->data());
@@ -2350,8 +2350,8 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         //file-based project
         qDebug() << "Project File: " << aFileName;
         KDbConnectionData fileConnData;
-        fileConnData.setFileName(aFileName);
-        QString detectedDriverName;
+        fileConnData.setDatabaseName(aFileName);
+        QString detectedDriverId;
         int detectOptions = 0;
         if (readOnly) {
             detectOptions |= KexiStartupHandler::OpenReadOnly;
@@ -2370,9 +2370,9 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         if (importActionData) { //importing requested
             return showProjectMigrationWizard(importActionData.mimeType, importActionData.fileName);
         }
-        fileConnData.driverName = detectedDriverName;
+        fileConnData.setDriverId(detectedDriverId);
 
-        if (fileConnData.driverName.isEmpty())
+        if (fileConnData.driverId().isEmpty())
             return false;
 
         //opening requested
@@ -3584,22 +3584,25 @@ void KexiMainWindow::slotToolsCompactDatabase()
             return;
         }
         KDbConnectionData cdata;
-        cdata.setFileName(dlg.selectedFileName());
+        cdata.setDatabaseName(dlg.selectedFileName());
 
         //detect driver name for the selected file
         KexiStartupData::Import detectedImportAction;
+        QString detectedDriverId;
         tristate res = KexiStartupHandler::detectActionForFile(
-                           &detectedImportAction, &cdata.driverName,
-                           "" /*suggestedDriverName*/, cdata.fileName(), 0,
+                           &detectedImportAction, &detectedDriverId,
+                           QString() /*suggestedDriverId*/, cdata.databaseName(), 0,
                            KexiStartupHandler::SkipMessages | KexiStartupHandler::ThisIsAProjectFile
                            | KexiStartupHandler::DontConvert);
 
-        if (true == res && !detectedImportAction)
-            drv = Kexi::driverManager().driver(cdata.driverName);
+        if (true == res && !detectedImportAction) {
+            cdata.setDriverId(detectedDriverId);
+            drv = Kexi::driverManager().driver(cdata.driverId());
+        }
         if (!drv || !(drv->features() & KDbDriver::CompactingDatabaseSupported)) {
             KMessageBox::information(this,
                                      xi18n("Compacting database file <filename>%1</filename> is not supported.",
-                                           QDir::toNativeSeparators(cdata.fileName())));
+                                           QDir::toNativeSeparators(cdata.databaseName())));
             return;
         }
         data = new KexiProjectData(cdata);

@@ -33,10 +33,10 @@ int main(int argc, char * argv[])
 
     conn_data.userName = "root";
     if (argc > 1)
-        conn_data.password = argv[1];
+        conn_data.setPassword(argv[1]);
     else
-        conn_data.password = "mysql";
-    conn_data.hostName = "localhost";
+        conn_data.setPassword("mysql");
+    conn_data.setHostName("localhost");
 
     KDbConnection *conn = driver->createConnection(conn_data);
     if (driver->error()) {
