@@ -1,6 +1,17 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
+   Contains code from kglobalsettings.h:
+   Copyright (C) 2000, 2006 David Faure <faure@kde.org>
+   Copyright (C) 2008 Friedrich W. H. Kossebau <kossebau@kde.org>
+
+   Contains code from kdialog.h:
+   Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
+   Additions 1999-2000 by Espen Sand (espen@kde.org)
+                       and Holger Freyther <freyther@kde.org>
+             2005-2009 Olivier Goffart <ogoffart @ kde.org>
+             2006      Tobias Koenig <tokoe@kde.org>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -542,6 +553,43 @@ KEXIUTILS_EXPORT QColor activeTextColor();
     @note This is a replacement for bool KGlobalSettings::singleClick().
 */
 KEXIUTILS_EXPORT bool activateItemsOnSingleClick(QWidget *widget = 0);
+
+/**
+ * @enum CaptionFlag
+ * Used to specify how to construct a window caption
+ *
+ * @value AppNameCaption Indicates that the method shall include
+ * the application name when making the caption string.
+ * @value ModifiedCaption Causes a 'modified' sign will be included in the
+ * returned string. This is useful when indicating that a file is
+ * modified, i.e., it contains data that has not been saved.
+ */
+enum CaptionFlag {
+    NoCaptionFlags = 0,
+    AppNameCaption = 1,
+    ModifiedCaption = 2
+};
+Q_DECLARE_FLAGS(CaptionFlags, CaptionFlag)
+
+/**
+ * Builds a caption that contains the application name along with the
+ * userCaption using a standard layout.
+ *
+ * To make a compliant caption for your window, simply do:
+ * @p setWindowTitle(makeStandardCaption(yourCaption));
+ *
+ * To ensure that the caption is appropriate to the desktop in which the
+ * application is running, pass in a pointer to the window the caption will
+ * be applied to.
+ *
+ * @param userCaption The caption string you want to display in the
+ * window caption area. Do not include the application name!
+ * @param flags
+ * @return the created caption
+ * Based on KDialog::makeStandardCaption()
+ */
+KEXIUTILS_EXPORT QString makeStandardCaption(const QString &userCaption,
+                                             CaptionFlags flags = AppNameCaption);
 
 } //namespace KexiUtils
 

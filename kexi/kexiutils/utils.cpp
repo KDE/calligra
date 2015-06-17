@@ -5,6 +5,13 @@
    Copyright (C) 2000, 2006 David Faure <faure@kde.org>
    Copyright (C) 2008 Friedrich W. H. Kossebau <kossebau@kde.org>
 
+   Contains code from kdialog.cpp:
+   Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
+   Additions 1999-2000 by Espen Sand (espen@kde.org)
+                       and Holger Freyther <freyther@kde.org>
+             2005-2009 Olivier Goffart <ogoffart @ kde.org>
+             2006      Tobias Koenig <tokoe@kde.org>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -54,6 +61,7 @@
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KAboutData>
 
 #if HAVE_LANGINFO_H
 #include <langinfo.h>
@@ -936,4 +944,31 @@ QColor KexiUtils::activeTextColor()
     KConfigGroup g(KSharedConfig::openConfig(), "WM");
     return g.readEntry("activeForeground", QColor(255, 255, 255));
 #endif
+}
+
+QString KexiUtils::makeStandardCaption(const QString &userCaption, CaptionFlags flags)
+{
+    QString caption = KAboutData::applicationData().displayName();
+    if (caption.isEmpty()) {
+        return QCoreApplication::instance()->applicationName();
+    }
+    QString captionString = userCaption.isEmpty() ? caption : userCaption;
+
+    // If the document is modified, add '[modified]'.
+    if (flags & ModifiedCaption) {
+        captionString += QString::fromUtf8(" [") + xi18n("modified") + QString::fromUtf8("]");
+    }
+
+    if (!userCaption.isEmpty()) {
+        // Add the application name if:
+        // User asked for it, it's not a duplication  and the app name (caption()) is not empty
+        if (flags & AppNameCaption &&
+                !caption.isEmpty() &&
+                !userCaption.endsWith(caption)) {
+            // TODO: check to see if this is a transient/secondary window before trying to add the app name
+            //       on platforms that need this
+            captionString += xi18nc("Document/application separator in titlebar", " – ") + caption;
+        }
+    }
+    return captionString;
 }
