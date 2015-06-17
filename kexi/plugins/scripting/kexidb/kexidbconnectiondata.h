@@ -106,7 +106,7 @@ public Q_SLOTS:
     /** Return the database path. */
     const QString dbPath() const;
     /** Return the database filename. */
-    const QString dbFileName() const;
+    const QString databaseName() const;
 
     /** Return a user-friendly string representation. */
     const QString toUserVisibleString() const;

@@ -138,9 +138,9 @@ const QString KexiDBConnectionData::dbPath() const
 {
     return m_data->dbPath();
 }
-const QString KexiDBConnectionData::dbFileName() const
+const QString KexiDBConnectionData::databaseName() const
 {
-    return m_data->dbFileName();
+    return m_data->databaseName();
 }
 const QString KexiDBConnectionData::toUserVisibleString() const
 {
