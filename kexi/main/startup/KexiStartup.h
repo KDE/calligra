@@ -59,21 +59,21 @@ public:
      \return true if actions should be performed or cancelled if action should be cancelled
      In this case there are two possibilities:
      - \a detectedImportAction == true means "import action" should be performed
-     - nonempty \a detectedDriverName means "open action" should be performed.
+     - nonempty \a detectedDriverId means "open action" should be performed.
 
-     \a detectedDriverName can contain following special strings:
+     \a detectedDriverId can contain following special strings:
      - "shortcut" if the file looks like a shortcut to a project/connection file
      - "connection" if the file looks like a connection data file.
 
      \a parent is passed as a parent for potential error message boxes.
-     \a driverName is a preferred driver name.
+     \a _suggestedDriverId is a preferred driver ID.
      \a options should be a combination of DetectActionForFileOptions enum values.
      \a forceReadOnly points to a flag that will be set to true if it was detected
         that the file cannot be written. */
     static tristate detectActionForFile(
-        KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
-        const QString& _suggestedDriverName,
-        const QString &dbFileName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
+        KexiStartupData::Import* detectedImportAction, QString* detectedDriverId,
+        const QString& _suggestedDriverId,
+        const QString &databaseName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
 
     /*! Allows user to select a project with KexiProjectSelectorDialog.
       \return selected project's data
@@ -89,7 +89,8 @@ protected Q_SLOTS:
     void slotAboutToAppQuit();
 
 protected:
-    bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
+//! @todo KEXI3 port getAutoopenObjects()
+//    bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 
     class Private;
     Private * const d;

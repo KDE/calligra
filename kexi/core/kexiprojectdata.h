@@ -67,7 +67,7 @@ public:
     /*! Creates project data out of connection data @a cdata.
       @a dbname can be provided for server-based connections; it is ignored
       for file-based onces because in this case name is equal to database's filename
-      (cdata.dbFileName()).
+      (cdata.databaseName()).
       @a caption is for setting project's caption. */
     explicit KexiProjectData(const KDbConnectionData &cdata,
                              const QString& dbname = QString(), const QString& caption = QString());

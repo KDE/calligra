@@ -43,7 +43,7 @@ public:
     Q_DECLARE_FLAGS(Flags, Flag)
 
     //! Constructs a new password dialog.
-    //! cdata.password is modified only when user provided the password.
+    //! cdata.password() is modified only when user provided the password.
     //! If @a showDetailsButton is true, the dialog displays connection details.
     KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& cdata, Flags flags = NoFlags);
     virtual ~KexiDBPasswordDialog();

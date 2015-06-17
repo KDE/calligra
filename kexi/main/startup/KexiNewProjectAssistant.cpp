@@ -611,9 +611,9 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         }
         //file-based project
         KDbConnectionData cdata;
-        cdata.driverName = KDb::defaultFileBasedDriverId();
-        cdata.setFileName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
-        createProject(cdata, cdata.fileName(), d->titleSelectionPage()->contents->le_title->text());
+        cdata.setDriverId(KDb::defaultFileBasedDriverId());
+        cdata.setDatabaseName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
+        createProject(cdata, cdata.databaseName(), d->titleSelectionPage()->contents->le_title->text());
     }
     else if (page == d->m_projectConnectionSelectionPage) {
         KDbConnectionData *cdata
