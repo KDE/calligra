@@ -69,7 +69,8 @@ public:
     bool setConnection(KDbConnectionData* data);
 
     KexiProjectSelectorWidget* projectSelector;
-    QPointer<KDbConnectionData> conndataToShow;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnectionData>
+    KDbConnectionData* conndataToShow;
 
 private:
     KexiProjectSet *m_projectSetToShow;

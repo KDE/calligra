@@ -25,7 +25,7 @@
 #include <KStandardDirs>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KComponentData>
+#include <KAboutData>
 
 #include <QDir>
 #include <QIcon>

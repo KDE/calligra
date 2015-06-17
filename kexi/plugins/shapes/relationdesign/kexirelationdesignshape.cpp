@@ -30,6 +30,7 @@
 #include <KDbDriverManager>
 #include <KDbUtils>
 #include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
 
 #include <QPainter>
 #include <QDebug>

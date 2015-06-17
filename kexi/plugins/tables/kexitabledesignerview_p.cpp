@@ -163,17 +163,17 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fie
     visible =
         (prop->listData() && prop->listData()->keys.count() > 1 /*disabled || isObjectTypeGroup*/)
         && set["primaryKey"].value().toBool() == false;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["objectType"];
     const bool isObjectTypeGroup
         = set["type"].value().toInt() == (int)KDbField::BLOB; // used only for BLOBs
     visible = isObjectTypeGroup;
-    setVisibilityIfNeeded(set, prop,  visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop,  visible, &changed, commandGroup);
 
     prop = &set["unsigned"];
     visible = KDbField::isNumericType(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["maxLength"];
     visible = (fieldType == KDbField::Text);
@@ -187,7 +187,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fie
 //   prop->setValue( lengthToSet, false );
 //    changed = true;
     }
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 #ifdef KEXI_SHOW_UNFINISHED
     prop = &set["precision"];
     visible = KDbField::isFPNumericType(fieldType);
@@ -195,29 +195,29 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fie
 #endif
     prop = &set["visibleDecimalPlaces"];
     visible = KDb::supportsVisibleDecimalPlacesProperty(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["unique"];
     visible = fieldType != KDbField::BLOB;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["indexed"];
     visible = fieldType != KDbField::BLOB;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["allowEmpty"];
     visible = KDbField::hasEmptyProperty(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["autoIncrement"];
     visible = KDbField::isAutoIncrementAllowed(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
 //! @todo remove this when BLOB supports default value
 #ifndef KEXI_SHOW_UNFINISHED
     prop = &set["defaultValue"];
     visible = !isObjectTypeGroup;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 #endif
 
     return changed;
@@ -228,7 +228,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, 
     Q_ASSERT(emptyTable);
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     bool ok;
-    emptyTable = conn->isEmpty(*designerView->tempData()->table, ok) && ok;
+    *emptyTable = conn->isEmpty(designerView->tempData()->table, &ok) && ok;
     return xi18n("Do you want to save the design now?")
            + ((*emptyTable || skipWarning) ? QString() :
               (QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design",
@@ -248,4 +248,3 @@ void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *record, KP
     view->data()->updateRecordEditBuffer(record, COLUMN_ID_ICON, icon);
     view->data()->saveRecordChanges(record, true);
 }
-
