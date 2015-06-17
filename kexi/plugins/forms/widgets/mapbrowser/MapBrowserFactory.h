@@ -39,7 +39,7 @@ public:
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
 
-    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w);
+    virtual void setPropertyOptions(KProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w);
 };
 
 #endif // MAPBROWSERFACTORY_H
