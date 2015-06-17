@@ -25,8 +25,9 @@
 
 #include <KDbUtils>
 #include <KDbDriverManager>
+#include <KDbDriverMetaData>
 
-#include <kdatetime.h>
+#include <KLocalizedString>
 
 #include <QDebug>
 

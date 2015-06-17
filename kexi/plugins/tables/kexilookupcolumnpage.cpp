@@ -28,6 +28,7 @@
 #include <kexiproject.h>
 
 #include <KDbConnection>
+#include <KDbTableOrQuerySchema>
 
 #include <KProperty>
 

@@ -28,6 +28,7 @@
 #include "KexiRelationsConnection.h"
 
 #include <KDbConnection>
+#include <KDbTableOrQuerySchema>
 #include <KDbUtils>
 
 #include <KComboBox>
@@ -469,7 +470,7 @@ KexiRelationsView::objectRenamed(const QString &mime, const QString& name,
 }
 
 void
-KexiRelationsView::hideAllTablesExcept(KDbTableSchema::List* tables)
+KexiRelationsView::hideAllTablesExcept(QList<KDbTableSchema*>* tables)
 {
     d->scrollArea->hideAllTablesExcept(tables);
 }

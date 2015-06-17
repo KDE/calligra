@@ -65,6 +65,7 @@
 #include <KDbAdmin>
 #include <KDbDriverManager>
 #include <KDbObjectNameValidator>
+#include <KDbObject>
 
 #include <KPropertyEditorView>
 #include <KPropertySet>
@@ -73,6 +74,7 @@
 #include <KActionMenu>
 #include <KToggleAction>
 #include <KStandardShortcut>
+#include <KStandardGuiItem>
 #include <KConfig>
 #include <KShortcutsDialog>
 #include <KEditToolBar>
@@ -82,6 +84,8 @@
 #include <KMultiTabBar>
 #include <KLocalizedString>
 #include <KAboutData>
+#include <KMessageBox>
+#include <KConfigGroup>
 
 #include <QApplication>
 #include <QFile>
@@ -97,6 +101,7 @@
 #include <QStylePainter>
 #include <QScopedPointer>
 #include <QFileDialog>
+#include <QDesktopWidget>
 
 #include <unistd.h>
 
@@ -312,7 +317,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
-        if (!kappExisted) {
+        if (!appExisted) {
             delete app;
         }
         return 0;
@@ -332,7 +337,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 
     if (true != win->startup()) {
         delete win;
-        if (!kappExisted) {
+        if (!appExisted) {
             delete app;
         }
         return 1;
@@ -353,11 +358,15 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 //-------------------------------------------------
 
 KexiMainMenuActionShortcut::KexiMainMenuActionShortcut(const QKeySequence& key,
-                                                       QWidget *parent, QAction *action)
+                                                       QAction *action, QWidget *parent)
     : QShortcut(key, parent)
     , m_action(action)
 {
     connect(this, SIGNAL(activated()), this, SLOT(slotActivated()));
+}
+
+KexiMainMenuActionShortcut::~KexiMainMenuActionShortcut()
+{
 }
 
 void KexiMainMenuActionShortcut::slotActivated()
@@ -686,7 +695,7 @@ void KexiMainWindow::setupActions()
     else {
         d->action_edit_paste_special_data_table = addAction(
             "edit_paste_special_data_table",
-            QIcon::fromTheme(d->action_edit_paste->icon()), xi18nc("Paste Special->As Data &Table...", "Paste Special..."));
+            d->action_edit_paste->icon(), xi18nc("Paste Special->As Data &Table...", "Paste Special..."));
         d->action_edit_paste_special_data_table->setToolTip(
             xi18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
@@ -1276,12 +1285,13 @@ tristate KexiMainWindow::startup()
     return result;
 }
 
-static QString internalReason(KDbObject *obj)
+static QString internalReason(const KDbResult &result)
 {
-    const QString &s = obj->errorMsg();
-    if (s.isEmpty())
-        return s;
-    return QString("<br>(%1) ").arg(xi18n("reason:") + " <i>" + s + "</i>");
+    const QString msg = result.message();
+    if (msg.isEmpty()) {
+        return QString();
+    }
+    return xi18n("<br>(reason: <i>%1</i>)", msg);
 }
 
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
@@ -1297,7 +1307,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     if (prj->data()->connectionData()->passwordNeeded()) {
         // password was supplied in this session, and shouldn't be stored or reused afterwards,
         // so let's remove it
-        prj->data()->connectionData()->password.clear();
+        prj->data()->connectionData()->setPassword(QString());
     }
 
     if (~res) {
@@ -1369,6 +1379,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& data, const QString&
 
 tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projectData)
 {
+    Q_UNUSED(projectData);
 #ifdef KEXI_PROJECT_TEMPLATES
     QStringList mimetypes;
     mimetypes.append(KDb::defaultFileBasedDriverMimeType());
@@ -1456,7 +1467,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                     not_found_msg += xi18n("cannot create object - unknown object type \"%1\"", info->value("type"));
                 else
                     not_found_msg += xi18n("unknown object type \"%1\"", info->value("type"));
-                not_found_msg += internalReason(&Kexi::partManager()) + "<br></li>";
+                not_found_msg += internalReason(Kexi::partManager().result()) + "<br></li>";
                 continue;
             }
             // * NEW
@@ -2323,7 +2334,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         //server-based project
         if (dbName.isEmpty()) {//no database name given, ask user
             bool cancel;
-            projectData = Kexi::startupHandler().selectProject(cdata, cancel, this);
+            projectData = Kexi::startupHandler().selectProject(cdata, &cancel, this);
             if (cancel)
                 return cancelled;
         } else {
@@ -2348,7 +2359,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         KexiStartupData::Import importActionData;
         bool forceReadOnly;
         const tristate res = KexiStartupHandler::detectActionForFile(
-                                 &importActionData, &detectedDriverName, fileConnData.driverName,
+                                 &importActionData, &detectedDriverId, fileConnData.driverId(),
                                  aFileName, this, detectOptions, &forceReadOnly);
         if (forceReadOnly) {
             readOnly = true;
@@ -3051,7 +3062,7 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
     KexiPart::Part * part = Kexi::partManager().partForPluginId(item->pluginId());
     if (!part) {
         if (errorMessage) {
-            *errorMessage = Kexi::partManager().errorMsg();
+            *errorMessage = Kexi::partManager().result().message();
         }
     }
     qDebug() << part << item->pluginId();
@@ -3074,7 +3085,7 @@ KexiWindow *
 KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled,
                            QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
-    Q_ASSERT(openingCancelled)
+    Q_ASSERT(openingCancelled);
     if (!d->prj || !item) {
         return 0;
     }
@@ -3397,16 +3408,16 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
                                            KGuiItem(xi18n("Close Window"), koIconName("window-close")),
                                            KStandardGuiItem::cancel());
         if (r != KMessageBox::Yes) {
-            success = false;
+            *success = false;
             return;
         }
     }
-    enableMessages(false); //to avoid double messages
-    const bool res = d->prj->renameObject(*item, newName);
-    enableMessages(true);
+    setMessagesEnabled(false); //to avoid double messages
+    const bool res = d->prj->renameObject(item, newName);
+    setMessagesEnabled(true);
     if (!res) {
-        showErrorMessage(d->prj, xi18n("Renaming object \"%1\" failed.", newName));
-        success = false;
+        showErrorMessage(xi18n("Renaming object \"%1\" failed.", newName), d->prj);
+        *success = false;
         return;
     }
 }

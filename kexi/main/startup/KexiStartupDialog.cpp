@@ -27,9 +27,9 @@
 
 #include <KDbUtils>
 
-#include <KComponentData>
 #include <KConfig>
 #include <KSharedConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QDebug>

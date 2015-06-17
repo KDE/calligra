@@ -107,7 +107,7 @@ bool KexiDBReportData::open()
         }
         else if ( d->copySchema)
         {
-            qDebug() << "Opening cursor.." << d->copySchema->debugString();
+            qDebug() << "Opening cursor.." << *d->copySchema;
             d->cursor = d->connection->executeQuery ( *d->copySchema, 1 );
         }
 

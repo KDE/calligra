@@ -454,7 +454,7 @@ protected Q_SLOTS:
      in view mode other than \a viewMode, the mode is not changed.
      \sa KexiProjectNavigator::openOrActivateItem() */
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item,
-                                        Kexi::ViewMode viewMode, bool openingCancelled);
+                                        Kexi::ViewMode viewMode, bool *openingCancelled);
 
     //! For convenience
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode);
@@ -570,7 +570,7 @@ protected Q_SLOTS:
      parameters of destination project and skip pages related to source project.
      \a cdata, if valid (isValid()) is used preselect server-based connections. */
     tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
-                                        const KDbConnectionData &cdata);
+                                        const KDbConnectionData &cdata = KDbConnectionData());
 
     //! Receives "selectionChanged()" signal from navigator to update some actions.
     void slotPartItemSelectedInNavigator(KexiPart::Item* item);
