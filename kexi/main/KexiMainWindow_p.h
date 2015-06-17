@@ -1016,9 +1016,12 @@ KHelpMenu* KexiTabbedToolBar::helpMenu() const
 
 void KexiTabbedToolBar::slotSettingsChanged(int category)
 {
-    if (category == KGlobalSettings::FontChanged) {
-        setFont(KGlobalSettings::menuFont());   // toolbar acts like a menu
-    }
+    Q_UNUSED(category);
+    //! @todo if (category == KGlobalSettings::FontChanged) {
+        //! @todo KEXI3 KGlobalSettings::menuFont() not available (using QFontDatabase::systemFont(QFontDatabase::GeneralFont) for now)
+        //!       https://community.kde.org/Frameworks/Porting_Notes#Global_Settings
+        setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont)); // the toolbar acts like a menu
+    //}
 }
 
 KToolBar* KexiTabbedToolBar::createWidgetToolBar() const
