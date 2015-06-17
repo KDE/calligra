@@ -119,14 +119,14 @@ void KexiPasswordPage::setDatabaseName(const QString& databaseName)
 
 void KexiPasswordPage::setConnectionData(const KDbConnectionData &data)
 {
-    setPassword(data.savePassword ? data.password : QString());
-    setUserName(data.userName);
+    setPassword(data.savePassword() ? data.password() : QString());
+    setUserName(data.userName());
     setServer(data.toUserVisibleString(KDbConnectionData::NoUserVisibleStringOption));
 }
 
 void KexiPasswordPage::updateConnectionData(KDbConnectionData *data)
 {
     if (data) {
-        data->password = password();
+        data->setPassword(password());
     }
 }

@@ -49,7 +49,7 @@ class KexiDBParser;
  * # We need a connectiondata object.
  * connectiondata = drivermanager.createConnectionData()
  * # Fill the new connectiondata object with what we need to connect.
- * connectiondata.setFileName("/home/user/kexisqlite3file.kexi")
+ * connectiondata.setDatabaseName("/home/user/kexisqlite3file.kexi")
  * # Create the database-driver to access the SQLite3 backend.
  * driver = drivermanager.driver("SQLite3")
  * # Create the connection now.
