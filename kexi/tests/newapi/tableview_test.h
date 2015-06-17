@@ -24,6 +24,8 @@
 
 #include <KDbCursor>
 
+#include <KAboutData>
+
 #include <QDesktopWidget>
 #include <QDebug>
 
@@ -53,7 +55,7 @@ int tableViewTest()
     KexiDataTableScrollArea *tv = new KexiDataTableScrollArea(0, cursor);
 
     tv->move((qApp->desktop()->width() - tv->width()) / 2, (qApp->desktop()->height() - tv->height()) / 2);
-    tv->setWindowTitle(QString("%1: %2").arg(KGlobal::mainComponent().aboutData()->programName()).arg(tv->windowTitle()));
+    tv->setWindowTitle(QString("%1: %2").arg(KAboutData::applicationData().displayName()).arg(tv->windowTitle()));
     tv->show();
     tv->setFocus();
 
