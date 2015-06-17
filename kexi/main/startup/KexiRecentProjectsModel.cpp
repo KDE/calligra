@@ -91,7 +91,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
     KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
-    bool fileBased = !pdata->connectionData()->dbFileName().isEmpty();
+    bool fileBased = !pdata->connectionData()->databaseName().isEmpty();
     QString opened(openedString(pdata->lastOpened()));
     if (!opened.isEmpty())
         opened.prepend('\n');
@@ -101,7 +101,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         if (fileBased) {
             QString n = pdata->caption().trimmed();
             if (n.isEmpty())
-                n = pdata->connectionData()->dbFileName();
+                n = pdata->connectionData()->databaseName();
             return QString(n + opened);
         }
         else {
@@ -124,12 +124,16 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
             return xi18nc("File database <file>", "File database %1",
-                         pdata->connectionData()->fileName());
+                         pdata->connectionData()->databaseName());
         }
         else {
             KDbDriverManager manager;
+            const KDbDriverMetaData *driverMetaData = manager.driverMetaData(pdata->connectionData()->driverId());
+            if (!driverMetaData) {
+                return xi18n("database");
+            }
             return xi18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
-                  manager.driverInfo(pdata->connectionData()->driverName).caption);
+                          driverMetaData->name());
         }
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype

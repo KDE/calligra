@@ -423,7 +423,7 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KDbConnectionData* data
     conndataToShow = 0;
     if (data) {
         m_projectSetToShow = new KexiProjectSet(data, m_assistant);
-        if (m_projectSetToShow->error()) {
+        if (m_projectSetToShow->result().isError()) {
             delete m_projectSetToShow;
             m_projectSetToShow = 0;
             return false;
@@ -434,8 +434,8 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KDbConnectionData* data
     }
     if (conndataToShow) {
         QString selectorLabel = xi18nc("@info",
-                                      "Existing project databases on <resource>%1 (%2)</resource> database server:",
-                                      conndataToShow->caption, conndataToShow->toUserVisibleString());
+            "Existing project databases on <resource>%1 (%2)</resource> database server:",
+            conndataToShow->caption(), conndataToShow->toUserVisibleString());
         m_projectSelector->label()->setText(selectorLabel);
     }
     return true;
