@@ -49,15 +49,20 @@ add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 generate_export_header(kexicore)
 
 target_link_libraries(kexicore
-  KF5::KIOWidgets
+    PUBLIC
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Widgets
 
-  kexiutils
-  kowidgetutils
+        KF5::KIOWidgets
+        KF5::CoreAddons
 
-  KDb
-  KProperty
+        kexiutils
+        kowidgetutils
+
+        KDb
+        KProperty
 )
-target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils)
 
 set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
