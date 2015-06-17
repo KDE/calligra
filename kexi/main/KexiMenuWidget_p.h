@@ -33,7 +33,6 @@
 
 #include "KexiMenuWidget.h"
 
-#include <KComponentData>
 #include <KSharedConfig>
 
 #include <QStyleOption>
@@ -117,7 +116,6 @@ public:
     ColorMap m_lowThreshold;
     ColorMap m_highThreshold;
 
-    KComponentData _componentData;
     KSharedConfigPtr _config;
     qreal _contrast;
     qreal _bgcontrast;
@@ -137,7 +135,10 @@ public:
     virtual ~KexiMenuWidgetPrivate()
     {
         delete scroll;
+//! @todo KEXI3 port OxygenHelper
+#if 0
         delete oxygenHelper;
+#endif
     }
     void init();
 
@@ -268,7 +269,10 @@ public:
     //! True if persistent selections are enabled. False by default.
     //bool persistentSelectionsEnabled;
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
     OxygenHelper *oxygenHelper;
+#endif
     bool bespin;
     bool qtcurve;
 
