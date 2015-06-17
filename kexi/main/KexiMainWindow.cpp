@@ -3625,7 +3625,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
     }
 
     if (!drv->adminTools().vacuum(*data->connectionData(), data->databaseName())) {
-      showErrorMessage(&drv->adminTools());
+      showErrorMessage(QString(), &drv->adminTools());
     }
 
     if (projectWasOpened)

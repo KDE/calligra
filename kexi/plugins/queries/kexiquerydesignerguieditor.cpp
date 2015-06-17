@@ -518,8 +518,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             *errMsg = msgCannotSwitch_EmptyDesign();
         return false;
     }
-    if (whereExpr)
-        qDebug() << "setting CRITERIA:" << whereExpr->debugString();
+    if (whereExpr) {
+        qDebug() << "setting CRITERIA:" << *whereExpr;
+    }
 
     //set always, because if whereExpr==NULL,
     //this will clear prev. expr
@@ -834,7 +835,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //2. Collect information about criterias
     // --this must be top level chain of AND's
     // --this will also show joins as: [table1.]field1 = [table2.]field2
-    KexiUtils::CaseInsensitiveHash<QString, KDbExpression*> criterias;
+    KDb::CaseInsensitiveHash<QString, KDbExpression*> criterias;
     KDbExpression* e = query->whereExpression();
     KDbExpression* eItem = 0;
     while (e) {
