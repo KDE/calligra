@@ -35,53 +35,100 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 {
 }
 
-void
-KexiGUIMessageHandler::showErrorMessage(const QString& msg, KDbResultable* resultable)
+KexiGUIMessageHandler* KexiGUIMessageHandler::guiRedirection()
 {
-    QString _msg(msg);
+    return dynamic_cast<KexiGUIMessageHandler*>(redirection());
+}
+
+void
+KexiGUIMessageHandler::showErrorMessage(const QString& message, KDbResultable* resultable)
+{
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(message, resultable);
+        return;
+    }
+    QString msg(message);
     if (!resultable) {
-        showErrorMessage(_msg, QString());
+        showErrorMessage(msg, QString());
         return;
     }
     QString details;
-    KDb::getHTMLErrorMesage(*resultable, &_msg, &details);
-    showErrorMessage(_msg, details);
+    KDb::getHTMLErrorMesage(*resultable, &msg, &details);
+    showErrorMessage(msg, details);
 }
 
 void
 KexiGUIMessageHandler::showErrorMessage(const QString &title, const QString &details)
 {
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(title, details);
+        return;
+    }
     showMessage(Error, title, details);
 }
 
 void
 KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &details)
 {
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showSorryMessage(title, details);
+        return;
+    }
     showMessage(Sorry, title, details);
 }
 
-void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details,
+void KexiGUIMessageHandler::showErrorMessage(const QString &message, const QString &details,
                                              KDbResultable *resultable)
 {
-    QString _msg(msg);
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(message, details, resultable);
+        return;
+    }
+    QString msg(message);
     if (!resultable) {
-        showErrorMessage(_msg, details);
+        showErrorMessage(msg, details);
         return;
     }
     QString _details(details);
-    KDb::getHTMLErrorMesage(*resultable, &_msg, &_details);
-    showErrorMessage(_msg, _details);
+    KDb::getHTMLErrorMesage(*resultable, &msg, &_details);
+    showErrorMessage(msg, _details);
 }
 
 void
 KexiGUIMessageHandler::showErrorMessage(Kexi::ObjectStatus *status)
 {
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(status);
+        return;
+    }
     showErrorMessage("", status);
 }
 
 void
 KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
 {
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(message, status);
+        return;
+    }
     if (status && status->error()) {
         QString msg(message);
         if (msg.isEmpty() || msg == status->message) {
@@ -107,11 +154,16 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
 
 void
 KexiGUIMessageHandler::showMessage(MessageType type,
-                                   const QString &title, const QString &details, const QString& dontShowAgainName)
+                                   const QString &title, const QString &details,
+                                   const QString& dontShowAgainName)
 {
-    if (!m_enableMessages)
+    if (!messagesEnabled()) {
         return;
-
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showMessage(type, title, details, dontShowAgainName);
+        return;
+    }
     //'wait' cursor is a nonsense now
     KexiUtils::removeWaitCursor();
 
@@ -122,26 +174,34 @@ KexiGUIMessageHandler::showMessage(MessageType type,
     if (!details.isEmpty()) {
         switch (type) {
         case Error:
-            KMessageBox::detailedError(m_messageHandlerParentWidget, msg, details);
+            KMessageBox::detailedError(parentWidget(), msg, details);
             break;
         case Warning:
             showWarningContinueMessage(title, details, dontShowAgainName);
             break;
         default: //Sorry
-            KMessageBox::detailedSorry(m_messageHandlerParentWidget, msg, details);
+            KMessageBox::detailedSorry(parentWidget(), msg, details);
         }
     } else {
-        KMessageBox::messageBox(m_messageHandlerParentWidget,
+        KMessageBox::messageBox(parentWidget(),
                                 type == Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
     }
 }
 
-void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, const QString &details,
-        const QString& dontShowAgainName)
+void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title,
+                                                       const QString &details,
+                                                       const QString& dontShowAgainName)
 {
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showWarningContinueMessage(title, details, dontShowAgainName);
+        return;
+    }
     if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
         return;
-    KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
+    KMessageBox::warningContinueCancel(parentWidget(),
                                        title + (details.isEmpty() ? QString() : (QString("\n") + details)),
                                        QString(),
                                        KStandardGuiItem::cont(),
@@ -188,8 +248,14 @@ KDbMessageHandler::ButtonCode KexiGUIMessageHandler::askQuestion(
 //                                               const QString &dontShowAskAgainName,
 //                                               KMessageBox::Options options)
 {
-    Q_UNUSED(defaultResult);
-    Q_UNUSED(msgHandler);
+    if (!messagesEnabled()) {
+        return defaultResult;
+    }
+    if (redirection()) {
+        return redirection()->askQuestion(messageType, message, caption, defaultResult,
+                                          buttonYes, buttonNo, dontShowAskAgainName,
+                                          options, msgHandler);
+    }
     KMessageBox::Options kmsgboxOptions = 0;
     if (options <= (KDbMessageHandler::Notify|KDbMessageHandler::AllowLink|KDbMessageHandler::Dangerous)) {
         kmsgboxOptions = static_cast<KMessageBox::Options>(int(options));
@@ -197,13 +263,13 @@ KDbMessageHandler::ButtonCode KexiGUIMessageHandler::askQuestion(
 
     if (KDbMessageHandler::WarningContinueCancel == messageType) {
         return static_cast<KDbMessageHandler::ButtonCode>(
-            KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
+            KMessageBox::warningContinueCancel(parentWidget(),
                 message, caption, toGuiItem(buttonYes), KStandardGuiItem::cancel(),
                 dontShowAskAgainName, kmsgboxOptions));
     }
     else {
         return static_cast<KDbMessageHandler::ButtonCode>(
-                    KMessageBox::messageBox(m_messageHandlerParentWidget,
+                    KMessageBox::messageBox(parentWidget(),
                                        static_cast<KMessageBox::DialogType>(messageType),
                                        message, caption, toGuiItem(buttonYes),
                                        toGuiItem(buttonNo),
@@ -213,19 +279,30 @@ KDbMessageHandler::ButtonCode KexiGUIMessageHandler::askQuestion(
 }
 
 void KexiGUIMessageHandler::showErrorMessage(KDbMessageHandler::MessageType messageType,
-                                             const QString &msg, const QString &details,
+                                             const QString &message, const QString &details,
                                              const QString &caption)
 {
-    Q_UNUSED(caption);
-    showMessage(messageType, msg, details);
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (redirection()) {
+        redirection()->showErrorMessage(messageType, message, details, caption);
+        return;
+    }
+    showMessage(messageType, message, details);
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const KDbResult& result,
                                              KDbMessageHandler::MessageType messageType,
-                                             const QString& msg,
+                                             const QString& message,
                                              const QString& caption)
 {
-    Q_UNUSED(result);
-    Q_UNUSED(caption);
-    showMessage(messageType, result.message() + '\n' + msg, QString());
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (redirection()) {
+        redirection()->showErrorMessage(result, messageType, message, caption);
+        return;
+    }
+    showMessage(messageType, result.message() + '\n' + message, QString());
 }

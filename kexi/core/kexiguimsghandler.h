@@ -55,17 +55,17 @@ public:
     /*! Shows error message with @a title (it is not caption) and details. */
     virtual void showErrorMessage(
         KDbMessageHandler::MessageType messageType,
-        const QString &msg,
+        const QString &message,
         const QString &details = QString(),
         const QString &caption = QString()
     );
 
-    /*! Shows error message with @a msg text. Existing error message from @a obj object
+    /*! Shows error message with @a message text. Existing error message from @a obj object
      is also copied, if present. */
     virtual void showErrorMessage(
         const KDbResult& result,
         KDbMessageHandler::MessageType messageType = Error,
-        const QString& msg = QString(),
+        const QString& message = QString(),
         const QString& caption = QString()
     );
 
@@ -84,6 +84,9 @@ public:
             const QString &dontShowAskAgainName = QString(),
             KDbMessageHandler::Options options = 0,
             KDbMessageHandler* msgHandler = 0);
+
+    //! @return GUI message redirection for this handler or 0 if there is no GUI redirection.
+    KexiGUIMessageHandler* guiRedirection();
 
 protected:
     //using KDbMessageHandler::showErrorMessage;
