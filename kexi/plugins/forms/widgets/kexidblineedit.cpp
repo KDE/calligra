@@ -21,7 +21,6 @@
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
 #include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
 
 #include <KDbFieldValidator>
 #include <KDbQuerySchema>
@@ -34,6 +33,7 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QFontDatabase>
+#include <QProxyStyle>
 
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator
@@ -53,11 +53,11 @@ public:
 //-----
 
 //! A style proxy overriding KexiDBLineEdit style
-class KexiDBLineEditStyle : public KexiUtils::StyleProxy
+class KexiDBLineEditStyle : public QProxyStyle
 {
 public:
-    explicit KexiDBLineEditStyle(QStyle* parentStyle, QObject *parent = 0)
-        : KexiUtils::StyleProxy(parentStyle, parent), indent(0)
+    explicit KexiDBLineEditStyle(QStyle* parentStyle)
+        : QProxyStyle(parentStyle), indent(0)
     {
     }
     virtual ~KexiDBLineEditStyle() {
@@ -74,7 +74,7 @@ public:
             const KexiFormDataItemInterface *dataItemIface = dynamic_cast<const KexiFormDataItemInterface*>(widget);
             if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
                 if (element == SE_LineEditContents) {
-                    QRect rect = KexiUtils::StyleProxy::subElementRect(SE_LineEditContents, option, widget);
+                    QRect rect = QProxyStyle::subElementRect(SE_LineEditContents, option, widget);
                     if (option->direction == Qt::LeftToRight)
                         return rect.adjusted(indent, 0, 0, 0);
                     else
@@ -82,7 +82,7 @@ public:
                 }
             }
         }
-        return KexiUtils::StyleProxy::subElementRect(element, option, widget);
+        return QProxyStyle::subElementRect(element, option, widget);
     }
     int indent;
 };
@@ -111,7 +111,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    m_internalStyle = new KexiDBLineEditStyle(style(), this);
+    m_internalStyle = new KexiDBLineEditStyle(style());
+    m_internalStyle->setParent(this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
     m_inStyleChangeEvent = true; // do not allow QLineEdit::event() to touch the style
     setStyle(m_internalStyle);
