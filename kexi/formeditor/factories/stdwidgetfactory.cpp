@@ -601,7 +601,7 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.geometry = QRect(
             check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
         return true;
-    } else if (args.classname == "KComboBox") {
+    } else if (args.classname == "KComboBox" || args.classname == "QComboBox") {
         QStringList list;
         KComboBox *combo = dynamic_cast<KComboBox*>(args.widget);
         for (int i = 0; i < combo->count(); i++) {
