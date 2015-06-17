@@ -21,9 +21,12 @@ target_link_libraries(kexi_tableplugin
         kexidatatable
         kexiextendedwidgets
         kexiutils
+        kundo2
 
         KDb
         KProperty
+
+        KF5::CoreAddons
 
         Qt5::Core
         Qt5::Gui
