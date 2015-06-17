@@ -50,7 +50,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
 
     tabWidget = new QTabWidget;
     tabWidget->setElideMode(Qt::ElideNone);
-    tabWidget->setAutomaticResizeTabs(true);
+    //! @todo KEXI3 tabWidget->setAutomaticResizeTabs(true);
     tabWidget->setDocumentMode(true);
 
     m_fileSelectorWidget = new QWidget;
@@ -321,4 +321,3 @@ QWidget* KexiOpenProjectAssistant::calloutWidget() const
 {
     return currentPage()->nextButton();
 }
-
