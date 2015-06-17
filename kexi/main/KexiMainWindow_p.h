@@ -838,8 +838,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     KToolBar *tbar;
 
     KexiUtils::smallFont(this/*init*/);
-    slotSettingsChanged(KGlobalSettings::FontChanged);
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(slotSettingsChanged(int)));
+    slotSettingsChanged(0);//KGlobalSettings::FontChanged
+    //! @todo KEXI3 port from KGlobalSettings::Private::_k_slotNotifyChange:
+    //! connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(slotSettingsChanged(int)));
 
     // help area
     QWidget *helpWidget = new QWidget(this);
@@ -849,8 +850,8 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     // * HELP MENU
     // add help menu actions... (KexiTabbedToolBar depends on them)
-    d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
-                                true/*showWhatsThis*/, d->ac);
+    d->helpMenu = new KHelpMenu(this, KAboutData::applicationData(),
+                                true/*showWhatsThis*/);
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
     QObject::disconnect(help_report_bug_action, 0, 0, 0);
     QObject::connect(help_report_bug_action, SIGNAL(triggered()), mainWin, SLOT(slotReportBug()));
@@ -894,7 +895,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
-    addTab(dummyWidgetForMainMenu, KGlobal::mainComponent().aboutData()->programName());
+    addTab(dummyWidgetForMainMenu, KAboutData::applicationData().displayName());
     d->toolbarsVisibleForIndex.append(true);
     addTab(new QWidget(this), QString()); // dummy for spacer
     d->toolbarsVisibleForIndex.append(true);
