@@ -58,10 +58,22 @@
 
 namespace Kexi
 {
-Q_GLOBAL_STATIC(KexiStartupHandler, _startupHandler)
+
+// Don't use Q_GLOBAL_STATIC as destroys the object *after* QApplication is gone but we have to cleanup before -> use qAddPostRoutine
+static KexiStartupHandler* _startupHandler = 0;
+
+static void _destroyStartupHandler()
+{
+    delete _startupHandler;
+    _startupHandler = 0;
+}
 
 KexiStartupHandler& startupHandler()
 {
+    if (!_startupHandler) {
+        _startupHandler = new KexiStartupHandler;
+        qAddPostRoutine(_destroyStartupHandler);
+    }
     return *_startupHandler;
 }
 }
