@@ -41,7 +41,6 @@
 
 #include <KMessageBox>
 #include <KActionCollection>
-#include <QFontDialog>
 #include <KTextEdit>
 #include <KLocalizedString>
 
@@ -53,6 +52,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
+#include <QFontDialog>
+#include <QMimeData>
 
 using namespace KFormDesigner;
 
@@ -2348,15 +2349,17 @@ void Form::changeFont()
 
     if (1 == widgetsWithFontProperty.count()) {
         //single widget's settings
-        if (QDialog::Accepted != KFontDialog::getFont(
-                font, KFontChooser::NoDisplayFlags, widget()))
-        {
+        bool ok;
+        font = QFontDialog::getFont(&ok, widget());
+        if (!ok) {
             return;
         }
         d->propertySet.changeProperty("font", font);
         return;
     }
     //multiple widgets
+//! @todo KEXI3 port KFontDialog::getFontDiff()
+#if 0
     QFlags<KFontChooser::FontDiff> diffFlags = KFontChooser::NoFontDiffFlags;
     if (QDialog::Accepted != KFontDialog::getFontDiff(
                 font, diffFlags, KFontChooser::NoDisplayFlags, widget())
@@ -2381,6 +2384,7 @@ void Form::changeFont()
     }
 //! @todo temporary fix for dirty flag
     setModified(true);
+#endif
 }
 
 void Form::setSlotPropertyChangedEnabled(bool set)
