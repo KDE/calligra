@@ -95,6 +95,7 @@ target_link_libraries(
 
     KF5::TextWidgets # KTextEdit
     KF5::KIOFileWidgets # KFileWidget
+    KF5::TextEditor
 )
 
 if (KEXI_MOBILE)
