@@ -61,12 +61,8 @@ public:
         if (action->shortcut().isEmpty())
             return;
         // we want to handle dialog-wide shortcut as well
-        if (!action->shortcut().primary().isEmpty()) {
-            QShortcut *shortcut = new QShortcut(action->shortcut().primary(), parent, member);
-            shortcuts.append(shortcut);
-        }
-        if (!action->shortcut().alternate().isEmpty()) {
-            QShortcut *shortcut = new QShortcut(action->shortcut().alternate(), parent, member);
+        if (!action->shortcut().isEmpty()) {
+            QShortcut *shortcut = new QShortcut(action->shortcut(), parent, member);
             shortcuts.append(shortcut);
         }
     }
