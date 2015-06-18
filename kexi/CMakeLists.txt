@@ -12,18 +12,32 @@ option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires KDB_DEBUG_GUI to be set 
 option(KEXI_SHOW_UNFINISHED, "Show unfinished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
-# Experimental:
-option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
-option(KEXI_TABLE_PRINT_SUPPORT "Experimental: Enable printing of tabular view in Kexi" OFF) # broken since Kexi 2
-option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF) # broken since Kexi 2
+# Extra GUI features
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
+# Experimental:
+option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
+
+# Not available:
+option(KEXI_MACROS_SUPPORT "Experimental: Enable macros in Kexi" OFF)
+if(KEXI_MACROS_SUPPORT) # temp.
+    message(FATAL_ERROR "Macros are not yet available.")
+endif()
+option(KEXI_TABLE_PRINT_SUPPORT "Experimental: Enable printing of tabular view in Kexi" OFF) # broken since Kexi 2
+if(KEXI_TABLE_PRINT_SUPPORT) # temp.
+    message(FATAL_ERROR "Table printing is not yet available.")
+endif()
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF) # broken since Kexi 2
+if(KEXI_PROJECT_TEMPLATES) # temp.
+    message(FATAL_ERROR "Project templates are not yet available.")
+endif()
+
 add_definitions(
-  -DKEXI_NO_CURSOR_PROPERTY
-  -DKEXI_NO_CTXT_HELP
-  -DKEXI_NO_SUBFORM
-  -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-  -DKEXI_NO_AUTOFIELD_WIDGET
+  -DKEXI_NO_CURSOR_PROPERTY  # broken
+  -DKEXI_NO_CTXT_HELP        # broken
+  -DKEXI_NO_SUBFORM          # broken
+  -DKEXI_NO_QUICK_PRINTING   # print/print preview/print setup for tables/queries in the navigator
+  -DKEXI_NO_AUTOFIELD_WIDGET # broken, to be removed
 )
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kexi\")
