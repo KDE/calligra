@@ -40,6 +40,8 @@
 #include <kexi_version.h>
 #include <core/KexiWindow.h>
 #include <core/KexiRecentProjects.h>
+#include <core/kexiaboutdata.h>
+#include <core/KexiCommandLineOptions.h>
 #include <KexiIcon.h>
 #include <kexi_global.h>
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -83,7 +85,6 @@
 #include <KHelpMenu>
 #include <KMultiTabBar>
 #include <KLocalizedString>
-#include <KAboutData>
 #include <KMessageBox>
 #include <KConfigGroup>
 
@@ -309,15 +310,24 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
+int KexiMainWindow::create(int argc, char *argv[], const QString &componentName)
 {
-    const bool appExisted = QCoreApplication::instance();
+    const bool appExisted = qApp;
 
     //! @todo use non-GUI app when needed
-    QApplication *app = new QApplication(argc, argv);
+    QApplication *app = qApp ? qApp : new QApplication(argc, argv);
+    QApplication::setWindowIcon(koIcon("calligrakexi"));
+    KLocalizedString::setApplicationDomain("kexi");
+    app->setQuitOnLastWindowClosed(false);
+    //! @todo KEXI3 app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
+    KexiAboutData aboutData;
+    if (!componentName.isEmpty()) {
+        aboutData.setComponentName(componentName);
+    }
     KAboutData::setApplicationData(aboutData);
 
-    tristate res = Kexi::startupHandler().init(argc, argv);
+    tristate res = Kexi::startupHandler().init();
     if (!res || ~res) {
         if (!appExisted) {
             delete app;
@@ -2333,11 +2343,8 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     }
 
     KexiProjectData* projectData = 0;
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
-    bool readOnly = false;
-    if (args) {
-        readOnly = args->isSet("readonly");
-    }
+    KexiStartupHandler &h = Kexi::startupHandler();
+    bool readOnly = h.isSet(h.options().readOnly);
     bool deleteAfterOpen = false;
     if (cdata) {
         //server-based project

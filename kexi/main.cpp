@@ -23,13 +23,11 @@
 */
 
 #include <QApplication>
-#include <core/kexiaboutdata.h>
 #include <main/KexiMainWindow.h>
 
 int main(int argc, char *argv[])
 {
-    KexiAboutData aboutData;
-    int result = KexiMainWindow::create(argc, argv, aboutData);
+    int result = KexiMainWindow::create(argc, argv);
     if (!qApp)
         return result;
 

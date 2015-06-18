@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,7 +23,9 @@
 #include <QString>
 #include "kexicore_export.h"
 
+class QCommandLineOption;
 class KexiProjectData;
+class KexiCommandLineOptions;
 
 //! Startup data used for storing results of startup operations in Kexi.
 //! @see KexiStartupHandler
@@ -55,10 +57,6 @@ public:
     KexiStartupData();
     virtual ~KexiStartupData();
 
-    virtual bool init() {
-        return true;
-    }
-
     Action action() const;
 
     //! \return project data of a project that should be opened (for action()==OpenProject)
@@ -85,6 +83,24 @@ public:
     /*! \return true if Kexi started fullscreen.
       Used on startup (by --fullscreen commandline switch). */
     bool forcedFullScreen() const;
+
+    //! @retrun command line options
+    KexiCommandLineOptions options() const;
+
+    //! Parses the options
+    //! @return true on success
+    bool parseOptions();
+
+    //! @return true if the option @a option was passed to the application
+    bool isSet(const QCommandLineOption & option) const;
+
+    //! @return the option value found for the given option @a option, or an empty string
+    //! if not found.
+    QString	value(const QCommandLineOption & option) const;
+
+    //! @return a list of positional arguments.
+    //! These are all of the arguments that were not recognized as part of an option.
+    QStringList positionalArguments() const;
 
 protected:
     void setAction(Action action);
