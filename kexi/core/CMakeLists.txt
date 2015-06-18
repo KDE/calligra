@@ -30,6 +30,7 @@ set(kexicore_LIB_SRCS
    kexiinternalpart.cpp
    #TODO KEXI3 kexidragobjects.cpp
    kexistartupdata.cpp
+   KexiCommandLineOptions.cpp
    kexiguimsghandler.cpp
    kexitextmsghandler.cpp
    kexidataiteminterface.cpp

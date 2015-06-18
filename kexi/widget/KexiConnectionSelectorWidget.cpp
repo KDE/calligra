@@ -32,7 +32,6 @@
 #include <KDbConnectionData>
 #include <KDbUtils>
 
-#include <KAboutData>
 #include <KMessageBox>
 #include <KUrlComboBox>
 

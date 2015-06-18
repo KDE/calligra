@@ -30,7 +30,6 @@
 
 #include <KMessageBox>
 #include <KIconTheme>
-#include <KAboutData>
 
 #include <QPixmap>
 #include <QPixmapCache>

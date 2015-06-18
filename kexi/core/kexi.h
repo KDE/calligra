@@ -30,7 +30,6 @@
 #include "kexiprojectset.h"
 
 class QLabel;
-class KAboutData;
 class KDbDriverManager;
 class KexiRecentProjects;
 

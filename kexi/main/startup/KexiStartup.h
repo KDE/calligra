@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,8 +39,7 @@ public:
     KexiStartupHandler();
     virtual ~KexiStartupHandler();
 
-    virtual bool init() { return KexiStartupData::init(); }
-    virtual tristate init(int argc, char **argv);
+    virtual tristate init();
 
     /*! Options for detectActionForFile() */
     enum DetectActionForFileOptions {

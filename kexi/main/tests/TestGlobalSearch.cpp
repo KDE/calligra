@@ -75,9 +75,7 @@ void TestGlobalSearch::testGlobalSearch()
     NewArgs args(m_argv);
     args.vals[args.count - 1] = qstrdup(QFile::encodeName(filename).constData());
 
-    KexiAboutData aboutData;
-    aboutData.setComponentName(ki18n(metaObject()->className()));
-    int result = KexiMainWindow::create(args.count, args.vals, aboutData);
+    int result = KexiMainWindow::create(args.count, args.vals, metaObject()->className());
     QVERIFY(kapp);
     QCOMPARE(result, 0);
 
