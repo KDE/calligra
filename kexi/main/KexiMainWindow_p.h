@@ -342,7 +342,7 @@ Q_SIGNALS:
     void hideContentsRequested();
 
 protected Q_SLOTS:
-    void contentWidgetDestroyed();
+    //void contentWidgetDestroyed();
 
 protected:
     virtual void showEvent(QShowEvent * event) {
@@ -415,10 +415,6 @@ private:
     QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
     bool m_selectFirstItem;
 };
-
-void KexiMainMenu::contentWidgetDestroyed()
-{
-}
 
 class KexiTabbedToolBarTabBar;
 
