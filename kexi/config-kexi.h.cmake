@@ -37,6 +37,10 @@
 //! @brief If defined, scripting GUI plugin is enabled in Kexi
 #cmakedefine KEXI_SCRIPTS_SUPPORT
 
+//! @def KEXI_MACROS_SUPPORT
+//! @brief If defined, macro GUI plugin is enabled in Kexi
+#cmakedefine KEXI_MACROS_SUPPORT
+
 //! @def KEXI_SHOW_UNFINISHED
 //! @brief If defined unfinished features are enabled and presented in Kexi.
 //! This is useful for testing but may confuse end-users.
