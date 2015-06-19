@@ -900,14 +900,14 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     m_actionGroup = new QActionGroup(tb);
     // allow only the following item types, there is not appropriate data for others
-    QStringList itemtypes;
-    itemtypes << "report:label"
-        << "report:field"
-        << "report:text"
-        << "report:check"
+    const QStringList itemtypes = QStringList()
+        << "label"
+        << "field"
+        << "text"
+        << "check"
         << "report:line"
-        << "report:chart"
-        << "report:web"
+        << "chart"
+        << "web"
         << ""; //separator
     foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
         if ( ! itemtypes.contains( a->objectName() ) ) {
@@ -1179,14 +1179,14 @@ void ReportDesigner::createDockers()
     tw.setupUi( w );
 
     // allow only the following item types, there is not appropriate data for others
-    QStringList itemtypes;
-    itemtypes << "report:label"
-    << "report:field"
-    << "report:text"
-    << "report:check"
-    << "report:line"
-    << "report:chart"
-    << "report:web";
+    const QStringList itemtypes = QStringList()
+        << "label"
+        << "field"
+        << "text"
+        << "check"
+        << "report:line"
+        << "chart"
+        << "web";
     QActionGroup *ag = new QActionGroup( this );
     int i = 0;
     foreach( QAction *a, m_designer->actions( ag ) ) {
@@ -1195,7 +1195,7 @@ void ReportDesigner::createDockers()
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-            if ( tb->objectName() == "report:web" ) {
+            if ( tb->objectName() == "web" ) {
                 tb->setToolTip( i18nc( "@into:tooltip", "Rich text" ) );
             } else {
                 tb->setToolTip( a->toolTip() );
