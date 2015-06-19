@@ -540,7 +540,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
                 package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
-                // QT5TODO
+                // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
 //                 kDebug(planDbg())<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {

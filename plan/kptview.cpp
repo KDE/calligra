@@ -2955,7 +2955,7 @@ void View::setLabel( ScheduleManager *sm )
 
 void View::slotWorkPackageLoaded()
 {
-    // QT5TODO: reenable
+    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
 //     kDebug(planDbg())<<getPart()->workPackages();
 }
 

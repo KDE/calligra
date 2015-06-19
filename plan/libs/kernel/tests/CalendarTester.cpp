@@ -221,7 +221,7 @@ void CalendarTester::testTimezone()
     KDateTime dt1 = KDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
     KDateTime dt2 = KDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
 
-    // QT5TODO: reenable
+    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
 //     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
 //     qDebug()<<dt1<<dt2<<"("<<dt1.toLocalZone()<<dt2.toLocalZone()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt1 ), after ), wdt1 );
@@ -236,7 +236,7 @@ void CalendarTester::testTimezone()
     KDateTime dt3 = KDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
     KDateTime dt4 = KDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
 
-    // QT5TODO: reenable
+    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
 //     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
 //     qDebug()<<dt3<<dt4<<"("<<dt3.toLocalZone()<<dt4.toLocalZone()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt3 ), after ), wdt1 );
@@ -251,7 +251,7 @@ void CalendarTester::testTimezone()
     KDateTime dt5 = KDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
     KDateTime dt6 = KDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
 
-    // QT5TODO: reenable
+    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
 //     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
 //     qDebug()<<dt5<<dt6<<"("<<dt5.toLocalZone()<<dt6.toLocalZone()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt5 ), after ), wdt1 );
