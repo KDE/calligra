@@ -536,7 +536,7 @@ QDate Value::asDate(const CalculationSettings* settings) const
 QTime Value::asTime(const CalculationSettings* settings) const
 {
     Q_UNUSED(settings);
-    QTime dt;
+    QTime dt(0, 0, 0, 0);
 
     const int days = asInteger();
     const int msecs = ::round(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
