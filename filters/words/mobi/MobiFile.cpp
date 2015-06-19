@@ -21,6 +21,7 @@
 #include "MobiHeaderGenerator.h"
 
 #include <QFile>
+#include <QDataStream>
 #include <kdebug.h>
 
 MobiFile::MobiFile()
