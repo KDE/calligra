@@ -4254,7 +4254,7 @@ void KexiMainWindow::hideDesignTab(int itemId, const QString &pluginId)
     if (!d->tabbedToolBar) {
         return;
     }
-    //qDebug() << itemId << partClass;
+    //qDebug() << itemId << pluginId;
     if (   itemId > 0
         && d->tabbedToolBar->currentWidget())
     {
