@@ -900,14 +900,14 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     m_actionGroup = new QActionGroup(tb);
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << "label"
-        << "field"
-        << "text"
-        << "check"
-        << "report:line"
-        << "chart"
-        << "web"
-        << ""; //separator
+        << QLatin1String("org.kde.kreport.line")
+        << QLatin1String("org.kde.kreport.label")
+        << QLatin1String("org.kde.kreport.field")
+        << QLatin1String("org.kde.kreport.text")
+        << QLatin1String("org.kde.kreport.check")
+        << QLatin1String("org.kde.kreport.chart")
+        << QLatin1String("org.kde.kreport.web")
+        << QLatin1String(""); //separator
     foreach( QAction *a, m_designer->itemActions(m_actionGroup) ) {
         if ( ! itemtypes.contains( a->objectName() ) ) {
             m_actionGroup->removeAction( a );
@@ -1179,13 +1179,13 @@ void ReportDesigner::createDockers()
 
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << "label"
-        << "field"
-        << "text"
-        << "check"
-        << "report:line"
-        << "chart"
-        << "web";
+        << QLatin1String("org.kde.kreport.line")
+        << QLatin1String("org.kde.kreport.label")
+        << QLatin1String("org.kde.kreport.field")
+        << QLatin1String("org.kde.kreport.text")
+        << QLatin1String("org.kde.kreport.check")
+        << QLatin1String("org.kde.kreport.chart")
+        << QLatin1String("org.kde.kreport.web");
     QActionGroup *ag = new QActionGroup( this );
     int i = 0;
     foreach( QAction *a, m_designer->itemActions( ag ) ) {
@@ -1194,7 +1194,7 @@ void ReportDesigner::createDockers()
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-            if ( tb->objectName() == "web" ) {
+            if ( tb->objectName() == QLatin1String("org.kde.kreport.web") ) {
                 tb->setToolTip( i18nc( "@into:tooltip", "Rich text" ) );
             } else {
                 tb->setToolTip( a->toolTip() );
