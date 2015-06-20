@@ -49,18 +49,13 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (!config) return;
 
     if (progressUpdater) progressUpdater->setProgress(0);
-    
-    // Benchmark
-    QTime timer, timerE;
-    
+
     QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
 
     if (userChosenHeightChannel == "FAIL") {
         qDebug("FIX YOUR FILTER");
         return;
     }
-    
-    timer.start();
 
     KoChannelInfo *m_heightChannel = 0;
 
@@ -69,6 +64,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
             m_heightChannel = channel;
         }
     }
+
     if (!m_heightChannel) {
         m_heightChannel = device->colorSpace()->channels().first();
     }
