@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DOCUMENT_UNDO_STORE_H
-#define __KIS_DOCUMENT_UNDO_STORE_H
+#ifndef __KIS_BUSY_PROGRESS_INDICATOR_H
+#define __KIS_BUSY_PROGRESS_INDICATOR_H
 
-#include "kis_undo_store.h"
+#include <QObject>
+#include <QScopedPointer>
 
-class KisDocument;
+class KoProgressProxy;
 
-class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
+
+class KisBusyProgressIndicator : public QObject
 {
+    Q_OBJECT
 public:
-    KisDocumentUndoStore(KisDocument *doc);
+    KisBusyProgressIndicator(KoProgressProxy *progressProxy);
+    ~KisBusyProgressIndicator();
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
-    void endMacro();
-    void purgeRedoState();
+public Q_SLOTS:
+    void update();
+
+private Q_SLOTS:
+    void slotStartTimer();
+    void timerFinished();
+
+Q_SIGNALS:
+    void sigStartTimer();
 
 private:
-    KisDocument* m_doc;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_DOCUMENT_UNDO_STORES_H */
+#endif /* __KIS_BUSY_PROGRESS_INDICATOR_H */

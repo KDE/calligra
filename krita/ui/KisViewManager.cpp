@@ -223,6 +223,8 @@ public:
         , wrapAroundAction(0)
         , showRulersAction(0)
         , zoomTo100pct(0)
+        , zoomIn(0)
+        , zoomOut(0)
         , showGuidesAction(0)
         , selectionManager(0)
         , controlFrame(0)
@@ -273,6 +275,8 @@ public:
     KisAction *wrapAroundAction;
     KisAction *showRulersAction;
     KisAction *zoomTo100pct;
+    KisAction *zoomIn;
+    KisAction *zoomOut;
     KisAction *showGuidesAction;
 
     KisSelectionManager *selectionManager;
@@ -388,6 +392,8 @@ void KisViewManager::setCurrentView(KisView *view)
 {
     bool first = true;
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(false);
+
         d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
         first = false;
         KisDocument* doc = d->currentImageView->document();
@@ -409,15 +415,20 @@ void KisViewManager::setCurrentView(KisView *view)
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         d->currentImageView = imageView;
+        KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
 
         d->viewConnections.addUniqueConnection(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
-        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),canvasController, SLOT(rotateCanvasLeft15()));
+        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
+        d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
+        d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
+        d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
         d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 
         showHideScrollbars();
@@ -436,6 +447,7 @@ void KisViewManager::setCurrentView(KisView *view)
     d->mirrorManager->setView(imageView);
 
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
     }
@@ -757,6 +769,9 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+
+    d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
+    d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
@@ -1278,18 +1293,9 @@ void KisViewManager::guiUpdateTimeout()
 
 void KisViewManager::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
-    if(d->showFloatingMessage && qtMainWindow()) {
-        if (d->savedFloatingMessage) {
-            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
-        } else {
-            if(d->currentImageView) {
-                d->savedFloatingMessage = new KisFloatingMessage(message, d->currentImageView->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
-                d->savedFloatingMessage->setShowOverParent(true);
-                d->savedFloatingMessage->setIcon(icon);
-                d->savedFloatingMessage->showMessage();
-            }
-        }
-    }
+    if (!d->currentImageView) return;
+    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
 #endif
