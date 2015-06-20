@@ -40,7 +40,7 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
     light_vector = QVector3D(0, 0, 0);
     reflection_vector = QVector3D(0, 0, 0);
 
-    setLightVector(QVector3D(-8, 8, 2));
+    //setLightVector(QVector3D(-8, 8, 2));
 
     Illuminant light[PHONG_TOTAL_ILLUMINANTS];
     QVariant guiLight[PHONG_TOTAL_ILLUMINANTS];
@@ -61,10 +61,9 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
             qreal m; //2D vector magnitude
             light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
             m = cos( inclination * M_PI / 180);
-            
+
             light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
             light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
-            
             //Pay close attention to this, indexes will move in this line
             lightSources.append(light[i]);
         }
@@ -188,12 +187,13 @@ QVector<quint16> PhongPixelProcessor::IlluminatePixelFromNormalmap(qreal r, qrea
 
     if (lightSources.size() == 0)
         return finalPixel;
-
+    
+    //  if ()
     // Algorithm begins, Phong Illumination Model
     normal_vector.setX(r);
     normal_vector.setY(g);
-    normal_vector.setZ(b);
-    normal_vector.normalize();
+    normal_vector.setZ(b+0.5);
+    //normal_vector.normalize();
 
     // PREPARE ALGORITHM HERE
 
