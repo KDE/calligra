@@ -75,7 +75,9 @@ public:
     ///Total specular light
     qreal Is;
     
-    QVector<quint16> testingHeightmapIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
+    QVector<quint16> IlluminatePixelFromHeightmap(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
+    QVector<quint16> IlluminatePixel();
+    QVector<quint16> IlluminatePixelFromNormalmap(qreal r, qreal g, qreal b);
     
     void setLightVector(QVector3D light_vector);
     

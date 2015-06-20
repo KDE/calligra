@@ -105,13 +105,8 @@ void PhongPixelProcessor::setLightVector(QVector3D lightVector)
     light_vector = lightVector;
 }
 
-QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
+QVector<quint16> PhongPixelProcessor::IlluminatePixelFromHeightmap(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
 {
-    qreal temp;
-    quint8 channel = 0;
-    const quint8 totalChannels = 3; // The 4th is alpha and we'll fill it with a nice 0xFFFF
-    qreal computation[] = {0, 0, 0};
-    //QColor pixelColor(0, 0, 0);
     QVector<quint16> finalPixel(4, 0xFFFF);
 
     if (lightSources.size() == 0)
@@ -122,6 +117,24 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
     normal_vector.setY(- realheightmap[posup] + realheightmap[posdown]);
     normal_vector.setZ(8);
     normal_vector.normalize();
+
+    // PREPARE ALGORITHM HERE
+
+    finalPixel = IlluminatePixel();
+    
+    return finalPixel;
+ }
+ 
+QVector<quint16> PhongPixelProcessor::IlluminatePixel()
+{
+    qreal temp;
+    quint8 channel = 0;
+    const quint8 totalChannels = 3; // The 4th is alpha and we'll fill it with a nice 0xFFFF
+    qreal computation[] = {0, 0, 0};
+    QVector<quint16> finalPixel(4, 0xFFFF);
+
+    if (lightSources.size() == 0)
+        return finalPixel;
 
     // PREPARE ALGORITHM HERE
 
@@ -165,6 +178,26 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
     finalPixel[2] = quint16(computation[0] * 0xFFFF);
     finalPixel[1] = quint16(computation[1] * 0xFFFF);
     finalPixel[0] = quint16(computation[2] * 0xFFFF);
+    
+    return finalPixel;
+ }
+ 
+QVector<quint16> PhongPixelProcessor::IlluminatePixelFromNormalmap(qreal r, qreal g, qreal b)
+ {
+    QVector<quint16> finalPixel(4, 0xFFFF);
+
+    if (lightSources.size() == 0)
+        return finalPixel;
+
+    // Algorithm begins, Phong Illumination Model
+    normal_vector.setX(r);
+    normal_vector.setY(g);
+    normal_vector.setZ(b);
+    normal_vector.normalize();
+
+    // PREPARE ALGORITHM HERE
+
+    finalPixel = IlluminatePixel();
     
     return finalPixel;
  }
