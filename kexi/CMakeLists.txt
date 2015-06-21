@@ -32,6 +32,9 @@ if(KEXI_PROJECT_TEMPLATES) # temp.
     message(FATAL_ERROR "Project templates are not yet available.")
 endif()
 
+#See commit # , left here for reference
+#option(KEXI_SQLITE_MIGRATION "If defined, SQLite3 migration to some newer format is possible. Users can see a suitable question on app's startup." OFF)
+
 add_definitions(
   -DKEXI_NO_CURSOR_PROPERTY  # broken
   -DKEXI_NO_CTXT_HELP        # broken
