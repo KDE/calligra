@@ -6,7 +6,7 @@ Icon=table
 Encoding=UTF-8
 
 X-KDE-Library=kexi_tableplugin
-X-KDE-ServiceTypes=Kexi/Viewer;Kexi/Designer
+X-KDE-ServiceTypes=Kexi/Viewer,Kexi/Designer
 X-KDE-PluginInfo-Author=Kexi Team
 X-KDE-PluginInfo-Email=kexi@kde.org
 X-KDE-PluginInfo-Name=org.kexi-project.table
