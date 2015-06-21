@@ -35,8 +35,8 @@
 #include "kexisearchandreplaceiface.h"
 #include "KexiBugReportDialog.h"
 #include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
 #include <kexiutils/KexiCloseButton.h>
+#include <kexiutils/KexiTester.h>
 #include <kexi_version.h>
 #include <core/KexiWindow.h>
 #include <core/KexiRecentProjects.h>

@@ -27,7 +27,6 @@
 #include <QStyleOptionToolButton>
 
 #include <kexi_global.h>
-#include <kexiutils/styleproxy.h>
 
 //! @internal A style that removes menu indicator from KexiDropDownButton.
 class KexiDropDownButtonStyle : public QProxyStyle
