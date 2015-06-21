@@ -20,6 +20,7 @@
 */
 
 #include "KexiJsonTrader.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QList>
@@ -58,11 +59,11 @@ KexiJsonTrader::~KexiJsonTrader()
 }
 
 //! @return true if at least one service type from @a serviceTypeNames exists in @a foundServiceTypes
-static bool supportsAtLeastServiceType(const QJsonArray &foundServiceTypes,
+static bool supportsAtLeastServiceType(const QStringList &foundServiceTypes,
                                        const QStringList &serviceTypeNames)
 {
     foreach(const QString &serviceTypeName, serviceTypeNames) {
-        if (foundServiceTypes.contains(QJsonValue(serviceTypeName))) {
+        if (foundServiceTypes.contains(serviceTypeName)) {
             return true;
         }
     }
@@ -98,7 +99,12 @@ static QList<QPluginLoader *> findPlugins(const QString &path, const QStringList
                 //qDebug() << dirIter.filePath() << "has no json!";
                 continue;
             }
-            const QJsonArray foundServiceTypes = pluginData.value(QLatin1String("ServiceTypes")).toArray();
+            const QJsonArray foundServiceTypesAray = pluginData.value(QLatin1String("ServiceTypes")).toArray();
+            if (foundServiceTypesAray.isEmpty()) {
+                qWarning() << "No ServiceTypes defined for plugin" << loader->fileName() << "-- skipping!";
+                continue;
+            }
+            QStringList foundServiceTypes = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(foundServiceTypesAray.toVariantList());
             if (!supportsAtLeastServiceType(foundServiceTypes, servicetypes)) {
                 continue;
             }
