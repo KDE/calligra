@@ -1323,7 +1323,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     bool incompatibleWithKexi;
     tristate res = prj->open(&incompatibleWithKexi);
 
-    if (prj->data()->connectionData()->passwordNeeded()) {
+    if (prj->data()->connectionData()->isPasswordNeeded()) {
         // password was supplied in this session, and shouldn't be stored or reused afterwards,
         // so let's remove it
         prj->data()->connectionData()->setPassword(QString());
