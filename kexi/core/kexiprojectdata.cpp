@@ -249,7 +249,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     } else if (type == "connection") {
         isDatabaseShortcut = false;
     } else {
-        //! @todo ERR: xi18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
+        //! @todo ERR: xi18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".", group, type)
         return false;
     }
 
