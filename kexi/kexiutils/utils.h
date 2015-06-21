@@ -134,7 +134,7 @@ KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObjectWithInherited(
 KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProperty);
 
 //! Convert a list @a list of @a SourceType type to another list of @a DestinationType
-//! type using @a convertMethod method
+//! type using @a convertMethod function
 /*!
  Example:
 @code
@@ -142,12 +142,31 @@ KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProper
     QStringList result = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(list);
 @endcode */
 template <typename SourceType, typename DestinationType,
-          DestinationType (*convertMethod)(const SourceType&)>
+          DestinationType (*ConvertFunction)(const SourceType&)>
 QList<DestinationType> convertTypes(const QList<SourceType> &list)
 {
     QList<DestinationType> result;
     foreach(const SourceType &element, list) {
-        result.append(convertMethod(element));
+        result.append(ConvertFunction(element));
+    }
+    return result;
+}
+
+//! Convert a list @a list of @a SourceType type to another list of @a DestinationType
+//! type using @a convertMethod
+/*!
+ Example:
+@code
+    QVariantList list = ....;
+    QStringList result = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(list);
+@endcode */
+template <typename SourceType, typename DestinationType,
+          DestinationType (SourceType::*ConvertMethod)() const>
+QList<DestinationType> convertTypes(const QList<SourceType> &list)
+{
+    QList<DestinationType> result;
+    foreach(const SourceType &element, list) {
+        result.append((element.*ConvertMethod)());
     }
     return result;
 }
