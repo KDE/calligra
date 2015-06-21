@@ -82,30 +82,20 @@ add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
 generate_export_header(kexiextendedwidgets BASE_NAME kexiextwidgets)
 
-target_link_libraries(
-    kexiextendedwidgets
-    kexidataviewcommon
-    kexiutils
-    kexiguiutils
-    kexicore
-    ktexteditor
+target_link_libraries(kexiextendedwidgets
+    PRIVATE
+        kexidataviewcommon
+        kexiutils
+        kexiguiutils
+        kexicore
 
-    KDb
-    KProperty
+        KDb
+        KProperty
 
-    KF5::TextWidgets # KTextEdit
-    KF5::KIOFileWidgets # KFileWidget
-    KF5::TextEditor
+        KF5::TextWidgets # KTextEdit
+        KF5::KIOFileWidgets # KFileWidget
+        KF5::TextEditor
 )
-
-if (KEXI_MOBILE)
-
-else()
-  target_link_libraries(
-    kexiextendedwidgets
-
-    )
-endif()
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiextendedwidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
