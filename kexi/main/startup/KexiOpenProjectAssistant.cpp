@@ -267,7 +267,7 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
             KDbConnectionData *cdata
                 = d->m_projectOpenPage->connSelector->selectedConnectionData();
             if (cdata) {
-                if (cdata->passwordNeeded()) {
+                if (cdata->isPasswordNeeded()) {
                     d->passwordPage()->setConnectionData(*cdata);
                     setCurrentPage(d->passwordPage());
                     return;
