@@ -154,6 +154,10 @@ KEXICORE_EXPORT QString serverIconName();
 /*! \return icon for database servers. */
 KEXICORE_EXPORT QIcon serverIcon();
 
+/*! @return message text "Kexi could have been incorrectly installed or started.
+            The application will be closed." useful for critical errors. */
+KEXICORE_EXPORT QString appIncorrectlyInstalledMessage();
+
 }//namespace Kexi
 
 //! @return icon name as understood by Kexi. Icon theme support is improved this way.

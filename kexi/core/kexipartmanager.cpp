@@ -128,13 +128,6 @@ PartClass* Manager::part(Info *info, QHash<QString, PartClass*> *partDict)
     return p;
 }
 
-static QString appIncorrectlyInstalledMessage()
-{
-    return xi18nc("@info", "<application>%1</application> could have been incorrectly "
-                           "installed or started. The application will be closed.",
-                           QApplication::applicationDisplayName());
-}
-
 //! @return a string list @a list with removed whitespace from the beginning and end of each string.
 //! Empty strings are also removed.
 static QStringList cleanupStringList(const QStringList &list)
