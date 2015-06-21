@@ -7,7 +7,6 @@ include_directories(
 
 set(kexiutils_LIB_SRCS
   utils.cpp
-  styleproxy.cpp
   InternalPropertyMap.cpp
   SmallToolButton.cpp
   KexiCommandLinkButton.cpp
@@ -73,7 +72,7 @@ install(TARGETS kexiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(FALSE) # TODO: install when we move to independent place
     install( FILES  tristate.h utils.h kexiutils_export.h kexiutils_global.h
-    styleproxy.h InternalPropertyMap.h
+    InternalPropertyMap.h
     SmallToolButton.h FlowLayout.h
     kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h
     KexiAssistantWidget.h KexiAnimatedLayout.h

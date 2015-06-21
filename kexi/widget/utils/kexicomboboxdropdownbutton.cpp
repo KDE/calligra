@@ -23,8 +23,7 @@
 #include <QStyleOptionToolButton>
 #include <QPainter>
 #include <QEvent>
-
-#include <kexiutils/styleproxy.h>
+#include <QPointer>
 
 //! @internal A style that allows to alter some painting in KexiComboBoxDropDownButton.
 class KexiComboBoxDropDownButtonStyle : public QProxyStyle
