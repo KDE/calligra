@@ -1,5 +1,0 @@
-[Parts]
-Order=org.kexi-project.table,org.kexi-project.query,org.kexi-project.form,org.kexi-project.report,org.kexi-project.macro,org.kexi-project.script
-
-[MainWindow]
-HoverCloseButtonForTabs=false
