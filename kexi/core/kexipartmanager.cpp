@@ -156,16 +156,14 @@ bool Manager::lookup()
 
     // load visual order of plugins
     KConfigGroup cg(KSharedConfig::openConfig()->group("Parts"));
-    if (qApp && !cg.hasKey("Order")) {
-        m_result = KDbResult(appIncorrectlyInstalledMessage());
-        m_result.setServerMessage(xi18nc("@info",
-            "Missing or invalid default application configuration. No <resource>%1</resource> key.",
-            QLatin1String("Parts/Order")));
-        return false;
-    }
-    const QStringList orderedPluginIds = cleanupStringList(cg.readEntry("Order").split(','));  //we'll set parts in defined order
+    const QStringList orderedPluginIds = cleanupStringList(
+        cg.readEntry("Order", "org.kexi-project.table,"
+                              "org.kexi-project.query,"
+                              "org.kexi-project.form,"
+                              "org.kexi-project.report,"
+                              "org.kexi-project.macro,"
+                              "org.kexi-project.script").split(','));
     QVector<Info*> orderedInfos(orderedPluginIds.count());
-
     QStringList serviceTypes;
     serviceTypes << "Kexi/Viewer" << "Kexi/Designer" << "Kexi/Editor";
     const QList<QPluginLoader*> offers = KexiPartTrader_instance->query(serviceTypes);
@@ -286,4 +284,3 @@ PartInfoList* Manager::infoList()
     }
     return &d->partlist;
 }
-
