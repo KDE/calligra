@@ -32,7 +32,6 @@
 
 #include <KIconLoader>
 #include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableScrollAreaHeader.
