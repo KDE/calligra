@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 */
 
 #include "KexiMainWindow.h"
+#include "KexiMainWindow_p.h"
 #include <config-kexi.h>
 #include "kexiactionproxy.h"
 #include "kexipartmanager.h"
@@ -90,21 +91,12 @@
 
 #include <QApplication>
 #include <QFile>
-#include <QTimer>
-#include <QObject>
 #include <QProcess>
 #include <QToolButton>
-#include <QAction>
 #include <QDebug>
 #include <QHash>
-#include <QDockWidget>
-#include <QShortcut>
 #include <QStylePainter>
-#include <QScopedPointer>
-#include <QFileDialog>
 #include <QDesktopWidget>
-
-#include <unistd.h>
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) qDebug()
@@ -116,12 +108,6 @@
 #include <KSharedConfig>
 #include "kexinewstuff.h"
 #endif
-
-//-------------------------------------------------
-
-#include "KexiMainWindow_p.h"
-
-//-------------------------------------------------
 
 class KexiDockWidget::Private
 {
@@ -3652,46 +3638,15 @@ void KexiMainWindow::slotToolsCompactDatabase()
     delete data;
 }
 
+tristate KexiMainWindow::showProjectMigrationWizard(const QString& mimeType, const QString& databaseName)
+{
+    return d->showProjectMigrationWizard(mimeType, databaseName, 0);
+}
+
 tristate KexiMainWindow::showProjectMigrationWizard(
     const QString& mimeType, const QString& databaseName, const KDbConnectionData &cdata)
 {
-    //pass arguments
-    QMap<QString, QString> args;
-    args.insert("mimeType", mimeType);
-    args.insert("databaseName", databaseName);
-    if (cdata.isValid()) { //pass KDbConnectionData serialized as a string...
-        QString str;
-        KDbUtils::serializeMap(cdata.toMap(), &str);
-        args.insert("connectionData", str);
-    }
-
-    QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "migration", this, 0, &args);
-    if (!dlg)
-        return false; //error msg has been shown by KexiInternalPart
-
-    const int result = dlg->exec();
-    delete dlg;
-    if (result != QDialog::Accepted)
-        return cancelled;
-
-    //open imported project in a new Kexi instance
-    QString destinationDatabaseName(args["destinationDatabaseName"]);
-    QString fileName, destinationConnectionShortcut, dbName;
-    if (!destinationDatabaseName.isEmpty()) {
-        if (args.contains("destinationConnectionShortcut")) {
-            // server-based
-            destinationConnectionShortcut = args["destinationConnectionShortcut"];
-        } else {
-            // file-based
-            fileName = destinationDatabaseName;
-            destinationDatabaseName.clear();
-        }
-        tristate res = openProject(fileName, destinationConnectionShortcut,
-                                   destinationDatabaseName);
-        raise();
-        return res;
-    }
-    return true;
+    return d->showProjectMigrationWizard(mimeType, databaseName, &cdata);
 }
 
 tristate KexiMainWindow::executeItem(KexiPart::Item* item)

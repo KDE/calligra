@@ -10,6 +10,7 @@ set(QT_USE_QTUITOOLS true)
 
 set(keximain_LIB_SRCS
     KexiMainWindow.cpp
+    KexiMainWindow_p.cpp
     KexiMenuWidget.cpp
     kexifinddialog.cpp
     kexistatusbar.cpp
