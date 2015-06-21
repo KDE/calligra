@@ -84,6 +84,12 @@ KoSection::KoSection(const QTextCursor &cursor, const QString &name, KoSection *
 
     d->boundingCursorStart.setKeepPositionOnInsert(true); // Start cursor should stay on place
     d->boundingCursorEnd.setKeepPositionOnInsert(false); // and end one should move forward
+
+    if (parent) {
+	d->level = parent->level() + 1;
+    } else {
+	d->level = 0;
+    }
 }
 
 KoSection::~KoSection()

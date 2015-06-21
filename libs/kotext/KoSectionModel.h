@@ -29,6 +29,31 @@
  * affect Model structure without changing something on Formatting
  * Level. Also affected by RenameSectionCommand.
  *
+ * Also we need to look at the consistency of some section properties:
+ *
+ * 1) Bounds. Those now are handled with QTextCursors that are placed
+ * on start and end of the section. In default state start cursor
+ * isn't moving if text inserted in its position, and end cursor
+ * moves. But in the case of initial document loading, it is necessary
+ * to make some end cursors stop moving, so we have:
+ * 	KoTextLoader -> calling -> KoSection::setKeepEndBound()
+ * 	KoTextLoader -> calling -> KoSectionModel::allowMovingEndBound()
+ *      ^-- this needed to restore defaul behaviour after load
+ *
+ * 2) Level. Level means the depth of the section in tree. Root
+ * sections has 0 (zero) level. Now if you look at the possible
+ * text editing command affecting sections you may notice that
+ * level of section doesn't change in any case, except drag-n-drop
+ * replacement in tree. Initial level is set in KoSection constructor
+ * as parent's level plus one.
+ *
+ * 3) Name. Each KoSection has a name that must be unique. We have
+ * two groups of KoSections in each moment of time: the first group
+ * consists of the sections that are present in document now,
+ * the second group consists of the sections that were deleted, but
+ * we still need them as they may be restored with "undo".
+ * This groups are stored in m_registeredSections and m_sectionNames.
+ *
  * Sections are created through this newSection() and newSectionEnd()
  * functions.
  *

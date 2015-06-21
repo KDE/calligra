@@ -29,7 +29,7 @@ KoSection *KoSectionModel::createSection(const QTextCursor &cursor, KoSection *p
     // Lets find our number in parent's children by cursor position
     QVector<KoSection *> &children = (parent ? parent->children() : m_rootSections);
     int childrenId = children.size();
-    for (int i = 0; i < children.size(); i++) {
+    for (int i = children.size() - 1; i >= 0; i--) {
 	if (cursor.position() < children[i]->bounds().first) {
 	    childrenId = i;
 	    break;
@@ -134,7 +134,7 @@ QModelIndex KoSectionModel::index(int row, int column, const QModelIndex &parent
     }
 
     KoSection *parent = static_cast<KoSection *>(parentIdx.internalPointer());
-    return createIndex(row, column, &parent->children()[row]);
+    return createIndex(row, column, parent->children()[row]);
 }
 
 QModelIndex KoSectionModel::parent(const QModelIndex &child) const
