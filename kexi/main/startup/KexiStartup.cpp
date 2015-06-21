@@ -50,13 +50,6 @@
 
 #include <unistd.h>
 
-//! @todo enable this when we need sqlite3-to-someting-newer migration
-// #define KEXI_SQLITE_MIGRATION
-
-#ifdef KEXI_SQLITE_MIGRATION
-# include "KexiStartup_p.h"
-#endif
-
 namespace Kexi
 {
 
@@ -862,30 +855,7 @@ tristate KexiStartupHandler::detectActionForFile(
         *detectedDriverId = suggestedDriverId;
     }
 // qDebug() << "driver id:" << detectedDriverName;
-//hardcoded for convenience:
-    const QString newFileFormat = "SQLite3";
 
-#ifdef KEXI_SQLITE_MIGRATION
-    if (!(options & DontConvert || options & SkipMessages)
-            && detectedDriverName.toLower() == "sqlite2" && detectedDriverName.toLower() != suggestedDriverName.toLower()
-            && KMessageBox::Yes == KMessageBox::questionYesNo(parent, xi18n(
-                        "Previous version of database file format (\"%1\") is detected in the \"%2\" "
-                        "project file.\nDo you want to convert the project to a new \"%3\" format (recommended)?",
-                        detectedDriverName, QDir::toNativeSeparators(databaseName), newFileFormat))) {
-        SQLite2ToSQLite3Migration migr(finfo.absoluteFilePath());
-        tristate res = migr.run();
-//  qDebug() << "--- migr.run() END ---";
-        if (!res) {
-            KMessageBox::sorry(parent, xi18n(
-                                   "Failed to convert project file \"%1\" to a new \"%2\" format.\n"
-                                   "The file format remains unchanged.",
-                                   QDir::toNativeSeparators(databaseName), newFileFormat));
-            //continue...
-        }
-        if (res == true)
-            detectedDriverName = newFileFormat;
-    }
-#endif
     if (detectedDriverId->isEmpty()) {
         QString possibleProblemsInfoMsg(Kexi::driverManager().possibleProblemsMessage());
         if (!possibleProblemsInfoMsg.isEmpty()) {

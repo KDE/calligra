@@ -72,13 +72,11 @@ Type: defined/undefined
 Default: defined
 Description: Defined means Kexi offers project templates.
 
+==== Obsolete, removed, don't use ====
+
 * KEXI_SQLITE_MIGRATION
 Type: defined/undefined
 Default: undefined
 Description: If defined, sqlite3 migration to some newer format is supported
 (users can see appropriate proposal on startup). Used in KexiStartup.cpp.
-NOTE: Shall be defined.
 
-==== Obsolete, don't use ====
-
-(none)
