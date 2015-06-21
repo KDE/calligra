@@ -76,7 +76,7 @@ void TestGlobalSearch::testGlobalSearch()
     args.vals[args.count - 1] = qstrdup(QFile::encodeName(filename).constData());
 
     int result = KexiMainWindow::create(args.count, args.vals, metaObject()->className());
-    QVERIFY(kapp);
+    QVERIFY(qApp);
     QCOMPARE(result, 0);
 
     QLineEdit *lineEdit = kexiTester().widget<QLineEdit*>("globalSearch.lineEdit");
@@ -124,7 +124,7 @@ void TestGlobalSearch::testGlobalSearch()
     QCOMPARE(selectedPartItem->pluginId(), QLatin1String("org.kexi-project.form"));
 
     if (m_goToEventLoop) {
-        result = kapp->exec();
+        result = qApp->exec();
         QCOMPARE(result, 0);
     }
 }
