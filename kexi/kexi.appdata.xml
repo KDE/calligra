@@ -241,6 +241,7 @@
       <li>Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
       <li xml:lang="bs">Scripting koristeći JavaScript, Python ili Ruby programskim jezicima (eksperimentalno)</li>
       <li xml:lang="ca">Crear scripts usant els llenguatges de programació JavaScript, Python o Ruby (experimental)</li>
+      <li xml:lang="de">Unterstützung für Skripte in den Programmsprachen JavaScript, Python oder Ruby (experimentell)</li>
       <li xml:lang="en-GB">Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
       <li xml:lang="es">Programación de scripts escritos en los lenguajes de programación JavaScript, Python o Ruby (experimental)</li>
       <li xml:lang="fi">Skriptaus JavaScript-, Python- tai Ruby-ohjelmointikielillä (kokeellinen)</li>
@@ -269,6 +270,7 @@
       <caption>Table View storing images</caption>
       <caption xml:lang="bs">Tabela View čuvanje slika</caption>
       <caption xml:lang="ca">Vista de taula emmagatzemant imatges</caption>
+      <caption xml:lang="de">Tabellen Ansicht mit Bildern</caption>
       <caption xml:lang="en-GB">Table View storing images</caption>
       <caption xml:lang="es">Una vista de tabla para almacenar imágenes</caption>
       <caption xml:lang="fi">Kuvien tallennus taulukkonäkymään</caption>
