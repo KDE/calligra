@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,37 +41,6 @@ namespace KexiPart
 class Info;
 class Part;
 }
-
-//! @internal tab widget acting as central widget for KexiMainWindow
-class KexiMainWindowTabWidget : public QTabWidget
-{
-    Q_OBJECT
-public:
-    KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
-    virtual ~KexiMainWindowTabWidget();
-public Q_SLOTS:
-    void closeTab();
-    tristate closeAllTabs();
-
-protected:
-    //! Shows context menu for tab at @a index at point @a point.
-    //! If @a index is -1, context menu for empty area is requested.
-    void showContextMenuForTab(int index, const QPoint& point);
-
-    //! Reimplemented to hide frame when no tabs are displayed
-    virtual void paintEvent(QPaintEvent * event);
-
-    virtual void mousePressEvent(QMouseEvent *event);
-
-    KexiMainWidget *m_mainWidget;
-    QAction *m_closeAction;
-    QAction *m_closeAllTabsAction;
-
-private:
-    int m_tabIndex;
-
-    void setTabIndexFromContextMenu(const int clickedIndex);
-};
 
 #define KexiMainWindowSuper QWidget //KMainWindow
 
@@ -571,10 +540,13 @@ protected Q_SLOTS:
     /*! Shows Project Migration Wizard. \return true on successful migration,
      cancelled on cancellation, and false on failure.
      If \a mimeType and \a databaseName are not empty, the wizard will only ask about
-     parameters of destination project and skip pages related to source project.
-     \a cdata, if valid (isValid()) is used preselect server-based connections. */
+     parameters of destination project and skip pages related to source project. */
+    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName);
+
+    /*! @overload tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName)
+     @a cdata is used preselect a server-based connection. */
     tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
-                                        const KDbConnectionData &cdata = KDbConnectionData());
+                                        const KDbConnectionData &cdata);
 
     //! Receives "selectionChanged()" signal from navigator to update some actions.
     void slotPartItemSelectedInNavigator(KexiPart::Item* item);
