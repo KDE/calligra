@@ -125,11 +125,10 @@ void KexiDBPasswordDialog::slotShowConnectionDetails()
 //static
 tristate KexiDBPasswordDialog::getPasswordIfNeeded(KDbConnectionData *data, QWidget *parent)
 {
-    if (data->passwordNeeded() && data->password().isNull() /* null means missing password */) {
+    if (data->isPasswordNeeded() && data->password().isNull() /* null means missing password */) {
         //ask for password
         KexiDBPasswordDialog pwdDlg(parent, *data, KexiDBPasswordDialog::ServerReadOnly);
         return QDialog::Accepted == pwdDlg.exec() ? tristate(true): cancelled;
     }
     return false;
 }
-
