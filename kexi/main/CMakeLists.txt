@@ -48,12 +48,12 @@ add_library(keximain SHARED ${keximain_LIB_SRCS})
 generate_export_header(keximain)
 
 target_link_libraries(keximain
+PRIVATE
     kexicore
     kexiutils
     kexiextendedwidgets
     kexiguiutils
-    keximigrate
-#TODO:    ${KDE4_KNEWSTUFF_LIBS}
+#TODO: KEXI3    keximigrate
 
     KDb
     KProperty

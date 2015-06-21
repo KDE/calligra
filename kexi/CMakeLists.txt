@@ -96,7 +96,7 @@ if(KEXI_MOBILE)
 
 else()
   add_subdirectory( main )
-  add_subdirectory( formeditor )
+#TODO KEXI3  add_subdirectory( formeditor )
 #TODO KEXI3  add_subdirectory( migration )
 endif()
 
