@@ -190,9 +190,9 @@ QVector<quint16> PhongPixelProcessor::IlluminatePixelFromNormalmap(qreal r, qrea
     
     //  if ()
     // Algorithm begins, Phong Illumination Model
-    normal_vector.setX(r);
-    normal_vector.setY(g);
-    normal_vector.setZ(b+0.5);
+    normal_vector.setX(r*2-1.0);
+    normal_vector.setY(-(g*2-1.0));
+    normal_vector.setZ(b*2-1.0);
     //normal_vector.normalize();
 
     // PREPARE ALGORITHM HERE
