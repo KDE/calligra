@@ -410,3 +410,9 @@ QIcon Kexi::serverIcon()
     return QIcon::fromTheme(serverIconName());
 }
 
+QString Kexi::appIncorrectlyInstalledMessage()
+{
+    return xi18nc("@info", "<application>%1</application> could have been incorrectly "
+                           "installed or started. The application will be closed.",
+                           QApplication::applicationDisplayName());
+}
