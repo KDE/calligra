@@ -21,17 +21,6 @@
 #ifndef KEXIMAINWINDOW_P_H
 #define KEXIMAINWINDOW_P_H
 
-#define KEXI_NO_PROCESS_EVENTS
-
-#ifdef KEXI_NO_PROCESS_EVENTS
-# define KEXI_NO_PENDING_DIALOGS
-#endif
-
-#define PROJECT_NAVIGATOR_TABBAR_ID 0
-#define PROPERTY_EDITOR_TABBAR_ID 1
-
-#include <QHBoxLayout>
-#include <QPainter>
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <QTabWidget>
@@ -39,7 +28,6 @@
 #include <QPropertyAnimation>
 #include <QStackedLayout>
 #include <QProxyStyle>
-#include <QStyleOptionTabV3>
 #include <QTabBar>
 #include <QTimer>
 #include <QDockWidget>
@@ -51,31 +39,36 @@
 #include <KActionCollection>
 #include <KMultiTabBar>
 #include <KActionMenu>
+#include <KMainWindow>
+#include <KSharedConfig>
 
+#include "KexiMainWindow.h"
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
 #include "KexiMenuWidget.h"
 #include "kexifinddialog.h"
 #include "kexistatusbar.h"
 #include "KexiStartup.h"
-#include <kexiutils/SmallToolButton.h>
-#include <kexiutils/styleproxy.h>
-#include <kexiutils/KexiTester.h>
 #include <kexiutils/utils.h>
-#include <kexiutils/KexiFadeWidgetEffect.h>
 #include <widget/utils/KexiDockableWidget.h>
 #include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiNameDialog.h>
 #include <core/kexi.h>
 #include <core/KexiWindow.h>
-#include <core/kexipartmanager.h>
 #include <core/kexipartinfo.h>
-#include <KexiIcon.h>
-#include <kde_file.h>
 
+#define KEXI_NO_PROCESS_EVENTS
+
+#ifdef KEXI_NO_PROCESS_EVENTS
+# define KEXI_NO_PENDING_DIALOGS
+#endif
+
+#define PROJECT_NAVIGATOR_TABBAR_ID 0
+#define PROPERTY_EDITOR_TABBAR_ID 1
+#define KEXITABBEDTOOLBAR_SPACER_TAB_INDEX 1
+
+class QPainter;
 class KexiProjectNavigator;
-
-static const int KEXITABBEDTOOLBAR_SPACER_TAB_INDEX = 1;
 
 //! @short Main application's tabbed toolbar
 class KexiTabbedToolBar : public QTabWidget
