@@ -63,7 +63,7 @@ private:
 };
 
 //! @return global KexiTester object.
-KexiTester& kexiTester();
+KEXIUTILS_EXPORT KexiTester& kexiTester();
 
 //! Adds test object @a object to the tester.
 KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object);
