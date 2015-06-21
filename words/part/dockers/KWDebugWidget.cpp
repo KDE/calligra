@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,6 @@
 #include <KoSection.h>
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
-#include <KoSectionManager.h>
 #include <KoElementReference.h>
 #include <KoShapeController.h>
 #include <KoSectionUtils.h>
@@ -124,7 +123,6 @@ void KWDebugWidget::unsetCanvas()
 
 void KWDebugWidget::doSetMagic()
 {
-    KoTextDocument(m_canvas->document()->mainFrameSet()->document()).sectionManager()->update(false);
     updateData();
 }
 

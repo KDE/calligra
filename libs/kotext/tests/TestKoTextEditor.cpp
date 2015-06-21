@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (c) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -651,6 +652,8 @@ void TestKoTextEditor::testDeleteSectionHandling_data()
     << (QVector<int>()));
 }
 
+// This test tests delete handling only on Formatting Level
+// See KoSectionModel
 void TestKoTextEditor::testDeleteSectionHandling()
 {
     QObject parent;
@@ -669,7 +672,8 @@ void TestKoTextEditor::testDeleteSectionHandling()
     KoSection *sec[TOTAL_SECTIONS];
     KoSectionEnd *secEnd[TOTAL_SECTIONS];
     for (int i = 0; i < TOTAL_SECTIONS; i++) {
-        sec[i] = new KoSection(editor.constCursor());
+	// Parent is nullptr below: shouldn't affect functioning of the test
+        sec[i] = new KoSection(editor.constCursor(), QString::number(i), 0);
         secEnd[i] = new KoSectionEnd(sec[i]);
     }
 

@@ -14,7 +14,7 @@
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -83,7 +83,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
 #include <KoSectionUtils.h>
-#include <KoSectionManager.h>
+#include <KoSectionModel.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -141,6 +141,7 @@ public:
 
     QVector<QString> nameSpacesList;
     QList<KoSection *> openingSections;
+    QStack<KoSection *> sectionStack; // Used to track the parent of current section
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
@@ -447,7 +448,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 
     if (!rootCallChecker) {
 	// Allow to move end bounds of sections with inserting text
-	KoTextDocument(cursor.block().document()).sectionManager()->allowMovingEndBound();
+	KoTextDocument(cursor.block().document()).sectionModel()->allowMovingEndBound();
     }
 }
 
@@ -832,13 +833,15 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    KoSection *section = new KoSection(cursor);
+    KoSection *parent = d->sectionStack.empty() ? 0 : d->sectionStack.top();
+    KoSection *section = d->context.sectionModel()->createSection(cursor, parent);
     if (!section->loadOdf(sectionElem, d->textSharedData, d->stylesDotXml)) {
         delete section;
         kWarning(32500) << "Could not load section";
         return;
     }
 
+    d->sectionStack << section;
     d->openingSections << section;
 
     loadBody(sectionElem, cursor);
@@ -846,7 +849,8 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     // Close the section on the last block of text we have loaded just now.
     QTextBlockFormat format = cursor.block().blockFormat();
     KoSectionUtils::setSectionEndings(format,
-        KoSectionUtils::sectionEndings(format) << new KoSectionEnd(section));
+        KoSectionUtils::sectionEndings(format) << d->context.sectionModel()->createSectionEnd(section));
+    d->sectionStack.pop();
 
     cursor.setBlockFormat(format);
 

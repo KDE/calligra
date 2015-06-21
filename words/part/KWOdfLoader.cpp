@@ -46,8 +46,8 @@
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoApplication.h>
-#include <KoSectionManager.h>
 #include <KoUnit.h>
+#include <KoSectionModel.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -218,7 +218,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
     m_document->addFrameSet(mainFs);
     textShapeData.setDocument(mainFs->document(), false);
-    sc.setSectionManager(new KoSectionManager(mainFs->document()));
+    sc.setSectionModel(new KoSectionModel(mainFs->document()));
 
     // disable the undo recording during load so the kotexteditor is in sync with
     // the app's undostack

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *  Copyright (c) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,7 +57,6 @@ class KoSectionPrivate;
 class KOTEXT_EXPORT KoSection
 {
 public:
-    explicit KoSection(const QTextCursor &cursor);
     ~KoSection();
 
     /// Returns section name
@@ -66,11 +65,6 @@ public:
     QPair<int, int> bounds() const;
     /// Returns section level. Root section has @c 0 level.
     int level() const;
-    /** Tries to set section's name to @p name
-     * @return @c false if there is a section with such name
-     * and new name isn't accepted
-     */
-    bool setName(const QString &name);
 
     /** Returns inlineRdf associated with section
      * @return pointer to the KoTextInlineRdf for this section
@@ -92,19 +86,37 @@ private:
     Q_DISABLE_COPY(KoSection)
     Q_DECLARE_PRIVATE(KoSection)
 
+    explicit KoSection(const QTextCursor &cursor, const QString &name, KoSection *parent);
+
+    /// Changes section's name to @param name
+    void setName(const QString &name);
+
+    /// Sets paired KoSectionsEnd for this section.
     void setSectionEnd(KoSectionEnd *sectionEnd);
+
+    /**
+     * Sets level of section in section tree.
+     * Root sections have @c 0 level.
+     */
     void setLevel(int level);
 
-    /** Specifies if end bound of section should stay on place when inserting text.
+    /// Returns a pointer to the parent of the section in tree.
+    KoSection *parent() const;
+
+    /// Returns a vector of pointers to the children of the section.
+    QVector<KoSection *> &children();
+
+    /**
+     * Specifies if end bound of section should stay on place when inserting text.
      * Used by KoTextLoader on document loading.
-     *
      * @see QTextCursor::setKeepPositionOnInsert(bool)
      */
     void setKeepEndBound(bool state);
 
-    friend class KoTextLoader;
-    friend class KoSectionManager;
+    friend class KoSectionModel;
+    friend class KoTextLoader; // accesses setKeepEndBound() function
     friend class KoSectionEnd;
+    friend class TestKoTextEditor;
 };
 
 Q_DECLARE_METATYPE(KoSection *)

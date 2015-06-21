@@ -41,7 +41,7 @@ set(kotext_LIB_SRCS
     KoSection.cpp
     KoSectionEnd.cpp
     KoSectionUtils.cpp
-    KoSectionManager.cpp
+    KoSectionModel.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoAnchorInlineObject.cpp
@@ -193,7 +193,7 @@ install(
     KoSection.h
     KoSectionEnd.h
     KoSectionUtils.h
-    KoSectionManager.h
+    KoSectionModel.h
     KoTextCommandBase.h
     KoTextTableTemplate.h
 
