@@ -690,9 +690,9 @@ void KexiMainWindow::setupActions()
 #endif
 
     //EDIT MENU
-    d->action_edit_cut = createSharedAction(KStandardAction::Cut, "edit_cut");
-    d->action_edit_copy = createSharedAction(KStandardAction::Copy, "edit_copy");
-    d->action_edit_paste = createSharedAction(KStandardAction::Paste, "edit_paste");
+    d->action_edit_cut = createSharedAction(KStandardAction::Cut);
+    d->action_edit_copy = createSharedAction(KStandardAction::Copy);
+    d->action_edit_paste = createSharedAction(KStandardAction::Paste);
 
     if (d->userMode)
         d->action_edit_paste_special_data_table = 0;
@@ -718,9 +718,9 @@ void KexiMainWindow::setupActions()
     connect(d->action_edit_copy_special_data_table, SIGNAL(triggered()),
             this, SLOT(slotEditCopySpecialDataTable()));
 
-    d->action_edit_undo = createSharedAction(KStandardAction::Undo, "edit_undo");
+    d->action_edit_undo = createSharedAction(KStandardAction::Undo);
     d->action_edit_undo->setWhatsThis(xi18n("Reverts the most recent editing action."));
-    d->action_edit_redo = createSharedAction(KStandardAction::Redo, "edit_redo");
+    d->action_edit_redo = createSharedAction(KStandardAction::Redo);
     d->action_edit_redo->setWhatsThis(xi18n("Reverts the most recent undo action."));
 
     ac->addAction("edit_find",
@@ -741,8 +741,7 @@ void KexiMainWindow::setupActions()
 //! @todo d->action_edit_replace_all = new QAction( xi18n("Replace All"), "", 0,
 //!   this, SLOT(slotEditReplaceAll()), actionCollection(), "edit_replaceall");
 
-    d->action_edit_select_all =  createSharedAction(KStandardAction::SelectAll,
-                                 "edit_select_all");
+    d->action_edit_select_all =  createSharedAction(KStandardAction::SelectAll);
 
     d->action_edit_delete = createSharedAction(xi18n("&Delete"), koIconName("edit-delete"),
                             QKeySequence(), "edit_delete");
