@@ -46,7 +46,7 @@ class WidgetLibraryPrivate
 public:
     WidgetLibraryPrivate()
             : showAdvancedProperties(true)
-            , factoriesLoaded(false)
+            , lookupDone(false)
     {
         advancedProperties.insert("acceptDrops");
         advancedProperties.insert("accessibleDescription");
@@ -95,7 +95,8 @@ public:
     QSet<QByteArray> advancedProperties;
     QSet<QByteArray> hiddenClasses;
     bool showAdvancedProperties;
-    bool factoriesLoaded;
+    bool lookupDone;
+    bool lookupResult;
 };
 }
 
@@ -110,7 +111,6 @@ WidgetLibrary::WidgetLibrary(QObject *parent, const QStringList& supportedFactor
     foreach (const QString &group, supportedFactoryGroups) {
         d->supportedFactoryGroups.insert(group.toLower().toLatin1());
     }
-    lookupFactories();
 }
 
 WidgetLibrary::~WidgetLibrary()
@@ -118,8 +118,7 @@ WidgetLibrary::~WidgetLibrary()
     delete d;
 }
 
-void
-WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
+void WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 {
     const WidgetInfoHash widgets( f->classes() );
     foreach (WidgetInfo *w, widgets) {
@@ -171,9 +170,15 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
     }
 }
 
-void
-WidgetLibrary::lookupFactories()
+bool WidgetLibrary::lookupFactories()
 {
+    //! @todo Allow refreshing
+    if (d->lookupDone) {
+        return d->lookupResult;
+    }
+    d->lookupDone = true;
+    d->lookupResult = false;
+
     const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/WidgetFactory");
     foreach (KService::Ptr ptr, tlist) {
         KService::Ptr existingService = d->services.value(ptr->library().toLower().toLatin1());
@@ -205,9 +210,6 @@ WidgetLibrary::lookupFactories()
 void
 WidgetLibrary::loadFactories()
 {
-    if (d->factoriesLoaded)
-        return;
-    d->factoriesLoaded = true;
     foreach (KService::Ptr ptr, d->services) {
         KexiPluginLoader loader(ptr, "");
         if (KFormDesigner::version() != loader.majorVersion()) {
