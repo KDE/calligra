@@ -4246,15 +4246,23 @@ KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
     return &d->userFeedback;
 }
 
+//! @todo KEXI3 remove when Migation is ported
+KexiMigrateManagerTemp::~KexiMigrateManagerTemp() {}
+
+QStringList KexiMigrateManagerTemp::supportedFileMimeTypes() { return QStringList(); }
+
 KexiMigrateManagerInterface* KexiMainWindow::migrateManager()
 {
-/*! @todo KEXI3
     if (d->migrateManager.isNull()) {
+        //! @todo KEXI3
+#if 0
         d->migrateManager.reset(new KexiMigration::MigrateManager());
+#else
+        // tmp
+        d->migrateManager.reset(new KexiMigrateManagerTemp());
+#endif
     }
     return d->migrateManager.data();
-    */
-    return 0;
 }
 
 void KexiMainWindow::toggleFullScreen(bool isFullScreen)
