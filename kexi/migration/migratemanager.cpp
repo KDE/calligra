@@ -319,7 +319,7 @@ void MigrateManager::drv_clearServerResult()
     d_int->m_serverResultName.clear();
 }
 
-QString MigrateManager::possibleProblemsInfoMsg() const
+QString MigrateManager::possibleProblemsMessage() const
 {
     if (d_int->possibleProblems.isEmpty())
         return QString();
