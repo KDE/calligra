@@ -319,7 +319,7 @@ tristate KexiStartupHandler::init()
     KexiStartupData::setForcedUserMode(isSet(options().userMode));
     KexiStartupData::setForcedDesignMode(isSet(options().designMode));
     KexiStartupData::setProjectNavigatorVisible(isSet(options().showNavigator));
-    KexiStartupData::setMainMenuVisible(isSet(options().hideMenu));
+    KexiStartupData::setMainMenuVisible(!isSet(options().hideMenu));
     KexiStartupData::setForcedFullScreen(isSet(options().fullScreen));
     bool createDB = isSet(options().createDb) || isSet(options().createAndOpenDb);
     const bool openExisting = !createDB && !isSet(options().dropDb);
