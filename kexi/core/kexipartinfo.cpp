@@ -40,8 +40,7 @@ static bool isTrue(KPluginMetaData *metaData, const char* fieldName)
 }
 
 Info::Private::Private(Info *info, const QJsonObject &rootObject)
-    : groupName(info->readTranslatedString(rootObject, "X-Kexi-GroupName"))
-    , untranslatedGroupName(info->value("X-Kexi-GroupName"))
+    : untranslatedGroupName(info->value("X-Kexi-GroupName"))
     , typeName(info->value("X-Kexi-TypeName"))
     , supportedViewModes(0)
     , supportedUserViewModes(0)
@@ -52,6 +51,7 @@ Info::Private::Private(Info *info, const QJsonObject &rootObject)
     , isPropertyEditorAlwaysVisibleInDesignMode(
           isTrue(info, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode"))
 {
+    groupName = info->readTranslatedString(rootObject, "X-Kexi-GroupName", untranslatedGroupName);
     const QStringList serviceTypes = info->serviceTypes();
     if (serviceTypes.contains("Kexi/Viewer")) {
         supportedViewModes |= Kexi::DataViewMode;
