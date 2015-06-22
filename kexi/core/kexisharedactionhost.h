@@ -119,7 +119,7 @@ protected:
 
     /*! Like above - creates shared action, but from standard action identified by \a id.
      Action's data is owned by the main window. */
-    QAction * createSharedAction(KStandardAction::StandardAction id, const char *name,
+    QAction * createSharedAction(KStandardAction::StandardAction id, const char *name = 0,
                                 KActionCollection* col = 0);
 
     /*! Creates shared action with name \a name and shortcut \a cut

@@ -241,10 +241,11 @@ QAction * KexiSharedActionHost::createSharedAction(KStandardAction::StandardActi
     if (!col)
         col = d->mainWin->actionCollection();
 
-    QAction * action = createSharedActionInternal(
-                          KStandardAction::create(id, 0/*receiver*/, 0/*slot*/, col)
-                      );
-    action->setObjectName(name);
+    QAction * action = KStandardAction::create(id, 0/*receiver*/, 0/*slot*/, col);
+    if (name) {
+        action->setObjectName(name);
+    }
+    (void)createSharedActionInternal(action);
     return action;
 }
 
