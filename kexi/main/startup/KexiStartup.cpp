@@ -224,9 +224,14 @@ tristate KexiStartupHandler::init()
 {
     setAction(DoNothing);
 
-    if (!parseOptions()) {
-        return false;
+    tristate res = parseOptions();
+    if (res != true) {
+        return res;
     }
+
+//    if (isSet(options().help)) {
+//        helpText
+//    }
 
     KDbConnectionData cdata;
 
@@ -457,8 +462,8 @@ tristate KexiStartupHandler::init()
                                                                    *KexiStartupData::projectData(), d->shortcutFileName);
                         connect(d->connDialog, SIGNAL(saveChanges()),
                                 this, SLOT(slotSaveShortcutFileChanges()));
-                        int res = d->connDialog->exec();
-                        if (res == QDialog::Accepted) {
+                        int dialogRes = d->connDialog->exec();
+                        if (dialogRes == QDialog::Accepted) {
                             //get (possibly changed) prj data
                             KexiStartupData::setProjectData(
                                 new KexiProjectData(d->connDialog->currentProjectData()));
@@ -467,7 +472,7 @@ tristate KexiStartupHandler::init()
                         delete d->connDialog;
                         d->connDialog = 0;
 
-                        if (res == QDialog::Rejected) {
+                        if (dialogRes == QDialog::Rejected) {
                             delete KexiStartupData::projectData();
                             KexiStartupData::setProjectData(0);
                             return cancelled;
@@ -493,8 +498,8 @@ tristate KexiStartupHandler::init()
                                 connect(d->connDialog, SIGNAL(saveChanges()),
                                         this, SLOT(slotSaveShortcutFileChanges()));
                             }
-                            const int res = d->connDialog->exec();
-                            if (res == QDialog::Accepted) {
+                            const int dialogRes = d->connDialog->exec();
+                            if (dialogRes == QDialog::Accepted) {
                                 //get (possibly changed) prj data
                                 cdata = *d->connDialog->currentProjectData().connectionData();
                             } else {
@@ -537,9 +542,9 @@ tristate KexiStartupHandler::init()
         else {
             d->connDialog = new KexiDBConnectionDialog(0, cdata);
         }
-        int res = d->connDialog->exec();
+        int dialogRes = d->connDialog->exec();
 
-        if (res == QDialog::Accepted) {
+        if (dialogRes == QDialog::Accepted) {
             //get (possibly changed) prj data
             KexiStartupData::setProjectData(new KexiProjectData(d->connDialog->currentProjectData()));
         }
@@ -547,7 +552,7 @@ tristate KexiStartupHandler::init()
         delete d->connDialog;
         d->connDialog = 0;
 
-        if (res == QDialog::Rejected) {
+        if (dialogRes == QDialog::Rejected) {
             delete KexiStartupData::projectData();
             KexiStartupData::setProjectData(0);
             return cancelled;
@@ -600,7 +605,7 @@ tristate KexiStartupHandler::init()
         }
     } else if (isSet(options().dropDb)) {
         KexiGUIMessageHandler gui;
-        const tristate res = KexiProject::dropProject(*projectData(), &gui, false/*ask*/);
+        res = KexiProject::dropProject(*projectData(), &gui, false/*ask*/);
         if (res == true)
             KMessageBox::information(0, xi18n("Project \"%1\" dropped successfully.",
                                              QDir::toNativeSeparators(projectData()->databaseName())));
@@ -668,7 +673,7 @@ tristate KexiStartupHandler::init()
                 cdata.setDatabaseName(selectedFile);
                 QString detectedDriverId;
                 KexiStartupData::Import importData = KexiStartupData::importActionData();
-                tristate res = detectActionForFile(&importData, &detectedDriverId,
+                res = detectActionForFile(&importData, &detectedDriverId,
                                      cdata.driverId(), selectedFile);
                 if (true != res)
                     return res;

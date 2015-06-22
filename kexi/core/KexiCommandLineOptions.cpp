@@ -28,11 +28,14 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 
-KexiCommandLineOptions::KexiCommandLineOptions()
+KexiCommandLineOptions::KexiCommandLineOptions(QCommandLineParser *parser)
+  : /*help(parser->addHelpOption()),
+    version(parser->addVersionOption()),*/
+
     // NOTE: REMEMBER TO ADD NEW OPTIONS IN KexiStartupData::parseOptions()
 
     // Options related to entire projects:
- :  createDb("createdb",
+    createDb("createdb",
         xi18nc("'createdb' command line option",
                "Create a new, blank project using specified database driver and database "
                "name and exit immediately. You will be asked for confirmation if "
