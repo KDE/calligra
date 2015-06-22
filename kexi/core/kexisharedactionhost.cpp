@@ -195,7 +195,7 @@ QWidget* KexiSharedActionHost::focusWindow()
 
 QAction * KexiSharedActionHost::createSharedActionInternal(QAction *action)
 {
-    QObject::connect(action, SIGNAL(activated()), &d->actionMapper, SLOT(map()));
+    QObject::connect(action, SIGNAL(triggered()), &d->actionMapper, SLOT(map()));
     d->actionMapper.setMapping(action, action->objectName());
     d->sharedActions.append(action);
     return action;

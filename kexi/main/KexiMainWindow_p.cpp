@@ -178,7 +178,7 @@ void KexiMainMenu::setContent(QWidget *contentWidget)
         m_contentLayout->setCurrentWidget(m_contentWidget);
         m_contentWidget->setFocus();
         m_contentWidget->installEventFilter(this);
-        connect(m_contentWidget, SIGNAL(destroyed()), this, SLOT(contentWidgetDestroyed()));
+        //connect(m_contentWidget, SIGNAL(destroyed()), this, SLOT(contentWidgetDestroyed()));
     }
     if (fadeEffect) {
         if (m_contentWidget)
@@ -596,6 +596,8 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     // from ktabwidget.cpp
     //! @todo QTabWidget::setTabBar() should be added with this code
+    //! @todo KEXI3 Are these tabBar() connections useful to port?
+#if 0
     connect(tabBar(), SIGNAL(contextMenu(int,QPoint)), SLOT(contextMenu(int,QPoint&)));
     connect(tabBar(), SIGNAL(tabDoubleClicked(int)), SLOT(mouseDoubleClick(int)));
     connect(tabBar(), SIGNAL(newTabRequest()), this, SIGNAL(mouseDoubleClick())); // #185487
@@ -605,13 +607,14 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     connect(tabBar(), SIGNAL(receivedDropEvent(int,QDropEvent*)), SLOT(receivedDropEvent(int,QDropEvent*)));
     connect(tabBar(), SIGNAL(moveTab(int,int)), SLOT(moveTab(int,int)));
     connect(tabBar(), SIGNAL(tabCloseRequested(int)), SLOT(closeRequest(int)));
+#endif
 
     setMouseTracking(true); // for mouseMoveEvent()
     setWhatsThis(xi18n("Task-oriented toolbar. Groups commands using tabs."));
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     connect(&d->tabRaiseTimer, SIGNAL(timeout()), this, SLOT(slotDelayedTabRaise()));
 #endif
-    connect(tabBar(), SIGNAL(tabDoubleClicked(int)), this, SLOT(slotTabDoubleClicked(int)));
+    connect(tabBar(), SIGNAL(tabBarDoubleClicked(int)), this, SLOT(slotTabDoubleClicked(int)));
 
     d->ac = KexiMainWindowIface::global()->actionCollection();
     QWidget *mainWin = KexiMainWindowIface::global()->thisWidget();
@@ -941,11 +944,15 @@ void KexiTabbedToolBar::slotCurrentChanged(int index)
 
 void KexiTabbedToolBar::slotTabDoubleClicked(int index)
 {
-    if (index == 0)
+    if (index <= 0) {
         return; // main item does not count here
+    }
     d->rolledUp = !d->rolledUp;
     d->tabBarAnimation.stop();
-    QWidget *w = widget(currentIndex());
+    QWidget *w = widget(index);
+    if (!w) {
+        return;
+    }
     w->setGraphicsEffect(&d->tabBarOpacityEffect);
     if (d->rolledUp) {
         d->tabBarOpacityEffect.setOpacity(1.0);
