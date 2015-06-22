@@ -29,7 +29,7 @@ KexiServerDriverNotFoundMessage::KexiServerDriverNotFoundMessage(QWidget *parent
                 "you do not have installed.</para>"
                 "<subtitle>Details</subtitle>"
                 "<para>To obtain database drivers please use your Package Manager to search "
-                "and install packages named <filename>calligra-kexi-xxxx-driver</filename>. "
+                "and install packages with so-called <emphasis>KDb drivers</emphasis> named <filename>kdb-****-driver</filename>. "
                 "Please note that your package names could vary slightly depending on the "
                 "operating system you use.</para>"))
             )
