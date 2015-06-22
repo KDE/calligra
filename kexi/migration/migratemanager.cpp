@@ -334,7 +334,7 @@ QString MigrateManager::possibleProblemsInfoMsg() const
     return str;
 }
 
-QList<QString> MigrateManager::supportedFileMimeTypes()
+QStringList MigrateManager::supportedFileMimeTypes()
 {
     clearResult();
     if (!d_int->lookupDrivers()) {
