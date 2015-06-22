@@ -23,6 +23,8 @@
 #include <QString>
 #include "kexicore_export.h"
 
+#include <KDbTristate>
+
 class QCommandLineOption;
 class KexiProjectData;
 class KexiCommandLineOptions;
@@ -89,7 +91,7 @@ public:
 
     //! Parses the options
     //! @return true on success
-    bool parseOptions();
+    tristate parseOptions();
 
     //! @return true if the option @a option was passed to the application
     bool isSet(const QCommandLineOption & option) const;
@@ -101,6 +103,8 @@ public:
     //! @return a list of positional arguments.
     //! These are all of the arguments that were not recognized as part of an option.
     QStringList positionalArguments() const;
+
+    QString helpText() const;
 
 protected:
     void setAction(Action action);

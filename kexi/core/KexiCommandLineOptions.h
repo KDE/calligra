@@ -32,8 +32,10 @@ class QCommandLineParser;
 class KexiCommandLineOptions
 {
 public:
-    KexiCommandLineOptions();
+    KexiCommandLineOptions(QCommandLineParser *parser);
 
+//    QCommandLineOption help;
+//    QCommandLineOption version;
     QCommandLineOption createDb;
     QCommandLineOption createAndOpenDb;
     QCommandLineOption dropDb;
