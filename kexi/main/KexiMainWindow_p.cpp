@@ -636,20 +636,25 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     // add help menu actions... (KexiTabbedToolBar depends on them)
     d->helpMenu = new KHelpMenu(this, KAboutData::applicationData(),
                                 true/*showWhatsThis*/);
-    QAction* help_report_bug_action = d->ac->action("help_report_bug");
+    QAction* help_report_bug_action = d->helpMenu->action(KHelpMenu::menuReportBug);
+    d->ac->addAction(help_report_bug_action->objectName(), help_report_bug_action);
     QObject::disconnect(help_report_bug_action, 0, 0, 0);
     QObject::connect(help_report_bug_action, SIGNAL(triggered()), mainWin, SLOT(slotReportBug()));
     help_report_bug_action->setText(xi18nc("Report a bug or wish for Kexi application", "Report a &Bug or Wish..."));
     help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
     help_report_bug_action->setWhatsThis(xi18n("Files a bug or wish for Kexi application."));
-    QAction* help_whats_this_action =  d->ac->action("help_whats_this");
+    QAction* help_whats_this_action =  d->helpMenu->action(KHelpMenu::menuWhatsThis);
+    d->ac->addAction(help_whats_this_action->objectName(), help_whats_this_action);
     help_whats_this_action->setWhatsThis(xi18n("Activates a \"What's This?\" tool."));
-    QAction* help_contents_action = d->ac->action("help_contents");
+    QAction* help_contents_action = d->helpMenu->action(KHelpMenu::menuHelpContents);
+    d->ac->addAction(help_contents_action->objectName(), help_contents_action);
     help_contents_action->setText(xi18n("Help"));
     help_contents_action->setWhatsThis(xi18n("Shows Kexi Handbook."));
-    QAction* help_about_app_action = d->ac->action("help_about_app");
+    QAction* help_about_app_action = d->helpMenu->action(KHelpMenu::menuAboutApp);
+    d->ac->addAction(help_about_app_action->objectName(), help_about_app_action);
     help_about_app_action->setWhatsThis(xi18n("Shows information about Kexi application."));
-    QAction* help_about_kde_action = d->ac->action("help_about_kde");
+    QAction* help_about_kde_action = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+    d->ac->addAction(help_about_kde_action->objectName(), help_about_kde_action);
     help_about_kde_action->setWhatsThis(xi18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
