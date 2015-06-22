@@ -862,10 +862,10 @@ tristate KexiStartupHandler::detectActionForFile(
 // qDebug() << "driver id:" << detectedDriverName;
 
     if (detectedDriverId->isEmpty()) {
-        QString possibleProblemsInfoMsg(Kexi::driverManager().possibleProblemsMessage());
-        if (!possibleProblemsInfoMsg.isEmpty()) {
-            possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>") + xi18n("Possible problems:"));
-            possibleProblemsInfoMsg += QString::fromLatin1("</p>");
+        QString possibleProblemsMessage(Kexi::driverManager().possibleProblemsMessage());
+        if (!possibleProblemsMessage.isEmpty()) {
+            possibleProblemsMessage.prepend(QString::fromLatin1("<p>") + xi18n("Possible problems:"));
+            possibleProblemsMessage += QString::fromLatin1("</p>");
         }
         if (!(options & SkipMessages)) {
             KMessageBox::detailedSorry(parent,
@@ -875,8 +875,8 @@ tristate KexiStartupHandler::detectActionForFile(
                      "type is %1%2.</para>%3",
                      mimename,
                      (mime.comment().isEmpty() ? QString() : QString::fromLatin1(" (%1).").arg(mime.comment())),
-                     possibleProblemsInfoMsg.isEmpty() ? QString()
-                                                       : QString("<para>%1</para>").arg(possibleProblemsInfoMsg)));
+                     possibleProblemsMessage.isEmpty() ? QString()
+                                                       : QString("<para>%1</para>").arg(possibleProblemsMessage)));
         }
         return false;
     }

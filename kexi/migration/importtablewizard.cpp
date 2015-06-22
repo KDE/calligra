@@ -563,7 +563,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     sourceDriverName = driverNameForSelectedSource();
     if (sourceDriverName.isEmpty())
         result.setStatus(xi18n("No appropriate migration driver found."),
-                            m_migrateManager->possibleProblemsInfoMsg());
+                            m_migrateManager->possibleProblemsMessage());
 
 
     // Get a source (migration) driver
