@@ -73,6 +73,7 @@ public:
     explicit Private(KexiProject *qq)
             : q(qq)
             , handler(0)
+            , connection(0)
             , data(0)
             , tempPartItemID_Counter(-1)
             , sqlParser(0)
