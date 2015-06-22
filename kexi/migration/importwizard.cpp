@@ -757,7 +757,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         sourceDriverName = driverNameForSelectedSource();
         if (sourceDriverName.isEmpty())
             result.setStatus(xi18n("No appropriate migration driver found."),
-                             d->migrateManager.possibleProblemsInfoMsg());
+                             d->migrateManager.possibleProblemsMessage());
     }
 
     // Get a source (migration) driver

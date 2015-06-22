@@ -69,7 +69,7 @@ public:
     /*! HTML information about possible problems encountered.
      It's displayed in 'details' section, if an error encountered.
      Currently it contains a list of incompatible migration drivers. */
-    QString possibleProblemsInfoMsg() const;
+    QString possibleProblemsMessage() const;
 
     //! @return the list of file MIME types that are supported by migration drivers.
     //! Implements MigrateManagerInterface
