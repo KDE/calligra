@@ -709,16 +709,16 @@ bool KexiProject::retrieveItems()
         return 0;
 
     int recentTypeId = -1000;
+    QString pluginId;
     KexiPart::ItemDict *dict = 0;
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         bool ok;
-        int typeId = cursor->value(3).toInt(&ok);
+        const int typeId = cursor->value(3).toInt(&ok);
         if (!ok || typeId <= 0) {
             qWarning() << "object of unknown type id" << cursor->value(3) << "id=" << cursor->value(0)
                        << "name=" <<  cursor->value(1);
             continue;
         }
-        QString pluginId;
         if (recentTypeId == typeId) {
             if (pluginId.isEmpty()) // still the same unknown plugin ID
                 continue;
@@ -732,8 +732,8 @@ bool KexiProject::retrieveItems()
             dict = new KexiPart::ItemDict();
             d->itemDicts.insert(pluginId, dict);
         }
-        int ident = cursor->value(0).toInt(&ok);
-        QString objName(cursor->value(1).toString());
+        const int ident = cursor->value(0).toInt(&ok);
+        const QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
                 && KDb::isIdentifier(objName))
         {
