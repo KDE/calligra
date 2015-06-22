@@ -41,7 +41,9 @@ class KexiBLOBBuffer::Private
 {
 public:
     Private()
-            : maxId(0) {
+            : maxId(0)
+            , conn(0)
+    {
     }
     ~Private() {
         foreach(Item* item, inMemoryItems) {

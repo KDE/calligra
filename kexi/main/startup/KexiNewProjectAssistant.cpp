@@ -369,6 +369,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
                        "Database name will be created automatically based on the caption. "
                        "You can change the database name too."),
                   parent)
+ , conndataToShow(0)
  , m_assistant(parent)
 {
     m_projectDataToOverwrite = 0;
