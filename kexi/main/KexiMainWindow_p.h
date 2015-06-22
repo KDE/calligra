@@ -418,6 +418,16 @@ private:
 //! @internal safer dictionary
 typedef QMap< int, KexiWindow* > KexiWindowDict;
 
+//! @todo KEXI3 remove when Migation is ported
+class KexiMigrateManagerTemp : public QObject, public KexiMigrateManagerInterface
+{
+public:
+    virtual ~KexiMigrateManagerTemp();
+
+    //! Implement to return the list offile MIME types that are supported by migration drivers
+    virtual QStringList supportedFileMimeTypes();
+};
+
 //! @internal
 class KexiMainWindow::Private
 {
@@ -644,7 +654,12 @@ public:
 
     KexiUserFeedbackAgent userFeedback;
 
-    //! @todo KEXI3 QScopedPointer<KexiMigration::MigrateManager> migrateManager;
+    //! @todo KEXI3
+#if 0
+    QScopedPointer<KexiMigration::MigrateManager> migrateManager;
+#else
+    QScopedPointer<KexiMigrateManagerTemp> migrateManager;
+#endif
 
 private:
     //! @todo move to KexiProject
