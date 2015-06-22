@@ -813,7 +813,7 @@ void KexiWelcomeStatusBar::showDonation()
         return;
     }
     if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
-       xi18n("<para><title>Kexi may be totally free, but its development is costly.</title><nl/>"
+       xi18nc("@info donate to the project", "<para><title>Kexi may be totally free, but its development is costly.</title><nl/>"
             "<para>Power, hardware, office space, internet access, traveling for meetings - everything costs.</para>"
             "<para>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
             "Everyone, regardless of any degree of involvement can do so.</para>"
