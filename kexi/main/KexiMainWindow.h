@@ -69,8 +69,10 @@ public:
      If @a componentName is provided, it is assigned to application's KAboutData::componentName.
      It's not used by Kexi itself but this is useful for test application that are based
      on KexiMainWindow.
-     @return result 1 on error and 0 on success (the result can be used as a result of main()) */
-    static int create(int argc, char *argv[], const QString &componentName = QString());
+     @return result 1 on error and 0 on success (the result can be used as a result of main())
+     @note Yes, the data referred to by argc and argv must stay valid for the entire lifetime
+          of the QApplication object so int& is used. */
+    static int create(int &argc, char *argv[], const QString &componentName = QString());
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project();

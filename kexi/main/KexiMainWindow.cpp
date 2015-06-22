@@ -296,7 +296,7 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], const QString &componentName)
+int KexiMainWindow::create(int &argc, char *argv[], const QString &componentName)
 {
     const bool appExisted = qApp;
 
