@@ -100,8 +100,10 @@ public:
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
-     \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], const KAboutData &aboutData);
+     \return result 1 on error and 0 on success (the result can be used as a result of kdemain())
+     @note Yes, the data referred to by argc and argv must stay valid for the entire lifetime
+           of the QApplication object so int& is used. */
+    static int create(int &argc, char *argv[], const KAboutData &aboutData);
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project();

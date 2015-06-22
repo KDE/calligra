@@ -309,7 +309,7 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
+int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
 
