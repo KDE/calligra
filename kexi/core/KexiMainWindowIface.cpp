@@ -33,6 +33,7 @@ KexiMainWindowIface::KexiMainWindowIface()
 
 KexiMainWindowIface::~KexiMainWindowIface()
 {
+    kexiMainWindow = 0;
 }
 
 KexiMainWindowIface* KexiMainWindowIface::global()
