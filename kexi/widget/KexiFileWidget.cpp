@@ -197,7 +197,7 @@ void KexiFileWidget::updateFilters()
     }
 
     if (normalOpeningMode) {
-        const QList<QString> supportedFileMimeTypes = KexiMainWindowIface::global()->migrateManager()->supportedFileMimeTypes();
+        const QStringList supportedFileMimeTypes = KexiMainWindowIface::global()->migrateManager()->supportedFileMimeTypes();
         qDebug() << supportedFileMimeTypes;
         foreach (const QString& supportedFileMimeType, supportedFileMimeTypes) {
             d->addFilterForType(&filter, &allfilters, supportedFileMimeType);

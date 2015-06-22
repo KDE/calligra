@@ -73,7 +73,7 @@ public:
 
     //! @return the list of file MIME types that are supported by migration drivers.
     //! Implements MigrateManagerInterface
-    virtual QList<QString> supportedFileMimeTypes();
+    virtual QStringList supportedFileMimeTypes();
 
 protected:
     virtual void drv_clearServerResult();
