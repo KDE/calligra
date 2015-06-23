@@ -231,7 +231,7 @@ void KexiMainMenu::showEvent(QShowEvent * event)
         if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
             && styleName == "oxygen")
         {
-            KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
+            KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style()->objectName(), this);
             m_menuWidget->setStyle(customStyle);
         }
 #endif
@@ -302,8 +302,8 @@ static bool isSpecificTabStyle(const QString &styleName)
     return styleName == "oxygen" || styleName == "qtcurve" || styleName == "gtk+";
 }
 
-KexiTabbedToolBarStyle::KexiTabbedToolBarStyle(QStyle *style)
-  : QProxyStyle(style)
+KexiTabbedToolBarStyle::KexiTabbedToolBarStyle(const QString &baseStyleName)
+  : QProxyStyle(baseStyleName)
 {
 }
 
@@ -455,7 +455,7 @@ KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : QTabBar(parent)
 {
     setObjectName("tabbar");
-    customStyle = new KexiTabbedToolBarStyle(style());
+    customStyle = new KexiTabbedToolBarStyle(style()->objectName());
     customStyle->setParent(this);
     setStyle(customStyle);
     installEventFilter(parent);

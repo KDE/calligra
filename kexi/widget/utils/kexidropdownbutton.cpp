@@ -32,8 +32,8 @@
 class KexiDropDownButtonStyle : public QProxyStyle
 {
 public:
-    explicit KexiDropDownButtonStyle(QStyle *parentStyle)
-            : QProxyStyle(parentStyle)
+    explicit KexiDropDownButtonStyle(const QString &baseStyleName)
+            : QProxyStyle(baseStyleName)
     {
     }
     virtual ~KexiDropDownButtonStyle() {}
@@ -65,7 +65,7 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
         : QToolButton(parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style());
+    KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style()->objectName());
     setStyle(s);
     s->setParent(this);
 //! @todo get this from a KStyle
@@ -82,6 +82,7 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
 
 KexiDropDownButton::~KexiDropDownButton()
 {
+    setStyle(0);
 }
 
 QSize KexiDropDownButton::sizeHint() const
