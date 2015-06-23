@@ -299,7 +299,7 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     delete d->designModeStyle;
     d->designModeStyle = 0;
     if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style());
+        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style()->objectName());
         d->designModeStyle->setParent(this);
         d->topTree->widget()->setStyle(d->designModeStyle);
     }
@@ -365,7 +365,7 @@ void Form::setMode(Mode mode)
 {
     d->mode = mode;
     if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->widget->style());
+        d->designModeStyle = new DesignModeStyle(d->widget->style()->objectName());
         d->designModeStyle->setParent(this);
         d->widget->setStyle(d->designModeStyle);
         return;
