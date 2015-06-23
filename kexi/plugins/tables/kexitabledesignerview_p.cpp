@@ -57,9 +57,9 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
         , slotPropertyChanged_primaryKey_enabled(true)
         , slotPropertyChanged_subType_enabled(true)
         , addHistoryCommand_in_slotPropertyChanged_enabled(true)
-        , addHistoryCommand_in_slotRowUpdated_enabled(true)
-        , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
-        , addHistoryCommand_in_slotRowInserted_enabled(true)
+        , addHistoryCommand_in_slotRecordUpdated_enabled(true)
+        , addHistoryCommand_in_slotAboutToDeleteRecord_enabled(true)
+        , addHistoryCommand_in_slotRecordInserted_enabled(true)
         , slotBeforeCellChanged_enabled(true)
         , tempStoreDataUsingRealAlterTable(false)
 {
@@ -235,7 +235,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, 
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *record, KPropertySet *set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *data, KPropertySet *set)
 {
     QVariant icon;
     if (!set->property("rowSource").value().toString().isEmpty()
@@ -245,6 +245,6 @@ void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *record, KP
     }
     //show/hide icon in the table
     view->data()->clearRecordEditBuffer();
-    view->data()->updateRecordEditBuffer(record, COLUMN_ID_ICON, icon);
-    view->data()->saveRecordChanges(record, true);
+    view->data()->updateRecordEditBuffer(data, COLUMN_ID_ICON, icon);
+    view->data()->saveRecordChanges(data, true);
 }

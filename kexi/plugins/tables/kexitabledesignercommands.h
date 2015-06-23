@@ -168,12 +168,12 @@ protected:
 
 //! @short Undo/redo command used when property visibility is changed
 /*! Internal, only used in addition to property change. */
-class InsertEmptyRowCommand : public Command
+class InsertEmptyRecordCommand : public Command
 {
 public:
-    /*! Creates the InsertEmptyRowCommand object. */
-    InsertEmptyRowCommand(Command* parent, KexiTableDesignerView* view, int row);
-    virtual ~InsertEmptyRowCommand();
+    /*! Creates the InsertEmptyRecordCommand object. */
+    InsertEmptyRecordCommand(Command* parent, KexiTableDesignerView* view, int row);
+    virtual ~InsertEmptyRecordCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();

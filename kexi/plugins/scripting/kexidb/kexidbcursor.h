@@ -131,9 +131,9 @@ private:
     {
     public:
         KDbRecordData rowdata;
-        KDbRowEditBuffer* buffer;
+        KDbRecordEditBuffer* buffer;
         Record(KDbCursor* cursor)
-                : buffer(new KDbRowEditBuffer(true)) {
+                : buffer(new KDbRecordEditBuffer(true)) {
             cursor->storeCurrentRow(rowdata);
         }
         ~Record() {

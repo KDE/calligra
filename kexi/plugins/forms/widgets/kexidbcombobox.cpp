@@ -569,16 +569,16 @@ void KexiDBComboBox::acceptRequested()
     signalValueChanged();
 }
 
-void KexiDBComboBox::slotRowAccepted(KDbRecordData *record, int row)
+void KexiDBComboBox::slotRecordAccepted(KDbRecordData *data, int row)
 {
     d->dataEnteredByHand = false;
-    KexiComboBoxBase::slotRowAccepted(record, row);
+    KexiComboBoxBase::slotRecordAccepted(data, row);
     d->dataEnteredByHand = true;
 }
 
-void KexiDBComboBox::slotItemSelected(KDbRecordData *record)
+void KexiDBComboBox::slotRecordSelected(KDbRecordData *data)
 {
-    KexiComboBoxBase::slotItemSelected(record);
+    KexiComboBoxBase::slotRecordSelected(data);
 }
 
 void KexiDBComboBox::slotInternalEditorValueChanged(const QVariant& v)

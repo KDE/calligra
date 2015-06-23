@@ -207,8 +207,8 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
     if (!val.isNull()) {
         KDbTableViewData *relData = column()->relatedData();
         if (relData) {
-            int rowToHighlight;
-            txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
+            int recordToHighlight;
+            txt = valueForString(val.toString(), &recordToHighlight, 0, 1);
         }
         else if (lookupFieldSchema()) {
         }
@@ -272,7 +272,7 @@ bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
         const bool enterPressed = k == Qt::Key_Enter || k == Qt::Key_Return;
         if (enterPressed && m_internalEditorValueChanged) {
             createPopup(false);
-            selectItemForEnteredValueInLookupTable(m_userEnteredValue);
+            selectRecordForEnteredValueInLookupTable(m_userEnteredValue);
             return true;
         }
 
