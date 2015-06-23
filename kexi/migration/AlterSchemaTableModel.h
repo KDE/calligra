@@ -39,7 +39,7 @@ class AlterSchemaTableModel : public QAbstractTableModel
 
         void setSchema(KDbTableSchema*);
         void setData(const QList<KDbRecordData>& data);
-        void setRecordCount(const int i);
+        void setRecordCount(int i);
     private:
         //! Reimplemented just to avoid 'hidden' warnings
         virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) {

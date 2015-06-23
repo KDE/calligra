@@ -351,7 +351,7 @@ protected:
 private:
     int m_tabIndex;
 
-    void setTabIndexFromContextMenu(const int clickedIndex);
+    void setTabIndexFromContextMenu(int clickedIndex);
 };
 
 //! @short A widget being main part of KexiMainWindow
