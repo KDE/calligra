@@ -29,8 +29,8 @@
 class KexiComboBoxDropDownButtonStyle : public QProxyStyle
 {
 public:
-    explicit KexiComboBoxDropDownButtonStyle(QStyle *parentStyle)
-            : QProxyStyle(parentStyle)
+    explicit KexiComboBoxDropDownButtonStyle(const QString &baseStyleName)
+            : QProxyStyle(baseStyleName)
     {
     }
     virtual ~KexiComboBoxDropDownButtonStyle() {}
@@ -65,6 +65,9 @@ KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
 
 KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 {
+    setStyle(0);
+    delete d->privateStyle;
+    d->privateStyle = 0;
     delete d;
 }
 
@@ -77,7 +80,7 @@ void KexiComboBoxDropDownButton::styleChanged()
         setStyle(0);
         delete static_cast<QStyle*>(d->privateStyle);
     }
-    setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style()));
+    setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style()->objectName()));
     d->privateStyle->setParent(this);
     d->styleChangeEnabled = true;
 }

@@ -28,8 +28,8 @@
 
 using namespace KFormDesigner;
 
-DesignModeStyle::DesignModeStyle(QStyle* parentStyle)
-    : QProxyStyle(parentStyle)
+DesignModeStyle::DesignModeStyle(const QString &baseStyleName)
+    : QProxyStyle(baseStyleName)
 {
 }
 
