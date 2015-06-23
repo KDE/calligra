@@ -50,7 +50,7 @@ class ObjectTree;
 class DesignModeStyle : public QProxyStyle
 {
 public:
-    explicit DesignModeStyle(QStyle* parentStyle);
+    explicit DesignModeStyle(const QString &baseStyleName);
 
     //! Reimplemented to remove handling of the State_MouseOver state.
     virtual void drawControl(ControlElement element, const QStyleOption *option,

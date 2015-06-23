@@ -307,7 +307,7 @@ public:
 class KexiTabbedToolBarStyle : public QProxyStyle
 {
 public:
-    explicit KexiTabbedToolBarStyle(QStyle *style);
+    explicit KexiTabbedToolBarStyle(const QString &baseStyleName);
 
     virtual ~KexiTabbedToolBarStyle();
 

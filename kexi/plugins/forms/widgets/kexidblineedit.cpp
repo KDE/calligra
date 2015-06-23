@@ -56,8 +56,8 @@ public:
 class KexiDBLineEditStyle : public QProxyStyle
 {
 public:
-    explicit KexiDBLineEditStyle(QStyle* parentStyle)
-        : QProxyStyle(parentStyle), indent(0)
+    explicit KexiDBLineEditStyle(const QString &baseStyleName)
+        : QProxyStyle(baseStyleName), indent(0)
     {
     }
     virtual ~KexiDBLineEditStyle() {
@@ -111,7 +111,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    m_internalStyle = new KexiDBLineEditStyle(style());
+    m_internalStyle = new KexiDBLineEditStyle(style()->objectName());
     m_internalStyle->setParent(this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
     m_inStyleChangeEvent = true; // do not allow QLineEdit::event() to touch the style

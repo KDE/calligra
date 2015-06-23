@@ -38,8 +38,8 @@
 class KexiTableScrollAreaHeaderStyle : public QProxyStyle
 {
 public:
-    KexiTableScrollAreaHeaderStyle(QStyle *parentStyle)
-            : QProxyStyle(parentStyle)
+    KexiTableScrollAreaHeaderStyle(const QString &baseStyleName)
+            : QProxyStyle(baseStyleName)
     {
     }
     virtual ~KexiTableScrollAreaHeaderStyle() {}
@@ -123,9 +123,9 @@ KexiTableScrollAreaHeader::KexiTableScrollAreaHeader(Qt::Orientation orientation
 
 KexiTableScrollAreaHeader::~KexiTableScrollAreaHeader()
 {
+    setModel(0); // avoid referencing deleted model
     setStyle(0);
     delete d->privateStyle;
-    setModel(0); // avoid referencing deleted model
     delete d;
 }
 
@@ -146,7 +146,7 @@ void KexiTableScrollAreaHeader::styleChanged()
         setStyle(0);
         delete static_cast<QStyle*>(d->privateStyle);
     }
-    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style()));
+    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style()->objectName()));
     d->privateStyle->setParent(this);
     d->styleChangeEnabled = true;
 }
