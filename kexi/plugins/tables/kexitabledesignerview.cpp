@@ -157,17 +157,17 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
     connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
             this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant&,KDbResultInfo*)));
-    connect(d->data, SIGNAL(rowUpdated(KDbRecordData*)),
-            this, SLOT(slotRowUpdated(KDbRecordData*)));
-    connect(d->data, SIGNAL(aboutToDeleteRow(KDbRecordData&,KDbResultInfo*,bool)),
-            this, SLOT(slotAboutToDeleteRow(KDbRecordData&,KDbResultInfo*,bool)));
+    connect(d->data, SIGNAL(recordUpdated(KDbRecordData*)),
+            this, SLOT(slotRecordUpdated(KDbRecordData*)));
+    connect(d->data, SIGNAL(aboutToDeleteRecord(KDbRecordData*,KDbResultInfo*,bool)),
+            this, SLOT(slotAboutToDeleteRecord(KDbRecordData*,KDbResultInfo*,bool)));
 
     setMinimumSize(d->view->minimumSizeHint().width(), d->view->minimumSizeHint().height());
     d->view->setFocus();
 
     d->sets = new KexiDataAwarePropertySet(this, d->view);
-    connect(d->sets, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
-    connect(d->sets, SIGNAL(rowInserted()), this, SLOT(slotRowInserted()));
+    connect(d->sets, SIGNAL(recordDeleted()), this, SLOT(updateActions()));
+    connect(d->sets, SIGNAL(recordInserted()), this, SLOT(slotRecordInserted()));
 
     connect(d->view->contextMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowContextMenu()));
@@ -228,12 +228,12 @@ void KexiTableDesignerView::initData()
     if (tempData()->table) {
         tableFieldCount = tempData()->table->fieldCount();
 
-        //recreate table data rows
+        //recreate table data records
         for (uint i = 0; i < tableFieldCount; i++) {
             KDbField *field = tempData()->table->field(i);
-            KDbRecordData *record = d->data->createItem();
+            KDbRecordData *data = d->data->createItem();
             if (field->isPrimaryKey()) {
-                (*record)[COLUMN_ID_ICON] = "key";
+                (*data)[COLUMN_ID_ICON] = "key";
                 d->primaryKeyExists = true;
             } else {
                 KDbLookupFieldSchema *lookupFieldSchema
@@ -242,13 +242,13 @@ void KexiTableDesignerView::initData()
                     && lookupFieldSchema->recordSource().type() != KDbLookupFieldSchema::RecordSource::NoType
                     && !lookupFieldSchema->recordSource().name().isEmpty())
                 {
-                    (*record)[COLUMN_ID_ICON] = "combo";
+                    (*data)[COLUMN_ID_ICON] = "combo";
                 }
             }
-            (*record)[COLUMN_ID_CAPTION] = field->captionOrName();
-            (*record)[COLUMN_ID_TYPE] = field->typeGroup() - 1; //-1 because type groups are counted from 1
-            (*record)[COLUMN_ID_DESC] = field->description();
-            d->data->append(record);
+            (*data)[COLUMN_ID_CAPTION] = field->captionOrName();
+            (*data)[COLUMN_ID_TYPE] = field->typeGroup() - 1; //-1 because type groups are counted from 1
+            (*data)[COLUMN_ID_DESC] = field->description();
+            d->data->append(data);
         }
     }
 
@@ -273,7 +273,7 @@ void KexiTableDesignerView::initData()
     d->view->setColumnWidth(COLUMN_ID_ICON, IconSize(KIconLoader::Small) + 10);
     d->view->setColumnResizeEnabled(COLUMN_ID_ICON, false);
     d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
-    d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
+    d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->recordHeight());
     d->view->setStretchLastColumn(true);
     const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
     if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
@@ -305,7 +305,7 @@ KexiTableDesignerView::getSubTypeListData(KDbField::TypeGroup fieldTypeGroup,
 }
 
 KPropertySet *
-KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool newOne)
+KexiTableDesignerView::createPropertySet(int record, const KDbField& field, bool newOne)
 {
     QString typeName = "KDbField::" + field.typeGroupString();
     KPropertySet *set = new KPropertySet(d->sets, typeName);
@@ -436,7 +436,7 @@ KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool ne
 
     set->addProperty(prop = new KProperty("rowSourceType",
             lookupFieldSchema ? lookupFieldSchema->recordSource().typeName() : QString(),
-            xi18nc("Record source type (in two rows)", "Record Source\nType")));
+            xi18nc("Record source type (in two records)", "Record Source\nType")));
     prop->setVisible(false);
 
     set->addProperty(prop = new KProperty("boundColumn",
@@ -453,7 +453,7 @@ KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool ne
                                                      xi18n("Visible Column")));
     prop->setVisible(false);
 
-//! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
+//! @todo support columnWidths(), columnHeadersVisible(), maxVisibleRecords(), limitToList(), displayWidget()
 
     //----
     d->updatePropertiesVisibility(field.type(), *set);
@@ -461,7 +461,7 @@ KexiTableDesignerView::createPropertySet(int row, const KDbField& field, bool ne
     connect(set, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
             this, SLOT(slotPropertyChanged(KPropertySet&,KProperty&)));
 
-    d->sets->set(row, set, newOne);
+    d->sets->set(record, set, newOne);
     return set;
 }
 
@@ -480,9 +480,9 @@ void KexiTableDesignerView::updateActions(bool activated)
     d->slotTogglePrimaryKeyCalled = false;
 }
 
-void KexiTableDesignerView::slotUpdateRowActions(int row)
+void KexiTableDesignerView::slotUpdateRecordActions(int record)
 {
-    KexiDataTableView::slotUpdateRowActions(row);
+    KexiDataTableView::slotUpdateRecordActions(record);
     updateActions();
 }
 
@@ -507,12 +507,12 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
     if (&propertySet == this->propertySet()) {
         //update action and icon @ column 0 (only if we're changing current property set)
         d->action_toggle_pkey->setChecked(set);
-        if (d->view->selectedItem()) {
+        if (d->view->selectedRecord()) {
             //show key in the table
             d->view->data()->clearRecordEditBuffer();
-            d->view->data()->updateRecordEditBuffer(d->view->selectedItem(), COLUMN_ID_ICON,
+            d->view->data()->updateRecordEditBuffer(d->view->selectedRecord(), COLUMN_ID_ICON,
                                                  QVariant(set ? "key" : ""));
-            d->view->data()->saveRecordChanges(d->view->selectedItem(), true);
+            d->view->data()->saveRecordChanges(d->view->selectedRecord(), true);
         }
         if (was_pkey || set) //change flag only if we're setting pk or really clearing it
             d->primaryKeyExists = set;
@@ -526,7 +526,7 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
         for (i = 0; i < count; i++) {
             s = d->sets->at(i);
             if (   s && s != &propertySet && (*s)["primaryKey"].value().toBool()
-                && i != d->view->currentRow())
+                && i != d->view->currentRecord())
             {
                 break;
             }
@@ -536,18 +536,18 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
             d->setPropertyValueIfNeeded(*s, "primaryKey", QVariant(false), commandGroup);
             //remove key from table
             d->view->data()->clearRecordEditBuffer();
-            KDbRecordData *record = d->view->itemAt(i);
-            if (record) {
-                d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_ICON, QVariant());
-                d->view->data()->saveRecordChanges(record, true);
+            KDbRecordData *data = d->view->recordAt(i);
+            if (data) {
+                d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_ICON, QVariant());
+                d->view->data()->saveRecordChanges(data, true);
             }
         }
         //set unsigned big-integer type
         d->slotBeforeCellChanged_enabled = false;
         d->view->data()->clearRecordEditBuffer();
-        d->view->data()->updateRecordEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
+        d->view->data()->updateRecordEditBuffer(d->view->selectedRecord(), COLUMN_ID_TYPE,
                                              QVariant(KDbField::IntegerGroup - 1/*counting from 0*/));
-        d->view->data()->saveRecordChanges(d->view->selectedItem(), true);
+        d->view->data()->saveRecordChanges(d->view->selectedRecord(), true);
         d->setPropertyValueIfNeeded(propertySet, "subType",
                                     KDbField::typeString(KDbField::BigInteger),
                                     commandGroup);
@@ -561,7 +561,7 @@ void KexiTableDesignerView::switchPrimaryKey(KPropertySet &propertySet,
 tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_ASSERT(dontStore);
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return false;
     tristate res = true;
     if (mode == Kexi::DataViewMode) {
@@ -615,20 +615,20 @@ KPropertySet *KexiTableDesignerView::propertySet()
 }
 
 void KexiTableDesignerView::slotBeforeCellChanged(
-    KDbRecordData *record, int colnum, QVariant& newValue, KDbResultInfo* /*result*/)
+    KDbRecordData *data, int colnum, QVariant& newValue, KDbResultInfo* /*result*/)
 {
     if (!d->slotBeforeCellChanged_enabled)
         return;
-    // qDebug() << d->view->selectedItem() << " " << item
-    //<< " " << d->sets->at( d->view->currentRow() ) << " " << propertySet();
+    // qDebug() << d->view->selectedRecord() << " " << item
+    //<< " " << d->sets->at( d->view->currentRecord() ) << " " << propertySet();
     if (colnum == COLUMN_ID_CAPTION) {//'caption'
         //if 'type' is not filled yet
-        if (record->at(COLUMN_ID_TYPE).isNull()) {
-            //auto select 1st row of 'type' column
-            d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE, QVariant((int)0));
+        if (data->at(COLUMN_ID_TYPE).isNull()) {
+            //auto select 1st record of 'type' column
+            d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_TYPE, QVariant((int)0));
         }
 
-        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*record);
+        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*data);
         if (propertySetForRecord) {
             d->addHistoryCommand_in_slotPropertyChanged_enabled = false; // because we'll add
                                                                          // the two changes as one group
@@ -667,14 +667,14 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         if (newValue.isNull()) {
             //'type' col will be cleared: clear all other columns as well
             d->slotBeforeCellChanged_enabled = false;
-            d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_ICON, QVariant());
-            d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_CAPTION, QVariant(QString()));
-            d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_DESC, QVariant());
+            d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_ICON, QVariant());
+            d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_CAPTION, QVariant(QString()));
+            d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_DESC, QVariant());
             d->slotBeforeCellChanged_enabled = true;
             return;
         }
 
-        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*record);
+        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*data);
         if (!propertySetForRecord)
             return;
 
@@ -765,7 +765,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 
         addHistoryCommand(changeDataTypeCommand, false /* !execute */);
     } else if (colnum == COLUMN_ID_DESC) {//'description'
-        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*record);
+        KPropertySet *propertySetForRecord = d->sets->findPropertySetForItem(*data);
         if (!propertySetForRecord)
             return;
         //update field desc.
@@ -775,37 +775,37 @@ void KexiTableDesignerView::slotBeforeCellChanged(
     }
 }
 
-void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
+void KexiTableDesignerView::slotRecordUpdated(KDbRecordData *data)
 {
-    const int row = d->view->data()->indexOf(record);
-    if (row < 0)
+    const int record = d->view->data()->indexOf(data);
+    if (record < 0)
         return;
 
     setDirty();
 
-    //-check if the row was empty before updating
-    //if yes: we want to add a property set for this new row (field)
-    QString fieldCaption(record->at(COLUMN_ID_CAPTION).toString());
-    const bool prop_set_allowed = !record->at(COLUMN_ID_TYPE).isNull();
+    //-check if the record was empty before updating
+    //if yes: we want to add a property set for this new record (field)
+    QString fieldCaption(data->at(COLUMN_ID_CAPTION).toString());
+    const bool prop_set_allowed = !data->at(COLUMN_ID_TYPE).isNull();
 
-    if (!prop_set_allowed && d->sets->at(row)/*propertySet()*/) {
+    if (!prop_set_allowed && d->sets->at(record)/*propertySet()*/) {
         //there is a property set, but it's not allowed - remove it:
-        d->sets->eraseAt(row);
+        d->sets->eraseAt(record);
 
         //clear 'type' column:
         d->view->data()->clearRecordEditBuffer();
-        d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE, QVariant());
-        d->view->data()->saveRecordChanges(record);
+        d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_TYPE, QVariant());
+        d->view->data()->saveRecordChanges(data);
 
-    } else if (prop_set_allowed && !d->sets->at(row)/*propertySet()*/) {
+    } else if (prop_set_allowed && !d->sets->at(record)/*propertySet()*/) {
         //-- create a new field:
         KDbField::TypeGroup fieldTypeGroup = static_cast<KDbField::TypeGroup>(
-                    record->at(COLUMN_ID_TYPE).toInt() + 1/*counting from 1*/);
+                    data->at(COLUMN_ID_TYPE).toInt() + 1/*counting from 1*/);
         int intFieldType = KDb::defaultTypeForGroup(fieldTypeGroup);
         if (intFieldType == 0)
             return;
 
-        QString description(record->at(COLUMN_ID_DESC).toString());
+        QString description(data->at(COLUMN_ID_DESC).toString());
 
 //! @todo check uniqueness:
         QString fieldName(KDb::stringToIdentifier(fieldCaption));
@@ -842,14 +842,14 @@ void KexiTableDesignerView::slotRowUpdated(KDbRecordData *record)
         qDebug() << field;
 
         //create a new property set:
-        KPropertySet *newSet = createPropertySet(row, field, true);
+        KPropertySet *newSet = createPropertySet(record, field, true);
 
         //refresh property editor:
         propertySetSwitched();
 
-        if (row >= 0) {
-            if (d->addHistoryCommand_in_slotRowUpdated_enabled) {
-                addHistoryCommand(new InsertFieldCommand(0, this, row, *newSet /*propertySet()*/),    //, field /*will be copied*/
+        if (record >= 0) {
+            if (d->addHistoryCommand_in_slotRecordUpdated_enabled) {
+                addHistoryCommand(new InsertFieldCommand(0, this, record, *newSet /*propertySet()*/),    //, field /*will be copied*/
                                   false /* !execute */);
             }
         } else {
@@ -883,10 +883,10 @@ void KexiTableDesignerView::slotPropertyChanged(KPropertySet& set, KProperty& pr
     if (pname == "rowSource" || pname == "rowSourceType") {
 //! @todo indicate invalid definitions of lookup columns as well using a special icon
 //!       (e.g. due to missing data source)
-        const int row = d->sets->findRowForPropertyValue("uid", set["uid"].value().toInt());
-        KDbRecordData *record = d->view->itemAt(row);
-        if (record)
-            d->updateIconForRecord(record, &set);
+        const int record = d->sets->findRecordForPropertyValue("uid", set["uid"].value().toInt());
+        KDbRecordData *data = d->view->recordAt(record);
+        if (data)
+            d->updateIconForRecord(data, &set);
     }
 
     //setting autonumber requires setting PK as well
@@ -1057,33 +1057,33 @@ void KexiTableDesignerView::slotPropertyChanged(KPropertySet& set, KProperty& pr
     }
 }
 
-void KexiTableDesignerView::slotRowInserted()
+void KexiTableDesignerView::slotRecordInserted()
 {
     updateActions();
 
-    if (d->addHistoryCommand_in_slotRowInserted_enabled) {
-        const int row = d->view->currentRow();
-        if (row >= 0) {
-            addHistoryCommand(new InsertEmptyRowCommand(0, this, row), false /* !execute */);
+    if (d->addHistoryCommand_in_slotRecordInserted_enabled) {
+        const int record = d->view->currentRecord();
+        if (record >= 0) {
+            addHistoryCommand(new InsertEmptyRecordCommand(0, this, record), false /* !execute */);
         }
     }
     //! @todo
 }
 
-void KexiTableDesignerView::slotAboutToDeleteRow(
-    KDbRecordData& record, KDbResultInfo* result, bool repaint)
+void KexiTableDesignerView::slotAboutToDeleteRecord(
+    KDbRecordData* data, KDbResultInfo* result, bool repaint)
 {
     Q_UNUSED(result)
     Q_UNUSED(repaint)
-    if (record[COLUMN_ID_ICON].toString() == "key")
+    if ((*data)[COLUMN_ID_ICON].toString() == "key")
         d->primaryKeyExists = false;
 
-    if (d->addHistoryCommand_in_slotAboutToDeleteRow_enabled) {
-        const int row = d->view->data()->indexOf(&record);
-        KPropertySet *set = row >= 0 ? d->sets->at(row) : 0;
-        //set can be 0 here, what means "removing empty row"
+    if (d->addHistoryCommand_in_slotAboutToDeleteRecord_enabled) {
+        const int record = d->view->data()->indexOf(data);
+        KPropertySet *set = record >= 0 ? d->sets->at(record) : 0;
+        //set can be 0 here, what means "removing empty record"
         addHistoryCommand(
-            new RemoveFieldCommand(0, this, row, set),
+            new RemoveFieldCommand(0, this, record, set),
             false /* !execute */
         );
     }
@@ -1120,7 +1120,7 @@ KDbField * KexiTableDesignerView::buildField(const KPropertySet &set) const
 
 tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilent)
 {
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return cancelled;
 
     //check for missing captions
@@ -1225,14 +1225,14 @@ tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilen
                 }
                 pkFieldName = pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex));
                 //ok, add PK with such unique name
-                d->view->insertEmptyRow(0);
+                d->view->insertEmptyRecord(0);
                 d->view->setCursorPosition(0, COLUMN_ID_CAPTION);
-                d->view->data()->updateRecordEditBuffer(d->view->selectedItem(), COLUMN_ID_CAPTION,
+                d->view->data()->updateRecordEditBuffer(d->view->selectedRecord(), COLUMN_ID_CAPTION,
                     pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString()
                                                     );
-                d->view->data()->updateRecordEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
+                d->view->data()->updateRecordEditBuffer(d->view->selectedRecord(), COLUMN_ID_TYPE,
                     QVariant(KDbField::IntegerGroup - 1/*counting from 0*/));
-                if (!d->view->data()->saveRecordChanges(d->view->selectedItem(), true)) {
+                if (!d->view->data()->saveRecordChanges(d->view->selectedRecord(), true)) {
                     return cancelled;
                 }
                 slotTogglePrimaryKey();
@@ -1265,7 +1265,7 @@ tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilen
             if (visibleColumn >= 0)
                 visibleColumns.append((uint)visibleColumn);
             lookupFieldSchema->setVisibleColumns(visibleColumns);
-//! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
+//! @todo support columnWidths(), columnHeadersVisible(), maxVisibleRecords(), limitToList(), displayWidget()
             if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {
                 qWarning() << "!schema.setLookupFieldSchema()";
                 delete lookupFieldSchema;
@@ -1629,58 +1629,58 @@ QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result
 
 // -- low-level actions used by undo/redo framework
 
-void KexiTableDesignerView::clearRow(int row, bool addCommand)
+void KexiTableDesignerView::clearRecord(int record, bool addCommand)
 {
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return;
-    KDbRecordData *record = d->view->itemAt(row);
-    if (!record)
+    KDbRecordData *data = d->view->recordAt(record);
+    if (!data)
         return;
     //clear from prop. set
-    d->sets->eraseAt(row);
-    //clear row in table view (just clear value in COLUMN_ID_TYPE column)
+    d->sets->eraseAt(record);
+    //clear record in table view (just clear value in COLUMN_ID_TYPE column)
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = false;
         d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
         d->slotBeforeCellChanged_enabled = false;
     }
-    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE, QVariant());
+    d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_TYPE, QVariant());
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = true;
         d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
         d->slotBeforeCellChanged_enabled = true;
     }
-    d->view->data()->saveRecordChanges(record, true);
+    d->view->data()->saveRecordChanges(data, true);
 }
 
-void KexiTableDesignerView::insertField(int row, const QString& caption, bool addCommand)
+void KexiTableDesignerView::insertField(int record, const QString& caption, bool addCommand)
 {
-    insertFieldInternal(row, 0, caption, addCommand);
+    insertFieldInternal(record, 0, caption, addCommand);
 }
 
-void KexiTableDesignerView::insertField(int row, KPropertySet& set, bool addCommand)
+void KexiTableDesignerView::insertField(int record, KPropertySet& set, bool addCommand)
 {
-    insertFieldInternal(row, &set, QString(), addCommand);
+    insertFieldInternal(record, &set, QString(), addCommand);
 }
 
-void KexiTableDesignerView::insertFieldInternal(int row, KPropertySet* set, //const KDbField& field,
+void KexiTableDesignerView::insertFieldInternal(int record, KPropertySet* set, //const KDbField& field,
         const QString& caption, bool addCommand)
 {
     if (set && (!set->contains("type") || !set->contains("caption"))) {
         qWarning() << "no 'type' or 'caption' property in set!";
         return;
     }
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return;
-    KDbRecordData *record = d->view->itemAt(row);
-    if (!record)
+    KDbRecordData *data = d->view->recordAt(record);
+    if (!data)
         return;
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = false;
         d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
         d->slotBeforeCellChanged_enabled = false;
     }
-    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_CAPTION,
+    d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_CAPTION,
                          set ? (*set)["caption"].value() : QVariant(caption));
     KDbField::TypeGroup tg;
     if (set) {
@@ -1688,58 +1688,58 @@ void KexiTableDesignerView::insertFieldInternal(int row, KPropertySet* set, //co
     } else {
         tg = KDbField::TextGroup; // default type
     }
-    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE, int(tg) - 1);
-    d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_DESC,
+    d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_TYPE, int(tg) - 1);
+    d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_DESC,
                          set ? (*set)["description"].value() : QVariant());
     if (!addCommand) {
         d->slotBeforeCellChanged_enabled = true;
     }
     //this will create a new property set:
-    d->view->data()->saveRecordChanges(record);
+    d->view->data()->saveRecordChanges(data);
     if (set) {
-        KPropertySet *newSet = d->sets->at(row);
+        KPropertySet *newSet = d->sets->at(record);
         if (newSet) {
             *newSet = *set; //deep copy
         } else {
-            qWarning() << "!newSet, row==" << row;
+            qWarning() << "!newSet, record==" << record;
         }
     }
     if (!addCommand) {
         d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
-        d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = true;
     }
-    d->view->updateRow(row);
+    d->view->updateRecord(record);
     propertySetReloaded(true);
 }
 
-void KexiTableDesignerView::insertEmptyRow(int row, bool addCommand)
+void KexiTableDesignerView::insertEmptyRecord(int record, bool addCommand)
 {
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowInserted_enabled = false;
+        d->addHistoryCommand_in_slotRecordInserted_enabled = false;
     }
-    d->view->insertEmptyRow(row);
+    d->view->insertEmptyRecord(record);
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowInserted_enabled = true;
+        d->addHistoryCommand_in_slotRecordInserted_enabled = true;
     }
 }
 
-void KexiTableDesignerView::deleteRow(int row, bool addCommand)
+void KexiTableDesignerView::deleteRecord(int record, bool addCommand)
 {
-    KDbRecordData *record = d->view->itemAt(row);
-    if (!record)
+    KDbRecordData *data = d->view->recordAt(record);
+    if (!data)
         return;
     if (!addCommand) {
-        d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = false;
+        d->addHistoryCommand_in_slotAboutToDeleteRecord_enabled = false;
     }
-    const bool res = d->view->deleteItem(record);
+    const bool res = d->view->deleteItem(data);
     if (!addCommand) {
-        d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = true;
+        d->addHistoryCommand_in_slotAboutToDeleteRecord_enabled = true;
     }
     if (!res)
         return;
 }
 
-void KexiTableDesignerView::changeFieldPropertyForRow(int row,
+void KexiTableDesignerView::changeFieldPropertyForRecord(int record,
         const QByteArray& propertyName, const QVariant& newValue,
         KPropertyListData* const listData, bool addCommand)
 {
@@ -1748,10 +1748,10 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
                                      + QString(propertyName) + "\" to \""
                                      + newValue.toString() + "\"", 2/*nestingLevel*/);
 #endif
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return;
 
-    KPropertySet* set = d->sets->at(row);
+    KPropertySet* set = d->sets->at(record);
     if (!set || !set->contains(propertyName))
         return;
     KProperty &property = set->property(propertyName);
@@ -1763,20 +1763,20 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
     }
     if (propertyName != "type") //delayed type update (we need to have subtype set properly)
         property.setValue(newValue);
-    KDbRecordData *record = d->view->itemAt(row);
-    Q_ASSERT(record);
+    KDbRecordData *data = d->view->recordAt(record);
+    Q_ASSERT(data);
 
     if (propertyName == "type") {
         d->slotPropertyChanged_subType_enabled = false;
-        d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_TYPE,
+        d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_TYPE,
             int(KDbField::typeGroup(KDb::intToFieldType(newValue.toInt()))) - 1);
-        d->view->data()->saveRecordChanges(record);
-        d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+        d->view->data()->saveRecordChanges(data);
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = true;
         property.setValue(newValue); //delayed type update (we needed to have subtype set properly)
     }
 
     if (!addCommand) {
-        d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = false;
         d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
         d->slotPropertyChanged_subType_enabled = false;
     }
@@ -1785,8 +1785,8 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
         if (!addCommand) {
             d->slotBeforeCellChanged_enabled = false;
         }
-        d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_CAPTION, newValue);
-        d->view->data()->saveRecordChanges(record);
+        d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_CAPTION, newValue);
+        d->view->data()->saveRecordChanges(data);
         if (!addCommand) {
             d->slotBeforeCellChanged_enabled = true;
         }
@@ -1794,18 +1794,18 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
         if (!addCommand) {
             d->slotBeforeCellChanged_enabled = false;
         }
-        d->view->data()->updateRecordEditBuffer(record, COLUMN_ID_DESC, newValue);
+        d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_DESC, newValue);
         if (!addCommand) {
             d->slotBeforeCellChanged_enabled = true;
         }
-        d->view->data()->saveRecordChanges(record);
+        d->view->data()->saveRecordChanges(data);
     }
     if (!addCommand) {
         d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
-        d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+        d->addHistoryCommand_in_slotRecordUpdated_enabled = true;
         d->slotPropertyChanged_subType_enabled = true;
     }
-    d->view->updateRow(row);
+    d->view->updateRecord(record);
 }
 
 void KexiTableDesignerView::changeFieldProperty(int fieldUID,
@@ -1813,12 +1813,12 @@ void KexiTableDesignerView::changeFieldProperty(int fieldUID,
         KPropertyListData* const listData, bool addCommand)
 {
     //find a property by UID
-    const int row = d->sets->findRowForPropertyValue("uid", fieldUID);
-    if (row < 0) {
+    const int record = d->sets->findRecordForPropertyValue("uid", fieldUID);
+    if (record < 0) {
         qWarning() << "field with uid=" << fieldUID << " not found!";
         return;
     }
-    changeFieldPropertyForRow(row, propertyName, newValue, listData, addCommand);
+    changeFieldPropertyForRecord(record, propertyName, newValue, listData, addCommand);
 }
 
 void KexiTableDesignerView::changePropertyVisibility(
@@ -1829,14 +1829,14 @@ void KexiTableDesignerView::changePropertyVisibility(
                                      + QString(propertyName) + "\" to \""
                                      + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
 #endif
-    if (!d->view->acceptRowEdit())
+    if (!d->view->acceptRecordEditing())
         return;
 
     //find a property by name
-    const int row = d->sets->findRowForPropertyValue("uid", fieldUID);
-    if (row < 0)
+    const int record = d->sets->findRecordForPropertyValue("uid", fieldUID);
+    if (record < 0)
         return;
-    KPropertySet* set = d->sets->at(row);
+    KPropertySet* set = d->sets->at(record);
     if (!set || !set->contains(propertyName))
         return;
 

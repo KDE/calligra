@@ -39,7 +39,7 @@ class AlterSchemaTableModel : public QAbstractTableModel
 
         void setSchema(KDbTableSchema*);
         void setData(const QList<KDbRecordData>& data);
-        void setRowCount(const int i);
+        void setRecordCount(const int i);
     private:
         //! Reimplemented just to avoid 'hidden' warnings
         virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) {
@@ -48,7 +48,7 @@ class AlterSchemaTableModel : public QAbstractTableModel
 
         KDbTableSchema *m_schema;
         QList<KDbRecordData> m_data; //Small amount of data to display to user
-        int m_rowCount;
+        int m_recordCount;
 };
 
 #endif // ALTERSCHEMATABLEMODEL_H

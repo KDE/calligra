@@ -40,7 +40,7 @@ KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
     skipKeyPress = false;
     ensureCellVisibleOnShow = QPoint(-1, -1);
     internal_bottomMargin = 0;
-    highlightedRow = -1;
+    highlightedRecord = -1;
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);
@@ -66,7 +66,7 @@ void KexiTableScrollArea::Private::clearVariables()
 
 void KexiTableScrollArea::Private::setSpreadSheetMode(bool set)
 {
-    tv->setBottomMarginInternal(set ? 0 : tv->rowHeight() / 2);
+    tv->setBottomMarginInternal(set ? 0 : tv->recordHeight() / 2);
     //copy the m_navPanelEnabled flag
     Appearance a = appearance;
     a.navigatorEnabled = tv->m_navPanelEnabled;

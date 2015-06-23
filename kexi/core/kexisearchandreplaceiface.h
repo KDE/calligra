@@ -66,7 +66,7 @@ public:
         enum SearchDirection {
             SearchUp = 0,      //!< Search up (previous) from the current position
             SearchDown = 1,    //!< Search down (next) from the current position (the default)
-            SearchAllRows = 2, //!< Search from the first to the last row
+            SearchAllRecords = 2, //!< Search from the first to the last record
             DefaultSearchDirection = SearchDown //! Used to mark the default
         };
 

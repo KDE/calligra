@@ -65,7 +65,7 @@ public:
      * @returns the number of records in the data set, (if data set is present)
      * @note not all of the records have to be processed
      */
-    int recordCount() const {
+    virtual int recordCount() const {
         return m_data->count();
     }
 

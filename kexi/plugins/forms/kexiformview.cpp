@@ -472,7 +472,7 @@ KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
     Q_ASSERT(dontStore);
     if (mode != viewMode()) {
         if (viewMode() == Kexi::DataViewMode) {
-            if (!d->scrollView->acceptRowEdit())
+            if (!d->scrollView->acceptRecordEditing())
                 return cancelled;
             d->scrollView->beforeSwitchView();
         }

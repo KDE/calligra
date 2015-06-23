@@ -93,11 +93,11 @@ public:
     void beforeSwitchView();
 
     /*! \return last record visible on the screen (counting from 0).
-     The returned value is guaranteed to be smaller or equal to currentRow() or -1
-     if there are no rows.
+     The returned value is guaranteed to be smaller or equal to currentRecord() or -1
+     if there are no records.
      Implemented for KexiDataAwareObjectInterface. */
     //! @todo unimplemented for now, this will be used for continuous forms
-    virtual int lastVisibleRow() const;
+    virtual int lastVisibleRecord() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
     virtual QScrollBar* verticalScrollBar() const;
@@ -146,10 +146,10 @@ public:
 public Q_SLOTS:
     //! Implementation for KexiDataAwareObjectInterface
     //! \return arbitraty value of 10.
-    virtual int rowsPerPage() const;
+    virtual int recordsPerPage() const;
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void ensureCellVisible(int row, int col);
+    virtual void ensureCellVisible(int record, int col);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void ensureColumnVisible(int col);
@@ -180,18 +180,18 @@ public Q_SLOTS:
     }
 
 Q_SIGNALS:
-    void itemChanged(KDbRecordData*, int row, int col);
-    void itemChanged(KDbRecordData*, int row, int col, QVariant oldValue);
-    void itemDeleteRequest(KDbRecordData*, int row, int col);
+    void itemChanged(KDbRecordData* data, int record, int column);
+    void itemChanged(KDbRecordData* data, int record, int column, const QVariant &oldValue);
+    void itemDeleteRequest(KDbRecordData* data, int record, int column);
     void currentItemDeleteRequest();
     void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     void dataRefreshed();
     void dataSet(KDbTableViewData *data);
-    void itemSelected(KDbRecordData*);
-    void cellSelected(int row, int col);
-    void sortedColumnChanged(int col);
-    void rowEditStarted(int row);
-    void rowEditTerminated(int row);
+    void itemSelected(KDbRecordData* data);
+    void cellSelected(int record, int column);
+    void sortedColumnChanged(int column);
+    void recordEditingStarted(int record);
+    void recordEditingTerminated(int record);
     void updateSaveCancelActions();
     void reloadActions();
 
@@ -199,26 +199,26 @@ Q_SIGNALS:
     bool resized();
 
 protected Q_SLOTS:
-    //! Handles KDbTableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KDbRecordData& record);
+    //! Handles KDbTableViewData::recordRepaintRequested() signal
+    virtual void slotRecordRepaintRequested(KDbRecordData* record);
 
-    //! Handles KDbTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KDbRecordData& record, KDbResultInfo* result, bool repaint) {
-        KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
+    //! Handles KDbTableViewData::aboutToDeleteRecord() signal. Prepares info for slotRecordDeleted().
+    virtual void slotAboutToDeleteRecord(KDbRecordData* record, KDbResultInfo* result, bool repaint) {
+        KexiDataAwareObjectInterface::slotAboutToDeleteRecord(record, result, repaint);
     }
 
-    //! Handles KDbTableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted() {
-        KexiDataAwareObjectInterface::slotRowDeleted();
+    //! Handles KDbTableViewData::recordDeleted() signal to repaint when needed.
+    virtual void slotRecordDeleted() {
+        KexiDataAwareObjectInterface::slotRecordDeleted();
     }
 
-    //! Handles KDbTableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KDbRecordData* record, bool repaint);
+    //! Handles KDbTableViewData::recordInserted() signal to repaint when needed.
+    virtual void slotRecordInserted(KDbRecordData* record, bool repaint);
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KDbRecordData* record, uint row, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData* record, uint record, bool repaint);
 
-    virtual void slotRowsDeleted(const QList<int>&);
+    virtual void slotRecordsDeleted(const QList<int>&);
 
     virtual void slotDataDestroying() {
         KexiDataAwareObjectInterface::slotDataDestroying();
@@ -256,28 +256,28 @@ protected:
     void sortColumnInternal(int col, int order = 0);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void updateGUIAfterSorting(int previousRow);
+    virtual void updateGUIAfterSorting(int previousRecord);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void createEditor(int row, int col, const QString& addText = QString(),
+    virtual void createEditor(int record, int column, const QString& addText = QString(),
                               CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void editorShowFocus(int row, int col);
+    virtual void editorShowFocus(int record, int column);
 
     /*! Implementation for KexiDataAwareObjectInterface
      Redraws specified cell. */
-    virtual void updateCell(int row, int col);
+    virtual void updateCell(int record, int column);
 
     /*! Redraws the current cell. Implemented after KexiDataAwareObjectInterface. */
     virtual void updateCurrentCell();
 
     /*! Implementation for KexiDataAwareObjectInterface
-     Redraws all cells of specified row. */
-    virtual void updateRow(int row);
+     Redraws all cells of specified record. */
+    virtual void updateRecord(int record);
 
     /*! Implementation for KexiDataAwareObjectInterface
      Updates contents of the widget. Just call update() here on your widget. */
@@ -295,7 +295,7 @@ protected:
      \return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
-    virtual bool cursorAtNewRow() const;
+    virtual bool cursorAtNewRecord() const;
 
     /*! Implementation for KexiFormDataProvider. */
     virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
@@ -306,7 +306,7 @@ protected:
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()
     //! if cursor's position is really changed.
-    virtual void selectCellInternal(int previousRow, int previousColumn);
+    virtual void selectCellInternal(int previousRecord, int previousColumn);
 
     /*! Reimplementation: used to refresh "editing indicator" visibility. */
     virtual void initDataContents();
@@ -314,14 +314,14 @@ protected:
     /*! @internal
      Updates record appearance after canceling record edit.
      Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
-     Used by cancelRowEdit(). */
-    virtual void updateAfterCancelRowEdit();
+     Used by cancelRecordEditing(). */
+    virtual void updateAfterCancelRecordEditing();
 
     /*! @internal
      Updates record appearance after accepting record edit.
      Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
-     Used by cancelRowEdit(). */
-    virtual void updateAfterAcceptRowEdit();
+     Used by cancelRecordEditing(). */
+    virtual void updateAfterAcceptRecordEditing();
 
     /*! @internal
      Used to invoke copy/paste/cut etc. actions at the focused widget's level. */

@@ -77,7 +77,7 @@ public:
 
     //! editors: one for each column (indexed by KDbTableViewColumn)
     QHash<KDbTableViewColumn*, KexiTableEdit*> editors;
-    int rowHeight;
+    int recordHeight;
     QTimer *pUpdateTimer;
     bool editOnDoubleClick;
     bool needAutoScroll;
@@ -134,8 +134,8 @@ public:
 
     QMargins viewportMargins;
 
-    /*! Helper for "highlighted row" effect. */
-    int highlightedRow;
+    /*! Helper for "highlighted record" effect. */
+    int highlightedRecord;
 
     /*! Id of context menu key (cached). */
     int contextMenuKey;

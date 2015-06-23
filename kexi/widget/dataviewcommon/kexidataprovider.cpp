@@ -86,11 +86,11 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
     }
 }
 
-void KexiFormDataProvider::fillDataItems(KDbRecordData *record, bool cursorAtNewRow)
+void KexiFormDataProvider::fillDataItems(KDbRecordData *data, bool cursorAtNewRow)
 {
-    Q_ASSERT(record);
-    qDebug() << "record.count=" << record->count()
-             << "\nRECORD=" << *record;
+    Q_ASSERT(data);
+    qDebug() << "record.count=" << data->count()
+             << "\nRECORD=" << *data;
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
             = m_fieldNumbersForDataItems.constBegin();
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {
@@ -101,12 +101,12 @@ void KexiFormDataProvider::fillDataItems(KDbRecordData *record, bool cursorAtNew
         }
         //1. Is this a value with a combo box (lookup)?
         int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
-        if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue >= record->count()) //sanity
+        if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue >= data->count()) //sanity
             indexForVisibleLookupValue = -1; //no
-        const QVariant value(record->at(it.value()));
+        const QVariant value(data->at(it.value()));
         QVariant visibleLookupValue;
-        if (indexForVisibleLookupValue != -1 && (int)record->count() > indexForVisibleLookupValue)
-            visibleLookupValue = record->at(indexForVisibleLookupValue);
+        if (indexForVisibleLookupValue != -1 && (int)data->count() > indexForVisibleLookupValue)
+            visibleLookupValue = data->at(indexForVisibleLookupValue);
             qDebug() << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value()
             << " data=" << value
             << (indexForVisibleLookupValue != -1
@@ -175,7 +175,7 @@ void KexiFormDataProvider::valueChanged(KexiDataItemInterface* item)
     Q_UNUSED(item);
 }
 
-bool KexiFormDataProvider::cursorAtNewRow() const
+bool KexiFormDataProvider::cursorAtNewRecord() const
 {
     return false;
 }

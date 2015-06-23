@@ -83,26 +83,26 @@ public:
 
     /*! \return currently selected column number or -1. */
     inline int currentColumn() const {
-        return m_curCol;
+        return m_curColumn;
     }
 
-    /*! \return currently selected row number or -1. */
-    inline int currentRow() const {
-        return m_curRow;
+    /*! \return number of the currently selected record number or -1. */
+    inline int currentRecord() const {
+        return m_curRecord;
     }
 
-    /*! \return last row visible on the screen (counting from 0).
-     The returned value is guaranteed to be smaller or equal to currentRow() or -1
-     if there are no rows. */
-    virtual int lastVisibleRow() const = 0;
+    /*! \return last record visible on the screen (counting from 0).
+     The returned value is guaranteed to be smaller or equal to currentRecord() or -1
+     if there are no records. */
+    virtual int lastVisibleRecord() const = 0;
 
     /*! \return currently selected record data or null. */
-    KDbRecordData *selectedItem() const {
-        return m_currentItem;
+    KDbRecordData *selectedRecord() const {
+        return m_currentRecord;
     }
 
-    /*! \return number of rows in this view. */
-    int rowCount() const;
+    /*! \return number of records in this view. */
+    int recordCount() const;
 
     /*! \return number of visible columns in this view.
      By default returns dataColumns(), what is proper table view.
@@ -164,8 +164,8 @@ public:
      dataSortColumn() should be checked first to see if sorting is enabled (and if there's data). */
     Qt::SortOrder dataSortOrder() const;
 
-    /*! Sorts all rows by column selected with setSorting().
-     If there is currently row edited, it is accepted.
+    /*! Sorts all records by column selected with setSorting().
+     If there is currently record edited, it is accepted.
      If acception failed, sort() will return false.
      \return true on success. */
     virtual bool sort();
@@ -181,7 +181,7 @@ public:
     /*! \return true if data inserting is enabled (the default). */
     virtual bool isInsertingEnabled() const;
 
-    /*! Sets insertingEnabled flag. If true, empty row is available
+    /*! Sets insertingEnabled flag. If true, empty record is available
      at the end of this widget for new entering new data.
      Unless the flag is set, the widget inherits insertingEnabled flag from it's data
      structure assigned with setData(). The default value if false.
@@ -195,21 +195,21 @@ public:
     */
     void setInsertingEnabled(bool set);
 
-    /*! \return true if row deleting is enabled.
+    /*! \return true if record deleting is enabled.
      Equal to deletionPolicy() != NoDelete && !isReadOnly()). */
     bool isDeleteEnabled() const;
 
-    /*! \return true if inserting empty rows are enabled (false by default).
+    /*! \return true if inserting empty records is enabled (false by default).
      Mostly usable for not db-aware objects (e.g. used in Kexi Alter Table).
      Note, that if inserting is disabled, or the data set is read-only,
      this flag will be ignored. */
-    bool isEmptyRowInsertingEnabled() const {
-        return m_emptyRowInsertingEnabled;
+    bool isEmptyRecordInsertingEnabled() const {
+        return m_emptyRecordInsertingEnabled;
     }
 
-    /*! Sets emptyRowInserting flag.
+    /*! Sets the emptyRecordInsertingEnabled flag.
      Note, that if inserting is disabled, this flag is ignored. */
-    void setEmptyRowInsertingEnabled(bool set);
+    void setEmptyRecordInsertingEnabled(bool set);
 
     /*! Enables or disables filtering. Filtering is enabled by default. */
     virtual void setFilteringEnabled(bool set);
@@ -223,8 +223,8 @@ public:
      will behave more like a spreadsheet (it's used for things like table designer view):
      - hides navigator
      - disables sorting, inserting and filtering
-     - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
-     - enables inserting empty row; see setEmptyRowInsertingEnabled() */
+     - enables accepting record after cell accepting; see setAcceptsRecordEditAfterCellAccepting()
+     - enables inserting empty record; see setEmptyRecordInsertingEnabled() */
     virtual void setSpreadSheetMode(bool set);
 
     /*! \return true id "spreadSheetMode" is enabled. It's false by default. */
@@ -232,9 +232,9 @@ public:
         return m_spreadSheetMode;
     }
 
-    /*! \return number of currently edited row or -1. */
-    inline int rowEditing() const {
-        return m_rowEditing;
+    /*! \return number of currently edited record or -1. */
+    inline int recordEditing() const {
+        return m_recordEditing;
     }
 
     enum DeletionPolicy {
@@ -255,29 +255,29 @@ public:
     /*! Deletes currently selected record; does nothing if no record
      is currently selected. If record is in edit mode, editing
      is cancelled before deleting.  */
-    virtual void deleteCurrentRow();
+    virtual void deleteCurrentRecord();
 
     /*! Inserts one empty record above \a pos. If \a pos is -1 (the default),
      new record is inserted above the current record (or above 1st record if there is no current).
-     A new record becomes current if \a pos is -1 or if \a pos is equal currentRow().
+     A new record becomes current if \a pos is -1 or if \a pos is equal currentRecord().
      This method does nothing if:
      -inserting flag is disabled (see isInsertingEnabled())
      -read-only flag is set (see isReadOnly())
      \return inserted record's data
     */
-    virtual KDbRecordData *insertEmptyRow(int pos = -1);
+    virtual KDbRecordData *insertEmptyRecord(int pos = -1);
 
     /*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
      Default implementation just returns true. */
-    virtual bool beforeDeleteItem(KDbRecordData *record);
+    virtual bool beforeDeleteItem(KDbRecordData *data);
 
-    /*! Deletes \a record. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting,
+    /*! Deletes \a record. Used by deleteCurrentRecord(). Calls beforeDeleteItem() before deleting,
      to double-check if deleting is allowed.
      \return true on success. */
-    bool deleteItem(KDbRecordData *record);
+    bool deleteItem(KDbRecordData *data);
 
-    /*! Inserts newRecord at position \a pos. -1 means current record. Used by insertEmptyRow(). */
-    void insertItem(KDbRecordData *newRecord, int pos = -1);
+    /*! Inserts \a data at position \a pos. -1 means current record. Used by insertEmptyRecord(). */
+    void insertItem(KDbRecordData *data, int pos = -1);
 
     /*! Clears entire table data, its visible representation
      and deletes data at database backend (if this is db-aware object).
@@ -287,34 +287,34 @@ public:
      Repaints widget if \a repaint is true (the default).
      For empty tables, true is returned immediately.
      If isDeleteEnabled() is false, false is returned.
-     For spreadsheet mode all current rows are just replaced by empty rows.
+     For spreadsheet mode all current records are just replaced by empty records.
      \return true on success, false on failure, and cancelled if user cancelled deletion
      (only possible if \a ask is true).
      */
-    tristate deleteAllRows(bool ask = false, bool repaint = true);
+    tristate deleteAllRecords(bool ask = false, bool repaint = true);
 
-    /*! \return maximum number of rows that can be displayed per one "page"
+    /*! \return maximum number of records that can be displayed per one "page"
      for current view's size. */
-    virtual int rowsPerPage() const = 0;
+    virtual int recordsPerPage() const = 0;
 
-    virtual void selectRow(int row);
-    virtual void selectNextRow();
-    virtual void selectPrevRow();
+    virtual void selectRecord(int record);
+    virtual void selectNextRecord();
+    virtual void selectPreviousRecord();
     virtual void selectNextPage(); //!< page down action
-    virtual void selectPrevPage(); //!< page up action
-    virtual void selectFirstRow();
-    virtual void selectLastRow();
+    virtual void selectPreviousPage(); //!< page up action
+    virtual void selectFirstRecord();
+    virtual void selectLastRecord();
     virtual void addNewRecordRequested();
 
 
-    /*! Clears current selection. Current row and column will be now unspecified:
-     currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
+    /*! Clears the current selection. Current record and column will be now unspecified:
+     currentRecord(), currentColumn() will return -1, and selectedRecord() will return null. */
     virtual void clearSelection();
 
     //! Flags for setCursorPosition()
     enum CursorPositionFlag {
         NoCursorPositionFlags = 0,  //!< Default flag
-        ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
+        ForceSetCursorPosition = 1, //!< Update cursor position even if record and col doesn't
                                     //!< differ from actual position.
         DontEnsureCursorVisibleIfPositionUnchanged = 2 //!< Don't call ensureCellVisible()
                                                        //!< when position is unchanged and
@@ -322,16 +322,16 @@ public:
     };
     Q_DECLARE_FLAGS(CursorPositionFlags, CursorPositionFlag)
 
-    /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
-     If forceSet is true, cursor position is updated even if \a row and \a col doesn't
+    /*! Moves cursor to \a record and \a col. If \a col is -1, current column number is used.
+     If forceSet is true, cursor position is updated even if \a record and \a col doesn't
      differ from actual position. */
-    virtual void setCursorPosition(int row, int col = -1,
+    virtual void setCursorPosition(int record, int col = -1,
                                    CursorPositionFlags flags = NoCursorPositionFlags);
 
-    /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
-     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
-    virtual void ensureCellVisible(int row, int col) = 0;
+    /*! Ensures that cell at \a record and \a col is visible.
+     If \a col is -1, current column number is used. \a record and \a col, if not -1, must
+     be between 0 and recordCount()-1 (or columnCount()-1 accordingly). */
+    virtual void ensureCellVisible(int record, int col) = 0;
 
     /*! Ensures that column \a col is visible.
      If \a col is -1, current column number is used. \a col, if not -1, must be between
@@ -339,12 +339,12 @@ public:
     virtual void ensureColumnVisible(int col) = 0;
 
     /*! Specifies, if this object automatically accepts
-     row editing (using acceptRowEdit()) on accepting any cell's edit
-     (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-    virtual void setAcceptsRowEditAfterCellAccepting(bool set);
+     record editing (using acceptRecordEdit()) on accepting any cell's edit
+     (i.e. after acceptEditor()). \sa acceptsRecordEditAfterCellAccepting() */
+    virtual void setAcceptsRecordEditAfterCellAccepting(bool set);
 
     /*! \return true, if this object automatically accepts
-     row editing (using acceptRowEdit()) on accepting any cell's edit
+     record editing (using acceptRecordEdit()) on accepting any cell's edit
      (i.e. after acceptEditor()).
      By default this flag is set to false.
      Not that if the query for this table has given constraints defined,
@@ -352,38 +352,38 @@ public:
      be impossible for the flag set to true, because of constraints violation.
      However, setting this flag to true can be useful especially for not-db-aware
      data set (it's used e.g. in Kexi Alter Table's field editor). */
-    bool acceptsRowEditAfterCellAccepting() const {
-        return m_acceptsRowEditAfterCellAccepting;
+    bool acceptsRecordEditAfterCellAccepting() const {
+        return m_acceptsRecordEditAfterCellAccepting;
     }
 
-    /*! \return true, if this table accepts dropping data on the rows. */
-    bool dropsAtRowEnabled() const {
-        return m_dropsAtRowEnabled;
+    /*! \return true, if this table accepts dropping data on the records. */
+    bool dropsAtRecordEnabled() const {
+        return m_dropsAtRecordEnabled;
     }
 
-    /*! Specifies, if this table accepts dropping data on the rows.
+    /*! Specifies, if this table accepts dropping data on the records.
      If enabled:
-     - dragging over row is indicated by drawing a line at bottom side of this row
-     - dragOverRow() signal will be emitted on dragging,
-      -droppedAtRow() will be emitted on dropping
+     - dragging over record is indicated by drawing a line at bottom side of this record
+     - dragOverRecord() signal will be emitted on dragging,
+      -droppedAtRecord() will be emitted on dropping
      By default this flag is set to false. */
-    virtual void setDropsAtRowEnabled(bool set);
+    virtual void setDropsAtRecordEnabled(bool set);
 
     /*! \return currently used data (field/cell) editor or 0 if there is no data editing. */
     inline KexiDataItemInterface *editor() const {
         return m_editor;
     }
 
-    /*! Cancels row editing All changes made to the editing
-     row during this current session will be undone.
+    /*! Cancels record editing. All changes made to the editing
+     record during this current session will be undone.
      \return true on success or false on failure (e.g. when editor does not exist) */
-    virtual bool cancelRowEdit();
+    virtual bool cancelRecordEditing();
 
-    /*! Accepts row editing. All changes made to the editing
-     row during this current session will be accepted (saved).
+    /*! Accepts record editing. All changes made to the editing
+     record during this current session will be accepted (saved).
      \return true if accepting was successful, false otherwise
-     (e.g. when current row contain data that does not meet given constraints). */
-    virtual bool acceptRowEdit();
+     (e.g. when current record contains data that does not meet given constraints). */
+    virtual bool acceptRecordEditing();
 
     virtual void removeEditor();
 
@@ -405,7 +405,7 @@ public:
     Q_DECLARE_FLAGS(CreateEditorFlags, CreateEditorFlag)
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
-    virtual void createEditor(int row, int col, const QString& addText = QString(),
+    virtual void createEditor(int record, int col, const QString& addText = QString(),
                               CreateEditorFlags flags = DefaultCreateEditorFlags) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
@@ -421,7 +421,7 @@ public:
      In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell();
 
-    inline KDbRecordData *itemAt(int pos) const;
+    inline KDbRecordData *recordAt(int pos) const;
 
     /*! \return column information for column number \a col.
      Default implementation just returns column # col,
@@ -438,7 +438,7 @@ public:
 
     bool hasDefaultValueAt(const KDbTableViewColumn& tvcol);
 
-    const QVariant* bufferedValueAt(int row, int col, bool useDefaultValueIfPossible = true);
+    const QVariant* bufferedValueAt(int record, int col, bool useDefaultValueIfPossible = true);
 
     //! \return a type of column \a col - one of KDbField::Type
     int columnType(int col);
@@ -460,9 +460,9 @@ public:
     virtual int horizontalHeaderHeight() const;
 
     //! signals
-    virtual void itemChanged(KDbRecordData*, int row, int col) = 0;
-    virtual void itemChanged(KDbRecordData*, int row, int col, QVariant oldValue) = 0;
-    virtual void itemDeleteRequest(KDbRecordData*, int row, int col) = 0;
+    virtual void itemChanged(KDbRecordData* data, int record, int column) = 0;
+    virtual void itemChanged(KDbRecordData* data, int record, int column, const QVariant &oldValue) = 0;
+    virtual void itemDeleteRequest(KDbRecordData* data, int record, int column) = 0;
     virtual void currentItemDeleteRequest() = 0;
     //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
     virtual void newItemAppendedForAfterDeletingInSpreadSheetMode() = 0;
@@ -514,9 +514,9 @@ public:
      otherwise starts editing (startEditCurrentCell()). */
     void startEditOrToggleValue();
 
-    /*! \return true if new row is edited; implies: rowEditing==true. */
-    inline bool newRowEditing() const {
-        return m_newRowEditing;
+    /*! \return true if the new record is edited; implies: recordEditing==true. */
+    inline bool newRecordEditing() const {
+        return m_newRecordEditing;
     }
 
     /*! Reaction on toggling a boolean value of a cell:
@@ -526,10 +526,10 @@ public:
     virtual void connectCellSelectedSignal(const QObject* receiver,
                                            const char* intIntMember) = 0;
 
-    virtual void connectRowEditStartedSignal(const QObject* receiver,
+    virtual void connectRecordEditingStartedSignal(const QObject* receiver,
             const char* intMember) = 0;
 
-    virtual void connectRowEditTerminatedSignal(const QObject* receiver,
+    virtual void connectRecordEditingTerminatedSignal(const QObject* receiver,
             const char* voidMember) = 0;
 
     virtual void connectUpdateSaveCancelActionsSignal(const QObject* receiver,
@@ -589,29 +589,29 @@ public:
     /*! Used in KexiTableView::keyPressEvent() (and in continuous forms).
      \return true when the key press event \e was consumed.
      You should also check e->isAccepted(), if it's true, nothing should be done;
-     if it is false, you should call setCursorPosition() for the altered \a curCol
-     and \c curRow variables.
+     if it is false, you should call setCursorPosition() for the altered \a curentColumn
+     and \c currentRecord variables.
 
      If \a moveToFirstField is not 0, *moveToFirstField will be set to true
      when the cursor should be moved to the first field (in tab order) and to false otherwise.
      If \a moveToLastField is not 0, *moveToLastField will be set to true
      when the cursor should be moved to the last field (in tab order) and to false otherwise.
      Note for forms: if moveToFirstField and moveToLastField are not 0,
-     \a curCol is altered after calling this method, so setCursorPosition() will set to
+     \a currentColumn is altered after calling this method, so setCursorPosition() will set to
      the index of an appropriate column (field). This is needed because field widgets can be
      inserted and ordered in custom tab order, so the very first field in the data source
      can be other than the very first field in the form.
 
      Used by KexiTableView::keyPressEvent() and KexiTableView::keyPressEvent(). */
-    virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRecordSelection,
+    virtual bool handleKeyPress(QKeyEvent *e, int *currentRecord, int *currentColumn, bool fullRecordSelection,
                                 bool *moveToFirstField = 0, bool *moveToLastField = 0);
 
 protected:
     /*! Reimplementation for KexiDataAwareObjectInterface.
-     Initializes data contents (resizes it, sets cursor at 1st row).
+     Initializes data contents (resizes it, sets cursor at the first record).
      Sets record count for record navigator.
-     Sets cursor positin (using setCursorPosition()) to first row or sets
-     (-1, -1) position if no rows are available.
+     Sets cursor positin (using setCursorPosition()) to first record or sets
+     (-1, -1) position if no records are available.
      Called on setData(). Also called once on show event after
      refreshRequested() signal was received from TableViewData object. */
     virtual void initDataContents();
@@ -654,11 +654,11 @@ protected:
 
     /*! @internal for implementation
      Updates GUI after sorting.
-     After sorting you need to ensure current row and column
+     After sorting you need to ensure current record and column
      is visible to avoid user confusion. For exaple, in KexiTableView
      implementation, current cell is centered (if possible)
      and updateContents() is called. */
-    virtual void updateGUIAfterSorting(int previousRow) = 0;
+    virtual void updateGUIAfterSorting(int previousRecord) = 0;
 
     /*! Emitted in initActions() to force reload actions
      You should remove existing actions and add them again.
@@ -672,19 +672,19 @@ protected:
     virtual void itemSelected(KDbRecordData *) = 0;
 
     /*! for implementation as a signal */
-    virtual void cellSelected(int row, int col) = 0;
+    virtual void cellSelected(int record, int col) = 0;
 
     /*! for implementation as a signal */
     virtual void sortedColumnChanged(int col) = 0;
 
     /*! for implementation as a signal */
-    virtual void rowEditTerminated(int row) = 0;
+    virtual void recordEditingTerminated(int record) = 0;
 
     /*! for implementation as a signal */
     virtual void updateSaveCancelActions() = 0;
 
-    /*! Prototype for signal rowEditStarted(int), implemented by KexiFormScrollView. */
-    virtual void rowEditStarted(int row) = 0;
+    /*! Prototype for signal recordEditingStarted(int), implemented by KexiFormScrollView. */
+    virtual void recordEditingStarted(int record) = 0;
 
     /*! Clear temporary members like the pointer to current editor.
      If you reimplement this method, don't forget to call this one. */
@@ -694,19 +694,19 @@ protected:
      Creates editor structure without filling it with data.
      Used in createEditor() and few places to be able to display cell contents
      dependending on its type. If \a ignoreMissingEditor is false (the default),
-     and editor cannot be instantiated, current row editing (if present) is cancelled.
+     and editor cannot be instantiated, current record editing (if present) is cancelled.
      */
     virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false) = 0;
 
     /*! Updates editor's position, size and shows its focus (not the editor!)
-     for \a row and \a col, using editor(). Does nothing if editor not found. */
-    virtual void editorShowFocus(int row, int col) = 0;
+     for \a record and \a column, using editor(). Does nothing if editor not found. */
+    virtual void editorShowFocus(int record, int column) = 0;
 
     /*! Redraws specified cell. */
-    virtual void updateCell(int row, int col) = 0;
+    virtual void updateCell(int record, int column) = 0;
 
-    /*! Redraws all cells of specified row. */
-    virtual void updateRow(int row) = 0;
+    /*! Redraws all cells of specified record \a record. */
+    virtual void updateRecord(int record) = 0;
 
     /*! Updates contents of the widget. Just call update() here on your widget. */
     virtual void updateWidgetContents() = 0;
@@ -715,56 +715,56 @@ protected:
     virtual void updateWidgetContentsSize() = 0;
 
     /*! @internal
-     Updates row appearance after canceling row edit.
-     Used by cancelRowEdit(). By default just calls updateRow(m_curRow).
+     Updates record appearance after canceling record edit.
+     Used by cancelRecordEdit(). By default just calls updateRecord(m_curRecord).
      Reimplemented by KexiFormScrollView. */
-    virtual void updateAfterCancelRowEdit();
+    virtual void updateAfterCancelRecordEditing();
 
     /*! @internal
-     Updates row appearance after accepting row edit.
-     Used by acceptRowEdit(). By default just calls updateRow(m_curRow).
+     Updates record appearance after accepting record edit.
+     Used by acceptRecordEditing(). By default just calls updateRecord(m_curRecord).
      Reimplemented by KexiFormScrollView. */
-    virtual void updateAfterAcceptRowEdit();
+    virtual void updateAfterAcceptRecordEditing();
 
-    //! Handles TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KDbRecordData& record) {
+    //! Handles TableViewData::recordRepaintRequested() signal
+    virtual void slotRecordRepaintRequested(KDbRecordData* record) {
         Q_UNUSED(record);
     }
 
-    //! Handles TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KDbRecordData& record, KDbResultInfo* result,
-                                      bool repaint);
+    //! Handles TableViewData::aboutToDeleteRecord() signal. Prepares info for slotRecordDeleted().
+    virtual void slotAboutToDeleteRecord(KDbRecordData* record, KDbResultInfo* result,
+                                         bool repaint);
 
-    //! Handles TableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted();
+    //! Handles TableViewData::recordDeleted() signal to repaint when needed.
+    virtual void slotRecordDeleted();
 
-    //! Handles TableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KDbRecordData *record, bool repaint);
+    //! Handles TableViewData::recordInserted() signal to repaint when needed.
+    virtual void slotRecordInserted(KDbRecordData *data, bool repaint);
 
-    virtual void beginInsertItem(KDbRecordData *newRecord, int pos);
+    virtual void beginInsertItem(KDbRecordData *data, int pos);
 
-    virtual void endInsertItem(KDbRecordData *newRecord, int pos);
+    virtual void endInsertItem(KDbRecordData *data, int pos);
 
-    virtual void beginRemoveItem(KDbRecordData *record, int pos);
+    virtual void beginRemoveItem(KDbRecordData *data, int pos);
 
     virtual void endRemoveItem(int pos);
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KDbRecordData *record, uint row, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData *data, uint record, bool repaint);
 
-    virtual void slotRowsDeleted(const QList<int> &) {}
+    virtual void slotRecordsDeleted(const QList<int> &) {}
 
     //! for sanity checks (return true if m_data is present; else: outputs warning)
     inline bool hasData() const;
 
     /*! Used by setCursorPosition() if cursor's position changed. */
-    virtual void selectCellInternal(int previousRow, int previousColumn);
+    virtual void selectCellInternal(int previousRecord, int previousColumn);
 
-    /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
-     to repaint tow \a row and all visible below.
-     Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
-    virtual void updateAllVisibleRowsBelow(int row) {
-        Q_UNUSED(row);
+    /*! Used in KexiDataAwareObjectInterface::slotRecordDeleted()
+     to repaint tow \a record and all visible below.
+     Implemented if there is more than one record displayed, i.e. currently for KexiTableView. */
+    virtual void updateAllVisibleRecordsBelow(int record) {
+        Q_UNUSED(record);
     }
 
     /*! @return geometry of the viewport, i.e. the scrollable area, minus any scrollbars, etc. */
@@ -778,12 +778,12 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
-    /*! Changes 'row editing' >=0 there's currently edited row, else -1.
-     * Can be reimplemented with calling superclass setRowEditing()
-     * Sends rowEditStarted(int) signal.
-     * @see rowEditing() rowEditStarted().
+    /*! Changes 'record editing' >=0 there's currently edited record, else -1.
+     * Can be reimplemented with calling superclass setRecordEditing()
+     * Sends recordEditingStarted(int) signal.
+     * @see recordEditing() recordEditingStarted().
      */
-    void setRowEditing(int row);
+    void setRecordEditing(int record);
 
     /*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
      message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
@@ -825,26 +825,26 @@ protected:
     //! data structure displayed for this object
     KDbTableViewData *m_data;
 
-    //! current row (cursor)
-    int m_curRow;
+    //! current record (cursor)
+    int m_curRecord;
 
     //! current column (cursor)
-    int m_curCol;
+    int m_curColumn;
 
     //! current record's data
-    KDbRecordData *m_currentItem;
+    KDbRecordData *m_currentRecord;
 
     //! data iterator
     KDbTableViewDataIterator m_itemIterator;
 
     //! record's data for inserting
-    KDbRecordData *m_insertItem;
+    KDbRecordData *m_insertRecord;
 
     //! true if m_data member is owned by this object
     bool m_owner;
 
-    /*! true if new row is edited; implies: rowEditing==true. */
-    bool m_newRowEditing;
+    /*! true if a new record is edited; implies: m_recorfEditing == true. */
+    bool m_newRecordEditing;
 
     /*! 'sorting by column' availability flag for widget */
     bool m_isSortingEnabled;
@@ -852,26 +852,26 @@ protected:
     /*! true if filtering is enabled for the view. */
     bool m_isFilteringEnabled;
 
-    /*! Public version of 'acceptsRowEditAfterCellAcceptin' flag (available for a user).
+    /*! Public version of 'acceptsRecordEditingAfterCellAcceptin' flag (available for a user).
      It's OR'es together with above flag.
     */
-    bool m_acceptsRowEditAfterCellAccepting;
+    bool m_acceptsRecordEditAfterCellAccepting;
 
     /*! Used in acceptEditor() to avoid infinite recursion,
-     eg. when we're calling acceptRowEdit() during cell accepting phase. */
+     eg. when we're calling acceptRecordEditing() during cell accepting phase. */
     bool m_inside_acceptEditor; // no bit field allowed
 
-    /*! Used in acceptRowEdit() to avoid infinite recursion,
-     eg. when we're calling acceptRowEdit() during cell accepting phase. */
-    bool m_inside_acceptRowEdit; // no bit field allowed
+    /*! Used in acceptRecordEditing() to avoid infinite recursion,
+     eg. when we're calling acceptRecordEdit() during cell accepting phase. */
+    bool m_inside_acceptRecordEdit; // no bit field allowed
 
     /*! @internal if true, this object automatically accepts
-     row editing (using acceptRowEdit()) on accepting any cell's edit
+     record editing (using acceptRecordEditing()) on accepting any cell's edit
      (i.e. after acceptEditor()). */
-    bool m_internal_acceptsRowEditAfterCellAccepting;
+    bool m_internal_acceptsRecordEditingAfterCellAccepting;
 
-    /*! true, if inserting empty rows are enabled (false by default) */
-    bool m_emptyRowInsertingEnabled;
+    /*! true, if inserting empty records are enabled (false by default) */
+    bool m_emptyRecordInsertingEnabled;
 
     /*! Contains 1 if the object is readOnly, 0 if not;
      otherwise (-1 means "do not know") the 'readOnly' flag from object's
@@ -899,12 +899,12 @@ protected:
      @see KexiTableView::setSpreadSheetMode() */
     bool m_spreadSheetMode;
 
-    /*! true, if this table accepts dropping data on the rows (false by default). */
-    bool m_dropsAtRowEnabled;
+    /*! true, if this table accepts dropping data on the records (false by default). */
+    bool m_dropsAtRecordEnabled;
 
-    /*! true, if this entire (visible) row should be updated when boving to other row.
-     False by default. For table view with 'row highlighting' flag enabled, it is true. */
-    bool m_updateEntireRowWhenMovingToOtherRow;
+    /*! true, if this entire (visible) record should be updated when boving to other record.
+     False by default. For table view with 'record highlighting' flag enabled, it is true. */
+    bool m_updateEntireRecordWhenMovingToOtherRecord;
 
     DeletionPolicy m_deletionPolicy;
 
@@ -915,8 +915,8 @@ protected:
 
     bool m_navPanelEnabled;
 
-    /*! Row number that over which user drags a mouse pointer.
-     Used to indicate dropping possibility for that row.
+    /*! Record number that over which user drags a mouse pointer.
+     Used to indicate dropping possibility for that record.
      Equal -1 if no indication is needed. */
     int m_dragIndicatorLine;
 
@@ -932,21 +932,21 @@ protected:
     /*! True if context menu is enabled. */
     bool m_contextMenuEnabled;
 
-    //! Used by updateAfterCancelRowEdit()
-    bool m_alsoUpdateNextRow;
+    //! Used by updateAfterCancelRecordEditing()
+    bool m_alsoUpdateNextRecord;
 
-    /*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
-     It is set in slotAboutToDeleteRow(KDbRecordData&,KDbResultInfo*,bool)) slot
+    /*! Record number (>=0 or -1 == no record) that will be deleted in deleteRecord().
+     It is set in slotAboutToDeleteRecord(KDbRecordData*,KDbResultInfo*,bool)) slot
      received from KDbTableViewData member.
-     This value will be used in slotRowDeleted() after rowDeleted() signal
+     This value will be used in slotRecordDeleted() after recordDeleted() signal
      is received from KDbTableViewData member and then cleared (set to -1). */
-    int m_rowWillBeDeleted;
+    int m_recordWillBeDeleted;
 
     /*! Displays passive error popup label used when invalid data has been entered. */
     QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 
     /*! Used to enable/disable execution of vScrollBarValueChanged()
-     when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */
+     when users navigate through records using keyboard, so vscrollbar tooltips are not visible. */
     bool m_vScrollBarValueChanged_enabled;
 
     /*! True, if vscrollbar tooltips are enabled (true by default). */
@@ -977,13 +977,13 @@ protected:
     QVector<uint> m_indicesForVisibleValues;
 
 private:
-    /*! >= 0 if a row is edited */
-    int m_rowEditing;
+    /*! >= 0 if a record is edited */
+    int m_recordEditing;
 
     bool m_lengthExceededMessageVisible;
 
-    //! true if acceptRowEdit() should be called in setCursorPosition() (true by default)
-    bool m_acceptRowEdit_in_setCursorPosition_enabled;
+    //! true if acceptRecordEditing() should be called in setCursorPosition() (true by default)
+    bool m_acceptRecordEditing_in_setCursorPosition_enabled;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CreateEditorFlags)
@@ -996,18 +996,18 @@ inline bool KexiDataAwareObjectInterface::hasData() const
     return m_data != 0;
 }
 
-inline KDbRecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
+inline KDbRecordData *KexiDataAwareObjectInterface::recordAt(int pos) const
 {
-    KDbRecordData *record = m_data->at(pos);
-    if (!record)
+    KDbRecordData *data = m_data->at(pos);
+    if (!data)
         qDebug() << "pos:" << pos << "- NO ITEM!!";
     else {
-        /*  qDebug() << "record:" << row;
+        /*  qDebug() << "record:" << record;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
               qDebug() << i<<": " << (*it).toString();*/
     }
-    return record;
+    return data;
 }
 
 //! Convenience macro used for KexiDataAwareObjectInterface implementations.
@@ -1016,11 +1016,11 @@ inline KDbRecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \
         connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember); \
     } \
-    void connectRowEditStartedSignal(const QObject* receiver, const char* intMember) { \
-        connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember); \
+    void connectRecordEditingStartedSignal(const QObject* receiver, const char* intMember) { \
+        connect(this, SIGNAL(recordEditingStarted(int)), receiver, intMember); \
     } \
-    void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
-        connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
+    void connectRecordEditingTerminatedSignal(const QObject* receiver, const char* voidMember) { \
+        connect(this, SIGNAL(recordEditingTerminated(int)), receiver, voidMember); \
     } \
     void connectUpdateSaveCancelActionsSignal(const QObject* receiver, \
                                               const char* voidMember) { \

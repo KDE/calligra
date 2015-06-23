@@ -64,7 +64,7 @@ public:
 
     /*! Clears field information entered for row.
      This is performed by removing values from caption and data type columns. */
-    virtual void clearRow(int row, bool addCommand = false) = 0;
+    virtual void clearRecord(int row, bool addCommand = false) = 0;
 
     /*! Inserts a new field with \a caption for \a row.
      Property set is also created.
@@ -79,16 +79,16 @@ public:
     virtual void insertField(int row, KPropertySet& set, bool addCommand = false) = 0;
 
     /*! Inserts a new empty row at position \a row. */
-    virtual void insertEmptyRow(int row, bool addCommand = false) = 0;
+    virtual void insertEmptyRecord(int row, bool addCommand = false) = 0;
 
     /*! Deletes \a row from the table view. Property set is also deleted.
      All the subsequent fields are moved up. */
-    virtual void deleteRow(int row, bool addCommand = false) = 0;
+    virtual void deleteRecord(int row, bool addCommand = false) = 0;
 
     /*! Changes property \a propertyName to \a newValue for a field pointed by \a fieldUID.
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
-    virtual void changeFieldPropertyForRow(int fieldUID, const QByteArray& propertyName,
+    virtual void changeFieldPropertyForRecord(int fieldUID, const QByteArray& propertyName,
                                            const QVariant& newValue,
                                            KPropertyListData* const listData = 0,
                                            bool addCommand = false) = 0;
