@@ -1974,7 +1974,7 @@ void KexiMainWindow::updateAppCaption()
         }
     }
 
-    setWindowTitle(KexiUtils::makeStandardCaption(d->appCaptionPrefix));
+    setWindowTitle(d->appCaptionPrefix);
 }
 
 bool KexiMainWindow::queryClose()
