@@ -69,10 +69,10 @@ public:
     void showPopup();
 
     //! Call this from slot
-    virtual void slotRowAccepted(KDbRecordData *record, int row);
+    virtual void slotRecordAccepted(KDbRecordData *data, int record);
 
     //! Call this from slot
-    virtual void slotItemSelected(KDbRecordData*);
+    virtual void slotRecordSelected(KDbRecordData* data);
 
     //! Call this from slot
     void slotInternalEditorValueChanged(const QVariant &v);
@@ -83,26 +83,26 @@ public:
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    //! Used to select row item for a user-entered value \a v.
+    //! Used to select record item for a user-entered value \a v.
     //! Only for "lookup table" mode.
-    KDbRecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
+    KDbRecordData* selectRecordForEnteredValueInLookupTable(const QVariant& v);
 
     /*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
      If \a allowNulls is true, NULL is returend if no matched column found, else:
      \a str is returned.
      Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string
      for column #1 for id-column #0 */
-    QString valueForString(const QString& str, int* row, uint lookInColumn,
+    QString valueForString(const QString& str, int* record, uint lookInColumn,
                            uint returnFromColumn, bool allowNulls = false);
 
     //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)
     void setValueOrTextInInternalEditor(const QVariant& value);
 
-    //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
+    //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined record source)
     KDbLookupFieldSchema* lookupFieldSchema() const;
 
-    int rowToHighlightForLookupTable() const;
+    int recordToHighlightForLookupTable() const;
 
     //! Implement this to perform "move cursor to end" in the internal editor
     virtual void moveCursorToEndInInternalEditor() = 0;

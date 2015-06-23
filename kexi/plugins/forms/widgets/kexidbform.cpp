@@ -293,7 +293,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 }
                 // try to handle global shortcuts at the KexiDataAwareObjectInterface
                 // level (e.g. for "next record" action)
-                int curRow = d->dataAwareObject->currentRow();
+                int curRow = d->dataAwareObject->currentRecord();
                 int curCol = d->dataAwareObject->currentColumn();
                 bool moveToFirstField; //if true, we'll move focus to the first field (in tab order)
                 bool moveToLastField; //if true, we'll move focus to the first field (in tab order)
@@ -302,7 +302,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         /* ^^ home/end/down/up are already handled by widgets */
                         && !ke->isAccepted()
                         && d->dataAwareObject->handleKeyPress(
-                            ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
+                            ke, &curRow, &curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
                     if (ke->isAccepted())
                         return true;
                     QWidget* widgetToFocus;
@@ -340,7 +340,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 //cancel field editing/row editing if possible
                 if (d->dataAwareObject->cancelEditor())
                     return true;
-                else if (d->dataAwareObject->cancelRowEdit())
+                else if (d->dataAwareObject->cancelRecordEditing())
                     return true;
                 return false; // canceling not needed - pass the event to the active widget
             }

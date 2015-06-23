@@ -109,8 +109,8 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 
     connect(d->table, SIGNAL(cellSelected(int,int)),
             this, SLOT(slotCellSelected(int,int)));
-    connect(d->table->data(), SIGNAL(rowInserted(KDbRecordData*,bool)),
-            this, SLOT(slotRowInserted(KDbRecordData*,bool)));
+    connect(d->table->data(), SIGNAL(recordInserted(KDbRecordData*,bool)),
+            this, SLOT(slotRecordInserted(KDbRecordData*,bool)));
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
@@ -170,7 +170,7 @@ ConnectionDialog::initTable()
 
     connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
             this, SLOT(slotCellChanged(KDbRecordData*,int,QVariant,KDbResultInfo*)));
-    connect(d->data, SIGNAL(rowUpdated(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
+    connect(d->data, SIGNAL(recordUpdated(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
     connect(d->table, SIGNAL(itemSelected(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
 }
 
@@ -183,16 +183,16 @@ void ConnectionDialog::exec()
 void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
-    KDbRecordData *record = d->table->itemAt(row);
-    if (!record)
+    KDbRecordData *data = d->table->itemAt(row);
+    if (!data)
         return;
     if (col == 2) // signal col
-        updateSignalList(record);
+        updateSignalList(data);
     else if (col == 4) // slot col
-        updateSlotList(record);
+        updateSlotList(data);
 }
 
-void ConnectionDialog::slotRowInserted(KDbRecordData* item, bool)
+void ConnectionDialog::slotRecordInserted(KDbRecordData* item, bool)
 {
     d->buffer->append(new Connection());
     checkConnection(item);
@@ -203,13 +203,13 @@ ConnectionDialog::slotOk()
 {
     // First we update our buffer contents
     for (int i = 0; i < d->table->rows(); i++) {
-        KDbRecordData *record = d->table->itemAt(i);
+        KDbRecordData *data = d->table->itemAt(i);
         Connection *c = d->buffer->at(i);
 
-        c->setSender((*record)[1].toString());
-        c->setSignal((*record)[2].toString());
-        c->setReceiver((*record)[3].toString());
-        c->setSlot((*record)[4].toString());
+        c->setSender((*data)[1].toString());
+        c->setSignal((*data)[2].toString());
+        c->setReceiver((*data)[3].toString());
+        c->setSlot((*data)[4].toString());
     }
 
     // then me make it replace form's current one
@@ -223,38 +223,38 @@ ConnectionDialog::updateTableData()
 {
     // First we update the columns data
     foreach (ObjectTreeItem *item, *d->form->objectTree()->hash()) {
-        KDbRecordData *record = d->widgetsColumnData->createItem();
-        (*record)[0] = item->name();
-        (*record)[1] = (*record)[0];
-        d->widgetsColumnData->append(record);
+        KDbRecordData *data = d->widgetsColumnData->createItem();
+        (*data)[0] = item->name();
+        (*data)[1] = (*data)[0];
+        d->widgetsColumnData->append(data);
     }
 
     // Then we fill the columns with the form connections
     foreach (Connection *c, *d->form->connectionBuffer()) {
-        KDbRecordData *record = d->table->data()->createItem();
-        (*record)[1] = c->sender();
-        (*record)[2] = c->signal();
-        (*record)[3] = c->receiver();
-        (*record)[4] = c->slot();
-        d->table->insertItem(record, d->table->rows());
+        KDbRecordData *newData = d->table->data()->createItem();
+        (*newData )[1] = c->sender();
+        (*newData )[2] = c->signal();
+        (*newData )[3] = c->receiver();
+        (*newData )[4] = c->slot();
+        d->table->insertItem(newData , d->table->rows());
     }
 
     d->buffer = new ConnectionBuffer(*(d->form->connectionBuffer()));
 }
 
 void
-ConnectionDialog::setStatusOk(KDbRecordData *record)
+ConnectionDialog::setStatusOk(KDbRecordData *data)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is OK.")));
 
-    if (!record)
-        record = d->table->selectedItem();
+    if (!data)
+        data = d->table->selectedItem();
     if (d->table->currentRow() >= d->table->rows())
-        record = 0;
+        data = 0;
 
-    if (record)
-        (*record)[0] = "dialog-ok";
+    if (data)
+        (*data)[0] = "dialog-ok";
     else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
@@ -262,18 +262,18 @@ ConnectionDialog::setStatusOk(KDbRecordData *record)
 }
 
 void
-ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *record)
+ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *data)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is invalid.")) + msg);
 
-    if (!record)
-        record = d->table->selectedItem();
+    if (!data)
+        data = d->table->selectedItem();
     if (d->table->currentRow() >= d->table->rows())
-        record = 0;
+        data = 0;
 
-    if (record)
-        (*record)[0] = "dialog-cancel";
+    if (data)
+        (*data)[0] = "dialog-cancel";
     else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
@@ -281,16 +281,16 @@ ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *record)
 }
 
 void
-ConnectionDialog::slotCellChanged(KDbRecordData *record, int col, QVariant&, KDbResultInfo*)
+ConnectionDialog::slotCellChanged(KDbRecordData *data, int col, QVariant&, KDbResultInfo*)
 {
     switch (col) {
         // sender changed, we clear siganl and slot
     case 1:
-        (*record)[2] = QString("");
+        (*data)[2] = QString("");
         // signal or receiver changed, we clear the slot cell
     case 2:
     case 3: {
-        (*record)[4] = QString("");
+        (*data)[4] = QString("");
         break;
     }
     default:
@@ -299,11 +299,11 @@ ConnectionDialog::slotCellChanged(KDbRecordData *record, int col, QVariant&, KDb
 }
 
 void
-ConnectionDialog::updateSlotList(KDbRecordData *record)
+ConnectionDialog::updateSlotList(KDbRecordData *data)
 {
     d->slotsColumnData->deleteAllRecords();
-    QString widget = (*record)[1].toString();
-    QString signal = (*record)[2].toString();
+    QString widget = (*data)[1].toString();
+    QString signal = (*data)[2].toString();
 
     if ((widget.isEmpty()) || signal.isEmpty())
         return;
@@ -324,17 +324,17 @@ ConnectionDialog::updateSlotList(KDbRecordData *record)
         if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
             continue;
 
-        KDbRecordData *record = d->slotsColumnData->createItem();
-        (*record)[0] = QString::fromLatin1(method.signature());
-        (*record)[1] = (*record)[0];
-        d->slotsColumnData->append(record);
+        KDbRecordData *newData = d->slotsColumnData->createItem();
+        (*newData)[0] = QString::fromLatin1(method.signature());
+        (*newData)[1] = (*newData)[0];
+        d->slotsColumnData->append(newData);
     }
 }
 
 void
-ConnectionDialog::updateSignalList(KDbRecordData *record)
+ConnectionDialog::updateSignalList(KDbRecordData *data)
 {
-    ObjectTreeItem *tree = d->form->objectTree()->lookup((*record)[1].toString());
+    ObjectTreeItem *tree = d->form->objectTree()->lookup((*data)[1].toString());
     if (!tree || !tree->widget())
         return;
 
@@ -343,43 +343,43 @@ ConnectionDialog::updateSignalList(KDbRecordData *record)
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
     foreach(const QMetaMethod &method, list) {
-        KDbRecordData *record = d->signalsColumnData->createItem();
-        (*record)[0] = QString::fromLatin1(method.signature());
-        (*record)[1] = (*record)[0];
-        d->signalsColumnData->append(record);
+        KDbRecordData *newData = d->signalsColumnData->createItem();
+        (*newData )[0] = QString::fromLatin1(method.signature());
+        (*newData )[1] = (*newData )[0];
+        d->signalsColumnData->append(newData );
     }
 }
 
 void
-ConnectionDialog::checkConnection(KDbRecordData *record)
+ConnectionDialog::checkConnection(KDbRecordData *data)
 {
     // First we check if one column is empty
     for (int i = 1; i < 5; i++) {
-        if (!record || (*record)[i].toString().isEmpty()) {
+        if (!data || (*data)[i].toString().isEmpty()) {
             setStatusError(xi18n("You have not selected item: <resource>%1</resource>.",
-                                d->data->column(i)->captionAliasOrName()), record);
+                                d->data->column(i)->captionAliasOrName()), data);
             return;
         }
     }
 
     // Then we check if signal/slot args are compatible
-    QString signal = (*record)[2].toString();
+    QString signal = (*data)[2].toString();
     signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
-    QString slot = (*record)[4].toString();
+    QString slot = (*data)[4].toString();
     slot.remove(QRegExp(".*[(]|[)]"));
 
     if (!signal.startsWith(slot, Qt::CaseSensitive)) {
-        setStatusError(xi18n("The signal/slot arguments are not compatible."), record);
+        setStatusError(xi18n("The signal/slot arguments are not compatible."), data);
         return;
     }
 
-    setStatusOk(record);
+    setStatusOk(data);
 }
 
 void
 ConnectionDialog::newItem()
 {
-    d->table->acceptRowEdit();
+    d->table->acceptRecordEditing();
     d->table->setCursorPosition(d->table->rows(), 1);
 }
 
@@ -403,12 +403,12 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
         return;
 
     Connection *c = new Connection(connection);
-    KDbRecordData *record = d->table->data()->createItem();
-    (*record)[1] = c->sender();
-    (*record)[2] = c->signal();
-    (*record)[3] = c->receiver();
-    (*record)[4] = c->slot();
-    d->table->insertItem(record, d->table->rows());
+    KDbRecordData *newData = d->table->data()->createItem();
+    (*newData)[1] = c->sender();
+    (*newData)[2] = c->signal();
+    (*newData)[3] = c->receiver();
+    (*newData)[4] = c->slot();
+    d->table->insertItem(newData, d->table->rows());
     d->buffer->append(c);
 }
 

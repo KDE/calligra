@@ -96,7 +96,7 @@ public:
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
-    void updateIconForRecord(KDbRecordData *record, KPropertySet *set);
+    void updateIconForRecord(KDbRecordData *data, KPropertySet *set);
 
     KexiTableDesignerView* designerView;
 
@@ -128,12 +128,12 @@ public:
     bool slotPropertyChanged_subType_enabled;
     //! used in slotPropertyChanged() to disable addHistoryCommand()
     bool addHistoryCommand_in_slotPropertyChanged_enabled;
-    //! used in slotRowUpdated() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowUpdated_enabled;
-    //! used in slotAboutToDeleteRow() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled;
-    //! used in slotRowInserted() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowInserted_enabled;
+    //! used in slotRecordUpdated() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotRecordUpdated_enabled;
+    //! used in slotAboutToDeleteRecord() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotAboutToDeleteRecord_enabled;
+    //! used in slotRecordInserted() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotRecordInserted_enabled;
 
     //! used to disable slotBeforeCellChanged()
     bool slotBeforeCellChanged_enabled;

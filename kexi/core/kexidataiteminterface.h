@@ -40,10 +40,10 @@ public:
      Called by KexiDataItemInterface::valueChanged() */
     virtual void valueChanged(KexiDataItemInterface* item) = 0;
 
-    /*! Implement this to return information whether we're currently at new row or not.
+    /*! Implement this to return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
-    virtual bool cursorAtNewRow() const = 0;
+    virtual bool cursorAtNewRecord() const = 0;
 
     /*! Implement this to react when length of data has been exceeded. */
     virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded) = 0;
@@ -189,7 +189,7 @@ public:
 
     virtual void setFocus();
 
-    bool cursorAtNewRow();
+    bool cursorAtNewRecord();
 
     /*! Sets a pointer to a Parent Data Item Interface. This pointer is 0 by default,
      but can be set by parent widget if this interface is a building block of a larger data widget.

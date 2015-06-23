@@ -103,8 +103,8 @@ protected:
     void updatePropertiesVisibility(KPropertySet& buf);
 
 protected Q_SLOTS:
-    void slotDragOverTableRow(KDbRecordData *record, int row, QDragMoveEvent* e);
-    void slotDroppedAtRow(KDbRecordData *record, int row,
+    void slotDragOverTableRecord(KDbRecordData *data, int record, QDragMoveEvent* e);
+    void slotDroppedAtRecord(KDbRecordData *data, int record,
                           QDropEvent *ev, KDbRecordData*& newRecord);
     //! Reaction on appending a new item after deleting one
     void slotNewItemAppendedForAfterDeletingInSpreadSheetMode();
@@ -115,7 +115,7 @@ protected Q_SLOTS:
     void slotBeforeCellChanged(KDbRecordData* record, int colnum,
                                QVariant& newValue, KDbResultInfo* result);
 
-    void slotRowInserted(KDbRecordData* record, uint row, bool repaint);
+    void slotRecordInserted(KDbRecordData* record, uint row, bool repaint);
     void slotTablePositionChanged(KexiRelationsTableContainer*);
     void slotAboutConnectionRemove(KexiRelationsConnection*);
     void slotAppendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
@@ -146,22 +146,22 @@ protected Q_SLOTS:
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 
 private:
-    void slotBeforeColumnCellChanged(KDbRecordData *record,
+    void slotBeforeColumnCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeTableCellChanged(KDbRecordData *record,
+    void slotBeforeTableCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeVisibleCellChanged(KDbRecordData *record,
+    void slotBeforeVisibleCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeTotalsCellChanged(KDbRecordData *record,
+    void slotBeforeTotalsCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeSortingCellChanged(KDbRecordData *record,
+    void slotBeforeSortingCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
-    void slotBeforeCriteriaCellChanged(KDbRecordData *record,
+    void slotBeforeCriteriaCellChanged(KDbRecordData *data,
         QVariant& newValue, KDbResultInfo* result);
 
     class Private;

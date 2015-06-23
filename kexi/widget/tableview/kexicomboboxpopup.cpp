@@ -52,13 +52,13 @@ public:
         a.navigatorEnabled = false;
 //! @todo add option for backgroundAltering??
         a.backgroundAltering = false;
-        a.fullRowSelection = true;
-        a.rowHighlightingEnabled = true;
-        a.rowMouseOverHighlightingEnabled = true;
+        a.fullRecordSelection = true;
+        a.recordHighlightingEnabled = true;
+        a.recordMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.rowMouseOverHighlightingColor = palette().highlight().color();
-        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
-        a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
+        a.recordMouseOverHighlightingColor = palette().highlight().color();
+        a.recordMouseOverHighlightingTextColor = palette().highlightedText().color();
+        a.recordHighlightingTextColor = a.recordMouseOverHighlightingTextColor;
         a.horizontalGridEnabled = false;
         a.verticalGridEnabled = false;
         setAppearance(a);
@@ -88,7 +88,7 @@ public:
     KexiComboBoxPopupPrivate()
             : int_f(0)
             , privateQuery(0) {
-        max_rows = KexiComboBoxPopup::defaultMaxRows;
+        maxRecordCount = KexiComboBoxPopup::defaultMaxRecordCount;
     }
     ~KexiComboBoxPopupPrivate() {
         delete int_f;
@@ -98,16 +98,16 @@ public:
     KexiComboBoxPopup_KexiTableView *tv;
     KDbField *int_f; //!< @todo remove this -temporary
     KDbQuerySchema* privateQuery;
-    int max_rows;
+    int maxRecordCount;
     //! Columns that should be kept visible; the others should be hidden.
-    //! Used when query is used as the row source type (KDbLookupFieldSchema::RecordSource::Query).
+    //! Used when query is used as the record source type (KDbLookupFieldSchema::RecordSource::Query).
     //! We're doing this in this case because it's hard to alter the query to remove columns.
     QList<uint> visibleColumnsToShow;
 };
 
 //========================================
 
-const int KexiComboBoxPopup::defaultMaxRows = 8;
+const int KexiComboBoxPopup::defaultMaxRecordCount = 8;
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KDbTableViewColumn &column)
         : QFrame(parent, Qt::Popup)
@@ -327,10 +327,10 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
     data->addColumn(new KDbTableViewColumn(d->int_f));
     const QVector<QString> hints(field->enumHints());
     for (int i = 0; i < hints.size(); i++) {
-        KDbRecordData *record = data->createItem();
-        (*record)[0] = QVariant(hints[i]);
+        KDbRecordData *newData = data->createItem();
+        (*newData)[0] = QVariant(hints[i]);
         qDebug() << "added: '" << hints[i] << "'";
-        data->append(record);
+        data->append(newData);
     }
     setDataInternal(data, true);
     updateSize();
@@ -348,23 +348,23 @@ void KexiComboBoxPopup::setDataInternal(KDbTableViewData *data, bool owner)
 
 void KexiComboBoxPopup::updateSize(int minWidth)
 {
-    const int rows = qMin(d->max_rows, d->tv->rowCount());
+    const int records = qMin(d->maxRecordCount, d->tv->recordCount());
 
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
     //qDebug() << "size=" << size();
-    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
+    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->recordHeight() * records + 2);
     //qDebug() << "size after=" << size();
     if (d->visibleColumnsToShow.isEmpty()) {
-        // row source type is not Query
+        // record source type is not Query
         d->tv->setColumnResizeEnabled(0, true);
         d->tv->setColumnResizeEnabled(d->tv->columnCount() - 1, false);
         d->tv->setColumnWidth(1, 0); //!< @todo A temp. hack to hide the bound column
         d->tv->setColumnWidth(0, d->tv->width() - 1);
     }
     else {
-        // row source type is Query
+        // record source type is Query
         // Set width to 0 and disable resizing of columns that shouldn't be visible
         const KDbQueryColumnInfo::Vector fieldsExpanded(d->tv->cursor()->query()->fieldsExpanded());
         QList<uint>::ConstIterator visibleColumnsToShowIt = d->visibleColumnsToShow.constBegin();
@@ -401,20 +401,20 @@ void KexiComboBoxPopup::resize(int w, int h)
     updateGeometry();
 }
 
-void KexiComboBoxPopup::setMaxRows(int r)
+void KexiComboBoxPopup::setMaxRecordCount(int r)
 {
-    d->max_rows = r;
+    d->maxRecordCount = r;
 }
 
-int KexiComboBoxPopup::maxRows() const
+int KexiComboBoxPopup::maxRecordCount() const
 {
-    return d->max_rows;
+    return d->maxRecordCount;
 }
 
-void KexiComboBoxPopup::slotTVItemAccepted(KDbRecordData *record, int row, int)
+void KexiComboBoxPopup::slotTVItemAccepted(KDbRecordData *data, int record, int)
 {
     hide();
-    emit rowAccepted(record, row);
+    emit recordAccepted(data, record);
 }
 
 bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)

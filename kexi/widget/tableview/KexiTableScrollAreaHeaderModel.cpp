@@ -57,7 +57,7 @@ int KexiTableScrollAreaHeaderModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
-    return scrollArea->rowCount()
+    return scrollArea->recordCount()
             + (scrollArea->isInsertingEnabled() ? 1 : 0);
 }
 
@@ -110,17 +110,17 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
         case Qt::DecorationRole: {
             const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
             if (scrollArea->isInsertingEnabled()) {
-                const int plusRow = scrollArea->rowCount();
+                const int plusRow = scrollArea->recordCount();
                 if (section == plusRow) {
                     return d->plusPixmap;
                 }
             }
             if (!scrollArea->isReadOnly() &&
-                    section == scrollArea->currentRow() && scrollArea->currentRow() == scrollArea->rowEditing())
+                    section == scrollArea->currentRecord() && scrollArea->currentRecord() == scrollArea->recordEditing())
             {
                 return d->penPixmap;
             }
-            if (section == scrollArea->currentRow()) {
+            if (section == scrollArea->currentRecord()) {
                 return d->pointerPixmap;
             }
         }
