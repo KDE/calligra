@@ -677,7 +677,8 @@ void KexiWindow::updateCaption()
     if (!d->item || !d->part)
         return;
     const QString fullCapt(windowTitleForItem(*d->item));
-    setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
+    setWindowTitle(isDirty() ? xi18nc("@title:window with dirty indicator", "%1*", fullCapt)
+                             : fullCapt);
 }
 
 bool KexiWindow::neverSaved() const
