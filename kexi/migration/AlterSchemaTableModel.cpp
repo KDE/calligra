@@ -107,7 +107,7 @@ void AlterSchemaTableModel::setData(const QList<KDbRecordData>& data)
     m_data = data;
 }
 
-void AlterSchemaTableModel::setRowCount(const int i)
+void AlterSchemaTableModel::setRowCount(int i)
 {
     if (i != m_rowCount) {
         m_rowCount = i;
