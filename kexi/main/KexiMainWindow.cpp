@@ -278,8 +278,13 @@ void KexiMainWindowTabWidget::showContextMenuForTab(int index, const QPoint& poi
     if (index >= 0) {
         menu.addAction(m_closeAction);
     }
-    menu.addAction(m_closeAllTabsAction);
-//! @todo add "&Detach Tab"
+    if (count() > 0) {
+        menu.addAction(m_closeAllTabsAction);
+    }
+    //! @todo add "&Detach Tab"
+    if (menu.actions().isEmpty()) {
+        return;
+    }
     setTabIndexFromContextMenu(index);
     menu.exec(point);
 }
