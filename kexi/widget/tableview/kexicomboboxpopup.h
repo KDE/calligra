@@ -48,17 +48,17 @@ public:
 
     KexiTableScrollArea* tableView();
 
-    /*! Sets maximum number of rows for this popup. */
-    void setMaxRows(int r);
+    /*! Sets maximum number of records for this popup. */
+    void setMaxRecordCount(int count);
 
-    /*! \return maximum number of rows for this popup. */
-    int maxRows() const;
+    /*! \return maximum number of records for this popup. */
+    int maxRecordCount() const;
 
-    /*! Default maximum number of rows for KexiComboBoxPopup objects. */
-    static const int defaultMaxRows;
+    /*! Default maximum number of records for KexiComboBoxPopup objects. */
+    static const int defaultMaxRecordCount;
 
 Q_SIGNALS:
-    void rowAccepted(KDbRecordData *record, int row);
+    void recordAccepted(KDbRecordData *data, int record);
     void cancelled();
     void hidden();
 
@@ -67,7 +67,7 @@ public Q_SLOTS:
     void updateSize(int minWidth = 0);
 
 protected Q_SLOTS:
-    void slotTVItemAccepted(KDbRecordData *record, int row, int col);
+    void slotTVItemAccepted(KDbRecordData *data, int record, int column);
     void slotDataReloadRequested();
 
 protected:

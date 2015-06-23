@@ -55,9 +55,9 @@ public:
         return m_usedDataSources;
     }
 
-    /*! Fills data items with appropriate data fetched from \a record.
+    /*! Fills data items with appropriate data fetched from \a data.
      \a cursorAtNewRow == true means that we are at new (not yet inserted) database row. */
-    void fillDataItems(KDbRecordData *record, bool cursorAtNewRow);
+    void fillDataItems(KDbRecordData *data, bool cursorAtNewRecord);
 
     /*! Implementation for KexiDataItemChangesListener.
      Reaction for change of \a item. Does nothing here. */
@@ -67,7 +67,7 @@ public:
      Implement this to return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. Returns false here. */
-    virtual bool cursorAtNewRow() const;
+    virtual bool cursorAtNewRecord() const;
 
     /*! Invalidates data sources collected by this provided.
      \a invalidSources is the set of data sources that should

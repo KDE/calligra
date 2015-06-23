@@ -64,9 +64,9 @@ public:
                     f1 = 34;
                     f2 = 66;
                 }
-                else if (headerWidget->scrollArea()->appearance().rowMouseOverHighlightingEnabled
+                else if (headerWidget->scrollArea()->appearance().recordMouseOverHighlightingEnabled
                          && headerWidget->orientation() == Qt::Vertical
-                         && newOption.section == headerWidget->scrollArea()->highlightedRow())
+                         && newOption.section == headerWidget->scrollArea()->highlightedRecordNumber())
                 {
                     f1 = 10;
                     f2 = 90;
@@ -209,7 +209,7 @@ void KexiTableScrollAreaHeader::mouseMoveEvent(QMouseEvent *e)
 {
     if (orientation() == Qt::Vertical) {
         const int section = logicalIndexAt(e->y());
-        scrollArea()->setHighlightedRow(section);
+        scrollArea()->setHighlightedRecordNumber(section);
     }
     QHeaderView::mouseMoveEvent(e);
 }
@@ -217,7 +217,7 @@ void KexiTableScrollAreaHeader::mouseMoveEvent(QMouseEvent *e)
 void KexiTableScrollAreaHeader::leaveEvent(QEvent *e)
 {
     if (orientation() == Qt::Vertical) {
-        scrollArea()->setHighlightedRow(-1);
+        scrollArea()->setHighlightedRecordNumber(-1);
     }
     QHeaderView::leaveEvent(e);
 }
@@ -324,7 +324,7 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
             height = scrollArea()->viewport()->height() - 1;
         }
         //qDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
-        return QSize(scrollArea()->rowHeight()
+        return QSize(scrollArea()->recordHeight()
                        + style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this),
                      height);
     }

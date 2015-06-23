@@ -88,8 +88,8 @@ public:
     virtual void undoChanges();
 
 public Q_SLOTS:
-    virtual void slotRowAccepted(KDbRecordData *record, int row);
-    virtual void slotItemSelected(KDbRecordData *record);
+    virtual void slotRecordAccepted(KDbRecordData *data, int record);
+    virtual void slotRecordSelected(KDbRecordData *data);
 
 protected Q_SLOTS:
     virtual void slotInternalEditorValueChanged(const QVariant& v);

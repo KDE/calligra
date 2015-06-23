@@ -118,11 +118,11 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotButtonClicked();
-    void slotRowAccepted(KDbRecordData *record, int row) {
-        KexiComboBoxBase::slotRowAccepted(record, row);
+    void slotRecordAccepted(KDbRecordData *data, int record) {
+        KexiComboBoxBase::slotRecordAccepted(data, record);
     }
-    void slotItemSelected(KDbRecordData* record) {
-        KexiComboBoxBase::slotItemSelected(record);
+    void slotRecordSelected(KDbRecordData* record) {
+        KexiComboBoxBase::slotRecordSelected(record);
     }
     void slotInternalEditorValueChanged(const QVariant& v) {
         KexiComboBoxBase::slotInternalEditorValueChanged(v);

@@ -166,12 +166,12 @@ RemoveFieldCommand::~RemoveFieldCommand()
 void RemoveFieldCommand::redoInternal()
 {
 // m_view->deleteField( m_fieldIndex );
-    m_view->deleteRow(m_fieldIndex);
+    m_view->deleteRecord(m_fieldIndex);
 }
 
 void RemoveFieldCommand::undoInternal()
 {
-    m_view->insertEmptyRow(m_fieldIndex);
+    m_view->insertEmptyRecord(m_fieldIndex);
     if (m_set)
         m_view->insertField(m_fieldIndex, *m_set);
 }
@@ -221,7 +221,7 @@ void InsertFieldCommand::redoInternal()
 
 void InsertFieldCommand::undoInternal()
 {
-    m_view->clearRow(m_alterTableAction->index());  //m_alterTableAction.index() );
+    m_view->clearRecord(m_alterTableAction->index());  //m_alterTableAction.index() );
 }
 
 KDbAlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
@@ -273,7 +273,7 @@ void ChangePropertyVisibilityCommand::undoInternal()
 
 //--------------------------------------------------------
 
-InsertEmptyRowCommand::InsertEmptyRowCommand(Command* parent, KexiTableDesignerView* view, int row)
+InsertEmptyRecordCommand::InsertEmptyRecordCommand(Command* parent, KexiTableDesignerView* view, int row)
         : Command(parent, view)
         , m_alterTableAction(true) //unused, null action
         , m_row(row)
@@ -281,18 +281,18 @@ InsertEmptyRowCommand::InsertEmptyRowCommand(Command* parent, KexiTableDesignerV
     setText(kundo2_noi18n("Insert empty row at position %1", m_row));
 }
 
-InsertEmptyRowCommand::~InsertEmptyRowCommand()
+InsertEmptyRecordCommand::~InsertEmptyRecordCommand()
 {
 }
 
-void InsertEmptyRowCommand::redoInternal()
+void InsertEmptyRecordCommand::redoInternal()
 {
-    m_view->insertEmptyRow(m_row);
+    m_view->insertEmptyRecord(m_row);
 }
 
-void InsertEmptyRowCommand::undoInternal()
+void InsertEmptyRecordCommand::undoInternal()
 {
     // let's assume the row is empty...
-    m_view->deleteRow(m_row);
+    m_view->deleteRecord(m_row);
 }
 

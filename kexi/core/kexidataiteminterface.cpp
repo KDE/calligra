@@ -200,9 +200,9 @@ void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* pa
     d->parentDataItemInterface = parentDataItemInterface;
 }
 
-bool KexiDataItemInterface::cursorAtNewRow()
+bool KexiDataItemInterface::cursorAtNewRecord()
 {
-    return listener() ? listener()->cursorAtNewRow() : false;
+    return listener() ? listener()->cursorAtNewRecord() : false;
 }
 
 bool KexiDataItemInterface::isComboBox() const
