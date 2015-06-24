@@ -29,9 +29,9 @@
 #include <QVBoxLayout>
 
 //uncomment this to enable KTextEdit-based editor
-//#define KTEXTEDIT_BASED_SQL_EDITOR
+//#define KTEXTEDIT_BASED_TEXT_EDITOR
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
 # include <KTextEdit>
 #else
 # include <KTextEditor/Document>
@@ -47,7 +47,7 @@ class KexiEditorSharedActionConnector : public KexiSharedActionConnector
 public:
     KexiEditorSharedActionConnector(KexiActionProxy* proxy, QObject* obj)
             : KexiSharedActionConnector(proxy, obj) {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
         plugSharedAction("edit_cut", SLOT(cut()));
         plugSharedAction("edit_copy", SLOT(copy()));
         plugSharedAction("edit_paste", SLOT(paste()));
@@ -69,7 +69,7 @@ class KexiEditor::Private
 {
 public:
     Private() {}
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     KTextEdit *view;
 #else
     KTextEditor::Document *doc;
@@ -81,7 +81,7 @@ KexiEditor::KexiEditor(QWidget *parent)
         : KexiView(parent)
         , d(new Private())
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     d->view = new KTextEdit("", QString(), this);
     //adjust font
     connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
@@ -138,7 +138,7 @@ void KexiEditor::updateActions(bool activated)
 
 bool KexiEditor::isAdvancedEditor()
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     return false;
 #else
     return true;
@@ -147,7 +147,7 @@ bool KexiEditor::isAdvancedEditor()
 
 QString KexiEditor::text()
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     return d->view->text();
 #else
     if (!d->doc)
@@ -158,7 +158,7 @@ QString KexiEditor::text()
 
 void KexiEditor::setText(const QString &text)
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     const bool was_dirty = m_parentView ? m_parentView->idDirty() : idDirty();
     d->view->setText(text);
     setDirty(was_dirty);
@@ -173,7 +173,7 @@ void KexiEditor::setText(const QString &text)
 
 void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
 #else
     if (!d->doc)
         return;
@@ -195,7 +195,7 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 
 void KexiEditor::slotConfigureEditor()
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
 //! @todo show configuration...
 #else
     if (!d->doc)
@@ -210,7 +210,7 @@ void KexiEditor::slotConfigureEditor()
 
 void KexiEditor::jump(int character)
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     const int numRows = d->view->paragraphs();
     int row = 0, col = 0;
     for (int ch = 0; row < numRows; row++) {
@@ -241,7 +241,7 @@ void KexiEditor::jump(int character)
 
 void KexiEditor::setCursorPosition(int line, int col)
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     d->view->setCursorPosition(line, col);
 #else
     d->view->setCursorPosition(KTextEditor::Cursor(line, col));
@@ -250,7 +250,7 @@ void KexiEditor::setCursorPosition(int line, int col)
 
 void KexiEditor::clearUndoRedo()
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     //! @todo how to remove undo/redo from a KTextEdit?
 #else
 //! @todo KEXI3 KexiEditor::clearUndoRedo()
@@ -264,7 +264,7 @@ void KexiEditor::slotTextChanged(KTextEditor::Document *)
 
 QMenu* KexiEditor::defaultContextMenu()
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_TEXT_EDITOR
     return d->view->createStandardContextMenu();
 #else
     QMenu* menu = d->view->defaultContextMenu();
