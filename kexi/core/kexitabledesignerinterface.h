@@ -68,13 +68,13 @@ public:
 
     /*! Inserts a new field with \a caption for \a row.
      Property set is also created.
-     Existing field will be overwritten, so use insertEmptyRow()
+     Existing field will be overwritten, so use insertEmptyRecord();
      is you want to move subsequent fields down. */
     virtual void insertField(int row, const QString& caption, bool addCommand = false) = 0;
 
     /*! Inserts a new \a field for \a row.
      Property set is also created. \a set will be deeply-copied into the new set.
-     Existing field will be overwritten, so use insertEmptyRow()
+     Existing field will be overwritten, so use insertEmptyRecord()
      is you want to move subsequent fields down. */
     virtual void insertField(int row, KPropertySet& set, bool addCommand = false) = 0;
 

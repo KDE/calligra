@@ -160,7 +160,7 @@ bool KexiNameDialog::canOverwrite()
         return true;
     }
     if (result == false) {
-        qWarning() << "Cannot load object schema data for" << widget()->nameText();
+        qWarning() << "Cannot load object data for" << widget()->nameText();
         return false;
     }
     if (widget()->originalNameText() == tmpObject.name()) {

@@ -213,13 +213,13 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    /*! Can be reimplemented if schema data is extended behind the default set of properties.
+    /*! Can be reimplemented if object data is extended behind the default set of properties.
      This is the case for table and query schema objects,
      where object of KDbObject subclass is returned.
      In this case value pointed by @a ownedByWindow is set to false.
      Default implemenatation owned (value pointed by @a ownedByWindow is set to true). */
-    virtual KDbObject* loadSchemaData(KexiWindow *window,
-            const KDbObject& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KDbObject* loadSchemaObject(KexiWindow *window,
+            const KDbObject& object, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
     bool loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID = QString());
 
@@ -253,10 +253,10 @@ protected:
     void setActionAvailable(const char *action_name, bool avail);
 
 private:
-    //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
+    //! Calls loadSchemaObject() (virtual), updates ownership of object data for @a window
     //! and assigns the created data to @a window.
-    void loadAndSetSchemaData(KexiWindow *window, const KDbObject& sdata,
-                              Kexi::ViewMode viewMode);
+    void loadAndSetSchemaObject(KexiWindow *window, const KDbObject& object,
+                               Kexi::ViewMode viewMode);
 
     Q_DISABLE_COPY(Part)
 

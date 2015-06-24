@@ -123,7 +123,7 @@ QString KexiReportPart::loadReport(const QString& name)
     if (conn->loadObjectData(win->project()->typeIdForPluginId("org.kexi-project.report"), name, &sd) != true
         && conn->loadObjectData(win->project()->typeIdForPluginId("uk.co.piggz.report"), name, &sd) != true /* compat. */)
     {
-        qWarning() << "failed to load schema data";
+        qWarning() << "failed to load object data";
         return QString();
     }
     qDebug() << "***Object ID:" << sd.id();

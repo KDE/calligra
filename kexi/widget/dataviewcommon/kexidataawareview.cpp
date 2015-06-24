@@ -311,7 +311,7 @@ void KexiDataAwareView::reloadActions()
 
     if (d->dataAwareObject->isEmptyRecordInsertingEnabled()) {
         unplugSharedAction("edit_insert_empty_row");
-        plugSharedAction("edit_insert_empty_row", d->internalView, SLOT(insertEmptyRow()));
+        plugSharedAction("edit_insert_empty_row", d->internalView, SLOT(insertEmptyRecord()));
         if (separatorNeeded)
             d->dataAwareObject->contextMenu()->addSeparator();
         plugSharedAction("edit_insert_empty_row", d->dataAwareObject->contextMenu());

@@ -70,7 +70,7 @@ private:
 protected:
     virtual KPropertySet *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual KDbObject* storeNewData(const KDbObject& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
                                              bool *cancel);
 
