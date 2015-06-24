@@ -61,6 +61,8 @@
 //! @todo remove this when BLOBs are implemented
 //#define KEXI_NO_BLOB_FIELDS
 
+#define KEXI_NO_UNDOREDO_ALTERTABLE
+
 using namespace KexiTableDesignerCommands;
 
 //! @internal Used in tryCastQVariant() anf canCastQVariant()
@@ -1547,7 +1549,10 @@ void KexiTableDesignerView::debugCommand(const KUndo2Command* command, int nesti
 
 void KexiTableDesignerView::addHistoryCommand(KexiTableDesignerCommands::Command* command, bool execute)
 {
-#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+#ifdef KEXI_NO_UNDOREDO_ALTERTABLE
+    Q_UNUSED(command);
+    Q_UNUSED(execute);
+#else
 # ifdef KEXI_DEBUG_GUI
     debugCommand(command, 0);
 # endif
