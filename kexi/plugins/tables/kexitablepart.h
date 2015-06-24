@@ -32,6 +32,7 @@
 
 class KexiLookupColumnPage;
 
+//! @short Kexi Table Designer plugin
 class KexiTablePart : public KexiPart::Part
 {
     Q_OBJECT
@@ -75,7 +76,7 @@ protected:
 
     virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
-    virtual KDbObject* loadSchemaData(KexiWindow *window, const KDbObject& sdata,
+    virtual KDbObject* loadSchemaObject(KexiWindow *window, const KDbObject& object,
             Kexi::ViewMode viewMode, bool *ownedByWindow);
 
 private:

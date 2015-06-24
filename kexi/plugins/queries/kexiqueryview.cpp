@@ -116,7 +116,7 @@ tristate KexiQueryView::executeQuery(KDbQuerySchema *query)
 tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     if (mode == Kexi::NoViewMode) {
-        KDbQuerySchema *querySchema = static_cast<KDbQuerySchema *>(window()->schemaData());
+        KDbQuerySchema *querySchema = static_cast<KDbQuerySchema *>(window()->schemaObject());
         const tristate result = executeQuery(querySchema);
         if (true != result)
             return result;
@@ -129,15 +129,15 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KDbObject* KexiQueryView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiQueryView::storeNewData(const KDbObject& object,
                                                 KexiView::StoreNewDataOptions options,
                                                 bool *cancel)
 {
     KexiView * view = window()->viewThatRecentlySetDirtyFlag();
     if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, options, cancel);
+        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(object, options, cancel);
     if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, options, cancel);
+        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(object, options, cancel);
     return 0;
 }
 
@@ -155,4 +155,3 @@ QList<QVariant> KexiQueryView::currentParameters() const
 {
     return d->currentParams;
 }
-

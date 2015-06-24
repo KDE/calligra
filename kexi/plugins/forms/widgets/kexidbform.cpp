@@ -331,7 +331,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 }
                 if (key == Qt::Key_Delete && ke->modifiers() == Qt::ControlModifier) {
 //! @todo remove hardcoded shortcuts: can be reconfigured...
-                    d->dataAwareObject->deleteCurrentRow();
+                    d->dataAwareObject->deleteCurrentRecord();
                     return true;
                 }
             }
@@ -463,7 +463,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         //qDebug() << "moving cursor to column #" << index;
                         editedItem = 0;
                         if ((int)index != d->dataAwareObject->currentColumn()) {
-                            d->dataAwareObject->setCursorPosition(d->dataAwareObject->currentRow(), index /*column*/);
+                            d->dataAwareObject->setCursorPosition(d->dataAwareObject->currentRecord(), index /*column*/);
                         }
                         break;
                     } else {

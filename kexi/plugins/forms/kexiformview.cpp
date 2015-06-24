@@ -570,7 +570,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
         }
 
         if (d->query)
-            d->scrollView->selectFirstRow();
+            d->scrollView->selectFirstRecord();
     }
     //dirty only if it's a new object
     if (mode == Kexi::NoViewMode)
@@ -737,12 +737,12 @@ void KexiFormView::setFormModified()
     form()->setModified(true);
 }
 
-KDbObject* KexiFormView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiFormView::storeNewData(const KDbObject& object,
                                                KexiView::StoreNewDataOptions options,
                                                bool *cancel)
 {
     Q_ASSERT(cancel);
-    KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
+    KDbObject *s = KexiView::storeNewData(object, options, cancel);
     //qDebug() << "new id:" << s->id();
 
     if (!s || *cancel) {
@@ -750,7 +750,7 @@ KDbObject* KexiFormView::storeNewData(const KDbObject& sdata,
         return 0;
     }
     if (!storeData()) {
-        //failure: remove object's schema data to avoid garbage
+        //failure: remove object's object data to avoid garbage
         KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
         delete s;

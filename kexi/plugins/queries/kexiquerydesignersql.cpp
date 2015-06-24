@@ -263,7 +263,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     KexiQueryPart::TempData * temp = tempData();
     KDbQuerySchema *query = temp->query();
     if (!query) {//try to just get saved schema, instead of temporary one
-        query = dynamic_cast<KDbQuerySchema *>(window()->schemaData());
+        query = dynamic_cast<KDbQuerySchema *>(window()->schemaObject());
     }
 
     if (mode != 0/*failure only if it is switching from prev. view*/ && !query) {
@@ -388,7 +388,7 @@ KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
         query = new KDbObject(); //just empty
     }
 
-    (KDbObject&)*query = sdata; //copy main attributes
+    (KDbObject&)*query = object; //copy main attributes
 
     ok = KexiMainWindowIface::global()->project()->dbConnection()->storeNewObjectData(query);
     if (ok) {
@@ -407,8 +407,8 @@ KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
 
 tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 {
-    if (window()->schemaData()) { //set this instance as obsolete (only if it's stored)
-        KexiMainWindowIface::global()->project()->dbConnection()->setQuerySchemaObsolete(window()->schemaData()->name());
+    if (window()->schemaObject()) { //set this instance as obsolete (only if it's stored)
+        KexiMainWindowIface::global()->project()->dbConnection()->setQuerySchemaObsolete(window()->schemaObject()->name());
     }
     tristate res = KexiView::storeData(dontAsk);
     if (~res)

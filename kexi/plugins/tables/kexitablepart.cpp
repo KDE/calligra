@@ -155,14 +155,14 @@ tristate KexiTablePart::rename(KexiPart::Item *item, const QString& newName)
     return conn->alterTableName(schema, newName);
 }
 
-KDbObject* KexiTablePart::loadSchemaData(KexiWindow *window, const KDbObject& sdata,
+KDbObject* KexiTablePart::loadSchemaObject(KexiWindow *window, const KDbObject& object,
                               Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
     if (ownedByWindow)
         *ownedByWindow = false;
-    return KexiMainWindowIface::global()->project()->dbConnection()->tableSchema(sdata.name());
+    return KexiMainWindowIface::global()->project()->dbConnection()->tableSchema(object.name());
 }
 
 //static

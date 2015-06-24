@@ -1310,19 +1310,19 @@ tristate KexiTableDesignerView::buildAlterTableActions(
     return true;
 }
 
-KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& object,
                                                         KexiView::StoreNewDataOptions options,
                                                         bool *cancel)
 {
     Q_ASSERT(cancel);
-    if (tempData()->table || window()->schemaData()) //must not be
+    if (tempData()->table || window()->schemaObject()) //must not be
         return 0;
 
     //create table schema definition
-    tempData()->table = new KDbTableSchema(sdata.name());
-    tempData()->table->setName(sdata.name());
-    tempData()->table->setCaption(sdata.caption());
-    tempData()->table->setDescription(sdata.description());
+    tempData()->table = new KDbTableSchema(object.name());
+    tempData()->table->setName(object.name());
+    tempData()->table->setCaption(object.caption());
+    tempData()->table->setDescription(object.description());
 
     tristate res = buildSchema(*tempData()->table);
     *cancel = ~res;
@@ -1351,7 +1351,7 @@ KDbObject* KexiTableDesignerView::storeNewData(const KDbObject& sdata,
     return tempData()->table;
 }
 
-KDbObject* KexiTableDesignerView::copyData(const KDbObject& sdata,
+KDbObject* KexiTableDesignerView::copyData(const KDbObject& object,
                                                      KexiView::StoreNewDataOptions options,
                                                      bool *cancel)
 {
@@ -1364,7 +1364,7 @@ KDbObject* KexiTableDesignerView::copyData(const KDbObject& sdata,
         return 0;
     }
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    KDbTableSchema *copiedTable = conn->copyTable(*tempData()->table, sdata);
+    KDbTableSchema *copiedTable = conn->copyTable(*tempData()->table, object);
     if (!copiedTable) {
         return 0;
     }
@@ -1380,7 +1380,7 @@ KDbObject* KexiTableDesignerView::copyData(const KDbObject& sdata,
 
 tristate KexiTableDesignerView::storeData(bool dontAsk)
 {
-    if (!tempData()->table || !window()->schemaData()) {
+    if (!tempData()->table || !window()->schemaObject()) {
         d->recentResultOfStoreData = false;
         return false;
     }
@@ -1441,7 +1441,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
             }
             // keep old behaviour:
             newTable = new KDbTableSchema();
-            // copy the schema data
+            // copy the object data
             static_cast<KDbObject&>(*newTable)
                 = static_cast<KDbObject&>(*tempData()->table);
             res = buildSchema(*newTable);
@@ -1483,7 +1483,7 @@ tristate KexiTableDesignerView::simulateAlterTableExecution(QString *debugTarget
         //to avoid executing for multiple alter table views
         return false;
     }
-    if (!tempData()->table || !window()->schemaData())
+    if (!tempData()->table || !window()->schemaObject())
         return false;
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KDbAlterTableHandler::ActionList actions;
@@ -1617,7 +1617,7 @@ void KexiTableDesignerView::slotAboutToShowContextMenu()
 QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result)
 {
     KDbTableSchema tempTable;
-    //copy schema data
+    //copy object data
     static_cast<KDbObject&>(tempTable)
         = static_cast<KDbObject&>(*tempData()->table);
     result = buildSchema(tempTable, true /*beSilent*/);

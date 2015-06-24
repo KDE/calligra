@@ -33,7 +33,7 @@
 class KDbQuerySchema;
 class KDbConnection;
 
-//! @short Kexi Query Designer Plugin.
+//! @short Kexi Query Designer plugin
 class KexiQueryPart : public KexiPart::Part
 {
     Q_OBJECT
@@ -58,7 +58,7 @@ public:
 
         /*! Assigns query \a query for this data.
          Existing query (available using query()) is deleted but only
-         if it is not owned by parent window (i.e. != KexiWindow::schemaData()).
+         if it is not owned by parent window (i.e. != KexiWindow::schemaObject()).
          \a query can be 0.
          If \a query is equal to existing query, nothing is performed.
         */
@@ -111,9 +111,8 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    virtual KDbObject* loadSchemaData(KexiWindow *window,
-            const KDbObject& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KDbObject* loadSchemaObject(KexiWindow *window,
+            const KDbObject& object, Kexi::ViewMode viewMode, bool *ownedByWindow);
 };
 
 #endif
-

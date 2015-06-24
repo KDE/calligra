@@ -546,14 +546,14 @@ tristate AlterTableTester::run(bool *closeAppRequested)
                     return false;
                 designerIface->insertField(row, testFileLine[2], true);
                 continue;
-            } else if (command == "insertEmptyRow") {
+            } else if (command == "insertEmptyRecord") {
                 if (!checkItemsNumber(2))
                     return false;
                 bool ok;
                 int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
-                designerIface->insertEmptyRow(row, true);
+                designerIface->insertEmptyRecord(row, true);
                 continue;
             } else if (command == "changeFieldProperty") {
                 if (!checkItemsNumber(5) || !changeFieldProperty(designerIface))

@@ -266,8 +266,8 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                     continue;
                 }
                 KDbVariableExpression fieldExpr(ci->field->table()->name() + "." + ci->field->name());
-                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->field = ci->field;
-                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
+                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr.field = ci->field;
+                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: fieldExpr.tablePositionForField = d->privateQuery->tableBoundToColumn(*it);
                 if (expr.isValid()) {
 //! @todo " " separator hardcoded...
 //! @todo use SQL sub-parser here...

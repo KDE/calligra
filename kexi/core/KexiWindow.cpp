@@ -50,8 +50,8 @@ class KexiWindow::Private
 public:
     explicit Private(KexiWindow *window)
             : win(window)
-            , schemaData(0)
-            , schemaDataOwned(false)
+            , schemaObject(0)
+            , schemaObjectOwned(false)
             , isRegistered(false)
             , dirtyChangedEnabled(true)
             , switchToViewModeEnabled(true)
@@ -65,31 +65,31 @@ public:
     }
 
     ~Private() {
-        setSchemaData(0);
+        setSchemaObject(0);
     }
 
-    void setSchemaData(KDbObject* data)
+    void setSchemaObject(KDbObject* data)
     {
-        if (schemaDataOwned) {
-            delete schemaData;
+        if (schemaObjectOwned) {
+            delete schemaObject;
         }
-        schemaData = data;
+        schemaObject = data;
     }
 
-    bool setupSchemaData(KDbObject *sdata, KexiPart::Item *item,
-                         KexiView::StoreNewDataOptions options) const
+    bool setupSchemaObject(KDbObject *object, KexiPart::Item *item,
+                           KexiView::StoreNewDataOptions options) const
     {
-        sdata->setName(item->name());
-        sdata->setCaption(item->caption());
-        sdata->setDescription(item->description());
+        object->setName(item->name());
+        object->setCaption(item->caption());
+        object->setDescription(item->description());
 
         KexiProject *project = KexiMainWindowIface::global()->project();
-        KexiPart::Item* existingItem = project->item(part->info(), sdata->name());
+        KexiPart::Item* existingItem = project->item(part->info(), object->name());
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
                                      xi18n("Could not create new object.")
                                      + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
-                                       .subs(sdata->name()).toString());
+                                       .subs(object->name()).toString());
             return false;
         }
         return true;
@@ -109,8 +109,8 @@ public:
     int id;
     QPointer<KexiPart::Part> part;
     KexiPart::Item *item;
-    KDbObject* schemaData;
-    bool schemaDataOwned;
+    KDbObject* schemaObject;
+    bool schemaObjectOwned;
     QPointer<KexiView> newlySelectedView; //!< Used in isDirty(), temporary set in switchToViewMode()
     //!< during view setup, when a new view is not yet raised.
     //! Used in viewThatRecentlySetDirtyFlag(), modified in dirtyChanged().
@@ -612,19 +612,19 @@ KexiWindow::propertySet()
     return v->propertySet();
 }
 
-void KexiWindow::setSchemaData(KDbObject* schemaData)
+void KexiWindow::setSchemaObject(KDbObject* object)
 {
-    d->setSchemaData(schemaData);
+    d->setSchemaObject(object);
 }
 
-KDbObject* KexiWindow::schemaData() const
+KDbObject* KexiWindow::schemaObject() const
 {
-    return d->schemaData;
+    return d->schemaObject;
 }
 
-void KexiWindow::setSchemaDataOwned(bool set)
+void KexiWindow::setSchemaObjectOwned(bool set)
 {
-    d->schemaDataOwned = set;
+    d->schemaObjectOwned = set;
 }
 
 KexiWindowData *KexiWindow::data() const
@@ -691,7 +691,7 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     if (!neverSaved()) {
         return false;
     }
-    if (d->schemaData) {
+    if (d->schemaObject) {
         return false; //schema must not exist
     }
     KexiView *v = selectedView();
@@ -701,15 +701,15 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
     KDbObject object(project->typeIdForPluginId(d->part->info()->pluginId()));
-    if (!d->setupSchemaData(&object, d->item, options)) {
+    if (!d->setupSchemaObject(&object, d->item, options)) {
         return false;
     }
 
     bool cancel = false;
-    d->schemaData = v->storeNewData(object, options, &cancel);
+    d->schemaObject = v->storeNewData(object, options, &cancel);
     if (cancel)
         return cancelled;
-    if (!d->schemaData) {
+    if (!d->schemaObject) {
         setStatus(project->dbConnection(), xi18n("Saving object's definition failed."), "");
         return false;
     }
@@ -720,9 +720,9 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
     }
     /* Sets 'dirty' flag on every dialog's view. */
     setDirty(false);
-    //new schema data has now ID updated to a unique value
+    //new object data has now ID updated to a unique value
     //-assign that to item's identifier
-    d->item->setIdentifier(d->schemaData->id());
+    d->item->setIdentifier(d->schemaObject->id());
     project->addStoredItem(part()->info(), d->item);
 
     return true;
@@ -778,29 +778,29 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     //create schema object and assign information
     KexiProject *project = KexiMainWindowIface::global()->project();
     KDbObject object(project->typeIdForPluginId(d->part->info()->pluginId()));
-    if (!d->setupSchemaData(&object, item, options)) {
+    if (!d->setupSchemaObject(&object, item, options)) {
         return false;
     }
 
     bool cancel = false;
-    KDbObject *newSchemaData;
+    KDbObject *newSchemaObject;
     if (isDirty()) { // full save of new data
-        newSchemaData = v->storeNewData(object, options, &cancel);
+        newSchemaObject = v->storeNewData(object, options, &cancel);
     }
     else { // there were no changes; full copy of the data is enough
            // - gives better performance (e.g. tables are copied on server side)
            // - works without bothering the user (no unnecessary questions)
-        newSchemaData = v->copyData(object, options, &cancel);
+        newSchemaObject = v->copyData(object, options, &cancel);
     }
 
     if (cancel) {
         return cancelled;
     }
-    if (!newSchemaData) {
+    if (!newSchemaObject) {
         setStatus(project->dbConnection(), xi18n("Saving object's definition failed."), "");
         return false;
     }
-    setSchemaData(newSchemaData); // deletes previous schema if owned
+    setSchemaObject(newSchemaObject); // deletes previous schema if owned
 
     if (project->typeIdForPluginId(part()->info()->pluginId()) < 0) {
         if (!project->createIdForPart(*part()->info()))
@@ -811,9 +811,9 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     // for now this Window has new item assigned
     d->item = item;
 
-    // new schema data has now ID updated to a unique value
+    // new object data has now ID updated to a unique value
     // -assign that to item's identifier
-    item->setIdentifier(d->schemaData->id());
+    item->setIdentifier(d->schemaObject->id());
 
     project->addStoredItem(part()->info(), d->item);
 
