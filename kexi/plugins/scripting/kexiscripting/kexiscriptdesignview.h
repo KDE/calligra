@@ -74,13 +74,13 @@ public:
      * Try to call \a storeData with new data we like to store. On
      * success the matching \a KDbObject is returned.
      *
-     * \param sdata The source \a KDbObject instance.
+     * \param object The source \a KDbObject instance.
      * \param cancel Cancel on failure and don't try to clean
      *       possible temporary created data up.
      * \return The matching \a KDbObject instance or NULL
      *        if storing failed.
      */
-    virtual KDbObject* storeNewData(const KDbObject& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
                                              bool *cancel);
 

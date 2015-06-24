@@ -186,12 +186,12 @@ protected:
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KDbObject* storeNewData(const KDbObject& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                     KexiView::StoreNewDataOptions options,
                                     bool *cancel);
 
     /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
-    virtual KDbObject* copyData(const KDbObject& sdata,
+    virtual KDbObject* copyData(const KDbObject& object,
                                 KexiView::StoreNewDataOptions options,
                                 bool *cancel);
 

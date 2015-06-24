@@ -250,9 +250,9 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
     window->setData(windowData);
 
     if (!item->neverSaved()) {
-        //we have to load schema data for this dialog
-        loadAndSetSchemaData(window, object, viewMode);
-        if (!window->schemaData()) {
+        //we have to load object data for this dialog
+        loadAndSetSchemaObject(window, object, viewMode);
+        if (!window->schemaObject()) {
             //last chance:
             if (false == d->askForOpeningInTextMode(
                         window, item, window->supportedViewModes(), viewMode)) {
@@ -260,9 +260,9 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
                 return 0;
             }
             viewMode = Kexi::TextViewMode;
-            loadAndSetSchemaData(window, object, viewMode);
+            loadAndSetSchemaObject(window, object, viewMode);
         }
-        if (!window->schemaData()) {
+        if (!window->schemaObject()) {
             if (!d->status.error())
                 d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
                                                xi18n("Could not load object's definition."), xi18n("Object design may be corrupted."));
@@ -283,13 +283,13 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
         tristate askForOpeningInTextModeRes
         = d->askForOpeningInTextMode(window, item, window->supportedViewModes(), viewMode);
         if (true == askForOpeningInTextModeRes) {
-            delete window->schemaData(); //old one
+            delete window->schemaObject(); //old one
             window->close();
             delete window;
             //try in text mode
             return openInstance(parent, item, Kexi::TextViewMode, staticObjectArgs);
         } else if (false == askForOpeningInTextModeRes) {
-            delete window->schemaData(); //old one
+            delete window->schemaObject(); //old one
             window->close();
             delete window;
             qWarning() << "!window, cannot switch to a view mode" <<
@@ -323,25 +323,25 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item *item, Kexi::View
     return window;
 }
 
-KDbObject* Part::loadSchemaData(KexiWindow *window, const KDbObject& sdata,
+KDbObject* Part::loadSchemaObject(KexiWindow *window, const KDbObject& object,
         Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
-    KDbObject *new_schema = new KDbObject();
-    *new_schema = sdata;
+    KDbObject *newObject = new KDbObject();
+    *newObject = object;
     if (ownedByWindow)
         *ownedByWindow = true;
-    return new_schema;
+    return newObject;
 }
 
-void Part::loadAndSetSchemaData(KexiWindow *window, const KDbObject& sdata,
+void Part::loadAndSetSchemaObject(KexiWindow *window, const KDbObject& object,
     Kexi::ViewMode viewMode)
 {
-    bool schemaDataOwned = true;
-    KDbObject* sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
-    window->setSchemaData(sd);
-    window->setSchemaDataOwned(schemaDataOwned);
+    bool schemaObjectOwned = true;
+    KDbObject* sd = loadSchemaObject(window, object, viewMode, &schemaObjectOwned);
+    window->setSchemaObject(sd);
+    window->setSchemaObjectOwned(schemaObjectOwned);
 }
 
 bool Part::loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID)

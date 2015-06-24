@@ -32,12 +32,13 @@
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
-        const KDbDriver &driver, KDbQuerySchema& querySchema, bool *ok)
+        const KDbDriver &driver, KDbQuerySchema* querySchema, bool *ok)
 {
     Q_ASSERT(ok);
+    Q_ASSERT(querySchema);
     Q_UNUSED(driver);
     *ok = false;
-    const QList<KDbQuerySchemaParameter> params(querySchema.parameters());
+    const QList<KDbQuerySchemaParameter> params(querySchema->parameters());
     QList<QVariant> values;
     const QString caption(xi18nc("@title:window Enter Query Parameter Value", "Enter Parameter Value"));
     foreach(const KDbQuerySchemaParameter &parameter, params) {

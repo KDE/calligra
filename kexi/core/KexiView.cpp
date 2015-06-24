@@ -395,57 +395,57 @@ void KexiView::setDirty()
     setDirty(true);
 }
 
-KDbObject* KexiView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiView::storeNewData(const KDbObject& object,
                                            KexiView::StoreNewDataOptions options,
                                            bool *cancel)
 {
     Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KDbObject> new_schema(new KDbObject);
-    *new_schema = sdata;
+    QScopedPointer<KDbObject> newObject(new KDbObject);
+    *newObject = object;
 
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeNewObjectData(new_schema.data())
-        || !conn->removeDataBlock(new_schema->id()) // for sanity
-        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+    if (!conn->storeNewObjectData(newObject.data())
+        || !conn->removeDataBlock(newObject->id()) // for sanity
+        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(newObject->id()) // for sanity
        )
     {
         return 0;
     }
-    d->newlyAssignedID = new_schema->id();
-    return new_schema.take();
+    d->newlyAssignedID = newObject->id();
+    return newObject.take();
 }
 
-KDbObject* KexiView::copyData(const KDbObject& sdata,
+KDbObject* KexiView::copyData(const KDbObject& object,
                                         KexiView::StoreNewDataOptions options,
                                         bool *cancel)
 {
     Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KDbObject> new_schema(new KDbObject);
-    *new_schema = sdata;
+    QScopedPointer<KDbObject> newObject(new KDbObject);
+    *newObject = object;
 
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeNewObjectData(new_schema.data())
-        || !conn->copyDataBlock(d->window->id(), new_schema->id())
-        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
+    if (!conn->storeNewObjectData(newObject.data())
+        || !conn->copyDataBlock(d->window->id(), newObject->id())
+        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), newObject->id())
        )
     {
         return 0;
     }
-    d->newlyAssignedID = new_schema->id();
-    return new_schema.take();
+    d->newlyAssignedID = newObject->id();
+    return newObject.take();
 }
 
 tristate KexiView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    if (!d->window || !d->window->schemaData())
+    if (!d->window || !d->window->schemaObject())
         return false;
     if (!KexiMainWindowIface::global()->project()
-            ->dbConnection()->storeObjectData(d->window->schemaData()))
+            ->dbConnection()->storeObjectData(d->window->schemaObject()))
     {
         return false;
     }

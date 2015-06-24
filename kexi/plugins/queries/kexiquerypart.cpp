@@ -114,8 +114,8 @@ void KexiQueryPart::initInstanceActions()
 {
 }
 
-KDbObject* KexiQueryPart::loadSchemaData(
-    KexiWindow *window, const KDbObject& sdata, Kexi::ViewMode viewMode,
+KDbObject* KexiQueryPart::loadSchemaObject(
+    KexiWindow *window, const KDbObject& object, Kexi::ViewMode viewMode,
     bool *ownedByWindow)
 {
     KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
@@ -131,9 +131,9 @@ KDbObject* KexiQueryPart::loadSchemaData(
         if (viewMode == Kexi::TextViewMode) {
             //for SQL view, no parsing is initially needed:
             //-just make a copy:
-            return KexiPart::Part::loadSchemaData(window, sdata, viewMode, ownedByWindow);
+            return KexiPart::Part::loadSchemaObject(window, object, viewMode, ownedByWindow);
         }
-        /* Set this to true on data loading loadSchemaData() to indicate that TextView mode
+        /* Set this to true on data loading loadSchemaObject() to indicate that TextView mode
          could be used instead of DataView or DesignView, because there are problems
          with opening object. */
         temp->proposeOpeningInTextViewModeBecauseOfProblems = true;
@@ -141,7 +141,7 @@ KDbObject* KexiQueryPart::loadSchemaData(
         return 0;
     }
     qDebug() << *query;
-    (KDbObject&)*query = sdata; //copy main attributes
+    (KDbObject&)*query = object; //copy main attributes
 
     temp->registerTableSchemaChanges(query);
     if (ownedByWindow)
@@ -242,7 +242,7 @@ void KexiQueryPart::TempData::setQuery(KDbQuerySchema *query)
         return;
     if (m_query
             /* query not owned by window */
-            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KDbObject*>(m_query)))
+            && (static_cast<KexiWindow*>(parent())->schemaObject() != static_cast<KDbObject*>(m_query)))
     {
         delete m_query;
     }
