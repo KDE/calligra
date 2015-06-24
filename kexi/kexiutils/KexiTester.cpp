@@ -23,6 +23,10 @@
 #include <QMap>
 #include <QWidget>
 
+#ifndef COMPILING_TESTS
+# undef kexiTester
+#endif
+
 KexiTestObject::KexiTestObject(QObject *object, const QString &name)
  : m_object(object), m_name(name)
 {
