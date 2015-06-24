@@ -80,11 +80,11 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
     propertySetSwitched();
 }
 
-KDbObject* KexiReportDesignView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiReportDesignView::storeNewData(const KDbObject& object,
                                                        KexiView::StoreNewDataOptions options,
                                                        bool *cancel)
 {
-    KDbObject *s = KexiView::storeNewData(sdata, options, cancel);
+    KDbObject *s = KexiView::storeNewData(object, options, cancel);
     qDebug() << "new id:" << s->id();
 
     if (!s || *cancel) {
@@ -92,7 +92,7 @@ KDbObject* KexiReportDesignView::storeNewData(const KDbObject& sdata,
         return 0;
     }
     if (!storeData()) {
-        //failure: remove object's schema data to avoid garbage
+        //failure: remove object's object data to avoid garbage
         KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
         delete s;

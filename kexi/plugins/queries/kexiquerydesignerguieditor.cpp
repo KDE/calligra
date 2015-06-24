@@ -90,11 +90,11 @@ public:
         sortColumnPreferredWidth = 0;
     }
 
-    bool changeSingleCellValue(KDbRecordData *data, int columnNumber,
+    bool changeSingleCellValue(KDbRecordData *recordData, int columnNumber,
                                const QVariant& value, KDbResultInfo* result) {
         data->clearRecordEditBuffer();
-        if (!data->updateRecordEditBuffer(data, columnNumber, value)
-                || !data->saveRecordChanges(data, true)) {
+        if (!data->updateRecordEditBuffer(recordData, columnNumber, value)
+                || !data->saveRecordChanges(recordData, true)) {
             if (result)
                 *result = data->result();
             return false;
@@ -203,10 +203,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
         d->dataTable->tableView()->setColumnWidth(COLUMN_ID_SORTING, d->sortColumnPreferredWidth);
         d->dataTable->tableView()->setStretchLastColumn(true);
         d->dataTable->tableView()->maximizeColumnsWidth(c);
-        d->dataTable->tableView()->setDropsAtRowEnabled(true);
+        d->dataTable->tableView()->setDropsAtRecordEnabled(true);
         connect(d->dataTable->tableView(), SIGNAL(dragOverRecord(KDbRecordData*,int,QDragMoveEvent*)),
                 this, SLOT(slotDragOverTableRecord(KDbRecordData*,int,QDragMoveEvent*)));
-        connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KDbRecordData*,int,QDropEvent*,KDbRecordData*&)),
+        connect(d->dataTable->tableView(), SIGNAL(droppedAtRecord(KDbRecordData*,int,QDropEvent*,KDbRecordData*&)),
                 this, SLOT(slotDroppedAtRecord(KDbRecordData*,int,QDropEvent*,KDbRecordData*&)));
         connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
                 this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
@@ -346,7 +346,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         //table
         /*! @todo what about query? */
         KDbTableSchema *table = d->relations->tables()->value(tableName)->schema()->table();
-        d->conn->registerForTableSchemaChanges(*tempData(), *table); //this table will be used
+        d->conn->registerForTableSchemaChanges(tempData(), table); //this table will be used
         data = d->tablesColumnData->createItem();
         (*data)[COLUMN_ID_COLUMN] = table->name();
         (*data)[COLUMN_ID_TABLE] = (*data)[COLUMN_ID_COLUMN];
@@ -659,9 +659,9 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             }
             // Invalid queries case:
             // KexiWindow::switchToViewMode() first opens DesignViewMode,
-            // and then KexiQueryPart::loadSchemaData() doesn't allocate KDbQuerySchema object
-            // do we're carefully looking at window()->schemaData()
-            KDbQuerySchema * q = dynamic_cast<KDbQuerySchema *>(window()->schemaData());
+            // and then KexiQueryPart::loadSchemaObject() doesn't allocate KDbQuerySchema object
+            // do we're carefully looking at window()->schemaObject()
+            KDbQuerySchema * q = dynamic_cast<KDbQuerySchema *>(window()->schemaObject());
             if (q) {
                 KDbResultInfo result;
                 showFieldsForQuery(q, result);
@@ -701,7 +701,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
     if (mode == Kexi::DataViewMode) {
         //this is just a SWITCH from data view
         //set cursor if needed:
-        if (d->dataTable->dataAwareObject()->currentRow() < 0
+        if (d->dataTable->dataAwareObject()->currentRecord() < 0
                 || d->dataTable->dataAwareObject()->currentColumn() < 0) {
             d->dataTable->dataAwareObject()->ensureCellVisible(0, 0);
             d->dataTable->dataAwareObject()->setCursorPosition(0, 0);
@@ -718,7 +718,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 
 
 KDbObject*
-KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& sdata,
+KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& object,
                                          KexiView::StoreNewDataOptions options,
                                          bool *cancel)
 {
@@ -738,7 +738,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KDbObject& sdata,
             return 0;
         }
     }
-    (KDbObject&)*temp->query() = sdata; //copy main attributes
+    (KDbObject&)*temp->query() = object; //copy main attributes
 
     bool ok = d->conn->storeNewObjectData(temp->query());
     if (ok) {
@@ -1086,7 +1086,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
         //in a case when query layout was not saved, build layout by hand
         // -- dynamic cast because of a need for handling invalid queries
         //    (as in KexiQueryDesignerGuiEditor::afterSwitchFrom()):
-        KDbQuerySchema * q = dynamic_cast<KDbQuerySchema *>(window()->schemaData());
+        KDbQuerySchema * q = dynamic_cast<KDbQuerySchema *>(window()->schemaObject());
         if (q) {
             showTablesForQuery(q);
             KDbResultInfo result;
@@ -1141,12 +1141,12 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
     KexiQueryPart::TempData * temp = tempData();
 
     // Save SQL without driver-escaped keywords.
-    if (window()->schemaData()) //set this instance as obsolete (only if it's stored)
-        d->conn->setQuerySchemaObsolete(window()->schemaData()->name());
+    if (window()->schemaObject()) //set this instance as obsolete (only if it's stored)
+        d->conn->setQuerySchemaObsolete(window()->schemaObject()->name());
 
     KDbConnection::SelectStatementOptions options;
     options.addVisibleLookupColumns = false;
-    QString sqlText = KDb::selectStatement(temp->query(), options);
+    QString sqlText = KDb::selectStatement(temp->query(), options).toString();
     if (!storeDataBlock(sqlText, "sql")) {
         return false;
     }

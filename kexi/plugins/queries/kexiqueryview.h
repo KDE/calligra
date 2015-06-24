@@ -39,7 +39,7 @@ public:
 protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KDbObject* storeNewData(const KDbObject& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
                                              bool *cancel);
 
