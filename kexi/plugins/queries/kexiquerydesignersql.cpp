@@ -41,6 +41,7 @@
 #include <QToolTip>
 #include <QAction>
 #include <QDebug>
+#include <QHBoxLayout>
 
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {
@@ -75,7 +76,7 @@ public:
     //! when switching out of this view (then it's cleared).
     KDbQuerySchema *parsedQuery;
     //! For internal use, statement passed in switching to this view
-    QString origStatement;
+    KDbEscapedString origStatement;
     //! needed to remember height for both modes, between switching
     int heightForStatusMode;
     //! helper for beforeSwitchTo()
@@ -216,7 +217,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool *don
             if (designViewWasVisible
                     && !sqlTextIsEmpty //for empty text always show error
                     && !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
-                    && compareSQL(d->origStatement, d->editor->text()))
+                    && compareSQL(d->origStatement.toString(), d->editor->text()))
             {
                 //statement unchanged! - nothing to do
                 temp->setQueryChangedInPreviousView(false);
@@ -243,7 +244,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool *don
                 temp->setQueryChangedInPreviousView(true);
             }
         }
-        d->origStatement = d->editor->text();
+        d->origStatement = KDbEscapedString(d->editor->text());
     }
 
     d->editor->setFocus();
@@ -276,7 +277,6 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         temp->setQuery(query);
         if (temp->queryChangedInPreviousView()) {
             KDbConnection::SelectStatementOptions options;
-            options.identifierEscaping = KDbDriver::EscapeKexi;
             options.addVisibleLookupColumns = false;
             d->origStatement = KDb::selectStatement(query, options);
         }
@@ -284,13 +284,16 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
         //no valid query delivered or query has not been modified:
         // just load sql text, no matter if it's valid
-        if (!loadDataBlock(&d->origStatement, "sql", true /*canBeEmpty*/))
+        QString sql;
+        if (!loadDataBlock(&sql, "sql", true /*canBeEmpty*/)) {
             return false;
+        }
+        d->origStatement = KDbEscapedString(sql);
     }
 
-    if (!compareSQL(d->origStatement, d->editor->text())) {
+    if (!compareSQL(d->origStatement.toString(), d->editor->text())) {
         d->slotTextChangedEnabled = false;
-        d->editor->setText(d->origStatement);
+        d->editor->setText(d->origStatement.toString());
         d->slotTextChangedEnabled = true;
     }
     QTimer::singleShot(100, d->editor, SLOT(setFocus()));
@@ -314,13 +317,13 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 
     qDebug();
     KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();
-    const bool ok = parser->parse(sqlText);
+    const bool ok = parser->parse(KDbEscapedString(sqlText));
     delete d->parsedQuery;
     d->parsedQuery = parser->query();
     if (!d->parsedQuery || !ok || !parser->error().type().isEmpty()) {
         KDbParserError err = parser->error();
-        setStatusError(err.error());
-        d->editor->jump(err.at());
+        setStatusError(err.message());
+        d->editor->jump(err.position());
         delete d->parsedQuery;
         d->parsedQuery = 0;
         return false;
@@ -357,7 +360,7 @@ KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
     return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
 
-KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& sdata,
+KDbObject* KexiQueryDesignerSQLView::storeNewData(const KDbObject& object,
                                                            KexiView::StoreNewDataOptions options,
                                                            bool *cancel)
 {
@@ -435,4 +438,3 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
         setDirty(true);
     return res;
 }
-
