@@ -240,7 +240,13 @@ void KexiMainWindowTabWidget::mousePressEvent(QMouseEvent *event)
     //! @todo KEXI3 test KexiMainWindowTabWidget's contextMenu event port from KTabWidget
     if (event->button() == Qt::RightButton) {
         int tab = tabBar()->tabAt(event->pos());
-        showContextMenuForTab(tab, tabBar()->mapToGlobal(event->pos()));
+        const QPoint realPos(tabBar()->mapToGlobal(event->pos()));
+        if (QRect(tabBar()->mapToGlobal(QPoint(0,0)),
+              tabBar()->mapToGlobal(QPoint(tabBar()->width()-1, tabBar()->height()-1))).contains(realPos))
+        {
+            showContextMenuForTab(tab, tabBar()->mapToGlobal(event->pos()));
+            return;
+        }
     }
     QTabWidget::mousePressEvent(event);
 }
