@@ -49,8 +49,8 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_editDeleteAction->setWhatsThis(del.whatsThis());
     m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new QAction(xi18n("Edit Sections"), this);
-    m_sectionEdit->setObjectName("sectionedit");
+    m_editSectionAction = new QAction(xi18n("Edit Sections"), this);
+    m_editSectionAction->setObjectName("sectionedit");
 
     m_itemRaiseAction = new QAction(koIcon("arrow-up"), xi18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
@@ -60,7 +60,7 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     QAction *sep = new QAction(QString(), this);
     sep->setSeparator(true);
 
-    al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_sectionEdit << sep << m_itemLowerAction << m_itemRaiseAction;
+    al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_editSectionAction << sep << m_itemLowerAction << m_itemRaiseAction;
     setViewActions(al);
 
 }
@@ -178,16 +178,16 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
      connect(deleteShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditDelete()));
 
     //Edit Actions
-    connect(m_editCutAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCut()));
-    connect(m_editCopyAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCopy()));
-    connect(m_editPasteAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditPaste()));
-    connect(m_editDeleteAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditDelete()));
+    connect(m_editCutAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditCut()));
+    connect(m_editCopyAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditCopy()));
+    connect(m_editPasteAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditPaste()));
+    connect(m_editDeleteAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditDelete()));
 
-    connect(m_sectionEdit, SIGNAL(activated()), m_reportDesigner, SLOT(slotSectionEditor()));
+    connect(m_editSectionAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotSectionEditor()));
 
     //Raise/Lower
-    connect(m_itemRaiseAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotRaiseSelected()));
-    connect(m_itemLowerAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotLowerSelected()));
+    connect(m_itemRaiseAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotRaiseSelected()));
+    connect(m_itemLowerAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotLowerSelected()));
     return true;
 }
 
