@@ -91,9 +91,9 @@ KexiEditor::KexiEditor(QWidget *parent)
     d->view->setFont(f);
     d->view->setCheckSpellingEnabled(false);
 #else
-    KexiUtils::KTextEditorFrame *fr = new KexiUtils::KTextEditorFrame(this);
+    QWidget *fr = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(fr);
-    layout->setContentsMargins(2, 2, 2, 2);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     KTextEditor::Editor *editor = KTextEditor::Editor::instance();
     if (!editor)
