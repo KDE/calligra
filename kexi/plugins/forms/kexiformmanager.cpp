@@ -119,7 +119,7 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
     if (col) {
         createActions( col );
         //connect actions provided by widget factories
-        connect(col->action("widget_assign_action"), SIGNAL(activated()),
+        connect(col->action("widget_assign_action"), SIGNAL(triggered()),
                 this, SLOT(slotAssignAction()));
     }
 

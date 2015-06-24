@@ -60,7 +60,7 @@ private:
     QAction *m_editCopyAction;
     QAction *m_editPasteAction;
     QAction *m_editDeleteAction;
-    QAction *m_sectionEdit;
+    QAction *m_editSectionAction;
     QAction *m_parameterEdit;
     QAction *m_itemRaiseAction;
     QAction *m_itemLowerAction;
