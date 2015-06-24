@@ -38,7 +38,7 @@ public:
      can be decoded as "kexi/fields" data. If decoding of "kexi/field"
      type is supported, decoding of "kexi/fields" is always supported.
      */
-    static bool canDecode(QMimeSource* e);
+    static bool canDecode(QDropEvent* e);
 
     /*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e.
      Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
