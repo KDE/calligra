@@ -692,7 +692,8 @@ KexiItemMenu::~KexiItemMenu()
 
 void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
 {
-    addSection(partInfo->name());
+    clear();
+    addSection(QString());
     KexiContextMenuUtils::updateTitle(this, partItem->name(), partInfo->name(),
                                       partInfo->iconName());
 
