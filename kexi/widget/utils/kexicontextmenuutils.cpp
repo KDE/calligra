@@ -234,7 +234,7 @@ bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
         return false;
     QAction *titleAction = actions.first();
     //! @todo KEXI3 test this
-    if (titleAction && titleAction->isSeparator()) {
+    if (titleAction->isSeparator()) {
         titleAction->setIcon(QIcon::fromTheme(iconName));
         /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
          (see doc/dev/settings.txt) */
