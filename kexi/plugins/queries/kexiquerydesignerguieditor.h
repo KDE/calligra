@@ -64,7 +64,7 @@ protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KDbObject* storeNewData(const KDbObject& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
                                              bool *cancel);
     virtual tristate storeData(bool dontAsk = false);
@@ -94,8 +94,8 @@ protected:
     KDbRecordData* createNewRow(const QString& tableName, const QString& fieldName,
                                      bool visible) const;
 
-    KDbExpression* parseExpressionString(const QString& fullString, int& token,
-                                            bool allowRelationalOperator);
+    KDbExpression parseExpressionString(const QString& fullString, KDbToken *token,
+                                         bool allowRelationalOperator);
 
     /*! @internal generates smallest unique alias */
     QByteArray generateUniqueAlias() const;
