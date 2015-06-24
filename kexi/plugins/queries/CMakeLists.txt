@@ -7,7 +7,8 @@ set(kexi_queryplugin_SRCS
    kexiquerypart.cpp
    kexiquerydesignersql.cpp
    kexiquerydesignerguieditor.cpp
-   kexiqueryview.cpp)
+   kexiqueryview.cpp
+)
 
 add_library(kexi_queryplugin MODULE ${kexi_queryplugin_SRCS})
 kcoreaddons_desktop_to_json(kexi_queryplugin kexi_queryplugin.desktop)

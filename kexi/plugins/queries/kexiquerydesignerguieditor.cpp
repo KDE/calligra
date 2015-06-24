@@ -23,7 +23,7 @@
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiinternalpart.h>
-/*! @todo KEXI3 Port #include <kexidragobjects.h>
+//! @todo KEXI3 Port #include <kexidragobjects.h>
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include <kexi.h>
@@ -46,6 +46,7 @@
 #include <KDbTableViewData>
 #include <KDb>
 #include <KDbExpression>
+#include <KDbTableOrQuerySchema>
 
 #include <KProperty>
 #include <KPropertySet>
@@ -58,6 +59,7 @@
 #include <QSplitter>
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QMimeData>
 #include <QSet>
 #include <QLocale>
 #include <QDebug>
@@ -84,6 +86,7 @@ class KexiQueryDesignerGuiEditor::Private
 public:
     Private(KexiQueryDesignerGuiEditor *p)
      : q(p)
+     , conn(0)
     {
         droppedNewRecord = 0;
         slotTableAdded_enabled = true;
@@ -105,7 +108,8 @@ public:
     KexiQueryDesignerGuiEditor *q;
     KDbTableViewData *data;
     KexiDataTableView *dataTable;
-    QPointer<KDbConnection> conn;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnection>
+    KDbConnection *conn;
 
     KexiRelationsView *relations;
     KexiSectionHeader *head;
@@ -409,11 +413,11 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     //add fields, also build:
     // -WHERE expression
     // -ORDER BY list
-    KDbExpression *whereExpr = 0;
+    KDbExpression whereExpr;
     const uint count = qMin(d->data->count(), d->sets->size());
     bool fieldsFound = false;
-    KDbTableViewDataIterator it(d->data->begin());
-    for (uint i = 0; i < count && it != d->data->end(); ++it, i++) {
+    KDbTableViewDataConstIterator it(d->data->constBegin());
+    for (uint i = 0; i < count && it != d->data->constEnd(); ++it, i++) {
         if (!(**it)[COLUMN_ID_TABLE].isNull()
                 && (**it)[COLUMN_ID_COLUMN].isNull()) {
             //show message about missing field name, and set focus to that cell
@@ -438,30 +442,29 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             QByteArray alias((*set)["alias"].value().toByteArray());
             if (!criteriaStr.isEmpty()) {
                 KDbToken token;
-                KDbExpression *criteriaExpr = parseExpressionString(criteriaStr, &token,
+                KDbExpression criteriaExpr = parseExpressionString(criteriaStr, &token,
                                                  true/*allowRelationalOperator*/);
-                if (!criteriaExpr) {//for sanity
+                if (criteriaExpr.isValid()) {//for sanity
                     if (errMsg)
                         *errMsg = xi18n("Invalid criteria \"%1\"", criteriaStr);
-                    delete whereExpr;
                     return false;
                 }
                 //build relational expression for column variable
-                KDbVariableExpression *varExpr = new KDbVariableExpression(fieldAndTableName);
-                criteriaExpr = new KDbBinaryExpression(varExpr, token, criteriaExpr);
+                KDbVariableExpression varExpr(fieldAndTableName);
+                criteriaExpr = KDbBinaryExpression(varExpr, token, criteriaExpr);
                 //critera ok: add it to WHERE section
-                if (whereExpr)
-                    whereExpr = new KDbBinaryExpression(whereExpr, KDbToken::AND, criteriaExpr);
+                if (whereExpr.isValid())
+                    whereExpr = KDbBinaryExpression(whereExpr, KDbToken::AND, criteriaExpr);
                 else //first expr.
                     whereExpr = criteriaExpr;
             }
             if (tableName.isEmpty()) {
                 if ((*set)["isExpression"].value().toBool() == true) {
                     //add expression column
-                    int dummyToken;
-                    KDbExpression *columnExpr = parseExpressionString(fieldName, dummyToken,
+                    KDbToken dummyToken;
+                    KDbExpression columnExpr = parseExpressionString(fieldName, &dummyToken,
                                                    false/*!allowRelationalOperator*/);
-                    if (!columnExpr) {
+                    if (!columnExpr.isValid()) {
                         if (errMsg)
                             *errMsg = xi18n("Invalid expression \"%1\"", fieldName);
                         return false;
@@ -518,8 +521,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             *errMsg = msgCannotSwitch_EmptyDesign();
         return false;
     }
-    if (whereExpr) {
-        qDebug() << "setting CRITERIA:" << *whereExpr;
+    if (whereExpr.isValid()) {
+        qDebug() << "setting CRITERIA:" << whereExpr;
     }
 
     //set always, because if whereExpr==NULL,
@@ -568,7 +571,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             orderByColumns.appendField(*currentField, sortingString == "ascending");
             continue;
         }
-        currentField = temp->query()->field((uint)fieldNumber);
+        currentField = temp->query()->field(uint(fieldNumber));
         if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
             continue;
@@ -835,38 +838,38 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //2. Collect information about criterias
     // --this must be top level chain of AND's
     // --this will also show joins as: [table1.]field1 = [table2.]field2
-    KDb::CaseInsensitiveHash<QString, KDbExpression*> criterias;
-    KDbExpression* e = query->whereExpression();
-    KDbExpression* eItem = 0;
-    while (e) {
+    KDbUtils::CaseInsensitiveHash<QString, KDbExpression> criterias;
+    KDbExpression e = query->whereExpression();
+    KDbExpression eItem;
+    while (e.isValid()) {
         //eat parentheses because the expression can be (....) AND (... AND ... )
-        while (e && e->toUnary() && e->token() == '(')
-            e = e->toUnary()->arg();
+        while (e.isValid() && e.isUnary() && e.token() == '(')
+            e = e.toUnary().arg();
 
-        if (e->toBinary() && e->token() == AND) {
-            eItem = e->toBinary()->left();
-            e = e->toBinary()->right();
+        if (e.isBinary() && e.token() == KDbToken::AND) {
+            eItem = e.toBinary().left();
+            e = e.toBinary().right();
         } else {
             eItem = e;
-            e = 0;
+            e = KDbExpression();
         }
 
         //eat parentheses
-        while (eItem && eItem->toUnary() && eItem->token() == '(')
-            eItem = eItem->toUnary()->arg();
+        while (eItem.isValid() && eItem.isUnary() && eItem.token() == '(')
+            eItem = eItem.toUnary().arg();
 
-        if (!eItem)
+        if (!eItem.isValid())
             continue;
 
-        qDebug() << eItem->toString(0);
-        KDbBinaryExpression* binary = eItem->toBinary();
-        if (binary && eItem->expressionClass() == KDb::RelationalExpression) {
+        qDebug() << eItem;
+        KDbBinaryExpression binary(eItem.toBinary());
+        if (binary.isValid() && eItem.expressionClass() == KDb::RelationalExpression) {
             KDbField *leftField = 0, *rightField = 0;
-            if (eItem->token() == '='
-                    && binary->left()->toVariable()
-                    && binary->right()->toVariable()
-                    && (leftField = query->findTableField(binary->left()->toString(0)))
-                    && (rightField = query->findTableField(binary->right()->toString(0)))) {
+            if (eItem.token() == '='
+                    && binary.left().isVariable()
+                    && binary.right().isVariable()
+                    && (leftField = query->findTableField(binary.left().toString(0).toString()))
+                    && (rightField = query->findTableField(binary.right().toString(0).toString()))) {
 //! @todo move this check to parser on KDbQuerySchema creation
 //!       or to KDbQuerySchema creation (WHERE expression should be then simplified
 //!       by removing joins
@@ -881,14 +884,14 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                         addConnection(rightField /*master*/, leftField /*details*/);
 //! @todo addConnection() should have "bool oneToOne" arg, for 1-to-1 relations
                 }
-            } else if (binary->left()->toVariable()) {
+            } else if (binary.left().isVariable()) {
                 //this is: variable , op , argument
                 //store variable -> argument:
-                criterias.insertMulti(binary->left()->toVariable()->name, binary->right());
-            } else if (binary->right()->toVariable()) {
+                criterias.insertMulti(binary.left().toVariable().name(), binary.right());
+            } else if (binary.right().isVariable()) {
                 //this is: argument , op , variable
                 //store variable -> argument:
-                criterias.insertMulti(binary->right()->toVariable()->name, binary->left());
+                criterias.insertMulti(binary.right().toVariable().name(), binary.left());
             }
         }
     } //while
@@ -898,7 +901,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
     //3. show fields (including * and table.*)
     uint row_num = 0;
-    QSet<KDbExpression*> usedCriterias; // <-- used criterias will be saved here
+    QSet<QString> usedCriterias; // <-- used criterias will be saved here
     //     so in step 4. we will be able to add
     //     remaining invisible columns with criterias
     qDebug() << *query;
@@ -908,8 +911,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     foreach(KDbField* field, *query->fields()) {
         //append a new row
         QString tableName, fieldName, columnAlias, criteriaString;
-        KDbBinaryExpression *criteriaExpr = 0;
-        KDbExpression *criteriaArgument = 0;
+        KDbBinaryExpression criteriaExpr;
+        KDbExpression criteriaArgument;
         if (field->isQueryAsterisk()) {
             if (field->table()) {//single-table asterisk
                 tableName = field->table()->name();
@@ -922,29 +925,30 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             columnAlias = query->columnAlias(row_num);
             if (field->isExpression()) {
 //! @todo ok? perhaps do not allow to omit aliases?
-                fieldName = field->expression()->toString(0);
+                fieldName = field->expression().toString(0).toString();
             }
             else {
                 tableName = field->table()->name();
                 fieldName = field->name();
                 criteriaArgument = criterias.value(fieldName);
-                if (!criteriaArgument) {//try table.field
+                if (!criteriaArgument.isValid()) {//try table.field
                     criteriaArgument = criterias.value(tableName + "." + fieldName);
                 }
-                if (criteriaArgument) {//criteria expression is just a parent of argument
-                    criteriaExpr = criteriaArgument->parent()->toBinary();
-                    usedCriterias.insert(criteriaArgument); //save info. about used criteria
+                if (criteriaArgument.isValid()) {//criteria expression is just a parent of argument
+                    criteriaExpr = criteriaArgument.parent().toBinary();
+                    usedCriterias.insert(criteriaArgument.toString(0).toString()); //save info. about used criteria
                 }
             }
         }
         //create new row data
         KDbRecordData *newRecord = createNewRow(tableName, fieldName, true /* visible*/);
-        if (criteriaExpr) {
+        if (criteriaExpr.isValid()) {
 //! @todo fix for !INFIX operators
-            if (criteriaExpr->token() == '=')
-                criteriaString = criteriaArgument->toString(0);
+            if (criteriaExpr.token() == '=')
+                criteriaString = criteriaArgument.toString(0).toString();
             else
-                criteriaString = criteriaExpr->tokenToString(0) + " " + criteriaArgument->toString(0);
+                criteriaString = criteriaExpr.token().toString()
+                        + " " + criteriaArgument.toString(0).toString();
             (*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
@@ -955,8 +959,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         if (!criteriaString.isEmpty())
             set["criteria"].setValue(criteriaString, false);
         if (field->isExpression()) {
-            if (!d->changeSingleCellValue(*newRecord, COLUMN_ID_COLUMN,
-                                          QVariant(columnAlias + ": " + field->expression()->toString(0)), &result))
+            if (!d->changeSingleCellValue(newRecord, COLUMN_ID_COLUMN,
+                                          QVariant(columnAlias + ": " + field->expression().toString(0).toString()), &result))
                 return; //problems with setting column expression
         }
         row_num++;
@@ -964,11 +968,11 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
     //4. show ORDER BY information
     d->data->clearRecordEditBuffer();
-    KDbOrderByColumnList& orderByColumns = query->orderByColumnList();
+    const KDbOrderByColumnList* orderByColumns = query->orderByColumnList();
     QHash<KDbQueryColumnInfo*, int> columnsOrder(
         query->columnsOrder(KDbQuerySchema::UnexpandedListWithoutAsterisks));
-    for (KDbOrderByColumn::ListConstIterator orderByColumnIt(orderByColumns.constBegin());
-            orderByColumnIt != orderByColumns.constEnd(); ++orderByColumnIt) {
+    for (KDbOrderByColumn::ListConstIterator orderByColumnIt(orderByColumns->constBegin());
+            orderByColumnIt != orderByColumns->constEnd(); ++orderByColumnIt) {
         KDbOrderByColumn* orderByColumn = *orderByColumnIt;
         KDbQueryColumnInfo *column = orderByColumn->column();
         KDbRecordData *data = 0;
@@ -1010,36 +1014,33 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     }
 
     //5. Show fields for unused criterias (with "Visible" column set to false)
-    foreach(
-        KDbExpression *criteriaArgument, // <-- contains field or table.field
-        criterias)
-    {
-        if (usedCriterias.contains(criteriaArgument))
+    foreach(const KDbExpression &criteriaArgument, criterias) { // <-- contains field or table.field
+        if (usedCriterias.contains(criteriaArgument.toString(0).toString()))
             continue;
         //unused: append a new row
-        KDbBinaryExpression *criteriaExpr = criteriaArgument->parent()->toBinary();
-        if (!criteriaExpr) {
+        KDbBinaryExpression criteriaExpr = criteriaArgument.parent().toBinary();
+        if (!criteriaExpr.isValid()) {
             qWarning() << "criteriaExpr is not a binary expr";
             continue;
         }
-        KDbVariableExpression *columnNameArgument = criteriaExpr->left()->toVariable(); //left or right
-        if (!columnNameArgument) {
-            columnNameArgument = criteriaExpr->right()->toVariable();
-            if (!columnNameArgument) {
+        KDbVariableExpression columnNameArgument = criteriaExpr.left().toVariable(); //left or right
+        if (!columnNameArgument.isValid()) {
+            columnNameArgument = criteriaExpr.right().toVariable();
+            if (!columnNameArgument.isValid()) {
                 qWarning() << "columnNameArgument is not a variable (table or table.field) expr";
                 continue;
             }
         }
         KDbField* field = 0;
-        if (!columnNameArgument->name.contains('.') && query->tables()->count() == 1) {
+        if (!columnNameArgument.name().contains('.') && query->tables()->count() == 1) {
             //extreme case: only field name provided for one-table query:
-            field = query->tables()->first()->field(columnNameArgument->name);
+            field = query->tables()->first()->field(columnNameArgument.name());
         } else {
-            field = query->findTableField(columnNameArgument->name);
+            field = query->findTableField(columnNameArgument.name());
         }
 
         if (!field) {
-            qWarning() << "no columnInfo found in the query for name" << columnNameArgument->name;
+            qWarning() << "no columnInfo found in the query for name" << columnNameArgument.name();
             continue;
         }
         QString tableName, fieldName, columnAlias, criteriaString;
@@ -1048,12 +1049,12 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         fieldName = field->name();
         //create new row data
         KDbRecordData *newRecord = createNewRow(tableName, fieldName, false /* !visible*/);
-        if (criteriaExpr) {
+        if (criteriaExpr.isValid()) {
 //! @todo fix for !INFIX operators
-            if (criteriaExpr->token() == '=')
-                criteriaString = criteriaArgument->toString(0);
+            if (criteriaExpr.token() == '=')
+                criteriaString = criteriaArgument.toString(0).toString();
             else
-                criteriaString = criteriaExpr->tokenToString(0) + " " + criteriaArgument->toString(0);
+                criteriaString = criteriaExpr.token().toString() + " " + criteriaArgument.toString(0).toString();
             (*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
@@ -1211,7 +1212,7 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 void KexiQueryDesignerGuiEditor::slotDragOverTableRecord(
     KDbRecordData * /*data*/, int /*record*/, QDragMoveEvent* e)
 {
-    if (e->provides("kexi/field")) {
+    if (e->mimeData()->hasFormat("kexi/field")) {
         e->setAccepted(true);
     }
 }
@@ -1224,6 +1225,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRecord(KDbRecordData * /*data*/, int /*
     QString srcTable;
     QStringList srcFields;
 
+    Q_UNUSED(ev);
     /*! @todo KEXI3 Port kexidragobjects.cpp
     if (!KexiFieldDrag::decode(ev, &sourcePartClass, &srcTable, &srcFields))
         return;
@@ -1301,13 +1303,13 @@ QByteArray KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 }
 
 //! @todo this is primitive, temporary: reuse SQL parser
-KDbExpression*
-KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDbToken *token,
-        bool allowRelationalOperator)
+KDbExpression KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString,
+                                            KDbToken *token, bool allowRelationalOperator)
 {
+    Q_ASSERT(token);
     QString str = fullString.trimmed();
     int len = 0;
-    //KDbExpression *expr = 0;
+    //KDbExpression expr;
     //1. get token
     *token = KDbToken();
     //2-char-long tokens
@@ -1337,7 +1339,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDb
             len = 5;
         }
         else {
-            return 0;
+            return KDbExpression();
         }
     }
     else {
@@ -1345,35 +1347,35 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDb
              || str.startsWith(QLatin1Char('<'))
              || str.startsWith(QLatin1Char('>')))
         {
-            token = str[0].toLatin1();
+            *token = str[0].toLatin1();
             len = 1;
         } else {
             if (allowRelationalOperator)
-                token = '=';
+                *token = '=';
         }
     }
 
-    if (!allowRelationalOperator && token != 0)
-        return 0;
+    if (!allowRelationalOperator && token->isValid())
+        return KDbExpression();
 
     //1. get expression after token
     if (len > 0)
         str = str.mid(len).trimmed();
     if (str.isEmpty())
-        return 0;
+        return KDbExpression();
 
-    KDbExpression *valueExpr = 0;
+    KDbExpression valueExpr;
     QRegExp re;
     if (str.length() >= 2 &&
             (
                 (str.startsWith(QLatin1Char('"')) && str.endsWith(QLatin1Char('"')))
                 || (str.startsWith(QLatin1Char('\'')) && str.endsWith(QLatin1Char('\''))))
        ) {
-        valueExpr = new KDbConstExpression(KDbToken::CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
+        valueExpr = KDbConstExpression(KDbToken::CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
     } else if (str.startsWith(QLatin1Char('[')) && str.endsWith(QLatin1Char(']'))) {
-        valueExpr = new KDbQueryParameterExpression(str.mid(1, str.length() - 2));
+        valueExpr = KDbQueryParameterExpression(str.mid(1, str.length() - 2));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch(str)) {
-        valueExpr = new KDbConstExpression(KDbToken::DATE_CONST, QDate::fromString(
+        valueExpr = KDbConstExpression(KDbToken::DATE_CONST, QDate::fromString(
                                               re.cap(1).rightJustified(4, '0') + "-" + re.cap(2).rightJustified(2, '0')
                                               + "-" + re.cap(3).rightJustified(2, '0'), Qt::ISODate));
     } else if ((re = QRegExp("(\\d{1,2}):(\\d{1,2})")).exactMatch(str)
@@ -1381,7 +1383,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDb
         QString res = re.cap(1).rightJustified(2, '0') + ":" + re.cap(2).rightJustified(2, '0')
                       + ":" + re.cap(3).rightJustified(2, '0');
 //  qDebug() << res;
-        valueExpr = new KDbConstExpression(KDbToken::TIME_CONST, QTime::fromString(res, Qt::ISODate));
+        valueExpr = KDbConstExpression(KDbToken::TIME_CONST, QTime::fromString(res, Qt::ISODate));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})")).exactMatch(str)
                || (re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch(str)) {
         QString res = re.cap(1).rightJustified(4, '0') + "-" + re.cap(2).rightJustified(2, '0')
@@ -1389,8 +1391,8 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDb
                       + "T" + re.cap(4).rightJustified(2, '0') + ":" + re.cap(5).rightJustified(2, '0')
                       + ":" + re.cap(6).rightJustified(2, '0');
 //  qDebug() << res;
-        valueExpr = new KDbConstExpr(DATETIME_CONST,
-                                          QDateTime::fromString(res, Qt::ISODate));
+        valueExpr = KDbConstExpression(KDbToken::DATETIME_CONST,
+                                       QDateTime::fromString(res, Qt::ISODate));
     } else if ((str[0] >= '0' && str[0] <= '9') || str[0] == '-' || str[0] == '+') {
         //number
         QLocale locale;
@@ -1403,29 +1405,30 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, KDb
         if (pos >= 0) {//real const number
             const int left = str.left(pos).toInt(&ok);
             if (!ok)
-                return 0;
+                return KDbExpression();
             const int right = str.mid(pos + 1).toInt(&ok);
             if (!ok)
-                return 0;
-            valueExpr = new KDbConstExpression(KDbToken::REAL_CONST, QPoint(left, right)); //decoded to QPoint
+                return KDbExpression();
+            valueExpr = KDbConstExpression(KDbToken::REAL_CONST, QPoint(left, right)); //decoded to QPoint
         } else {
             //integer const
             const qint64 val = str.toLongLong(&ok);
             if (!ok)
-                return 0;
-            valueExpr = new KDbConstExpression(KDbToken::INTEGER_CONST, val);
+                return KDbExpression();
+            valueExpr = KDbConstExpression(KDbToken::INTEGER_CONST, val);
         }
     } else if (str.toLower() == "null") {
-        valueExpr = new KDbConstExpression(KDbToken::SQL_NULL, QVariant());
+        valueExpr = KDbConstExpression(KDbToken::SQL_NULL, QVariant());
     } else {//identfier
         if (!KDb::isIdentifier(str))
-            return 0;
-        valueExpr = new KDbVariableExpression(str);
+            return KDbExpression();
+        valueExpr = KDbVariableExpression(str); // the default is 'fieldname'
         //find first matching field for name 'str':
         foreach(KexiRelationsTableContainer *cont, *d->relations->tables()) {
             /*! @todo what about query? */
             if (cont->schema()->table() && cont->schema()->table()->field(str)) {
-                valueExpr->toVariable()->field = cont->schema()->table()->field(str);
+                valueExpr = KDbVariableExpression(cont->schema()->table()->name() + '.' + str); // the expression is now: tablename.fieldname
+                //! @todo KEXI3 check this we're calling KDbQuerySchema::validate() instead of this: valueExpr.toVariable().field = cont->schema()->table()->field(str);
                 break;
             }
         }
@@ -1492,14 +1495,13 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KDbRecordData *data
         }
         fieldName = fieldId.mid(id + 1).trimmed();
         //check expr.
-        KDbExpression *e;
-        int dummyToken;
-        if ((e = parseExpressionString(fieldName, dummyToken,
-                                       false/*allowRelationalOperator*/)))
+        KDbExpression e;
+        KDbToken dummyToken;
+        if ((e = parseExpressionString(fieldName, &dummyToken,
+                                       false/*allowRelationalOperator*/)).isValid())
         {
-            fieldName = e->toString(0); //print it prettier
+            fieldName = e.toString(0).toString(); //print it prettier
             //this is just checking: destroy expr. object
-            delete e;
         }
         else {
             result->success = false;
@@ -1516,7 +1518,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KDbRecordData *data
         }
         else {
             if (!KDb::splitToTableAndFieldParts(
-                        fieldId, tableName, fieldName, KDb::SetFieldNameIfNoTableName))
+                        fieldId, &tableName, &fieldName, KDb::SetFieldNameIfNoTableName))
             {
                 qWarning() << "no 'field' or 'table.field'";
                 return;
@@ -1604,7 +1606,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeVisibleCellChanged(KDbRecordData *dat
     bool saveOldValue = true;
     if (!propertySet()) {
         saveOldValue = false;
-        createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
+        createPropertySet(d->dataTable->dataAwareObject()->currentRecord(),
                           (*data)[COLUMN_ID_TABLE].toString(),
                           (*data)[COLUMN_ID_COLUMN].toString(), true);
 #ifndef KEXI_NO_QUERY_TOTALS
@@ -1637,7 +1639,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KDbRecordData *dat
     KPropertySet *set = d->sets->findPropertySetForItem(*data);
     if (!set) {
         saveOldValue = false;
-        set = createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
+        set = createPropertySet(d->dataTable->dataAwareObject()->currentRecord(),
                                 (*data)[COLUMN_ID_TABLE].toString(),
                                 (*data)[COLUMN_ID_COLUMN].toString(), true);
 #ifndef KEXI_NO_QUERY_TOTALS
@@ -1667,7 +1669,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KDbRecordData *da
 {
 //! @todo this is primitive, temporary: reuse SQL parser
     //QString operatorStr, argStr;
-    KDbExpression* e = 0;
+    KDbExpression e;
     const QString str = newValue.toString().trimmed();
     KDbToken token;
     QString field, table;
@@ -1688,18 +1690,17 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KDbRecordData *da
             result->msg = xi18n("Could not set criteria for empty record");
     }
     else if (str.isEmpty()
-             || (e = parseExpressionString(str, &token, true/*allowRelationalOperator*/)))
+             || (e = parseExpressionString(str, &token, true/*allowRelationalOperator*/)).isValid())
     {
-        if (e) {
+        if (e.isValid()) {
             QString tokenStr;
-            if (token.value() != '=') {
+            if (token != '=') {
                 tokenStr = token.toString() + " ";
             }
             if (set) {
-                (*set)["criteria"] = QString(tokenStr + e->toString(0)); //print it prettier
+                (*set)["criteria"] = QString(tokenStr + e.toString(0).toString()); //print it prettier
             }
             //this is just checking: destroy expr. object
-            delete e;
         } else if (set && str.isEmpty()) {
             (*set)["criteria"] = QVariant(); //clear it
         }
@@ -1840,7 +1841,7 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KPropertySet& set, KPropert
         const QVariant& v = property.value();
         if (!v.toString().trimmed().isEmpty() && !KDb::isIdentifier(v.toString())) {
             KMessageBox::sorry(this,
-                               KexiUtils::identifierExpectedMessage(property.caption(), v.toString()));
+                KDb::identifierExpectedMessage(property.caption(), v.toString()));
             property.resetValue();
         }
         if (pname == "alias") {

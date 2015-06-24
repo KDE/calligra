@@ -119,10 +119,11 @@ KDbObject* KexiQueryPart::loadSchemaObject(
     bool *ownedByWindow)
 {
     KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
-    QString sqlText;
-    if (!loadDataBlock(window, &sqlText, "sql")) {
+    QString sql;
+    if (!loadDataBlock(window, &sql, "sql")) {
         return 0;
     }
+    KDbEscapedString sqlText(sql);
     KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     parser->parse(sqlText);
     KDbQuerySchema *query = parser->query();
@@ -198,7 +199,7 @@ KexiQueryPart::TempData::TempData(KexiWindow* window, KDbConnection *conn)
 
 KexiQueryPart::TempData::~TempData()
 {
-    conn->unregisterForTablesSchemaChanges(*this);
+    conn->unregisterForTablesSchemaChanges(this);
 }
 
 void KexiQueryPart::TempData::clearQuery()
@@ -211,7 +212,7 @@ void KexiQueryPart::TempData::clearQuery()
 
 void KexiQueryPart::TempData::unregisterForTablesSchemaChanges()
 {
-    conn->unregisterForTablesSchemaChanges(*this);
+    conn->unregisterForTablesSchemaChanges(this);
 }
 
 void KexiQueryPart::TempData::registerTableSchemaChanges(KDbQuerySchema *q)
@@ -219,7 +220,7 @@ void KexiQueryPart::TempData::registerTableSchemaChanges(KDbQuerySchema *q)
     if (!q)
         return;
     foreach(KDbTableSchema* table, *q->tables()) {
-        conn->registerForTableSchemaChanges(*this, *table);
+        conn->registerForTableSchemaChanges(this, table);
     }
 }
 

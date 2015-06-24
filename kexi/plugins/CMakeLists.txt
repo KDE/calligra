@@ -4,7 +4,7 @@ if (KEXI_MOBILE)
 
 else ()
   add_subdirectory( tables )
-  # KEXI3 TODO add_subdirectory( queries )
+  add_subdirectory( queries )
   # KEXI3 TODO add_subdirectory( forms )
   # KEXI3 TODO add_subdirectory( reports )
   # KEXI3 TODO add_subdirectory( migration )
