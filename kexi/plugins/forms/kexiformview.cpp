@@ -696,7 +696,7 @@ void KexiFormView::initDataSource()
             QList<QVariant> params;
             {
                 KexiUtils::WaitCursorRemover remover;
-                params = KexiQueryParameters::getParameters(this, *conn->driver(), *d->query, ok);
+                params = KexiQueryParameters::getParameters(this, *conn->driver(), d->query, &ok);
             }
             if (ok) //input cancelled
                 d->cursor = conn->executeQuery(*d->query, params);
