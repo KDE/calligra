@@ -39,7 +39,6 @@
 #include <KDbUtils>
 #include <KDbConnection>
 
-#include <kpluginfactory.h>
 #include <KLocalizedString>
 
 

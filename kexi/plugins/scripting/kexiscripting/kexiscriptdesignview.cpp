@@ -25,9 +25,9 @@
 #include <KexiIcon.h>
 #include <KexiMainWindowIface.h>
 
-#include <kross/core/manager.h>
-#include <kross/core/action.h>
-#include <kross/core/interpreter.h>
+#include <Kross/Manager>
+#include <Kross/Action>
+#include <Kross/Interpreter>
 
 #include <KDbConnection>
 

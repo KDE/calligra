@@ -20,7 +20,7 @@
 #ifndef IMPORTTABLEWIZARD_H
 #define IMPORTTABLEWIZARD_H
 
-#include <kassistantdialog.h>
+#include <KAssistantDialog>
 
 #include <QPointer>
 

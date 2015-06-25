@@ -37,7 +37,7 @@
 #include <QModelIndex>
 #include <QElapsedTimer>
 
-#include <kassistantdialog.h>
+#include <KAssistantDialog>
 
 #include <KDbTristate>
 #include <KDbConnection>
