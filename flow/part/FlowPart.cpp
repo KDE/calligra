@@ -33,7 +33,7 @@
 FlowPart::FlowPart(QObject *parent)
     : KoPart(parent)
 {
-    setTemplateType("flow_template");
+    setTemplatesResourcePath(QLatin1String("flow/templates/"));
     setComponentData(FlowFactory::componentData());
 }
 

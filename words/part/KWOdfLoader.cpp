@@ -47,6 +47,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoApplication.h>
 #include <KoSectionManager.h>
+#include <KoUnit.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>

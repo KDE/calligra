@@ -32,8 +32,6 @@
 
 #include <kpagedialog.h>
 
-#include <KoUnit.h>
-
 class KVBox;
 class QCheckBox;
 class QSpinBox;

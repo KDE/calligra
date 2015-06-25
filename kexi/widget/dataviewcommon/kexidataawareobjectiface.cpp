@@ -94,7 +94,7 @@ KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 void KexiDataAwareObjectInterface::clearVariables()
 {
     m_editor = 0;
-    m_rowEditing = false;
+    m_rowEditing = -1;
     m_newRowEditing = false;
     m_curRow = -1;
     m_curCol = -1;
@@ -471,6 +471,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                                                      CursorPositionFlags flags)
 {
     int newrow = row;
+
     int newcol = col;
 
     if (rowCount() <= 0) {
@@ -527,7 +528,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
 
         // cursor moved to other row: end of row editing
         bool newRowInserted = false;
-        if (m_rowEditing && m_curRow != newrow) {
+        if (m_rowEditing >= 0 && m_curRow != newrow) {
             newRowInserted = m_newRowEditing;
             if (m_acceptRowEdit_in_setCursorPosition_enabled
                 && !acceptRowEdit())
@@ -668,7 +669,7 @@ void KexiDataAwareObjectInterface::selectCellInternal(int previousRow, int previ
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-    if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit)
+    if (m_rowEditing == -1 || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit)
         return true;
     if (m_inside_acceptEditor) {
         m_internal_acceptsRowEditAfterCellAccepting = true;
@@ -716,7 +717,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
             //update current-item-iterator
             setCursorPosition(m_curRow, -1, ForceSetCursorPosition);
         }
-        m_rowEditing = false;
+        m_rowEditing = -1;
         m_newRowEditing = false;
         updateAfterAcceptRowEdit();
         kDebug() << "EDIT RECORD ACCEPTED:";
@@ -760,10 +761,10 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 {
     if (!hasData())
         return true;
-    if (!m_rowEditing)
+    if (m_rowEditing == -1)
         return true;
     cancelEditor();
-    m_rowEditing = false;
+    m_rowEditing = -1;
 
     m_alsoUpdateNextRow = m_newRowEditing;
     if (m_newRowEditing) {
@@ -1388,15 +1389,18 @@ KexiDB::TableViewColumn* KexiDataAwareObjectInterface::column(int column)
 
 bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol)
 {
-    if (m_rowEditing && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
+    if (m_rowEditing >= 0 && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
         return m_data->rowEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
     }
     return false;
 }
 
-const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useDefaultValueIfPossible)
+const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int row, int col,
+                                                              bool useDefaultValueIfPossible)
 {
-    if (m_rowEditing && m_data->rowEditBuffer()) {
+    KexiDB::RecordData *currentItem = row < int(m_data->count()) ? m_data->at(row) : m_insertItem;
+    //kDebug() << m_insertItem << m_currentItem << currentItem;
+    if (m_rowEditing >= 0 && row == m_rowEditing && m_data->rowEditBuffer()) {
         KexiDB::TableViewColumn* tvcol = column(col);
         if (tvcol->isDBAware()) {
             //get the stored value
@@ -1405,7 +1409,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
                 kWarning() << "fieldNumberForColumn(m_curCol) < 0";
                 return 0;
             }
-            const QVariant *storedValue = &m_currentItem->at(realFieldNumber);
+            const QVariant *storedValue = &currentItem->at(realFieldNumber);
 
             //db-aware data: now, try to find a buffered value (or default one)
             const QVariant *cv = m_data->rowEditBuffer()->at(*tvcol->columnInfo(),
@@ -1425,7 +1429,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
         kWarning() << "fieldNumberForColumn(m_curCol) < 0";
         return 0;
     }
-    return &m_currentItem->at(realFieldNumber);
+    return &currentItem->at(realFieldNumber);
 }
 
 void KexiDataAwareObjectInterface::startEditOrToggleValue()
@@ -1460,7 +1464,7 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
 {
     if (!isInsertingEnabled())
         return;
-    if (m_rowEditing) {
+    if (m_rowEditing >= 0) {
         if (!acceptRowEdit())
             return;
     }
@@ -1478,12 +1482,13 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
     }
     CreateEditorFlags flags = DefaultCreateEditorFlags;
     flags ^= EnsureCellVisible;
-    createEditor(rowCount(), columnToSelect, QString(), flags);
+    const int rowToAdd = rowCount();
+    createEditor(rowToAdd, columnToSelect, QString(), flags);
     if (m_editor)
         m_editor->setFocus();
     const bool orig_acceptRowEdit_in_setCursorPosition_enabled = m_acceptRowEdit_in_setCursorPosition_enabled;
     m_acceptRowEdit_in_setCursorPosition_enabled = false;
-    setCursorPosition(rowCount(), columnToSelect);
+    setCursorPosition(rowToAdd, columnToSelect);
     m_acceptRowEdit_in_setCursorPosition_enabled = orig_acceptRowEdit_in_setCursorPosition_enabled;
 }
 
@@ -1890,15 +1895,22 @@ tristate KexiDataAwareObjectInterface::findNextAndReplace(
     return false;
 }
 
-void KexiDataAwareObjectInterface::setRowEditing(bool set)
+void KexiDataAwareObjectInterface::setRowEditing(int row)
 {
-    if (set == m_rowEditing)
+    if (row == m_rowEditing) {
         return;
-    m_rowEditing = set;
-    if (m_rowEditing)
-        emit rowEditStarted(m_curRow);
-    else
-        emit rowEditTerminated(m_curRow);
+    }
+    if (m_rowEditing >= 0 && row >= 0) {
+        kWarning() << "Cannot set editing for row" << row << "before editing of row"
+                   << m_rowEditing << "is accepted or cancelled";
+        return;
+    }
+    m_rowEditing = row;
+    if (row >= 0) {
+        emit rowEditStarted(row);
+    } else {
+        emit rowEditTerminated(row);
+    }
 }
 
 void KexiDataAwareObjectInterface::showEditorContextMessage(

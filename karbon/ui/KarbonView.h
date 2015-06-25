@@ -36,7 +36,6 @@
 
 #include <KoView.h>
 #include <QPointF>
-#include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <karbonui_export.h>
@@ -48,6 +47,7 @@ class QResizeEvent;
 class KarbonDocument;
 
 class KoColor;
+class KoUnit;
 
 
 class KarbonPart;

@@ -30,6 +30,7 @@
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 #include "KoCanvasBase.h"
+#include <KoUnit.h>
 
 #include <QApplication>
 #include <QTextBlock>

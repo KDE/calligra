@@ -35,7 +35,7 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
-#include "KoUnit.h"
+#include <KoUnit.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>

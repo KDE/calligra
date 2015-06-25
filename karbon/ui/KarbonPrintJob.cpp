@@ -25,6 +25,7 @@
 #include "KarbonDocument.h"
 
 #include <KoShapeManager.h>
+#include <KoUnit.h>
 
 #include <QPainter>
 

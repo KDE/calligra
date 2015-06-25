@@ -69,6 +69,7 @@
 #include <KoProgressUpdater.h>
 #include <KoInteractionTool.h>
 #include <KoView.h>
+#include <KoUnit.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"

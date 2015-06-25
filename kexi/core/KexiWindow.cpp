@@ -804,6 +804,8 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
         if (!project->createIdForPart(*part()->info()))
             return false;
     }
+    // clear 'dirty' for old window
+    setDirty(false);
     // for now this Window has new item assigned
     d->item = item;
 

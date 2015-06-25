@@ -235,8 +235,8 @@ public:
         return m_spreadSheetMode;
     }
 
-    /*! \return true if currently selected row is edited. */
-    inline bool rowEditing() const {
+    /*! \return number of currently edited row or -1. */
+    inline int rowEditing() const {
         return m_rowEditing;
     }
 
@@ -441,7 +441,7 @@ public:
 
     bool hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol);
 
-    const QVariant* bufferedValueAt(int col, bool useDefaultValueIfPossible = true);
+    const QVariant* bufferedValueAt(int row, int col, bool useDefaultValueIfPossible = true);
 
     //! \return a type of column \a col - one of KexiDB::Field::Type
     int columnType(int col);
@@ -781,12 +781,12 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
-    /*! Changes 'row editing' flag, true if currently selected row is edited.
+    /*! Changes 'row editing' >=0 there's currently edited row, else -1.
      * Can be reimplemented with calling superclass setRowEditing()
      * Sends rowEditStarted(int) signal.
      * @see rowEditing() rowEditStarted().
      */
-    void setRowEditing(bool set);
+    void setRowEditing(int row);
 
     /*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
      message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
@@ -980,8 +980,8 @@ protected:
     QVector<uint> m_indicesForVisibleValues;
 
 private:
-    /*! true if currently selected row is edited */
-    bool m_rowEditing;
+    /*! >= 0 if a row is edited */
+    int m_rowEditing;
 
     bool m_lengthExceededMessageVisible;
 

@@ -57,7 +57,7 @@ public:
     KexiNameDialogValidator *validator;
     bool checkIfObjectExists;
     bool allowOverwriting;
-    bool *overwriteNeeded;
+    bool overwriteNeeded;
 };
 
 KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
@@ -169,8 +169,8 @@ bool KexiNameDialog::canOverwrite()
                   yesItem, KGuiItem(i18n("&Choose Other Name...")),
                   QString(),
                   KMessageBox::Notify | KMessageBox::Dangerous);
-    if (d->overwriteNeeded && res == KMessageBox::Yes) {
-        *d->overwriteNeeded = true;
+    if (res == KMessageBox::Yes) {
+        d->overwriteNeeded = true;
     }
     return res == KMessageBox::Yes;
 }
@@ -218,15 +218,17 @@ int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
     d->project = &project;
     d->part = &part;
     d->checkIfObjectExists = true;
-    d->overwriteNeeded = overwriteNeeded;
-    if (d->overwriteNeeded) {
-        *d->overwriteNeeded = false;
+    if (overwriteNeeded) {
+        *overwriteNeeded = false;
+        d->overwriteNeeded = false;
     }
     int res = exec();
     d->project = 0;
     d->part = 0;
     d->checkIfObjectExists = false;
-    d->overwriteNeeded = 0;
+    if (overwriteNeeded) {
+        *overwriteNeeded = d->overwriteNeeded;
+    }
     return res;
 }
 

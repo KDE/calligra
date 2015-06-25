@@ -207,8 +207,9 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
     if (mode == Kexi::DesignViewMode || mode == Kexi::DataViewMode) {
         QString sqlText = d->editor->text().trimmed();
         KexiQueryPart::TempData * temp = tempData();
-        if (sqlText.isEmpty()) {
-            //special case: empty SQL text
+        const bool sqlTextIsEmpty = sqlText.isEmpty();
+        if (sqlTextIsEmpty && mode == Kexi::DesignViewMode) {
+            //special case: empty SQL text, allow to switch to the design view
             if (temp->query()) {
                 temp->setQueryChangedInPreviousView(true); //query changed
                 temp->setQuery(0);
@@ -218,13 +219,15 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
             const bool designViewWasVisible = window()->viewForMode(mode) != 0;
             //should we check SQL text?
             if (designViewWasVisible
+                    && !sqlTextIsEmpty //for empty text always show error
                     && !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
-                    && compareSQL(d->origStatement, d->editor->text())) {
+                    && compareSQL(d->origStatement, d->editor->text()))
+            {
                 //statement unchanged! - nothing to do
                 temp->setQueryChangedInPreviousView(false);
             } else {
                 //yes: parse SQL text
-                if (!slotCheckQuery()) {
+                if (sqlTextIsEmpty || !slotCheckQuery()) {
                     if (KMessageBox::No == KMessageBox::warningYesNo(this,
                             "<p>" + i18n("The query you entered is incorrect.")
                             + "</p><p>" + i18n("Do you want to cancel any changes made to this SQL text?") + "</p>"
@@ -283,7 +286,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
             d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
         }
     }
-    if (d->origStatement.isEmpty()) {
+    if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
         //no valid query delivered or query has not been modified:
         // just load sql text, no matter if it's valid
         if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))

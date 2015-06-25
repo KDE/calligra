@@ -89,7 +89,7 @@ KexiTableScrollArea::Appearance::Appearance(QWidget *widget)
         baseColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
         textColor = KColorScheme(QPalette::Active, KColorScheme::View).foreground().color()/*QPalette::Base*/;
         QStyleOptionViewItemV4 option;
-        option.init(widget);
+        option.initFrom(widget);
         const int gridHint = widget->style()->styleHint(QStyle::SH_Table_GridLineColor, &option, widget);
         gridColor = static_cast<QRgb>(gridHint);
         emptyAreaColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
@@ -671,7 +671,7 @@ void KexiTableScrollArea::paintCell(QPainter* p, KexiDB::RecordData *record, int
             } else {
                 //we're displaying values from edit buffer, if available
                 // this assignment will also get default value if there's no actual value set
-                cellValue = *bufferedValueAt(col);
+                cellValue = *bufferedValueAt(row, col);
             }
         } else {
             cellValue = record->at(col);
@@ -1119,7 +1119,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
             e->accept();
             return;
         }
-    } else if (rowEditing()) {// if a row is in edit mode, do some special stuff
+    } else if (rowEditing() >= 0) {// if a row is in edit mode, do some special stuff
         if (shortCutPressed(e, "data_save_row")) {
             kDebug() << "shortCutPressed!!!";
             acceptRowEdit();
@@ -1174,7 +1174,7 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
                 printable = true; //just space key
         }
     } else if (k == Qt::Key_Escape) {
-        if (nobtn && rowEditing()) {
+        if (nobtn && rowEditing() >= 0) {
             cancelRowEdit();
             return;
         }
@@ -1331,36 +1331,42 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
                                        CreateEditorFlags flags)
 {
     //kDebug() << "addText:" << addText << "removeOld:" << removeOld;
+    if (row < 0) {
+        kWarning() << "ROW NOT SPECIFIED!" << row;
+        return;
+    }
     if (isReadOnly()) {
         kDebug() << "DATA IS READ ONLY!";
         return;
     }
-
     if (m_data->column(col)->isReadOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
         kDebug() << "COL IS READ ONLY!";
         return;
     }
-
-    const bool startRowEdit = !rowEditing(); //remember if we're starting row edit
-
-    if (!rowEditing()) {
+    if (rowEditing() >= 0 && row != rowEditing()) {
+        if (!acceptRowEdit()) {
+            return;
+        }
+    }
+    const bool startRowEdit = rowEditing() == -1; //remember if we're starting row edit
+    if (startRowEdit) {
         //we're starting row editing session
         m_data->clearRowEditBuffer();
-
-        setRowEditing(true);
+        setRowEditing(row);
         //indicate on the vheader that we are editing:
-        if (isInsertingEnabled() && m_currentItem == m_insertItem) {
+        if (isInsertingEnabled() && row == rowCount()) {
             //we should know that we are in state "new record editing"
             m_newRowEditing = true;
-            beginInsertItem(m_currentItem, row);
+            KexiDB::RecordData *insertItem = m_insertItem;
+            beginInsertItem(insertItem, row);
             //'insert' row editing: show another row after that:
-            m_data->append(m_insertItem);
+            m_data->append(insertItem);
             //new empty 'inserting' item
             m_insertItem = m_data->createItem();
-            endInsertItem(m_currentItem, row);
+            endInsertItem(insertItem, row);
             updateWidgetContentsSize();
             //refr. current and next row
-            d->scrollAreaWidget->update(columnPos(0), rowPos(row),
+            d->scrollAreaWidget->update(columnPos(col), rowPos(row),
                                         viewport()->width(), d->rowHeight*2);
             if (flags & EnsureCellVisible) {
                 ensureVisible(columnPos(col), rowPos(row + 1) + d->rowHeight - 1,
@@ -1376,7 +1382,7 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
     if (!editorWidget)
         return;
 
-    m_editor->setValue(*bufferedValueAt(col, !(flags & ReplaceOldValue)/*useDefaultValueIfPossible*/),
+    m_editor->setValue(*bufferedValueAt(row, col, !(flags & ReplaceOldValue)/*useDefaultValueIfPossible*/),
                        addText, flags & ReplaceOldValue);
     if (m_editor->hasFocusableWidget()) {
         editorWidget->move(columnPos(col), rowPos(row));
@@ -1388,7 +1394,7 @@ void KexiTableScrollArea::createEditor(int row, int col, const QString& addText,
 
     if (startRowEdit) {
         m_navPanel->showEditingIndicator(true); //this will allow to enable 'next' btn
-        emit rowEditStarted(row);
+        //emit rowEditStarted(row);
     }
     m_editor->installListener(this);
 }
@@ -1702,7 +1708,7 @@ QSize KexiTableScrollArea::tableSize() const
         }
 #endif
 
-//  kDebug() << rowCount()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
+//  kDebug() << rowCount()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< rowEditing() << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
 kDebug() << s << "cw(last):" << columnWidth(columnCount() - 1);
 #endif
