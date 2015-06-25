@@ -20,7 +20,7 @@
 #include "kexicharencodingcombobox.h"
 #include <kexiutils/utils.h>
 
-#include <kcharsets.h>
+#include <KCharsets>
 #include <KLocalizedString>
 
 #include <QTextCodec>

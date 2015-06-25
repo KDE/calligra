@@ -25,6 +25,8 @@ target_link_libraries(kexi_csvimportexportplugin
 
         KDb
 
+        KF5::Codecs
+
         Qt5::Gui
 )
 

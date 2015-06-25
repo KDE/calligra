@@ -23,7 +23,8 @@
 
 #include "kexiformdataiteminterface.h"
 #include <formeditor/FormWidgetInterface.h>
-#include <knuminput.h>
+
+#include <QDoubleSpinBox>
 
 //! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox,

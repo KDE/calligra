@@ -26,7 +26,7 @@
 
 #include <KDbTristate>
 
-#include <kassistantdialog.h>
+#include <KAssistantDialog>
 
 #include <QLabel>
 

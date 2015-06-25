@@ -26,8 +26,6 @@
 #include <KDbLongLongValidator>
 
 #include <KColorScheme>
-#include <kcompletionbox.h>
-#include <knumvalidator.h>
 
 #include <QPainter>
 #include <QApplication>

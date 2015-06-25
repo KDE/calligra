@@ -59,12 +59,12 @@
 #include <KDbUtils>
 
 #include <KMessageBox>
-#include <kcharsets.h>
-#include <knuminput.h>
+#include <KCharsets>
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KGuiItem>
 
+#include <QSpinBox>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QLabel>
