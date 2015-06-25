@@ -24,7 +24,7 @@
 #include <QMetaObject>
 #include <QAction>
 
-#include <kross/core/manager.h>
+#include <Kross/Manager>
 
 #include <KDbConnection>
 

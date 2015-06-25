@@ -21,7 +21,7 @@
 
 #include "widgetfactory.h"
 
-#include <keditlistwidget.h>
+#include <KEditListWidget>
 #include <KLocalizedString>
 
 #include "richtextdialog.h"

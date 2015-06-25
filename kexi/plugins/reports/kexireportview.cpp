@@ -33,8 +33,8 @@
 #include <KoReportPreRenderer>
 #include "krscriptfunctions.h"
 
-#include <kio/netaccess.h>
-#include <krun.h>
+#include <KIO/NetAccess>
+#include <KRun>
 #include <KActionMenu>
 #include <KMessageBox>
 

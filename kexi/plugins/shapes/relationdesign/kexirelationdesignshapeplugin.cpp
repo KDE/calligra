@@ -20,7 +20,6 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesigntoolfactory.h"
 #include <KoShapeRegistry.h>
-#include <kpluginfactory.h>
 #include <KoToolRegistry.h>
 
 K_PLUGIN_FACTORY(KexiRelationDesignShapePluginFactory, registerPlugin<KexiRelationDesignShapePlugin>();)
