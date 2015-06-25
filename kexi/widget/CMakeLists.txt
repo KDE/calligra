@@ -95,6 +95,7 @@ target_link_libraries(kexiextendedwidgets
         KF5::TextWidgets # KTextEdit
         KF5::KIOFileWidgets # KFileWidget
         KF5::TextEditor
+        KF5::Codecs # KCharsets
 )
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

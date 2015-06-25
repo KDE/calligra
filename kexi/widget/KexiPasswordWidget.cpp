@@ -32,7 +32,7 @@
 
 #include <KComboBox>
 #include <KIconLoader>
-#include <ktitlewidget.h>
+#include <KTitleWidget>
 
 #include "ui_KexiPasswordWidget.h"
 

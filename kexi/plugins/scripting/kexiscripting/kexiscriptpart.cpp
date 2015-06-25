@@ -30,9 +30,8 @@
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 
-#include <kross/core/manager.h>
-#include <kross/core/action.h>
-#include <kross/core/actioncollection.h>
+#include <Kross/Manager>
+#include <Kross/ActionCollection>
 
 #include <KConfig>
 #include <KConfigGroup>

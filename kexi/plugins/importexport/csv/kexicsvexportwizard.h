@@ -23,9 +23,9 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KAssistantDialog>
 
 #include "kexicsvexport.h"
-#include <kassistantdialog.h>
 
 class QCheckBox;
 class QGroupBox;

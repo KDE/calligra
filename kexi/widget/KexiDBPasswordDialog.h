@@ -24,7 +24,7 @@
 
 #include <KDbTristate>
 
-#include <kpassworddialog.h>
+#include <KPasswordDialog>
 
 class KDbConnectionData;
 class KexiProjectData;

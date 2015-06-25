@@ -22,7 +22,7 @@
 
 #include "kexiscripteditor.h"
 
-#include <kross/core/action.h>
+#include <Kross/Action>
 
 /// \internal d-pointer class
 class KexiScriptEditor::Private
