@@ -204,6 +204,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 KWView::~KWView()
 {
+    KoToolManager::instance()->removeCanvasController(m_gui->canvasController());
+
     m_canvas = 0;
 }
 

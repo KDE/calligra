@@ -309,7 +309,7 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
+int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
 
@@ -425,9 +425,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupContextHelp();
         setupPropertyEditor();
     }
-
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
@@ -1360,15 +1357,17 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
-    d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
-    d->tabbedToolBar->showTab("data");
-    d->tabbedToolBar->showTab("external");
-    d->tabbedToolBar->showTab("tools");
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
+        d->tabbedToolBar->showTab("data");
+        d->tabbedToolBar->showTab("external");
+        d->tabbedToolBar->showTab("tools");
+        d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
+        d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
 
-    // make sure any tab is activated
-    d->tabbedToolBar->setCurrentTab(0);
+        // make sure any tab is activated
+        d->tabbedToolBar->setCurrentTab(0);
+    }
     return true;
 }
 
@@ -1576,7 +1575,9 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 #endif
 
     updateAppCaption();
-    d->tabbedToolBar->hideMainMenu();
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->hideMainMenu();
+    }
 
     qApp->processEvents();
     emit projectOpened();
@@ -1723,6 +1724,8 @@ void KexiMainWindow::setupMainWidget()
         connect(d->action_view_global_search, SIGNAL(triggered()),
                 d->tabbedToolBar, SLOT(activateSearchLineEdit()));
         tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+        d->tabbedToolBar->hideTab("form"); //temporarily until createToolbar is split
+        d->tabbedToolBar->hideTab("report"); //temporarily until createToolbar is split
     }
     else {
         d->tabbedToolBar = 0;
@@ -2261,10 +2264,14 @@ tristate KexiMainWindow::createNewProject(const KexiProjectData &projectData)
                 prj->data()->connectionData(),
                 prj->data()->databaseName());
         Kexi::recentProjects()->addProjectData(*prj->data());
-        d->tabbedToolBar->hideMainMenu();
+        if (d->tabbedToolBar) {
+            d->tabbedToolBar->hideMainMenu();
+        }
         return res;
     }
-    d->tabbedToolBar->hideMainMenu();
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->hideMainMenu();
+    }
     d->prj = prj.take();
     setupProjectNavigator();
     d->prj->data()->setLastOpened(QDateTime::currentDateTime());
@@ -2432,7 +2439,9 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     if (!ok) {
         d->showStartProcessMsg(args);
     }
-    d->tabbedToolBar->hideMainMenu();
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->hideMainMenu();
+    }
     return ok;
 }
 
@@ -4135,7 +4144,9 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
-    d->tabbedToolBar->addSearchableModel(model);
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->addSearchableModel(model);
+    }
 }
 
 void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
@@ -4146,6 +4157,9 @@ void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
 
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 {
+    if (!d->tabbedToolBar) {
+        return;
+    }
     d->tabbedToolBar->showTab(tabName);
     if (currentWindow() && currentWindow()->partItem()
         && currentWindow()->partItem()->identifier() != 0) // for unstored items id can be < 0
@@ -4186,6 +4200,9 @@ void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::Vi
 
 void KexiMainWindow::activateDesignTab(const QString &partClass)
 {
+    if (!d->tabbedToolBar) {
+        return;
+    }
     switch (d->prj->idForClass(partClass)) {
     case KexiPart::FormObjectType:
         d->tabbedToolBar->setCurrentTab("form");
@@ -4199,6 +4216,9 @@ void KexiMainWindow::activateDesignTab(const QString &partClass)
 
 void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
 {
+    if (!d->tabbedToolBar) {
+        return;
+    }
     const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
     //kDebug() << partClass << viewMode << tabToActivate;
 
@@ -4212,6 +4232,9 @@ void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::V
 
 void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
 {
+    if (!d->tabbedToolBar) {
+        return;
+    }
     //kDebug() << itemId << partClass;
     if (   itemId > 0
         && d->tabbedToolBar->currentWidget())
@@ -4235,7 +4258,7 @@ void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
 
 void KexiMainWindow::showDesignTabIfNeeded(int previousItemId)
 {
-    if (d->insideCloseWindow)
+    if (d->insideCloseWindow && d->tabbedToolBar)
         return;
     if (currentWindow()) {
         restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
@@ -4262,17 +4285,18 @@ void KexiMainWindow::toggleFullScreen(bool isFullScreen)
 {
     static bool isTabbarRolledDown;
 
-    if (isFullScreen) {
-        isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
-        if (isTabbarRolledDown) {
-            d->tabbedToolBar->toggleRollDown();
-        }
-    } else {
-        if (isTabbarRolledDown && d->tabbedToolBar->isRolledUp()) {
-            d->tabbedToolBar->toggleRollDown();
+    if (d->tabbedToolBar) {
+        if (isFullScreen) {
+            isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+            if (isTabbarRolledDown) {
+                d->tabbedToolBar->toggleRollDown();
+            }
+        } else {
+            if (isTabbarRolledDown && d->tabbedToolBar->isRolledUp()) {
+                d->tabbedToolBar->toggleRollDown();
+            }
         }
     }
-
     KToggleFullScreenAction::setFullScreen(this, isFullScreen);
 }
 
