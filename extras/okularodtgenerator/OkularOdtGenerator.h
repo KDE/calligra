@@ -33,6 +33,9 @@ class KWDocument;
 
 class OkularOdtGenerator : public Okular::Generator
 {
+    Q_OBJECT
+    Q_INTERFACES( Okular::Generator )
+
 public:
     OkularOdtGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdtGenerator();

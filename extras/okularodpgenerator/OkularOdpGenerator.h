@@ -33,6 +33,9 @@ class KoPADocument;
 
 class OkularOdpGenerator : public Okular::Generator
 {
+    Q_OBJECT
+    Q_INTERFACES( Okular::Generator )
+
 public:
     OkularOdpGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdpGenerator();
