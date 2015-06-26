@@ -23,6 +23,7 @@
   <name xml:lang="pt-BR">Flow</name>
   <name xml:lang="sk">Flow</name>
   <name xml:lang="sv">Flow</name>
+  <name xml:lang="tr">Akış</name>
   <name xml:lang="uk">Flow</name>
   <name xml:lang="x-test">xxFlowxx</name>
   <summary>Flowchart &amp; Diagram Editing</summary>
@@ -42,6 +43,7 @@
   <summary xml:lang="pt-BR">Edição de fluxogramas e diagramas</summary>
   <summary xml:lang="sk">Vývojový diagram &amp; úprava diagramu</summary>
   <summary xml:lang="sv">Flödesdiagram och diagramredigering</summary>
+  <summary xml:lang="tr">Akış &amp; Çizimi Düzenleme</summary>
   <summary xml:lang="uk">Редагування блок-схем і діаграм</summary>
   <summary xml:lang="x-test">xxFlowchart &amp; Diagram Editingxx</summary>
   <description>
@@ -64,6 +66,7 @@
     <p xml:lang="pt-BR">Calligra Flow é um aplicativo para criação de diagramas e fluxogramas fácil de usar e com uma forte integração com as outros aplicativos do Calligra. Permite-lhe criar diagramas de rede, organogramas, fluxogramas, entre outros.</p>
     <p xml:lang="sk">Calligra Flow je ľahko použiteľná aplikácia na diagramy a vývojové diagramy s úzkou integráciou s inými aplikáciami Calligra. Umožní vám vytvárať sieťové diagramy, organizačné schémy, vývojové diagramy a viac.</p>
     <p xml:lang="sv">Calligra Flow är ett lättanvänt program för att skapa diagram och flödesdiagram med nära integration med övriga program i Calligra. Det möjliggör att skapa nätverksdiagram, organisationsdiagram, flödesdiagram med mera.</p>
+    <p xml:lang="tr">Calligra Akış diğer Calligra uygulamalarıyla tümleşik çalışan, kolay kullanılabilir bir çizelge ve akış diyagramı uygulamasıdır. Ağ diyagramları, organizasyon çizimleri, akış diyagramları ve daha fazlasını oluşturmanıza izin verir.</p>
     <p xml:lang="uk">Calligra Flow — проста у користуванні програма для створення діаграм та блок-схем з тісною інтеграцією з іншими програмами Calligra. За її допомогою ви можете створювати мережеві діаграми, організаційні діаграми, блок-схеми тощо.</p>
     <p xml:lang="x-test">xxCalligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.xx</p>
     <p>Features:</p>
@@ -86,6 +89,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="tr">Özellikleri:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
@@ -106,6 +110,7 @@
       <li xml:lang="pt-BR">Criar diagramas de rede, organogramas, fluxogramas, entre outros</li>
       <li xml:lang="sk">Vytváranie sieťových diagramov, organizačných schém, vývojových diagramov a viac</li>
       <li xml:lang="sv">Skapa nätverksdiagram, organisationsdiagram, flödesdiagram med mera</li>
+      <li xml:lang="tr">Ağ diyagramları, organizasyon çizimleri, akış diyagramları ve daha fazlasını oluşturun</li>
       <li xml:lang="uk">Створення мережевих діаграм, організаційних діаграм, блок-схем тощо.</li>
       <li xml:lang="x-test">xxCreate network diagrams, organisation charts, flowcharts and morexx</li>
       <li>Scriptable stencil creation using Python</li>
@@ -125,6 +130,7 @@
       <li xml:lang="pt-BR">Criação de formas programáveis usando Python</li>
       <li xml:lang="sk">Skriptovateľné vytváranie šablón pomocou Pythonu</li>
       <li xml:lang="sv">Möjlighet att skapa stenciler med skript genom att använda Python</li>
+      <li xml:lang="tr">Python betik şablonlarını kullanın</li>
       <li xml:lang="uk">Створення шаблонів на основі скриптів мовою Python.</li>
       <li xml:lang="x-test">xxScriptable stencil creation using Pythonxx</li>
       <li>Support for Dia stencils.</li>
@@ -144,6 +150,7 @@
       <li xml:lang="pt-BR">Suporte para formas do Dia.</li>
       <li xml:lang="sk">Podpora pre Dia šablóny.</li>
       <li xml:lang="sv">Stöd för Dia-stenciler.</li>
+      <li xml:lang="tr">Dia şablonları desteği.</li>
       <li xml:lang="uk">Підтримка шаблонів Dia.</li>
       <li xml:lang="x-test">xxSupport for Dia stencils.xx</li>
     </ul>
