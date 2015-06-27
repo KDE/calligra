@@ -68,6 +68,7 @@
 #include <KoTextEditor.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
+#include <KoGuidesData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
