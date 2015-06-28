@@ -41,8 +41,8 @@ private Q_SLOTS:
     void pushSectionStart(int num, KoSection *sec, KoTextEditor &editor);
     void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor &editor);
 
-    void testDeleteSectionHandling_data();
-    void testDeleteSectionHandling();
+    void testDeleteSectionHandlingFl_data();
+    void testDeleteSectionHandlingFl();
 };
 
 #endif // TEST_KO_TEXT_EDITOR_H
