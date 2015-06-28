@@ -42,6 +42,26 @@
 namespace KPlato
 {
 
+QString CalendarDay::stateToString( int st, bool trans )
+{
+    return
+        ( st == None ) ?
+            (trans ? i18n( "Undefined" ) : QLatin1String( "Undefined" )) :
+        ( st == NonWorking ) ?
+            (trans ? i18n( "Non-working" ) : QLatin1String( "Non-working" )) :
+        ( st == Working ) ?
+            (trans ?  i18n( "Working" ) : QLatin1String( "Working" )) :
+        QString();
+}
+
+QStringList CalendarDay::stateList( bool trans )
+{
+    QStringList lst;
+    return trans
+        ? lst << i18n( "Undefined" ) << i18n( "Non-working" ) << i18n( "Working" )
+        : lst << QLatin1String("Undefined") << QLatin1String("Non-working") << QLatin1String("Working");
+}
+
 /////   CalendarDay   ////
 CalendarDay::CalendarDay()
     : m_date(),
