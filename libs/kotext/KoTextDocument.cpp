@@ -405,8 +405,7 @@ KoSectionModel* KoTextDocument::sectionModel()
     if (!resource.isValid()) {
         setSectionModel(new KoSectionModel(document())); // Using create on demand strategy
     }
-
-    return resource.value<KoSectionModel *>();
+    return m_document->resource(KoTextDocument::SectionModel, SectionModelUrl).value<KoSectionModel *>();
 }
 
 void KoTextDocument::setSectionModel(KoSectionModel *model)

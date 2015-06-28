@@ -116,7 +116,7 @@ private:
     friend class KoSectionModel;
     friend class KoTextLoader; // accesses setKeepEndBound() function
     friend class KoSectionEnd;
-    friend class TestKoTextEditor;
+    friend class TestKoTextEditor; // accesses setKeepEndBound() function
 };
 
 Q_DECLARE_METATYPE(KoSection *)

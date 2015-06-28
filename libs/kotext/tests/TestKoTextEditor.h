@@ -25,6 +25,7 @@
 class KoTextEditor;
 class KoSection;
 class KoSectionEnd;
+class TestDocument;
 
 class TestKoTextEditor : public QObject
 {
@@ -32,17 +33,26 @@ class TestKoTextEditor : public QObject
 
 private Q_SLOTS:
 
-    void testInsertInlineObject();
+//     void testInsertInlineObject();
     void testRemoveSelectedText();
 
-    bool checkEndings(const QVector<int> &needEndings, KoSectionEnd **secEnd, KoTextEditor &editor);
-    bool checkStartings(const QVector<int> &needStartings, KoSection **sec, KoTextEditor &editor);
+    bool checkEndings(const QVector<QString> &needEndings, KoTextEditor *editor);
+    bool checkStartings(const QVector<QString> &needStartings, KoTextEditor *editor);
+    void checkSectionFormattingLevel(
+	TestDocument *doc,
+	int neededBlockCount,
+	const QVector< QVector<QString> > &needStartings,
+	const QVector< QVector<QString> > &needEndings);
 
-    void pushSectionStart(int num, KoSection *sec, KoTextEditor &editor);
-    void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor &editor);
+    void pushSectionStart(int num, KoSection *sec, KoTextEditor *editor);
+    void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor *editor);
+    void formSectionTestDocument(TestDocument *doc);
 
-    void testDeleteSectionHandlingFl_data();
-    void testDeleteSectionHandlingFl();
+    void testBasicSectionCreation();
+    void testInsertSectionHandling(TestDocument *doc);
+
+    void testDeleteSectionHandling_data();
+    void testDeleteSectionHandling();
 };
 
 #endif // TEST_KO_TEXT_EDITOR_H
