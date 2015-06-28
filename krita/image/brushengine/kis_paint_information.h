@@ -75,16 +75,25 @@ public:
 
     /**
      * Create a new KisPaintInformation object.
-
      */
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation,
+                        qreal tangentialPressure,
+                        qreal perspective,
+                        qreal time,
+                        qreal speed);
+
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation);
+
     KisPaintInformation(const QPointF & pos = QPointF(),
-                        qreal pressure = PRESSURE_DEFAULT,
-                        qreal xTilt = 0.0,
-                        qreal yTilt = 0.0,
-                        qreal rotation = 0.0,
-                        qreal tangentialPressure = 0.0,
-                        qreal perspective = 1.0,
-                        qreal time = 0.0);
+                        qreal pressure = PRESSURE_DEFAULT);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -199,6 +208,7 @@ public:
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
             qreal perspective = 1.0,
+	    qreal speed = 0.0,
             int canvasrotation = 0);
     /**
      *Returns the canvas rotation if that has been given to the kispaintinformation.
@@ -208,7 +218,6 @@ public:
      *set the canvas rotation.
      */
     void setCanvasRotation(int rotation);
-    
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);
