@@ -107,6 +107,7 @@
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
+#include <k4aboutdata.h>
 
 #include <limits>
 
@@ -131,8 +132,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-// QT5TODO: no longer exists, but possibly also not needed. Check it.
-//     setComponentData(KWFactory::componentData());
+    setComponentName(KWFactory::componentData().componentName(), KWFactory::aboutData()->programName());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();

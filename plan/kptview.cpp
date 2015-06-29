@@ -66,6 +66,7 @@
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
 #include <khelpclient.h>
+#include <k4aboutdata.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -220,8 +221,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     doc->registerView( this );
 
-    // QT5TODO: perhaps no longer needed
-//     setComponentData( Factory::global() );
+    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
     if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else

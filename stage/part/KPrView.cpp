@@ -29,6 +29,7 @@
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kstatusbar.h>
+#include <k4aboutdata.h>
 
 #include <KoIcon.h>
 
@@ -227,8 +228,7 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
-// QT5TODO: no longer exists, but possibly also not needed. Check it.
-//     setComponentData(KPrFactory::componentData());
+    setComponentName(KPrFactory::componentData().componentName(), KPrFactory::aboutData()->programName());
     if (!koDocument()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
