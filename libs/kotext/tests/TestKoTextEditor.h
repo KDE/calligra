@@ -34,9 +34,21 @@ class TestKoTextEditor : public QObject
 
 private Q_SLOTS:
 
+    //FIXME: see cpp file: why it is commented out
 //     void testInsertInlineObject();
     void testRemoveSelectedText();
 
+    // Section tests
+    void testBasicSectionCreation();
+
+    void testInsertSectionHandling_data();
+    void testInsertSectionHandling();
+
+    void testDeleteSectionHandling_data();
+    void testDeleteSectionHandling();
+
+private:
+    // Sections stuff
     bool checkEndings(const QVector<QString> &needEndings, KoTextEditor *editor);
     bool checkStartings(const QVector<QString> &needStartings, KoTextEditor *editor);
     void checkSectionFormattingLevel(
@@ -49,11 +61,12 @@ private Q_SLOTS:
     void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor *editor);
     void formSectionTestDocument(TestDocument *doc);
 
-    void testBasicSectionCreation();
-    void testInsertSectionHandling(TestDocument *doc);
-
-    void testDeleteSectionHandling_data();
-    void testDeleteSectionHandling();
+    /**
+     * This one is used to generate unittest data.
+     * Use it if you are sure that current implementation is right
+     * or double check results.
+     */
+    void dumpSectionFormattingLevel(TestDocument *doc);
 };
 
 #endif // TEST_KO_TEXT_EDITOR_H

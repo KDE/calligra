@@ -109,7 +109,7 @@ const QString lorem(
     "deserunt mollit anim id est laborum.\n"
 );
 
-/* FIXME: all the meaning part of this test was commented by somebody
+/* FIXME: all the meaning part of this test was commented by boud in 2011
 void TestKoTextEditor::testInsertInlineObject()
 {
     QObject parent;
@@ -339,6 +339,54 @@ void TestKoTextEditor::checkSectionFormattingLevel(
     }
 }
 
+void TestKoTextEditor::dumpSectionFormattingLevel(TestDocument *doc)
+{
+    QString result;
+    result += QString("QTest::newRow(\"%1\") << %2\n").arg(QTest::currentDataTag()).arg(doc->m_document->blockCount());
+    result += "    << (QVector< QVector<QString> >()\n";
+    QTextBlock curBlock = doc->m_document->firstBlock();
+    // This kind of cycle should visit all blocks
+    // including ones in tables and frames.
+    while (curBlock.isValid()) {
+	result += "    << (QVector<QString>()";
+	QList<KoSection *> l = KoSectionUtils::sectionStartings(curBlock.blockFormat());
+	foreach (KoSection *s, l) {
+	    result += QString(" << \"%1\"").arg(s->name());
+	}
+	result += ")";
+	curBlock = curBlock.next();
+	if (curBlock.isValid()) {
+	    result += "\n";
+	} else {
+	    result += ")\n";
+	}
+    }
+
+    result += "    << (QVector< QVector<QString> >()\n";
+    curBlock = doc->m_document->firstBlock();
+    while (curBlock.isValid()) {
+	result += "    << (QVector<QString>()";
+	QList<KoSectionEnd *> l = KoSectionUtils::sectionEndings(curBlock.blockFormat());
+	foreach (KoSectionEnd *e, l) {
+	    result += QString(" << \"%1\"").arg(e->correspondingSection()->name());
+	}
+	result += ")";
+	curBlock = curBlock.next();
+	if (curBlock.isValid()) {
+	    result += "\n";
+	} else {
+	    result += ")\n";
+	}
+    }
+    result += ";";
+
+    QFile out(QString("dump_%1.txt").arg(QTest::currentDataTag()));
+    if (out.open(QIODevice::ReadWrite)) {
+	QTextStream(&out) << result;
+    }
+    out.close();
+}
+
 void TestKoTextEditor::testBasicSectionCreation()
 {
     TestDocument doc;
@@ -376,9 +424,24 @@ void TestKoTextEditor::testBasicSectionCreation()
     //FIXME: check here also model level
 }
 
-void TestKoTextEditor::testInsertSectionHandling(TestDocument *doc)
+#include "TestInsertSectionHandling_data.cpp"
+
+void TestKoTextEditor::testInsertSectionHandling()
 {
-    //TODO: implement
+    TestDocument doc;
+    formSectionTestDocument(&doc);
+
+    KoTextEditor *editor = doc.textEditor();
+
+    QFETCH(int, insertPosition);
+    editor->setPosition(insertPosition);
+    editor->newSection();
+
+    QFETCH(int, neededBlockCount);
+    QFETCH(QVector< QVector<QString> >, needStartings);
+    QFETCH(QVector< QVector<QString> >, needEndings);
+    checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
+//     //FIXME: check here also model level
 }
 
 #include "TestDeleteSectionHandling_data.cpp"
