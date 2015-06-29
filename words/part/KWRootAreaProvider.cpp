@@ -251,6 +251,9 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, frameSet(), pageNumber);
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
+        if (rootAreaPage->page.pageStyle().columns().count > 1) {
+            area->setAcceptsColumnBreak(true);
+        }
         area->setAcceptsPageBreak(true);
     }
 
