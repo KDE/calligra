@@ -30,7 +30,6 @@
 #include <QMap>
 #include <QStringList>
 
-#include <klocale.h>
 #include <ktimezone.h>
 #include <kdebug.h>
 
@@ -251,22 +250,8 @@ public:
     
     const CalendarDay &copy(const CalendarDay &day);
 
-    static QString stateToString( int st, bool trans = false ) {
-        if ( st == None ) {
-            return trans ? i18n( "Undefined" ) : "Undefined";
-        } else if ( st == NonWorking ) {
-            return trans ? i18n( "Non-working" ) : "Non-working";
-        } else if ( st == Working ) {
-            return trans ?  i18n( "Working" ) : "Working";
-        }
-        return QString();
-    }
-    static QStringList stateList( bool trans = false ) {
-        QStringList lst;
-        return trans
-            ? lst << i18n( "Undefined" ) << i18n( "Non-working" ) << i18n( "Working" )
-            : lst << "Undefined" << "Non-working" << "Working";
-    }
+    static QString stateToString( int st, bool trans = false );
+    static QStringList stateList( bool trans = false );
 
 private:
     QDate m_date; //NOTE: inValid if used for weekdays

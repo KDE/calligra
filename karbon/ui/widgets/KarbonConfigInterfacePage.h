@@ -21,7 +21,6 @@
 #ifndef KARBONCONFIGINTERFACEPAGE_H
 #define KARBONCONFIGINTERFACEPAGE_H
 
-#include <KoUnit.h>
 #include <kvbox.h>
 #include <ksharedconfig.h>
 

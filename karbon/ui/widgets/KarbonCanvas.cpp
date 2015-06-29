@@ -35,11 +35,15 @@
 #include <KarbonOutlinePaintingStrategy.h>
 
 #include <KoZoomHandler.h>
+#include <KoPageLayout.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoShapeManagerPaintingStrategy.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 
 #include <kdebug.h>
 #include <klocale.h>

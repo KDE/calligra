@@ -50,7 +50,6 @@
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 

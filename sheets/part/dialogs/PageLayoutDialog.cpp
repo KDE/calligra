@@ -30,6 +30,9 @@
 // commands
 #include "part/commands/PageLayoutCommand.h"
 
+// Calligra
+#include <KoUnit.h>
+
 // KDE
 #include <klocale.h>
 

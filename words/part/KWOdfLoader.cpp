@@ -47,6 +47,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoApplication.h>
 #include <KoSectionManager.h>
+#include <KoUnit.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -120,7 +121,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(20);
 
-    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), KGlobal::mainComponent());
+    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), QLatin1String("words/styles/"));
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
     sc.setDocumentRdf(m_document->documentRdf());
 

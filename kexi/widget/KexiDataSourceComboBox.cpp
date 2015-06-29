@@ -259,8 +259,9 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
     const int i = findItem(item.partClass(), QString(oldName));
-    if (i == -1)
+    if (i == -1) {
         return;
+    }
     setItemText(i, item.name());
     completionObject()->removeItem(oldName);
     completionObject()->addItem(item.name());
@@ -283,20 +284,24 @@ void KexiDataSourceComboBox::slotClearButtonClicked()
 
 QString KexiDataSourceComboBox::selectedPartClass() const
 {
-    if (selectedName().isEmpty())
+    if (selectedName().isEmpty()) {
         return QString();
+    }
     const int index = currentIndex();
-    if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
+    if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex()) {
         return "org.kexi-project.table";
-    else if (index >= (int)d->firstQueryIndex() && index < count())
+    }
+    else if (index >= (int)d->firstQueryIndex() && index < count()) {
         return "org.kexi-project.query";
+    }
     return QString();
 }
 
 QString KexiDataSourceComboBox::selectedName() const
 {
-    if (isSelectionValid())
+    if (isSelectionValid()) {
         return itemText(currentIndex());
+    }
     return currentText();
 }
 
@@ -308,6 +313,11 @@ bool KexiDataSourceComboBox::isSelectionValid() const
 
 void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
 {
+    //if selected text is valid: no completion is required.
+    if (isSelectionValid()) {
+        return;
+    }
+
     //text is available: select item for this text:
     bool changed = false;
     if (text.isEmpty() && 0 != currentIndex()) {
@@ -320,8 +330,9 @@ void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
             changed = true;
         }
     }
-    if (changed)
+    if (changed) {
         emit dataSourceChanged();
+    }
 }
 
 void KexiDataSourceComboBox::focusOutEvent(QFocusEvent *e)

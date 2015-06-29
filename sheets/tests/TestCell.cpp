@@ -33,6 +33,7 @@
 #include <sheets/Sheet.h>
 #include <sheets/Style.h>
 #include <sheets/OdfLoadingContext.h>
+#include <sheets/Value.h>
 
 #include <qtest_kde.h>
 

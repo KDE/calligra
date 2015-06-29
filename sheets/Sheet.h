@@ -47,6 +47,7 @@ class KoStyleStack;
 class KoGenStyles;
 class KoOasisSettings;
 class KoOdfStylesReader;
+class KoOdfLoadingContext;
 class KoShape;
 class KoXmlWriter;
 

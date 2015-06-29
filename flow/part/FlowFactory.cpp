@@ -66,6 +66,7 @@ QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( keyword );
     FlowPart *part = new FlowPart(parent);
     FlowDocument* doc = new FlowDocument(part);
+    doc->setDefaultStylesResourcePath(QLatin1String("flow/styles/"));
     part->setDocument(doc);
 
     return part;
@@ -76,9 +77,7 @@ const KComponentData &FlowFactory::componentData()
   if (!s_instance) {
     s_instance = new KComponentData(aboutData());
 
-    s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
     s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
-    s_instance->dirs()->addResourceType("styles", "data", "flow/styles/");
     KIconLoader::global()->addAppDir("calligra");
   }
 

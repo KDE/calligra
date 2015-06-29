@@ -73,6 +73,7 @@
 #include "ValueParser.h"
 #include "StyleStorage.h"
 
+#include <KoUnit.h>
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>

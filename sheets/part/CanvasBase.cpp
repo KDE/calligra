@@ -83,6 +83,7 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
+#include <KoUnit.h>
 
 // Sheets
 #include "CellStorage.h"

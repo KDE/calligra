@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
@@ -55,6 +55,7 @@
 #include <QSplitter>
 #include <QTreeView>
 #include <QApplication>
+#include <QStyledItemDelegate>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -96,6 +97,37 @@
 #include <kexi_global.h>
 
 #define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
+
+//! @internal An item delegate for KexiCSVImportDialog's table view
+class KexiCSVImportDialogItemDelegate : public QStyledItemDelegate
+{
+public:
+    KexiCSVImportDialogItemDelegate(QObject *parent = 0);
+
+    virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                                  const QModelIndex &index) const;
+};
+
+KexiCSVImportDialogItemDelegate::KexiCSVImportDialogItemDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+}
+
+QWidget* KexiCSVImportDialogItemDelegate::createEditor(QWidget *parent,
+                                                       const QStyleOptionViewItem &option,
+                                                       const QModelIndex &index) const
+{
+    QStyleOptionViewItem newOption(option);
+    QWidget *editor = QStyledItemDelegate::createEditor(parent, newOption, index);
+    if (editor && index.row() == 0) {
+        QFont f(editor->font());
+        f.setBold(true);
+        editor->setFont(f);
+    }
+    return editor;
+}
+
+// --
 
 //! @internal
 class KexiCSVImportStatic
@@ -324,14 +356,11 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_fpNumberRegExp1 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
     // E notation, e.g. 0.1e2, 0.1e+2, 0.1e-2, 0.1E2, 0.1E+2, 0.1E-2
     m_fpNumberRegExp2 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+[Ee][+-]{0,1}\\d+");
-    QString caption(i18n("Open CSV Data File"));
-
-
     m_loadingProgressDlg = 0;
     if (m_mode == Clipboard) {
         m_infoLbl->setIcon(koIconName("edit-paste"));
     }
-    m_tableView->setSelectionMode(QAbstractItemView::NoSelection);
+    m_tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     connect(m_formatCombo, SIGNAL(activated(int)),
             this, SLOT(formatChanged(int)));
@@ -646,6 +675,8 @@ void KexiCSVImportDialog::createOptionsPage()
     m_table = new KexiCSVImportDialogModel(m_tableView);
     m_table->setObjectName("m_table");
     m_tableView->setModel(m_table);
+    m_tableItemDelegate = new KexiCSVImportDialogItemDelegate(m_tableView);
+    m_tableView->setItemDelegate(m_tableItemDelegate);
     lyr->addWidget(m_tableView);
 
     QSizePolicy spolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -1807,18 +1838,32 @@ void KexiCSVImportDialog::import()
 
         for (uint col = 0; col < numCols; col++) {
             QString fieldCaption(m_table->data(m_table->index(0, col)).toString().simplified());
-            QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
-            if (m_destinationTableSchema->field(fieldName)) {
-                QString fixedFieldName;
-                uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
+            QString fieldName;
+            if (fieldCaption.isEmpty()) {
+                uint i = 0;
                 do {
-                    fixedFieldName = fieldName + "_" + QString::number(i);
-                    if (!m_destinationTableSchema->field(fixedFieldName))
+                    fieldCaption = i18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1);
+                    fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                    if (!m_destinationTableSchema->field(fieldName)) {
                         break;
+                    }
                     i++;
                 } while (true);
-                fieldName = fixedFieldName;
-                fieldCaption += (" " + QString::number(i));
+            }
+            else {
+                fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                if (m_destinationTableSchema->field(fieldName)) {
+                    QString fixedFieldName;
+                    uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
+                    do {
+                        fixedFieldName = fieldName + "_" + QString::number(i);
+                        if (!m_destinationTableSchema->field(fixedFieldName))
+                            break;
+                        i++;
+                    } while (true);
+                    fieldName = fixedFieldName;
+                    fieldCaption += (" " + QString::number(i));
+                }
             }
             KexiDB::Field::Type detectedType = d->detectedType(col);
 //! @todo what about time and float/double types and different integer subtypes?
@@ -1993,12 +2038,12 @@ void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int state)
 {
     m_adjustRows = true;
-    m_table->setFirstRowForFieldNames(state); 
     if (m_1stRowForFieldNames->isChecked() && m_startline > 0 && m_startline >= (m_startAtLineSpinBox->maximum() - 1)) {
         m_startline--;
     }
     m_columnsAdjusted = false;
     fillTable();
+    m_table->setFirstRowForFieldNames(state);
 }
 
 void KexiCSVImportDialog::optionsButtonClicked()
