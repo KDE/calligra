@@ -144,47 +144,40 @@ void TestKoTextEditor::testInsertInlineObject()
 
 void TestKoTextEditor::testRemoveSelectedText()
 {
-    QObject parent;
+    TestDocument doc;
 
-    // create a document
-    QTextDocument doc;
-
-    KoTextRangeManager rangeManager(&parent);
-    KoTextDocument textDoc(&doc);
-    textDoc.setTextRangeManager(&rangeManager);
-
-    KoTextEditor editor(&doc);
-    textDoc.setTextEditor(&editor);
+    KoTextEditor *editor = doc.textEditor();
+    KoTextRangeManager *rangeManager = &doc.m_rangeManager;
 
     // enter some lorem ipsum
-    editor.insertText(lorem);
+    editor->insertText(lorem);
 
-    QTextCursor cur(&doc);
-    cur.setPosition(editor.position());
+    QTextCursor cur(doc.m_document);
+    cur.setPosition(editor->position());
     KoBookmark *bookmark = new KoBookmark(cur);
     bookmark->setName("start!");
     bookmark->setPositionOnlyMode(false); // we want it to be several chars long
-    rangeManager.insert(bookmark);
+    rangeManager->insert(bookmark);
 
-    editor.insertText(lorem);
+    editor->insertText(lorem);
 
-    bookmark->setRangeEnd(editor.position());
+    bookmark->setRangeEnd(editor->position());
 
     QCOMPARE(bookmark->rangeStart(), lorem.length());
     QCOMPARE(bookmark->rangeEnd(), lorem.length() * 2);
-    Q_ASSERT(rangeManager.textRanges().length() == 1);
+    Q_ASSERT(rangeManager->textRanges().length() == 1);
 
     // select all text
-    editor.setPosition(0, QTextCursor::MoveAnchor);
-    editor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    editor->setPosition(0, QTextCursor::MoveAnchor);
+    editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
 
-    Q_ASSERT(editor.hasSelection());
+    Q_ASSERT(editor->hasSelection());
 
     // remove the text + the bookmark from the document
-    editor.deleteChar();
+    editor->deleteChar();
 
     // check whether the bookmark has gone.
-    Q_ASSERT(rangeManager.textRanges().length() == 0);
+    Q_ASSERT(rangeManager->textRanges().length() == 0);
 }
 
 void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor *editor)
