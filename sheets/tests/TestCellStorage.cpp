@@ -22,6 +22,7 @@
 #include <sheets/CellStorage.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
+#include <sheets/Value.h>
 
 #include <qtest_kde.h>
 

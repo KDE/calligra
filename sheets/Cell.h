@@ -35,22 +35,18 @@
 #ifndef CALLIGRA_SHEETS_CELL
 #define CALLIGRA_SHEETS_CELL
 
-#include <QDate>
 #include <QSharedDataPointer>
 #include <QSharedPointer>
 #include <QTextDocument>
 
-#include "Condition.h"
 #include "Global.h"
-#include "Format.h"
-#include "OdfLoadingContext.h"
-
-#include "database/Database.h"
+#include "Style.h"
 
 class QDomElement;
 class QDomDocument;
 class QRect;
 class QPoint;
+class QDate;
 
 class KLocale;
 class KoXmlWriter;
@@ -62,6 +58,8 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Conditions;
+class Database;
 class Doc;
 class Formula;
 class OdfLoadingContext;
@@ -70,6 +68,7 @@ class Sheet;
 class Validity;
 class Value;
 class CellTest;
+struct ShapeLoadingData;
 
 /**
  * An accessor to the actual cell data.

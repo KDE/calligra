@@ -36,6 +36,7 @@
 #include <CellView.h>
 #include <Damages.h>
 #include <GenValidationStyle.h>
+#include <Condition.h>
 #include <Map.h>
 #include <OdfLoadingContext.h>
 #include <OdfSavingContext.h>
@@ -46,6 +47,7 @@
 #include <Sheet.h>
 #include <SheetView.h>
 #include <StyleManager.h>
+#include <Value.h>
 
 using namespace Calligra::Sheets;
 

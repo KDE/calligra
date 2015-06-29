@@ -36,6 +36,7 @@
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoUnit.h>

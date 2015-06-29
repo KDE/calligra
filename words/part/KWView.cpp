@@ -68,6 +68,7 @@
 #include <KoTextEditor.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
+#include <KoGuidesData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -202,6 +203,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 KWView::~KWView()
 {
+    KoToolManager::instance()->removeCanvasController(m_gui->canvasController());
+
     m_canvas = 0;
 }
 

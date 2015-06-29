@@ -50,6 +50,8 @@
 
 #include <DocBase.h>
 #include <sheets/Sheet.h>
+#include <sheets/Condition.h>
+#include <OdfLoadingContext.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>
