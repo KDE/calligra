@@ -25,7 +25,7 @@
 using namespace Calligra::Sheets;
 
 Localization::Localization()
-        : KLocale("calligra")
+        : KLocale()
 {
     // QT5TODO: ensure proper loading of catalog
 //     insertCatalog("calligra");
