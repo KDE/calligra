@@ -35,7 +35,7 @@ class KPLATOWORK_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit Factory( QObject* parent = 0 );
+    explicit Factory();
     ~Factory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright (C) 2013 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPTFACTORYINIT_H
-#define KPTFACTORYINIT_H
+#ifndef CAUFACTORYINIT_H
+#define CAUFACTORYINIT_H
 
-#include "kptfactory.h"
+#include "CAuFactory.h"
 
-class KPlatoFactoryInit : public KPlato::Factory
+class CAuFactoryInit : public CAuFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "planpart.json")
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "authorpart.json")
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KPlatoFactoryInit() : KPlato::Factory() {}
-    virtual ~KPlatoFactoryInit() {}
+    explicit CAuFactoryInit() : CAuFactory() {}
+    virtual ~CAuFactoryInit() {}
 
 };
 
-#endif
+#endif // CAUFACTORYINIT_H

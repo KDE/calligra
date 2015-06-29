@@ -51,8 +51,8 @@
 KComponentData *CAuFactory::s_instance = 0;
 K4AboutData *CAuFactory::s_aboutData = 0;
 
-CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(/**aboutData(), parent*/)
+CAuFactory::CAuFactory()
+    : KPluginFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.

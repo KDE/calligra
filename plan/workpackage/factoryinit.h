@@ -29,7 +29,7 @@ class KPlatoWorkFactoryInit : public KPlatoWork::Factory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KPlatoWorkFactoryInit(QObject *parent = 0) : KPlatoWork::Factory(parent) {}
+    explicit KPlatoWorkFactoryInit() : KPlatoWork::Factory() {}
     virtual ~KPlatoWorkFactoryInit() {}
 
 };

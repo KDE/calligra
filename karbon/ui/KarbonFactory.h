@@ -38,7 +38,7 @@ class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
     Q_OBJECT
 
 public:
-    explicit KarbonFactory(QObject* parent = 0);
+    explicit KarbonFactory();
     ~KarbonFactory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);

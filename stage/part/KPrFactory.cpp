@@ -34,8 +34,8 @@ K4AboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( /* QT5TODO: what now? *aboutData(), parent*/ )
+KPrFactory::KPrFactory()
+    : KPluginFactory()
 {
     (void)componentData();
 

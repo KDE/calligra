@@ -28,9 +28,9 @@ class KWFactoryInit : public KWFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KWFactoryInit(QObject *parent = 0) : KWFactory(parent) {}
+    explicit KWFactoryInit() : KWFactory() {}
     virtual ~KWFactoryInit() {}
 
 };
 
-#endif // FLOWFACTORYINIT_H
+#endif // KWFACTORYINIT_H

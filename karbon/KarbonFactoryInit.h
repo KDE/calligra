@@ -29,7 +29,7 @@ class KarbonFactoryInit : public KarbonFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KarbonFactoryInit(QObject *parent = 0) : KarbonFactory(parent) {}
+    explicit KarbonFactoryInit() : KarbonFactory() {}
     virtual ~KarbonFactoryInit() {}
 };
 
