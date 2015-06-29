@@ -96,7 +96,6 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 
     KoParagraphStyle *style = KoTextDocument(d->document).styleManager()->paragraphStyle(notesConfig->defaultNoteParagraphStyle());
     if (style) {
-        QTextBlock block = cursor.block();
         QTextBlockFormat bf;
         QTextCharFormat cf;
         style->applyStyle(bf);

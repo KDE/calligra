@@ -760,7 +760,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
     }
 }
 
-void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
+void KoTextLoader::loadListItem(const KoXmlElement &e, QTextCursor &cursor, int level)
 {
     bool numberedParagraph = e.parentNode().toElement().localName() == "numbered-paragraph";
 
@@ -880,7 +880,6 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         }
     }
 }
-
 
 void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
@@ -1338,7 +1337,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
 }
 
-void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &columns)
+void KoTextLoader::loadTableColumn(const KoXmlElement &tblTag, QTextTable *tbl, int &columns)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = tbl->rows();
@@ -1368,7 +1367,7 @@ void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &c
         tbl->resize(1, columns);
 }
 
-void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &rows)
+void KoTextLoader::loadTableRow(const KoXmlElement &tblTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &rows)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
 
@@ -1411,7 +1410,7 @@ void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRe
     }
 }
 
-void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell)
+void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     const int currentRow = tbl->rows() - 1;
