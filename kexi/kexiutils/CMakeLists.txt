@@ -79,4 +79,6 @@ if(FALSE) # TODO: install when we move to independent place
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif()
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
