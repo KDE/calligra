@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "TestGlobalSearch.h"
+#include "GlobalSearchTest.h"
 
 #include <core/kexi.h>
 #include <core/kexipartitem.h>
@@ -37,9 +37,9 @@
 
 const int GUI_DELAY = 10;
 
-#define FILES_DATA_DIR KDESRCDIR "data"
+#define FILES_DATA_DIR CURRENT_SOURCE_DIR "data"
 
-void TestGlobalSearch::initTestCase()
+void GlobalSearchTest::initTestCase()
 {
 }
 
@@ -64,13 +64,13 @@ public:
     char **vals;
 };
 
-TestGlobalSearch::TestGlobalSearch(int argc, char **argv, bool goToEventLoop)
+GlobalSearchTest::GlobalSearchTest(int &argc, char **argv, bool goToEventLoop)
  : m_argc(argc), m_argv(argv), m_goToEventLoop(goToEventLoop)
 {
 }
-void TestGlobalSearch::testGlobalSearch()
+void GlobalSearchTest::testGlobalSearch()
 {
-    QString filename(QFile::decodeName(FILES_DATA_DIR "/TestGlobalSearch.kexi"));
+    QString filename(QFile::decodeName(FILES_DATA_DIR "/GlobalSearchTest.kexi"));
     qDebug() << filename;
     NewArgs args(m_argv);
     args.vals[args.count - 1] = qstrdup(QFile::encodeName(filename).constData());
@@ -129,7 +129,7 @@ void TestGlobalSearch::testGlobalSearch()
     }
 }
 
-void TestGlobalSearch::cleanupTestCase()
+void GlobalSearchTest::cleanupTestCase()
 {
 }
 
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     }
 
     // Actual test
-    TestGlobalSearch tc(realCount, realVals, goToEventLoop);
+    GlobalSearchTest tc(realCount, realVals, goToEventLoop);
     int result = QTest::qExec(&tc, realCount, realVals);
 
     // Clean up

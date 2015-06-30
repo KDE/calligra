@@ -1,4 +1,2 @@
-calligra_build_test(GlobalSearch)
-target_link_libraries(TestGlobalSearch Qt5::Test KDb
-                                       keximain kexicore kexiextendedwidgets)
-
+set(LIBS keximain kexicore kexiextendedwidgets)
+calligra_add_test(kexi GlobalSearchTest ${LIBS})
