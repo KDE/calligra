@@ -48,9 +48,9 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         case KDbField::Integer:
         case KDbField::BigInteger: {
 //! @todo problem for ranges in case of BigInteger - will disappear when we remove use of QInputDialog
-            int minValue, maxValue;
+            qlonglong minValue, maxValue;
 //! @todo add support for unsigned parameter here
-            KDb::getLimitsForType(parameter.type, &minValue, &maxValue);
+            KDb::getLimitsForFieldType(parameter.type, &minValue, &maxValue);
             const int result = QInputDialog::getInt(parent, caption, parameter.message,
                                                     0, minValue, maxValue, 1/*step*/, ok);
             if (!*ok)

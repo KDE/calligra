@@ -258,7 +258,8 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
           if ( ( returnCode = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
             qDebug()<<"Error reading blob field. Error code: "<<returnCode; // make error message more verbose
           } else {
-            val = KDb::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
+            bool ok;
+            val = KDb::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field->type(), 0, blobFieldLength );
           }
           #ifdef XB_LOCKING_ON
             tableDbf->LockMemoFile( F_SETLK, F_UNLCK );
@@ -270,7 +271,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
         #endif
 
         default:
-          val = KDb::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) );
+          val = KDb::cstringToVariant(data, fieldsExpanded.at(j)->field->type());
           break;
       }
       vals.append( val );
