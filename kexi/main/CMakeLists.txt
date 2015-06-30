@@ -69,4 +69,7 @@ set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION
 install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(status)
-add_subdirectory(tests)
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
