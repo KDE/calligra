@@ -258,8 +258,9 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
             mysql_free_result(res);
             return false;
         }
-        for (int i = 0; i < numFields; i++)
-            vals.append(KDb::cstringToVariant(row[i], fieldsExpanded.at(i)->field, (int)lengths[i]));
+        for (int i = 0; i < numFields; i++) {
+            vals.append(KDb::cstringToVariant(row[i], fieldsExpanded.at(i)->field->type(), 0, int(lengths[i])));
+        }
         if (!destConn->insertRecord(*dstTable, vals)) {
             mysql_free_result(res);
             return false;

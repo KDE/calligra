@@ -439,7 +439,7 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn
                 vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
             } else
                 vals.append(KDb::cstringToVariant((*i).c_str(),
-                                                     fieldsExpanded.at(index)->field, (*i).size()));
+                                                     fieldsExpanded.at(index)->field->type(), (*i).size()));
         }
         if (!destConn->insertRecord(*dstTable, vals))
             return false;
