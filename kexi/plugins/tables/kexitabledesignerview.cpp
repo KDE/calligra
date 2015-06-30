@@ -297,8 +297,8 @@ KexiTableDesignerView::getSubTypeListData(KDbField::TypeGroup fieldTypeGroup,
         namesList << xi18n("Image object type", "Image");
       }
       else {*/
-    stringsList = KDb::typeStringsForGroup(fieldTypeGroup);
-    namesList = KDb::typeNamesForGroup(fieldTypeGroup);
+    stringsList = KDb::fieldTypeStringsForGroup(fieldTypeGroup);
+    namesList = KDb::fieldTypeNamesForGroup(fieldTypeGroup);
 // }
     qDebug() << "subType strings: " <<
         stringsList.join("|") << "\nnames: " << namesList.join("|");
@@ -695,7 +695,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         fieldTypeGroup = static_cast<KDbField::TypeGroup>(i_fieldTypeGroup);
 
         //-get 1st type from this group, and update 'type' property
-        KDbField::Type fieldType = KDb::defaultTypeForGroup(fieldTypeGroup);
+        KDbField::Type fieldType = KDb::defaultFieldTypeForGroup(fieldTypeGroup);
         if (fieldType == KDbField::InvalidType)
             fieldType = KDbField::Text;
 
@@ -801,7 +801,7 @@ void KexiTableDesignerView::slotRecordUpdated(KDbRecordData *data)
         //-- create a new field:
         KDbField::TypeGroup fieldTypeGroup = static_cast<KDbField::TypeGroup>(
                     data->at(COLUMN_ID_TYPE).toInt() + 1/*counting from 1*/);
-        int intFieldType = KDb::defaultTypeForGroup(fieldTypeGroup);
+        int intFieldType = KDb::defaultFieldTypeForGroup(fieldTypeGroup);
         if (intFieldType == 0)
             return;
 
