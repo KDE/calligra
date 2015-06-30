@@ -90,7 +90,9 @@ add_subdirectory( widget )
 add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
+if (BUILD_TESTING)
 #TODO KEXI3 add_subdirectory( tests )
+endif()
 
 if(KEXI_MOBILE)
 
