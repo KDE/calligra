@@ -155,12 +155,14 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     int pageNumber = 1;
     KWRootAreaPage *rootAreaPage = m_pages.isEmpty() ? 0 : m_pages.last();
-
     int requiredRootAreaCount = 1;
     if (rootAreaPage && frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
         requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().count;
+        if (constraints.newPageForced) {
+            requiredRootAreaCount = 1;
+        }
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page
@@ -294,7 +296,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
 
     QString reallyNeededPageStyle = constraints.masterPageName;
     int visiblePageNumber = constraints.visiblePageNumber;
-
+    bool newPageForced = constraints.newPageForced;
     if (m_rootAreaCache.size() > requestedPosition)
     {
         KoTextLayoutRootArea *rootArea = m_rootAreaCache[requestedPosition];
@@ -353,6 +355,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
     RootAreaConstraint realConstraints;
     realConstraints.masterPageName = reallyNeededPageStyle;
     realConstraints.visiblePageNumber = visiblePageNumber;
+    realConstraints.newPageForced = newPageForced;
     KoTextLayoutRootArea *area = 0;
     do {
         area = provideNext(documentLayout, realConstraints);
