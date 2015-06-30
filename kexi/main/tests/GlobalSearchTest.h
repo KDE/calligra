@@ -22,17 +22,17 @@
 
 #include <QObject>
 
-class TestGlobalSearch : public QObject
+class GlobalSearchTest : public QObject
 {
     Q_OBJECT
 public:
-    TestGlobalSearch(int argc, char **argv, bool goToEventLoop);
+    GlobalSearchTest(int &argc, char **argv, bool goToEventLoop);
 private Q_SLOTS:
     void initTestCase();
     void testGlobalSearch();
     void cleanupTestCase();
 private:
-    const int m_argc;
+    const int &m_argc;
     char **m_argv;
     bool m_goToEventLoop;
 };
