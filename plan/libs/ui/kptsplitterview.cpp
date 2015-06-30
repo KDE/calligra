@@ -20,6 +20,7 @@
 #include "kptsplitterview.h"
 
 #include "KoDocument.h"
+#include <KoXmlReader.h>
 
 #include <ktabwidget.h>
 

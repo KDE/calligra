@@ -38,7 +38,7 @@ public:
     }
 
 
-    QString qstrQuery;
+    QString objectName;
 
     KexiDB::Cursor *cursor;
     KexiDB::Connection *connection;
@@ -46,12 +46,21 @@ public:
     KexiDB::QuerySchema *copySchema;
 };
 
-KexiDBReportData::KexiDBReportData (const QString &qstrSQL,
+KexiDBReportData::KexiDBReportData (const QString &objectName,
                                     KexiDB::Connection * pDb)
         : d(new Private(pDb))
 {
-    d->qstrQuery = qstrSQL;
+    d->objectName = objectName;
     getSchema();
+}
+
+KexiDBReportData::KexiDBReportData(const QString& objectName,
+                                   const QString& partClass,
+                                   KexiDB::Connection* pDb)
+        : d(new Private(pDb))
+{
+    d->objectName = objectName;
+    getSchema(partClass);
 }
 
 void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
@@ -91,7 +100,7 @@ bool KexiDBReportData::open()
 {
     if ( d->connection && d->cursor == 0 )
     {
-        if ( d->qstrQuery.isEmpty() )
+        if ( d->objectName.isEmpty() )
         {
             d->cursor = d->connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
         }
@@ -125,25 +134,27 @@ bool KexiDBReportData::close()
     return true;
 }
 
-bool KexiDBReportData::getSchema()
+bool KexiDBReportData::getSchema(const QString& partClass)
 {
-    if ( d->connection )
+    if (d->connection)
     {
         delete d->originalSchema;
         d->originalSchema = 0;
         delete d->copySchema;
         d->copySchema = 0;
 
-        if ( d->connection->tableSchema ( d->qstrQuery ) )
+        if ((partClass.isEmpty() || partClass == "org.kexi-project.table")
+                && d->connection->tableSchema(d->objectName))
         {
-            kDebug() << d->qstrQuery <<  " is a table..";
-            d->originalSchema = new KexiDB::QuerySchema ( *(d->connection->tableSchema ( d->qstrQuery )) );
+            kDebug() << d->objectName <<  "is a table..";
+            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->tableSchema(d->objectName)));
         }
-        else if ( d->connection->querySchema ( d->qstrQuery ) )
+        else if ((partClass.isEmpty() || partClass == "org.kexi-project.query")
+                 && d->connection->querySchema(d->objectName))
         {
-            kDebug() << d->qstrQuery <<  " is a query..";
-            d->connection->querySchema(d->qstrQuery)->debug();
-            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->querySchema ( d->qstrQuery )));
+            kDebug() << d->objectName <<  "is a query..";
+            d->connection->querySchema(d->objectName)->debug();
+            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->querySchema(d->objectName)));
         }
 
         if (d->originalSchema) {
@@ -162,7 +173,7 @@ bool KexiDBReportData::getSchema()
 
 QString KexiDBReportData::sourceName() const
 {
-    return d->qstrQuery;
+    return d->objectName;
 }
 
 int KexiDBReportData::fieldNumber ( const QString &fld ) const

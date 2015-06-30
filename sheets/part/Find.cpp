@@ -26,6 +26,7 @@
 #include <KoFindOption.h>
 
 #include "Sheet.h"
+#include "Value.h"
 #include "ValueStorage.h"
 #include "ui/SheetView.h"
 

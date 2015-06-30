@@ -45,6 +45,7 @@
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoAnnotation.h>
+#include <KoGridData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
@@ -71,6 +72,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoAnnotationLayoutManager.h>
 #include <KoPageWidgetItem.h>
+#include <KoUnit.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>

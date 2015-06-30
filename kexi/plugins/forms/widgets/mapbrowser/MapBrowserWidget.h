@@ -73,11 +73,13 @@ protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
     void deserializeData(const QVariant& serialized);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     //! Used in slotTextChanged()
     bool m_slotMapChanged_enabled; //!< @todo do we need this to be 1 bit? As in some other widgets
     bool m_internalReadOnly;
+    int m_defaultZoom;
 };
 
 #endif // MAPBROWSERWIDGET_H

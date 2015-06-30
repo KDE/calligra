@@ -28,7 +28,6 @@
 
 // Calligra
 #include <KoXmlReader.h>
-#include <KoUnit.h>
 
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyle.h>

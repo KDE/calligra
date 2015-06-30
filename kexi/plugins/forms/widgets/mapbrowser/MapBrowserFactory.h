@@ -38,6 +38,8 @@ public:
     virtual bool startInlineEditing(InlineEditorCreationArguments& args);
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
+
+    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w);
 };
 
 #endif // MAPBROWSERFACTORY_H

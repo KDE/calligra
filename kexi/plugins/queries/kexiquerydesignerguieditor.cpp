@@ -857,15 +857,15 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         if (!eItem)
             continue;
 
-        kDebug() << eItem->toString();
+        kDebug() << eItem->toString(0);
         KexiDB::BinaryExpr* binary = eItem->toBinary();
         if (binary && eItem->exprClass() == KexiDBExpr_Relational) {
             KexiDB::Field *leftField = 0, *rightField = 0;
             if (eItem->token() == '='
                     && binary->left()->toVariable()
                     && binary->right()->toVariable()
-                    && (leftField = query->findTableField(binary->left()->toString()))
-                    && (rightField = query->findTableField(binary->right()->toString()))) {
+                    && (leftField = query->findTableField(binary->left()->toString(0)))
+                    && (rightField = query->findTableField(binary->right()->toString(0)))) {
 //! @todo move this check to parser on QuerySchema creation
 //!       or to QuerySchema creation (WHERE expression should be then simplified
 //!       by removing joins
@@ -921,7 +921,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             columnAlias = query->columnAlias(row_num);
             if (field->isExpression()) {
 //! @todo ok? perhaps do not allow to omit aliases?
-                fieldName = field->expression()->toString();
+                fieldName = field->expression()->toString(0);
             }
             else {
                 tableName = field->table()->name();
@@ -941,9 +941,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         if (criteriaExpr) {
 //! @todo fix for !INFIX operators
             if (criteriaExpr->token() == '=')
-                criteriaString = criteriaArgument->toString();
+                criteriaString = criteriaArgument->toString(0);
             else
-                criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
+                criteriaString = criteriaExpr->tokenToString(0) + " " + criteriaArgument->toString(0);
             (*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
@@ -955,7 +955,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             set["criteria"].setValue(criteriaString, false);
         if (field->isExpression()) {
             if (!d->changeSingleCellValue(*newRecord, COLUMN_ID_COLUMN,
-                                          QVariant(columnAlias + ": " + field->expression()->toString()), &result))
+                                          QVariant(columnAlias + ": " + field->expression()->toString(0)), &result))
                 return; //problems with setting column expression
         }
         row_num++;
@@ -1050,9 +1050,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         if (criteriaExpr) {
 //! @todo fix for !INFIX operators
             if (criteriaExpr->token() == '=')
-                criteriaString = criteriaArgument->toString();
+                criteriaString = criteriaArgument->toString(0);
             else
-                criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
+                criteriaString = criteriaExpr->tokenToString(0) + " " + criteriaArgument->toString(0);
             (*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
         }
         d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
@@ -1494,7 +1494,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
         if ((e = parseExpressionString(fieldName, dummyToken,
                                        false/*allowRelationalOperator*/)))
         {
-            fieldName = e->toString(); //print it prettier
+            fieldName = e->toString(0); //print it prettier
             //this is just checking: destroy expr. object
             delete e;
         }
@@ -1691,10 +1691,10 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
             QString tokenStr;
             if (token != '=') {
                 KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
-                tokenStr = be.tokenToString() + " ";
+                tokenStr = be.tokenToString(0) + " ";
             }
             if (set) {
-                (*set)["criteria"] = QString(tokenStr + e->toString()); //print it prettier
+                (*set)["criteria"] = QString(tokenStr + e->toString(0)); //print it prettier
             }
             //this is just checking: destroy expr. object
             delete e;

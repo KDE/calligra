@@ -281,7 +281,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
                     expr = fieldExpr;
             }
             expr->debug();
-            kDebug() << expr->toString();
+            kDebug() << expr->toString(0);
 
             KexiDB::Field *f = new KexiDB::Field();
             f->setExpression(expr);

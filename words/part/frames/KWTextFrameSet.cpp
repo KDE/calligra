@@ -103,8 +103,10 @@ void KWTextFrameSet::setupShape(KoShape *shape)
         data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
     }
 
-    shape->setGeometryProtected(true);
-
+    if(textFrameSetType() != Words::OtherTextFrameSet) {
+        shape->setGeometryProtected(true);
+    }
+ 
     // We need to keep collision detection on or we will not relayout when page anchored shapes are
     // moved. For page anchored shapes (which are different from anchored shapes which are usually
     // children of the shape they are anchored too and therefore the ShapeManager filters collision

@@ -53,6 +53,7 @@
     <p xml:lang="bs">Karbon je vektorska aplikacija za crtanje s korisničkim sučeljem koje je jednostavno za korištenje , vrlo prilagodljivo i proširivo . To čini Karbon odličnom aplikacijom za korisnike koji počinju istraživati ​​svijet vektorske grafike , kao i za umjetnike koji žele stvoriti prekrasnu vektorsku umjetnost .</p>
     <p xml:lang="ca">El Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, que es pot personalitzar i ampliar molt. Això converteix el Karbon en una gran aplicació per usuaris que comencin a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixi bocabadat.</p>
     <p xml:lang="en-GB">Karbon is a vector drawing application with a user interface that is easy to use, highly customisable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.</p>
+    <p xml:lang="es">Karbon es una aplicación de dibujo vectorial que dispone de una interfaz de usuario intuitiva, altamente personalizable y extensible. Todo ello hace que Karbon sea una gran aplicación para aquellos usuarios que empiezan a explorar el mundo de los gráficos vectoriales, así como para los artistas que desean crear impresionantes piezas de arte vectorial.</p>
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare straordinarie opere vettoriali. </p>
@@ -133,7 +134,7 @@
       <li xml:lang="bs">Prilagodljiv korisnički interfejs sa gdje se moze slobodno  staviti alatne trake i dockers</li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
       <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
-      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y acoplables que se pueden posicionar libremente en cualquier lugar.</li>
+      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y paneles que se pueden posicionar libremente en cualquier lugar.</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
@@ -153,7 +154,7 @@
       <li xml:lang="bs">Sloj lučki radnik za jednostavno rukovanje složenim dokumentima , uključujući pregled sličica , podršku za grupiranje oblika putem drag and drop , kontroliranje vidljivost oblika ili zaključavanje</li>
       <li xml:lang="ca">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig.</li>
       <li xml:lang="en-GB">Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or locking</li>
-      <li xml:lang="es">Acoplable de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas, soporte para la agrupación de figuras mediante la operación de arrastrar y soltar, control de la visibilidad de las figuras o bloqueo.</li>
+      <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas, soporte para la agrupación de figuras mediante la operación de arrastrar y soltar, control de la visibilidad de las figuras o bloqueo.</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes de prévisualisation, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
@@ -169,7 +170,7 @@
         Advanced path editing tool with great on-canvas editing capabilities
       </li>
       <li xml:lang="bs">Alat za napredno uređivanje puta s velikom mogućnosti uređivanja  na platnu</li>
-      <li xml:lang="ca">Eina avançada d'edició de camins amb una grana capacitat d'edició en el llenç</li>
+      <li xml:lang="ca">Eina avançada d'edició de camins amb una gran capacitat d'edició en el llenç</li>
       <li xml:lang="en-GB">Advanced path editing tool with great on-canvas editing capabilities</li>
       <li xml:lang="es">Herramienta de edición avanzada de rutas con grandes capacidades de edición en el lienzo</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
@@ -299,7 +300,7 @@
       <li xml:lang="bs">Extensible pisanjem dodataka za novim alatima , oblika i modnog brenda Dockers</li>
       <li xml:lang="ca">Ampliable mitjançant l'escriptura de connectors per eines noves, formes i acobladors</li>
       <li xml:lang="en-GB">Extensible by writing plugins for new tools, shapes and dockers</li>
-      <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y acoplables</li>
+      <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y paneles</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>

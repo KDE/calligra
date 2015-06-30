@@ -86,8 +86,6 @@ const KComponentData &KarbonFactory::componentData()
         s_instance = new KComponentData(aboutData());
         // Add any application-specific resource directories here
 
-        s_instance->dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-        s_instance->dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 
