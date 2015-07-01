@@ -71,5 +71,5 @@ install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
 add_subdirectory(status)
 
 if (BUILD_TESTING)
-    add_subdirectory(tests)
+    add_subdirectory(autotests)
 endif()
