@@ -281,26 +281,23 @@ protected:
         textOption.setAlignment(QStyle::visualAlignment(option->direction, option->displayAlignment));
         QTextLayout textLayout;
         textLayout.setTextOption(textOption);
-        QFont f(option->font);
-        if (highlightMatchingSubstrings) {
-            f.setWeight(QFont::Black);
-        }
-        textLayout.setFont(f);
+        textLayout.setFont(option->font);
         QString text = option->text;
         textLayout.setText(text);
-
-        viewItemTextLayout(textLayout, textRect.width());
 
         if (highlightMatchingSubstrings) {
             QList<QTextLayout::FormatRange> formats;
             QString substring = m_completer->completionPrefix();
+            QColor underLineColor(p->pen().color());
+            underLineColor.setAlpha(128);
+            QTextLayout::FormatRange formatRange;
+            formatRange.format.setFontUnderline(true);
+            formatRange.format.setUnderlineColor(underLineColor);
 
             for (int i = 0; i < text.length();) {
                 i = text.indexOf(substring, i, Qt::CaseInsensitive);
                 if (i == -1)
                     break;
-                QTextLayout::FormatRange formatRange;
-                formatRange.format.setFontWeight(QFont::Normal);
                 formatRange.length = substring.length();
                 formatRange.start = i;
                 formats.append(formatRange);
@@ -308,11 +305,14 @@ protected:
             }
             textLayout.setAdditionalFormats(formats);
         }
+        viewItemTextLayout(textLayout, textRect.width());
+
         const int lineCount = textLayout.lineCount();
         QPointF position = textRect.topLeft();
         for (int i = 0; i < lineCount; ++i) {
             const QTextLine line = textLayout.lineAt(i);
-            line.draw(p, position);
+            const QPointF adjustPos(0, qreal(textRect.height() - line.rect().height()) / 2.0);
+            line.draw(p, position + adjustPos);
             position.setY(position.y() + line.y() + line.ascent());
         }
     }
