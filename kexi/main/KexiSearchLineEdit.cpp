@@ -339,6 +339,9 @@ static void fixLeftMargin(QLineEdit *lineEdit)
     if (st == "breeze" || st == "gtk+") {
         add = 4; // like QLineEditIconButton::IconMargin
     }
+    else if (st == "fusion") {
+        add = 2;
+    }
     if (add != 0) {
         QMargins margins(lineEdit->textMargins());
         margins.setLeft(margins.left() + add);
@@ -381,7 +384,7 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
                                  // previously focus widget in KexiSearchLineEdit::setFocus().
                                  // We need this information to focus back when pressing Escape key.
     setClearButtonEnabled(true);
-    setPlaceholderText(i18n("Search"));
+    setPlaceholderText(xi18n("Search"));
     fixLeftMargin(this);
 }
 
