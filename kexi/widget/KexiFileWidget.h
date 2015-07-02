@@ -73,7 +73,6 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    // QUrl currentURL();
     virtual QString highlightedFile() const;
 
     //! just sets locationWidget()->setCurrentText(fn)
@@ -104,8 +103,6 @@ public Q_SLOTS:
     virtual void accept();
 
 Q_SIGNALS:
-    //entered file name is accepted
-//alread avail. in KFileWidget  void accepted();
     void fileHighlighted();
     void rejected();
 
