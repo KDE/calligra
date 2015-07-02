@@ -1,10 +1,3 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
-
-
-########### next target ###############
-
 set(keximigrate_txtmigrate_PART_SRCS txtmigrate.cpp )
 
 

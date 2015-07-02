@@ -1,6 +1,3 @@
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi  )
-
 # temp
 #ADD_DEFINITIONS( -DNO_GUI=1 )
 

@@ -1,12 +1,4 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
-
-
-########### next target ###############
-
 set(kexistartuptest_SRCS main.cpp )
-
 
 add_executable(kexistartuptest ${kexistartuptest_SRCS})
 
