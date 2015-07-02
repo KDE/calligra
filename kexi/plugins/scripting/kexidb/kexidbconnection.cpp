@@ -144,7 +144,7 @@ QObject* KexiDBConnection::executeQueryString(const QString& sqlquery)
 
 QObject* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschema)
 {
-    KDbCursor* cursor = m_connection->executeQuery(*queryschema->queryschema());
+    KDbCursor* cursor = m_connection->executeQuery(queryschema->queryschema());
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
