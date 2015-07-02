@@ -1,7 +1,4 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs   )
-
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core)
 
 ########### next target ###############
 

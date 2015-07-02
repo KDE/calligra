@@ -1,4 +1,4 @@
-include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
+include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR})
 
 kde_enable_exceptions()
 

@@ -1,9 +1,6 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
 
-include_directories(
-  ${CMAKE_SOURCE_DIR}/kexi
-  ${CMAKE_CURRENT_SOURCE_DIR}/completer
-)
+include_directories(completer)
 
 set(kexiutils_LIB_SRCS
   utils.cpp

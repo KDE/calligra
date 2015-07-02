@@ -1,9 +1,8 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi
-    ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration)
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget)
 
 # the main plugin
 set(kexi_csvimportexportplugin_SRCS
-   kexicsv_importexportpart.cpp
+   KexiCsvImportExportPlugin.cpp
    KexiCSVImportDialogModel.cpp
    kexicsvimportdialog.cpp
    kexicsvimportoptionsdlg.cpp
@@ -12,13 +11,12 @@ set(kexi_csvimportexportplugin_SRCS
    kexicsvexport.cpp
 )
 
-add_library(kexi_csvimportexportplugin MODULE ${kexi_csvimportexportplugin_PART_SRCS})
+add_library(kexi_csvimportexportplugin MODULE ${kexi_csvimportexportplugin_SRCS})
 kcoreaddons_desktop_to_json(kexi_csvimportexportplugin kexi_csvimportexportplugin.desktop)
 
 target_link_libraries(kexi_csvimportexportplugin
     PRIVATE
         kexicore
-        keximigrate
         kexiutils
         kexiextendedwidgets
         keximain
@@ -26,6 +24,7 @@ target_link_libraries(kexi_csvimportexportplugin
         KDb
 
         KF5::Codecs
+        KF5::KIOWidgets #for KIO::pixmapForUrl...
 
         Qt5::Gui
 )
