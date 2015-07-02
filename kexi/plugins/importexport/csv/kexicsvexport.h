@@ -23,6 +23,7 @@
 #include <KDbUtils>
 
 class QTextStream;
+class KDbTableOrQuerySchema;
 
 namespace KexiCSVExport
 {
@@ -37,7 +38,7 @@ public:
     Options();
 
     //! Assigns \a args. \return false on failure.
-    bool assign(QMap<QString, QString>& args);
+    bool assign(QMap<QString, QString> *args);
 
     Mode mode;
     int itemId; //!< Table or query ID
@@ -51,11 +52,11 @@ public:
 
 /*! Exports data. \return false on failure.
  @param options options for the export
- @param rowCount row count of the input data or -1 if the row cound has not yet been computed
+ @param recordCount record count of the input data or -1 if the record cound has not yet been computed
  @param predefinedTextStream text stream that should be used instead of writing to a file
 */
-bool exportData(KDbTableOrQuerySchema& tableOrQuery, const Options& options,
-                int rowCount = -1,  QTextStream *predefinedTextStream = 0);
+bool exportData(KDbTableOrQuerySchema *tableOrQuery, const Options& options,
+                int recordCount = -1,  QTextStream *predefinedTextStream = 0);
 
 }
 

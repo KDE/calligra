@@ -54,8 +54,8 @@ class QFile;
 class QStackedWidget;
 class QProgressDialog;
 class QProgressBar;
+class QSpinBox;
 class KComboBox;
-class KIntSpinBox;
 class KPageWidgetItem;
 
 class KexiCSVCommentWidget;
@@ -102,7 +102,7 @@ public:
 
     virtual ~KexiCSVImportDialog();
 
-    bool cancelled() const;
+    bool canceled() const;
 
 protected:
     virtual bool eventFilter(QObject *watched, QEvent *e);
@@ -128,7 +128,7 @@ private:
                             //!< (true by default, set to false if user sets delimiter)
     QLabel* m_formatLabel;
     KComboBox* m_formatCombo;
-    KIntSpinBox *m_startAtLineSpinBox;
+    QSpinBox *m_startAtLineSpinBox;
     KexiCSVTextQuoteComboBox* m_comboQuote;
     QLabel* m_startAtLineLabel;
     QLabel* TextLabel2;
@@ -208,7 +208,7 @@ private:
       3b. The same algorithm as in 3. is performed for comma character.
     4. If the step 3. did not return a delimiter, a character found in step 1. with
       the highest priority is retured as delimiter. */
-    QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream);
+    QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream *inputStream);
 
     /*! Callback, called whenever row is loaded in loadRows(). When inGUI is true,
     nothing is performed, else database buffer is written back to the database. */
@@ -222,7 +222,7 @@ private:
     void updateColumnVectorSize();
 
     bool m_parseComments;
-    bool m_cancelled;
+    bool m_canceled;
     bool m_adjustRows;
     int m_startline;
     QChar m_textquote;
@@ -252,12 +252,12 @@ private:
     KexiCSVImportOptions m_options;
     QProgressDialog *m_loadingProgressDlg;
     QProgressBar *m_importingProgressBar;
-    bool m_dialogCancelled;
+    bool m_dialogCanceled;
     KexiCSVInfoLabel *m_infoLbl;
     KDbConnection *m_conn; //!< (temp) database connection used for importing
     KexiFieldListModel *m_fieldsListModel;
     KDbTableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
-    KDbPreparedStatement::Ptr m_importingStatement;
+    KDbPreparedStatement m_importingStatement;
     QList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
     bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
     bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview
@@ -276,10 +276,10 @@ private:
     void createImportPage();
 
     bool m_newTable;
-    QList<QVariant> m_tmpValues;
+    KDbPreparedStatementParameters m_valuesToInsert;
     KexiPart::Item* m_partItemForSavedTable;
     bool m_importInProgress;
-    bool m_importCancelled;
+    bool m_importCanceled;
     class Private;
     Private * const d;
 
