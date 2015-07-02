@@ -1,10 +1,9 @@
 #TODO add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44019)
 
-include_directories(  ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/kexiutils
 ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
-${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES}   )
+${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget)
 
 set(QT_USE_QTUITOOLS true)
 

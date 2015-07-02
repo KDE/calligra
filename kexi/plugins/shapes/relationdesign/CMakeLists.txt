@@ -1,5 +1,4 @@
-
-include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
+include_directories(${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
 
 set(kexirelationdesignshape_PART_SRCS
 kexirelationdesignshape.cpp

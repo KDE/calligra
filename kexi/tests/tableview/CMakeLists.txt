@@ -1,12 +1,4 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
-
-
-########### next target ###############
-
 set(kexitableviewtest_SRCS main.cpp )
-
 
 add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 

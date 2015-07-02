@@ -1,4 +1,4 @@
-include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
+include_directories(${XBase_INCLUDE_DIR})
 
 ########### next target ###############
 

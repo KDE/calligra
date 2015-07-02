@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils   )
+include_directories(${CMAKE_SOURCE_DIR}/kexi/widget/utils)
 
 set(kexiguiutils_LIB_SRCS
     kexisharedactionclient.cpp

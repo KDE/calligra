@@ -1,5 +1,5 @@
-include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget
- ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget
+ ${CMAKE_SOURCE_DIR}/kexi/widget/tableview)
 
 # the main plugin
 set(kexi_tableplugin_SRCS

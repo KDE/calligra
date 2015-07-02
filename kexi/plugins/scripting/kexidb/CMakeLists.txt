@@ -1,5 +1,3 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
-
 set(krossmodulekexidb_PART_SRCS
    kexidbmodule.cpp
    kexidbfield.cpp
