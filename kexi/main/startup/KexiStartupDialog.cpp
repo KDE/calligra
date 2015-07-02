@@ -379,8 +379,8 @@ void KexiStartupDialog::setupPageOpenExisting()
     }
     d->openExistingFileWidget = d->openExistingConnWidget->fileWidget;
     connect(d->openExistingFileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(d->openExistingFileWidget, SIGNAL(fileHighlighted()),
-            this, SLOT(existingFileHighlighted()));
+    connect(d->openExistingFileWidget, SIGNAL(selectionChanged()),
+            this, SLOT(existingFileSelected()));
     connect(d->openExistingConnWidget, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
             this, SLOT(connectionItemForOpenExistingExecuted(ConnectionDataLVItem*)));
     connect(d->openExistingConnWidget, SIGNAL(connectionItemHighlighted(ConnectionDataLVItem*)),
@@ -435,7 +435,7 @@ KDbConnectionData* KexiStartupDialog::selectedExistingConnection() const
     return d->selectedExistingConnection;
 }
 
-void KexiStartupDialog::existingFileHighlighted()
+void KexiStartupDialog::existingFileSelected()
 {
     //qDebug();
     updateDialogOKButton(0);

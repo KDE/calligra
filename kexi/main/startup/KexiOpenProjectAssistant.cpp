@@ -66,7 +66,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     fileSelector->hideHelpers();
     fileSelector->hideDescription();
     //connect(fileSelector->fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(fileSelector->fileWidget, SIGNAL(fileHighlighted()),
+    connect(fileSelector->fileWidget, SIGNAL(selectionChanged()),
             this, SLOT(next()));
 
     m_connSelectorWidget = new QWidget;
