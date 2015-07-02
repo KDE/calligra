@@ -29,6 +29,7 @@
 
 #include <KLocalizedString>
 
+#include <QFileInfo>
 #include <QDebug>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
@@ -97,8 +98,9 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
             QString n = pdata->caption().trimmed();
-            if (n.isEmpty())
-                n = pdata->connectionData()->databaseName();
+            if (n.isEmpty()) { // file's base name is a good replacement for caption
+                n = QFileInfo(pdata->connectionData()->databaseName()).baseName();
+            }
             return QString(n + opened);
         }
         else {
