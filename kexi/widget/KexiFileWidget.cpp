@@ -99,8 +99,8 @@ KexiFileWidget::KexiFileWidget(
     if (previewAction)
         previewAction->setChecked(false);
     setFocusProxy(locationEdit());
-    connect(this, SIGNAL(fileHighlighted(QString)),
-            this, SLOT(slotExistingFileHighlighted(QString)));
+    connect(this, SIGNAL(fileHighlighted(QUrl)),
+            this, SLOT(slotExistingFileHighlighted(QUrl)));
 }
 
 KexiFileWidget::~KexiFileWidget()
@@ -125,10 +125,10 @@ KexiFileWidget::~KexiFileWidget()
     delete d;
 }
 
-void KexiFileWidget::slotExistingFileHighlighted(const QString& fileName)
+void KexiFileWidget::slotExistingFileHighlighted(const QUrl& url)
 {
-    qDebug() << fileName;
-    d->highlightedUrl = QUrl(fileName);
+    qDebug() << url;
+    d->highlightedUrl = url;
     emit fileHighlighted();
 }
 

@@ -108,7 +108,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     virtual void reject();
-    void slotExistingFileHighlighted(const QString& fileName);
+    void slotExistingFileHighlighted(const QUrl& url);
 
 private:
     void updateFilters();
