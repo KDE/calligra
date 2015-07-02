@@ -27,7 +27,7 @@
 #include <QLineEdit>
 
 #include <KIconLoader>
-#include <KIO/Global>
+#include <KIO/PixmapLoader>
 #include <KLocalizedString>
 
 #include <kexi_global.h>
