@@ -50,7 +50,7 @@ public:
 
     virtual ~KexiCSVExportWizard();
 
-    bool cancelled() const;
+    bool canceled() const;
 
 protected Q_SLOTS:
     virtual void next();
@@ -103,7 +103,7 @@ protected:
     QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
     KDbTableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
-    bool m_cancelled;
+    bool m_canceled;
 };
 
 #endif

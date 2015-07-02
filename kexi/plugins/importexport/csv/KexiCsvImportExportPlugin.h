@@ -23,12 +23,12 @@
 #include <core/kexiinternalpart.h>
 #include "kexicsvexportwizard.h"
 
-/*! Internal part for CSV data import/export dialogs. */
-class KexiCSVImportExportPart : public KexiInternalPart
+//! Internal plugin for CSV import/export
+class KexiCsvImportExportPlugin : public KexiInternalPart
 {
 public:
-    KexiCSVImportExportPart(QObject *parent, const QVariantList &args);
-    virtual ~KexiCSVImportExportPart();
+    KexiCsvImportExportPlugin(QObject *parent, const QVariantList &args);
+    virtual ~KexiCsvImportExportPlugin();
 
     /*! Reimplemented to return wizard object. */
     virtual QWidget *createWidget(const char* widgetClass,

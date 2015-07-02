@@ -54,7 +54,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         , m_fileSavePage(0)
         , m_defaultsBtn(0)
         , m_importExportGroup(KSharedConfig::openConfig()->group("ImportExport"))
-        , m_cancelled(false)
+        , m_canceled(false)
 {
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 
@@ -93,15 +93,16 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             infoLblFromText = xi18n("Exporting data from query:");
         }
     } else {
-        msgh.showErrorMessage(KexiMainWindowIface::global()->project()->dbConnection(),
+        msgh.showErrorMessage(KexiMainWindowIface::global()->project()->dbConnection()->result(),
+                              KDbMessageHandler::Error,
                               xi18n("Could not open data for exporting."));
-        m_cancelled = true;
+        m_canceled = true;
         return;
     }
 
     QString text = "\n" + captionOrName;
-    int m_rowCount = KDb::recordCount(*m_tableOrQuery);
-    int columns = KDb::fieldCount(*m_tableOrQuery);
+    int m_rowCount = KDb::recordCount(m_tableOrQuery);
+    int columns = KDb::fieldCount(m_tableOrQuery);
     text += "\n";
     if (m_rowCount > 0)
         text += xi18n("(rows: %1, columns: %2)", m_rowCount, columns);
@@ -271,9 +272,9 @@ KexiCSVExportWizard::~KexiCSVExportWizard()
     delete m_tableOrQuery;
 }
 
-bool KexiCSVExportWizard::cancelled() const
+bool KexiCSVExportWizard::canceled() const
 {
-    return m_cancelled;
+    return m_canceled;
 }
 
 void KexiCSVExportWizard::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
@@ -313,7 +314,7 @@ void KexiCSVExportWizard::done(int result)
         m_options.delimiter = m_delimiterWidget->delimiter();
         m_options.textQuote = m_textQuote->textQuote();
         m_options.addColumnNames = m_addColumnNamesCheckBox->isChecked();
-        if (!KexiCSVExport::exportData(*m_tableOrQuery, m_options))
+        if (!KexiCSVExport::exportData(m_tableOrQuery, m_options))
             return;
 
         //store options
@@ -426,4 +427,3 @@ QString KexiCSVExportWizard::defaultTextQuote() const
         return KEXICSV_DEFAULT_CLIPBOARD_TEXT_QUOTE;
     return KEXICSV_DEFAULT_FILE_TEXT_QUOTE;
 }
-

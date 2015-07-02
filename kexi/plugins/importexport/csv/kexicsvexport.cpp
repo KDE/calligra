@@ -29,6 +29,7 @@
 
 #include <KDbCursor>
 #include <KDbUtils>
+#include <KDbTableOrQuerySchema>
 
 #include <KLocalizedString>
 
@@ -46,59 +47,59 @@ Options::Options()
 {
 }
 
-bool Options::assign(QMap<QString, QString>& args)
+bool Options::assign(QMap<QString, QString> *args)
 {
-    mode = (args["destinationType"] == "file")
+    mode = (args->value("destinationType") == "file")
            ? KexiCSVExport::File : KexiCSVExport::Clipboard;
 
-    if (args.contains("delimiter"))
-        delimiter = args["delimiter"];
+    if (args->contains("delimiter"))
+        delimiter = args->value("delimiter");
     else
         delimiter = (mode == File) ? KEXICSV_DEFAULT_FILE_DELIMITER : KEXICSV_DEFAULT_CLIPBOARD_DELIMITER;
 
-    if (args.contains("textQuote"))
-        textQuote = args["textQuote"];
+    if (args->contains("textQuote"))
+        textQuote = args->value("textQuote");
     else
         textQuote = (mode == File) ? KEXICSV_DEFAULT_FILE_TEXT_QUOTE : KEXICSV_DEFAULT_CLIPBOARD_TEXT_QUOTE;
 
     bool ok;
-    itemId = args["itemId"].toInt(&ok);
+    itemId = args->value("itemId").toInt(&ok);
     if (!ok || itemId == 0) //neverSaved items are supported
         return false;
-    if (args.contains("forceDelimiter"))
-        forceDelimiter = args["forceDelimiter"];
-    if (args.contains("addColumnNames"))
-        addColumnNames = (args["addColumnNames"] == "1");
-    useTempQuery = (args["useTempQuery"] == "1");
+    if (args->contains("forceDelimiter"))
+        forceDelimiter = args->value("forceDelimiter");
+    if (args->contains("addColumnNames"))
+        addColumnNames = (args->value("addColumnNames") == "1");
+    useTempQuery = (args->value("useTempQuery") == "1");
     return true;
 }
 
 //------------------------------------
 
-bool KexiCSVExport::exportData(KDbTableOrQuerySchema& tableOrQuery,
-                               const Options& options, int rowCount, QTextStream *predefinedTextStream)
+bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
+                               const Options& options, int recordCount, QTextStream *predefinedTextStream)
 {
-    KDbConnection* conn = tableOrQuery.connection();
+    KDbConnection* conn = tableOrQuery->connection();
     if (!conn)
         return false;
 
-    KDbQuerySchema* query = tableOrQuery.query();
+    KDbQuerySchema* query = tableOrQuery->query();
     QList<QVariant> queryParams;
     if (!query) {
-        query = tableOrQuery.table()->query();
+        query = tableOrQuery->table()->query();
     }
     else {
         queryParams = KexiMainWindowIface::global()->currentParametersForQuery(query->id());
     }
 
-    if (rowCount == -1)
-        rowCount = KDb::recordCount(tableOrQuery, queryParams);
-    if (rowCount == -1)
+    if (recordCount == -1)
+        recordCount = KDb::recordCount(tableOrQuery, queryParams);
+    if (recordCount == -1)
         return false;
 
 //! @todo move this to non-GUI location so it can be also used via command line
 //! @todo add a "finish" page with a progressbar.
-//! @todo look at rowCount whether the data is really large;
+//! @todo look at recordCount whether the data is really large;
 //!       if so: avoid copying to clipboard (or ask user) because of system memory
 
 //! @todo OPTIMIZATION: use fieldsExpanded(true /*UNIQUE*/)
@@ -114,7 +115,7 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema& tableOrQuery,
     const bool copyToClipboard = options.mode == Clipboard;
     if (copyToClipboard) {
 //! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
-        uint bufSize = qMin(uint(rowCount < 0 ? 10 : rowCount) * fields.count() * 20, (uint)128000);
+        uint bufSize = qMin(uint(recordCount < 0 ? 10 : recordCount) * fields.count() * 20, (uint)128000);
         buffer.reserve(bufSize);
         if ((uint)buffer.capacity() < bufSize) {
             qWarning() << "Cannot allocate memory for " << bufSize
@@ -212,13 +213,13 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema& tableOrQuery,
     }
 
     KexiGUIMessageHandler handler;
-    KDbCursor *cursor = conn->executeQuery(*query, queryParams);
+    KDbCursor *cursor = conn->executeQuery(query, queryParams);
     if (!cursor) {
-        handler.showErrorMessage(conn);
+        handler.showErrorMessage(conn->result());
         _ERR;
     }
-    for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-        qDebug() << "Adding records";
+    for (cursor->moveFirst(); !cursor->eof() && !cursor->result().isError(); cursor->moveNext()) {
+        //qDebug() << "Adding records";
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
@@ -257,12 +258,12 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema& tableOrQuery,
         buffer.squeeze();
 
     if (!conn->deleteCursor(cursor)) {
-        handler.showErrorMessage(conn);
+        handler.showErrorMessage(conn->result());
         _ERR;
     }
 
     if (copyToClipboard)
-        kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+        QApplication::clipboard()->setText(buffer, QClipboard::Clipboard);
 
     qDebug() << "Done";
 

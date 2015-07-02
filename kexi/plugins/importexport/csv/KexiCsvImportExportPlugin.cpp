@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicsv_importexportpart.h"
+#include "KexiCsvImportExportPlugin.h"
 #include "kexicsvimportdialog.h"
 #include "kexicsvexportwizard.h"
 #include <core/KexiMainWindowIface.h>
@@ -25,18 +25,20 @@
 #include <core/kexipart.h>
 #include <kexiutils/utils.h>
 
-KEXIPART_PLUGIN_FACTORY(KexiCSVImportExportPart, "kexi_csvimportexportplugin.json")
+#include <KDbTableOrQuerySchema>
 
-KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QVariantList &args)
+KEXIPART_PLUGIN_FACTORY(KexiCsvImportExportPlugin, "kexi_csvimportexportplugin.json")
+
+KexiCsvImportExportPlugin::KexiCsvImportExportPlugin(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
 }
 
-KexiCSVImportExportPart::~KexiCSVImportExportPart()
+KexiCsvImportExportPlugin::~KexiCsvImportExportPlugin()
 {
 }
 
-QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
+QWidget *KexiCsvImportExportPlugin::createWidget(const char* widgetClass,
         QWidget *parent, const char *objName, QMap<QString, QString>* args)
 {
     if (0 == qstrcmp(widgetClass, "KexiCSVImportDialog")) {
@@ -44,7 +46,7 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
                                          ? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
         KexiCSVImportDialog *dlg = new KexiCSVImportDialog(mode, parent);
         dlg->setObjectName(objName);
-        KexiInternalPart::setCancelled(dlg->cancelled());
+        KexiInternalPart::setCancelled(dlg->canceled());
         if (KexiInternalPart::cancelled()) {
             delete dlg;
             return 0;
@@ -54,11 +56,11 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
         if (!args)
             return 0;
         KexiCSVExport::Options options;
-        if (!options.assign(*args))
+        if (!options.assign(args))
             return 0;
         KexiCSVExportWizard *dlg = new KexiCSVExportWizard(options, parent);
         dlg->setObjectName(objName);
-        KexiInternalPart::setCancelled(dlg->cancelled());
+        KexiInternalPart::setCancelled(dlg->canceled());
         if (KexiInternalPart::cancelled()) {
             delete dlg;
             return 0;
@@ -68,21 +70,22 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
     return 0;
 }
 
-bool KexiCSVImportExportPart::executeCommand(const char* commandName,
+bool KexiCsvImportExportPlugin::executeCommand(const char* commandName,
         QMap<QString, QString>* args)
 {
     if (0 == qstrcmp(commandName, "KexiCSVExport")) {
         KexiCSVExport::Options options;
-        if (!options.assign(*args))
+        if (!options.assign(args))
             return false;
         KDbTableOrQuerySchema tableOrQuery(
             KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
         QTextStream *stream = 0;
-        if (args->contains("textStream"))
-            stream = KexiUtils::stringToPtr<QTextStream>((*args)["textStream"]);
-        return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
+        if (args->contains("textStream")) {
+            stream = KDbUtils::stringToPtr<QTextStream>(args->value("textStream"));
+        }
+        return KexiCSVExport::exportData(&tableOrQuery, options, -1, stream);
     }
     return false;
 }
 
-#include "kexicsv_importexportpart.moc"
+#include "KexiCsvImportExportPlugin.moc"
