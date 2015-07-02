@@ -88,10 +88,10 @@ Manager::~Manager()
 template <typename PartClass>
 PartClass* Manager::part(Info *info, QHash<QString, PartClass*> *partDict)
 {
-    clearResult();
     if (!info) {
         return 0;
     }
+    clearResult();
     if (!lookup()) {
         return 0;
     }
@@ -274,7 +274,7 @@ void Manager::insertStaticPart(StaticPart* part)
 KexiInternalPart* Manager::internalPartForPluginId(const QString& pluginId)
 {
     Info* info = infoForPluginId(pluginId);
-    return part<KexiInternalPart>(info, &d->internalParts);
+    return info ? part<KexiInternalPart>(info, &d->internalParts) : 0;
 }
 
 PartInfoList* Manager::infoList()
