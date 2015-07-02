@@ -131,7 +131,7 @@ protected Q_SLOTS:
     void templateSelected(const QString& fileName);
 
     //! helper
-    void existingFileHighlighted();
+    void existingFileSelected();
     void showSimpleConnForOpenExisting();
     void showAdvancedConnForOpenExisting();
     void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);
