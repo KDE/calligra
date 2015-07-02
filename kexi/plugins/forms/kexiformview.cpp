@@ -699,7 +699,7 @@ void KexiFormView::initDataSource()
                 params = KexiQueryParameters::getParameters(this, *conn->driver(), d->query, &ok);
             }
             if (ok) //input cancelled
-                d->cursor = conn->executeQuery(*d->query, params);
+                d->cursor = conn->executeQuery(d->query, params);
         }
         d->scrollView->invalidateDataSources(invalidSources, d->query);
         ok = d->cursor != 0;
