@@ -31,6 +31,7 @@
 #include <KDbDriver>
 #include <KDbConnection>
 #include <KDbParser>
+#include <KDbNativeStatementBuilder>
 
 #include <KMessageBox>
 
@@ -276,9 +277,13 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
         if (temp->queryChangedInPreviousView()) {
-            KDbConnection::SelectStatementOptions options;
+            KDbSelectStatementOptions options;
             options.addVisibleLookupColumns = false;
-            d->origStatement = KDb::selectStatement(query, options);
+            KDbNativeStatementBuilder builder(KexiMainWindowIface::global()->project()->dbConnection());
+            if (!builder.generateSelectStatement(&d->origStatement, query, options)) {
+                //! @todo msg
+                return false;
+            }
         }
     }
     if (d->origStatement.isEmpty() && !window()->partItem()->neverSaved()) {
