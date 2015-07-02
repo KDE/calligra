@@ -47,6 +47,7 @@
 #include <KDb>
 #include <KDbExpression>
 #include <KDbTableOrQuerySchema>
+#include <KDbNativeStatementBuilder>
 
 #include <KProperty>
 #include <KPropertySet>
@@ -1145,10 +1146,14 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
     if (window()->schemaObject()) //set this instance as obsolete (only if it's stored)
         d->conn->setQuerySchemaObsolete(window()->schemaObject()->name());
 
-    KDbConnection::SelectStatementOptions options;
+    KDbSelectStatementOptions options;
     options.addVisibleLookupColumns = false;
-    QString sqlText = KDb::selectStatement(temp->query(), options).toString();
-    if (!storeDataBlock(sqlText, "sql")) {
+    KDbNativeStatementBuilder builder(KexiMainWindowIface::global()->project()->dbConnection());
+    KDbEscapedString sql;
+    if (!builder.generateSelectStatement(&sql, temp->query(), options)) {
+        return false;
+    }
+    if (!storeDataBlock(sql.toString(), "sql")) {
         return false;
     }
 
