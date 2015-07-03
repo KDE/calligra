@@ -44,7 +44,7 @@ public:
     /**
      * @return internal name of the plugin, a shortcut of pluginId()
      *
-     * Examnple "org.kexi-project.table"
+     * Example: "org.kexi-project.table"
      */
     QString id() const;
 
