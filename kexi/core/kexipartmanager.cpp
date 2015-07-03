@@ -165,7 +165,8 @@ bool Manager::lookup()
                               "org.kexi-project.script").split(','));
     QVector<Info*> orderedInfos(orderedPluginIds.count());
     QStringList serviceTypes;
-    serviceTypes << "Kexi/Viewer" << "Kexi/Designer" << "Kexi/Editor";
+    serviceTypes << "Kexi/Viewer" << "Kexi/Designer" << "Kexi/Editor"
+                 << "Kexi/ModalDialog";
     const QList<QPluginLoader*> offers = KexiPartTrader_instance->query(serviceTypes);
     foreach(QPluginLoader *loader, offers) {
         Info *info = new Info(*loader);
@@ -194,26 +195,34 @@ bool Manager::lookup()
                        << info->id() << info->fileName() << "-- skipping this one";
             continue;
         }
-        // find correct place
-        const int index = orderedPluginIds.indexOf(info->id());
-        if (index != -1) {
-            orderedInfos[index] = info;
+        // find correct place for plugins visible in Navigator
+        if (info->isVisibleInNavigator()) {
+            const int index = orderedPluginIds.indexOf(info->id());
+            if (index != -1) {
+                orderedInfos[index] = info;
+            }
+            else {
+                orderedInfos.append(info);
+            }
+            // append later when we know order
         }
         else {
-            orderedInfos.append(info);
+            // append now
+            d->partlist.append(info);
         }
+        d->partsByPluginId.insert(info->pluginId(), info);
     }
 
-    // fill final list using computed order
+    // fill the final list using computed order
     for (int i = 0; i < orderedInfos.size(); i++) {
         Info *info = orderedInfos[i];
         if (!info) {
             continue;
         }
-        d->partsByPluginId.insert(info->pluginId(), info);
         //qDebug() << "adding Kexi part info" << info->pluginId();
-        d->partlist.append(info);
+        d->partlist.insert(i, info);
     }
+    // now the d->partlist is: [ordered plugins visible in Navigator] [other plugins in unspecified order]
     d->lookupResult = true;
     return true;
 }

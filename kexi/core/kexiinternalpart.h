@@ -107,9 +107,9 @@ public:
     static KexiInternalPart* part(KDbMessageHandler *msgHdr, const QString &className);
 
     /*! \return true if the part can create only one (unique) window. */
-    bool uniqueWindow() const;
+    bool createsUniqueWindow() const;
 
-    void setUniqueWindow(bool set);
+    void setCreatesUniqueWindow(bool set);
 
     /*! \return true if the part creation has been cancelled (eg. by a user)
      so it wasn't an error. Internal part's impelmentation should set it to true when needed.
