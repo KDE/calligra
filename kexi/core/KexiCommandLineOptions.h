@@ -60,6 +60,7 @@ public:
     QCommandLineOption localSocket;
     QCommandLineOption skipConnDialog;
     QCommandLineOption fullScreen;
+    QCommandLineOption listPlugins;
 };
 
 #endif

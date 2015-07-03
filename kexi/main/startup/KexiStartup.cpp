@@ -25,6 +25,7 @@
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
 #include <core/kexipartmanager.h>
+#include <core/kexipartinfo.h>
 #include <core/KexiCommandLineOptions.h>
 #include <kexiutils/utils.h>
 #include <widget/KexiConnectionSelectorWidget.h>
@@ -220,12 +221,83 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
 }
 #endif
 
+void prettyPrintPluginMetaData(int maxWidth, const QStringList &labels, QTextStream *out,
+                               const KPluginMetaData& metaData)
+{
+#define LABEL(n) labels[n] << QString(maxWidth - labels[n].length() + 1, ' ')
+    *out << " * " << metaData.pluginId() << endl
+         << "     " << LABEL(0) << metaData.name() << endl
+         << "     " << LABEL(1) << metaData.description() << endl
+         << "     " << LABEL(2) << metaData.version() << endl
+         << "     " << LABEL(3) << metaData.fileName() << endl;
+#undef LABEL
+}
+
+//! Nicely output a list of plugins
+static void prettyPrintListOfPlugins()
+{
+    QTextStream out(stdout);
+
+    QStringList labels;
+    labels << i18nc("Plugin name", "Name:")
+           << i18nc("Plugin description", "Description:")
+           << i18nc("Plugin version", "Version:")
+           << i18nc("Plugin fileName", "File:");
+    int maxWidth = -1;
+    foreach(const QString &label, labels) {
+        maxWidth = qMax(maxWidth, label.length());
+    }
+
+    // 1. Kexi plugins
+    if (Kexi::partManager().infoList()->isEmpty()) {
+        out << i18n("No Kexi plugins found.") << endl;
+    }
+    else {
+        out << i18n("Kexi plugins (%1):", Kexi::partManager().infoList()->count()) << endl;
+        foreach(const KexiPart::Info *info, *Kexi::partManager().infoList()) {
+            prettyPrintPluginMetaData(maxWidth, labels, &out, *info);
+        }
+    }
+
+    // 2. KDb drivers
+    KDbDriverManager driverManager;
+    if (driverManager.driverIds().isEmpty()) {
+        out << i18n("No KDb database driver plugins found.") << endl;
+    }
+    else {
+        out << i18n("KDb database driver plugins (%1):", driverManager.driverIds().count()) << endl;
+        foreach(const QString &pluginId, driverManager.driverIds()) {
+            const KDbDriverMetaData *metaData = driverManager.driverMetaData(pluginId);
+            if (metaData) {
+                prettyPrintPluginMetaData(maxWidth, labels, &out, *metaData);
+            }
+        }
+    }
+}
+
+// Handle higher-prioroty options.
+// When such options are present, handle them and immediately exit without showing
+// the GUI even if other options or arguments are present.
+// These options are currently:
+// - options that display configuration or state of Kexi installation
+tristate KexiStartupHandler::handleHighPriorityOptions()
+{
+    if (isSet(options().listPlugins)) {
+        prettyPrintListOfPlugins();
+        setAction(Exit);
+        return true;
+    }
+    // option not found:
+    return cancelled;
+}
+
 tristate KexiStartupHandler::init()
 {
     setAction(DoNothing);
 
     tristate res = parseOptions();
     if (res != true) {
+        setAction(Exit);
         return res;
     }
 
@@ -233,6 +305,13 @@ tristate KexiStartupHandler::init()
 //        helpText
 //    }
 
+    res = handleHighPriorityOptions();
+    if (res == true || res == false) {
+        setAction(Exit);
+        return res;
+    }
+
+    // Other options
     KDbConnectionData cdata;
 
     if (isSet(options().connectionShortcut)) {

@@ -91,6 +91,16 @@ protected:
 //! @todo KEXI3 port getAutoopenObjects()
 //    bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 
+    //! Handle higher-prioroty options.
+    /*! When such options are present, handle them and immediately exit without showing
+     the GUI even if other options or arguments are present.
+     These options are currently:
+     - options that display configuration or state of Kexi installation
+     @return true if such an option has been found, false if there's failure, cancelled
+             if no such option has been found (in this case processing of other options
+             should continue) */
+    tristate handleHighPriorityOptions();
+
     class Private;
     Private * const d;
 };
