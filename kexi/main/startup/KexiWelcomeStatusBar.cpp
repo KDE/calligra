@@ -262,7 +262,8 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
     }
     if (ok) {
         foreach (const QString &fname, d->fileNamesToUpdate) {
-            if (!QFile::rename(d->tempDir + fname, dir + fname)) {
+            const QByteArray oldName(QFile::encodeName(d->tempDir + fname)), newName(QFile::encodeName(dir + fname));
+            if (0 != ::rename(oldName.constData(), newName.constData())) {
                 qWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
             }
         }
