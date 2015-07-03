@@ -132,7 +132,7 @@ QList<QPluginLoader *> KexiJsonTrader::query(const QStringList &servicetypes,
         QStringList searchDirs;
         searchDirs += QCoreApplication::libraryPaths();
         foreach(const QString &dir, searchDirs) {
-            qDebug() << dir;
+            //qDebug() << dir;
             QString possiblePath = dir + QLatin1Char('/') + d->subDir;
             if (QDir(possiblePath).exists()) {
                 d->pluginPaths += possiblePath;
