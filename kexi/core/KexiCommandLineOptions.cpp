@@ -178,6 +178,14 @@ KexiCommandLineOptions::KexiCommandLineOptions(QCommandLineParser *parser)
     fullScreen(QStringList() << "f" << "fullscreen",
         xi18nc("'fullscreen' command line option",
                "Start Kexi in full screen mode to occupy the whole screen area by hiding "
-               "window decorations such as title bars."))
+               "window decorations such as title bars.")),
+
+    // Options that display configuration or state of Kexi installation.
+    // When used, Kexi immediately exits without showing the GUI even if other options
+    // or arguments are present.
+    listPlugins("list-plugins",
+      xi18nc("'list-plugins' command line option",
+             "Displays list of plugins available for Kexi with their name, description, "
+             "version and filenames."))
 {
 }

@@ -209,6 +209,7 @@ tristate KexiStartupData::parseOptions()
     ADD_OPTION(localSocket)
     ADD_OPTION(skipConnDialog)
     ADD_OPTION(fullScreen)
+    ADD_OPTION(listPlugins)
 #undef ADD_OPTION
 
     d->parser.addPositionalArgument("file",
