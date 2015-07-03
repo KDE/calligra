@@ -144,19 +144,20 @@ QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
         return 0; //fatal!
     }
     QWidget *w;
-    if (part->uniqueWindow() && !part->d->uniqueWidget.isNull())
+    if (part->createsUniqueWindow() && !part->d->uniqueWidget.isNull())
         w = part->d->uniqueWidget;
     else
         w = part->createWidget(dialogClass, KexiMainWindowIface::global()->thisWidget(),
                                objName ? objName : className.toLatin1().constData(), args);
 
-    if (dynamic_cast<QDialog*>(w)) {
-        if (part->uniqueWindow())
+    QDialog* dialog = qobject_cast<QDialog*>(w);
+    if (dialog) {
+        if (part->createsUniqueWindow())
             part->d->uniqueWidget = w;
-        return dynamic_cast<QDialog*>(w);
+        return dialog;
     }
     //sanity
-    if (!(part->uniqueWindow() && !part->d->uniqueWidget.isNull()))
+    if (!(part->createsUniqueWindow() && !part->d->uniqueWidget.isNull()))
         delete w;
     return 0;
 }
@@ -207,12 +208,12 @@ bool KexiInternalPart::executeCommand(const char* commandName,
     return false;
 }
 
-bool KexiInternalPart::uniqueWindow() const
+bool KexiInternalPart::createsUniqueWindow() const
 {
     return d->uniqueWindow;
 }
 
-void KexiInternalPart::setUniqueWindow(bool set)
+void KexiInternalPart::setCreatesUniqueWindow(bool set)
 {
     d->uniqueWindow = set;
 }
