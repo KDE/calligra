@@ -57,7 +57,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         , m_canceled(false)
 {
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
-
+    buttonBox()->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     if (m_options.mode == KexiCSVExport::Clipboard) {
         //! @todo KEXI3 ?
         button(QDialogButtonBox::Ok)->setText(xi18n("Copy"));
