@@ -164,7 +164,7 @@ KexiCommandLineOptions::KexiCommandLineOptions(QCommandLineParser *parser)
         "number"),
     localSocket(QStringList() << "socket" << "local-socket",
         xi18nc("'local-socket' command line option",
-               "Local computer's socket file name to be used when connecting to "
+               "Local computer's socket filename to be used when connecting to "
                "a database project. Ignored if the project is opened using a shortcut file. "
                "Defaults depend on the used server type (e.g. %1, %2).",
                "MySQL", "PostgreSQL"),
