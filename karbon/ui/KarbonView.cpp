@@ -102,6 +102,9 @@
 #include <KoRulerController.h>
 #include <KoDockRegistry.h>
 #include <KoDockerManager.h>
+#include <KoPageLayout.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoShapeLayer.h>
 #include <KoColorBackground.h>
 #include <KoCutController.h>
