@@ -87,7 +87,7 @@ QWidget* KexiInternalPart::createWidgetInstance(const QString &className,
     if (!part)
         return 0; //fatal!
     return part->createWidget(widgetClass, parent,
-                              objName ? objName : className.toLatin1().constData(), args);
+                              objName ? objName : qPrintable(className), args);
 }
 
 KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
@@ -130,7 +130,7 @@ KexiWindow* KexiInternalPart::createKexiWindowInstance(
         qWarning() << "!part";
         return 0; //fatal!
     }
-    return part->findOrCreateKexiWindow(objName ? objName : className.toLatin1().constData());
+    return part->findOrCreateKexiWindow(objName ? objName : qPrintable(className));
 }
 
 //static
@@ -148,7 +148,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const QString &className,
         w = part->d->uniqueWidget;
     else
         w = part->createWidget(dialogClass, KexiMainWindowIface::global()->thisWidget(),
-                               objName ? objName : className.toLatin1().constData(), args);
+                               objName ? objName : qPrintable(className), args);
 
     QDialog* dialog = qobject_cast<QDialog*>(w);
     if (dialog) {
