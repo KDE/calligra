@@ -580,7 +580,7 @@ void KexiCSVImportDialog::createFileOpenPage()
     m_openFileWidget->setAdditionalFilters(csvMimeTypes().toSet());
     m_openFileWidget->setDefaultExtension("csv");
     connect(m_openFileWidget, SIGNAL(fileSelected(QUrl)), this, SLOT(next()));
-    m_openFilePage = new KPageWidgetItem(m_openFileWidget, xi18n("Select file name for import"));
+    m_openFilePage = new KPageWidgetItem(m_openFileWidget, xi18n("Select Import Filename"));
     addPage(m_openFilePage);
 }
 
