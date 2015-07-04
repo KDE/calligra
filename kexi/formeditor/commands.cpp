@@ -426,7 +426,7 @@ AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment align
     d->form = &form;
     d->alignment = alignment;
     foreach (QWidget *w, list) {
-        d->pos.insert(w->objectName().toLatin1().constData(), w->pos());
+        d->pos.insert(qPrintable(w->objectName()), w->pos());
     }
 
     switch (d->alignment) {
@@ -554,7 +554,7 @@ void AlignWidgetsCommand::undo()
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
         if (item && item->widget())
         {
-            item->widget()->move(d->pos.value(item->widget()->objectName().toLatin1().constData()));
+            item->widget()->move(d->pos.value(qPrintable(item->widget()->objectName())));
             // we restore selection
             d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection | Form::Raise);
         }
@@ -599,9 +599,9 @@ AdjustSizeCommand::AdjustSizeCommand(Form& form, Adjustment type, const QWidgetL
                 w = w->parentWidget();
         }
 
-        d->sizes.insert(w->objectName().toLatin1().constData(), w->size());
+        d->sizes.insert(qPrintable(w->objectName()), w->size());
         if (d->type == SizeToGrid) // SizeToGrid also move widgets
-            d->pos.insert(w->objectName().toLatin1().constData(), w->pos());
+            d->pos.insert(qPrintable(w->objectName()), w->pos());
     }
 
     switch (d->type) {
@@ -804,9 +804,9 @@ void AdjustSizeCommand::undo()
     for (QHash<QByteArray, QSize>::ConstIterator it = d->sizes.constBegin(); it != endIt; ++it) {
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
         if (item && item->widget()) {
-            item->widget()->resize(d->sizes[item->widget()->objectName().toLatin1().constData()]);
+            item->widget()->resize(d->sizes[qPrintable(item->widget()->objectName())]);
             if (d->type == SizeToGrid)
-                item->widget()->move(d->pos[item->widget()->objectName().toLatin1().constData()]);
+                item->widget()->move(d->pos[qPrintable(item->widget()->objectName())]);
             d->form->selectWidget(item->widget(),
                 Form::AddToPreviousSelection | Form::LastSelection | Form::Raise); // restore selection
         }

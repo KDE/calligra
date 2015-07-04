@@ -390,7 +390,7 @@ void KexiFormView::updateValuesForSubproperties()
                 //    << subpropIt.value();
 
                 QMetaProperty meta = KexiUtils::findPropertyWithSuperclasses(
-                                         subwidget, subpropIt.key().toLatin1().constData());
+                                         subwidget, qPrintable(subpropIt.key()));
                 if (meta.isValid()) {
                     // Special case: the property value of type enum (set) but is saved as a string list,
                     // not as int, so we need to translate it to int. It's been created as such

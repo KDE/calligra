@@ -149,7 +149,7 @@ bool xBaseMigrate::drv_readTableSchema(
   // Get table path
   QString tablePath = m_tableNamePathMap.value( originalName );
   // get dbf pointer for table
-  xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
+  xbDbf* tableDbf = GetDbfPtr(qPrintable(tablePath));
 
   xbLong numFlds = tableDbf->FieldCount();
 
@@ -206,7 +206,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destCon
 
   // get dbf pointer for table
   QString tablePath = m_tableNamePathMap.value( srcTable );
-  xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
+  xbDbf* tableDbf = GetDbfPtr(qPrintable(tablePath));
 
   xbLong numRecords = tableDbf->NoOfRecords();
 
@@ -338,7 +338,7 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbFi
 
     // get dbf pointer for table
     QString tablePath = m_tableNamePathMap.value( tableName );
-    xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
+    xbDbf* tableDbf = GetDbfPtr(qPrintable(tablePath));
 
     // determine type of indexFile
     // currently done by checking extension.
@@ -355,7 +355,7 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KDbFi
       return;
     }
 
-    if ( index->OpenIndex( indexFileName.toLatin1().constData() ) != XB_NO_ERROR ) {
+    if ( index->OpenIndex(qPrintable(indexFileName)) != XB_NO_ERROR ) {
       qDebug()<<"Couldn't open index file"<<indexFileName;
       return;
     }
