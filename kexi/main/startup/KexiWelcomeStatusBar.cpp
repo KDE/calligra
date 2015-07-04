@@ -54,6 +54,8 @@
 #include <QTimer>
 #include <QCryptographicHash>
 
+#include <stdio.h>
+
 static const int GUI_UPDATE_INTERVAL = 60; // update interval for GUI, in minutes
 static const int DONATION_INTERVAL = 10; // donation interval, in days
 static const int UPDATE_FILES_LIST_SIZE_LIMIT = 1024 * 128;
@@ -249,7 +251,8 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
     QString dir(KStandardDirs::locateLocal("data", basePath() + '/', true /*create*/));
     kDebug() << dir;
     foreach (const QString &fname, d->fileNamesToUpdate) {
-        if (!QFile::rename(d->tempDir + fname, dir + fname)) {
+        const QByteArray oldName(QFile::encodeName(d->tempDir + fname)), newName(QFile::encodeName(dir + fname));
+        if (0 != ::rename(oldName.constData(), newName.constData())) {
             kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
         }
     }

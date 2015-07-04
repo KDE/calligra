@@ -18,6 +18,9 @@
 
 #include "RecentImageImageProvider.h"
 #include <QFile>
+#include <QDir>
+#include <QProcess>
+#include <QApplication>
 #include <QImage>
 #include <QImageReader>
 #include <QPainter>

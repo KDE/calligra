@@ -63,6 +63,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kcomponentdata.h>
 
 const int DEFAULT_ICON_SIZE = 200;
 

@@ -41,6 +41,7 @@
 #include <kicon.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 
 //Calligra Headers

@@ -36,6 +36,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include <KoXmlReader.h>

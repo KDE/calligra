@@ -30,6 +30,7 @@
 
 #include <QTimer>
 #include <QImage>
+#include <QApplication>
 #include <QPainter>
 
 static const int minThumbnailSize = 400;

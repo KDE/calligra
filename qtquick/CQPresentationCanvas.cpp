@@ -55,6 +55,8 @@
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QApplication>
+
 
 class CQPresentationCanvas::Private
 {

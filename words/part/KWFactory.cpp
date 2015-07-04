@@ -23,8 +23,6 @@
 #include "KWAboutData.h"
 #include "KWDocument.h"
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kiconloader.h>
 
@@ -92,10 +90,7 @@ const KComponentData &KWFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-        KGlobal::dirs()->addResourceType("styles", "data", "words/styles/");
-
         KIconLoader::global()->addAppDir("calligra");
-
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
