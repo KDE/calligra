@@ -1,5 +1,5 @@
 
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/kexidb)
+include_directories( ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/kexidb)
 
 set(kexirelationdesignshape_PART_SRCS  
 kexirelationdesignshape.cpp
@@ -17,7 +17,8 @@ kexirelationdesignshape
 ${CALLIGRADB_LIBS}
 kexicore
 keximain
-komain
+kowidgets
+flake
 ${KDE4_KDECORE_LIBS}
 ${KDE4_KDEUI_LIBS}
 ${QT_QTCORE_LIBRARY}
