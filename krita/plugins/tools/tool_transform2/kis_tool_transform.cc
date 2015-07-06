@@ -87,7 +87,6 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
     , m_workRecursively(true)
-    , m_isActive(false)
     , m_changesTracker(&m_transaction)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
@@ -146,6 +145,13 @@ void KisToolTransform::outlineChanged()
 void KisToolTransform::canvasUpdateRequested()
 {
     m_canvas->updateCanvas();
+}
+
+void KisToolTransform::resetCursorStyle()
+{
+    KisTool::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -207,6 +213,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolTransform::setFunctionalCursor()
 {
+    if (overrideCursorIfNotEditable()) {
+        return;
+    }
+
     if (!m_strokeData.strokeId()) {
         useCursor(KisCursor::pointingHandCursor());
     } else {
@@ -446,11 +456,6 @@ void KisToolTransform::applyTransform()
     slotApplyTransform();
 }
 
-bool KisToolTransform::isActive() const
-{
-    return m_isActive;
-}
-
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
 {
     TransformToolMode mode = FreeTransformMode;
@@ -653,6 +658,26 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+
+    if (lastCommand &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand,
+                                                      args)) {
+
+        image()->undoAdapter()->undoLastCommand();
+        // FIXME: can we make it async?
+        image()->waitForDone();
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -767,8 +792,6 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
     }
 
-    m_isActive = true;
-    emit isActiveChanged();
     startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
@@ -776,9 +799,6 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
-    m_isActive = false;
-    emit isActiveChanged();
-
     KisTool::deactivate();
 }
 
@@ -829,6 +849,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
+    ToolTransformArgs fetchedArgs;
+    const bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs);
+
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
@@ -867,7 +890,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    if (!tryInitTransformModeFromNode(currentNode)) {
+    if (fetchedFromCommand) {
+        m_currentArgs = fetchedArgs;
+        initGuiAfterTransformMode();
+    } else if (!tryInitTransformModeFromNode(currentNode)) {
         initTransformMode(mode);
     }
 

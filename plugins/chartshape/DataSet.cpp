@@ -117,6 +117,29 @@ const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
 
 static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 
+// just to get access to paintMarker method, until there is a proper way to
+// have markers painted by some util class
+class MarkerPainterDummyDiagram : public KChart::AbstractDiagram
+{
+public:
+    MarkerPainterDummyDiagram() {}
+    void doPaintMarker( QPainter* painter,
+                        const KChart::MarkerAttributes& markerAttributes,
+                        const QBrush& brush, const QPen& pen,
+                        const QPointF& point, const QSizeF& size );
+public: // abstract KChart::AbstractDiagram API
+    virtual void paint ( KChart::PaintContext* /*paintContext*/ ) {}
+    virtual void resize ( const QSizeF& /*area*/ ) {}
+protected: // abstract KChart::AbstractDiagram API
+    virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const { return QPair<QPointF, QPointF>(); }
+};
+
+void MarkerPainterDummyDiagram::doPaintMarker(QPainter* painter, const KChart::MarkerAttributes& markerAttributes, const QBrush& brush, const QPen& pen, const QPointF& point, const QSizeF& size)
+{
+    paintMarker(painter, markerAttributes, brush, pen, point, size);
+}
+
+
 class DataSet::Private
 {
 public:
@@ -710,14 +733,13 @@ OdfMarkerStyle DataSet::markerStyle() const
 QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
 {
     if (markerStyle != NoMarker) {
-        QPixmap *markerPixmap = new QPixmap(16,16);
-        markerPixmap->fill(QColor(255,255,255,0));
-        QPainter *painter = new QPainter(markerPixmap);
+        QPixmap markerPixmap(16,16);
+        markerPixmap.fill(QColor(255,255,255,0));
+        QPainter painter(&markerPixmap);
         KChart::MarkerAttributes matt;
         matt.setMarkerStyle(odf2kdMarker(markerStyle));
-// QT5TODO: this should be normal API
-//         KChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
-        QIcon markerIcon = QIcon(*markerPixmap);
+        MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        QIcon markerIcon = QIcon(markerPixmap);
         return markerIcon;
     }
     return QIcon();

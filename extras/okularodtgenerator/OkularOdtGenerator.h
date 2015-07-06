@@ -24,10 +24,18 @@
 #include <okular/core/document.h>
 #include <okular/core/version.h>
 
+// add dummy macro, no longer exists, remove post 3.0
+#ifndef OKULAR_IS_VERSION
+#define OKULAR_IS_VERSION(a,b,c) 1
+#endif
+
 class KWDocument;
 
 class OkularOdtGenerator : public Okular::Generator
 {
+    Q_OBJECT
+    Q_INTERFACES( Okular::Generator )
+
 public:
     OkularOdtGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdtGenerator();

@@ -35,6 +35,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QScrollBar>
+#include <QPushButton>
 
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -303,15 +304,14 @@ PreferenceDialog::PreferenceDialog(View* view)
     setObjectName(QLatin1String("PreferenceDialog"));
     setWindowTitle(i18nc("@title:window", "Configure"));
     setFaceType(List);
-    // QT5TODO: port to QDialog
-//     setButtons(Ok | Cancel | Default | Reset);
-//     setDefaultButton(Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->view = view;
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
-    connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
+    connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
     QWidget* widget = 0;
     KPageWidgetItem* page = 0;

@@ -51,6 +51,7 @@
     </p>
     <p xml:lang="bs">Calligra Flow je jednostavan alat za crtanje dijagrama i organigrama sa bliskom integracijom s drugim  Calligra aplikacijama. Omogućava vam da crtate mrežne dijagrame, organizacione dijagrame, dijagrame toka i drugo.</p>
     <p xml:lang="ca">El Calligra Flow és una aplicació fàcil d'utilitzar per fer diagrames i diagrames de flux amb una estreta integració amb altres aplicacions del Calligra. Permet crear diagrames de xarxa, diagrames d'organització, diagrames de flux i més.</p>
+    <p xml:lang="de">Calligra Flow ist ein einfach zu verwendendes Programm für Diagramme und Flussdiagramme mit enger Integration in andere Calligra-Programme. Mit diesem Programm können Sie Netzwerkdiagramme, Organisationsdiagramme, Flussdiagramme und andere Diagramme erstellen und bearbeiten</p>
     <p xml:lang="en-GB">Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.</p>
     <p xml:lang="es">Calligra Flow es una aplicación de fácil uso que sirve para crear diagramas de flujo y gráficos, y que goza de una alta integración con el resto de aplicaciones de Calligra. Le permite crear diagramas de red, gráficos de organización, gráficos de flujo y más.</p>
     <p xml:lang="fi">Calligra Flow on helppokäyttöinen diagrammi- ja vuokaaviosovellus, joka integroituu tiukasti muihin Calligra-sovelluksiin. Sillä voit luoda verkko-, organisaatio- ja vuokaavioita sekä muita.</p>
@@ -76,6 +77,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
@@ -91,7 +93,7 @@
       <li>Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="bs">Kreirajte mrežne dijagrame, organizacione dijagrame, dijagrame toka i drugo</li>
       <li xml:lang="ca">Crea diagrames de xarxa, diagrames d'organització, diagrames de flux i més</li>
-      <li xml:lang="de">Erstellung von Netzwerkdiagrammen, Organisationsdiagrammen, Flussdiagramme und mehr</li>
+      <li xml:lang="de">Erstellung von Netzwerkdiagrammen, Organisationsdiagrammen, Flussdiagrammen und mehr</li>
       <li xml:lang="en-GB">Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="es">Crea diagramas de red, gráficos de organización, gráficos de flujo y más</li>
       <li xml:lang="fi">Verkko-, organisaatio- ja vuokaavioiden sekä muiden luonti</li>

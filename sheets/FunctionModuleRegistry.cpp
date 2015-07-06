@@ -67,8 +67,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    // QT5TODO
-    const KStandardDirs* dirs = KGlobal::/*activeComponent().*/dirs();
+    const KStandardDirs* dirs = KGlobal::dirs();
     const QString fileName = dirs->findResource("functions", module->descriptionFileName());
     if (fileName.isEmpty()) {
         kDebug(36002) << module->descriptionFileName() << "not found.";

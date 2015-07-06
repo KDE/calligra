@@ -173,10 +173,6 @@ public:
     qint32 maxNumberOfThreads(bool defaultValue = false) const;
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 
-    /// Maximum tiles in memory (this is a guideline, not absolute)
-    qint32 maxTilesInMem(bool defaultValue = false) const;
-    void setMaxTilesInMem(qint32 tiles) const;
-
     quint32 getGridMainStyle(bool defaultValue = false) const;
     void setGridMainStyle(quint32 v) const;
 
@@ -267,6 +263,9 @@ public:
     // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
     QString canvasState(bool defaultValue = false) const;
     void setCanvasState(const QString& state) const;
+
+    bool toolOptionsPopupDetached(bool defaultValue = false) const;
+    void setToolOptionsPopupDetached(bool detached) const;
 
     bool paintopPopupDetached(bool defaultValue = false) const;
     void setPaintopPopupDetached(bool detached) const;
@@ -454,6 +453,9 @@ public:
 
     bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
+
+    bool toolOptionsInDocker(bool defaultValue = false) const;
+    void setToolOptionsInDocker(bool inDocker);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

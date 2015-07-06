@@ -1,5 +1,5 @@
 
-include_directories( ${OKULAR_INCLUDE_DIR}   ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part)
+include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part)
 
 ########### next target ###############
 
@@ -7,7 +7,12 @@ set( okularGenerator_odt_SRCS OkularOdtGenerator.cpp )
 
 add_library(okularGenerator_odt MODULE ${okularGenerator_odt_SRCS} )
 
-target_link_libraries( okularGenerator_odt ${OKULAR_LIBRARIES}  komain kotextlayout wordsprivate )
+target_link_libraries( okularGenerator_odt
+    Okular::okularcore
+    komain
+    kotextlayout
+    wordsprivate
+)
 
 install( TARGETS okularGenerator_odt DESTINATION ${PLUGIN_INSTALL_DIR} )
 

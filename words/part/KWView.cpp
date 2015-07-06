@@ -68,6 +68,7 @@
 #include <KoTextEditor.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
+#include <KoGuidesData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -107,6 +108,7 @@
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
+#include <k4aboutdata.h>
 
 #include <limits>
 
@@ -131,8 +133,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-// QT5TODO: no longer exists, but possibly also not needed. Check it.
-//     setComponentData(KWFactory::componentData());
+    setComponentName(KWFactory::componentData().componentName(), KWFactory::aboutData()->programName());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
@@ -204,6 +205,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 KWView::~KWView()
 {
+    KoToolManager::instance()->removeCanvasController(m_gui->canvasController());
+
     m_canvas = 0;
 }
 

@@ -22,6 +22,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 
 #include <ktempdir.h>
 #include <kdebug.h>

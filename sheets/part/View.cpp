@@ -64,6 +64,7 @@
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
+#include <k4aboutdata.h>
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -79,7 +80,6 @@
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -562,8 +562,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-// QT5TODO: no longer exists, but possibly also not needed. Check it.
-//     setComponentData(Factory::global());
+    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
     setXMLFile("sheets.rc");
 
     // GUI Initializations

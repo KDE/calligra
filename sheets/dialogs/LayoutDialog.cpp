@@ -231,17 +231,14 @@ void GeneralTab::styleNameChanged(const QString& name)
     if (!m_dlg->getStyleManager()->validateStyleName(name, m_dlg->getStyle())) {
         m_nameStatus->setText(i18n("A style with this name already exists."));
         m_nameStatus->show();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else if (name.isEmpty()) {
         m_nameStatus->setText(i18n("The style name can not be empty."));
         m_nameStatus->show();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else {
         m_nameStatus->hide();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(true);
+        m_dlg->setOkButtonEnabled(true);
     }
 }
 
@@ -250,18 +247,15 @@ void GeneralTab::parentChanged(const QString& parentName)
     if (m_nameEdit->text() == parentName) {
         m_parentStatus->setText(i18n("A style cannot inherit from itself."));
         m_parentStatus->show();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else if (!m_dlg->checkCircle(m_nameEdit->text(), parentName)) {
         m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.",
                                      m_parentBox->currentText()));
         m_parentStatus->show();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else {
         m_parentStatus->hide();
-        // QT5TODO: port to QDialog
-//         m_dlg->enableButtonOk(true);
+        m_dlg->setOkButtonEnabled(true);
     }
 
     if (parentName.isEmpty() || parentName == i18n("Default"))
@@ -629,6 +623,12 @@ KLocale* CellFormatDialog::locale() const
     return m_sheet->map()->calculationSettings()->locale();
 }
 
+void CellFormatDialog::setOkButtonEnabled(bool enabled)
+{
+    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(enabled);
+}
+
+
 void CellFormatDialog::checkBorderRight(const Style& style)
 {
     if (borders[BorderType_Right].style != style.rightBorderPen().style() ||
@@ -753,8 +753,6 @@ void CellFormatDialog::init()
     }
 
     setWindowTitle(i18n("Cell Format"));
-    // QT5TODO: port to QDialog
-//     setButtons(KDialog::Ok | KDialog::Cancel);
     setFaceType(KPageDialog::Tabbed);
     setMinimumWidth(600);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -788,7 +786,7 @@ void CellFormatDialog::init()
     protectPage = new CellFormatPageProtection(this, this);
     addPage(protectPage, i18n("&Cell Protection"));
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
 }
 
 QPixmap * CellFormatDialog::paintFormatPixmap(const char * _string1, const QColor & _color1,

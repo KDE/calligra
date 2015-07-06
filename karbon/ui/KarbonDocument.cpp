@@ -60,6 +60,8 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

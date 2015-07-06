@@ -31,6 +31,8 @@
 #include <kdatetime.h>
 #include <kdebug.h>
 
+#include <QFileInfo>
+
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)
  : QAbstractListModel(parent), m_projects(&projects)
@@ -98,8 +100,9 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
             QString n = pdata->caption().trimmed();
-            if (n.isEmpty())
-                n = pdata->constConnectionData()->dbFileName();
+            if (n.isEmpty()) { // file's base name is a good replacement for caption
+                n = QFileInfo(pdata->constConnectionData()->dbFileName()).baseName();
+            }
             return QString(n + opened);
         }
         else {

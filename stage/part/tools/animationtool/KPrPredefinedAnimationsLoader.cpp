@@ -230,7 +230,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     KoShapeLoadingContext shapeContext(context, 0);
     KoXmlDocument doc;
 
-    const KStandardDirs* dirs = KGlobal::dirs(); // QT5TODO: was KGlobal::activeComponent().dirs();
+    const KStandardDirs* dirs = KGlobal::dirs();
     const QString filePath = dirs->findResource("data", "stage/animations/animations.xml");
     if (!filePath.isEmpty()) {
         QFile file(filePath);

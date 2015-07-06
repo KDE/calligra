@@ -666,16 +666,6 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
     m_cfg.writeEntry("maxthreads", maxThreads);
 }
 
-qint32 KisConfig::maxTilesInMem(bool defaultValue) const
-{
-    return (defaultValue ? 5000 : m_cfg.readEntry("maxtilesinmem", 5000));
-}
-
-void KisConfig::setMaxTilesInMem(qint32 tiles) const
-{
-    m_cfg.writeEntry("maxtilesinmem", tiles);
-}
-
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);
@@ -1000,6 +990,17 @@ void KisConfig::setCanvasState(const QString& state) const
         m_cfg.sync();
     }
 }
+
+bool KisConfig::toolOptionsPopupDetached(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("ToolOptionsPopupDetached", false));
+}
+
+void KisConfig::setToolOptionsPopupDetached(bool detached) const
+{
+    m_cfg.writeEntry("ToolOptionsPopupDetached", detached);
+}
+
 
 bool KisConfig::paintopPopupDetached(bool defaultValue) const
 {
@@ -1545,6 +1546,16 @@ bool KisConfig::compressKra(bool defaultValue) const
 void KisConfig::setCompressKra(bool compress)
 {
     m_cfg.writeEntry("compressLayersInKra", compress);
+}
+
+bool KisConfig::toolOptionsInDocker(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("ToolOptionsInDocker", false));
+}
+
+void KisConfig::setToolOptionsInDocker(bool inDocker)
+{
+    m_cfg.writeEntry("ToolOptionsInDocker", inDocker);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const

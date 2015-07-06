@@ -42,6 +42,11 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
+void KisStrokeStrategyUndoCommandBased::setUsedWhileUndoRedo(bool value)
+{
+    setClearsRedoOnStart(!value);
+}
+
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;
@@ -75,6 +80,7 @@ void KisStrokeStrategyUndoCommandBased::finishStrokeCallback()
     QMutexLocker locker(&m_mutex);
     if(m_macroCommand) {
         Q_ASSERT(m_undoAdapter);
+        postProcessToplevelCommand(m_macroCommand);
         m_undoAdapter->addMacro(m_macroCommand);
         m_macroCommand = 0;
     }
@@ -117,4 +123,9 @@ void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP comman
     if(m_macroCommand) {
         m_macroCommand->addCommand(command, sequentiality, exclusivity);
     }
+}
+
+void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
+{
+    Q_UNUSED(command);
 }

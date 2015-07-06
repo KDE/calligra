@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <author/CAuDocument.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
 
 #include <kiconloader.h>
 
@@ -51,8 +50,8 @@
 KComponentData *CAuFactory::s_instance = 0;
 K4AboutData *CAuFactory::s_aboutData = 0;
 
-CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(/**aboutData(), parent*/)
+CAuFactory::CAuFactory()
+    : KPluginFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
@@ -92,10 +91,7 @@ const KComponentData &CAuFactory::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
-        KGlobal::dirs()->addResourceType("styles", "data", "words/styles/");
-
         KIconLoader::global()->addAppDir("calligra");
-
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());

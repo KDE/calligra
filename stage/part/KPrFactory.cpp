@@ -24,8 +24,6 @@
 #include "KPrPart.h"
 
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <KoPluginLoader.h>
 
@@ -34,8 +32,8 @@ K4AboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( /* QT5TODO: what now? *aboutData(), parent*/ )
+KPrFactory::KPrFactory()
+    : KPluginFactory()
 {
     (void)componentData();
 
@@ -67,6 +65,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     Q_UNUSED( keyword );
     KPrPart *part = new KPrPart(parent);
     KPrDocument *doc = new KPrDocument(part);
+    doc->setDefaultStylesResourcePath(QLatin1String("stage/styles/"));
     part->setDocument(doc);
     return part;
 }
@@ -84,8 +83,6 @@ const KComponentData &KPrFactory::componentData()
     if ( !s_instance )
     {
         s_instance = new KComponentData(aboutData());
-
-        KGlobal::dirs()->addResourceType("styles", "data", "stage/styles/");
     }
     return *s_instance;
 }

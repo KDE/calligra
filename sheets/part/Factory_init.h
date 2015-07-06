@@ -33,7 +33,7 @@ class FactoryInit : public Factory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit FactoryInit(QObject *parent = 0) : Factory(parent) {}
+    explicit FactoryInit() : Factory() {}
     virtual ~FactoryInit() {}
 
 };

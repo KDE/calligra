@@ -596,6 +596,7 @@ public:
 
     KLocale * locale() const;
 
+    void setOkButtonEnabled(bool enabled);
 
     struct CellBorderFormat {
         int width;

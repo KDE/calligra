@@ -34,8 +34,8 @@ namespace KPlato
 KComponentData* Factory::s_global = 0L;
 K4AboutData* Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory(/*QT5TODO *aboutData(), parent */)
+Factory::Factory()
+    : KPluginFactory()
 {
     global();
 }

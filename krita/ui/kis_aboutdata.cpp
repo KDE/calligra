@@ -236,6 +236,7 @@ K4AboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Vadim Zhukov"));
     aboutData->addAuthor(ki18n("Vera Lukman"));
     aboutData->addAuthor(ki18n("Victor Lafon"));
+    aboutData->addAuthor(ki18n("Victor Wåhlström"));
     aboutData->addAuthor(ki18n("Volker Krause"));
     aboutData->addAuthor(ki18n("Waldo Bastian"));
     aboutData->addAuthor(ki18n("Werner Trobin"));
@@ -543,8 +544,7 @@ K4AboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Pat David"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Patrick \"ponpat\" Poniewas"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Paul Wortmann"), ki18n("Krita 2.9 Kickstarter Backer"));
-    aboutData->addCredit(ki18n("Pawel"), ki18n("Krita 2.9 Kickstarter Backer"));
-    aboutData->addCredit(ki18n("Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Pawel Swierczynski"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("P+B-Snegge"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("pepeland"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Peter Moonen"), ki18n("Krita 2.9 Kickstarter Backer"));

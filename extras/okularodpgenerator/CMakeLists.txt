@@ -1,5 +1,5 @@
 
-include_directories( ${OKULAR_INCLUDE_DIR}   ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 ########### next target ###############
 
@@ -7,7 +7,11 @@ set( okularGenerator_odp_SRCS OkularOdpGenerator.cpp )
 
 add_library(okularGenerator_odp MODULE ${okularGenerator_odp_SRCS} )
 
-target_link_libraries( okularGenerator_odp ${OKULAR_LIBRARIES}  komain kopageapp )
+target_link_libraries( okularGenerator_odp
+    Okular::okularcore
+    komain
+    kopageapp
+)
 
 install( TARGETS okularGenerator_odp DESTINATION ${PLUGIN_INSTALL_DIR} )
 

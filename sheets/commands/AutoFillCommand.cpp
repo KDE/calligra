@@ -39,6 +39,7 @@
 #include <KSharedConfig>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 
 #include <QList>

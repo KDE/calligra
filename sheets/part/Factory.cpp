@@ -37,8 +37,8 @@ using namespace Calligra::Sheets;
 KComponentData* Factory::s_global = 0;
 K4AboutData* Factory::s_aboutData = 0;
 
-Factory::Factory(QObject* parent)
-        : KPluginFactory(/**aboutData(), parent*/)
+Factory::Factory()
+    : KPluginFactory()
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the

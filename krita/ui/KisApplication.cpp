@@ -26,6 +26,7 @@
 
 #include <KoDpi.h>
 #include "KoGlobal.h"
+#include "KoConfig.h"
 
 #include <kcrash.h>
 #include <kdeversion.h>
@@ -79,6 +80,9 @@
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 
+#ifdef HAVE_OPENGL
+#include "opengl/kis_opengl.h"
+#endif
 
 KisApplication* KisApplication::KoApp = 0;
 
@@ -145,6 +149,10 @@ KisApplication::KisApplication(const QString &key)
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
+
+#ifdef HAVE_OPENGL
+    KisOpenGL::initialize();
+#endif
 
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
@@ -246,6 +254,54 @@ bool KisApplication::createNewDocFromTemplate(KCmdLineArgs *args, int argNumber,
     }
 
     return false;
+}
+
+void KisApplication::clearConfig()
+{
+    KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+
+    KSharedConfigPtr config = KGlobal::config();
+
+    // find user settings file
+    bool createDir = false;
+    QString kritarcPath = KStandardDirs::locateLocal("config", "kritarc", createDir);
+
+    QFile configFile(kritarcPath);
+    if (configFile.exists()) {
+        // clear file
+        if (configFile.open(QFile::WriteOnly)) {
+            configFile.close();
+        }
+        else {
+            QMessageBox::warning(0,
+                                 i18nc("@title:window", "Krita"),
+                                 i18n("Failed to clear %1\n\n"
+                                      "Please make sure no other program is using the file and try again.",
+                                      kritarcPath),
+                                 QMessageBox::Ok, QMessageBox::Ok);
+        }
+    }
+
+    // reload from disk; with the user file settings cleared,
+    // this should load any default configuration files shipping with the program
+    config->reparseConfiguration();
+    config->sync();
+}
+
+void KisApplication::askClearConfig()
+{
+    Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
+    bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
+
+    if (askClearConfig) {
+        bool ok = QMessageBox::question(0,
+                                        i18nc("@title:window", "Krita"),
+                                        i18n("Do you want to clear the settings file?"),
+                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
+        if (ok) {
+            clearConfig();
+        }
+    }
 }
 
 bool KisApplication::start()
@@ -606,4 +662,3 @@ QList<KUrl> KisApplication::checkAutosaveFiles()
     return autosaveUrls;
 }
 
-#include <KisApplication.moc>

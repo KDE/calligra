@@ -223,6 +223,8 @@ public:
         , wrapAroundAction(0)
         , showRulersAction(0)
         , zoomTo100pct(0)
+        , zoomIn(0)
+        , zoomOut(0)
         , showGuidesAction(0)
         , selectionManager(0)
         , controlFrame(0)
@@ -264,6 +266,7 @@ public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
     KisAction *createTemplate;
+    KisAction *createCopy;
     KisAction *saveIncremental;
     KisAction *saveIncrementalBackup;
     KisAction *openResourcesDirectory;
@@ -272,6 +275,8 @@ public:
     KisAction *wrapAroundAction;
     KisAction *showRulersAction;
     KisAction *zoomTo100pct;
+    KisAction *zoomIn;
+    KisAction *zoomOut;
     KisAction *showGuidesAction;
 
     KisSelectionManager *selectionManager;
@@ -387,6 +392,8 @@ void KisViewManager::setCurrentView(KisView *view)
 {
     bool first = true;
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(false);
+
         d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
         first = false;
         KisDocument* doc = d->currentImageView->document();
@@ -408,15 +415,20 @@ void KisViewManager::setCurrentView(KisView *view)
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         d->currentImageView = imageView;
+        KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
 
         d->viewConnections.addUniqueConnection(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
-        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
-        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),canvasController, SLOT(rotateCanvasLeft15()));
+        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
+        d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
+        d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
+        d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
         d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 
         showHideScrollbars();
@@ -435,6 +447,7 @@ void KisViewManager::setCurrentView(KisView *view)
     d->mirrorManager->setView(imageView);
 
     if (d->currentImageView) {
+        d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
     }
@@ -677,6 +690,11 @@ void KisViewManager::createActions()
     actionManager()->addAction("create_template", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
+    d->createCopy = new KisAction( i18n( "&Create Copy From Current Image" ), this);
+    d->createCopy->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("create_copy", d->createCopy);
+    connect(d->createCopy, SIGNAL(triggered()), this, SLOT(slotCreateCopy()));
+
     d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
     d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
@@ -751,12 +769,15 @@ void KisViewManager::createActions()
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-#ifndef Q_OS_WIN
+
+    d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
+    d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
+
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
-#endif
+
 }
 
 
@@ -856,6 +877,28 @@ void KisViewManager::slotCreateTemplate()
     KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra",
                                         KisFactory::componentData(), document(), mainWindow());
 }
+
+void KisViewManager::slotCreateCopy()
+{
+    if (!document()) return;
+    KisDocument *doc = KisPart::instance()->createDocument();
+
+    QString name = document()->documentInfo()->aboutInfo("name");
+    if (name.isEmpty()) {
+        name = document()->url().toLocalFile();
+    }
+    name = i18n("%1 (Copy)", name);
+    doc->documentInfo()->setAboutInfo("title", name);
+    KisImageWSP image = document()->image();
+    KisImageSP newImage = new KisImage(doc->createUndoStore(), image->width(), image->height(), image->colorSpace(), name);
+    newImage->setRootLayer(dynamic_cast<KisGroupLayer*>(image->rootLayer()->clone().data()));
+    doc->setCurrentImage(newImage);
+    KisPart::instance()->addDocument(doc);
+    KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
+    KisView *view = KisPart::instance()->createView(doc, resourceProvider()->resourceManager(), mw->actionCollection(), mw);
+    mw->addView(view);
+}
+
 
 QMainWindow* KisViewManager::qtMainWindow() const
 {
@@ -1250,18 +1293,9 @@ void KisViewManager::guiUpdateTimeout()
 
 void KisViewManager::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
-    if(d->showFloatingMessage && qtMainWindow()) {
-        if (d->savedFloatingMessage) {
-            d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
-        } else {
-            if(d->currentImageView) {
-                d->savedFloatingMessage = new KisFloatingMessage(message, d->currentImageView->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
-                d->savedFloatingMessage->setShowOverParent(true);
-                d->savedFloatingMessage->setIcon(icon);
-                d->savedFloatingMessage->showMessage();
-            }
-        }
-    }
+    if (!d->currentImageView) return;
+    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
 #endif
@@ -1327,8 +1361,9 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
+
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);
     } else if (profiles.contains(profileName)) {

@@ -46,6 +46,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kcomponentdata.h>
 
 #include <QTimer>
 #include <QCoreApplication>

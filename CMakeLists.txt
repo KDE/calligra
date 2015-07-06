@@ -1,5 +1,7 @@
 project(calligra)
 
+message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
@@ -36,11 +38,11 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "3.0 Pre-Alpha")
-set(CALLIGRA_VERSION_MAJOR 2)
-set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_VERSION_STRING "3.0 Alpha")
+set(CALLIGRA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
+set(CALLIGRA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
+set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
@@ -51,17 +53,15 @@ endif()
 
 message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
 
-# define the generic version of the Calligra libraries here
-# this makes it easy to advance it when the next Calligra release comes
-if(CALLIGRA_VERSION_MAJOR EQUAL 2)
-    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
-    if(NOT DEFINED CALLIGRA_STABLE)
-        # bump some more because it is in fact unstable 3.0 so has to be larger than for any 2.9.x
-        math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR} + 1")
-    endif()
+# Define the generic version of the Calligra libraries here
+# This makes it easy to advance it when the next Calligra release comes.
+# 14 was the last GENERIC_CALLIGRA_LIB_VERSION_MAJOR of the previous Calligra series
+# (2.x) so we're starting with 15 in 3.x series.
+if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
+    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
 else()
-    # let's make sure we won't forget to update the "5"
-    message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+    # let's make sure we won't forget to update the "15"
+    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
 endif()
 set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
@@ -398,6 +398,27 @@ macro_optional_find_package(KChart 2.6.0)
 macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
 
 ##
+## Test for KDb
+##
+macro_optional_find_package(KDb 1.0.0)
+macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
+                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
+
+##
+## Test for KReport
+##
+macro_optional_find_package(KReport 2.96.0)
+macro_log_feature(KReport_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats"
+                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+
+##
+## Test for KProperty
+##
+macro_optional_find_package(KProperty 2.96.0)
+macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
+                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
+
+##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
@@ -486,9 +507,9 @@ if(HAVE_VC)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                         "${CMAKE_SOURCE_DIR}/cmake/vc")
 
-    include("${CMAKE_SOURCE_DIR}/cmake/vc/VcMacros.cmake")
-    set(Vc_DEFINITIONS)
-    vc_set_preferred_compiler_flags()
+    include (VcMacros)
+
+    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
 
     #Handle Vc master
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
@@ -503,7 +524,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${Vc_DEFINITIONS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -511,7 +532,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${Vc_DEFINITIONS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -519,7 +540,7 @@ if(HAVE_VC)
     else()
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${Vc_DEFINITIONS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -527,7 +548,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${Vc_DEFINITIONS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -634,8 +655,8 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular 0.22.60)
-macro_log_feature(OKULAR_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
+macro_optional_find_package(Okular 1.0.0)
+macro_log_feature(Okular_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
 
 ##
 ## Test for librevenge
@@ -912,17 +933,23 @@ calligra_drop_product_on_bad_condition( APP_KRITA
     REQUIRED_Xinput_FOUND "Xinput devel not found "
 )
 
+calligra_drop_product_on_bad_condition( APP_KEXI
+    KDb_FOUND "KDb not found"
+    KReport_FOUND "KReport not found"
+    KProperty_FOUND "KProperty not found"
+)
+
 calligra_drop_product_on_bad_condition( APP_ACTIVE
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
     KF5DECLARATIVE_FOUND "KF5Declarative not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
-    OKULAR_FOUND "Okular devel not found"
+    Okular_FOUND "Okular devel not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
-    OKULAR_FOUND "Okular devel not found"
+    Okular_FOUND "Okular devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
@@ -1001,6 +1028,7 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
+    KF5Contacts_FOUND "KF5Contacts devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

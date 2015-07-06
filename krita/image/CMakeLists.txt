@@ -192,10 +192,12 @@ set(kritaimage_LIB_SRCS
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
    kis_memory_leak_tracker.cpp
+   kis_memory_statistics_server.cpp
    kis_name_server.cpp
    kis_node.cpp
    kis_node_facade.cpp
    kis_node_progress_proxy.cpp
+   kis_busy_progress_indicator.cpp
    kis_node_visitor.cpp
    kis_paint_device.cc
    kis_fixed_paint_device.cpp
@@ -298,8 +300,8 @@ set(einspline_SRCS
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

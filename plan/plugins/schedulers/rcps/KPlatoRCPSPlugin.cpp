@@ -47,7 +47,7 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     kDebug(planDbg())<<rcps_version();
     KLocale *locale = KLocale::global();
     if ( locale ) {
-        // QT5TODO
+        // QT5TODO: ensure proper loading of catalog
 //         locale->insertCatalog( "planrcpsplugin" );
     }
     m_granularities << (long unsigned int) 1 * 60 * 1000

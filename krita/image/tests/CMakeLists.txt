@@ -1,3 +1,15 @@
+# cmake in some versions for some not yet known reasons fails to run automoc
+# on random targets (changing target names already has an effect)
+# As temporary workaround skipping build of tests on these versions for now
+# See https://mail.kde.org/pipermail/kde-buildsystem/2015-June/010819.html
+# extend range of affected cmake versions as needed
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
+   NOT ${CMAKE_VERSION} VERSION_GREATER 3.2.1)
+    message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.1 seems to have a problem with automoc")
+    return()
+endif()
+
+
 # set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 

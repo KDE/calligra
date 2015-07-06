@@ -405,6 +405,20 @@ bool KUndo2Command::isMerged()
     return !m_mergeCommandsVector.isEmpty();
 }
 
+KUndo2Command::ExtraData::~ExtraData()
+{
+}
+
+KUndo2Command::ExtraData* KUndo2Command::extraData() const
+{
+    return d->extraData.data();
+}
+
+void KUndo2Command::setExtraData(ExtraData *data)
+{
+    d->extraData.reset(data);
+}
+
 
 #endif // QT_NO_UNDOCOMMAND
 
@@ -541,6 +555,34 @@ void KUndo2QStack::setIndex(int idx, bool clean)
     bool is_clean = m_index == m_clean_index;
     if (is_clean != was_clean)
         emit cleanChanged(is_clean);
+}
+
+void KUndo2QStack::purgeRedoState()
+{
+    bool macro = !m_macro_stack.isEmpty();
+    if (macro) return;
+
+    bool redoStateChanged = false;
+    bool cleanStateChanged = false;
+
+    while (m_index < m_command_list.size()) {
+        delete m_command_list.takeLast();
+        redoStateChanged = true;
+    }
+
+    if (m_clean_index > m_index) {
+        m_clean_index = -1; // we've deleted the clean state
+        cleanStateChanged = true;
+    }
+
+    if (redoStateChanged) {
+        emit canRedoChanged(canRedo());
+        emit redoTextChanged(redoText());
+    }
+
+    if (cleanStateChanged) {
+        emit cleanChanged(isClean());
+    }
 }
 
 /*! \internal

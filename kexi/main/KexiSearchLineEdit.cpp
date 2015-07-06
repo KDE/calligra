@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 
    This program is free software; you can redistribute it and/or
@@ -330,6 +330,24 @@ protected:
 
 // ----
 
+//! @internal Style-dependent fixes for the left margin, probably needed because of the limited
+//! width of the line edit - it's placed in tab bar's corner widget.
+static void fixLeftMargin(QLineEdit *lineEdit)
+{
+    int add = 0;
+    const QByteArray st(lineEdit->style()->objectName().toLatin1());
+    if (st == "breeze" || st == "gtk+") {
+        add = 4; // like QLineEditIconButton::IconMargin
+    }
+    if (add != 0) {
+        QMargins margins(lineEdit->textMargins());
+        margins.setLeft(margins.left() + add);
+        lineEdit->setTextMargins(margins);
+    }
+}
+
+// ----
+
 KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
  : KLineEdit(parent), d(new Private(this))
 {
@@ -364,6 +382,7 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
                                  // We need this information to focus back when pressing Escape key.
     setClearButtonShown(true);
     setClickMessage(i18n("Search"));
+    fixLeftMargin(this);
 }
 
 KexiSearchLineEdit::~KexiSearchLineEdit()
@@ -700,6 +719,14 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     }
 
     KLineEdit::keyPressEvent(event);
+}
+
+void KexiSearchLineEdit::changeEvent(QEvent *event)
+{
+    QLineEdit::changeEvent(event);
+    if (event->type() == QEvent::StyleChange) {
+        fixLeftMargin(this);
+    }
 }
 
 // forked bits from QLineControl::advanceToEnabledItem()

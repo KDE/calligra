@@ -36,6 +36,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include <KoXmlReader.h>
@@ -94,8 +95,7 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     vbox->addWidget(d->combo);
     vbox->addWidget(d->label, 1);
 
-    // QT5TODO: port
-    const KStandardDirs *const dirs = KGlobal::/*activeComponent().*/dirs();
+    const KStandardDirs *const dirs = KGlobal::dirs();
     const QStringList lst = dirs->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
 
     int index = 0;
@@ -130,8 +130,7 @@ void AutoFormatDialog::slotActivated(int index)
 {
     enableButtonOk(true);
 
-    // QT5TODO: port
-    const KStandardDirs *const dirs = KGlobal::/*activeComponent().*/dirs();
+    const KStandardDirs *const dirs = KGlobal::dirs();
     QString image = dirs->findResource("sheet-styles", d->entries[index].image);
     if (image.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find image %1.", d->entries[index].image));
@@ -150,8 +149,7 @@ void AutoFormatDialog::slotActivated(int index)
 
 void AutoFormatDialog::slotOk()
 {
-    // QT5TODO: port
-    const KStandardDirs *const dirs = KGlobal::/*activeComponent().*/dirs();
+    const KStandardDirs *const dirs = KGlobal::dirs();
     QString xml = dirs->findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
     if (xml.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find sheet-style XML file '%1'.", d->entries[d->combo->currentIndex()].xml));

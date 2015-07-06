@@ -48,8 +48,8 @@
 
 KSharedConfig::Ptr s_karbonConfig;
 
-KarbonFactory::KarbonFactory(QObject* parent)
-        : KPluginFactory(/**aboutData(), parent*/)
+KarbonFactory::KarbonFactory()
+    : KPluginFactory()
 {
 }
 

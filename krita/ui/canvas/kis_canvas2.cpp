@@ -376,8 +376,6 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGL::makeSharedContextCurrent();
-
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
                                                                         m_d->displayColorConverter->monitorProfile(),
                                                                         m_d->displayColorConverter->renderingIntent(),
@@ -402,7 +400,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
+        if (QGLFormat::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
                 // Creating the opengl canvas failed, fall back
@@ -897,6 +895,17 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
     }
 
     m_d->canvasWidget->setWrapAroundViewingMode(value);
+}
+
+bool KisCanvas2::wrapAroundViewingMode() const
+{
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        return !(infinityDecoration->visible());
+    }
+    return false;
 }
 
 KoGuidesData *KisCanvas2::guidesData()

@@ -36,9 +36,8 @@ class WORDS_EXPORT KWFactory : public KPluginFactory
 public:
     /**
      * Constructor
-     * @param parent the parent QObject
      */
-    explicit KWFactory(QObject *parent = 0);
+    explicit KWFactory();
     ~KWFactory();
 
     /// overwritten method from superclass

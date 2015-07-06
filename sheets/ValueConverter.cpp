@@ -271,11 +271,12 @@ Value ValueConverter::asString(const Value &value) const
     case Value::Empty:
         val = Value(QString());
         break;
-    case Value::Boolean:
-        // QT5TODO: find proper way to get translation from custom language
-        val = Value(value.asBoolean() ? ki18n("True").toString(/*m_parser->settings()->locale()*/) :
-                    ki18n("False").toString(/*m_parser->settings()->locale()*/));
+    case Value::Boolean: {
+        const QStringList localeCodes(m_parser->settings()->locale()->country());
+        val = Value(value.asBoolean() ? ki18n("True").toString(localeCodes) :
+                    ki18n("False").toString(localeCodes));
         break;
+    }
     case Value::Integer: {
         fmt = value.format();
         if (fmt == Value::fmt_Percent)

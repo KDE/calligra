@@ -28,6 +28,7 @@
 #include <KoPASavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 //KPresenter includes
 #include <KPrDocument.h>

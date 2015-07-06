@@ -28,7 +28,7 @@ class KPrFactoryInit : public KPrFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KPrFactoryInit(QObject *parent = 0) : KPrFactory(parent) {}
+    explicit KPrFactoryInit() : KPrFactory() {}
     virtual ~KPrFactoryInit() {}
 
 };

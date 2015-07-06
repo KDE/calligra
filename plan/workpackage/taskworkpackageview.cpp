@@ -48,7 +48,6 @@
 
 #include <kaction.h>
 #include <kglobal.h>
-#include <klocale.h>
 
 #include "debugarea.h"
 
@@ -721,14 +720,9 @@ GanttView::GanttView( Part *part, QWidget *parent )
 
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
-    // FIXME: improve/cover all options
-    QMap<QString, QString> format;
-    format.insert( "%H", "HH" );
-    format.insert( "%k", "H" );
-    format.insert( "%I", "HH A" );
-    format.insert( "%l", "h a" );
-    // QT5TODO
-//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
+    // TODO: extend QLocale/KGantt to support formats for hourly time display
+    // see bug #349030
+    // removed custom code here
 
     for ( int i = 0; i < part->workPackageCount(); ++i ) {
         updateDateTimeGrid( part->workPackage( i ) );

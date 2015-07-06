@@ -36,8 +36,8 @@ namespace KPlatoWork
 KComponentData* Factory::s_global = 0L;
 K4AboutData* Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory( /*QT5TODO:was before *aboutData(), parent*/ )
+Factory::Factory()
+    : KPluginFactory()
 {
     global();
 }
@@ -74,7 +74,6 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        // QT5TODO
         KGlobal::dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
         KGlobal::dirs()->addResourceType("projects", "data", "planwork/projects/");
 

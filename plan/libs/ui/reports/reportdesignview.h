@@ -26,8 +26,8 @@
 #include <KPropertySet>
 #include <kexireportpart.h>
 #include "koreport/wrtembed/reportdesigner.h"
-#include "koreportdata.h"
 
+class KoReportData;
 class QScrollArea;
 class ReportEntitySelector;
 class SourceSelector;

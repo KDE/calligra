@@ -296,4 +296,5 @@ void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConf
 }
 
 
+#include "kis_brightness_contrast_filter.moc"
 

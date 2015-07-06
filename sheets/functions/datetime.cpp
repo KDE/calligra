@@ -581,7 +581,7 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
     int m = calc->conv()->asInteger(args[1]).asInteger();
     int s = calc->conv()->asInteger(args[2]).asInteger();
 
-    QTime res;
+    QTime res(0, 0);
     res = res.addSecs(60 * 60 * h);
     res = res.addSecs(60 * m);
     res = res.addSecs(s);

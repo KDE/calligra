@@ -498,14 +498,9 @@ MyKGanttView::MyKGanttView( QWidget *parent )
 
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
-    // FIXME: improve/cover all options
-    QMap<QString, QString> format;
-    format.insert( "%H", "HH" );
-    format.insert( "%k", "H" );
-    format.insert( "%I", "HH A" );
-    format.insert( "%l", "h a" );
-    // QT5TODO
-//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
+    // TODO: extend QLocale/KGantt to support formats for hourly time display
+    // see bug #349030
+    // removed custom code here
 
     connect( model(), SIGNAL(nodeInserted(Node*)), this, SLOT(slotNodeInserted(Node*)) );
 }
@@ -881,14 +876,9 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
 
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
-    // FIXME: improve/cover all options
-    QMap<QString, QString> format;
-    format.insert( "%H", "HH" );
-    format.insert( "%k", "H" );
-    format.insert( "%I", "HH A" );
-    format.insert( "%l", "h a" );
-    // QT5TODO
-//     g->setHourFormat( format.value( KLocale::global()->timeFormat().left( 2 ) ) );
+    // TODO: extend QLocale/KGantt to support formats for hourly time display
+    // see bug #349030
+    // removed custom code here
 }
 
 MilestoneItemModel *MilestoneKGanttView::model() const
