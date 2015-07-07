@@ -17,7 +17,7 @@ kde4_add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTime
 target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 
 kde4_add_executable(ppttoodp ppttoodpmain.cpp)
-target_link_libraries(ppttoodp ppttoodplib)
+target_link_libraries(ppttoodp ppttoodplib  ${KDE4_KDECORE_LIBS})
 
 kde4_add_plugin(calligra_filter_ppt2odp PowerPointImport.cpp)
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)

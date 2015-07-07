@@ -20,7 +20,7 @@ set (tableshape_LIB_SRCS
 kde4_add_plugin(calligra_shape_spreadsheet-deferred ${tableshape_LIB_SRCS})
 kde4_add_plugin(calligra_shape_spreadsheet TableShapeFactory.cpp)
 
-target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
+target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon ${KDE4_KFILE_LIBS})
 target_link_libraries(calligra_shape_spreadsheet flake)
 
 install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -21,7 +21,7 @@ if(SHOULD_BUILD_FILTER_SHEETS_TO_HTML)
 set(sheets2html_PART_SRCS htmlexport.cc exportdialog.cc )
 kde4_add_ui_files(sheets2html_PART_SRCS exportwidget.ui )
 kde4_add_plugin(calligra_filter_sheets2html ${sheets2html_PART_SRCS})
-target_link_libraries(calligra_filter_sheets2html calligrasheetscommon)
+target_link_libraries(calligra_filter_sheets2html calligrasheetscommon ${KDE4_KFILE_LIBS})
 install(TARGETS calligra_filter_sheets2html  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_sheets2html.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
