@@ -21,12 +21,18 @@
 #include "kexidbreportdata.h"
 #ifndef KEXI_MOBILE
 #include <widget/utils/kexirecordnavigator.h>
+ //! @todo KEXI3
+#if 0
 #include "keximigratereportdata.h"
+#endif
 #endif
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 #include <KexiIcon.h>
+
+#ifdef KREPORT_SCRIPTING
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
+#endif
 
 #include <KoReportPage>
 #include <renderobjects>
@@ -48,7 +54,7 @@
 #include <QMimeDatabase>
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0) //! @todo KEXI3, m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
@@ -168,8 +174,10 @@ KexiReportView::~KexiReportView()
 {
     qDebug();
     delete m_preRenderer;
+#ifdef KREPORT_SCRIPTING
     delete m_kexi;
     delete m_functions;
+#endif
     delete m_reportDocument;
 }
 
@@ -218,7 +226,7 @@ void KexiReportView::slotExportAsPdf()
         cxt.painter = &painter;
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               xi18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.toDisplayString()),
                                xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
@@ -298,7 +306,7 @@ void KexiReportView::slotExportAsSpreadsheet()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               xi18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.toDisplayString()),
                                xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
@@ -324,7 +332,7 @@ void KexiReportView::slotExportAsTextDocument()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               xi18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                               xi18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.toDisplayString()),
                                xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
@@ -365,7 +373,7 @@ void KexiReportView::slotExportAsWebPage()
 
     if (!renderer->render(cxt, m_reportDocument)) {
         KMessageBox::error(this,
-                           xi18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                           xi18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.toDisplayString()),
                            xi18n("Export Failed"));
     } else {
         openExportedDocument(cxt.destinationUrl);
@@ -404,13 +412,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
-
+#ifdef KREPORT_SCRIPTING
             //Add a kexi object to provide kexidb and extra functionality
             if(!m_kexi) {
                 m_kexi = new KexiScriptAdaptor();
             }
             m_preRenderer->registerScriptObject(m_kexi, "Kexi");
-
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
                 //Delete old functions
@@ -421,6 +428,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
+#endif
 
             if (m_reportDocument) {
                 qDebug() << "=======================================Deleting old document";
@@ -462,9 +470,12 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (e.attribute("type") ==  "external") {
         kodata = new KexiMigrateReportData(e.attribute("source"));
     }
+#endif
 #endif
     return kodata;
 }

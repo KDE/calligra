@@ -44,9 +44,9 @@ private:
     QString m_source;
     qreal math(const QString &, const QString &);
 
-    QString m_where;
+    KDbEscapedString m_where;
 public Q_SLOTS:
-    void setWhere(const QString&);
+    void setWhere(const KDbEscapedString&);
 
     qreal sum(const QString &);
     qreal avg(const QString &);

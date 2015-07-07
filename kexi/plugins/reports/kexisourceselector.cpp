@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QDomElement>
+#include <QVBoxLayout>
 
 //#define NO_EXTERNAL_SOURCES
 
@@ -46,7 +47,10 @@ public:
     {
         delete kexiDBData;
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
         delete kexiMigrateData;
+#endif
 #endif
     }
 
@@ -61,9 +65,11 @@ public:
     KexiDBReportData *kexiDBData;
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     KexiMigrateReportData *kexiMigrateData;
 #endif
-
+#endif
 };
 
 KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
@@ -74,7 +80,9 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->kexiDBData = 0;
 
 #ifndef KEXI_MOBILE
+#ifdef HAVE_KEXIMMIGRATE
     d->kexiMigrateData = 0;
+#endif
 #endif
 
     d->layout = new QVBoxLayout(this);
@@ -166,10 +174,13 @@ KoReportData* KexiSourceSelector::sourceData()
     }
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (d->kexiMigrateData) {
         delete d->kexiMigrateData;
         d->kexiMigrateData = 0;
     }
+#endif
 #endif
 
 //!@TODO Fix when enable external data
@@ -180,10 +191,13 @@ KoReportData* KexiSourceSelector::sourceData()
     }
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "external") {
         d->kexiMigrateData = new KexiMigrateReportData(d->externalSource->text());
         return d->kexiMigrateData;
     }
+#endif
 #endif
 
 #else
