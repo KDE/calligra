@@ -6,7 +6,7 @@ else ()
   add_subdirectory( tables )
   add_subdirectory( queries )
   add_subdirectory( forms )
-  # KEXI3 TODO add_subdirectory( reports )
+  add_subdirectory( reports )
   # KEXI3 TODO add_subdirectory( migration )
   add_subdirectory( importexport )
 

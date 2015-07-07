@@ -101,7 +101,7 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    QList<QAction*> reportActions = KoReportDesigner::actions(&d->toolboxActionGroup);
+    QList<QAction*> reportActions = KoReportDesigner::itemActions(&d->toolboxActionGroup);
 
     foreach(QAction* action, reportActions) {
         connect(action, SIGNAL(triggered(bool)), this, SLOT(slotToolboxActionTriggered(bool)));

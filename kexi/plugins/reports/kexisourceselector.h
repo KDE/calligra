@@ -26,8 +26,9 @@
 #include <KoReportData>
 
 #include "kexidbreportdata.h"
+#ifdef HAVE_KEXI_MIGRATE
 #include "keximigratereportdata.h"
-
+#endif
 class KexiProject;
 
 //! @todo rename to KexiReportDataSourcePage

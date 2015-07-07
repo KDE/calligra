@@ -32,8 +32,10 @@
 class KoReportPreRenderer;
 class ORODocument;
 class KoReportPage;
+#ifdef KREPORT_SCRIPTING
 class KexiScriptAdaptor;
 class KRScriptFunctions;
+#endif
 #ifndef KEXI_MOBILE
 class KexiRecordNavigator;
 #endif
@@ -75,9 +77,10 @@ private:
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
-
+#ifdef KREPORT_SCRIPTING
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
+#endif
     KoReportRendererFactory m_factory;
 
     //! @todo KEXI3 add equivalent of kfiledialog:/// for lastExportPathOrVariable

@@ -20,6 +20,7 @@
 #include <core/kexipart.h>
 
 #include <KDbQuerySchema>
+#include <KDbNativeStatementBuilder>
 
 #include <QDomDocument>
 #include <QDebug>
@@ -79,12 +80,12 @@ void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
     }
 }
 
-void KexiDBReportData::addExpression(const QString& field, const QVariant& value, int relation)
+void KexiDBReportData::addExpression(const QString& field, const QVariant& value, char relation)
 {
     if (d->copySchema) {
         KDbField *fld = d->copySchema->findTableField(field);
         if (fld) {
-            d->copySchema->addToWhereExpression(fld, value, relation);
+            d->copySchema->addToWhereExpression(fld, value, KDbToken(relation));
         }
     } else {
         qDebug() << "Unable to add expresstion to null schema";
@@ -103,12 +104,12 @@ bool KexiDBReportData::open()
     {
         if ( d->objectName.isEmpty() )
         {
-            d->cursor = d->connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
+            d->cursor = d->connection->executeQuery ( KDbEscapedString("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'") );
         }
         else if ( d->copySchema)
         {
             qDebug() << "Opening cursor.." << *d->copySchema;
-            d->cursor = d->connection->executeQuery ( *d->copySchema, 1 );
+            d->cursor = d->connection->executeQuery ( d->copySchema, 1 );
         }
 
 
@@ -148,7 +149,7 @@ bool KexiDBReportData::getSchema(const QString& pluginId)
                 && d->connection->tableSchema(d->objectName))
         {
             qDebug() << d->objectName <<  "is a table..";
-            d->originalSchema = new KDbQuerySchema(*(d->connection->tableSchema(d->objectName)));
+            d->originalSchema = new KDbQuerySchema(d->connection->tableSchema(d->objectName));
         }
         else if ((pluginId.isEmpty() || pluginId == "org.kexi-project.query")
                  && d->connection->querySchema(d->objectName))
@@ -159,14 +160,23 @@ bool KexiDBReportData::getSchema(const QString& pluginId)
         }
 
         if (d->originalSchema) {
-            qDebug() << "Original:" << d->connection->selectStatement(*d->originalSchema);
+            const KDbNativeStatementBuilder builder(d->connection);
+            KDbEscapedString sql;
+            if (builder.generateSelectStatement(&sql, d->originalSchema)) {
+                qDebug() << "Original:" << sql;
+            } else {
+                qDebug() << "Original: ERROR";
+            }
             qDebug() << *d->originalSchema;
 
             d->copySchema = new KDbQuerySchema(*d->originalSchema);
             qDebug() << *d->copySchema;
-            qDebug() << "Copy:" << d->connection->selectStatement(*d->copySchema);
+            if (builder.generateSelectStatement(&sql, d->copySchema)) {
+                qDebug() << "Copy:" << sql;
+            } else {
+                qDebug() << "Copy: ERROR";
+            }
         }
-
         return true;
     }
     return false;
@@ -268,12 +278,10 @@ qint64 KexiDBReportData::recordCount() const
 {
     if ( d->copySchema )
     {
-        return KDb::recordCount ( *d->copySchema );
+        return KDb::recordCount ( d->copySchema );
     }
-    else
-    {
-        return 1;
-    }
+
+    return 1;
 }
 
 QStringList KexiDBReportData::scriptList(const QString& interpreter) const

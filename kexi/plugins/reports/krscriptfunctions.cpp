@@ -50,7 +50,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
     }
 
     qDebug() << sql;
-    KDbCursor *curs = m_connection->executeQuery(sql);
+    KDbCursor *curs = m_connection->executeQuery(KDbEscapedString(sql));
 
     if (curs) {
         ret = curs->value(0).toDouble();

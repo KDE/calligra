@@ -24,6 +24,8 @@
 #include <core/KexiWindowData.h>
 
 #include <KoReportData>
+#include <QDomElement>
+
 
 /**
  * @short Application Main Window

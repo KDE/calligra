@@ -47,7 +47,7 @@ public:
 
     virtual QStringList fieldNames() const;
     virtual void setSorting(const QList<SortedField>& sorting);
-    virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
+    virtual void addExpression(const QString &field, const QVariant &value, char relation = '=');
 
     virtual QString sourceName() const;
     virtual int fieldNumber(const QString &field) const;

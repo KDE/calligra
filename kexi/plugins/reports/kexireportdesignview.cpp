@@ -26,6 +26,9 @@
 #include <QShortcut>
 #include <QDebug>
 #include <QScrollArea>
+#include <QLayout>
+
+#include <KStandardGuiItem>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
         : KexiView(parent)
