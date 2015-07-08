@@ -22,5 +22,10 @@ CMakeLists.txt.user*
 *.kate-swap
 *.diff
 *.patch
+GTAGS
+GPATH
+GRTAGS
+GSYMS
+BROWSE
 
 
