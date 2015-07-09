@@ -42,7 +42,6 @@
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
-#include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoEmbeddedDocumentSaver.h>

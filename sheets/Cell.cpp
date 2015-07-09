@@ -80,7 +80,6 @@
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoOdfStylesReader.h>
 #include <KoXmlWriter.h>
 
 #include <KoTextLoader.h>
