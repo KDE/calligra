@@ -33,6 +33,8 @@
 
 #include <KoReportRendererBase.h>
 
+#include <QDomDocument>
+
 class KoDocument;
 class KoShape;
 struct KoPageLayout;

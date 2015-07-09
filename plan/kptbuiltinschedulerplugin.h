@@ -25,8 +25,6 @@
 
 #include "kptschedule.h"
 
-#include <KoXmlReader.h>
-
 #include <QThread>
 #include <QMutex>
 #include <QTimer>
