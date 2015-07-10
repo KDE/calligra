@@ -181,7 +181,7 @@ install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
   #${GMIC_SOURCE_DIR}/gmic_def.gmic
-  ${GMIC_SOURCE_DIR}/update1610.gmic
+  ${GMIC_SOURCE_DIR}/update1650.gmic
   gmic_def.gmic.blacklist
 DESTINATION ${GMIC_INSTALL_DIR} )
 
