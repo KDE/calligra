@@ -172,9 +172,6 @@ private:
     friend class WidgetLibrary;
 };
 
-typedef QList<WidgetInfo*> WidgetInfoList;
-typedef QHash<QByteArray, WidgetInfo*> WidgetInfoHash;
-
 } // namespace KFormDesigner
 
 #endif

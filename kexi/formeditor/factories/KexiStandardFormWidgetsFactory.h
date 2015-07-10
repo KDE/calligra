@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef STDWIDGETFACTORY_H
-#define STDWIDGETFACTORY_H
+#ifndef KEXISTANDARDFORMWIDGETSFACTORY_H
+#define KEXISTANDARDFORMWIDGETSFACTORY_H
 
 #include <QFrame>
 #include <QPixmap>
@@ -29,47 +29,20 @@
 
 #include "widgetfactory.h"
 #include "container.h"
-#include "FormWidgetInterface.h"
 
 class QTreeWidgetItem;
 class QTreeWidget;
 
 class KPropertySet;
 
-//! A picture label widget for use within forms
-class KexiPictureLabel : public QLabel, public KFormDesigner::FormWidgetInterface
-{
-    Q_OBJECT
-
-public:
-    explicit KexiPictureLabel(const QPixmap &pix, QWidget *parent = 0);
-    virtual ~KexiPictureLabel();
-
-    virtual bool setProperty(const char *name, const QVariant &value);
-};
-
-//! A line widget for use within forms
-class Line : public QFrame, public KFormDesigner::FormWidgetInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
-
-public:
-    explicit Line(Qt::Orientation orient, QWidget *parent = 0);
-    virtual ~Line();
-
-    void setOrientation(Qt::Orientation orient);
-    Qt::Orientation orientation() const;
-};
-
 //! Factory for all basic widgets, including Spring (not containers)
-class StdWidgetFactory : public KFormDesigner::WidgetFactory
+class KexiStandardFormWidgetsFactory : public KFormDesigner::WidgetFactory
 {
     Q_OBJECT
 
 public:
-    StdWidgetFactory(QObject *parent, const QVariantList &args);
-    ~StdWidgetFactory();
+    KexiStandardFormWidgetsFactory(QObject *parent, const QVariantList &args);
+    ~KexiStandardFormWidgetsFactory();
 
     virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
@@ -101,8 +74,11 @@ public Q_SLOTS:
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     void  editListContents();
 #endif
+protected Q_SLOTS:
+    void reorderTabs(int oldpos, int newpos);
 
 protected:
+    KFormDesigner::ObjectTreeItem* selectableItem(KFormDesigner::ObjectTreeItem* item);
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
                                            const QByteArray &property, bool isTopLevel);
     virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,

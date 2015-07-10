@@ -122,7 +122,7 @@ public:
     //! \return A pointer to the WidgetLibrary supporting this form.
     WidgetLibrary* library() const;
 
-    KPropertySet& propertySet();
+    KPropertySet* propertySet();
 
     void setFeatures(Features features);
 

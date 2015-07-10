@@ -93,7 +93,7 @@ using namespace KFormDesigner;
 
 // FormIO itself
 
-KFORMDESIGNER_EXPORT uint KFormDesigner::version()
+KFORMDESIGNER_EXPORT int KFormDesigner::version()
 {
     return KFORMDESIGNER_VERSION;
 }
@@ -338,7 +338,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
         attr = attr.nextSibling().toAttr();
     }
     //update format version information
-    uint ver = 1; //the default
+    int ver = 1; //the default
     if (form->headerProperties()->contains("version")) {
         bool ok;
         uint v = (*form->headerProperties())["version"].toUInt(&ok);
@@ -857,7 +857,7 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
     }
     else if (type == "set") {
         WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
+            = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
         QObject *subobject = (subpropIface && subpropIface->subwidget())
                              ? subpropIface->subwidget() : obj;
         const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1()));
@@ -940,12 +940,12 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     names.removeOne("layout");
 
     // Save the buddy widget for a label
-    if (   dynamic_cast<QLabel*>(item->widget())
-        && dynamic_cast<QLabel*>(item->widget())->buddy())
+    if (   qobject_cast<QLabel*>(item->widget())
+        && qobject_cast<QLabel*>(item->widget())->buddy())
     {
         savePropertyElement(
             tclass, domDoc, "property", "buddy",
-            dynamic_cast<QLabel*>(item->widget())->buddy()->objectName());
+            qobject_cast<QLabel*>(item->widget())->buddy()->objectName());
     }
 
     if (names.contains("paletteBackgroundColor")) {

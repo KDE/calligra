@@ -87,18 +87,18 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : QDialog(parent), d(new Privat
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
-    d->btnUp = new QPushButton(koIcon("arrow-up"), xi18n("Move Up"), frame);
+    d->btnUp = new QPushButton(koIcon("arrow-up"), xi18n("Move Up"), this);
     d->btnUp->setToolTip(xi18n("Move widget up"));
     vbox->addWidget(d->btnUp);
     connect(d->btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-    d->btnDown = new QPushButton(koIcon("arrow-down"), xi18n("Move Down"), frame);
+    d->btnDown = new QPushButton(koIcon("arrow-down"), xi18n("Move Down"), this);
     d->btnDown->setToolTip(xi18n("Move widget down"));
     vbox->addWidget(d->btnDown);
     connect(d->btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
     vbox->addStretch();
 
-    d->check = new QCheckBox(xi18n("Handle tab order automatically"), frame);
+    d->check = new QCheckBox(xi18n("Handle tab order automatically"), this);
     d->check->setObjectName("tabstops_check");
     connect(d->check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
     l->addWidget(d->check, 1, 0, 1, 2);

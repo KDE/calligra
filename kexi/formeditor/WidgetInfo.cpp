@@ -187,7 +187,7 @@ QByteArray WidgetInfo::parentFactoryName() const
 
 void WidgetInfo::setParentFactoryName(const QByteArray& parentFactoryName)
 {
-    d->parentFactoryName = QByteArray("kformdesigner_") + parentFactoryName;
+    d->parentFactoryName = parentFactoryName;
 }
 
 void WidgetInfo::addAlternateClassName(const QByteArray& alternateName, bool override)

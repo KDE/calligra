@@ -19,22 +19,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef CONTAINERFACTORY_H
-#define CONTAINERFACTORY_H
+#ifndef KEXISTANDARDCONTAINERWIDGETS_H
+#define KEXISTANDARDCONTAINERWIDGETS_H
 
-#include "commands.h"
-#include "widgetfactory.h"
-#include "utils.h"
 #include "FormWidgetInterface.h"
+#include "utils.h"
 
+#include <QAction>
 #include <QGroupBox>
-#include <QMenu>
 
 class QPaintEvent;
 
 namespace KFormDesigner
 {
-class Form;
 class Container;
 }
 
@@ -288,41 +285,5 @@ private:
     QString   m_formName;
 };
 #endif //0
-
-//! Standard Factory for all container widgets
-class ContainerFactory : public KFormDesigner::WidgetFactory
-{
-    Q_OBJECT
-
-public:
-    ContainerFactory(QObject *parent, const QVariantList &args);
-    virtual ~ContainerFactory();
-
-    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
-                                  KFormDesigner::Container *container,
-                                  CreateWidgetOptions options = DefaultOptions);
-    virtual bool createMenuActions(const QByteArray& classname, QWidget *w,
-                                   QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
-    virtual bool previewWidget(const QByteArray& classname, QWidget *widget,
-                               KFormDesigner::Container *container);
-    virtual bool saveSpecialProperty(const QByteArray& classname, const QString &name,
-                                     const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-    virtual bool readSpecialProperty(const QByteArray& classname, QDomElement &node, QWidget *w,
-                                     KFormDesigner::ObjectTreeItem *item);
-
-    //! Reimplemented for pages of QTabWidget.
-    virtual KFormDesigner::ObjectTreeItem* selectableItem(KFormDesigner::ObjectTreeItem* item);
-
-protected:
-    virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
-                                           const QByteArray &property, bool isTopLevel);
-    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
-                                  const QString &text, QString &oldText);
-    virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
-
-public Q_SLOTS:
-    void reorderTabs(int oldpos, int newpos);
-};
 
 #endif

@@ -2,45 +2,22 @@ include_directories(${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
-########### next target ###############
+set(kexiforms_standardwidgetsplugin_SRCS
+    KexiStandardFormWidgetsFactory.cpp
+    KexiStandardFormWidgets.cpp
+    KexiStandardContainerFormWidgets.cpp
+)
 
-set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
+add_library(kexiforms_standardwidgetsplugin MODULE ${kexiforms_standardwidgetsplugin_SRCS})
+kcoreaddons_desktop_to_json(kexiforms_standardwidgetsplugin kexiforms_standardwidgetsplugin.desktop)
 
-
-add_library(kformdesigner_containers MODULE ${kformdesigner_containers_PART_SRCS})
-
-
-
-target_link_libraries(
-    kformdesigner_containers
+target_link_libraries(kexiforms_standardwidgetsplugin
     kformdesigner
     kundo2
-
 
     Qt5::Core
     Qt5::Gui
     Qt5::Xml
-    )
-
-install(TARGETS kformdesigner_containers  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
-
-
-########### next target ###############
-
-set(kformdesigner_stdwidgets_PART_SRCS stdwidgetfactory.cpp )
-
-add_library(kformdesigner_stdwidgets MODULE ${kformdesigner_stdwidgets_PART_SRCS})
-
-
-
-target_link_libraries(
-    kformdesigner_stdwidgets
-    kformdesigner
-
-    KProperty
-
-    Qt5::Gui
-    Qt5::Xml
 )
 
-install(TARGETS kformdesigner_stdwidgets  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
+install(TARGETS kexiforms_standardwidgetsplugin DESTINATION ${KEXI_FORM_WIDGETS_PLUGIN_INSTALL_DIR})
