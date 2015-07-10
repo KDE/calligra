@@ -33,8 +33,8 @@
 
 /*! Make a deep copy so we can modify the version.
  We need to override the version since it sometimes can look like
- "2.9 Pre-Alpha (git 4e06281 master)" what confuses the bugs.kde.org service.
- KEXI_VERSION_STRING returns just 2.9 Pre-Alpha */
+ "2.9 Alpha (git 4e06281 master)" what confuses the bugs.kde.org service.
+ KEXI_VERSION_STRING returns just 2.9 Alpha */
 static KAboutData copyAboutDataWithFixedVersion()
 {
     KAboutData data = KAboutData::applicationData();
