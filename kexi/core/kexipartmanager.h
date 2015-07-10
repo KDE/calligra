@@ -38,11 +38,11 @@ typedef QList<Info*>::iterator PartInfoListIterator;
 typedef QHash<QString, Part*> PartDict;
 
 /**
- * @short KexiPart's manager: looks up and instantiates them
+ * @short KexiPart's manager: looks up and instantiates KexiPart-based plugins
  *
  * It creates instances only when needed.
  */
-class KEXICORE_EXPORT Manager : public QObject, /*public KDbObject,*/ public KDbResultable
+class KEXICORE_EXPORT Manager : public QObject, public KDbResultable
 {
     Q_OBJECT
 

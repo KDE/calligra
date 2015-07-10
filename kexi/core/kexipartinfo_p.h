@@ -36,7 +36,6 @@ public:
     //! used in StaticItem class
     Private();
 
-    QString errorMessage;
     QString groupName;
     QString untranslatedGroupName;
     QString typeName;
@@ -48,9 +47,6 @@ public:
     /*! Supported modes for dialogs created by this part in user mode.
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
-
-    int majorVersion;
-    int minorVersion;
 
     bool isVisibleInNavigator;
     bool isDataExportSupported;

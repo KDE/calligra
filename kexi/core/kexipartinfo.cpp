@@ -21,7 +21,6 @@
 #include "kexipartinfo_p.h"
 #include "kexipartmanager.h"
 #include "KexiMainWindowIface.h"
-#include "KexiJsonTrader.h"
 
 #include <KDbGlobal>
 
@@ -72,19 +71,6 @@ Info::Private::Private(Info *info, const QJsonObject &rootObject)
     }
     if (userServiceTypes.contains(QJsonValue("Kexi/Editor"))) {
         supportedUserViewModes |= Kexi::TextViewMode;
-    }
-
-    QStringList v(info->version().split('.'));
-    bool ok = v.count() >= 2;
-    if (ok) {
-        majorVersion = v[0].toInt(&ok);
-    }
-    if (ok) {
-        minorVersion = v[1].toInt(&ok);
-    }
-    if (!ok) {
-        majorVersion = 0;
-        minorVersion = 0;
     }
 }
 
@@ -141,18 +127,13 @@ void KexiNewObjectAction::slotTriggered()
 //}
 
 Info::Info(const QPluginLoader &loader)
-    : KPluginMetaData(loader), d(new Private(this, KexiJsonTrader::rootObjectForPluginLoader(loader)))
+    : KexiPluginMetaData(loader), d(new Private(this, rootObject()))
 {
 }
 
 Info::~Info()
 {
     delete d;
-}
-
-QString Info::id() const
-{
-    return pluginId();
 }
 
 QString Info::typeName() const
@@ -190,16 +171,6 @@ bool Info::isVisibleInNavigator() const
     return d->isVisibleInNavigator;
 }
 
-void Info::setErrorMessage(const QString& errorMessage)
-{
-    d->errorMessage = errorMessage;
-}
-
-QString Info::errorMessage() const
-{
-    return d->errorMessage;
-}
-
 bool Info::isDataExportSupported() const
 {
     return d->isDataExportSupported;
@@ -218,16 +189,6 @@ bool Info::isExecuteSupported() const
 bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 {
     return d->isPropertyEditorAlwaysVisibleInDesignMode;
-}
-
-int Info::majorVersion() const
-{
-    return d->majorVersion;
-}
-
-int Info::minorVersion() const
-{
-    return d->minorVersion;
 }
 
 QAction* Info::newObjectAction()

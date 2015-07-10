@@ -106,8 +106,4 @@ protected:
 
 } // namespace KexiPart
 
-//! Implementation of plugin's entry point
-#define KEXIPART_PLUGIN_FACTORY(class_name, name) \
-    K_PLUGIN_FACTORY_WITH_JSON(class_name ## Factory, name, registerPlugin<class_name>();)
-
 #endif

@@ -27,7 +27,7 @@
 
 #include <KDbTableOrQuerySchema>
 
-KEXIPART_PLUGIN_FACTORY(KexiCsvImportExportPlugin, "kexi_csvimportexportplugin.json")
+KEXI_PLUGIN_FACTORY(KexiCsvImportExportPlugin, "kexi_csvimportexportplugin.json")
 
 KexiCsvImportExportPlugin::KexiCsvImportExportPlugin(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)

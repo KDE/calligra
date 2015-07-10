@@ -23,6 +23,7 @@ set(kexiutils_LIB_SRCS
   KexiJsonTrader.cpp
   KexiPushButton.cpp
   KexiFadeWidgetEffect.cpp
+  KexiPluginMetaData.cpp
 
   completer/KexiCompleter.cpp
 )

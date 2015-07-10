@@ -38,7 +38,7 @@
 #include <QDebug>
 #include <QTabWidget>
 
-KEXIPART_PLUGIN_FACTORY(KexiTablePart, "kexi_tableplugin.json")
+KEXI_PLUGIN_FACTORY(KexiTablePart, "kexi_tableplugin.json")
 
 //! @internal
 class KexiTablePart::Private

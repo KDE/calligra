@@ -181,4 +181,8 @@ KEXICORE_EXPORT QLabel *KEXI_UNFINISHED_LABEL(
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
     KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString())
 
+//! Implementation of plugin's entry point
+#define KEXI_PLUGIN_FACTORY(class_name, name) \
+    K_PLUGIN_FACTORY_WITH_JSON(class_name ## Factory, name, registerPlugin<class_name>();)
+
 #endif
