@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBProgressBar_H
-#define KexiDBProgressBar_H
+#ifndef KEXIDBPROGRESSBAR_H
+#define KEXIDBPROGRESSBAR_H
 
 #include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>

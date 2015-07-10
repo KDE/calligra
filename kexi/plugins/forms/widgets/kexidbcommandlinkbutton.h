@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBCommandLinkButton_H
-#define KexiDBCommandLinkButton_H
+#ifndef KEXIDBCOMMANDLINKBUTTON_H
+#define KEXIDBCOMMANDLINKBUTTON_H
 
 #include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDropDownButton_H
-#define KexiDropDownButton_H
+#ifndef KEXIDROPDOWNBUTTON_H
+#define KEXIDROPDOWNBUTTON_H
 
 #include "kexiguiutils_export.h"
 

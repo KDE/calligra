@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiSearchAndReplaceViewInterface_H
-#define KexiSearchAndReplaceViewInterface_H
+#ifndef KEXISEARCHANDREPLACEVIEWINTERFACE_H
+#define KEXISEARCHANDREPLACEVIEWINTERFACE_H
 
 #include "kexicore_export.h"
 

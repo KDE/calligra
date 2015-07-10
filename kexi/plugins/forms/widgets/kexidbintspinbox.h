@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBIntSpinBox_H
-#define KexiDBIntSpinBox_H
+#ifndef KEXIDBINTSPINBOX_H
+#define KEXIDBINTSPINBOX_H
 
 #include "kexiformdataiteminterface.h"
 #include <formeditor/FormWidgetInterface.h>

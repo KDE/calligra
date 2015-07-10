@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBImageBox_H
-#define KexiDBImageBox_H
+#ifndef KEXIDBIMAGEBOX_H
+#define KEXIDBIMAGEBOX_H
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <widget/utils/kexicontextmenuutils.h>

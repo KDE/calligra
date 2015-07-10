@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBCheckBox_H
-#define KexiDBCheckBox_H
+#ifndef KEXIDBCHECKBOX_H
+#define KEXIDBCHECKBOX_H
 
 #include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>

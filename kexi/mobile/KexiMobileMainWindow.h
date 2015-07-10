@@ -18,8 +18,8 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#ifndef KexiMobile_H
-#define KexiMobile_H
+#ifndef KEXIMOBILE_H
+#define KEXIMOBILE_H
 
 #include <core/KexiMainWindowIface.h>
 
@@ -95,4 +95,4 @@ private:
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage);
 };
 
-#endif // KexiMobile_H
+#endif // KEXIMOBILE_H
