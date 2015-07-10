@@ -168,7 +168,7 @@ bool Manager::lookup()
                  << "Kexi/ModalDialog";
     const QList<QPluginLoader*> offers = KexiPartTrader_instance->query(serviceTypes);
     foreach(QPluginLoader *loader, offers) {
-        Info *info = new Info(*loader);
+        QScopedPointer<Info> info(new Info(*loader));
         if (info->id().isEmpty()) {
             qWarning() << "No plugin ID (X-KDE-PluginInfo-Name) specified for Kexi Part"
                        << info->fileName() << "-- skipping!";
@@ -198,18 +198,19 @@ bool Manager::lookup()
         if (info->isVisibleInNavigator()) {
             const int index = orderedPluginIds.indexOf(info->id());
             if (index != -1) {
-                orderedInfos[index] = info;
+                orderedInfos[index] = info.data();
             }
             else {
-                orderedInfos.append(info);
+                orderedInfos.append(info.data());
             }
             // append later when we know order
         }
         else {
             // append now
-            d->partlist.append(info);
+            d->partlist.append(info.data());
         }
-        d->partsByPluginId.insert(info->pluginId(), info);
+        d->partsByPluginId.insert(info->pluginId(), info.data());
+        info.take();
     }
 
     // fill the final list using computed order
