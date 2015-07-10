@@ -15,8 +15,8 @@ kde4_add_plugin( kplatorcpsscheduler ${RCPSScheduler_SRCS} )
 target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
-    koodf
     rcps_plan
+    ${KDE4_KDECORE_LIBS}
 #    ${LIBRCPS_LIBRARIES}
 )
 
