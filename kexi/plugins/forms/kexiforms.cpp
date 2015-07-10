@@ -19,6 +19,6 @@
 
 #include "kexiformpart.h"
 
-KEXIPART_PLUGIN_FACTORY(KexiFormPart, "kexi_formplugin.json")
+KEXI_PLUGIN_FACTORY(KexiFormPart, "kexi_formplugin.json")
 
 #include "kexiforms.moc"

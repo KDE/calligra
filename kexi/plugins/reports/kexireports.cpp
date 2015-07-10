@@ -18,6 +18,6 @@
 
 #include "kexireportpart.h"
 
-KEXIPART_PLUGIN_FACTORY(KexiReportPart, "kexi_reportplugin.json")
+KEXI_PLUGIN_FACTORY(KexiReportPart, "kexi_reportplugin.json")
 
 #include "kexireports.moc"

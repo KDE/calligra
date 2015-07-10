@@ -25,7 +25,7 @@
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 
-KEXIPART_PLUGIN_FACTORY(KexiMigrationPart, "kexi_migrationplugin.json")
+KEXI_PLUGIN_FACTORY(KexiMigrationPart, "kexi_migrationplugin.json")
 
 KexiMigrationPart::KexiMigrationPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)

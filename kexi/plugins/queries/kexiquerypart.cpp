@@ -32,7 +32,7 @@
 
 #include <QDebug>
 
-KEXIPART_PLUGIN_FACTORY(KexiQueryPart, "kexi_queryplugin.json")
+KEXI_PLUGIN_FACTORY(KexiQueryPart, "kexi_queryplugin.json")
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
   : KexiPart::Part(parent,

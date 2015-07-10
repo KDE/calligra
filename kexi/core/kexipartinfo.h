@@ -24,6 +24,7 @@
 #include <KPluginMetaData>
 
 #include "kexi.h"
+#include "KexiPluginMetaData.h"
 
 class QAction;
 class KexiProject;
@@ -36,17 +37,10 @@ class Item;
 class Part;
 
 //! Provides information about a single Kexi Part plugin
-class KEXICORE_EXPORT Info : public KPluginMetaData
+class KEXICORE_EXPORT Info : public KexiPluginMetaData
 {
 public:
     ~Info();
-
-    /**
-     * @return internal name of the plugin, a shortcut of pluginId()
-     *
-     * Example: "org.kexi-project.table"
-     */
-    QString id() const;
 
     /**
      * @return a symbolic type name e.g. "table" for a plugin of "org.kexi-project.table" id.
@@ -144,21 +138,6 @@ public:
     bool isPropertyEditorAlwaysVisibleInDesignMode() const;
 
     /**
-     * @return major version of this part.
-     *
-     * 0 means invalid version.
-     * @see version()
-     */
-    int majorVersion() const;
-
-    /**
-     * @return minor version of this part.
-     *
-     * @see version()
-     */
-    int minorVersion() const;
-
-    /**
      * @return "New object" action for this part.
      */
     QAction* newObjectAction();
@@ -175,17 +154,6 @@ protected:
     friend class Manager;
     friend class ::KexiProject;
     friend class ::KexiWindow;
-
-    /**
-     * Sets an error message useful to explain loading-related issues found with this plugin.
-     * Most likely to be called by @ref KexiPart::Manager
-     */
-    void setErrorMessage(const QString& errorMessage);
-
-    /**
-     * @return i18n'd error message set by setErrorMessage().
-     */
-    QString errorMessage() const;
 
 private:
     Q_DISABLE_COPY(Info)

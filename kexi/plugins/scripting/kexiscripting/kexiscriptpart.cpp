@@ -40,7 +40,7 @@
 
 #include <QDebug>
 
-KEXIPART_PLUGIN_FACTORY(KexiScriptPart, "kexi_scriptplugin.json")
+KEXI_PLUGIN_FACTORY(KexiScriptPart, "kexi_scriptplugin.json")
 
 /// \internal
 class KexiScriptPart::Private
