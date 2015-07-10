@@ -117,8 +117,7 @@ PartClass* Manager::part(Info *info, QHash<QString, PartClass*> *partDict)
     p = factory->create<PartClass>(this);
     if (!p) {
         m_result = KDbResult(ERR_CANNOT_LOAD_OBJECT,
-                             QObject::tr("Could not open Kexi plugin \"%1\".")
-                             .arg(info->fileName()));
+                             i18n("Could not open Kexi plugin \"%1\".").arg(info->fileName()));
         qWarning() << m_result.message();
         return 0;
     }
