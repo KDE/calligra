@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiRelationsScrollArea_H
-#define KexiRelationsScrollArea_H
+#ifndef KEXIRELATIONSSCROLLAREA_H
+#define KEXIRELATIONSSCROLLAREA_H
 
 #include <QScrollArea>
 #include <QSet>

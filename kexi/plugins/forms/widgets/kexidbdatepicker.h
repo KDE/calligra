@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBDatePicker_H
-#define KexiDBDatePicker_H
+#ifndef KEXIDBDATEPICKER_H
+#define KEXIDBDATEPICKER_H
 
 #include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>

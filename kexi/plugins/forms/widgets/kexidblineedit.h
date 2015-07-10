@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBLineEdit_H
-#define KexiDBLineEdit_H
+#ifndef KEXIDBLINEEDIT_H
+#define KEXIDBLINEEDIT_H
 
 #include <QValidator>
 #include <QEvent>

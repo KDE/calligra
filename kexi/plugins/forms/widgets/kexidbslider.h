@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBSlider_H
-#define KexiDBSlider_H
+#ifndef KEXIDBSLIDER_H
+#define KEXIDBSLIDER_H
 
 #include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>

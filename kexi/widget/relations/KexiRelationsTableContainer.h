@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiRelationsTableContainer_H
-#define KexiRelationsTableContainer_H
+#ifndef KEXIRELATIONSTABLECONTAINER_H
+#define KEXIRELATIONSTABLECONTAINER_H
 
 #include "kexirelationsview_export.h"
 

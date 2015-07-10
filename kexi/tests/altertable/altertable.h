@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef AlterTableTester_H
-#define AlterTableTester_H
+#ifndef ALTERTABLETESTER_H
+#define ALTERTABLETESTER_H
 
 #include <QUrlOperator>
 

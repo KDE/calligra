@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBTextWidgetInterface_H
-#define KexiDBTextWidgetInterface_H
+#ifndef KEXIDBTEXTWIDGETINTERFACE_H
+#define KEXIDBTEXTWIDGETINTERFACE_H
 
 #include "kexiformutils_export.h"
 

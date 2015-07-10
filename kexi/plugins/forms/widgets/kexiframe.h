@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiFrame_H
-#define KexiFrame_H
+#ifndef KEXIFRAME_H
+#define KEXIFRAME_H
 
 #include "kexiformutils_export.h"
 

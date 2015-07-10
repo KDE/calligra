@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiContextMenuUtils_H
-#define KexiContextMenuUtils_H
+#ifndef KEXICONTEXTMENUUTILS_H
+#define KEXICONTEXTMENUUTILS_H
 
 #include "kexiguiutils_export.h"
 #include <kexi_global.h>

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBComboBox_H
-#define KexiDBComboBox_H
+#ifndef KEXIDBCOMBOBOX_H
+#define KEXIDBCOMBOBOX_H
 
 #include "kexidbutils.h"
 #include "kexidbautofield.h"
