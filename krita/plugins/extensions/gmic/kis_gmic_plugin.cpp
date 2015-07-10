@@ -220,7 +220,13 @@ void KisGmicPlugin::slotShowGmicDialog()
     KisConfig cfg;
     QString gmicUpdatesUrl = cfg.readEntry<QString>("gmic_updates_url", "http://www.gmic.eu/");
 
-    QString updateUrl = gmicUpdatesUrl + QString("update") + QString::number(gmic_version) + ".gmic";
+    QString prefix("");
+    if (QString::number(gmic_version, 10) > "1610")
+    {
+        prefix = QString("gimp_");
+    }
+    QString updateUrl = gmicUpdatesUrl + prefix + QString("update") + QString::number(gmic_version, 10) + ".gmic";
+
     m_gmicWidget = new KisGmicWidget(model, updateUrl);
 
     // preview filter
@@ -249,7 +255,7 @@ void KisGmicPlugin::slotCloseGmicDialog()
 {
     dbgPlugins << "progress manager: " << m_progressManager;
 
-    // reset state 
+    // reset state
     {
         m_gmicWidget = 0;
 

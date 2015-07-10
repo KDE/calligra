@@ -84,6 +84,11 @@ void KisGmicUpdater::finishedDownload(QNetworkReply*reply)
     out.write(data);
     out.close();
 
+    if (fileName.startsWith("gimp_"))
+    {
+        fileName.remove(0, 5);
+    }
+
     QString filePathDst = path + fileName;
 
     std::FILE *file = std::fopen(tmpfilePath.toUtf8().constData(),"rb");
