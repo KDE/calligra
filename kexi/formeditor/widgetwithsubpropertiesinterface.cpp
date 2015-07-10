@@ -20,6 +20,7 @@
 #include "widgetwithsubpropertiesinterface.h"
 
 #include <QMetaObject>
+#include <QPointer>
 #include <QDebug>
 
 #include <kexiutils/utils.h>
@@ -93,7 +94,7 @@ QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char *
     return KexiUtils::findPropertyWithSuperclasses(d->subwidget, name);
 }
 
-QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool *&ok) const
+QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool *ok) const
 {
     Q_ASSERT(ok);
     if (!d->subwidget || d->subproperties.contains(name)) {

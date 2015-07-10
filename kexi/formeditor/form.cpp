@@ -1679,9 +1679,9 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
     }
  }
 
-KPropertySet& Form::propertySet()
+KPropertySet* Form::propertySet()
 {
-    return d->propertySet;
+    return &d->propertySet;
 }
 
 bool Form::isSnapToGridEnabled() const
@@ -2400,9 +2400,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         KTextEdit *textedit = new KTextEdit(args.widget->parentWidget());
         textedit->setPlainText(args.text);
         textedit->setAlignment(args.alignment);
-        if (dynamic_cast<QTextEdit*>(args.widget)) {
-            textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(args.widget)->wordWrapMode());
-            textedit->setLineWrapMode(dynamic_cast<QTextEdit*>(args.widget)->lineWrapMode());
+        if (qobject_cast<QTextEdit*>(args.widget)) {
+            textedit->setWordWrapMode(qobject_cast<QTextEdit*>(args.widget)->wordWrapMode());
+            textedit->setLineWrapMode(qobject_cast<QTextEdit*>(args.widget)->lineWrapMode());
         }
         textedit->moveCursor(QTextCursor::End);
         textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -2573,8 +2573,8 @@ QString Form::inlineEditorText() const
     QWidget *ed = d->inlineEditor;
     if (!ed)
         return QString();
-    return dynamic_cast<KTextEdit*>(ed)
-           ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<QLineEdit*>(ed)->text();
+    return qobject_cast<KTextEdit*>(ed)
+           ? qobject_cast<KTextEdit*>(ed)->toPlainText() : qobject_cast<QLineEdit*>(ed)->text();
 }
 
 void Form::setInlineEditorText(const QString& text)
@@ -2583,10 +2583,10 @@ void Form::setInlineEditorText(const QString& text)
     if (!ed)
         return;
 
-    if (dynamic_cast<KTextEdit*>(ed))
-        dynamic_cast<KTextEdit*>(ed)->setPlainText(text);
-    else if (dynamic_cast<QLineEdit*>(ed))
-        dynamic_cast<QLineEdit*>(ed)->setText(text);
+    if (qobject_cast<KTextEdit*>(ed))
+        qobject_cast<KTextEdit*>(ed)->setPlainText(text);
+    else if (qobject_cast<QLineEdit*>(ed))
+        qobject_cast<QLineEdit*>(ed)->setText(text);
     else
         qWarning() << "Inline editor is neither KTextEdit nor QLineEdit";
 }

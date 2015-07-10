@@ -24,10 +24,13 @@
 #include <QDomDocument>
 #include <QStackedWidget>
 #include <QDebug>
+#include <QMimeData>
 
 #include <KMessageBox>
 #include <KAcceleratorManager>
 #include <KLocalizedString>
+
+#include <KPropertySet>
 
 #include "kformdesigner_export.h"
 #include "WidgetInfo.h"
@@ -39,7 +42,6 @@
 #include "events.h"
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
-#include <KProperty>
 #include <kexiutils/utils.h>
 
 #include "commands.h"
@@ -226,7 +228,7 @@ void PropertyCommand::execute()
             }
         }
     }
-    d->form->propertySet().changeProperty(d->propertyName, d->value);
+    d->form->propertySet()->changeProperty(d->propertyName, d->value);
     d->form->setUndoing(false);
 }
 
@@ -252,7 +254,7 @@ void PropertyCommand::undo()
         }
     }
 
-    d->form->propertySet().changeProperty(d->propertyName, d->oldValues.constBegin().value());
+    d->form->propertySet()->changeProperty(d->propertyName, d->oldValues.constBegin().value());
     d->form->setUndoing(false);
 }
 
@@ -1839,7 +1841,7 @@ void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pa
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
         const QString realPageName = pageName.isEmpty() ?
             xi18n("Page %1", tab->count() + 1) : pageName;
         if (pageIndex < 0)
@@ -1848,7 +1850,7 @@ void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pa
         tab->setCurrentWidget(page);
         item->addModifiedProperty("title", realPageName);
     } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(parent);
         stack->addWidget(page);
         stack->setCurrentWidget(page);
         item->addModifiedProperty("stackIndex", stack->indexOf(page));
@@ -1874,10 +1876,10 @@ void InsertPageCommand::undo(const QString& name)
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
         tab->removeTab(tab->indexOf(page));
     } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(parent);
         int index = stack->indexOf(page);
         if (index > 0)
             index--;
@@ -1926,7 +1928,7 @@ RemovePageCommand::RemovePageCommand(Container *container, QWidget *parent)
 {
     d->containername = container->widget()->objectName();
     d->form = container->form();
-    TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+    TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
     if (tab) {
         d->name = tab->currentWidget()->objectName();
         d->pageName = tab->tabText(tab->currentIndex());

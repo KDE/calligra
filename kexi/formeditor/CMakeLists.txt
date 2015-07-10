@@ -23,6 +23,7 @@ set(kformdesigner_LIB_SRCS
    resizehandle.cpp
    widgetfactory.cpp
    widgetlibrary.cpp
+   KexiFormWidgetsPluginMetaData.cpp
    WidgetInfo.cpp
    libactionwidget.cpp
    form.cpp
@@ -48,6 +49,8 @@ set(kformdesigner_LIBS
   kexiutils
   kexicore
   kexiextendedwidgets
+  kundo2
+  kowidgets
 
   KDb
   KProperty

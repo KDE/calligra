@@ -75,7 +75,7 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
 
-    d->toolbar = new KToolBar(frame);
+    d->toolbar = new KToolBar(this);
     mainLayout->addWidget(d->toolbar);
 
     d->fontCombo = new KFontRequester(d->toolbar);

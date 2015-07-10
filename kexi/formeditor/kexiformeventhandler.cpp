@@ -63,7 +63,7 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
     }
     actionType = _actionType;
     actionArg = _actionArg;
-    ok = true;
+    *ok = true;
     return info;
 }
 
@@ -154,7 +154,7 @@ void KexiFormEventAction::slotTrigger()
         else if (d->actionOption == "close") {
             tristate res = KexiMainWindowIface::global()->closeObject(item);
             if (~res)
-                *actionCancelled = true;
+                actionCancelled = true;
         }
     }
 }
@@ -210,7 +210,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
             continue;
 
         QString actionType, actionArg;
-        KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
+        KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, &ok);
         if (!ok)
             continue;
         qDebug() << "actionType:" << actionType << "actionArg:" << actionArg;

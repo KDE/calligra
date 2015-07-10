@@ -586,7 +586,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 
     if (args.classname == "KexiDBLineEdit") {
 //! @todo this code should not be copied here but
-//! just inherited StdWidgetFactory::startInlineEditing() should be called
+//! just inherited KexiStandardFormWidgetsFactory::startInlineEditing() should be called
 
         QLineEdit *lineedit = static_cast<QLineEdit*>(args.widget);
         args.text = lineedit->text();
@@ -596,7 +596,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
     }
     else if (args.classname == "KexiDBTextEdit") {
 //! @todo this code should not be copied here but
-//! just inherited StdWidgetFactory::startInlineEditing() should be called
+//! just inherited KexiStandardFormWidgetsFactory::startInlineEditing() should be called
         KTextEdit *textedit = static_cast<KTextEdit*>(args.widget);
 //! @todo rich text?
         args.text = textedit->toPlainText();
@@ -718,7 +718,7 @@ bool
 KexiDBFactory::clearWidgetContent(const QByteArray & /*classname*/, QWidget *w)
 {
 //! @todo this code should not be copied here but
-//! just inherited StdWidgetFactory::clearWidgetContent() should be called
+//! just inherited KexiStandardFormWidgetsFactory::clearWidgetContent() should be called
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(w);
     if (iface)
         iface->clear();

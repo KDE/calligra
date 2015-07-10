@@ -60,10 +60,10 @@ class Container;
 
 //! KFormDesigner API version number. Increased on every breaking of backward compatibility.
 //! Use KFormDesigner::version() to get real version number of the library.
-#define KFORMDESIGNER_VERSION 2
+#define KFORMDESIGNER_VERSION 3
 
 //! \return KFormDesigner API version number for this library. This information is stored
-KFORMDESIGNER_EXPORT uint version();
+KFORMDESIGNER_EXPORT int version();
 
 /** This class act as a namespace for all .ui files related functions, ie saving/loading .ui files.
     You don't need to create a FormIO object, as all methods are static.\n

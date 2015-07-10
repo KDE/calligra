@@ -403,6 +403,7 @@ public:
     QGridLayout *secondAnd3rdColumnGrLyr;
     QStackedWidget *secondAnd3rdColumnStack; //, *secondColumnStack;
     bool hideActionToExecuteListView;
+    QDialogButtonBox *buttonBox;
 };
 
 //-------------------------------------
@@ -481,7 +482,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->secondAnd3rdColumnGrLyr = new QGridLayout(d->secondAnd3rdColumnMainWidget);
-    QDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KexiUtils::spacingHint());
+    //! @todo KEXI3 QDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KexiUtils::spacingHint());
     d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
@@ -525,7 +526,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
 
     bool ok;
     QString actionType, actionArg;
-    KexiPart::Info* partInfo = action.decodeString(actionType, actionArg, ok);
+    KexiPart::Info* partInfo = action.decodeString(actionType, actionArg, &ok);
     if (ok) {
         d->actionCategoriesListView->selectAction(actionType);
         if (actionType == "kaction") {
@@ -559,17 +560,17 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     }
 
     // buttons
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = d->buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(d->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(d->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     d->actionWidgetName = actionWidgetName;
-    buttonBox->button(QDialogButtonBox::Ok)->setText(xi18nc("Assign action", "&Assign"));
+    d->buttonBox->button(QDialogButtonBox::Ok)->setText(xi18nc("Assign action", "&Assign"));
     //buttonBox->button(QDialogButtonBox::Ok)->setIcon(koIconName("dialog-ok"));
-    buttonBox->button(QDialogButtonBox::Ok)->setToolTip(xi18n("Assign action"));
-    mainLayout->addWidget(buttonBox);
+    d->buttonBox->button(QDialogButtonBox::Ok)->setToolTip(xi18n("Assign action"));
+    mainLayout->addWidget(d->buttonBox);
 }
 
 KexiActionSelectionDialog::~KexiActionSelectionDialog()
@@ -738,7 +739,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                 KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForPluginId(partItem->pluginId()) : 0;
                 if (partInfo) {
                     // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
-                    data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());
+                    data.string = QString("%1:%2").arg(partInfo->typeName()).arg(partItem->name());
                     data.option = actionToExecute->data(ActionSelectorDialogTreeItem::ActionDataRole).toString();
                     return data;
                 }
@@ -756,6 +757,6 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
 
     //qDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
-    QPushButton *btn = button(QDialogButtonBox::Ok);
+    QPushButton *btn = d->buttonBox->button(QDialogButtonBox::Ok);
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }

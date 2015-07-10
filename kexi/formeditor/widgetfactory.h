@@ -22,10 +22,12 @@
 #ifndef KFORMDESIGNERWIDGETFACTORY_H
 #define KFORMDESIGNERWIDGETFACTORY_H
 
-#include "WidgetInfo.h"
-
 #include <QVariant>
 #include <QRect>
+
+#include <KPluginFactory>
+
+#include "kformdesigner_export.h"
 
 class QWidget;
 class QListWidget;
@@ -43,6 +45,7 @@ class Container;
 class ObjectTreeItem;
 class Form;
 class WidgetLibrary;
+class WidgetInfo;
 
 //! Used by WidgetFactory
 class KFORMDESIGNER_EXPORT InternalPropertyHandlerInterface
@@ -129,14 +132,14 @@ protected:
     has been called. For example, setting "forceShowAdvancedProperty:pixmap" to true
     unhides "pixmap" property for a given class.
 
-  See StdWidgetFactory::StdWidgetFactory() for properties like "Line:orientationSelectionPopup:horizontalIcon".
+  See KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory() for properties like "Line:orientationSelectionPopup:horizontalIcon".
 
   \n\n
   See the standard factories in formeditor/factories for an example of factories,
   and how to deal with complex widgets (eg tabwidget).
   */
 class KFORMDESIGNER_EXPORT WidgetFactory : public QObject,
-                                         public InternalPropertyHandlerInterface
+                                           public InternalPropertyHandlerInterface
 {
     Q_OBJECT
 public:
@@ -151,7 +154,8 @@ public:
     };
     Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
-    explicit WidgetFactory(QObject *parent, const char *name = 0);
+    explicit WidgetFactory(QObject *parent);
+
     virtual ~WidgetFactory();
 
     /*! Adds a new class described by \a w. */
@@ -166,7 +170,7 @@ public:
     /**
      * \return all classes which are provided by this factory
      */
-    const WidgetInfoHash& classes() const;
+    QHash<QByteArray, WidgetInfo*> classes() const;
 
     /**
      * Creates a widget (and if needed a KFormDesigner::Container)
@@ -373,11 +377,6 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
-
-//! Implementation of a form designer-compatible widget factory
-#define K_EXPORT_KEXIFORMWIDGETS_PLUGIN( class_name, internal_name ) \
-    KEXI_EXPORT_PLUGIN("formwidgets", class_name, internal_name, \
-                       KFORMDESIGNER_VERSION, 0, 0)
 
 }
 #endif

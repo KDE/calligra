@@ -398,17 +398,17 @@ void KexiFormManager::setDataSourceFieldOrExpression(
     if (!formViewWidget)
         return;
 
-    KPropertySet& set = formViewWidget->form()->propertySet();
-    if (!set.contains("dataSource"))
+    KPropertySet* set = formViewWidget->form()->propertySet();
+    if (!set->contains("dataSource"))
         return;
 
-    set["dataSource"].setValue(string);
+    set->property("dataSource").setValue(string);
 
-    if (set.propertyValue("autoCaption", false).toBool()) {
-        set.changePropertyIfExists("fieldCaptionInternal", caption);
+    if (set->propertyValue("autoCaption", false).toBool()) {
+        set->changePropertyIfExists("fieldCaptionInternal", caption);
     }
-    if (set.propertyValue("widgetType").toString() == "Auto") {
-        set.changePropertyIfExists("fieldTypeInternal", type);
+    if (set->propertyValue("widgetType").toString() == "Auto") {
+        set->changePropertyIfExists("fieldTypeInternal", type);
     }
 }
 
@@ -505,14 +505,14 @@ void KexiFormManager::slotAssignAction()
         return;
     }
 
-    KPropertySet& set = form->propertySet();
+    KPropertySet* set = form->propertySet();
 
     KexiFormEventAction::ActionData data;
-    const KProperty &onClickActionProp = set.property("onClickAction");
+    const KProperty &onClickActionProp = set->property("onClickAction");
     if (!onClickActionProp.isNull())
         data.string = onClickActionProp.value().toString();
 
-    const KProperty &onClickActionOptionProp = set.property("onClickActionOption");
+    const KProperty &onClickActionOptionProp = set->property("onClickActionOption");
     if (!onClickActionOptionProp.isNull())
         data.option = onClickActionOptionProp.value().toString();
 
@@ -525,13 +525,13 @@ void KexiFormManager::slotAssignAction()
         return;
 
     KexiActionSelectionDialog dlg(dbform, data,
-                                  set.property("objectName").value().toString());
+                                  set->property("objectName").value().toString());
 
     if (dlg.exec() == QDialog::Accepted) {
         data = dlg.currentAction();
         //update property value
-        set.changeProperty("onClickAction", data.string);
-        set.changeProperty("onClickActionOption", data.option);
+        set->changeProperty("onClickAction", data.string);
+        set->changeProperty("onClickActionOption", data.option);
     }
 }
 

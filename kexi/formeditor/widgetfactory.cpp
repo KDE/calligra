@@ -77,7 +77,7 @@ public:
 
     WidgetLibrary *library;
 
-    WidgetInfoHash classesByName;
+    QHash<QByteArray, WidgetInfo*> classesByName;
     QSet<QByteArray>* hiddenClasses;
 
     //! i18n stuff
@@ -103,10 +103,9 @@ WidgetFactory::Private::~Private()
     delete hiddenClasses;
 }
 
-WidgetFactory::WidgetFactory(QObject *parent, const char *name)
+WidgetFactory::WidgetFactory(QObject *parent)
     : QObject(parent), d(new Private())
 {
-    setObjectName(QString("kformdesigner_") + name);
 }
 
 WidgetFactory::~WidgetFactory()
@@ -135,7 +134,7 @@ void WidgetFactory::hideClass(const char *classname)
     d->hiddenClasses->insert(QByteArray(classname).toLower());
 }
 
-const WidgetInfoHash& WidgetFactory::classes() const
+QHash<QByteArray, WidgetInfo*> WidgetFactory::classes() const
 {
     return d->classesByName;
 }
@@ -148,7 +147,10 @@ void WidgetFactory::disableFilter(QWidget *w, Container *container)
 bool WidgetFactory::editList(QWidget *w, QStringList &list) const
 {
     //! @todo KEXI3 port to QDialog
-#if 0
+#if 1
+    Q_UNUSED(w);
+    Q_UNUSED(list);
+#else
     QDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
@@ -202,7 +204,7 @@ WidgetFactory::editListWidget(QListWidget *listwidget) const
 void WidgetFactory::changeProperty(Form *form, QWidget *widget, const char *name, const QVariant &value)
 {
     if (form->selectedWidget()) { // single selection
-        form->propertySet().changePropertyIfExists(name, value);
+        form->propertySet()->changePropertyIfExists(name, value);
         widget->setProperty(name, value);
     }
     else {

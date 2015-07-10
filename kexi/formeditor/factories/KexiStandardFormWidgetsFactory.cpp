@@ -19,6 +19,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KexiStandardFormWidgetsFactory.h"
+#include "KexiStandardFormWidgets.h"
+#include "KexiStandardContainerFormWidgets.h"
+#include "formIO.h"
+#include "form.h"
+#include "widgetlibrary.h"
+#include "objecttree.h"
+#include "WidgetInfo.h"
+#include <kexiutils/utils.h>
+#include <KexiIcon.h>
+#include <kexi.h>
+
+#include <KProperty>
+#include <KPropertySet>
+
+#include <KComboBox>
+#include <KTextEdit>
+#include <KLocalizedString>
+
+#include <QStackedWidget>
 #include <QLabel>
 #include <QRadioButton>
 #include <QCheckBox>
@@ -38,142 +58,15 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QAction>
+#include <QSpinBox>
 #include <QDebug>
 
-#include <knuminput.h>
-#include <KComboBox>
-#include <KTextEdit>
-#include <KLocalizedString>
+KEXI_PLUGIN_FACTORY(KexiStandardFormWidgetsFactory, "kexiforms_standardwidgetsplugin.json")
 
-#include <KexiIcon.h>
-
-#include <KProperty>
-#include <KPropertySet>
-
-#include "formIO.h"
-#include "form.h"
-#include "widgetlibrary.h"
-#include "stdwidgetfactory.h"
-#include "objecttree.h"
-
-// Some widgets subclass to allow event filtering and some other things
-KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent)
-        : QLabel(parent)
+KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory(QObject *parent, const QVariantList &args)
+        : KFormDesigner::WidgetFactory(parent)
 {
-    setPixmap(pix);
-    setScaledContents(false);
-}
-
-KexiPictureLabel::~KexiPictureLabel()
-{
-}
-
-bool
-KexiPictureLabel::setProperty(const char *name, const QVariant &value)
-{
-    if (0 == qstrcmp(name, "pixmap")) {
-        const QPixmap pm(value.value<QPixmap>());
-        resize(pm.height(), pm.width());
-    }
-    return QLabel::setProperty(name, value);
-}
-
-Line::Line(Qt::Orientation orient, QWidget *parent)
-        : QFrame(parent)
-{
-    setFrameShadow(Sunken);
-    if (orient == Qt::Horizontal)
-        setFrameShape(HLine);
-    else
-        setFrameShape(VLine);
-}
-
-Line::~Line()
-{
-}
-
-void
-Line::setOrientation(Qt::Orientation orient)
-{
-    if (orient == Qt::Horizontal)
-        setFrameShape(HLine);
-    else
-        setFrameShape(VLine);
-}
-
-Qt::Orientation
-Line::orientation() const
-{
-    if (frameShape() == HLine)
-        return Qt::Horizontal;
-    else
-        return Qt::Vertical;
-}
-
-/////   Internal actions
-
-//! Action of editing rich text for a label or text editor
-//! Keeps context expressed using container and receiver widget
-class EditRichTextAction : public QAction
-{
-public:
-    EditRichTextAction(KFormDesigner::Container *container,
-                       QWidget *receiver, QObject *parent,
-                       StdWidgetFactory *factory);
-protected slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
-    StdWidgetFactory *m_factory;
-};
-
-EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container,
-                                       QWidget *receiver, QObject *parent,
-                                       StdWidgetFactory *factory)
-    : QAction(koIcon("document-edit"),
-              xi18nc("Edit rich text for a widget", "Edit Rich Text"),
-              parent)
-    , m_container(container)
-    , m_receiver(receiver)
-    , m_factory(factory)
-{
-    connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
-}
-
-void EditRichTextAction::slotTriggered()
-{
-    const QByteArray classname( m_receiver->metaObject()->className() );
-    QString text;
-    if (classname == "KTextEdit") {
-        KTextEdit* te = dynamic_cast<KTextEdit*>(m_receiver);
-        if (te->acceptRichText()) {
-            text = te->toHtml();
-        }
-        else {
-            text = te->toPlainText();
-        }
-    }
-    else if (classname == "QLabel") {
-        text = dynamic_cast<QLabel*>(m_receiver)->text();
-    }
-
-    if (m_factory->editRichText(m_receiver, text)) {
-//! @todo ok?
-        m_factory->changeProperty(m_container->form(), m_receiver, "acceptRichText", true);
-        m_factory->changeProperty(m_container->form(), m_receiver, "text", text);
-    }
-
-    if (classname == "QLabel") {
-        m_receiver->resize(m_receiver->sizeHint());
-    }
-}
-
-// The factory itself
-
-StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
-        : KFormDesigner::WidgetFactory(parent, "stdwidgets")
-{
+    Q_UNUSED(args);
     KFormDesigner::WidgetInfo *wFormWidget = new KFormDesigner::WidgetInfo(this);
     wFormWidget->setIconName(koIconName("form"));
     wFormWidget->setClassName("FormWidgetBase");
@@ -286,7 +179,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 //     wListBox->setIncludeFileName("qlistbox.h");
 //     wListBox->setName(xi18n("List Box"));
 //     wListBox->setNamePrefix(
-//         xi18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
+//         xi18nc("Widget name. This string will be used to name widgets of this class. "
+//    "It must _not_ contain white spaces and non latin1 characters.", "listBox"));
 //     wListBox->setDescription(xi18n("A simple list widget"));
 //     wListBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
 //     addClass(wListBox);
@@ -300,7 +194,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 //     wTreeWidget->setIncludeFileName("qtreewidget.h");
 //     wTreeWidget->setName(xi18n("List Widget"));
 //     wTreeWidget->setNamePrefix(
-//         xi18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
+//         xi18nc("Widget name. This string will be used to name widgets of this class. "
+//    "It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
 //     wTreeWidget->setDescription(xi18n("A list (or tree) widget"));
 //     wTreeWidget->setAutoSaveProperties(QList<QByteArray>() << "list_contents");
 //     addClass(wTreeWidget);
@@ -441,45 +336,129 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     setValueDescription("ScrollBarAlwaysOn", xi18nc("Property: Scroll Bar Always On", "Always On"));
     setPropertyDescription("acceptRichText", xi18nc("Property: Text Edit accepts rich text", "Rich Text"));
     setPropertyDescription("HTML", xi18nc("Property: HTML value of text edit", "HTML"));
+
+    // --- containers ---
+
+    KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
+    wTabWidget->setIconName(koIconName("tabwidget"));
+    wTabWidget->setClassName("KFDTabWidget");
+    wTabWidget->addAlternateClassName("KTabWidget");
+    wTabWidget->addAlternateClassName("QTabWidget");
+    wTabWidget->setSavingName("QTabWidget");
+    wTabWidget->setIncludeFileName("qtabwidget.h");
+    wTabWidget->setName(xi18n("Tab Widget"));
+    wTabWidget->setNamePrefix(
+        xi18nc("A prefix for identifiers of tab widgets. Based on that, identifiers such as "
+              "tab1, tab2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "tabWidget"));
+    wTabWidget->setDescription(xi18n("A widget to display multiple pages using tabs"));
+    addClass(wTabWidget);
+
+    KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
+    wWidget->setIconName(koIconName("frame"));
+    wWidget->setClassName("QWidget");
+    wWidget->addAlternateClassName("ContainerWidget");
+    wWidget->setName(/* no i18n needed */ "Basic container");
+    wWidget->setNamePrefix(/* no i18n needed */ "container");
+    wWidget->setDescription(/* no i18n needed */ "An empty container with no frame");
+    addClass(wWidget);
+
+    KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
+    wGroupBox->setIconName(koIconName("groupbox"));
+    wGroupBox->setClassName("QGroupBox");
+    wGroupBox->addAlternateClassName("GroupBox");
+    wGroupBox->setName(xi18n("Group Box"));
+    wGroupBox->setNamePrefix(
+        xi18nc("A prefix for identifiers of group box widgets. Based on that, identifiers such as "
+              "groupBox1, groupBox2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "groupBox"));
+    wGroupBox->setDescription(xi18n("A container to group some widgets"));
+    addClass(wGroupBox);
+
+    KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
+    wFrame->setIconName(koIconName("frame"));
+    wFrame->setClassName("QFrame");
+    wFrame->setName(/* no i18n needed */ "Frame");
+    wFrame->setNamePrefix(/* no i18n needed */ "frame");
+    wFrame->setDescription(/* no i18n needed */ "A simple frame container");
+    addClass(wFrame);
+
+//! @todo
+#if 0
+// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
+//     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
+//     wSubForm->setIconName(koIconName("form"));
+//     wSubForm->setClassName("SubForm");
+//     wSubForm->setName(xi18n("Sub Form"));
+//     wSubForm->setNamePrefix(
+//         xi18nc("Widget name. This string will be used to name widgets of this class. "
+//    "It must _not_ contain white spaces and non latin1 characters.", "subForm"));
+//     wSubForm->setDescription(xi18n("A form widget included in another Form"));
+//     wSubForm->setAutoSyncForProperty("formName", false);
+//     addClass(wSubForm);
+#endif
+
+    //groupbox
+    setPropertyDescription("title", xi18nc("'Title' property for group box", "Title"));
+    setPropertyDescription("flat", xi18nc("'Flat' property for group box", "Flat"));
+
+    //tab widget
+    setPropertyDescription("tabPosition", xi18n("Tab Position"));
+    setPropertyDescription("currentIndex", xi18nc("'Current page' property for tab widget", "Current Page"));
+    setPropertyDescription("tabShape", xi18n("Tab Shape"));
+    setPropertyDescription("elideMode", xi18nc("Tab Widget's Elide Mode property", "Elide Mode"));
+    setPropertyDescription("usesScrollButtons",
+                           xi18nc("Tab Widget's property: true if can use scroll buttons", "Scroll Buttons"));
+
+    setPropertyDescription("tabsClosable", xi18n("Closable Tabs"));
+    setPropertyDescription("movable", xi18n("Movable Tabs"));
+    setPropertyDescription("documentMode", xi18n("Document Mode"));
+
+    setValueDescription("Rounded", xi18nc("Property value for Tab Shape", "Rounded"));
+    setValueDescription("Triangular", xi18nc("Property value for Tab Shape", "Triangular"));
 }
 
-StdWidgetFactory::~StdWidgetFactory()
+KexiStandardFormWidgetsFactory::~KexiStandardFormWidgetsFactory()
 {
 }
 
-QWidget*
-StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                               KFormDesigner::Container *container,
-                               CreateWidgetOptions options)
+QWidget* KexiStandardFormWidgetsFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
+                                                      KFormDesigner::Container *container,
+                                                      CreateWidgetOptions options)
 {
     QWidget *w = 0;
+    bool createContainer = false;
     QString text(container->form()->library()->textForWidgetName(n, c));
-    if (c == "QLabel")
+    if (c == "QLabel") {
         w = new QLabel(text, p);
-    else if (c == "KexiPictureLabel")
+    } else if (c == "KexiPictureLabel") {
         w = new KexiPictureLabel(koDesktopIcon("image-x-generic"), p);
-    else if (c == "QLineEdit") {
+    } else if (c == "QLineEdit") {
         w = new QLineEdit(p);
     } else if (c == "QPushButton") {
         w = new QPushButton(text, p);
-    }
-    else if (c == "QRadioButton")
+    } else if (c == "QRadioButton") {
         w = new QRadioButton(text, p);
-
-    else if (c == "QCheckBox")
+    } else if (c == "QCheckBox") {
         w = new QCheckBox(text, p);
-
-    else if (c == "KIntSpinBox")
-        w = new KIntSpinBox(p);
-
-    else if (c == "KComboBox")
+    } else if (c == "KIntSpinBox") {
+        w = new QSpinBox(p);
+    } else if (c == "KComboBox") {
         w = new KComboBox(p);
-
-    else if (c == "KTextEdit")
+    } else if (c == "KTextEdit") {
         w = new KTextEdit(text, p);
-
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
-    else if (c == "QTreeWidget") {
+    } else if (c == "QTreeWidget") {
         QTreeWidget *tw = new QTreeWidget(p);
         w = tw;
         if (container->form()->interactiveMode()) {
@@ -488,49 +467,116 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
             tw->headerItem()->setText(1, futureI18n("Column 1"));
         }
         lw->setRootIsDecorated(true);
-    }
 #endif
-    else if (c == "QSlider")
+    } else if (c == "QSlider") {
         w = new QSlider(Qt::Horizontal, p);
-
-    else if (c == "QProgressBar")
+    } else if (c == "QProgressBar") {
         w = new QProgressBar(p);
-
-    else if (c == "KDateWidget" || c == "QDateEdit")
+    } else if (c == "KDateWidget" || c == "QDateEdit") {
         w = new QDateEdit(QDate::currentDate(), p);
-
-    else if (c == "KTimeWidget" || c == "QTimeEdit")
+    } else if (c == "KTimeWidget" || c == "QTimeEdit") {
         w = new QTimeEdit(QTime::currentTime(), p);
-
-    else if (c == "KDateTimeWidget" || c == "QDateTimeEdit")
+    } else if (c == "KDateTimeWidget" || c == "QDateTimeEdit") {
         w = new QDateTimeEdit(QDateTime::currentDateTime(), p);
-
-    else if (c == "Line")
+    } else if (c == "Line") {
         w = new Line(options & WidgetFactory::VerticalOrientation
                      ? Qt::Vertical : Qt::Horizontal, p);
+    } // --- containers ---
+    else if (c == "KFDTabWidget") {
+        KFDTabWidget *tab = new KFDTabWidget(container, p);
+        w = tab;
+#if defined(USE_KTabWidget)
+        tab->setTabReorderingEnabled(true);
+        connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
+#endif
+        qDebug() << "Creating ObjectTreeItem:";
+        container->form()->objectTree()->addItem(container->objectTree(),
+                new KFormDesigner::ObjectTreeItem(
+                    container->form()->library()->displayName(c), n, tab, container));
+    } else if (c == "QWidget") {
+        w = new ContainerWidget(p);
+        w->setObjectName(n);
+        new KFormDesigner::Container(container, w, p);
+        return w;
+    } else if (c == "QGroupBox") {
+        QString text = container->form()->library()->textForWidgetName(n, c);
+        w = new GroupBox(text, p);
+        createContainer = true;
+    } else if (c == "QFrame") {
+        QFrame *frm = new QFrame(p);
+        w = frm;
+        frm->setLineWidth(2);
+        frm->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+        createContainer = true;
+    } else if (c == "QStackedWidget" || /* compat */ c == "QWidgetStack") {
+        QStackedWidget *stack = new QStackedWidget(p);
+        w = stack;
+        stack->setLineWidth(2);
+        stack->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+        qDebug() << "Creating ObjectTreeItem:";
+        container->form()->objectTree()->addItem(container->objectTree(),
+                new KFormDesigner::ObjectTreeItem(
+                    container->form()->library()->displayName(c), n, stack, container));
+
+        if (container->form()->interactiveMode()) {
+            AddStackPageAction(container, stack, 0).trigger(); // addStackPage();
+        }
+    } else if (c == "HBox") {
+        w = new HBox(p);
+        createContainer = true;
+    } else if (c == "VBox") {
+        w = new VBox(p);
+        createContainer = true;
+    } else if (c == "Grid") {
+        w = new Grid(p);
+        createContainer = true;
+    } else if (c == "HFlow") {
+        w = new HFlow(p);
+        createContainer = true;
+    } else if (c == "VFlow") {
+        w = new VFlow(p);
+        createContainer = true;
+//! @todo
+#if 0
+    } else if (c == "SubForm") {
+        w = new SubForm(container->form(), p);
+#endif
+    }
 
     if (w) {
         w->setObjectName(n);
         qDebug() << w << w->objectName() << "created";
-        return w;
     }
-    qWarning() << "w == 0";
-    return 0;
+    if (createContainer) {
+        (void)new KFormDesigner::Container(container, w, container);
+    }
+    if (c == "KFDTabWidget") {
+        // if we are loading, don't add this tab
+        if (container->form()->interactiveMode()) {
+            TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(w);
+            AddTabAction(container, tab, 0).slotTriggered();
+        }
+    }
+    return w;
 }
 
-bool
-StdWidgetFactory::previewWidget(const QByteArray &classname,
-                                QWidget *widget, KFormDesigner::Container *)
+bool KexiStandardFormWidgetsFactory::previewWidget(const QByteArray &classname,
+                                QWidget *widget, KFormDesigner::Container *container)
 {
-    Q_UNUSED(classname);
-    Q_UNUSED(widget);
+    if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(widget);
+        KFormDesigner::ObjectTreeItem *tree = container->form()->objectTree()->lookup(
+            widget->objectName());
+        if (!tree->modifiedProperties()->contains("frameShape"))
+            stack->setFrameStyle(QFrame::NoFrame);
+    }
     return true;
 }
 
-bool
-StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
-                                    QMenu *menu, KFormDesigner::Container *container)
+bool KexiStandardFormWidgetsFactory::createMenuActions(const QByteArray &classname, QWidget *w,
+                                                       QMenu *menu, KFormDesigner::Container *container)
 {
+    QWidget *pw = w->parentWidget();
     if ((classname == "QLabel") || (classname == "KTextEdit")) {
         menu->addAction( new EditRichTextAction(container, w, menu, this) );
         return true;
@@ -542,12 +588,46 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
         return true;
     }
 #endif
+    else if (classname == "KFDTabWidget" || pw->parentWidget()->inherits("QTabWidget")) {
+//! @todo KEXI3 port this: setWidget(pw->parentWidget(), m_container->toplevel());
+#if 0
+        if (pw->parentWidget()->inherits("QTabWidget")) {
+            setWidget(pw->parentWidget(), m_container->toplevel());
+        }
+#endif
 
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(w);
+        if (tab) {
+            menu->addAction( new AddTabAction(container, tab, menu) );
+            menu->addAction( new RenameTabAction(container, tab, menu) );
+            menu->addAction( new RemoveTabAction(container, tab, menu) );
+        }
+        return true;
+    }
+    else if (    (KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
+              && !pw->parentWidget()->inherits("QTabWidget")
+            )
+    {
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(pw);
+//! @todo KEXI3 port this: setWidget( pw, container->form()->objectTree()->lookup(stack->objectName())->parent()->container() );
+#if 0
+        setWidget(
+            pw,
+            container->form()->objectTree()->lookup(stack->objectName())->parent()->container()
+        );
+#endif
+        KFormDesigner::Container *parentContainer
+            = container->form()->objectTree()->lookup(stack->objectName())->parent()->container();
+        menu->addAction( new AddStackPageAction(parentContainer, pw, menu) );
+        menu->addAction( new RemoveStackPageAction(parentContainer, pw, menu) );
+        menu->addAction( new GoToStackPageAction(GoToStackPageAction::Previous, parentContainer, pw, menu) );
+        menu->addAction( new GoToStackPageAction(GoToStackPageAction::Next, parentContainer, pw, menu) );
+        return true;
+    }
     return false;
 }
 
-bool
-StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
+bool KexiStandardFormWidgetsFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
     if (args.classname == "QLineEdit") {
         QLineEdit *lineedit = static_cast<QLineEdit*>(args.widget);
@@ -603,14 +683,14 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         return true;
     } else if (args.classname == "KComboBox" || args.classname == "QComboBox") {
         QStringList list;
-        KComboBox *combo = dynamic_cast<KComboBox*>(args.widget);
+        KComboBox *combo = qobject_cast<KComboBox*>(args.widget);
         for (int i = 0; i < combo->count(); i++) {
             list.append(combo->itemText(i));
         }
         args.execute = false;
         if (editList(args.widget, list)) {
-            dynamic_cast<KComboBox*>(args.widget)->clear();
-            dynamic_cast<KComboBox*>(args.widget)->addItems(list);
+            qobject_cast<KComboBox*>(args.widget)->clear();
+            qobject_cast<KComboBox*>(args.widget)->addItems(list);
         }
         return true;
     }
@@ -625,32 +705,30 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
     return false;
 }
 
-bool
-StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
+bool KexiStandardFormWidgetsFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
 {
     if (classname == "QLineEdit")
-        dynamic_cast<QLineEdit*>(w)->clear();
+        qobject_cast<QLineEdit*>(w)->clear();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget")
-        dynamic_cast<QTreeWidget*>(w)->clear();
+        qobject_cast<QTreeWidget*>(w)->clear();
 #endif
     else if (classname == "KComboBox")
-        dynamic_cast<KComboBox*>(w)->clear();
+        qobject_cast<KComboBox*>(w)->clear();
     else if (classname == "KTextEdit")
-        dynamic_cast<KTextEdit*>(w)->clear();
+        qobject_cast<KTextEdit*>(w)->clear();
     else
         return false;
     return true;
 }
 
-bool
-StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
-                                   const QString &text, QString &oldText)
+bool KexiStandardFormWidgetsFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
+                                                      const QString &text, QString &oldText)
 {
     const QByteArray n(widget->metaObject()->className());
     if (n == "KIntSpinBox") {
-        oldText = QString::number(dynamic_cast<KIntSpinBox*>(widget)->value());
-        dynamic_cast<KIntSpinBox*>(widget)->setValue(text.toInt());
+        oldText = QString::number(qobject_cast<QSpinBox*>(widget)->value());
+        qobject_cast<QSpinBox*>(widget)->setValue(text.toInt());
     }
     else {
         oldText = widget->property("text").toString();
@@ -659,9 +737,8 @@ StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
     return true;
 }
 
-void
-StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
-                               const QByteArray &classname)
+void KexiStandardFormWidgetsFactory::resizeEditor(QWidget *editor, QWidget *widget,
+                                                  const QByteArray &classname)
 {
     QSize s = widget->size();
     QPoint p = widget->pos();
@@ -692,15 +769,20 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
 
     editor->resize(s);
     editor->move(p);
+
+    //! @todo KEXI3
+    /* from ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &):
+        QSize s = widget->size();
+        editor->move(widget->x() + 2, widget->y() - 5);
+        editor->resize(s.width() - 20, widget->fontMetrics().height() + 10); */
 }
 
-bool
-StdWidgetFactory::saveSpecialProperty(const QByteArray &classname,
+bool KexiStandardFormWidgetsFactory::saveSpecialProperty(const QByteArray &classname,
                                       const QString &name, const QVariant &,
                                       QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
 {
     if (name == "list_items" && classname == "KComboBox") {
-        KComboBox *combo = dynamic_cast<KComboBox*>(w);
+        KComboBox *combo = qobject_cast<KComboBox*>(w);
         for (int i = 0; i < combo->count(); i++) {
             QDomElement item = domDoc.createElement("item");
             KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", combo->itemText(i));
@@ -710,7 +792,7 @@ StdWidgetFactory::saveSpecialProperty(const QByteArray &classname,
     }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (name == "list_contents" && classname == "QTreeWidget") {
-        QTreeWidget *treewidget = dynamic_cast<QTreeWidget*>(w);
+        QTreeWidget *treewidget = qobject_cast<QTreeWidget*>(w);
         // First we save the columns
         QTreeWidgetItem *headerItem = treewidget->headerItem();
         if (headerItem) {
@@ -738,12 +820,25 @@ StdWidgetFactory::saveSpecialProperty(const QByteArray &classname,
         return true;
     }
 #endif
-    return false;
+    else if ((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget"))) {
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(w->parentWidget()->parentWidget());
+        KFormDesigner::FormIO::savePropertyElement(
+            parentNode, domDoc, "attribute", "title", tab->tabText(tab->indexOf(w)));
+    } else if ((name == "stackIndex")
+        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
+            || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
+    {
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(w->parentWidget());
+        KFormDesigner::FormIO::savePropertyElement(
+            parentNode, domDoc, "attribute", "stackIndex", stack->indexOf(w));
+    } else
+        return false;
+    return true;
 }
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
-StdWidgetFactory::saveListItem(QListWidgetItem *item,
+KexiStandardFormWidgetsFactory::saveListItem(QListWidgetItem *item,
                                QDomNode &parentNode, QDomDocument &domDoc)
 {
     QDomElement element = domDoc.createElement("item");
@@ -764,17 +859,17 @@ StdWidgetFactory::saveListItem(QListWidgetItem *item,
 }
 #endif
 
-bool
-StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
-                                      QDomElement &node, QWidget *w,
-                                      KFormDesigner::ObjectTreeItem *item)
+bool KexiStandardFormWidgetsFactory::readSpecialProperty(const QByteArray &classname,
+                                                         QDomElement &node, QWidget *w,
+                                                         KFormDesigner::ObjectTreeItem *item)
 {
     const QString tag( node.tagName() );
     const QString name( node.attribute("name") );
-    KFormDesigner::Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
+    KFormDesigner::Form *form = item->container()
+            ? item->container()->form() : item->parent()->container()->form();
 
     if ((tag == "item") && (classname == "KComboBox")) {
-        KComboBox *combo = dynamic_cast<KComboBox*>(w);
+        KComboBox *combo = qobject_cast<KComboBox*>(w);
         QVariant val = KFormDesigner::FormIO::readPropertyValue(
                     form, node.firstChild().firstChild(), w, name);
         if (val.canConvert(QVariant::Pixmap))
@@ -783,12 +878,9 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
             combo->addItem(val.toString());
         return true;
     }
-
-    if (false) {
-    }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (tag == "column" && classname == "QTreeWidget") {
-        QTreeWidget *tw = dynamic_cast<QTreeWidget*>(w);
+        QTreeWidget *tw = qobject_cast<QTreeWidget*>(w);
         int id = 0;
         for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
             QString prop = n.toElement().attribute("name");
@@ -807,17 +899,34 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
         return true;
     }
     else if (tag == "item" && classname == "QTreeWidget") {
-        QTreeWidget *tw = dynamic_cast<QTreeWidget*>(w);
+        QTreeWidget *tw = qobject_cast<QTreeWidget*>(w);
         readListItem(node, 0, tw);
         return true;
     }
 #endif
+    else if ((name == "title") && (item->parent()->widget()->inherits("QTabWidget"))) {
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(w->parentWidget());
+        tab->addTab(w, node.firstChild().toElement().text());
+        item->addModifiedProperty("title", node.firstChild().toElement().text());
+        return true;
+    }
+    else if (name == "stackIndex"
+        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
+            || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
+    {
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(w->parentWidget());
+        int index = KFormDesigner::FormIO::readPropertyValue(form, node.firstChild(), w, name).toInt();
+        stack->insertWidget(index, w);
+        stack->setCurrentWidget(w);
+        item->addModifiedProperty("stackIndex", index);
+        return true;
+    }
     return false;
 }
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
-StdWidgetFactory::readTreeItem(
+KexiStandardFormWidgetsFactory::readTreeItem(
     QDomElement &node, QTreeWidgetItem *parent, QTreeWidget *treewidget)
 {
     QTreeWidgetItem *item;
@@ -859,9 +968,9 @@ StdWidgetFactory::readTreeItem(
 }
 #endif
 
-bool
-StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
-                                            QWidget *w, const QByteArray &property, bool isTopLevel)
+bool KexiStandardFormWidgetsFactory::isPropertyVisibleInternal(const QByteArray &classname,
+                                                               QWidget *w, const QByteArray &property,
+                                                               bool isTopLevel)
 {
     bool ok = true;
     if (classname == "FormWidgetBase") {
@@ -909,20 +1018,40 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
 //! @todo reenable autoDefault / default if the top level window is dialog...
         ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoDefault" && property != "default");
     }
+    else if (   classname == "HBox" || classname == "VBox" || classname == "Grid"
+             || classname == "HFlow" || classname == "VFlow")
+    {
+        return property == "objectName" || property == "geometry";
+    }
+    else if (classname == "QGroupBox") {
+        ok =
+#ifndef KEXI_SHOW_UNFINISHED
+            /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding
+            a fake properties which will allow to properly work in design mode, otherwise
+            child widgets become frozen when checked==true */
+            (KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "checkable" && property != "checked")) &&
+#endif
+            true;
+    } else if (classname == "KFDTabWidget") {
+        ok = (KFormDesigner::WidgetFactory::advancedPropertiesVisible()
+              || (property != "tabReorderingEnabled" && property != "hoverCloseButton"
+                  && property != "hoverCloseButtonDelayed"));
+    }
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
-StdWidgetFactory::editListContents()
+KexiStandardFormWidgetsFactory::editListContents()
 {
     if (widget()->inherits("QTreeWidget"))
-        editTreeWidget(dynamic_cast<QTreeWidget*>(widget()));
+        editTreeWidget(qobject_cast<QTreeWidget*>(widget()));
 }
 #endif
 
-void
-StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
+void KexiStandardFormWidgetsFactory::setPropertyOptions(KPropertySet& set,
+                                                        const KFormDesigner::WidgetInfo& info,
+                                                        QWidget *w)
 {
     Q_UNUSED(info);
     Q_UNUSED(w);
@@ -933,6 +1062,27 @@ StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::Wid
     }
 }
 
-K_EXPORT_KEXIFORMWIDGETS_PLUGIN(StdWidgetFactory, stdwidgets)
+void KexiStandardFormWidgetsFactory::reorderTabs(int oldpos, int newpos)
+{
+    KFDTabWidget *tabWidget = qobject_cast<KFDTabWidget*>(sender());
+    KFormDesigner::ObjectTreeItem *tab
+            = tabWidget->container()->form()->objectTree()->lookup(tabWidget->objectName());
+    if (!tab)
+        return;
 
+    tab->children()->move(oldpos, newpos);
+}
 
+KFormDesigner::ObjectTreeItem* KexiStandardFormWidgetsFactory::selectableItem(
+                                                KFormDesigner::ObjectTreeItem* item)
+{
+    if (item->parent() && item->parent()->widget()) {
+        if (qobject_cast<QTabWidget*>(item->parent()->widget())) {
+            // tab widget's page
+            return item->parent();
+        }
+    }
+    return item;
+}
+
+#include "KexiStandardFormWidgetsFactory.moc"
