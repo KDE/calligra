@@ -141,7 +141,7 @@ protected Q_SLOTS:
 
     void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
-    void slotNewItemStored(KexiPart::Item&);
+    void slotNewItemStored(KexiPart::Item* item);
     void slotItemRemoved(const KexiPart::Item& item);
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 
