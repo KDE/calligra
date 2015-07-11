@@ -27,6 +27,7 @@
 #include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 
 #include <QApplication>
 #include <QLabel>

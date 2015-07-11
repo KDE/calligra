@@ -23,4 +23,8 @@ CMakeLists.txt.user*
 *.diff
 *.patch
 .idea
-
+GTAGS
+GPATH
+GRTAGS
+GSYMS
+BROWSE

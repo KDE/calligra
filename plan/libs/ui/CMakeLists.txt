@@ -7,7 +7,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
 
-    ${KOODF_INCLUDES}
+    ${KOPROPERTY_INCLUDES}
+
+    ${KOREPORT_INCLUDES}
 
     ${KOPROPERTIES_INCLUDES}
 

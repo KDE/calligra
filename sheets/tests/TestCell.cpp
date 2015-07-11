@@ -21,7 +21,6 @@
 #include "TestCell.h"
 
 #include <KoStore.h>
-#include <KoXmlReaderForward.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>

@@ -28,7 +28,7 @@
 #include <QPointF>
 
 //Calligra includes
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoGenStyles.h>
 #include <QVariantList>

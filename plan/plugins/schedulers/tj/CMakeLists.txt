@@ -40,7 +40,8 @@ kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
 target_link_libraries(
     plantjscheduler
     kplatokernel
-    koodf
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTXML_LIBRARY}
 )
 
 set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )

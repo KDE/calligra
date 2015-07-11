@@ -42,6 +42,7 @@
 #include <KGanttTreeViewRowController>
 
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 #include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>

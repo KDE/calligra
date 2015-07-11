@@ -33,7 +33,9 @@
 #include <ktimezone.h>
 #include <kdebug.h>
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
+
+class QDomElement;
 
 /// The main namespace.
 namespace KPlato

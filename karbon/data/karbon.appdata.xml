@@ -137,6 +137,7 @@
       </li>
       <li xml:lang="bs">Prilagodljiv korisnički interfejs sa gdje se moze slobodno  staviti alatne trake i dockers</li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
+      <li xml:lang="de">Anpassungsfähige Bedienungsoberfläche mit frei platzierbaren Werkzeugleisten und andockbaren Fenstern</li>
       <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
       <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y paneles que se pueden posicionar libremente en cualquier lugar.</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
@@ -303,6 +304,7 @@
       </li>
       <li xml:lang="bs">Extensible pisanjem dodataka za novim alatima , oblika i modnog brenda Dockers</li>
       <li xml:lang="ca">Ampliable mitjançant l'escriptura de connectors per eines noves, formes i acobladors</li>
+      <li xml:lang="de">Erweiterbar durch das Schreiben von Modulen für neue Werkzeuge, Objekte und andockbaren Dialogen</li>
       <li xml:lang="en-GB">Extensible by writing plugins for new tools, shapes and dockers</li>
       <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y paneles</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>

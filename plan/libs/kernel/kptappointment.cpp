@@ -29,6 +29,8 @@
 #include "kptxmlloaderobject.h"
 #include "kptdebug.h"
 
+#include <KoXmlReader.h>
+
 #include <QDateTime>
 #include <QMutableMapIterator>
 

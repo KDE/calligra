@@ -16,8 +16,8 @@ kcoreaddons_desktop_to_json(kplatorcpsscheduler planrcpsscheduler.desktop)
 target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
-    koodf
     rcps_plan
+    ${KDE4_KDECORE_LIBS}
 #    ${LIBRCPS_LIBRARIES}
 )
 

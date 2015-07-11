@@ -1,5 +1,5 @@
 
-include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
+include_directories(${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main)
 
 set(kexirelationdesignshape_PART_SRCS  
 kexirelationdesignshape.cpp
@@ -16,7 +16,8 @@ target_link_libraries(
 kexirelationdesignshape
 kexicore
 keximain
-komain
+kowidgets
+flake
 
 Predicate
 

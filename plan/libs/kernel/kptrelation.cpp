@@ -23,6 +23,8 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
+#include <KoXmlReader.h>
+
 #include <QDomDocument>
 #include <QStringList>
 

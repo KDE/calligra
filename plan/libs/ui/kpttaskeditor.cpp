@@ -32,6 +32,7 @@
 #include "kptresourcemodel.h"
 #include "kptresourceallocationmodel.h"
 
+#include <KoXmlReader.h>
 #include <KoDocument.h>
 #include <KoIcon.h>
 
