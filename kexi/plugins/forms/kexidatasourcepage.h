@@ -24,6 +24,7 @@
 
 #include <KDbField>
 #include <KDbUtils>
+#include <KDbTableOrQuerySchema>
 
 #include <KPropertySet>
 

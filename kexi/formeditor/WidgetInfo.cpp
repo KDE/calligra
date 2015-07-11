@@ -245,7 +245,7 @@ QList<QByteArray> WidgetInfo::autoSaveProperties() const
 
 void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int type)
 {
-    if (propertyName.isEmpty() || type == (int)KProperty::Auto)
+    if (propertyName.isEmpty() || type == int(KProperty::Auto))
         return;
     if (!d->customTypesForProperty) {
         d->customTypesForProperty = new QHash<QByteArray, int>();

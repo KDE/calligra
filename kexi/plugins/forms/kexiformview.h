@@ -32,9 +32,9 @@
 #include <core/kexiblobbuffer.h>
 #include <formeditor/form.h>
 
-#include "kexiformpart.h"
+#include "kexiformutils_export.h"
 
-#define NO_DSWIZARD
+#define KEXI_NO_FORM_DATASOURCE_WIZARD
 
 class KexiFormPart;
 class KexiFormPartTempData;

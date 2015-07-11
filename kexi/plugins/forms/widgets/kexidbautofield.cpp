@@ -38,6 +38,7 @@
 
 #include <QLabel>
 #include <QApplication>
+#include <QBoxLayout>
 #include <QDebug>
 
 #define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
@@ -746,7 +747,7 @@ void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
 QVariant KexiDBAutoField::property(const char * name) const
 {
     bool ok;
-    QVariant val = KFormDesigner::WidgetWithSubpropertiesInterface::subproperty(name, ok);
+    QVariant val = KFormDesigner::WidgetWithSubpropertiesInterface::subproperty(name, &ok);
     if (ok)
         return val;
     return QWidget::property(name);

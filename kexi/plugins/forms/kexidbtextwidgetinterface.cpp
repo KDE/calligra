@@ -49,7 +49,7 @@ void KexiDBTextWidgetInterface::paint(
 {
     KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
     KDbQueryColumnInfo *columnInfo = dataItemIface ? dataItemIface->columnInfo() : 0;
-    if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRow() && textIsEmpty) {
+    if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRecord() && textIsEmpty) {
         int addMargin = 0;
         if (dynamic_cast<QFrame*>(w))
             addMargin += dynamic_cast<QFrame*>(w)->lineWidth() + dynamic_cast<QFrame*>(w)->midLineWidth();

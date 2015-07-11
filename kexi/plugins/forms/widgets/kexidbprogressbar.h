@@ -34,7 +34,7 @@ class KEXIFORMUTILS_EXPORT KexiDBProgressBar : public QProgressBar,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
     explicit KexiDBProgressBar(QWidget *parent = 0);

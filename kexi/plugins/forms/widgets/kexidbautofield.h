@@ -51,7 +51,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
     Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor RESET unsetPalette)
     Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition)
     Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType)

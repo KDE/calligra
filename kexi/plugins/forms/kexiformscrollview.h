@@ -79,6 +79,12 @@ public:
      so columnCount() can return greater or smaller number than dataColumns(). */
     virtual int columnCount() const;
 
+    //! @return the number of records in the data set (if data set is present).
+    virtual int recordCount() const;
+
+    //! \return number of the currently selected record number or -1.
+    virtual int currentRecord() const;
+
     /*! \return column information for column number \a col.
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
@@ -200,11 +206,11 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     //! Handles KDbTableViewData::recordRepaintRequested() signal
-    virtual void slotRecordRepaintRequested(KDbRecordData* record);
+    virtual void slotRecordRepaintRequested(KDbRecordData* data);
 
     //! Handles KDbTableViewData::aboutToDeleteRecord() signal. Prepares info for slotRecordDeleted().
-    virtual void slotAboutToDeleteRecord(KDbRecordData* record, KDbResultInfo* result, bool repaint) {
-        KexiDataAwareObjectInterface::slotAboutToDeleteRecord(record, result, repaint);
+    virtual void slotAboutToDeleteRecord(KDbRecordData* data, KDbResultInfo* result, bool repaint) {
+        KexiDataAwareObjectInterface::slotAboutToDeleteRecord(data, result, repaint);
     }
 
     //! Handles KDbTableViewData::recordDeleted() signal to repaint when needed.
@@ -213,10 +219,10 @@ protected Q_SLOTS:
     }
 
     //! Handles KDbTableViewData::recordInserted() signal to repaint when needed.
-    virtual void slotRecordInserted(KDbRecordData* record, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData* data, bool repaint);
 
     //! Like above, not db-aware version
-    virtual void slotRecordInserted(KDbRecordData* record, uint record, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData* data, uint record, bool repaint);
 
     virtual void slotRecordsDeleted(const QList<int>&);
 

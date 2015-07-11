@@ -623,9 +623,9 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
 
 void KexiComboBoxBase::updateTextForHighlightedRecord()
 {
-    KDbRecordData* record = popup() ? popup()->tableView()->highlightedRecord() : 0;
-    if (record)
-        slotRecordSelected(record);
+    KDbRecordData* data = popup() ? popup()->tableView()->highlightedRecord() : 0;
+    if (data)
+        slotRecordSelected(data);
 }
 
 void KexiComboBoxBase::undoChanges()

@@ -39,10 +39,10 @@ class KEXIFORMUTILS_EXPORT KexiDBPushButton : public KexiPushButton,
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
     Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
-    explicit KexiDBPushButton(const QString & text, QWidget * parent);
+    explicit KexiDBPushButton(const QString & text, QWidget * parent = 0);
     ~KexiDBPushButton();
 
     inline QString dataSource() const {

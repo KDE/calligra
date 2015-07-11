@@ -69,7 +69,7 @@ public:
 
     KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
 
-#ifndef NO_DSWIZARD
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
     void generateForm(KDbFieldList *list, QDomDocument &domDoc);
 #endif
 

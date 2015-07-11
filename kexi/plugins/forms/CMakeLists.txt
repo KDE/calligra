@@ -6,7 +6,7 @@ if(MARBLE_FOUND)
   add_subdirectory(widgets/mapbrowser)
 endif()
 
-if(QT_QTWEBKIT_FOUND)
+if(Qt5WebKitWidgets_FOUND)
   add_subdirectory(widgets/webbrowser)
 endif()
 
@@ -14,7 +14,7 @@ endif()
 set(kexi_formplugin_SRCS kexiforms.cpp)
 
 add_library(kexi_formplugin MODULE ${kexi_formplugin_SRCS})
-kcoreaddons_desktop_to_json(kexi_tableplugin kexi_formplugin.desktop)
+kcoreaddons_desktop_to_json(kexi_formplugin kexi_formplugin.desktop)
 
 target_link_libraries(kexi_formplugin
     kexicore
@@ -30,12 +30,12 @@ target_link_libraries(kexi_formplugin
 install(TARGETS kexi_formplugin DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
 
 # the form widgets plugin
-set(kformdesigner_kexidbwidgets_PART_SRCS kexidbfactory.cpp)
+set(kexiforms_dbwidgetsplugin_SRCS kexidbfactory.cpp)
 
-add_library(kformdesigner_kexidbwidgets MODULE ${kformdesigner_kexidbwidgets_PART_SRCS})
-kcoreaddons_desktop_to_json(kformdesigner_kexidbfactory kformdesigner_kexidbfactory.desktop)
+add_library(kexiforms_dbwidgetsplugin MODULE ${kexiforms_dbwidgetsplugin_SRCS})
+kcoreaddons_desktop_to_json(kexiforms_dbwidgetsplugin kexiforms_dbwidgetsplugin.desktop)
 
-target_link_libraries(kformdesigner_kexidbwidgets
+target_link_libraries(kexiforms_dbwidgetsplugin
     PRIVATE
         kformdesigner
         kexiformutils
@@ -50,7 +50,7 @@ target_link_libraries(kformdesigner_kexidbwidgets
         Qt5::Gui
 )
 
-install(TARGETS kformdesigner_kexidbwidgets DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
+install(TARGETS kexiforms_dbwidgetsplugin DESTINATION ${KEXI_FORM_WIDGETS_PLUGIN_INSTALL_DIR})
 
 # the form utils lib
 set(kexiformutils_LIB_SRCS

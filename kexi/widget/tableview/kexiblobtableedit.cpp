@@ -269,13 +269,13 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const QUrl &url)
     //emit acceptRequested();
 }
 
-void KexiBlobTableEdit::handleAboutToSaveAsAction(QString *origFilename, QString *fileExtension, bool *dataIsEmpty)
+void KexiBlobTableEdit::handleAboutToSaveAsAction(QString *origFilename, QString *mimeType, bool *dataIsEmpty)
 {
     Q_ASSERT(origFilename);
-    Q_ASSERT(fileExtension);
+    Q_ASSERT(mimeType);
     Q_ASSERT(dataIsEmpty);
     Q_UNUSED(origFilename);
-    Q_UNUSED(fileExtension);
+    Q_UNUSED(mimeType);
     *dataIsEmpty = valueIsEmpty();
 //! @todo no fname stored for now
 }

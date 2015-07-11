@@ -45,8 +45,10 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     m_reload = new QPushButton(xi18n("Reload"),this);
     m_stop = new QPushButton;
     KGuiItem::assign(m_stop,KStandardGuiItem::stop());
-    m_back = new QPushButton(backForward.first);
-    m_forward = new QPushButton(backForward.second);
+    m_back = new QPushButton;
+    KGuiItem::assign(m_back, backForward.first);
+    m_forward = new QPushButton;
+    KGuiItem::assign(m_forward, backForward.second);
     h_layout = new QHBoxLayout;
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
@@ -202,4 +204,3 @@ void  WebBrowserWidget::setReadOnly(bool val)
 {
     m_readOnly = val;
 }
-

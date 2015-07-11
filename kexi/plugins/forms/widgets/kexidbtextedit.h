@@ -39,7 +39,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :  public KTextEdit,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
     explicit KexiDBTextEdit(QWidget *parent);

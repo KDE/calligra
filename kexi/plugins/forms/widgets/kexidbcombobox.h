@@ -102,7 +102,9 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent *e);
 
-    void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+
+    virtual void changeEvent(QEvent * event);
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -112,12 +114,6 @@ protected:
     //! Creates editor. Reimplemented, because if the combo box is not editable,
     //! editor should not be created.
     virtual void createEditor();
-
-    /*! Reimplemented */
-    virtual void styleChange(QStyle& oldStyle);
-
-    /*! Reimplemented */
-    virtual void fontChange(const QFont & oldFont);
 
     virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 

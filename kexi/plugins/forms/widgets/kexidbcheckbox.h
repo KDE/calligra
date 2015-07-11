@@ -33,7 +33,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(Tristate tristate READ isTristate WRITE setTristate)
     Q_ENUMS(Tristate)
 

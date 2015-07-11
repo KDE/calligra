@@ -30,6 +30,7 @@
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QPaintEvent>
+#include <QPointer>
 
 class KexiDropDownButton;
 class KexiImageContextMenu;
@@ -43,7 +44,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId STORED false)
     Q_PROPERTY(uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
@@ -189,7 +190,7 @@ protected Q_SLOTS:
     void slotUpdateActionsAvailabilityRequested(bool* valueIsNull, bool* valueIsReadOnly);
 
     void handleInsertFromFileAction(const QUrl &url);
-    void handleAboutToSaveAsAction(QString* origFilename, QString* fileExtension, bool*& dataIsEmpty);
+    void handleAboutToSaveAsAction(QString* origFilename, QString* mimeType, bool* dataIsEmpty);
     bool handleSaveAsAction(const QUrl &url);
     void handleCutAction();
     void handleCopyAction();

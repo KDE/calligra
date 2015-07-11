@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "MapBrowserWidget.h"
 #include <kexiutils/utils.h>
 
@@ -139,4 +138,3 @@ void MapBrowserWidget::resizeEvent(QResizeEvent *event)
     KexiUtils::BoolBlocker guard(&m_slotMapChanged_enabled, false);
     Marble::MarbleWidget::resizeEvent(event);
 }
-

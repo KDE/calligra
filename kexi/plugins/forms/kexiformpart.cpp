@@ -171,7 +171,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     return view;
 }
 
-#ifndef NO_DSWIZARD
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
 void
 KexiFormPart::generateForm(KDbFieldList *list, QDomDocument &domDoc)
 {
