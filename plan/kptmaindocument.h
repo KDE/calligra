@@ -34,6 +34,7 @@
 #include "KoDocument.h"
 
 #include <QFileInfo>
+#include <QDomDocument>
 
 
 #define PLAN_MIME_TYPE "application/x-vnd.kde.plan"

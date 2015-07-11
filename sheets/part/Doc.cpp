@@ -54,7 +54,6 @@
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
-#include <KoOdfStylesReader.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>

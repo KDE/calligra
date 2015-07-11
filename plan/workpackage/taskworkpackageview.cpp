@@ -37,6 +37,7 @@
 #include "kdganttstyleoptionganttitem.h"
 
 #include <KoIcon.h>
+#include <KoXmlReader.h>
 
 #include <QDragMoveEvent>
 #include <QMenu>
