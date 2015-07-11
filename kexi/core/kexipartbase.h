@@ -63,8 +63,8 @@ public:
      @note As number of %n parameters is unspecified,
      you should add appropriate number of parameters using .subs().
      to result of i18nMessage().
-     In your your implementation, you should use ki18n(I18N_NOOP())
-     or ki18nc(I18N_NOOP2()) instead of i18n() or i18nc().
+     In your your implementation, you should use kxi18nc(I18NC_NOOP("@info", "..."))
+     instead of i18n().
      Example:
      @code
       QString tableName = "Employees";

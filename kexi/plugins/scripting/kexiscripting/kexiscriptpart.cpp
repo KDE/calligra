@@ -231,9 +231,9 @@ KLocalizedString KexiScriptPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of script <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of script <resource>%1</resource> has been modified."));
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
 
