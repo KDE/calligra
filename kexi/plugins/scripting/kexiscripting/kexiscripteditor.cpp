@@ -56,7 +56,7 @@ void KexiScriptEditor::initialize(Kross::Action* scriptaction)
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
     QString code = d->scriptaction->code();
-    if (code.isNull()) {
+    if (code.isEmpty()) {
         // If there is no code we just add some information.
 ///@todo remove after release
 #if 0
