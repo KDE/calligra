@@ -168,9 +168,9 @@ KDbQuerySchema *KexiQueryPart::currentQuery(KexiView* view)
 KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of query <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of query <resource>%1</resource> has been modified."));
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Query <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Query <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }

@@ -204,14 +204,14 @@ KLocalizedString KexiTablePart::i18nMessage(
 {
     Q_UNUSED(window);
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of table <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of table <resource>%1</resource> has been modified."));
 
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Table <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Table <resource>%1</resource> already exists."));
 
     if (window->currentViewMode() == Kexi::DesignViewMode && !window->neverSaved()
             && englishMessage == ":additional message before saving design")
-        return ki18n(I18N_NOOP("Warning! Any data in this table will be removed upon design's saving!"));
+        return kxi18nc(I18NC_NOOP("@info", "Warning! Any data in this table will be removed upon design's saving!"));
 
     return Part::i18nMessage(englishMessage, window);
 }
