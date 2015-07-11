@@ -54,7 +54,6 @@ target_link_libraries(kexicore
         KF5::KIOWidgets
         KF5::CoreAddons
         KF5::XmlGui
-        KF5::KDELibs4Support # temp
 
         kexiutils
         kowidgetutils

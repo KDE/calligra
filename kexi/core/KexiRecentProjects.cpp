@@ -27,10 +27,9 @@
 #include <KDbConnection>
 #include <KDbMessageHandler>
 
-#include <KStandardDirs>
-
 #include <QDebug>
 #include <QDir>
+#include <QStandardPaths>
 
 #include <unistd.h>
 
@@ -41,7 +40,7 @@ class KexiRecentProjects::Private
 {
 public:
     explicit Private(KexiRecentProjects *qq)
-        : q(qq), handler(0), loaded(false)
+        : handler(0), q(qq), loaded(false)
     {
     }
     ~Private()
@@ -52,13 +51,14 @@ public:
     bool add(KexiProjectData *data, const QString& existingShortcutPath,
              bool deleteDuplicate = false);
 
-    KexiRecentProjects *q;
     KDbMessageHandler* handler;
+    QMap<KexiProjectData*, QString> shortcutPaths;
+private:
+    KexiRecentProjects *q;
     bool loaded;
     QString path;
     QMap<QString, KexiProjectData*> projectsForKey;
     QSet<KexiProjectData*> toDelete;
-    QMap<KexiProjectData*, QString> shortcutPaths;
 };
 
 void KexiRecentProjects::Private::load()
@@ -70,9 +70,12 @@ void KexiRecentProjects::Private::load()
     qDebug() << "wait..";
     sleep(2);
 #endif
-    path = KStandardDirs::locateLocal("data", "kexi/recent_projects/",
-                                              true /*create dir*/);
+    path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+            + "/kexi/recent_projects/";
     QDir dir(path);
+    if (!dir.mkpath(path)) {
+        return;
+    }
     if (!dir.exists() || !dir.isReadable()) {
         return;
     }
