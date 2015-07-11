@@ -3624,11 +3624,15 @@ void KexiMainWindow::slotToolsCompactDatabase()
                 && (d->prj->dbConnection()->driver()->features() & KDbDriver::CompactingDatabaseSupported)))
             return;
 
-        if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
+        KGuiItem yesItem(KStandardGuiItem::cont());
+        yesItem.setText(xi18nc("@action:button Compact database", "Compact"));
+        if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
                 xi18n("The current project has to be closed before compacting the database. "
-                     "It will be open again after compacting.\n\nDo you want to continue?")))
+                     "It will be open again after compacting.\n\nDo you want to continue?"),
+                QString(), yesItem, KStandardGuiItem::cancel()))
+        {
             return;
-
+        }
         data = new KexiProjectData(*d->prj->data()); // a copy
         drv = d->prj->dbConnection()->driver();
         const tristate res = closeProject();
