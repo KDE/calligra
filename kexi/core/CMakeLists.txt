@@ -56,7 +56,7 @@ target_link_libraries(kexicore
         KF5::XmlGui
 
         kexiutils
-        kowidgetutils
+        kowidgetutils # KoGroupButton
 
         KDb
         KProperty
