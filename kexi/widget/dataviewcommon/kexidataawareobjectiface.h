@@ -727,12 +727,12 @@ protected:
     virtual void updateAfterAcceptRecordEditing();
 
     //! Handles TableViewData::recordRepaintRequested() signal
-    virtual void slotRecordRepaintRequested(KDbRecordData* record) {
-        Q_UNUSED(record);
+    virtual void slotRecordRepaintRequested(KDbRecordData* data) {
+        Q_UNUSED(data);
     }
 
     //! Handles TableViewData::aboutToDeleteRecord() signal. Prepares info for slotRecordDeleted().
-    virtual void slotAboutToDeleteRecord(KDbRecordData* record, KDbResultInfo* result,
+    virtual void slotAboutToDeleteRecord(KDbRecordData* data, KDbResultInfo* result,
                                          bool repaint);
 
     //! Handles TableViewData::recordDeleted() signal to repaint when needed.

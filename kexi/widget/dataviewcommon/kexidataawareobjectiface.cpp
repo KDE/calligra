@@ -1309,11 +1309,11 @@ void KexiDataAwareObjectInterface::setEmptyRecordInsertingEnabled(bool set)
     /*emit*/ reloadActions();
 }
 
-void KexiDataAwareObjectInterface::slotAboutToDeleteRecord(KDbRecordData* record,
+void KexiDataAwareObjectInterface::slotAboutToDeleteRecord(KDbRecordData* data,
         KDbResultInfo* /*result*/, bool repaint)
 {
     if (repaint) {
-        m_recordWillBeDeleted = m_data->indexOf(record);
+        m_recordWillBeDeleted = m_data->indexOf(data);
     }
 }
 
@@ -1353,14 +1353,14 @@ void KexiDataAwareObjectInterface::endRemoveItem(int pos)
     Q_UNUSED(pos);
 }
 
-bool KexiDataAwareObjectInterface::deleteItem(KDbRecordData* record)
+bool KexiDataAwareObjectInterface::deleteItem(KDbRecordData* data)
 {
-    if (!record || !beforeDeleteItem(record))
+    if (!data || !beforeDeleteItem(data))
         return false;
 
-    const int pos = m_data->indexOf(record);
-    beginRemoveItem(record, pos);
-    bool result = m_data->deleteRecord(record, true /*repaint*/);
+    const int pos = m_data->indexOf(data);
+    beginRemoveItem(data, pos);
+    bool result = m_data->deleteRecord(data, true /*repaint*/);
     endRemoveItem(pos);
     if (!result) {
         showErrorMessageForResult(m_data->result());
@@ -1392,7 +1392,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int record, int co
                                                               bool useDefaultValueIfPossible)
 {
     KDbRecordData *currentRecord = record < int(m_data->count()) ? m_data->at(record) : m_insertRecord;
-    //qDebug() << m_insertItem << m_currentItem << currentItem;
+    //qDebug() << m_insertItem << m_currentRecord << currentRecord;
     if (m_recordEditing >= 0 && record == m_recordEditing && m_data->recordEditBuffer()) {
         KDbTableViewColumn* tvcol = column(col);
         if (tvcol->isDBAware()) {

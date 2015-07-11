@@ -944,7 +944,7 @@ void KexiTableDesignerView::slotPropertyChanged(KPropertySet& set, KProperty& pr
 
     if (pname == "defaultValue") {
         KDbField::Type type = KDb::intToFieldType(set["type"].value().toInt());
-        set["defaultValue"].setType((KProperty::Type)KDbField::variantType(type));
+        set["defaultValue"].setType(static_cast<KProperty::Type>(KDbField::variantType(type)));
     }
 
     if (pname == "subType" && d->slotPropertyChanged_subType_enabled) {

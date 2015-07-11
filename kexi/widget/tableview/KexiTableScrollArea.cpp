@@ -723,7 +723,7 @@ void KexiTableScrollArea::paintCell(QPainter* p, KDbRecordData *data, int record
         //get visible lookup value if available
         getVisibleLookupValue(cellValue, edit, data, tvcol);
 
-/*qDebug() << "edit->setupContents()" << (m_currentItem == record && col == m_curColumn)
+/*qDebug() << "edit->setupContents()" << (m_currentRecord == record && col == m_curColumn)
         << cellValue << txt << align << x << y_offset << w << h;*/
         edit->setupContents(p, m_currentRecord == data && column == m_curColumn,
                             cellValue, txt, align, x, y_offset, w, h);
@@ -1803,9 +1803,9 @@ void KexiTableScrollArea::removeEditor()
     viewport()->setFocus();
 }
 
-void KexiTableScrollArea::slotRecordRepaintRequested(KDbRecordData* record)
+void KexiTableScrollArea::slotRecordRepaintRequested(KDbRecordData* data)
 {
-    updateRecord(m_data->indexOf(record));
+    updateRecord(m_data->indexOf(data));
 }
 
 #ifdef KEXI_TABLE_PRINT_SUPPORT
