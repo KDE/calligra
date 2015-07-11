@@ -50,7 +50,7 @@ set(kformdesigner_LIBS
   kexicore
   kexiextendedwidgets
   kundo2
-  kowidgets
+  kowidgets # KoFileDialog
 
   KDb
   KProperty
