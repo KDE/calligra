@@ -23,8 +23,7 @@
 #include "kexistatusbar.h"
 
 #include <QToolButton>
-#include <QCheckBox>
-#include <QMenu>
+#include <QLabel>
 #include <QDebug>
 
 #include <KLocalizedString>
@@ -34,6 +33,7 @@
 #include <ktexteditor/viewstatusmsginterface.h>
 #endif
 
+#if 0
 // Smart menu
 class Menu : public QMenu
 {
@@ -49,22 +49,48 @@ void Menu::mouseReleaseEvent(QMouseEvent* e)
     if (activeAction())
         activeAction()->trigger();
 }
+#endif
+
+class KexiStatusBar::Private
+{
+public:
+    explicit Private(KexiStatusBar *qq) : q(qq)
+  #ifdef KexiStatusBar_KTEXTEDITOR_USED
+          , m_cursorIface(0)
+  #endif
+    {
+    }
+
+    QLabel* insertPermanentItem(const QString &text, int stretch = 0)
+    {
+        QLabel *l = new QLabel(text, q);
+        l->setFixedHeight(q->fontMetrics().height() + 2);
+        l->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        q->addPermanentWidget(l, stretch);
+        l->show();
+        return l;
+    }
+
+    QLabel *messageLabel;
+    QLabel *readOnlyLabel;
+private:
+    KexiStatusBar *q;
+};
+
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
+    KTextEditor::ViewCursorInterface * m_cursorIface;
+    KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
+#endif
+    //QMenu *m_viewMenu;
 
 
 KexiStatusBar::KexiStatusBar(QWidget *parent)
-        : KStatusBar(parent)
-#ifdef KexiStatusBar_KTEXTEDITOR_USED
-        , m_cursorIface(0)
-#endif
+        : QStatusBar(parent), d(new Private(this))
 {
     setObjectName("KexiStatusBar");
     setContentsMargins(2, 0, 2, 0);
-    int id = 0;
-    m_msgID = id++;
-    insertPermanentItem("", m_msgID, 1 /*stretch*/);
-
-    m_readOnlyID = id++;
-    insertPermanentItem(QString(), m_readOnlyID);
+    d->messageLabel = d->insertPermanentItem(QString(), 1);
+    d->readOnlyLabel = d->insertPermanentItem(QString());
     setReadOnlyFlag(false);
 
 // still disabled as showing hiding would be implemented as side bars
@@ -94,6 +120,7 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
 
 KexiStatusBar::~KexiStatusBar()
 {
+    delete d;
 }
 
 void KexiStatusBar::cursorPositionChanged()
@@ -110,7 +137,7 @@ void KexiStatusBar::cursorPositionChanged()
 void KexiStatusBar::setStatus(const QString &str)
 {
     //qDebug() << str;
-    changeItem(str, m_msgID);
+    d->messageLabel->setText(str);
 }
 
 #if 0
@@ -122,6 +149,6 @@ void KexiStatusBar::setCursorPosition(int line, int col)
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {
-    changeItem(readOnly ? xi18n("Read only") : QString(), m_readOnlyID);
+    d->readOnlyLabel->setText(readOnly ? xi18nc("@label Read-only mode", "Read only") : QString());
 }
 

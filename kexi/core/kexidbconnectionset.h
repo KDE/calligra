@@ -36,7 +36,7 @@ public:
 
     /*! Loads connection data set from storage, currently from
      .kexic files saved in dirs returned by
-     KStandardDirs::findDirs("data", "connections") */
+     QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kexi/connections") */
     void load();
 
     /*! Adds \a data as connection data.

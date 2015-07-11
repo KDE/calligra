@@ -20,8 +20,6 @@
 #include "kexidbconnectionset.h"
 #include "kexidbshortcutfile.h"
 
-#include <KStandardDirs>
-
 #include <QDebug>
 #include <QDirIterator>
 #include <QFile>
@@ -76,13 +74,15 @@ bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QStri
             return false;
         QString baseFilename(dir + (data->hostName().isEmpty() ? "localhost" : data->hostName()));
         int i = 0;
-        while (KStandardDirs::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic"))
+        while (QFile::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic")) {
             i++;
-        if (!KStandardDirs::exists(dir)) {
+        }
+        if (!QDir(dir).exists()) {
             //make 'connections' dir and protect it
             //! @todo KEXI3 set permission of the created dirs to 0700
-            if (!QDir().mkpath(dir))
+            if (!QDir().mkpath(dir)) {
                 return false;
+            }
             //! @todo change permission of every created subdir, see KStandardDirs::makeDir() create
             QFile(dir).setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
         }

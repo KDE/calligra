@@ -22,7 +22,6 @@
 
 #include <KDbUtils>
 
-#include <KStandardDirs>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KAboutData>
