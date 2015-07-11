@@ -37,6 +37,7 @@
 #include <KLocalizedString>
 
 #include <QLabel>
+#include <QLineEdit>
 #include <QHBoxLayout>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)

@@ -17,12 +17,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-#include "MapBrowserWidget.h"
 #include "MapBrowserFactory.h"
+#include "MapBrowserWidget.h"
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
 #include <KexiIcon.h>
+#include <kexi.h>
 
 #include <KProperty>
 #include <KPropertySet>
@@ -32,11 +32,14 @@
 #include <QDebug>
 #include <QVariant>
 #include <QVariantList>
+#include <qglobal.h>
 
 #include <marble/MapThemeManager.h>
 
+KEXI_PLUGIN_FACTORY(MapBrowserFactory, "kexiforms_mapwidgetplugin.json")
+
 MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
-  : KexiDBFactoryBase(parent, "mapbrowser")
+  : KexiDBFactoryBase(parent)
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
@@ -154,6 +157,4 @@ void MapBrowserFactory::setPropertyOptions(KPropertySet& set, const KFormDesigne
     }
 }
 
-K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
-
-
+#include "MapBrowserFactory.moc"

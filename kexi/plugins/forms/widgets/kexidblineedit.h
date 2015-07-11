@@ -25,6 +25,7 @@
 #include <QEvent>
 #include <QPaintEvent>
 #include <QLineEdit>
+#include <QPointer>
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
@@ -48,16 +49,16 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public QLineEdit,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(QString clickMessage READ placeholderText
                                     WRITE setPlaceholderText) // Internal, equivalent of placeholderText
                                                               // For backward compatibility Kexi projects
                                                               // created with Qt < 4.7.
-    Q_PROPERTY(QString showClearButton READ isClearButtonEnabled
-                                       WRITE setClearButtonEnabled) // Internal, equivalent of clearButtonEnabled
-                                                                    // For backward compatibility Kexi projects
-                                                                    // created with Qt 4.
+    Q_PROPERTY(bool showClearButton READ isClearButtonEnabled
+                                    WRITE setClearButtonEnabled) // Internal, equivalent of clearButtonEnabled
+                                                                 // For backward compatibility Kexi projects
+                                                                 // created with Qt 4.
 public:
     explicit KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
@@ -137,11 +138,6 @@ public Q_SLOTS:
 
     //! Implemented for KexiDataItemInterface
     virtual bool fixup();
-
-    //! This makes the line edit display a grayed-out hinting text as long as
-    //! the user didn't enter any text. Equivalent of placeholderText. Calls QLineEdit::placeholderText().
-    //! For backward compatibility Kexi projects created with Qt < 4.7.
-    void setPlaceholderText(const QString &msg);
 
 protected Q_SLOTS:
     void slotTextChanged(const QString&);

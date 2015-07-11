@@ -121,8 +121,8 @@ protected Q_SLOTS:
     void slotRecordAccepted(KDbRecordData *data, int record) {
         KexiComboBoxBase::slotRecordAccepted(data, record);
     }
-    void slotRecordSelected(KDbRecordData* record) {
-        KexiComboBoxBase::slotRecordSelected(record);
+    void slotRecordSelected(KDbRecordData* data) {
+        KexiComboBoxBase::slotRecordSelected(data);
     }
     void slotInternalEditorValueChanged(const QVariant& v) {
         KexiComboBoxBase::slotInternalEditorValueChanged(v);

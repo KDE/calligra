@@ -40,7 +40,11 @@ KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString &text,
         : KexiCommandLinkButton(text, description, parent)
         , d(new KexiDBCommandLinkButtonPrivate)
 {
-    setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
+    QString basePath = Kexi::basePathForProject(
+        KexiMainWindowIface::global()->project()->dbConnection()->data());
+    if (!basePath.isEmpty()) {
+        setLocalBasePath(basePath);
+    }
 }
 
 KexiDBCommandLinkButton::~KexiDBCommandLinkButton()

@@ -26,6 +26,7 @@
 #include <KDb>
 #include <KDbMessageHandler>
 #include <KDbDriverManager>
+#include <KDbDriverMetaData>
 #include <KDbUtils>
 
 #include <KMessageBox>
@@ -36,6 +37,7 @@
 #include <QLabel>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QFileInfo>
 
 using namespace Kexi;
 
@@ -415,4 +417,15 @@ QString Kexi::appIncorrectlyInstalledMessage()
     return xi18nc("@info", "<application>%1</application> could have been incorrectly "
                            "installed or started. The application will be closed.",
                            QApplication::applicationDisplayName());
+}
+
+QString Kexi::basePathForProject(const KDbConnectionData& connectionData)
+{
+    KDbDriverManager manager;
+    const KDbDriverMetaData* driverMetaData = manager.driverMetaData(connectionData.driverId());
+    if (driverMetaData && driverMetaData->isFileBased()) {
+        const QFileInfo fileinfo(connectionData.databaseName());
+        return fileinfo.path();
+    }
+    return QString();
 }

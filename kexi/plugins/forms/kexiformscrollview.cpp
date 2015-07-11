@@ -35,6 +35,7 @@
 #include <QPalette>
 #include <QScrollBar>
 #include <QHeaderView>
+#include <QTimer>
 
 class KexiFormScrollView::Private
 {
@@ -148,11 +149,11 @@ void KexiFormScrollView::selectCellInternal(int previousRecord, int previousColu
     Q_UNUSED(previousRecord);
     Q_UNUSED(previousColumn);
 
-    //m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
-    if (m_currentItem) {
-        if (m_currentItem != d->previousRecord) {
-            fillDataItems(m_currentItem, cursorAtNewRecord());
-            d->previousRecord = m_currentItem;
+    //m_currentRecord is already set by KexiDataAwareObjectInterface::setCursorPosition()
+    if (m_currentRecord) {
+        if (m_currentRecord != d->previousRecord) {
+            fillDataItems(m_currentRecord, cursorAtNewRecord());
+            d->previousRecord = m_currentRecord;
             QWidget *w = 0;
             if (m_curColumn >= 0 && m_curColumn < dbFormWidget()->orderedDataAwareWidgets()->count()) {
                 w = dbFormWidget()->orderedDataAwareWidgets()->at(m_curColumn);
@@ -266,7 +267,7 @@ void KexiFormScrollView::createEditor(int record, int column, const QString& add
         qWarning() << "DATA IS READ ONLY!";
         return;
     }
-    if (column(column)->isReadOnly()) {
+    if (this->column(column)->isReadOnly()) {
         qWarning() << "COL IS READ ONLY!";
         return;
     }
@@ -289,9 +290,9 @@ void KexiFormScrollView::createEditor(int record, int column, const QString& add
             //we should know that we are in state "new record editing"
             m_newRecordEditing = true;
             //'insert' record editing: show another record after that:
-            m_data->append(m_insertItem);
+            m_data->append(m_insertRecord);
             //new empty insert item
-            m_insertItem = m_data->createItem();
+            m_insertRecord = m_data->createItem();
             updateWidgetContentsSize();
         }
     }
@@ -350,22 +351,22 @@ void KexiFormScrollView::updateWidgetContentsSize()
     //! @todo
 }
 
-void KexiFormScrollView::slotRecordRepaintRequested(KDbRecordData* record)
+void KexiFormScrollView::slotRecordRepaintRequested(KDbRecordData* data)
 {
-    Q_UNUSED(record);
+    Q_UNUSED(data);
     //! @todo
 }
 
-void KexiFormScrollView::slotRecordInserted(KDbRecordData* record, bool repaint)
+void KexiFormScrollView::slotRecordInserted(KDbRecordData* data, bool repaint)
 {
-    Q_UNUSED(record);
+    Q_UNUSED(data);
     Q_UNUSED(repaint);
     //! @todo
 }
 
-void KexiFormScrollView::slotRecordInserted(KDbRecordData* record, uint record, bool repaint)
+void KexiFormScrollView::slotRecordInserted(KDbRecordData* data, uint record, bool repaint)
 {
-    Q_UNUSED(record);
+    Q_UNUSED(data);
     Q_UNUSED(record);
     Q_UNUSED(repaint);
     //! @todo
@@ -384,6 +385,16 @@ KexiDBForm* KexiFormScrollView::dbFormWidget() const
 int KexiFormScrollView::columnCount() const
 {
     return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
+}
+
+int KexiFormScrollView::recordCount() const
+{
+    return KexiDataAwareObjectInterface::recordCount();
+}
+
+int KexiFormScrollView::currentRecord() const
+{
+    return KexiDataAwareObjectInterface::currentRecord();
 }
 
 void KexiFormScrollView::setForm(KFormDesigner::Form *form)
@@ -444,7 +455,7 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 
 bool KexiFormScrollView::cursorAtNewRecord() const
 {
-    return isInsertingEnabled() && (m_currentItem == m_insertItem || m_newRecordEditing);
+    return isInsertingEnabled() && (m_currentRecord == m_insertRecord || m_newRecordEditing);
 }
 
 void KexiFormScrollView::lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded)
@@ -533,13 +544,13 @@ void KexiFormScrollView::updateAfterCancelRecordEditing()
 
 void KexiFormScrollView::updateAfterAcceptRecordEditing()
 {
-    if (!m_currentItem)
+    if (!m_currentRecord)
         return;
     recordNavigator()->showEditingIndicator(false);
     dbFormWidget()->editedItem = 0;
     //update visible data because there could be auto-filled (eg. autonumber) fields
-    fillDataItems(m_currentItem, cursorAtNewRecord());
-    d->previousRecord = m_currentItem;
+    fillDataItems(m_currentRecord, cursorAtNewRecord());
+    d->previousRecord = m_currentRecord;
     KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
     if (item) {
         item->selectAllOnFocusIfNeeded();

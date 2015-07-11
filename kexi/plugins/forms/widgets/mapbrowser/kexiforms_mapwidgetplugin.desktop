@@ -1,0 +1,20 @@
+[Desktop Entry]
+Name=Map Widget
+Comment=Kexi plugin providing map browser form widget
+Type=Service
+Icon=form
+Encoding=UTF-8
+
+X-KDE-Library=kexiforms_mapwidgetplugin
+X-KDE-ServiceTypes=Kexi/FormWidgets
+X-KDE-PluginInfo-Author=Kexi Team
+X-KDE-PluginInfo-Email=kexi@kde.org
+X-KDE-PluginInfo-Name=org.kexi-project.form.widgets.map
+X-KDE-PluginInfo-Version=3.0
+X-KDE-PluginInfo-Website=http://kexi-project.org
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Kexi-FormWidgetsFactoryGroup=

@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef MAPBROWSERWIDGET_H
 #define MAPBROWSERWIDGET_H
-
-#include <marble/MarbleWidget.h>
 
 #include "widgetfactory.h"
 #include "container.h"
 #include "FormWidgetInterface.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <qglobal.h>
+
+#include <marble/MarbleWidget.h>
 
 class MapBrowserWidget : public Marble::MarbleWidget,
                          public KFormDesigner::FormWidgetInterface,
@@ -34,7 +34,7 @@ class MapBrowserWidget : public Marble::MarbleWidget,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 public:
     explicit MapBrowserWidget(QWidget *parent = 0);

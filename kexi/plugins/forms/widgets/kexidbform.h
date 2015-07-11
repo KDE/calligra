@@ -42,7 +42,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm : public QWidget,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops)
     //original "size" property is not designable, so here's a custom (not storable) replacement
     Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal STORED false)

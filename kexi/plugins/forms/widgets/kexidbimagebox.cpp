@@ -48,6 +48,8 @@
 #include <QPainter>
 #include <QMimeDatabase>
 #include <QStandardPaths>
+#include <QMimeType>
+#include <QImageReader>
 #include <QDebug>
 
 //! @internal
@@ -359,10 +361,10 @@ void KexiDBImageBox::handleInsertFromFileAction(const QUrl &url)
 }
 
 void KexiDBImageBox::handleAboutToSaveAsAction(
-    QString* origFilename, QString* fileExtension, bool *dataIsEmpty)
+    QString* origFilename, QString* mimeType, bool *dataIsEmpty)
 {
     Q_ASSERT(origFilename);
-    Q_ASSERT(fileExtension);
+    Q_ASSERT(mimeType);
     Q_ASSERT(dataIsEmpty);
     if (data().isEmpty()) {
         qWarning() << "no pixmap!";
@@ -371,10 +373,14 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
     }
     if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
         *origFilename = m_data.originalFileName();
-        if (!origFilename->isEmpty())
-            *origFilename = QString("/") + origFilename;
-        if (!m_data.mimeType().isEmpty())
-            *fileExtension = KImageIO::typeForMime(m_data.mimeType()).first().toLower();
+        if (!origFilename->isEmpty()) {
+            *origFilename = QLatin1String("/") + *origFilename;
+        }
+        const QMimeDatabase db;
+        const QMimeType mime(db.mimeTypeForName(m_data.mimeType()));
+        if (!m_data.mimeType().isEmpty() && QImageReader::supportedMimeTypes().contains(mime.name().toLatin1())) {
+            *mimeType = mime.name();
+        }
     }
 }
 

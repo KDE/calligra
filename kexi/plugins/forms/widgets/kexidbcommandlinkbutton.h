@@ -39,7 +39,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButto
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
     Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
     KexiDBCommandLinkButton(const QString &text, const QString &description, QWidget * parent = 0);

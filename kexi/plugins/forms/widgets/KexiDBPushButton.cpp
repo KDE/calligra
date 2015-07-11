@@ -39,7 +39,11 @@ KexiDBPushButton::KexiDBPushButton(const QString & text, QWidget * parent)
         : KexiPushButton(text, parent)
         , d(new KexiDBPushButtonPrivate)
 {
-    setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
+    QString basePath = Kexi::basePathForProject(
+        KexiMainWindowIface::global()->project()->dbConnection()->data());
+    if (!basePath.isEmpty()) {
+        setLocalBasePath(basePath);
+    }
 }
 
 KexiDBPushButton::~KexiDBPushButton()

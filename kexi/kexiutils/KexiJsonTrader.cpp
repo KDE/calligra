@@ -48,7 +48,6 @@ KexiJsonTrader::KexiJsonTrader(const QString& subDir)
     : d(new Private)
 {
     Q_ASSERT(!subDir.isEmpty());
-    Q_ASSERT(!subDir.contains('/'));
     Q_ASSERT(!subDir.contains(' '));
     d->subDir = subDir;
 }

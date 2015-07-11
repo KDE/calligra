@@ -158,6 +158,11 @@ KEXICORE_EXPORT QIcon serverIcon();
             The application will be closed." useful for critical errors. */
 KEXICORE_EXPORT QString appIncorrectlyInstalledMessage();
 
+//! @return base path (without the filename for file-based connection data @a connectionData.
+//! Empty string is returned if @a connectionData does not point to a file-based connection with
+//! database name specified.
+KEXICORE_EXPORT QString basePathForProject(const KDbConnectionData& connectionData);
+
 }//namespace Kexi
 
 //! @return icon name as understood by Kexi. Icon theme support is improved this way.

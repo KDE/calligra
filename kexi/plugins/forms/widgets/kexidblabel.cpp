@@ -187,31 +187,6 @@ void KexiDBLabel::resizeEvent(QResizeEvent* e)
     QLabel::resizeEvent(e);
 }
 
-void KexiDBLabel::fontChange(const QFont& font)
-{
-    QLabel::fontChange(font);
-}
-
-void KexiDBLabel::styleChange(QStyle& style)
-{
-    QLabel::styleChange(style);
-}
-
-void KexiDBLabel::enabledChange(bool enabled)
-{
-    QLabel::enabledChange(enabled);
-}
-
-void KexiDBLabel::paletteChange(const QPalette& oldPal)
-{
-    Q_UNUSED(oldPal);
-}
-
-void KexiDBLabel::showEvent(QShowEvent* e)
-{
-    QLabel::showEvent(e);
-}
-
 void KexiDBLabel::setText(const QString& text)
 {
     QLabel::setText(text);

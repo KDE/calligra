@@ -1,27 +1,26 @@
-include_directories(${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/plugins/forms/widgets/webbrowser
-${CMAKE_SOURCE_DIR}/kexi/core)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/kexi/formeditor
+    ${CMAKE_SOURCE_DIR}/kexi/core
+)
 
-set(kformdesigner_webbrowser_PART_SRCS
+set(kexiforms_webbrowserwidgetplugin_SRCS
     WebBrowserWidget.cpp
-    WebBrowserFactory.cpp)
+    WebBrowserFactory.cpp
+)
 
-
-add_library(kformdesigner_webbrowser MODULE  ${kformdesigner_webbrowser_PART_SRCS})
+add_library(kexiforms_webbrowserwidgetplugin MODULE ${kexiforms_webbrowserwidgetplugin_SRCS})
+kcoreaddons_desktop_to_json(kexiforms_webbrowserwidgetplugin kexiforms_webbrowserwidgetplugin.desktop)
 
 set (QT_USE_QTWEBKIT TRUE)
 
-target_link_libraries(
-    kformdesigner_webbrowser
+target_link_libraries(kexiforms_webbrowserwidgetplugin
     kformdesigner
     kexicore
     kexiguiutils
     kexidatatable
     kexiextendedwidgets
-    kformdesigner
     kexidataviewcommon
     kexiformutils
-
-    KProperty
 
     Qt5::Core
     Qt5::Gui
@@ -29,10 +28,7 @@ target_link_libraries(
     Qt5::Xml
 )
 
-
-install(TARGETS kformdesigner_webbrowser  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
+install(TARGETS kexiforms_webbrowserwidgetplugin DESTINATION ${KEXI_FORM_WIDGETS_PLUGIN_INSTALL_DIR})
 
 ecm_install_icons(ICONS
     16-actions-web_browser.png

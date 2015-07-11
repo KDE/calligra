@@ -54,7 +54,7 @@ public:
     KexiComboBoxPopup *popup;
     KComboBox *paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle (because styles use <static_cast>)
     QSize sizeHint; //!< A cache for KexiDBComboBox::sizeHint(),
-    //!< rebuilt by KexiDBComboBox::fontChange() and KexiDBComboBox::styleChange()
+    //!< rebuilt by a font change event and style change event
     KDbQueryColumnInfo* visibleColumnInfo;
     //! used for collecting subwidgets and their childrens (if isEditable is false)
     QList<QWidget*> subWidgetsWithDisabledEvents;
@@ -354,6 +354,25 @@ void KexiDBComboBox::mouseDoubleClickEvent(QMouseEvent *e)
     mousePressEvent(e);
 }
 
+void KexiDBComboBox::changeEvent(QEvent * event)
+{
+    switch(event->type()) {
+    case QEvent::FontChange:
+    case QEvent::StyleChange:
+        d->sizeHint = QSize(); //force rebuild the cache
+        break;
+    default:;
+    }
+    switch(event->type()) {
+    case QEvent::StyleChange:
+        if (subwidget()) {
+            subwidget()->setGeometry(editorGeometry());
+        }
+    default:;
+    }
+    KexiDBAutoField::changeEvent(event);
+}
+
 bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
 {
 #if 0
@@ -531,20 +550,6 @@ int KexiDBComboBox::popupWidthHint() const
     return width();
 }
 
-void KexiDBComboBox::fontChange(const QFont & oldFont)
-{
-    d->sizeHint = QSize(); //force rebuild the cache
-    KexiDBAutoField::fontChange(oldFont);
-}
-
-void KexiDBComboBox::styleChange(QStyle& oldStyle)
-{
-    KexiDBAutoField::styleChange(oldStyle);
-    d->sizeHint = QSize(); //force rebuild the cache
-    if (subwidget())
-        subwidget()->setGeometry(editorGeometry());
-}
-
 QSize KexiDBComboBox::sizeHint() const
 {
     if (isVisible() && d->sizeHint.isValid())
@@ -569,10 +574,10 @@ void KexiDBComboBox::acceptRequested()
     signalValueChanged();
 }
 
-void KexiDBComboBox::slotRecordAccepted(KDbRecordData *data, int row)
+void KexiDBComboBox::slotRecordAccepted(KDbRecordData *data, int record)
 {
     d->dataEnteredByHand = false;
-    KexiComboBoxBase::slotRecordAccepted(data, row);
+    KexiComboBoxBase::slotRecordAccepted(data, record);
     d->dataEnteredByHand = true;
 }
 

@@ -23,17 +23,19 @@
 #include <formeditor/formIO.h>
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
-
 #include <KexiIcon.h>
+#include <kexi.h>
+
+#include <KLocalizedString>
 
 #include <QVariant>
 #include <QVariantList>
 #include <QDebug>
 
-#include <KLocalizedString>
+KEXI_PLUGIN_FACTORY(WebBrowserFactory, "kexiforms_webbrowserwidgetplugin.json")
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
-  : KexiDBFactoryBase(parent, "webbrowser")
+  : KexiDBFactoryBase(parent)
 {
     Q_UNUSED(args);
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
@@ -108,5 +110,4 @@ bool WebBrowserFactory::previewWidget(const QByteArray &classname,
     return true;
 }
 
-K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
-
+#include "WebBrowserFactory.moc"

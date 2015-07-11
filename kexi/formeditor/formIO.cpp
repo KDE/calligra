@@ -469,8 +469,8 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
         QDomText valueE;
         QDomElement type = parent.createElement("pixmap");
         QByteArray property = propertyE.attribute("name").toLatin1();
-//! @todo  QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
-        if (form->pixmapsStoredInline() /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
+//! @todo  QCString pixmapName = m_currentRecord->widget()->property("pixmapName").toCString();
+        if (form->pixmapsStoredInline() /* (js)too risky: || m_currentRecord->pixmapName(property).isNull() */)
             valueE = parent.createTextNode(saveImage(parent, value.value<QPixmap>()));
         else
             valueE = parent.createTextNode(item->pixmapName(property));
@@ -841,10 +841,10 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
     } else if (type == "pixmap") {
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-        if (form->pixmapsStoredInline() || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
+        if (form->pixmapsStoredInline() || !m_currentForm || !m_currentRecord || !m_currentForm->pixmapCollection()->contains(text))
             return loadImage(tag.ownerDocument(), text);
         else {
-            m_currentItem->setPixmapName(name.toLatin1(), text);
+            m_currentRecord->setPixmapName(name.toLatin1(), text);
             return form->pixmapCollection()->getPixmap(text);
         }
 #else

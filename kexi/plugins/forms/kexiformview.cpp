@@ -274,7 +274,7 @@ void KexiFormView::initForm()
     const bool newForm = window()->id() < 0;
 
     KDbFieldList *fields = 0;
-#ifndef NO_DSWIZARD
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
     if (newForm) {
         // Show the form wizard if this is a new Form
         KexiDataSourceWizard *w = new KexiDataSourceWizard(
@@ -288,7 +288,7 @@ void KexiFormView::initForm()
 #endif
 
     if (fields) {
-#ifndef NO_DSWIZARD
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
         QDomDocument dom;
         formPart()->generateForm(fields, dom);
         KFormDesigner::FormIO::loadFormFromDom(form(), d->dbform, dom);
@@ -438,7 +438,7 @@ KexiFormView::loadForm()
     //qDebug() << "Loading the form with id" << window()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
-        KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, tempData()->tempForm);
+        KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, &tempData()->tempForm);
         setUnsavedBLOBIdsForDataViewMode(d->dbform, tempData()->unsavedLocalBLOBsByName);
         updateAutoFieldsDataSource();
         updateValuesForSubproperties();
@@ -448,7 +448,7 @@ KexiFormView::loadForm()
     // normal load
     QString data;
     loadDataBlock(&data);
-    KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, data);
+    KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, &data);
 
     //"autoTabStops" property is loaded -set it within the form tree as well
     form()->setAutoTabStops(d->dbform->autoTabStops());
@@ -462,7 +462,7 @@ KexiFormView::slotPropertySetSwitched()
 {
     propertySetReloaded();
     if (viewMode() == Kexi::DesignViewMode) {
-        formPart()->dataSourcePage()->assignPropertySet(&form()->propertySet());
+        formPart()->dataSourcePage()->assignPropertySet(form()->propertySet());
     }
 }
 
@@ -580,8 +580,9 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KPropertySet* KexiFormView::propertySet() {
-    return &d->form->propertySet();
+KPropertySet* KexiFormView::propertySet()
+{
+    return d->form->propertySet();
 }
 
 KexiFormPartTempData* KexiFormView::tempData() const
@@ -680,7 +681,7 @@ void KexiFormView::initDataSource()
                 continue;
             }
             if (tableSchema) {
-                if (!d->query->hasField(f)) {
+                if (!d->query->hasField(*f)) {
                     //we're building a new query: add this field
                     d->query->addField(f);
                 }
@@ -778,9 +779,9 @@ KexiFormView::storeData(bool dontAsk)
     blobsFieldNamesWithoutID.pop_front();
     KDbFieldList *blobsFieldsWithoutID = blobsTable->subList(blobsFieldNamesWithoutID);
 
-    KDbPreparedStatement::Ptr st = conn->prepareStatement(
-                                            KDbPreparedStatement::InsertStatement, *blobsFieldsWithoutID);
-    if (!st) {
+    KDbPreparedStatement st = conn->prepareStatement(
+                            KDbPreparedStatement::InsertStatement, blobsFieldsWithoutID);
+    if (!st.isValid()) {
         delete blobsFieldsWithoutID;
         //! @todo show message
         return false;
@@ -805,15 +806,13 @@ KexiFormView::storeData(bool dontAsk)
             QString originalFileName(h.originalFileName());
             QFileInfo fi(originalFileName);
             QString caption(fi.baseName().replace('_', ' ').simplified());
-            if (st) {
-                *st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/
-                    << h.data() << originalFileName << caption
-                    << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
-                if (!st->execute()) {
-                    delete blobsFieldsWithoutID;
-                    qWarning() << "execute error";
-                    return false;
-                }
+            KDbPreparedStatementParameters parameters;
+            parameters << h.data() << originalFileName << caption
+                       << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
+            if (!st.execute(parameters)) {
+                delete blobsFieldsWithoutID;
+                qWarning() << "execute error";
+                return false;
             }
             delete blobsFieldsWithoutID;
             blobsFieldsWithoutID = 0;
@@ -1045,9 +1044,9 @@ void
 KexiFormView::updateDataSourcePage()
 {
     if (viewMode() == Kexi::DesignViewMode) {
-        KPropertySet &set = form()->propertySet();
-        const QString dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
-        const QString dataSource = set.propertyValue("dataSource").toString();
+        KPropertySet *set = form()->propertySet();
+        const QString dataSourcePartClass = set->propertyValue("dataSourcePartClass").toString();
+        const QString dataSource = set->propertyValue("dataSource").toString();
         formPart()->dataSourcePage()->setFormDataSource(dataSourcePartClass, dataSource);
     }
 }
@@ -1055,6 +1054,7 @@ KexiFormView::updateDataSourcePage()
 void
 KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 {
+    Q_UNUSED(e);
 /*! @todo KEXI3 Port kexidragobjects.cpp
     if (KexiFieldDrag::canDecode(e)) {
         e->setAccepted(true);
@@ -1240,7 +1240,7 @@ void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteA
     Q_UNUSED(newname);
     //qDebug() << oldname << newname << form()->propertySet().propertyValue("objectName").toString();
     KexiMainWindowIface::global()->updatePropertyEditorInfoLabel();
-    formPart()->dataSourcePage()->updateInfoLabelForPropertySet(&form()->propertySet());
+    formPart()->dataSourcePage()->updateInfoLabelForPropertySet(form()->propertySet());
 }
 
 void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)

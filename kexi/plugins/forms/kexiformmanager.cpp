@@ -287,19 +287,19 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
                                     widget->metaObject(), QMetaMethod::Signal));
 
     if (!_signals.isEmpty()) {
-        const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
-        const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
+        QByteArray handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
+        QByteArray handleDropEventSignal = "handleDropEvent(QDropEvent*)";
         KexiFormView *formView = KDbUtils::findParent<KexiFormView*>(widget);
 
         foreach(const QMetaMethod& method, _signals) {
-            if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
-                qDebug() << method.signature();
+            if (0 == qstrcmp(method.methodSignature(), handleDragMoveEventSignal)) {
+                qDebug() << method.methodSignature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                             formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
                 }
-            } else if (0 == qstrcmp(method.signature(), handleDropEventSignal)) {
-                qDebug() << method.signature();
+            } else if (0 == qstrcmp(method.methodSignature(), handleDropEventSignal)) {
+                qDebug() << method.methodSignature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDropEvent(QDropEvent*)),
                             formView, SLOT(slotHandleDropEvent(QDropEvent*)));

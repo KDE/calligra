@@ -78,7 +78,7 @@ protected Q_SLOTS:
     void slotUpdateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly);
 
     void handleInsertFromFileAction(const QUrl &url);
-    void handleAboutToSaveAsAction(QString *origFilename, QString *fileExtension, bool *dataIsEmpty);
+    void handleAboutToSaveAsAction(QString *origFilename, QString *mimeType, bool *dataIsEmpty);
     void handleSaveAsAction(const QString& fileName);
     void handleCutAction();
     void handleCopyAction();

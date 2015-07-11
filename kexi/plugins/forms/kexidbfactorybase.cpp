@@ -44,8 +44,8 @@
 
 //////////////////////////////////////////
 
-KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
-        : KFormDesigner::WidgetFactory(parent, name)
+KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent)
+        : KFormDesigner::WidgetFactory(parent)
 {
     setPropertyDescription("dataSource", xi18n("Data Source"));
 

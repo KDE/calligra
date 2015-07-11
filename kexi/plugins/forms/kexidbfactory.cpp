@@ -65,10 +65,13 @@
 #include <QFontMetrics>
 //////////////////////////////////////////
 
+KEXI_PLUGIN_FACTORY(KexiDBFactory, "kexiforms_dbwidgetsplugin.json")
+
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
-        : KexiDBFactoryBase(parent, "kexidb")
+        : KexiDBFactoryBase(parent)
         , m_assignAction(0)
 {
+    QByteArray parentFactory = "org.kexi-project.form.widgets.standard";
     {
         KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("form"));
@@ -109,10 +112,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("lineedit"));
         wi->setClassName("KexiDBLineEdit");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("QLineEdit");
-        wi->addAlternateClassName("QLineEdit", true/*override*/);
-        wi->addAlternateClassName("QLineEdit", true/*override*/);
+        wi->addAlternateClassName("KLineEdit", true/*override*/);
         wi->setIncludeFileName("qlineedit.h");
         wi->setName(xi18nc("Text Box widget", "Text Box"));
         wi->setNamePrefix(
@@ -134,7 +136,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("textedit"));
         wi->setClassName("KexiDBTextEdit");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("KTextEdit");
         wi->addAlternateClassName("QTextEdit", true/*override*/);
         wi->addAlternateClassName("KTextEdit", true/*override*/);
@@ -158,7 +160,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
         wi->setIconName(koIconName("frame"));
         wi->setClassName("KexiFrame");
-        wi->setParentFactoryName("containers");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("QFrame"); /* we are inheriting to get i18n'd strings already translated there */
         wi->addAlternateClassName("QFrame", true/*override*/);
         wi->addAlternateClassName("Q3Frame", true/*override*/);
@@ -179,7 +181,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("label"));
         wi->setClassName("KexiDBLabel");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("QLabel"); /* we are inheriting to get i18n'd strings already translated there */
         wi->addAlternateClassName("QLabel", true/*override*/);
         wi->addAlternateClassName("KexiLabel", true/*override*/); //older
@@ -202,7 +204,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("pixmaplabel"));
         wi->setClassName("KexiDBImageBox");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("KexiPictureLabel"); /* we are inheriting to get i18n'd strings already translated there */
         wi->addAlternateClassName("KexiPictureLabel", true/*override*/);
         wi->addAlternateClassName("KexiImageBox", true/*override*/); //older
@@ -227,7 +229,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("combo"));
         wi->setClassName("KexiDBComboBox");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("KComboBox"); /* we are inheriting to get i18n'd strings already translated there */
         wi->addAlternateClassName("KComboBox", true/*override*/);
         wi->setName(xi18nc("Combo Box widget", "Combo Box"));
@@ -247,7 +249,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("check"));
         wi->setClassName("KexiDBCheckBox");
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("QCheckBox"); /* we are inheriting to get i18n'd strings already translated there */
         wi->addAlternateClassName("QCheckBox", true/*override*/);
         wi->setName(xi18nc("Check Box widget", "Check Box"));
@@ -296,7 +298,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
                 "Moreover, try to make this prefix as short as possible.",
                 "button"));
         wi->setDescription(xi18n("A button for executing actions"));
-        wi->setParentFactoryName("stdwidgets");
+        wi->setParentFactoryName(parentFactory);
         wi->setInheritedClassName("QPushButton");
         addClass(wi);
     }
@@ -882,5 +884,4 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
     }
 }
 
-K_EXPORT_KEXIFORMWIDGETS_PLUGIN(KexiDBFactory, kexidbwidgets)
-
+#include "kexidbfactory.moc"
