@@ -42,7 +42,7 @@ public:
     QString text() const;
 
 public Q_SLOTS:
-    void changeFont(const QString &);
+    void changeFont(const QFont &font);
     void changeColor(const QColor&);
     void slotActionTriggered(QAction* action);
     void slotCurrentCharFormatChanged(const QTextCharFormat& f);

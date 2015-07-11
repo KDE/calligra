@@ -89,7 +89,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_widgetDataSourceCombo->setObjectName("sourceFieldCombo");
     m_widgetDataSourceCombo->setContentsMargins(0, 0, 0, 0);
     m_widgetDSLabel->setBuddy(m_widgetDataSourceCombo);
-    connect(m_widgetDataSourceCombo->lineEdit(), SIGNAL(textChanged(QString)),
+    connect(m_widgetDataSourceCombo, SIGNAL(editTextChanged(QString)),
         this, SLOT(slotWidgetDataSourceTextChanged(QString)));
     mainLayout()->addWidget(m_widgetDataSourceCombo);
 
@@ -186,7 +186,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
     mainLayout()->addStretch(1);
 
-    connect(m_formDataSourceCombo, SIGNAL(textChanged(QString)),
+    connect(m_formDataSourceCombo, SIGNAL(editTextChanged(QString)),
             this, SLOT(slotFormDataSourceTextChanged(QString)));
     connect(m_formDataSourceCombo, SIGNAL(dataSourceChanged()),
             this, SLOT(slotFormDataSourceChanged()));

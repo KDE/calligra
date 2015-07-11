@@ -80,8 +80,8 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 
     d->fontCombo = new KFontRequester(d->toolbar);
     d->fontComboAction = d->toolbar->addWidget(d->fontCombo);
-    connect(d->fontCombo, SIGNAL(textChanged(QString)),
-            this, SLOT(changeFont(QString)));
+    connect(d->fontCombo, SIGNAL(fontSelected(QFont)),
+            this, SLOT(changeFont(QFont)));
 
     d->toolbar->addSeparator();
 
@@ -154,9 +154,9 @@ RichTextDialog::text() const
 }
 
 void
-RichTextDialog::changeFont(const QString &font)
+RichTextDialog::changeFont(const QFont &font)
 {
-    d->edit->setFontFamily(font);
+    d->edit->setCurrentFont(font);
 }
 
 void
