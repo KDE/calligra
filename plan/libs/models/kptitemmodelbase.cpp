@@ -38,6 +38,7 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include <QStylePainter>
+#include <QMimeData>
 
 #include <kcombobox.h>
 #include <klineedit.h>
