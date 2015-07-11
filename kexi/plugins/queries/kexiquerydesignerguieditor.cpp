@@ -296,9 +296,9 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 {
     d->data->deleteAllRecords();
     for (int i = 0; i < (int)d->sets->size(); i++) {
-        KDbRecordData* record;
-        d->data->append(record = d->data->createItem());
-        (*record)[COLUMN_ID_VISIBLE] = QVariant(false);
+        KDbRecordData* data = d->data->createItem();
+        d->data->append(data);
+        (*data)[COLUMN_ID_VISIBLE] = QVariant(false);
     }
     d->dataTable->dataAwareObject()->setData(d->data);
 
@@ -1255,10 +1255,10 @@ void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadShee
         (*data)[COLUMN_ID_VISIBLE] = QVariant(false); //the same init as in initTableRows()
 }
 
-void KexiQueryDesignerGuiEditor::slotRecordInserted(KDbRecordData* record, uint row, bool /*repaint*/)
+void KexiQueryDesignerGuiEditor::slotRecordInserted(KDbRecordData* data, uint record, bool /*repaint*/)
 {
-    if (d->droppedNewRecord && d->droppedNewRecord == record) {
-        createPropertySet(row, d->droppedNewTable, d->droppedNewField, true);
+    if (d->droppedNewRecord && d->droppedNewRecord == data) {
+        createPropertySet(record, d->droppedNewTable, d->droppedNewField, true);
         propertySetSwitched();
         d->droppedNewRecord = 0;
     }

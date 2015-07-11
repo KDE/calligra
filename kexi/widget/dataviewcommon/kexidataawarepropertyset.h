@@ -130,8 +130,8 @@ protected Q_SLOTS:
     //! Called on multiple records delete in a tableview.
     void slotRecordsDeleted(const QList<int> &records);
 
-    //! Called on \a record insertion in a tableview.
-    void slotRecordInserted(KDbRecordData* record, uint pos, bool repaint);
+    //! Called on \a data insertion in a tableview.
+    void slotRecordInserted(KDbRecordData* data, uint record, bool repaint);
 
     //! Called on selecting another cell in a tableview.
     void slotCellSelected(int record, int column);

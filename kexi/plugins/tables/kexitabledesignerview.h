@@ -144,7 +144,7 @@ protected Q_SLOTS:
     void slotRecordInserted();
 
     //! Called before record deleting in tableview.
-    void slotAboutToDeleteRecord(KDbRecordData* record, KDbResultInfo* result, bool repaint);
+    void slotAboutToDeleteRecord(KDbRecordData* data, KDbResultInfo* result, bool repaint);
 
     /*! Called after any property has been changed in the current property set,
      to perform some actions (like updating other dependent properties) */

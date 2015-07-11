@@ -237,13 +237,14 @@ void KexiDataAwarePropertySet::slotRecordsDeleted(const QList<int> &_record)
     d->view->propertySetSwitched();
 }
 
-void KexiDataAwarePropertySet::slotRecordInserted(KDbRecordData*, uint pos, bool /*repaint*/)
+void KexiDataAwarePropertySet::slotRecordInserted(KDbRecordData* data, uint record, bool /*repaint*/)
 {
+    Q_UNUSED(data);
     d->view->setDirty();
-    if (pos > 0) {
-        enlargeToFitRecord(pos - 1);
+    if (record > 0) {
+        enlargeToFitRecord(record - 1);
     }
-    d->sets.insert(pos, 0);
+    d->sets.insert(record, 0);
 
     d->view->propertySetSwitched();
     emit recordInserted();

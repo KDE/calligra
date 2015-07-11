@@ -56,7 +56,7 @@ public:
     }
 
     /*! Fills data items with appropriate data fetched from \a data.
-     \a cursorAtNewRow == true means that we are at new (not yet inserted) database row. */
+     \a cursorAtNewRecord == true means that we are at new (not yet inserted) database row. */
     void fillDataItems(KDbRecordData *data, bool cursorAtNewRecord);
 
     /*! Implementation for KexiDataItemChangesListener.

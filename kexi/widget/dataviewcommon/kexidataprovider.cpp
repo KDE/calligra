@@ -86,7 +86,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
     }
 }
 
-void KexiFormDataProvider::fillDataItems(KDbRecordData *data, bool cursorAtNewRow)
+void KexiFormDataProvider::fillDataItems(KDbRecordData *data, bool cursorAtNewRecord)
 {
     Q_ASSERT(data);
     qDebug() << "record.count=" << data->count()
@@ -113,7 +113,7 @@ void KexiFormDataProvider::fillDataItems(KDbRecordData *data, bool cursorAtNewRo
                  ? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
                  .arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())
                  : QString());
-        const bool displayDefaultValue = cursorAtNewRow && (value.isNull() && visibleLookupValue.isNull())
+        const bool displayDefaultValue = cursorAtNewRecord && (value.isNull() && visibleLookupValue.isNull())
                                          && !itemIface->columnInfo()->field->defaultValue().isNull()
                                          && !itemIface->columnInfo()->field->isAutoIncrement(); //no value to set but there is default value defined
         itemIface->setValue(

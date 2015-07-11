@@ -112,10 +112,10 @@ protected Q_SLOTS:
     void slotTableHidden(KDbTableSchema &t);
 
     //! Called before cell change in tableview.
-    void slotBeforeCellChanged(KDbRecordData* record, int colnum,
+    void slotBeforeCellChanged(KDbRecordData* data, int colnum,
                                QVariant& newValue, KDbResultInfo* result);
 
-    void slotRecordInserted(KDbRecordData* record, uint row, bool repaint);
+    void slotRecordInserted(KDbRecordData* data, uint record, bool repaint);
     void slotTablePositionChanged(KexiRelationsTableContainer*);
     void slotAboutConnectionRemove(KexiRelationsConnection*);
     void slotAppendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
