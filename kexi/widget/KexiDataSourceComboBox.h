@@ -74,7 +74,7 @@ Q_SIGNALS:
     void dataSourceChanged();
 
 protected Q_SLOTS:
-    void slotNewItemStored(KexiPart::Item& item);
+    void slotNewItemStored(KexiPart::Item* item);
     void slotItemRemoved(const KexiPart::Item& item);
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
     void slotActivated(int index);

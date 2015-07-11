@@ -1863,9 +1863,9 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KPropertySet& set, KPropert
     tempData()->setQueryChangedInPreviousView(true);
 }
 
-void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
+void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item* item)
 {
-    d->relations->objectCreated(item.pluginId(), item.name());
+    d->relations->objectCreated(item->pluginId(), item->name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)

@@ -186,11 +186,11 @@ void KexiDataSourceComboBox::setDataSource(const QString& pluginId, const QStrin
     slotActivated(i);
 }
 
-void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
+void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item* item)
 {
-    QString name(item.name());
+    QString name(item->name());
     //insert a new item, maintaining sort order and splitting to tables and queries
-    if (item.pluginId() == "org.kexi-project.table") {
+    if (item->pluginId() == "org.kexi-project.table") {
         int i = 1; /*skip empty row*/
 #ifdef ADD_DEFINEQUERY_ROW
         i++; /*skip 'define query' row*/
@@ -200,7 +200,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
         insertItem(i, d->tableIcon, name);
         completionObject()->addItem(name);
         d->tablesCount++;
-    } else if (item.pluginId() == "org.kexi-project.query") {
+    } else if (item->pluginId() == "org.kexi-project.query") {
         int i;
         for (i = d->firstQueryIndex(); i < count() && name >= itemText(i); i++) {
         }
