@@ -174,11 +174,11 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 
     mainLayout()->addStretch(1);
 
-    connect(d->rowSourceCombo, SIGNAL(textChanged(QString)),
+    connect(d->rowSourceCombo, SIGNAL(editTextChanged(QString)),
             this, SLOT(slotRowSourceTextChanged(QString)));
-    connect(d->boundColumnCombo, SIGNAL(textChanged(QString)),
+    connect(d->boundColumnCombo, SIGNAL(editTextChanged(QString)),
             this, SLOT(slotBoundColumnTextChanged(QString)));
-    connect(d->visibleColumnCombo, SIGNAL(textChanged(QString)),
+    connect(d->visibleColumnCombo, SIGNAL(editTextChanged(QString)),
             this, SLOT(slotVisibleColumnTextChanged(QString)));
     connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
     connect(d->boundColumnCombo, SIGNAL(selected()), this, SLOT(slotBoundColumnSelected()));

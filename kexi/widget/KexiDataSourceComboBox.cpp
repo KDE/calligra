@@ -76,7 +76,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
     connect(this, SIGNAL(returnPressed(QString)),
             this, SLOT(slotReturnPressed(QString)));
-    connect(lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotTextChanged(QString)));
+    connect(this, SIGNAL(editTextChanged(QString)), this, SLOT(slotTextChanged(QString)));
 
     d->tableIcon = koIcon("table");
     d->queryIcon = koIcon("query");
