@@ -23,6 +23,7 @@
 #include "kplatoui_export.h"
 
 #include <QTableView>
+#include <QAbstractItemModel>
 
 #include "kpttask.h"
 

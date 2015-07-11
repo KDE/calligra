@@ -25,8 +25,8 @@
 #include "ui_kptmainprojectpanelbase.h"
 
 #include <QWidget>
-#include <QDateTime>
 
+class QDateTime;
 
 namespace KPlato
 {

@@ -22,7 +22,6 @@
 
 #include "kptnode.h"
 
-#include <QEvent>
 #include <QLineEdit>
 #include <QLocale>
 #include <QValidator>

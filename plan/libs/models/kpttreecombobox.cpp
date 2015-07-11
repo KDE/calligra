@@ -24,7 +24,6 @@
 
 #include <QModelIndex>
 #include <QTreeView>
-#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QStylePainter>
 

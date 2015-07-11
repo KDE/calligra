@@ -34,11 +34,8 @@
 #include "KoStore.h"
 #include <KoIcon.h>
 
-#include <QAbstractItemModel>
 #include <QMimeData>
 #include <QModelIndex>
-#include <QWidget>
-#include <QPair>
 #include <QByteArray>
 
 #include <kglobal.h>

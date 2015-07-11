@@ -31,8 +31,6 @@
 
 #include <klocale.h>
 
-#include <QHash>
-#include <QMap>
 #include <QApplication>
 
 

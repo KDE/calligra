@@ -46,7 +46,6 @@
 #include <QScrollBar>
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
-#include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
 #include <QFocusEvent>

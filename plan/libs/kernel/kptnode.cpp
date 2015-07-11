@@ -29,9 +29,7 @@
 
 #include <KoXmlReader.h>
 
-#include <QList>
 #include <QListIterator>
-#include <QDomDocument>
 
 #include <klocale.h>
 

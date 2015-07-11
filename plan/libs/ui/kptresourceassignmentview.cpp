@@ -29,7 +29,6 @@
 
 #include <KoDocument.h>
 
-#include <QWidget>
 #include <QSplitter>
 #include <QStringList>
 #include <QCursor>

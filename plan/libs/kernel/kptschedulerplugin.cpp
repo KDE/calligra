@@ -28,8 +28,6 @@
 
 #include <kglobal.h>
 
-#include <QDomDocument>
-
 
 namespace KPlato
 {
