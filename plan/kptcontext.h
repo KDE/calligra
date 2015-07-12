@@ -21,7 +21,6 @@
 #ifndef KPTCONTEXT_H
 #define KPTCONTEXT_H
 
-#include <QDateTime>
 #include <QString>
 #include <QStringList>
 

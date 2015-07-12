@@ -25,7 +25,6 @@
 #include "kplato_export.h"
 
 class KoView;
-class QWidget;
 
 /// The main namespace.
 namespace KPlato

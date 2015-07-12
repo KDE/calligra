@@ -23,8 +23,6 @@
 
 #include <KoViewAdaptor.h>
 
-#include <QRect>
-
 namespace KPlato
 {
 

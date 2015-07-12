@@ -25,7 +25,6 @@
 #include "KoXmlReaderForward.h"
 
 #include <QString>
-#include <QObject>
 
 namespace KPlato
 {
