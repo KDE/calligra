@@ -47,7 +47,8 @@ public:
     {
         delete kexiDBData;
 #ifndef KEXI_MOBILE
-#ifdef HAVE_KEXIMMIGRATE
+//! @todo KEXI3
+#if 0
         delete kexiMigrateData;
 #endif
 #endif
@@ -64,7 +65,8 @@ public:
     KexiDBReportData *kexiDBData;
 
 #ifndef KEXI_MOBILE
-#ifdef HAVE_KEXIMMIGRATE
+//! @todo KEXI3
+#if 0
     KexiMigrateReportData *kexiMigrateData;
 #endif
 #endif
@@ -172,7 +174,8 @@ KoReportData* KexiSourceSelector::sourceData()
     }
 
 #ifndef KEXI_MOBILE
-#ifdef HAVE_KEXIMMIGRATE
+//! @todo KEXI3
+#if 0
     if (d->kexiMigrateData) {
         delete d->kexiMigrateData;
         d->kexiMigrateData = 0;
@@ -188,7 +191,8 @@ KoReportData* KexiSourceSelector::sourceData()
     }
 
 #ifndef KEXI_MOBILE
-#ifdef HAVE_KEXIMMIGRATE
+//! @todo KEXI3
+#if 0
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "external") {
         d->kexiMigrateData = new KexiMigrateReportData(d->externalSource->text());
         return d->kexiMigrateData;

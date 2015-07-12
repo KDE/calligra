@@ -21,7 +21,8 @@
 #include "kexidbreportdata.h"
 #ifndef KEXI_MOBILE
 #include <widget/utils/kexirecordnavigator.h>
-#ifdef HAVE_KEXI_MIGRATE
+ //! @todo KEXI3
+#if 0
 #include "keximigratereportdata.h"
 #endif
 #endif
@@ -53,7 +54,7 @@
 #include <QMimeDatabase>
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0)//TODO, m_kexi(0), m_functions(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0) //! @todo KEXI3, m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
@@ -469,7 +470,8 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
 #ifndef KEXI_MOBILE
-#ifdef HAVE_KEXI_MIGRATE
+//! @todo KEXI3
+#if 0
     if (e.attribute("type") ==  "external") {
         kodata = new KexiMigrateReportData(e.attribute("source"));
     }

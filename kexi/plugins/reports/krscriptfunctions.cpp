@@ -35,7 +35,7 @@ KRScriptFunctions::~KRScriptFunctions()
 {
 }
 
-void KRScriptFunctions::setWhere(const QString&w)
+void KRScriptFunctions::setWhere(const KDbEscapedString&w)
 {
     m_where = w;
 }
@@ -43,14 +43,14 @@ void KRScriptFunctions::setWhere(const QString&w)
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
     qreal ret;
-    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')';
+    KDbEscapedString sql = KDbEscapedString("SELECT " + function + "(" + field + ") FROM (" + m_source + ")");
 
     if (!m_where.isEmpty()) {
         sql += " WHERE(" + m_where + ')';
     }
 
     qDebug() << sql;
-    KDbCursor *curs = m_connection->executeQuery(KDbEscapedString(sql));
+    KDbCursor *curs = m_connection->executeQuery(sql);
 
     if (curs) {
         ret = curs->value(0).toDouble();
