@@ -20,4 +20,4 @@
 
 #include "BindingModel.h"
 
-// QT5TODO: move the rest
+// TODO: move the rest of the BindingModel sources here
