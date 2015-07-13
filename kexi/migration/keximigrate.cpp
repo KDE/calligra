@@ -246,9 +246,11 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     // -- read table schemas and create them in memory (only for non-KexiDB-compat tables)
     QMap<QString, QString> nativeNames;
     foreach(const QString& tableCaption, tables) {
-        if (destDriver->isSystemObjectName(tableCaption)   //"kexi__objects", etc.
-                || tableCaption.startsWith(QLatin1String("kexi__"), Qt::CaseInsensitive)) //tables at KexiProject level, e.g. "kexi__blobs"
+        if (destDriver->isSystemObjectName(tableCaption)
+                || KDbDriver::isKDbSystemObjectName(tableCaption)) // "kexi__objects", tables at KexiProject level, e.g. "kexi__blobs"
+        {
             continue;
+        }
         // this is a non-KexiDB table: generate schema from native data source
         const QString tableIdentifier(KDb::stringToIdentifier(tableCaption.toLower()));
         nativeNames.insert(tableIdentifier, tableCaption);
@@ -415,7 +417,8 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         foreach(KDbTableSchema *ts, d->tableSchemas) {
             if (!ok)
                 break;
-            if (destConn->driver()->isSystemObjectName(ts->name())
+            if ((destConn->driver()->isSystemObjectName(ts->name())
+                 || KDbDriver::isKDbSystemObjectName(ts->name()))
 //! @todo what if these two tables are not compatible with tables created in destination db
 //!       because newer db format was used?
                     && ts->name() != "kexi__objectdata" //copy this too
