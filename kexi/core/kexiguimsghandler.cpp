@@ -173,6 +173,9 @@ KexiGUIMessageHandler::showMessage(MessageType type,
     msg = "<qt><p>" + msg + "</p>";
     if (!details.isEmpty()) {
         switch (type) {
+        case Information:
+            KMessageBox::information(parentWidget(), title, dontShowAgainName);
+            break;
         case Error:
             KMessageBox::detailedError(parentWidget(), msg, details);
             break;
@@ -183,8 +186,16 @@ KexiGUIMessageHandler::showMessage(MessageType type,
             KMessageBox::detailedSorry(parentWidget(), msg, details);
         }
     } else {
-        KMessageBox::messageBox(parentWidget(),
-                                type == Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
+        KMessageBox::DialogType msgType;
+        switch (type) {
+        case Information: msgType = KMessageBox::Information;
+            break;
+        case Error: msgType = KMessageBox::Error;
+            break;
+        default:
+            msgType = KMessageBox::Sorry;
+        }
+        KMessageBox::messageBox(parentWidget(), msgType, msg);
     }
 }
 
