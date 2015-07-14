@@ -152,6 +152,19 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
     return query;
 }
 
+KexiDB::QuerySchema *KexiQueryPart::currentQuery(KexiView* view)
+{
+    if (!view)
+        return 0;
+
+    KexiQueryView *qvp = 0;
+    if (!(qvp = qobject_cast<KexiQueryView*>(view))) {
+        return 0;
+    }
+
+    return static_cast<KexiQueryPart::TempData*>(qvp->window()->data())->query();
+}
+
 KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")

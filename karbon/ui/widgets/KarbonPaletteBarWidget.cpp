@@ -31,6 +31,7 @@
 #include <KoGradientBackground.h>
 #include <KoShapeStroke.h>
 
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <QToolButton>
@@ -47,6 +48,8 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
     , m_prevButton(0), m_nextButton(0), m_choosePalette(0), m_colorBar(0)
     , m_palettes(KoResourceServerProvider::instance()->paletteServer())
 {
+    m_palettes.connectToResourceServer();
+
     m_prevButton = new QToolButton(this);
     m_prevButton->setAutoRepeat(true);
     m_prevButton->setAutoRepeatInterval(ScrollUpdateIntervall);

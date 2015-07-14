@@ -608,9 +608,32 @@ set(kis_scanline_fill_test_SRCS kis_scanline_fill_test.cpp )
 kde4_add_unit_test(KisScanlineFillTest TESTNAME krita-image-ScanlineFill-Test ${kis_scanline_fill_test_SRCS})
 target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_psd_layer_style_test_SRCS kis_psd_layer_style_test.cpp )
+kde4_add_unit_test(KisPSDLayerStyleTest TESTNAME krita-image-PSDLayerStyle-Test ${kis_psd_layer_style_test_SRCS})
+target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
 kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
 target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
+kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-plugins-kis_layer_styles_test  ${kis_layer_styles_test_SRCS})
+target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_layer_style_projection_plane_test_SRCS kis_layer_style_projection_plane_test.cpp )
+kde4_add_unit_test(KisLayerStyleProjectionPlaneTest TESTNAME kritaimage-layer_style_projection_plane_test ${kis_layer_style_projection_plane_test_SRCS})
+target_link_libraries(KisLayerStyleProjectionPlaneTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_projection_leaf_test_SRCS kis_projection_leaf_test.cpp )
+kde4_add_unit_test(KisProjectionLeafTest TESTNAME kritaimage-projection_leaf_test ${kis_projection_leaf_test_SRCS})
+target_link_libraries(KisProjectionLeafTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

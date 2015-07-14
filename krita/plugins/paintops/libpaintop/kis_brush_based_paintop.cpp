@@ -105,8 +105,7 @@ bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
     scale *= m_brush->scale();
 
-    return scale * m_brush->width() < 0.01 ||
-           scale * m_brush->height() < 0.01;
+    return (scale * m_brush->width() < 0.01 || scale * m_brush->height() < 0.01);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const
@@ -116,8 +115,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
     return effectiveSpacing(metric.width(), metric.height(), 1.0, false, rotation);
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
-{
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const {
     qreal extraSpacingScale = 1.0;
     if (spacingOption.isChecked()) {
         extraSpacingScale = spacingOption.apply(pi);

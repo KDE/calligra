@@ -46,6 +46,11 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
+KoAbstractGradient* KoStopGradient::clone() const
+{
+    return new KoStopGradient(*this);
+}
+
 bool KoStopGradient::load()
 {
     QFile f(filename());
@@ -238,6 +243,11 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
         m_stops.append(KoGradientStop(stop.first, color));
     }
     updatePreview();
+}
+
+QList<KoGradientStop> KoStopGradient::stops() const
+{
+    return m_stops;
 }
 
 void KoStopGradient::loadKarbonGradient(QIODevice *file)

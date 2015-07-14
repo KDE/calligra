@@ -83,7 +83,7 @@ public:
     Private(CloudAccountsModel* qq)
         : q(qq)
     {
-        dataFile = KGlobal::dirs()->locateLocal("config", "calligrageminicloudaccounts");
+        dataFile = KStandardDirs::locateLocal("config", "calligrageminicloudaccounts");
         loadList();
     }
     ~Private()

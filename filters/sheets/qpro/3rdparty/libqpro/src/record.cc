@@ -28,7 +28,7 @@
 // -----------------------------------------------------------------------
 
 #include <iomanip>
-#include <strstream>
+#include <sstream>
 
 void
 Charout(ostream& pOut, unsigned char pChar)
@@ -50,7 +50,7 @@ Hexout(ostream& pOut, unsigned char pChar)
 int
 Hexout(char* pChar, int pLen)
 {
-    std::ostrstream*   lOStr = new std::ostrstream;
+    std::ostringstream*   lOStr = new std::ostringstream;
 
     while (pLen) {
         int lIdx = 0;
@@ -70,7 +70,7 @@ Hexout(char* pChar, int pLen)
         cerr << lOStr->rdbuf() << endl;
 
         delete lOStr;
-        lOStr = new std::ostrstream;
+        lOStr = new std::ostringstream;
     }
 
     delete lOStr;
@@ -213,7 +213,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 {
 //??? cope with relative/absolute references
 
-    std::strstream lOut(pText, 20, ios::out); // ??? ard coded len
+    std::ostringstream lOut; 
     int       lPageRelative = pRow & 0x8000;
     int       lColRelative  = pRow & 0x4000;
     int       lRowRelative  = pRow & 0x2000;
@@ -252,7 +252,8 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
         lOut << '$';
     }
 
-    lOut << (lRow & 0x1FFF) + 1 << ends;
+    lOut << (lRow & 0x1FFF) + 1;
+    strncpy(pText, lOut.str().c_str(), 20);// ??? ard coded len
 }
 
 void

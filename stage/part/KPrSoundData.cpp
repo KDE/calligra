@@ -22,8 +22,6 @@
 #include "KPrSoundData.h"
 #include "KPrSoundCollection.h"
 
-#include <KoUnit.h>
-
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <QIODevice>

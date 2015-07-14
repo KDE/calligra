@@ -13,6 +13,7 @@
   <name xml:lang="es">Plan</name>
   <name xml:lang="fi">Plan</name>
   <name xml:lang="fr">Plan</name>
+  <name xml:lang="gl">Plan</name>
   <name xml:lang="ia">Plan</name>
   <name xml:lang="it">Plan</name>
   <name xml:lang="nl">Plan</name>
@@ -24,6 +25,7 @@
   <name xml:lang="uk">Plan</name>
   <name xml:lang="x-test">xxPlanxx</name>
   <summary>Project Management</summary>
+  <summary xml:lang="ast">Xestión de proyeutu</summary>
   <summary xml:lang="bs">Upravljanje projektom</summary>
   <summary xml:lang="ca">Gestió de projectes</summary>
   <summary xml:lang="cs">Správa projektů</summary>
@@ -32,6 +34,7 @@
   <summary xml:lang="es">Gestor de proyectos</summary>
   <summary xml:lang="fi">Projektinhallinta</summary>
   <summary xml:lang="fr">Gestion de projet</summary>
+  <summary xml:lang="gl">Xestión de proxectos</summary>
   <summary xml:lang="ia">Administration de projectos</summary>
   <summary xml:lang="it">Gestione progetti</summary>
   <summary xml:lang="nl">Projectbeheer</summary>
@@ -48,6 +51,7 @@
     </p>
     <p xml:lang="bs">Plan je program za upravljanje projektima. Namijenjen je za upravljanje umjereno velikim projektima sa više resursa.</p>
     <p xml:lang="ca">El Plan és una aplicació de gestió de projectes. Està pensat per gestionar projectes moderadament grans amb múltiples recursos.</p>
+    <p xml:lang="de">Plan ist ein Programm zur Projektplanung und -verwaltung. Es ist für mittelgroße Projekte mit mehreren Ressourcen geeignet.</p>
     <p xml:lang="en-GB">Plan is a project management application. It is intended for managing moderately large projects with multiple resources.</p>
     <p xml:lang="es">Plan es una aplicación para gestionar proyectos. Está enfocada a la gestión de proyectos moderadamente grandes con varios recursos.</p>
     <p xml:lang="fi">Plan on projektinhallintasovellus. Se on tarkoitettu suurehkojen, moniresurssisten projektien hallintaan.</p>
@@ -71,11 +75,12 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
-    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
@@ -119,6 +124,7 @@
       <li>Configurable level of detail on Gantt Chart</li>
       <li xml:lang="bs">Konfigurabilan nivo detalja na Gantt Chart</li>
       <li xml:lang="ca">Es pot configurar el nivell de detall en el diagrama de Gantt</li>
+      <li xml:lang="de">Einstellbare Detailstufen auf dem Gantt-Diagramm</li>
       <li xml:lang="en-GB">Configurable level of detail on Gantt Chart</li>
       <li xml:lang="es">Nivel de detalles configurable en el diagrama de Gantt</li>
       <li xml:lang="fi">Mukautettava yksityiskohtien taso Gantt-kaavioissa</li>

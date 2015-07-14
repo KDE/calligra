@@ -36,6 +36,27 @@
 
 class QIODevice;
 
+enum psd_layer_type {
+    psd_layer_type_normal,
+    psd_layer_type_hidden,
+    psd_layer_type_folder,
+    psd_layer_type_solid_color,
+    psd_layer_type_gradient_fill,
+    psd_layer_type_pattern_fill,
+    psd_layer_type_levels,
+    psd_layer_type_curves,
+    psd_layer_type_brightness_contrast,
+    psd_layer_type_color_balance,
+    psd_layer_type_hue_saturation,
+    psd_layer_type_selective_color,
+    psd_layer_type_threshold,
+    psd_layer_type_invert,
+    psd_layer_type_posterize,
+    psd_layer_type_channel_mixer,
+    psd_layer_type_gradient_map,
+    psd_layer_type_photo_filter,
+};
+
 struct  ChannelInfo {
 
     ChannelInfo()
@@ -67,12 +88,14 @@ public:
         qDeleteAll(channelInfoRecords);
     }
 
+    QRect channelRect(ChannelInfo *channel) const;
+
     bool read(QIODevice* io);
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
     bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisNodeSP node);
-    bool writePixelData(QIODevice* io);
+    void write(QIODevice* io, KisPaintDeviceSP layerContentDevice, KisNodeSP onlyTransparencyMask, const QRect &maskRect, psd_section_type sectionType, const QDomDocument &stylesXmlDoc);
+    void writePixelData(QIODevice* io);
 
     bool valid();
 
@@ -88,6 +111,7 @@ public:
     QVector<ChannelInfo*> channelInfoRecords;
 
     QString blendModeKey;
+    bool isPassThrough;
 
     quint8 opacity;
     quint8 clipping;
@@ -126,11 +150,10 @@ public:
 
     QString layerName; // pascal, not unicode!
 
-    struct LayerInfoBlock {
-        QByteArray data;
-    };
+    PsdAdditionalLayerInfoBlock infoBlocks;
 
-    QMap<QString, LayerInfoBlock*> infoBlocks;
+private:
+    void writeTransparencyMaskPixelData(QIODevice *io);
 
 private:
 
@@ -139,7 +162,11 @@ private:
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
-    KisNodeSP m_node;
+    KisPaintDeviceSP m_layerContentDevice;
+    KisNodeSP m_onlyTransparencyMask;
+    QRect m_onlyTransparencyMaskRect;
+    qint64 m_transparencyMaskSizeOffset;
+
     const PSDHeader m_header;
 };
 

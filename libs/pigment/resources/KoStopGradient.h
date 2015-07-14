@@ -39,6 +39,8 @@ public:
     explicit KoStopGradient(const QString &filename);
     virtual ~KoStopGradient();
 
+    KoAbstractGradient* clone() const;
+
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
@@ -55,6 +57,7 @@ public:
     
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
+    QList<KoGradientStop> stops() const;
 
     /// reimplemented
     QString defaultFileExtension() const;

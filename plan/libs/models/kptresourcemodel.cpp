@@ -428,7 +428,7 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;;
+                    kDebug(planDbg())<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }

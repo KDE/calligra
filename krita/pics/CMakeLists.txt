@@ -45,12 +45,17 @@ select_shape.png
 shade.png
 shear_horizontal.png
 shear_vertical.png
+sidebaricon.png
 tablet.png
 tool_screenshot.png
 transparency-disabled.png
 transparency-enabled.png
 transparency-locked.png
 transparency-unlocked.png
+passthrough-enabled.png
+passthrough-disabled.png
+layer-style-enabled.png
+layer-style-disabled.png
 unlinked.png
 unlocked.png
 visible.png

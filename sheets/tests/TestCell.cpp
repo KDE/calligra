@@ -21,7 +21,6 @@
 #include "TestCell.h"
 
 #include <KoStore.h>
-#include <KoXmlReaderForward.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -33,6 +32,7 @@
 #include <sheets/Sheet.h>
 #include <sheets/Style.h>
 #include <sheets/OdfLoadingContext.h>
+#include <sheets/Value.h>
 
 #include <qtest_kde.h>
 

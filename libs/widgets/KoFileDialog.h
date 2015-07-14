@@ -71,7 +71,7 @@ public:
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir);
+    void setDefaultDir(const QString &defaultDir, bool override = false);
 
     /**
      * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
@@ -106,6 +106,8 @@ public:
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();
+
+    QStringList nameFilters() const;
 
     QStringList urls();
     QString url();

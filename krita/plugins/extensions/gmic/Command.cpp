@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ void Command::processCommandName(const QString& line)
     Q_ASSERT(splittedLine.size() == 2);
 
     QString commandName = splittedLine.at(0);
-    setName(commandName.remove(0, GIMP_COMMENT.size()).trimmed());
+    setName(commandName.trimmed());
 
     QStringList commands = splittedLine[1].split(",");
     Q_ASSERT(commands.size() == 2);
@@ -117,8 +117,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
             typeName.remove(0, 1);
         }
 
-        const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
-        if (!typeDefs.contains(typeName))
+        if (!Parameter::isTypeDefined(typeName))
         {
             dbgPlugins << "Unknown type" << typeName << line;
         }
@@ -205,8 +204,8 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
 bool Command::processParameter(const QStringList& block)
 {
     QString parameterLine = mergeBlockToLine(block);
-    // remove gimp prefix and " :"
-    parameterLine = parameterLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+    // remove " :"
+    parameterLine = parameterLine.remove(0, 2).trimmed();
 
     /* State: one parameter one line
      * one parameter n lines
@@ -245,55 +244,55 @@ bool Command::processParameter(const QStringList& block)
             typeDefinition.remove(0,1);
         }
 
-        if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FLOAT_P]))
+        if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FLOAT_P]))
         {
             parameter = new FloatParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::INT_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::INT_P]))
         {
             parameter = new IntParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::SEPARATOR_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::SEPARATOR_P]))
         {
             parameter = new SeparatorParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CHOICE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::CHOICE_P]))
         {
             parameter = new ChoiceParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::TEXT_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::TEXT_P]))
         {
             parameter = new TextParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::NOTE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::NOTE_P]))
         {
             parameter = new NoteParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::LINK_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::LINK_P]))
         {
             parameter = new LinkParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BOOL_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::BOOL_P]))
         {
             parameter = new BoolParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::COLOR_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::COLOR_P]))
         {
             parameter = new ColorParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FOLDER_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FOLDER_P]))
         {
             parameter = new FolderParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FILE_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::FILE_P]))
         {
             parameter = new FileParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CONST_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::CONST_P]))
         {
             parameter = new ConstParameter(paramName, showPreviewOnChange);
         }
-        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BUTTON_P]))
+        else if (typeDefinition.startsWith(Parameter::PARAMETER_NAMES[Parameter::BUTTON_P]))
         {
             parameter = new ButtonParameter(paramName, showPreviewOnChange);
         }
@@ -381,17 +380,15 @@ int Command::columnCount() const
 }
 
 
-void Command::writeConfiguration(KisGmicFilterSetting* setting)
+QString Command::buildCommand(const QString &baseCommand)
 {
-    // example: -gimp_poster_edges 20,60,5,0,10,0,0
-    QString command = "-" + m_command + " ";
-    QString commandPreview = "-" + m_commandPreview + " ";
+    // build list of parameters
+    QString parameterList;
     foreach(Parameter * p, m_parameters)
     {
         if (!p->value().isNull())
         {
-            command.append(p->value() +",");
-            commandPreview.append(p->value() +",");
+            parameterList.append(p->value() +",");
         }
         else
         {
@@ -403,17 +400,28 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
         }
     }
 
-    if (command.endsWith(","))
+    if (parameterList.endsWith(","))
     {
-        command.chop(1);
+        parameterList.chop(1);
     }
 
-    if (commandPreview.endsWith(","))
+    QString command = "-" + baseCommand;
+    // some commands might contain presentational parameters only
+    if (!parameterList.isEmpty())
     {
-        commandPreview.chop(1);
+        command.append(" ");
+        command.append(parameterList);
     }
 
+    return command;
+}
+
+void Command::writeConfiguration(KisGmicFilterSetting* setting)
+{
+    QString command = buildCommand(m_command);
     setting->setGmicCommand(command);
+
+    QString commandPreview = buildCommand(m_commandPreview);
     setting->setPreviewGmicCommand(commandPreview);
 }
 
@@ -429,7 +437,7 @@ QString Command::mergeBlockToLine(const QStringList& block)
     for (int i = 1; i < block.size(); i++)
     {
         QString nextLine = block.at(i);
-        nextLine = nextLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+        nextLine = nextLine.remove(0, 2).trimmed();
         result = result + nextLine;
     }
     return result;

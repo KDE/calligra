@@ -62,7 +62,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     QString knsrcFile = "kritagradients.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true,true);
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 
@@ -98,9 +98,14 @@ KisGradientChooser::~KisGradientChooser()
 {
 }
 
-KoResource *  KisGradientChooser::currentResource()
+KoResource *KisGradientChooser::currentResource()
 {
     return m_itemChooser->currentResource();
+}
+
+void KisGradientChooser::setCurrentResource(KoResource *resource)
+{
+    m_itemChooser->setCurrentResource(resource);
 }
 
 void KisGradientChooser::setCurrentItem(int row, int column)

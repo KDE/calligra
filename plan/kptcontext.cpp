@@ -20,8 +20,6 @@
 #include "kptcontext.h"
 #include "kptview.h"
 
-#include <KoXmlReader.h>
-
 #include <QDomDocument>
 
 #include <kdebug.h>

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,7 +73,7 @@ int KexiComboBoxBase::rowToHighlightForLookupTable() const
     const int rowUid = origValue().toInt();
 //! @todo for now we're assuming the id is INTEGER
     KexiDB::TableViewData *tvData = popup()->tableView()->data();
-    const int boundColumn = lookupFieldSchema->boundColumn();
+    const int boundColumn = boundColumnIndex();
     int row = -1;
     for (KexiDB::TableViewData::Iterator it(tvData->constBegin()); it != tvData->constEnd(); ++it) {
         row++;
@@ -114,7 +114,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
                 const int rowToHighlight = rowToHighlightForLookupTable();
                 popup()->tableView()->setHighlightedRow(rowToHighlight);
 
-                const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
+                const int visibleColumn = visibleColumnIndex();
                 if (m_setVisibleValueOnSetValueInternal && -1 != visibleColumn) {
                     //only for table views
                     KexiDB::RecordData *record = popup()->tableView()->highlightedItem();
@@ -172,7 +172,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
     const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::ByteArray; //most common case
     const QString txt(valueIsText ? v.toString().trimmed() : QString());
     KexiDB::TableViewData *lookupData = popup()->tableView()->data();
-    const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnCount());
+    const int visibleColumn = visibleColumnIndex();
     if (-1 == visibleColumn)
         return 0;
     KexiDB::TableViewData::Iterator it(lookupData->constBegin());
@@ -229,6 +229,39 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     return str; //for sanity but it's weird to show id to the user
 }
 
+int KexiComboBoxBase::boundColumnIndex() const
+{
+    if (!lookupFieldSchema()) {
+        return -1;
+    }
+    switch (lookupFieldSchema()->rowSource().type()) {
+    case KexiDB::LookupFieldSchema::RowSource::Table:
+        // When the row source is Table we have hardcoded columns: <visible>, <bound>
+        return lookupFieldSchema()->visibleColumns().count();
+    default:;
+    }
+    // When the row source is Query we use the lookup field's bound column index
+    //! @todo Implement for other types
+    return lookupFieldSchema()->boundColumn();
+}
+
+int KexiComboBoxBase::visibleColumnIndex() const
+{
+    if (!lookupFieldSchema() || lookupFieldSchema()->visibleColumns().isEmpty()) {
+        return -1;
+    }
+    switch (lookupFieldSchema()->rowSource().type()) {
+    case KexiDB::LookupFieldSchema::RowSource::Table:
+        // When the row source is Table we have hardcoded columns: <visible>, <bound>
+        return lookupFieldSchema()->visibleColumn(0);
+    default:;
+    }
+    // When the row source is Query we use the lookup field's visible column index
+    //! @todo Implement for multiple visible columns
+    //! @todo Implement for other types
+    return lookupFieldSchema()->visibleColumns().first();
+}
+
 QVariant KexiComboBoxBase::value()
 {
     KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
@@ -257,7 +290,7 @@ QVariant KexiComboBoxBase::value()
             }
             record = selectItemForEnteredValueInLookupTable(m_userEnteredValue);
         }
-        return record ? record->at(lookupFieldSchema->boundColumn()) : QVariant();
+        return record ? record->at(boundColumnIndex()) : QVariant();
     } else if (popup()) {
         //use 'enum hints' model
         const int row = popup()->tableView()->currentRow();
@@ -277,7 +310,8 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (!popup() || !lookupFieldSchema)
         return QVariant();
-    const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
+    const int visibleColumn = visibleColumnIndex();
+    //kDebug() << "visibleColumn" << visibleColumn;
     if (-1 == visibleColumn)
         return QVariant();
     KexiDB::RecordData *record = popup()->tableView()->selectedItem();
@@ -410,8 +444,7 @@ void KexiComboBoxBase::createPopup(bool show)
             }
             popup()->tableView()->selectRow(rowToHighlight);
             popup()->tableView()->setHighlightedRow(rowToHighlight);
-            if (rowToHighlight < popup()->tableView()->rowsPerPage())
-                popup()->tableView()->ensureCellVisible(-1, 0);
+            popup()->tableView()->ensureCellVisible(-1, 0); // scroll to left as expected
 
             /*-->*/ m_moveCursorToEndInInternalEditor_enabled = true;
             m_selectAllInInternalEditor_enabled = true;
@@ -480,7 +513,7 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
             valueToSet = record->at(1);
     } else if (lookupFieldSchema) {
         KexiDB::RecordData *record = popup()->tableView()->selectedItem();
-        const int visibleColumn = lookupFieldSchema->visibleColumn(popup()->tableView()->data()->columnCount());
+        const int visibleColumn = visibleColumnIndex();
         if (record && visibleColumn != -1 /* && (int)item->size() >= visibleColumn --already checked*/) {
             valueToSet = record->at(qMin(visibleColumn, record->count() - 1)/*sanity*/);
         }

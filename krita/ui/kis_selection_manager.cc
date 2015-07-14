@@ -135,8 +135,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     actionManager->addAction("cut_sharp", cutSharp);
     connect(cutSharp, SIGNAL(triggered()), this, SLOT(cutSharp()));
 
-    m_pasteNew  = new KisAction(i18n("Paste into &New Image"), this);
+    m_pasteNew = new KisAction(i18n("Paste into &New Image"), this);
     actionManager->addAction("paste_new", m_pasteNew);
+    m_pasteNew->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
     m_pasteAt = new KisAction(i18n("Paste at cursor"), this);
@@ -161,6 +162,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
+    m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));

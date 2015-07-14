@@ -22,10 +22,11 @@
 #include <krita_export.h>
 
 class KoPattern;
+class KoAbstractGradient;
 class KisPropertiesConfiguration;
 
 
-class PAINTOP_EXPORT KisEmbeddedPatternManager
+class KRITAUI_EXPORT KisEmbeddedPatternManager
 {
 public:
     static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);

@@ -32,11 +32,15 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
+#include "kis_busy_progress_indicator.h"
 
 #include "kis_clone_layer.h"
 
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
+
+#include "kis_abstract_projection_plane.h"
+#include "kis_projection_leaf.h"
 
 
 /**
@@ -75,17 +79,23 @@ static KisNodeSPStaticRegistrar __registrar;
 struct KisNode::Private
 {
 public:
-    Private()
+    Private(KisNode *node)
             : graphListener(0)
-            , nodeProgressProxy(0) {
+            , nodeProgressProxy(0)
+            , busyProgressIndicator(0)
+            , projectionLeaf(new KisProjectionLeaf(node))
+    {
     }
 
     KisNodeWSP parent;
     KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
+    KisBusyProgressIndicator *busyProgressIndicator;
     QReadWriteLock nodeSubgraphLock;
 
+
+    KisProjectionLeafSP projectionLeaf;
 
     const KisNode* findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
@@ -157,7 +167,7 @@ void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot
 }
 
 KisNode::KisNode()
-        : m_d(new Private())
+        : m_d(new Private(this))
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -165,7 +175,7 @@ KisNode::KisNode()
 
 KisNode::KisNode(const KisNode & rhs)
         : KisBaseNode(rhs)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -186,8 +196,13 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    if (m_d->nodeProgressProxy)
+    if (m_d->busyProgressIndicator) {
+        m_d->busyProgressIndicator->deleteLater();
+    }
+
+    if (m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy->deleteLater();
+    }
 
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
@@ -213,6 +228,20 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     return rect;
+}
+
+KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
+{
+    KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
+    static KisAbstractProjectionPlaneSP plane =
+        toQShared(new KisDumbProjectionPlane());
+
+    return plane;
+}
+
+KisProjectionLeafSP KisNode::projectionLeaf() const
+{
+    return m_d->projectionLeaf;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)
@@ -473,10 +502,21 @@ KisNodeProgressProxy* KisNode::nodeProgressProxy() const
     return 0;
 }
 
+KisBusyProgressIndicator* KisNode::busyProgressIndicator() const
+{
+    if (m_d->busyProgressIndicator) {
+        return m_d->busyProgressIndicator;
+    } else if (parent()) {
+        return parent()->busyProgressIndicator();
+    }
+    return 0;
+}
+
 void KisNode::createNodeProgressProxy()
 {
     if (!m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy = new KisNodeProgressProxy(this);
+        m_d->busyProgressIndicator = new KisBusyProgressIndicator(m_d->nodeProgressProxy);
     }
 }
 

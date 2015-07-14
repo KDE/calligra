@@ -21,6 +21,8 @@
 #include "KoResource.h"
 #include <pigment_export.h>
 
+#include <QMetaType>
+
 /// Write API docs here
 class PIGMENTCMS_EXPORT KoPattern : public KoResource
 {
@@ -43,6 +45,9 @@ public:
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
     virtual bool saveToDevice(QIODevice* dev) const;
+
+    bool loadPatFromDevice(QIODevice *dev);
+    bool savePatToDevice(QIODevice* dev) const;
 
     qint32 width() const;
     qint32 height() const;
@@ -72,6 +77,8 @@ private:
     QImage m_pattern;
     mutable QByteArray m_md5;
 };
+
+Q_DECLARE_METATYPE(KoPattern*)
 
 #endif // KOPATTERN_H
 

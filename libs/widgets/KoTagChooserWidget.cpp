@@ -138,7 +138,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
     }
 
     int index = tags.indexOf(tagName);
-    if (findIndexOf(tagName) == -1) {
+    if (d->comboBox->findText(tagName) == -1) {
         insertItemAt(index, tagName);
         d->tags.append(tagName);
     }
@@ -198,4 +198,9 @@ void KoTagChooserWidget::tagOptionsContextMenuAboutToShow()
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
     emit popupMenuAboutToShow();
+}
+
+void KoTagChooserWidget::showTagToolButton(bool show)
+{
+    d->tagToolButton->setVisible(show);
 }

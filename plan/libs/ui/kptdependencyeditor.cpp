@@ -2189,7 +2189,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             DependencyConnectorItem *c = static_cast<DependencyConnectorItem*>( item );
             QList<DependencyLinkItem*> items;
             QList<QAction*> actions;
-            KMenu menu;;
+            KMenu menu;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
                 actions << menu.addAction(koIcon("document-properties"), i->predItem->text());

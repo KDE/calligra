@@ -68,12 +68,6 @@ public:
     KisPaintDeviceSP paintDevice() const;
 
     bool needProjection() const;
-    void copyOriginalToProjection(const KisPaintDeviceSP original,
-                                  KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
-
-    // From KisNode
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
      * resets cached projection of lower layer to a new device
@@ -111,6 +105,16 @@ public:
      */
 
     void setInternalSelection(KisSelectionSP selection);
+
+    /**
+     * When painted in indirect painting mode, the internal selection
+     * might not contain actual selection, because a part of it is
+     * stored on an indirect painting device. This method returns the
+     * merged copy of the real selection. The area in \p rect only is
+     * guaranteed to be prepared. The content of the rest of the
+     * selection is undefined.
+     */
+    KisSelectionSP fetchComposedInternalSelection(const QRect &rect) const;
 
     /**
      * gets this layer's x coordinate, taking selection into account
@@ -159,10 +163,30 @@ public:
      */
     QImage createThumbnail(qint32 w, qint32 h);
 
+
+protected:
+    // override from KisLayer
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
+    // override from KisNode
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+
 protected:
     void initSelection();
 
     QRect cropChangeRectBySelection(const QRect &rect) const;
+
+    /**
+     * Sets if the selection should be used in
+     * copyOriginalToProjection() method.
+     *
+     * Default value is 'true'. The descendants should override it to
+     * get desired behaviour.
+     *
+     * Must be called only once in the child's constructor
+     */
+    void setUseSelectionInProjection(bool value) const;
 
 public Q_SLOTS:
 

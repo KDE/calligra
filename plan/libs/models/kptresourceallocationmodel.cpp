@@ -162,7 +162,7 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
             return i18nc( "<value>%", "%1%", units );
         }
         case Qt::EditRole:
-            return rr ? rr->units() : 0;;
+            return rr ? rr->units() : 0;
         case Qt::ToolTipRole: {
             int units = rr ? rr->units() : 0;
             if ( units == 0 ) {
@@ -313,7 +313,7 @@ QVariant ResourceAllocationModel::data( const ResourceGroup *group, int property
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;;
+                    kDebug(planDbg())<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }

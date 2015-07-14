@@ -71,7 +71,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     //not needed in grid:
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+    connect(m_recentProjects, SIGNAL(activated(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     
     m_statusBar = new KexiWelcomeStatusBar;
     contentsLyr->addWidget(m_statusBar);

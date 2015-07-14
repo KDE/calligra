@@ -69,7 +69,7 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
 
     KarbonPart *part = new KarbonPart(parent);
     KarbonDocument* doc = new KarbonDocument(part);
-    part->setDocument(doc);;
+    part->setDocument(doc);
     return part;
 }
 
@@ -86,12 +86,6 @@ const KComponentData &KarbonFactory::componentData()
         s_instance = new KComponentData(aboutData());
         // Add any application-specific resource directories here
 
-        s_instance->dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-        s_instance->dirs()->addResourceType("kis_pattern", "data", "krita/patterns/");
-        s_instance->dirs()->addResourceType("karbon_gradient", "data", "krita/gradients/");
-        s_instance->dirs()->addResourceType("karbon_clipart", "data", "karbon/cliparts/");
-        s_instance->dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
-        s_instance->dirs()->addResourceType("karbon_effects", "data", "karbon/effects/");
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 

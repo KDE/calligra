@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Braindump</name>
+  <name xml:lang="ast">Braindump</name>
   <name xml:lang="bs">Braindump</name>
   <name xml:lang="ca">Braindump</name>
   <name xml:lang="cs">Braindump</name>
@@ -13,6 +14,7 @@
   <name xml:lang="es">Braindump</name>
   <name xml:lang="fi">Braindump</name>
   <name xml:lang="fr">Braindump</name>
+  <name xml:lang="gl">Braindump</name>
   <name xml:lang="hu">Braindump</name>
   <name xml:lang="ia">Braindump</name>
   <name xml:lang="it">Braindump</name>
@@ -32,7 +34,7 @@
       It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.
     </p>
     <p xml:lang="bs">Braindump je alat za slanje i organizaciju sadržaja vašeg mozga (ideja, crteža, slika, teksta...) na računar. Radi tako što vam dopušta da kreirate i uređujete table koja su beskonačna platna na koje možete dodati tekstove, slike, dijagrame, crteže itd.</p>
-    <p xml:lang="ca">El Braindump és una eina per a bolcar i organitzar el contingut del cervell (idees, dibuixos, imatges, texts…) a l'ordinador. Funciona permetent crear i editar pissarres, que tenen llenços infinits en els que es poden afegir texts, imatges, diagrames, dibuixos, etc.</p>
+    <p xml:lang="ca">El Braindump és una eina per a bolcar i organitzar el contingut del cervell (idees, dibuixos, imatges, texts…) a l'ordinador. Funciona permetent crear i editar pissarres, que tenen llenços infinits en els quals es pot afegir texts, imatges, diagrames, dibuixos, etc.</p>
     <p xml:lang="en-GB">Braindump is a tool to dump and organise the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.</p>
     <p xml:lang="es">Braindump es una herramienta para volcar y organizar el contenido de su cerebro (ideas, dibujos, imágenes, texto...) en su equipo. Permite crear y editar pizarras en blanco, es decir, lienzos infinitos en los que puede añadir textos, imágenes, diagramas, dibujos, etc.</p>
     <p xml:lang="fi">Braindump on työkalu aivojesi sisällön (ajatusten, piirrosten, kuvien, tekstin…) purkamiseksi ja järjestämiseksi. Se toimii antamalla sinun luoda ja muokata valkotauluja, jotka ovat rajaton kangas tekstillesi, kuvillesi, kaavioillesi, piirroksillesi jne.</p>

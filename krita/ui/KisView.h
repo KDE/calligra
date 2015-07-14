@@ -29,6 +29,8 @@
 #include <kis_types.h>
 #include "krita_export.h"
 
+#include "widgets/kis_floating_message.h"
+
 class KisDocument;
 class KisMainWindow;
 class KisPrintJob;
@@ -72,7 +74,7 @@ public:
      * Creates a new view for the document.
      */
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
- ~KisView();
+    ~KisView();
 
     KAction *undoAction() const;
     KAction *redoAction() const;
@@ -148,7 +150,7 @@ public:
     /**
      * Return the zoomController for this view.
      */
-     KoZoomController *zoomController() const;
+    KoZoomController *zoomController() const;
 
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
@@ -201,6 +203,11 @@ public:
     /// the global selection.
     KisSelectionSP selection();
 
+    void notifyCurrentStateChanged(bool isCurrent);
+
+    void setShowFloatingMessage(bool show);
+    void showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+
 public Q_SLOTS:
 
     /**
@@ -227,10 +234,10 @@ Q_SIGNALS:
 protected:
 
     // QWidget overrides
-     void dragEnterEvent(QDragEnterEvent * event);
-     void dropEvent(QDropEvent * event);
-     bool event( QEvent* event );
-     void closeEvent(QCloseEvent *event);
+    void dragEnterEvent(QDragEnterEvent * event);
+    void dropEvent(QDropEvent * event);
+    bool event( QEvent* event );
+    void closeEvent(QCloseEvent *event);
 
     /**
      * Generate a name for this view.

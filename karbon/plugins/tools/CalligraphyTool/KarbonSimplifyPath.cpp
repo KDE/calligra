@@ -216,9 +216,10 @@ bool KarbonSimplifyPath::isSufficentlyFlat(QPointF curve[4])
     qreal dx = curve[0].x() - curve[3].y();
     qreal dy = curve[0].y() - curve[3].y();
     qreal dist2 = dx * dx + dy * dy;
-    qreal tolerance = dist2 / (SUBDIVISION_COEFF * SUBDIVISION_COEFF);
+    qreal max2 = qMax(ux*ux, vx*vx) + qMax(uy*uy, vy*vy);
+    max2 *= (SUBDIVISION_COEFF * SUBDIVISION_COEFF);
 
-    return qMax(ux*ux, vx*vx) + qMax(uy*uy, vy*vy) <= tolerance;
+    return max2 <= dist2;
 }
 
 void KarbonSimplifyPath::simplifySubpaths(QList<KoSubpath *> *subpaths,

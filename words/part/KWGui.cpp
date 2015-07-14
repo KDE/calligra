@@ -33,6 +33,7 @@
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoRuler.h>
+#include <KoUnit.h>
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <kactioncollection.h>
@@ -114,7 +115,6 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
 KWGui::~KWGui()
 {
-   KoToolManager::instance()->removeCanvasController(m_canvasController);
 }
 
 int KWGui::visibleWidth() const

@@ -78,8 +78,6 @@
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -1177,7 +1175,7 @@ void View::updateReadWrite(bool readwrite)
 
 void View::createTemplate()
 {
-    KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
+    KoTemplateCreateDia::createTemplate(doc()->documentPart()->templatesResourcePath(), ".ots",
                                         Factory::global(), doc(), this);
 }
 

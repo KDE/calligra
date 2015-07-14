@@ -100,7 +100,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     chooserButton->setIcon(koIcon("document-multiple"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
-    m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");
+    m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {
         QDir().mkpath(m_rserver->saveLocation());
     }
@@ -113,7 +113,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
     itemChooser->setColumnCount(1);
-    itemChooser->showTaggingBar(true, true);
+    itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 
     connect(itemChooser, SIGNAL(resourceSelected(KoResource*)),

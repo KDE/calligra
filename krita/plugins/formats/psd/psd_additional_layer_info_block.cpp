@@ -1,226 +1,332 @@
+/*
+ *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "psd_additional_layer_info_block.h"
 
-PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
+#include <QDomDocument>
+
+#include <asl/kis_offset_on_exit_verifier.h>
+
+#include <asl/kis_asl_reader_utils.h>
+#include <asl/kis_asl_reader.h>
+#include <asl/kis_asl_writer_utils.h>
+#include <asl/kis_asl_writer.h>
+#include <asl/kis_asl_patterns_writer.h>
+
+
+PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader& header)
+    : m_header(header)
 {
 }
 
-bool PsdAdditionalLayerInfoBlock::read(QIODevice */*io*/)
+bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 {
+    bool result = true;
 
-    if (key == "SoCo") {
-
+    try {
+        readImpl(io);
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        error = e.what();
+        result = false;
     }
-    else if (key == "GdFl") {
 
-    }
-    else if (key == "PtFl") {
+    return result;
+}
 
-    }
-    else if (key == "brit") {
+void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
+{
+    using namespace KisAslReaderUtils;
 
+    QStringList longBlocks;
+    if (m_header.version > 1) {
+        longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
     }
-    else if (key == "levl") {
 
-    }
-    else if (key == "curv") {
+    while (!io->atEnd()) {
 
-    }
-    else if (key == "expA") {
+        {
+            const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
+            const quint32 refSignature2 = 0x38423634; // '8B64' in little-endian
+            if (!TRY_READ_SIGNATURE_2OPS_EX(io, refSignature1, refSignature2)) {
+                break;
+            }
+        }
 
-    }
-    else if (key == "vibA") {
+        QString key = readFixedString(io);
+        dbgFile << "found info block with key" << key;
 
-    }
-    else if (key == "hue") {
+        quint64 blockSize = GARBAGE_VALUE_MARK;
+        if (longBlocks.contains(key)) {
+            SAFE_READ_EX(io, blockSize);
+        } else {
+            quint32 size32;
+            SAFE_READ_EX(io, size32);
+            blockSize = size32;
+        }
 
-    }
-    else if (key == "hue2") {
+        // offset verifier will correct the position on the exit from
+        // current namespace, including 'continue', 'return' and
+        // exceptions.
+        SETUP_OFFSET_VERIFIER(infoBlockEndVerifier, io, blockSize, 0);
 
-    }
-    else if (key == "blnc") {
+        if (keys.contains(key)) {
+            error = "Found duplicate entry for key ";
+            continue;
+        }
+        keys << key;
 
-    }
-    else if (key == "blwh") {
+        if (key == "SoCo") {
 
-    }
-    else if (key == "phfl") {
+        }
+        else if (key == "GdFl") {
 
-    }
-    else if (key == "mixr") {
+        }
+        else if (key == "PtFl") {
 
-    }
-    else if (key == "clrL") {
+        }
+        else if (key == "brit") {
 
-    }
-    else if (key == "nvrt") {
+        }
+        else if (key == "levl") {
 
-    }
-    else if (key == "post") {
+        }
+        else if (key == "curv") {
 
-    }
-    else if (key == "thrs") {
+        }
+        else if (key == "expA") {
 
-    }
-    else if (key == "grdm") {
+        }
+        else if (key == "vibA") {
 
-    }
-    else if (key == "selc") {
+        }
+        else if (key == "hue") {
 
-    }
-    else if (key == "lrFX") {
+        }
+        else if (key == "hue2") {
 
-    }
-    else if (key == "tySh") {
+        }
+        else if (key == "blnc") {
 
-    }
-    else if (key == "luni") {
+        }
+        else if (key == "blwh") {
 
-    }
-    else if (key == "lyid") {
+        }
+        else if (key == "phfl") {
 
-    }
-    else if (key == "lfx2") {
+        }
+        else if (key == "mixr") {
 
-    }
-    else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
+        }
+        else if (key == "clrL") {
 
-    }
-    else if (key == "Anno") {
+        }
+        else if (key == "nvrt") {
 
-    }
-    else if (key == "clbl") {
+        }
+        else if (key == "post") {
+
+        }
+        else if (key == "thrs") {
+
+        }
+        else if (key == "grdm") {
+
+        }
+        else if (key == "selc") {
 
-    }
-    else if (key == "infx") {
+        }
+        else if (key == "lrFX") {
+            // deprecated! use lfx2 instead!
+        }
+        else if (key == "tySh") {
+        }
+        else if (key == "luni") {
+            // get the unicode layer name
+            unicodeLayerName = readUnicodeString(io);
+            dbgFile << "unicodeLayerName" << unicodeLayerName;
+        }
+        else if (key == "lyid") {
 
-    }
-    else if (key == "knko") {
+        }
+        else if (key == "lfx2") {
+            KisAslReader reader;
+            layerStyleXml = reader.readLfx2PsdSection(io);
+        }
+        else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
+            KisAslReader reader;
+            QDomDocument pattern = reader.readPsdSectionPattern(io, blockSize);
+            embeddedPatterns << pattern;
+        }
+        else if (key == "Anno") {
 
-    }
-    else if (key == "spf") {
+        }
+        else if (key == "clbl") {
 
-    }
-    else if (key == "lclr") {
+        }
+        else if (key == "infx") {
 
-    }
-    else if (key == "fxrp") {
+        }
+        else if (key == "knko") {
 
-    }
-    else if (key == "grdm") {
+        }
+        else if (key == "spf") {
 
-    }
-    else if (key == "lsct") {
+        }
+        else if (key == "lclr") {
 
-    }
-    else if (key == "brst") {
+        }
+        else if (key == "fxrp") {
 
-    }
-    else if (key == "SoCo") {
+        }
+        else if (key == "grdm") {
 
-    }
-    else if (key == "PtFl") {
+        }
+        else if (key == "lsct") {
+            quint32 dividerType = GARBAGE_VALUE_MARK;
+            SAFE_READ_EX(io, dividerType);
+            this->sectionDividerType = (psd_section_type)dividerType;
 
-    }
-    else if (key == "GdFl") {
+            dbgFile << "Reading \"lsct\" block:";
+            dbgFile << ppVar(blockSize);
+            dbgFile << ppVar(dividerType);
 
-    }
-    else if (key == "vmsk" || key == "vsms") { // If key is 'vsms' then we are writing for (Photoshop CS6) and the document will have a 'vscg' key
+            if (blockSize >= 12) {
+                quint32 lsctSignature = GARBAGE_VALUE_MARK;
+                const quint32 refSignature1 = 0x3842494D; // '8BIM' in little-endian
+                SAFE_READ_SIGNATURE_EX(io, lsctSignature, refSignature1);
 
-    }
-    else if (key == "TySh") {
+                this->sectionDividerBlendMode = readFixedString(io);
 
-    }
-    else if (key == "ffxi") {
+                dbgFile << ppVar(this->sectionDividerBlendMode);
+            }
 
-    }
-    else if (key == "lnsr") {
+            // Animation
+            if (blockSize >= 14) {
+                /**
+                 * "I don't care
+                 *  I don't care, no... !" (c)
+                 */
+            }
 
-    }
-    else if (key == "shpa") {
+        }
+        else if (key == "brst") {
 
-    }
-    else if (key == "shmd") {
+        }
+        else if (key == "SoCo") {
 
-    }
-    else if (key == "lyvr") {
+        }
+        else if (key == "PtFl") {
 
-    }
-    else if (key == "tsly") {
+        }
+        else if (key == "GdFl") {
 
-    }
-    else if (key == "lmgm") {
+        }
+        else if (key == "vmsk" || key == "vsms") { // If key is "vsms" then we are writing for (Photoshop CS6) and the document will have a "vscg" key
 
-    }
-    else if (key == "vmgm") {
+        }
+        else if (key == "TySh") {
 
-    }
-    else if (key == "plLd") { // Replaced by SoLd in CS3
+        }
+        else if (key == "ffxi") {
 
-    }
-    else if (key == "linkD" || key == "lnk2" || key == "lnk3") {
+        }
+        else if (key == "lnsr") {
 
-    }
-    else if (key == "phfl") {
+        }
+        else if (key == "shpa") {
 
-    }
-    else if (key == "blwh") {
+        }
+        else if (key == "shmd") {
 
-    }
-    else if (key == "CgEd") {
+        }
+        else if (key == "lyvr") {
 
-    }
-    else if (key == "Txt2") {
+        }
+        else if (key == "tsly") {
 
-    }
-    else if (key == "vibA") {
+        }
+        else if (key == "lmgm") {
 
-    }
-    else if (key == "pths") {
+        }
+        else if (key == "vmgm") {
 
-    }
-    else if (key == "anFX") {
+        }
+        else if (key == "plLd") { // Replaced by SoLd in CS3
 
-    }
-    else if (key == "FMsk") {
+        }
+        else if (key == "linkD" || key == "lnk2" || key == "lnk3") {
 
-    }
-    else if (key == "SoLd") {
+        }
+        else if (key == "phfl") {
 
-    }
-    else if (key == "vstk") {
+        }
+        else if (key == "blwh") {
 
-    }
-    else if (key == "vsCg") {
+        }
+        else if (key == "CgEd") {
 
-    }
-    else if (key == "sn2P") {
+        }
+        else if (key == "Txt2") {
 
-    }
-    else if (key == "vogk") {
+        }
+        else if (key == "vibA") {
 
-    }
-    else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
+        }
+        else if (key == "pths") {
 
-    }
-    else if (key == "LMsk") {
+        }
+        else if (key == "anFX") {
 
-    }
-    else if (key == "expA") {
+        }
+        else if (key == "FMsk") {
 
-    }
-    else if (key == "FXid") {
+        }
+        else if (key == "SoLd") {
 
-    }
-    else if (key == "FEid") {
+        }
+        else if (key == "vstk") {
 
-    }
+        }
+        else if (key == "vsCg") {
 
+        }
+        else if (key == "sn2P") {
 
+        }
+        else if (key == "vogk") {
 
+        }
+        else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
 
-    return true;
+        }
+        else if (key == "LMsk") {
 
+        }
+        else if (key == "expA") {
 
+        }
+        else if (key == "FXid") {
+
+        }
+        else if (key == "FEid") {
+
+        }
+    }
 }
 
 bool PsdAdditionalLayerInfoBlock::write(QIODevice */*io*/, KisNodeSP /*node*/)
@@ -233,4 +339,61 @@ bool PsdAdditionalLayerInfoBlock::valid()
 {
 
     return true;
+}
+
+void PsdAdditionalLayerInfoBlock::writeLuniBlockEx(QIODevice* io, const QString &layerName)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("luni", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> layerNameSizeTag(io, 2);
+    KisAslWriterUtils::writeUnicodeString(layerName, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLsctBlockEx(QIODevice* io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lsct", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> sectionTypeSizeTag(io, 2);
+    SAFE_WRITE_EX(io, (quint32)sectionType);
+
+    QString realBlendModeKey = isPassThrough ? QString("pass") : blendModeKey;
+
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString(realBlendModeKey, io);
+}
+
+void PsdAdditionalLayerInfoBlock::writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("lfx2", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> lfx2SizeTag(io, 2);
+
+    try {
+        KisAslWriter writer;
+        writer.writePsdLfx2SectionEx(io, stylesXmlDoc);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style lfx2 block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
+}
+
+void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice* io, const QDomDocument &patternsXmlDoc)
+{
+    KisAslWriterUtils::writeFixedString("8BIM", io);
+    KisAslWriterUtils::writeFixedString("Patt", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32> pattSizeTag(io, 2);
+
+    try {
+        KisAslPatternsWriter writer(patternsXmlDoc, io);
+        writer.writePatterns();
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        qWarning() << "WARNING: Couldn't save layer style patterns block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
 }

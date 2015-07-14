@@ -253,8 +253,8 @@ void KarbonGradientEditWidget::updateUI()
     const bool colorStopSelected = m_stopIndex >= 0 && m_stopIndex < m_stops.count();
     if (colorStopSelected) {
         QColor c = m_stops[m_stopIndex].second;
-        m_actionStopColor->setCurrentColor(c);
         m_stopPosition->setValue(m_stops[m_stopIndex].first);
+        m_actionStopColor->setCurrentColor(c);
     }
     m_stopColor->setEnabled(colorStopSelected);
     m_stopPosition->setEnabled(colorStopSelected);

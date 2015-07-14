@@ -56,7 +56,16 @@ class KOODF_EXPORT KoOdfNotesConfiguration : public QObject
     Q_OBJECT
 public:
 
-    KoOdfNotesConfiguration();
+    /**
+     * Note class
+     * The note class attribute determines which note elements this notes configuration applies to.
+     */
+    enum NoteClass {
+        Footnote,
+        Endnote
+    };
+
+    KoOdfNotesConfiguration(NoteClass noteClass);
     ~KoOdfNotesConfiguration();
     KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
     KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);
@@ -72,42 +81,35 @@ public:
      */
     void saveOdf(KoXmlWriter * writer) const;
 
-    /**
-     * Note class
-     * The note class attribute determines which note elements this notes configuration applies to.
-     */
-    enum NoteClass {
-        Footnote,
-        Endnote,
-        Unknown
-    };
 
     NoteClass noteClass() const;
-    void setNoteClass(NoteClass noteClass);
 
     /**
      * Citation Text Style
      * The text:citation-style attribute specifies the text style to use for the footnote citation
      * within the footnote.
      */
-    QString citationTextStyle() const;
-    void setCitationTextStyle(const QString &citationTextStyle);
+    QString citationTextStyleName() const;
+    void *citationTextStyle() const;
+    void setCitationTextStyle(void *citationTextStyle);
 
     /**
      * Citation Body Text Style
      * The text:citation-body-style-name attribute specifies the text style to use for the
      * footnote citation in the text flow.
      */
-    QString citationBodyTextStyle() const;
-    void setCitationBodyTextStyle(const QString &citationBodyTextStyle);
+    QString citationBodyTextStyleName() const;
+    void *citationBodyTextStyle() const;
+    void setCitationBodyTextStyle(void *citationBodyTextStyle);
 
     /**
      * Default Note Paragraph Style
      * The default footnote paragraph style is only used for footnotes that are inserted into an existing
      * document. It is not used for footnotes that already exist.
      */
-    QString defaultNoteParagraphStyle() const;
-    void setDefaultNoteParagraphStyle(const QString &defaultNoteParagraphStyle);
+    QString defaultNoteParagraphStyleName() const;
+    void *defaultNoteParagraphStyle() const;
+    void setDefaultNoteParagraphStyle(void *defaultNoteParagraphStyle);
 
     /**
      * Master Page

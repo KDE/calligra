@@ -6,7 +6,7 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsv_importexportpart.cpp 
    KexiCSVImportDialogModel.cpp
    kexicsvimportdialog.cpp 
-   kexicsvimportoptionsdlg.cpp 
+   kexicsvimportoptionsdlg.cpp
    kexicsvwidgets.cpp 
    kexicsvexportwizard.cpp
    kexicsvexport.cpp

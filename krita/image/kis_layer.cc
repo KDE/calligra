@@ -28,6 +28,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
@@ -44,6 +45,10 @@
 #include "kis_paint_layer.h"
 
 #include "kis_clone_layer.h"
+
+#include "kis_psd_layer_style.h"
+#include "kis_layer_projection_plane.h"
+#include "layerstyles/kis_layer_style_projection_plane.h"
 
 
 class KisSafeProjection {
@@ -107,14 +112,16 @@ private:
 
 struct KisLayer::Private
 {
-
-public:
-
     KisImageWSP image;
     QBitArray channelFlags;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
+
+    KisPSDLayerStyleSP layerStyle;
+    KisAbstractProjectionPlaneSP layerStyleProjectionPlane;
+
+    KisAbstractProjectionPlaneSP projectionPlane;
 };
 
 
@@ -126,6 +133,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
+    m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -135,7 +143,13 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
+
         setName(rhs.name());
+        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+
+        if (rhs.m_d->layerStyle) {
+            setLayerStyle(rhs.m_d->layerStyle->clone());
+        }
     }
 }
 
@@ -169,18 +183,60 @@ const KoCompositeOp * KisLayer::compositeOp() const
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
+KisPSDLayerStyleSP KisLayer::layerStyle() const
+{
+    return m_d->layerStyle;
+}
+
+void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
+{
+    if (layerStyle) {
+        m_d->layerStyle = layerStyle;
+
+        KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
+            KisAbstractProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
+            KisAbstractProjectionPlaneSP(0);
+
+        m_d->layerStyleProjectionPlane = plane;
+    } else {
+        m_d->layerStyleProjectionPlane.clear();
+        m_d->layerStyle.clear();
+    }
+}
+
 KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    if (compositeOp())
+
+    if (compositeOp()) {
         l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+    }
+
+    if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
+        l << KisDocumentSectionModel::Property(i18n("Layer Style"), koIcon("layer-style-enabled"), koIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+    }
+
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+
     return l;
 }
 
 void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
+
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Inherit Alpha")) {
+            disableAlphaChannel(property.state.toBool());
+        }
+
+        if (property.name == i18n("Layer Style")) {
+            if (m_d->layerStyle) {
+                m_d->layerStyle->setEnabled(property.state.toBool());
+            }
+        }
+    }
 }
 
 void KisLayer::disableAlphaChannel(bool disable)
@@ -479,7 +535,7 @@ KisNode::PositionToFilthy calculatePositionToFilthy(KisNodeSP nodeInQuestion,
 }
 
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
-                           const KisPaintDeviceSP destination,
+                           KisPaintDeviceSP destination,
                            const QRect &requestedRect,
                            KisNodeSP filthyNode,
                            KisNodeSP lastNode) const
@@ -560,9 +616,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             }
             Q_ASSERT(applyRects.isEmpty());
 
-            KisPainter gc2(destination);
-            gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-            gc2.bitBlt(changeRect.topLeft(), tempDevice, changeRect);
+            KisPainter::copyAreaOptimized(changeRect.topLeft(), tempDevice, destination, changeRect);
         }
     }
 
@@ -629,11 +683,19 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
                                         KisPaintDeviceSP projection,
                                         const QRect& rect) const
 {
-    KisPainter gc(projection);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rect.topLeft(), original, rect);
+    KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 }
 
+KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
+{
+    return m_d->layerStyleProjectionPlane ?
+        m_d->layerStyleProjectionPlane : m_d->projectionPlane;
+}
+
+KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
+{
+    return m_d->projectionPlane;
+}
 
 KisPaintDeviceSP KisLayer::projection() const
 {

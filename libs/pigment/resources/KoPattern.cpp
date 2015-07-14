@@ -100,41 +100,13 @@ bool KoPattern::load()
     return result;
 }
 
-bool KoPattern::loadFromDevice(QIODevice *dev)
+bool KoPattern::loadPatFromDevice(QIODevice *dev)
 {
-    QString fileExtension;
-    int index = filename().lastIndexOf('.');
-
-    if (index != -1)
-        fileExtension = filename().mid(index).toLower();
-
-    bool result;
-
-
-    if (fileExtension == ".pat") {
-        QByteArray data = dev->readAll();
-        result = init(data);
-    }
-    else {
-        QImage image;
-        result = image.load(dev, fileExtension.toUpper().toLatin1());
-        setPatternImage(image);
-    }
-
-    return result;
-
+    QByteArray data = dev->readAll();
+    return init(data);
 }
 
-bool KoPattern::save()
-{
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
-}
-
-bool KoPattern::saveToDevice(QIODevice *dev) const
+bool KoPattern::savePatToDevice(QIODevice* dev) const
 {
     // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
     // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
@@ -183,6 +155,56 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
     wrote = dev->write(bytes);
     if (wrote == -1)
         return false;
+
+    return true;
+}
+
+bool KoPattern::loadFromDevice(QIODevice *dev)
+{
+    QString fileExtension;
+    int index = filename().lastIndexOf('.');
+
+    if (index != -1)
+        fileExtension = filename().mid(index + 1).toLower();
+
+    bool result;
+
+    if (fileExtension == "pat") {
+        result = loadPatFromDevice(dev);
+    }
+    else {
+        QImage image;
+        result = image.load(dev, fileExtension.toUpper().toLatin1());
+        setPatternImage(image);
+    }
+
+    return result;
+
+}
+
+bool KoPattern::save()
+{
+    QFile file(filename());
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    bool res = saveToDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KoPattern::saveToDevice(QIODevice *dev) const
+{
+    QString fileExtension;
+    int index = filename().lastIndexOf('.');
+
+    if (index != -1)
+        fileExtension = filename().mid(index + 1).toLower();
+
+    if (fileExtension == "pat") {
+        return savePatToDevice(dev);
+    }
+    else {
+        return m_pattern.save(dev, fileExtension.toUpper().toLatin1());
+    }
 
     return true;
 

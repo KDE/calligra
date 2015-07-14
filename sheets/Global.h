@@ -31,7 +31,6 @@
 #define KSPREAD_GLOBAL_H
 
 #include <kdebug.h>
-#include <QTime>
 
 namespace Calligra
 {

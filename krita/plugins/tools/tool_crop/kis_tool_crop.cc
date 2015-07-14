@@ -52,6 +52,9 @@
 #include <kis_group_layer.h>
 #include <kis_resources_snapshot.h>
 
+#include <kundo2command.h>
+#include <kis_crop_saved_extra_data.h>
+
 
 struct DecorationLine
 {
@@ -135,8 +138,6 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     // load settings from configuration
     setGrowCenter(configGroup.readEntry("growCenter", false));
-    //setForceRatio(configGroup.readEntry("forceRatio", false));
-    setRatio(configGroup.readEntry("defaultRatio", 1.0));
     setAllowGrow(configGroup.readEntry("allowGrow", false));
 
     // Default: thirds decoration
@@ -240,6 +241,41 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
     m_finalRect.moveHandle(KisConstrainedRect::HandleType(m_mouseOnHandleType), drag, m_initialDragRect);
 }
 
+bool KisToolCrop::tryContinueLastCropAction()
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+    const KisCropSavedExtraData *data;
+
+    if ((lastCommand = image()->undoAdapter()->presentCommand()) &&
+        (data = dynamic_cast<const KisCropSavedExtraData*>(lastCommand->extraData()))) {
+
+        bool cropImageConsistent =
+            m_cropType == ImageCropType &&
+            (data->type() == KisCropSavedExtraData::CROP_IMAGE ||
+             data->type() == KisCropSavedExtraData::RESIZE_IMAGE);
+
+        bool cropLayerConsistent =
+            m_cropType == LayerCropType &&
+            data->type() == KisCropSavedExtraData::CROP_LAYER &&
+            currentNode() == data->cropNode();
+
+
+        if (cropImageConsistent || cropLayerConsistent) {
+            image()->undoAdapter()->undoLastCommand();
+            image()->waitForDone();
+
+            m_finalRect.setRectInitial(data->cropRect());
+            m_haveCropSelection = true;
+
+            result = true;
+        }
+    }
+
+    return result;
+}
+
 void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
@@ -252,8 +288,10 @@ void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 
 
     if (!m_haveCropSelection && !haveValidRect) {
-        m_finalRect.setRectInitial(image()->bounds());
-        m_haveCropSelection = true;
+        if (!tryContinueLastCropAction()) {
+            m_finalRect.setRectInitial(image()->bounds());
+            m_haveCropSelection = true;
+        }
     } else if (m_resettingStroke && !haveValidRect) {
         m_lastCanvasUpdateRect = image()->bounds();
         m_haveCropSelection = false;
@@ -367,6 +405,9 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
+
+    m_finalRect.setCropRect(image()->bounds());
+
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)
@@ -543,6 +584,7 @@ bool KisToolCrop::forceHeight() const
 void KisToolCrop::setAllowGrow(bool g)
 {
     m_finalRect.setCanGrow(g);
+    m_finalRect.setCropRect(image()->bounds());
     configGroup.writeEntry("allowGrow", g);
 }
 
@@ -573,7 +615,6 @@ void KisToolCrop::setRatio(double ratio)
     }
 
     m_finalRect.setRatio(ratio);
-    configGroup.writeEntry("defaultRatio", ratio);
 }
 
 double KisToolCrop::ratio() const
@@ -584,7 +625,6 @@ double KisToolCrop::ratio() const
 void KisToolCrop::setForceRatio(bool force)
 {
     m_finalRect.setRatioLocked(force);
-    //configGroup.writeEntry("forceRatio", force);
 }
 
 bool KisToolCrop::forceRatio() const

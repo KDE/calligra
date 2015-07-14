@@ -256,6 +256,8 @@ struct KisCubicCurve::Data : public QSharedData {
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
     mutable bool validSpline;
+    mutable QVector<quint8> u8Transfer;
+    mutable bool validU8Transfer;
     mutable QVector<quint16> u16Transfer;
     mutable bool validU16Transfer;
     mutable QVector<qreal> fTransfer;
@@ -404,6 +406,19 @@ void KisCubicCurve::removePoint(int idx)
     d->data->invalidate();
 }
 
+bool KisCubicCurve::isNull() const
+{
+    const QList<QPointF> &points = d->data->points;
+
+    foreach (const QPointF &pt, points) {
+        if (!qFuzzyCompare(pt.x(), pt.y())) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 const QString& KisCubicCurve::name() const
 {
     return d->data->name;
@@ -447,6 +462,13 @@ void KisCubicCurve::fromString(const QString& string)
     }
     setPoints(points);
 }
+
+const QVector<quint8> KisCubicCurve::uint8Transfer(int size) const
+{
+    d->data->updateTransfer<quint8, int>(&d->data->u8Transfer, d->data->validU8Transfer, 0x0, 0xFF, size);
+    return d->data->u8Transfer;
+}
+
 
 const QVector<quint16> KisCubicCurve::uint16Transfer(int size) const
 {

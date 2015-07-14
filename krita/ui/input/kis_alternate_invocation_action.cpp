@@ -43,6 +43,7 @@ KisAlternateInvocationAction::KisAlternateInvocationAction()
     shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
     shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
 
+
     shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
     shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
 
@@ -108,7 +109,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);;
+    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
 
     m_d->savedAction = shortcutToToolAction(shortcut);
 

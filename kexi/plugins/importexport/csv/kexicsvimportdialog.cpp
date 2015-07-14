@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
@@ -55,6 +55,7 @@
 #include <QSplitter>
 #include <QTreeView>
 #include <QApplication>
+#include <QStyledItemDelegate>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -96,6 +97,37 @@
 #include <kexi_global.h>
 
 #define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
+
+//! @internal An item delegate for KexiCSVImportDialog's table view
+class KexiCSVImportDialogItemDelegate : public QStyledItemDelegate
+{
+public:
+    KexiCSVImportDialogItemDelegate(QObject *parent = 0);
+
+    virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                                  const QModelIndex &index) const;
+};
+
+KexiCSVImportDialogItemDelegate::KexiCSVImportDialogItemDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+}
+
+QWidget* KexiCSVImportDialogItemDelegate::createEditor(QWidget *parent,
+                                                       const QStyleOptionViewItem &option,
+                                                       const QModelIndex &index) const
+{
+    QStyleOptionViewItem newOption(option);
+    QWidget *editor = QStyledItemDelegate::createEditor(parent, newOption, index);
+    if (editor && index.row() == 0) {
+        QFont f(editor->font());
+        f.setBold(true);
+        editor->setFont(f);
+    }
+    return editor;
+}
+
+// --
 
 //! @internal
 class KexiCSVImportStatic
@@ -223,6 +255,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_adjustRows(true),
         m_startline(0),
         m_textquote(QString(KEXICSV_DEFAULT_FILE_TEXT_QUOTE)[0]),
+        m_commentSymbol(QString(KEXICSV_DEFAULT_COMMENT_START)[0]),
         m_mode(mode),
         m_columnsAdjusted(false),
         m_firstFillTableCall(true),
@@ -243,6 +276,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_partItemForSavedTable(0),
         m_importInProgress(false),
         m_importCancelled(false),
+        m_parseComments(false),
         d(new Private)
 {
     setWindowTitle( mode == File
@@ -324,19 +358,18 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_fpNumberRegExp1 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
     // E notation, e.g. 0.1e2, 0.1e+2, 0.1e-2, 0.1E2, 0.1E+2, 0.1E-2
     m_fpNumberRegExp2 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+[Ee][+-]{0,1}\\d+");
-    QString caption(i18n("Open CSV Data File"));
-
-
     m_loadingProgressDlg = 0;
     if (m_mode == Clipboard) {
         m_infoLbl->setIcon(koIconName("edit-paste"));
     }
-    m_tableView->setSelectionMode(QAbstractItemView::NoSelection);
+    m_tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     connect(m_formatCombo, SIGNAL(activated(int)),
             this, SLOT(formatChanged(int)));
     connect(m_delimiterWidget, SIGNAL(delimiterChanged(QString)),
             this, SLOT(delimiterChanged(QString)));
+    connect(m_commentWidget, SIGNAL(commentSymbolChanged(QString)),
+            this, SLOT(commentSymbolChanged(QString)));
     connect(m_startAtLineSpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(startlineSelected(int)));
     connect(m_comboQuote, SIGNAL(activated(int)),
@@ -582,6 +615,14 @@ void KexiCSVImportDialog::createOptionsPage()
     delimiterLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     glyr->addWidget(delimiterLabel, 0, 0, 1, 1);
 
+    m_commentWidget = new KexiCSVCommentWidget(true, page);
+    glyr->addWidget(m_commentWidget, 1, 4);
+
+    QLabel *commentLabel = new QLabel(i18n("Comment symbol:"), page);
+    commentLabel->setBuddy(m_commentWidget);
+    commentLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    glyr->addWidget(commentLabel, 0, 4);
+
     // Format: number, text...
 //! @todo Object and Currency types
     m_formatCombo = new KComboBox(page);
@@ -639,13 +680,15 @@ void KexiCSVImportDialog::createOptionsPage()
     glyr->addWidget(m_1stRowForFieldNames, 3, 2, 1, 2);
 
     QSpacerItem* spacer_2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred);
-    glyr->addItem(spacer_2, 0, 4, 4, 1);
-    glyr->setColumnStretch(4, 2);
+    glyr->addItem(spacer_2, 0, 5, 4, 1);
+    glyr->setColumnStretch(5, 2);
 
     m_tableView = new QTableView(m_optionsWidget);
     m_table = new KexiCSVImportDialogModel(m_tableView);
     m_table->setObjectName("m_table");
     m_tableView->setModel(m_table);
+    m_tableItemDelegate = new KexiCSVImportDialogItemDelegate(m_tableView);
+    m_tableView->setItemDelegate(m_tableItemDelegate);
     lyr->addWidget(m_tableView);
 
     QSizePolicy spolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -1018,7 +1061,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                                        bool inGUI)
 {
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
-           S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD
+           S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD, S_COMMENT
          } state = S_START;
     field.clear();
     const bool ignoreDups = m_ignoreDuplicates->isChecked();
@@ -1048,6 +1091,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
         }
     }
     const QChar delimiter(m_delimiterWidget->delimiter()[0]);
+    const QChar commentSymbol(m_commentWidget->commentSymbol()[0]);
     m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
     if (m_importingProgressBar) {
         m_elapsedTimer.start();
@@ -1101,7 +1145,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 if ((ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
                 lastCharDelimiter = true;
-            } else if (x == '\n' || x == '\r') {
+            } else if (x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                 if (!inGUI) {
                     //fill remaining empty fields (database wants them explicitly)
                     for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
@@ -1116,6 +1160,11 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 maxColumn = qMax(maxColumn, column);
                 column = 1;
                 m_prevColumnForSetText = 0;
+                if (x == commentSymbol && m_parseComments) {
+                    state = S_COMMENT;
+                    maxColumn -= 1;
+                    break;
+                }
             } else {
                 field += x;
                 state = S_MAYBE_NORMAL_FIELD;
@@ -1152,14 +1201,18 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             if (x == m_textquote) {
                 field += x; //no, this was just escaped quote character
                 state = S_QUOTED_FIELD;
-            } else if (x == delimiter || x == '\n' || x == '\r') {
+            } else if (x == delimiter || x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n' || x == '\r') {
+                if (x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
                     m_prevColumnForSetText = 0;
+                    if (x == commentSymbol && m_parseComments) {
+                        state = S_COMMENT;
+                        break;
+                    }
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -1171,14 +1224,18 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             }
             break;
         case S_END_OF_QUOTED_FIELD :
-            if (x == delimiter || x == '\n' || x == '\r') {
+            if (x == delimiter || x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n' || x == '\r') {
+                if (x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
                     m_prevColumnForSetText = 0;
+                    if (x == commentSymbol && m_parseComments) {
+                        state = S_COMMENT;
+                        break;
+                    }
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -1189,21 +1246,34 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 state = S_END_OF_QUOTED_FIELD;
             }
             break;
+        case S_COMMENT :
+            if (x == '\n' || x == '\r') {
+                state = S_START;
+            }
+            if (lastCharDelimiter) {
+                lastCharDelimiter = false;
+            }
+            break;
         case S_MAYBE_NORMAL_FIELD :
             if (x == m_textquote) {
                 field.clear();
                 state = S_QUOTED_FIELD;
                 break;
             }
+
         case S_NORMAL_FIELD :
-            if (x == delimiter || x == '\n' || x == '\r') {
+            if (x == delimiter || x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n' || x == '\r') {
+                if (x == '\n' || x == '\r' || (x == commentSymbol && m_parseComments)) {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
                     m_prevColumnForSetText = 0;
+                    if (x == commentSymbol && m_parseComments) {
+                        state = S_COMMENT;
+                        break;
+                    }
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -1645,6 +1715,20 @@ void KexiCSVImportDialog::delimiterChanged(const QString& delimiter)
     fillTableLater();
 }
 
+void KexiCSVImportDialog::commentSymbolChanged(const QString& commentSymbol)
+{
+    QString noneString = QString(i18n("None"));
+    if (commentSymbol.compare(noneString) == 0) {
+        m_parseComments = false;
+    } else {
+        m_parseComments = true;
+    }
+    m_columnsAdjusted = false;
+    m_detectDelimiter = false; //selected by hand: do not detect in the future
+    //delayed, otherwise combobox won't be repainted
+    fillTableLater();
+}
+
 void KexiCSVImportDialog::textquoteSelected(int)
 {
     const QString tq(m_comboQuote->textQuote());
@@ -1807,18 +1891,32 @@ void KexiCSVImportDialog::import()
 
         for (uint col = 0; col < numCols; col++) {
             QString fieldCaption(m_table->data(m_table->index(0, col)).toString().simplified());
-            QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
-            if (m_destinationTableSchema->field(fieldName)) {
-                QString fixedFieldName;
-                uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
+            QString fieldName;
+            if (fieldCaption.isEmpty()) {
+                uint i = 0;
                 do {
-                    fixedFieldName = fieldName + "_" + QString::number(i);
-                    if (!m_destinationTableSchema->field(fixedFieldName))
+                    fieldCaption = i18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1);
+                    fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                    if (!m_destinationTableSchema->field(fieldName)) {
                         break;
+                    }
                     i++;
                 } while (true);
-                fieldName = fixedFieldName;
-                fieldCaption += (" " + QString::number(i));
+            }
+            else {
+                fieldName = KexiUtils::stringToIdentifier(fieldCaption);
+                if (m_destinationTableSchema->field(fieldName)) {
+                    QString fixedFieldName;
+                    uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
+                    do {
+                        fixedFieldName = fieldName + "_" + QString::number(i);
+                        if (!m_destinationTableSchema->field(fixedFieldName))
+                            break;
+                        i++;
+                    } while (true);
+                    fieldName = fixedFieldName;
+                    fieldCaption += (" " + QString::number(i));
+                }
             }
             KexiDB::Field::Type detectedType = d->detectedType(col);
 //! @todo what about time and float/double types and different integer subtypes?
@@ -1993,12 +2091,12 @@ void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int state)
 {
     m_adjustRows = true;
-    m_table->setFirstRowForFieldNames(state); 
     if (m_1stRowForFieldNames->isChecked() && m_startline > 0 && m_startline >= (m_startAtLineSpinBox->maximum() - 1)) {
         m_startline--;
     }
     m_columnsAdjusted = false;
     fillTable();
+    m_table->setFirstRowForFieldNames(state);
 }
 
 void KexiCSVImportDialog::optionsButtonClicked()

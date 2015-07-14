@@ -19,6 +19,7 @@
 #define KOABSTRACTGRADIENT_H
 
 #include <QGradient>
+#include <QMetaType>
 
 #include "KoColorSpace.h"
 #include "KoResource.h"
@@ -31,10 +32,11 @@ class KoColor;
  */
 class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource
 {
-
 public:
     explicit KoAbstractGradient(const QString &filename);
     virtual ~KoAbstractGradient();
+
+    virtual KoAbstractGradient* clone() const = 0;
 
     virtual bool load() {
         return false;
@@ -78,9 +80,13 @@ public:
 protected:
     virtual QByteArray generateMD5() const;
 
+    KoAbstractGradient(const KoAbstractGradient &rhs);
+
 private:
     struct Private;
     Private* const d;
 };
+
+Q_DECLARE_METATYPE(KoAbstractGradient*)
 
 #endif // KOABSTRACTGRADIENT_H

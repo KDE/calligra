@@ -486,7 +486,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
-        if (specialModifierActive) {
+        if (specialModifierActive ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleX() / m_d->clickArgs.scaleY();
             m_d->currentArgs.setScaleX(aspectRatio * result.scale);
         }
@@ -529,7 +529,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
-        if (specialModifierActive) {
+        if (specialModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleY() / m_d->clickArgs.scaleX();
             m_d->currentArgs.setScaleY(aspectRatio * result.scale);
         }
@@ -562,7 +562,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         QPointF staticPointInView = m_d->transform.map(staticPoint);
         QPointF movingPointInView = mousePos;
 
-        if (specialModifierActive) {
+        if (specialModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             KisTransformUtils::MatricesPack m(m_d->clickArgs);
             QTransform t = m.finalTransform();
 
@@ -662,7 +662,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
 
     /**
      * The center of the original image should still
-     * stay the the origin of CS
+     * stay the origin of CS
      */
     KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 

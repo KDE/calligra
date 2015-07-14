@@ -29,6 +29,8 @@
 #include "kptxmlloaderobject.h"
 #include "kptdebug.h"
 
+#include <KoXmlReader.h>
+
 #include "KoStore.h"
 #include <KoIcon.h>
 
@@ -2218,7 +2220,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case WPTransmitionTime: result = wpTransmitionTime( n, role ); break;
 
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;
             return result;
     }
     return result;

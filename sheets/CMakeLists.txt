@@ -297,6 +297,7 @@ kde4_add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
+    ${KDE4_KFILE_LIBS}
     ${QT_QTSQL_LIBRARY}
     ${KDE4_THREADWEAVER_LIBS}
 )

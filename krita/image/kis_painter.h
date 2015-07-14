@@ -87,6 +87,22 @@ public:
     virtual ~KisPainter();
 
 public:
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect);
+
+    static void copyAreaOptimizedOldData(const QPoint &dstPt,
+                                         KisPaintDeviceSP src,
+                                         KisPaintDeviceSP dst,
+                                         const QRect &originalSrcRect);
+
+    static void copyAreaOptimized(const QPoint &dstPt,
+                                  KisPaintDeviceSP src,
+                                  KisPaintDeviceSP dst,
+                                  const QRect &originalSrcRect,
+                                  KisSelectionSP selection);
+
     /**
      * Start painting on the specified device. Not undoable.
      */
@@ -512,7 +528,12 @@ public:
 
     /**
      * Draw the path using the Pen
+     *
+     * if \p requestedRect is null, the entire path is painted
      */
+    void drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect);
+
+    // convenience overload
     void drawPainterPath(const QPainterPath& path, const QPen& pen);
 
     /**

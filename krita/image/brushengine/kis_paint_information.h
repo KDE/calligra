@@ -75,16 +75,25 @@ public:
 
     /**
      * Create a new KisPaintInformation object.
-
      */
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation,
+                        qreal tangentialPressure,
+                        qreal perspective,
+                        qreal time,
+                        qreal speed);
+
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation);
+
     KisPaintInformation(const QPointF & pos = QPointF(),
-                        qreal pressure = PRESSURE_DEFAULT,
-                        qreal xTilt = 0.0,
-                        qreal yTilt = 0.0,
-                        qreal rotation = 0.0,
-                        qreal tangentialPressure = 0.0,
-                        qreal perspective = 1.0,
-                        qreal time = 0.0);
+                        qreal pressure = PRESSURE_DEFAULT);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -119,10 +128,13 @@ public:
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
     qreal yTilt() const;
 
+    /// XXX !!! :-| Please add dox!
     void overrideDrawingAngle(qreal angle);
 
+    /// XXX !!! :-| Please add dox!
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
+    /// XXX !!! :-| Please add dox!
     DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**
@@ -195,7 +207,8 @@ public:
             qreal xTilt = 0.0, qreal yTilt = 0.0,
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
-            qreal perspective = 1.0);
+            qreal perspective = 1.0,
+            qreal speed = 0.0);
 
     void toXML(QDomDocument&, QDomElement&) const;
 

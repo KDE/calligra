@@ -1,4 +1,20 @@
-
+/*
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 // Qt
 #include <QGridLayout>
@@ -28,8 +44,10 @@
 #include <KoFileDialog.h>
 #include <kfiledialog.h> // For kisurlrequester...
 
+const static int DELAY = 250;
+
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command)
-    :   KisConfigWidget(0, 0, 250),
+    :   KisConfigWidget(0, 0, DELAY),
         m_commandDefinition(command)
 {
     createSettingsWidget(CreateRole);
@@ -63,7 +81,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     for (int i = 0; i < parameters.size();i++)
     {
         Parameter * p = parameters.at(i);
-        dbgPlugins << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << qPrintable(p->toString());
+        dbgPlugins << "Processing: " << qPrintable(p->typeName()) << " " << qPrintable(p->toString());
         switch (p->m_type)
         {
             case Parameter::INT_P:
@@ -266,7 +284,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 #if KDE_IS_VERSION(4,5,0)
                     colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
 #endif
-                    m_widgetToParameterIndexMapper[colorParam] = i;
+                    m_widgetToParameterIndexMapper[colorButton] = i;
                     mapParameterWidget(colorParam, colorButton);
 
                     connect(colorButton, SIGNAL(changed(QColor)), this, SIGNAL(sigConfigurationItemChanged()));
@@ -333,7 +351,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 {
                     urlRequester = new KisUrlRequester;
                     urlRequester->setMode(KoFileDialog::OpenFile);
-                    urlRequester->setMimeTypeFilters(QStringList(i18n("All Files")));
+                    urlRequester->setNameFilter(i18n("All files (*)"));
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);
@@ -444,7 +462,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             }
 
             default:{
-                dbgPlugins << "IGNORING : " << qPrintable(PARAMETER_NAMES[p->m_type]);
+                dbgPlugins << "IGNORING : " << qPrintable(p->typeName());
                 break;
             }
 
@@ -581,19 +599,21 @@ void KisGmicSettingsWidget::setTextValue()
 
 
 
-Parameter * KisGmicSettingsWidget::parameter(QObject* widget)
+Parameter * KisGmicSettingsWidget::parameter(QObject * widget)
 {
-    if (!widget)
+    QWidget *q = qobject_cast<QWidget*>(widget);
+    if (!q)
     {
         return 0;
     }
 
-    if (!m_widgetToParameterIndexMapper.contains(widget))
+    if (!m_widgetToParameterIndexMapper.contains(q))
     {
+        dbgPlugins << "Widget-to-parameter map does not contain " << q;
         return 0;
     }
 
-    int index = m_widgetToParameterIndexMapper[widget];
+    int index = m_widgetToParameterIndexMapper[q];
     Parameter * p = m_commandDefinition->m_parameters.at(index);
     return p;
 }

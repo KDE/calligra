@@ -13,11 +13,13 @@ endif()
 # turn off O2 and Ob1 or Ob2 for g'mic
 if (MSVC)
     # RelWithDebInfo
-    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Oi /Ot /Oy /Gs /GF /Gy")
+    string(REPLACE "/O2" "/Od" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
     string(REPLACE "/Ob1" "/Ob0" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
 
     #Release
-    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Oi /Ot /Oy /Gs /GF /Gy")
+    string(REPLACE "/O2" "/Od"  CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
     string(REPLACE "/Ob2" "/Ob0" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
@@ -32,6 +34,7 @@ set(gmic_headers_SRCS
 )
 
 # Mandatory flags
+add_definitions(-Dgmic_gimp)
 add_definitions(-Dgmic_build)
 add_definitions(-Dgmic_float_only)
 add_definitions(-Dcimg_use_vt100 )
@@ -151,20 +154,22 @@ set(kritagmic_PART_SRCS
     kis_export_gmic_processing_visitor.cpp
     kis_gmic_applicator.cpp
     kis_gmic_command.cpp
+    kis_gmic_data.cpp
     kis_gmic_synchronize_layers_command.cpp
+    kis_gmic_synchronize_image_size_command.cpp
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_progress_manager.cpp
     kis_gmic_small_applicator.cpp
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
-target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARIES})
+target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${ZLIB_LIBRARIES})
 
 # gmicparser for debugging purposes
 
 set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
+target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
@@ -174,7 +179,11 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  ${GMIC_SOURCE_DIR}/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
+install( FILES
+  #${GMIC_SOURCE_DIR}/gmic_def.gmic
+  ${GMIC_SOURCE_DIR}/update1610.gmic
+  gmic_def.gmic.blacklist
+DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)

@@ -36,6 +36,8 @@
 #include <kexiutils/utils.h>
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
+#define KEXICSV_OTHER_NUMBER_OF_SIGNS 2
+#define KEXICSV_OTHER_commentSymbol_INDEX 1
 
 #ifdef Q_CC_MSVC
 Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
@@ -65,6 +67,19 @@ public:
     KLineEdit* delimiterEdit;
 };
 
+class KexiCSVCommentWidget::Private
+{
+public:
+    Private() : availablecommentSymbols(KEXICSV_OTHER_NUMBER_OF_SIGNS) {
+        availablecommentSymbols[0] = KEXICSV_DEFAULT_COMMENT_START;
+        availablecommentSymbols[1] = KEXICSV_DEFAULT_HASHSIGN;
+    }
+    QString commentSymbol;
+    QVector<QString> availablecommentSymbols;
+    KComboBox* combo;
+    KLineEdit* commentSymbolEdit;
+};
+
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent)
         : QWidget(parent)
         , d(new Private())
@@ -88,6 +103,7 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     d->delimiterEdit->setObjectName("d->delimiterEdit");
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));
     d->delimiterEdit->setMaxLength(1);
+    d->delimiterEdit->setVisible(false);
     lyr->addWidget(d->delimiterEdit);
     if (!lineEditOnBottom)
         lyr->addStretch(2);
@@ -99,6 +115,9 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
             this, SLOT(slotDelimiterLineEditReturnPressed()));
     connect(d->delimiterEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotDelimiterLineEditTextChanged(QString)));
+    slotDelimiterChangedInternal(KEXICSV_DEFAULT_FILE_DELIMITER_INDEX); //this will init d->delimiter
+    connect(d->combo, SIGNAL(activated(int)),
+            this, SLOT(slotDelimiterChanged(int)));
 }
 
 KexiCSVDelimiterWidget::~KexiCSVDelimiterWidget()
@@ -165,6 +184,64 @@ void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 }
 
 //----------------------------------------------------
+
+KexiCSVCommentWidget::KexiCSVCommentWidget(bool lineEditOnBottom, QWidget *parent) : QWidget(parent)
+  , d(new Private())
+{
+    QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
+    setLayout(lyr);
+    KexiUtils::setMargins(lyr, 0);
+    lyr->setSpacing(KDialog::spacingHint());
+
+    d->combo = new KComboBox(this);
+    d->combo->setObjectName("KexiCSVcommentSymbolComboBox");
+    d->combo->addItem(i18n("None"));
+    d->combo->addItem(i18n("Hashtag \"#\""));
+    lyr->addWidget(d->combo);
+
+    setFocusProxy(d->combo);
+    const int numberOfNonePosition = 0;
+    slotcommentSymbolChangedInternal(numberOfNonePosition);
+    connect(d->combo, SIGNAL(activated(int)),
+            this, SLOT(slotcommentSymbolChanged(int)));
+}
+
+KexiCSVCommentWidget::~KexiCSVCommentWidget()
+{
+    delete d;
+}
+
+void KexiCSVCommentWidget::slotcommentSymbolChanged(int index)
+{
+    slotcommentSymbolChangedInternal(index);
+}
+
+void KexiCSVCommentWidget::slotcommentSymbolChangedInternal(int index)
+{
+    bool changed = false;
+    changed = d->commentSymbol != d->availablecommentSymbols[index];
+    d->commentSymbol = d->availablecommentSymbols[index];
+    if (changed)
+      emit commentSymbolChanged(d->commentSymbol);
+}
+
+QString KexiCSVCommentWidget::commentSymbol() const {
+  return d->commentSymbol;
+}
+
+void KexiCSVCommentWidget::setcommentSymbol(const QString& commentSymbol)
+{
+    QVector<QString>::ConstIterator it = d->availablecommentSymbols.constBegin();
+    int index = 0;
+    for (; it != d->availablecommentSymbols.constEnd(); ++it, index++) {
+        if (*it == commentSymbol) {
+            d->combo->setCurrentIndex(index);
+            slotcommentSymbolChangedInternal(index);
+            return;
+        }
+    }
+}
+
 
 KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
         : KComboBox(parent)

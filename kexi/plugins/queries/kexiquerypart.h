@@ -94,6 +94,9 @@ public:
         bool m_queryChangedInPreviousView;
     };
 
+    //! Implemented for KexiPart::Part.
+    virtual KexiDB::QuerySchema* currentQuery(KexiView* view);
+
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
 

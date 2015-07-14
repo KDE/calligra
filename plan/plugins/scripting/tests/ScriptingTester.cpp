@@ -63,7 +63,7 @@ void ScriptingTester::initTestCase()
         Kross::Manager::self().addObject( m_module, "Plan" );
         Kross::Manager::self().addObject( m_result, "TestResult" );
 
-        QStringList scripts = initTestList();;
+        QStringList scripts = initTestList();
         for ( int i = 0; i < scripts.count(); ++i ) {
             //Create a new Kross::Action instance.
             Kross::Action* action = new Kross::Action(0, QString( "%1" ).arg( scripts.at( i ) ) );

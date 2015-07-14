@@ -35,6 +35,8 @@
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
+#include "kis_psd_layer_style.h"
+
 
 struct KisGroupLayer::Private
 {
@@ -42,12 +44,15 @@ public:
     Private()
         : paintDevice(0)
         , x(0)
-        , y(0) {
+        , y(0)
+        , passThroughMode(false)
+    {
     }
 
     KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
+    bool passThroughMode;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
@@ -218,7 +223,8 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
          child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
          child->compositeOpId() == COMPOSITE_COPY) &&
         child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+        *child->projection()->colorSpace() == *colorSpace() &&
+        !child->layerStyle()) {
 
         quint8 defaultOpacity =
             m_d->paintDevice->colorSpace()->opacityU8(
@@ -263,6 +269,35 @@ KoColor KisGroupLayer::defaultProjectionColor() const
     return color;
 }
 
+bool KisGroupLayer::passThroughMode() const
+{
+    return m_d->passThroughMode;
+}
+
+void KisGroupLayer::setPassThroughMode(bool value)
+{
+    m_d->passThroughMode = value;
+}
+
+KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
+{
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    // XXX: get right icons
+    l << KisDocumentSectionModel::Property(i18n("Pass Through"), koIcon("passthrough-enabled"), koIcon("passthrough-disabled"), passThroughMode());
+    return l;
+}
+
+void KisGroupLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+{
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Pass Through")) {
+            setPassThroughMode(property.state.toBool());
+        }
+    }
+
+    KisLayer::setSectionModelProperties(properties);
+}
+
 bool KisGroupLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -301,6 +336,48 @@ void KisGroupLayer::setY(qint32 y)
         m_d->paintDevice->setY(m_d->paintDevice->y() + delta);
         Q_ASSERT(m_d->paintDevice->y() == m_d->y);
     }
+}
+
+struct ExtentPolicy
+{
+    inline QRect operator() (const KisNode *node) {
+        return node->extent();
+    }
+};
+
+struct ExactBoundsPolicy
+{
+    inline QRect operator() (const KisNode *node) {
+        return node->exactBounds();
+    }
+};
+
+template <class MetricPolicy>
+QRect collectRects(const KisNode *node, MetricPolicy policy)
+{
+    QRect accumulator;
+
+    const KisNode *child = node->firstChild();
+    while (child) {
+        accumulator |= policy(child);
+        child = child->nextSibling();
+    }
+
+    return accumulator;
+}
+
+QRect KisGroupLayer::extent() const
+{
+    return m_d->passThroughMode ?
+        collectRects(this, ExtentPolicy()) :
+        KisLayer::extent();
+}
+
+QRect KisGroupLayer::exactBounds() const
+{
+    return m_d->passThroughMode ?
+        collectRects(this, ExactBoundsPolicy()) :
+        KisLayer::exactBounds();
 }
 
 #include "kis_group_layer.moc"

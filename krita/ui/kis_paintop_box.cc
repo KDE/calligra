@@ -52,7 +52,7 @@
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_config_widget.h>
 #include <kis_action.h>
 
 #include "kis_canvas2.h"
@@ -65,7 +65,9 @@
 #include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"
+#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
+#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
@@ -77,19 +79,20 @@
 
 
 
-typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
     : QWidget(parent)
     , m_resourceProvider(view->resourceProvider())
     , m_optionWidget(0)
-    , m_settingsWidget(0)
-    , m_presetWidget(0)
-    , m_brushChooser(0)
+    , m_toolOptionsPopupButton(0)
+    , m_brushEditorPopupButton(0)
+    , m_presetSelectorPopupButton(0)
+    , m_toolOptionsPopup(0)
     , m_viewManager(view)
     , m_previousNode(0)
-    , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
+    , m_currTabletToolID(KoInputDevice::invalid())
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
@@ -108,18 +111,28 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    m_settingsWidget = new KisPopupButton(this);
-    m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
-    m_settingsWidget->setToolTip(i18n("Edit brush settings"));
-    m_settingsWidget->setFixedSize(32, 32);
+    KConfigGroup grp = KGlobal::config()->group("krita").group("Toolbar BrushesAndStuff");
+    int iconsize = grp.readEntry("IconSize", 32);
 
-    m_presetWidget = new KisPopupButton(this);
-    m_presetWidget->setIcon(koIcon("paintop_settings_01"));
-    m_presetWidget->setToolTip(i18n("Choose brush preset"));
-    m_presetWidget->setFixedSize(32, 32);
+    if (!cfg.toolOptionsInDocker()) {
+        m_toolOptionsPopupButton = new KisPopupButton(this);
+        m_toolOptionsPopupButton->setIcon(koIcon("configure"));
+        m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
+        m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
+    }
+
+    m_brushEditorPopupButton = new KisPopupButton(this);
+    m_brushEditorPopupButton->setIcon(koIcon("paintop_settings_02"));
+    m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
+    m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
+
+    m_presetSelectorPopupButton = new KisPopupButton(this);
+    m_presetSelectorPopupButton->setIcon(koIcon("paintop_settings_01"));
+    m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
+    m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
 
     m_eraseModeButton = new QToolButton(this);
-    m_eraseModeButton->setFixedSize(32, 32);
+    m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
 
     KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
@@ -133,7 +146,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     eraserBrushSize = 0; // brush size changed when using erase mode
 
     m_reloadButton = new QToolButton(this);
-    m_reloadButton->setFixedSize(32, 32);
+    m_reloadButton->setFixedSize(iconsize, iconsize);
     m_reloadButton->setCheckable(true);
 
     KisAction* reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
@@ -142,9 +155,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setDefaultAction(reloadAction);
     m_viewManager->actionCollection()->addAction("reload_preset_action", reloadAction);
 
-
     m_alphaLockButton = new QToolButton(this);
-    m_alphaLockButton->setFixedSize(32, 32);
+    m_alphaLockButton->setFixedSize(iconsize, iconsize);
     m_alphaLockButton->setCheckable(true);
     KisAction* alphaLockAction = new KisAction(i18n("Preserve Alpha"), m_alphaLockButton);
     alphaLockAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -153,62 +165,86 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton->setDefaultAction(alphaLockAction);
     m_viewManager->actionCollection()->addAction("preserve_alpha", alphaLockAction);
 
-    hMirrorButton = new QToolButton(this);
-    hMirrorButton->setFixedSize(32, 32);
-    hMirrorButton->setCheckable(true);
+    m_hMirrorButton = new QToolButton(this);
+    m_hMirrorButton->setFixedSize(iconsize, iconsize);
+    m_hMirrorButton->setCheckable(true);
 
-    m_hMirrorAction = new KisAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    m_hMirrorAction = new KisAction(i18n("Set horizontal mirror mode"), m_hMirrorButton);
     m_hMirrorAction->setIcon(themedIcon("symmetry-horizontal"));
     m_hMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_hMirrorAction->setCheckable(true);
-    hMirrorButton->setDefaultAction(m_hMirrorAction);
+    m_hMirrorButton->setDefaultAction(m_hMirrorAction);
     m_viewManager->actionCollection()->addAction("hmirror_action", m_hMirrorAction);
 
-    vMirrorButton = new QToolButton(this);
-    vMirrorButton->setFixedSize(32, 32);
-    vMirrorButton->setCheckable(true);
+    m_vMirrorButton = new QToolButton(this);
+    m_vMirrorButton->setFixedSize(iconsize, iconsize);
+    m_vMirrorButton->setCheckable(true);
 
-    m_vMirrorAction = new KisAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    m_vMirrorAction = new KisAction(i18n("Set vertical mirror mode"), m_vMirrorButton);
     m_vMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_vMirrorAction->setIcon(themedIcon("symmetry-vertical"));
     m_vMirrorAction->setCheckable(true);
-    vMirrorButton->setDefaultAction(m_vMirrorAction);
+    m_vMirrorButton->setDefaultAction(m_vMirrorAction);
     m_viewManager->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
 
+    const bool sliderLabels = cfg.sliderLabels();
+    int sliderWidth;
+
+    if (sliderLabels) {
+        sliderWidth = 150 * logicalDpiX() / 96;
+    }
+    else {
+        sliderWidth = 120 * logicalDpiX() / 96;
+    }
 
     for (int i = 0; i < 3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
-        KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
-        KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
-        KisDoubleSliderSpinBox* slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size"   , i18n("Size:"));
+        KisDoubleSliderSpinBox* slOpacity;
+        KisDoubleSliderSpinBox* slFlow;
+        KisDoubleSliderSpinBox* slSize;
+        if (sliderLabels) {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slOpacity->setPrefix(QString("%1  ").arg(i18n("Opacity:")));
+            slFlow->setPrefix(QString("%1  ").arg(i18n("Flow:")));
+            slSize->setPrefix(QString("%1  ").arg(i18n("Size:")));
+        }
+        else {
+            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
+            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
+            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+        }
 
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
         slOpacity->setSingleStep(0.05);
-        slOpacity->setMinimumWidth(120);
+        slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
+        slOpacity->setFixedHeight(iconsize);
+        slOpacity->setBlockUpdateSignalOnDrag(true);
 
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(120);
+        slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
+        slFlow->setFixedHeight(iconsize);
+        slFlow->setBlockUpdateSignalOnDrag(true);
 
         slSize->setRange(0, 1000, 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setMinimumWidth(120);
         slSize->setSuffix(" px");
+        slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
+        slSize->setFixedHeight(iconsize);
+        slSize->setBlockUpdateSignalOnDrag(true);
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
 
-
-    QLabel* labelMode = new QLabel(i18n("Mode: "), this);
-    labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-
     m_cmbCompositeOp = new KisCompositeOpComboBox();
-    m_cmbCompositeOp->setFixedHeight(30);
+    m_cmbCompositeOp->setFixedHeight(iconsize);
     foreach(KAction * a, m_cmbCompositeOp->blendmodeActions()) {
         m_viewManager->actionCollection()->addAction(a->text(), a);
     }
@@ -216,27 +252,32 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
-    m_workspaceWidget->setFixedSize(32, 32);
+    m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
+    baseLayout->setSpacing(4);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_layout = new QHBoxLayout(m_paintopWidget);
-    m_layout->addWidget(m_settingsWidget);
-    m_layout->addWidget(m_presetWidget);
+    if (!cfg.toolOptionsInDocker()) {
+        m_layout->addWidget(m_toolOptionsPopupButton);
+    }
+    m_layout->addWidget(m_brushEditorPopupButton);
+    m_layout->addWidget(m_presetSelectorPopupButton);
+    m_layout->setSpacing(4);
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget* compositeActions = new QWidget(this);
     QHBoxLayout* compositeLayout = new QHBoxLayout(compositeActions);
-    compositeLayout->addWidget(labelMode);
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
 
-    compositeLayout->setContentsMargins(8, 0, 0, 0);
+    compositeLayout->setSpacing(4);
+    compositeLayout->setContentsMargins(0, 0, 0, 0);
 
     compositeLayout->addWidget(m_reloadButton);
 
@@ -276,10 +317,28 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
+    if (!cfg.toolOptionsInDocker()) {
+        action = new KAction(i18n("Show Tool Options"), this);
+        view->actionCollection()->addAction("show_tool_options", action);
+        action->setShortcut(Qt::Key_Backslash);
+        connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
+    }
+
+    action = new KAction(i18n("Show Brush Editor"), this);
+    view->actionCollection()->addAction("show_brush_editor", action);
+    action->setShortcut(Qt::Key_F5);
+    connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
+
+    action = new KAction(i18n("Show Brush Presets"), this);
+    view->actionCollection()->addAction("show_brush_presets", action);
+    action->setShortcut(Qt::Key_F6);
+    connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
+
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
-    mirrorLayout->addWidget(hMirrorButton);
-    mirrorLayout->addWidget(vMirrorButton);
+    mirrorLayout->addWidget(m_hMirrorButton);
+    mirrorLayout->addWidget(m_vMirrorButton);
+    mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
     action = new KAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);
@@ -289,13 +348,19 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     view->actionCollection()->addAction("workspaces", action);
     action->setDefaultWidget(m_workspaceWidget);
 
+    if (!cfg.toolOptionsInDocker()) {
+        m_toolOptionsPopup = new KisToolOptionsPopup();
+        m_toolOptionsPopupButton->setPopupWidget(m_toolOptionsPopup);
+        m_toolOptionsPopup->switchDetached(false);
+    }
+
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
-    m_settingsWidget->setPopupWidget(m_presetsPopup);
+    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->switchDetached(false);
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setFixedSize(500, 600);
-    m_presetWidget->setPopupWidget(m_presetsChooserPopup);
+    m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -357,10 +422,22 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
 
+    slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 }
 
 KisPaintopBox::~KisPaintopBox()
 {
+    KisConfig cfg;
+    QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if ((iter.key().pointer) == QTabletEvent::Eraser) {
+            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+        else {
+            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+    }
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
@@ -375,6 +452,13 @@ void KisPaintopBox::restoreResource(KoResource* resource)
 
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
+    }
+}
+
+void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+{
+    if (m_toolOptionsPopup) {
+        m_toolOptionsPopup->newOptionWidgets(optionWidgetList);
     }
 }
 
@@ -440,7 +524,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     if (!m_paintopOptionWidgets.contains(paintop))
-        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
+        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 
@@ -452,7 +536,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
 
-    Q_ASSERT(m_optionWidget && m_presetWidget);
+    Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
     connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
     connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
     connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
@@ -462,7 +546,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
     QString pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
-    m_settingsWidget->setIcon(QIcon(pixFilename));
+    m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 
@@ -552,8 +636,8 @@ void KisPaintopBox::setWidgetState(int flags)
     }
 
     if (flags & (ENABLE_PRESETS | DISABLE_PRESETS)) {
-        m_presetWidget->setEnabled(flags & ENABLE_PRESETS);
-        m_settingsWidget->setEnabled(flags & ENABLE_PRESETS);
+        m_presetSelectorPopupButton->setEnabled(flags & ENABLE_PRESETS);
+        m_brushEditorPopupButton->setEnabled(flags & ENABLE_PRESETS);
     }
 
     for (int i = 0; i < 3; ++i) {
@@ -591,13 +675,23 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        if (m_resourceProvider->currentPreset()) {
-            KisPaintOpPresetSP preset =
-                m_resourceProvider->currentPreset()->clone();
-            m_resourceProvider->setPaintOpPreset(preset);
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KisPaintOpPresetSP preset;
+        if (inputDevice.pointer() == QTabletEvent::Eraser) {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_circle"));
+        }
+        else {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+        }
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+        if (preset) {
             setCurrentPaintop(preset->paintOp(), preset);
         }
-    } else {
+    }
+    else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
     }
 
@@ -796,13 +890,13 @@ void KisPaintopBox::slotSetCompositeMode(int index)
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorHorizontal(value);
-    toggleHighlightedButton(hMirrorButton);
+    toggleHighlightedButton(m_hMirrorButton);
 }
 
 void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorVertical(value);
-    toggleHighlightedButton(vMirrorButton);
+    toggleHighlightedButton(m_vMirrorButton);
 }
 
 void KisPaintopBox::sliderChanged(int n)

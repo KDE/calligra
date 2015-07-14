@@ -694,7 +694,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
     //center berechnen
     QPointF center(startpoint - QPointF(cossa * rx, -sinsa * ry));
 
-    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;;
+    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;
 
     for (int part = 0; part < parts; ++part) {
         // start tangent
@@ -789,7 +789,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
     (*lastPoint)->unsetProperty(KoPathPoint::CloseSubpath);
 }
 
-QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
+QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
 {
     QList<KoPathPoint*> result;
 
@@ -808,7 +808,7 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
     return result;
 }
 
-QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r)
+QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r) const
 {
     QList<KoPathSegment> segments;
     int subpathCount = m_subpaths.count();

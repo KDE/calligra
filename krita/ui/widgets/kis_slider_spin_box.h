@@ -45,9 +45,21 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(qreal dbl);
+
+    /**
+     * If set to block, it informs inheriting classes that they shouldn't emit signals
+     * if the update comes from a mouse dragging the slider.
+     * Set this to true when dragging the slider and updates during the drag are not needed.
+     */
+    void setBlockUpdateSignalOnDrag(bool block);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
 
 protected:
     virtual void paintEvent(QPaintEvent* e);
@@ -59,9 +71,6 @@ protected:
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
 
@@ -72,13 +81,27 @@ protected:
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
     virtual QString valueString() const = 0;
-    virtual void setInternalValue(int value) = 0;
+    /**
+     * Sets the slider internal value. Inheriting classes should respect blockUpdateSignal
+     * so that, in specific cases, we have a performance improvement. See setIgnoreMouseMoveEvents.
+     */
+    virtual void setInternalValue(int value, bool blockUpdateSignal) = 0;
 
 protected Q_SLOTS:
     void contextMenuEvent(QContextMenuEvent * event);
     void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
+
+    // QWidget interface
+protected:
+    virtual void changeEvent(QEvent *e);
+    void paint(QPainter& painter);
+    void paintPlastique(QPainter& painter);
+    void paintBreeze(QPainter& painter);
+
+private:
+    void setInternalValue(int value);
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
@@ -103,15 +126,17 @@ public:
     ///Get the value, don't use value()
     int value();
 
-    ///Set the value, don't use setValue()
-    void setValue(int value);
-
     void setSingleStep(int value);
     void setPageStep(int value);
 
+public Q_SLOTS:
+
+    ///Set the value, don't use setValue()
+    void setValue(int value);
+
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
 Q_SIGNALS:
     void valueChanged(int value);
 };
@@ -139,7 +164,7 @@ public:
     void setSingleStep(qreal value);
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
 Q_SIGNALS:
     void valueChanged(qreal value);
 };

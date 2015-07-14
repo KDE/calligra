@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
+#include <KoResourceServerProvider.h>
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
 
@@ -39,7 +40,7 @@ FilterResourceServerProvider::FilterResourceServerProvider()
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_effects", "data", "karbon/effects/");
 
-    m_filterEffectServer = new KoResourceServer<FilterEffectResource>("ko_effects", "*.svg");
+    m_filterEffectServer = new KoResourceServerSimpleConstruction<FilterEffectResource>("ko_effects", "*.svg");
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
         QDir().mkpath(m_filterEffectServer->saveLocation());
     }

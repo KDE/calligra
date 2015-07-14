@@ -100,8 +100,10 @@ public:
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
-     \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], const KAboutData &aboutData);
+     \return result 1 on error and 0 on success (the result can be used as a result of kdemain())
+     @note Yes, the data referred to by argc and argv must stay valid for the entire lifetime
+           of the QApplication object so int& is used. */
+    static int create(int &argc, char *argv[], const KAboutData &aboutData);
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project();
@@ -221,10 +223,14 @@ public Q_SLOTS:
                                 SaveObjectOptions options = 0);
 
     /*! Implemented for KexiMainWindowIface. */
+    virtual KexiWindow *openedWindowFor(int identifier);
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
     /*! Implemented for KexiMainWindowIface */
     virtual QList<QVariant> currentParametersForQuery(int queryId) const;
+
+    /*! Implemented for KexiMainWindowIface. */
+    virtual KexiDB::QuerySchema *unsavedQuery(int queryId);
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
@@ -430,6 +436,9 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
+    //! Activates design tab when switching to design view, according to \a partClass.
+    void activateDesignTab(const QString &partClass);
+
 protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);
 
@@ -579,6 +588,16 @@ protected Q_SLOTS:
 
     //! Shows "copy special as data table" dialog for \a item.
     tristate copyItemToClipboardAsDataTable(KexiPart::Item* item);
+
+    bool checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QString, QString> *args);
+
+    /*! Shows a question message
+     * "Design of query %1 that you want to export data from is changed and has not yet been saved.
+     * Do you want to use data from the changed query for exporting or from its original (saved) version?"
+    \return true if the user picked the first option,
+     * false if the user picked the second option and cancelled value if user cancelled the export.
+     */
+    tristate askOnExportingChangedQuery(KexiPart::Item* item) const;
 
     //! Shows "print" dialog for \a item.
     //! \return true on success.

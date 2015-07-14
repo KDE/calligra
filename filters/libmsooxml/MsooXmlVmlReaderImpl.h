@@ -308,7 +308,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //automatic ordering in case of negative numbers temporary.
     if (!z_index.isEmpty() && z_index != "auto") {
         bool ok;
-        const int n = z_index.toInt(&ok);;
+        const int n = z_index.toInt(&ok);
         if (!ok) {
             kDebug() << "error converting" << z_index << "to int (attribute z-index)";
         }
@@ -1691,7 +1691,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     TRY_READ_ATTR_WITH_NS(r, id)
     if (!r_id.isEmpty()) {
         const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
-        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
         KoFilter::ConversionStatus status = m_context->import->copyFile(sourceName, m_currentVMLProperties.imagedataPath, false);
         if (status == KoFilter::OK) {
             addManifestEntryForFile(m_currentVMLProperties.imagedataPath);
@@ -1757,7 +1757,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
         addManifestEntryForFile(destinationName);
         addManifestEntryForPicturesDir();
@@ -2630,7 +2630,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 
     kDebug() << "imagedata:" << imagedata;
     if (!imagedata.isEmpty()) {
-        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
+        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);
         KoFilter::ConversionStatus status = m_context->import->copyFile(imagedata, m_currentVMLProperties.imagedataPath, false);
         if (status == KoFilter::OK) {
             addManifestEntryForFile(m_currentVMLProperties.imagedataPath);

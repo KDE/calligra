@@ -961,7 +961,7 @@ void ImportWizard::next()
 //                return;
 //        }
     } else if (currentPage() == d->importTypePageItem) {
-        if (!fileBasedSrcSelected()) {
+        if (!fileBasedDstSelected()) {
             // make sure we have password if needed
             tristate passwordNeeded = false;
             KexiDB::ConnectionData* condata = d->dstConn->selectedConnectionData();

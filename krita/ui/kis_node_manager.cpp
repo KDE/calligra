@@ -175,6 +175,7 @@ KisNodeManager::KisNodeManager(KisViewManager *view)
     m_d->mergeSelectedLayers = new KisAction(i18n("&Merge Selected Layers"), this);
     m_d->mergeSelectedLayers->setActivationFlags(KisAction::ACTIVE_LAYER);
     view->actionManager()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    m_d->mergeSelectedLayers->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_E));
     connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }
@@ -191,7 +192,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
     m_d->layerManager->setView(imageView);
 
     if (m_d->imageView) {
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
         m_d->imageView->image()->disconnect(this);
@@ -200,7 +201,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
     m_d->imageView = imageView;
 
     if (m_d->imageView) {
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
@@ -287,8 +288,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
                          "KisPaintLayer", koIcon("document-new"),
                          Qt::Key_Insert);
 
-    NEW_LAYER_ACTION("add_new_group_layer", i18n("&Group Layer"),
-                     "KisGroupLayer", koIcon("folder-new"));
+    NEW_LAYER_ACTION_KEY("add_new_group_layer", i18n("&Group Layer"),
+                     "KisGroupLayer", koIcon("folder-new"),
+                     Qt::ControlModifier + Qt::Key_G);
 
     NEW_LAYER_ACTION("add_new_clone_layer", i18n("&Clone Layer"),
                      "KisCloneLayer", koIcon("edit-copy"));
@@ -447,6 +449,8 @@ void KisNodeManager::toggleIsolateMode(bool checked)
 
     if (checked) {
         KisNodeSP activeNode = this->activeNode();
+        // Transform masks don't have pixel data...
+        if (activeNode->inherits("KisTransformMask")) return;
         KIS_ASSERT_RECOVER_RETURN(activeNode);
 
         image->startIsolatedMode(activeNode);

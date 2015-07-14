@@ -20,6 +20,8 @@
 
 #include "kis_dlg_filter.h"
 
+#include <KStandardDirs>
+#include <QPushButton>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_filter_mask.h>
@@ -67,6 +69,13 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     d->uiFilterDialog.pushButtonCreateMaskEffect->show();
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
 
+    d->uiFilterDialog.filterGalleryToggle->setChecked(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
+    d->uiFilterDialog.filterGalleryToggle->setIcon(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/sidebaricon.png")));
+    d->uiFilterDialog.filterGalleryToggle->setMaximumWidth(d->uiFilterDialog.filterGalleryToggle->height());
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(sigFilterGalleryToggled(bool)), d->uiFilterDialog.filterGalleryToggle, SLOT(setChecked(bool)));
+    connect(d->uiFilterDialog.filterGalleryToggle, SIGNAL(toggled(bool)), d->uiFilterDialog.filterSelection, SLOT(showFilterGallery(bool)));
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(sigSizeChanged()), this, SLOT(slotFilterWidgetSizeChanged()));
+
     if (node->inherits("KisMask")) {
         d->uiFilterDialog.pushButtonCreateMaskEffect->setVisible(false);
     }
@@ -75,7 +84,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
-    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
+    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(toggled(bool)), SLOT(enablePreviewToggled(bool)));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
 
@@ -84,6 +93,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
+
 }
 
 KisDlgFilter::~KisDlgFilter()
@@ -120,12 +130,23 @@ void KisDlgFilter::updatePreview()
 {
     if (!d->uiFilterDialog.filterSelection->configuration()) return;
 
+
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
         startApplyingFilter(config);
     }
 
     d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+}
+
+void KisDlgFilter::adjustSize()
+{
+    QWidget::adjustSize();
+}
+
+void KisDlgFilter::slotFilterWidgetSizeChanged()
+{
+    QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 }
 
 void KisDlgFilter::slotOnAccept()
@@ -170,7 +191,7 @@ void KisDlgFilter::createMask()
     accept();
 }
 
-void KisDlgFilter::previewCheckBoxChange(int state)
+void KisDlgFilter::enablePreviewToggled(bool state)
 {
     if (state) {
         updatePreview();
@@ -180,6 +201,7 @@ void KisDlgFilter::previewCheckBoxChange(int state)
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+
     group.config()->sync();
 }
 

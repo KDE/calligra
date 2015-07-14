@@ -90,9 +90,7 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
 
     if(m_dragging && m_closeSnappingActivated) {
-        if (m_closeSnappingActivated) {
-            m_points.append(m_points.first());
-        }
+        m_points.append(m_points.first());
         endStroke();
     } else {
         m_dragging = true;
@@ -256,6 +254,18 @@ QRectF KisToolPolylineBase::dragBoundingRect()
     QRectF rect = pixelToView(QRectF(m_dragStart, m_dragEnd).normalized());
     rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
     return rect;
+}
+
+
+void KisToolPolylineBase::listenToModifiers(bool listen)
+{
+    Q_UNUSED(listen)
+}
+
+bool KisToolPolylineBase::listeningToModifiers()
+{
+    //Never grab modifier keys
+    return false;
 }
 
 #include "kis_tool_polyline_base.moc"

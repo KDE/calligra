@@ -23,28 +23,19 @@
 #ifndef KIS_RESOURCESERVERPROVIDER_H_
 #define KIS_RESOURCESERVERPROVIDER_H_
 
-#include <QString>
-#include <QStringList>
-#include <QList>
-
-
-#include <KoResource.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 
 #include <kis_paintop_preset.h>
 
 #include <krita_export.h>
 
-class KoResource;
 class KoResourceLoaderThread;
-class KisPaintOpPreset;
 class KisWorkspaceResource;
+class KisPSDLayerStyleCollectionResource;
 
-typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
-
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -57,11 +48,13 @@ public:
 
     KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
     KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
 
     void brushBlacklistCleanup();
+
 Q_SIGNALS:
     void notifyBrushBlacklistCleanup();
-    
+
 private:
 
     KisResourceServerProvider();
@@ -70,11 +63,14 @@ private:
 
     KisPaintOpPresetResourceServer* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* m_layerStyleCollectionServer;
 
 private:
 
-    KoResourceLoaderThread *paintOpPresetThread;
-    KoResourceLoaderThread *workspaceThread;
+    KoResourceLoaderThread *m_paintOpPresetThread;
+    KoResourceLoaderThread *m_workspaceThread;
+    KoResourceLoaderThread *m_layerStyleCollectionThread;
+
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

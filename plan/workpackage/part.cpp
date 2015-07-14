@@ -480,21 +480,6 @@ bool Part::loadWorkPackages()
 
 }
 
-bool Part::loadKPlatoWorkPackages()
-{
-    m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "planprojects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
-    //kDebug(planworkDbg())<<lst;
-    foreach ( const QString &file, lst ) {
-        if ( ! loadNativeFormatFromStore( file ) ) {
-            KMessageBox::information( 0, i18n( "Failed to load file:<br>%1" , file ) );
-        }
-    }
-    m_loadingFromProjectStore = false;
-    return true;
-}
-
 bool Part::loadNativeFormatFromStore(const QString& file)
 {
     kDebug(planworkDbg())<<file;

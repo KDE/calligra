@@ -92,7 +92,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     //not needed in grid:
     m_templatesList->setSpacing(margin);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    connect(m_templatesList, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+    connect(m_templatesList, SIGNAL(activated(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
 
     KexiTemplateCategoryInfoList templateCategories;
     KexiTemplateCategoryInfo templateCategory;

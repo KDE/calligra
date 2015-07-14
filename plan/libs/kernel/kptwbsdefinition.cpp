@@ -22,6 +22,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <KoXmlReader.h>
+
 #include <QList>
 #include <QString>
 #include <QStringList>

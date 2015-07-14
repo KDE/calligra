@@ -93,7 +93,7 @@ public:
 
 using namespace KexiPart;
 
-Part::Part(QObject *parent, 
+Part::Part(QObject *parent,
            const QString& instanceName,
            const QString& toolTip,
            const QString& whatsThis,
@@ -410,6 +410,12 @@ GUIClient* Part::guiClient() const
 const Kexi::ObjectStatus& Part::lastOperationStatus() const
 {
     return d->status;
+}
+
+KexiDB::QuerySchema* Part::currentQuery(KexiView* view)
+{
+    Q_UNUSED(view);
+    return 0;
 }
 
 KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiPart::Part *part)

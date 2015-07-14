@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
@@ -61,16 +61,19 @@ class KProgressDialog;
 class QProgressBar;
 class KPageWidgetItem;
 
+class KexiCSVCommentWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiProject;
 class KexiCSVImportDialogModel;
+class KexiCSVImportDialogItemDelegate;
 class KexiFileWidget;
 class KexiCommandLinkButton;
 class KexiNameWidget;
 class KexiProjectNavigator;
 class KexiFieldListModel;
+
 
 namespace KexiPart {
 class Item;
@@ -121,8 +124,10 @@ private:
     QGridLayout* MyDialogLayout;
     QHBoxLayout* Layout1;
     KexiCSVImportDialogModel *m_table;
+    KexiCSVImportDialogItemDelegate *m_tableItemDelegate;
     QTableView *m_tableView;
     KexiCSVDelimiterWidget* m_delimiterWidget;
+    KexiCSVCommentWidget* m_commentWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
                             //!< (true by default, set to false if user sets delimiter)
     QLabel* m_formatLabel;
@@ -220,10 +225,12 @@ private:
     //! Updates size of m_columnNames and m_changedColumnNames if needed
     void updateColumnVectorSize();
 
+    bool m_parseComments;
     bool m_cancelled;
     bool m_adjustRows;
     int m_startline;
     QChar m_textquote;
+    QChar m_commentSymbol;
     QString m_clipboardData;
     QByteArray m_fileArray;
     Mode m_mode;
@@ -293,6 +300,7 @@ private Q_SLOTS:
     void initLater();
     void formatChanged(int id);
     void delimiterChanged(const QString& delimiter);
+    void commentSymbolChanged(const QString& commentSymbol);
     void startlineSelected(int line);
     void textquoteSelected(int);
     void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);

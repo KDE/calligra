@@ -68,11 +68,10 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 
 KWRootAreaProvider::~KWRootAreaProvider()
 {
-    //FIXME : this code crashes so far, why ?
-    /*foreach (QList<KoTextLayoutRootArea*> areaList, m_rootAreaCache.values())
-        qDeleteAll(areaList);*/
+    qDeleteAll(m_rootAreaCache);
     m_rootAreaCache.clear();
     qDeleteAll(m_pages);
+    m_pages.clear();
 }
 
 void KWRootAreaProvider::clearPages(int pageNumber)
@@ -156,12 +155,14 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     int pageNumber = 1;
     KWRootAreaPage *rootAreaPage = m_pages.isEmpty() ? 0 : m_pages.last();
-
     int requiredRootAreaCount = 1;
     if (rootAreaPage && frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
         requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().count;
+        if (constraints.newPageForced) {
+            requiredRootAreaCount = 1;
+        }
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page
@@ -252,6 +253,9 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
 
     KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, frameSet(), pageNumber);
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
+        if (rootAreaPage->page.pageStyle().columns().count > 1) {
+            area->setAcceptsColumnBreak(true);
+        }
         area->setAcceptsPageBreak(true);
     }
 
@@ -292,7 +296,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
 
     QString reallyNeededPageStyle = constraints.masterPageName;
     int visiblePageNumber = constraints.visiblePageNumber;
-
+    bool newPageForced = constraints.newPageForced;
     if (m_rootAreaCache.size() > requestedPosition)
     {
         KoTextLayoutRootArea *rootArea = m_rootAreaCache[requestedPosition];
@@ -305,7 +309,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
             return rootArea;
         }
 
-        KWRootAreaPage *rootAreaPage = m_pageHash[rootArea];
+        KWRootAreaPage *rootAreaPage = m_pageHash.value(rootArea);
         Q_ASSERT(rootAreaPage);
 
         if (constraints.visiblePageNumber >= 0)
@@ -323,7 +327,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
             }
             else
             {
-                KWRootAreaPage *previousAreaPage = m_pageHash[m_rootAreaCache[requestedPosition - 1]];
+                KWRootAreaPage *previousAreaPage = m_pageHash.value(m_rootAreaCache[requestedPosition - 1]);
                 reallyNeededPageStyle = previousAreaPage->page.pageStyle().nextStyleName();
                 if (reallyNeededPageStyle.isNull())
                     reallyNeededPageStyle = previousAreaPage->page.pageStyle().name();
@@ -351,6 +355,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
     RootAreaConstraint realConstraints;
     realConstraints.masterPageName = reallyNeededPageStyle;
     realConstraints.visiblePageNumber = visiblePageNumber;
+    realConstraints.newPageForced = newPageForced;
     KoTextLayoutRootArea *area = 0;
     do {
         area = provideNext(documentLayout, realConstraints);
@@ -374,14 +379,15 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     if (afterThis) {
         if (!m_pageHash.contains(afterThis))
             return;
-        KWRootAreaPage *page = m_pageHash[afterThis];
+        KWRootAreaPage *page = m_pageHash.value(afterThis);
         afterIndex = m_pages.indexOf(page);
         Q_ASSERT(afterIndex >= 0);
 
         int newSize = m_rootAreaCache.indexOf(afterThis) + 1;
         while (m_rootAreaCache.size() != newSize)
         {
-            m_rootAreaCache.removeLast();
+            KoTextLayoutRootArea *oldArea = m_rootAreaCache.takeLast();
+            delete(oldArea);
         }
     }
 
@@ -411,8 +417,10 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     } else {
         //atLeastOnePageRemoved = !m_pages.isEmpty();
         qDeleteAll(m_pages);
+        qDeleteAll(m_rootAreaCache);
         m_pages.clear();
         m_pageHash.clear();
+        m_rootAreaCache.clear();
 
         /*FIXME that would result in flickering :-/
         for(int i = pageManager->pageCount(); i >= 1; --i)
