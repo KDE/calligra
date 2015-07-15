@@ -488,16 +488,14 @@ bool KexiConnectionSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 
 void KexiConnectionSelectorWidget::slotConnectionSelected()
 {
-    QList<QTreeWidgetItem *> items;
-    QLineEdit *lineEdit;
     switch (selectedConnectionType()) {
-    case KexiConnectionSelectorWidget::FileBased:
-        lineEdit = fileWidget->locationEdit()->lineEdit();
+    case KexiConnectionSelectorWidget::FileBased: {
+        QLineEdit *lineEdit = fileWidget->locationEdit()->lineEdit();
         d->isConnectionSelected = !lineEdit->text().isEmpty();
         break;
+    }
     case KexiConnectionSelectorWidget::ServerBased:
-        items = d->remote->list->selectedItems();
-        d->isConnectionSelected = !items.isEmpty();
+        d->isConnectionSelected = !d->remote->list->selectedItems().isEmpty();
         break;
     default:;
     }
