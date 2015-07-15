@@ -79,12 +79,13 @@ KexiDBConnShortcutFile::~KexiDBConnShortcutFile()
 {
 }
 
-bool KexiDBConnShortcutFile::loadConnectionData(KDbConnectionData& data, QString* _groupKey)
+bool KexiDBConnShortcutFile::loadConnectionData(KDbConnectionData* data, QString* _groupKey)
 {
-    KexiProjectData pdata(data);
+    Q_ASSERT(data);
+    KexiProjectData pdata(*data);
     if (!pdata.load(fileName(), _groupKey))
         return false;
-    data = *pdata.connectionData();
+    *data = *pdata.connectionData();
     return true;
 }
 
