@@ -164,17 +164,20 @@ void KexiDBConnectionSet::clear()
 void KexiDBConnectionSet::load()
 {
     clear();
-    const QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kexi/connections"));
+    const QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                     "kexi/connections",
+                                                     QStandardPaths::LocateDirectory));
     foreach(const QString &dir, dirs) {
-        QDirIterator it(dir, QStringList() << "*.kexic");
+        QDirIterator it(dir, QStringList() << "*.kexic", QDir::Files | QDir::Readable,
+                        QDirIterator::FollowSymlinks);
         while (it.hasNext()) {
             KDbConnectionData *data = new KDbConnectionData();
             KexiDBConnShortcutFile shortcutFile(it.next());
-            if (!shortcutFile.loadConnectionData(*data)) {
+            if (!shortcutFile.loadConnectionData(data)) {
                 delete data;
                 continue;
             }
-            addConnectionDataInternal(data, it.next());
+            addConnectionDataInternal(data, it.filePath());
             //qDebug() << file << "added.";
         }
    }
