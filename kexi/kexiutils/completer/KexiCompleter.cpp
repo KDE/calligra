@@ -835,11 +835,11 @@ KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelInde
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *q)
+KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *qq)
 : widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
   role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(KexiCompleter::UnsortedModel),
   wrap(true), eatFocusOut(true),
-  hiddenBecauseNoMatch(false), q(q)
+  hiddenBecauseNoMatch(false), q(qq)
 {
 }
 
