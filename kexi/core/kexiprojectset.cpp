@@ -71,7 +71,7 @@ KexiProjectSet::KexiProjectSet(KDbConnectionData* conndata,
             return;
         }
         if (!conn->connect()) {
-            m_result = drv->result();
+            m_result = conn->result();
             return;
         }
         dbnames = conn->databaseNames(false/*skip system*/);
