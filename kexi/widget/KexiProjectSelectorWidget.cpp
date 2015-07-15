@@ -304,7 +304,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
     KDbConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
-    KGuiItem okItem(xi18n("&Open"), koIconName("document-open"),
+    KGuiItem okItem(xi18nc("@action:button", "&Open"), koIconName("document-open"),
                     xi18n("Open Database Connection"));
     KGuiItem::assign(button(QDialogButtonBox::Ok), okItem);
 

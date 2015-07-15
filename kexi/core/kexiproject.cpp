@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
+#include <KexiIcon.h>
 
 #include <KLocalizedString>
 #include <KStandardGuiItem>
@@ -1068,7 +1069,7 @@ KexiProject::createBlankProject(bool *cancelled, const KexiProjectData& data,
                     "The project %1 already exists.\n"
                     "Do you want to replace it with a new, blank one?",
                     prj->data()->infoString()) + "\n" + i18n(warningNoUndo) + "</qt>",
-                QString(), KGuiItem(xi18n("Replace")), KStandardGuiItem::cancel()))
+                QString(), KGuiItem(xi18nc("@action:button", "Replace")), KStandardGuiItem::cancel()))
 //! @todo add toUserVisibleString() for server-based prj
         {
             delete prj;
@@ -1091,10 +1092,15 @@ KexiProject::createBlankProject(bool *cancelled, const KexiProjectData& data,
 tristate KexiProject::dropProject(const KexiProjectData& data,
                                   KDbMessageHandler* handler, bool dontAsk)
 {
-    if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
-            xi18n("Do you want to drop the project \"%1\"?",
-                 static_cast<const KDbObject*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
+    if (!dontAsk && KMessageBox::Yes != KMessageBox::questionYesNo(0,
+            xi18n("Do you want to delete the project \"%1\"?\n%1",
+                 static_cast<const KDbObject*>(&data)->name(), i18n(warningNoUndo)),
+                 QString(), KGuiItem(xi18nc("@action:button", "Delete Project"), koIconName("edit-delete")),
+                 KStandardGuiItem::no(), QString(),
+                 KMessageBox::Notify | KMessageBox::Dangerous))
+    {
         return cancelled;
+    }
 
     KexiProject prj(data, handler);
     if (!prj.open())

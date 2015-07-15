@@ -116,12 +116,12 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
         bool exec = (dontask == "yes");
         if (!exec && dontask != "no") {
-            exec = KMessageBox::warningContinueCancel(0,
+            exec = KMessageBox::Yes == KMessageBox::questionYesNo(view,
                     futureI18n("Do you want to execute the script \"%1\"?\n\n"
                          "Scripts obtained from unknown sources can contain dangerous code.", scriptaction->text()),
-                    futureI18n("Execute Script?"), KGuiItem(futureI18n("Execute"), koIconName("system-run")),
+                    futureI18n("Execute Script?"), KGuiItem(futureI18nc("@action:button", "Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
-                                                     ) == KMessageBox::Continue;
+                                                     );
         }
 
         if (exec) {

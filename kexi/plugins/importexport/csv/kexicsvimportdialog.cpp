@@ -479,7 +479,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
     nextButton()->setEnabled(page == m_saveMethodPage ? false : true);
     finishButton()->setEnabled(page == m_importPage ? true : false);
     if (page == m_importPage) {
-        KGuiItem::assign(finishButton(), KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
+        KGuiItem::assign(finishButton(), KGuiItem(xi18nc("@action:button Import CSV", "&Import..."), _IMPORT_ICON));
     }
     //! @todo KEXI3 button(ConfigureButton)->setEnabled(page == m_optionsPage ? true : false);
     nextButton()->setEnabled(page == m_importPage ? false : true);
@@ -1655,7 +1655,7 @@ bool KexiCSVImportDialog::saveRow(bool inGUI)
 //! @todo move
     if (!res) {
         const QStringList msgList = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(m_valuesToInsert);
-        const int msgRes = KMessageBox::warningContinueCancelList(this,
+        const KMessageBox::ButtonCode msgRes = KMessageBox::warningContinueCancelList(this,
                     xi18nc("@info", "An error occurred during insert record."),
                     QStringList(msgList.join(";")),
                     QString(),
@@ -1772,7 +1772,7 @@ void KexiCSVImportDialog::dropDestinationTable(KexiProject* project, KexiPart::I
 void KexiCSVImportDialog::raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable)
 {
     finishButton()->setEnabled(true);
-    KGuiItem::assign(finishButton(), KGuiItem(xi18n("&Import..."), _IMPORT_ICON));
+    KGuiItem::assign(finishButton(), KGuiItem(xi18nc("@action:button Import CSV", "&Import..."), _IMPORT_ICON));
     project->deleteUnstoredItem(partItemForSavedTable);
     delete m_destinationTableSchema;
     m_destinationTableSchema = 0;
@@ -1834,8 +1834,8 @@ void KexiCSVImportDialog::import()
                         "<para><note>An imported table without a primary key may not be "
                         "editable (depending on database type).</note></para>"),
                    QString(),
-                   KGuiItem(xi18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
-                   KGuiItem(xi18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()))))
+                   KGuiItem(xi18nc("@action:button Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
+                   KGuiItem(xi18nc("@action:button Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()))))
         {
             if (msgboxResult == KMessageBox::Cancel) {
                 raiseErrorInAccept(project, m_partItemForSavedTable);

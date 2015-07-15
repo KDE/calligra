@@ -852,7 +852,8 @@ tristate ImportWizard::import()
                         xi18n("<para>Database %1 already exists.</para>"
                               "<para>Do you want to replace it with a new one?</para>",
                               sourceDriver->data()->destination->infoString()),
-                0, KGuiItem(xi18n("&Replace")), KGuiItem(xi18n("No")))) {
+                0, KGuiItem(xi18nc("@action:button Replace Database", "&Replace")), KStandardGuiItem::no()))
+        {
             return cancelled;
         }
     }

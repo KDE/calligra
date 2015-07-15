@@ -826,7 +826,7 @@ void KexiWelcomeStatusBar::showDonation()
             "<para>Contact us at http://community.kde.org/Kexi/Contact for more information.</para>"
             "<para>Thanks for your support!</para>"),
        xi18n("Donate to the Project"),
-       KGuiItem(xi18n("Proceed to the Donation Web Page"), QIcon(":/icons/heart.png")),
+       KGuiItem(xi18nc("@action:button Go to Donation", "Proceed to the Donation Web Page"), QIcon(":/icons/heart.png")),
        KGuiItem(xi18nc("Do not donate now", "Not Now"))))
     {
         return;

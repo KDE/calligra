@@ -576,7 +576,7 @@ tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontSt
 //   cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, xi18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
 //   KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
             bool emptyTable;
-            int r = KMessageBox::warningYesNoCancel(this,
+            const KMessageBox::ButtonCode r = KMessageBox::warningYesNoCancel(this,
                 xi18n("Saving changes for existing table design is now required.")
                 + "\n"
                 + d->messageForSavingChanges(&emptyTable, /*skip warning?*/!isPhysicalAlteringNeeded()),
@@ -903,7 +903,7 @@ void KexiTableDesignerView::slotPropertyChanged(KPropertySet& set, KProperty& pr
 
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
                 xi18n("Setting Autonumber Field"),
-                KGuiItem(xi18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel()))
+                KGuiItem(xi18nc("@action:button", "Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel()))
             {
                 changePrimaryKey = true;
                 setPrimaryKey = true;
@@ -955,7 +955,7 @@ void KexiTableDesignerView::slotPropertyChanged(KPropertySet& set, KProperty& pr
             qDebug() << "INVALID " << property.value().toString();
 //   if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //    xi18n("This field has primary key assigned. Setting autonumber field"),
-//    KGuiItem(xi18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel() ))
+//    KGuiItem(xi18nc("@action:button", "Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel() ))
         }
         KDbField::Type type = KDb::intToFieldType(set["type"].value().toInt());
         QString typeName;
@@ -1193,8 +1193,8 @@ tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilen
                      "<para>If you want to add a primary key by hand, press <interface>Cancel</interface> "
                      "to cancel saving table design.</para>", schema.name()),
                 QString(),
-                KGuiItem(xi18nc("Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
-                KGuiItem(xi18nc("Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()),
+                KGuiItem(xi18nc("@action:button Add Database Primary Key to a Table", "&Add Primary Key"), koIconName("key")),
+                KGuiItem(xi18nc("@action:button Do Not Add Database Primary Key to a Table", "Do &Not Add"), KStandardGuiItem::no().icon()),
                 KStandardGuiItem::cancel(),
                 "autogeneratePrimaryKeysOnTableDesignSaving");
             if (questionRes == KMessageBox::Cancel) {

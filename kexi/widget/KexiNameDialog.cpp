@@ -181,9 +181,9 @@ bool KexiNameDialog::canOverwrite()
     KGuiItem yesItem(KStandardGuiItem::yes());
     yesItem.setText(xi18n("&Replace"));
     yesItem.setToolTip(xi18n("Replace object"));
-    int res = KMessageBox::warningYesNo(
+    const KMessageBox::ButtonCode res = KMessageBox::warningYesNo(
                   this, msg, QString(),
-                  yesItem, KGuiItem(xi18n("&Choose Other Name...")),
+                  yesItem, KGuiItem(xi18nc("@action:button", "&Choose Other Name...")),
                   QString(),
                   KMessageBox::Notify | KMessageBox::Dangerous);
     if (res == KMessageBox::Yes) {

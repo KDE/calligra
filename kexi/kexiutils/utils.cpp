@@ -31,6 +31,7 @@
 #include "utils.h"
 #include "utils_p.h"
 #include "kexiutils_global.h"
+#include <KexiIcon.h>
 
 #include <QPainter>
 #include <QImage>
@@ -738,11 +739,13 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
     }
 
     if (KRun::isExecutableFile(url, type)) {
-        int ret = KMessageBox::warningYesNo(parent
-                                            , xi18nc("@info", "Do you want to run this file?"
-                                                    "<warning>Running executables can be dangerous.</warning>")
-                                            , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
-                                            , "AllowRunExecutable", KMessageBox::Dangerous);
+        int ret = KMessageBox::questionYesNo(parent
+                    , xi18nc("@info", "Do you want to run this file?"
+                            "<warning>Running executables can be dangerous.</warning>")
+                    , QString()
+                    , KGuiItem(xi18nc("@action:button Run script file", "Run"), koIconName("system-run"))
+                    , KStandardGuiItem::no()
+                    , "AllowRunExecutable", KMessageBox::Dangerous);
 
         if (ret != KMessageBox::Yes) {
             return;
