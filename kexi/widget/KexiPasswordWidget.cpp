@@ -42,6 +42,7 @@ class KexiPasswordWidget::Private
 public:
     explicit Private(KexiPasswordWidget *q, KexiPasswordWidgetFlags flags);
 
+    void init();
 
     KexiPasswordWidget * const q;
     KexiPasswordWidgetFlags flags;
@@ -59,6 +60,10 @@ KexiPasswordWidget::Private::Private(KexiPasswordWidget *qq, KexiPasswordWidgetF
       commentRow(0)
 {
     this->flags = flags;
+}
+
+void KexiPasswordWidget::Private::init()
+{
     ui.setupUi( q );
     ui.errorMessage->setHidden(true);
 
@@ -116,6 +121,7 @@ KexiPasswordWidget::KexiPasswordWidget(QWidget* parent ,
                                        KexiPasswordWidgetFlags flags)
    : QWidget(parent), d(new Private(this, flags))
 {
+    d->init();
 }
 
 KexiPasswordWidget::~KexiPasswordWidget()
