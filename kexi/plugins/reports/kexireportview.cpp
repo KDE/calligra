@@ -18,6 +18,7 @@
  */
 
 #include "kexireportview.h"
+#include <KReportView>
 #include "kexidbreportdata.h"
 #ifndef KEXI_MOBILE
 #include <widget/utils/kexirecordnavigator.h>
@@ -54,23 +55,15 @@
 #include <QMimeDatabase>
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0) //! @todo KEXI3, m_kexi(0), m_functions(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0) //! @todo KEXI3, m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
-    m_reportView = new QGraphicsView(this);
-    // page selector should be always visible:
-    m_reportView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_reportView = new KReportView(this);
     layout()->addWidget(m_reportView);
 
-    m_reportScene = new QGraphicsScene(this);
-    m_reportScene->setSceneRect(0,0,1000,2000);
-    m_reportView->setScene(m_reportScene);
-
-    m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
-
 #ifndef KEXI_MOBILE
-    m_pageSelector = new KexiRecordNavigator(*m_reportView, m_reportView);
+    m_pageSelector = new KexiRecordNavigator(*m_reportView->scrollArea(), m_reportView);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setInsertingEnabled(false);
     m_pageSelector->setLabelText(xi18nc("Page selector label", "Page:"));
@@ -411,7 +404,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_preRenderer->setSourceData(reportData);
 
             m_preRenderer->setName(tempData()->name);
-            m_currentPage = 1;
+
 #ifdef KREPORT_SCRIPTING
             //Add a kexi object to provide kexidb and extra functionality
             if(!m_kexi) {
@@ -437,21 +430,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
-                m_pageCount = m_reportDocument->pages();
+                m_reportView->setDocument(m_reportDocument);
 #ifndef KEXI_MOBILE
-                m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setRecordCount(m_reportView->pageCount());
                 m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
-
-            m_reportPage = new KoReportPage(this, m_reportDocument);
-            m_reportPage->setObjectName("KexiReportPage");
-
-            m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
-            m_reportScene->addItem(m_reportPage);
-            m_reportPage->setPos(20,20);
-            m_reportView->centerOn(0,0);
-
         } else {
             KMessageBox::error(this, xi18n("Report schema appears to be invalid or corrupt"), xi18n("Opening failed"));
         }
@@ -492,46 +476,36 @@ void KexiReportView::addNewRecordRequested()
 
 void KexiReportView::moveToFirstRecordRequested()
 {
-        if (m_currentPage != 1) {
-                m_currentPage = 1;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+
+    m_reportView->moveToFirstPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
+
 }
 
 void KexiReportView::moveToLastRecordRequested()
 {
-        if (m_currentPage != m_pageCount) {
-                m_currentPage = m_pageCount;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToLastPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
 void KexiReportView::moveToNextRecordRequested()
 {
-        if (m_currentPage < m_pageCount) {
-                m_currentPage++;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToNextPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
 void KexiReportView::moveToPreviousRecordRequested()
 {
-        if (m_currentPage > 1) {
-                m_currentPage--;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToPreviousPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
 void KexiReportView::moveToRecordRequested(uint r)
@@ -541,10 +515,10 @@ void KexiReportView::moveToRecordRequested(uint r)
 
 int KexiReportView::currentRecord() const
 {
-    return m_currentPage;
+    return m_reportView->currentPage();
 }
 
 int KexiReportView::recordCount() const
 {
-    return m_pageCount;
+    return m_reportView->pageCount();
 }

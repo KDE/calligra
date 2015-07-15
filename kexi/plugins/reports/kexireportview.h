@@ -31,7 +31,7 @@
 
 class KoReportPreRenderer;
 class ORODocument;
-class KoReportPage;
+class KReportView;
 #ifdef KREPORT_SCRIPTING
 class KexiScriptAdaptor;
 class KRScriptFunctions;
@@ -66,15 +66,12 @@ public:
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
-    QGraphicsView *m_reportView;
-    QGraphicsScene *m_reportScene;
-    KoReportPage *m_reportPage;
+    KReportView *m_reportView;
 
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif
-    int m_currentPage;
-    int m_pageCount;
+
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
 #ifdef KREPORT_SCRIPTING
