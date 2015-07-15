@@ -202,5 +202,8 @@ QString KexiDBConnectionSet::key(const KDbConnectionData &data)
         + QString::number(data.port()) + ','
         + QString::number(data.useLocalSocketFile()) + ','
         + data.localSocketFileName() + ','
-        + data.databaseName();
+        + data.databaseName().replace(',', "\\,") + ','
+        + QString::number(data.savePassword() ? 1 : 0) + ','
+        + data.caption().replace(',', "\\,") + ','
+        + data.description().replace(',', "\\,");
 }
