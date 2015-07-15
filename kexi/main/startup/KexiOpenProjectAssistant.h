@@ -33,7 +33,6 @@
 
 class QTabWidget;
 class KexiProjectData;
-class KexiProjectSet;
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiOpenProjectAssistant;
@@ -73,7 +72,6 @@ public:
     KDbConnectionData* conndataToShow;
 
 private:
-    KexiProjectSet *m_projectSetToShow;
     KexiOpenProjectAssistant* m_assistant;
 };
 
