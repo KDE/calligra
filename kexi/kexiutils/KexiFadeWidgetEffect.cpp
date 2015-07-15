@@ -107,7 +107,7 @@ KexiFadeWidgetEffect::KexiFadeWidgetEffect(QWidget *destWidget, int defaultDurat
         return;
     }
     setGeometry(QRect(destWidget->mapTo(parentWidget(), QPoint(0, 0)), destWidget->size()));
-    d->oldPixmap = QPixmap::grabWidget(destWidget);
+    d->oldPixmap = destWidget->grab();
     d->timeLine.setFrameRange(0, 255);
     d->timeLine.setCurveShape(QTimeLine::EaseOutCurve);
     connect(&d->timeLine, SIGNAL(finished()), SLOT(finished()));
@@ -134,7 +134,7 @@ void KexiFadeWidgetEffect::start(int duration)
         deleteLater();
         return;
     }
-    d->newPixmap = QPixmap::grabWidget(d->destWidget);
+    d->newPixmap = d->destWidget->grab();
     d->timeLine.setDuration(duration);
     d->timeLine.start();
 }
