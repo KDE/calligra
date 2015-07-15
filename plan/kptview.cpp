@@ -111,7 +111,7 @@
 #include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-// QT5TODO: reenable reports
+// QT5TODO: T450 reenable reports
 #if 0
 #include "reports/reportview.h"
 #include "reports/reportdata.h"
