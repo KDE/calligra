@@ -113,7 +113,7 @@ public:
      * @param flags a set of KexiPasswordWidgetFlag flags
      */
     explicit KexiPasswordWidget(QWidget *parent = 0L,
-                                const KexiPasswordWidgetFlags& flags = NoFlags);
+                                KexiPasswordWidgetFlags flags = NoFlags);
 
     /**
      * Destructor

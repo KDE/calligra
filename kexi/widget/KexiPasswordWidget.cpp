@@ -40,9 +40,10 @@
 class KexiPasswordWidget::Private
 {
 public:
-    explicit Private(KexiPasswordWidget *q, const KexiPasswordWidgetFlags& flags);
+    explicit Private(KexiPasswordWidget *q, KexiPasswordWidgetFlags flags);
 
-    KexiPasswordWidget *q;
+
+    KexiPasswordWidget * const q;
     KexiPasswordWidgetFlags flags;
     Ui_KexiPasswordWidget ui;
     QMap<QString,QString> knownLogins;
@@ -51,8 +52,8 @@ public:
     unsigned int commentRow;
 };
 
-KexiPasswordWidget::Private::Private(KexiPasswordWidget *q, const KexiPasswordWidgetFlags& flags)
-    : q(q),
+KexiPasswordWidget::Private::Private(KexiPasswordWidget *qq, KexiPasswordWidgetFlags flags)
+    : q(qq),
       userEditCombo(0),
       pixmapLabel(0),
       commentRow(0)
@@ -112,7 +113,7 @@ KexiPasswordWidget::Private::Private(KexiPasswordWidget *q, const KexiPasswordWi
 // ---
 
 KexiPasswordWidget::KexiPasswordWidget(QWidget* parent ,
-                                       const KexiPasswordWidgetFlags& flags)
+                                       KexiPasswordWidgetFlags flags)
    : QWidget(parent), d(new Private(this, flags))
 {
 }
