@@ -316,7 +316,7 @@ tristate KexiStartupHandler::init()
 
     if (isSet(options().connectionShortcut)) {
         KexiDBConnShortcutFile connectionShortcut(value(options().connectionShortcut));
-        if (!connectionShortcut.loadConnectionData(cdata)) {
+        if (!connectionShortcut.loadConnectionData(&cdata)) {
 //! @todo Show error message from KexiDBConnShortcutFile when there's one implemented.
 //!       For we're displaying generic error msg.
             KMessageBox::sorry(0,
@@ -560,7 +560,7 @@ tristate KexiStartupHandler::init()
                 } else if (cdata.driverId() == "connection") {
                     //get information for a connection file
                     d->connShortcutFile = new KexiDBConnShortcutFile(cdata.databaseName());
-                    if (!d->connShortcutFile->loadConnectionData(cdata, &d->shortcutFileGroupKey)) {
+                    if (!d->connShortcutFile->loadConnectionData(&cdata, &d->shortcutFileGroupKey)) {
                         KMessageBox::sorry(0, xi18n("Could not open connection data file\n\"%1\".",
                                                    QDir::toNativeSeparators(cdata.databaseName())));
                         delete d->connShortcutFile;

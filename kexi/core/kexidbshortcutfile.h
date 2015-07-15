@@ -64,7 +64,7 @@ public:
      \a groupKey, if provided will be set to a group key,
      so you can later use it in saveConnectionData().
      \return true on success. */
-    bool loadConnectionData(KDbConnectionData& data, QString* groupKey = 0);
+    bool loadConnectionData(KDbConnectionData* data, QString* groupKey = 0);
 
     /*! Saves connection data \a data to a shortcut file.
      If \a storePassword is true, password will be saved in the file,
