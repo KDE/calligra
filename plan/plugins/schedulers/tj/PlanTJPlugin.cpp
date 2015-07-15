@@ -41,7 +41,7 @@ PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
 {
     KLocale *locale = KLocale::global();
     if ( locale ) {
-        // QT5TODO: ensure proper loading of catalog
+        // QT5TODO: ensure proper loading of catalog, T449
 //         locale->insertCatalog( "plantjplugin" );
     }
     m_granularities << (long unsigned int) 5 * 60 * 1000

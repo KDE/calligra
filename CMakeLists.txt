@@ -192,8 +192,8 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      GuiAddons I18n ItemModels ItemViews
                                      WidgetsAddons ThreadWeaver
                                      Completion IconThemes Sonnet
-                                     Parts
-                                     XmlGui Kross Wallet
+                                     Parts KIO
+                                     XmlGui Kross Wallet GlobalAccel
                                      Emoticons ConfigWidgets KDELibs4Support
     OPTIONAL_COMPONENTS
         NotifyConfig
@@ -205,7 +205,7 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
+find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS Sql WebKit WebKitWidgets DBus Declarative X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
@@ -440,7 +440,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ##
 ## Test for soprano
 ##
-# QT5TODO: find Qt5 version of Soprano
+# QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
 # macro_optional_find_package(Soprano)
 set(Soprano_FOUND FALSE)
 macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")

@@ -25,7 +25,7 @@
 
 #include "kptduration.h"
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 #include <QString>
 

@@ -93,7 +93,7 @@ public:
     bool oldCreateBackupFile;
 
     // Plugin Options
-    // QT5TODO: port to KJsonTrader
+    // QT5TODO: not compatible with Calligra-style plugins, T448
 //     KPluginSelector* pluginSelector;
 
     // Spellchecker Options
@@ -360,7 +360,8 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->resetOpenSaveOptions(); // initialize values
 
     // Plugin Options Widget
-    /* QT5TODO: port to KJsonTrader
+    // QT5TODO: not compatible with Calligra-style plugins, T448
+    /*
     d->pluginSelector = new KPluginSelector(this);
     const QString serviceType = QLatin1String("CalligraSheets/Plugin");
     const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
@@ -380,7 +381,7 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
-    d->spellCheckPage = new Sonnet::ConfigWidget(/* QT5TODO: was sharedConfigPtr.data(),*/ this);
+    d->spellCheckPage = new Sonnet::ConfigWidget(this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));

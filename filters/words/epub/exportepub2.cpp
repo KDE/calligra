@@ -470,53 +470,53 @@ KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, Epu
 void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
 {
     QByteArray coverHtmlContent;
-    QBuffer *buff = new QBuffer(&coverHtmlContent);
-    KoXmlWriter * writer = new KoXmlWriter(buff);
+    QBuffer buff(&coverHtmlContent);
+    KoXmlWriter writer(&buff);
 
-    writer->startDocument(NULL,NULL,NULL); //xml version, etc...
-    writer->startElement("html");
-    writer->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-    writer->addAttribute("xml:lang", "en");
+    writer.startDocument(NULL,NULL,NULL); //xml version, etc...
+    writer.startElement("html");
+    writer.addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    writer.addAttribute("xml:lang", "en");
 
-    writer->startElement("head");
+    writer.startElement("head");
 
-    writer->startElement("meta");
-    writer->addAttribute("http-equiv", "Content-Type");
-    writer->addAttribute("content", "text/html; charset=UTF-8");
-    writer->endElement();
+    writer.startElement("meta");
+    writer.addAttribute("http-equiv", "Content-Type");
+    writer.addAttribute("content", "text/html; charset=UTF-8");
+    writer.endElement();
 
-    writer->startElement("title");
-    writer->addTextNode("Cover");
-    writer->endElement();
+    writer.startElement("title");
+    writer.addTextNode("Cover");
+    writer.endElement();
 
-    writer->startElement("style");
-    writer->addAttribute("type", "text/css");
-    writer->addAttribute("title", "override_css");
+    writer.startElement("style");
+    writer.addAttribute("type", "text/css");
+    writer.addAttribute("title", "override_css");
 
-    writer->addTextNode("\n");
-    writer->addTextNode("   @page { padding:Opt; margin:Opt } \n");
-    writer->addTextNode("   body { text-align:center; padding:Opt; margin:Opt } \n");
-    writer->addTextNode("   img { padding:Opt; margin:Opt; max-height: 100% ; max-width: 100% } \n");
+    writer.addTextNode("\n");
+    writer.addTextNode("   @page { padding:Opt; margin:Opt } \n");
+    writer.addTextNode("   body { text-align:center; padding:Opt; margin:Opt } \n");
+    writer.addTextNode("   img { padding:Opt; margin:Opt; max-height: 100% ; max-width: 100% } \n");
 
-    writer->endElement(); //style
+    writer.endElement(); //style
 
-    writer->endElement(); // head
+    writer.endElement(); // head
 
-    writer->startElement("body");
+    writer.startElement("body");
 
-    writer->startElement("div");
-    writer->addAttribute("id", "cover-image");
+    writer.startElement("div");
+    writer.addAttribute("id", "cover-image");
 
-    writer->startElement("img");
-    writer->addAttribute("src", coverPath);
-    writer->addAttribute("alt", "Cover Image");
-    writer->endElement();
+    writer.startElement("img");
+    writer.addAttribute("src", coverPath);
+    writer.addAttribute("alt", "Cover Image");
+    writer.endElement();
 
-    writer->endElement(); // div
+    writer.endElement(); // div
 
-    writer->endElement(); // body
+    writer.endElement(); // body
 
-    writer->endElement(); // html
+    writer.endElement(); // html
 
     // Add cover html to content
     epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")

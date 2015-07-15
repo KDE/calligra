@@ -17,7 +17,7 @@ add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTimeForma
 target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 
 add_executable(ppttoodp ppttoodpmain.cpp)
-target_link_libraries(ppttoodp ppttoodplib)
+target_link_libraries(ppttoodp ppttoodplib KF5::KDELibs4Support)
 
 add_library(calligra_filter_ppt2odp MODULE PowerPointImport.cpp)
 kcoreaddons_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.desktop)

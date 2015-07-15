@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 class QDomElement;
 class QString;

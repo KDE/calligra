@@ -28,6 +28,7 @@
 #include "kpteffortcostmap.h"
 #include "kptdebug.h"
 
+#include <KoXmlReader.h>
 #include "KoDocument.h"
 #include "KoPageLayoutWidget.h"
 

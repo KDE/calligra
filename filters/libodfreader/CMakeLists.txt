@@ -28,7 +28,7 @@ set(odfreader_LIB_SRCS
 
 add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
 
-target_link_libraries(koodfreader koodf koodf2 Qt5::Xml)
+target_link_libraries(koodfreader koodf koodf2 KF5::KDELibs4Support Qt5::Xml)
 
 set_target_properties(koodfreader PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

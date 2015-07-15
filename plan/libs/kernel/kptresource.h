@@ -30,7 +30,7 @@
 #include "kptappointment.h"
 #include "kptcalendar.h"
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 #include <QHash>
 #include <QString>

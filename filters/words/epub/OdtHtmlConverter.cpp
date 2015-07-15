@@ -1085,30 +1085,30 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 void OdtHtmlConverter::writeMediaOverlayDocumentFile()
 {
     QByteArray mediaContent;
-    QBuffer *buff = new QBuffer(&mediaContent);
-    KoXmlWriter * writer = new KoXmlWriter(buff);
+    QBuffer buff(&mediaContent);
+    KoXmlWriter writer(&buff);
 
-    writer->startElement("smil");
-    writer->addAttribute("xmlns", "http://www.w3.org/ns/SMIL");
-    writer->addAttribute("version", "3.0");
+    writer.startElement("smil");
+    writer.addAttribute("xmlns", "http://www.w3.org/ns/SMIL");
+    writer.addAttribute("version", "3.0");
 
-    writer->startElement("body");
+    writer.startElement("body");
 
     foreach (QString mediaReference, m_mediaFilesList.keys()) {
-        writer->startElement("par");
+        writer.startElement("par");
 
-        writer->startElement("text");
-        writer->addAttribute("src", mediaReference);
-        writer->endElement(); // text
+        writer.startElement("text");
+        writer.addAttribute("src", mediaReference);
+        writer.endElement(); // text
 
-        writer->startElement("audio");
-        writer->addAttribute("src", m_mediaFilesList.value(mediaReference).section("/", -1));
-        writer->endElement();
+        writer.startElement("audio");
+        writer.addAttribute("src", m_mediaFilesList.value(mediaReference).section("/", -1));
+        writer.endElement();
 
-        writer->endElement(); // par
+        writer.endElement(); // par
     }
-    writer->endElement(); // body
-    writer->endElement(); // smil
+    writer.endElement(); // body
+    writer.endElement(); // smil
 
     m_collector->addContentFile(QString("smil"), QString(m_collector->pathPrefix() + "media.smil")
                                 ,"application/smil", mediaContent);

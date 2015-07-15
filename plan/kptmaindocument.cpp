@@ -80,7 +80,7 @@ MainDocument::MainDocument(KoPart *part)
     // Add library translation files
     KLocale *locale = KLocale::global();
     if ( locale ) {
-        // QT5TODO: ensure proper loading of catalogs
+        // QT5TODO: ensure proper loading of catalogs, T449
 //         locale->insertCatalog( "planlibs" );
 //         locale->insertCatalog( "kdgantt" );
 //         locale->insertCatalog( "timezones4" );

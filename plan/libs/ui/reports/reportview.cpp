@@ -53,6 +53,7 @@
 #include "KoPageLayout.h"
 #include "KoDocument.h"
 #include "KoIcon.h"
+#include <KoXmlReader.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>

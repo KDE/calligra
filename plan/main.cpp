@@ -23,7 +23,6 @@
 #include <ksplashscreen.h>
 #include <QHideEvent>
 
-#include <kdemacros.h>
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 

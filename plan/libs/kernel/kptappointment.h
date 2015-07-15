@@ -27,7 +27,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 #include <QString>
 #include <QList>
