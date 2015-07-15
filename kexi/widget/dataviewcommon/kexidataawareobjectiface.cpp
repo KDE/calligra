@@ -1076,10 +1076,10 @@ void KexiDataAwareObjectInterface::deleteCurrentRecord()
     case ImmediateDelete:
         break;
     case AskDelete:
-        if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
+        if (KMessageBox::Yes != KMessageBox::questionYesNo(
                     dynamic_cast<QWidget*>(this),
                     xi18n("Do you want to delete selected record?"), QString(),
-                    KGuiItem(xi18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
+                    KGuiItem(xi18nc("@action:button", "&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "AskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
@@ -1179,7 +1179,7 @@ tristate KexiDataAwareObjectInterface::deleteAllRecords(bool ask, bool repaint)
         }
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this),
                 xi18n("Do you want to clear the contents of table %1?", tableName),
-                0, KGuiItem(xi18n("&Clear Contents"))))
+                0, KGuiItem(xi18nc("@action:button", "&Clear Contents"))))
         {
             return cancelled;
         }
@@ -1626,10 +1626,10 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(const KDbResultInfo&
         return KMessageBox::questionYesNo(thisWidget, resultInfo.msg
                                           + (resultInfo.desc.isEmpty() ? QString() : ("\n" + resultInfo.desc)),
                                           QString(),
-                                          KGuiItem(xi18nc("Correct Changes", "Correct"),
+                                          KGuiItem(xi18nc("@action:button Correct Changes", "Correct"),
                                                    QString(),
                                                    xi18n("Correct changes")),
-                                          KGuiItem(xi18n("Discard Changes")));
+                                          KGuiItem(xi18nc("@action:button", "Discard Changes")));
     }
 
     if (resultInfo.desc.isEmpty())

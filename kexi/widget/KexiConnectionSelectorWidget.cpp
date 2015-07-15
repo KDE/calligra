@@ -381,7 +381,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
 {
     KDbConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
-                               KGuiItem(xi18n("&Add"), koIconName("dialog-ok"), xi18n("Add database connection")));
+                               KGuiItem(xi18nc("@action:button Add Database Connection", "&Add"), koIconName("dialog-ok"), xi18n("Add database connection")));
     dlg.setWindowTitle(xi18nc("@title:window", "Add a New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
@@ -410,7 +410,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     if (!item)
         return;
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
-                               KGuiItem(xi18n("&Save"), koIconName("document-save"),
+                               KGuiItem(xi18nc("@action:button Save Database Connection", "&Save"), koIconName("document-save"),
                                         xi18n("Save changes made to this database connection")));
     dlg.setWindowTitle(xi18nc("@title:window", "Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())
@@ -435,7 +435,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(items.first());
     if (!item)
         return;
-    if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
+    if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
             xi18n(
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
                 item->data()->toUserVisibleString()),

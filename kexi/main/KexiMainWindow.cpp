@@ -1335,7 +1335,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
                          "Database project <resource>%1</resource> does not appear to have been created using Kexi.<nl/>"
                          "Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
-                    QString(), KGuiItem(xi18nc("Import Database", "&Import..."), koIconName("database_import")),
+                    QString(), KGuiItem(xi18nc("@action:button Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
                 const bool anotherProjectAlreadyOpened = prj;
@@ -2909,7 +2909,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (!additionalMessageString.isEmpty())
             additionalMessageString = "<p>" + additionalMessageString + "</p>";
 
-        const int questionRes = KMessageBox::warningYesNoCancel(this,
+        const KMessageBox::ButtonCode questionRes = KMessageBox::warningYesNoCancel(this,
                                 "<p>"
                                 + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                 .subs(window->partItem()->name()).toString()
@@ -3328,7 +3328,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
         return false;
 
     if (!dontAsk) {
-        if (KMessageBox::No == KMessageBox::warningYesNo(this,
+        if (KMessageBox::No == KMessageBox::questionYesNo(this,
                 xi18nc("@info Remove <objecttype> <objectname>?",
                       "Do you want to permanently delete the following object?<nl/>"
                       "<nl/>%1 <resource>%2</resource><nl/>"
@@ -3337,8 +3337,8 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                       part->info()->name(), item->name()),
                 xi18nc("@title:window Delete Object %1.",
                       "Delete <resource>%1</resource>?", item->name()),
-                KGuiItem(xi18n("Delete"), koIconName("edit-delete")),
-                KStandardGuiItem::no()))
+                KGuiItem(xi18nc("@action:button Delete object", "Delete"), koIconName("edit-delete")),
+                KStandardGuiItem::no(), QString(), KMessageBox::Notify | KMessageBox::Dangerous))
         {
             return cancelled;
         }
@@ -3417,7 +3417,7 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
                             "<para>Do you want to close it?</para>",
                             item->name());
         int r = KMessageBox::questionYesNo(this, msg, QString(),
-                                           KGuiItem(xi18n("Close Window"), koIconName("window-close")),
+                                           KGuiItem(xi18nc("@action:button", "Close Window"), koIconName("window-close")),
                                            KStandardGuiItem::cancel());
         if (r != KMessageBox::Yes) {
             *success = false;
@@ -3761,14 +3761,14 @@ bool KexiMainWindow::checkForDirtyFlagOnExport(KexiPart::Item *item, QMap<QStrin
 
 tristate KexiMainWindow::askOnExportingChangedQuery(KexiPart::Item *item) const
 {
-    int result = KMessageBox::warningYesNoCancel(const_cast<KexiMainWindow*>(this),
+    const KMessageBox::ButtonCode result = KMessageBox::warningYesNoCancel(const_cast<KexiMainWindow*>(this),
         xi18nc("@info", "Design of query <resource>%1</resource> that you want to export data"
                                          " from is changed and has not yet been saved. Do you want to use data"
                                          " from the changed query for exporting or from its original (saved)"
                                          " version?", item->captionOrName()),
         QString(),
-        KGuiItem(xi18nc("Export query data", "Use the Changed Query")),
-        KGuiItem(xi18nc("Export query data", "Use the Original Query")),
+        KGuiItem(xi18nc("@action:button Export query data", "Use the Changed Query")),
+        KGuiItem(xi18nc("@action:button Export query data", "Use the Original Query")),
         KStandardGuiItem::cancel(),
         QString(),
         KMessageBox::Notify | KMessageBox::Dangerous);
@@ -3908,7 +3908,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
             else
                 return false;
 
-            const int questionRes = KMessageBox::warningYesNoCancel(this,
+            const KMessageBox::ButtonCode questionRes = KMessageBox::warningYesNoCancel(this,
                                     "<p>"
                                     + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                     .subs(item->name())

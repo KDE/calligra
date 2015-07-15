@@ -102,7 +102,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     hbox->addStretch(2);
     d->btnSaveChanges = new QPushButton(frmBottom);
     KGuiItem::assign(d->btnSaveChanges,
-                     KGuiItem(xi18n("Save Changes"), "document-save",
+                     KGuiItem(xi18nc("@action:button", "Save Changes"), "document-save",
                               xi18n("Save all changes made to this connection information"),
                               xi18n("Save all changes made to this connection information. "
                                     "You can later reuse this information.")));
@@ -115,7 +115,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     d->btnTestConnection = new QPushButton(frmBottom);
 //! @todo add Test Connection icon
     KGuiItem::assign(d->btnTestConnection,
-                     KGuiItem(xi18n("&Test Connection"), QString(),
+                     KGuiItem(xi18nc("@action:button", "&Test Connection"), QString(),
                               xi18n("Test database connection"),
                               xi18n("Tests database connection. "
                                     "You can check validity of connection information.")));
@@ -449,7 +449,7 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
     connect(d->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     KGuiItem::assign(d->buttonBox->button(QDialogButtonBox::Ok),
                      acceptButtonGuiItem.text().isEmpty()
-                     ? KGuiItem(xi18n("&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
+                     ? KGuiItem(xi18nc("@action:button", "&Open"), koIconName("document-open"), xi18n("Open Database Connection"))
                      : acceptButtonGuiItem
                     );
     mainLayout->addWidget(d->buttonBox);

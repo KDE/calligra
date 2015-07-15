@@ -892,7 +892,7 @@ tristate KexiStartupHandler::detectActionForFile(
                         parent, xi18n("\"%1\" is an external file of type:\n\"%2\".\n"
                                      "Do you want to import the file as a Kexi project?",
                                      QDir::toNativeSeparators(databaseName), mime.comment()),
-                        xi18n("Open External File"), KGuiItem(xi18n("Import...")), KStandardGuiItem::cancel()))
+                        xi18n("Open External File"), KGuiItem(xi18nc("@action:button Import File", "Import...")), KStandardGuiItem::cancel()))
             {
                 return cancelled;
             }
@@ -920,7 +920,7 @@ tristate KexiStartupHandler::detectActionForFile(
             //! @todo error message "Could not detect database driver to use"
             return false;
         }
-        int res = KMessageBox::Yes;
+        KMessageBox::ButtonCode res = KMessageBox::Yes;
         if (!(options & SkipMessages))
             res = KMessageBox::warningYesNoCancel(parent, xi18n(
                                                       "The project file \"%1\" is recognized as compatible with \"%2\" database driver, "

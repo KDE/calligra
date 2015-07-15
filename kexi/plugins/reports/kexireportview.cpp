@@ -255,9 +255,9 @@ QUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
         // not cancelled?
         if (result.isValid()) {
             if (KIO::NetAccess::exists(result, KIO::NetAccess::DestinationSide, this)) {
-                const int answer = KMessageBox::warningContinueCancel(this,
+                const KMessageBox::ButtonCode answer = KMessageBox::warningContinueCancel(this,
                     xi18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
-                    caption, KGuiItem(xi18n("Overwrite")));
+                    caption, KGuiItem(xi18nc("@action:button Overwrite File", "Overwrite")));
 
                 // if overwriting not wanted, let select another url
                 if (answer == KMessageBox::Cancel) {
@@ -361,8 +361,8 @@ void KexiReportView::slotExportAsWebPage()
                  "which will give an output closer to the original, "
                  "or export using a HTML Table, which outputs a much simpler format?"),
             dialogTitle,
-            KGuiItem(xi18n("Use CSS")),
-            KGuiItem(xi18n("Use Table")));
+            KGuiItem(xi18nc("@action:button", "Use CSS")),
+            KGuiItem(xi18nc("@action:button", "Use Table")));
 
     if (answer == KMessageBox::Yes) {
         renderer = m_factory.createInstance("htmlcss");
