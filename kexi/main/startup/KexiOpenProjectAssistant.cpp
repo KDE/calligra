@@ -175,20 +175,17 @@ KexiProjectDatabaseSelectionPage::~KexiProjectDatabaseSelectionPage()
 
 bool KexiProjectDatabaseSelectionPage::setConnection(KDbConnectionData* data)
 {
-    if (conndataToShow != data) {
-        projectSelector->setProjectSet(0);
-        conndataToShow = 0;
-        if (data) {
-            m_projectSetToShow = new KexiProjectSet(data, m_assistant);
-            if (m_projectSetToShow->result().isError()) {
-                delete m_projectSetToShow;
-                m_projectSetToShow = 0;
-                return false;
-            }
-            conndataToShow = data;
-            //-refresh projects list
-            projectSelector->setProjectSet(m_projectSetToShow);
+    projectSelector->setProjectSet(0);
+    conndataToShow = 0;
+    if (data) {
+        KexiProjectSet *projectSetToShow = new KexiProjectSet(data, m_assistant);
+        if (projectSetToShow->result().isError()) {
+            delete projectSetToShow;
+            return false;
         }
+        conndataToShow = data;
+        //-refresh projects list
+        projectSelector->setProjectSet(projectSetToShow);
     }
     if (conndataToShow) {
         setDescription(
