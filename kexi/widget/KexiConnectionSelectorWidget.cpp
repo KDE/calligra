@@ -109,6 +109,12 @@ public:
     {
     }
 
+    void updateRemoteListColumns()
+    {
+        remote->list->resizeColumnToContents(0); // name
+        remote->list->resizeColumnToContents(1); // type
+    }
+
     KexiConnectionSelector *remote;
     QWidget* openExistingWidget;
     KexiPrjTypeSelector* prjTypeSelector;
@@ -209,9 +215,8 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
                     //   }
                 }
                 if (d->remote->list->topLevelItemCount() > 0) {
+                    d->updateRemoteListColumns();
                     d->remote->list->sortByColumn(0, Qt::AscendingOrder);
-                    d->remote->list->resizeColumnToContents(0); // name
-                    d->remote->list->resizeColumnToContents(1); // type
                     d->remote->list->topLevelItem(0)->setSelected(true);
                 }
                 d->remote->descGroupBox->layout()->setMargin(2);
@@ -396,9 +401,12 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     }
 
     ConnectionDataLVItem* item = addConnectionData(newData);
-    d->remote->list->clearSelection();
-    item->setSelected(true);
-    slotConnectionSelectionChanged();
+    if (item) {
+        d->remote->list->clearSelection();
+        d->updateRemoteListColumns();
+        item->setSelected(true);
+        slotConnectionSelectionChanged();
+    }
 }
 
 void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
@@ -423,6 +431,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     const KDbDriverMetaData *driverMetaData = d->manager.driverMetaData(item->data()->driverId());
     if (driverMetaData) {
         item->update(*driverMetaData);
+        d->updateRemoteListColumns();
         slotConnectionSelectionChanged(); //to update descr. edit
     }
 }
@@ -452,12 +461,11 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     if (!d->conn_set->removeConnectionData(item->data()))
         return;
 
-    if (nextItem)
-        nextItem->setSelected(true);
-
     delete item;
 
-    slotConnectionSelectionChanged();
+    if (nextItem)
+        nextItem->setSelected(true);
+    d->updateRemoteListColumns();
 }
 
 void KexiConnectionSelectorWidget::hideConnectonIcon()
