@@ -49,7 +49,7 @@ void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &t
     timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(m_squaresPerRow, m_squaresPerCol) );
 }
 
-// QT5TODO: check if these can be replaced by math function 1:1, named floor and ceil before
+// TODO: check if these can be replaced by math function 1:1, named floor and ceil before
 static inline int intFloor(double d) { return (int) (d + 1e-5); }
 static inline int intCeil(double d) { return (int) (d + 1 - 1e-5); }
 
