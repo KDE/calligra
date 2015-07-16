@@ -333,8 +333,10 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
                     *incompatibleWithKexi = true;
             } else {
                 KDbMessageTitleSetter et(this,
-                    xi18n("Database project %1 does not appear to have been created using Kexi and cannot be opened. "
-                         "It is an SQLite file created using other tools.", d->data->infoString()));
+                    xi18nc("@info (don't add tags around %1, it's done already)",
+                           "Database project %1 does not "
+                           "appear to have been created using Kexi and cannot be opened. "
+                           "It is an SQLite file created using other tools.", d->data->infoString()));
                 m_result = d->connection->result();
             }
             closeConnection();
@@ -1065,10 +1067,12 @@ KexiProject::createBlankProject(bool *cancelled, const KexiProjectData& data,
     tristate res = prj->create(false);
     if (~res) {
 //! @todo move to KexiMessageHandler
-        if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>" + xi18n(
-                    "The project %1 already exists.\n"
-                    "Do you want to replace it with a new, blank one?",
-                    prj->data()->infoString()) + "\n" + i18n(warningNoUndo) + "</qt>",
+        if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>" + xi18nc(
+                    "@info (don't add tags around %1, it's done already)",
+                    "The project %1 already exists.<nl/>"
+                    "Do you want to replace it with a new, blank one?<nl/>"
+                    "%2",
+                    prj->data()->infoString(), xi18n(warningNoUndo)),
                 QString(), KGuiItem(xi18nc("@action:button", "Replace")), KStandardGuiItem::cancel()))
 //! @todo add toUserVisibleString() for server-based prj
         {

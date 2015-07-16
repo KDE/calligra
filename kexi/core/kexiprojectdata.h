@@ -26,6 +26,8 @@
 #include <KDbConnectionData>
 #include <KDbObject>
 
+#include <KLocalizedString>
+
 #include <QDateTime>
 #include <QList>
 
@@ -115,9 +117,8 @@ public:
      For server-based projects returns i18n'd string:
      "<project name>" (connection: user\@server:port).
      For file-based projects returns project's filename.
-     If \a nobr is true, \<nobr\> tags are added around '(connection: user\@server:port)'
-     (useful for displaying in message boxes). */
-    QString infoString(bool nobr = true) const;
+     If \a format controls format of the message (useful for displaying in message boxes). */
+    QString infoString(Kuit::VisualFormat format = Kuit::PlainText) const;
 
     QDateTime lastOpened() const;
 

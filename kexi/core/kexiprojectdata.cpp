@@ -29,7 +29,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 #include <QDir>
 #include <QStringList>
@@ -189,17 +188,17 @@ void KexiProjectData::setDescription(const QString& desc)
     return KDbObject::setDescription(desc);
 }
 
-QString KexiProjectData::infoString(bool nobr) const
+QString KexiProjectData::infoString(Kuit::VisualFormat format) const
 {
     if (d->connData.databaseName().isEmpty()) {
         //server-based
-        return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
-               + (nobr ? " <nobr>" : " ") + xi18nc("database connection", "(connection %1)",
-                                                  d->connData.toUserVisibleString()) + (nobr ? "</nobr>" : "");
+        return kxi18nc("@info database connection",
+                       "<resource>%1</resource> (connection <resource>%2</resource>)")
+                .subs(databaseName()).subs(d->connData.toUserVisibleString()).toString(format);
     }
     //file-based
-    return QString(nobr ? "<nobr>" : "")
-           + QString("\"%1\"").arg(d->connData.databaseName()) + (nobr ? "</nobr>" : "");
+    return kxi18nc("@info database name",
+                   "<resource>%1</resource>").subs(d->connData.databaseName()).toString(format);
 }
 
 void KexiProjectData::setReadOnly(bool set)
