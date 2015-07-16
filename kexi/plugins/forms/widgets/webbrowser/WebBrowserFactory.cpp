@@ -55,6 +55,7 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
 
+    setPropertyDescription("textScale", xi18n("Text Scale"));
     setPropertyDescription("zoomFactor", xi18n("Zoom Factor"));
     setPropertyDescription("url", xi18n("Url"));
 }

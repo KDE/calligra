@@ -413,6 +413,7 @@ KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory(QObject *parent, 
     setPropertyDescription("flat", xi18nc("'Flat' property for group box", "Flat"));
 
     //tab widget
+    setPropertyDescription("tabBarAutoHide", xi18n("Auto-hide Tabs"));
     setPropertyDescription("tabPosition", xi18n("Tab Position"));
     setPropertyDescription("currentIndex", xi18nc("'Current page' property for tab widget", "Current Page"));
     setPropertyDescription("tabShape", xi18n("Tab Shape"));

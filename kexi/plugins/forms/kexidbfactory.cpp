@@ -783,7 +783,12 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "labelPosition"
              && property != "widgetType"
              && property != "fieldTypeInternal"
-             && property != "fieldCaptionInternal"; //hide properties that come with KexiDBAutoField
+             && property != "fieldCaptionInternal" //hide properties that come with KexiDBAutoField
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+             && property != "foregroundLabelColor"
+             && property != "backgroundLabelColor"
+#endif
+             ;
     else if (classname == "KexiDBTextEdit")
         ok = property != "undoDepth"
              && property != "undoRedoEnabled" //always true!
