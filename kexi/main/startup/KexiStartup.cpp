@@ -866,12 +866,13 @@ tristate KexiStartupHandler::detectActionForFile(
         QFile f(databaseName);
         if (!f.open(QIODevice::ReadOnly)) {
             // BTW: similar error msg is provided in SQLiteConnection::drv_useDatabase()
-            if (!(options & SkipMessages))
-                KMessageBox::sorry(parent, xi18n("<p>Could not open project.</p>")
-                                   + xi18n("<p>The file <nobr>\"%1\"</nobr> is not readable.</p>",
-                                          QDir::toNativeSeparators(databaseName))
-                                   + xi18n("Check the file's permissions and whether it is already opened "
-                                          "and locked by another application."));
+            if (!(options & SkipMessages)) {
+                KMessageBox::sorry(parent, xi18nc("@info", "<para>Could not open project.</para>"
+                                   "<para>The file <filename>%1</filename> is not readable. "
+                                   "Check the file's permissions and whether it is already opened "
+                                   "and locked by another application.</para>",
+                                   QDir::toNativeSeparators(databaseName)));
+            }
             return false;
         }
     }

@@ -849,9 +849,10 @@ tristate ImportWizard::import()
     if (sourceDriver && !result.error() && acceptingNeeded) {
         // ok, the destination-db already exists...
         if (KMessageBox::Yes != KMessageBox::warningYesNo(this,
-                        xi18n("<para>Database %1 already exists.</para>"
-                              "<para>Do you want to replace it with a new one?</para>",
-                              sourceDriver->data()->destination->infoString()),
+                        xi18nc("@info (don't add tags around %1, it's done already)",
+                               "Database %1 already exists.<nl/>"
+                               "Do you want to replace it with a new one?",
+                               sourceDriver->data()->destination->infoString()),
                 0, KGuiItem(xi18nc("@action:button Replace Database", "&Replace")), KStandardGuiItem::no()))
         {
             return cancelled;

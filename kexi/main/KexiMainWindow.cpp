@@ -1331,10 +1331,10 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     else if (!res) {
         if (incompatibleWithKexi) {
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
-                    xi18nc("@info",
-                         "Database project <resource>%1</resource> does not appear to have been created using Kexi.<nl/>"
-                         "Do you want to import it as a new Kexi project?",
-                         projectData.infoString()),
+                    xi18nc("@info (don't add tags around %1, it's done already)",
+                           "Database project %1 does not appear to have been created using Kexi.<nl/>"
+                           "Do you want to import it as a new Kexi project?",
+                           projectData.infoString()),
                     QString(), KGuiItem(xi18nc("@action:button Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
