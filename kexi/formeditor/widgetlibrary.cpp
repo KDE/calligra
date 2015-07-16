@@ -73,9 +73,11 @@ public:
         m_advancedProperties.insert("locale");
         m_advancedProperties.insert("mouseTracking");
 /*! @todo: reenable */ m_advancedProperties.insert("palette");
+        m_advancedProperties.insert("sizeAdjustPolicy"); //QAbstractScrollArea
         m_advancedProperties.insert("sizeIncrement");
         m_advancedProperties.insert("sizePolicy");
         m_advancedProperties.insert("statusTip");
+        m_advancedProperties.insert("toolTipDuration");
         m_advancedProperties.insert("trapEnterKeyEvent");
         m_advancedProperties.insert("windowModality");
         m_advancedProperties.insert("autoExclusive");
