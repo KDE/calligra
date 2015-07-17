@@ -65,8 +65,10 @@ public:
     virtual qint64 recordCount() const;
 
     //Utility Functions
+#ifdef KREPORT_SCRIPTING
     virtual QStringList scriptList(const QString& language) const;
     virtual QString scriptCode(const QString& script, const QString& language) const;
+#endif
     virtual QStringList dataSources() const;
     virtual KoReportData* data(const QString&);
 
