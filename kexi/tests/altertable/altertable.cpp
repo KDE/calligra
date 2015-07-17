@@ -44,7 +44,7 @@ QString testFilename;
 QFile testFile;
 QTextStream testFileStream;
 QStringList testFileLine;
-uint testLineNumber = 0;
+int testLineNumber = 0;
 QString origDbFilename, dbFilename;
 int variableI = 1; // simple variable 'i' support
 int newArgc;

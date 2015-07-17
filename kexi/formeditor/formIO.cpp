@@ -341,7 +341,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     int ver = 1; //the default
     if (form->headerProperties()->contains("version")) {
         bool ok;
-        uint v = (*form->headerProperties())["version"].toUInt(&ok);
+        int v = (*form->headerProperties())["version"].toUInt(&ok);
         if (ok)
             ver = v;
     }
@@ -375,7 +375,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     QDomElement tabStops = ui.firstChildElement("tabstops");
     if (!tabStops.isNull()) {
         int i = 0;
-        uint itemsNotFound = 0;
+        int itemsNotFound = 0;
         for (QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++) {
             QString name = n.toElement().text();
             ObjectTreeItem *item = form->objectTree()->lookup(name);

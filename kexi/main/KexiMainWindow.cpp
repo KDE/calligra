@@ -2109,8 +2109,8 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
         }
 
         //delete old custom tabs (other than 'property' tab)
-        const uint count = d->propEditorTabWidget->count();
-        for (uint i = 1; i < count; i++)
+        const int count = d->propEditorTabWidget->count();
+        for (int i = 1; i < count; i++)
             d->propEditorTabWidget->removeTab(1);
     }
 

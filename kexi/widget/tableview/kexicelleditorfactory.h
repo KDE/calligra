@@ -45,13 +45,13 @@ public:
      You can register the same \a item many times for different types and subtypes.
      Once registered, \a item object will be owned by the factory, so you shouldn't
      care about deleting it. */
-    static void registerItem(KexiCellEditorFactoryItem& item, uint type,
+    static void registerItem(KexiCellEditorFactoryItem& item, int type,
                              const QString& subType = QString());
 
     /*! \return item for \a type and (optional) \a subType.
      If no item found, the one with empty subtype is tried.
      If still no item found, the default is tried. Eventually, may return NULL. */
-    static KexiCellEditorFactoryItem* item(uint type, const QString& subType = QString());
+    static KexiCellEditorFactoryItem* item(int type, const QString& subType = QString());
 
     /*! Creates a new editor for \a column. If \a parent is of QScrollArea, the new editor
      will be created inside parent->viewport() instead. */

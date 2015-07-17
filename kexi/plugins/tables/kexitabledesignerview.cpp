@@ -222,14 +222,14 @@ void KexiTableDesignerView::initData()
 {
     //add column data
     d->data->deleteAllRecords();
-    uint tableFieldCount = 0;
+    int tableFieldCount = 0;
     d->primaryKeyExists = false;
 
     if (tempData()->table) {
         tableFieldCount = tempData()->table->fieldCount();
 
         //recreate table data records
-        for (uint i = 0; i < tableFieldCount; i++) {
+        for (int i = 0; i < tableFieldCount; i++) {
             KDbField *field = tempData()->table->field(i);
             KDbRecordData *data = d->data->createItem();
             if (field->isPrimaryKey()) {
@@ -253,8 +253,8 @@ void KexiTableDesignerView::initData()
     }
 
     //add empty space, at least 2 times more than number of existing fields
-    uint fullSize = qMax(d->sets->size(), uint(2 * tableFieldCount));
-    for (uint i = tableFieldCount; i < fullSize; i++) {
+    int fullSize = qMax(d->sets->size(), 2 * tableFieldCount);
+    for (int i = tableFieldCount; i < fullSize; i++) {
         d->data->append(d->data->createItem());
     }
 
@@ -263,7 +263,7 @@ void KexiTableDesignerView::initData()
 
     //now recreate property sets
     if (tempData()->table) {
-        for (uint i = 0; i < tableFieldCount; i++) {
+        for (int i = 0; i < tableFieldCount; i++) {
             KDbField *field = tempData()->table->field(i);
             createPropertySet(i, *field);
         }
@@ -376,7 +376,7 @@ KexiTableDesignerView::createPropertySet(int record, const KDbField& field, bool
     set->addProperty(prop = new KProperty("unsigned", QVariant(field.isUnsigned()),
                                                      xi18n("Unsigned Number")));
 
-    set->addProperty(prop = new KProperty("maxLength", (uint)field.maxLength(),
+    set->addProperty(prop = new KProperty("maxLength", field.maxLength(),
                                                      xi18n("Max Length")));
 
     set->addProperty(prop  = new KProperty("maxLengthIsDefault",
@@ -811,7 +811,7 @@ void KexiTableDesignerView::slotRecordUpdated(KDbRecordData *data)
         QString fieldName(KDb::stringToIdentifier(fieldCaption));
 
         KDbField::Type fieldType = KDb::intToFieldType(intFieldType);
-        uint maxLength = 0;
+        int maxLength = 0;
         if (fieldType == KDbField::Text) {
             maxLength = KDbField::defaultMaxLength();
         }
@@ -1260,10 +1260,10 @@ tristate KexiTableDesignerView::buildSchema(KDbTableSchema &schema, bool beSilen
 //! @todo this is backward-compatible code for "single visible column" implementation
 //!       for multiple columns, only the first is displayed, so there is a data loss is GUI is used
 //!       -- special kproperty editor needed
-            QList<uint> visibleColumns;
+            QList<int> visibleColumns;
             const int visibleColumn = (*s)["visibleColumn"].value().toInt();
             if (visibleColumn >= 0)
-                visibleColumns.append((uint)visibleColumn);
+                visibleColumns.append(visibleColumn);
             lookupFieldSchema->setVisibleColumns(visibleColumns);
 //! @todo support columnWidths(), columnHeadersVisible(), maxVisibleRecords(), limitToList(), displayWidget()
             if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {

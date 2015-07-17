@@ -53,7 +53,7 @@ protected:
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber, QStringList& stringList,
+        const QString& sqlStatement, int columnNumber, QStringList& stringList,
         int numRecords = -1);
 
     /*! Fetches single record from result obtained
@@ -86,7 +86,7 @@ protected:
     virtual bool drv_moveLast();
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
+    virtual QVariant drv_value(int i);
 
 
 private:

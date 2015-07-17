@@ -152,7 +152,7 @@ bool SybaseMigrate::drv_tableNames(QStringList& tableNames)
  On success the result is stored in \a stringList and true is returned.
  \return cancelled if there are no records available. */
 tristate SybaseMigrate::drv_queryStringListFromSQL(
-    const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+    const QString& sqlStatement, int columnNumber, QStringList& stringList, int numRecords)
 {
     if (!query(sqlStatement))
         return false;
@@ -173,7 +173,7 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
             return r;
         }
 
-        uint numFields = dbnumcols(d->dbProcess);
+        int numFields = dbnumcols(d->dbProcess);
         if (columnNumber > (numFields - 1)) {
             qWarning() << sqlStatement
                 << "columnNumber too large"

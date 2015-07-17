@@ -91,7 +91,7 @@ public:
     QLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
     QLineEdit *navRecordCount; //!< readonly counter
-    uint nav1DigitWidth;
+    int nav1DigitWidth;
     QAbstractScrollArea *view;
 
     QLabel *editingIndicatorLabel;
@@ -325,9 +325,9 @@ void KexiRecordNavigator::resizeEvent(QResizeEvent *e)
     }
 }
 
-void KexiRecordNavigator::setCurrentRecordNumber(uint r)
+void KexiRecordNavigator::setCurrentRecordNumber(int r)
 {
-    uint recCnt = recordCount();
+    int recCnt = recordCount();
     if (r > (recCnt + (d->isInsertingEnabled ? 1 : 0)))
         r = recCnt + (d->isInsertingEnabled ? 1 : 0);
     QString n;
@@ -340,9 +340,9 @@ void KexiRecordNavigator::setCurrentRecordNumber(uint r)
     updateButtons(recCnt);
 }
 
-void KexiRecordNavigator::updateButtons(uint recCnt)
+void KexiRecordNavigator::updateButtons(int recCnt)
 {
-    const uint r = currentRecordNumber();
+    const int r = currentRecordNumber();
     if (isEnabled()) {
         d->navBtnPrev->setEnabled(r > 1);
         d->navBtnFirst->setEnabled(r > 1);
@@ -352,7 +352,7 @@ void KexiRecordNavigator::updateButtons(uint recCnt)
     }
 }
 
-void KexiRecordNavigator::setRecordCount(uint count)
+void KexiRecordNavigator::setRecordCount(int count)
 {
     const QString & n = QString::number(count);
     if (d->isInsertingEnabled && currentRecordNumber() == 0) {
@@ -375,7 +375,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
     updateButtons(recordCount());
 }
 
-uint KexiRecordNavigator::currentRecordNumber() const
+int KexiRecordNavigator::currentRecordNumber() const
 {
     bool ok = true;
     int r = d->navRecordNumber->text().toInt(&ok);
@@ -384,7 +384,7 @@ uint KexiRecordNavigator::currentRecordNumber() const
     return r;
 }
 
-uint KexiRecordNavigator::recordCount() const
+int KexiRecordNavigator::recordCount() const
 {
     bool ok = true;
     int r = d->navRecordCount->text().toInt(&ok);

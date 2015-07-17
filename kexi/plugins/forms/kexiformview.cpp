@@ -420,7 +420,7 @@ static void setUnsavedBLOBIdsForDataViewMode(
 //! @todo KexiBLOBBuffer::Id_t is unsafe and unsupported by QVariant - fix it
             widget->setProperty(
                 "pixmapId",
-                (uint)blobID);
+                int(blobID));
     }
     const QList<QWidget*> list(widget->findChildren<QWidget*>());
     if (list.isEmpty())
@@ -659,7 +659,7 @@ void KexiFormView::initDataSource()
         }
         //qDebug() << "sources=" << sources;
 
-        uint index = 0;
+        int index = 0;
         for (QStringList::ConstIterator it = sources.constBegin();
              it != sources.constEnd(); ++it, index++)
         {
@@ -808,7 +808,7 @@ KexiFormView::storeData(bool dontAsk)
             QString caption(fi.baseName().replace('_', ' ').simplified());
             KDbPreparedStatementParameters parameters;
             parameters << h.data() << originalFileName << caption
-                       << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
+                       << h.mimeType() << int(/*! @todo unsafe */h.folderId());
             if (!st.execute(parameters)) {
                 delete blobsFieldsWithoutID;
                 qWarning() << "execute error";
@@ -827,7 +827,7 @@ KexiFormView::storeData(bool dontAsk)
             //set widget's internal property so it can be saved...
             const QVariant oldStoredPixmapId(it.key()->property("storedPixmapId"));
             //! @todo KexiBLOBBuffer::Id_t is unsafe and unsupported by QVariant - fix!
-            it.key()->setProperty("storedPixmapId", QVariant((uint)storedBLOBID));
+            it.key()->setProperty("storedPixmapId", QVariant(int(storedBLOBID)));
             KFormDesigner::ObjectTreeItem *widgetItem
                 = designFormView->form()->objectTree()->lookup(it.key()->objectName());
             if (widgetItem)

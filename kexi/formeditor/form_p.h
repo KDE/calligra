@@ -136,9 +136,9 @@ public:
     QHash<QByteArray, QString> headerProperties;
 
     //! Format version, set by FormIO or on creating a new form.
-    uint formatVersion;
+    int formatVersion;
     //! Format version, set by FormIO's loader or on creating a new form.
-    uint originalFormatVersion;
+    int originalFormatVersion;
 
 #ifdef KFD_SIGSLOTS
     //! true is slot connection is curently being painted
@@ -148,7 +148,7 @@ public:
     //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
     PropertyCommandGroup  *lastCommandGroup;
-    uint idOfPropertyCommand;
+    int idOfPropertyCommand;
 
     //! Command that being executed through Form::addCommand()
     const Command *executingCommand;

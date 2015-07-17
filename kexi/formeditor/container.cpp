@@ -160,7 +160,7 @@ public:
     };
     State state;
 
-    uint idOfPropertyCommand;
+    int idOfPropertyCommand;
 
     //! the watched container and it's toplevel one...
     QPointer<Container> toplevel;
@@ -1019,20 +1019,20 @@ Container::createGridLayout(bool testOnly)
     for (QWidgetList::ConstIterator it(vlist->constBegin()); it!=vlist->constEnd(); ++it) {
         QWidget *w = *it;
         QRect r( w->geometry() );
-        uint wcol = 0, wrow = 0, endrow = 0, endcol = 0;
-        uint i = 0;
+        int wcol = 0, wrow = 0, endrow = 0, endcol = 0;
+        int i = 0;
 
         // We look for widget row(s) ..
         while (r.y() >= rows[i]) {
-            if ((uint)rows.size() <= (i + 1)) { // we are the last row
+            if (rows.size() <= (i + 1)) { // we are the last row
                 wrow = i;
                 break;
             }
             if (r.y() < rows[i+1]) {
                 wrow = i; // the widget will be in this row
-                uint j = i + 1;
+                int j = i + 1;
                 // Then we check if the widget needs to span multiple rows
-                while ((uint)rows.size() >= (j + 1) && r.bottom() > rows[j]) {
+                while (rows.size() >= (j + 1) && r.bottom() > rows[j]) {
                     endrow = j;
                     j++;
                 }
@@ -1047,15 +1047,15 @@ Container::createGridLayout(bool testOnly)
         // .. and column(s)
         i = 0;
         while (r.x() >= cols[i]) {
-            if ((uint)cols.size() <= (i + 1)) { // last column
+            if (cols.size() <= (i + 1)) { // last column
                 wcol = i;
                 break;
             }
             if (r.x() < cols[i+1]) {
                 wcol = i;
-                uint j = i + 1;
+                int j = i + 1;
                 // Then we check if the widget needs to span multiple columns
-                while ((uint)cols.size() >= (j + 1) && r.right() > cols[j]) {
+                while (cols.size() >= (j + 1) && r.right() > cols[j]) {
                     endcol = j;
                     j++;
                 }

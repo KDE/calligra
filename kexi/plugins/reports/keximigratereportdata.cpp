@@ -92,7 +92,7 @@ int KexiMigrateReportData::fieldNumber(const QString &fld) const
 {
     KDbQueryColumnInfo::Vector flds;
 
-    uint x = -1;
+    int x = -1;
 
     if (d->schema) {
         flds = d->schema->columns();

@@ -115,9 +115,9 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
     const bool copyToClipboard = options.mode == Clipboard;
     if (copyToClipboard) {
 //! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
-        uint bufSize = qMin(uint(recordCount < 0 ? 10 : recordCount) * fields.count() * 20, (uint)128000);
+        int bufSize = qMin((recordCount < 0 ? 10 : recordCount) * fields.count() * 20, 128000);
         buffer.reserve(bufSize);
-        if ((uint)buffer.capacity() < bufSize) {
+        if (buffer.capacity() < bufSize) {
             qWarning() << "Cannot allocate memory for " << bufSize
             << " characters";
             return false;
@@ -162,7 +162,7 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
 
     qDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
-    const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
+    const int fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
     const QByteArray delimiter(options.delimiter.left(1).toLatin1());
     const bool hasTextQuote = !options.textQuote.isEmpty();
     const QString textQuote(options.textQuote.left(1));
@@ -172,10 +172,10 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
     QScopedArrayPointer<bool> isDateTime(new bool[fieldsCount]);
     QScopedArrayPointer<bool> isTime(new bool[fieldsCount]);
     QScopedArrayPointer<bool> isBLOB(new bool[fieldsCount]);
-    QScopedArrayPointer<uint> visibleFieldIndex(new uint[fieldsCount]);
+    QScopedArrayPointer<int> visibleFieldIndex(new int[fieldsCount]);
 // bool isInteger[fieldsCount]; //cache for faster checks
 // bool isFloatingPoint[fieldsCount]; //cache for faster checks
-    for (uint i = 0; i < fieldsCount; i++) {
+    for (int i = 0; i < fieldsCount; i++) {
         KDbQueryColumnInfo* ci;
         const int indexForVisibleLookupValue = fields[i]->indexForVisibleLookupValue();
         if (-1 != indexForVisibleLookupValue) {
@@ -197,7 +197,7 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
 
     // 1. Output column names
     if (options.addColumnNames) {
-        for (uint i = 0; i < fieldsCount; i++) {
+        for (int i = 0; i < fieldsCount; i++) {
             qDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
@@ -220,9 +220,9 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
     }
     for (cursor->moveFirst(); !cursor->eof() && !cursor->result().isError(); cursor->moveNext()) {
         //qDebug() << "Adding records";
-        const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
-        for (uint i = 0; i < realFieldCount; i++) {
-            const uint real_i = visibleFieldIndex[i];
+        const int realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
+        for (int i = 0; i < realFieldCount; i++) {
+            const int real_i = visibleFieldIndex[i];
             if (i > 0) {
                 APPEND(delimiter);
             }

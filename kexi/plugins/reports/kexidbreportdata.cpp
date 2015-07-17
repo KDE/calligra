@@ -72,7 +72,7 @@ void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
             return;
         KDbOrderByColumnList order;
         for (int i = 0; i < sorting.count(); i++) {
-            order.appendField(*d->copySchema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
+            order.appendField(d->copySchema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
         }
         d->copySchema->setOrderByColumnList(order);
     } else {

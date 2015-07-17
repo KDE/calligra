@@ -213,7 +213,7 @@ QPixmap KexiDBImageBox::pixmap() const
     return m_pixmap;
 }
 
-uint KexiDBImageBox::pixmapId() const
+int KexiDBImageBox::pixmapId() const
 {
     if (dataSource().isEmpty()) {
         //not db-aware
@@ -222,7 +222,7 @@ uint KexiDBImageBox::pixmapId() const
     return 0;
 }
 
-void KexiDBImageBox::setPixmapId(uint id)
+void KexiDBImageBox::setPixmapId(int id)
 {
     if (m_insideSetData) //avoid recursion
         return;
@@ -230,7 +230,7 @@ void KexiDBImageBox::setPixmapId(uint id)
     repaint();
 }
 
-uint KexiDBImageBox::storedPixmapId() const
+int KexiDBImageBox::storedPixmapId() const
 {
     if (dataSource().isEmpty() && m_data.stored()) {
         //not db-aware
@@ -239,7 +239,7 @@ uint KexiDBImageBox::storedPixmapId() const
     return 0;
 }
 
-void KexiDBImageBox::setStoredPixmapId(uint id)
+void KexiDBImageBox::setStoredPixmapId(int id)
 {
     setData(KexiBLOBBuffer::self()->objectForId(id, /*stored*/true));
     repaint();

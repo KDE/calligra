@@ -404,7 +404,7 @@ void KexiCSVImportDialog::next()
             return;
         }
     } else if (curPage == m_optionsPage) {
-        const uint numRows(m_table->rowCount());
+        const int numRows(m_table->rowCount());
         if (numRows == 0)
             return; //impossible
 
@@ -968,7 +968,7 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStr
     int tabs = 0, semicolons = 0, commas = 0;
     int line = 0;
     bool wasChar13 = false; // true if previous x was '\r'
-    for (uint i = 0; !inputStream->atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
+    for (int i = 0; !inputStream->atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
         (*m_inputStream) >> c; // read one char
         if (prevChar == '"') {
             if (c != '"') //real quote (not double "")
@@ -1821,7 +1821,7 @@ void KexiCSVImportDialog::import()
         m_destinationTableSchema = new KDbTableSchema(m_partItemForSavedTable->name());
         m_destinationTableSchema->setCaption(m_partItemForSavedTable->caption());
         m_destinationTableSchema->setDescription(m_partItemForSavedTable->description());
-        const uint numCols(m_table->columnCount());
+        const int numCols(m_table->columnCount());
 
         m_implicitPrimaryKeyAdded = false;
         //add PK if user wanted it
@@ -1850,7 +1850,7 @@ void KexiCSVImportDialog::import()
             QString fieldCaption("Id");
 
             QSet<QString> colnames;
-            for (uint col = 0; col < numCols; col++)
+            for (int col = 0; col < numCols; col++)
                 colnames.insert(m_table->data(m_table->index(0, col)).toString().toLower().simplified());
             if (colnames.contains(fieldName)) {
                 int num = 1;
@@ -1864,7 +1864,7 @@ void KexiCSVImportDialog::import()
                 KDbField::Integer,
                 KDbField::NoConstraints,
                 KDbField::NoOptions,
-                0, 0, //uint length=0, uint precision=0,
+                0, 0, //int length=0, int precision=0,
                 QVariant(), //QVariant defaultValue=QVariant(),
                 fieldCaption
             ); //no description and width for now
@@ -1873,11 +1873,11 @@ void KexiCSVImportDialog::import()
             m_destinationTableSchema->addField(field);
         }
 
-        for (uint col = 0; col < numCols; col++) {
+        for (int col = 0; col < numCols; col++) {
             QString fieldCaption(m_table->data(m_table->index(0, col)).toString().simplified());
             QString fieldName;
             if (fieldCaption.isEmpty()) {
-                uint i = 0;
+                int i = 0;
                 do {
                     fieldCaption = xi18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1);
                     fieldName = KDb::stringToIdentifier(fieldCaption);
@@ -1891,7 +1891,7 @@ void KexiCSVImportDialog::import()
                 fieldName = KDb::stringToIdentifier(fieldCaption);
                 if (m_destinationTableSchema->field(fieldName)) {
                     QString fixedFieldName;
-                    uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
+                    int i = 2; //"apple 2, apple 3, etc. if there're many "apple" names
                     do {
                         fixedFieldName = fieldName + "_" + QString::number(i);
                         if (!m_destinationTableSchema->field(fixedFieldName))
@@ -1913,7 +1913,7 @@ void KexiCSVImportDialog::import()
                 detectedType,
                 KDbField::NoConstraints,
                 KDbField::NoOptions,
-                0, 0, //uint length=0, uint precision=0,
+                0, 0, //int length=0, int precision=0,
                 QVariant(), //QVariant defaultValue=QVariant(),
                 fieldCaption
             ); //no description and width for now

@@ -117,15 +117,15 @@ public Q_SLOTS:
     void setDescription(const QString& desc);
 
     /** Returns the length of text if the field type is text. */
-    uint length();
+    int length();
     /** Sets the length for this field. Only works for Text Type (not including LongText). */
-    void setLength(uint length);
+    void setLength(int length);
 
     /** Returns precision for numeric and other fields that have both length and
     precision (floating point types). */
-    uint precision();
+    int precision();
     /** Sets the precision for numeric and other fields. */
-    void setPrecision(uint precision);
+    void setPrecision(int precision);
 
     /** Returns the default value this field has. */
     QVariant defaultValue();

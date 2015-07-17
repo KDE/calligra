@@ -65,7 +65,7 @@ public:
     virtual bool drv_movePrevious();
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
+    virtual QVariant drv_value(int i);
 
     virtual bool drv_moveFirst();
 

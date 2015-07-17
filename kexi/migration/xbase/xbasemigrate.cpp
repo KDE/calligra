@@ -161,7 +161,7 @@ bool xBaseMigrate::drv_readTableSchema(
         new KDbField( fldID, type( tableDbf->GetFieldType( i ) ) );
 
     if ( fld->type() == KDbField::Text ) {
-      uint len = tableDbf->GetFieldLen(i);
+      int len = tableDbf->GetFieldLen(i);
       if (len < 255) { // limit for small lengths only
           fld->setMaxLength(len);
       }

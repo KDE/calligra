@@ -100,17 +100,17 @@ int KexiDBCursor::at()
 {
     return m_cursor->at();
 }
-uint KexiDBCursor::fieldCount()
+int KexiDBCursor::fieldCount()
 {
     return m_cursor->fieldCount();
 }
 
-QVariant KexiDBCursor::value(uint index)
+QVariant KexiDBCursor::value(int index)
 {
     return m_cursor->value(index);
 }
 
-bool KexiDBCursor::setValue(uint index, QVariant value)
+bool KexiDBCursor::setValue(int index, QVariant value)
 {
     KDbQuerySchema* query = m_cursor->query();
     if (! query) {

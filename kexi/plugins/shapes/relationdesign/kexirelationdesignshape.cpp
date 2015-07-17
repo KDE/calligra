@@ -169,8 +169,8 @@ void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverte
 
     painter.drawText(QPointF(5.0, 11.0), m_database + " : " + m_relation);
 
-    uint i = 0;
-    uint offset;
+    int i = 0;
+    int offset;
     foreach(SimpleField * column, m_fieldData) {
         ++i;
         offset = (13.0 * i) + 20;
@@ -264,7 +264,7 @@ void KexiRelationDesignShape::addConnectionPoints()
 {
     clearConnectionPoints();
 
-    uint i = 0;
+    int i = 0;
     foreach(SimpleField * column, m_fieldData) {
         Q_UNUSED(column);
         ++i;

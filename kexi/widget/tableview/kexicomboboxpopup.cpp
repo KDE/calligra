@@ -102,7 +102,7 @@ public:
     //! Columns that should be kept visible; the others should be hidden.
     //! Used when query is used as the record source type (KDbLookupFieldSchema::RecordSource::Query).
     //! We're doing this in this case because it's hard to alter the query to remove columns.
-    QList<uint> visibleColumnsToShow;
+    QList<int> visibleColumnsToShow;
 };
 
 //========================================
@@ -181,7 +181,7 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
         lookupFieldSchema = field->table()->lookupFieldSchema(*field);
     delete d->privateQuery;
     d->privateQuery = 0;
-    const QList<uint> visibleColumns(lookupFieldSchema ? lookupFieldSchema->visibleColumns() : QList<uint>());
+    const QList<int> visibleColumns(lookupFieldSchema ? lookupFieldSchema->visibleColumns() : QList<int>());
     if (!visibleColumns.isEmpty() && lookupFieldSchema->boundColumn() >= 0) {
         const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
@@ -205,10 +205,10 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
                 const KDbQueryColumnInfo::Vector fieldsExpanded(lookupTable->query()->fieldsExpanded());
                 d->privateQuery = new KDbQuerySchema;
                 bool columnsFound = true;
-                QList<uint> visibleAndBoundColumns = visibleColumns;
+                QList<int> visibleAndBoundColumns = visibleColumns;
                 visibleAndBoundColumns.append(lookupFieldSchema->boundColumn());
                 qDebug() << visibleAndBoundColumns;
-                foreach (uint index, visibleAndBoundColumns) {
+                foreach (int index, visibleAndBoundColumns) {
                     KDbQueryColumnInfo *columnInfo = fieldsExpanded.value(index);
                     if (columnInfo && columnInfo->field) {
                         d->privateQuery->addField(columnInfo->field);
@@ -256,9 +256,9 @@ void KexiComboBoxPopup::setData(KDbTableViewColumn *column, KDbField *field)
         if (multipleLookupColumnJoined && d->privateQuery) {
             // append a column computed using multiple columns
             const KDbQueryColumnInfo::Vector fieldsExpanded(d->privateQuery->fieldsExpanded());
-            uint fieldsExpandedSize(fieldsExpanded.size());
+            int fieldsExpandedSize(fieldsExpanded.size());
             KDbExpression expr;
-            QList<uint>::ConstIterator it(visibleColumns.constBegin());
+            QList<int>::ConstIterator it(visibleColumns.constBegin());
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
                 KDbQueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
                 if (!ci) {
@@ -367,8 +367,8 @@ void KexiComboBoxPopup::updateSize(int minWidth)
         // record source type is Query
         // Set width to 0 and disable resizing of columns that shouldn't be visible
         const KDbQueryColumnInfo::Vector fieldsExpanded(d->tv->cursor()->query()->fieldsExpanded());
-        QList<uint>::ConstIterator visibleColumnsToShowIt = d->visibleColumnsToShow.constBegin();
-        for (uint i = 0; i < uint(fieldsExpanded.count()); ++i) {
+        QList<int>::ConstIterator visibleColumnsToShowIt = d->visibleColumnsToShow.constBegin();
+        for (int i = 0; i < fieldsExpanded.count(); ++i) {
             bool show = visibleColumnsToShowIt != d->visibleColumnsToShow.constEnd() && i == *visibleColumnsToShowIt;
             d->tv->setColumnResizeEnabled(i, show);
             if (show) {

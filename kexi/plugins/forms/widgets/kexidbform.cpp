@@ -65,7 +65,7 @@ public:
 
     //! \return index of data item \a item, or -1 if not found
     int indexOfDataItem(KexiDataItemInterface* item) const {
-        QHash<KexiDataItemInterface*, uint>::const_iterator indicesForDataAwareWidgetsIt(
+        QHash<KexiDataItemInterface*, int>::const_iterator indicesForDataAwareWidgetsIt(
             indicesForDataAwareWidgets.find(item));
         if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd())
             return -1;
@@ -95,7 +95,7 @@ public:
     //! ordered list of data-aware widgets
     QList<QWidget*> orderedDataAwareWidgets;
     //! a subset of orderedFocusWidgets mapped to indices
-    QHash<KexiDataItemInterface*, uint> indicesForDataAwareWidgets;
+    QHash<KexiDataItemInterface*, int> indicesForDataAwareWidgets;
     QList<QWidget*>::iterator orderedFocusWidgetsIterator;
     QRect prev_rect; //!< previously selected rectangle
     bool autoTabStops;
@@ -163,7 +163,7 @@ QList<QWidget*>* KexiDBForm::orderedDataAwareWidgets() const
 void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 {
     QWidget *fromWidget = 0;
-    uint numberOfDataAwareWidgets = 0;
+    int numberOfDataAwareWidgets = 0;
     //generate a new list
     foreach (KFormDesigner::ObjectTreeItem* titem, *form->tabStops()) {
         if (titem->widget()->focusPolicy() & Qt::TabFocus) {

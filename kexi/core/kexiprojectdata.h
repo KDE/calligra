@@ -146,7 +146,7 @@ public:
      This is set to 0 by default what means KexiDBShortcutFile_version should be used on saving.
      If KexiDBShortcutFile was used to create this KexiProjectData object,
      the version information is retrieved from the file. */
-    uint formatVersion;
+    int formatVersion;
 
 private:
     KexiProjectDataPrivate * const d;

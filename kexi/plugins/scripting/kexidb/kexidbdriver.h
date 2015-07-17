@@ -94,9 +94,9 @@ public Q_SLOTS:
     could not be created. */
     QObject* createConnection(QObject* data);
     /** Returns the number of connections. */
-    uint connectionCount();
+    int connectionCount();
     /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
-    //! @todo QObject* connection(uint index);
+    //! @todo QObject* connection(int index);
 
 private:
     KDbDriver* m_driver;

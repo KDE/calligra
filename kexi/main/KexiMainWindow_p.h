@@ -463,7 +463,7 @@ public:
 
     void removeWindow(int identifier);
 
-    uint openedWindowsCount();
+    int openedWindowsCount();
 
     //! Used in KexiMainWindowe::closeProject()
     void clearWindows();

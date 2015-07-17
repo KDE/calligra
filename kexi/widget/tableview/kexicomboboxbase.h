@@ -92,8 +92,8 @@ protected:
      \a str is returned.
      Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string
      for column #1 for id-column #0 */
-    QString valueForString(const QString& str, int* record, uint lookInColumn,
-                           uint returnFromColumn, bool allowNulls = false);
+    QString valueForString(const QString& str, int* record, int lookInColumn,
+                           int returnFromColumn, bool allowNulls = false);
 
     //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)

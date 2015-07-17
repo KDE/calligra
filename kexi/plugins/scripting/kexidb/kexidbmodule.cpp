@@ -145,8 +145,8 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
         if (version >= 2 && config.hasKey("encryptedPassword")) {
             QString password(config.readEntry("encryptedPassword"));
-            uint len = password.length();
-            for (uint i = 0; i < len; i++) {
+            int len = password.length();
+            for (int i = 0; i < len; i++) {
                 password[i] = QChar(password[i].unicode() - 47 - i);
             }
             data->setPassword(password);

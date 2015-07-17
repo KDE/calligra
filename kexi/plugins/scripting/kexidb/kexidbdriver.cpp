@@ -76,13 +76,13 @@ QObject* KexiDBDriver::createConnection(QObject* data)
     return d ? new KexiDBConnection(m_driver->createConnection(*d->data())) : 0;
 }
 
-uint KexiDBDriver::connectionCount()
+int KexiDBDriver::connectionCount()
 {
     return m_driver->connections().count();
 }
 
 //! @todo
-/*QObject* KexiDBDriver::connection(uint index) {
+/*QObject* KexiDBDriver::connection(int index) {
     QSet<KDbConnection*> list = m_driver->connectionsList();
     return (index < list.count()) ? list.at(index) : 0;
 }*/
