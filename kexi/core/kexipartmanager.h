@@ -96,6 +96,8 @@ private:
      * Queries the plugin system and creates a list of available parts.
      * @return false if required servicetype was not found (what means the installation is broken).
      */
+    //! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
+    //! @todo This method generates a few warnings, maybe we want to optionally display them somewhere (via the message handler)?
     bool lookup();
 
     template <typename PartClass>
