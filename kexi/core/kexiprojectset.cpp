@@ -43,6 +43,7 @@ KexiProjectSet::KexiProjectSet(KDbMessageHandler* handler)
         : KDbResultable()
         , d(new KexiProjectSetPrivate())
 {
+    setMessageHandler(handler);
 }
 
 KexiProjectSet::~KexiProjectSet()
@@ -57,6 +58,7 @@ bool KexiProjectSet::setConnectionData(KDbConnectionData* conndata)
     qDeleteAll(d->list);
     d->list.clear();
 
+    KDbMessageGuard mg(this);
     KDbDriver *drv = Kexi::driverManager().driver(conndata->driverId());
     if (!drv) {
         m_result = Kexi::driverManager().result();

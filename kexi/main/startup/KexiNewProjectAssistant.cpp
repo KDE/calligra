@@ -21,6 +21,7 @@
 
 #include "KexiNewProjectAssistant.h"
 #include "ui_KexiServerDBNamePage.h"
+#include "KexiAssistantMessageHandler.h"
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
 #include "KexiStartup.h"
@@ -383,8 +384,6 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     m_dbNameAutofill = true;
     m_le_dbname_txtchanged_enabled = true;
     contents = new KexiServerDBNamePage;
-//! @todo
-    m_msgHandler = new KexiGUIMessageHandler(this);
 
     connect(contents->le_title, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
@@ -536,6 +535,9 @@ public:
 
     ~Private()
     {
+        KDbMessageHandler *h = q->messageHandler();
+        q->setMessageHandler(0);
+        delete h;
     }
 
     KexiTemplateSelectionPage* templateSelectionPage() {
@@ -588,6 +590,7 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
 {
     setCurrentPage(d->templateSelectionPage());
     setFocusProxy(d->templateSelectionPage());
+    setMessageHandler(this);
 }
 
 KexiNewProjectAssistant::~KexiNewProjectAssistant()

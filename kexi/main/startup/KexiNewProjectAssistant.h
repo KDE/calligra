@@ -33,6 +33,7 @@
 
 #include <KDbConnectionData>
 #include <KDbMessageHandler>
+#include <KDbResult>
 
 #include <QPointer>
 
@@ -146,7 +147,6 @@ private Q_SLOTS:
 private:
     QString enteredDbName() const;
     KexiNewProjectAssistant* m_assistant;
-    KexiGUIMessageHandler* m_msgHandler;
     KexiProjectSet *m_projectSetToShow;
     KexiProjectSelectorWidget* m_projectSelector;
 
@@ -160,7 +160,8 @@ private:
 class KexiProjectData;
 
 class KexiNewProjectAssistant : public KexiAssistantWidget,
-                                public KexiAssistantMessageHandler
+                                public KexiAssistantMessageHandler,
+                                public KDbResultable
 {
     Q_OBJECT
 public:
