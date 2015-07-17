@@ -918,8 +918,8 @@ void ImportWizard::next()
             return;
         }
 
-        KDbConnectionData* condata = d->srcConn->selectedConnectionData();
-        if (!fileBasedSrcSelected() && !condata) {
+        KDbConnectionData* conndata = d->srcConn->selectedConnectionData();
+        if (!fileBasedSrcSelected() && !conndata) {
             KMessageBox::sorry(this, xi18n("Select source database."));
             return;
         }
@@ -930,7 +930,7 @@ void ImportWizard::next()
             if (fileBasedSrcSelected())
                 dbname = selectedSourceFileName();
             else
-                dbname = condata ? condata->toUserVisibleString() : QString();
+                dbname = conndata ? conndata->toUserVisibleString() : QString();
             KMessageBox::error(this,
                                dbname.isEmpty() ?
                                xi18n("Could not import database. This type is not supported.")
@@ -941,18 +941,21 @@ void ImportWizard::next()
         if (!fileBasedSrcSelected()) {
             // make sure we have password if needed
             tristate passwordNeeded = false;
-            if (condata->password().isEmpty()) {
-                passwordNeeded = KexiDBPasswordDialog::getPasswordIfNeeded(condata, this);
+            if (conndata->password().isEmpty()) {
+                passwordNeeded = KexiDBPasswordDialog::getPasswordIfNeeded(conndata, this);
             }
             bool ok = passwordNeeded != cancelled;
             if (ok) {
                 KexiGUIMessageHandler handler;
-                d->prjSet = new KexiProjectSet(condata, &handler);
-                ok = !d->prjSet->error();
+                d->prjSet = new KexiProjectSet(&handler);
+                if (!d->prjSet->setConnectionData(conndata)) {
+                    handler.showErrorMessage(d->prjSet->result());
+                    ok = false;
+                }
             }
             if (!ok) {
                 if (passwordNeeded == true) {
-                    condata->password = QString::null; // not clear(), we have to remove password
+                    conndata->password = QString::null; // not clear(), we have to remove password
                 }
                 delete d->prjSet;
                 d->prjSet = 0;

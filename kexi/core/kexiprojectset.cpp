@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,16 +30,12 @@ class KexiProjectSetPrivate
 {
 public:
     KexiProjectSetPrivate()
-     : handler(0)
     {
     }
     ~KexiProjectSetPrivate()
     {
-        foreach (KexiProjectData* data, list) {
-            delete data;
-        }
+        qDeleteAll(list);
     }
-    KDbMessageHandler* handler;
     KexiProjectData::List list;
 };
 
@@ -47,50 +43,48 @@ KexiProjectSet::KexiProjectSet(KDbMessageHandler* handler)
         : KDbResultable()
         , d(new KexiProjectSetPrivate())
 {
-    d->handler = handler;
 }
 
-KexiProjectSet::KexiProjectSet(KDbConnectionData* conndata,
-                               KDbMessageHandler* handler)
-        : KDbResultable()
-        , d(new KexiProjectSetPrivate())
+KexiProjectSet::~KexiProjectSet()
+{
+    delete d;
+}
+
+bool KexiProjectSet::setConnectionData(KDbConnectionData* conndata)
 {
     Q_ASSERT(conndata);
-    d->handler = handler;
     clearResult();
+    qDeleteAll(d->list);
+    d->list.clear();
+
     KDbDriver *drv = Kexi::driverManager().driver(conndata->driverId());
     if (!drv) {
         m_result = Kexi::driverManager().result();
-        return;
+        return false;
     }
     QStringList dbnames;
     QScopedPointer<KDbConnection> conn(drv->createConnection(*conndata));
     {
         if (!conn) {
             m_result = drv->result();
-            return;
+            return false;
         }
         if (!conn->connect()) {
             m_result = conn->result();
-            return;
+            return false;
         }
         dbnames = conn->databaseNames(false/*skip system*/);
         if (conn->result().isError()) {
             m_result = conn->result();
-            return;
+            return false;
         }
     }
     for (QStringList::ConstIterator it = dbnames.constBegin(); it != dbnames.constEnd(); ++it) {
         // project's caption is just the same as database name - nothing better is available
         KexiProjectData *pdata = new KexiProjectData(*conndata, *it, *it);
-        d->list.append(pdata);
+        addProjectData(pdata);
     }
-    clearResult();
-}
-
-KexiProjectSet::~KexiProjectSet()
-{
-    delete d;
+    return true;
 }
 
 void KexiProjectSet::addProjectData(KexiProjectData *data)

@@ -355,9 +355,16 @@ void ImportTableWizard::arriveSrcDBPage()
         m_srcDBPageWidget->hide();
         qDebug() << "Looks like we need a project selector widget!";
 
-        KDbConnectionData* condata = m_srcConnSel->selectedConnectionData();
-        if (condata) {
-            m_prjSet = new KexiProjectSet(condata);
+        KDbConnectionData* conndata = m_srcConnSel->selectedConnectionData();
+        if (conndata) {
+            KexiGUIMessageHandler handler;
+            m_prjSet = new KexiProjectSet(&handler);
+            if (!m_prjSet->setConnectionData(conndata)) {
+                handler.showErrorMessage(m_prjSet->result());
+                delete m_prjSet;
+                m_prjSet = 0;
+                return;
+            }
             QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPageWidget);
             KexiUtils::setStandardMarginsAndSpacing(vbox);
             m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPageWidget, m_prjSet);
