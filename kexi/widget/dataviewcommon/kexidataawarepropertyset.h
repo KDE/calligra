@@ -67,12 +67,12 @@ public:
 
     virtual ~KexiDataAwarePropertySet();
 
-    uint size() const;
+    int size() const;
 
     KPropertySet* currentPropertySet() const;
 
-    uint currentRecord() const;
-    KPropertySet* at(uint record) const;
+    int currentRecord() const;
+    KPropertySet* at(int record) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
@@ -110,15 +110,15 @@ public Q_SLOTS:
 
      The property set \a set will be owned by this object, so you should not
      delete this property set by hand but call removeCurrentPropertySet()
-     or remove(uint) instead.
+     or remove(int) instead.
      Note that property set's parent (QObject::parent()) must be null
      or equal to this KexiDataAwarePropertySet object, otherwise this method
      will fail with a warning.
     */
-    void set(uint record, KPropertySet* set, bool newOne = false);
+    void set(int record, KPropertySet* set, bool newOne = false);
 
     /*! Deletes a property set at \a record position without removing the record. */
-    void eraseAt(uint record);
+    void eraseAt(int record);
 
 protected Q_SLOTS:
     /*! Handles table view's data source changes. */
@@ -131,7 +131,7 @@ protected Q_SLOTS:
     void slotRecordsDeleted(const QList<int> &records);
 
     //! Called on \a data insertion in a tableview.
-    void slotRecordInserted(KDbRecordData* data, uint record, bool repaint);
+    void slotRecordInserted(KDbRecordData* data, int record, bool repaint);
 
     //! Called on selecting another cell in a tableview.
     void slotCellSelected(int record, int column);
@@ -140,7 +140,7 @@ protected Q_SLOTS:
     void slotReloadRequested();
 
 protected:
-    void enlargeToFitRecord(uint record);
+    void enlargeToFitRecord(int record);
 
 private:
     class Private;

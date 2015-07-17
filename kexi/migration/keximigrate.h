@@ -163,7 +163,7 @@ public:
     bool moveLast();
 
     //!Read the data at the given row/field
-    QVariant value(uint i);
+    QVariant value(int i);
 
 Q_SIGNALS:
     void progressPercent(int percent);
@@ -205,7 +205,7 @@ protected:
       (so e.g. keximdb driver does not need this). */
 //! @todo SQL-dependent!
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber, QStringList& stringList,
+        const QString& sqlStatement, int columnNumber, QStringList& stringList,
         int numRecords = -1) {
         Q_UNUSED(sqlStatement); Q_UNUSED(columnNumber); Q_UNUSED(stringList);
         Q_UNUSED(numRecords);
@@ -219,7 +219,7 @@ protected:
      This implementation uses drv_queryStringListFromSQL() with numRecords == 1. */
 //! @todo SQL-dependent!
     virtual tristate drv_querySingleStringFromSQL(const QString& sqlStatement,
-            uint columnNumber, QString& string);
+            int columnNumber, QString& string);
 
     /*! Fetches single record from result obtained
      by running \a sqlStatement.
@@ -295,7 +295,7 @@ protected:
     virtual bool drv_moveLast() { return false; }
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i) { Q_UNUSED(i); return QVariant(); };
+    virtual QVariant drv_value(int i) { Q_UNUSED(i); return QVariant(); };
 
     //! @return Database driver for this migration.
     KDbDriver *driver();

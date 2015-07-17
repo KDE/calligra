@@ -200,7 +200,7 @@ KDbRecordData* KexiComboBoxBase::selectRecordForEnteredValueInLookupTable(const 
 }
 
 QString KexiComboBoxBase::valueForString(const QString& str, int* record,
-        uint lookInColumn, uint returnFromColumn, bool allowNulls)
+        int lookInColumn, int returnFromColumn, bool allowNulls)
 {
     Q_UNUSED(returnFromColumn);
     KDbTableViewData *relData = column() ? column()->relatedData() : 0;

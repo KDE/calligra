@@ -508,7 +508,7 @@ void KexiReportView::moveToPreviousRecordRequested()
     #endif
 }
 
-void KexiReportView::moveToRecordRequested(uint r)
+void KexiReportView::moveToRecordRequested(int r)
 {
     Q_UNUSED(r);
 }

@@ -36,12 +36,12 @@ KexiDBFieldList::~KexiDBFieldList()
         delete m_fieldlist;
 }
 
-uint KexiDBFieldList::fieldCount()
+int KexiDBFieldList::fieldCount()
 {
     return m_fieldlist->fieldCount();
 }
 
-QObject* KexiDBFieldList::field(uint index)
+QObject* KexiDBFieldList::field(int index)
 {
     KDbField* field = m_fieldlist->field(index);
     return field ? new KexiDBField(this, field, false) : 0;
@@ -72,7 +72,7 @@ bool KexiDBFieldList::addField(QObject* field)
     return true;
 }
 
-bool KexiDBFieldList::insertField(uint index, QObject* field)
+bool KexiDBFieldList::insertField(int index, QObject* field)
 {
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
     if (! f) return false;

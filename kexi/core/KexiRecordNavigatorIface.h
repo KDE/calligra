@@ -37,12 +37,12 @@ public:
      *  i.e. a value that will be displayed in the 'record number' text box.
      *  This can also affect button's enabling and disabling.
      *  @p r is counted from 1; if it is 0 'record number' text box's content is cleared. */
-    virtual void setCurrentRecordNumber(uint r) = 0;
+    virtual void setCurrentRecordNumber(int r) = 0;
 
     /*! Sets record count for this navigator.
      *  This can also affect button's enabling and disabling.
      *  By default count is 0. */
-    virtual void setRecordCount(uint count) = 0;
+    virtual void setRecordCount(int count) = 0;
 
     /*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
     virtual void setInsertingEnabled(bool set) = 0;

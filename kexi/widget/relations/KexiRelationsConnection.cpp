@@ -100,9 +100,9 @@ KexiRelationsConnection::drawConnection(QPainter *p)
     int sideNy = ry - fm.height();
 //! @todo details char can be also just a '1' for some cases
     QChar sideNChar(0x221E); //infinity char
-    uint sideNCharWidth = 2 + 2 + fm.width(sideNChar);
+    int sideNCharWidth = 2 + 2 + fm.width(sideNChar);
     QChar side1Char('1');
-    uint side1CharWidth = 2 + 2 + fm.width(side1Char);
+    int side1CharWidth = 2 + 2 + fm.width(side1Char);
     p->setBrush(p->pen().color());
 
     QPen pen(p->pen());

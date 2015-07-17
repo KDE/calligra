@@ -48,7 +48,7 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
 
     QStringList descEncodings(KCharsets::charsets()->descriptiveEncodingNames());
 
-    uint id = 0;
+    int id = 0;
     foreach(const QString &descEncoding, descEncodings) {
         bool found = false;
         QString name(KCharsets::charsets()->encodingForName(descEncoding));

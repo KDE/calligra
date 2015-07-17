@@ -63,7 +63,7 @@ namespace Kexi
  * In contrary to that macro this function returns the number of the actually
  * installed Kexi version, not the number of the Kexi version that was
  * installed when the program was compiled.
- * @return the version number, encoded in a single uint
+ * @return the version number, encoded in a single int
  */
 KEXICORE_EXPORT unsigned int version();
 /**
@@ -101,7 +101,7 @@ KEXICORE_EXPORT const char *fullVersionString();
  * In contrary to KEXI_STABLE_VERSION macro this function returns the number
  * of the actually installed Kexi version, not the number of the Kexi version that was
  * installed when the program was compiled.
- * @return the version number, encoded in a single uint
+ * @return the version number, encoded in a single int
  * @see Kexi::version()
  * @see KEXI_STABLE_VERSION
  */

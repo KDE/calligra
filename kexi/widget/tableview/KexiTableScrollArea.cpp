@@ -1781,7 +1781,7 @@ bool KexiTableScrollArea::getVisibleLookupValue(QVariant& cellValue, KexiTableEd
         const QVariant *visibleFieldValue = 0;
         if (m_currentRecord == data && m_data->recordEditBuffer()) {
             visibleFieldValue = m_data->recordEditBuffer()->at(
-                                    *tvcol->visibleLookupColumnInfo(), false/*!useDefaultValueIfPossible*/);
+                                    tvcol->visibleLookupColumnInfo(), false/*!useDefaultValueIfPossible*/);
         }
 
         if (visibleFieldValue)
@@ -2070,7 +2070,7 @@ int KexiTableScrollArea::validRowNumber(const QString& text)
     return r -1;
 }
 
-void KexiTableScrollArea::moveToRecordRequested(uint record)
+void KexiTableScrollArea::moveToRecordRequested(int record)
 {
     setFocus();
     selectRecord(record);

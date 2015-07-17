@@ -216,7 +216,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
-    uint _formatVersion = cg.readEntry("version", KEXIPROJECTDATA_FORMAT);
+    int _formatVersion = cg.readEntry("version", KEXIPROJECTDATA_FORMAT);
 
     QString groupKey;
     if (!_groupKey || _groupKey->isEmpty()) {
@@ -356,7 +356,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
 
-    uint realFormatVersion = formatVersion;
+    int realFormatVersion = formatVersion;
     if (realFormatVersion == 0) /* 0 means "default version"*/
         realFormatVersion = KEXIPROJECTDATA_FORMAT;
     cg.writeEntry("version", realFormatVersion);

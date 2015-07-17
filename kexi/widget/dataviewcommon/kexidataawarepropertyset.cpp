@@ -84,8 +84,8 @@ void KexiDataAwarePropertySet::slotDataSet(KDbTableViewData *data)
         connect(d->currentTVData, SIGNAL(recordDeleted()), this, SLOT(slotRecordDeleted()));
         connect(d->currentTVData, SIGNAL(recordsDeleted(QList<int>)),
                 this, SLOT(slotRecordsDeleted(QList<int>)));
-        connect(d->currentTVData, SIGNAL(recordInserted(KDbRecordData*,uint,bool)),
-                this, SLOT(slotRecordInserted(KDbRecordData*,uint,bool)));
+        connect(d->currentTVData, SIGNAL(recordInserted(KDbRecordData*,int,bool)),
+                this, SLOT(slotRecordInserted(KDbRecordData*,int,bool)));
         connect(d->currentTVData, SIGNAL(reloadRequested()),
                 this, SLOT(slotReloadRequested()));
     }
@@ -96,7 +96,7 @@ void KexiDataAwarePropertySet::eraseCurrentPropertySet()
     eraseAt(d->dataObject->currentRecord());
 }
 
-void KexiDataAwarePropertySet::eraseAt(uint record)
+void KexiDataAwarePropertySet::eraseAt(int record)
 {
     KPropertySet *set = d->sets.value(record);
     if (!set) {
@@ -110,7 +110,7 @@ void KexiDataAwarePropertySet::eraseAt(uint record)
     d->view->propertySetSwitched();
 }
 
-uint KexiDataAwarePropertySet::size() const
+int KexiDataAwarePropertySet::size() const
 {
     return d->sets.size();
 }
@@ -124,9 +124,9 @@ void KexiDataAwarePropertySet::clear()
     d->view->propertySetSwitched();
 }
 
-void KexiDataAwarePropertySet::enlargeToFitRecord(uint record)
+void KexiDataAwarePropertySet::enlargeToFitRecord(int record)
 {
-    uint newSize = d->sets.size();
+    int newSize = d->sets.size();
     if (record < newSize) {
         return;
     }
@@ -141,7 +141,7 @@ void KexiDataAwarePropertySet::slotReloadRequested()
     clear();
 }
 
-void KexiDataAwarePropertySet::set(uint record, KPropertySet* set, bool newOne)
+void KexiDataAwarePropertySet::set(int record, KPropertySet* set, bool newOne)
 {
     if (!set) {
         Q_ASSERT_X(false, "KexiDataAwarePropertySet::set", "set == 0");
@@ -180,12 +180,12 @@ KPropertySet* KexiDataAwarePropertySet::currentPropertySet() const
     return d->sets.value(d->dataObject->currentRecord());
 }
 
-uint KexiDataAwarePropertySet::currentRecord() const
+int KexiDataAwarePropertySet::currentRecord() const
 {
     return d->dataObject->currentRecord();
 }
 
-KPropertySet* KexiDataAwarePropertySet::at(uint record) const
+KPropertySet* KexiDataAwarePropertySet::at(int record) const
 {
     return d->sets.value(record);
 }
@@ -237,7 +237,7 @@ void KexiDataAwarePropertySet::slotRecordsDeleted(const QList<int> &_record)
     d->view->propertySetSwitched();
 }
 
-void KexiDataAwarePropertySet::slotRecordInserted(KDbRecordData* data, uint record, bool /*repaint*/)
+void KexiDataAwarePropertySet::slotRecordInserted(KDbRecordData* data, int record, bool /*repaint*/)
 {
     Q_UNUSED(data);
     d->view->setDirty();

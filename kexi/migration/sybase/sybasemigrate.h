@@ -49,7 +49,7 @@ protected:
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber,
+        const QString& sqlStatement, int columnNumber,
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,

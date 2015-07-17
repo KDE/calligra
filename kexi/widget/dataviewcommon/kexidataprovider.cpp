@@ -143,7 +143,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
                 continue;
             qDebug() << " ** " << dataItemIface->columnInfo()->field->name();
             it_dup = tmpDuplicatedItems.constFind(dataItemIface->columnInfo()->field);
-            uint count;
+            int count;
             if (it_dup == tmpDuplicatedItems.constEnd())
                 count = 0;
             else
@@ -186,7 +186,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
     //fill m_fieldNumbersForDataItems mapping from data item to field number
     //(needed for fillDataItems)
     KDbQueryColumnInfo::Vector fieldsExpanded;
-// uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
+// int dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
 
     if (query) {
         fieldsExpanded = query->fieldsExpanded(KDbQuerySchema::WithInternalFields);
@@ -230,7 +230,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
             it = m_dataItems.erase(it);
             continue;
         }
-        uint fieldNumber = m_fieldNumbersForDataItems[ item ];
+        int fieldNumber = m_fieldNumbersForDataItems[ item ];
         if (query) {
             KDbQueryColumnInfo *ci = fieldsExpanded[fieldNumber];
             item->setColumnInfo(ci);

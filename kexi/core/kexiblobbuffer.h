@@ -215,7 +215,7 @@ private:
         QString name;
         QString caption; //!< @todo for future use within image gallery
         QString mimeType;
-        uint refs;
+        int refs;
         Id_t id;
         Id_t folderId;
         bool stored;

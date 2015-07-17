@@ -534,7 +534,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
         hasCheckableItems |= action->isCheckable();
         QIcon is = action->icon();
         if (!is.isNull()) {
-            maxIconWidth = qMax<uint>(maxIconWidth, icone + 4);
+            maxIconWidth = qMax<int>(maxIconWidth, icone + 4);
         }
     }
 
@@ -959,7 +959,7 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
     }
 
     //figure out which scroll flags
-    uint newScrollFlags = QMenuScroller::ScrollNone;
+    int newScrollFlags = QMenuScroller::ScrollNone;
     if (newOffset < 0) //easy and cheap one
         newScrollFlags |= QMenuScroller::ScrollUp;
     int saccum = newOffset;
@@ -1906,7 +1906,7 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
             pos.setY(screen.top() + desktopFrame);
         if (pos.y() + size.height() - 1 > screen.bottom() - desktopFrame) {
             if (d->scroll) {
-                d->scroll->scrollFlags |= uint(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown);
+                d->scroll->scrollFlags |= int(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown);
                 int y = qMax(screen.y(),pos.y());
                 size.setHeight(screen.bottom() - (desktopFrame * 2) - y);
             } else {

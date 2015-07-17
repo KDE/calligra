@@ -952,21 +952,22 @@ void Form::autoAssignTabStops()
     }
 }
 
-uint Form::formatVersion() const
+int Form::formatVersion() const
 {
     return d->formatVersion;
 }
 
-void Form::setFormatVersion(uint ver)
+void Form::setFormatVersion(int ver)
 {
     d->formatVersion = ver;
 }
-uint Form::originalFormatVersion() const
+
+int Form::originalFormatVersion() const
 {
     return d->originalFormatVersion;
 }
 
-void Form::setOriginalFormatVersion(uint ver)
+void Form::setOriginalFormatVersion(int ver)
 {
     d->originalFormatVersion = ver;
 }
@@ -1128,7 +1129,7 @@ Form::State Form::state() const
 
 void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                               const QVariant &value, const QByteArray &propertyName,
-                              AddCommandOption addOption, uint idOfPropertyCommand)
+                              AddCommandOption addOption, int idOfPropertyCommand)
 {
     QHash<QByteArray, QVariant> oldValues;
     oldValues.insert(wname, oldValue);
@@ -1137,7 +1138,7 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
 
 void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                               const QVariant &value, const QByteArray &propertyName,
-                              AddCommandOption addOption, uint idOfPropertyCommand)
+                              AddCommandOption addOption, int idOfPropertyCommand)
 {
 //! @todo add to merge in PropertyCommand...
 #if 0
@@ -1174,7 +1175,7 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
 }
 
 void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
-                                   AddCommandOption addOption, uint idOfPropertyCommand)
+                                   AddCommandOption addOption, int idOfPropertyCommand)
 {
 //! @todo add to merge in PropertyCommand...?
 #if 0
@@ -1700,7 +1701,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     if (!widget())
         return;
     const bool toplevelWidgetSelected = widget() == w;
-    const uint widgetsCount = container->form()->selectedWidgets()->count();
+    const int widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;
 
     //set title
@@ -1824,10 +1825,10 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         if (separatorNeeded) {
             lastAction = menu.addSeparator();
         }
-        const uint oldIndex = menu.actions().count() - 1;
+        const int oldIndex = menu.actions().count() - 1;
         container->form()->library()
             ->createMenuActions(w->metaObject()->className(), w, &menu, container);
-        if (oldIndex == uint(menu.actions().count() - 1)) {
+        if (oldIndex == (menu.actions().count() - 1)) {
             //nothing added
             if (separatorNeeded) {
                 menu.removeAction(lastAction);
@@ -2123,7 +2124,7 @@ void Form::selectAll()
         return;
     }
     selectFormWidget();
-    uint count = objectTree()->children()->count();
+    int count = objectTree()->children()->count();
     foreach (ObjectTreeItem *titem, *objectTree()->children()) {
         selectWidget(
             titem->widget(),

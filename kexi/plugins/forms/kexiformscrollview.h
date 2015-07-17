@@ -160,7 +160,7 @@ public Q_SLOTS:
     //! Implementation for KexiDataAwareObjectInterface
     virtual void ensureColumnVisible(int col);
 
-    virtual void moveToRecordRequested(uint r);
+    virtual void moveToRecordRequested(int r);
     virtual void moveToLastRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
@@ -222,7 +222,7 @@ protected Q_SLOTS:
     virtual void slotRecordInserted(KDbRecordData* data, bool repaint);
 
     //! Like above, not db-aware version
-    virtual void slotRecordInserted(KDbRecordData* data, uint record, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData* data, int record, bool repaint);
 
     virtual void slotRecordsDeleted(const QList<int>&);
 

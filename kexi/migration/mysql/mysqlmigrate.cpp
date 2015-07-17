@@ -157,7 +157,7 @@ bool MySQLMigrate::drv_tableNames(QStringList& tableNames)
  On success the result is stored in \a stringList and true is returned.
  \return cancelled if there are no records available. */
 tristate MySQLMigrate::drv_queryStringListFromSQL(
-    const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+    const QString& sqlStatement, int columnNumber, QStringList& stringList, int numRecords)
 {
     stringList.clear();
     if (!d->executeSQL(sqlStatement))
@@ -178,7 +178,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
             mysql_free_result(res);
             return r;
         }
-        uint numFields = mysql_num_fields(res);
+        int numFields = mysql_num_fields(res);
         if (columnNumber > (numFields - 1)) {
             qWarning() << sqlStatement
                 << ": columnNumber too large ("
@@ -574,7 +574,7 @@ bool MySQLMigrate::drv_readFromTable(const QString& tableName)
     return true;
 }
 
-QVariant MySQLMigrate::drv_value(uint i)
+QVariant MySQLMigrate::drv_value(int i)
 {
     QString val;
     if (m_dataRow) {

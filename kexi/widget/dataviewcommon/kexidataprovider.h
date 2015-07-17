@@ -84,7 +84,7 @@ public:
 protected:
     QWidget *m_mainWidget;
     QSet<KDbField*> *m_duplicatedItems;
-    typedef QMap<KexiFormDataItemInterface*, uint> KexiFormDataItemInterfaceToIntMap;
+    typedef QMap<KexiFormDataItemInterface*, int> KexiFormDataItemInterfaceToIntMap;
     QList<KexiFormDataItemInterface*> m_dataItems;
     QStringList m_usedDataSources;
     KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;

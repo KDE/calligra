@@ -66,21 +66,21 @@ public:
         qDeleteAll(items);
     }
 
-    QString key(uint type, const QString& subType) const {
+    QString key(int type, const QString& subType) const {
         QString key = QString::number(type);
         if (!subType.isEmpty())
             key += (QString(" ") + subType);
         return key;
     }
 
-    void registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString()) {
+    void registerItem(KexiCellEditorFactoryItem& item, int type, const QString& subType = QString()) {
         if (!items.contains(&item))
             items.insert(&item);
 
         items_by_type.insert(key(type, subType), &item);
     }
 
-    KexiCellEditorFactoryItem *findItem(uint type, const QString& subType) {
+    KexiCellEditorFactoryItem *findItem(int type, const QString& subType) {
         KexiCellEditorFactoryItem *item = items_by_type.value(key(type, subType));
         if (item)
             return item;
@@ -107,7 +107,7 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType)
+void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, int type, const QString& subType)
 {
     KexiCellEditorFactory_static->registerItem(item, type, subType);
 }
@@ -169,7 +169,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KDbTableViewColumn &column, Q
     return item->createEditor(column, parent);
 }
 
-KexiCellEditorFactoryItem* KexiCellEditorFactory::item(uint type, const QString& subType)
+KexiCellEditorFactoryItem* KexiCellEditorFactory::item(int type, const QString& subType)
 {
     return KexiCellEditorFactory_static->findItem(type, subType);
 }

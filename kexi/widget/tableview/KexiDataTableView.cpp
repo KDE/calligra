@@ -135,9 +135,9 @@ bool KexiDataTableView::saveSettings()
         if (id > 0 && tv->data()->columnCount() > 0) {
             QStringList widths;
             bool equal = true; // will be only saved if widths are not equal
-            for (uint i = 0; i < tv->data()->columnCount(); ++i) {
+            for (int i = 0; i < tv->data()->columnCount(); ++i) {
                 if (equal) {
-                    equal = tv->data()->column(i)->width() == uint(tv->columnWidth(i));
+                    equal = tv->data()->column(i)->width() == tv->columnWidth(i);
                 }
                 widths.append(QString::number(tv->columnWidth(i)));
             }

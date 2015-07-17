@@ -218,8 +218,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     }
     connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
             this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant&,KDbResultInfo*)));
-    connect(d->data, SIGNAL(recordInserted(KDbRecordData*,uint,bool)),
-            this, SLOT(slotRecordInserted(KDbRecordData*,uint,bool)));
+    connect(d->data, SIGNAL(recordInserted(KDbRecordData*,int,bool)),
+            this, SLOT(slotRecordInserted(KDbRecordData*,int,bool)));
     connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
             this, SLOT(slotTablePositionChanged(KexiRelationsTableContainer*)));
     connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
@@ -415,10 +415,10 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     // -WHERE expression
     // -ORDER BY list
     KDbExpression whereExpr;
-    const uint count = qMin(d->data->count(), d->sets->size());
+    const int count = qMin(d->data->count(), d->sets->size());
     bool fieldsFound = false;
     KDbTableViewDataConstIterator it(d->data->constBegin());
-    for (uint i = 0; i < count && it != d->data->constEnd(); ++it, i++) {
+    for (int i = 0; i < count && it != d->data->constEnd(); ++it, i++) {
         if (!(**it)[COLUMN_ID_TABLE].isNull()
                 && (**it)[COLUMN_ID_COLUMN].isNull()) {
             //show message about missing field name, and set focus to that cell
@@ -546,7 +546,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     KDbOrderByColumnList orderByColumns;
     it = d->data->constBegin();
     int fieldNumber = -1; //field number (empty rows are omitted)
-    for (uint i = 0/*row number*/; i < count && it != d->data->constEnd(); ++it, i++) {
+    for (int i = 0/*row number*/; i < count && it != d->data->constEnd(); ++it, i++) {
         KPropertySet *set = d->sets->at(i);
         if (!set)
             continue;
@@ -569,10 +569,10 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                     << "available for sorting";
                 continue;
             }
-            orderByColumns.appendField(*currentField, sortingString == "ascending");
+            orderByColumns.appendField(currentField, sortingString == "ascending");
             continue;
         }
-        currentField = temp->query()->field(uint(fieldNumber));
+        currentField = temp->query()->field(fieldNumber);
         if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
             continue;
@@ -583,9 +583,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                             + (aliasString.isEmpty() ? currentField->name() : aliasString));
         if (currentField && currentColumn) {
             if (currentColumn->visible)
-                orderByColumns.appendColumn(*currentColumn, sortingString == "ascending");
+                orderByColumns.appendColumn(currentColumn, sortingString == "ascending");
             else if (currentColumn->field)
-                orderByColumns.appendField(*currentColumn->field, sortingString == "ascending");
+                orderByColumns.appendField(currentColumn->field, sortingString == "ascending");
         }
     }
     temp->query()->setOrderByColumnList(orderByColumns);
@@ -901,7 +901,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         return;
 
     //3. show fields (including * and table.*)
-    uint row_num = 0;
+    int row_num = 0;
     QSet<QString> usedCriterias; // <-- used criterias will be saved here
     //     so in step 4. we will be able to add
     //     remaining invisible columns with criterias
@@ -1255,7 +1255,7 @@ void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadShee
         (*data)[COLUMN_ID_VISIBLE] = QVariant(false); //the same init as in initTableRows()
 }
 
-void KexiQueryDesignerGuiEditor::slotRecordInserted(KDbRecordData* data, uint record, bool /*repaint*/)
+void KexiQueryDesignerGuiEditor::slotRecordInserted(KDbRecordData* data, int record, bool /*repaint*/)
 {
     if (d->droppedNewRecord && d->droppedNewRecord == data) {
         createPropertySet(record, d->droppedNewTable, d->droppedNewField, true);

@@ -186,7 +186,7 @@ void KexiFormScrollView::ensureColumnVisible(int col)
     //! @todo
 }
 
-void KexiFormScrollView::moveToRecordRequested(uint r)
+void KexiFormScrollView::moveToRecordRequested(int r)
 {
     //! @todo
     selectRecord(r);
@@ -364,7 +364,7 @@ void KexiFormScrollView::slotRecordInserted(KDbRecordData* data, bool repaint)
     //! @todo
 }
 
-void KexiFormScrollView::slotRecordInserted(KDbRecordData* data, uint record, bool repaint)
+void KexiFormScrollView::slotRecordInserted(KDbRecordData* data, int record, bool repaint)
 {
     Q_UNUSED(data);
     Q_UNUSED(record);

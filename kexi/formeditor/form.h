@@ -267,11 +267,11 @@ public:
      one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                             const QVariant &value, const QByteArray &propertyName,
-                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                            AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                             const QVariant &value, const QByteArray &propertyName,
-                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                            AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     //! Adds @a commandGroup to the undo/redo stack.
     /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
@@ -279,7 +279,7 @@ public:
      one-after-one. In this case only values of the command in the present command group
      on the stack are changed and @a commandGroup is deleted.*/
     void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
-                                 AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                                 AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     /*! @return Command that being executed through addCommand() or 0 if addCommand()
      is not currently being executed.
@@ -354,13 +354,13 @@ public:
 
     //! \return format version number for this form.
     //! For new forms it is equal to KFormDesigner::version().
-    uint formatVersion() const;
-    void setFormatVersion(uint ver);
+    int formatVersion() const;
+    void setFormatVersion(int ver);
 
     //! \return original format version number for this form (as loaded from .ui XML string)
     //! For new forms it is equal to KFormDesigner::version().
-    uint originalFormatVersion() const;
-    void setOriginalFormatVersion(uint ver);
+    int originalFormatVersion() const;
+    void setOriginalFormatVersion(int ver);
 
 #ifdef KFD_SIGSLOTS
     /*! Related to signal/slots connections.

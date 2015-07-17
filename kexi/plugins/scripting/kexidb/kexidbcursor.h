@@ -114,12 +114,12 @@ public Q_SLOTS:
     point to a valid record. */
     int at();
     /** Returns the number of fields available for this cursor. */
-    uint fieldCount();
+    int fieldCount();
     /** Returns the value stored in the passed column number (counting from 0). */
-    QVariant value(uint index);
+    QVariant value(int index);
     /** Set the value for the field defined with index. The new value is buffered
     and does not got written as long as save() is not called. */
-    bool setValue(uint index, QVariant value);
+    bool setValue(int index, QVariant value);
 
     /** Save any changes done with setValue(). You should call this only once at
     the end of all value/setValue iterations cause the cursor is closed once

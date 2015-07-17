@@ -62,7 +62,7 @@ protected:
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber,
+        const QString& sqlStatement, int columnNumber,
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
@@ -97,7 +97,7 @@ protected:
     virtual bool drv_moveLast();
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
+    virtual QVariant drv_value(int i);
 
 private:
     MySqlConnectionInternal * const d;

@@ -159,8 +159,8 @@ void KexiDataAwareObjectInterface::setData(KDbTableViewData *data, bool owner)
             QObject::connect(m_data, SIGNAL(recordDeleted()), thisObject, SLOT(slotRecordDeleted()));
             QObject::connect(m_data, SIGNAL(recordInserted(KDbRecordData*,bool)),
                              thisObject, SLOT(slotRecordInserted(KDbRecordData*,bool)));
-            QObject::connect(m_data, SIGNAL(recordInserted(KDbRecordData*,uint,bool)),
-                             thisObject, SLOT(slotRecordInserted(KDbRecordData*,uint,bool))); //not db-aware
+            QObject::connect(m_data, SIGNAL(recordInserted(KDbRecordData*,int,bool)),
+                             thisObject, SLOT(slotRecordInserted(KDbRecordData*,int,bool))); //not db-aware
             QObject::connect(m_data, SIGNAL(recordRepaintRequested(KDbRecordData*)),
                              thisObject, SLOT(slotRecordRepaintRequested(KDbRecordData*)));
             QObject::connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -1147,7 +1147,7 @@ void KexiDataAwareObjectInterface::slotRecordInserted(KDbRecordData* data, bool 
     slotRecordInserted(data, m_data->indexOf(data), repaint);
 }
 
-void KexiDataAwareObjectInterface::slotRecordInserted(KDbRecordData * /*data*/, uint pos, bool repaint)
+void KexiDataAwareObjectInterface::slotRecordInserted(KDbRecordData * /*data*/, int pos, bool repaint)
 {
     if (repaint && (int)pos < recordCount()) {
         updateWidgetContentsSize();
@@ -1383,7 +1383,7 @@ KDbTableViewColumn* KexiDataAwareObjectInterface::column(int column)
 bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KDbTableViewColumn& tvcol)
 {
     if (m_recordEditing >= 0 && m_data->recordEditBuffer() && m_data->recordEditBuffer()->isDBAware()) {
-        return m_data->recordEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
+        return m_data->recordEditBuffer()->hasDefaultValueAt(tvcol.columnInfo());
     }
     return false;
 }
@@ -1405,7 +1405,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int record, int co
             const QVariant *storedValue = &currentRecord->at(realFieldNumber);
 
             //db-aware data: now, try to find a buffered value (or default one)
-            const QVariant *cv = m_data->recordEditBuffer()->at(*tvcol->columnInfo(),
+            const QVariant *cv = m_data->recordEditBuffer()->at(tvcol->columnInfo(),
                                  storedValue->isNull() && useDefaultValueIfPossible);
             if (cv)
                 return cv;
@@ -1645,7 +1645,7 @@ void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
     m_indicesForVisibleValues.resize(m_data ? m_data->columnCount() : 0);
     if (!m_data)
         return;
-    for (uint i = 0; i < m_data->columnCount(); i++) {
+    for (int i = 0; i < m_data->columnCount(); i++) {
         KDbTableViewColumn* tvCol = m_data->column(i);
         if (tvCol->columnInfo() && tvCol->columnInfo()->indexForVisibleLookupValue() != -1)
             // retrieve visible value from lookup field

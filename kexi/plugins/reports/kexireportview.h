@@ -59,7 +59,7 @@ public:
     virtual void moveToLastRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToPreviousRecordRequested();
-    virtual void moveToRecordRequested(uint r);
+    virtual void moveToRecordRequested(int r);
     virtual int currentRecord() const;
     virtual int recordCount() const;
 

@@ -178,7 +178,7 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
 #if 0 //TODO
 //bool reverse = QApplication::reverseLayout();
     style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, d->paintedCombo  /*this*/
-                                flags, (uint)QStyle::SC_All,
+                                flags, (int)QStyle::SC_All,
                                 (d->buttonPressed ? QStyle::SC_ComboBoxArrow : QStyle::SC_None)
                                );
 

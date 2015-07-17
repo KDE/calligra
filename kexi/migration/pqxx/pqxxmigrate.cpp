@@ -88,7 +88,7 @@ bool PqxxMigrate::drv_readTableSchema(
     if (!query("select * from " + drv_escapeIdentifier(originalName) + " limit 1"))
         return false;
     //Loop round the fields
-    for (uint i = 0; i < (uint)m_res->columns(); i++) {
+    for (int i = 0; i < m_res->columns(); i++) {
         QString fldName(m_res->column_name(i));
         KDbField::Type fldType = type(m_res->column_type(i), fldName);
         QString fldID(KDb::stringToIdentifier(fldName));
@@ -362,7 +362,7 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
  On success the result is stored in \a string and true is returned.
  \return cancelled if there are no records available. */
 tristate PqxxMigrate::drv_queryStringListFromSQL(
-    const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+    const QString& sqlStatement, int columnNumber, QStringList& stringList, int numRecords)
 {
     std::string result;
     int i = 0;
@@ -588,7 +588,7 @@ bool PqxxMigrate::drv_moveLast()
     return true;
 }
 
-QVariant PqxxMigrate::drv_value(uint i)
+QVariant PqxxMigrate::drv_value(int i)
 {
     if (m_row < m_rows) {
         QString str = (*m_res)[m_row][i].c_str();

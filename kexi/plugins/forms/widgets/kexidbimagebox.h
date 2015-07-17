@@ -46,8 +46,8 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
-    Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId STORED false)
-    Q_PROPERTY(uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
+    Q_PROPERTY(int pixmapId READ pixmapId WRITE setPixmapId STORED false)
+    Q_PROPERTY(int storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents)
     Q_PROPERTY(bool smoothTransformation READ smoothTransformation WRITE setSmoothTransformation)
     Q_PROPERTY(bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio)
@@ -76,9 +76,9 @@ public:
 
     QPixmap pixmap() const;
 
-    uint pixmapId() const;
+    int pixmapId() const;
 
-    uint storedPixmapId() const;
+    int storedPixmapId() const;
 
     virtual void setInvalidState(const QString& displayText);
 
@@ -140,9 +140,9 @@ public:
     virtual void setFocusPolicy(Qt::FocusPolicy policy);
 
 public Q_SLOTS:
-    void setPixmapId(uint id);
+    void setPixmapId(int id);
 
-    void setStoredPixmapId(uint id);
+    void setStoredPixmapId(int id);
 
     //! Sets the datasource to \a ds
     virtual void setDataSource(const QString &ds);

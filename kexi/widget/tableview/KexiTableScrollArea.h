@@ -483,7 +483,7 @@ protected Q_SLOTS:
     }
 
     //! Like above, not db-aware version
-    virtual void slotRecordInserted(KDbRecordData *data, uint record, bool repaint) {
+    virtual void slotRecordInserted(KDbRecordData *data, int record, bool repaint) {
         KexiDataAwareObjectInterface::slotRecordInserted(data, record, repaint);
     }
 
@@ -494,7 +494,7 @@ protected Q_SLOTS:
     }
 
     //! for navigator
-    virtual void moveToRecordRequested(uint record);
+    virtual void moveToRecordRequested(int record);
     virtual void moveToLastRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();

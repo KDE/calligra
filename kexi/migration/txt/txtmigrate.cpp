@@ -70,7 +70,7 @@ bool TxtMigrate::drv_readTableSchema(const QString& originalName, KDbTableSchema
 {
   if (drv_readFromTable(originalName))
   {
-    for (uint i = 0; i < (uint)m_FieldNames.count(); ++i)
+    for (int i = 0; i < m_FieldNames.count(); ++i)
     {
       tableSchema.addField( new KDbField(m_FieldNames[i], KDbField::Text) );
     }
@@ -133,7 +133,7 @@ bool TxtMigrate::drv_movePrevious()
   return false;
 }
 
-QVariant TxtMigrate::drv_value(uint i)
+QVariant TxtMigrate::drv_value(int i)
 {
     //qDebug() << m_Row;
     //qDebug() << m_LastLine;

@@ -1284,7 +1284,7 @@ void KexiMainWindow::Private::removeWindow(int identifier)
     windows.remove(identifier);
 }
 
-uint KexiMainWindow::Private::openedWindowsCount()
+int KexiMainWindow::Private::openedWindowsCount()
 {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
     return windows.count();

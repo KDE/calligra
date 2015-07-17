@@ -127,7 +127,7 @@ void KexiStatusBar::cursorPositionChanged()
 {
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
     if (m_cursorIface) {
-        uint line, col;
+        int line, col;
         m_cursorIface->cursorPosition(&line, &col);
         setCursorPosition(line, col);
     }

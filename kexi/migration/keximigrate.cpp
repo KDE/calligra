@@ -640,7 +640,7 @@ bool KexiMigrate::drv_queryMaxNumber(const QString& tableName,
 }
 
 tristate KexiMigrate::drv_querySingleStringFromSQL(
-    const QString& sqlStatement, uint columnNumber, QString& string)
+    const QString& sqlStatement, int columnNumber, QString& string)
 {
     QStringList stringList;
     const tristate res = drv_queryStringListFromSQL(sqlStatement, columnNumber, stringList, 1);
@@ -693,7 +693,7 @@ bool KexiMigrate::moveLast()
   return drv_moveLast();
 }
 
-QVariant KexiMigrate::value(uint i)
+QVariant KexiMigrate::value(int i)
 {
   return drv_value(i);
 }

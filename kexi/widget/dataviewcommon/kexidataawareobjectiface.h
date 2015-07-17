@@ -750,7 +750,7 @@ protected:
     virtual void endRemoveItem(int pos);
 
     //! Like above, not db-aware version
-    virtual void slotRecordInserted(KDbRecordData *data, uint record, bool repaint);
+    virtual void slotRecordInserted(KDbRecordData *data, int record, bool repaint);
 
     virtual void slotRecordsDeleted(const QList<int> &) {}
 
@@ -957,8 +957,8 @@ protected:
     {
     public:
         PositionOfValue() : firstCharacter(0), lastCharacter(0), exists(false) {}
-        uint firstCharacter;
-        uint lastCharacter;
+        int firstCharacter;
+        int lastCharacter;
         bool exists;
     };
 
@@ -974,7 +974,7 @@ protected:
     KexiSearchAndReplaceViewInterface::Options::SearchDirection m_recentSearchDirection;
 
     //! Setup by updateIndicesForVisibleValues() and used by find()
-    QVector<uint> m_indicesForVisibleValues;
+    QVector<int> m_indicesForVisibleValues;
 
 private:
     /*! >= 0 if a record is edited */

@@ -87,7 +87,7 @@ static QString toStringForTextType(const QVariant& value, const QString& add,
     const QString str(value.toString());
     if (lengthExceeded) {
         if (field && field->maxLength() > 0) {
-            *lengthExceeded = uint(str.length() + add.length()) > field->maxLength();
+            *lengthExceeded = (str.length() + add.length()) > field->maxLength();
         }
         else {
             *lengthExceeded = false;
@@ -260,5 +260,5 @@ QString KexiTextFormatter::inputMask() const
 bool KexiTextFormatter::lengthExceeded(const QString& text) const
 {
     return d->field && d->field->type() == KDbField::Text && d->field->maxLength() > 0
-            && uint(text.length()) > d->field->maxLength();
+            && text.length() > d->field->maxLength();
 }
