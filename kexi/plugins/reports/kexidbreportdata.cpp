@@ -284,6 +284,7 @@ qint64 KexiDBReportData::recordCount() const
     return 1;
 }
 
+#ifdef KREPORT_SCRIPTING
 QStringList KexiDBReportData::scriptList(const QString& interpreter) const
 {
     QStringList scripts;
@@ -371,6 +372,7 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
     }
     return scripts;
 }
+#endif
 
 QStringList KexiDBReportData::dataSources() const
 {
