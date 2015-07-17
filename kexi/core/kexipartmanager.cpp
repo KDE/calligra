@@ -28,6 +28,7 @@
 
 #include <KDbConnection>
 #include <KDbCursor>
+#include <KDbMessageHandler>
 
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -92,6 +93,7 @@ PartClass* Manager::part(Info *info, QHash<QString, PartClass*> *partDict)
         return 0;
     }
     clearResult();
+    KDbMessageGuard mg(this);
     if (!lookup()) {
         return 0;
     }
@@ -143,7 +145,6 @@ static QStringList cleanupStringList(const QStringList &list)
 
 bool Manager::lookup()
 {
-//! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
     if (d->lookupDone) {
         return d->lookupResult;
     }
@@ -229,6 +230,7 @@ bool Manager::lookup()
 
 Part* Manager::part(Info *info)
 {
+    KDbMessageGuard mg(this);
     Part *p = part<Part>(info, &d->parts);
     if (p) {
         emit partLoaded(p);
@@ -256,6 +258,7 @@ Part* Manager::partForPluginId(const QString &pluginId)
 
 Info* Manager::infoForPluginId(const QString &pluginId)
 {
+    KDbMessageGuard mg(this);
     if (!lookup())
         return 0;
     const QString realId = realPluginId(pluginId);
@@ -271,6 +274,7 @@ void Manager::insertStaticPart(StaticPart* part)
 {
     if (!part)
         return;
+    KDbMessageGuard mg(this);
     if (!lookup())
         return;
     d->partlist.append(part->info());
@@ -288,6 +292,7 @@ KexiInternalPart* Manager::internalPartForPluginId(const QString& pluginId)
 
 PartInfoList* Manager::infoList()
 {
+    KDbMessageGuard mg(this);
     if (!lookup()) {
         return 0;
     }

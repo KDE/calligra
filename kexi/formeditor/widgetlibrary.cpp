@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@
 #include "objecttree.h"
 #include "KexiJsonTrader.h"
 #include "KexiFormWidgetsPluginMetaData.h"
+#include <core/kexiguimsghandler.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -51,10 +52,12 @@ public:
     Private(WidgetLibrary *library, const QStringList& supportedFactoryGroups)
             : showAdvancedProperties(true)
             , q(library)
+            , m_couldNotFindAnyFormWidgetPluginsErrorDisplayed(false)
             , m_supportedFactoryGroups(supportedFactoryGroups.toSet())
             , m_lookupDone(false)
             , m_loadFactoriesDone(false)
     {
+        q->setMessageHandler(&messageHandler);
         m_advancedProperties.insert("acceptDrops");
         m_advancedProperties.insert("accessibleDescription");
         m_advancedProperties.insert("accessibleName");
@@ -104,11 +107,13 @@ public:
     }
 
     QHash<QByteArray, WidgetInfo*> widgets() {
+        KDbMessageGuard mg(q);
         (void)loadFactories();
         return m_widgets;
     }
 
     QHash<QByteArray, WidgetFactory*> factories() {
+        KDbMessageGuard mg(q);
         (void)loadFactories();
         return m_factories;
     }
@@ -121,6 +126,7 @@ public:
 
 private:
     //! Performs a form widget plugins lookup. @retrun true on success.
+    //! @todo This method generates a few warnings, maybe we want to optionally display them somewhere (via the message handler)?
     bool lookup() {
         //! @todo Allow refreshing
         if (m_lookupDone) {
@@ -168,6 +174,7 @@ private:
         }
         if (m_pluginsMetaData.isEmpty()) {
             q->m_result = KDbResult(i18n("Could not find any form widget plugins."));
+            m_couldNotFindAnyFormWidgetPluginsErrorDisplayed = true;
             return false;
         }
         m_lookupResult = true;
@@ -177,6 +184,9 @@ private:
     //! Loads all factory plugins
     bool loadFactories() {
         if (m_loadFactoriesDone) {
+            if (m_couldNotFindAnyFormWidgetPluginsErrorDisplayed) {
+                q->clearResult(); // show the warning only once
+            }
             return m_loadFactoriesResult;
         }
         m_loadFactoriesDone = true;
@@ -295,8 +305,10 @@ private:
     }
 
     WidgetLibrary *q;
+    KexiGUIMessageHandler messageHandler;
     //! A map which associates a class name with a Widget class
     QHash<QString, KexiFormWidgetsPluginMetaData*> m_pluginsMetaData; //!< owner
+    bool m_couldNotFindAnyFormWidgetPluginsErrorDisplayed;
     QSet<QString> m_supportedFactoryGroups;
     QHash<QByteArray, WidgetFactory*> m_factories; //!< owner
     QHash<QByteArray, WidgetInfo*> m_widgets; //!< owner
