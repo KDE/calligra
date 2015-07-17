@@ -424,8 +424,9 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KDbConnectionData* data
     m_projectSelector->setProjectSet(0);
     conndataToShow = 0;
     if (data) {
-        m_projectSetToShow = new KexiProjectSet(data, m_assistant);
-        if (m_projectSetToShow->result().isError()) {
+        m_projectSetToShow = new KexiProjectSet(m_assistant->messageHandler());
+        KDbMessageGuard mg(m_projectSetToShow);
+        if (!m_projectSetToShow->setConnectionData(data)) {
             delete m_projectSetToShow;
             m_projectSetToShow = 0;
             return false;
