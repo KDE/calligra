@@ -339,12 +339,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
                            "It is an SQLite file created using other tools.", d->data->infoString()));
                 m_result = d->connection->result();
             }
-            closeConnection();
+            closeConnectionInternal();
             return false;
         }
 
         m_result = d->connection->result();
-        closeConnection();
+        closeConnectionInternal();
         return false;
     }
 
@@ -370,14 +370,14 @@ KexiProject::create(bool forceOverwrite)
             return cancelled;
         if (!d->connection->dropDatabase(d->data->databaseName())) {
             m_result = d->connection->result();
-            closeConnection();
+            closeConnectionInternal();
             return false;
         }
         //qDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
     }
     if (!d->connection->createDatabase(d->data->databaseName())) {
         m_result = d->connection->result();
-        closeConnection();
+        closeConnectionInternal();
         return false;
     }
     //qDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
@@ -385,7 +385,7 @@ KexiProject::create(bool forceOverwrite)
     if (!d->connection->useDatabase(d->data->databaseName())) {
         qWarning() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
         m_result = d->connection->result();
-        closeConnection();
+        closeConnectionInternal();
         return false;
     }
     //qDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
@@ -658,9 +658,27 @@ KexiProject::createConnection()
     return true;
 }
 
+bool KexiProject::closeConnectionInternal()
+{
+    if (!m_result.isError()) {
+        clearResult();
+    }
+    if (!d->connection) {
+        return true;
+    }
+    if (!d->connection->disconnect()) {
+        if (!m_result.isError()) {
+            m_result = d->connection->result();
+        }
+        return false;
+    }
 
-bool
-KexiProject::closeConnection()
+    delete d->connection; //this will also clear connection for BLOB buffer
+    d->connection = 0;
+    return true;
+}
+
+bool KexiProject::closeConnection()
 {
     clearResult();
     KDbMessageGuard mg(this);
@@ -1156,6 +1174,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
         return false;
     }
 
+    KDbMessageGuard mg(prj.dbConnection()->result(), handler);
     return prj.dbConnection()->dropDatabase();
 }
 
