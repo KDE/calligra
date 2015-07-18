@@ -343,6 +343,10 @@ protected:
     /*! \return Kexi part for \a item. */
     KexiPart::Part *findPartFor(const KexiPart::Item& item);
 
+    //! Closes connection without altering the m_result if is actually set. @return true on success.
+    //! Used on failed operations such as useDatabase().
+    bool closeConnectionInternal();
+
 Q_SIGNALS:
     /** signal emitted on error */
     void error(const QString &title, KDbObject *obj);
