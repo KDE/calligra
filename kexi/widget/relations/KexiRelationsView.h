@@ -45,7 +45,7 @@ public:
 
     KexiRelationsTableContainer* table(const QString& name) const;
 
-    const ConnectionSet* connections() const;
+    const QSet<KexiRelationsConnection*>* relationsConnections() const;
 
     void addTable(const QString& t);
 

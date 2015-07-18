@@ -39,7 +39,6 @@ class KDbConnection;
 typedef QHash<QString, KexiRelationsTableContainer*> TablesHash;
 typedef QMutableHashIterator<QString, KexiRelationsTableContainer*> TablesHashMutableIterator;
 typedef QHash<QString, KexiRelationsTableContainer*>::ConstIterator TablesHashConstIterator;
-typedef QSet<KexiRelationsConnection*> ConnectionSet;
 typedef QMutableSetIterator<KexiRelationsConnection*> ConnectionSetMutableIterator;
 typedef QSet<KexiRelationsConnection*>::ConstIterator ConnectionSetIterator;
 
@@ -92,7 +91,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-    const ConnectionSet* connections() const;
+    const QSet<KexiRelationsConnection*>* relationsConnections() const;
 
     //! @internal Handles mouse press event for area widget
     void handleMousePressEvent(QMouseEvent *ev);

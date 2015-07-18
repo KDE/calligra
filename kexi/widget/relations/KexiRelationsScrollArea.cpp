@@ -53,7 +53,7 @@ public:
     QWidget *areaWidget;
     TablesHash tables;
     bool readOnly;
-    ConnectionSet connectionViews;
+    QSet<KexiRelationsConnection*> relationsConnections;
     KexiRelationsConnection* selectedConnection;
     QPointer<KexiRelationsTableContainer> focusedTableContainer;
     QPointer<KexiRelationsTableContainer> movedTableContainer;
@@ -139,8 +139,8 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
 KexiRelationsScrollArea::~KexiRelationsScrollArea()
 {
     clearSelection(); //sanity
-    qDeleteAll(d->connectionViews);
-    d->connectionViews.clear();
+    qDeleteAll(d->relationsConnections);
+    d->relationsConnections.clear();
     delete d;
 }
 
@@ -270,7 +270,7 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
 // qDebug() << "finalSRC =" << d->tables[conn.srcTable];
 
     KexiRelationsConnection *connView = new KexiRelationsConnection(master, details, conn, this);
-    d->connectionViews.insert(connView);
+    d->relationsConnections.insert(connView);
     qDebug() << "connView->connectionRect() " << connView->connectionRect();
     d->areaWidget->update();
 
@@ -297,7 +297,7 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
 {
     d->movedTableContainer = c;
     QRect r;
-    foreach(KexiRelationsConnection* cview, d->connectionViews) {
+    foreach(KexiRelationsConnection* cview, d->relationsConnections) {
 //! @todo optimize
         if (cview->masterTable() == c || cview->detailsTable() == c
                 || cview->connectionRect().intersects(r)) {
@@ -386,7 +386,7 @@ KexiRelationsScrollArea::slotListUpdate(QObject *)
 void
 KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
 {
-    foreach(KexiRelationsConnection* cview, d->connectionViews) {
+    foreach(KexiRelationsConnection* cview, d->relationsConnections) {
         if (!cview->matchesPoint(ev->pos(), 3))
             continue;
         clearSelection();
@@ -424,7 +424,7 @@ void KexiRelationsScrollArea::handlePaintEvent(QPaintEvent *event)
         horizontalScrollBar() ? horizontalScrollBar()->value() : 0,
         verticalScrollBar() ? verticalScrollBar()->value() : 0,
         width(), height());
-    foreach(KexiRelationsConnection *cview, d->connectionViews) {
+    foreach(KexiRelationsConnection *cview, d->relationsConnections) {
         cview->drawConnection(&p);
     }
 }
@@ -516,7 +516,7 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
     KexiRelationsTableContainer* container = it.value();
     KDbTableSchema *ts = container->schema()->table();
     //for all connections: find and remove all connected with this table
-    for (ConnectionSetMutableIterator itConn(d->connectionViews);itConn.hasNext();) {
+    for (ConnectionSetMutableIterator itConn(d->relationsConnections);itConn.hasNext();) {
         KexiRelationsConnection* conn = itConn.next();
         if (conn->masterTable() == container
                 || conn->detailsTable() == container) {
@@ -545,7 +545,7 @@ KexiRelationsScrollArea::hideAllTablesExcept(QList<KDbTableSchema*>* tables)
 void
 KexiRelationsScrollArea::removeConnection(KexiRelationsConnection *conn)
 {
-    ConnectionSetMutableIterator it(d->connectionViews);
+    ConnectionSetMutableIterator it(d->relationsConnections);
     if (!it.findNext(conn))
         return;
     removeConnectionInternal(it);
@@ -588,8 +588,8 @@ void KexiRelationsScrollArea::clear()
 void KexiRelationsScrollArea::removeAllConnections()
 {
     clearSelection(); //sanity
-    qDeleteAll(d->connectionViews);
-    d->connectionViews.clear();
+    qDeleteAll(d->relationsConnections);
+    d->relationsConnections.clear();
     d->areaWidget->update();
 }
 
@@ -608,8 +608,8 @@ KexiRelationsTableContainer* KexiRelationsScrollArea::focusedTableContainer() co
     return d->focusedTableContainer;
 }
 
-const ConnectionSet* KexiRelationsScrollArea::connections() const
+const QSet<KexiRelationsConnection*>* KexiRelationsScrollArea::relationsConnections() const
 {
-    return &d->connectionViews;
+    return &d->relationsConnections;
 }
 

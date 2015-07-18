@@ -531,7 +531,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     temp->query()->setWhereExpression(whereExpr);
 
     //add relations (looking for connections)
-    foreach(KexiRelationsConnection* conn, *d->relations->connections()) {
+    foreach(KexiRelationsConnection* conn, *d->relations->relationsConnections()) {
         KexiRelationsTableContainer *masterTable = conn->masterTable();
         KexiRelationsTableContainer *detailsTable = conn->detailsTable();
 
@@ -1171,7 +1171,7 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
     }
 
 
-    foreach(KexiRelationsConnection *conn, *d->relations->connections()) {
+    foreach(KexiRelationsConnection *conn, *d->relations->relationsConnections()) {
         tmp = QString("<conn mtable=\"") + QString(conn->masterTable()->schema()->name())
               + "\" mfield=\"" + conn->masterField() + "\" dtable=\""
               + QString(conn->detailsTable()->schema()->name())
