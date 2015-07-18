@@ -47,7 +47,7 @@ class KexiRelationsView::Private
 {
 public:
     Private()
-            : conn(KexiMainWindowIface::global()->project()->dbConnection()) {
+    {
     }
 
     KComboBox *tableCombo;
@@ -88,7 +88,6 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     lbl->setIndent(3);
     hlyr->addWidget(lbl);
     hlyr->addWidget(d->tableCombo);
-    fillTablesCombo();
 
     d->btnAdd = new QPushButton(xi18nc("Insert table/query into relations view", "&Insert"), horWidget);
     hlyr->addWidget(d->btnAdd);
@@ -393,11 +392,10 @@ void KexiRelationsView::aboutToShowPopupMenu()
     }
 }
 
-void
-KexiRelationsView::clear()
+bool KexiRelationsView::clear()
 {
     d->scrollArea->clear();
-    fillTablesCombo();
+    return setConnection(d->conn);
 }
 
 /*! Removes all coonections from the view. */
@@ -406,13 +404,20 @@ void KexiRelationsView::removeAllConnections()
     d->scrollArea->removeAllConnections();
 }
 
-void
-KexiRelationsView::fillTablesCombo()
+bool KexiRelationsView::setConnection(KDbConnection *conn)
 {
     d->tableCombo->clear();
-    QStringList tmp = d->conn->tableNames();
-    tmp.sort();
-    d->tableCombo->addItems(tmp);
+    d->conn = conn;
+    if (conn) {
+        bool ok;
+        QStringList result = d->conn->tableNames(false/*no system tables*/, &ok);
+        if (!ok) {
+            return false;
+        }
+        result.sort();
+        d->tableCombo->addItems(result);
+    }
+    return true;
 }
 
 void
