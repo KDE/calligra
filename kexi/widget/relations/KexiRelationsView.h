@@ -71,7 +71,7 @@ public Q_SLOTS:
      */
     void addTable(KDbTableSchema *t, const QRect &rect = QRect());
 
-    //! Adds a connection \a con to the area. This changes only visual representation.
+    //! Adds a connection \a conn to the area. This changes only visual representation.
     void addConnection(const SourceConnection& conn);
 
     void removeSelectedObject();
@@ -79,7 +79,7 @@ public Q_SLOTS:
     /*! Removes all tables and coonections from the widget. */
     void clear();
 
-    /*! Removes all coonections from the view. */
+    /*! Removes all connections from the view. */
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
