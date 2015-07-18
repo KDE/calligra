@@ -106,7 +106,7 @@ Q_SIGNALS:
     void tableViewGotFocus();
     void connectionViewGotFocus();
     void emptyAreaGotFocus();
-    void tableHidden(KDbTableSchema& t);
+    void tableHidden(KDbTableSchema* t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
 
@@ -143,10 +143,10 @@ protected:
     void removeConnection(KexiRelationsConnection *conn);
 
     //! Removes current value of iterator \a it, also deleted the container object.
-    void hideTableInternal(TablesHashMutableIterator& it);
+    void hideTableInternal(TablesHashMutableIterator* it);
 
     //! Removes current value of iterator \a it, also deleted the connection object.
-    void removeConnectionInternal(ConnectionSetMutableIterator& it);
+    void removeConnectionInternal(ConnectionSetMutableIterator* it);
 
 private:
     class Private;
