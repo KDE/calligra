@@ -55,9 +55,9 @@ public:
     KexiRelationsScrollArea *scrollArea;
     KDbConnection *conn;
 
-    QMenu *tableQueryPopup //!< over table/query
-    , *connectionPopup //!< over connection
-    , *areaPopup; //!< over outer area
+    QMenu *tableQueryPopup; //!< over table/query
+    QMenu *connectionPopup; //!< over connection
+    QMenu *areaPopup; //!< over outer area
     QAction *openSelectedTableAction, *designSelectedTableAction,
     *appendSelectedFieldAction, *appendSelectedFieldsAction, *hideTableAction;
 };
