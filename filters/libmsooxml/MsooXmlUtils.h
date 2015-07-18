@@ -35,13 +35,13 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 
 class QLocale;
 class KZip;
 struct KoOdfWriters;
 class KoCharacterStyle;
 class KoXmlWriter;
+class KoGenStyles;
 
 //! Returns from the current block if the result of @a call is not equal to KoFilter::OK
 #define RETURN_IF_ERROR( call ) \

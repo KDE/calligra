@@ -34,7 +34,6 @@
 #include <QVariantList>
 
 class KoXmlWriter;
-class KoGenStyles;
 
 class Filterkpr2odf : public KoFilter
 {

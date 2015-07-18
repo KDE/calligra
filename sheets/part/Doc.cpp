@@ -58,7 +58,6 @@
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
-#include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
