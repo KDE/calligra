@@ -650,6 +650,10 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 {
+    if (!d->relations->setConnection(d->conn)) {
+        window()->setStatus(d->conn);
+        return false;
+    }
     if (mode == Kexi::NoViewMode || (mode == Kexi::DataViewMode && !tempData()->query())) {
         //this is not a SWITCH but a fresh opening in this view mode
         if (!window()->neverSaved()) {

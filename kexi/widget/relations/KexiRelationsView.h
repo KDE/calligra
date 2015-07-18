@@ -40,6 +40,12 @@ public:
     explicit KexiRelationsView(QWidget *parent = 0);
     virtual ~KexiRelationsView();
 
+    //! Sets database connection @a conn for which tables and connections will be displayed.
+    //! If @a conn is 0, contents is cleared.
+    //! @return true on successfull retrieval of table and relation information.
+    //! On failure result is available at conn->result() and KdbMessageGuard can be used.
+    bool setConnection(KDbConnection *conn);
+
     //! \return a hash of added tables
     TablesHash* tables() const;
 
@@ -76,8 +82,9 @@ public Q_SLOTS:
 
     void removeSelectedObject();
 
-    /*! Removes all tables and coonections from the widget. */
-    void clear();
+    /*! Removes all tables and connections from the widget and refreshes the connection assignment.
+     @return true on success. */
+    bool clear();
 
     /*! Removes all connections from the view. */
     void removeAllConnections();
@@ -107,9 +114,6 @@ protected:
 
     //! Invalidates all actions availability.
     void invalidateActions();
-
-    //! Fills table's combo box with all available table names.
-    void fillTablesCombo();
 
 private:
     class Private;
