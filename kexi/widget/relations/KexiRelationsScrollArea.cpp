@@ -503,17 +503,18 @@ KexiRelationsScrollArea::removeSelectedObject()
 void
 KexiRelationsScrollArea::hideTable(KexiRelationsTableContainer* container)
 {
+    Q_ASSERT(container);
     /*! @todo what about query? */
     TablesHashMutableIterator it(d->tables);
     if (!it.findNext(container))
         return;
-    hideTableInternal(it);
+    hideTableInternal(&it);
 }
 
-void
-KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
+void KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator* it)
 {
-    KexiRelationsTableContainer* container = it.value();
+    Q_ASSERT(it);
+    KexiRelationsTableContainer* container = it->value();
     KDbTableSchema *ts = container->schema()->table();
     //for all connections: find and remove all connected with this table
     for (ConnectionSetMutableIterator itConn(d->relationsConnections);itConn.hasNext();) {
@@ -521,45 +522,46 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
         if (conn->masterTable() == container
                 || conn->detailsTable() == container) {
             //remove this
-            removeConnectionInternal(itConn);
+            removeConnectionInternal(&itConn);
         }
     }
-    it.remove();
+    it->remove();
     delete container;
-    emit tableHidden(*ts);
+    emit tableHidden(ts);
 }
 
 void
 KexiRelationsScrollArea::hideAllTablesExcept(QList<KDbTableSchema*>* tables)
 {
+    Q_ASSERT(tables);
 //! @todo what about queries?
     for (TablesHashMutableIterator it(d->tables); it.hasNext();) {
         it.next();
         KDbTableSchema *table = it.value()->schema()->table();
         if (!table || tables->contains(table))
             continue;
-        hideTableInternal(it);
+        hideTableInternal(&it);
     }
 }
 
 void
 KexiRelationsScrollArea::removeConnection(KexiRelationsConnection *conn)
 {
+    Q_ASSERT(conn);
     ConnectionSetMutableIterator it(d->relationsConnections);
     if (!it.findNext(conn))
         return;
-    removeConnectionInternal(it);
+    removeConnectionInternal(&it);
 }
 
-void
-KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& it)
+void KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator* it)
 {
-    KexiRelationsConnection *conn = it.value();
+    Q_ASSERT(it);
+    KexiRelationsConnection *conn = it->value();
     emit aboutConnectionRemove(conn);
-    it.remove();
+    it->remove();
     d->areaWidget->update(conn->connectionRect());
     delete conn;
-    qDebug();
 }
 
 void KexiRelationsScrollArea::slotTableViewGotFocus()
