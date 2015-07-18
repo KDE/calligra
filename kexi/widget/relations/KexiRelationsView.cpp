@@ -188,9 +188,9 @@ KexiRelationsTableContainer* KexiRelationsView::table(const QString& name) const
     return d->scrollArea->tables()->value(name);
 }
 
-const ConnectionSet* KexiRelationsView::connections() const
+const QSet<KexiRelationsConnection*>* KexiRelationsView::relationsConnections() const
 {
-    return d->scrollArea->connections();
+    return d->scrollArea->relationsConnections();
 }
 
 void
