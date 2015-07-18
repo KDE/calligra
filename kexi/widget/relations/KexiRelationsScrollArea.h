@@ -118,7 +118,7 @@ public Q_SLOTS:
      Does not emit signals like tableHidden(). */
     void clear();
 
-    /*! Removes all coonections from the view. */
+    /*! Removes all connections from the view. */
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
