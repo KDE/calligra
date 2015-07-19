@@ -25,8 +25,6 @@
 
 #include "KoPageLayoutWidget.h"
 
-#include <QCheckBox>
-#include <QHeaderView>
 
 #include <kpushbutton.h>
 

@@ -22,7 +22,9 @@
 
 #include <QRectF>
 
-#include "KoGenStyles.h"
+class KoGenStyles;
+class KoGenStyle;
+class KoXmlWriter;
 
 /**
  * Helper class that for writing xml.

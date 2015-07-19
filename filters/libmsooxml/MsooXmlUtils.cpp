@@ -51,6 +51,7 @@
 #include <styles/KoCharacterStyle.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 #include <KoUnit.h>
 
 #include <QGlobalStatic>

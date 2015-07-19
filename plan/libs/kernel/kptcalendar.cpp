@@ -30,9 +30,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomDocument>
-#include <QList>
-
 #include <kdatetime.h>
 #include <klocale.h>
 #include <ktimezone.h>

@@ -36,7 +36,6 @@
 #include <QPainter>
 #include <QToolTip>
 #include <QTreeView>
-#include <QHeaderView>
 #include <QStylePainter>
 #include <QMimeData>
 

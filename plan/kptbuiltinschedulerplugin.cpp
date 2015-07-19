@@ -25,12 +25,6 @@
 
 #include <kglobal.h>
 
-#include <QApplication>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QTimer>
-#include <QMutexLocker>
-
 namespace KPlato
 {
 

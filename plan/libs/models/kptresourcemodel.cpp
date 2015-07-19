@@ -35,7 +35,6 @@
 #include <KoIcon.h>
 
 #include <QMimeData>
-#include <QObject>
 #include <QStringList>
 
 #include <kglobal.h>

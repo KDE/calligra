@@ -25,7 +25,10 @@
 #ifndef DATE_TIME_FORMAT_H
 #define DATE_TIME_FORMAT_H
 
-#include <KoGenStyles.h>
+#include <QString>
+
+class KoXmlWriter;
+class KoGenStyles;
 
 class DateTimeFormat
 {

@@ -51,7 +51,6 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QDateTime>
-#include <QMenu>
 #include <QModelIndex>
 #include <QPainter>
 #include <QTabWidget>

@@ -25,11 +25,6 @@
 
 #include "kptschedule.h"
 
-#include <QThread>
-#include <QMutex>
-#include <QTimer>
-
-
 class KLocale;
 
 

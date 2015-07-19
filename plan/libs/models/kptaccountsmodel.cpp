@@ -33,9 +33,6 @@
 
 #include <KoIcon.h>
 
-#include <QList>
-#include <QObject>
-
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
 #include <kglobal.h>

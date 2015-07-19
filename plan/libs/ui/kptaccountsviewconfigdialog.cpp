@@ -28,7 +28,6 @@
 
 #include <QPushButton>
 #include <QCheckBox>
-#include <QDateTime>
 #include <QString>
 
 #include <klocale.h>

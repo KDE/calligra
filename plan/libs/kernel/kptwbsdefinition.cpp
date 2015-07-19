@@ -24,10 +24,7 @@
 
 #include <KoXmlReader.h>
 
-#include <QList>
-#include <QString>
 #include <QStringList>
-#include <QPair>
 
 namespace KPlato
 {

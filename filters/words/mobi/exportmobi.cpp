@@ -22,7 +22,6 @@
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
-#include <KoGenStyles.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 

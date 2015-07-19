@@ -138,6 +138,7 @@ qreal KWPage::leftMargin() const
     if (! isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
+    qDebug() << "asking for left margin" << pageNumber() << (page.pageSide == Left) << pageEdgeMargin() << marginClosestBinding();
     qreal answer = page.pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
     if (answer != -1)
         return answer;

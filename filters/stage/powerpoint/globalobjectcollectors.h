@@ -22,6 +22,8 @@
 #include "PptToOdp.h"
 #include "ODrawToOdf.h"
 
+#include <KoGenStyles.h>
+
 /**
  * Report global objects belonging to global options to the collector.
  */
