@@ -24,8 +24,6 @@
 
 #include "ui_kpttaskdescriptionpanelbase.h"
 
-#include <QWidget>
-
 #include <kdialog.h>
 
 namespace KPlato

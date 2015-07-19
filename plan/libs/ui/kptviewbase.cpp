@@ -46,7 +46,6 @@
 #include <QScrollBar>
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
-#include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
 #include <QFocusEvent>
@@ -1894,7 +1893,7 @@ void DoubleTreeViewBase::hideColumns( TreeViewBase *view, const QList<int> &list
     view->setColumnsHidden( list );
 }
 
-void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<int> slaveList )
+void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<int> &slaveList )
 {
     m_leftview->setColumnsHidden( masterList );
     m_rightview->setColumnsHidden( slaveList );

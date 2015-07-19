@@ -33,20 +33,8 @@
 #include "KoPageLayoutWidget.h"
 
 #include <QDragMoveEvent>
-#include <QMenu>
 #include <QModelIndex>
 #include <QVBoxLayout>
-#include <QWidget>
-#include <QTextBrowser>
-#include <QTextCursor>
-#include <QTextTableFormat>
-#include <QTextLength>
-#include <QTextTable>
-#include <QTextFrame>
-#include <QTextFrameFormat>
-#include <QTextCharFormat>
-#include <QTextTableCell>
-#include <QLineEdit>
 #include <QItemSelection>
 #include <QApplication>
 #include <QResizeEvent>

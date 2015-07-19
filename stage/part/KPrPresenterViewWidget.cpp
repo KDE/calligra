@@ -30,7 +30,6 @@
 #include <KoPAPageBase.h>
 #include <KoPAViewBase.h>
 #include <KoShape.h>
-#include <KoTextShapeData.h>
 
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"

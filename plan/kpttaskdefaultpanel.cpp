@@ -30,8 +30,6 @@
 #endif
 
 #include <QDateTime>
-#include <QDateTimeEdit>
-#include <QComboBox>
 
 #include <kactioncollection.h>
 #include <ktextedit.h>

@@ -449,7 +449,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     foreach ( TJ::CoreAttributes *a, job->getBookedResources( 0 ) ) {
         TJ::Resource *r = static_cast<TJ::Resource*>( a );
         Resource *res = m_resourcemap[ r ];
-        QList<TJ::Interval> lst = r->getBookedIntervals( 0, job );
+        const QVector<TJ::Interval> lst = r->getBookedIntervals( 0, job );
         foreach ( const TJ::Interval &tji, lst ) {
             AppointmentInterval ai = fromTJInterval( tji );
             double load = res->type() == Resource::Type_Material ? res->units() : ai.load() * r->getEfficiency();

@@ -24,7 +24,6 @@
 
 #include <KoIcon.h>
 
-#include <QPushButton>
 #include <QTreeWidget>
 #include <QList>
 

@@ -28,8 +28,6 @@
 #include <QModelIndex>
 #include <QModelIndexList>
 #include <QTreeView>
-#include <QVBoxLayout>
-#include <QTimer>
 
 
 namespace KPlato

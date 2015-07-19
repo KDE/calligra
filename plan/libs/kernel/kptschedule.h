@@ -253,7 +253,7 @@ public:
 
             QString formatMsg() const;
     };
-    virtual void addLog( Log &log );
+    virtual void addLog( const Log &log );
     virtual void clearLogs() {};
     virtual void logError( const QString &, int = -1 ) {}
     virtual void logWarning( const QString &, int = -1 ) {}
@@ -511,9 +511,9 @@ public:
     }
     void addCriticalPathNode( Node *node );
     
-    QList<Schedule::Log> logs() const;
-    void setLog( const QList<Schedule::Log> &log ) { m_log = log; }
-    virtual void addLog( Schedule::Log &log );
+    QVector<Schedule::Log> logs() const;
+    void setLog( const QVector<Schedule::Log> &log ) { m_log = log; }
+    virtual void addLog( const Schedule::Log &log );
     virtual void clearLogs() { m_log.clear(); m_logPhase.clear(); }
     
     void setPhaseName( int phase, const QString &name ) { m_logPhase[ phase ] = name; }
@@ -547,7 +547,7 @@ private:
     QList<Node*> *m_currentCriticalPath;
     
     
-    QList<Schedule::Log> m_log;
+    QVector<Schedule::Log> m_log;
     QMap<int, QString> m_logPhase;
 };
 
@@ -660,7 +660,7 @@ public:
 
     /// Log added by MainSchedule
     /// Emits sigLogAdded() to enable synchronization between schedules
-    void logAdded( Schedule::Log &log );
+    void logAdded( const Schedule::Log &log );
 
     /// Create and load a MainSchedule
     MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
@@ -684,7 +684,7 @@ public Q_SLOTS:
     void setProgress( int value );
 
     /// Add the lis of logs @p log to expected()
-    void slotAddLog( const QList<KPlato::Schedule::Log> &log );
+    void slotAddLog( const QVector<KPlato::Schedule::Log> &log );
 
     void setPhaseNames( const QMap<int, QString> &phasenames );
 
@@ -697,7 +697,7 @@ Q_SIGNALS:
 
     /// Emitted by logAdded()
     /// Used by scheduling thread
-    void sigLogAdded( Schedule::Log log );
+    void sigLogAdded( const Schedule::Log &log );
 
 protected:
     Project &m_project;
@@ -724,6 +724,8 @@ protected:
 
 
 } //namespace KPlato
+
+Q_DECLARE_TYPEINFO(KPlato::Schedule::Log, Q_MOVABLE_TYPE);
 
 KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule *s );
 KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule &s );

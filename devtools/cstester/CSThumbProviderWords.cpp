@@ -34,7 +34,6 @@
 #include <frames/KWTextFrameSet.h>
 
 #include <KoShapeManager.h>
-#include <KoTextShapeData.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
 #include <KoPAUtil.h>

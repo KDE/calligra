@@ -23,7 +23,6 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 
-#include <KoTextShapeData.h>
 #include <KoToolProxy.h>
 #include <QTextCursor>
 #include <KoShapeRegistry.h>

@@ -25,7 +25,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomDocument>
 #include <QStringList>
 
 

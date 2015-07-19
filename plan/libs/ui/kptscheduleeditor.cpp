@@ -35,14 +35,11 @@
 #include <KoDocument.h>
 #include <KoIcon.h>
 
-#include <QMenu>
 #include <QList>
-#include <QObject>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QApplication>
 #include <QClipboard>
-#include <QKeyEvent>
 #include <QContextMenuEvent>
 
 #include <kaction.h>

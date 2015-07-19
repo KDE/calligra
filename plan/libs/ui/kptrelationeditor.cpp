@@ -32,7 +32,6 @@
 #include <QItemSelectionModel>
 #include <QModelIndex>
 #include <QVBoxLayout>
-#include <QWidget>
 #include <QMenu>
 
 #include <kaction.h>

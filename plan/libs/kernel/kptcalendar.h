@@ -28,7 +28,6 @@
 #include <QPair>
 #include <QList>
 #include <QMap>
-#include <QStringList>
 
 #include <ktimezone.h>
 #include <kdebug.h>
@@ -36,6 +35,7 @@
 #include <KoXmlReaderForward.h>
 
 class QDomElement;
+class QStringList;
 
 /// The main namespace.
 namespace KPlato

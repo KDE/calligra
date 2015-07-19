@@ -36,9 +36,7 @@
 
 #include <QList>
 #include <QVBoxLayout>
-#include <QHeaderView>
 #include <QContextMenuEvent>
-#include <QDragMoveEvent>
 #include <QMenu>
 
 #include <kaction.h>

@@ -29,7 +29,7 @@
 #include "DocxXmlDocumentReader.h"
 #include <MsooXmlDrawingTableStyle.h>
 
-#include <KoGenStyles.h>
+#include <KoGenStyle.h>
 #include <KoCharacterStyle.h>
 
 //! A class reading MSOOXML DOCX markup - styles.xml part.

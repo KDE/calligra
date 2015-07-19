@@ -41,7 +41,6 @@
 
 #include <KoDocument.h>
 #include <KoShapeLoadingContext.h>
-#include <KoGenStyle.h>
 #include <KoXmlReader.h>
 
 #include <karbonui_export.h>

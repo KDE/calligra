@@ -39,10 +39,7 @@
 #include <QItemSelectionModel>
 #include <QModelIndex>
 #include <QVBoxLayout>
-#include <QWidget>
-#include <QMenu>
 #include <QDragMoveEvent>
-#include <QDockWidget>
 
 #include <kaction.h>
 #include <kactionmenu.h>

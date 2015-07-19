@@ -34,6 +34,7 @@
 #include <QString>
 
 // Calligra
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
 
