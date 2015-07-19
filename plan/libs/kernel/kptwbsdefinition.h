@@ -22,7 +22,7 @@
 
 #include "kplatokernel_export.h"
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 #include <QString>
 #include <QMap>
@@ -30,6 +30,7 @@
 #include <QList>
 
 class QStringList;
+class QDomElement;
 
 
 namespace KPlato

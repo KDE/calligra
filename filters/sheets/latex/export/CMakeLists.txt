@@ -25,7 +25,7 @@ kde4_add_plugin(calligra_filter_kspread2tex ${kspread2tex_PART_SRCS})
 
 
 
-target_link_libraries(calligra_filter_kspread2tex komain)
+target_link_libraries(calligra_filter_kspread2tex komain ${KDE4_KFILE_LIBS})
 
 install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR})
 

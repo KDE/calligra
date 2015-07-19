@@ -27,10 +27,9 @@
 #include <klocale.h>
 
 #include <QComboBox>
-#include <QCheckBox>
-#include <QPushButton>
 #include <QTableWidget>
 #include <QStringList>
+
 #include <kundo2command.h>
 
 

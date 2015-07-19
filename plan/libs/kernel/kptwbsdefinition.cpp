@@ -22,10 +22,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QList>
-#include <QString>
+#include <KoXmlReader.h>
+
 #include <QStringList>
-#include <QPair>
 
 namespace KPlato
 {

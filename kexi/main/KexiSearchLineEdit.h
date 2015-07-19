@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 
    This program is free software; you can redistribute it and/or
@@ -70,6 +70,7 @@ protected:
     virtual void focusInEvent(QFocusEvent *e);
     virtual void focusOutEvent(QFocusEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
+    virtual void changeEvent(QEvent *event);
 
 private:
     void connectCompleter();

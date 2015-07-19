@@ -31,8 +31,6 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
-#include <QMimeData>
-#include <QObject>
 #include <QStringList>
 
 #include <klocale.h>

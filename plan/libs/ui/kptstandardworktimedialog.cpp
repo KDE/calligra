@@ -24,7 +24,6 @@
 #include "kptcommand.h"
 #include "kptdebug.h"
 
-#include <QPushButton>
 #include <QTreeWidgetItem>
 
 #include <klocale.h>

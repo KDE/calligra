@@ -45,6 +45,7 @@
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoAnnotation.h>
+#include <KoGridData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
@@ -61,7 +62,6 @@
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
-#include <KoTextShapeData.h>
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>

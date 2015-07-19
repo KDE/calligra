@@ -35,6 +35,8 @@
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 #include <KoAnnotationLayoutManager.h>

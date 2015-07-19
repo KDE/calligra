@@ -32,8 +32,6 @@
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoUnit.h>
 
 #include "CellStorage.h"

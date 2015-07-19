@@ -68,6 +68,7 @@
 #include <KoTextEditor.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
+#include <KoGuidesData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -525,8 +526,7 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("Words %1.%2.%3").arg(Calligra::versionMajor())
-                              .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
+    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CALLIGRA_VERSION_STRING));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

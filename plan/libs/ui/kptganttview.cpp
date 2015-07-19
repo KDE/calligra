@@ -42,6 +42,7 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 #include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
@@ -50,7 +51,6 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QDateTime>
-#include <QMenu>
 #include <QModelIndex>
 #include <QPainter>
 #include <QTabWidget>

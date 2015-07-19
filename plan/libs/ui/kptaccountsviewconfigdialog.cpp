@@ -27,7 +27,6 @@
 #include "KoPageLayoutWidget.h"
 
 #include <QCheckBox>
-#include <QDateTime>
 #include <QString>
 
 #include <klocale.h>

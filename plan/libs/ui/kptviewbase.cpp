@@ -36,6 +36,7 @@
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 #include <KoUnit.h>
+#include <KoXmlReader.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -45,7 +46,6 @@
 #include <QScrollBar>
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
-#include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
 #include <QFocusEvent>

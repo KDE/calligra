@@ -24,6 +24,7 @@
 
 #include "ui_kptconfigtaskpanelbase.h"
 
+#include <QWidget>
 
 namespace KPlato
 {

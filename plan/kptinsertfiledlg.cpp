@@ -25,8 +25,6 @@
 #include <kio/netaccess.h>
 #include <kdebug.h>
 
-#include <QRadioButton>
-
 namespace KPlato
 {
 

@@ -34,7 +34,6 @@
 #include "KoDocumentInfo.h"
 #include "KoView.h"
 
-#include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
@@ -48,6 +47,9 @@
 #include <KoUnit.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentInfoDlg.h>
+#include <KoPageLayout.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
 
 #include <kmimetype.h>
 #include <kfileitem.h>

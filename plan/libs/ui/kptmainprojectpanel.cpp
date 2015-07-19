@@ -19,9 +19,6 @@
 
 #include "kptmainprojectpanel.h"
 
-#include <QCheckBox>
-#include <QPushButton>
-
 #include <klocale.h>
 #include "kptdebug.h"
 

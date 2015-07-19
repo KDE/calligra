@@ -29,8 +29,7 @@
 #include "kptxmlloaderobject.h"
 #include "kptdebug.h"
 
-#include <QDateTime>
-#include <QMutableMapIterator>
+#include <KoXmlReader.h>
 
 
 namespace KPlato

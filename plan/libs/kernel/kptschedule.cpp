@@ -31,9 +31,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomElement>
-#include <QList>
-#include <QString>
 #include <QStringList>
 
 #include <klocale.h>

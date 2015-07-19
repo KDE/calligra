@@ -27,6 +27,7 @@
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
+#include <Value.h>
 #include "commands/PasteCommand.h"
 
 using namespace Calligra::Sheets;
