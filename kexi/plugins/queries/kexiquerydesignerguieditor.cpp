@@ -617,7 +617,6 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
         }
         if (tempData()->queryChangedInPreviousView() || !tempData()->query()) {
             //remember current design in a temporary structure
-            *dontStore = true;
             QString errMsg;
             //build schema; problems are not allowed
             if (!buildSchema(&errMsg)) {
@@ -625,7 +624,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
                 return cancelled;
             }
         }
-        dontStore = true;
+        *dontStore = true;
         //! @todo
         return true;
     } else if (mode == Kexi::TextViewMode) {
