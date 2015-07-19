@@ -398,9 +398,6 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             if (!tempData()->connectionDefinition.isNull())  {
                 reportData = sourceData(tempData()->connectionDefinition);
             }
-            if (!reportData) {
-                reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
-            }
             m_preRenderer->setSourceData(reportData);
 
             m_preRenderer->setName(tempData()->name);
@@ -450,7 +447,7 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
 {
     KoReportData *kodata = 0;
 
-    if (e.attribute("type") == "internal") {
+    if (e.attribute("type") == "internal" && !e.attribute("source").isEmpty()) {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
 #ifndef KEXI_MOBILE
