@@ -163,7 +163,7 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     
     //subtract/add the rotation of the canvas.
     
-    if (info.canvasRotation()!=m_canvasAngle) {
+    if (info.canvasRotation()!=m_canvasAngle && info.canvasMirroredH()==m_canvasAxisXMirrored) {
        m_canvasAngle=info.canvasRotation();
     }
     
@@ -220,8 +220,8 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
         vertical = halfvalue-(fabs(vertical)*halfvalue);
     }
     
-    if (m_canvasAxisXMirrored) {horizontal = maxvalue-horizontal;}
-    if (m_canvasAxisYMirrored) {vertical = maxvalue-vertical;}
+    if (m_canvasAxisXMirrored && info.canvasMirroredH()) {horizontal = maxvalue-horizontal;}
+    if (m_canvasAxisYMirrored && info.canvasMirroredH()) {vertical = maxvalue-vertical;}
     
     depth = sin(elevation)*maxvalue;
     

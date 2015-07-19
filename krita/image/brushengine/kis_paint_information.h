@@ -208,8 +208,9 @@ public:
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
             qreal perspective = 1.0,
-	    qreal speed = 0.0,
-            int canvasrotation = 0);
+	        qreal speed = 0.0,
+            int canvasrotation = 0,
+            bool canvasMirroredH = false);
     /**
      *Returns the canvas rotation if that has been given to the kispaintinformation.
      */
@@ -218,6 +219,17 @@ public:
      *set the canvas rotation.
      */
     void setCanvasRotation(int rotation);
+    
+    /*
+     *Whether the canvas is mirrored for the paint-operation.
+     */
+    bool canvasMirroredH() const;
+    
+    /*
+     *Set whether the canvas is mirrored for the paint-operation.
+     */
+    void setCanvasHorizontalMirrorState(bool mir);
+    
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

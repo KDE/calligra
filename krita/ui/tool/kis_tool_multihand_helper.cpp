@@ -73,11 +73,10 @@ void KisToolMultihandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,
         __pi.setPos(transform.map(__pi.pos()));
         __pi.setCanvasRotation(rotated.angle());
         
-        /*if (transform.m11()<0.0 && transform.m22()<0.0) {
-            __pi.setCanvasRotation(__pi.canvasRotation()+180 );
-        } else if (transform.m11()<0.0 || transform.m22()<0.0) {
-            __pi.setCanvasRotation(360-__pi.canvasRotation() );
-        }*/
+        if (__pi.canvasMirroredH()) {
+            __pi.setCanvasRotation(180-__pi.canvasRotation());
+            __pi.setCanvasRotation(__pi.canvasRotation()+180);
+        }
         
         paintAt(painterInfos[i], __pi);
     }
@@ -106,14 +105,13 @@ void KisToolMultihandHelper::paintLine(const QVector<PainterInfo*> &painterInfos
         rotated = transform.map(rotateme);
         __pi2.setCanvasRotation(rotated.angle());
 
-        //check mirroring, has to happen seperately for both.
-        /*if (transform.m11()<0.0 && transform.m22()<0.0) {
-            __pi1.setCanvasRotation(__pi1.canvasRotation()+180 );
-            __pi2.setCanvasRotation(__pi2.canvasRotation()+180 );
-        } else if (transform.m11()<0.0 || transform.m22()<0.0) {
-            __pi1.setCanvasRotation(360-__pi1.canvasRotation() );
-            __pi2.setCanvasRotation(360-__pi2.canvasRotation() );
-        }*/
+        //check mirroring
+        if (__pi2.canvasMirroredH()) {
+            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
+            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);            
+            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
+            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
+        }
         
 
         paintLine(painterInfos[i], __pi1, __pi2);
@@ -145,13 +143,12 @@ void KisToolMultihandHelper::paintBezierCurve(const QVector<PainterInfo*> &paint
         rotated = transform.map(rotateme);
         __pi2.setCanvasRotation(rotated.angle());
         
-        /*if (transform.m11()<0.0 && transform.m22()<0.0) {
-            __pi1.setCanvasRotation(__pi1.canvasRotation()+180 );
-            __pi2.setCanvasRotation(__pi2.canvasRotation()+180 );
-        } else if (transform.m11()<0.0 || transform.m22()<0.0) {
-            __pi1.setCanvasRotation(360-__pi1.canvasRotation() );
-            __pi2.setCanvasRotation(360-__pi2.canvasRotation() );
-        }*/
+        if (__pi2.canvasMirroredH()) {
+            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
+            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);            
+            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
+            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
+        }
         
 
         QPointF __control1 = transform.map(control1);

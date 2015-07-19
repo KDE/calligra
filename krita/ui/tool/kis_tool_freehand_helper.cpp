@@ -80,6 +80,7 @@ struct KisToolFreehandHelper::Private
     QTimer stabilizerPollTimer;
     
     int canvasRotation;
+    bool canvasMirroredH;
 
     KisPaintInformation
     getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
@@ -126,6 +127,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     const KisPaintOpSettings *settings = globalSettings;
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
     info.setCanvasRotation(m_d->canvasRotation);
+    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
     KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
 
     if (!m_d->painterInfos.isEmpty()) {
@@ -336,6 +338,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             m_d->infoBuilder->continueStroke(event,
                                              elapsedStrokeTime());
     info.setCanvasRotation( m_d->canvasRotation );
+    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
 
     KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
@@ -823,3 +826,13 @@ void KisToolFreehandHelper::setCanvasRotation(int rotation)
 {
    m_d->canvasRotation = rotation; 
 }
+bool KisToolFreehandHelper::canvasMirroredH()
+{
+    return m_d->canvasMirroredH;
+}
+
+void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
+{
+   m_d->canvasMirroredH = mirrored; 
+}
+
