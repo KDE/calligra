@@ -526,7 +526,7 @@ void KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator* it)
         }
     }
     it->remove();
-    delete container;
+    container->deleteLater();
     emit tableHidden(ts);
 }
 
