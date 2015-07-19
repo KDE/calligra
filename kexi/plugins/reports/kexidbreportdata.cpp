@@ -104,7 +104,7 @@ bool KexiDBReportData::open()
     {
         if ( d->objectName.isEmpty() )
         {
-            d->cursor = d->connection->executeQuery ( KDbEscapedString("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'") );
+            return false;
         }
         else if ( d->copySchema)
         {
