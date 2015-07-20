@@ -105,7 +105,10 @@ KexiDBSubForm::setFormName(const QString &name)
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     // we check if there is a form with this name
-    int id = KDb::idForObjectName(*conn, name, KexiPart::FormObjectType);
+    int id;
+    if (true != KDb::idForObjectName(*conn, &id, name, KexiPart::FormObjectType)) {
+        return;
+    }
     if ((id == 0) || (id == view->window()->id())) // == our form
         return; // because of recursion when loading
 

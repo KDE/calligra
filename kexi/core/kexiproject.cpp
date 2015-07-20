@@ -164,8 +164,8 @@ public:
                 return false;
             }
             if (!connection->executeSQL(KDbEscapedString("UPDATE kexi__objects SET o_name=%1  WHERE o_id=%2")
-                    .arg(connection->driver()->valueToSQL(KDbField::Text, newName))
-                    .arg(item->identifier())))
+                    .arg(connection->escapeString(newName))
+                    .arg(connection->driver()->valueToSQL(KDbField::Integer, item->identifier()))))
             {
                 q->m_result = connection->result();
                 return false;
@@ -173,8 +173,8 @@ public:
         }
         if (_newCaption) {
             if (!connection->executeSQL(KDbEscapedString("UPDATE kexi__objects SET o_caption=%1 WHERE o_id=%2")
-                    .arg(connection->driver()->valueToSQL(KDbField::Text, newCaption))
-                    .arg(item->identifier())))
+                    .arg(connection->escapeString(newCaption))
+                    .arg(connection->driver()->valueToSQL(KDbField::Integer, item->identifier()))))
             {
                 q->m_result = connection->result();
                 return false;
@@ -442,11 +442,14 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
     if (!ok)
         storedMinorVersion = 1;
 
-    bool containsKexi__blobsTable = d->connection->drv_containsTable("kexi__blobs");
+    const tristate containsKexi__blobsTable = d->connection->drv_containsTable("kexi__blobs");
+    if (~containsKexi__blobsTable) {
+        return false;
+    }
     int dummy;
     bool contains_o_folder_id = false;
-    if (containsKexi__blobsTable) {
-        tristate res = d->connection->querySingleNumber(
+    if (true == containsKexi__blobsTable) {
+        const tristate res = d->connection->querySingleNumber(
                 KDbEscapedString("SELECT COUNT(o_folder_id) FROM kexi__blobs"), &dummy, 0, false/*addLimitTo1*/);
         if (res == false) {
             m_result = d->connection->result();
@@ -472,7 +475,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
             }
         }
 
-        if (containsKexi__blobsTable) {
+        if (true == containsKexi__blobsTable) {
 //! @todo what to do for readonly connections? Should we alter kexi__blobs in memory?
             if (!d->connection->options()->isReadOnly()) {
                 if (!contains_o_folder_id) {
@@ -501,7 +504,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
              );
 
     //*** create global BLOB container, if not present
-    if (containsKexi__blobsTable) {
+    if (true == containsKexi__blobsTable) {
         //! just insert this schema
         d->connection->insertInternalTable(t_blobs);
         if (add_folder_id_column && !d->connection->options()->isReadOnly()) {
@@ -552,9 +555,12 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
     .addField(new KDbField("p_mime", KDbField::Text))
     .addField(new KDbField("p_url", KDbField::Text));
 
-    bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    const tristate containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    if (~containsKexi__partsTable) {
+        return false;
+    }
     bool partsTableOk = true;
-    if (containsKexi__partsTable) {
+    if (true == containsKexi__partsTable) {
         //! just insert this schema
         d->connection->insertInternalTable(t_parts);
     } else {
@@ -596,8 +602,11 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
         .addField(new KDbField("d_sub_id", KDbField::Text, KDbField::NotNull | KDbField::NotEmpty))
         .addField(new KDbField("d_data", KDbField::LongText));
 
-    bool containsKexi__userdataTable = d->connection->drv_containsTable("kexi__userdata");
-    if (containsKexi__userdataTable) {
+    const tristate containsKexi__userdataTable = d->connection->drv_containsTable("kexi__userdata");
+    if (~containsKexi__userdataTable) {
+        return false;
+    }
+    if (true == containsKexi__userdataTable) {
         d->connection->insertInternalTable(t_userdata);
     }
     else if (!d->connection->options()->isReadOnly()) {
@@ -1187,8 +1196,11 @@ bool KexiProject::checkProject(const QString& singlePluginId)
         m_result = d->connection->result();
         return false;
     }
-    bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
-    if (containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
+    const tristate containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    if (~containsKexi__partsTable) {
+        return false;
+    }
+    if (true == containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
         KDbEscapedString sql = KDbEscapedString("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
         if (!singlePluginId.isEmpty()) {
             sql.append(KDbEscapedString(" WHERE p_url=%1").arg(d->connection->escapeString(singlePluginId)));
@@ -1318,7 +1330,8 @@ tristate KexiProject::loadUserDataBlock(int objectID, const QString& dataID, QSt
         return false;
     }
     if (!d->connection->querySingleString(
-               KDbEscapedString("SELECT d_data FROM kexi__userdata WHERE o_id=%1 AND ").arg(objectID)
+               KDbEscapedString("SELECT d_data FROM kexi__userdata WHERE o_id=%1 AND ")
+                .arg(d->connection->driver()->valueToSQL(KDbField::Integer, objectID))
                 + KDb::sqlWhere(d->connection->driver(), KDbField::Text, "d_user", d->userName())
                 + " AND " + KDb::sqlWhere(d->connection->driver(), KDbField::Text, "d_sub_id", dataID),
                dataString))
@@ -1341,13 +1354,12 @@ bool KexiProject::storeUserDataBlock(int objectID, const QString& dataID, const 
             = KDb::sqlWhere(d->connection->driver(), KDbField::Text, "d_user", d->userName())
               + " AND " + KDb::sqlWhere(d->connection->driver(), KDbField::Text, "d_sub_id", dataID);
 
-    bool ok;
-    bool exists = d->connection->resultExists(sql + " AND " + sql_sub, &ok);
-    if (!ok) {
+    const tristate result = d->connection->resultExists(sql + " AND " + sql_sub);
+    if (~result) {
         m_result = d->connection->result();
         return false;
     }
-    if (exists) {
+    if (result == true) {
         if (!d->connection->executeSQL(
             KDbEscapedString("UPDATE kexi__userdata SET d_data="
                 + d->connection->driver()->valueToSQL(KDbField::LongText, dataString)
@@ -1389,8 +1401,8 @@ bool KexiProject::copyUserDataBlock(int sourceObjectID, int destObjectID, const 
         = KDbEscapedString("INSERT INTO kexi__userdata SELECT t.d_user, %2, t.d_sub_id, t.d_data "
                            "FROM kexi__userdata AS t WHERE d_user=%1 AND o_id=%3")
                          .arg(d->connection->escapeString(d->userName()))
-                         .arg(destObjectID)
-                         .arg(sourceObjectID);
+                         .arg(d->connection->driver()->valueToSQL(KDbField::Integer, destObjectID))
+                         .arg(d->connection->driver()->valueToSQL(KDbField::Integer, sourceObjectID));
     if (!dataID.isEmpty()) {
         sql += " AND " + KDb::sqlWhere(d->connection->driver(), KDbField::Text, "d_sub_id", dataID);
     }
@@ -1408,7 +1420,7 @@ bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
         return false;
     }
     if (dataID.isEmpty()) {
-        if (!KDb::deleteRecord(d->connection, "kexi__userdata",
+        if (!KDb::deleteRecords(d->connection, "kexi__userdata",
                                "o_id", KDbField::Integer, objectID,
                                "d_user", KDbField::Text, d->userName()))
         {
@@ -1416,7 +1428,7 @@ bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
             return false;
         }
     else
-        if (!KDb::deleteRecord(d->connection, "kexi__userdata",
+        if (!KDb::deleteRecords(d->connection, "kexi__userdata",
                                "o_id", KDbField::Integer, objectID,
                                "d_user", KDbField::Text, d->userName(),
                                "d_sub_id", KDbField::Text, dataID))

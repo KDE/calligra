@@ -227,8 +227,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, 
 {
     Q_ASSERT(emptyTable);
     KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    bool ok;
-    *emptyTable = conn->isEmpty(designerView->tempData()->table, &ok) && ok;
+    *emptyTable = true == conn->isEmpty(designerView->tempData()->table);
     return xi18n("Do you want to save the design now?")
            + ((*emptyTable || skipWarning) ? QString() :
               (QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design",
