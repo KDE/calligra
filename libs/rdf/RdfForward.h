@@ -20,6 +20,9 @@
 #ifndef __rdf_RdfForward_h__
 #define __rdf_RdfForward_h__
 
+// See http://doc.qt.io/qt-5/qexplicitlyshareddatapointer.html#QExplicitlySharedDataPointer-4
+// about define below
+#define QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST
 #include <QExplicitlySharedDataPointer>
 
 class KoDocumentRdf;

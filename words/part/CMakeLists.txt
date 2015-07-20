@@ -207,6 +207,8 @@ set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
 
 add_library(authorpart MODULE ${authorpart_PART_SRCS})
 
+kcoreaddons_desktop_to_json(authorpart author/authorpart.desktop)
+
 target_link_libraries(authorpart   wordsprivate )
 
 install(TARGETS authorpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

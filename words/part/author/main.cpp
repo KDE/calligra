@@ -25,7 +25,7 @@
 #include "KWDocument.h"
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    QScopedPointer<KAboutData> aboutData(newAuthorAboutData());
+    QScopedPointer<K4AboutData> aboutData(newAuthorAboutData());
 
 #ifdef HAVE_X11
     // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Author
