@@ -179,10 +179,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     d->relations = new KexiRelationsView(d->spl);
     d->spl->addWidget(d->relations);
     d->relations->setObjectName("relations");
-    connect(d->relations, SIGNAL(tableAdded(KDbTableSchema&)),
-            this, SLOT(slotTableAdded(KDbTableSchema&)));
-    connect(d->relations, SIGNAL(tableHidden(KDbTableSchema&)),
-            this, SLOT(slotTableHidden(KDbTableSchema&)));
+    connect(d->relations, SIGNAL(tableAdded(KDbTableSchema*)),
+            this, SLOT(slotTableAdded(KDbTableSchema*)));
+    connect(d->relations, SIGNAL(tableHidden(KDbTableSchema*)),
+            this, SLOT(slotTableHidden(KDbTableSchema*)));
     connect(d->relations, SIGNAL(appendFields(KDbTableOrQuerySchema&,QStringList)),
             this, SLOT(slotAppendFields(KDbTableOrQuerySchema&,QStringList)));
 
@@ -216,8 +216,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
         connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
                 this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
     }
-    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant&,KDbResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant*,KDbResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant*,KDbResultInfo*)));
     connect(d->data, SIGNAL(recordInserted(KDbRecordData*,int,bool)),
             this, SLOT(slotRecordInserted(KDbRecordData*,int,bool)));
     connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
@@ -1268,7 +1268,7 @@ void KexiQueryDesignerGuiEditor::slotRecordInserted(KDbRecordData* data, int rec
     tempData()->setQueryChangedInPreviousView(true);
 }
 
-void KexiQueryDesignerGuiEditor::slotTableAdded(KDbTableSchema & /*t*/)
+void KexiQueryDesignerGuiEditor::slotTableAdded(KDbTableSchema* /*t*/)
 {
     if (!d->slotTableAdded_enabled)
         return;
@@ -1278,7 +1278,7 @@ void KexiQueryDesignerGuiEditor::slotTableAdded(KDbTableSchema & /*t*/)
     d->dataTable->setFocus();
 }
 
-void KexiQueryDesignerGuiEditor::slotTableHidden(KDbTableSchema & /*t*/)
+void KexiQueryDesignerGuiEditor::slotTableHidden(KDbTableSchema* /*t*/)
 {
     updateColumnsData();
     setDirty();
@@ -1445,17 +1445,17 @@ KDbExpression KexiQueryDesignerGuiEditor::parseExpressionString(const QString& f
 }
 
 void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KDbRecordData *data,
-    int colnum, QVariant& newValue, KDbResultInfo* result)
+    int colnum, QVariant* newValue, KDbResultInfo* result)
 {
     switch (colnum) {
-    case COLUMN_ID_COLUMN: slotBeforeColumnCellChanged(data, newValue, result); break;
-    case COLUMN_ID_TABLE: slotBeforeTableCellChanged(data, newValue, result); break;
-    case COLUMN_ID_VISIBLE: slotBeforeVisibleCellChanged(data, newValue, result); break;
+    case COLUMN_ID_COLUMN: slotBeforeColumnCellChanged(data, *newValue, result); break;
+    case COLUMN_ID_TABLE: slotBeforeTableCellChanged(data, *newValue, result); break;
+    case COLUMN_ID_VISIBLE: slotBeforeVisibleCellChanged(data, *newValue, result); break;
 #ifndef KEXI_NO_QUERY_TOTALS
     case COLUMN_ID_TOTALS: slotBeforeTotalsCellChanged(data, newValue, result); break;
 #endif
-    case COLUMN_ID_SORTING: slotBeforeSortingCellChanged(data, newValue, result); break;
-    case COLUMN_ID_CRITERIA: slotBeforeCriteriaCellChanged(data, newValue, result); break;
+    case COLUMN_ID_SORTING: slotBeforeSortingCellChanged(data, *newValue, result); break;
+    case COLUMN_ID_CRITERIA: slotBeforeCriteriaCellChanged(data, *newValue, result); break;
     default: Q_ASSERT_X(false, "colnum", "unhandled value");
     }
 }

@@ -155,8 +155,8 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
     d->view->setSpreadSheetMode(true);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant&,KDbResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant*,KDbResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KDbRecordData*,int,QVariant*,KDbResultInfo*)));
     connect(d->data, SIGNAL(recordUpdated(KDbRecordData*)),
             this, SLOT(slotRecordUpdated(KDbRecordData*)));
     connect(d->data, SIGNAL(aboutToDeleteRecord(KDbRecordData*,KDbResultInfo*,bool)),
@@ -615,7 +615,7 @@ KPropertySet *KexiTableDesignerView::propertySet()
 }
 
 void KexiTableDesignerView::slotBeforeCellChanged(
-    KDbRecordData *data, int colnum, QVariant& newValue, KDbResultInfo* /*result*/)
+    KDbRecordData *data, int colnum, QVariant* newValue, KDbResultInfo* /*result*/)
 {
     if (!d->slotBeforeCellChanged_enabled)
         return;
@@ -641,19 +641,19 @@ void KexiTableDesignerView::slotBeforeCellChanged(
                 kundo2_i18n(
                     "Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"",
                     oldName, propertySetForRecord->property("name").value().toString(),
-                    oldCaption, newValue.toString()), 0, this
+                    oldCaption, newValue->toString()), 0, this
             );
 
             //we need to create the action now as set["name"] will be changed soon.
             //Child 1 is the caption
             /*ChangeFieldPropertyCommand *changeCaptionCommand = */
                 (void)new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, this,
-                          *propertySetForRecord, "caption", oldCaption, newValue);
+                          *propertySetForRecord, "caption", oldCaption, *newValue);
 
             //update field caption and name
-            propertySetForRecord->changeProperty("caption", newValue);
+            propertySetForRecord->changeProperty("caption", *newValue);
             propertySetForRecord->changeProperty("name",
-                                                 KDb::stringToIdentifier(newValue.toString()));
+                                                 KDb::stringToIdentifier(newValue->toString()));
 
             //Child 2 is the name
             /*ChangeFieldPropertyCommand *changeNameCommand =*/
@@ -664,7 +664,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
         }
     } else if (colnum == COLUMN_ID_TYPE) {//'type'
-        if (newValue.isNull()) {
+        if (newValue->isNull()) {
             //'type' col will be cleared: clear all other columns as well
             d->slotBeforeCellChanged_enabled = false;
             d->view->data()->updateRecordEditBuffer(data, COLUMN_ID_ICON, QVariant());
@@ -683,7 +683,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         //'type' col is changed (existed before)
         //-get type group number
         KDbField::TypeGroup fieldTypeGroup;
-        int i_fieldTypeGroup = newValue.toInt() + 1/*counting from 1*/;
+        int i_fieldTypeGroup = newValue->toInt() + 1/*counting from 1*/;
         if (i_fieldTypeGroup < 1 || i_fieldTypeGroup >
 #ifdef KEXI_NO_BLOB_FIELDS
 //! @todo remove this later
@@ -771,7 +771,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         //update field desc.
         QVariant oldValue((*propertySetForRecord)["description"].value());
         qDebug() << oldValue;
-        propertySetForRecord->changeProperty("description", newValue);
+        propertySetForRecord->changeProperty("description", *newValue);
     }
 }
 

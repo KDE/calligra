@@ -168,8 +168,8 @@ ConnectionDialog::initTable()
     d->table->maximizeColumnsWidth(c);
     d->table->setColumnResizeEnabled(4, true);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant&,KDbResultInfo*)),
-            this, SLOT(slotCellChanged(KDbRecordData*,int,QVariant,KDbResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant*,KDbResultInfo*)),
+            this, SLOT(slotCellChanged(KDbRecordData*,int,QVariant*,KDbResultInfo*)));
     connect(d->data, SIGNAL(recordUpdated(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
     connect(d->table, SIGNAL(itemSelected(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
 }
@@ -281,7 +281,7 @@ ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *data)
 }
 
 void
-ConnectionDialog::slotCellChanged(KDbRecordData *data, int col, QVariant&, KDbResultInfo*)
+ConnectionDialog::slotCellChanged(KDbRecordData *data, int col, QVariant*, KDbResultInfo*)
 {
     switch (col) {
         // sender changed, we clear siganl and slot

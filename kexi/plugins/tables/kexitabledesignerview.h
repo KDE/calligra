@@ -135,7 +135,7 @@ protected Q_SLOTS:
 
     //! Called before cell change in tableview.
     void slotBeforeCellChanged(KDbRecordData *data, int colnum,
-                               QVariant& newValue, KDbResultInfo* result);
+                               QVariant* newValue, KDbResultInfo* result);
 
     //! Called on record change in a tableview.
     void slotRecordUpdated(KDbRecordData *data);

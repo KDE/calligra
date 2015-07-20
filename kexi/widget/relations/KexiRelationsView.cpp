@@ -149,8 +149,8 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
             this, SLOT(tableContextMenuRequest(QPoint)));
     connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(QPoint)),
             this, SLOT(connectionContextMenuRequest(QPoint)));
-    connect(d->scrollArea, SIGNAL(tableHidden(KDbTableSchema&)),
-            this, SLOT(slotTableHidden(KDbTableSchema&)));
+    connect(d->scrollArea, SIGNAL(tableHidden(KDbTableSchema*)),
+            this, SLOT(slotTableHidden(KDbTableSchema*)));
     connect(d->scrollArea, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
             this, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)));
     connect(d->scrollArea, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
@@ -237,7 +237,7 @@ KexiRelationsView::addTable(KDbTableSchema *t, const QRect &rect)
             d->btnAdd->setEnabled(false);
         }
     }
-    emit tableAdded(*t);
+    emit tableAdded(t);
 }
 
 void
@@ -347,13 +347,13 @@ QSize KexiRelationsView::sizeHint() const
     return d->scrollArea->sizeHint();
 }
 
-void KexiRelationsView::slotTableHidden(KDbTableSchema &table)
+void KexiRelationsView::slotTableHidden(KDbTableSchema* table)
 {
-    const QString &t = table.name().toLower();
+    const QString &t = table->name().toLower();
     int i;
     for (i = 0; i < d->tableCombo->count() && t > d->tableCombo->itemText(i).toLower(); i++) {
     }
-    d->tableCombo->insertItem(i, table.name());
+    d->tableCombo->insertItem(i, table->name());
     if (!d->tableCombo->isEnabled()) {
         d->tableCombo->setCurrentIndex(0);
         d->tableCombo->setEnabled(true);
