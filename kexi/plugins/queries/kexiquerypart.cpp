@@ -125,8 +125,10 @@ KDbObject* KexiQueryPart::loadSchemaObject(
     }
     KDbEscapedString sqlText(sql);
     KDbParser *parser = KexiMainWindowIface::global()->project()->sqlParser();
-    parser->parse(sqlText);
-    KDbQuerySchema *query = parser->query();
+    KDbQuerySchema *query = 0;
+    if (parser->parse(sqlText)) {
+        query = parser->query();
+    }
     //error?
     if (!query) {
         if (viewMode == Kexi::TextViewMode) {
