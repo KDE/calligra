@@ -108,12 +108,12 @@ protected Q_SLOTS:
                           QDropEvent *ev, KDbRecordData*& newRecord);
     //! Reaction on appending a new item after deleting one
     void slotNewItemAppendedForAfterDeletingInSpreadSheetMode();
-    void slotTableAdded(KDbTableSchema &t);
-    void slotTableHidden(KDbTableSchema &t);
+    void slotTableAdded(KDbTableSchema* t);
+    void slotTableHidden(KDbTableSchema* t);
 
     //! Called before cell change in tableview.
     void slotBeforeCellChanged(KDbRecordData* data, int colnum,
-                               QVariant& newValue, KDbResultInfo* result);
+                               QVariant* newValue, KDbResultInfo* result);
 
     void slotRecordInserted(KDbRecordData* data, int record, bool repaint);
     void slotTablePositionChanged(KexiRelationsTableContainer*);

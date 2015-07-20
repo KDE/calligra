@@ -65,8 +65,8 @@ public:
     void objectRenamed(const QString &mime, const QString& name, const QString& newName);
 
 Q_SIGNALS:
-    void tableAdded(KDbTableSchema& t);
-    void tableHidden(KDbTableSchema& t);
+    void tableAdded(KDbTableSchema* t);
+    void tableHidden(KDbTableSchema* t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
     void appendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
@@ -103,7 +103,7 @@ protected Q_SLOTS:
     void appendSelectedFields();
     void openSelectedTable();
     void designSelectedTable();
-    void slotTableHidden(KDbTableSchema &table);
+    void slotTableHidden(KDbTableSchema* table);
     void aboutToShowPopupMenu();
 
 protected:
