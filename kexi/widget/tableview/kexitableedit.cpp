@@ -22,7 +22,7 @@
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/tableview/KexiTableScrollArea.h>
 
-#include <KDbField>
+#include <KDb>
 #include <KDbUtils>
 
 #include <QPalette>
