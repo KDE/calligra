@@ -26,10 +26,13 @@
 
 #include <kis_pressure_size_option.h>
 #include <kis_tangent_tilt_option.h>
-#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
+#include <kis_pressure_flow_option.h>
+#include <kis_pressure_softness_option.h>
+#include <kis_pressure_sharpness_option.h>
 
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
@@ -48,11 +51,14 @@ public:
 private:
     //private functions//
     KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
+    KisFlowOpacityOption m_opacityOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption m_scatterOption;
     KisTangentTiltOption m_tangentTiltOption;
+    KisPressureSoftnessOption m_softnessOption;
+    KisPressureSharpnessOption m_sharpnessOption;
+    KisPressureFlowOption m_flowOption;
     
     KisFixedPaintDeviceSP m_maskDab;
     KisPaintDeviceSP m_tempDev;

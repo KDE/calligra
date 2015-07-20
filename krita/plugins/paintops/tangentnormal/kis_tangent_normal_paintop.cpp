@@ -36,22 +36,32 @@
 
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
-    m_tempDev(painter->device()->createCompositionSourceDevice())
+    m_tempDev(painter->device()->createCompositionSourceDevice()),
+    m_opacityOption(node)
     
 {
     //Init, read settings, etc//
     m_tangentTiltOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
+    m_flowOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
+    m_softnessOption.readOptionSetting(settings);
+    m_sharpnessOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     
     m_sizeOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
+    m_flowOption.resetAllSensors();
     m_spacingOption.resetAllSensors();
+    m_softnessOption.resetAllSensors();
+    m_sharpnessOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
+    
+    m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisTangentNormalPaintOp::~KisTangentNormalPaintOp()
@@ -95,7 +105,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     setCurrentScale(scale);
     setCurrentRotation(rotation);
     
-    QPointF scatteredPos =
+    QPointF cursorPos =
         m_scatterOption.apply(info,
                               brush->maskWidth(scale, rotation, 0, 0, info),
                               brush->maskHeight(scale, rotation, 0, 0, info));
@@ -103,9 +113,9 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
     
     m_maskDab =
-        m_dabCache->fetchDab(rgbColorSpace, color, info.pos(),
+        m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
                              scale, scale, rotation,
-                             info, 1.0,
+                             info, m_softnessOption.apply(info),
                              &m_dstDabRect);
 
     if (m_dstDabRect.isEmpty()) return KisSpacingInformation(1.0);
@@ -117,8 +127,11 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     
     quint8  oldOpacity = painter()->opacity();
     QString oldCompositeOpId = painter()->compositeOp()->id();
-    qreal   fpOpacity  = (qreal(oldOpacity) / 255.0) * 1.0;//m_opacityOption.getOpacityf(info);
+    qreal   fpOpacity  = (qreal(oldOpacity) / 255.0) * 1.0;
     
+    
+    m_opacityOption.setFlow(m_flowOption.apply(info));
+    m_opacityOption.apply(painter(), info);
     //paint with the default color? Copied this from color smudge.//
     //painter()->setCompositeOp(COMPOSITE_COPY);
     //painter()->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
@@ -129,7 +142,8 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
     
-    return effectiveSpacing(scale, rotation);
+    return effectiveSpacing(scale, rotation,
+                            m_spacingOption, info);
 }
 
 
