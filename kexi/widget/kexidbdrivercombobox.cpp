@@ -23,6 +23,7 @@
 
 #include <KDbDriverManager>
 #include <KDbDriverMetaData>
+#include <KDbMessageHandler>
 
 class KexiDBDriverComboBox::Private
 {
@@ -50,6 +51,10 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent, Options options)
     QList<const KDbDriverMetaData*> fileBasedDrivers, serverBasedDrivers;
     foreach(const QString &id, manager.driverIds()) {
         const KDbDriverMetaData* driverMetaData = manager.driverMetaData(id);
+        KDbMessageGuard mg(manager.resultable());
+        if (!driverMetaData) {
+            return;
+        }
         if (driverMetaData->isFileBased()) {
             fileBasedDrivers.append(driverMetaData);
         } else {

@@ -23,12 +23,13 @@
 #include "kexicore_export.h"
 
 #include <QObject>
+#include <KDbResult>
 #include <KDbConnectionData>
 
 class KexiDBConnectionSetPrivate;
 
 /*! Stores information about multiple connection-data items. */
-class KEXICORE_EXPORT KexiDBConnectionSet : public QObject
+class KEXICORE_EXPORT KexiDBConnectionSet : public QObject, public KDbResultable
 {
 public:
     KexiDBConnectionSet();

@@ -38,7 +38,6 @@
 #include <KDbMessageHandler>
 #include <KDbProperties>
 #include <KDbResult>
-#include <KDbProperties>
 
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
@@ -409,7 +408,10 @@ KexiProject::create(bool forceOverwrite)
             || !props.setCaption("project_caption", xi18n("Project caption"))
             || !props.setValue("project_desc", d->data->description())
             || !props.setCaption("project_desc", xi18n("Project description")))
+    {
+        m_result = props.result();
         return false;
+    }
 
     if (trans.active() && !d->connection->commitTransaction(trans))
         return false;

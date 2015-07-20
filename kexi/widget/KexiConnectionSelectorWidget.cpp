@@ -31,6 +31,7 @@
 #include <KDbDriverMetaData>
 #include <KDbConnectionData>
 #include <KDbUtils>
+#include <KDbMessageHandler>
 
 #include <KMessageBox>
 #include <KUrlComboBox>
@@ -394,8 +395,8 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     //store this conn. data
     KDbConnectionData *newData
         = new KDbConnectionData(*dlg.currentProjectData().connectionData());
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->addConnectionData(newData)) {
-        //! @todo msg?
         delete newData;
         return;
     }
@@ -424,8 +425,8 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     if (QDialog::Accepted != dlg.exec())
         return;
 
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->saveConnectionData(item->data(), *dlg.currentProjectData().connectionData())) {
-        //! @todo msg?
         return;
     }
     const KDbDriverMetaData *driverMetaData = d->manager.driverMetaData(item->data()->driverId());
@@ -458,6 +459,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     QTreeWidgetItem* nextItem = d->remote->list->itemBelow(item);
     if (!nextItem)
         nextItem = d->remote->list->itemAbove(item);
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->removeConnectionData(item->data()))
         return;
 

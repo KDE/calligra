@@ -25,6 +25,7 @@
 #include <KDbDriverMetaData>
 #include <KDbConnectionData>
 #include <KDbUtils>
+#include <KDbMessageHandler>
 
 #include <KLocalizedString>
 #include <KGuiItem>
@@ -218,6 +219,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     KDbDriverManager manager;
     KexiProjectData::List prjlist = d->prj_set->list();
     foreach(KexiProjectData* data, prjlist) {
+        KDbMessageGuard mg(manager.resultable());
         const KDbDriverMetaData *driverMetaData = manager.driverMetaData(data->connectionData()->driverId());
         if (driverMetaData) {
             ProjectDataLVItem *item = new ProjectDataLVItem(data, *driverMetaData, this);

@@ -74,6 +74,8 @@ void KexiRecentProjects::Private::load()
             + "/kexi/recent_projects/";
     QDir dir(path);
     if (!dir.mkpath(path)) {
+        q->m_result.setMessage(xi18n("Could not create folder <filename>%1</filename> for "
+                                     "storing recent projects information.", path));
         return;
     }
     if (!dir.exists() || !dir.isReadable()) {
@@ -98,6 +100,7 @@ void KexiRecentProjects::Private::load()
             add(data, path + shortcutPath, true /*deleteDuplicate*/);
         }
         else {
+            q->m_result = data->result();
             delete data;
         }
     }
@@ -188,7 +191,13 @@ bool KexiRecentProjects::Private::add(KexiProjectData *newData,
         }
         if (shortcutPath.isEmpty()) {
             KDbConnectionData conn = *newData->connectionData();
-            if (KDbDriverManager().driverMetaData(conn.driverId())->isFileBased()) {
+            KDbDriverManager manager;
+            const KDbDriverMetaData *metaData = manager.driverMetaData(conn.driverId());
+            if (!metaData) {
+                q->m_result = manager.result();
+                return false;
+            }
+            if (metaData->isFileBased()) {
                 shortcutPath = path + QFileInfo(newData->databaseName()).fileName();
                 QFileInfo fi(shortcutPath);
                 if (!fi.suffix().isEmpty()) {

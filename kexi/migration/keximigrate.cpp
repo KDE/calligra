@@ -142,6 +142,7 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
     KDbConnection *tmpConn
         = destDriver->createConnection(*d->migrateData->destination->connectionData());
     if (!tmpConn || destDriver->error() || !tmpConn->connect()) {
+        m_result = destDriver->result();
         delete tmpConn;
         return true;
     }

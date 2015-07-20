@@ -20,6 +20,8 @@
 #include "kexidbconnectionset.h"
 #include "kexidbshortcutfile.h"
 
+#include <KLocalizedString>
+
 #include <QDebug>
 #include <QDirIterator>
 #include <QFile>
@@ -70,8 +72,10 @@ bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QStri
     if (generateUniqueFilename) {
         QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
                       + "/kexi/connections/";
-        if (dir.isEmpty())
+        if (dir.isEmpty()) {
+            m_result.setMessage(xi18n("Could not find location to save connection data file."));
             return false;
+        }
         QString baseFilename(dir + (data->hostName().isEmpty() ? "localhost" : data->hostName()));
         int i = 0;
         while (QFile::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic")) {
@@ -81,6 +85,7 @@ bool KexiDBConnectionSet::addConnectionData(KDbConnectionData *data, const QStri
             //make 'connections' dir and protect it
             //! @todo KEXI3 set permission of the created dirs to 0700
             if (!QDir().mkpath(dir)) {
+                m_result.setMessage(xi18n("Could not create folder <filename>%1</filename> for connection data file.", dir));
                 return false;
             }
             //! @todo change permission of every created subdir, see KStandardDirs::makeDir() create
@@ -109,11 +114,15 @@ bool KexiDBConnectionSet::saveConnectionData(KDbConnectionData *oldData,
         return false;
     const QString oldDataKey = key(*oldData);
     const QString filename(d->filenamesForData.value(oldDataKey));
-    if (filename.isEmpty())
+    if (filename.isEmpty()) {
+        m_result.setCode(ERR_OTHER);
         return false;
+    }
     KexiDBConnShortcutFile shortcutFile(filename);
-    if (!shortcutFile.saveConnectionData(newData, newData.savePassword()))
+    if (!shortcutFile.saveConnectionData(newData, newData.savePassword())) {
+        m_result = shortcutFile.result();
         return false;
+    }
     if (oldData != &newData) {
         *oldData = newData;
     }
@@ -140,11 +149,16 @@ bool KexiDBConnectionSet::removeConnectionData(KDbConnectionData *data)
     if (!data)
         return false;
     const QString filename(d->filenamesForData.value(key(*data)));
-    if (filename.isEmpty())
+    if (filename.isEmpty()) {
+        m_result.setCode(ERR_OTHER);
         return false;
+    }
     QFile file(filename);
-    if (!file.remove())
+    if (!file.remove()) {
+        m_result.setMessage(xi18n("Could not remove connection file <filename>%1</filename>.",
+                                  filename));
         return false;
+    }
     removeConnectionDataInternal(data);
     return true;
 }
