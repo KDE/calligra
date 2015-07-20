@@ -92,8 +92,10 @@ kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml KF5::AkonadiContact  komain)
-
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml komain)
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(planprivate KF5::AkonadiContact)
+endif()
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})

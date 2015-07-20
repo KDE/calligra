@@ -43,7 +43,7 @@
 #include <kmimetype.h>
 #include <kio/job.h>
 
-#ifdef PLAN_KDEPIMLIBS_FOUND
+#ifdef PLAN_KCONTACTS_FOUND
 #include <KContacts/Addressee>
 #include <KContacts/VCardConverter>
 #endif
@@ -1256,7 +1256,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
 
 bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
 {
-#ifdef PLAN_KDEPIMLIBS_FOUND
+#ifdef PLAN_KCONTACTS_FOUND
     KContacts::VCardConverter vc;
     KContacts::Addressee::List lst = vc.parseVCards( data );
     MacroCommand *m = new MacroCommand( kundo2_i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
