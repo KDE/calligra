@@ -21,6 +21,7 @@
 #define KEXIDBSHORTCUTFILE_H
 
 #include <QString>
+#include <KDbResult>
 
 #include "kexicore_export.h"
 
@@ -52,7 +53,7 @@ protected:
  This is implementation for handling .KEXIC files.
  See http://www.kexi-project.org/wiki/wikiview/index.php@KexiMimeTypes_DataSaving_Loading.html
 */
-class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
+class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile, public KDbResultable
 {
 public:
     /*! Creates a new object for \a fileName. */

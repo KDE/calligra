@@ -24,6 +24,7 @@
 #include "kexicore_export.h"
 
 #include <KDbConnectionData>
+#include <KDbResult>
 #include <KDbObject>
 
 #include <KLocalizedString>
@@ -43,7 +44,7 @@ class KexiProjectDataPrivate;
 
  @todo make it value-based class
 */
-class KEXICORE_EXPORT KexiProjectData : public QObject, public KDbObject
+class KEXICORE_EXPORT KexiProjectData : public QObject, public KDbObject, public KDbResultable
 {
 public:
     typedef QList<KexiProjectData*> List;

@@ -119,6 +119,7 @@ KexiProjectData::KexiProjectData(
 KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
         : QObject(0)
         , KDbObject()
+        , KDbResultable(pdata)
         , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
@@ -228,13 +229,16 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             }
         }
         if (groupKey.isEmpty()) {
-            //! @todo ERR: "File %1 contains no connection information"
+            m_result = KDbResult(xi18n("File <filename>%1</filename> contains no connection information.",
+                                       fileName));
             return false;
         }
         if (_groupKey)
             *_groupKey = groupKey;
     } else {
         if (!config.hasGroup(*_groupKey))
+            m_result = KDbResult(xi18n("File <filename>%1</filename> does not contain group <resource>%2</resource>.",
+                                       fileName, *_groupKey));
             return false;
         groupKey = *_groupKey;
     }
@@ -248,13 +252,16 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     } else if (type == "connection") {
         isDatabaseShortcut = false;
     } else {
-        //! @todo ERR: xi18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".", group, type)
+        m_result = KDbResult(xi18n("Invalid value <resource>%1</resource> type specified in group "
+                                   "<resource>%2</resource> of file <filename>%3</filename>.",
+                                   type, groupKey, fileName));
         return false;
     }
 
     const QString driverName = cg.readEntry("engine").toLower();
     if (driverName.isEmpty()) {
-        //! @todo ERR: "No valid "engine" field specified for %1 section" group
+        m_result = KDbResult(xi18n("No valid \"engine\" field specified in group <resource>%1</resource> "
+                                   "of file <filename>%1</filename>.", groupKey, fileName));
         return false;
     }
 
@@ -267,7 +274,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         KDbDriverManager driverManager;
         const KDbDriverMetaData *driverMetaData = driverManager.driverMetaData(d->connData.driverId());
         if (!driverMetaData) {
-            //! @todo ERR: "No valid driver for "engine" found
+             m_result = driverManager.result();
             return false;
         }
         const bool fileBased = driverMetaData->isFileBased()
@@ -397,7 +404,13 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
 
     config.group(groupKey).deleteGroup();
     cg = config.group(groupKey);
-    const bool fileBased = KDbDriverManager().driverMetaData(d->connData.driverId())->isFileBased();
+    KDbDriverManager manager;
+    const KDbDriverMetaData *metaData = manager.driverMetaData(d->connData.driverId());
+    if (!metaData) {
+        m_result = manager.result();
+        return false;
+    }
+    const bool fileBased = metaData->isFileBased();
     if (thisIsConnectionData) {
         cg.writeEntry("type", "connection");
         if (!d->connData.caption().isEmpty())
@@ -460,7 +473,10 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
     }
 
     /*! @todo add "options=", eg. as string list? */
-    cg.sync();
+    if (!cg.sync()) {
+        m_result = KDbResult("Could not write project file.");
+        return false;
+    }
     return true;
 }
 

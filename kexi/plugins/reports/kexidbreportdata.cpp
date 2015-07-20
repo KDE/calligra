@@ -128,9 +128,10 @@ bool KexiDBReportData::close()
 {
     if ( d->cursor )
     {
-        d->cursor->close();
+        const bool ok = d->cursor->close();
         delete d->cursor;
         d->cursor = 0;
+        return ok;
     }
 
     return true;

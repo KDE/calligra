@@ -99,7 +99,9 @@ tristate KexiQueryView::executeQuery(KDbQuerySchema *query)
     setData(d->cursor);
 
 //! @todo remove close() when dynamic cursors arrive
-    d->cursor->close();
+    if (!d->cursor->close()) {
+        return false;
+    }
 
     if (oldCursor)
         oldCursor->connection()->deleteCursor(oldCursor);
