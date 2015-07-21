@@ -447,7 +447,7 @@ KEXIUTILS_EXPORT void setMargins(QLayout *layout, int value);
  void myNonRecursiveFunctionEnabled() {
     if (!m_myNonRecursiveFunctionEnabled)
         return;
-    kexiUtils::BoolBlocker guard(&m_myNonRecursiveFunctionEnabled, false);
+    KexiUtils::BoolBlocker guard(&m_myNonRecursiveFunctionEnabled, false);
     // function's body guarded against recursion...
  }
  @endcode
@@ -456,7 +456,7 @@ class KEXIUTILS_EXPORT BoolBlocker
 {
 public:
     inline BoolBlocker(bool *var, bool tempValue)
-     : v(var), origValue(var) { *var = tempValue; }
+     : v(var), origValue(*var) { *var = tempValue; }
     inline ~BoolBlocker() { *v = origValue; }
 private:
     bool *v;
