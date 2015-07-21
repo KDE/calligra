@@ -27,13 +27,9 @@
 #include <QDate>
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
-#include <qstandarditemmodel.h>
 
 class KUrl;
 class KUndo2Command;
-class QMimeData;
-class QModelIndex;
-class QMimeData;
 
 namespace KPlato
 {

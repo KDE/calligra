@@ -26,7 +26,6 @@
 
 #include <QModelIndex>
 #include <QApplication>
-#include <QToolTip>
 #include <QStyleOptionViewItem>
 #include <QStyle>
 #include <QPainter>

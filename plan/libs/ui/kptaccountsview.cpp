@@ -29,13 +29,6 @@
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 
-#include <QApplication>
-#include <QLabel>
-#include <QPainter>
-#include <QPalette>
-#include <QPushButton>
-#include <QSizePolicy>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPrinter>
 #include <QPrintDialog>

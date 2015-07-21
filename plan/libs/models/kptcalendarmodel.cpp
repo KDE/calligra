@@ -33,8 +33,6 @@
 #include "kptdebug.h"
 
 #include <QMimeData>
-#include <QList>
-#include <QObject>
 #include <QPainter>
 
 #include <kglobal.h>

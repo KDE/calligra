@@ -28,8 +28,6 @@
 
 #include <kglobal.h>
 
-#include <QDomDocument>
-
 
 namespace KPlato
 {
@@ -178,10 +176,11 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
         sm->setPhaseNames( j->phaseNames() );
     }
 
-    QList<Schedule::Log> logs;
-    foreach ( const Schedule::Log &log, j->log() ) {
+    QVector<Schedule::Log> logs = j->takeLog();
+    QMutableVectorIterator<Schedule::Log> i(logs);
+    while (i.hasNext()) {
+        Schedule::Log &l = i.next();
         // map log from temporary project to real project
-        Schedule::Log l = log;
         if ( l.resource ) {
             const Resource *r = l.resource;
             l.resource = sm->project().findResource( l.resource->id() );
@@ -204,7 +203,6 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
 #endif
             Q_ASSERT( l.node->projectNode() == p );
         }
-        logs << l;
     }
     if ( ! logs.isEmpty() ) {
         sm->slotAddLog( logs );
@@ -388,17 +386,17 @@ int SchedulerThread::progress() const
     return m_progress;
 }
 
-void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
+void SchedulerThread::slotAddLog( const KPlato::Schedule::Log &log )
 {
 //     kDebug(planDbg())<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
 
-QList<Schedule::Log> SchedulerThread::log()
+QVector<Schedule::Log> SchedulerThread::takeLog()
 {
     QMutexLocker m( &m_logMutex );
-    QList<KPlato::Schedule::Log> l = m_logs;
+    const QVector<KPlato::Schedule::Log> l = m_logs;
     m_logs.clear();
     return l;
 }

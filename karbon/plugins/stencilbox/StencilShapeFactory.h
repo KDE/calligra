@@ -31,7 +31,7 @@ class StencilShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// id is the absolute file path
-    StencilShapeFactory(const QString& id, const QString& name, KoProperties* props);
+    StencilShapeFactory(const QString& id, const QString& name, const KoProperties* props);
     ~StencilShapeFactory();
 
     KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = new KoDocumentResourceManager()) const;
@@ -40,7 +40,7 @@ public:
 private:
     KoShape* createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const;
     KoShape* createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const;
-    KoProperties* m_properties;
+    const KoProperties* m_properties;
 };
 
 #endif //KOSTENCILSHAPEFACTORY_H

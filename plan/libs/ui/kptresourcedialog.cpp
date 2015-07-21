@@ -25,7 +25,6 @@
 #include "kptresourcemodel.h"
 #include "kptdebug.h"
 
-#include <QPushButton>
 #include <QList>
 #include <QStringList>
 #include <QSortFilterProxyModel>

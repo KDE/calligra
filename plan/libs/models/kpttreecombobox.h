@@ -25,7 +25,6 @@
 #include <kcombobox.h>
 
 #include <QAbstractItemView>
-#include <QEvent>
 
 class QModelIndex;
 class QPersistentModelIndex;

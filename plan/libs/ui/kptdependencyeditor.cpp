@@ -40,7 +40,6 @@
 #include <QStyleOptionViewItem>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QTimer>
 #include <QKeyEvent>
 
 #include <kmenu.h>

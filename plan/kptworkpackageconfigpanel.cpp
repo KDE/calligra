@@ -23,10 +23,6 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#include <QDateTime>
-#include <QDateTimeEdit>
-#include <QComboBox>
-
 #include <kdebug.h>
 
 namespace KPlato

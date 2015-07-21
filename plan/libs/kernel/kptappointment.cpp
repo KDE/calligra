@@ -31,9 +31,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QDateTime>
-#include <QMutableMapIterator>
-
 
 namespace KPlato
 {

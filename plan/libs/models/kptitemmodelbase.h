@@ -28,14 +28,10 @@
 #include <QAbstractItemModel>
 #include <QStyledItemDelegate>
 #include <QMetaEnum>
-#include <QEvent>
-#include <QComboBox>
 
 #include <KoXmlReaderForward.h>
 
 class KUndo2Command;
-class QPainter;
-class QModelIndex;
 
 
 /// The main namespace

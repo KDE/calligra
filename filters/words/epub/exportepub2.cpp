@@ -35,7 +35,6 @@
 
 // Calligra
 #include <KoFilterChain.h>
-#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>

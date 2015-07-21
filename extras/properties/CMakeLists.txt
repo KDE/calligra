@@ -1,12 +1,12 @@
 include_directories(
-    ${KOMAIN_INCLUDES}
+    ${KOWIDGETS_INCLUDES}
 )
 
 set(calligradocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp)
 
 add_library(calligradocinfopropspage MODULE ${calligradocinfopropspage_PART_SRCS})
 
-target_link_libraries(calligradocinfopropspage  KF5::KIOWidgets komain)
+target_link_libraries(calligradocinfopropspage  KF5::KIOWidgets kowidgets)
 
 install(TARGETS calligradocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR})
 

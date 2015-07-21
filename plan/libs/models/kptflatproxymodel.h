@@ -23,11 +23,6 @@
 #include "kplatomodels_export.h"
 
 #include <QAbstractProxyModel>
-#include <QStandardItemModel>
-
-class PersistentModelIndex;
-class QModelIndex;
-class QItemSelection;
 
 /// The main namespace
 namespace KPlato

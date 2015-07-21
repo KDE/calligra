@@ -43,7 +43,7 @@ struct KoCollectionItem
     QString name;
     QString toolTip;
     QIcon icon;
-    KoProperties* properties;
+    const KoProperties* properties;
 };
 
 class CollectionItemModel : public QAbstractListModel
@@ -66,7 +66,7 @@ class CollectionItemModel : public QAbstractListModel
 
         void setViewMode(QListView::ViewMode vm);
         QListView::ViewMode viewMode() const;
-        KoProperties* properties(const QModelIndex& index) const;
+        const KoProperties* properties(const QModelIndex& index) const;
 
     private:
         QList<KoCollectionItem> m_shapeTemplateList;

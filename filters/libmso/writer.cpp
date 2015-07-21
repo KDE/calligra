@@ -19,6 +19,7 @@
 
 #include "writer.h"
 
+#include "KoGenStyles.h"
 #include <QRegExp>
 
 namespace

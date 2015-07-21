@@ -36,8 +36,6 @@
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 
-#include <QDateTime>
-
 using namespace KPlato;
 
 KPLATOKERNEL_EXPORT int kplatoXmlDebugArea() {

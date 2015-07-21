@@ -21,14 +21,10 @@
 
 #include <QString>
 #include <QStringList>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QItemDelegate>
 #include <QStyle>
-#include <QHeaderView>
 #include <QBrush>
 #include <QContextMenuEvent>
-#include <QTimer>
 
 #include <kmenu.h>
 #include <kmessagebox.h>

@@ -32,7 +32,6 @@
 #include "ParsedPresentation.h"
 
 #include <KoFilter.h>
-#include <KoGenStyles.h>
 #include <KoStore.h>
 
 #include <QStack>
@@ -40,6 +39,9 @@
 #include <QRectF>
 #include <QColor>
 #include <QDebug>
+
+class KoGenStyles;
+class KoGenStyle;
 
 class PowerPointImport;
 class ODrawToOdf;

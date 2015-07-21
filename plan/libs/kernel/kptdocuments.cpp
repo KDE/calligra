@@ -25,8 +25,6 @@
 #include <KoXmlReader.h>
 #include <KoStore.h>
 
-#include <QDomDocument>
-
 
 namespace KPlato
 {

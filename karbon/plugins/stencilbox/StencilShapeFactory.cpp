@@ -45,7 +45,7 @@
 StencilShapeFactory::
 StencilShapeFactory(const QString& id,
                     const QString& name,
-                    KoProperties* props)
+                    const KoProperties* props)
     : KoShapeFactoryBase(id, name)
     , m_properties(props)
 {

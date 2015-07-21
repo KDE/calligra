@@ -33,7 +33,6 @@
 
 #include <QModelIndex>
 #include <QVariant>
-#include <QRegExp>
 
 namespace KPlato
 {

@@ -30,7 +30,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptdebug.h"
 
-#include <QAbstractItemModel>
 #include <QMimeData>
 #include <QModelIndex>
 

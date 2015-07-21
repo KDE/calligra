@@ -28,15 +28,13 @@
 #include "kptcontext.h"
 #include "kptviewbase.h"
 
-#include <QMenu>
 #include <QDockWidget>
-#include <QTimer>
 #include <QMap>
-#include <QPointer>
-#include <QPrintDialog>
 
 #include <kconfigdialog.h>
 
+class QMenu;
+class QPrintDialog;
 class QStackedWidget;
 class QSplitter;
 class KUndo2Command;

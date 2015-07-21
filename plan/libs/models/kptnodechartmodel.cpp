@@ -26,9 +26,7 @@
 
 #include <kglobal.h>
 
-#include <QPointF>
 #include <QVariant>
-#include <QColor>
 #include <QPen>
 
 #include <KChartGlobal>
