@@ -185,8 +185,6 @@ void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor *e
     editor->insertText(QString("[ %1").arg(num));
 
     QTextBlockFormat fmt = editor->blockFormat();
-    fmt.clearProperty(KoParagraphStyle::SectionStartings);
-    fmt.clearProperty(KoParagraphStyle::SectionEndings);
     KoSectionUtils::setSectionStartings(fmt, QList<KoSection *>() << sec);
     editor->setBlockFormat(fmt);
 
@@ -201,9 +199,6 @@ void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEdito
     editor->insertText(QString("%1 ]").arg(num));
 
     QTextBlockFormat fmt = editor->blockFormat();
-    fmt.clearProperty(KoParagraphStyle::SectionStartings);
-    fmt.clearProperty(KoParagraphStyle::SectionEndings);
-
     KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>() << secEnd);
     editor->setBlockFormat(fmt);
 
@@ -271,6 +266,8 @@ void TestKoTextEditor::formSectionTestDocument(TestDocument *doc)
     secEnd[0] = doc->sectionModel()->createSectionEnd(sec[0]);
     pushSectionEnd(0, secEnd[0], editor);
     sec[0]->setKeepEndBound(true);
+
+    doc->sectionModel()->allowMovingEndBound();
 }
 
 bool TestKoTextEditor::checkStartings(const QVector<QString> &needStartings, KoTextEditor *editor)
@@ -336,6 +333,66 @@ void TestKoTextEditor::checkSectionFormattingLevel(
 	    QFAIL("Wrong section information.");
 	}
 	editor->movePosition(QTextCursor::NextBlock);
+    }
+}
+
+void TestKoTextEditor::checkSectionModelLevelRecursive(QModelIndex index, TestKoTextEditor::SectionHandle *handle)
+{
+    QCOMPARE(index.data(KoSectionModel::PointerRole).value<KoSection *>(), handle->sec);
+    QCOMPARE(index.model()->rowCount(index), handle->children.size());
+    QModelIndex parent = index.parent();
+    QCOMPARE(parent.data(KoSectionModel::PointerRole).value<KoSection *>(), handle->parent);
+    for (int i = 0; i < handle->children.size(); i++) {
+	checkSectionModelLevelRecursive(index.child(i, 0), handle->children[i]);
+    }
+}
+
+void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
+{
+    // Assuming here that Formatting level is OK
+    // Below I will rebuild sections structure from scratch
+    // and compare it then with a KoSectionModel
+
+    QVector<SectionHandle *> allSections, rootSections;
+    QStack<SectionHandle *> sectionStack;
+
+    QTextBlock curBlock = doc->m_document->firstBlock();
+    // This kind of cycle should visit all blocks
+    // including ones in tables and frames.
+    while (curBlock.isValid()) {
+	QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(curBlock.blockFormat());
+	QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(curBlock.blockFormat());
+
+	foreach(KoSection *sec, secStartings) {
+	    SectionHandle *handle = new SectionHandle(sec);
+	    if (sectionStack.empty()) {
+		rootSections.push_back(handle);
+		handle->parent = 0;
+	    } else {
+		sectionStack.top()->children.push_back(handle);
+		handle->parent = sectionStack.top()->sec;
+	    }
+
+	    allSections.push_back(handle);
+	    sectionStack.push(handle);
+	}
+
+	foreach(KoSectionEnd *secEnd, secEndings) {
+	    sectionStack.pop();
+	}
+
+	curBlock = curBlock.next();
+    }
+
+    // Now lets compare builded tree with KoSectionModel
+    KoSectionModel *model = doc->sectionModel();
+    QCOMPARE(model->rowCount(), rootSections.size());
+    for (int i = 0; i < rootSections.size(); i++) {
+	checkSectionModelLevelRecursive(model->index(i, 0), rootSections[i]);
+    }
+
+    foreach (SectionHandle *handle, allSections) {
+	delete handle;
     }
 }
 
@@ -421,7 +478,7 @@ void TestKoTextEditor::testBasicSectionCreation()
 	    << (QVector<QString>());
 
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
-    //FIXME: check here also model level
+    checkSectionModelLevel(&doc);
 }
 
 #include "TestInsertSectionHandling_data.cpp"
@@ -441,7 +498,7 @@ void TestKoTextEditor::testInsertSectionHandling()
     QFETCH(QVector< QVector<QString> >, needStartings);
     QFETCH(QVector< QVector<QString> >, needEndings);
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
-//     //FIXME: check here also model level
+    checkSectionModelLevel(&doc);
 }
 
 #include "TestDeleteSectionHandling_data.cpp"
@@ -470,7 +527,7 @@ void TestKoTextEditor::testDeleteSectionHandling()
     editor->deleteChar();
 
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
-    //FIXME: check here also model level
+    checkSectionModelLevel(&doc);
 }
 
 QTEST_MAIN(TestKoTextEditor)
