@@ -61,7 +61,7 @@
 //! @todo remove this when BLOBs are implemented
 //#define KEXI_NO_BLOB_FIELDS
 
-//#define KEXI_NO_UNDOREDO_ALTERTABLE
+// Defining this removes alter table! #define KEXI_NO_UNDOREDO_ALTERTABLE
 
 using namespace KexiTableDesignerCommands;
 
