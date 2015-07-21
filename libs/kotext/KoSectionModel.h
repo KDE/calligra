@@ -43,9 +43,9 @@
  * 2) Level. Level means the depth of the section in tree. Root
  * sections has 0 (zero) level. Now if you look at the possible
  * text editing command affecting sections you may notice that
- * level of section doesn't change in any case, except drag-n-drop
- * replacement in tree. Initial level is set in KoSection constructor
- * as parent's level plus one.
+ * level of section doesn't change in any case. Initial level
+ * is set in KoSection constructor as parent's level plus one.
+ * TODO: write about drag-n-drop here, when its implemented
  *
  * 3) Name. Each KoSection has a name that must be unique. We have
  * two groups of KoSections in each moment of time: the first group
