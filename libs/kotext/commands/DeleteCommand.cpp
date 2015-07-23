@@ -290,6 +290,16 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
 
 	    while (!openList.empty() && !closeListEndBlock.empty()
 		&& openList.last()->name() == closeListEndBlock.first()->name()) {
+
+		int childIdx = KoTextDocument(m_document)
+		    .sectionModel()->findRowOfChild(openList.back());
+		m_sectionsToRemove.push_back(
+		    DeleteCommand::SectionDeleteInfo(
+			openList.back(),
+			childIdx
+		    )
+		);
+
 		openList.pop_back();
 		closeListEndBlock.pop_front();
 	    }
@@ -307,7 +317,9 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
 		changer.setPosition(cur->document()->findBlockByNumber(v.m_endBlockNum + 1).position());
 		changer.setBlockFormat(fmt2);
 	    }
-	} else { // m_endBlockNum != -1 in this case. We're pushing all new section info to the end block.
+	} else { // v.m_startBlockNum == -1
+	    // v.m_endBlockNum != -1 in this case.
+	    // We're pushing all new section info to the end block.
 	    QTextBlockFormat fmt = cur->document()->findBlockByNumber(v.m_endBlockNum).blockFormat();
 	    QList<KoSection *> allStartings = KoSectionUtils::sectionStartings(fmt);
 	    fmt.clearProperty(KoParagraphStyle::SectionStartings);
@@ -325,10 +337,21 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
 		}
 	    }
 
-	    closeList = pairedEndings + closeList + unpairedEndings;
+	    if (cur->selectionStart()) {
+		QTextCursor changer = *cur;
+		changer.setPosition(cur->selectionStart() - 1);
+
+		QTextBlockFormat prevFmt = changer.blockFormat();
+		QList<KoSectionEnd *> prevEndings = KoSectionUtils::sectionEndings(prevFmt);
+
+		prevEndings = prevEndings + closeList;
+
+		KoSectionUtils::setSectionEndings(prevFmt, prevEndings);
+		changer.setBlockFormat(prevFmt);
+	    }
 
 	    KoSectionUtils::setSectionStartings(fmt, openList);
-	    KoSectionUtils::setSectionEndings(fmt, closeList);
+	    KoSectionUtils::setSectionEndings(fmt, pairedEndings + unpairedEndings);
 
 	    QTextCursor changer = *cur;
 	    changer.setPosition(cur->document()->findBlockByNumber(v.m_endBlockNum).position());

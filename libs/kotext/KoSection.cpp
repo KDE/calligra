@@ -67,9 +67,9 @@ public:
 
     // Boundings explanation:
     //
-    // |S|e|c|t|i|o|n|...|t|e|x|t|P
-    // ^                         ^
-    // |--- Start                |-- End
+    // |S|e|c|t|i|o|n|...|t|e|x|t|P|
+    // ^                           ^
+    // |--- Start                  |-- End
 
     QVector<KoSection *> children; ///< List of the section's childrens
     KoSection *parent; ///< Parent of the section

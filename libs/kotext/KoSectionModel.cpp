@@ -29,7 +29,7 @@ KoSection *KoSectionModel::createSection(const QTextCursor &cursor, KoSection *p
     // Lets find our number in parent's children by cursor position
     QVector<KoSection *> &children = (parent ? parent->children() : m_rootSections);
     int childrenId = children.size();
-    for (int i = children.size() - 1; i >= 0; i--) {
+    for (int i = 0; i < children.size(); i++) {
 	if (cursor.position() < children[i]->bounds().first) {
 	    childrenId = i;
 	    break;
@@ -54,13 +54,16 @@ KoSectionEnd *KoSectionModel::createSectionEnd(KoSection *section)
 
 KoSection *KoSectionModel::sectionAtPosition(int pos)
 {
-    // Rewrite it by traversing Model as tree
+    // TODO: Rewrite it by traversing Model as tree
     KoSection *result = 0;
-    int smallest = INT_MAX; //smallest in size section will be the deepest
+    int smallest = INT_MAX; // Smallest in size section will be the deepest
+                            // FIXME: wrong assumption in case of "[[text]]" paragraph
+                            // they have same size
+                            // use level instead
     QHash<QString, KoSection *>::iterator it = m_sectionNames.begin();
     for (; it != m_sectionNames.end(); it++) {
 	QPair<int, int> bounds = it.value()->bounds();
-	if (bounds.first > pos || bounds.second < pos) {
+	if (bounds.first > pos || bounds.second - 1 < pos) {
 	    continue;
 	}
 

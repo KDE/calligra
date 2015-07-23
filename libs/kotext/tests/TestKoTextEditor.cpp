@@ -212,16 +212,16 @@ void TestKoTextEditor::formSectionTestDocument(TestDocument *doc)
 {
     // Here we are going to create next document with nested sections:
     //      ** offset  ** block num
-    // [ 0$     0           0
-    // [ 1$     4           1
-    // [ 2$     8           2
-    // 2 ]$     12          3
-    // 1 ]$     16          4
-    // [ 3$     20          5
-    // 3 ]$     24          6
-    // [ 4$     28          7
-    // 4 ]$     32          8
-    // 0 ]$     36          9
+    // [ 0P     0           0
+    // [ 1P     4           1
+    // [ 2P     8           2
+    // 2 ]P     12          3
+    // 1 ]P     16          4
+    // [ 3P     20          5
+    // 3 ]P     24          6
+    // [ 4P     28          7
+    // 4 ]P     32          8
+    // 0 ]P     36          9
     // (**empty_block**)    10
     //
     // Sections will receive names "0", "1", etc.
