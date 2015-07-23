@@ -56,10 +56,7 @@ KoSection *KoSectionModel::sectionAtPosition(int pos)
 {
     // TODO: Rewrite it by traversing Model as tree
     KoSection *result = 0;
-    int smallest = INT_MAX; // Smallest in size section will be the deepest
-                            // FIXME: wrong assumption in case of "[[text]]" paragraph
-                            // they have same size
-                            // use level instead
+    int level = -1; // Seeking the section with maximum level
     QHash<QString, KoSection *>::iterator it = m_sectionNames.begin();
     for (; it != m_sectionNames.end(); it++) {
 	QPair<int, int> bounds = it.value()->bounds();
@@ -67,9 +64,9 @@ KoSection *KoSectionModel::sectionAtPosition(int pos)
 	    continue;
 	}
 
-	if (bounds.second - bounds.first < smallest) {
+	if (it.value()->level() > level) {
 	    result = it.value();
-	    smallest = bounds.second - bounds.first;
+	    level = it.value()->level();
 	}
     }
 
