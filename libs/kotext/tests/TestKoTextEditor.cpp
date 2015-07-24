@@ -444,41 +444,45 @@ void TestKoTextEditor::dumpSectionFormattingLevel(TestDocument *doc)
     out.close();
 }
 
+void TestKoTextEditor::checkSectionTestDocument(TestDocument *doc)
+{
+    int neededBlockCount = 11;
+    QVector< QVector<QString> > needStartings =
+    QVector< QVector<QString> >()
+    << (QVector<QString>() << "0")
+    << (QVector<QString>() << "1")
+    << (QVector<QString>() << "2")
+    << (QVector<QString>())
+    << (QVector<QString>())
+    << (QVector<QString>() << "3")
+    << (QVector<QString>())
+    << (QVector<QString>() << "4")
+    << (QVector<QString>())
+    << (QVector<QString>())
+    << (QVector<QString>());
+    QVector< QVector<QString> > needEndings =
+    QVector< QVector<QString> >()
+    << (QVector<QString>())
+    << (QVector<QString>())
+    << (QVector<QString>())
+    << (QVector<QString>() << "2")
+    << (QVector<QString>() << "1")
+    << (QVector<QString>())
+    << (QVector<QString>() << "3")
+    << (QVector<QString>())
+    << (QVector<QString>() << "4")
+    << (QVector<QString>() << "0")
+    << (QVector<QString>());
+
+    checkSectionFormattingLevel(doc, neededBlockCount, needStartings, needEndings);
+    checkSectionModelLevel(doc);
+}
+
 void TestKoTextEditor::testBasicSectionCreation()
 {
     TestDocument doc;
     formSectionTestDocument(&doc);
-
-    int neededBlockCount = 11;
-    QVector< QVector<QString> > needStartings =
-	QVector< QVector<QString> >()
-	    << (QVector<QString>() << "0")
-	    << (QVector<QString>() << "1")
-	    << (QVector<QString>() << "2")
-	    << (QVector<QString>())
-	    << (QVector<QString>())
-	    << (QVector<QString>() << "3")
-	    << (QVector<QString>())
-	    << (QVector<QString>() << "4")
-	    << (QVector<QString>())
-	    << (QVector<QString>())
-	    << (QVector<QString>());
-    QVector< QVector<QString> > needEndings =
-	QVector< QVector<QString> >()
-	    << (QVector<QString>())
-	    << (QVector<QString>())
-	    << (QVector<QString>())
-	    << (QVector<QString>() << "2")
-	    << (QVector<QString>() << "1")
-	    << (QVector<QString>())
-	    << (QVector<QString>() << "3")
-	    << (QVector<QString>())
-	    << (QVector<QString>() << "4")
-	    << (QVector<QString>() << "0")
-	    << (QVector<QString>());
-
-    checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
-    checkSectionModelLevel(&doc);
+    checkSectionTestDocument(&doc);
 }
 
 #include "TestInsertSectionHandling_data.cpp"

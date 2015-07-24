@@ -75,6 +75,7 @@ private:
     void pushSectionStart(int num, KoSection *sec, KoTextEditor *editor);
     void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor *editor);
     void formSectionTestDocument(TestDocument *doc);
+    void checkSectionTestDocument(TestDocument *doc);
 
     /**
      * This one is used to generate unittest data.
