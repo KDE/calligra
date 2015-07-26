@@ -48,6 +48,7 @@ public:
     int redChannel() const;
     int greenChannel() const;
     int blueChannel() const;
+    QImage swizzleTransformPreview (QImage preview);
     int directionType() const;
     int elevationMin() const;
     int elevationMax() const;
@@ -57,11 +58,12 @@ public:
     bool m_canvasAxisXMirrored;
     bool m_canvasAxisYMirrored;
     /*This assigns the right axis to the component, based on index and maximum value*/
+    int previewTransform(int const horizontal, int const vertical, int const depth, int index, int maxvalue);
     void swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue);
-    
+
     //takes the RGB values and will deform them depending on tilt.
     void apply(const KisPaintInformation& info,quint8 *r,quint8 *g,quint8 *b);
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:

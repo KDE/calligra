@@ -38,7 +38,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSetti
     KisBrushBasedPaintOp(settings, painter),
     m_tempDev(painter->device()->createCompositionSourceDevice()),
     m_opacityOption(node)
-    
+
 {
     //Init, read settings, etc//
     m_tangentTiltOption.readOptionSetting(settings);
@@ -50,7 +50,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSetti
     m_sharpnessOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
-    
+
     m_sizeOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
@@ -59,7 +59,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSetti
     m_sharpnessOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
-    
+
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
 }
@@ -73,45 +73,45 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 {
     //For the colour, we'd ideally figure out the image colour deth, and then retreive an RGB colour space in the image colour depth, but first let's go for 8bit.
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    
+
     quint8 data[4];
-    
+
     data[0] = 255;//blue
     data[1] = 128;//green
     data[2] = 128;//red
     data[3] = 255;//alpha, leave alone.
-    
+
     quint8 r, g, b;
     m_tangentTiltOption.apply(info, &r, &g, &b);
-    
+
     data[0] = b;//blue
     data[1] = g;//green
     data[2] = r;//red
-    
+
     KoColor color(data, rgbColorSpace);//Should be default RGB(0.5,0.5,1.0)
-    
+
     //draw stuff here, return kisspacinginformation.
     KisBrushSP brush = m_brush;
-    
+
     if (!painter()->device() || !brush || !brush->canPaintFor(info)) {
         return KisSpacingInformation(1.0);
     }
-    
+
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    
+
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
-    
+
     QPointF cursorPos =
         m_scatterOption.apply(info,
                               brush->maskWidth(scale, rotation, 0, 0, info),
                               brush->maskHeight(scale, rotation, 0, 0, info));
-                              
+
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
-    
+
     m_maskDab =
         m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
                              scale, scale, rotation,
@@ -124,12 +124,12 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     // sanity check
     Q_ASSERT(m_dstDabRect.size() == dabRect.size());
-    
+
     quint8  oldOpacity = painter()->opacity();
     QString oldCompositeOpId = painter()->compositeOp()->id();
     qreal   fpOpacity  = (qreal(oldOpacity) / 255.0) * 1.0;
-    
-    
+
+
     m_opacityOption.setFlow(m_flowOption.apply(info));
     m_opacityOption.apply(painter(), info);
     //paint with the default color? Copied this from color smudge.//
@@ -141,7 +141,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     // restore orginal opacity and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldCompositeOpId);
-    
+
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);
 }

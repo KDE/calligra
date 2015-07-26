@@ -41,11 +41,11 @@ class KisTangentNormalPaintOp: public KisBrushBasedPaintOp
 {
 public:
     //public functions//
-    
+
     /* Create a Tangent Normal Brush Operator*/
     KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     virtual ~KisTangentNormalPaintOp();
-    
+
     /*paint the dabs*/
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 private:
@@ -59,7 +59,7 @@ private:
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureFlowOption m_flowOption;
-    
+
     KisFixedPaintDeviceSP m_maskDab;
     KisPaintDeviceSP m_tempDev;
     QRect m_dstDabRect;

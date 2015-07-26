@@ -18,4 +18,5 @@ install(TARGETS kritatangentnormalpaintop DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kritatangentnormalpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-tangetnormal.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-tangentnormal-preview.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
