@@ -139,7 +139,7 @@ add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 # set(KPLATO_REPORTS_LIBS KProperty KReport)
 target_link_libraries(kplatoui  ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels KChart KGantt KF5::KHtml )
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(planprivate KF5::AkonadiContact)
+    target_link_libraries(kplatoui KF5::AkonadiContact)
 endif()
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

@@ -464,7 +464,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
          */
 
         if (!w) w = qApp->widgetAt(globalPos);
-        if (!w) w = QWidget::find(msg.hwnd);
+        if (!w) w = qApp->activeWindow();
 
         QWidget *parentOverride = 0;
 
@@ -577,7 +577,7 @@ void KisTabletSupportWin::setButtonsConverter(ButtonsConverter *buttonsConverter
     globalButtonsConverter = buttonsConverter;
 }
 
-bool KisTabletSupportWin::eventFilter(const QByteArray &/*eventType*/, void *message, long *result)
+bool KisTabletSupportWin::nativeEventFilter(const QByteArray &/*eventType*/, void *message, long *result)
 {
     MSG *msg = static_cast<MSG*>(message);
     Q_UNUSED(result);
