@@ -415,7 +415,7 @@ protected:
      from \a prevWindow window to a current window. */
     void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, Kexi::ViewMode prevViewMode);
 
-    /*! @overload void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, int prevViewMode) */
+    /*! @overload void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, Kexi::ViewMode prevViewMode) */
     void updateCustomPropertyPanelTabs(KexiPart::Part *prevWindowPart,
                                        Kexi::ViewMode prevViewMode, KexiPart::Part *curWindowPart, Kexi::ViewMode curViewMode);
 
