@@ -256,7 +256,7 @@ protected:
     KexiWindow();
 
     /*! Used by Part::openInstance(),
-     like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
+     like switchToViewMode( Kexi::ViewMode newViewMode ), but passed \a staticObjectArgs.
      Only used for parts of class KexiPart::StaticPart. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode,
                               QMap<QString, QVariant>* staticObjectArgs,
