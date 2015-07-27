@@ -442,12 +442,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ##
 # QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
 macro_optional_find_package(Soprano)
-# FIXME: do we need if below
 macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
-if(NOT Soprano_FOUND)
-    set(SOPRANO_INCLUDE_DIR "")
-endif()
-
 
 ##
 ## Test for marble
