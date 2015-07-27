@@ -45,6 +45,7 @@
 #include <KoSectionEnd.h>
 #include <KoSectionUtils.h>
 #include <KoSectionModel.h>
+#include <kundo2stack.h>
 
 /**
  * Convenient class to create a document and assign
@@ -60,6 +61,8 @@ public:
 
 	KoTextDocument textDoc(m_document);
 	KoTextEditor *editor = new KoTextEditor(m_document);
+	KUndo2Stack *undoStack = new KUndo2Stack();
+	textDoc.setUndoStack(undoStack);
 
 	textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
 	textDoc.setTextRangeManager(&m_rangeManager);
@@ -503,9 +506,14 @@ void TestKoTextEditor::testInsertSectionHandling()
     QFETCH(QVector< QVector<QString> >, needEndings);
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
     checkSectionModelLevel(&doc);
+    
+    // undo changes and check a source document
+    KoTextDocument(doc.m_document).undoStack()->undo();
+    checkSectionTestDocument(&doc);
 }
 
 #include "TestDeleteSectionHandling_data.cpp"
+#include <kundo2stack.h>
 
 // This test tests delete handling only on Formatting Level
 // See KoSectionModel
@@ -532,6 +540,10 @@ void TestKoTextEditor::testDeleteSectionHandling()
 
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
     checkSectionModelLevel(&doc);
+    
+    // undo changes and check a source document
+    KoTextDocument(doc.m_document).undoStack()->undo();
+    checkSectionTestDocument(&doc);
 }
 
 QTEST_MAIN(TestKoTextEditor)
