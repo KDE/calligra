@@ -243,66 +243,47 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="spinElevationMin">
+	<item row="0" column="3">
+         <widget class="QRadioButton" name="optionMix">
           <property name="toolTip">
-           <string>Elevation substracted from min</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mix Tilt and Drawing angle to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
-          <property name="suffix">
-           <string>°</string>
-          </property>
-          <property name="maximum">
-           <number>90</number>
+          <property name="text">
+           <string>Direction/Tilt Mix</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QSpinBox" name="spinElevationMax">
-          <property name="suffix">
-           <string>°</string>
-          </property>
-          <property name="maximum">
-           <number>90</number>
-          </property>
-          <property name="value">
-           <number>90</number>
+        <item row="1" column="1">
+	 <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity" native="true">
+	  <property name="sizePolicy">
+	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+	    <horstretch>0</horstretch>
+	    <verstretch>0</verstretch>
+	   </sizepolicy>
+	  </property>
+	 </widget>
+	</item>
+	<item row="2" column="0">
+         <widget class="QLabel" name="L_mix">
+          <property name="text">
+           <string>Direction/Tilt Mix Value</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QSpinBox" name="spinDirectionMin">
-          <property name="suffix">
-           <string>°</string>
-          </property>
-          <property name="maximum">
-           <number>360</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QSpinBox" name="spinDirectionMax">
-          <property name="suffix">
-           <string>°</string>
-          </property>
-          <property name="maximum">
-           <number>360</number>
-          </property>
-          <property name="value">
-           <number>360</number>
-          </property>
-         </widget>
+         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue" native="true">
+	  <property name="sizePolicy">
+	   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+	    <horstretch>0</horstretch>
+	    <verstretch>0</verstretch>
+	   </sizepolicy>
+	  </property>
+	 </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="L_elevation">
           <property name="text">
-           <string>Elevation Limits</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="L_direction">
-          <property name="text">
-           <string>Direction Limits</string>
+           <string>Elevation Sensitivity</string>
           </property>
          </widget>
         </item>
@@ -326,6 +307,37 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+  <connections>
+   <connection>
+    <sender>optionMix</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>sliderMixValue</receiver>
+    <slot>setVisible(bool)</slot>
+   </connection>
+   <connection>
+    <sender>optionMix</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>L_mix</receiver>
+    <slot>setVisible(bool)</slot>
+    <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>308</y>
+    </hint>
+   </hints>
+   </connection>
+  </connections>
 </ui>

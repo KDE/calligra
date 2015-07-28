@@ -30,8 +30,8 @@ const QString TANGENT_RED = "Tangent/swizzleRed";
 const QString TANGENT_GREEN = "Tangent/swizzleGreen";
 const QString TANGENT_BLUE = "Tangent/swizzleBlue";
 const QString TANGENT_TYPE = "Tangent/directionType";
-const QString TANGENT_EV_MIN = "Tangent/elevationMinimum";
-const QString TANGENT_EV_MAX = "Tangent/elevationMaximum";
+const QString TANGENT_EV_SEN = "Tangent/elevationSensitivity";
+const QString TANGENT_MIX_VAL = "Tangent/mixValue";
 //const QString TANGENT_DIR_MIN = "Tangent/directionMinimum";
 //const QString TANGENT_DIR_MAX = "Tangent/directionMaximum";
 
@@ -50,10 +50,8 @@ public:
     int blueChannel() const;
     QImage swizzleTransformPreview (QImage preview);
     int directionType() const;
-    int elevationMin() const;
-    int elevationMax() const;
-    int directionMin() const;
-    int directionMax() const;
+    double elevationSensitivity() const;
+    double mixValue() const;
     qreal m_canvasAngle;
     bool m_canvasAxisXMirrored;
     bool m_canvasAxisYMirrored;

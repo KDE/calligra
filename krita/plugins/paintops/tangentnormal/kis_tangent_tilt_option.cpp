@@ -51,9 +51,14 @@ KisTangentTiltOption::KisTangentTiltOption()
     m_options->comboRed->setCurrentIndex(0);
     m_options->comboGreen->setCurrentIndex(2);
     m_options->comboBlue->setCurrentIndex(4);
-    m_options->spinElevationMin->setValue(0);
-    m_options->spinElevationMax->setValue(360);
 
+    m_options->sliderElevationSensitivity->setRange(0, 100, 0);
+    m_options->sliderElevationSensitivity->setValue(100);
+    m_options->sliderElevationSensitivity->setSuffix("%");
+
+    m_options->sliderMixValue->setRange(0, 100, 0);
+    m_options->sliderMixValue->setValue(50);
+    m_options->sliderMixValue->setSuffix("%");
     //TODO: this can be changed in frameworks to  KGlobal::dirs()->findResource("kis_images", "krita-tangetnormal.png");
     QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
     QImage preview = QImage(fileName);
@@ -66,17 +71,12 @@ KisTangentTiltOption::KisTangentTiltOption()
     connect(m_options->optionTilt, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->optionDirection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->optionRotation, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->optionMix, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
-    connect(m_options->spinElevationMin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_options->spinElevationMax, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->sliderElevationSensitivity, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->sliderMixValue, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    m_options->sliderMixValue->setVisible(false);
 
-    //hiding these, they don't work.
-    m_options->spinDirectionMin->setVisible(false);
-    m_options->spinDirectionMax->setVisible(false);
-    m_options->L_direction->setVisible(false);
-    //connect(m_options->spinDirectionMin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-    //connect(m_options->spinDirectionMax, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
-    //connect tangent tilt
     setConfigurationPage(m_options);
 
 }
@@ -132,6 +132,9 @@ int KisTangentTiltOption::directionType() const
     else if (m_options->optionRotation->isChecked()==true) {
         type=2;
     }
+    else if (m_options->optionMix->isChecked()==true) {
+        type=3;
+    }
     else {
         qWarning()<<"There's something odd with the radio buttons. We'll use Tilt";
     }
@@ -139,26 +142,15 @@ int KisTangentTiltOption::directionType() const
     return type;
 }
 
-int KisTangentTiltOption::elevationMin() const
+double KisTangentTiltOption::elevationSensitivity() const
 {
-    return m_options->spinElevationMin->value(); 
+    return m_options->sliderElevationSensitivity->value(); 
 }
 
-int KisTangentTiltOption::elevationMax() const
+double KisTangentTiltOption::mixValue() const
 {
-    return m_options->spinElevationMax->value(); 
+    return m_options->sliderMixValue->value();
 }
-
-int KisTangentTiltOption::directionMin() const
-{
-    return m_options->spinDirectionMin->value(); 
-}
-
-int KisTangentTiltOption::directionMax() const
-{
-    return m_options->spinDirectionMax->value(); 
-}
-
 //simplified function for the preview.
 int KisTangentTiltOption::previewTransform(int const horizontal, int const vertical, int const depth, int index, int maxvalue)
 {
@@ -207,8 +199,8 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
         direction = info.rotation();
 	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);//artpens have tilt-recognition, so this should work.
     } else if (directionType()==3) {//mix of tilt+direction, TODO.
-	qreal mixamount = 0.5;
-        direction = (KisPaintInformation::tiltDirection(info, true)*360.0*(1.0-mixamount))+((0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0*(1.0-mixamount));
+	qreal mixamount = mixValue()/100.0;
+        direction = (KisPaintInformation::tiltDirection(info, true)*360.0*(1.0-mixamount))+((0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0*(mixamount));
 	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     }
 
@@ -222,27 +214,9 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
 
     //limit the direction/elevation
 
-    qreal elevationFull = 90-((90-elevationMax())+elevationMin());
-    if (elevationFull<0) {elevationFull = 10;}
-    if (elevation>elevationMax()) {
-        elevation=elevationMax();
-    }
-    elevation=elevation-elevationMin();
-    if (elevation<0) {elevation = 0;}
-    qreal elevationT = ((elevation/elevationFull)*90.0);
+    //qreal elevationMax = (elevationSensitivity()*90.0)/100.0;
+    qreal elevationT = elevation*(elevationSensitivity()/100.0)+(90-(elevationSensitivity()*90.0)/100.0);
     elevation = static_cast<int>(elevationT);
-
-    /* this doesn't work...
-    qreal directionFull = 360-((360-directionMax())+directionMin());
-    if (directionFull<0) {directionFull = 10;}
-    if (direction>directionMax()) {
-        direction=directionMax();
-    }
-    direction=direction-directionMin();
-    if (direction<0) {direction = 0;}
-    qreal directionT = ((direction/directionFull)*360.0);
-    direction = static_cast<int>(directionT);
-    */
 
     //convert to radians.
     //TODO: Convert this to kis_global's radian function.
@@ -288,10 +262,8 @@ void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfiguration* settin
     setting->setProperty(TANGENT_GREEN, greenChannel());
     setting->setProperty(TANGENT_BLUE, blueChannel());
     setting->setProperty(TANGENT_TYPE, directionType());
-    setting->setProperty(TANGENT_EV_MIN, elevationMin());
-    setting->setProperty(TANGENT_EV_MAX, elevationMax());
-    //setting->setProperty(TANGENT_DIR_MIN, directionMin());
-    //setting->setProperty(TANGENT_DIR_MAX, directionMax());
+    setting->setProperty(TANGENT_EV_SEN, elevationSensitivity());
+    setting->setProperty(TANGENT_MIX_VAL, mixValue());
 }
 
 void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -302,20 +274,27 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
 
     if (setting->getInt(TANGENT_TYPE)== 0){
         m_options->optionTilt->setChecked(true);
+	m_options->sliderMixValue->setVisible(false);
     }
     else if (setting->getInt(TANGENT_TYPE)== 1) {
         m_options->optionDirection->setChecked(true);
+	m_options->sliderMixValue->setVisible(false);
     }
     else if (setting->getInt(TANGENT_TYPE)== 2) {
         m_options->optionRotation->setChecked(true);
+	m_options->sliderMixValue->setVisible(false);
+    }
+    else if (setting->getInt(TANGENT_TYPE)== 3) {
+        m_options->optionMix->setChecked(true);
+	m_options->sliderMixValue->setVisible(true);
     }
 
     m_canvasAngle = setting->getDouble("runtimeCanvasRotation", 0.0);//in degrees please.
     m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
     m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 
-    m_options->spinElevationMin->setValue(setting->getInt(TANGENT_EV_MIN, 0));
-    m_options->spinElevationMax->setValue(setting->getInt(TANGENT_EV_MAX, 90));
+    m_options->sliderElevationSensitivity->setValue(setting->getDouble(TANGENT_EV_SEN, 100));
+    m_options->sliderMixValue->setValue(setting->getDouble(TANGENT_MIX_VAL, 50));
 
     QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
     QImage preview = QImage(fileName);
@@ -323,6 +302,5 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
     m_options->TangentTiltPreview->setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
     m_options->TangentTiltPreview->setUpdatesEnabled(true);
     m_options->update();
-    //m_options->spinDirectionMin->setValue(setting->getInt(TANGENT_DIR_MIN, 0));
-    //m_options->spinDirectionMax->setValue(setting->getInt(TANGENT_DIR_MAX, 360));
+
 }
