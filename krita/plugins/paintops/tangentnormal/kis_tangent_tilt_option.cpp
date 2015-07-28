@@ -190,20 +190,27 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
 {
     //formula based on http://www.cerebralmeltdown.com/programming_projects/Altitude%20and%20Azimuth%20to%20Vector/index.html
 
-    //TODO: Have these take higher bitspaces into account, including floating point.
+    //TODO: Have these take higher bitspaces into account, including floating point. Does that even make any sense?
     qreal halfvalue = 128;
     qreal maxvalue = 255;
 
     //have the azimuth and altitude in degrees.
     qreal direction = KisPaintInformation::tiltDirection(info, true)*360.0;
+    qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     if (directionType()==0) {
         direction = KisPaintInformation::tiltDirection(info, true)*360.0;
+	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     } else if (directionType()==1) {
         direction = (0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0;
+	elevation= 0;//turns out that tablets that don't support tilt just return 90 degrees for elevation.
     } else if (directionType()==2) {
         direction = info.rotation();
+	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);//artpens have tilt-recognition, so this should work.
+    } else if (directionType()==3) {//mix of tilt+direction, TODO.
+	qreal mixamount = 0.5;
+        direction = (KisPaintInformation::tiltDirection(info, true)*360.0*(1.0-mixamount))+((0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0*(1.0-mixamount));
+	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     }
-    qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
 
     //subtract/add the rotation of the canvas.
 
