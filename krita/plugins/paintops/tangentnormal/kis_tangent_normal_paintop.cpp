@@ -71,8 +71,20 @@ KisTangentNormalPaintOp::~KisTangentNormalPaintOp()
 
 KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation& info)
 {
-    //For the colour, we'd ideally figure out the image colour deth, and then retreive an RGB colour space in the image colour depth, but first let's go for 8bit.
+    /*
+     * For the color, the precision of tilt is only 60x60, and the precision of direction and rotation are 360 and 360*90.
+     * You can't get more precise than 8bit. Therefore, we will check if the current space is RGB,
+     * if so we request a profile with that space and 8bit bit depth, if not, just sRGB
+     */
+    KoColor currentColor = painter()->paintColor();
+    QString currentSpace = currentColor.colorSpace()->colorModelId().id();
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    if (currentSpace != "RGBA") {
+	rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    } else {
+	QString bit = rgbColorSpace->colorDepthId().id();//let Krita tell you what the bit depth string is.
+	rgbColorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", bit, currentColor.profile() );
+    }
 
     quint8 data[4];
 
