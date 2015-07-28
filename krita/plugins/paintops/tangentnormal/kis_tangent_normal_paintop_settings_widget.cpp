@@ -50,9 +50,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
-    
 
-//    addPaintOpOption(new KisCompositeOpOption(true)); No composite opp... for now.
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));

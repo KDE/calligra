@@ -64,6 +64,8 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+public Q_SLOTS:
+    void updateImage();
 private:
     KisTangentTiltOptionWidget * m_options;
 };

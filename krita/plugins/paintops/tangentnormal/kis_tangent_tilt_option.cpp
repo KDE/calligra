@@ -100,6 +100,16 @@ int KisTangentTiltOption::blueChannel() const
     return m_options->comboBlue->currentIndex(); 
 }
 
+void KisTangentTiltOption::updateImage()
+{
+    QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
+    QImage preview = QImage(fileName);
+    preview = swizzleTransformPreview (preview);
+    m_options->TangentTiltPreview->setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    m_options->TangentTiltPreview->repaint();
+    m_options->repaint();
+}
+
 QImage KisTangentTiltOption::swizzleTransformPreview (QImage preview)
 {
     int width = preview.width();
@@ -299,11 +309,6 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
     m_options->sliderElevationSensitivity->setValue(setting->getDouble(TANGENT_EV_SEN, 100));
     m_options->sliderMixValue->setValue(setting->getDouble(TANGENT_MIX_VAL, 50));
 
-    QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
-    QImage preview = QImage(fileName);
-    preview = swizzleTransformPreview (preview);
-    m_options->TangentTiltPreview->setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-    m_options->TangentTiltPreview->setUpdatesEnabled(true);
-    m_options->update();
+    updateImage();
 
 }
