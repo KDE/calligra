@@ -23,7 +23,9 @@
 
 CAuDocument::CAuDocument(KoPart *part)
     : KWDocument(part)
+#ifdef SHOULD_BUILD_RDF
     , m_metaManager(new CAuMetaDataManager(this))
+#endif
 {
 }
 
@@ -52,7 +54,9 @@ bool CAuDocument::saveOdf(SavingContext &documentContext)
     return true;
 }
 
+#ifdef SHOULD_BUILD_RDF
 CAuMetaDataManager *CAuDocument::metaManager() const
 {
     return m_metaManager;
 }
+#endif

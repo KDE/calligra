@@ -21,8 +21,11 @@
 #define CAUDOCUMENT_H
 
 #include <KWDocument.h>
-#include "metadata/CAuMetaDataManager.h"
 #include <KoPart.h>
+
+#ifdef SHOULD_BUILD_RDF
+#include "metadata/CAuMetaDataManager.h"
+#endif
 
 class CAuDocument : public KWDocument
 {
@@ -39,12 +42,15 @@ public:
     /// reimplemented to save cover
     virtual bool saveOdf(SavingContext &documentContext);
 
+#ifdef SHOULD_BUILD_RDF
     CAuMetaDataManager *metaManager() const;
+#endif
 
 private:
     QPair<QString, QByteArray> m_coverImage;
+#ifdef SHOULD_BUILD_RDF
     CAuMetaDataManager *m_metaManager;
-
+#endif
 };
 
 #endif //CAUDOCUMENT_H
