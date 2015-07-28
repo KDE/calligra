@@ -36,10 +36,11 @@
 
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
-    m_tempDev(painter->device()->createCompositionSourceDevice()),
-    m_opacityOption(node)
+    m_opacityOption(node),
+    m_tempDev(painter->device()->createCompositionSourceDevice())
 
 {
+    Q_UNUSED(image);
     //Init, read settings, etc//
     m_tangentTiltOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
@@ -122,8 +123,6 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
                               brush->maskWidth(scale, rotation, 0, 0, info),
                               brush->maskHeight(scale, rotation, 0, 0, info));
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
-
     m_maskDab =
         m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
                              scale, scale, rotation,
@@ -136,10 +135,10 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     // sanity check
     Q_ASSERT(m_dstDabRect.size() == dabRect.size());
+    Q_UNUSED(dabRect);
 
     quint8  oldOpacity = painter()->opacity();
     QString oldCompositeOpId = painter()->compositeOp()->id();
-    qreal   fpOpacity  = (qreal(oldOpacity) / 255.0) * 1.0;
 
 
     m_opacityOption.setFlow(m_flowOption.apply(info));
@@ -157,5 +156,3 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);
 }
-
-

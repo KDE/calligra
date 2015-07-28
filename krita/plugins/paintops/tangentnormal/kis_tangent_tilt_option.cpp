@@ -182,7 +182,10 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
 {
     //formula based on http://www.cerebralmeltdown.com/programming_projects/Altitude%20and%20Azimuth%20to%20Vector/index.html
 
-    //TODO: Have these take higher bitspaces into account, including floating point. Does that even make any sense?
+    /* It doesn't make sense of have higher than 8bit color depth.
+     * Instead we make sure in the paintAt function of kis_tangent_normal_paintop to pick an 8bit space of the current
+     * color space if the space is an RGB space. If not, it'll pick sRGB 8bit.
+     */
     qreal halfvalue = 128;
     qreal maxvalue = 255;
 
