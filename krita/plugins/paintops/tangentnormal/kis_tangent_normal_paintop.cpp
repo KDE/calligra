@@ -102,7 +102,6 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     data[2] = r;//red
 
     KoColor color(data, rgbColorSpace);//Should be default RGB(0.5,0.5,1.0)
-
     //draw stuff here, return kisspacinginformation.
     KisBrushSP brush = m_brush;
 
@@ -155,4 +154,51 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);
+}
+
+void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
+{
+    if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
+
+        if (!m_lineCacheDevice) {
+            m_lineCacheDevice = m_tempDev;
+        }
+        else {
+            m_lineCacheDevice->clear();
+        }
+
+        KisPainter p(m_lineCacheDevice);
+	KoColor currentColor = painter()->paintColor();
+	QString currentSpace = currentColor.colorSpace()->colorModelId().id();
+	const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+	if (currentSpace != "RGBA") {
+	    rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+	} else {
+	    QString bit = rgbColorSpace->colorDepthId().id();//let Krita tell you what the bit depth string is.
+	    rgbColorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", bit, currentColor.profile() );
+	}
+	quint8 data[4];
+
+	data[0] = 255;//blue
+	data[1] = 128;//green
+	data[2] = 128;//red
+	data[3] = 255;//alpha, leave alone.
+
+	quint8 r, g, b;
+	m_tangentTiltOption.apply(pi2, &r, &g, &b);
+
+	data[0] = b;//blue
+	data[1] = g;//green
+	data[2] = r;//red
+
+	KoColor color(data, rgbColorSpace);
+        p.setPaintColor(color);
+        p.drawDDALine(pi1.pos(), pi2.pos());
+
+        QRect rc = m_lineCacheDevice->extent();
+        painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
+    }
+    else {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
 }

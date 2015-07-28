@@ -48,6 +48,7 @@ public:
 
     /*paint the dabs*/
     KisSpacingInformation paintAt(const KisPaintInformation& info);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 private:
     //private functions//
     KisPressureSizeOption m_sizeOption;
@@ -63,5 +64,7 @@ private:
     KisFixedPaintDeviceSP m_maskDab;
     KisPaintDeviceSP m_tempDev;
     QRect m_dstDabRect;
+
+    KisPaintDeviceSP m_lineCacheDevice;
 };
 #endif // _KIS_TANGENTNORMALPAINTOP_H_
