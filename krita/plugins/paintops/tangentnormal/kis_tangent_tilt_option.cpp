@@ -198,7 +198,7 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     } else if (directionType()==2) {
         direction = info.rotation();
 	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);//artpens have tilt-recognition, so this should work.
-    } else if (directionType()==3) {//mix of tilt+direction, TODO.
+    } else if (directionType()==3) {//mix of tilt+direction
 	qreal mixamount = mixValue()/100.0;
         direction = (KisPaintInformation::tiltDirection(info, true)*360.0*(1.0-mixamount))+((0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0*(mixamount));
 	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
@@ -219,9 +219,9 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     elevation = static_cast<int>(elevationT);
 
     //convert to radians.
-    //TODO: Convert this to kis_global's radian function.
-    direction = direction*M_PI / 180.0;
-    elevation = elevation*M_PI / 180.0;
+    // Convert this to kis_global's radian function.
+    direction = kisDegreesToRadians(direction);
+    elevation = kisDegreesToRadians(elevation);
 
     //make variables for axes for easy switching later on.
     qreal horizontal, vertical, depth;
