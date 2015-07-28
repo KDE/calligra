@@ -64,6 +64,8 @@ private:
 	    , childIdx(_childIdx)
 	{
 	}
+	
+	bool operator<(const SectionDeleteInfo &other) const;
 
 	KoSection *section; ///< Section to remove
 	int childIdx; ///< Position of section in parent's children() list

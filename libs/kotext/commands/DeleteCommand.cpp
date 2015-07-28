@@ -40,6 +40,21 @@
 #include <KoShapeController.h>
 #include <KoDocument.h>
 
+bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDeleteInfo &other) const
+{
+    // At first we remove sections that lays deeper in tree
+    // On one level we delete sections by descending order of their childIdx
+    // That is needed on undo, cuz we want it to be simply done by inserting
+    // sections back in reverse order of their deletion.
+    // Without childIdx compare it is possible that we will want to insert
+    // section on position 2 while the number of children is less than 2.
+    
+    if (section->level() != other.section->level()) {
+	return section->level() > other.section->level();
+    }
+    return childIdx > other.childIdx;
+}
+
 DeleteCommand::DeleteCommand(DeleteMode mode,
                              QTextDocument *document,
                              KoShapeController *shapeController,
@@ -360,6 +375,7 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
     }
 
     // Now lets deal with KoSectionModel
+    qSort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
     deleteSectionsFromModel();
 }
 
@@ -374,9 +390,9 @@ void DeleteCommand::deleteSectionsFromModel()
 void DeleteCommand::insertSectionsToModel()
 {
     KoSectionModel *model = KoTextDocument(m_document).sectionModel();
-    for (QList<SectionDeleteInfo>::iterator it = m_sectionsToRemove.end();
-	 it != m_sectionsToRemove.end();
-	 it++) {
+    QList<SectionDeleteInfo>::iterator it = m_sectionsToRemove.end();
+    while (it != m_sectionsToRemove.begin()) {
+	it--;
 	model->insertToModel(it->section, it->childIdx);
     }
 }
