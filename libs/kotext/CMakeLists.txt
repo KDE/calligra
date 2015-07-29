@@ -120,6 +120,7 @@ set(kotext_LIB_SRCS
     commands/ParagraphFormattingCommand.cpp
     commands/RenameSectionCommand.cpp
     commands/NewSectionCommand.cpp
+    commands/SplitSectionsCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp

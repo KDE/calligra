@@ -67,6 +67,7 @@
 #include "commands/AddAnnotationCommand.h"
 #include "commands/RenameSectionCommand.h"
 #include "commands/NewSectionCommand.h"
+#include "commands/SplitSectionsCommand.h"
 
 #include <klocale.h>
 
@@ -1506,6 +1507,30 @@ void KoTextEditor::newSection()
 
     NewSectionCommand *cmd = new NewSectionCommand(d->document);
     addCommand(cmd);
+    emit cursorPositionChanged();
+}
+
+void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
+{
+    if (isEditProtected()) {
+	return;
+    }
+    addCommand(new SplitSectionsCommand(
+	d->document,
+	SplitSectionsCommand::Startings,
+	sectionIdToInsertBefore));
+    emit cursorPositionChanged();
+}
+
+void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
+{
+    if (isEditProtected()) {
+	return;
+    }
+    addCommand(new SplitSectionsCommand(
+	d->document,
+	SplitSectionsCommand::Startings,
+	sectionIdToInsertAfter));
     emit cursorPositionChanged();
 }
 
