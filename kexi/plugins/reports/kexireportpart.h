@@ -1,7 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,14 +46,7 @@ public:
      */
     virtual ~KexiReportPart();
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
-                                 KexiPart::Item *item, Kexi::ViewMode = Kexi::DataViewMode,
-                                 QMap<QString, QVariant>* staticObjectArgs = 0);
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
-
     virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
-
-    virtual void initPartActions();
 
     class TempData : public KexiWindowData
     {
@@ -65,11 +58,22 @@ public:
         /*! true, if \a document member has changed in previous view. Used on view switching.
         Check this flag to see if we should refresh data for DataViewMode. */
         bool reportSchemaChangedInPreviousView;
-        QString name;
     };
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
+
+protected:
+    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
+                                 KexiPart::Item *item, Kexi::ViewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
+
+    virtual KexiWindowData* createWindowData(KexiWindow* window);
+
+    virtual void initPartActions();
+
+    virtual KDbObject* loadSchemaObject(KexiWindow *window,
+            const KDbObject& object, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
 private Q_SLOTS:
     void slotToolboxActionTriggered(bool checked);
@@ -77,7 +81,6 @@ private Q_SLOTS:
     void slotItemInserted(const QString& entity);
 
 private:
-    QString loadReport(const QString&);
     class Private;
     Private* d;
 };

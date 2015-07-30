@@ -1,7 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -111,53 +111,41 @@ void KexiReportPart::initPartActions()
 
 }
 
-QString KexiReportPart::loadReport(const QString& name)
+KDbObject* KexiReportPart::loadSchemaObject(
+    KexiWindow *window, const KDbObject& object, Kexi::ViewMode viewMode,
+    bool *ownedByWindow)
 {
-    KexiMainWindowIface *win = KexiMainWindowIface::global();
-    KDbConnection *conn;
-    if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {
-        qDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
-        return QString();
-    }
-    KDbObject sd;
-    if (conn->loadObjectData(win->project()->typeIdForPluginId("org.kexi-project.report"), name, &sd) != true
-        && conn->loadObjectData(win->project()->typeIdForPluginId("uk.co.piggz.report"), name, &sd) != true /* compat. */)
+    QString layout;
+    if (   !loadDataBlock(window, &layout, "layout") == true
+        && !loadDataBlock(window, &layout, "pgzreport_layout") == true /* compat */)
     {
-        qWarning() << "failed to load object data";
-        return QString();
+        return 0;
     }
-    qDebug() << "***Object ID:" << sd.id();
 
-    QString src;
-    if (   win->project()->dbConnection()->loadDataBlock(sd.id(), &src, "layout") == true
-        || win->project()->dbConnection()->loadDataBlock(sd.id(), &src, "pgzreport_layout") == true /* compat */)
-    {
-        return src;
+    QDomDocument doc;
+    if (!doc.setContent(layout)) {
+        return 0;
     }
-    qWarning() << "Unable to load document";
-    return QString();
+    qDebug() << doc.toString();
+
+    KexiReportPart::TempData * temp = static_cast<KexiReportPart::TempData*>(window->data());
+    const QDomElement root = doc.documentElement();
+    temp->reportDefinition = root.firstChildElement("report:content");
+    if (temp->reportDefinition.isNull()) {
+        qWarning() << "no report report:content element found in report" << window->partItem()->name();
+        return 0;
+    }
+    temp->connectionDefinition = root.firstChildElement("connection");
+    if (temp->connectionDefinition.isNull()) {
+        qWarning() << "no report report:content element found in report" << window->partItem()->name();
+        return 0;
+    }
+    return KexiPart::Part::loadSchemaObject(window, object, viewMode, ownedByWindow);
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
-    qDebug();
-    const QString document(loadReport(window->partItem()->name()));
-    KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-
-    QDomDocument doc;
-    doc.setContent(document);
-
-    qDebug() << doc.toString();
-
-    QDomElement root = doc.documentElement();
-    QDomElement korep = root.firstChildElement("report:content");
-    QDomElement conn = root.firstChildElement("connection");
-
-    td->reportDefinition = korep;
-    td->connectionDefinition = conn;
-
-    td->name = window->partItem()->name();
-    return td;
+    return new KexiReportPart::TempData(window);
 }
 
 KexiReportPart::TempData::TempData(QObject* parent)

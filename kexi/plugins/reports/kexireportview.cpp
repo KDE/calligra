@@ -400,7 +400,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             }
             m_preRenderer->setSourceData(reportData);
 
-            m_preRenderer->setName(tempData()->name);
+            m_preRenderer->setName(window()->partItem()->name());
 
 #ifdef KREPORT_SCRIPTING
             //Add a kexi object to provide kexidb and extra functionality
