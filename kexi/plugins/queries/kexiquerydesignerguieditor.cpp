@@ -1084,10 +1084,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 bool KexiQueryDesignerGuiEditor::loadLayout()
 {
     QString xml;
-//! @todo if (!loadDataBlock( xml, "query_layout" )) {
-    loadDataBlock(&xml, "query_layout");
     //! @todo errmsg
-    if (xml.isEmpty()) {
+    if (!loadDataBlock(&xml, "query_layout") || xml.isEmpty()) {
         //in a case when query layout was not saved, build layout by hand
         // -- dynamic cast because of a need for handling invalid queries
         //    (as in KexiQueryDesignerGuiEditor::afterSwitchFrom()):
