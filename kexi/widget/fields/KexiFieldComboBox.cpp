@@ -38,7 +38,9 @@ class KexiFieldComboBox::Private
 {
 public:
     Private()
-            : table(true) {
+            : table(true)
+            , insideSetFieldOrExpression(false)
+    {
     }
     ~Private() {
     }
@@ -49,6 +51,7 @@ public:
     QString fieldOrExpression;
 
     bool table;
+    bool insideSetFieldOrExpression;
 };
 
 //------------------------
@@ -122,6 +125,11 @@ bool KexiFieldComboBox::isTableAssigned() const
 
 void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 {
+    if (d->insideSetFieldOrExpression) {
+        return;
+    }
+    KexiUtils::BoolBlocker guard(&d->insideSetFieldOrExpression, true);
+
     qDebug() << string;
     const QString name(string);
     const int pos = name.indexOf('.');
