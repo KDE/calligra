@@ -346,8 +346,9 @@ void Part::loadAndSetSchemaObject(KexiWindow *window, const KDbObject& object,
 
 bool Part::loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID)
 {
-    if (!KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(
-                window->id(), dataString, dataID)) {
+    if (true != KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(
+                window->id(), dataString, dataID))
+    {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
                                        xi18n("Could not load object's data."),
                                        xi18n("Data identifier: \"%1\".", dataID));
