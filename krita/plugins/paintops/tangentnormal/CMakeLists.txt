@@ -3,6 +3,7 @@ set(kritatangentnormalpaintop_PART_SRCS
     kis_tangent_normal_paintop.cpp
     kis_tangent_normal_paintop_settings_widget.cpp
     kis_tangent_tilt_option.cpp
+    kis_normal_preview_widget.cpp
 
 )
 

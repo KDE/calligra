@@ -63,6 +63,9 @@ KisTangentTiltOption::KisTangentTiltOption()
     connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setRedChannel(int) ));
+    connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setGreenChannel(int) ));
+    connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setBlueChannel(int) ));
 
     connect(m_options->optionTilt, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->optionDirection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -238,6 +241,8 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
     m_options->comboRed->setCurrentIndex(setting->getInt(TANGENT_RED, 0));
     m_options->comboGreen->setCurrentIndex(setting->getInt(TANGENT_GREEN, 2));
     m_options->comboBlue->setCurrentIndex(setting->getInt(TANGENT_BLUE, 4));
+    
+    //The comboboxes are connected to the TangentTiltPreview, so that gets automatically updated by them.
 
     if (setting->getInt(TANGENT_TYPE)== 0){
         m_options->optionTilt->setChecked(true);

@@ -172,7 +172,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="TangentTiltPreview">
+       <widget class="KisNormalPreviewWidget" name="TangentTiltPreview">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -312,6 +312,12 @@
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisNormalPreviewWidget</class>
+   <extends>QLabel</extends>
+   <header>kis_normal_preview_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
