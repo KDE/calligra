@@ -59,10 +59,6 @@ KisTangentTiltOption::KisTangentTiltOption()
     m_options->sliderMixValue->setRange(0, 100, 0);
     m_options->sliderMixValue->setValue(50);
     m_options->sliderMixValue->setSuffix("%");
-    //TODO: this can be changed in frameworks to  KGlobal::dirs()->findResource("kis_images", "krita-tangetnormal.png");
-    QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
-    QImage preview = QImage(fileName);
-    m_options->TangentTiltPreview->setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
     connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
@@ -89,44 +85,15 @@ KisTangentTiltOption::~KisTangentTiltOption()
 //options
 int KisTangentTiltOption::redChannel() const
 {
-    return m_options->comboRed->currentIndex(); 
+    return m_options->comboRed->currentIndex();
 }
 int KisTangentTiltOption::greenChannel() const
 {
-    return m_options->comboGreen->currentIndex(); 
+    return m_options->comboGreen->currentIndex();
 }
 int KisTangentTiltOption::blueChannel() const
 {
-    return m_options->comboBlue->currentIndex(); 
-}
-
-void KisTangentTiltOption::updateImage()
-{
-    QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", "krita-tangentnormal-preview.png");
-    QImage preview = QImage(fileName);
-    preview = swizzleTransformPreview (preview);
-    m_options->TangentTiltPreview->setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-    m_options->TangentTiltPreview->repaint();
-    m_options->repaint();
-}
-
-QImage KisTangentTiltOption::swizzleTransformPreview (QImage preview)
-{
-    int width = preview.width();
-    int height = preview.height();
-    QImage endPreview(preview.width(),preview.height(),QImage::Format_RGB32);
-    for (int y=0; y<height; y++) {
-	for (int x=0; x<width; x++) {
-	    QColor currentcolor = QColor(preview.pixel(x,y));
-	    int r, g, b =0;
-	    r = previewTransform(currentcolor.red(), currentcolor.green(), currentcolor.blue(), redChannel(), 255);
-	    g = previewTransform(currentcolor.red(), currentcolor.green(), currentcolor.blue(), greenChannel(), 255);
-	    b = previewTransform(currentcolor.red(), currentcolor.green(), currentcolor.blue(), blueChannel(), 255);
-	    QRgb transformedColor = qRgb(r,g,b);
-	    endPreview.setPixel(x,y, transformedColor);
-	}
-    }
-    return endPreview;
+    return m_options->comboBlue->currentIndex();
 }
 
 int KisTangentTiltOption::directionType() const
@@ -160,20 +127,6 @@ double KisTangentTiltOption::elevationSensitivity() const
 double KisTangentTiltOption::mixValue() const
 {
     return m_options->sliderMixValue->value();
-}
-//simplified function for the preview.
-int KisTangentTiltOption::previewTransform(int const horizontal, int const vertical, int const depth, int index, int maxvalue)
-{
-    int component = 0;
-    switch(index) {
-    case 0: component = horizontal; break;
-    case 1: component = maxvalue-horizontal; break;
-    case 2: component = vertical; break;
-    case 3: component = maxvalue-vertical; break;
-    case 4: component = depth; break;
-    case 5: component = maxvalue-depth; break;
-    }
-    return component;
 }
 
 void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue)
@@ -222,8 +175,9 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
     if (info.canvasRotation()!=m_canvasAngle && info.canvasMirroredH()==m_canvasAxisXMirrored) {
        m_canvasAngle=info.canvasRotation();
     }
-
-    direction = direction-m_canvasAngle;
+    if (directionType()!=1) {
+        direction = direction-m_canvasAngle;
+    }
 
     //limit the direction/elevation
 
@@ -308,7 +262,5 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* s
 
     m_options->sliderElevationSensitivity->setValue(setting->getDouble(TANGENT_EV_SEN, 100));
     m_options->sliderMixValue->setValue(setting->getDouble(TANGENT_MIX_VAL, 50));
-
-    updateImage();
 
 }
