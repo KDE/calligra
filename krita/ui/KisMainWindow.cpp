@@ -554,6 +554,34 @@ void KisMainWindow::slotThemeChanged()
     KConfigGroup group(KGlobal::config(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
+    // reload action icons!
+    foreach (QAction *action, actionCollection()->actions()) {
+        QIcon icon = action->icon();
+        if (icon.isNull()) continue;
+
+        QString iconName = icon.name();
+        if (iconName.isNull()) continue;
+
+        QString realIconName;
+
+        if (iconName.startsWith("dark_")) {
+            realIconName = iconName.mid(5);
+        }
+
+        if (iconName.startsWith("light_")) {
+            realIconName = iconName.mid(6);
+        }
+
+        if (!realIconName.isNull()) {
+            QIcon newIcon = themedIcon(realIconName);
+            if (!newIcon.isNull()) {
+                action->setIcon(newIcon);
+            } else {
+                qWarning() << "WARNING: Couldn't load themed icon:" << realIconName;
+            }
+        }
+    }
+
     emit themeChanged();
 }
 
@@ -2156,7 +2184,7 @@ void KisMainWindow::createActions()
     actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    d->newWindow = new KisAction(koIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
+    d->newWindow = new KisAction(themedIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
     actionManager->addAction("view_newwindow", d->newWindow);
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 

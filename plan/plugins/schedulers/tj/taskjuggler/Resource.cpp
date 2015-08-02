@@ -1193,9 +1193,9 @@ Resource::getJobs(int sc) const
     return bl;
 }
 
-QList<Interval> Resource::getBookedIntervals(int sc, const TJ::Task* task) const
+QVector<Interval> Resource::getBookedIntervals(int sc, const TJ::Task* task) const
 {
-    QList<Interval> lst;
+    QVector<Interval> lst;
     if (scoreboards[sc] == 0)
         return lst;
     for (uint i = 0; i < sbSize; ++i)

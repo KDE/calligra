@@ -19,8 +19,10 @@
 */
 
 #include "ODrawToOdf.h"
+
 #include "drawstyle.h"
 #include "msodraw.h"
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <QtDebug>
 #include <QColor>

@@ -21,6 +21,7 @@
   <name xml:lang="pt-BR">Stage</name>
   <name xml:lang="sk">Stage</name>
   <name xml:lang="sv">Stage</name>
+  <name xml:lang="tr">Stage</name>
   <name xml:lang="uk">Stage</name>
   <name xml:lang="x-test">xxStagexx</name>
   <summary>Presentation</summary>
@@ -40,6 +41,7 @@
   <summary xml:lang="pt-BR">Apresentação</summary>
   <summary xml:lang="sk">Prezentácia</summary>
   <summary xml:lang="sv">Presentation</summary>
+  <summary xml:lang="tr">Sunum</summary>
   <summary xml:lang="uk">Презентації</summary>
   <summary xml:lang="x-test">xxPresentationxx</summary>
   <description>
@@ -62,6 +64,7 @@
     <p xml:lang="pt-BR">Calligra Stage é um aplicativo de apresentações fácil de usar, mas também bastante flexível. Você pode criar facilmente apresentações que contenham uma grande variedade de elementos, desde gráficos a texto, assim como de gráficos a imagens. O Calligra Stage é expansível através de um sistema de plugins, permitindo adicionar facilmente novos efeitos, elementos de conteúdo ou até novas formas de gerenciar sua apresentação. Devido à integração com o Calligra, todo o poder e flexibilidade dos elementos de conteúdo do Calligra também estão disponíveis no Stage.</p>
     <p xml:lang="sk">Calligra Stage je jednoducho použiteľná a flexibilná aplikácia na prezentácie. Môžete jednoducho vytvárať prezentácie obsahujúce bohatý výber prvkov, od grafických po textové, od grafov po obrázky. Calligra Stage je rozšíriteľná cez systém pluginov, takže je jednoduché pridať nové efekty, nové obsahové prvky alebo dokonca nové spôsoby správy vašej prezentácie. Vďaka integrácii so systémom Calligra je k dispozícii celá sila a flexibilita obsahových prvkov Calligra.</p>
     <p xml:lang="sv">Calligra Stage är ett lättanvänt men ändå flexibelt presentationsprogram. Du kan enkelt skapa presentationer som innehåller en rik variation av element, från grafik till text, från diagram till bilder. Calligra Stage är utökningsbar via ett insticksprogramsystem, så det är lätt att lägga till nya effekter, nya innehållselement eller till och med nya sätt att hantera presentationer. På grund av integration med Calligra är de kraftfulla och flexibla innehållselementen i Calligra tillgängliga för Stage.</p>
+    <p xml:lang="tr">Calligra Stage kullanımı kolay ve esnek bir sunum uygulamasıdır. Grafikten metne, çizelgelerden resimlere geniş bir çeşitlilikte nesneler kullanarak sunumlar hazırlayabilirsiniz. Calligra Stage bir eklenti sistemine sahip olduğundan yeni efektler, içerik ögeleri veya sunum yönetmek için yeni araçlar eklemek çok kolaydır. Calligra ile tümleşik çalıştığından Calligra'nın tüm gücü ve esnekliği Stage için de geçerlidir.</p>
     <p xml:lang="uk">Calligra Stage — проста, але потужна програма для роботи з презентаціями. За її допомогою ви без проблем зможете створити презентацію з багатим набором елементів, від графіки до тексту, від діаграм до зображень. Можливості Calligra Stage можна розширити за допомогою системи додатків: ви можете додати нові ефекти, нові елементи вмісту і навіть нові способи керування презентацією. Через тісну інтеграцію з рештою програм Calligra ви можете скористатися усіма потужними та гнучкими елементами решти програм Calligra безпосередньо у Stage.</p>
     <p xml:lang="x-test">xxCalligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.xx</p>
     <p>Features:</p>
@@ -81,6 +84,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
@@ -99,6 +103,7 @@
       <li xml:lang="pt-BR">Vários slides-mestres</li>
       <li xml:lang="sk">Viacero hlavných snímok</li>
       <li xml:lang="sv">Flera förlagssidor</li>
+      <li xml:lang="tr">Birden çok ana slayt</li>
       <li xml:lang="uk">Використання декількох основних слайдів.</li>
       <li xml:lang="x-test">xxMultiple master slidesxx</li>
       <li>Easily switch between slides during a presentation</li>
@@ -116,6 +121,7 @@
       <li xml:lang="pt-BR">Troca facilmente de slides durante uma apresentação</li>
       <li xml:lang="sk">Jednoducho prepnúť medzi snímkami počas prezentácie</li>
       <li xml:lang="sv">Enkelt byte mellan bilder under presentationer</li>
+      <li xml:lang="tr">Sunum sırasında slaytlar arası kolay geçiş</li>
       <li xml:lang="uk">Просте перемикання між слайдами під час презентації.</li>
       <li xml:lang="x-test">xxEasily switch between slides during a presentationxx</li>
       <li>Add notes for your slide</li>
@@ -133,6 +139,7 @@
       <li xml:lang="pt-BR">Adiciona notas ao seu slide</li>
       <li xml:lang="sk">Pridať poznámky pre vašu snímku</li>
       <li xml:lang="sv">Lägg till anteckningar för bilder</li>
+      <li xml:lang="tr">Slaytınız için not ekleyin</li>
       <li xml:lang="uk">Додавання нотаток до слайдів.</li>
       <li xml:lang="x-test">xxAdd notes for your slidexx</li>
       <li>Supports most ODF file transitions</li>
@@ -150,6 +157,7 @@
       <li xml:lang="pt-BR">Suporte à maioria das transições em arquivos ODF</li>
       <li xml:lang="sk">Podporuje väčšinu ODF súborových prechodov</li>
       <li xml:lang="sv">Stöder de flesta ODF-filövergångar</li>
+      <li xml:lang="tr">Çoğu ODF dosya geçişlerini destekler</li>
       <li xml:lang="uk">Підтримка більшості переходів у файлах ODF.</li>
       <li xml:lang="x-test">xxSupports most ODF file transitionsxx</li>
     </ul>

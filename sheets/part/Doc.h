@@ -37,7 +37,6 @@
 
 #include <KoDocument.h>
 #include <KoXmlReader.h>
-#include <KoGenStyle.h>
 
 #include "../Global.h"
 #include "../DocBase.h"

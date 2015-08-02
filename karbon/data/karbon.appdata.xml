@@ -22,6 +22,7 @@
   <name xml:lang="pt-BR">Karbon</name>
   <name xml:lang="sk">Karbon</name>
   <name xml:lang="sv">Karbon</name>
+  <name xml:lang="tr">Karbon</name>
   <name xml:lang="uk">Karbon</name>
   <name xml:lang="x-test">xxKarbonxx</name>
   <summary>Scalable Graphics</summary>
@@ -42,6 +43,7 @@
   <summary xml:lang="pt-BR">Imagens vetoriais</summary>
   <summary xml:lang="sk">Škálovateľná grafika</summary>
   <summary xml:lang="sv">Skalbar grafik</summary>
+  <summary xml:lang="tr">Ölçeklenebilir Grafikler</summary>
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
   <summary xml:lang="x-test">xxScalable Graphicsxx</summary>
   <description>
@@ -63,6 +65,7 @@
     <p xml:lang="pt-BR">Karbon é um aplicativo de desenho vetorial com uma interface simples de usar, facilmente configurável e expansível. Isso torna o Karbon um ótimo aplicativo para usuários que começam a explorar o mundo dos gráficos vetoriais, assim como para artistas que desejam criar arte vetorial espetacular.</p>
     <p xml:lang="sk">Karbon je vektorová kresliaca aplikácia s používateľským rozhraním jednoduchým na používanie, veľmi prispôsobiteľná a rozšíriteľná. Toto robí z Karbonu výbornú aplikáciu pre používateľov, ktorí začínajú objavovať sveet vektorovej grafiky, ako aj pre umelcov, ktorí chcú vytvárať dych vyrážajúce vektorové umenie.</p>
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
+    <p xml:lang="tr">Karbon kullanımı kolay bir arayüze sahip, son derece özelleştirilebilir ve genişletilebilir bir vektör çizim uygulamasıdır. Karbon vektör dünyasını merak eden yeni kullanıcılar için olduğu kadar nefes kesen vektör sanatı ürünleri oluşturmak isteyen sanatçılar için de harika bir uygulamadır.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
     <p>Features:</p>
@@ -83,6 +86,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
@@ -105,6 +109,7 @@
       <li xml:lang="pt-BR">Suporte para carregamento de ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="sk">Podpora čítania pre ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="sv">Stöd för att läsa in ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="tr">ODG, SVG, WPG, WMF, EPS/PS için yükleme desteği</li>
       <li xml:lang="uk">Підтримка завантаження даних ODG, SVG, WPG, WMF, EPS/PS.</li>
       <li xml:lang="x-test">xxLoading support for ODG, SVG, WPG, WMF, EPS/PSxx</li>
       <li>
@@ -126,6 +131,7 @@
       <li xml:lang="pt-BR">Suporte de gravação em ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="sk">Podpora zápisu pre ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="sv">Stöd för att skriva ut ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="tr">ODG, SVG, PNG, PDF, WMF için yazma desteği</li>
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
       <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
       <li>
@@ -146,6 +152,7 @@
       <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
+      <li xml:lang="tr">Araç çubuklarının ve diğer nesnelerin serbestçe yerleştirilebildiği özelleştirilebilir arayüz</li>
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
       <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
       <li>
