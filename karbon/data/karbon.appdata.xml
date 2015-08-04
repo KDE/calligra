@@ -106,7 +106,7 @@
       <li xml:lang="nl">Ondersteuning voor laden van ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pl">Obsługa wczytywania dla ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pt">Suporte do carregamento de imagens em ODG, SVG, WPG, WMF, EPS/PS</li>
-      <li xml:lang="pt-BR">Suporte para carregamento de ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="pt-BR">Suporte para carregamento de arquivos ODG, SVG, WPG, WMF e EPS/PS</li>
       <li xml:lang="sk">Podpora čítania pre ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="sv">Stöd för att läsa in ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="tr">ODG, SVG, WPG, WMF, EPS/PS için yükleme desteği</li>
@@ -128,7 +128,7 @@
       <li xml:lang="nl">Ondersteuning voor schrijven van ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pl">Obsługa zapisywania dla ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pt">Suporte da gravação de imagens em ODG, SVG, PNG, PDF, WMF</li>
-      <li xml:lang="pt-BR">Suporte de gravação em ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="pt-BR">Suporte para gravação de arquivos ODG, SVG, PNG, PDF e WMF</li>
       <li xml:lang="sk">Podpora zápisu pre ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="sv">Stöd för att skriva ut ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="tr">ODG, SVG, PNG, PDF, WMF için yazma desteği</li>
@@ -149,7 +149,7 @@
       <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en verankeringen</li>
       <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
-      <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
+      <li xml:lang="pt-BR">Interface de usuário configurável com barras de ferramentas e áreas acopláveis que podem ser facilmente ajustadas</li>
       <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
       <li xml:lang="tr">Araç çubuklarının ve diğer nesnelerin serbestçe yerleştirilebildiği özelleştirilebilir arayüz</li>
@@ -187,7 +187,7 @@
       <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
       <li xml:lang="pl">Zaawansowane narzędzia edytowania ścieżki z szerokimi możliwościami edytowania na płótnie</li>
       <li xml:lang="pt">Ferramenta de edição de caminhos avançada, com grandes capacidade de edição no local</li>
-      <li xml:lang="pt-BR">Ferramenta de edição de caminhos avançada, com ótima capacidade de edição no local</li>
+      <li xml:lang="pt-BR">Ferramenta avançada para edição de caminhos, com ótima capacidade de edição no local</li>
       <li xml:lang="sk">Pokročilý nástroj na úpravu ciest s výbornými schopnosťami editácie na plátne</li>
       <li xml:lang="sv">Avancerat konturredigeringsverktyg med utmärkta redigeringsmöjligheter direkt på duken</li>
       <li xml:lang="uk">Інструмент редагування контурів з чудовими можливостями редагування безпосередньо на полотні.</li>
@@ -261,7 +261,7 @@
       <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, afbeelding</li>
       <li xml:lang="pl">Zawiera wiele uprzednio stworzonych kształtów, do których można zaliczyć gwiazdy, okręgi, elipsy, prostokąty, obrazy</li>
       <li xml:lang="pt">Inclui diversas formas predefinidas, incluindo formas básicas como as estrelas, círculos/elipses, rectângulos, imagens</li>
-      <li xml:lang="pt-BR">Inclui diversas formas predefinidas, incluindo formas básicas como estrelas, círculos/elipses, retângulos, imagens</li>
+      <li xml:lang="pt-BR">Inclui diversas formas predefinidas, incluindo formas básicas como estrelas, círculos/elipses, retângulos e imagens</li>
       <li xml:lang="sk">Obsahuje mnoho preddefinovaných tvarov vrátane základných tvarov ako hviezdy, kružnica/elipsa, obdĺžnik, obrázok</li>
       <li xml:lang="sv">Innehåller många fördefinierade former inklusive grundläggande former som stjärnor, cirkel/ellips, rektangel, bild</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
