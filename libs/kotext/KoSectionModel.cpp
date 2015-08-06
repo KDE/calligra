@@ -60,7 +60,7 @@ KoSection *KoSectionModel::sectionAtPosition(int pos)
     QHash<QString, KoSection *>::iterator it = m_sectionNames.begin();
     for (; it != m_sectionNames.end(); it++) {
 	QPair<int, int> bounds = it.value()->bounds();
-	if (bounds.first > pos || bounds.second - 1 < pos) {
+	if (bounds.first > pos || bounds.second < pos) {
 	    continue;
 	}
 

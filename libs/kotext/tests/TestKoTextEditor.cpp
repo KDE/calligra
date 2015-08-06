@@ -204,6 +204,7 @@ void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEdito
     QTextBlockFormat fmt = editor->blockFormat();
     KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>() << secEnd);
     editor->setBlockFormat(fmt);
+    secEnd->correspondingSection()->setKeepEndBound(true);
 
     editor->insertText("\n");
     fmt.clearProperty(KoParagraphStyle::SectionEndings);
@@ -228,6 +229,7 @@ void TestKoTextEditor::formSectionTestDocument(TestDocument *doc)
     // (**empty_block**)    10
     //
     // Sections will receive names "0", "1", etc.
+    // [ and ] is actual text, not a sign!
 
     KoTextEditor *editor = doc->textEditor();
 
@@ -246,29 +248,24 @@ void TestKoTextEditor::formSectionTestDocument(TestDocument *doc)
 
     secEnd[2] = doc->sectionModel()->createSectionEnd(sec[2]);
     pushSectionEnd(2, secEnd[2], editor);
-    sec[2]->setKeepEndBound(true);
 
     secEnd[1] = doc->sectionModel()->createSectionEnd(sec[1]);
     pushSectionEnd(1, secEnd[1], editor);
-    sec[1]->setKeepEndBound(true);
 
     sec[3] = doc->sectionModel()->createSection(editor->constCursor(), sec[0], QString::number(3));
     pushSectionStart(3, sec[3], editor);
 
     secEnd[3] = doc->sectionModel()->createSectionEnd(sec[3]);
     pushSectionEnd(3, secEnd[3], editor);
-    sec[3]->setKeepEndBound(true);
 
     sec[4] = doc->sectionModel()->createSection(editor->constCursor(), sec[0], QString::number(4));
     pushSectionStart(4, sec[4], editor);
 
     secEnd[4] = doc->sectionModel()->createSectionEnd(sec[4]);
     pushSectionEnd(4, secEnd[4], editor);
-    sec[4]->setKeepEndBound(true);
 
     secEnd[0] = doc->sectionModel()->createSectionEnd(sec[0]);
     pushSectionEnd(0, secEnd[0], editor);
-    sec[0]->setKeepEndBound(true);
 
     doc->sectionModel()->allowMovingEndBound();
 }
