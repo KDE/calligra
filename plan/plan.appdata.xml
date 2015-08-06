@@ -108,6 +108,7 @@
       <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="bs">Koristi standardne strukture: Struktura prekida rada (WBS), Struktura prekida resursa (RBS), Struktura prekida troška (CBS)</li>
       <li xml:lang="ca">Usa estructures estàndard: Estructura de descomposició de treballs (WBS), Estructura de descomposició de recursos (RBS), Estructura de descomposició de costos (CBS)</li>
+      <li xml:lang="de">Verwendet Standardstrukturen: Projektstrukturplan (PSP), Ressourcenstrukturplan (RSP), Kostenstrukturplan (KSP)</li>
       <li xml:lang="en-GB">Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="es">Utiliza estructuras estándar: estructura de desglose del trabajo (WBS), estructura de desglose de los recursos (RBS), estructura de desglose de los costes (CBS)</li>
       <li xml:lang="fi">Vakiorakenteet käytettävissä: töiden (WBS), resurssien (RBS) ja kustannusten (CBS) jakautumisrakenteet</li>
@@ -142,6 +143,7 @@
       <li>Supports Summarytasks, Tasks, and milestones</li>
       <li xml:lang="bs">Podržava rezime zadataka, zadatke i prekretnice</li>
       <li xml:lang="ca">Permet resums de tasques, tasques i fites</li>
+      <li xml:lang="de">Unterstützt Aufgabenübersichten, Aufgaben und Meilensteine</li>
       <li xml:lang="en-GB">Supports Summarytasks, Tasks, and milestones</li>
       <li xml:lang="es">Soporta tareas de resumen, tareas e hitos</li>
       <li xml:lang="fi">Yhteenvetotehtävien, tehtävien ja virstanpylväiden tuki</li>
@@ -158,6 +160,7 @@
       <li>Configurable Scheduling Constraints</li>
       <li xml:lang="bs">Konfigurabilna ograničenja rasporeda</li>
       <li xml:lang="ca">Es poden configurar restriccions de planificació</li>
+      <li xml:lang="de">Einstellbare Planungsvorgaben</li>
       <li xml:lang="en-GB">Configurable Scheduling Constraints</li>
       <li xml:lang="es">Restricciones de planificación configurables</li>
       <li xml:lang="fi">Mukautettavat aikataulutusehdot</li>

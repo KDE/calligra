@@ -37,6 +37,10 @@
 #include <QFile>
 #include <QOpenGLShaderProgram>
 #include <QTransform>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLFramebufferObject>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -159,7 +163,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     , d(new Private())
 {
 
-    initializeOpenGLFunctions();
+    QSurfaceFormat format;
+    format.setDepthBufferSize(24);
+    setFormat(format);
 
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
@@ -177,9 +183,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
-
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
@@ -191,10 +194,12 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     d->displayFilter = displayFilter;
-    d->canvasInitialized = false;
-//    initializeDisplayShader();
-    initializeCheckerShader();
-    d->canvasInitialized = true;
+    if (d->canvasInitialized) {
+        d->canvasInitialized = false;
+        initializeDisplayShader();
+        initializeCheckerShader();
+        d->canvasInitialized = true;
+    }
 }
 
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
@@ -227,11 +232,19 @@ void KisOpenGLCanvas2::initializeGL()
 //            }
 //        }
 //    }
+    KisConfig cfg;
+    qDebug() << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    int glVersion = KisOpenGL::initializeContext(context());
+    qDebug() << "OpenGL: Context gives version" << glVersion;
+    initializeOpenGLFunctions();
+    VSyncWorkaround::tryDisableVSync(context());
 
+    d->openGLImageTextures->initGL((QOpenGLFunctions *)this);
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
-//    initializeDisplayShader();
+    initializeDisplayShader();
 
-//    Sync::init();
+    Sync::init();
 
     d->canvasInitialized = true;
 }
@@ -249,17 +262,19 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
+    QPainter gc(this);
+    gc.beginNativePainting();
     renderCanvasGL();
 
-    QPainter gc(this);
+    if (d->glSyncObject) {
+        Sync::deleteSync(d->glSyncObject);
+    }
+    d->glSyncObject = Sync::getSync();
+    gc.endNativePainting();
+
     renderDecorations(&gc);
     gc.end();
 
-//    if (d->glSyncObject) {
-//        Sync::deleteSync(d->glSyncObject);
-//    }
-
-//    d->glSyncObject = Sync::getSync();
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg;
@@ -270,8 +285,7 @@ void KisOpenGLCanvas2::paintGL()
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-//    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
-    return false;
+    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
 }
 
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
@@ -435,7 +449,10 @@ void KisOpenGLCanvas2::drawImage()
             KisTextureTile *tile =
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
-            KIS_ASSERT_RECOVER_BREAK(tile);
+            if (!tile) {
+                qWarning() << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                continue;
+            }
 
             /*
              * We create a float rect here to workaround Qt's
@@ -671,17 +688,5 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
 }
-
-//void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
-//{
-//    // Workaround for bug 322808, paint events with only a partial rect cause flickering
-//    // Drop those event and trigger a new full update
-//    if (event->rect().width() == width() && event->rect().height() == height()) {
-//        QOpenGLWidget::paintEvent(event);
-//    } else {
-//        update();
-//    }
-//}
-
 
 #endif // HAVE_OPENGL

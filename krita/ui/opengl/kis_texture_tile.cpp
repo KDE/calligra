@@ -20,6 +20,8 @@
 #include "kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
+#include <QtCore/QDebug>
+#include <QtGui/QOpenGLFunctions>
 
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
@@ -40,7 +42,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, FilterMode filter,
-                               bool useBuffer, int numMipmapLevels)
+                               bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f)
 
     : m_textureId(0)
 #ifdef USE_PIXEL_BUFFERS
@@ -62,8 +64,8 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                                              m_tileRectInImagePixels,
                                              m_texturesInfo);
 
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->glGenTextures(1, &m_textureId);
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 
@@ -73,7 +75,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     fd = 0;
 #endif
 
-    glTexImage2D(GL_TEXTURE_2D, 0,
+    f->glTexImage2D(GL_TEXTURE_2D, 0,
                  m_texturesInfo->internalFormat,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
@@ -101,7 +103,7 @@ KisTextureTile::~KisTextureTile()
 
 void KisTextureTile::bindToActiveTexture()
 {
-    glBindTexture(GL_TEXTURE_2D, textureId());
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     if (m_needsMipmapRegeneration) {
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -311,7 +313,6 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
             m_glBuffer->bind();
             m_glBuffer->allocate(size);
         }
-
         void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
         memcpy(vid, data, size);
         m_glBuffer->unmap();

@@ -32,6 +32,7 @@
 #include <QOpenGLBuffer>
 #endif
 
+class QOpenGLFunctions;
 
 struct KisGLTexturesInfo {
 
@@ -68,7 +69,7 @@ public:
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                    const QByteArray &fillData, FilterMode mode,
-                   bool useBuffer, int numMipmapLevels);
+                   bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();
 
     void setUseBuffer(bool useBuffer) {
@@ -85,10 +86,6 @@ public:
         return m_tileRectInImagePixels;
     }
 
-    inline GLuint textureId() {
-        return m_textureId;
-    }
-
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
@@ -99,7 +96,6 @@ public:
 
     inline void setTextureParameters()
     {
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
