@@ -85,6 +85,7 @@ void SplitSectionsCommand::redo()
 	    fmt = editor->blockFormat();
 	    KoSectionUtils::setSectionStartings(fmt, moveForward);
 	    editor->setBlockFormat(fmt);
+	    editor->movePosition(QTextCursor::PreviousBlock);
 	} else { // Endings
 	    editor->movePosition(QTextCursor::EndOfBlock);
 	    editor->newLine();
@@ -98,6 +99,7 @@ void SplitSectionsCommand::redo()
 	    fmt = editor->blockFormat();
 	    KoSectionUtils::setSectionEndings(fmt, moveBackward);
 	    editor->setBlockFormat(fmt);
+	    editor->movePosition(QTextCursor::NextBlock);
 	}
     }
 }

@@ -1529,7 +1529,7 @@ void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
     }
     addCommand(new SplitSectionsCommand(
 	d->document,
-	SplitSectionsCommand::Startings,
+	SplitSectionsCommand::Endings,
 	sectionIdToInsertAfter));
     emit cursorPositionChanged();
 }
