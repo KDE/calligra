@@ -234,7 +234,7 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
 
         foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
             if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
-                hKoRdfSemanticItem si(dynamic_cast<KoRdfSemanticItem *>(
+                hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
 		    KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this).data()
 		));
                 si->loadUserStylesheets(d->model);
@@ -931,7 +931,7 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item)
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-	hKoRdfSemanticItem si(dynamic_cast<KoRdfSemanticItem *>(item.data()));
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(item.data()));
         RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << si->name();
         insertReflow(col, si);
         applyReflow(col);
@@ -945,7 +945,7 @@ void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem ba
         return;
     }
 
-    hKoRdfSemanticItem item(dynamic_cast<KoRdfSemanticItem *>(baseItem.data()));
+    hKoRdfSemanticItem item(static_cast<KoRdfSemanticItem *>(baseItem.data()));
     if (item) {
 	RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
 	emit semanticObjectViewSiteUpdated(item, xmlid);
