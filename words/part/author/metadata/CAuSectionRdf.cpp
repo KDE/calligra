@@ -23,6 +23,7 @@
 
 #include <QTextEdit>
 #include <KActionCollection>
+#include <kicon.h>
 
 using namespace Soprano;
 
@@ -70,7 +71,7 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
 
     KActionCollection *actions = new KActionCollection(ret);
 
-    m_editWidgetUI.synopRichTextWidget->createActions(actions);
+    actions->addActions(m_editWidgetUI.synopRichTextWidget->createActions());
     m_editWidgetUI.boldToolButton->setDefaultAction(actions->action("format_text_bold"));
     m_editWidgetUI.italicToolButton->setDefaultAction(actions->action("format_text_italic"));
     m_editWidgetUI.underlineToolButton->setDefaultAction(actions->action("format_text_underline"));

@@ -1024,7 +1024,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
 #ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem basicitem, const QString &xmlid)
 {
-    hKoRdfSemanticItem item(basicitem);
+    hKoRdfSemanticItem item(static_cast<KoRdfSemanticItem *>(basicitem.data()));
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {

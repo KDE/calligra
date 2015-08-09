@@ -207,6 +207,8 @@ set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
 
 add_library(authorpart MODULE ${authorpart_PART_SRCS})
 
+kcoreaddons_desktop_to_json(authorpart author/authorpart.desktop)
+
 target_link_libraries(authorpart   wordsprivate )
 
 install(TARGETS authorpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
@@ -236,7 +238,6 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
-install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
