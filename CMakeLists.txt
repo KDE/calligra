@@ -15,7 +15,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
 endif()
 
 if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
-    cmake_policy(SET CMP0026 OLD)
+    cmake_policy(SET CMP0026 OLD) 
     cmake_policy(SET CMP0046 OLD)
 endif()
 
@@ -444,9 +444,10 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 # macro_optional_find_package(Soprano)
 set(Soprano_FOUND FALSE)
 macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
-if (NOT Soprano_FOUND)
+if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
+
 
 ##
 ## Test for marble
@@ -778,8 +779,8 @@ include(MacroCalligraBuildTest)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 
-set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version
-                       ${CMAKE_BINARY_DIR}/libs/version
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
+                       ${CMAKE_BINARY_DIR}/libs/version 
 )
 
 include_directories(${KOVERSION_INCLUDES})
@@ -792,17 +793,17 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
-                   ${KOVERSION_INCLUDES}
+                   ${KOVERSION_INCLUDES} 
                    )
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
-                   ${KOVERSION_INCLUDES}
+                   ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}
-
+                   
                    )
 
 # flake depends on koodf and pigment
@@ -850,13 +851,13 @@ set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
-set(KOWIDGETS_INCLUDES
+set(KOWIDGETS_INCLUDES 
                     ${BASICFLAKES_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils)
 
 # komain depends on kotext & flake
-set(KOMAIN_INCLUDES
+set(KOMAIN_INCLUDES 
                     ${KOWIDGETS_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/main
