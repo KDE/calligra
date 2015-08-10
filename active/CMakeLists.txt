@@ -69,4 +69,4 @@ endif()
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
 install(FILES calligraactive.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(DIRECTORY qml DESTINATION share/calligraactive)
+install(DIRECTORY qml DESTINATION ${DATA_INSTALL_DIR}/calligraactive)
