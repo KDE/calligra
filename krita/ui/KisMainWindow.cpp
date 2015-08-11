@@ -128,6 +128,8 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#include "kis_icon_utils.h"
+
 
 #include "calligraversion.h"
 
@@ -312,17 +314,26 @@ KisMainWindow::KisMainWindow()
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     KoToolBoxFactory toolBoxFactory;
-    createDockWidget(&toolBoxFactory);
+    QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
+    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
+
 
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
     }
 
+
+    QMap<QString, QAction*> dockwidgetActions;
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        createDockWidget(factory);
+        QDockWidget *dw = createDockWidget(factory);
+        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
     }
+    foreach(QString title, dockwidgetActions.keys()) {
+        d->dockWidgetMenu->addAction(dockwidgetActions[title]);
+    }
+
 
     foreach (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -367,6 +378,11 @@ KisMainWindow::KisMainWindow()
         d->helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
+
+    // KDE libss 4' help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
+    QAction *helpAction = actionCollection()->action("help_contents");
+    helpAction->disconnect();
+    connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
 
 
 #if 0
@@ -556,30 +572,7 @@ void KisMainWindow::slotThemeChanged()
 
     // reload action icons!
     foreach (QAction *action, actionCollection()->actions()) {
-        QIcon icon = action->icon();
-        if (icon.isNull()) continue;
-
-        QString iconName = icon.name();
-        if (iconName.isNull()) continue;
-
-        QString realIconName;
-
-        if (iconName.startsWith("dark_")) {
-            realIconName = iconName.mid(5);
-        }
-
-        if (iconName.startsWith("light_")) {
-            realIconName = iconName.mid(6);
-        }
-
-        if (!realIconName.isNull()) {
-            QIcon newIcon = themedIcon(realIconName);
-            if (!newIcon.isNull()) {
-                action->setIcon(newIcon);
-            } else {
-                qWarning() << "WARNING: Couldn't load themed icon:" << realIconName;
-            }
-        }
+        KisIconUtils::updateIcon(action);
     }
 
     emit themeChanged();
@@ -1502,6 +1495,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
+    KisConfig cfg;
+    cfg.setFullscreenMode(fullScreen);
+
     if (fullScreen) {
         setWindowState(windowState() | Qt::WindowFullScreen);   // set
     } else {
@@ -1727,12 +1723,9 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
         addDockWidget(side, dockWidget);
-        if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
-            d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
-            if (!visible)
-                dockWidget->hide();
+        if (!visible) {
+            dockWidget->hide();
         }
-
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
@@ -2106,7 +2099,7 @@ void KisMainWindow::createActions()
 
     d->exportPdf  = new KisAction(i18nc("@action:inmenu", "Export as PDF..."));
     d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->exportPdf->setIcon(koIcon("application-pdf"));
+    d->exportPdf->setIcon(themedIcon("application-pdf"));
     actionManager->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
@@ -2123,18 +2116,18 @@ void KisMainWindow::createActions()
 //    actionManager->addAction("file_reload_file", d->reloadFile);
 //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->importFile  = new KisAction(koIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
+    d->importFile  = new KisAction(themedIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
     actionManager->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KisAction(koIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
+    d->exportFile  = new KisAction(themedIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
     d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KisAction(koIcon("document-properties"), i18nc("@action:inmenu", "Document Information"));
+    d->showDocumentInfo  = new KisAction(themedIcon("configure"), i18nc("@action:inmenu", "Document Information"));
     d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
@@ -2256,6 +2249,11 @@ void KisMainWindow::initializeGeometry()
         }
     }
     restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+}
+
+void KisMainWindow::showManual()
+{
+    QDesktopServices::openUrl(QUrl("https://userbase.kde.org/Special:MyLanguage/Krita/Manual"));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)
