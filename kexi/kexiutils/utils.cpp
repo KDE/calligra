@@ -708,20 +708,20 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+tristate KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
 {
     if (url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());
         if (!fileInfo.exists()) {
             KMessageBox::sorry(parent, xi18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
-            return;
+            return false;
         }
     }
 
     if (!url.isValid()) {
         KMessageBox::sorry(parent, xi18nc("@info", "Invalid hyperlink <link>%1</link>.",
                                           url.url(QUrl::PreferLocalFile)));
-        return;
+        return false;
     }
 
     QMimeDatabase db;
@@ -730,13 +730,13 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
     if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
         KMessageBox::sorry(parent, xi18nc("@info", "Executable <link>%1</link> not allowed.",
                                           url.url(QUrl::PreferLocalFile)));
-        return;
+        return false;
     }
 
     if (!options.allowRemote && !url.isLocalFile()) {
         KMessageBox::sorry(parent, xi18nc("@info", "Remote hyperlink <link>%1</link> not allowed.",
                                           url.url(QUrl::PreferLocalFile)));
-        return;
+        return false;
     }
 
     if (KRun::isExecutableFile(url, type)) {
@@ -749,21 +749,20 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
                     , "AllowRunExecutable", KMessageBox::Dangerous);
 
         if (ret != KMessageBox::Yes) {
-            return;
+            return cancelled;
         }
     }
 
     switch(options.tool) {
         case OpenHyperlinkOptions::DefaultHyperlinkTool:
-            KRun::runUrl(url, type, parent);
-            break;
+            return KRun::runUrl(url, type, parent);
         case OpenHyperlinkOptions::BrowserHyperlinkTool:
-            QDesktopServices::openUrl(url);
-            break;
+            return QDesktopServices::openUrl(url);
         case OpenHyperlinkOptions::MailerHyperlinkTool:
-            QDesktopServices::openUrl(url);
-            break;
+            return QDesktopServices::openUrl(url);
+        default:;
     }
+    return false;
 }
 
 // ----

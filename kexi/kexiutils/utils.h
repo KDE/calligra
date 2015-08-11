@@ -44,6 +44,8 @@
 
 #include <KIconLoader>
 
+#include <KDbTristate>
+
 class QColor;
 class QMetaProperty;
 class QLayout;
@@ -519,8 +521,10 @@ public:
 
 /*!
  * Opens the given \a url using \a options
+ * It can fail if opening a given link is not possible or allowed.
+ * @return true on success, cancelled if user has cancelled the opening and false on failure
 */
-KEXIUTILS_EXPORT void openHyperLink(const QUrl &url, QWidget *parent,
+KEXIUTILS_EXPORT tristate openHyperLink(const QUrl &url, QWidget *parent,
                                     const OpenHyperlinkOptions &options);
 
 //! \return size of combo box arrow according to \a style
