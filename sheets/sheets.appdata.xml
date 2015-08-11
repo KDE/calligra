@@ -11,7 +11,6 @@
   <name xml:lang="de">Sheets</name>
   <name xml:lang="en-GB">Sheets</name>
   <name xml:lang="es">Sheets</name>
-  <name xml:lang="et">Sheets</name>
   <name xml:lang="fi">Sheets</name>
   <name xml:lang="fr">Sheets</name>
   <name xml:lang="gl">Sheets</name>
@@ -33,7 +32,6 @@
   <summary xml:lang="de">Tabellenkalkulation</summary>
   <summary xml:lang="en-GB">Spreadsheet</summary>
   <summary xml:lang="es">Hoja de cálculo</summary>
-  <summary xml:lang="et">Tabelitöötlus</summary>
   <summary xml:lang="fi">Taulukkolaskenta</summary>
   <summary xml:lang="fr">Tableur</summary>
   <summary xml:lang="gl">Follas de cálculo</summary>
@@ -57,7 +55,6 @@
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
-    <p xml:lang="et">Calligra Sheets on kõiki võimaliku pakkuv tabelitöötluse ja arvutamise tööriist. Selle abil saab kiiresti luua ja välja arvutada mitmesuguseid ärimaailmas vajalikke tabeleid, näiteks tulud ja kulud, töötunnid jms.</p>
     <p xml:lang="fi">Calligra Sheets on täysominaisuuksinen taulukkolaskentasovellus. Luot sillä nopeasti erilaisia talouslaskentaan liittyviä taulukoita kuten tulo- ja menotaulukoita, työntekijöiden työtuntitaulukoita jne.</p>
     <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
@@ -78,7 +75,6 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
-    <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
@@ -99,7 +95,6 @@
       <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
-      <li xml:lang="et">Kujundite kasutamine märkmete või ideekaardi loomiseks</li>
       <li xml:lang="fi">Muotojen käyttö muistiinpanojen tai miellekarttojen tallentamiseen</li>
       <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
@@ -118,7 +113,6 @@
       <li xml:lang="de">Viele vordefinierte Vorlagen aus vielen Bereichen</li>
       <li xml:lang="en-GB">Large range of pre-defined templates</li>
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
-      <li xml:lang="et">Suur valik valmismalle</li>
       <li xml:lang="fi">Laajalti erilaisia esimääritettyjä mallipohjia</li>
       <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
@@ -137,7 +131,6 @@
       <li xml:lang="de">Leistungsfähige und umfassende Liste von Formeln</li>
       <li xml:lang="en-GB">Powerful and comprehensive formula list</li>
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
-      <li xml:lang="et">Võimas ja põhjalik valemikogu</li>
       <li xml:lang="fi">Tehokas ja kattava kaavaluettelo</li>
       <li xml:lang="fr">Liste de formules complète et variée</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
@@ -156,7 +149,6 @@
       <li xml:lang="de">Arbeiten in einer bekannten Arbeitsumgebung</li>
       <li xml:lang="en-GB">Work in a familiar environment</li>
       <li xml:lang="es">Funciona en un entorno familiar</li>
-      <li xml:lang="et">Töötamine harjumuspärases keskkonnas</li>
       <li xml:lang="fi">Työskentely tutussa ympäristössä</li>
       <li xml:lang="fr">Travaillez dans un environnement familier</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>

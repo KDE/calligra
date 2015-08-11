@@ -11,7 +11,6 @@
   <name xml:lang="de">Flow</name>
   <name xml:lang="en-GB">Flow</name>
   <name xml:lang="es">Flow</name>
-  <name xml:lang="et">Flow</name>
   <name xml:lang="fi">Flow</name>
   <name xml:lang="fr">Flow</name>
   <name xml:lang="gl">Fluxo</name>
@@ -32,7 +31,6 @@
   <summary xml:lang="de">Programm zum Erstellen von Diagrammen</summary>
   <summary xml:lang="en-GB">Flowchart &amp; Diagram Editing</summary>
   <summary xml:lang="es">Edición de gráficos y diagramas de flujo</summary>
-  <summary xml:lang="et">Voo- ja muud skeemid</summary>
   <summary xml:lang="fi">Vuokaavio- ja diagrammimuokkaus</summary>
   <summary xml:lang="fr">Édition de diagrammes</summary>
   <summary xml:lang="ia">Modifica de diagramma de fluxo &amp; diagramma</summary>
@@ -56,7 +54,6 @@
     <p xml:lang="de">Calligra Flow ist ein einfach zu verwendendes Programm für Diagramme und Flussdiagramme mit enger Integration in andere Calligra-Programme. Mit diesem Programm können Sie Netzwerkdiagramme, Organisationsdiagramme, Flussdiagramme und andere Diagramme erstellen und bearbeiten</p>
     <p xml:lang="en-GB">Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.</p>
     <p xml:lang="es">Calligra Flow es una aplicación de fácil uso que sirve para crear diagramas de flujo y gráficos, y que goza de una alta integración con el resto de aplicaciones de Calligra. Le permite crear diagramas de red, gráficos de organización, gráficos de flujo y más.</p>
-    <p xml:lang="et">Calligra Flow on hõlpsasti kasutatav voo- ja muude skeemide rakendus, mis on tihedalt seotud muude Calligra rakendustega. See võimaldab luua võrguskeeme, organisatsiooniskeeme, vooskeeme jms.</p>
     <p xml:lang="fi">Calligra Flow on helppokäyttöinen diagrammi- ja vuokaaviosovellus, joka integroituu tiukasti muihin Calligra-sovelluksiin. Sillä voit luoda verkko-, organisaatio- ja vuokaavioita sekä muita.</p>
     <p xml:lang="fr">Calligra Flow est une application de diagrammes et d'organigrammes facile à utiliser  fortement intégrée avec les autres application Calligra. Elle vous permet de créer des plans de réseaux, des organigrammes, des graphiques, et autres.</p>
     <p xml:lang="ia">Calligra Flow es un application facile de usar pro facer diagrammas e diagrammas de fluxo con un forte integration con altere applicationes de Calligra. Illo permitte te crear diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</p>
@@ -78,7 +75,6 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
-    <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
@@ -100,7 +96,6 @@
       <li xml:lang="de">Erstellung von Netzwerkdiagrammen, Organisationsdiagrammen, Flussdiagrammen und mehr</li>
       <li xml:lang="en-GB">Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="es">Crea diagramas de red, gráficos de organización, gráficos de flujo y más</li>
-      <li xml:lang="et">Võrguskeemide, organisatsiooniskeemine, vooskeemide ja muude skeemide loomine</li>
       <li xml:lang="fi">Verkko-, organisaatio- ja vuokaavioiden sekä muiden luonti</li>
       <li xml:lang="fr">Créez des plans de réseaux, des organigrammes, des graphiques et autres</li>
       <li xml:lang="ia">Crea diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</li>
@@ -120,7 +115,6 @@
       <li xml:lang="de">Skriptfähige Erstellung von Schablonen mittels Python</li>
       <li xml:lang="en-GB">Scriptable stencil creation using Python</li>
       <li xml:lang="es">Creación de plantillas mediante scripts utilizando Python</li>
-      <li xml:lang="et">Skriptitav trafarettide loomine Pythoni abil</li>
       <li xml:lang="fi">Skriptattava sapluunojen luonti Pythonilla</li>
       <li xml:lang="fr">Création de pochoirs programmable en utilisant le langage Python</li>
       <li xml:lang="ia">Creation de stencil de script usante Python</li>
@@ -140,7 +134,6 @@
       <li xml:lang="de">Unterstützung für Dia-Schablonen.</li>
       <li xml:lang="en-GB">Support for Dia stencils.</li>
       <li xml:lang="es">Admite las plantillas de Dia.</li>
-      <li xml:lang="et">Dia trafarettide toetamine</li>
       <li xml:lang="fi">Dian sapluunojen tuki</li>
       <li xml:lang="fr">Prise en charge des pochoirs issus de Dia.</li>
       <li xml:lang="ia">Supporto pro stencils de Dia.</li>
