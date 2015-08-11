@@ -292,7 +292,7 @@ QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool 
 
 //! @internal
 static QFileDialog* getImageDialog(QWidget *parent, const QString &caption, const QUrl &directory,
-                                   const QList<QByteArray> supportedMimeTypes)
+                                   const QList<QByteArray> &supportedMimeTypes)
 {
     QFileDialog *dialog = new QFileDialog(parent, caption);
     dialog->setDirectoryUrl(directory);
