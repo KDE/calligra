@@ -297,7 +297,7 @@ static QFileDialog* getImageDialog(QWidget *parent, const QString &caption, cons
     QFileDialog *dialog = new QFileDialog(parent, caption);
     dialog->setDirectoryUrl(directory);
     const QStringList mimeTypeFilters
-        = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(supportedMimeTypes);
+        = KexiUtils::convertTypesUsingFunction<QByteArray, QString, &QString::fromLatin1>(supportedMimeTypes);
     dialog->setMimeTypeFilters(mimeTypeFilters);
     return dialog;
 }

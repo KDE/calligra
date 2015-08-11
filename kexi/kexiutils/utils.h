@@ -139,11 +139,11 @@ KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProper
  Example:
 @code
     QList<QByteArray> list = ....;
-    QStringList result = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(list);
+    QStringList result = KexiUtils::convertTypesUsingFunction<QByteArray, QString, &QString::fromLatin1>(list);
 @endcode */
 template <typename SourceType, typename DestinationType,
           DestinationType (*ConvertFunction)(const SourceType&)>
-QList<DestinationType> convertTypes(const QList<SourceType> &list)
+QList<DestinationType> convertTypesUsingFunction(const QList<SourceType> &list)
 {
     QList<DestinationType> result;
     foreach(const SourceType &element, list) {
@@ -158,11 +158,11 @@ QList<DestinationType> convertTypes(const QList<SourceType> &list)
  Example:
 @code
     QVariantList list = ....;
-    QStringList result = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(list);
+    QStringList result = KexiUtils::convertTypesUsingMethod<QVariant, QString, &QVariant::toString>(list);
 @endcode */
 template <typename SourceType, typename DestinationType,
           DestinationType (SourceType::*ConvertMethod)() const>
-QList<DestinationType> convertTypes(const QList<SourceType> &list)
+QList<DestinationType> convertTypesUsingMethod(const QList<SourceType> &list)
 {
     QList<DestinationType> result;
     foreach(const SourceType &element, list) {

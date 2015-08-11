@@ -103,7 +103,7 @@ static QList<QPluginLoader *> findPlugins(const QString &path, const QStringList
                 qWarning() << "No ServiceTypes defined for plugin" << loader->fileName() << "-- skipping!";
                 continue;
             }
-            QStringList foundServiceTypes = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(foundServiceTypesAray.toVariantList());
+            QStringList foundServiceTypes = KexiUtils::convertTypesUsingMethod<QVariant, QString, &QVariant::toString>(foundServiceTypesAray.toVariantList());
             if (!supportsAtLeastServiceType(foundServiceTypes, servicetypes)) {
                 continue;
             }
