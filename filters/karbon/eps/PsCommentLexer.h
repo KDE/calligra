@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Dirk Schönberger <dirk.schoenberger@sz-online.de>
+   Copyright (C) 2002, Dirk SchÃ¶nberger <dirk.schoenberger@sz-online.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include <QString>
 
 /**
-  *@author Dirk Schönberger
+  *@author Dirk SchÃ¶nberger
   */
 typedef enum {
     State_Comment = 0,
