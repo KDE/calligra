@@ -8,7 +8,7 @@ set( okularGenerator_odt_SRCS OkularOdtGenerator.cpp )
 add_library(okularGenerator_odt MODULE ${okularGenerator_odt_SRCS} )
 
 target_link_libraries( okularGenerator_odt
-    Okular::okularcore
+    Okular::Core
     komain
     kotextlayout
     wordsprivate

@@ -8,7 +8,7 @@ set( okularGenerator_odp_SRCS OkularOdpGenerator.cpp )
 add_library(okularGenerator_odp MODULE ${okularGenerator_odp_SRCS} )
 
 target_link_libraries( okularGenerator_odp
-    Okular::okularcore
+    Okular::Core
     komain
     kopageapp
 )
