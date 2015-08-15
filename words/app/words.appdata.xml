@@ -59,6 +59,7 @@
     <p xml:lang="es">Words es un procesador de texto intuitivo y un editor para el escritorio. Con él, podrá crear documentos informativos y atractivos con gusto y facilidad.</p>
     <p xml:lang="fi">Words on intuitiivinen tekstinkäsittely- ja taitto-ohjelma. Sen avulla voit luoda informatiivisia ja vaikuttavia tekstitiedostoja mukavasti ja helposti.</p>
     <p xml:lang="fr">Words est un traitement de texte intuitif et une application bureautique de publication. Avec lui, vous pouvez facilement créer des documents informatifs et attractifs.</p>
+    <p xml:lang="gl">Words é un programa intuitivo de procesamento de texto e publicación de escritorio. Con el pode crear documentos informativos e atractivos plácida e facilmente.</p>
     <p xml:lang="it">Words è un elaboratore di testi intuitivo e un'applicazione di pubblicazione per desktop. Con esso, puoi creare documenti informativi e accattivanti con soddisfazione e facilità.</p>
     <p xml:lang="ja">Words はワードプロセッサおよびデスクトップ出版のためのアプリケーションです。直感的な操作で有益かつ魅力的な文書が簡単に作成できます</p>
     <p xml:lang="nb">Words er en intuitiv tekstbehandler, som kan brrukes til skrivebordspublisering. Du kan lett lage informative og attraktive dokumenter med glede.</p>
@@ -102,6 +103,7 @@
       <li xml:lang="es">Edición basada en marcos</li>
       <li xml:lang="fi">Kehyksiin perustuva muokkaus</li>
       <li xml:lang="fr">Édition à base de cadres</li>
+      <li xml:lang="gl">Edición baseada en marcos.</li>
       <li xml:lang="it">Modifica basata su riquadri</li>
       <li xml:lang="ja">フレームベースの編集</li>
       <li xml:lang="nb">Ramme-basert redigering</li>
@@ -121,6 +123,7 @@
       <li xml:lang="es">Permite incrustar documentos</li>
       <li xml:lang="fi">Tiedostojen upottamisen tuki</li>
       <li xml:lang="fr">Permet les documents intégrés</li>
+      <li xml:lang="gl">Permite incrustar documentos.</li>
       <li xml:lang="ia">Il permitte insertar documentos</li>
       <li xml:lang="it">Consente l'integrazione di documenti</li>
       <li xml:lang="ja">文書への埋め込みを許可</li>
@@ -141,6 +144,7 @@
       <li xml:lang="es">Personalización de la interfaz de usuario</li>
       <li xml:lang="fi">Käyttöliittymä mukautettavissa</li>
       <li xml:lang="fr">Personnalisation de l'interface</li>
+      <li xml:lang="gl">Personalización da interface.</li>
       <li xml:lang="ia">Prsonalisation de le Interfacie de usator</li>
       <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
       <li xml:lang="ja">ユーザインターフェースのカスタマイズ</li>
@@ -161,6 +165,7 @@
       <li xml:lang="es">Incluye todas las características que se esperan de un procesador de texto moderno</li>
       <li xml:lang="fi">Kaikki nykyaikaiselta tekstinkäsittelyohjelmalta odotetut ominaisuudet</li>
       <li xml:lang="fr">Inclut toutes les fonctionnalités que l'on peut attendre d'un traitement de texte moderne</li>
+      <li xml:lang="gl">Inclúe todas as funcionalidades que pode esperar dun procesador de textos moderno.</li>
       <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
       <li xml:lang="ja">現在のワードプロセッサに求められるすべての機能を含む</li>
       <li xml:lang="nb">Har alle egenskaper forventet av en moderne tekstbehandler</li>
@@ -180,6 +185,7 @@
       <li xml:lang="es">Admite el formato ODT («Open Document Text»)</li>
       <li xml:lang="fi">ODT- eli OpenDocument-tekstitiedostojen tuki</li>
       <li xml:lang="fr">Prise en charge du format ODT (Open Document Text)</li>
+      <li xml:lang="gl">Compatíbel co formato ODT (Open Document Text).</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>
       <li xml:lang="ja">ODT (Open Document Text) サポート</li>
       <li xml:lang="nb">Støtte for ODT (Open Document Text)</li>

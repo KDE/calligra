@@ -56,6 +56,7 @@
     <p xml:lang="es">Plan es una aplicación para gestionar proyectos. Está enfocada a la gestión de proyectos moderadamente grandes con varios recursos.</p>
     <p xml:lang="fi">Plan on projektinhallintasovellus. Se on tarkoitettu suurehkojen, moniresurssisten projektien hallintaan.</p>
     <p xml:lang="fr">Plan est une application de gestion de projet. Cette application est prévue pour des projets de taille moyenne avec plusieurs ressources.</p>
+    <p xml:lang="gl">Plan é un programa de xestión de proxectos. Está pensado para xestionar proxectos moderadamente grandes con varios recursos.</p>
     <p xml:lang="ia">Plan es un application pro gerer projectos. Illo es destinate pro gerer projectos moderatemente grande con ressources multiple.</p>
     <p xml:lang="it">Plan è un'applicazione di gestione progetti. È pensato per gestire progetti abbastanza grandi con risorse multiple.</p>
     <p xml:lang="nl">Plan is een toepassing voor projectbeheer. Het is bedoeld voor het beheer van middelgrote projecten met meerdere hulpbronnen.</p>
@@ -95,6 +96,7 @@
       <li xml:lang="es">Varias vistas: diagramas de Gant, Vista de recursos, vista de cuentas</li>
       <li xml:lang="fi">Erilaiset näkymät: Gantt-kaaviot, resurssinäkymä, tilinäkymä</li>
       <li xml:lang="fr">Vues multiples : diagrammes de Gantt, vue des ressources, vue des comptes</li>
+      <li xml:lang="gl">Varias vistas: gráficos de Gantt, vista de recursos, vista de contas.</li>
       <li xml:lang="ia">Vistas multiple: Diagrammas de Gantt, Vista de ressource, vista de contos</li>
       <li xml:lang="it">Viste multiple: diagrammi di Gantt, vista delle risorse, vista degli account</li>
       <li xml:lang="nl">Meerdere weergaven: Gant-kaarten, hulpbronweergave, accountweergave</li>
@@ -113,6 +115,7 @@
       <li xml:lang="es">Utiliza estructuras estándar: estructura de desglose del trabajo (WBS), estructura de desglose de los recursos (RBS), estructura de desglose de los costes (CBS)</li>
       <li xml:lang="fi">Vakiorakenteet käytettävissä: töiden (WBS), resurssien (RBS) ja kustannusten (CBS) jakautumisrakenteet</li>
       <li xml:lang="fr">Utilise les structures standard : décomposition des tâches (WBS), décomposition des ressources (RBS), décomposition des coûts (CBS)</li>
+      <li xml:lang="gl">Usa estruturas estándar: estrutura de división do traballo (WBS), estrutura de división dos recursos (RBS), estrutura de división dos custos (CBS).</li>
       <li xml:lang="it">Utilizza strutture standard: strutture di scomposizione del lavoro (WBS), strutture di scomposizione delle risorse (RBS), strutture di scomposizione dei costi (CBS)</li>
       <li xml:lang="nl">Gebruikt standaard structuren: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="pl">Używa standardowych struktur: Struktura podziału pracy (WBS),  Struktura podziału zasobów (RBS), Struktura podziału kosztów (CBS)</li>
@@ -130,6 +133,7 @@
       <li xml:lang="es">Nivel de detalles configurable en el diagrama de Gantt</li>
       <li xml:lang="fi">Mukautettava yksityiskohtien taso Gantt-kaavioissa</li>
       <li xml:lang="fr">Niveau de détail configurable pour les diagrammes de Gantt</li>
+      <li xml:lang="gl">O gráfico de Gantt permite configurar o nivel de detalle.</li>
       <li xml:lang="ia">Nivello de detalios configurabile sur Diagramma de Gantt</li>
       <li xml:lang="it">Livello di dettaglio configurabile per i diagrammi di Gantt</li>
       <li xml:lang="nl">Instelbaar detailniveau op Gant-kaart</li>
@@ -148,6 +152,7 @@
       <li xml:lang="es">Soporta tareas de resumen, tareas e hitos</li>
       <li xml:lang="fi">Yhteenvetotehtävien, tehtävien ja virstanpylväiden tuki</li>
       <li xml:lang="fr">Prends en charge les phases, les tâches et les jalons</li>
+      <li xml:lang="gl">Permite definir tarefas de resumo, tarefas e fitos.</li>
       <li xml:lang="it">Supporta attività di riepilogo, attività e pietre miliari</li>
       <li xml:lang="nl">Ondersteunt Samenvattingstaken, taken en mijlpalen</li>
       <li xml:lang="pl">Obsługa dla zadań podsumowujących, zadań oraz kamieni milowych</li>
@@ -165,6 +170,7 @@
       <li xml:lang="es">Restricciones de planificación configurables</li>
       <li xml:lang="fi">Mukautettavat aikataulutusehdot</li>
       <li xml:lang="fr">Contraintes d'ordonnancement configurables</li>
+      <li xml:lang="gl">Restricións de planificación configurábeis.</li>
       <li xml:lang="it">Vincoli di pianificazione configurabili</li>
       <li xml:lang="nl">Instelbare voorwaarden voor planning</li>
       <li xml:lang="pl">Ustawialne ograniczenia w planowaniu</li>

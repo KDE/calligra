@@ -57,6 +57,7 @@
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="fi">Calligra Sheets on täysominaisuuksinen taulukkolaskentasovellus. Luot sillä nopeasti erilaisia talouslaskentaan liittyviä taulukoita kuten tulo- ja menotaulukoita, työntekijöiden työtuntitaulukoita jne.</p>
     <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
+    <p xml:lang="gl">Calligra Sheets é unha ferramenta completa de follas de cálculo. Úsea para crear rapidamente follas de cálculo de negocios, como por exemplo follas de gastos e ingresos, de horas de traballo, etc.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
     <p xml:lang="ja">Calligra Sheets は豊富な機能を持った表計算ツールです。収入と支出、従業員の労働時間などビジネスなどに必要なスプレッドシートの作成、計算を短時間で行うことができます。</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
@@ -97,6 +98,7 @@
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
       <li xml:lang="fi">Muotojen käyttö muistiinpanojen tai miellekarttojen tallentamiseen</li>
       <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
+      <li xml:lang="gl">Use formas para escribir notas ou mapas mentais.</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
       <li xml:lang="ja">シェイプを使用したメモの貼り付けやマインドマップの作成</li>
       <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
@@ -115,6 +117,7 @@
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
       <li xml:lang="fi">Laajalti erilaisia esimääritettyjä mallipohjia</li>
       <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
+      <li xml:lang="gl">Gran variedade de modelos predefinidos.</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
       <li xml:lang="ja">幅広い種類のテンプレート</li>
       <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
@@ -133,6 +136,7 @@
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
       <li xml:lang="fi">Tehokas ja kattava kaavaluettelo</li>
       <li xml:lang="fr">Liste de formules complète et variée</li>
+      <li xml:lang="gl">Lista de fórmulas potentes e fáciles de entender.</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
       <li xml:lang="ja">強力かつ包括的な数式</li>
       <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
@@ -151,6 +155,7 @@
       <li xml:lang="es">Funciona en un entorno familiar</li>
       <li xml:lang="fi">Työskentely tutussa ympäristössä</li>
       <li xml:lang="fr">Travaillez dans un environnement familier</li>
+      <li xml:lang="gl">Traballe nun ambiente familiar.</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>
       <li xml:lang="ja">使い慣れた環境での操作</li>
       <li xml:lang="nl">Werk in een bekende omgeving</li>
