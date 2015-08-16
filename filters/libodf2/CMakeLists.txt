@@ -51,6 +51,7 @@ set(koodf2_LIB_SRCS
 )
 
 add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
+generate_export_headers(koodf2 BASE_NAME koodf2)
 
 target_link_libraries(koodf2 koodf mso KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
 target_link_libraries(koodf2 LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
@@ -62,7 +63,7 @@ install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 install( FILES
-    koodf2_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/koodf2_export.h
 
     KoStyle.h
     KoTable.h

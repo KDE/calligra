@@ -40,6 +40,7 @@ set(msooxml_LIB_SRCS
 )
 
 add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
+generate_export_header(komsooxml BASE_NAME komsooxml)
 
 target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive)
 if(Qca-qt5_FOUND)
@@ -54,7 +55,7 @@ update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 
 if (FALSE) # these headers are private for now
 install( FILES
-    komsooxml_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/komsooxml_export.h
     MsooXmlContentTypes.h
     MsooXmlReader.h
     MsooXmlReader_p.h

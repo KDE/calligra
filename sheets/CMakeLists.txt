@@ -291,6 +291,7 @@ set (calligrasheetsodf_LIB_SRCS
 
 
 add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
+generate_export_header(calligrasheetsodf BASE_NAME calligrasheetsodf)
 
 target_link_libraries(calligrasheetsodf komain)
 target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
@@ -302,6 +303,7 @@ install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
+generate_export_header(calligrasheetscommon BASE_NAME calligrasheetscommon)
 
 target_link_libraries(calligrasheetscommon
     komain
@@ -325,6 +327,8 @@ install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
 add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
+generate_export_header(calligrasheetspart BASE_NAME calligrasheetspart)
+
 kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
@@ -342,7 +346,7 @@ install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
-    calligra_sheets_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/calligra_sheets_export.h
     calligra_sheets_limits.h
 
     Cell.h
