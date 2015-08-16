@@ -169,6 +169,23 @@ void KisColorSpaceSelector::colorSpaceChanged()
     emit(selectionChanged(valid));
     if(valid) {
         emit colorSpaceChanged(currentColorSpace());
+        if (currentColorSpace()->profile()->hasColorants()){
+            QVector <double> colorants = currentColorSpace()->profile()->getColorantsXYZ();
+            QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointXYZ();
+            QString text = currentColorSpace()->profile()->info()+" ="+
+                        " White: "+QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2])+
+                        " Red: "  +QString::number(colorants[0])+", "+QString::number(colorants[1])+", "+QString::number(colorants[2])+
+                        " Green: "+QString::number(colorants[3])+", "+QString::number(colorants[4])+", "+QString::number(colorants[5])+
+                        " Blue: " +QString::number(colorants[6])+", "+QString::number(colorants[7])+", "+QString::number(colorants[8]);
+            d->colorSpaceSelector->lblColorantInfo->setText(text);
+            //qDebug()<<text;
+        } else {QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointXYZ();
+            QString text = currentColorSpace()->profile()->info()+" ="+
+                        " White:"+QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2])+
+                        " This Profile has no colorants";
+            d->colorSpaceSelector->lblColorantInfo->setText(text);
+            //qDebug()<<text;
+        }
     }
 }
 

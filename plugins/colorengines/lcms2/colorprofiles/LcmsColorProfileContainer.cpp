@@ -45,6 +45,10 @@ public:
     IccColorProfile::Data * data;
     bool valid;
     bool suitableForOutput;
+    bool hasColorants;
+    cmsCIEXYZ mediaWhitePoint;
+    cmsCIExyY whitePoint;
+    cmsCIEXYZTRIPLE colorants;
 };
 
 LcmsColorProfileContainer::LcmsColorProfileContainer()
@@ -120,7 +124,30 @@ bool LcmsColorProfileContainer::init()
         cmsProfileClassSignature profile_class;
         profile_class = cmsGetDeviceClass(d->profile);
         d->valid = (profile_class != cmsSigNamedColorClass);
-
+        
+        if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)) {
+            d->mediaWhitePoint = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigMediaWhitePointTag));
+            cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
+            //qDebug()<<d->name<<" Whitepoint: "<<WhitePoint.x<<","<<WhitePoint.y<<","<<WhitePoint.Y;
+        }
+        if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
+            cmsCIEXYZTRIPLE tempColorants = { -1 };
+            tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigRedColorantTag));
+            tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigGreenColorantTag));
+            tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigBlueColorantTag));
+            d->colorants = tempColorants;
+            d->hasColorants = true;
+            //TODO: convert to d65, this is useless.
+            //cmsAdaptMatrixFromD50(&tempColorants, &WhitePoint);
+            //cmsXYZ2xyY(&(d->Primaries.Green), &tempColor);
+            //qDebug()<<d->name<<": "<<tempColorants.Red.Y<<","<<tempColorants.Green.Y<<","<<tempColorants.Blue.Y;
+        } else {
+        //qDebug()<<d->name<<": has no colorants";
+        d->hasColorants = false;
+        }
+        
+        
+        
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
                 || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
@@ -180,6 +207,79 @@ bool LcmsColorProfileContainer::isSuitableForPrinting() const
 bool LcmsColorProfileContainer::isSuitableForDisplay() const
 {
     return deviceClass() == cmsSigDisplayClass;
+}
+bool LcmsColorProfileContainer::hasColorants() const
+{
+    return d->hasColorants;
+}
+QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
+{
+    QVector <double> colorants(9);
+    colorants[0] = d->colorants.Red.X;
+    colorants[1] = d->colorants.Red.Y;
+    colorants[2] = d->colorants.Red.Z;
+    colorants[3] = d->colorants.Green.X;
+    colorants[4] = d->colorants.Green.Y;
+    colorants[5] = d->colorants.Green.Z;
+    colorants[6] = d->colorants.Blue.X;
+    colorants[7] = d->colorants.Blue.Y;
+    colorants[8] = d->colorants.Blue.Z;
+    return colorants;
+}
+
+QVector <double> LcmsColorProfileContainer::getColorantsxyY() const
+{
+    cmsCIEXYZ temp1;
+    cmsCIExyY temp2;
+    QVector <double> colorants;
+    
+    temp1.X = d->colorants.Red.X;
+    temp1.Y = d->colorants.Red.Y;
+    temp1.Z = d->colorants.Red.Z;
+    cmsXYZ2xyY(&temp2, &temp1);
+    colorants[0] = temp2.x;
+    colorants[1] = temp2.y;
+    colorants[2] = temp2.Y;
+    
+    temp1.X = d->colorants.Green.X;
+    temp1.Y = d->colorants.Green.Y;
+    temp1.Z = d->colorants.Green.Z;
+    cmsXYZ2xyY(&temp2, &temp1);
+    colorants[3] = temp2.x;
+    colorants[4] = temp2.y;
+    colorants[5] = temp2.Y;
+    
+    temp1.X = d->colorants.Blue.X;
+    temp1.Y = d->colorants.Blue.Y;
+    temp1.Z = d->colorants.Blue.Z;
+    cmsXYZ2xyY(&temp2, &temp1);
+    colorants[6] = temp2.x;
+    colorants[7] = temp2.y;
+    colorants[8] = temp2.Y;
+    
+    return colorants;
+}
+
+QVector <double> LcmsColorProfileContainer::getWhitePointXYZ() const
+{
+    QVector <double> tempWhitePoint(3);
+    
+    tempWhitePoint[0] = d->mediaWhitePoint.X;
+    tempWhitePoint[1] = d->mediaWhitePoint.Y;
+    tempWhitePoint[2] = d->mediaWhitePoint.Z;
+    
+    return tempWhitePoint;
+}
+
+QVector <double> LcmsColorProfileContainer::getWhitePointxyY() const
+{
+    QVector <double> tempWhitePoint(3);
+    
+    tempWhitePoint[0] = d->whitePoint.x;
+    tempWhitePoint[1] = d->whitePoint.y;
+    tempWhitePoint[2] = d->whitePoint.Y;
+    
+    return tempWhitePoint;
 }
 
 QString LcmsColorProfileContainer::name() const
