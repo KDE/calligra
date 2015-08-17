@@ -22,7 +22,6 @@
  */
 
 #include "XlsxXmlCommonReader.h"
-#include "XlsxXmlStylesReader.h"
 
 #include <math.h>
 

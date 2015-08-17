@@ -28,7 +28,6 @@
 #include "kptrelation.h"
 #include "kptdebug.h"
 
-#include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QWidget>
 

@@ -115,7 +115,7 @@ public:
 //    bool bookInterval(Booking* b, int sc, int sloppy = 0, int overtime = 0);
 //    bool addBooking(int sc, Booking* b, int sloppy = 0, int overtime = 0);
     /// Return a list of booked intervals for scenario @p sc and task @p task
-    QList<Interval> getBookedIntervals(int sc, const Task* task) const;
+    QVector<Interval> getBookedIntervals(int sc, const Task* task) const;
 
     double getCurrentLoad(const Interval& i, const Task* task = 0) const;
 

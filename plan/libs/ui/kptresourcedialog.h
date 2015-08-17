@@ -29,8 +29,6 @@
 
 #include <QMap>
 
-class QString;
-
 namespace KPlato
 {
 

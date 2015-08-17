@@ -51,8 +51,6 @@
 #include <QPainter>
 #include <QDir>
 #include <QMutableMapIterator>
-#include <QTreeView>
-#include <QStandardItemModel>
 
 #include <kdebug.h>
 #include <klocale.h>

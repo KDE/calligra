@@ -37,7 +37,7 @@ set(kplatokernel_LIB_SRCS
 
 kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
 
-target_link_libraries(kplatokernel koodf kowidgetutils kundo2 ${QT_QTGUI_LIBRARY})
+target_link_libraries(kplatokernel koodf kowidgetutils kundo2 ${KDE4_KFILE_LIBS} ${QT_QTGUI_LIBRARY})
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

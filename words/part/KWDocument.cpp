@@ -62,7 +62,6 @@
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
-#include <KoTextShapeData.h>
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>

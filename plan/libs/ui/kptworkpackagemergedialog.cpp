@@ -25,14 +25,12 @@
 #include <kmessagebox.h>
 #include <kextendableitemdelegate.h>
 
-#include <QTreeView>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QList>
 #include <QStyle>
 #include <QStyleOption>
-#include <QPixmap>
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QCheckBox>

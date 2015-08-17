@@ -25,7 +25,6 @@
 #include "ui_kptitemviewsettings.h"
 
 #include <QListWidgetItem>
-#include <QWidget>
 
 #include <kpagedialog.h>
 

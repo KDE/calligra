@@ -11,6 +11,7 @@
   <name xml:lang="de">Words</name>
   <name xml:lang="en-GB">Words</name>
   <name xml:lang="es">Words</name>
+  <name xml:lang="et">Words</name>
   <name xml:lang="fi">Words</name>
   <name xml:lang="fr">Words</name>
   <name xml:lang="ia">Words</name>
@@ -23,6 +24,7 @@
   <name xml:lang="pt-BR">Words</name>
   <name xml:lang="sk">Words</name>
   <name xml:lang="sv">Words</name>
+  <name xml:lang="tr">Kelimeler</name>
   <name xml:lang="uk">Words</name>
   <name xml:lang="x-test">xxWordsxx</name>
   <summary>Word Processor</summary>
@@ -32,6 +34,7 @@
   <summary xml:lang="de">Textverarbeitung</summary>
   <summary xml:lang="en-GB">Word Processor</summary>
   <summary xml:lang="es">Procesador de texto</summary>
+  <summary xml:lang="et">Tekstitöötlus</summary>
   <summary xml:lang="fi">Tekstinkäsittely</summary>
   <summary xml:lang="fr">Traitement de texte</summary>
   <summary xml:lang="ia">Processator de parolas</summary>
@@ -44,6 +47,7 @@
   <summary xml:lang="pt-BR">Processador de Texto</summary>
   <summary xml:lang="sk">Textový procesor</summary>
   <summary xml:lang="sv">Ordbehandlare</summary>
+  <summary xml:lang="tr">Kelime İşlemci</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
   <summary xml:lang="x-test">xxWord Processorxx</summary>
   <description>
@@ -55,6 +59,7 @@
     <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
     <p xml:lang="es">Words es un procesador de texto intuitivo y un editor para el escritorio. Con él, podrá crear documentos informativos y atractivos con gusto y facilidad.</p>
+    <p xml:lang="et">Words on intuitiivselt kasutatav tekstitöötlus- ja küljendusrakendus. Selle abil saab luua lusti ja rõõmuga teabeküllaseid ja silmailu pakkuvaid dokumente.</p>
     <p xml:lang="fi">Words on intuitiivinen tekstinkäsittely- ja taitto-ohjelma. Sen avulla voit luoda informatiivisia ja vaikuttavia tekstitiedostoja mukavasti ja helposti.</p>
     <p xml:lang="fr">Words est un traitement de texte intuitif et une application bureautique de publication. Avec lui, vous pouvez facilement créer des documents informatifs et attractifs.</p>
     <p xml:lang="it">Words è un elaboratore di testi intuitivo e un'applicazione di pubblicazione per desktop. Con esso, puoi creare documenti informativi e accattivanti con soddisfazione e facilità.</p>
@@ -66,6 +71,7 @@
     <p xml:lang="pt-BR">Words é um processador de texto intuitivo e um aplicativo de publicação no desktop. Com ele, você pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="sk">Words je intuitívny textový procesor a aplikácia na desktopové publikovanie. Môžete pomocou neho vytvoriť informatívne a atraktívne dokumenty s radosťou a jednoduchosťou.</p>
     <p xml:lang="sv">Words är en intuitiv ordbehandlare och skrivbordspubliceringsprogram. Det gör att du kan skapa informativa och attraktiva dokument med nöje och enkelhet.</p>
+    <p xml:lang="tr">Kelimeler sezgisel bir kelime işleme ve masaüstü yayıncılık uygulamasıdır. Onu kullanarak keyifle ve kolayca bilgilendirici ve çekici belgeler oluşturabilirsiniz.</p>
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
     <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
     <p>Features:</p>
@@ -75,6 +81,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
+    <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="ia">Characteristicas:</p>
@@ -87,14 +94,17 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Frame-based editing</li>
       <li xml:lang="bs">Uređivanje bazirano na okvirima</li>
       <li xml:lang="ca">Edició basada en marcs</li>
+      <li xml:lang="de">Editor auf der Grundlage von Rahmen</li>
       <li xml:lang="en-GB">Frame-based editing</li>
       <li xml:lang="es">Edición basada en marcos</li>
+      <li xml:lang="et">Paneelipõhine redigeerimine</li>
       <li xml:lang="fi">Kehyksiin perustuva muokkaus</li>
       <li xml:lang="fr">Édition à base de cadres</li>
       <li xml:lang="it">Modifica basata su riquadri</li>
@@ -106,6 +116,7 @@
       <li xml:lang="pt-BR">Edição baseada em molduras</li>
       <li xml:lang="sk">Rámcovo založené editovanie</li>
       <li xml:lang="sv">Rambaserad redigering</li>
+      <li xml:lang="tr">Çerçeve tabanlı düzenleme</li>
       <li xml:lang="uk">Редагування на основі блоків.</li>
       <li xml:lang="x-test">xxFrame-based editingxx</li>
       <li>Allows embedding of Documents</li>
@@ -114,6 +125,7 @@
       <li xml:lang="de">Ermöglicht das Einbetten von Dokumenten</li>
       <li xml:lang="en-GB">Allows embedding of Documents</li>
       <li xml:lang="es">Permite incrustar documentos</li>
+      <li xml:lang="et">Dokumentide lõimimise toetamine</li>
       <li xml:lang="fi">Tiedostojen upottamisen tuki</li>
       <li xml:lang="fr">Permet les documents intégrés</li>
       <li xml:lang="ia">Il permitte insertar documentos</li>
@@ -126,6 +138,7 @@
       <li xml:lang="pt-BR">Permite a incorporação de documentos</li>
       <li xml:lang="sk">Umožňuje vkladanie dokumentov</li>
       <li xml:lang="sv">Tillåter att dokument inbäddas</li>
+      <li xml:lang="tr">Belgelerin katıştırılmasına izin verir</li>
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
       <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
@@ -134,6 +147,7 @@
       <li xml:lang="de">Anpassung der Benutzeroberfläche</li>
       <li xml:lang="en-GB">Customisation of user interface</li>
       <li xml:lang="es">Personalización de la interfaz de usuario</li>
+      <li xml:lang="et">Kohandatav kasutajaliides</li>
       <li xml:lang="fi">Käyttöliittymä mukautettavissa</li>
       <li xml:lang="fr">Personnalisation de l'interface</li>
       <li xml:lang="ia">Prsonalisation de le Interfacie de usator</li>
@@ -146,6 +160,7 @@
       <li xml:lang="pt-BR">Personalização da interface do usuário</li>
       <li xml:lang="sk">Úprava používateľského rozhrania</li>
       <li xml:lang="sv">Anpassning av användargränssnitt</li>
+      <li xml:lang="tr">Kullanıcı arayüzü özelleştirilebilir</li>
       <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
       <li xml:lang="x-test">xxCustomization of user interfacexx</li>
       <li>Includes all features expected from a modern word processor</li>
@@ -154,6 +169,7 @@
       <li xml:lang="de">Enthält alle Funktionen einer modernen Textverarbeitung</li>
       <li xml:lang="en-GB">Includes all features expected from a modern word processor</li>
       <li xml:lang="es">Incluye todas las características que se esperan de un procesador de texto moderno</li>
+      <li xml:lang="et">Kõigi tänapäeva tekstitöötlusrakendusele omaste võimaluste pakkumine</li>
       <li xml:lang="fi">Kaikki nykyaikaiselta tekstinkäsittelyohjelmalta odotetut ominaisuudet</li>
       <li xml:lang="fr">Inclut toutes les fonctionnalités que l'on peut attendre d'un traitement de texte moderne</li>
       <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
@@ -165,6 +181,7 @@
       <li xml:lang="pt-BR">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
       <li xml:lang="sk">Obsahuje všetky funkcie očakávané od moderného textového procesora</li>
       <li xml:lang="sv">Innehåller alla funktioner som förväntas av en modern ordbehandlare</li>
+      <li xml:lang="tr">Modern bir kelime işlemciden beklenen tüm özellikler</li>
       <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
       <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
       <li>ODT (Open Document Text) support</li>
@@ -173,6 +190,7 @@
       <li xml:lang="de">Unterstützung für ODT (Open Document Text)</li>
       <li xml:lang="en-GB">ODT (Open Document Text) support</li>
       <li xml:lang="es">Admite el formato ODT («Open Document Text»)</li>
+      <li xml:lang="et">ODT (OpenDocument Text) toetamine</li>
       <li xml:lang="fi">ODT- eli OpenDocument-tekstitiedostojen tuki</li>
       <li xml:lang="fr">Prise en charge du format ODT (Open Document Text)</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>
@@ -184,6 +202,7 @@
       <li xml:lang="pt-BR">Suporte para ODT (Texto Open Document)</li>
       <li xml:lang="sk">Podpora ODT (Open Document Text)</li>
       <li xml:lang="sv">Stöd för ODT (Open Document Text)</li>
+      <li xml:lang="tr">ODT (Açık Belge Metni) desteği</li>
       <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
       <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
     </ul>

@@ -21,9 +21,7 @@
 
 #include "kptitemmodelbase.h"
 
-#include <QCheckBox>
 #include <QDate>
-#include <QTableWidget>
 #include <QHeaderView>
 
 #include <kglobal.h>

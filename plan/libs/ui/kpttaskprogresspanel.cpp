@@ -22,9 +22,7 @@
 
 #include <KoIcon.h>
 
-#include <QCheckBox>
 #include <QDate>
-#include <QTableWidget>
 
 #include <kdatetime.h>
 #include <klocale.h>

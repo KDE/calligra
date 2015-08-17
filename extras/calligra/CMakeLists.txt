@@ -4,6 +4,6 @@ set(calligra_SRCS main.cpp )
 
 kde4_add_executable(calligra ${calligra_SRCS})
 
-target_link_libraries(calligra komain)
+target_link_libraries(calligra komain ${KDE4_KIO_LIBS})
 
 install(TARGETS calligra ${INSTALL_TARGETS_DEFAULT_ARGS})

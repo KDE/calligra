@@ -33,11 +33,7 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomDocument>
-#include <QString>
 #include <QDateTime>
-#include <QBrush>
-#include <QList>
 
 #include <kglobal.h>
 #include <kdatetime.h>
