@@ -71,6 +71,7 @@ public:
         virtual QVector <double> getColorantsxyY() const = 0;
         virtual QVector <double> getWhitePointXYZ() const = 0;
         virtual QVector <double> getWhitePointxyY() const = 0;
+        virtual QVector <double> getEstimatedTRC() const = 0;
     };
 public:
 
@@ -97,6 +98,7 @@ public:
     virtual QVector <double> getColorantsxyY() const;
     virtual QVector <double> getWhitePointXYZ() const;
     virtual QVector <double> getWhitePointxyY() const;
+    virtual QVector <double> getEstimatedTRC() const;
     virtual bool operator==(const KoColorProfile&) const;
     virtual QString type() const { return "icc"; }
 

@@ -37,6 +37,7 @@ public:
     virtual QVector <double> getColorantsxyY() const;
     virtual QVector <double> getWhitePointXYZ() const;
     virtual QVector <double> getWhitePointxyY() const;
+    virtual QVector <double> getEstimatedTRC() const;
     virtual bool operator==(const KoColorProfile&) const;
 };
 

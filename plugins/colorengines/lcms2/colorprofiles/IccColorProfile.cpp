@@ -182,6 +182,14 @@ QVector <double> IccColorProfile::getWhitePointxyY() const
         return d->shared->lcmsProfile->getWhitePointxyY();
     return d50Dummy;
 }
+QVector <double> IccColorProfile::getEstimatedTRC() const
+{
+    QVector <double> dummy(3);
+    dummy.fill(2.2);//estimated sRGB trc.
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->getEstimatedTRC();
+    return dummy;
+}
 bool IccColorProfile::load()
 {
     QFile file(fileName());

@@ -46,9 +46,14 @@ public:
     bool valid;
     bool suitableForOutput;
     bool hasColorants;
+    bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
     cmsCIEXYZTRIPLE colorants;
+    cmsToneCurve *redTRC;
+    cmsToneCurve *greenTRC;
+    cmsToneCurve *blueTRC;
+    cmsToneCurve *grayTRC;
 };
 
 LcmsColorProfileContainer::LcmsColorProfileContainer()
@@ -130,11 +135,15 @@ bool LcmsColorProfileContainer::init()
             cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
             //qDebug()<<d->name<<" Whitepoint: "<<WhitePoint.x<<","<<WhitePoint.y<<","<<WhitePoint.Y;
         }
+        
+ 
         if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
             cmsCIEXYZTRIPLE tempColorants = { -1 };
+            //can't adapt from d50
             tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigRedColorantTag));
             tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigGreenColorantTag));
             tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigBlueColorantTag));
+            
             d->colorants = tempColorants;
             d->hasColorants = true;
             //TODO: convert to d65, this is useless.
@@ -145,7 +154,16 @@ bool LcmsColorProfileContainer::init()
         //qDebug()<<d->name<<": has no colorants";
         d->hasColorants = false;
         }
+        //retrieve TRC.
+        if (cmsIsTag(d->profile, cmsSigRedTRCTag) && cmsIsTag(d->profile, cmsSigBlueTRCTag) && cmsIsTag(d->profile, cmsSigGreenTRCTag)) {
         
+            d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
+            d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
+            d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
+        
+        } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
+            d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
+        }
         
         
         // Check if the profile can convert (something->this)
@@ -231,7 +249,7 @@ QVector <double> LcmsColorProfileContainer::getColorantsxyY() const
 {
     cmsCIEXYZ temp1;
     cmsCIExyY temp2;
-    QVector <double> colorants;
+    QVector <double> colorants(9);
     
     temp1.X = d->colorants.Red.X;
     temp1.Y = d->colorants.Red.Y;
@@ -274,12 +292,44 @@ QVector <double> LcmsColorProfileContainer::getWhitePointXYZ() const
 QVector <double> LcmsColorProfileContainer::getWhitePointxyY() const
 {
     QVector <double> tempWhitePoint(3);
-    
     tempWhitePoint[0] = d->whitePoint.x;
     tempWhitePoint[1] = d->whitePoint.y;
     tempWhitePoint[2] = d->whitePoint.Y;
-    
     return tempWhitePoint;
+}
+
+QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
+{
+    QVector <double> TRCtriplet(3);
+    if (d->hasColorants) {
+        if (cmsIsToneCurveLinear(d->redTRC)) {
+            TRCtriplet[0] = 1.0;
+        } else {
+            TRCtriplet[0] = cmsEstimateGamma(d->redTRC, 0.01);
+        }
+        if (cmsIsToneCurveLinear(d->greenTRC)) {
+            TRCtriplet[1] = 1.0;
+        } else {
+            TRCtriplet[1] = cmsEstimateGamma(d->greenTRC, 0.01);
+        }
+        if (cmsIsToneCurveLinear(d->blueTRC)) {
+            TRCtriplet[2] = 1.0;
+        } else {
+            TRCtriplet[2] = cmsEstimateGamma(d->blueTRC, 0.01);
+        }
+            
+    } else {
+        if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
+            if (cmsIsToneCurveLinear(d->grayTRC)) {
+                TRCtriplet.fill(1.0);
+            } else {
+                TRCtriplet.fill(cmsEstimateGamma(d->grayTRC,  0.01));
+            } 
+        } else {
+            TRCtriplet.fill(1.0);
+        }
+    }
+    return TRCtriplet;
 }
 
 QString LcmsColorProfileContainer::name() const

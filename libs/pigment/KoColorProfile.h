@@ -116,7 +116,11 @@ public:
     virtual QVector <double> getColorantsxyY() const = 0;
     virtual QVector <double> getWhitePointXYZ() const = 0;
     virtual QVector <double> getWhitePointxyY() const = 0;
-
+    
+    /**
+     * @return estimated gamma for RGB and Grayscale profiles
+     */
+    virtual QVector <double> getEstimatedTRC() const = 0;
     virtual bool operator==(const KoColorProfile&) const = 0;
 
     /**

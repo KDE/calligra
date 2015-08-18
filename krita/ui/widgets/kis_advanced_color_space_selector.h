@@ -1,6 +1,8 @@
 /*
  *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  Copyright (C) 2015 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,48 +19,45 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_COLOR_SPACE_SELECTOR_H_
-#define _KIS_COLOR_SPACE_SELECTOR_H_
+#ifndef _KIS_ADVANCED_COLOR_SPACE_SELECTOR_H_
+#define _KIS_ADVANCED_COLOR_SPACE_SELECTOR_H_
 
 #include <QWidget>
+#include <QDialog>
 #include <krita_export.h>
-#include "kis_advanced_color_space_selector.h"
+
+#include "ui_wdgcolorspaceselectoradvanced.h"
 
 class KoID;
 class KoColorSpace;
-class KisAdvancedColorSpaceSelector;
 
-class KRITAUI_EXPORT KisColorSpaceSelector : public QWidget
+/* Use KisColorSpaceSelector instead of directly using this one*/
+
+class KRITAUI_EXPORT KisAdvancedColorSpaceSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisColorSpaceSelector(QWidget* parent);
-    ~KisColorSpaceSelector();
+    KisAdvancedColorSpaceSelector(QWidget* parent, const QString &caption);
+    ~KisAdvancedColorSpaceSelector();
     const KoColorSpace* currentColorSpace();
     void setCurrentColorModel(const KoID& id);
     void setCurrentColorDepth(const KoID& id);
     void setCurrentProfile(const QString& name);
     void setCurrentColorSpace(const KoColorSpace* colorSpace);
 Q_SIGNALS:
-    /**
-     * This signal is emitted when a new color space is selected.
-     * @param valid indicates if the color space can be used
-     */
     void selectionChanged(bool valid);
-    /// This signal is emitted, when a new color space is selected, that can be used (eg is valid)
     void colorSpaceChanged(const KoColorSpace*);
 private Q_SLOTS:
     void fillCmbDepths(const KoID& idd);
-    void fillCmbProfiles();
+    void fillLstProfiles();
+    void fillDescription();
     void colorSpaceChanged();
     void installProfile();
-    void uploadProfile();
-    void downloadProfile();
+    //void uploadProfile();
+    //void downloadProfile();
     void buttonUpdate();
-    void slotOpenAdvancedSelector();
 private:
     struct Private;
-    KisAdvancedColorSpaceSelector* m_advancedSelector;
     Private * const d;
 };
 
