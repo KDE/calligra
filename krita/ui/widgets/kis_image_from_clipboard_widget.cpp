@@ -43,7 +43,6 @@
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>
-#include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
 
 #include <kis_fill_painter.h>
@@ -101,7 +100,7 @@ void KisImageFromClipboard::createImage()
         }
 
     }
-
+    doc->setModified(true);
     emit documentSelected(doc);
 }
 

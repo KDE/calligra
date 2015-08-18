@@ -57,9 +57,9 @@ public:
 
         KoTemplateTree* tree(0);
         if(templateType == WORDS_MIME_TYPE)
-            tree = new KoTemplateTree("words_template", KWFactory::componentData(), true);
+            tree = new KoTemplateTree("words/templates/", KWFactory::componentData(), true);
         else if(templateType == STAGE_MIME_TYPE)
-            tree = new KoTemplateTree("stage_template", KPrFactory::componentData(), true);
+            tree = new KoTemplateTree("stage/templates/", KPrFactory::componentData(), true);
         if(!tree)
             return;
 

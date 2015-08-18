@@ -20,13 +20,18 @@
 */
 
 #include "KoUnitDoubleSpinBox.h"
+
+#include <KoUnit.h>
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #ifdef Q_OS_WIN
 #include <float.h>
+#ifndef __MINGW32__
 #define isnan _isnan
+#endif
 #endif
 
 // #define DEBUG_VALIDATOR
@@ -132,7 +137,7 @@ void KoUnitDoubleSpinBox::privateValueChanged() {
     emit valueChangedPt( value () );
 }
 
-void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
+void KoUnitDoubleSpinBox::setUnit( const KoUnit &unit )
 {
     if (unit == d->unit) return;
 

@@ -31,7 +31,6 @@
 #include <akonadi/contact/emailaddressselection.h>
 #endif
 
-#include <QPushButton>
 #include <kdebug.h>
 
 namespace KPlato

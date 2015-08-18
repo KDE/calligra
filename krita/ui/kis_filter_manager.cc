@@ -98,6 +98,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
 
     // Setup reapply action
     d->reapplyAction = new KisAction(i18n("Apply Filter Again"), this);
+    d->reapplyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
     d->actionManager->addAction("filter_apply_again", d->reapplyAction);
 
     d->reapplyAction->setEnabled(false);
@@ -273,7 +274,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
 
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(image->bounds(), size);
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(d->view->activeNode()->exactBounds(), size);
 
         foreach(const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
@@ -281,7 +282,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         }
     } else {
         image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(image->bounds(), false));
+                      new KisFilterStrokeStrategy::Data(d->view->activeNode()->exactBounds(), false));
     }
 
     d->currentlyAppliedConfiguration = filterConfig;

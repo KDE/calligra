@@ -68,6 +68,7 @@
 #include <KoTextEditor.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
+#include <KoGuidesData.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -80,6 +81,7 @@
 #include <KoAnnotationLayoutManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasControllerWidget.h>
+#include <KoPart.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -201,6 +203,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 KWView::~KWView()
 {
+    KoToolManager::instance()->removeCanvasController(m_gui->canvasController());
+
     m_canvas = 0;
 }
 
@@ -522,15 +526,14 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("Words %1.%2.%3").arg(Calligra::versionMajor())
-                              .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
+    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CALLIGRA_VERSION_STRING));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
 
 void KWView::createTemplate()
 {
-    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".ott",
                                         KWFactory::componentData(), m_document, this);
 }
 

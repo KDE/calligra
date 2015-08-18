@@ -13,6 +13,7 @@
   <name xml:lang="es">Stage</name>
   <name xml:lang="fi">Stage</name>
   <name xml:lang="fr">Stage</name>
+  <name xml:lang="gl">Stage</name>
   <name xml:lang="ia">Stage</name>
   <name xml:lang="it">Stage</name>
   <name xml:lang="nl">Stage</name>
@@ -32,6 +33,7 @@
   <summary xml:lang="es">Presentación</summary>
   <summary xml:lang="fi">Esitysgrafiikka</summary>
   <summary xml:lang="fr">Présentation</summary>
+  <summary xml:lang="gl">Presentación</summary>
   <summary xml:lang="ia">Presentation</summary>
   <summary xml:lang="it">Presentazioni</summary>
   <summary xml:lang="nl">Presentatie</summary>
@@ -55,6 +57,7 @@
     <p xml:lang="es">Calligra Stage es un aplicación para presentaciones, fácil de utilizar y flexible. Permite crear fácilmente presentaciones que contengan una amplia variedad de elementos, desde gráficos a texto, desde diagramas a imágenes. Calligra Stage es extensible a través de un sistema de complementos, por lo que es fácil añadir nuevos efectos, nuevos elementos de contenido e incluso nuevas maneras de gestionar las presentaciones. Debido a su integración con Calligra, toda la potencia y flexibilidad de los elementos de contenido de Calligra están disponibles para Stage.</p>
     <p xml:lang="fi">Calligra Stage on helppokäyttöinen mutta silti joustava esityssovellus. Voit luoda esityksiä, jotka sisältävät monenlaisia elementtejä grafiikasta tekstiin ja kaavioista valokuviin. Calligra Stagea voi laajentaa liitännäisin, joten uusia tehosteita, uusia sisältöelementtejä tai jopa uusia esityksesi hallinnan tapoja on helppo lisätä. Calligra-integroinnin ansiosta Calligran sisältöelementtien teho ja joustavuus ovat Stagenkin käytössä.</p>
     <p xml:lang="fr">Calligra Stage est une application de présentation à la fois flexible et facile à utiliser. Vous pouvez facilement créer des présentations comprenant une grande variété d'éléments, allant des graphiques au texte, en passant par les diagrammes et les images.Calligra Stage propose un système d'extensions ; il est facile d'ajouter de nouveaux effets, des nouveaux éléments de contenu ou même de nouvelles façons de gérer votre présentation. Du fait de l'intégration avec Calligra, toute la puissance et la flexibilité des contenu de Calligra sont disponibles dans Stage.</p>
+    <p xml:lang="gl">Calligra Stage é un programa de presentacións fácil de usar pero flexíbel. Permítelle crear presentacións cunha ampla variedade de elementos, incluíndo texto, gráficos e imaxes. As funcionalidades de Calligra Stage poden ampliarse mediante un sistema de complementos, así que resulta doado engadir efectos e elementos novos, así como novos xeitos de xestionar as presentacións. Grazas á súa integración con Calligra, Stage pode facer uso da potencia e flexibilidade dos elementos de contido dispoñíbeis en Calligra.</p>
     <p xml:lang="it">Calligra Stage è un'applicazione per presentazioni tanto facile da utilizzare quanto è flessibile. Puoi creare facilmente presentazioni che contengono un'ampia varietà di elementi, dalla grafica al testo, dai grafici alle immagini. Calligra Stage è espandibile tramite un sistema di estensioni, per cui è semplice aggiungere nuovi effetti o anche nuovi modi di gestire le tue presentazioni. Grazie all'integrazione con Calligra, tutta la potenza e la flessibilità degli elementi di Calligra sono disponibili in Stage.</p>
     <p xml:lang="nl">Calligra Stage is een gemakkelijk te gebruiken maar toch flexibele toepassing voor presentaties. U kunt gemakkelijk presentaties maken met een rijke variatie van elementen, van grafische tot tekst, van grafieken tot afbeeldingen. Calligra Stage is uit te breiden met een systeem van plug-ins, zodat het gemakkelijk is om nieuwe effecten toe te voegen, nieuwe soorten inhoud of zelfs nieuwe manieren van het beheren van uw presentatie. Vanwege de integratie met Calligra, is alle kracht en flexibiliteit van de inhoudselementen van Calligra beschikbaar in Stage.</p>
     <p xml:lang="pl">Scena Calligra jest łatwym w użyciu, a zarazem elastycznym programem do prezentowania. Można łatwo tworzyć prezentację zawierające bogatą różnorodność elementów, od grafiki do tekstu, od wykresów do obrazów. Scena Calligra jest rozszerzalna przez system wtyczek, tak że można łatwo dodać nowe efekty, nowe elementy lub nawet nowe sposoby na zarządzanie prezentacją. Ze względów na powiązanie z Calligrą, cała moc i elastyczność elementów Calligry jest dostępna również dla Sceny.</p>
@@ -74,6 +77,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -93,6 +97,7 @@
       <li xml:lang="es">Múltiples diapositivas maestras</li>
       <li xml:lang="fi">Useammat pohjadiat</li>
       <li xml:lang="fr">Planches-maîtresses multiples</li>
+      <li xml:lang="gl">Varias diapositivas mestre.</li>
       <li xml:lang="it">Diapositive master multiple</li>
       <li xml:lang="nl">Meerdere voorbeelddia's</li>
       <li xml:lang="pl">Wiele głównych plansz</li>
@@ -104,12 +109,13 @@
       <li xml:lang="x-test">xxMultiple master slidesxx</li>
       <li>Easily switch between slides during a presentation</li>
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
-      <li xml:lang="ca">Canvis senzill entre dispositives durant una presentació </li>
+      <li xml:lang="ca">Canvi senzill entre dispositives durant una presentació</li>
       <li xml:lang="de">Einfacher Wechsel zwischen Folien während einer Präsentation</li>
       <li xml:lang="en-GB">Easily switch between slides during a presentation</li>
       <li xml:lang="es">Permite cambiar fácilmente entre diapositivas durante una presentación</li>
       <li xml:lang="fi">Helppo siirtyminen diasta toiseen esityksen aikana</li>
       <li xml:lang="fr">Passage facile d'une planche à une autre pendant une présentation</li>
+      <li xml:lang="gl">Permite cambiar facilmente entre diapositivas durante as presentacións.</li>
       <li xml:lang="it">Cambia facilmente le diapositive durante una presentazione</li>
       <li xml:lang="nl">Schakel gemakkelijk tussen dia's tijdens een presentatie</li>
       <li xml:lang="pl">Łatwe przełączanie pomiędzy planszami przy prezentowaniu</li>
@@ -127,6 +133,7 @@
       <li xml:lang="es">Permite añadir notas a una diapositiva</li>
       <li xml:lang="fi">Muistiinpanojen lisäys dioihisi</li>
       <li xml:lang="fr">Ajoutez des notes à vos planches</li>
+      <li xml:lang="gl">Permite engadir notas ás presentacións.</li>
       <li xml:lang="it">Aggiungi note alle tue diapositive</li>
       <li xml:lang="nl">Voeg notities toe aan uw dia</li>
       <li xml:lang="pl">Dodawanie notatek do plansz</li>
@@ -144,6 +151,7 @@
       <li xml:lang="es">Implementa la mayoría de las transiciones de archivo de ODF</li>
       <li xml:lang="fi">Useimpien ODF-siirtymien tuki</li>
       <li xml:lang="fr">Prend en charge la plupart des transitions ODF</li>
+      <li xml:lang="gl">Compatíbel coa meirande parte das transicións dos ficheiros ODF.</li>
       <li xml:lang="it">Supporta la maggior parte delle transizioni dei file ODF</li>
       <li xml:lang="nl">Ondersteunt de meeste ODF-bestandstransities</li>
       <li xml:lang="pl">Obsługa większości przejść plików ODF</li>

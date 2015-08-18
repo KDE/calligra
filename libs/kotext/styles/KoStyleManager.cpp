@@ -46,10 +46,7 @@
 
 #include <kundo2stack.h>
 
-#include <QTimer>
 #include <QUrl>
-#include <QPixmap>
-#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
@@ -151,28 +148,37 @@ KoStyleManager::KoStyleManager(QObject *parent)
         d->defaultBibEntriesStyleId.append(style->styleId());
     }
 
+    d->footNotesConfiguration = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Footnote);
+    d->endNotesConfiguration = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Endnote);
+
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Footnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
+    d->footNotesConfiguration->setDefaultNoteParagraphStyle(style);
     style = new KoParagraphStyle();
     style->setName("Endnote");
-    setParent(d->defaultParagraphStyle);
+    style->setParentStyle(d->defaultParagraphStyle);
     add(style);
+    d->endNotesConfiguration->setDefaultNoteParagraphStyle(style);
     KoCharacterStyle *cStyle = new KoCharacterStyle();
     cStyle->setName("Footnote anchor");
     cStyle->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     add(cStyle);
+    d->footNotesConfiguration->setCitationBodyTextStyle(cStyle);
     cStyle = new KoCharacterStyle();
     cStyle->setName("Footnote Symbol");
     add(cStyle);
+    d->footNotesConfiguration->setCitationTextStyle(cStyle);
     cStyle = new KoCharacterStyle();
     cStyle->setName("Endnote anchor");
     cStyle->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     add(cStyle);
+    d->endNotesConfiguration->setCitationBodyTextStyle(cStyle);
     cStyle = new KoCharacterStyle();
     cStyle->setName("Endnote Symbol");
     add(cStyle);
+    d->endNotesConfiguration->setCitationTextStyle(cStyle);
 
     d->footNotesConfiguration = 0;
     d->endNotesConfiguration = 0;
@@ -387,22 +393,22 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     //save note configuration in styles.xml
     if (d->footNotesConfiguration) {
         QBuffer xmlBufferFootNote;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
-        d->footNotesConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferFootNote);
+        d->footNotesConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferFootNote.data());
     }
 
     if (d->endNotesConfiguration) {
         QBuffer xmlBufferEndNote;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
-        d->endNotesConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferEndNote);
+        d->endNotesConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
     }
 
     if (d->bibliographyConfiguration) {
         QBuffer xmlBufferBib;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferBib);
-        d->bibliographyConfiguration->saveOdf(xmlWriter);
+        KoXmlWriter xmlWriter(&xmlBufferBib);
+        d->bibliographyConfiguration->saveOdf(&xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
     }
 
@@ -418,8 +424,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
     foreach(KoTextTableTemplate *textTableTemplate, d->tableTemplates) {
         QBuffer xmlBufferTableTemplate;
-        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferTableTemplate);
-        textTableTemplate->saveOdf(xmlWriter, textSharedSavingData);
+        KoXmlWriter xmlWriter(&xmlBufferTableTemplate);
+        textTableTemplate->saveOdf(&xmlWriter, textSharedSavingData);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferTableTemplate.data());
     }
 }
@@ -946,14 +952,8 @@ KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
 KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
 {
     if (noteClass == KoOdfNotesConfiguration::Endnote) {
-        if (!d->endNotesConfiguration) {
-            d->endNotesConfiguration = new KoOdfNotesConfiguration(noteClass);
-        }
         return d->endNotesConfiguration;
     } else if (noteClass == KoOdfNotesConfiguration::Footnote) {
-        if (!d->footNotesConfiguration) {
-            d->footNotesConfiguration = new KoOdfNotesConfiguration(noteClass);
-        }
         return d->footNotesConfiguration;
     } else {
         return 0;

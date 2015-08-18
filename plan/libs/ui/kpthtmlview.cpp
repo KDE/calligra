@@ -21,11 +21,7 @@
 
 #include <KoDocument.h>
 
-#include <QMenu>
-#include <QList>
-#include <QObject>
 #include <QVBoxLayout>
-
 
 #include <klocale.h>
 #include <khtmlview.h>

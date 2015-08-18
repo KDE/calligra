@@ -36,10 +36,6 @@
 
 #include <kglobal.h>
 
-#include <QDomDocument>
-#include <QBrush>
-#include <QList>
-
 
 namespace KPlato
 {

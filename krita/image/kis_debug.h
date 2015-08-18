@@ -93,7 +93,7 @@
 #  endif
 
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 class QRect;
 class QString;
@@ -136,5 +136,15 @@ void KRITAIMAGE_EXPORT kis_debug_save_device_incremental(KisPaintDeviceSP device
         kis_debug_save_device_incremental((device), i, (rc), (suffix), (prefix)); \
     } while(0)
 
+
+
+#ifdef __GNUC__
+KRITAIMAGE_EXPORT const char* __methodName(const char *prettyFunction);
+#define __METHOD_NAME__ __methodName(__PRETTY_FUNCTION__)
+#else
+#define __METHOD_NAME__ "<unknown>:<unknown>"
+#endif
+
+#define PREPEND_METHOD(msg) QString("%1: %2").arg(__METHOD_NAME__).arg(msg)
 
 #include "kis_assert.h"

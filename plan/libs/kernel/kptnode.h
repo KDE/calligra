@@ -35,7 +35,7 @@
 #include <QHash>
 #include <QString>
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 class QDomElement;
 

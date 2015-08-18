@@ -42,6 +42,9 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
+#include "kis_signal_compressor_with_param.h"
+
+
 KisImageManager::KisImageManager(KisViewManager * view)
         : m_view(view)
 {
@@ -60,27 +63,27 @@ void KisImageManager::setup(KisActionManager *actionManager)
     actionManager->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
+    action  = new KisAction(themedIcon("configure"), i18n("Properties..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
-    action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
+    action  = new KisAction(themedIcon("document-new"), i18n("as Paint Layer..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KisAction(koIcon("edit-copy"), i18n("as Transparency Mask..."), this);
+    action  = new KisAction(themedIcon("edit-copy"), i18n("as Transparency Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_transparency_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
-    action  = new KisAction(koIcon("bookmarks"), i18n("as Filter Mask..."), this);
+    action  = new KisAction(themedIcon("view-filter"), i18n("as Filter Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_filter_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
-    action  = new KisAction(koIcon("edit-paste"), i18n("as Selection Mask..."), this);
+    action  = new KisAction(themedIcon("edit-paste"), i18n("as Selection Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_selection_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
@@ -189,6 +192,15 @@ void KisImageManager::slotImageProperties()
     delete dlg;
 }
 
+void updateImageBackgroundColor(KisImageSP image, const KColorDialog *dlg)
+{
+    QColor newColor = dlg->color();
+    KoColor bg = image->defaultProjectionColor();
+    bg.fromQColor(newColor);
+    image->setDefaultProjectionColor(bg);
+    image->refreshGraphAsync();
+}
+
 void KisImageManager::slotImageColor()
 {
     KisImageWSP image = m_view->image();
@@ -199,14 +211,19 @@ void KisImageManager::slotImageColor()
     dlg.setAlphaChannelEnabled(true);
 #endif
     KoColor bg = image->defaultProjectionColor();
-
     dlg.setColor(bg.toQColor());
     dlg.setButtons(KColorDialog::Ok | KColorDialog::Cancel);
+
+    KisSignalCompressor compressor(200, KisSignalCompressor::FIRST_INACTIVE);
+
+    boost::function<void ()> updateCall(boost::bind(updateImageBackgroundColor, image, &dlg));
+    SignalToFunctionProxy proxy(updateCall);
+
+    connect(&dlg, SIGNAL(colorSelected(const QColor&)), &compressor, SLOT(start()));
+    connect(&compressor, SIGNAL(timeout()), &proxy, SLOT(start()));
+
     if (dlg.exec() == KColorDialog::Accepted) {
-        QColor c = dlg.color();
-        bg.fromQColor(c);
-        image->setDefaultProjectionColor(bg);
-        image->refreshGraphAsync();
+        // TODO: undo!!!
     }
 }
 

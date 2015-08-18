@@ -23,7 +23,7 @@
 
 
 struct psd_layer_effects_context;
-struct psd_layer_effects_shadow_base;
+class psd_layer_effects_shadow_base;
 struct psd_layer_effects_overlay_base;
 class KisLayerStyleFilterEnvironment;
 class KoPattern;
@@ -86,7 +86,8 @@ namespace KisLsUtils
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
-                             const psd_layer_effects_shadow_base *config);
+                             const psd_layer_effects_shadow_base *config,
+                             const KisLayerStyleFilterEnvironment *env);
 
 }
 

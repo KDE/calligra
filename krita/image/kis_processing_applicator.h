@@ -19,12 +19,13 @@
 #ifndef __KIS_PROCESSING_APPLICATOR_H
 #define __KIS_PROCESSING_APPLICATOR_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include "kis_stroke_job_strategy.h"
 #include "kis_image_signal_router.h"
 #include "kundo2magicstring.h"
+#include "kundo2commandextradata.h"
 
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
@@ -44,7 +45,8 @@ public:
                             KisNodeSP node,
                             ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
-                            const KUndo2MagicString &name = KUndo2MagicString());
+                            const KUndo2MagicString &name = KUndo2MagicString(),
+                            KUndo2CommandExtraData *extraData = 0);
 
     ~KisProcessingApplicator();
 

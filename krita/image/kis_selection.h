@@ -21,7 +21,7 @@
 #include <QRect>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_paint_device.h"
 
 enum SelectionMode {
@@ -33,7 +33,8 @@ enum SelectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,
-    SELECTION_INTERSECT
+    SELECTION_INTERSECT,
+    SELECTION_DEFAULT
 };
 
 #include "kis_pixel_selection.h"

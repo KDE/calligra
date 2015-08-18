@@ -27,11 +27,6 @@
 #include "KisPart.h"
 #include "KisView.h"
 
-#include "KoOdfStylesReader.h"
-#include "KoOdfReadStore.h"
-#include "KoOdfWriteStore.h"
-#include "KoXmlNS.h"
-
 #include <KoCanvasBase.h>
 #include <KoColor.h>
 #include <KoColorProfile.h>
@@ -41,6 +36,7 @@
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
 #include <KoDpi.h>
+#include <KoUnit.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoFileDialog.h>
 #include <KoID.h>
@@ -580,6 +576,11 @@ KisDocument::KisDocument()
     init();
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
+
+    gridData().setShowGrid(false);
+    KisConfig cfg;
+    gridData().setGrid(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+
 }
 
 KisDocument::~KisDocument()
@@ -1055,10 +1056,21 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
     int accuracy = 0;
 
     QFile f(url.toLocalFile());
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open file to check the mimetype" << url;
+    }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
     KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
     f.close();
+
+    if (!mime) {
+        return mimeType;
+    }
+
+    // Checking the content failed as well, so let's fall back on the extension again
+    if (mime->name() == "application/octet-stream") {
+        return mimeType;
+    }
 
     return mime->name();
 }
@@ -1190,7 +1202,7 @@ bool KisDocument::importDocument(const KUrl & _url)
 }
 
 
-bool KisDocument::openUrl(const KUrl & _url)
+bool KisDocument::openUrl(const KUrl & _url, KisDocument::OpenUrlFlags flags)
 {
     kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
@@ -1237,7 +1249,9 @@ bool KisDocument::openUrl(const KUrl & _url)
         setModified(true);
     }
     else {
-        KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        if( !(flags & OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES) ) {
+            KisPart::instance()->addRecentURLToAllMainWindows(_url);
+        }
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
@@ -1274,7 +1288,6 @@ bool KisDocument::openFile()
 
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
-
 
     //kDebug(30003) << "mimetypes 4:" << typeName;
 
@@ -1842,34 +1855,35 @@ bool KisDocument::completeLoading(KoStore* store)
 
     d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
 
+    bool retval = true;
     if (!d->kraLoader->errorMessages().isEmpty()) {
         setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-        return false;
+        retval = false;
     }
+    if (retval) {
+        vKisNodeSP preselectedNodes = d->kraLoader->selectedNodes();
+        if (preselectedNodes.size() > 0) {
+            d->preActivatedNode = preselectedNodes.first();
+        }
 
-    vKisNodeSP preselectedNodes = d->kraLoader->selectedNodes();
-    if (preselectedNodes.size() > 0) {
-        d->preActivatedNode = preselectedNodes.first();
+        // before deleting the kraloader, get the list with preloaded assistants and save it
+        d->assistants = d->kraLoader->assistants();
+        d->shapeController->setImage(d->image);
+
+        connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+
+        if (d->image) {
+            d->image->initialRefreshGraph();
+        }
+        setAutoSave(KisConfig().autoSaveInterval());
+
+        emit sigLoadingFinished();
     }
-
-    // before deleting the kraloader, get the list with preloaded assistants and save it
-    d->assistants = d->kraLoader->assistants();
 
     delete d->kraLoader;
     d->kraLoader = 0;
 
-    d->shapeController->setImage(d->image);
-
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-
-    if (d->image) {
-        d->image->initialRefreshGraph();
-    }
-    setAutoSave(KisConfig().autoSaveInterval());
-
-    emit sigLoadingFinished();
-
-    return true;
+    return retval;
 
 }
 
@@ -1878,10 +1892,10 @@ bool KisDocument::completeSaving(KoStore* store)
     QString uri = url().url();
 
     d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), isAutosaving());
-
+    bool retval = true;
     if (!d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
-        return false;
+        retval = false;
     }
 
     delete d->kraSaver;
@@ -1889,7 +1903,7 @@ bool KisDocument::completeSaving(KoStore* store)
 
     emit sigSavingFinished();
 
-    return true;
+    return retval;
 }
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
@@ -1941,7 +1955,7 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
         return false;
     }
 
-    Q_ASSERT(d->kraLoader == 0);
+    if (d->kraLoader) delete d->kraLoader;
     d->kraLoader = new KisKraLoader(this, syntaxVersion);
 
     // Legacy from the multi-image .kra file period.
@@ -1989,7 +2003,7 @@ QDomDocument KisDocument::saveXML()
     root.setAttribute("editor", "Krita");
     root.setAttribute("syntaxVersion", "2");
 
-    Q_ASSERT(d->kraSaver == 0);
+    if (d->kraSaver) delete d->kraSaver;
     d->kraSaver = new KisKraSaver(this);
 
     root.appendChild(d->kraSaver->saveXML(doc, d->image));

@@ -49,6 +49,8 @@ extern "C" {
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoUnit.h>
+#include "KoColorModelStandardIds.h"
 
 #include <kis_painter.h>
 #include <KisDocument.h>
@@ -90,10 +92,9 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
         return JCS_RGB;
     }
-    if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
+    if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYKAU16")) {
         return JCS_CMYK;
     }
-    QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 
@@ -112,11 +113,12 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDocument *doc)
+KisJPEGConverter::KisJPEGConverter(KisDocument *doc, bool batchMode)
 {
     m_doc = doc;
     m_job = 0;
     m_stop = false;
+    m_batchMode = batchMode;
 }
 
 KisJPEGConverter::~KisJPEGConverter()
@@ -409,6 +411,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     // Dump loaded metadata
     layer->metaData()->debugDump();
 
+    // Check whether the metadata has resolution info, too...
+    if (cinfo.density_unit == 0 && layer->metaData()->containsEntry("tiff:XResolution") && layer->metaData()->containsEntry("tiff:YResolution")) {
+        double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
+        double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
+        if (xres != 0 && yres != 0) {
+            m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+        }
+    }
+
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
@@ -465,9 +476,18 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
+
+    if (!m_batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
+        QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Warning: JPEG only supports 8 bits per channel. Your image uses: %1. Krita will save your image as 8 bits per channel.", cs->name()));
+    }
+
     if (color_type == JCS_UNKNOWN) {
+        if (!m_batchMode) {
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
+        }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         delete tmp;
+        cs = KoColorSpaceRegistry::instance()->rgb8();
         color_type = JCS_RGB;
     }
 
@@ -475,6 +495,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
         delete tmp;
+        cs = dst;
         color_type = JCS_RGB;
     }
 
@@ -685,10 +706,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 do {
                     //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     const quint8 *d = it->oldRawData();
-                    *(dst++) = cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
-                    *(dst++) = cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
-                    *(dst++) = cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
-                    *(dst++) = cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
+                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
+                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
+                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
+                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
 
                 } while (it->nextPixel());
             } else {

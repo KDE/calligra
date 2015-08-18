@@ -19,17 +19,20 @@
 #ifndef __KIS_ASL_READER_H
 #define __KIS_ASL_READER_H
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
+#include <QtGlobal>
 
 class QDomDocument;
 class QIODevice;
 
 
-class LIBKISPSD_EXPORT KisAslReader
+class KRITAPSD_EXPORT KisAslReader
 {
 public:
     QDomDocument readFile(QIODevice *device);
     QDomDocument readLfx2PsdSection(QIODevice *device);
+
+    static QDomDocument readPsdSectionPattern(QIODevice *device, qint64 bytesLeft);
 };
 
 #endif /* __KIS_ASL_READER_H */

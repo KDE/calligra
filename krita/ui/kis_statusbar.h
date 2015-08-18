@@ -21,17 +21,19 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QIcon>
 
 #include <kis_types.h>
 #include "KisView.h"
 
 class QLabel;
 class QToolButton;
+class QPushButton;
 class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KRITAUI_EXPORT KisStatusBar : public QObject
 {
@@ -58,6 +60,10 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateSelectionIcon();
+    void showMemoryInfoToolTip();
+
+private:
+   void updateMemoryStatus();
 
 private:
 
@@ -66,12 +72,16 @@ private:
     KisProgressWidget * m_progress;
 
     QToolButton *m_selectionStatus;
-    QLabel *m_imageSizeLabel;
+    QPushButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
 
+
+    QString m_shortMemoryTag;
+    QString m_longMemoryTag;
+    QIcon m_memoryStatusIcon;
 };
 
 #endif

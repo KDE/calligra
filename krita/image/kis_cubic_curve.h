@@ -23,7 +23,7 @@
 #include<QVector>
 #include<QVariant>
 
-#include <krita_export.h>
+#include <kritaimage_export.h>
 
 class QPointF;
 
@@ -53,6 +53,8 @@ public:
      */
     int addPoint(const QPointF& point);
     void removePoint(int idx);
+
+    bool isNull() const;
 
     /**
      * This allows us to carry around a display name for the curve internally. It is used

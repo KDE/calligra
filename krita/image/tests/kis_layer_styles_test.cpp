@@ -54,7 +54,6 @@ struct TestConfig {
     bool keep_original;
 
     void writeProperties(KisPSDLayerStyleSP style) const {
-        style->context()->global_angle = angle;
         style->context()->keep_original = keep_original;
 
         style->dropShadow()->setEffectEnabled(true);
@@ -105,7 +104,8 @@ void testDropShadowImpl(const TestConfig &config,
 
     KisTransaction t(dst);
 
-    KisLayerStyleFilterEnvironment env(0);
+    TestUtil::MaskParent parent;
+    KisLayerStyleFilterEnvironment env(parent.layer.data());
 
     foreach (const QRect &rc, applyRects) {
         lsFilter.processDirectly(dev, dst, rc, style, &env);

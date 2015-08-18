@@ -18,11 +18,16 @@
 
 #include "kis_layer_style_filter_environment.h"
 
+#include <QBitArray>
+
 #include "kis_layer.h"
 #include "kis_ls_utils.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_painter.h"
+
+#include "krita_utils.h"
 
 
 struct KisLayerStyleFilterEnvironment::Private
@@ -34,6 +39,7 @@ struct KisLayerStyleFilterEnvironment::Private
 KisLayerStyleFilterEnvironment::KisLayerStyleFilterEnvironment(KisLayer *sourceLayer)
     : m_d(new Private)
 {
+    Q_ASSERT(sourceLayer);
     m_d->sourceLayer = sourceLayer;
 }
 
@@ -55,9 +61,8 @@ QRect KisLayerStyleFilterEnvironment::defaultBounds() const
 QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
 {
     // TODO: make it really cachable!
-
+    Q_ASSERT(m_d->sourceLayer);
     KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
-
     QRect srcRect = srcDevice->exactBounds();
     if (srcRect.isEmpty()) return QPainterPath();
 
@@ -69,4 +74,14 @@ QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
     selection->recalculateOutlineCache();
 
     return selection->outlineCache();
+}
+
+void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
+                                                       quint8 opacity,
+                                                       const QBitArray &channelFlags) const
+{
+    Q_ASSERT(m_d->sourceLayer);
+    gc->setOpacity(KritaUtils::mergeOpacity(opacity, m_d->sourceLayer->opacity()));
+    gc->setChannelFlags(KritaUtils::mergeChannelFlags(channelFlags, m_d->sourceLayer->channelFlags()));
+
 }

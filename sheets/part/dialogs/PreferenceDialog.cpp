@@ -43,6 +43,7 @@
 #include <knuminput.h>
 
 #include <KoConfigAuthorPage.h>
+#include <KoUnit.h>
 
 #include <kplugininfo.h>
 #include <kpluginselector.h>

@@ -31,11 +31,9 @@
 #include <kdebug.h>
 
 // Calligra
-#include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>

@@ -23,10 +23,15 @@
 #include <QByteArray>
 #include <QBitArray>
 #include <QIODevice>
+#include <QDomDocument>
+
 
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <kis_node.h>
+
+#include <boost/function.hpp>
+
 
 #include "psd.h"
 #include "psd_header.h"
@@ -252,17 +257,30 @@ struct psd_layer_type_tool {
 class PsdAdditionalLayerInfoBlock
 {
 public:
-    PsdAdditionalLayerInfoBlock();
+    PsdAdditionalLayerInfoBlock(const PSDHeader& header);
+
+    typedef boost::function<bool(QIODevice*)> ExtraLayerInfoBlockHandler;
+
+    void setExtraLayerInfoBlockHandler(ExtraLayerInfoBlockHandler handler);
+
     bool read(QIODevice* io);
     bool write(QIODevice* io, KisNodeSP node);
 
+    void writeLuniBlockEx(QIODevice* io, const QString &layerName);
+    void writeLsctBlockEx(QIODevice* io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
+    void writeLfx2BlockEx(QIODevice* io, const QDomDocument &stylesXmlDoc);
+    void writePattBlockEx(QIODevice* io, const QDomDocument &patternsXmlDoc);
+
+
     bool valid();
 
-    PSDHeader m_header;
+    const PSDHeader &m_header;
     QString error;
     QStringList keys; // List of all the keys that we've seen
 
     QString unicodeLayerName;
+    QDomDocument layerStyleXml;
+    QVector<QDomDocument> embeddedPatterns;
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
@@ -270,6 +288,8 @@ public:
 private:
     void readImpl(QIODevice* io);
 
+private:
+    ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;
 };
 
 #endif // PSD_ADDITIONAL_LAYER_INFO_BLOCK_H

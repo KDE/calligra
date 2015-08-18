@@ -20,6 +20,7 @@
 
 #include <QDebug>
 #include <QColor>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>

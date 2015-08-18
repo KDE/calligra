@@ -82,11 +82,22 @@ int KisToolLine::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
+void KisToolLine::resetCursorStyle()
+{
+    KisToolPaint::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
+}
 
 void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
    KisToolPaint::activate(activation, shapes);
    configGroup = KGlobal::config()->group(toolId());
+}
+
+void KisToolLine::deactivate()
+{
+    cancelStroke();
 }
 
 QWidget* KisToolLine::createOptionWidget()
@@ -165,6 +176,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolLine::updateStroke()
 {
+    if (!m_strokeIsRunning) return;
+
     m_helper->repaintLine(canvas()->resourceManager(),
                           image(),
                           currentNode(),
@@ -260,7 +273,14 @@ void KisToolLine::cancelStroke()
     if (!m_strokeIsRunning) return;
     if (m_startPoint == m_endPoint) return;
 
-    m_helper->cancel();
+    /**
+     * The actual stroke is run by the timer so it is a legal
+     * situation when m_strokeIsRunning is true, but the actual redraw
+     * stroke is not running.
+     */
+    if (m_helper->isRunning()) {
+        m_helper->cancel();
+    }
 
 
     m_strokeIsRunning = false;

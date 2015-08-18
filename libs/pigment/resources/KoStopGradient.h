@@ -57,13 +57,12 @@ public:
     
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
+    QList<KoGradientStop> stops() const;
 
     /// reimplemented
     QString defaultFileExtension() const;
 
 protected:
-
-    virtual QByteArray generateMD5() const;
 
     QList<KoGradientStop> m_stops;
     QPointF m_start;

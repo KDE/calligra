@@ -61,7 +61,6 @@
 #include <KoXmlNS.h>
 #include <KoTextRdfCore.h>
 #include <KoDocument.h>
-#include <KoTextShapeDataBase.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 

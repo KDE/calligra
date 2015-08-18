@@ -25,9 +25,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QDateTime> 
-#include <QCheckBox> 
-
 namespace KPlato
 {
 

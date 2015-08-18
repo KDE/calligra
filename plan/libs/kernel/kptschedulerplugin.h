@@ -172,7 +172,7 @@ public:
 
     int maxProgress() const;
     int progress() const;
-    QList<Schedule::Log> log();
+    QVector<Schedule::Log> takeLog();
 
     QMap<int, QString> phaseNames() const;
 
@@ -215,7 +215,7 @@ protected Q_SLOTS:
     void setMaxProgress( int );
     void setProgress( int );
 
-    void slotAddLog( Schedule::Log log );
+    void slotAddLog( const Schedule::Log &log );
 
 protected:
     /// Re-implement to do the job
@@ -245,7 +245,7 @@ protected:
     mutable QMutex m_maxprogressMutex;
     int m_progress;
     mutable QMutex m_progressMutex;
-    QList<Schedule::Log> m_logs;
+    QVector<Schedule::Log> m_logs;
     mutable QMutex m_logMutex;
 };
 

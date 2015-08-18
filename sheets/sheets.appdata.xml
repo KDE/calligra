@@ -13,6 +13,7 @@
   <name xml:lang="es">Sheets</name>
   <name xml:lang="fi">Sheets</name>
   <name xml:lang="fr">Sheets</name>
+  <name xml:lang="gl">Sheets</name>
   <name xml:lang="ia">Sheets</name>
   <name xml:lang="it">Sheets</name>
   <name xml:lang="ja">Sheets</name>
@@ -33,6 +34,7 @@
   <summary xml:lang="es">Hoja de cálculo</summary>
   <summary xml:lang="fi">Taulukkolaskenta</summary>
   <summary xml:lang="fr">Tableur</summary>
+  <summary xml:lang="gl">Follas de cálculo</summary>
   <summary xml:lang="ia">Folio de calculo electronic</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
   <summary xml:lang="ja">スプレッドシート</summary>
@@ -50,11 +52,12 @@
       Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
     </p>
     <p xml:lang="bs">Calligra ListoviSheets je kompletno opremljen kalkulacijski i tabelarni alat. Koristite ga da brzo kreirate i izračunati različite poslovne vezane tabele, kao što su prihodi i rashodi, radno vrijeme, itd</p>
-    <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos full de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
+    <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="fi">Calligra Sheets on täysominaisuuksinen taulukkolaskentasovellus. Luot sillä nopeasti erilaisia talouslaskentaan liittyviä taulukoita kuten tulo- ja menotaulukoita, työntekijöiden työtuntitaulukoita jne.</p>
     <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
+    <p xml:lang="gl">Calligra Sheets é unha ferramenta completa de follas de cálculo. Úsea para crear rapidamente follas de cálculo de negocios, como por exemplo follas de gastos e ingresos, de horas de traballo, etc.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
     <p xml:lang="ja">Calligra Sheets は豊富な機能を持った表計算ツールです。収入と支出、従業員の労働時間などビジネスなどに必要なスプレッドシートの作成、計算を短時間で行うことができます。</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
@@ -75,6 +78,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
@@ -94,6 +98,7 @@
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
       <li xml:lang="fi">Muotojen käyttö muistiinpanojen tai miellekarttojen tallentamiseen</li>
       <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
+      <li xml:lang="gl">Use formas para escribir notas ou mapas mentais.</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
       <li xml:lang="ja">シェイプを使用したメモの貼り付けやマインドマップの作成</li>
       <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
@@ -107,11 +112,12 @@
       <li>Large range of pre-defined templates</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
-      <li xml:lang="de">Viele vordefinierte Vorlagen</li>
+      <li xml:lang="de">Viele vordefinierte Vorlagen aus vielen Bereichen</li>
       <li xml:lang="en-GB">Large range of pre-defined templates</li>
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
       <li xml:lang="fi">Laajalti erilaisia esimääritettyjä mallipohjia</li>
       <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
+      <li xml:lang="gl">Gran variedade de modelos predefinidos.</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
       <li xml:lang="ja">幅広い種類のテンプレート</li>
       <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
@@ -130,6 +136,7 @@
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
       <li xml:lang="fi">Tehokas ja kattava kaavaluettelo</li>
       <li xml:lang="fr">Liste de formules complète et variée</li>
+      <li xml:lang="gl">Lista de fórmulas potentes e fáciles de entender.</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
       <li xml:lang="ja">強力かつ包括的な数式</li>
       <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
@@ -143,10 +150,12 @@
       <li>Work in a familiar environment</li>
       <li xml:lang="bs">Rad u poznatom okruženju</li>
       <li xml:lang="ca">Treball en un entorn familiar</li>
+      <li xml:lang="de">Arbeiten in einer bekannten Arbeitsumgebung</li>
       <li xml:lang="en-GB">Work in a familiar environment</li>
       <li xml:lang="es">Funciona en un entorno familiar</li>
       <li xml:lang="fi">Työskentely tutussa ympäristössä</li>
       <li xml:lang="fr">Travaillez dans un environnement familier</li>
+      <li xml:lang="gl">Traballe nun ambiente familiar.</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>
       <li xml:lang="ja">使い慣れた環境での操作</li>
       <li xml:lang="nl">Werk in een bekende omgeving</li>

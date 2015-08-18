@@ -40,9 +40,7 @@
 #include <KoShapeBasedDocumentBase.h>
 
 #include <KoDocument.h>
-#include <KoUnit.h>
 #include <KoShapeLoadingContext.h>
-#include <KoGenStyle.h>
 #include <KoXmlReader.h>
 
 #include <karbonui_export.h>

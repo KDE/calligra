@@ -34,7 +34,7 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
-#include <KoUpdater.h>
+#include "kis_busy_progress_indicator.h"
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transform_mask_params_interface.h"
 #include "kis_recalculate_transform_mask_job.h"
@@ -114,7 +114,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return koIcon("edit-cut");
+    return themedIcon("edit-cut");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -215,7 +215,6 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      const QRect & rc,
                                      PositionToFilthy maskPos) const
 {
-    Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
                "src must be != dst, because we cant create transactions "
                "during merge, as it breaks reentrancy");
@@ -254,7 +253,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else {
+    } else if (m_d->staticCacheDevice) {
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
@@ -264,6 +263,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 #endif /* DEBUG_RENDERING */
 
     }
+
+    KIS_ASSERT_RECOVER_NOOP(this->busyProgressIndicator());
+    this->busyProgressIndicator()->update();
 
     return rc;
 }

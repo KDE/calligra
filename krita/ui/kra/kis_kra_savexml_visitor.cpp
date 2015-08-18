@@ -129,13 +129,6 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
     QDomElement layerElement = savePaintLayerAttributes(layer, m_doc);
     m_elem.appendChild(layerElement);
-
-    /*    if(layer->paintDevice()->hasExifInfo())
-        {
-            QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
-            layerElement.appendChild(exifElmt);
-        } TODO: save the metadata
-    */
     m_count++;
     return saveMasks(layer, layerElement);
 }
@@ -149,6 +142,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     else {
         layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, GROUP_LAYER, layer);
+        layerElement.setAttribute(PASS_THROUGH_MODE, layer->passThroughMode());
         m_elem.appendChild(layerElement);
     }
     QDomElement elem = m_doc.createElement(LAYERS);
@@ -367,7 +361,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(UUID, mask->uuid().toString());
 
     if (maskType == SELECTION_MASK) {
-        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("visible"));
+        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("active"));
     }
 
     m_nodeFileNames[mask] = MASK + QString::number(m_count);

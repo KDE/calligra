@@ -27,6 +27,8 @@
 #include "kpttask.h"
 #include "kptaccount.h"
 
+#include <KoXmlReader.h>
+
 #include <qtest_kde.h>
 
 namespace KPlato

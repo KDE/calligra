@@ -47,9 +47,6 @@
 
 #include "kis_ls_utils.h"
 
-#include "kis_convolution_kernel.h"
-#include <kis_convolution_painter.h>
-
 #include "gimp_bump_map.h"
 #include "kis_transaction.h"
 
@@ -427,7 +424,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         gc.setSelection(baseSelection);
         gc.setCompositeOp(config->shadowBlendMode());
-        gc.setOpacity(config->shadowOpacity());
+        env->setupFinalPainter(&gc, config->shadowOpacity(), QBitArray());
         gc.bitBlt(fillRect.topLeft(), fillDevice, fillRect);
         gc.end();
     }
@@ -447,7 +444,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         KisPainter gc(dstDevice);
         gc.setSelection(baseSelection);
         gc.setCompositeOp(config->highlightBlendMode());
-        gc.setOpacity(config->highlightOpacity());
+        env->setupFinalPainter(&gc, config->highlightOpacity(), QBitArray());
         gc.bitBlt(fillRect.topLeft(), fillDevice, fillRect);
         gc.end();
     }

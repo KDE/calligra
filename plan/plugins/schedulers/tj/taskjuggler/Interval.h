@@ -154,6 +154,7 @@ protected:
 
 } // namespace TJ
 
+Q_DECLARE_TYPEINFO( TJ::Interval, Q_MOVABLE_TYPE );
 Q_DECLARE_METATYPE( TJ::Interval )
 
 KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::Interval *i );

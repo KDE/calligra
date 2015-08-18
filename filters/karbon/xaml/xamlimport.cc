@@ -22,7 +22,6 @@
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
-#include <KoUnit.h>
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>

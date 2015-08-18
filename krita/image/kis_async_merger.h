@@ -19,7 +19,7 @@
 #ifndef __KIS_ASYNC_MERGER_H
 #define __KIS_ASYNC_MERGER_H
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
@@ -32,13 +32,10 @@ public:
     void startMerge(KisBaseRectsWalker &walker, bool notifyClones = true);
 
 private:
-    static inline bool isRootNode(KisNodeSP node);
-    static inline bool dependOnLowerNodes(KisNodeSP node);
-
     inline void resetProjection();
-    inline void setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection);
-    inline void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect);
-    inline bool compositeWithProjection(KisLayerSP layer, const QRect &rect);
+    inline void setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection);
+    inline void writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, QRect rect);
+    inline bool compositeWithProjection(KisProjectionLeafSP leaf, const QRect &rect);
     inline void doNotifyClones(KisBaseRectsWalker &walker);
 
 private:

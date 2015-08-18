@@ -28,7 +28,7 @@
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_types.h>
 
 #include "kis_floating_message.h"
@@ -228,6 +228,7 @@ private Q_SLOTS:
 
     void slotBlacklistCleanup();
     void slotCreateTemplate();
+    void slotCreateCopy();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
@@ -236,6 +237,8 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void makeStatusBarVisible();
     void guiUpdateTimeout();
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
 
 private:
     void createActions();

@@ -18,7 +18,7 @@
 #ifndef KIS_TILE_DATA_STORE_H_
 #define KIS_TILE_DATA_STORE_H_
 
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 #include <QReadWriteLock>
 #include "kis_tile_data_interface.h"
@@ -45,6 +45,18 @@ public:
     ~KisTileDataStore();
 
     void debugPrintList();
+
+    struct MemoryStatistics {
+        qint64 totalMemorySize;
+        qint64 realMemorySize;
+        qint64 historicalMemorySize;
+
+        qint64 poolSize;
+
+        qint64 swapSize;
+    };
+
+    MemoryStatistics memoryStatistics();
 
     /**
      * Returns total number of tiles present: in memory

@@ -58,6 +58,7 @@
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoUnit.h>
 
 #include "CalculationSettings.h"
 #include "Cell.h"
@@ -1771,7 +1772,7 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     connect(size_combo, SIGNAL(activated(QString)),
             SLOT(size_chosen_slot(QString)));
-    connect(size_combo , SIGNAL(textChanged(QString)),
+    connect(size_combo , SIGNAL(editTextChanged(QString)),
             this, SLOT(size_chosen_slot(QString)));
 
     connect(weight_combo, SIGNAL(activated(QString)),
@@ -2639,7 +2640,7 @@ void CellFormatPageBorder::SetConnections()
             this, SLOT(slotPressEvent(QMouseEvent*)));
 
     connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
-    connect(size, SIGNAL(textChanged(QString)),
+    connect(size, SIGNAL(editTextChanged(QString)),
             this, SLOT(slotChangeStyle(QString)));
     connect(size , SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
 }

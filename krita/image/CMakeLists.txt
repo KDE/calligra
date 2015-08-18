@@ -45,7 +45,7 @@ include_directories(
 )
 
 if(FFTW3_FOUND)
-  include_directories(${FFTW3_INCLUDE_DIRS})
+  include_directories(${FFTW3_INCLUDE_DIR})
 endif()
 
 if(HAVE_VC)
@@ -99,6 +99,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_set_layer_style_command.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   commands_new/kis_activate_selection_mask_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
@@ -107,6 +108,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_mirror_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
+   filter/kis_color_transformation_configuration.cc
    filter/kis_filter_registry.cc
    filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
@@ -162,6 +164,7 @@ set(kritaimage_LIB_SRCS
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp
    kis_composite_progress_proxy.cpp
+   kis_update_time_monitor.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
@@ -170,6 +173,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
+   kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
@@ -179,6 +183,7 @@ set(kritaimage_LIB_SRCS
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
    kis_mask_projection_plane.cpp
+   kis_projection_leaf.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
@@ -190,10 +195,12 @@ set(kritaimage_LIB_SRCS
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
    kis_memory_leak_tracker.cpp
+   kis_memory_statistics_server.cpp
    kis_name_server.cpp
    kis_node.cpp
    kis_node_facade.cpp
    kis_node_progress_proxy.cpp
+   kis_busy_progress_indicator.cpp
    kis_node_visitor.cpp
    kis_paint_device.cc
    kis_fixed_paint_device.cpp
@@ -296,8 +303,8 @@ set(einspline_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES libglobal libkispsd koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaglobal kritapsd koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})
@@ -374,7 +381,7 @@ install( FILES
     kis_shared_ptr.h
     kis_transaction.h
     kis_types.h
-    krita_export.h
+    kritaimage_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h

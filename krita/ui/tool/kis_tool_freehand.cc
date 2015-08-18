@@ -89,35 +89,29 @@ void KisToolFreehand::resetCursorStyle()
 {
     KisConfig cfg;
 
-    switch (cfg.cursorStyle()) {
-    case CURSOR_STYLE_CROSSHAIR:
-    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
-        useCursor(KisCursor::crossCursor());
+    switch (cfg.newCursorStyle()) {
+    case CURSOR_STYLE_NO_CURSOR:
+        useCursor(KisCursor::blankCursor());
         break;
     case CURSOR_STYLE_POINTER:
         useCursor(KisCursor::arrowCursor());
         break;
-    case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor());
-        break;
     case CURSOR_STYLE_SMALL_ROUND:
-    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
         useCursor(KisCursor::roundCursor());
         break;
-    case CURSOR_STYLE_OUTLINE:
-        useCursor(KisCursor::blankCursor());
+    case CURSOR_STYLE_CROSSHAIR:
+        useCursor(KisCursor::crossCursor());
         break;
     case CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
-    case CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
         useCursor(KisCursor::triangleRightHandedCursor());
         break;
     case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
-    case CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
         useCursor(KisCursor::triangleLeftHandedCursor());
         break;
     case CURSOR_STYLE_TOOLICON:
     default:
         KisToolPaint::resetCursorStyle();
+        break;
     }
 }
 
@@ -169,6 +163,12 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
+    //set canvas information here?//
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    if (canvas2) {
+        m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
+        m_helper->setCanvasRotation(canvas2->rotationAngle());
+    }
     m_helper->paint(event);
 }
 
@@ -263,7 +263,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             event->xTilt(), event->yTilt(),
                                             event->rotation(),
                                             event->tangentialPressure(),
-                                            perspective, 0),
+                                            perspective, 0, 0),
                         event->modifiers());
     return !paintOpIgnoredEvent;
 }

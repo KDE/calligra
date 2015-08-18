@@ -20,7 +20,7 @@
 #define KIS_BRUSH_BASED_PAINTOP_SETTINGS_H
 
 #include <kis_paintop_settings.h>
-#include <krita_export.h>
+#include <kritapaintop_export.h>
 #include <kis_outline_generation_policy.h>
 
 
@@ -46,6 +46,9 @@ public:
 
     ///Reimplemented
     virtual bool isLoadable();
+
+protected:
+    QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false) const;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

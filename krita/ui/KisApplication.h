@@ -21,11 +21,11 @@
 #define KIS_APPLICATION_H
 
 #include <qtsingleapplication/qtsingleapplication.h>
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KisMainWindow;
 class KisApplicationPrivate;
-
+class KCmdLineArgs;
 class QWidget;
 class QStringList;
 
@@ -75,6 +75,13 @@ public:
     virtual bool start();
 
     /**
+     * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.
+     *
+     * Typically called during startup before reading the config.
+     */
+    void askClearConfig();
+
+    /**
      * Tell KisApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
      * to have the splash show correctly on Xinerama displays. 
@@ -113,8 +120,11 @@ public Q_SLOTS:
 
 private:
     /// @return the number of autosavefiles opened
-    int checkAutosaveFiles(KisMainWindow *mainWindow);
+    QList<KUrl> checkAutosaveFiles();
+    bool createNewDocFromTemplate(KCmdLineArgs *args, int argNumber, KisMainWindow *mainWindow);
+    void clearConfig();
 
+private:
     KisApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;

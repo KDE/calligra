@@ -24,7 +24,7 @@
 
 #include "kis_global.h"
 #include "kis_vec.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_distance_information.h"
 
 class QDomDocument;
@@ -75,16 +75,25 @@ public:
 
     /**
      * Create a new KisPaintInformation object.
-
      */
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation,
+                        qreal tangentialPressure,
+                        qreal perspective,
+                        qreal time,
+                        qreal speed);
+
+    KisPaintInformation(const QPointF & pos,
+                        qreal pressure,
+                        qreal xTilt,
+                        qreal yTilt,
+                        qreal rotation);
+
     KisPaintInformation(const QPointF & pos = QPointF(),
-                        qreal pressure = PRESSURE_DEFAULT,
-                        qreal xTilt = 0.0,
-                        qreal yTilt = 0.0,
-                        qreal rotation = 0.0,
-                        qreal tangentialPressure = 0.0,
-                        qreal perspective = 1.0,
-                        qreal time = 0.0);
+                        qreal pressure = PRESSURE_DEFAULT);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -198,8 +207,29 @@ public:
             qreal xTilt = 0.0, qreal yTilt = 0.0,
             qreal rotation = 0.0,
             qreal tangentialPressure = 0.0,
-            qreal perspective = 1.0);
-
+            qreal perspective = 1.0,
+	        qreal speed = 0.0,
+            int canvasrotation = 0,
+            bool canvasMirroredH = false);
+    /**
+     *Returns the canvas rotation if that has been given to the kispaintinformation.
+     */
+    int canvasRotation() const;
+    /**
+     *set the canvas rotation.
+     */
+    void setCanvasRotation(int rotation);
+    
+    /*
+     *Whether the canvas is mirrored for the paint-operation.
+     */
+    bool canvasMirroredH() const;
+    
+    /*
+     *Set whether the canvas is mirrored for the paint-operation.
+     */
+    void setCanvasHorizontalMirrorState(bool mir);
+    
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

@@ -28,8 +28,8 @@
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
+    setTemplatesResourcePath(QLatin1String("plan/templates/"));
     setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
-    setTemplateType( "plan_template" );
 }
 
 Part::~Part()

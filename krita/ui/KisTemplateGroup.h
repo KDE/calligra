@@ -23,9 +23,8 @@
 
 #include <QList>
 #include <QStringList>
-#include <QPixmap>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class KisTemplate;
 

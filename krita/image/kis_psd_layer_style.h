@@ -26,7 +26,7 @@ struct QUuid;
 #include <psd.h>
 
 #include "kis_types.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 
 
 /**
@@ -62,6 +62,9 @@ public:
      * \return true if all the styles are disabled
      */
     bool isEmpty() const;
+
+    bool isEnabled() const;
+    void setEnabled(bool value);
 
     const psd_layer_effects_context* context() const;
     const psd_layer_effects_drop_shadow* dropShadow() const;

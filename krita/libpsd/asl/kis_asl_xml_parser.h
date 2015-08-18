@@ -19,14 +19,14 @@
 #ifndef __KIS_ASL_XML_PARSER_H
 #define __KIS_ASL_XML_PARSER_H
 
-#include "libkispsd_export.h"
+#include "kritapsd_export.h"
 
 class QDomDocument;
 class QIODevice;
 class KisAslObjectCatcher;
 
 
-class LIBKISPSD_EXPORT KisAslXmlParser
+class KRITAPSD_EXPORT KisAslXmlParser
 {
 public:
     void parseXML(const QDomDocument &doc, KisAslObjectCatcher &catcher);

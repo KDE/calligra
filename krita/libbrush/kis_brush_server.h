@@ -25,14 +25,14 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 
-#include "krita_export.h"
+#include "kritabrush_export.h"
 #include "kis_brush.h"
 
 class KoResource;
 class KoResourceLoaderThread;
 
-typedef KoResourceServer<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServer;
-typedef KoResourceServerAdapter<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
+typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;
+typedef KoResourceServerAdapter<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
 
 /**
  *

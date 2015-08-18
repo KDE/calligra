@@ -40,7 +40,6 @@ set(komain_LIB_SRCS
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
-    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
@@ -83,14 +82,14 @@ if (APPLE)
 endif ()
 
 kde4_add_ui_files( komain_LIB_SRCS
-   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
-target_link_libraries(komain ${extra_libs}
+target_link_libraries(komain
     ${KDE4_KFILE_LIBRARY}
+    ${KDE4_KIO_LIBS}
     kowidgets
     kotextlayout
 )
@@ -105,7 +104,7 @@ if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
 endif ()
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KIO_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

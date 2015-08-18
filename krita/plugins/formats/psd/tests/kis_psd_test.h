@@ -27,6 +27,19 @@ class KisPSDTest : public QObject
 private Q_SLOTS:
     void testFiles();
     void testOpening();
+    void testTransparencyMask();
+    void testOpenGrayscaleMultilayered();
+    void testOpenGroupLayers();
+    void testOpenLayerStyles();
+
+    void testOpenLayerStylesWithPattern();
+    void testOpenLayerStylesWithPatternMulti();
+
+    void testSaveLayerStylesWithPatternMulti();
+
+    void testOpeningFromOpenCanvas();
+    void testOpeningAllFormats();
+    void testSavingAllFormats();
 };
 
 #endif

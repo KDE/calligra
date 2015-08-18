@@ -79,6 +79,7 @@ protected:
     void dropEvent(QDropEvent *);
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
+    void mouseMoveEvent(QMouseEvent *event);
 
 private:
     void commitColor(const KoColor& koColor, Acs::ColorRole role);
@@ -106,6 +107,7 @@ private:
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
+    bool m_hideOnMouseClick;
     KisColorPreviewPopup* m_colorPreviewPopup;
 };
 

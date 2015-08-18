@@ -78,7 +78,6 @@
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoDocumentEntry.h>
-#include <KoOdfStylesReader.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -89,6 +88,7 @@
 #include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
+#include <KoUnit.h>
 
 // KChart
 #include "Axis.h"

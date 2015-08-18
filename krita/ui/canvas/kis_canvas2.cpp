@@ -240,6 +240,16 @@ qreal KisCanvas2::rotationAngle() const
     return m_d->coordinatesConverter->rotationAngle();
 }
 
+bool KisCanvas2::xAxisMirrored() const
+{
+    return m_d->coordinatesConverter->xAxisMirrored();
+}
+
+bool KisCanvas2::yAxisMirrored() const
+{
+    return m_d->coordinatesConverter->yAxisMirrored();
+}
+
 void KisCanvas2::channelSelectionChanged()
 {
     KisImageWSP image = this->image();
@@ -404,6 +414,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 #ifdef HAVE_OPENGL
         if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
             createOpenGLCanvas();
+            if (cfg.canvasState() == "OPENGL_FAILED") {
+                // Creating the opengl canvas failed, fall back
+                createQPainterCanvas();
+            }
         } else {
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
@@ -893,6 +907,17 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
     }
 
     m_d->canvasWidget->setWrapAroundViewingMode(value);
+}
+
+bool KisCanvas2::wrapAroundViewingMode() const
+{
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        return !(infinityDecoration->visible());
+    }
+    return false;
 }
 
 KoGuidesData *KisCanvas2::guidesData()

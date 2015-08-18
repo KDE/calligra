@@ -28,13 +28,12 @@
 #include <QPointF>
 
 //Calligra includes
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoGenStyles.h>
 #include <QVariantList>
 
 class KoXmlWriter;
-class KoGenStyles;
 
 class Filterkpr2odf : public KoFilter
 {

@@ -31,9 +31,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomElement>
-#include <QList>
-#include <QString>
 #include <QStringList>
 
 #include <klocale.h>
@@ -676,7 +673,7 @@ double Schedule::plannedCostTo( const QDate &date, EffortCostCalculationType typ
     return c;
 }
 
-void Schedule::addLog( Schedule::Log &log )
+void Schedule::addLog( const Schedule::Log &log )
 {
     if ( m_parent ) {
         m_parent->addLog( log );
@@ -1463,12 +1460,12 @@ void MainSchedule::addCriticalPathNode( Node *node )
     m_currentCriticalPath->append( node );
 }
 
-QList<Schedule::Log> MainSchedule::logs() const
+QVector<Schedule::Log> MainSchedule::logs() const
 {
     return m_log;
 }
 
-void MainSchedule::addLog( KPlato::Schedule::Log &log )
+void MainSchedule::addLog( const KPlato::Schedule::Log &log )
 {
     Q_ASSERT( log.resource || log.node );
 #ifndef NDEBUG
@@ -1478,12 +1475,14 @@ void MainSchedule::addLog( KPlato::Schedule::Log &log )
         Q_ASSERT( manager()->project().findNode( log.node->id() ) == log.node );
     }
 #endif
-    if ( log.phase == -1 && ! m_log.isEmpty() ) {
-        log.phase = m_log.last().phase;
-    }
+    const int phaseToSet = ( log.phase == -1 && ! m_log.isEmpty() ) ? m_log.last().phase : -1;
     m_log.append( log );
+
+    if ( phaseToSet != -1 ) {
+        m_log.last().phase = phaseToSet;
+    }
     if ( m_manager ) {
-        m_manager->logAdded( log );
+        m_manager->logAdded(m_log.last());
     }
 }
 
@@ -1864,20 +1863,20 @@ void ScheduleManager::incProgress()
     m_project.incProgress();
 }
 
-void ScheduleManager::logAdded( Schedule::Log &log )
+void ScheduleManager::logAdded( const Schedule::Log &log )
 {
     emit sigLogAdded( log );
     int row = expected()->logs().count() - 1;
     emit logInserted( expected(), row, row );
 }
 
-void ScheduleManager::slotAddLog( const QList<KPlato::Schedule::Log> &log )
+void ScheduleManager::slotAddLog( const QVector<KPlato::Schedule::Log> &log )
 {
     if ( expected() && ! log.isEmpty() ) {
         int first = expected()->logs().count();
         int last = first + log.count() - 1;
         Q_UNUSED(last);
-        foreach ( KPlato::Schedule::Log l, log ) {
+        foreach ( const KPlato::Schedule::Log &l, log ) {
             expected()->addLog( l );
         }
     }

@@ -541,7 +541,7 @@ public:
     /// Hide columns in the @p hideList, show all other columns.
     /// If the hideList.last() == -1, the rest of the columns are hidden.
     void hideColumns( TreeViewBase *view, const QList<int> &hideList );
-    void hideColumns( const QList<int> &masterList, const QList<int> List = QList<int>() );
+    void hideColumns( const QList<int> &masterList, const QList<int> &slaveList = QList<int>() );
     void hideColumn( int col ) {
         m_leftview->hideColumn( col ); 
         if ( m_rightview ) m_rightview->hideColumn( col );

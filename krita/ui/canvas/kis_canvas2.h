@@ -27,7 +27,7 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
@@ -192,6 +192,9 @@ public Q_SLOTS:
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;
+    /// Bools indicating canvasmirroring.
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
 
     void channelSelectionChanged();
 
@@ -232,8 +235,9 @@ public:
     bool isPopupPaletteVisible();
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
 
-    // interafce for KisCanvasController only
+    // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
+    bool wrapAroundViewingMode() const;
     void initializeImage();
     // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);

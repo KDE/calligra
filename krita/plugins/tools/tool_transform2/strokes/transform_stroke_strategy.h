@@ -31,10 +31,10 @@
 class KisPostExecutionUndoAdapter;
 
 
-class KDE_EXPORT TransformStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class TransformStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KDE_EXPORT TransformData : public KisStrokeJobData {
+    class TransformData : public KisStrokeJobData {
     public:
         enum Destination {
             PAINT_DEVICE,
@@ -55,7 +55,7 @@ public:
         KisNodeSP node;
     };
 
-    class KDE_EXPORT ClearSelectionData : public KisStrokeJobData {
+    class ClearSelectionData : public KisStrokeJobData {
     public:
         ClearSelectionData(KisNodeSP _node)
             : KisStrokeJobData(SEQUENTIAL, NORMAL),
@@ -76,7 +76,15 @@ public:
     KisSelectionSP realSelection() const;
 
 
+    void initStrokeCallback();
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
+
+    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode);
+
+protected:
+    void postProcessToplevelCommand(KUndo2Command *command);
 
 private:
     KoUpdaterPtr fetchUpdater(KisNodeSP node);
@@ -108,6 +116,10 @@ private:
 
     KisPaintDeviceSP m_previewDevice;
     KisTransformMaskSP writeToTransformMask;
+
+
+    ToolTransformArgs m_savedTransformArgs;
+    KisNodeSP m_savedRootNode;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

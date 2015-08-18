@@ -30,12 +30,9 @@
 #include "kis_node.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
-#include "kis_node_progress_proxy.h"
+#include "kis_busy_progress_indicator.h"
 #include "kis_transaction.h"
 #include "kis_painter.h"
-
-#include <KoUpdater.h>
-#include <KoProgressUpdater.h>
 
 KisFilterMask::KisFilterMask()
     : KisEffectMask(),
@@ -56,7 +53,7 @@ KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
 
 QIcon KisFilterMask::icon() const
 {
-    return koIcon("view-filter");
+    return themedIcon("view-filter");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
@@ -93,14 +90,10 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         return QRect();
     }
 
-    KoProgressUpdater updater(nodeProgressProxy());
-    updater.start(100, filter->name());
+    KIS_ASSERT_RECOVER_NOOP(this->busyProgressIndicator());
+    this->busyProgressIndicator()->update();
 
-    QPointer<KoUpdater> updaterPtr = updater.startSubtask();
-
-    filter->process(src, dst, 0, rc, filterConfig.data(), updaterPtr);
-
-    updaterPtr->setProgress(100);
+    filter->process(src, dst, 0, rc, filterConfig.data(), 0);
 
     QRect r = filter->changedRect(rc, filterConfig.data());
     return r;

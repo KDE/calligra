@@ -26,6 +26,7 @@
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
 #include "kis_liquify_properties.h"
+#include <kritatooltransform_export.h>
 
 
 #include <QScopedPointer>
@@ -39,7 +40,7 @@ class QDomElement;
  * memory.
  */
 
-class KDE_EXPORT ToolTransformArgs
+class KRITATOOLTRANSFORM_TEST_EXPORT ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
@@ -261,6 +262,10 @@ public:
 
     void translate(const QPointF &offset);
 
+    void saveContinuedState();
+    void restoreContinuedState();
+    const ToolTransformArgs* continuedTransform() const;
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -299,6 +304,13 @@ private:
     bool m_editTransformPoints;
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
+
+    /**
+     * When we continue a transformation, m_continuedTransformation
+     * stores the initial step of our transform. All cancel and revert
+     * operations should revert to it.
+     */
+    QScopedPointer<ToolTransformArgs> m_continuedTransformation;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

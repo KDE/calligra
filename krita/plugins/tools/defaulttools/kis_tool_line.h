@@ -57,11 +57,15 @@ public:
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void deactivate();
 
     virtual int flags() const;
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const;
+
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 
 private Q_SLOTS:
     void updateStroke();

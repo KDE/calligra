@@ -25,7 +25,7 @@
 #include <QDomElement>
 #include <QLocale>
 #include "klocale.h"
-#include "krita_export.h"
+#include "kritaimage_export.h"
 #include "kis_debug.h"
 
 
@@ -224,6 +224,11 @@ bool loadValue(const QDomElement &parent, const QString &tag, T *value)
 
     return loadValue(e, value);
 }
+
+KRITAIMAGE_EXPORT QDomElement findElementByAttibute(QDomNode parent,
+                                                    const QString &tag,
+                                                    const QString &attribute,
+                                                    const QString &key);
 
 }
 

@@ -39,11 +39,11 @@ class KexiReportPart::Private
 public:
     Private() : toolboxActionGroup(0)
     {
-        ksrc = 0;
+        sourceSelector = 0;
     }
     ~Private() {
     }
-    KexiSourceSelector *ksrc;
+    KexiSourceSelector *sourceSelector;
     QActionGroup toolboxActionGroup;
     QMap<QString, QAction*> toolboxActionsByName;
 };
@@ -91,8 +91,8 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
         view = new KexiReportView(parent);
 
     } else if (viewMode == Kexi::DesignViewMode) {
-        view = new KexiReportDesignView(parent, d->ksrc);
-        connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
+        view = new KexiReportDesignView(parent, d->sourceSelector);
+        connect(d->sourceSelector, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
         connect(view, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
     }
     return view;
@@ -171,10 +171,11 @@ KexiReportPart::TempData::TempData(QObject* parent)
 
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
-    if (!d->ksrc)
-        d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
-    tab->addTab(d->ksrc, koIcon("server-database"), QString());
-    tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
+    if (!d->sourceSelector) {
+        d->sourceSelector = new KexiSourceSelector(KexiMainWindowIface::global()->project(), tab);
+    }
+    tab->addTab(d->sourceSelector, koIcon("server-database"), QString());
+    tab->setTabToolTip(tab->indexOf(d->sourceSelector), i18n("Data Source"));
 }
 
 void KexiReportPart::slotToolboxActionTriggered(bool checked)

@@ -27,7 +27,6 @@
 
 
 
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "KoGridData.h"
 #include "KoGuidesData.h"
@@ -42,11 +41,12 @@
 #include <kis_painting_assistant.h>
 #include <kis_debug.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 
 class QString;
 
 class KUndo2Command;
+class KoUnit;
 
 class KoColor;
 class KoColorSpace;
@@ -86,6 +86,11 @@ protected:
 
 public:
 
+    enum OpenUrlFlags {
+        OPEN_URL_FLAG_NONE                       = 1 << 0,
+        OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES = 1 << 1,
+    };
+
     /**
      *  Destructor.
      *
@@ -101,10 +106,12 @@ public:
     virtual bool reload();
 
     /**
-     * Reimplemented from KisParts::ReadWritePart for internal reasons
-     * (for the autosave functionality)
+     * @brief openUrl Open an URL
+     * @param url The URL to open
+     * @param flags Control specific behavior
+     * @return success status
      */
-    virtual bool openUrl(const KUrl & url);
+    virtual bool openUrl(const KUrl & url, OpenUrlFlags flags = OPEN_URL_FLAG_NONE);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -700,7 +707,7 @@ public:
     QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
 
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 

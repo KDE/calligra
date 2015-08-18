@@ -31,15 +31,9 @@
 #include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <QSize>
 #include <QStackedWidget>
 #include <QVBoxLayout>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QPrinter>
 #include <QPrintDialog>
-#include <QProgressBar>
-#include <QSortFilterProxyModel>
 #include <QDomDocument>
 #include <QDomElement>
 #include <kundo2command.h>
@@ -471,7 +465,7 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".plant",
                                         Factory::global(), getPart(), this);
 }
 

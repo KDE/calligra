@@ -214,7 +214,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
 
-        yres = 100.0;
+        yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0) {
                 yres = attr.toDouble() / 72.0;
@@ -353,7 +353,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         {
             KoStoreDevice device(store);
             device.open(QIODevice::ReadOnly);
-            collection->loadFromDevice(&device);
+
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            collection->loadFromDevice(&raDevice);
         }
         store->close();
 
@@ -572,6 +580,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         }
     }
 
+    if (node->inherits("KisGroupLayer")) {
+        if (element.hasAttribute(PASS_THROUGH_MODE)) {
+            bool value = element.attribute(PASS_THROUGH_MODE, "0") != "0";
+
+            KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
+            group->setPassThroughMode(value);
+        }
+    }
+
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
@@ -641,8 +658,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString basePath = info.absolutePath();
 
     QString fullPath = basePath + QDir::separator() + filename;
-
+    // Entering the event loop to show the messagebox will delete the image, so up the ref by one
+    image->ref();
     if (!QFileInfo(fullPath).exists()) {
+
+        qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
             "@info",
             "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
@@ -666,6 +686,8 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
                 filename = d.relativeFilePath(url);
             }
         }
+
+        qApp->restoreOverrideCursor();
     }
 
     KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);

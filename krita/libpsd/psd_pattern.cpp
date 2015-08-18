@@ -52,6 +52,7 @@ KoPattern *PsdPattern::pattern() const
 
 bool psd_write_pattern(QIODevice *io)
 {
+    Q_UNUSED(io);
     return false;
 }
 
@@ -87,7 +88,7 @@ bool psd_read_pattern(QIODevice *io)
 
     // Now load the virtual memory array
     psdread(io, &pattern.version);
-    if (!pattern.version == 3) return false;
+    if (pattern.version != 3) return false;
     quint32 vm_array_length;
     psdread(io, &vm_array_length);
     psdread(io, &pattern.top);
@@ -173,6 +174,7 @@ bool psd_read_pattern(QIODevice *io)
                 }
 
                 per_channel_length = length;
+                Q_UNUSED(per_channel_length); // wtf!?
 
                 switch(pattern.color_mode) {
                 case Bitmap:

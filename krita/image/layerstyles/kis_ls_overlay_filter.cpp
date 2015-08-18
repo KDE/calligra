@@ -22,7 +22,6 @@
 
 #include <QBitArray>
 
-#include <KoUpdater.h>
 #include <KoPattern.h>
 
 #include <KoAbstractGradient.h>
@@ -89,10 +88,9 @@ void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
         const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
 
         gc.setCompositeOp(compositeOp);
-        gc.setOpacity(opacityU8);
+        env->setupFinalPainter(&gc, opacityU8, QBitArray());
 
         gc.bitBlt(applyRect.topLeft(), tempDevice, applyRect);
-
         gc.end();
     }
 }

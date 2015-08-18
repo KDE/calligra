@@ -28,7 +28,8 @@
 #include <QtConcurrentMap>
 #include <QByteArray>
 #include <QBuffer>
-#include <QCryptographicHash>
+#include <QFile>
+#include <QFileInfo>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -294,7 +295,7 @@ QImage KisAutoBrush::createBrushPreview()
     int width = maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
     int height = maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
 
-    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, angle(), 0, 0);
+    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, angle(), 0, 0, 0, 0);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     fdev->setRect(QRect(0, 0, width, height));
@@ -313,29 +314,6 @@ const KisMaskGenerator* KisAutoBrush::maskGenerator() const
 qreal KisAutoBrush::density() const
 {
     return d->density;
-}
-
-QByteArray KisAutoBrush::generateMD5() const
-{
-    QByteArray ba;
-    if (!brushTipImage().isNull()) {
-#if QT_VERSION >= 0x040700
-        ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
-#else
-        ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
-#endif
-    }
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(ba);
-
-    QDomDocument doc;
-    QDomElement root = doc.createElement("autobrush");
-    toXML(doc, root);
-    doc.appendChild(root);
-    md5.addData(doc.toByteArray());
-
-    return md5.result();
-
 }
 
 qreal KisAutoBrush::randomness() const

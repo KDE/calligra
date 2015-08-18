@@ -23,6 +23,29 @@
 #include <KoColorSpaceMaths.h>
 
 template<class HSXType, class TReal>
+inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
+{
+    // see http://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
+    TReal tx = 2*srcR-1;
+    TReal ty = 2*srcG-1;
+    TReal tz = 2*srcB;
+    TReal ux = -2*dstR+1;
+    TReal uy = -2*dstG+1;
+    TReal uz = 2*dstB-1;
+    TReal k = (tx*ux+ty*uy+tz*uz)/tz; // dot(t,u)/t.z
+    TReal rx = tx*k-ux;
+    TReal ry = ty*k-uy;
+    TReal rz = tz*k-uz;
+    k = 1/sqrt(rx*rx+ry*ry+rz*rz); // normalize result
+    rx *= k;
+    ry *= k;
+    rz *= k;
+    dstR = rx*0.5+0.5;
+    dstG = ry*0.5+0.5;
+    dstB = rz*0.5+0.5;
+}
+
+template<class HSXType, class TReal>
 inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     TReal lum = getLightness<HSXType>(dr, dg, db);
     dr = sr;
@@ -91,8 +114,41 @@ inline void cfTangentNormalmap(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& d
     dr = sr+(dr-half);
     dg = sg+(dg-half);
     db = sb+(db-unitValue<TReal>());
+} 
     
+template<class HSXType, class TReal>
+inline void cfDarkerColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     
+    TReal lum = getLightness<HSXType>(dr, dg, db);
+    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
+    if (lum<lum2) {
+        sr = dr;
+        sg = dg;
+        sb = db;
+    }
+    else {
+        dr = sr;
+        dg = sg;
+        db = sb;
+    }
+
+}
+
+template<class HSXType, class TReal>
+inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    
+    TReal lum = getLightness<HSXType>(dr, dg, db);
+    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
+    if (lum>lum2) {
+        sr = dr;
+        sg = dg;
+        sb = db;
+    }
+    else {
+        dr = sr;
+        dg = sg;
+        db = sb;
+    }
 }
 
 template<class T>
@@ -227,7 +283,7 @@ inline T cfVividLight(T src, T dst) {
     if(src < halfValue<T>()) {
         if(src == zeroValue<T>())
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
-            
+
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
         composite_type dsti = inv(dst);

@@ -35,6 +35,7 @@ struct KisLayerStyleProjectionPlane::Private
     QVector<KisAbstractProjectionPlaneSP> stylesBefore;
     QVector<KisAbstractProjectionPlaneSP> stylesAfter;
 
+    KisPSDLayerStyleSP style;
 };
 
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
@@ -58,7 +59,9 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
 
 void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleSP style)
 {
+    Q_ASSERT(sourceLayer);
     m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
+    m_d->style = style;
 
     {
         KisLayerStyleFilterProjectionPlane *dropShadow =
@@ -137,6 +140,7 @@ KisLayerStyleProjectionPlane::~KisLayerStyleProjectionPlane()
 
 KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLayer *sourceLayer)
 {
+    Q_ASSERT(sourceLayer);
     return toQShared(new KisLayerStyleProjectionPlane(sourceLayer));
 }
 
@@ -150,14 +154,18 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-        plane->apply(painter, rect);
-    }
+    if (m_d->style->isEnabled()) {
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            plane->apply(painter, rect);
+        }
 
-    sourcePlane->apply(painter, rect);
+        sourcePlane->apply(painter, rect);
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-        plane->apply(painter, rect);
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            plane->apply(painter, rect);
+        }
+    } else {
+        sourcePlane->apply(painter, rect);
     }
 }
 
@@ -173,12 +181,14 @@ QRect KisLayerStyleProjectionPlane::changeRect(const QRect &rect, KisLayer::Posi
     QRect layerChangeRect = sourcePlane->changeRect(rect, pos);
     QRect changeRect = layerChangeRect;
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-        changeRect |= plane->changeRect(layerChangeRect, KisLayer::N_ABOVE_FILTHY);
-    }
+    if (m_d->style->isEnabled()) {
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            changeRect |= plane->changeRect(layerChangeRect, KisLayer::N_ABOVE_FILTHY);
+        }
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-        changeRect |= plane->changeRect(layerChangeRect, KisLayer::N_ABOVE_FILTHY);
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            changeRect |= plane->changeRect(layerChangeRect, KisLayer::N_ABOVE_FILTHY);
+        }
     }
 
     return changeRect;
@@ -189,12 +199,14 @@ QRect KisLayerStyleProjectionPlane::accessRect(const QRect &rect, KisLayer::Posi
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
     QRect accessRect = sourcePlane->accessRect(rect, pos);
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-        accessRect |= plane->accessRect(rect, KisLayer::N_ABOVE_FILTHY);
-    }
+    if (m_d->style->isEnabled()) {
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            accessRect |= plane->accessRect(rect, KisLayer::N_ABOVE_FILTHY);
+        }
 
-    foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-        accessRect |= plane->accessRect(rect, KisLayer::N_ABOVE_FILTHY);
+        foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            accessRect |= plane->accessRect(rect, KisLayer::N_ABOVE_FILTHY);
+        }
     }
 
     return accessRect;

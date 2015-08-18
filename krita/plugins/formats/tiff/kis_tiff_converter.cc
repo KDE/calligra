@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <KoDocumentInfo.h>
+#include <KoUnit.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -45,6 +46,10 @@
 #include "kis_tiff_ycbcr_reader.h"
 #include "kis_buffer_stream.h"
 #include "kis_tiff_writer_visitor.h"
+
+#if TIFFLIB_VERSION < 20111221
+typedef size_t tmsize_t;
+#endif
 
 namespace
 {

@@ -32,11 +32,15 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
+#include <KoHashGeneratorProvider.h>
+
 #include <kis_debug.h>
 
 #include "kis_aboutdata.h"
 
 #include "KisPart.h"
+
+#include "kis_md5_generator.h"
 
 
 KAboutData* KisFactory::s_aboutData = 0;
@@ -45,6 +49,7 @@ KComponentData* KisFactory::s_componentData = 0;
 KisFactory::KisFactory()
 {
     (void)componentData();
+    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 KisFactory::~KisFactory()
@@ -69,7 +74,6 @@ const KComponentData &KisFactory::componentData()
     if (!s_componentData) {
         s_componentData = new KComponentData(aboutData());
         Q_CHECK_PTR(s_componentData);
-        s_componentData->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         // for cursors
         s_componentData->dirs()->addResourceType("kis_pics", "data", "krita/pics/");

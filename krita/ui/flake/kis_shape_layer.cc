@@ -46,6 +46,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoImageCollection.h>
+#include <KoUnit.h>
 #include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
@@ -271,7 +272,7 @@ void KisShapeLayer::setParent(KoShapeContainer *parent)
 
 QIcon KisShapeLayer::icon() const
 {
-    return koIcon("bookmark-new");
+    return themedIcon("bookmarks");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

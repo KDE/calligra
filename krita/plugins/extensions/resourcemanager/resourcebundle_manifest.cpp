@@ -22,13 +22,13 @@
 #include <QDomElement>
 #include <QDomNode>
 #include <QDomNodeList>
+#include <QForeachContainer>
 
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include "KoPattern.h"
 #include "KoAbstractGradient.h"
-#include "KoResourceServerProvider.h"
 
 #include "kis_brush_server.h"
 #include "kis_resource_server_provider.h"
@@ -179,7 +179,7 @@ bool ResourceBundleManifest::save(QIODevice *device)
 
 void ResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
 {
-    ResourceReference ref(fileName, fileTagList, md5);
+    ResourceReference ref(fileName, fileTagList, fileTypeName, md5);
     if (!m_resources.contains(fileTypeName)) {
         m_resources[fileTypeName] = QMap<QString, ResourceReference>();
     }
@@ -204,7 +204,18 @@ QStringList ResourceBundleManifest::tags() const
 
 QList<ResourceBundleManifest::ResourceReference> ResourceBundleManifest::files(const QString &type) const
 {
-    if (!m_resources.contains(type)) {
+    // If no type is specified we return all the resources
+    if(type.isEmpty()) {
+        QList<ResourceReference> resources;
+        QList<QMap<QString, ResourceReference> >::iterator i;
+        QList<QMap<QString, ResourceReference> > values = m_resources.values();
+        for(i = values.begin(); i != values.end(); ++i) {
+            resources.append(i->values());
+        }
+
+        return resources;
+    }
+    else if (!m_resources.contains(type)) {
         return QList<ResourceBundleManifest::ResourceReference>();
     }
     return m_resources[type].values();

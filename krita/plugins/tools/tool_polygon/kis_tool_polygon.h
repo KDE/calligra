@@ -37,6 +37,8 @@ public:
     virtual ~KisToolPolygon();
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points);
+protected Q_SLOTS:
+    virtual void resetCursorStyle();
 };
 
 
@@ -51,7 +53,7 @@ public:
         setToolTip(i18n("Polygon Tool. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIconName(koIconNameCStr("tool_polygon"));
+        setIconName(koIconNameCStr("krita_tool_polygon"));
         setPriority(4);
     }
 

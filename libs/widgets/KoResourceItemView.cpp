@@ -21,88 +21,40 @@
 #include "KoResourceItemView.h"
 #include <QEvent>
 #include <QHelpEvent>
-#include <QHeaderView>
 
 #include <QDebug>
 
-KoResourceItemView::KoResourceItemView( QWidget * parent )
-    : QTableView(parent)
+KoResourceItemView::KoResourceItemView(QWidget *parent)
+    : KoTableView(parent)
 {
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    verticalHeader()->hide();
-    horizontalHeader()->hide();
-    verticalHeader()->setDefaultSectionSize( 20 );
-    setContextMenuPolicy(Qt::DefaultContextMenu);
-    m_viewMode = FIXED_COLUMS;
 }
 
-void KoResourceItemView::resizeEvent( QResizeEvent * event )
+bool KoResourceItemView::viewportEvent(QEvent *event)
 {
-    QTableView::resizeEvent(event);
-    updateView();
-
-    emit sigSizeChanged();
-}
-
-bool KoResourceItemView::viewportEvent( QEvent * event )
-{
-    if( event->type() == QEvent::ToolTip && model() )
-    {
-        QHelpEvent *he = static_cast<QHelpEvent*>(event);
+    if (event->type() == QEvent::ToolTip && model()) {
+        QHelpEvent *he = static_cast<QHelpEvent *>(event);
         QStyleOptionViewItem option = viewOptions();
-        QModelIndex index = model()->buddy( indexAt(he->pos()));
-        if( index.isValid() )
-        {
-            option.rect = visualRect( index );
-            m_tip.showTip( this, he->pos(), option, index );
+        QModelIndex index = model()->buddy(indexAt(he->pos()));
+        if (index.isValid()) {
+            option.rect = visualRect(index);
+            m_tip.showTip(this, he->pos(), option, index);
             return true;
         }
     }
 
-    return QTableView::viewportEvent( event );
+    return QTableView::viewportEvent(event);
 }
 
-void KoResourceItemView::setViewMode(KoResourceItemView::ViewMode mode)
-{
-    m_viewMode = mode;
-}
 
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     emit currentResourceChanged(selected.indexes().first());
 }
 
-void KoResourceItemView::contextMenuEvent( QContextMenuEvent * event)
+void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)
 {
     QTableView::contextMenuEvent(event);
     emit contextMenuRequested(event->globalPos());
-}
-
-void KoResourceItemView::updateView()
-{
-    int columnCount = model()->columnCount( QModelIndex() );
-    int rowCount = model()->rowCount( QModelIndex() );
-    int rowHeight, columnWidth;
-
-    if (m_viewMode == FIXED_COLUMS) {
-        columnWidth = viewport()->size().width() / columnCount;
-
-        for( int i = 0; i < columnCount; ++i ) {
-            setColumnWidth( i, columnWidth );
-        }
-        if ( columnCount > 1) {
-            for( int i = 0; i < rowCount; ++i ) {
-                setRowHeight( i, columnWidth );
-            }
-        }
-    } else if (m_viewMode == FIXED_ROWS) {
-        if (rowCount == 0) return;  // Don't divide by zero
-        rowHeight = viewport()->size().height() / rowCount;
-
-        for( int i = 0; i < rowCount; ++i ) {
-            setRowHeight( i, rowHeight );
-        }
-    }
 }
 
 

@@ -31,6 +31,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoUnit.h>
 
 #include <QTextCursor>
 #include <kdebug.h>

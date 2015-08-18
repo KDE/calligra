@@ -46,6 +46,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
     // https://bugs.kde.org/show_bug.cgi?id=294122
     // demand the opposite from each other...
     setCompositeOp(COMPOSITE_COPY);
+    setUseSelectionInProjection(false);
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
@@ -76,11 +77,12 @@ QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
     }
 
     /**
-     * We can't paint outside a selection, that is why we call
-     * KisSelectionBasedLayer::cropChangeRectBySelection to crop
-     * actual change area in the end
+     * After the change in the blending using
+     * setUseSelectionInProjection(false) we should *not* crop the
+     * change rect of the layer, because we pass contents through.
+     *
+     * //filteredRect = cropChangeRectBySelection(filteredRect);
      */
-    filteredRect = cropChangeRectBySelection(filteredRect);
 
     return filteredRect;
 }
@@ -116,7 +118,7 @@ void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *u
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return koIcon("view-filter");
+    return themedIcon("view-filter");
 }
 
 KisDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const

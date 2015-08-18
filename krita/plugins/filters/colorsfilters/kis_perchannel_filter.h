@@ -25,10 +25,13 @@
 #include <QList>
 
 #include <filter/kis_color_transformation_filter.h>
-#include <filter/kis_filter_configuration.h>
+#include <filter/kis_color_transformation_configuration.h>
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
 #include "ui_wdg_perchannel.h"
+
+#include "virtual_channel_info.h"
+
 
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
 {
@@ -41,7 +44,7 @@ public:
 };
 
 class KisPerChannelFilterConfiguration
-        : public KisFilterConfiguration
+        : public KisColorTransformationConfiguration
 {
 public:
     KisPerChannelFilterConfiguration(int n);
@@ -108,6 +111,10 @@ private Q_SLOTS:
 
 private:
 
+    QVector<VirtualChannelInfo> m_virtualChannels;
+    int m_activeVChannel;
+
+
     // private routines
     inline QPixmap getHistogram();
     inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
@@ -117,7 +124,6 @@ private:
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
     mutable QList<KisCubicCurve> m_curves;
-    int m_activeCh;
 
     // scales for displaying color numbers
     double m_scale;

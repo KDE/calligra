@@ -36,7 +36,6 @@
 #endif
 
 #include <QDateTime>
-#include <QPushButton>
 
 #include <kptdebug.h>
 

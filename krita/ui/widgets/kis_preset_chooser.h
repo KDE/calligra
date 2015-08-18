@@ -21,7 +21,7 @@
 #define KIS_ITEM_CHOOSER_H_
 
 #include <QWidget>
-#include <krita_export.h>
+#include <kritaui_export.h>
 #include <KoID.h>
 
 class KoAbstractResourceServerAdapter;
@@ -55,7 +55,7 @@ public:
 
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
-    void showTaggingBar( bool showSearchBar, bool showOpBar );
+    void showTaggingBar(bool show);
 
     KoResourceItemChooser *itemChooser();
 

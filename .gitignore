@@ -23,4 +23,8 @@ CMakeLists.txt.user*
 *.diff
 *.patch
 *.pyc
-
+GTAGS
+GPATH
+GRTAGS
+GSYMS
+BROWSE

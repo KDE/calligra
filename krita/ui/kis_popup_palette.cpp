@@ -27,8 +27,6 @@
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
 #include "KoColorSpaceRegistry.h"
-#include "KoResource.h"
-#include <KoResourceServer.h>
 #include <kis_types.h>
 #include <QtGui>
 #include <QDebug>
@@ -358,7 +356,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     int side = qMin(width(), height());
-    QPixmap settingIcon = koIcon("configure").pixmap(QSize(22,22));
+    QPixmap settingIcon = themedIcon("configure").pixmap(QSize(22,22));
     painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
     
 }

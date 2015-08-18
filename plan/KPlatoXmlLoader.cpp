@@ -30,8 +30,6 @@
 #include <ktimezone.h>
 #include <kdebug.h>
 
-#include <QDateTime>
-
 extern int kplatoXmlDebugArea();
 
 namespace KPlato

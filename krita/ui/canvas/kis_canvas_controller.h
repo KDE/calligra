@@ -21,7 +21,7 @@
 
 #include <KoCanvasControllerWidget.h>
 
-#include "krita_export.h"
+#include "kritaui_export.h"
 #include "kis_types.h"
 
 class KisView;
@@ -43,6 +43,7 @@ public:
 
 public:
     using KoCanvasController::documentSize;
+    bool wrapAroundMode() const;
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

@@ -61,8 +61,10 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/slider_and_spin_box_sync.cpp
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
+    dialogs/kis_dlg_png_import.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -117,7 +119,7 @@ set(kritaui_LIB_SRCS
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
+    kis_paintop_settings_widget.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -169,6 +171,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool.cc
     tool/kis_delegated_tool_policies.cpp
     tool/kis_tool_freehand.cc
+    tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
@@ -176,7 +179,6 @@ set(kritaui_LIB_SRCS
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
-    tool/kis_tool_select_base.cpp
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
@@ -209,6 +211,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_integer_filter_widget.cc
     widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_popup.cpp
+    widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc
@@ -313,6 +316,7 @@ set(kritaui_LIB_SRCS
     KisView.cpp
 
     thememanager.cpp
+    kis_icon_utils.cpp
 
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
@@ -324,6 +328,7 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtsingleapplication.cpp
 
     widgets/kis_url_requester.cpp
+    kis_md5_generator.cpp
 )
 
 if(WIN32)
@@ -369,6 +374,7 @@ endif()
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
@@ -438,7 +444,8 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
-                              ${X11_Xinput_LIB})
+                              ${X11_Xinput_LIB}
+                              ${KDE4_KIO_LIBS} )
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
 endif ()
@@ -464,7 +471,7 @@ if(HAVE_OPENGL)
 
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms ${KDE4_KIO_LIBS} ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -478,6 +485,7 @@ if (APPLE)
 endif ()
 
 install( FILES
+    kritaui_export.h
     canvas/kis_canvas2.h
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h
@@ -516,6 +524,6 @@ install( FILES
 #    canvas/kis_perspective_grid_manager.h
     kis_paintop_option.h
     kis_paintop_options_model.h
-    kis_paintop_options_widget.h
+    kis_paintop_settings_widget.h
     processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

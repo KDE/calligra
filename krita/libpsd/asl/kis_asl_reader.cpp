@@ -467,7 +467,7 @@ qint64 readPattern(QIODevice *device,
         QString fileName = QString("%1.pat").arg(patternUuid);
         QImage patternImage = readVirtualArrayList(device, numPlanes);
         KoPattern realPattern(patternImage, patternName, fileName);
-        realPattern.saveToDevice(&patternBuf);
+        realPattern.savePatToDevice(&patternBuf);
     }
 
     /**
@@ -579,6 +579,12 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
 {
     QDomDocument doc;
 
+    if (device->isSequential()) {
+        qWarning() << "WARNING: *** KisAslReader::readFile: the supplied"
+                   << "IO device is sequential. Chances are that"
+                   << "the layer style will *not* be loaded correctly!";
+    }
+
     try {
         doc = Private::readFileImpl(device);
     } catch (KisAslReaderUtils::ASLParseException &e) {
@@ -591,6 +597,12 @@ QDomDocument KisAslReader::readFile(QIODevice *device)
 QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
 {
     QDomDocument doc;
+
+    if (device->isSequential()) {
+        qWarning() << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
+                   << "IO device is sequential. Chances are that"
+                   << "the layer style will *not* be loaded correctly!";
+    }
 
     try {
         {
@@ -613,6 +625,33 @@ QDomDocument KisAslReader::readLfx2PsdSection(QIODevice *device)
 
     } catch (KisAslReaderUtils::ASLParseException &e) {
         qWarning() << "WARNING: PSD: lfx2 section:" << e.what();
+    }
+
+    return doc;
+}
+
+QDomDocument KisAslReader::readPsdSectionPattern(QIODevice *device, qint64 bytesLeft)
+{
+    QDomDocument doc;
+
+    QDomElement root = doc.createElement("asl");
+    doc.appendChild(root);
+
+    QDomElement pat = doc.createElement("node");
+    root.appendChild(pat);
+
+    pat.setAttribute("classId", "Patterns");
+    pat.setAttribute("type", "Descriptor");
+    pat.setAttribute("name", "");
+
+    try {
+        qint64 bytesRead = 0;
+        while (bytesRead < bytesLeft) {
+            qint64 chunk = Private::readPattern(device, &pat, &doc);
+            bytesRead += chunk;
+        }
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        qWarning() << "WARNING: PSD (emb. pattern):" << e.what();
     }
 
     return doc;

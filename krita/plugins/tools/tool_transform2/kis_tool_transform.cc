@@ -87,7 +87,6 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
     , m_workRecursively(true)
-    , m_isActive(false)
     , m_changesTracker(&m_transaction)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
@@ -146,6 +145,13 @@ void KisToolTransform::outlineChanged()
 void KisToolTransform::canvasUpdateRequested()
 {
     m_canvas->updateCanvas();
+}
+
+void KisToolTransform::resetCursorStyle()
+{
+    KisTool::resetCursorStyle();
+
+    overrideCursorIfNotEditable();
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -207,6 +213,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolTransform::setFunctionalCursor()
 {
+    if (overrideCursorIfNotEditable()) {
+        return;
+    }
+
     if (!m_strokeData.strokeId()) {
         useCursor(KisCursor::pointingHandCursor());
     } else {
@@ -446,11 +456,6 @@ void KisToolTransform::applyTransform()
     slotApplyTransform();
 }
 
-bool KisToolTransform::isActive() const
-{
-    return m_isActive;
-}
-
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
 {
     TransformToolMode mode = FreeTransformMode;
@@ -653,6 +658,30 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
     return result;
 }
 
+bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
+    KisNodeSP oldRootNode;
+
+    if (lastCommand &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
+        args->mode() == mode &&
+        oldRootNode == currentNode) {
+
+        args->saveContinuedState();
+
+        image()->undoAdapter()->undoLastCommand();
+        // FIXME: can we make it async?
+        image()->waitForDone();
+
+        result = true;
+    }
+
+    return result;
+}
+
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -767,8 +796,6 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
     }
 
-    m_isActive = true;
-    emit isActiveChanged();
     startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
@@ -776,9 +803,6 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
-    m_isActive = false;
-    emit isActiveChanged();
-
     KisTool::deactivate();
 }
 
@@ -829,6 +853,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
+    ToolTransformArgs fetchedArgs;
+    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
+
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
@@ -867,12 +894,25 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    if (!tryInitTransformModeFromNode(currentNode)) {
+    if (fetchedFromCommand) {
+        m_currentArgs = fetchedArgs;
+        initGuiAfterTransformMode();
+    } else if (!tryInitTransformModeFromNode(currentNode)) {
         initTransformMode(mode);
     }
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
-    clearDevices(m_transaction.rootNode(), m_workRecursively);
+
+    bool haveInvisibleNodes = clearDevices(m_transaction.rootNode(), m_workRecursively);
+    if (haveInvisibleNodes) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Invisible sublayers will also be transformed. Lock layers if you do not want them to be transformed "),
+                QIcon(), 4000, KisFloatingMessage::Low);
+    }
+
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
@@ -904,9 +944,14 @@ void KisToolTransform::cancelStroke()
 {
     if (!m_strokeData.strokeId()) return;
 
-    image()->cancelStroke(m_strokeData.strokeId());
-    m_strokeData.clear();
-    m_changesTracker.reset();
+    if (m_currentArgs.continuedTransform()) {
+        m_currentArgs.restoreContinuedState();
+        endStroke();
+    } else {
+        image()->cancelStroke(m_strokeData.strokeId());
+        m_strokeData.clear();
+        m_changesTracker.reset();
+    }
 }
 
 void KisToolTransform::commitChanges()
@@ -922,15 +967,18 @@ void KisToolTransform::slotTrackerChangedConfig()
     updateOptionWidget();
 }
 
-void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
+bool KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
 {
-    if (!node->isEditable()) return;
+    bool haveInvisibleNodes = false;
+    if (!node->isEditable(false)) return haveInvisibleNodes;
+
+    haveInvisibleNodes = !node->visible(false);
 
     if (recursive) {
         // simple tail-recursive iteration
         KisNodeSP prevNode = node->lastChild();
         while(prevNode) {
-            clearDevices(prevNode, recursive);
+            haveInvisibleNodes |= clearDevices(prevNode, recursive);
             prevNode = prevNode->prevSibling();
         }
     }
@@ -944,6 +992,8 @@ void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
      * applicable nodes right in the beginning of the processing
      */
     m_strokeData.addClearedNode(node);
+
+    return haveInvisibleNodes;
 }
 
 void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
@@ -1041,8 +1091,25 @@ void KisToolTransform::slotApplyTransform()
 
 void KisToolTransform::slotResetTransform()
 {
-    initTransformMode(m_currentArgs.mode());
-    slotEditingFinished();
+    if (m_currentArgs.continuedTransform()) {
+        ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
+
+        if (m_currentArgs.continuedTransform()->mode() == savedMode) {
+            m_currentArgs.restoreContinuedState();
+            initGuiAfterTransformMode();
+            slotEditingFinished();
+
+        } else {
+            cancelStroke();
+            image()->waitForDone();
+            startStroke(savedMode);
+
+            KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
+        }
+    } else {
+        initTransformMode(m_currentArgs.mode());
+        slotEditingFinished();
+    }
 }
 
 void KisToolTransform::slotRestartTransform()

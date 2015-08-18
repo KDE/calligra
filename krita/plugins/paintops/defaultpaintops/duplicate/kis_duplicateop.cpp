@@ -53,7 +53,7 @@
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
 #include <kis_brush_option_widget.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_paint_action_type_option.h>
@@ -107,7 +107,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP realSourceDevice;
 
-    if (m_cloneFromProjection) {
+    if (m_cloneFromProjection && m_image) {
         realSourceDevice = m_image->projection();
     }
     else {

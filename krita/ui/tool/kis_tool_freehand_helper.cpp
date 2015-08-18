@@ -35,6 +35,8 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_utils.h"
 
+#include "kis_update_time_monitor.h"
+
 
 #include <math.h>
 
@@ -76,6 +78,9 @@ struct KisToolFreehandHelper::Private
     QQueue<KisPaintInformation> stabilizerDeque;
     KisPaintInformation stabilizerLastPaintInfo;
     QTimer stabilizerPollTimer;
+    
+    int canvasRotation;
+    bool canvasMirroredH;
 
     KisPaintInformation
     getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
@@ -121,6 +126,8 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 {
     const KisPaintOpSettings *settings = globalSettings;
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
+    info.setCanvasRotation(m_d->canvasRotation);
+    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
     KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
 
     if (!m_d->painterInfos.isEmpty()) {
@@ -330,6 +337,10 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
                                              elapsedStrokeTime());
+    info.setCanvasRotation( m_d->canvasRotation );
+    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
+
+    KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
     /**
      * Smooth the coordinates out using the history and the
@@ -805,3 +816,23 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
 {
     paintBezierCurve(m_d->painterInfos, pi1, control1, control2, pi2);
 }
+
+int KisToolFreehandHelper::canvasRotation()
+{
+    return m_d->canvasRotation;
+}
+
+void KisToolFreehandHelper::setCanvasRotation(int rotation)
+{
+   m_d->canvasRotation = rotation; 
+}
+bool KisToolFreehandHelper::canvasMirroredH()
+{
+    return m_d->canvasMirroredH;
+}
+
+void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
+{
+   m_d->canvasMirroredH = mirrored; 
+}
+

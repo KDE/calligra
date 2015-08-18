@@ -27,9 +27,9 @@
 #include "kptxmlloaderobject.h"
 #include "kptdebug.h"
 
-#include <QList>
+#include <KoXmlReader.h>
+
 #include <QListIterator>
-#include <QDomDocument>
 
 #include <klocale.h>
 

@@ -24,6 +24,8 @@
 
 #include <KoCompositeOpRegistry.h>
 #include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
+
 #include <KoPattern.h>
 
 
@@ -78,7 +80,7 @@ void KisAslLayerStyleSerializerTest::testReading()
 
     CMP(outerGlow, effectEnabled, true);
     CMP(outerGlow, blendMode, COMPOSITE_SCREEN);
-    CMP(outerGlow, color, QColor(255,255,189.997));
+    CMP(outerGlow, color, QColor(255, 255, 189));
     CMP(outerGlow, opacity, 43);
     CMP(outerGlow, spread, 23);
     CMP(outerGlow, size, 109);
@@ -93,7 +95,7 @@ void KisAslLayerStyleSerializerTest::testReading()
 
     CMP(innerGlow, effectEnabled, true);
     CMP(innerGlow, blendMode, COMPOSITE_SCREEN);
-    CMP(innerGlow, color, QColor(255,255,189.997));
+    CMP(innerGlow, color, QColor(255, 255, 189));
     CMP(innerGlow, opacity, 55);
     CMP(innerGlow, spread, 21);
     CMP(innerGlow, size, 128);
@@ -142,13 +144,13 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(stroke, size, 13);
     CMP(stroke, fillType, psd_fill_solid_color);
     CMP(stroke, position, psd_stroke_outside);
-    CMP(stroke, color, QColor(210.0, 33.7665, 87.6887));
+    CMP(stroke, color, QColor(210, 33, 87));
 
     CMP(bevelAndEmboss, effectEnabled, true);
 
     CMP(bevelAndEmboss, highlightBlendMode, COMPOSITE_SCREEN);
     CMP(bevelAndEmboss, highlightOpacity, 75);
-    CMP(bevelAndEmboss, highlightColor, QColor(255.0, 255.0, 255.0));
+    CMP(bevelAndEmboss, highlightColor, QColor(255, 255, 255));
 
     CMP(bevelAndEmboss, shadowBlendMode, COMPOSITE_MULT);
     CMP(bevelAndEmboss, shadowOpacity, 75);
@@ -337,22 +339,84 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
     }
 }
 
-#include <KoResourceServer.h>
-#include "kis_psd_layer_style_resource.h"
-#include "kis_resource_server_provider.h"
-
-void KisAslLayerStyleSerializerTest::testResources()
+void KisAslLayerStyleSerializerTest::testWritingGradients()
 {
-    QTest::qWait(1000);
+    KoStopGradient stopGradient("");
 
-    KGlobal::locale();
+    {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        QList<KoGradientStop> stops;
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs));
+        stops << KoGradientStop(0.3, KoColor(Qt::red, cs));
+        stops << KoGradientStop(0.6, KoColor(Qt::green, cs));
+        stops << KoGradientStop(1.0, KoColor(Qt::white, cs));
+        stopGradient.setStops(stops);
+    }
 
-    QTest::qWait(1000);
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *server =
-        KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    style->outerGlow()->setEffectEnabled(true);
+    style->outerGlow()->setFillType(psd_fill_gradient);
+    style->outerGlow()->setGradient(toQShared(new KoStopGradient(stopGradient)));
 
-    qDebug() << ppVar(server->resourceCount());
+    style->innerGlow()->setEffectEnabled(true);
+    style->innerGlow()->setFillType(psd_fill_gradient);
+    style->innerGlow()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+
+    style->gradientOverlay()->setEffectEnabled(true);
+    style->gradientOverlay()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+
+    style->stroke()->setEffectEnabled(true);
+    style->stroke()->setFillType(psd_fill_gradient);
+    style->stroke()->setGradient(toQShared(new KoStopGradient(stopGradient)));
+
+    {
+        KisAslLayerStyleSerializer s;
+
+        s.setStyles(QVector<KisPSDLayerStyleSP>() << style);
+
+        QFile dstFile("test_written_stop_gradient.asl");
+        dstFile.open(QIODevice::WriteOnly);
+        s.saveToDevice(&dstFile);
+        dstFile.close();
+    }
+
+    QString xmlDoc;
+
+    {
+        QFile resultFile("test_written_stop_gradient.asl");
+        resultFile.open(QIODevice::ReadOnly);
+
+        KisAslReader reader;
+        QDomDocument doc = reader.readFile(&resultFile);
+        xmlDoc = doc.toString();
+    }
+
+    {
+        // the reference document has stripped "Idnt" field which is random
+
+        QRegExp rx("<node key=\"Idnt\" type=\"Text\" value=\".+\"/>");
+        rx.setMinimal(true);
+
+        int pos = 0;
+        while ((pos = rx.indexIn(xmlDoc, pos)) != -1) {
+            xmlDoc.remove(pos, rx.matchedLength());
+        }
+
+        {
+            //QFile xmlFile("reference_gradients.asl.xml");
+            //xmlFile.open(QIODevice::WriteOnly);
+            //xmlFile.write(xmlDoc.toLatin1());
+            //xmlFile.close();
+        }
+
+        QString refFileName(TestUtil::fetchDataFileLazy("reference_gradients.asl.xml"));
+        QFile refFile(refFileName);
+        refFile.open(QIODevice::ReadOnly);
+        QString refDoc = QString(refFile.readAll());
+
+        QCOMPARE(xmlDoc, refDoc);
+    }
 }
 
 QTEST_KDEMAIN(KisAslLayerStyleSerializerTest, GUI)

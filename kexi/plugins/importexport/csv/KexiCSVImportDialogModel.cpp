@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
@@ -56,7 +56,6 @@ KexiCSVImportDialogModel::~KexiCSVImportDialogModel()
 
 QVariant KexiCSVImportDialogModel::data(const QModelIndex &index, int role) const
 {
-
     QVariant value = QStandardItemModel::data(index, role);
 
     switch (role) {
@@ -65,15 +64,6 @@ QVariant KexiCSVImportDialogModel::data(const QModelIndex &index, int role) cons
             QFont f(value.value<QFont>());
             f.setBold(true);
             return qVariantFromValue(f);
-        }
-    case Qt::EditRole:
-    case Qt::DisplayRole:
-        if (index.row() == 0) {
-            if (!d->columnNames[index.column()].isEmpty() && d->firstRowForFieldNames) {
-                return d->columnNames[index.column()];
-            } else {
-                return i18nc("@title:column Column 1, Column 2, etc.", "Column %1", index.column() + 1);
-            }
         }
     }
     return value;
@@ -93,14 +83,14 @@ QVariant KexiCSVImportDialogModel::headerData(int section, Qt::Orientation orien
     return value;
 }
 
-bool KexiCSVImportDialogModel::setData(const QModelIndex &index, const QVariant &value,
-                                       int role)
+Qt::ItemFlags KexiCSVImportDialogModel::flags(const QModelIndex &index) const
 {
-    if (index.row() == 0 && d->firstRowForFieldNames && role == Qt::EditRole) {
-        d->columnNames[index.column()] = value.toString();
-        return true;
+    Qt::ItemFlags f = QStandardItemModel::flags(index);
+    f |= Qt::ItemIsEditable;
+    if (index.row() > 0) {
+        f ^= Qt::ItemIsEditable;
     }
-    return QStandardItemModel::setData(index, value, role);
+    return f;
 }
 
 void KexiCSVImportDialogModel::setColumnCount(int col)
@@ -118,5 +108,12 @@ bool KexiCSVImportDialogModel::firstRowForFieldNames() const
 
 void KexiCSVImportDialogModel::setFirstRowForFieldNames(bool flag)
 {
-    d->firstRowForFieldNames = flag;
+    if (!flag) {
+        d->firstRowForFieldNames = flag;
+        for (int i = 0; i < columnCount(); ++i) {
+            setData(index(0, i),
+                    i18nc("@title:column Column 1, Column 2, etc.", "Column %1", i + 1),
+                    Qt::EditRole);
+        }
+    }
 }

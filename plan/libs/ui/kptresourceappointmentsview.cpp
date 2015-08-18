@@ -36,12 +36,10 @@
 
 #include "KoPageLayoutWidget.h"
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 
-#include <QMenu>
 #include <QList>
-#include <QObject>
 #include <QVBoxLayout>
-#include <QHeaderView>
 #include <QTabWidget>
 
 #include <klocale.h>

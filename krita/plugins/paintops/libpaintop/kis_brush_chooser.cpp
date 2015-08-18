@@ -34,9 +34,6 @@
 #include <klocale.h>
 
 #include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
 
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
@@ -45,10 +42,13 @@
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
 
+#include "kis_custom_brush_widget.h"
+#include "kis_clipboard_brush_widget.h"
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
 #include "kis_debug.h"
+#include "kis_image.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -96,7 +96,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_stampBrushWidget(0),
+      m_clipboardBrushWidget(0)
 {
     setObjectName(name);
 
@@ -135,7 +137,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true, true);
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
@@ -145,11 +147,23 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
 
+    QPushButton *stampButton = new QPushButton(i18n("Stamp"), this);
+    QPushButton *clipboardButton = new QPushButton(i18n("Clipboard"), this);
+
+    stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
+                                 "\n If no selection is present the whole image will be used."));
+    clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
+
+    m_itemChooser->addCustomButton(stampButton, 2);
+    m_itemChooser->addCustomButton(clipboardButton, 3);
+    connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
+    connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
+
     QGridLayout *spacingLayout = new QGridLayout();
+    spacingLayout->setObjectName("spacing grid layout");
 
     mainLayout->addLayout(spacingLayout, 1);
 
@@ -171,7 +185,6 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     spacingLayout->addLayout(resetHLayout, 4, 0, 1, 2);
 
-    slotActivatedBrush(m_itemChooser->currentResource());
     update(m_itemChooser->currentResource());
 }
 
@@ -245,6 +258,37 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
+void KisBrushChooser::slotOpenStampBrush()
+{
+    if(!m_stampBrushWidget) {
+        m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
+        m_stampBrushWidget->setModal(false);
+        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
+                                    SLOT(slotNewPredefinedBrush(KoResource *)));
+    }
+
+    QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
+
+    if(result) {
+        update(m_itemChooser->currentResource());
+    }
+}
+void KisBrushChooser::slotOpenClipboardBrush()
+{
+    if(!m_clipboardBrushWidget) {
+        m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
+        m_clipboardBrushWidget->setModal(true);
+        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
+                                        SLOT(slotNewPredefinedBrush(KoResource *)));
+    }
+
+    QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();
+
+    if(result) {
+        update(m_itemChooser->currentResource());
+    }
+}
+
 void KisBrushChooser::update(KoResource * resource)
 {
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
@@ -293,6 +337,12 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     }
 }
 
+void KisBrushChooser::slotNewPredefinedBrush(KoResource *resource)
+{
+    m_itemChooser->setCurrentResource(resource);
+    update(resource);
+}
+
 void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 {
     Q_UNUSED(yPixels);
@@ -304,5 +354,9 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     m_slSize->setValue(newWidth);
 }
 
+void KisBrushChooser::setImage(KisImageWSP image)
+{
+    m_image = image;
+}
 
 #include "kis_brush_chooser.moc"

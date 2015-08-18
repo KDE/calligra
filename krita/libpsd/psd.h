@@ -28,8 +28,10 @@
 
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoAbstractGradient.h>
 
-#include "libkispsd_export.h"
+
+#include "kritapsd_export.h"
 
 #include "kis_debug.h"
 
@@ -218,19 +220,17 @@ struct psd_pattern {
 
 struct psd_layer_effects_context {
     psd_layer_effects_context()
-        : global_angle(120),
-          keep_original(false)
+        : keep_original(false)
     {
     }
 
-    qint32 global_angle;
     bool keep_original;
 };
 
 #define PSD_LOOKUP_TABLE_SIZE 256
 
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-class LIBKISPSD_EXPORT psd_layer_effects_shadow_base {
+class KRITAPSD_EXPORT psd_layer_effects_shadow_base {
 public:
     psd_layer_effects_shadow_base()
         : m_invertsSelection(false)
@@ -466,7 +466,7 @@ private:
     KoAbstractGradientSP m_gradient;
 };
 
-class LIBKISPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
+class KRITAPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
 {
 public:
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
@@ -486,7 +486,7 @@ public:
     // using psd_layer_effects_shadow_base::setNoise;
 };
 
-class LIBKISPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
+class KRITAPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
 {
 public:
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
@@ -497,7 +497,7 @@ public:
 };
 
 // isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-class LIBKISPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_common
+class KRITAPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_common
 {
 public:
     psd_layer_effects_inner_shadow() {
@@ -507,7 +507,7 @@ public:
     }
 };
 
-class LIBKISPSD_EXPORT psd_layer_effects_glow_common : public psd_layer_effects_shadow_base
+class KRITAPSD_EXPORT psd_layer_effects_glow_common : public psd_layer_effects_shadow_base
 {
 public:
     psd_layer_effects_glow_common() {
@@ -539,12 +539,12 @@ public:
 };
 
 // oglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
-class LIBKISPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
+class KRITAPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
 {
 };
 
 // iglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
-class LIBKISPSD_EXPORT psd_layer_effects_inner_glow : public psd_layer_effects_glow_common
+class KRITAPSD_EXPORT psd_layer_effects_inner_glow : public psd_layer_effects_glow_common
 {
 public:
     psd_layer_effects_inner_glow()
@@ -1077,12 +1077,13 @@ struct psd_layer_effects_pattern_overlay : public psd_layer_effects_overlay_base
     // using psd_layer_effects_overlay_base::patternPhase;
 
 private:
-    int m_scale;
+    // These are unused
+    /*int m_scale;
     bool m_alignWithLayer;
     KoPattern *m_pattern;
 
     int m_horizontalPhase;
-    int m_verticalPhase;
+    int m_verticalPhase;*/
 };
 
 struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base
@@ -1144,13 +1145,13 @@ private:
  *
  * @return a QPair containing ColorModelId and ColorDepthID
  */
-QPair<QString, QString> LIBKISPSD_EXPORT psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth);
+QPair<QString, QString> KRITAPSD_EXPORT psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth);
 
 
 /**
  * Convert the Photoshop blend mode strings to Pigment compositeop id's
  */
-QString LIBKISPSD_EXPORT psd_blendmode_to_composite_op(const QString& blendmode);
-QString LIBKISPSD_EXPORT composite_op_to_psd_blendmode(const QString& compositeOp);
+QString KRITAPSD_EXPORT psd_blendmode_to_composite_op(const QString& blendmode);
+QString KRITAPSD_EXPORT composite_op_to_psd_blendmode(const QString& compositeOp);
 
 #endif // PSD_H

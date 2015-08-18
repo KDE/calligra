@@ -46,6 +46,9 @@ public:
     virtual bool save();
     virtual bool saveToDevice(QIODevice* dev) const;
 
+    bool loadPatFromDevice(QIODevice *dev);
+    bool savePatToDevice(QIODevice* dev) const;
+
     qint32 width() const;
     qint32 height() const;
 
@@ -60,10 +63,6 @@ public:
      * @return a valid QImage. There are no guarantees to the image format.
      */
     QImage pattern() const;
-
-protected:
-
-    virtual QByteArray generateMD5() const;
 
 private:
 
