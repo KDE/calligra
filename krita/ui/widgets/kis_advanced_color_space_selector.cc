@@ -80,8 +80,8 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
 
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
     
-    //connect(d->colorSpaceSelector->bnOK, SIGNAL(accepted()), this, (accept()));
-    //connect(d->colorSpaceSelector->bnOK, SIGNAL(rejected()), this, (reject()));
+    connect(d->colorSpaceSelector->bnOK, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(d->colorSpaceSelector->bnOK, SIGNAL(rejected()), this, SLOT(reject()));
     
     d->knsrcFile = "kritaiccprofiles.knsrc";
     fillLstProfiles();
@@ -102,13 +102,18 @@ void KisAdvancedColorSpaceSelector::fillLstProfiles()
     if (csf == 0) return;//TODO: make this give better feedback.
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    QStringList profileNames;
+    foreach(const KoColorProfile *profile, profileList) {
+        profileNames.append(profile->name());
+    }
+    qSort(profileNames);
     QListWidgetItem *defaultProfile = new QListWidgetItem;
     defaultProfile->setText(csf->defaultProfile()+" "+i18n("(Default)"));
-    foreach(const KoColorProfile *profile, profileList) {
-        if (profile->name()==csf->defaultProfile()) {
+    foreach(QString stringName, profileNames) {
+        if (stringName==csf->defaultProfile()) {
             d->colorSpaceSelector->lstProfile->addItem(defaultProfile);
         } else {
-            d->colorSpaceSelector->lstProfile->addItem(profile->name());
+            d->colorSpaceSelector->lstProfile->addItem(stringName);
         }
     }
     d->colorSpaceSelector->lstProfile->setCurrentItem(defaultProfile);

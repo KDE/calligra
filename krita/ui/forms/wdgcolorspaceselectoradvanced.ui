@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>632</width>
-    <height>403</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -31,7 +31,11 @@
     </widget>
    </item>
    <item row="4" column="1" colspan="2">
-    <widget class="QPlainTextEdit" name="textProfileDescription"/>
+    <widget class="QPlainTextEdit" name="textProfileDescription">
+     <property name="textInteractionFlags">
+      <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+     </property>
+    </widget>
    </item>
    <item row="0" column="1" rowspan="2" colspan="2">
     <widget class="QLabel" name="lbl_descriptionwidget">
@@ -44,7 +48,7 @@
     </widget>
    </item>
    <item row="2" column="1" rowspan="2">
-    <widget class="KisCIETongueWidget" name="TongueWidget">
+    <widget class="KisCIETongueWidget" name="TongueWidget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -53,8 +57,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>200</width>
-       <height>200</height>
+       <width>250</width>
+       <height>250</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -67,6 +71,12 @@
    </item>
    <item row="2" column="2" rowspan="2">
     <widget class="QGroupBox" name="groupBox_2">
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="title">
       <string>Profile Properties</string>
      </property>
@@ -142,33 +152,46 @@
      <property name="title">
       <string>Profile Picker</string>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Model</string>
-        </property>
-       </widget>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Depth</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Model</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Profile</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="KisCmbIDList" name="cmbColorDepth"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisCmbIDList" name="cmbColorModels"/>
+        </item>
+       </layout>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Depth</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Profile</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
+      <item>
        <widget class="QListWidget" name="lstProfile">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="showDropIndicator" stdset="0">
          <bool>false</bool>
         </property>
@@ -177,25 +200,40 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="KisCmbIDList" name="cmbColorModels"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="KisCmbIDList" name="cmbColorDepth"/>
-      </item>
-      <item row="4" column="1">
-       <widget class="QPushButton" name="bnInstallProfile">
-        <property name="text">
-         <string/>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="bottomMargin">
+         <number>3</number>
         </property>
-       </widget>
+        <item>
+         <widget class="QPushButton" name="bnInstallProfile">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bnDownloadProfile">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bnUploadProfile">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
-  <customwidgets>
+ <customwidgets>
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QComboBox</extends>

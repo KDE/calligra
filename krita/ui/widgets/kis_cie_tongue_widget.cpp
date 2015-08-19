@@ -254,14 +254,13 @@ QRgb KisCIETongueWidget::colorByCoord(double x, double y)
     QString space = KoColorSpaceRegistry::instance()->colorSpaceId("XYZA", "U8");
     QString profile = KoColorSpaceRegistry::instance()->colorSpaceFactory(space)->defaultProfile();
     const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "U8", profile);
-    quint8 data[4];
+    quint8 data[4]; 
     data[0]= cx*255;
     data[1]= cy*255;
     data[2]= cz*255;
     data[3]= 1.0*255;
     KoColor colXYZ(data, xyzColorSpace);
     QColor colRGB = colXYZ.toQColor();
-
     return qRgb(colRGB.red(), colRGB.green(), colRGB.blue());
 }
  
@@ -365,7 +364,8 @@ void KisCIETongueWidget::drawTongueAxis()
  
 void KisCIETongueWidget::drawTongueGrid()
 {
-    d->painter.setPen(qRgb(80, 80, 80));
+    d->painter.setPen(qRgb(128, 128, 128));
+    d->painter.setOpacity(0.5);
  
     for (int y = 1; y <= 9; y += 1)
     {
@@ -375,6 +375,7 @@ void KisCIETongueWidget::drawTongueGrid()
         biasedLine(xstart, grids(4), xstart,   d->pxrows - grids(4) - 1);
         biasedLine(grids(7), ystart, d->pxcols-1-grids(7), ystart);
     }
+    d->painter.setOpacity(1.0);
 }
  
 void KisCIETongueWidget::drawLabels()
@@ -430,8 +431,14 @@ void KisCIETongueWidget::drawSmallElipse(QPointF xy, int r, int g, int b, int sz
     int icx, icy;
  
     mapPoint(icx, icy, xy);
+    d->painter.save();
+    d->painter.setRenderHint(QPainter::Antialiasing);
     d->painter.setPen(qRgb(r, g, b));
     d->painter.drawEllipse(icx + d->xBias- sz/2, icy-sz/2, sz, sz);
+    d->painter.setPen(qRgb(r/2, g/2, b/2));
+    int sz2 = sz-2;
+    d->painter.drawEllipse(icx + d->xBias- sz2/2, icy-sz2/2, sz2, sz2);
+    d->painter.restore();
 }
  
 void KisCIETongueWidget::drawColorantTriangle()
@@ -445,12 +452,16 @@ void KisCIETongueWidget::drawColorantTriangle()
     mapPoint(x1, y1, (QPointF(d->Primaries[0],d->Primaries[1])) );
     mapPoint(x2, y2, (QPointF(d->Primaries[3],d->Primaries[4])) );
     mapPoint(x3, y3, (QPointF(d->Primaries[6],d->Primaries[7])) );
- 
-    d->painter.setPen(qRgb(255, 255, 255));
+    
+    d->painter.save();
+    d->painter.setPen(qRgb(80, 80, 80));
+    d->painter.setRenderHint(QPainter::Antialiasing);
+    
  
     biasedLine(x1, y1, x2, y2);
     biasedLine(x2, y2, x3, y3);
     biasedLine(x3, y3, x1, y1);
+    d->painter.restore();
 }
  
 void KisCIETongueWidget::drawWhitePoint()
