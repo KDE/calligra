@@ -53,8 +53,8 @@ private Q_SLOTS:
     void fillDescription();
     void colorSpaceChanged();
     void installProfile();
-    //void uploadProfile();
-    //void downloadProfile();
+    void uploadProfile();
+    void downloadProfile();
     void buttonUpdate();
 private:
     struct Private;

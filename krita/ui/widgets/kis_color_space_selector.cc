@@ -48,6 +48,7 @@
 struct KisColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelector* colorSpaceSelector;
     QString knsrcFile;
+    bool profileValid;
 };
 
 KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), m_advancedSelector(0), d(new Private)
@@ -95,8 +96,18 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->knsrcFile = "kritaiccprofiles.knsrc";
     
     connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
+    
+    
+    d->colorSpaceSelector->lblColorSpaces->hide();
+    d->colorSpaceSelector->lblColorModels->hide();
+    d->colorSpaceSelector->lblProfiles->hide();
+    d->colorSpaceSelector->cmbColorModels->hide();
+    d->colorSpaceSelector->cmbColorDepth->hide();
+    d->colorSpaceSelector->cmbProfile->hide();
+    d->colorSpaceSelector->bnInstallProfile->hide();
 
     fillCmbProfiles();
+    d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
 }
 
 KisColorSpaceSelector::~KisColorSpaceSelector()
@@ -168,6 +179,7 @@ void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;
+    d->profileValid = valid;
     emit(selectionChanged(valid));
     if(valid) {
         emit colorSpaceChanged(currentColorSpace());
@@ -255,16 +267,24 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
     if(!m_advancedSelector) {
         m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
         m_advancedSelector->setModal(true);
-       //m_advancedSelector->setCurrentColorSpace(currentColorSpace());
+        m_advancedSelector->setCurrentColorSpace(currentColorSpace());
+        connect(m_advancedSelector, SIGNAL(selectionChanged(bool)), this, SLOT(slotProfileValid(bool)) );
     }
     
-    m_advancedSelector->exec();
-    /*
+    //m_advancedSelector->exec();
     QDialog::DialogCode result = (QDialog::DialogCode)m_advancedSelector->exec();
 
     if(result) {
-        //setCurrentColorSpace(m_advancedSelector->currentColorSpace());
-    }*/
+        if (d->profileValid==true) {
+            setCurrentColorSpace(m_advancedSelector->currentColorSpace());
+            d->colorSpaceSelector->lblColorantInfo->setText(currentColorSpace()->profile()->name());
+        }
+    }
+}
+
+void KisColorSpaceSelector::slotProfileValid(bool valid)
+{
+    d->profileValid = valid;
 }
 
 #include "kis_color_space_selector.moc"

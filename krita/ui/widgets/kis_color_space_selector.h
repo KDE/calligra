@@ -56,6 +56,7 @@ private Q_SLOTS:
     void downloadProfile();
     void buttonUpdate();
     void slotOpenAdvancedSelector();
+    void slotProfileValid(bool valid);
 private:
     struct Private;
     KisAdvancedColorSpaceSelector* m_advancedSelector;
