@@ -26,6 +26,8 @@
 
 #include <cfloat>
 #include <cmath>
+#include <QTransform>
+#include <QGenericMatrix>
 
 #include "DebugPigment.h"
 
@@ -130,9 +132,29 @@ bool LcmsColorProfileContainer::init()
         profile_class = cmsGetDeviceClass(d->profile);
         d->valid = (profile_class != cmsSigNamedColorClass);
         
+        cmsCIEXYZ baseMediaWhitePoint;//dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
         if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)) {
             d->mediaWhitePoint = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigMediaWhitePointTag));
+            baseMediaWhitePoint = d->mediaWhitePoint;
             cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
+            
+            if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)) {
+                cmsCIEXYZ *CAM1 = (cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigChromaticAdaptationTag);
+                double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y,d->mediaWhitePoint.Z};
+                QGenericMatrix<1,3,double> whitePointMatrix(d3dummy);
+                QTransform invertDummy(CAM1[0].X, CAM1[0].Y,CAM1[0].Z, CAM1[1].X, CAM1[1].Y,CAM1[1].Z, CAM1[2].X, CAM1[2].Y,CAM1[2].Z);
+                QTransform invertedDummy=invertDummy.inverted();
+                double d9dummy [9] = {invertedDummy.m11(), invertedDummy.m12(), invertedDummy.m13(),
+                                      invertedDummy.m21(), invertedDummy.m22(), invertedDummy.m23(),
+                                      invertedDummy.m31(), invertedDummy.m32(), invertedDummy.m33()};
+                QGenericMatrix<3,3,double> chromaticAdaptionMatrix(d9dummy);
+                QGenericMatrix<1,3,double> result = chromaticAdaptionMatrix * whitePointMatrix;
+                
+                d->mediaWhitePoint.X = result(0,0);
+                d->mediaWhitePoint.Y = result(1,0);
+                d->mediaWhitePoint.Z = result(2,0);
+                cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
+            }
             //qDebug()<<d->name<<" Whitepoint: "<<WhitePoint.x<<","<<WhitePoint.y<<","<<WhitePoint.Y;
         }
         
@@ -143,13 +165,12 @@ bool LcmsColorProfileContainer::init()
             tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigRedColorantTag));
             tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigGreenColorantTag));
             tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag (d->profile, cmsSigBlueColorantTag));
-            
-            d->colorants = tempColorants;
+            //convert to d65, this is useless.
+            cmsAdaptToIlluminant(&d->colorants.Red  , &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Red);
+            cmsAdaptToIlluminant(&d->colorants.Green, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Green);
+            cmsAdaptToIlluminant(&d->colorants.Blue , &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Blue);
+            //d->colorants = tempColorants;
             d->hasColorants = true;
-            //TODO: convert to d65, this is useless.
-            //cmsAdaptMatrixFromD50(&tempColorants, &WhitePoint);
-            //cmsXYZ2xyY(&(d->Primaries.Green), &tempColor);
-            //qDebug()<<d->name<<": "<<tempColorants.Red.Y<<","<<tempColorants.Green.Y<<","<<tempColorants.Blue.Y;
         } else {
         //qDebug()<<d->name<<": has no colorants";
         d->hasColorants = false;
