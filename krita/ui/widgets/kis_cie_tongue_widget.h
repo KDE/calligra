@@ -37,7 +37,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
   
-#include <krita_export.h>
+#include <kritaui_export.h>
  
 class KRITAUI_EXPORT KisCIETongueWidget : public QWidget
 {

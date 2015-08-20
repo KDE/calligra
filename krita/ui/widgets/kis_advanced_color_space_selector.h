@@ -24,7 +24,7 @@
 
 #include <QWidget>
 #include <QDialog>
-#include <krita_export.h>
+#include "kritaui_export.h"
 
 #include "ui_wdgcolorspaceselectoradvanced.h"
 
