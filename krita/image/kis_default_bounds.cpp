@@ -87,7 +87,6 @@ QRect KisSelectionDefaultBounds::bounds() const
     return additionalRect | KisDefaultBounds::bounds();
 }
 
-
 /******************************************************************/
 /*                   KisSelectionEmptyBounds                      */
 /******************************************************************/

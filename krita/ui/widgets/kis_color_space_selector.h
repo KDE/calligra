@@ -21,8 +21,8 @@
 #define _KIS_COLOR_SPACE_SELECTOR_H_
 
 #include <QWidget>
-#include <krita_export.h>
 #include "kis_advanced_color_space_selector.h"
+#include <kritaui_export.h>
 
 class KoID;
 class KoColorSpace;

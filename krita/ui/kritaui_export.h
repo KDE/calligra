@@ -1,7 +1,6 @@
 /*
     This file is part of krita
     Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
-    Copyright (c) 2008 Thomas Zander <zander@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,21 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRITA_EXPORT_H
-#define KRITA_EXPORT_H
+#ifndef KRITAUI_EXPORT_H
+#define KRITAUI_EXPORT_H
 
 #include <kdemacros.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined(_WIN32) || defined(_WIN64)
-
-#ifndef KRITASKETCH_EXPORT
-# ifdef MAKE_KRITASKETCHLIB_LIB
-#  define KRITASKETCH_EXPORT KDE_EXPORT
-# else
-#  define KRITASKETCH_EXPORT KDE_IMPORT
-# endif
-#endif
 
 #ifndef KRITAUI_EXPORT
 # ifdef MAKE_KRITAUI_LIB
@@ -43,57 +34,25 @@
 # endif
 #endif
 
-#ifndef KRITAIMAGE_EXPORT
-# ifdef MAKE_KRITAIMAGE_LIB
-#  define KRITAIMAGE_EXPORT KDE_EXPORT
-# else
-#  define KRITAIMAGE_EXPORT KDE_IMPORT
-# endif
-#endif
-
-#ifndef PAINTOP_EXPORT
-# ifdef MAKE_KRITALIBPAINTOP_LIB
-#  define PAINTOP_EXPORT KDE_EXPORT
-# else
-#  define PAINTOP_EXPORT KDE_IMPORT
-# endif
-#endif
-
-#ifndef BRUSH_EXPORT
-# ifdef MAKE_KRITALIBBRUSH_LIB
-#  define BRUSH_EXPORT KDE_EXPORT
-# else
-#  define BRUSH_EXPORT KDE_IMPORT
-# endif
-#endif
-
 #else // not windows
 
-#define KRITASKETCH_EXPORT KDE_EXPORT
 #define KRITAUI_EXPORT KDE_EXPORT
-#define KRITAIMAGE_EXPORT KDE_EXPORT
-#define PAINTOP_EXPORT KDE_EXPORT
-#define BRUSH_EXPORT KDE_EXPORT
 
 #endif /* not windows */
 
 /* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
 #  if defined _WIN32 || defined _WIN64
-#    if defined(MAKE_KRITAUI_LIB) || defined(MAKE_KRITAIMAGE_LIB)
-#      define KRITAIMAGE_TEST_EXPORT KDE_EXPORT
+#    if defined(MAKE_KRITAUI_LIB)
 #      define KRITAUI_TEST_EXPORT KDE_EXPORT
 #    else
-#       define KRITAIMAGE_TEST_EXPORT KDE_IMPORT
 #       define KRITAUI_TEST_EXPORT KDE_IMPORT
 #    endif
 #  else /* not windows */
-#    define KRITAIMAGE_TEST_EXPORT KDE_EXPORT
 #    define KRITAUI_TEST_EXPORT KDE_EXPORT
 #  endif
 #else /* not compiling tests */
-#  define KRITAIMAGE_TEST_EXPORT
 #  define KRITAUI_TEST_EXPORT
 #endif
 
-#endif /* KRITA_EXPORT_H */
+#endif /* KRITAUI_EXPORT_H */

@@ -1067,7 +1067,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
 /*! ECMA-376, 21.2.2.71, p.3802.
 
  Parent elements:
- - numCache (ง21.2.2.120)
+ - numCache (ยง21.2.2.120)
 
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_formatCode()
@@ -1486,17 +1486,17 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
  - plotArea ยง21.2.2.145
 
  Child elements:
- - custSplit (Custom Split) ง5.7.2.35
- - dLbls (Data Labels) ง5.7.2.49
- - extLst (Chart Extensibility) ง5.7.2.64
- - gapWidth (Gap Width) ง5.7.2.75
- - ofPieType (Pie of Pie or Bar of Pie Type) ง5.7.2.128
- - secondPieSize (Second Pie Size) ง5.7.2.165
- - ser (Pie Chart Series) ง5.7.2.170
- - serLines (Series Lines) ง5.7.2.177
- - splitPos (Split Position) ง5.7.2.196
- - splitType (Split Type) ง5.7.2.197
- - varyColors (Vary Colors by Point) ง5.7.2.228
+ - custSplit (Custom Split) ยง5.7.2.35
+ - dLbls (Data Labels) ยง5.7.2.49
+ - extLst (Chart Extensibility) ยง5.7.2.64
+ - gapWidth (Gap Width) ยง5.7.2.75
+ - ofPieType (Pie of Pie or Bar of Pie Type) ยง5.7.2.128
+ - secondPieSize (Second Pie Size) ยง5.7.2.165
+ - ser (Pie Chart Series) ยง5.7.2.170
+ - serLines (Series Lines) ยง5.7.2.177
+ - splitPos (Split Position) ยง5.7.2.196
+ - splitType (Split Type) ยง5.7.2.197
+ - varyColors (Vary Colors by Point) ยง5.7.2.228
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_ofPieChart()
 {
@@ -3147,12 +3147,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_strRef()
 /*! ECMA-376, 5.7.2.116, p.4060
 
  Parent Elements:
-  - cat (ง5.7.2.24); xVal (ง5.7.2.235)
+  - cat (ยง5.7.2.24); xVal (ยง5.7.2.235)
 
  Child Elements:
-  - extLst (Chart Extensibility) ง5.7.2.64
-  - f (Formula) ง5.7.2.65
-  - multiLvlStrCache (Multi Level String Cache) ง5.7.2.115
+  - extLst (Chart Extensibility) ยง5.7.2.64
+  - f (Formula) ยง5.7.2.65
+  - multiLvlStrCache (Multi Level String Cache) ยง5.7.2.115
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_multiLvlStrRef()
 {

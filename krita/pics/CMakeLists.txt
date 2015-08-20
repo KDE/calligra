@@ -43,6 +43,9 @@ onionA.png
 onionB.png
 mirrorAxis-HorizontalMove.png
 mirrorAxis-VerticalMove.png
+visible.svg
+novisible.svg
+dirty-preset.svg
 
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
