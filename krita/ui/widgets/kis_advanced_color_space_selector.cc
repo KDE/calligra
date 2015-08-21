@@ -175,8 +175,8 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->lblXYZ_B->setToolTip(whatIsColorant);
         } else {
             QVector <double> whitepoint2 = currentColorSpace()->profile()->getWhitePointxyY();
-            d->colorSpaceSelector->lblXYZ_W->setText(QString::number(whitepoint2[0])+", "+QString::number(whitepoint2[1])+", "+QString::number(whitepoint2[2]));
-            
+            d->colorSpaceSelector->lblXYZ_W->setText(nameWhitePoint(whitepoint2));
+            d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint2[0], 'f', 4)+", "+QString::number(whitepoint2[1], 'f', 4)+", "+QString::number(whitepoint2[2], 'f', 4));
             d->colorSpaceSelector->lblXYZ_R->setText(notApplicable);
             d->colorSpaceSelector->lblXYZ_R->setToolTip(notApplicableTooltip);
             d->colorSpaceSelector->lblXYZ_G->setText(notApplicable);
