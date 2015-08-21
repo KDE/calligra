@@ -165,8 +165,6 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             QVector <double> colorants = currentColorSpace()->profile()->getColorantsxyY();
             QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
             //QString text = currentColorSpace()->profile()->info()+" ="+
-            d->colorSpaceSelector->TongueWidget->setEnabled(true);
-            d->colorSpaceSelector->TongueWidget->setProfileData(colorants, whitepoint, true);
             d->colorSpaceSelector->lblXYZ_W->setText(QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2]));
             d->colorSpaceSelector->lblXYZ_R->setText(QString::number(colorants[0])+", "+QString::number(colorants[1])+", "+QString::number(colorants[2]));
             d->colorSpaceSelector->lblXYZ_G->setText(QString::number(colorants[3])+", "+QString::number(colorants[4])+", "+QString::number(colorants[5]));
@@ -176,7 +174,6 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->lblXYZ_B->setToolTip(whatIsColorant);
         } else {
             QVector <double> whitepoint2 = currentColorSpace()->profile()->getWhitePointxyY();
-            d->colorSpaceSelector->TongueWidget->setEnabled(false);
             d->colorSpaceSelector->lblXYZ_W->setText(QString::number(whitepoint2[0])+", "+QString::number(whitepoint2[1])+", "+QString::number(whitepoint2[2]));
             
             d->colorSpaceSelector->lblXYZ_R->setText(notApplicable);
@@ -187,7 +184,6 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->lblXYZ_B->setToolTip(notApplicableTooltip);
         }
     } else {
-        d->colorSpaceSelector->TongueWidget->setEnabled(false);
         d->colorSpaceSelector->lblXYZ_W->setText(notApplicable);
         d->colorSpaceSelector->lblXYZ_W->setToolTip(notApplicableTooltip);
         d->colorSpaceSelector->lblXYZ_R->setText(notApplicable);
@@ -204,7 +200,13 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     QString estimatedsRGB = i18n("Estimated Gamma: sRGB, L* or rec709 trc");
     QString whatissRGB = i18n("The Tone Response Curve of this color space is either sRGB, L* or rec709 trc.");
     QString currentModelStr = d->colorSpaceSelector->cmbColorModels->currentItem().id();
-    if (currentModelStr == "RGBA") {
+
+    if (profileList.isEmpty()) {
+        d->colorSpaceSelector->TongueWidget->setProfileDataAvailable(false);
+    } else if (currentModelStr == "RGBA") {
+        QVector <double> colorants = currentColorSpace()->profile()->getColorantsxyY();
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setRGBData(whitepoint, colorants);
         estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
         if (estimatedTRC[0] == -1) {
             d->colorSpaceSelector->lbltrc->setToolTip(whatissRGB);
@@ -214,7 +216,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         d->colorSpaceSelector->lbltrc->setText(estimatedGamma+QString::number((estimatedTRC[0]+estimatedTRC[1]+estimatedTRC[2])/3));
         }
     } else if (currentModelStr == "GRAYA") {
-            estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setGrayData(whitepoint);
+        estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
         if (estimatedTRC[0] == -1) {
             d->colorSpaceSelector->lbltrc->setToolTip(whatissRGB);
             d->colorSpaceSelector->lbltrc->setText(estimatedsRGB);
@@ -223,15 +227,23 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->lbltrc->setText(estimatedGamma+QString::number(estimatedTRC[0]));
         }
     } else if (currentModelStr == "CMYKA") {
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setCMYKData(whitepoint);
         d->colorSpaceSelector->lbltrc->setToolTip(i18n("Estimated Gamma can't be retrieved for CMYK"));
         d->colorSpaceSelector->lbltrc->setText(estimatedGamma+notApplicable);
     } else if (currentModelStr == "XYZA") {
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setXYZData(whitepoint);
         d->colorSpaceSelector->lbltrc->setToolTip(i18n("We asume that XYZ is linear"));
         d->colorSpaceSelector->lbltrc->setText(estimatedGamma+"1.0");
     } else if (currentModelStr == "LABA") {
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setLABData(whitepoint);
         d->colorSpaceSelector->lbltrc->setToolTip(i18n("We asume this is the L * TRC"));
         d->colorSpaceSelector->lbltrc->setText(estimatedGamma+"L*");
     } else if (currentModelStr == "YCbCrA") {
+        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        d->colorSpaceSelector->TongueWidget->setYCbCrData(whitepoint);
         d->colorSpaceSelector->lbltrc->setToolTip(i18n("Estimated Gamma can't be retrieved for YCRCB"));
         d->colorSpaceSelector->lbltrc->setText(estimatedGamma+notApplicable);
     }

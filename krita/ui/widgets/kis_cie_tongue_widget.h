@@ -48,11 +48,22 @@ public:
     KisCIETongueWidget(QWidget *parent=0);
     ~KisCIETongueWidget();
  
+    //this expects a qvector <double> (9), qvector <double> (3) and whether or not there's profile data?;
     void setProfileData(QVector <double> p, QVector <double> w, bool profileData = false);
+    
+    void setRGBData(QVector <double> whitepoint, QVector <double> colorants);
+    void setCMYKData(QVector <double> whitepoint);
+    void setXYZData(QVector <double> whitepoint);
+    void setGrayData(QVector <double> whitepoint);
+    void setLABData(QVector <double> whitepoint);
+    void setYCbCrData(QVector <double> whitepoint);
+    void setProfileDataAvailable(bool dataAvailable);
  
     void loadingStarted();
     void loadingFailed();
     void uncalibratedColor();
+    
+    enum model {RGBA, CMYKA, XYZA, LABA, GRAYA, YCbCrA};
  
 protected:
  

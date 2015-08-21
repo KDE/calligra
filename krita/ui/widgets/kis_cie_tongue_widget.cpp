@@ -182,6 +182,7 @@ public:
  
     QVector <double> Primaries;
     QVector <double> whitePoint;
+    model colorModel;
 };
 
 KisCIETongueWidget::KisCIETongueWidget(QWidget *parent) :
@@ -222,7 +223,81 @@ void KisCIETongueWidget::setProfileData(QVector <double> p, QVector <double> w, 
     }
 }
 
+void KisCIETongueWidget::setRGBData(QVector <double> whitepoint, QVector <double> colorants)
+{
+    if (colorants.size()==9){
+        d->Primaries= colorants;
+        
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::RGBA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
+void KisCIETongueWidget::setCMYKData(QVector <double> whitepoint)
+{
+    if (whitepoint.size()==3){
+        //d->Primaries= colorants;
+        
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::CMYKA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
+void KisCIETongueWidget::setXYZData(QVector <double> whitepoint)
+{
+    if (whitepoint.size()==3){
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::XYZA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
+void KisCIETongueWidget::setGrayData(QVector <double> whitepoint)
+{
+    if (whitepoint.size()==3){
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::GRAYA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
+void KisCIETongueWidget::setLABData(QVector <double> whitepoint)
+{
+    if (whitepoint.size()==3){
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::LABA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
+void KisCIETongueWidget::setYCbCrData(QVector <double> whitepoint)
+{
+    if (whitepoint.size()==3){
+        d->whitePoint = whitepoint;
+        d->needUpdatePixmap = true;
+        d->colorModel = KisCIETongueWidget::YCbCrA;
+        d->profileDataAvailable = true;
+    } else {
+        return;
+    }
+}
 
+void KisCIETongueWidget::setProfileDataAvailable(bool dataAvailable)
+{
+    d->profileDataAvailable = dataAvailable;
+}
 void KisCIETongueWidget::mapPoint(int& icx, int& icy, QPointF xy)
 {
     icx = (int) floor((xy.x() * (d->pxcols - 1)) + .5);
@@ -443,24 +518,34 @@ void KisCIETongueWidget::drawSmallElipse(QPointF xy, int r, int g, int b, int sz
  
 void KisCIETongueWidget::drawColorantTriangle()
 {
-    drawSmallElipse((QPointF(d->Primaries[0],d->Primaries[1])),   255, 128, 128, 6);
-    drawSmallElipse((QPointF(d->Primaries[3],d->Primaries[4])), 128, 255, 128, 6);
-    drawSmallElipse((QPointF(d->Primaries[6],d->Primaries[7])),  128, 128, 255, 6);
- 
-    int x1, y1, x2, y2, x3, y3;
- 
-    mapPoint(x1, y1, (QPointF(d->Primaries[0],d->Primaries[1])) );
-    mapPoint(x2, y2, (QPointF(d->Primaries[3],d->Primaries[4])) );
-    mapPoint(x3, y3, (QPointF(d->Primaries[6],d->Primaries[7])) );
-    
     d->painter.save();
     d->painter.setPen(qRgb(80, 80, 80));
     d->painter.setRenderHint(QPainter::Antialiasing);
-    
+    if (d->colorModel ==KisCIETongueWidget::RGBA) {
+        drawSmallElipse((QPointF(d->Primaries[0],d->Primaries[1])),   255, 128, 128, 6);
+        drawSmallElipse((QPointF(d->Primaries[3],d->Primaries[4])), 128, 255, 128, 6);
+        drawSmallElipse((QPointF(d->Primaries[6],d->Primaries[7])),  128, 128, 255, 6);
+        
+        int x1, y1, x2, y2, x3, y3;
  
-    biasedLine(x1, y1, x2, y2);
-    biasedLine(x2, y2, x3, y3);
-    biasedLine(x3, y3, x1, y1);
+        mapPoint(x1, y1, (QPointF(d->Primaries[0],d->Primaries[1])) );
+        mapPoint(x2, y2, (QPointF(d->Primaries[3],d->Primaries[4])) );
+        mapPoint(x3, y3, (QPointF(d->Primaries[6],d->Primaries[7])) );
+        
+        biasedLine(x1, y1, x2, y2);
+        biasedLine(x2, y2, x3, y3);
+        biasedLine(x3, y3, x1, y1);
+    } /*else if (d->colorModel ==CMYK){
+        for (i=0; i<d->Primaries.size();i+++){
+            drawSmallElipse((QPointF(d->Primaries[0],d->Primaries[1])),   160, 160, 160, 6);//greyscale for now
+            //int x1, y1, x2, y2;
+            //mapPoint(x1, y1, (QPointF(d->Primaries[i],d->Primaries[i+1])) );
+            //mapPoint(x2, y2, (QPointF(d->Primaries[i+3],d->Primaries[i+4])) );
+            //biasedLine(x1, y1, x2, y2);
+        }
+    }
+    */
+ 
     d->painter.restore();
 }
  
