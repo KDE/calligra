@@ -71,6 +71,12 @@
    </item>
    <item row="2" column="2" rowspan="2">
     <widget class="QGroupBox" name="groupBox_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>250</width>
@@ -85,6 +91,9 @@
        <widget class="QLabel" name="lbltrc">
         <property name="text">
          <string>TRC</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -177,10 +186,24 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="KisCmbIDList" name="cmbColorDepth"/>
+         <widget class="KisCmbIDList" name="cmbColorDepth">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
-         <widget class="KisCmbIDList" name="cmbColorModels"/>
+         <widget class="KisCmbIDList" name="cmbColorModels">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
