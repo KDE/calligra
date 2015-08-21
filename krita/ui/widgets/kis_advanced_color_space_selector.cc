@@ -166,10 +166,10 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
             //QString text = currentColorSpace()->profile()->info()+" ="+
             d->colorSpaceSelector->lblXYZ_W->setText(nameWhitePoint(whitepoint));
-            d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2]));
-            d->colorSpaceSelector->lblXYZ_R->setText(QString::number(colorants[0])+", "+QString::number(colorants[1])+", "+QString::number(colorants[2]));
-            d->colorSpaceSelector->lblXYZ_G->setText(QString::number(colorants[3])+", "+QString::number(colorants[4])+", "+QString::number(colorants[5]));
-            d->colorSpaceSelector->lblXYZ_B->setText(QString::number(colorants[6])+", "+QString::number(colorants[7])+", "+QString::number(colorants[8]));
+            d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint[0], 'f', 4)+", "+QString::number(whitepoint[1], 'f', 4)+", "+QString::number(whitepoint[2], 'f', 4));
+            d->colorSpaceSelector->lblXYZ_R->setText(QString::number(colorants[0], 'f', 4)+", "+QString::number(colorants[1], 'f', 4)+", "+QString::number(colorants[2], 'f', 4));
+            d->colorSpaceSelector->lblXYZ_G->setText(QString::number(colorants[3], 'f', 4)+", "+QString::number(colorants[4], 'f', 4)+", "+QString::number(colorants[5], 'f', 4));
+            d->colorSpaceSelector->lblXYZ_B->setText(QString::number(colorants[6], 'f', 4)+", "+QString::number(colorants[7], 'f', 4)+", "+QString::number(colorants[8], 'f', 4));
             d->colorSpaceSelector->lblXYZ_R->setToolTip(whatIsColorant);
             d->colorSpaceSelector->lblXYZ_G->setToolTip(whatIsColorant);
             d->colorSpaceSelector->lblXYZ_B->setToolTip(whatIsColorant);
@@ -352,7 +352,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 }
 
 QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoint) {
-    QString name=(QString::number(whitePoint[0])+", "+QString::number(whitePoint[1]));
+    QString name=(QString::number(whitePoint[0])+", "+QString::number(whitePoint[1], 'f', 4));
     //A   (0.451170, 0.40594) (2856K)(tungsten)
     if ((whitePoint[0]>0.451170-0.005 && whitePoint[0]<0.451170+0.005) &&
         (whitePoint[1]>0.40594-0.005 && whitePoint[1]<0.40594+0.005)){
