@@ -146,6 +146,7 @@ public:
     Private() :
         profileDataAvailable(false),
         needUpdatePixmap(false),
+        cieTongueNeedsUpdate(true),
         uncalibratedColor(false),
         xBias(0),
         yBias(0),
@@ -163,6 +164,7 @@ public:
     
     bool            profileDataAvailable;
     bool            needUpdatePixmap;
+    bool            cieTongueNeedsUpdate;
     bool            uncalibratedColor;
  
     int             xBias;
@@ -178,6 +180,7 @@ public:
     QTimer*         progressTimer;
  
     QPixmap         pixmap;
+    QPixmap         cietongue;
     KPixmapSequence progressPix;
  
     QVector <double> Primaries;
@@ -371,7 +374,7 @@ void KisCIETongueWidget::outlineTongue()
  
 void KisCIETongueWidget::fillTongue()
 {
-    QImage Img = d->pixmap.toImage();
+    QImage Img = d->cietongue.toImage();
  
     int x;
  
@@ -407,7 +410,7 @@ void KisCIETongueWidget::fillTongue()
         }
     }
  
-    d->pixmap = QPixmap::fromImage(Img, Qt::AvoidDither);
+    d->cietongue = QPixmap::fromImage(Img, Qt::AvoidDither);
 }
  
 void KisCIETongueWidget::drawTongueAxis()
@@ -558,34 +561,41 @@ void KisCIETongueWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
     d->pixmap = QPixmap(size());
+
+    if (d->cieTongueNeedsUpdate){
+    // Draw the CIE tongue curve. I don't see why we need to redraw it every time the whitepoint and such changes so we cache it.
+        d->cieTongueNeedsUpdate = false;
+        d->cietongue = QPixmap(size());
+        d->cietongue.fill(Qt::black);
+        d->painter.begin(&d->cietongue);
  
-    // Draw the CIE tongue curve.
- 
-    d->pixmap.fill(Qt::black);
+        int pixcols = d->pixmap.width();
+        int pixrows = d->pixmap.height();
+
+        d->gridside = (qMin(pixcols, pixrows)) / 512.0;
+        d->xBias    = grids(32);
+        d->yBias    = grids(20);
+        d->pxcols   = pixcols - d->xBias;
+        d->pxrows   = pixrows - d->yBias;
+
+        d->painter.setBackground(QBrush(qRgb(0, 0, 0)));
+        d->painter.setPen(qRgb(255, 255, 255));
+
+        outlineTongue();
+        d->painter.end();
+    
+        fillTongue();
+    
+        d->painter.begin(&d->cietongue);
+        drawTongueAxis();
+        drawLabels();
+        drawTongueGrid();
+        d->painter.end();
+    }
+    d->pixmap = d->cietongue;
+
     d->painter.begin(&d->pixmap);
- 
-    int pixcols = d->pixmap.width();
-    int pixrows = d->pixmap.height();
- 
-    d->gridside = (qMin(pixcols, pixrows)) / 512.0;
-    d->xBias    = grids(32);
-    d->yBias    = grids(20);
-    d->pxcols   = pixcols - d->xBias;
-    d->pxrows   = pixrows - d->yBias;
- 
-    d->painter.setBackground(QBrush(qRgb(0, 0, 0)));
-    d->painter.setPen(qRgb(255, 255, 255));
- 
-    outlineTongue();
-    d->painter.end();
- 
-    fillTongue();
- 
-    d->painter.begin(&d->pixmap);
-    drawTongueAxis();
-    drawLabels();
-    drawTongueGrid();
- 
+    //draw whitepoint and  colorants
     if (d->whitePoint[2] > 0.0)
     {
         drawWhitePoint();
@@ -595,7 +605,6 @@ void KisCIETongueWidget::updatePixmap()
     {
         drawColorantTriangle();
     }
- 
     d->painter.end();
 }
  
@@ -664,6 +673,7 @@ void KisCIETongueWidget::resizeEvent(QResizeEvent* event)
     setMinimumHeight(width());
     setMaximumHeight(width());
     d->needUpdatePixmap = true;
+    d->cieTongueNeedsUpdate = true;
 }
  
 void KisCIETongueWidget::slotProgressTimerDone()
