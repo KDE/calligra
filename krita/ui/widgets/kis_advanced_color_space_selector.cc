@@ -165,7 +165,8 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             QVector <double> colorants = currentColorSpace()->profile()->getColorantsxyY();
             QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
             //QString text = currentColorSpace()->profile()->info()+" ="+
-            d->colorSpaceSelector->lblXYZ_W->setText(QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2]));
+            d->colorSpaceSelector->lblXYZ_W->setText(nameWhitePoint(whitepoint));
+            d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint[0])+", "+QString::number(whitepoint[1])+", "+QString::number(whitepoint[2]));
             d->colorSpaceSelector->lblXYZ_R->setText(QString::number(colorants[0])+", "+QString::number(colorants[1])+", "+QString::number(colorants[2]));
             d->colorSpaceSelector->lblXYZ_G->setText(QString::number(colorants[3])+", "+QString::number(colorants[4])+", "+QString::number(colorants[5]));
             d->colorSpaceSelector->lblXYZ_B->setText(QString::number(colorants[6])+", "+QString::number(colorants[7])+", "+QString::number(colorants[8]));
@@ -350,16 +351,68 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             
 }
 
-QString nameWhitePoint(QVector <double> whitePoint) {
-    
-    //A (0.451170, 0.40594) (2856K)(tungsten)
-    if (whitePoint[0] ){
-        return
+QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoint) {
+    QString name=(QString::number(whitePoint[0])+", "+QString::number(whitePoint[1]));
+    //A   (0.451170, 0.40594) (2856K)(tungsten)
+    if ((whitePoint[0]>0.451170-0.005 && whitePoint[0]<0.451170+0.005) &&
+        (whitePoint[1]>0.40594-0.005 && whitePoint[1]<0.40594+0.005)){
+        name="A";
+        return name;
     }
-    //B (0.34980, 0.35270)(4874K)(Direct Sunlight at noon)(obsolete)
-    //C (0.31039, 0.31905)(6774K)(avarage/north sky daylight)(obsolete)
+    //B   (0.34980, 0.35270) (4874K) (Direct Sunlight at noon)(obsolete)
+    //C   (0.31039, 0.31905) (6774K) (avarage/north sky daylight)(obsolete)
     //D50 (0.34773, 0.35952) (5003K) (Horizon Light, default color of white paper, ICC profile standard illuminant)
-    //D55 (0.33411,	0.34877) (5503K)
+    if ((whitePoint[0]>0.34773-0.005 && whitePoint[0]<0.34773+0.005) &&
+        (whitePoint[1]>0.35952-0.005 && whitePoint[1]<0.35952+0.005)){
+        name="D50";
+        return name;
+    }
+    //D55 (0.33411,	0.34877) (5503K) (Mid-morning / Mid-afternoon Daylight)
+    if ((whitePoint[0]>0.33411-0.001 && whitePoint[0]<0.33411+0.001) &&
+        (whitePoint[1]>0.34877-0.005 && whitePoint[1]<0.34877+0.005)){
+        name="D55";
+        return name;
+    }
+    //D60 (0.3217, 0.3378) (~6000K) (ACES colorspace default)
+    if ((whitePoint[0]>0.3217-0.001 && whitePoint[0]<0.3217+0.001) &&
+        (whitePoint[1]>0.3378-0.005 && whitePoint[1]<0.3378+0.005)){
+        name="D60";
+        return name;
+    }
+    //D65 (0.31382, 0.33100) (6504K) (Noon Daylight, default for computer and tv screens, sRGB default)
+    //Elle's are old school with 0.3127 and 0.3289
+    if ((whitePoint[0]>0.31382-0.002 && whitePoint[0]<0.31382+0.002) &&
+        (whitePoint[1]>0.33100-0.005 && whitePoint[1]<0.33100+0.002)){
+        name="D65";
+        return name;
+    }
+    //D75 (0.29968, 0.31740) (7504K) (North sky Daylight)
+    if ((whitePoint[0]>0.29968-0.001 && whitePoint[0]<0.29968+0.001) &&
+        (whitePoint[1]>0.31740-0.005 && whitePoint[1]<0.31740+0.005)){
+        name="D75";
+        return name;
+    }
+    //E   (1/3, 1/3)         (5454K) (Equal Energy. CIERGB default)
+    if ((whitePoint[0]>(1.0/3.0)-0.001 && whitePoint[0]<(1.0/3.0)+0.001) &&
+        (whitePoint[1]>(1.0/3.0)-0.001 && whitePoint[1]<(1.0/3.0)+0.001)){
+        name="E";
+        return name;
+    }
+    //The F series seems to sorta overlap with the D series, so I'll just leave them in comment here.//
+    //F1  (0.31811, 0.33559) (6430K) (Daylight Fluorescent)
+    //F2  (0.37925, 0.36733) (4230K) (Cool White Fluorescent)
+    //F3  (0.41761, 0.38324) (3450K) (White Florescent)
+    //F4  (0.44920, 0.39074) (2940K) (Warm White Fluorescent)
+    //F5  (0.31975, 0.34246) (6350K) (Daylight Fluorescent)
+    //F6  (0.38660, 0.37847) (4150K) (Lite White Fluorescent)
+    //F7  (0.31569, 0.32960) (6500K) (D65 simulator, Daylight simulator)
+    //F8  (0.34902, 0.35939) (5000K) (D50 simulator)
+    //F9  (0.37829, 0.37045) (4150K) (Cool White Deluxe Fluorescent)
+    //F10 (0.35090, 0.35444) (5000K) (Philips TL85, Ultralume 50)
+    //F11 (0.38541, 0.37123) (4000K) (Philips TL84, Ultralume 40)
+    //F12 (0.44256, 0.39717) (3000K) (Philips TL83, Ultralume 30)
+    
+    return name;
 }
 
 const KoColorSpace* KisAdvancedColorSpaceSelector::currentColorSpace()
