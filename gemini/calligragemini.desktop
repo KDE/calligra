@@ -43,6 +43,7 @@ GenericName[pt]=Processamento de Texto e Apresentações
 GenericName[pt_BR]=Processamento de Texto e Apresentação
 GenericName[sk]=Spracovanie textu a prezentácie
 GenericName[sv]=Ordbehandling och presentation
+GenericName[tr]=Kelime İşleme ve Sunum
 GenericName[uk]=Робота з текстом і презентації
 GenericName[x-test]=xxWord Processing and Presentationxx
 Exec=calligragemini %u
