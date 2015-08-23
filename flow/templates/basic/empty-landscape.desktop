@@ -30,7 +30,6 @@ Name[pt]=Documento em Paisagem Vazio
 Name[pt_BR]=Documento em paisagem vazio
 Name[sk]=Prázdny ležatý dokument
 Name[sv]=Tomt liggande dokument
-Name[tr]=Boş Enine Belge
 Name[uk]=Порожній альбомний документ
 Name[x-test]=xxEmpty Landscape Documentxx
 Comment=Creates a landscape-oriented document with no stencils loaded.
