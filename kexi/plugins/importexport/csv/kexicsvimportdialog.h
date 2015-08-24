@@ -184,7 +184,9 @@ private:
 
     int  getHeader(int col);
     QString getText(int row, int col);
-    void updateColumnText(int col);
+    void updateColumn(int col);
+    bool isPrimaryKeyAllowed(int col);
+    void setPrimaryKeyIcon(int column, bool set);
     void updateRowCountInfo();
     tristate loadRows(QString &field, int &row, int &columnm, int &maxColumn, bool inGUI);
 

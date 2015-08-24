@@ -879,6 +879,7 @@ void KexiCSVImportDialog::fillTable()
     m_table->clear();
     d->clearDetectedTypes();
     d->clearUniquenessTests();
+    m_primaryKeyColumn = -1;
 
     if (true != loadRows(field, row, column, maxColumn, true))
         return;
@@ -896,7 +897,7 @@ void KexiCSVImportDialog::fillTable()
     m_table->setColumnCount(maxColumn);
 
     for (column = 0; column < m_table->columnCount(); ++column) {
-        updateColumnText(column);
+        updateColumn(column);
         if (!m_columnsAdjusted)
             m_tableView->resizeColumnToContents(column);
     }
@@ -904,14 +905,14 @@ void KexiCSVImportDialog::fillTable()
 
     if (m_primaryKeyColumn >= 0 && m_primaryKeyColumn < m_table->columnCount()) {
         if (KexiDB::Field::Integer != d->detectedType(m_primaryKeyColumn)) {
+            setPrimaryKeyIcon(m_primaryKeyColumn, false);
             m_primaryKeyColumn = -1;
         }
     }
 
     m_tableView->setCurrentIndex(m_table->index(0, 0));
     currentCellChanged(m_table->index(0, 0), QModelIndex());
-    if (m_primaryKeyColumn != -1)
-        m_table->setData(m_table->index(0, m_primaryKeyColumn), m_pkIcon, Qt::DecorationRole);
+    setPrimaryKeyIcon(m_primaryKeyColumn, true);
 
     const int count = qMax(0, m_table->rowCount() - 1 + m_startline);
     m_allRowsLoadedInPreview = count < m_maximumRowsForPreview && !m_stoppedAt_MAX_BYTES_TO_PREVIEW;
@@ -1300,7 +1301,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     return true;
 }
 
-void KexiCSVImportDialog::updateColumnText(int col)
+void KexiCSVImportDialog::updateColumn(int col)
 {
     KexiDB::Field::Type detectedType = d->detectedType(col);
     if (detectedType == KexiDB::Field::InvalidType) {
@@ -1311,27 +1312,34 @@ void KexiCSVImportDialog::updateColumnText(int col)
     m_table->setHeaderData(col, Qt::Horizontal,
         QString(i18n("Column %1", col + 1) + "  \n(" + kexiCSVImportStatic->typeNames[detectedType].toLower() + ")  "));
     m_tableView->horizontalHeader()->adjustSize();
+    if (m_primaryKeyColumn == -1 && isPrimaryKeyAllowed(col)) {
+        m_primaryKeyColumn = col;
+    }
+}
 
-    //check uniqueness
+bool KexiCSVImportDialog::isPrimaryKeyAllowed(int col)
+{
     QList<int> *list = d->uniquenessTest(col);
-    if (m_primaryKeyColumn == -1 && list && !list->isEmpty()) {
+    if (m_primaryKeyColumn != -1 || !list || list->isEmpty()) {
+        return false;
+    }
+    bool result = false;
+    int expectedRowCount = m_table->rowCount();
+    if (m_table->firstRowForFieldNames()) {
+        expectedRowCount--;
+    }
+    if (list->count() == expectedRowCount) {
         qSort(*list);
         QList<int>::ConstIterator it = list->constBegin();
         int prevValue = *it;
         ++it;
-        for (; it != list->constEnd() && prevValue != (*it); ++it)
+        for (; it != list->constEnd() && prevValue != (*it); ++it) {
             prevValue = (*it);
-        if (it != list->constEnd()) {
-            //duplicates:
-            list->clear();
         }
-        else {
-            //a candidate for PK (autodetected)!
-            m_primaryKeyColumn = col;
-        }
+        result = it == list->constEnd(); // no duplicates
     }
-    if (list) //not needed now: conserve memory
-        list->clear();
+    list->clear(); // not needed now: conserve memory
+    return result;
 }
 
 void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
@@ -1664,7 +1672,7 @@ void KexiCSVImportDialog::formatChanged(int index)
     d->setDetectedType(m_tableView->currentIndex().column(), type);
     m_primaryKeyField->setEnabled(KexiDB::Field::Integer == type);
     m_primaryKeyField->setChecked(m_primaryKeyColumn == m_tableView->currentIndex().column() && m_primaryKeyField->isEnabled());
-    updateColumnText(m_tableView->currentIndex().column());
+    updateColumn(m_tableView->currentIndex().column());
 }
 
 void KexiCSVImportDialog::delimiterChanged(const QString& delimiter)
@@ -2082,16 +2090,15 @@ bool KexiCSVImportDialog::eventFilter(QObject * watched, QEvent * e)
 
 void KexiCSVImportDialog::slotPrimaryKeyFieldToggled(bool on)
 {
-    Q_UNUSED(on);
-    if (m_primaryKeyColumn >= 0 && m_primaryKeyColumn < m_table->columnCount()) {
-        m_table->setData(m_table->index(0, m_primaryKeyColumn), QPixmap(), Qt::DecorationRole);
-    }
-    if (m_primaryKeyField->isChecked()) {
-        m_primaryKeyColumn = m_tableView->currentIndex().column();
-        m_table->setData(m_table->index(0, m_primaryKeyColumn), m_pkIcon, Qt::DecorationRole);
-    }
-    else {
-        m_primaryKeyColumn = -1;
+    setPrimaryKeyIcon(m_primaryKeyColumn, false);
+    m_primaryKeyColumn = on ? m_tableView->currentIndex().column() : -1;
+    setPrimaryKeyIcon(m_primaryKeyColumn, true);
+}
+
+void KexiCSVImportDialog::setPrimaryKeyIcon(int column, bool set)
+{
+    if (column >= 0 && column < m_table->columnCount()) {
+        m_table->setData(m_table->index(0, column), set ? m_pkIcon : QPixmap(), Qt::DecorationRole);
     }
 }
 
