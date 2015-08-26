@@ -459,6 +459,10 @@ public:
 
     void insertWindow(KexiWindow *window);
 
+    bool windowContainerExistsFor(int identifier) const;
+
+    void setWindowContainerExistsFor(int identifier, bool set);
+
     void updateWindowId(KexiWindow *window, int oldItemID);
 
     void removeWindow(int identifier);
@@ -664,6 +668,10 @@ public:
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;
+    //! A set of item identifiers for whose there are KexiWindowContainer instances already.
+    //! This lets to verify that KexiWindow is about to be constructed and opened so multiple
+    //! opening can be avoided.
+    QSet<int> windowContainers;
 #ifndef KEXI_NO_PROCESS_EVENTS
     QHash<int, PendingJobType> pendingWindows; //!< part item identifiers for windows whoose opening has been started
     //! @todo QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts

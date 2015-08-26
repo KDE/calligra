@@ -1268,6 +1268,21 @@ void KexiMainWindow::Private::insertWindow(KexiWindow *window)
 #endif
 }
 
+bool KexiMainWindow::Private::windowContainerExistsFor(int identifier) const
+{
+    return windowContainers.contains(identifier);
+}
+
+void KexiMainWindow::Private::setWindowContainerExistsFor(int identifier, bool set)
+{
+    if (set) {
+        windowContainers.insert(identifier);
+    }
+    else {
+        windowContainers.remove(identifier);
+    }
+}
+
 void KexiMainWindow::Private::updateWindowId(KexiWindow *window, int oldItemID)
 {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );

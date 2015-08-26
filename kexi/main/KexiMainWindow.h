@@ -172,7 +172,11 @@ public Q_SLOTS:
      (only works when part for this item is of type KexiPart::StaticPart).
      \a openingCancelled is set to true is opening has been cancelled.
      \a errorMessage, if not 0, points to a string that can be set to error message
-     if one encountered. */
+     if one encountered.
+     @c nullptr can be returned if the KexiWindow object for @a item is not yet fully constructed
+     but openObject() has been quickly called again for the same @a item. This can happen if user
+     clicked multiple times on the same Project navigator's item. In this case @a openingCancelled
+     is not set; the caller should not display error message but the opening should be silently abandoned. */
     virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
                                    bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
                                    QString* errorMessage = 0);
