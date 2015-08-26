@@ -1072,7 +1072,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupChanged( ResourceGroup *res
 }
 
 //-------------------------------------------------------
-class ResourceAppointmentsRowModel::Private
+class Q_DECL_HIDDEN ResourceAppointmentsRowModel::Private
 {
 public:
     Private( Private *par=0, void *p=0, KPlato::ObjectType t=OT_None ) : parent( par ), ptr( p ), type( t ), internalCached( false ), externalCached( false ), intervalRow( -1 )
