@@ -20,7 +20,8 @@
 #include "KarbonPatternOptionsWidget.h"
 #include "ui_KarbonPatternOptionsWidget.h"
 
-class KarbonPatternOptionsWidget::Private {
+class Q_DECL_HIDDEN KarbonPatternOptionsWidget::Private
+{
 public:
     Ui_PatternOptionsWidget widget;
 };
