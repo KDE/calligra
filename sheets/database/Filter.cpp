@@ -489,7 +489,7 @@ bool Filter::Or::loadOdf(const KoXmlElement& parent)
 }
 
 
-class Filter::Private
+class Q_DECL_HIDDEN Filter::Private
 {
 public:
     Private()

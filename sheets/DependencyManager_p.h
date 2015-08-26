@@ -39,7 +39,7 @@ class Formula;
 class Map;
 class Sheet;
 
-class DependencyManager::Private
+class Q_DECL_HIDDEN DependencyManager::Private
 {
 public:
     /**

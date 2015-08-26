@@ -75,7 +75,7 @@
 
 using namespace Calligra::Sheets;
 
-class CellTool::Private
+class Q_DECL_HIDDEN CellTool::Private
 {
 public:
     CanvasBase* canvas;

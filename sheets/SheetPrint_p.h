@@ -87,7 +87,7 @@ private:
 };
 
 
-class SheetPrint::Private
+class Q_DECL_HIDDEN SheetPrint::Private
 {
 public:
     Private(SheetPrint *parent) : q(parent) {}

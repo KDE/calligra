@@ -39,7 +39,7 @@
 
 using namespace Calligra::Sheets;
 
-class RegionSelector::Private
+class Q_DECL_HIDDEN RegionSelector::Private
 {
 public:
     Selection* selection;

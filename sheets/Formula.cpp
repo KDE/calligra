@@ -112,7 +112,7 @@ struct stackEntry {
     int row1, col1, row2, col2;
 };
 
-class Formula::Private : public QSharedData
+class Q_DECL_HIDDEN Formula::Private : public QSharedData
 {
 public:
     Cell cell;

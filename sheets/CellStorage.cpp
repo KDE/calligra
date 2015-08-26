@@ -66,7 +66,7 @@ using namespace Calligra::Sheets;
 
 typedef RectStorage<QString> NamedAreaStorage;
 
-class CellStorage::Private
+class Q_DECL_HIDDEN CellStorage::Private
 {
 public:
     Private(Sheet* sheet)

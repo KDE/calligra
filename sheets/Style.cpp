@@ -144,7 +144,7 @@ SharedSubStyle SharedSubStyle::s_defaultStyle(new SubStyle());
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class Style::Private : public QSharedData
+class Q_DECL_HIDDEN Style::Private : public QSharedData
 {
 public:
     QHash<Key, SharedSubStyle> subStyles;
@@ -2715,7 +2715,7 @@ bool Style::releaseSubStyle(Key key)
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class CustomStyle::Private : public QSharedData
+class Q_DECL_HIDDEN CustomStyle::Private : public QSharedData
 {
 public:
     QString name;

@@ -24,7 +24,7 @@
 
 using namespace Calligra::Sheets;
 
-class MergeStrategy::Private
+class Q_DECL_HIDDEN MergeStrategy::Private
 {
 public:
     QRect initialSelection;

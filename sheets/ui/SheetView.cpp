@@ -56,7 +56,7 @@ struct CellPaintData
     QPointF coordinate;
 };
 
-class SheetView::Private
+class Q_DECL_HIDDEN SheetView::Private
 {
 public:
     Private()

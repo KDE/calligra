@@ -29,7 +29,7 @@
 
 using namespace Calligra::Sheets;
 
-class PasteStrategy::Private
+class Q_DECL_HIDDEN PasteStrategy::Private
 {
 public:
 };
