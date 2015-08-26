@@ -40,7 +40,7 @@
 //                         class KoOdfStyle
 
 
-class KoOdfStyle::Private
+class Q_DECL_HIDDEN KoOdfStyle::Private
 {
 public:
     Private();
