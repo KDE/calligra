@@ -27,6 +27,7 @@ set(odfreader_LIB_SRCS
 )
 
 add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
+generate_export_header(koodfreader)
 
 target_link_libraries(koodfreader koodf koodf2 KF5::KDELibs4Support Qt5::Xml)
 
@@ -38,7 +39,7 @@ install(TARGETS koodfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 #install( FILES
-     # koodfreader_export.h
+     # ${CMAKE_CURRENT_BINARY_DIR}/koodfreader_export.h
      # OdfReaderContext.h
      # OdtReaderBackend.h
      # OdfParser.h
