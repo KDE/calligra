@@ -47,10 +47,10 @@
 #endif
 
 KComponentData *KWFactory::s_instance = 0;
-KAboutData *KWFactory::s_aboutData = 0;
+K4AboutData *KWFactory::s_aboutData = 0;
 
-KWFactory::KWFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+KWFactory::KWFactory()
+    : KPluginFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Words.
@@ -77,7 +77,7 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     return part;
 }
 
-KAboutData *KWFactory::aboutData()
+K4AboutData *KWFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newWordsAboutData();
@@ -96,7 +96,9 @@ const KComponentData &KWFactory::componentData()
         dockRegistry->add(new KWStatisticsDockerFactory());
         dockRegistry->add(new KWNavigationDockerFactory());
 #ifndef NDEBUG
+#ifdef SHOULD_BUILD_RDF
         dockRegistry->add(new KWDebugDockerFactory());
+#endif
 #endif
 
 #ifdef SHOULD_BUILD_RDF

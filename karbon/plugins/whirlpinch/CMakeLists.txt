@@ -1,18 +1,18 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core   )
 
 ########### next target ###############
 
-set(karbon_whirlpinchplugin_PART_SRCS WhirlPinchPlugin.cpp KarbonWhirlPinchCommand.cpp )
+set(karbon_whirlpinch_PART_SRCS WhirlPinchPlugin.cpp KarbonWhirlPinchCommand.cpp )
 
-kde4_add_plugin(karbon_whirlpinchplugin ${karbon_whirlpinchplugin_PART_SRCS})
+add_library(karbon_whirlpinch MODULE ${karbon_whirlpinch_PART_SRCS})
 
-target_link_libraries(karbon_whirlpinchplugin karboncommon)
+kcoreaddons_desktop_to_json(karbon_whirlpinch karbon_whirlpinch.desktop)
 
-install(TARGETS karbon_whirlpinchplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(karbon_whirlpinch karboncommon)
+
+install(TARGETS karbon_whirlpinch  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  WhirlPinchPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonwhirlpinchplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
+install( FILES  WhirlPinchPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

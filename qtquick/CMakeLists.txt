@@ -74,12 +74,12 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-automoc4_add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
+add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
 
 target_link_libraries(calligraqtquickcomponentsplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTOPENGL_LIBRARY}
-    ${QT_LIBRARIES}
+    Qt5::Declarative
+    Qt5::OpenGL
+    Qt5::Svg
     komain
     kotextlayout
     wordsprivate

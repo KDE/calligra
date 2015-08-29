@@ -24,6 +24,7 @@
 
 #include <kdialog.h>
 
+class KUrl;
 
 namespace KPlato
 {

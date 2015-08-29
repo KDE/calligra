@@ -137,22 +137,21 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
-    button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
-    
+    button( QDialogButtonBox::Ok )->setEnabled( ! treeview->defaultColumns().isEmpty() );
+
     m_panel = new ItemViewSettup( treeview, includeColumn0 );
     KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
     page->setHeader( i18n( "Tree View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
-    
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(okClicked()), m_panel, SLOT(slotOk()));
-    connect(this, SIGNAL(defaultClicked()), m_panel, SLOT(setDefault()));
+
+    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), m_panel, SLOT(slotOk()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_panel, SLOT(setDefault()));
 }
 
 void ItemViewSettupDialog::slotOk()
@@ -209,13 +208,12 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     bool nodef = treeview->masterView()->defaultColumns().isEmpty() || treeview->slaveView()->defaultColumns().isEmpty();
-    button( Default )->setEnabled( ! nodef );
+    button( QDialogButtonBox::Ok )->setEnabled( ! nodef );
 
     m_page1 = new ItemViewSettup( treeview->masterView(), true );
     KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );
@@ -232,11 +230,11 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     //connect( m_page1, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
     //connect( m_page2, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
-    connect( this, SIGNAL(okClicked()), m_page1, SLOT(slotOk()) );
-    connect( this, SIGNAL(okClicked()), m_page2, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), m_page1, SLOT(setDefault()) );
-    connect( this, SIGNAL(defaultClicked()), m_page2, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), m_page1, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), m_page2, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_page1, SLOT(setDefault()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_page2, SLOT(setDefault()) );
 }
 
 void SplitItemViewSettupDialog::slotOk()

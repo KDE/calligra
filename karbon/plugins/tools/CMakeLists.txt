@@ -1,6 +1,4 @@
 include_directories(
-    ${QT_INCLUDES} 
-    ${KDE4_INCLUDE_DIR}
     ${FLAKE_INCLUDES}
     ${CMAKE_SOURCE_DIR}/karbon 
     ${CMAKE_SOURCE_DIR}/karbon/ui
@@ -39,18 +37,24 @@ set(karbon_tools_PART_SRCS
    filterEffectTool/FilterRegionEditStrategy.cpp
 )
 
-kde4_add_ui_files(karbon_tools_PART_SRCS
+ki18n_wrap_ui(karbon_tools_PART_SRCS
     filterEffectTool/FilterEffectEditWidget.ui
 )
 
-kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
+add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
 
-target_link_libraries(karbontools karboncommon karbonui kowidgets)
+kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
 
-install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(karbon_tools karboncommon karbonui kowidgets)
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-########### install files ###############
+ecm_install_icons( ICONS
+    22-actions-calligraphy.png
+    22-actions-gradient.png
+    22-actions-pattern.png
+    32-actions-tool_imageeffects.png
 
-install( FILES karbontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME hicolor
+)

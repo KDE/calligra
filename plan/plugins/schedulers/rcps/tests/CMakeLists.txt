@@ -6,10 +6,11 @@ include_directories( .. ${KPLATO_INCLUDES} ${KOSTORE_INCLUDES})
 
 set(ProjectTester_SRCS ProjectTester.cpp ../KPlatoRCPSScheduler.cpp ../KPlatoRCPSPlugin.cpp)
  
- 
+add_definitions(-DPLAN_NOPLUGIN)
+
 kde4_add_unit_test(ProjectTester TESTNAME Plan-RCPSTester  ${ProjectTester_SRCS})
  
-target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} rcps_plan planprivate kplatokernel  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(ProjectTester  rcps_plan planprivate kplatokernel Qt5::Test)
  
 
 ########### next target ###############

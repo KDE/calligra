@@ -9,9 +9,8 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif()
 
-if (KDEPIMLIBS_FOUND)
-    math(EXPR KDEPIMLIBS_HEXVERSION "${KDEPIMLIBS_VERSION_MAJOR}*65536 +  ${KDEPIMLIBS_VERSION_MINOR}*256  + ${KDEPIMLIBS_VERSION_PATCH}")
-    add_definitions(-DPLAN_KDEPIMLIBS_FOUND -DPLAN_KDEPIMLIBS_HEXVERSION=${KDEPIMLIBS_HEXVERSION})
+if (KF5AkonadiContact_FOUND)
+    add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
 endif ()
 
 if (PLANCHARTDEBUG)
@@ -26,13 +25,8 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
 
-    ${KDGANTT_INCLUDES}
-    ${KDCHART_INCLUDES}
-
     ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
-
-    ${KOREPORT_INCLUDES}
 )
 
 add_subdirectory( libs )
@@ -69,6 +63,7 @@ set(planprivate_LIB_SRCS
     kptmaindocument.cpp
     kptview.cpp
 #     KPtViewAdaptor.cpp
+    kptprintingcontrolprivate.cpp
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
@@ -81,7 +76,7 @@ set(planprivate_LIB_SRCS
     KPlatoXmlLoader.cpp
 )
 
-kde4_add_ui_files(planprivate_LIB_SRCS
+ki18n_wrap_ui(planprivate_LIB_SRCS
     kptviewlistaddview.ui
     kptviewlisteditview.ui
     kptviewlisteditcategory.ui
@@ -93,12 +88,14 @@ kde4_add_ui_files(planprivate_LIB_SRCS
     kptinsertfilepanel.ui
 )
 
-kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
+kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
-kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
+add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
-
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml komain)
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(planprivate KF5::AkonadiContact)
+endif()
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -107,11 +104,13 @@ install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(planpart_PART_SRCS kptfactoryinit.cpp )
 
-kde4_add_plugin(planpart ${planpart_PART_SRCS})
+add_library(planpart MODULE ${planpart_PART_SRCS})
 
-target_link_libraries(planpart ${KDE4_KPARTS_LIBS} planprivate)
+kcoreaddons_desktop_to_json(planpart planpart.desktop)
 
-install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(planpart KF5::Parts planprivate)
+
+install(TARGETS planpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### KPlato executable ###############
@@ -122,9 +121,10 @@ endif()
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/*-apps-calligraplan.png")
+ecm_add_app_icon(calligraplan_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -141,8 +141,7 @@ install(TARGETS calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
+install( FILES  plan.rc plan_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/plan)
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})

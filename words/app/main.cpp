@@ -24,9 +24,9 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newWordsAboutData();
+    K4AboutData * aboutData = newWordsAboutData();
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
     // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
     QApplication::setGraphicsSystem( QLatin1String("raster") );
 #endif

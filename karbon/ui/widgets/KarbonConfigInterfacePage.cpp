@@ -36,7 +36,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <knuminput.h>
 #include <kcolorbutton.h>
 
-#include <QLabel>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QFormLayout>
@@ -46,7 +45,7 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     setObjectName(name);
 
     m_view = view;
-    m_config = KarbonFactory::componentData().config();
+    m_config = KarbonFactory::karbonConfig();
 
     m_oldRecentFiles = 10;
     m_oldDockerFontSize = 8;
@@ -135,4 +134,3 @@ void KarbonConfigInterfacePage::slotDefault()
     m_showStatusBar->setChecked(true);
 }
 
-#include "KarbonConfigInterfacePage.moc"

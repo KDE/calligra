@@ -1,6 +1,6 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget
- ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
+ ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/libs)
 
 ########### next target ###############
 
@@ -9,27 +9,26 @@ set(kexihandler_table_PART_SRCS kexitablepart.cpp kexitabledesignerview.cpp
   kexitabledesignerview_p.cpp kexilookupcolumnpage.cpp )
 
 
-kde4_add_plugin(kexihandler_table ${kexihandler_table_PART_SRCS})
+add_library(kexihandler_table MODULE ${kexihandler_table_PART_SRCS})
 
 
 
 target_link_libraries(
     kexihandler_table
     kexicore
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexidataviewcommon
     kexidatatable
     kexiextendedwidgets
-    ${KOPROPERTY_LIBS}
     kexiutils
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
 
-install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
+    Predicate
+    KProperty
+
+    Qt5::Core
+    Qt5::Gui
+)
+
+install(TARGETS kexihandler_table  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -976,4 +976,6 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
+Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
+
 #endif  // CALLIGRA_SHEETS_SHEET

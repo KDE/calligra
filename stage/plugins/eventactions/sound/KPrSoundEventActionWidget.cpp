@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kurl.h>
 
 
 #include <KoEventActionAddCommand.h>

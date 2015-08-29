@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
 
 
 ########### next target ###############
@@ -8,18 +8,18 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 set(keximigrate_txtmigrate_PART_SRCS txtmigrate.cpp )
 
 
-kde4_add_plugin(keximigrate_txt ${keximigrate_txtmigrate_PART_SRCS})
+add_library(keximigrate_txt MODULE ${keximigrate_txtmigrate_PART_SRCS})
 
 
 
 target_link_libraries(keximigrate_txt  
     keximigrate
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
+
+    Predicate
 )
 
-install(TARGETS keximigrate_txt  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_txt  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

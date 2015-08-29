@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 
-#include <koproperty/Set.h>
+#include <KPropertySet>
 
 #include <kexi_global.h>
 #include <db/cursor.h>
@@ -89,16 +89,16 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const QByteArray& propertyName,
+    const KPropertySet& set, const QByteArray& propertyName,
     const QVariant& newValue, const QVariant& oldValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
-    KoProperty::Property& property = set[propertyName];
+    KProperty& property = set[propertyName];
 
     //remember because we'll change list data soon
-    KoProperty::Property::ListData *oldListData = property.listData() ?
-            new KoProperty::Property::ListData(*property.listData()) : 0;
+    KProperty::ListData *oldListData = property.listData() ?
+            new KProperty::ListData(*property.listData()) : 0;
     if (slist && nlist) {
         if (slist->isEmpty() || nlist->isEmpty()) {
             property.setListData(0);
@@ -127,18 +127,18 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const QByteArray& propertyName,
+    const KPropertySet& set, const QByteArray& propertyName,
     const QVariant& newValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
-    KoProperty::Property& property = set[propertyName];
+    KProperty& property = set[propertyName];
     QVariant oldValue(property.value());
     setPropertyValueIfNeeded(set, propertyName, newValue, property.value(),
                              commandGroup, forceAddCommand, rememberOldValue, slist, nlist);
 }
 
-void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
+void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
         bool visible, bool &changed, Command *commandGroup)
 {
     if (prop->isVisible() != visible) {
@@ -150,11 +150,11 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& 
     }
 }
 
-bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
+bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
         Command *commandGroup)
 {
     bool changed = false;
-    KoProperty::Property *prop;
+    KProperty *prop;
     bool visible;
 
     prop = &set["subType"];
@@ -236,7 +236,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, 
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set)
 {
     QVariant icon;
     if (!set["rowSource"].value().toString().isEmpty()

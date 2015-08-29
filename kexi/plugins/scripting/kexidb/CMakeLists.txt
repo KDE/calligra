@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
 
 set(krossmodulekexidb_PART_SRCS 
    kexidbmodule.cpp
@@ -11,7 +11,7 @@ set(krossmodulekexidb_PART_SRCS
    kexidbconnection.cpp 
    kexidbdriver.cpp )
 
-kde4_add_plugin(krossmodulekexidb ${krossmodulekexidb_PART_SRCS})
+add_library(krossmodulekexidb MODULE ${krossmodulekexidb_PART_SRCS})
 
-target_link_libraries(krossmodulekexidb ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
-install(TARGETS krossmodulekexidb DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(krossmodulekexidb Predicate)
+install(TARGETS krossmodulekexidb DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

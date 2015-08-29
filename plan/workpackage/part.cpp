@@ -49,6 +49,7 @@
 #include <kundo2qstack.h>
 #include <QPointer>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -350,11 +351,12 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     kDebug(planworkDbg());
     setComponentData( Factory::global() );
     // Add library translation files
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
-        locale->insertCatalog( "planlibs" );
+        // QT5TODO: ensure proper loading of catalogs, T449
+//         locale->insertCatalog( "planlibs" );
 #ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
+//         locale->insertCatalog( "kabc" );
 #endif
     }
     if ( isReadWrite() ) {
@@ -467,8 +469,7 @@ void Part::addWorkPackage( WorkPackage *wp )
 bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = KGlobal::dirs()->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug(planworkDbg())<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
@@ -776,7 +777,7 @@ void Part::setModified( bool mod )
     emit captionChanged( QString(), mod );
 }
 
-bool Part::saveAs( const KUrl &/*url*/ )
+bool Part::saveAs( const QUrl &/*url*/ )
 {
     return false;
 }

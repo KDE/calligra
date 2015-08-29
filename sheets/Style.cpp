@@ -27,7 +27,6 @@
 #include <QPen>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <KoGenStyles.h>
@@ -599,8 +598,8 @@ static QString convertDateFormat(const QString& date)
 
 Format::Type Style::dateType(const QString &_f)
 {
-    const QString dateFormatShort = convertDateFormat(KGlobal::locale()->dateFormatShort());
-    const QString dateFormat = convertDateFormat(KGlobal::locale()->dateFormat());
+    const QString dateFormatShort = convertDateFormat(KLocale::global()->dateFormatShort());
+    const QString dateFormat = convertDateFormat(KLocale::global()->dateFormat());
     QString _format = _f;
     _format.replace(' ', '-');
 
@@ -953,11 +952,11 @@ QString Style::saveOdfStyleNumericDate(KoGenStyles&mainStyles, Format::Type _sty
     switch (_style) {
         //TODO fixme use locale of kspread and not kglobal
     case Format::ShortDate:
-        format = KGlobal::locale()->dateFormatShort();
+        format = KLocale::global()->dateFormatShort();
         locale = true;
         break;
     case Format::TextDate:
-        format = KGlobal::locale()->dateFormat();
+        format = KLocale::global()->dateFormat();
         locale = true;
         break;
     case Format::Date1:

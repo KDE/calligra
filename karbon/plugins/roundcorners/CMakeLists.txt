@@ -1,23 +1,22 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core   )
 
 
 ########### next target ###############
 
-set(karbon_roundcornersplugin_PART_SRCS RoundCornersPlugin.cpp RoundCornersCommand.cpp )
+set(karbon_roundcorners_PART_SRCS RoundCornersPlugin.cpp RoundCornersCommand.cpp )
 
 
-kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
+add_library(karbon_roundcorners MODULE ${karbon_roundcorners_PART_SRCS})
 
+kcoreaddons_desktop_to_json(karbon_roundcorners karbon_roundcorners.desktop)
 
+target_link_libraries(karbon_roundcorners karboncommon)
 
-target_link_libraries(karbon_roundcornersplugin karboncommon)
-
-install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_roundcorners  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  RoundCornersPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonroundcornersplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  RoundCornersPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

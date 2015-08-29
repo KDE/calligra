@@ -21,7 +21,7 @@
 #ifndef KPTABOUTDATA_H
 #define KPTABOUTDATA_H
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 
 #include <calligraversion.h>
@@ -32,10 +32,10 @@ namespace KPlato
 static const char PLAN_DESCRIPTION[] = I18N_NOOP("Project Planning and Management Tool");
 static const char PLAN_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newAboutData()
+K4AboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
-                                           PLAN_VERSION, ki18n(PLAN_DESCRIPTION), KAboutData::License_GPL,
+    K4AboutData * aboutData=new K4AboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
+                                           PLAN_VERSION, ki18n(PLAN_DESCRIPTION), K4AboutData::License_GPL,
                                            ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );

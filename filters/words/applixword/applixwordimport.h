@@ -22,6 +22,7 @@
 #define APPLIXWORDIMPORT_H
 
 #include <QString>
+#include <QColor>
 #include <QVariantList>
 #include <QFile>
 #include <QObject>

@@ -95,8 +95,7 @@ public:
 };
 
 
-K_PLUGIN_FACTORY(KeyImportFactory, registerPlugin<KeyImport>();)
-K_EXPORT_PLUGIN(KeyImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KeyImportFactory, "calligra_filter_key2odp.json", registerPlugin<KeyImport>();)
 
 KeyImport::KeyImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -150,3 +149,5 @@ KoFilter::ConversionStatus KeyImport::convert(const QByteArray& from, const QByt
 
     return KoFilter::OK;
 }
+
+#include "KeyImport.moc"

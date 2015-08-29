@@ -39,6 +39,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTextLayoutRootArea.h>
 
+#include <kglobal.h>
 #include <kaboutdata.h>
 #include <kmimetype.h>
 
@@ -47,13 +48,12 @@
 static KAboutData createAboutData()
 {
     KAboutData aboutData(
-         "okular_odt",
-         "okularGenerator_odt",
-         ki18n( "ODT/OTT Backend" ),
-         CALLIGRA_VERSION_STRING,
-         ki18n( "ODT/OTT file renderer" ),
-         KAboutData::License_GPL,
-         ki18n( "© 2012 Sven Langkamp" )
+         QStringLiteral("okularGenerator_odt"),
+         i18n( "ODT/OTT Backend" ),
+         QStringLiteral(CALLIGRA_VERSION_STRING),
+         i18n( "ODT/OTT file renderer" ),
+         KAboutLicense::GPL,
+         i18n( "© 2012 Sven Langkamp" )
     );
 
     // fill the about data
@@ -282,3 +282,4 @@ const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
     return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : 0;
 }
 
+#include "OkularOdtGenerator.moc"

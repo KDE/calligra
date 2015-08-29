@@ -37,6 +37,7 @@
 
 #include <KarbonFactory.h>
 #include <KarbonDocument.h>
+#include <ui/KarbonAboutData.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public KSplashScreen
@@ -54,7 +55,7 @@ public:
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+    KCmdLineArgs::init( argc, argv, newKarbonAboutData() );
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n( "File to open" ));

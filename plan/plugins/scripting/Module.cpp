@@ -72,7 +72,7 @@ Module::Module(QObject* parent)
     d->project = 0;
     d->command = 0;
 
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
         locale->insertCatalog( "plan" );
         locale->insertCatalog( "planlibs" );

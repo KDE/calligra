@@ -28,6 +28,7 @@
 
 #include <KoCanvasBase.h>
 
+#include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
@@ -118,8 +119,8 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     int col = marker.x();
     int colstart = col; //this is where we get back after each week
     setText(sheet, row, colstart, i18n("Calendar from %1 to %2",
-                                       KGlobal::locale()->formatDate(start),
-                                       KGlobal::locale()->formatDate(end)));
+                                       KLocale::global()->formatDate(start),
+                                       KLocale::global()->formatDate(end)));
 
     QDate current(start);
 //   QDate previous(current);

@@ -4,10 +4,10 @@ set(braindumpcore_LIB_SRCS
   StatesRegistry.cpp
 )
 
-kde4_add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
-target_link_libraries(braindumpcore ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSVG_LIBRARY} ${KDE4_KDECORE_LIBRARY})
+add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
+target_link_libraries(braindumpcore Qt5::Core Qt5::Xml Qt5::Svg )
 
-target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY})
+target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES Qt5::Core)
 
 set_target_properties(braindumpcore PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
 

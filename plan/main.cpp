@@ -44,7 +44,7 @@ public:
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KAboutData * aboutData=KPlato::newAboutData();
+    K4AboutData * aboutData=KPlato::newAboutData();
 
     KCmdLineArgs::init( argc, argv, aboutData);
     KCmdLineOptions options;

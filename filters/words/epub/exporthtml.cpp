@@ -51,8 +51,11 @@
 #include "SvmPainterBackend.h"
 
 
-K_PLUGIN_FACTORY(ExportHtmlFactory, registerPlugin<ExportHtml>();)
-K_EXPORT_PLUGIN(ExportHtmlFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExportHtmlFactory, "calligra_filter_odt2html.json",
+			   registerPlugin<ExportHtml>();)
+
+// Needed to instantiate the plugin factory.
+#include "exporthtml.moc"
 
 
 ExportHtml::ExportHtml(QObject *parent, const QVariantList&)

@@ -20,17 +20,17 @@
 #ifndef KWABOUTDATA_H
 #define KWABOUTDATA_H
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
 
 static const char WORDS_DESCRIPTION[] = I18N_NOOP("Word processor");
 static const char WORDS_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newWordsAboutData()
+K4AboutData * newWordsAboutData()
 {
-    KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Calligra Words"),
-                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
+    K4AboutData * aboutData = new K4AboutData("words", 0, ki18nc("application name", "Calligra Words"),
+                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), K4AboutData::License_LGPL,
                                             ki18n("© 1998-%1, The Words Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.calligra.org/words/");

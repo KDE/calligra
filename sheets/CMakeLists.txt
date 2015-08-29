@@ -18,6 +18,10 @@ add_subdirectory( functions )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
+if(NOT Qt5Sql_FOUND)
+    add_definitions(-DQT_NO_SQL)
+endif()
+
 ########### next target ###############
 set (chart_DIR_SRCS
     chart/ChartDatabaseSelectorFactory.cpp
@@ -25,7 +29,7 @@ set (chart_DIR_SRCS
     chart/ChartDialog.cpp
     )
 
-kde4_add_ui_files(chart_DIR_SRCS
+ki18n_wrap_ui(chart_DIR_SRCS
     chart/ChartDatabaseSelector.ui
     )
 
@@ -106,7 +110,7 @@ set (dialogs_DIR_SRCS
     )
 
 
-kde4_add_ui_files(dialogs_DIR_SRCS
+ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/ConsolidateWidget.ui
     dialogs/ConsolidateDetailsWidget.ui
     dialogs/FontWidget.ui
@@ -163,7 +167,7 @@ set (part_DIR_SRCS
     part/dialogs/SheetSelectPage.cpp
 )
 
-kde4_add_ui_files(part_DIR_SRCS
+ki18n_wrap_ui(part_DIR_SRCS
     part/dialogs/FileOptionsWidget.ui
     part/dialogs/InterfaceOptionsWidget.ui
     part/dialogs/PageLayoutSheetPage.ui
@@ -224,11 +228,14 @@ set (calligrasheetsodf_LIB_SRCS
     ApplicationSettings.cpp
     Binding.cpp
     BindingManager.cpp
+    BindingModel.cpp
+    BindingStorage.cpp
     CalculationSettings.cpp
     Cell.cpp
     CellStorage.cpp
     Cluster.cpp
     Condition.cpp
+    ConditionsStorage.cpp
     Currency.cpp
     Damages.cpp
     DependencyManager.cpp
@@ -258,6 +265,7 @@ set (calligrasheetsodf_LIB_SRCS
     StyleStorage.cpp
     Util.cpp
     Validity.cpp
+    ValidityStorage.cpp
     Value.cpp
     ValueCalc.cpp
     ValueConverter.cpp
@@ -266,6 +274,7 @@ set (calligrasheetsodf_LIB_SRCS
 
     database/Database.cpp
     database/DatabaseManager.cpp
+    database/DatabaseStorage.cpp
     database/Filter.cpp
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
@@ -281,7 +290,7 @@ set (calligrasheetsodf_LIB_SRCS
     )
 
 
-kde4_add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
+add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
 
 target_link_libraries(calligrasheetsodf komain)
 target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
@@ -292,23 +301,17 @@ set_target_properties(calligrasheetsodf PROPERTIES
 install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-kde4_add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
+add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 
 target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
-    ${KDE4_KFILE_LIBS}
-    ${QT_QTSQL_LIBRARY}
-    ${KDE4_THREADWEAVER_LIBS}
+    KF5::SonnetCore
+    KF5::SonnetUi
+    KF5::NotifyConfig
 )
-if(QT_QTDBUS_FOUND)
-    target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
-endif()
-
-if(KDE4_KCMUTILS_LIBS)
-    target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
-else()
-    target_link_libraries(calligrasheetscommon ${KDE4_KUTILS_LIBS} )
+if(Qt5Sql_FOUND)
+    target_link_libraries(calligrasheetscommon Qt5::Sql)
 endif()
 
 target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
@@ -321,19 +324,18 @@ install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
-kde4_add_plugin(calligrasheetspart ${calligrasheetspart_PART_SRCS})
+add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
-install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
@@ -410,9 +412,10 @@ if (SHOULD_BUILD_APP_SHEETS)
 
 set (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/*-apps-calligrasheets.png")
+ecm_add_app_icon(calligrasheets_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)

@@ -46,6 +46,8 @@
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
 
+#include <KSharedConfig>
+
 // Qt
 #include <QStyledItemDelegate>
 
@@ -382,7 +384,7 @@ void SortDialog::init()
     ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
     ',' + i18n("Sunday");
 
-    KSharedConfigPtr config = KGlobal::activeComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     const QStringList other = config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {

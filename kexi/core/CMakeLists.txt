@@ -1,6 +1,6 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44020)
 
-include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi   )
 
 ########### next target ###############
 
@@ -43,18 +43,18 @@ set(kexicore_LIB_SRCS
    KexiSearchableModel.cpp
 )
 
-kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
+add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore
-  ${KDE4_KIO_LIBS}
-  ${KDE4_KDEUI_LIBS}
+  KF5::KIOWidgets
+
   kexiutils
-  kexidb
-  ${CALLIGRADB_LIBS}
-  ${KOPROPERTY_LIBS}
   kowidgetutils
+
+  Predicate
+  KProperty
 )
-target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb ${KOPROPERTY_LIBS})
+target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils)
 
 set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

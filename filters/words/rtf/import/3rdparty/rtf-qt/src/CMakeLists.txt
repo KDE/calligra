@@ -7,7 +7,6 @@ endif ()
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${QT_INCLUDE_DIR}
 )
 #if(CMAKE_COMPILER_IS_GNUCXX)
 #    list(APPEND CMAKE_CXX_FLAGS "-fprofile-arcs -ftest-coverage")
@@ -49,10 +48,10 @@ set(RtfReader_LIB_SOURCES
 	UserPropsDestination.cpp
 )
 
-qt4_automoc(${RtfReader_LIB_SOURCES})
+add_library(RtfReader SHARED ${RtfReader_LIB_SOURCES})
+generate_export_header( RtfReader )
 
-kde4_add_library(RtfReader SHARED ${RtfReader_LIB_SOURCES})
-target_link_libraries(RtfReader ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}) 
+target_link_libraries(RtfReader Qt5::Gui)
 
 set_target_properties(RtfReader PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS RtfReader ${INSTALL_TARGETS_DEFAULT_ARGS})

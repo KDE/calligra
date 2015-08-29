@@ -23,8 +23,8 @@
 
 #include <ctype.h>
 
-
 #include <kdebug.h>
+#include <KCharsets>
 
 #include "Formula.h"
 #include "calligra_sheets_limits.h"
@@ -150,7 +150,7 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagNam
         e.setAttribute("underline", "yes");
     if (font.strikeOut())
         e.setAttribute("strikeout", "yes");
-    //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
+    //e.setAttribute( "charset", KCharsets::charsets()->name( font ) );
 
     return e;
 }
@@ -193,11 +193,11 @@ QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement & element)
     /* Uncomment when charset is added to kspread_dlg_layout
        + save a document-global charset
        if ( element.hasAttribute( "charset" ) )
-         KGlobal::charsets()->setQFont( f, element.attribute("charset") );
+         KCharsets::charsets()->setQFont( f, element.attribute("charset") );
         else
     */
     // ######## Not needed anymore in 3.0?
-    //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
+    //KCharsets::charsets()->setQFont( f, KLocale::global()->charset() );
 
     return f;
 }

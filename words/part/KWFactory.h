@@ -23,7 +23,8 @@
 #include <kpluginfactory.h>
 #include "words_export.h"
 
-class KAboutData;
+class K4AboutData;
+class KComponentData;
 
 /**
  * Factory for the Words application.
@@ -35,9 +36,8 @@ class WORDS_EXPORT KWFactory : public KPluginFactory
 public:
     /**
      * Constructor
-     * @param parent the parent QObject
      */
-    explicit KWFactory(QObject *parent = 0);
+    explicit KWFactory();
     ~KWFactory();
 
     /// overwritten method from superclass
@@ -47,11 +47,11 @@ public:
     static const KComponentData &componentData();
 
     /// Creates a new KAboutData instance
-    static KAboutData *aboutData();
+    static K4AboutData *aboutData();
 
 private:
     static KComponentData *s_instance;
-    static KAboutData *s_aboutData;
+    static K4AboutData *s_aboutData;
 };
 
 #endif

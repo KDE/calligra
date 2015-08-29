@@ -11,8 +11,8 @@ find_package(Qt4 4.7.0 REQUIRED)
 find_package(KDE4 REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories(${QT_INCLUDES}
-                    ${KDE4_INCLUDES}
+include_directories(
+                    
                     ${KDECLARATIVE_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR})
@@ -25,7 +25,7 @@ include_directories(
 )
 
 set (calligra-active_RCCS CalligraActive.qrc)
-qt4_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
+qt5_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_active_global.h)
 
@@ -52,9 +52,9 @@ qt4_automoc(${calligra-active_SRCS})
 add_executable(calligraactive ${calligra-active_SRCS})
 
 target_link_libraries(calligraactive
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_LIBRARIES}
-    ${KDECLARATIVE_LIBRARIES}
+    KF5::Declarative
     komain
     wordsprivate
     calligrasheetscommon

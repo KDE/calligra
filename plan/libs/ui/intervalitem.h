@@ -48,8 +48,8 @@ public:
     {
         m_start = time;
         m_length = length;
-        setText( 0, KGlobal::locale()->formatTime( time ) );
-        setText( 1, KGlobal::locale()->formatNumber( length ) );
+        setText( 0, KLocale::global()->formatTime( time ) );
+        setText( 1, KLocale::global()->formatNumber( length ) );
     }
 
 private:

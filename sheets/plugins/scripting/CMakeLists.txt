@@ -14,11 +14,11 @@ add_subdirectory( scripts )
 # the Sheets Scripting Plugin + Kross module
 set(krossmodulesheets_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingWidgets.cpp ScriptingPart.cpp ScriptingListener.cpp)
 
-qt4_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
-kde4_add_plugin(krossmodulesheets ${krossmodulesheets_PART_SRCS})
+qt5_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
+add_library(krossmodulesheets MODULE ${krossmodulesheets_PART_SRCS})
 
-target_link_libraries(krossmodulesheets ${KDE4_KDEUI_LIBS}  calligrasheetscommon kokross)
-install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(krossmodulesheets   calligrasheetscommon kokross)
+install(TARGETS krossmodulesheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

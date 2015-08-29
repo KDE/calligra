@@ -13,7 +13,7 @@ check_include_files(strings.h HAVE_STRINGS_H)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-filters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-filters.h )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
 if(SHOULD_BUILD_LIB_KOODF2)
     add_subdirectory( libodf2 )

@@ -51,7 +51,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QResizeEvent>
-#include <QFocusEvent>
 #include <QMouseEvent>
 #include <QMenu>
 #include <QEvent>
@@ -470,5 +469,4 @@ void KarbonCanvas::setCursor(const QCursor &cursor)
     QWidget::setCursor(cursor);
 }
 
-#include "KarbonCanvas.moc"
 

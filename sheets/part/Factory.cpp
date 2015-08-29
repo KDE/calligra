@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include <KoDockRegistry.h>
 
@@ -34,10 +35,10 @@
 using namespace Calligra::Sheets;
 
 KComponentData* Factory::s_global = 0;
-KAboutData* Factory::s_aboutData = 0;
+K4AboutData* Factory::s_aboutData = 0;
 
-Factory::Factory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+Factory::Factory()
+    : KPluginFactory()
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
@@ -64,7 +65,7 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
     return part;
 }
 
-KAboutData* Factory::aboutData()
+K4AboutData* Factory::aboutData()
 {
     if (!s_aboutData)
         s_aboutData = newAboutData();
@@ -76,8 +77,8 @@ const KComponentData &Factory::global()
     if (!s_global) {
         s_global = new KComponentData(aboutData());
 
-        s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
-        s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+        KGlobal::dirs()->addResourceType("functions", "data", "sheets/functions/");
+        KGlobal::dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);

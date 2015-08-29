@@ -12,17 +12,17 @@ set(calligrastageeventactions_PART_SRCS
     Plugin.cpp
 )
 
-kde4_add_plugin(calligrastageeventactions ${calligrastageeventactions_PART_SRCS})
+add_library(calligrastageeventactions MODULE ${calligrastageeventactions_PART_SRCS})
+
+kcoreaddons_desktop_to_json(calligrastageeventactions calligrastageeventactions.desktop)
 
 target_link_libraries(
     calligrastageeventactions
     calligrastageprivate
     flake
-    ${KDE4_KIO_LIBRARY}
-    ${KDE4_PHONON_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    KF5::KIOCore
+    ${PHONON_LIBS}
+    Qt5::Gui
     )
 
-install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install(FILES calligrastageeventactions.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install(TARGETS calligrastageeventactions  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -44,8 +44,8 @@
 #include <kdialog.h>
 #include <QImage>
 
-K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<ImageExport>();)
-K_EXPORT_PLUGIN(PngExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2image.json",
+                           registerPlugin<ImageExport>();)
 
 
 ImageExport::ImageExport(QObject*parent, const QVariantList&)

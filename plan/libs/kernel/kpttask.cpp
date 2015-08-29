@@ -1130,7 +1130,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     timer.start();
     cs->logDebug( QString( "Start calculate forward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     cs->logInfo( i18n( "Calculate early finish " ) );
     //kDebug(planDbg())<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
@@ -1395,7 +1395,7 @@ DateTime Task::calculateLateStart(int use) {
     timer.start();
     cs->logDebug( QString( "Start calculate backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     cs->logInfo( i18n( "Calculate late start" ) );
     cs->logDebug( QString( "%1: late finish= %2" ).arg( constraintToString() ).arg( cs->lateFinish.toString() ) );
     //kDebug(planDbg())<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish;
@@ -1638,7 +1638,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     QTime timer;
     timer.start();
     cs->logInfo( i18n( "Start schedule forward: %1 ", constraintToString( true ) ) );
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     cs->logInfo( i18n( "Schedule from start %1", locale->formatDateTime( cs->startTime ) ) );
     //kDebug(planDbg())<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
@@ -2041,7 +2041,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     timer.start();
     cs->logDebug( QString( "Start schedule backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     cs->logInfo( i18n( "Schedule from end time: %1", cs->endTime.toString() ) );
     if (type() == Node::Type_Task) {
         cs->duration = m_estimate->value(use, pert);

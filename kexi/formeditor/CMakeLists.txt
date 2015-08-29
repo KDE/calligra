@@ -1,6 +1,6 @@
 add_subdirectory( factories )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs   )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
@@ -44,11 +44,12 @@ set(kformdesigner_LIB_SRCS
 )
 
 set(kformdesigner_LIBS
-  ${KOPROPERTY_LIBS}
   kexiutils
   kexicore
   kexiextendedwidgets
-  ${CALLIGRADB_LIBS}
+
+  Predicate
+  KProperty
 )
 
 if(KFD_SIGSLOTS)
@@ -59,7 +60,7 @@ if(KFD_SIGSLOTS)
   list(APPEND kformdesigner_LIBS kexiextendedwidgets kexidatatable)
 endif()
 
-kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
+add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
 target_link_libraries(kformdesigner ${kformdesigner_LIBS})
 

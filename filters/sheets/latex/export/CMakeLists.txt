@@ -19,15 +19,14 @@ set(kspread2tex_PART_SRCS
    table.cc 
    xmlparser.cc )
 
-kde4_add_ui_files(kspread2tex_PART_SRCS latexexportwidget.ui )
+ki18n_wrap_ui(kspread2tex_PART_SRCS latexexportwidget.ui )
 
-kde4_add_plugin(calligra_filter_kspread2tex ${kspread2tex_PART_SRCS})
-
-
+add_library(calligra_filter_kspread2tex MODULE ${kspread2tex_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspread2tex.desktop)
 
 target_link_libraries(calligra_filter_kspread2tex komain ${KDE4_KFILE_LIBS})
 
-install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_kspread2tex  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

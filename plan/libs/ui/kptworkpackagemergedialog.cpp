@@ -24,6 +24,7 @@
 
 #include <kmessagebox.h>
 #include <kextendableitemdelegate.h>
+#include <kglobal.h>
 
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
@@ -111,7 +112,7 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
         items << new QStandardItem();
         items << new QStandardItem( p->project->childNode( 0 )->name() );
         items << new QStandardItem( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() );
-        items << new QStandardItem( KGlobal::locale()->formatDateTime( p->timeTag ) );
+        items << new QStandardItem( KLocale::global()->formatDateTime( p->timeTag ) );
 
         if ( p->toTask ) {
             items[ CheckColumn ]->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable );

@@ -31,8 +31,8 @@
 #include "ui_kptganttprintingoptions.h"
 #include "ui_kptganttchartdisplayoptions.h"
 
-#include <kdganttglobal.h>
-#include <kdganttview.h>
+#include <KGanttGlobal>
+#include <KGanttView>
 
 class KoDocument;
 
@@ -41,7 +41,7 @@ class QSplitter;
 
 class KoPrintJob;
 
-namespace KDGantt
+namespace KGantt
 {
     class TreeViewRowController;
 }
@@ -57,7 +57,7 @@ class Task;
 class Project;
 class Relation;
 class ScheduleManager;
-class MyKDGanttView;
+class MyKGanttView;
 class GanttPrintingOptions;
 class GanttViewBase;
 class NodeGanttViewBase;
@@ -161,7 +161,7 @@ public:
 
 };
 
-class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
+class KPLATOUI_EXPORT GanttViewBase : public KGantt::View
 {
     Q_OBJECT
 public:
@@ -203,14 +203,14 @@ protected:
     Project *m_project;
     GanttItemDelegate *m_ganttdelegate;
     NodeItemModel m_defaultModel;
-    KDGantt::TreeViewRowController *m_rowController;
+    KGantt::TreeViewRowController *m_rowController;
 };
 
-class KPLATOUI_EXPORT MyKDGanttView : public NodeGanttViewBase
+class KPLATOUI_EXPORT MyKGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    explicit MyKDGanttView(QWidget *parent);
+    explicit MyKGanttView(QWidget *parent);
 
     GanttItemModel *model() const;
     void setProject( Project *project );
@@ -289,10 +289,10 @@ private:
     bool m_readWrite;
     int m_defaultFontSize;
     QSplitter *m_splitter;
-    MyKDGanttView *m_gantt;
+    MyKGanttView *m_gantt;
     Project *m_project;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
@@ -310,11 +310,11 @@ private:
 };
 
 
-class KPLATOUI_EXPORT MilestoneKDGanttView : public NodeGanttViewBase
+class KPLATOUI_EXPORT MilestoneKGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    explicit MilestoneKDGanttView(QWidget *parent);
+    explicit MilestoneKGanttView(QWidget *parent);
 
     MilestoneItemModel *model() const;
     void setProject( Project *project );
@@ -376,7 +376,7 @@ private:
     bool m_readWrite;
     int m_defaultFontSize;
     QSplitter *m_splitter;
-    MilestoneKDGanttView *m_gantt;
+    MilestoneKGanttView *m_gantt;
     bool m_showTaskName;
     bool m_showProgress;
     bool m_showPositiveFloat;
@@ -431,7 +431,7 @@ private:
     GanttViewBase *m_gantt;
     Project *m_project;
     ResourceAppointmentsGanttModel *m_model;
-    KDGantt::TreeViewRowController *m_rowController;
+    KGantt::TreeViewRowController *m_rowController;
 
 };
 

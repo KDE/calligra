@@ -24,10 +24,9 @@
 #ifndef WHIRLPINCHPLUGIN_H
 #define WHIRLPINCHPLUGIN_H
 
-#include <kdialog.h>
+#include <QDialog>
 #include <kxmlguiclient.h>
 
-#include <QPointF>
 #include <QVariantList>
 
 class WhirlPinchDlg;
@@ -50,7 +49,7 @@ class KDoubleNumInput;
 class KoUnitDoubleSpinBox;
 class KoUnit;
 
-class WhirlPinchDlg : public KDialog
+class WhirlPinchDlg : public QDialog
 {
     Q_OBJECT
 

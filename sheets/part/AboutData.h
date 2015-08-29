@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_ABOUTDATA
 #define CALLIGRA_SHEETS_ABOUTDATA
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
 
@@ -34,10 +34,10 @@ static const char description[] = I18N_NOOP("Calligra Spreadsheet Application");
 // Always the same as the Calligra version
 static const char version[] = CALLIGRA_VERSION_STRING;
 
-static KAboutData * newAboutData()
+static K4AboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
-                                            version, ki18n(description), KAboutData::License_LGPL,
+    K4AboutData * aboutData = new K4AboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
+                                            version, ki18n(description), K4AboutData::License_LGPL,
                                             ki18n("© 1998-%1, The Calligra Sheets Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.calligra.org/sheets/");

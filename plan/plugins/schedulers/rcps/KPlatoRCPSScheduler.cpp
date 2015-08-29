@@ -97,7 +97,7 @@ KPlatoRCPSScheduler::~KPlatoRCPSScheduler()
 
 KLocale *KPlatoRCPSScheduler::locale() const
 {
-    return KGlobal::locale();
+    return KLocale::global();
 }
 
 int KPlatoRCPSScheduler::progress_callback( int generations, struct rcps_fitness fitness, void *arg )

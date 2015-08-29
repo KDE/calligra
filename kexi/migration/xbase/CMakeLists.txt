@@ -1,23 +1,23 @@
-include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
 
 ########### next target ###############
 
 set(keximigrate_xbase_PART_SRCS xbasemigrate.cpp )
 
-kde4_add_plugin(keximigrate_xbase ${keximigrate_xbase_PART_SRCS})
+add_library(keximigrate_xbase MODULE ${keximigrate_xbase_PART_SRCS})
 
 
 target_link_libraries(
     keximigrate_xbase
     keximigrate
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${XBase_LIBRARIES} 
+
+    Predicate
+
+    ${XBase_LIBRARIES}
     )
 
-install(TARGETS keximigrate_xbase DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_xbase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -19,7 +19,7 @@
  */
 
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 
 #include <QFile>
@@ -54,12 +54,12 @@ int main( int argc, char** argv )
 #endif
 
 
-    KAboutData aboutData("calligrageminithumbnailer",
+    K4AboutData aboutData("calligrageminithumbnailer",
                          "calligrawords",
                          ki18n("Calligra Gemini Thumbnailer"),
                          version.toLatin1(),
                          ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.calligra.org",
@@ -112,7 +112,7 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 #endif
 
-#if defined Q_WS_X11 && QT_VERSION >= 0x040800
+#if defined HAVE_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 

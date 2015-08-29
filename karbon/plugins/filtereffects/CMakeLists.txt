@@ -1,7 +1,7 @@
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
-set(karbonfiltereffects_PART_SRCS
-    KarbonFilterEffectsPlugin.cpp
+set(karbon_filtereffects_PART_SRCS
+    FilterEffectsPlugin.cpp
     BlurEffect.cpp
     BlurEffectFactory.cpp
     BlurEffectConfigWidget.cpp
@@ -38,10 +38,10 @@ set(karbonfiltereffects_PART_SRCS
     MatrixDataModel.cpp
     )
 
-kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
+add_library(karbon_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
 
-target_link_libraries(karbonfiltereffects flake kowidgets)
+kcoreaddons_desktop_to_json(karbon_filtereffects karbon_filtereffects.desktop)
 
-install(TARGETS karbonfiltereffects  DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(karbon_filtereffects flake kowidgets)
 
-install( FILES karbonfiltereffects.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install(TARGETS karbon_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

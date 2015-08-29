@@ -7,13 +7,12 @@ if(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
 
 set(csv2sheets_PART_SRCS csvimport.cc)
 
-kde4_add_plugin(calligra_filter_csv2sheets ${csv2sheets_PART_SRCS})
+add_library(calligra_filter_csv2sheets MODULE ${csv2sheets_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_csv2sheets calligra_filter_csv2sheets.desktop)
 
 target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
 
-install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_csv2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_filter_csv2sheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 endif()
 
@@ -22,14 +21,13 @@ if(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
 
 set(sheets2csv_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
-kde4_add_ui_files(sheets2csv_PART_SRCS exportdialogui.ui )
+ki18n_wrap_ui(sheets2csv_PART_SRCS exportdialogui.ui )
 
-kde4_add_plugin(calligra_filter_sheets2csv ${sheets2csv_PART_SRCS})
+add_library(calligra_filter_sheets2csv MODULE ${sheets2csv_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2csv calligra_filter_sheets2csv.desktop)
 
 target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
 
-install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_sheets2csv.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_filter_sheets2csv  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 endif()

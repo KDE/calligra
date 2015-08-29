@@ -43,6 +43,9 @@ public Q_SLOTS:
     void slotApply();
     void slotDefault();
 
+protected slots:
+    void handleButtonClicked(QAbstractButton* button);
+
 private:
     KoConfigGridPage* m_gridPage;
     KoConfigDocumentPage* m_docPage;

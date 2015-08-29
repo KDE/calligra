@@ -7,12 +7,12 @@ include_directories(
 if(SHOULD_BUILD_FILTER_SHEETS_TO_GNUMERIC)
 
 set(sheets2gnumeric_PART_SRCS gnumericexport.cc )
-kde4_add_plugin(calligra_filter_sheets2gnumeric ${sheets2gnumeric_PART_SRCS})
-target_link_libraries(calligra_filter_sheets2gnumeric calligrasheetscommon kowidgets)
+add_library(calligra_filter_sheets2gnumeric MODULE ${sheets2gnumeric_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2gnumeric calligra_filter_sheets2gnumeric.desktop)
+target_link_libraries(calligra_filter_sheets2gnumeric calligrasheetscommon kowidgets KF5::Archive)
 
-install(TARGETS calligra_filter_sheets2gnumeric  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_sheets2gnumeric  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  calligra_filter_sheets2gnumeric.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()
 
@@ -20,10 +20,10 @@ endif()
 if(SHOULD_BUILD_FILTER_GNUMERIC_TO_SHEETS)
 
 set(gnumeric2sheets_PART_SRCS gnumericimport.cc )
-kde4_add_plugin(calligra_filter_gnumeric2sheets ${gnumeric2sheets_PART_SRCS})
-target_link_libraries(calligra_filter_gnumeric2sheets calligrasheetscommon kowidgets)
-install(TARGETS calligra_filter_gnumeric2sheets  DESTINATION ${PLUGIN_INSTALL_DIR})
+add_library(calligra_filter_gnumeric2sheets MODULE ${gnumeric2sheets_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_gnumeric2sheets calligra_filter_gnumeric2sheets.desktop)
+target_link_libraries(calligra_filter_gnumeric2sheets calligrasheetscommon kowidgets KF5::Archive)
+install(TARGETS calligra_filter_gnumeric2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  calligra_filter_gnumeric2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 endif()

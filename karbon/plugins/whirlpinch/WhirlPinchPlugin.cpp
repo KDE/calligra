@@ -49,20 +49,24 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <QGroupBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
-K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
-K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(WhirlPinchPluginFactory, "karbon_whirlpinch.json",
+                           registerPlugin<WhirlPinchPlugin>();)
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/WhirlPinchPlugin.rc"), true);
-    QAction *a = new KAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
+    QAction *a = new QAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
 
@@ -100,15 +104,16 @@ void WhirlPinchPlugin::slotWhirlPinch()
 }
 
 WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption(i18n("Whirl Pinch"));
-    setButtons(Ok | Cancel);
-
-    QWidget * mainWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+    setWindowTitle(i18n("Whirl Pinch"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     QGroupBox* info = new QGroupBox(i18n("Info"), mainWidget);
@@ -117,6 +122,10 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     QLabel * infoLabel = new QLabel(infoText, info);
     infoLabel->setWordWrap(true);
     infoLayout->addWidget(infoLabel);
+
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input fields:
     QGroupBox* group = new QGroupBox(i18n("Properties"), mainWidget);
@@ -140,13 +149,17 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     layout->addWidget(m_radius, 2, 1);
 
     // signals and slots:
-    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 
     mainLayout->addWidget(info);
     mainLayout->addWidget(group);
 
-    setMainWidget(mainWidget);
+    mainLayout->addWidget(mainWidget);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 }
 
 qreal WhirlPinchDlg::angle() const
@@ -184,5 +197,4 @@ void WhirlPinchDlg::setUnit(const KoUnit &unit)
     m_radius->setUnit(unit);
 }
 
-#include "WhirlPinchPlugin.moc"
-
+#include <WhirlPinchPlugin.moc>

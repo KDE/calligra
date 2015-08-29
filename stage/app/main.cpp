@@ -28,7 +28,7 @@
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
     int state;
-    KAboutData * aboutData=newKPresenterAboutData();
+    K4AboutData * aboutData=newKPresenterAboutData();
 
     KCmdLineArgs::init( argc, argv, aboutData );
 

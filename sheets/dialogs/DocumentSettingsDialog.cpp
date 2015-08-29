@@ -67,14 +67,14 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
         , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
-    setCaption(i18n("Document Settings"));
+    setWindowTitle(i18n("Document Settings"));
 //     setFaceType(List);
-    setButtons(Ok | Cancel/* | Default | Reset*/);
-    setDefaultButton(Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel/* | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset*/);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
-//     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
-//     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+//     connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
+//     connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
     KVBox *p1 = new KVBox();
     d->page1 = addPage(p1, i18n("Calculation"));

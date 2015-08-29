@@ -39,11 +39,12 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
 set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(calligra_filter_sheets2xls ${sheets2xls_SRCS})
+add_library(calligra_filter_sheets2xls MODULE ${sheets2xls_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_sheets2xls calligra_filter_sheets2xls.desktop)
 
 
 target_link_libraries(calligra_filter_sheets2xls
@@ -55,11 +56,6 @@ target_link_libraries(calligra_filter_sheets2xls
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 
 if(INSTALL_XLS_EXPORT_FILTER)
-  install(TARGETS calligra_filter_sheets2xls  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-  install( FILES  calligra_filter_sheets2xls.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+  install(TARGETS calligra_filter_sheets2xls  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 endif()
 

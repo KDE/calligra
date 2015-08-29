@@ -17,17 +17,24 @@ set (tableshape_LIB_SRCS
     SheetsEditor.cpp
    )
 
-kde4_add_plugin(calligra_shape_spreadsheet-deferred ${tableshape_LIB_SRCS})
-kde4_add_plugin(calligra_shape_spreadsheet TableShapeFactory.cpp)
+add_library(calligra_shape_spreadsheet-deferred MODULE ${tableshape_LIB_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_spreadsheet-deferred calligra_shape_spreadsheet-deferred.desktop)
+add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
+kcoreaddons_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon ${KDE4_KFILE_LIBS})
 target_link_libraries(calligra_shape_spreadsheet flake)
 
-install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR})
-install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES calligra_shape_spreadsheet-deferred.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES calligra_shape_spreadsheet.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons( ICONS
+    22-actions-spreadsheetshape.png
+    22-actions-tool_cellformatting.png
+    32-actions-spreadsheetshape.png
+
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME hicolor
+)

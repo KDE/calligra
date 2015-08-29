@@ -44,22 +44,17 @@
 #include <kdebug.h>
 
 #include <KoPluginLoader.h>
+#include <kglobal.h>
 
-KComponentData* KarbonFactory::s_instance = 0L;
-KAboutData* KarbonFactory::s_aboutData = 0L;
+KSharedConfig::Ptr s_karbonConfig;
 
-KarbonFactory::KarbonFactory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+KarbonFactory::KarbonFactory()
+    : KPluginFactory()
 {
-    componentData();
 }
 
 KarbonFactory::~KarbonFactory()
 {
-    delete s_instance;
-    s_instance = 0L;
-    delete s_aboutData;
-    s_aboutData = 0L;
 }
 
 QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
@@ -73,17 +68,10 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
     return part;
 }
 
-KAboutData * KarbonFactory::aboutData()
+const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
 {
-    if (!s_aboutData)
-        s_aboutData = newKarbonAboutData();
-    return s_aboutData;
-}
-
-const KComponentData &KarbonFactory::componentData()
-{
-    if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+    if (!s_karbonConfig) {
+        s_karbonConfig = KSharedConfig::openConfig(KAboutData::applicationData().componentName() + QLatin1String("rc"));
         // Add any application-specific resource directories here
 
         // Tell the iconloader about share/apps/calligra/icons
@@ -92,9 +80,7 @@ const KComponentData &KarbonFactory::componentData()
         // Load Karbon specific dockers.
         KoPluginLoader::instance()->load(QString::fromLatin1("Karbon/Dock"));
     }
-
-    return *s_instance;
+    return s_karbonConfig;
 }
 
-#include "KarbonFactory.moc"
 

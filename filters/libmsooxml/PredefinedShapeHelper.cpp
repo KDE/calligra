@@ -21,6 +21,9 @@
  *
  */
 
+#include <QString>   // used in generated/generatedShapes.h, which is included
+		     // inside a function in this file.
+
 #include "PredefinedShapeHelper.h"
 
 PredefinedShapeHelper::PredefinedShapeHelper()

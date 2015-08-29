@@ -202,7 +202,7 @@ void FormPrivate::addValueCaption(const QByteArray &value, const QString &captio
         propValCaption.insert(value, caption);
 }
 
-void FormPrivate::setColorProperty(KoProperty::Property& p,
+void FormPrivate::setColorProperty(KProperty& p,
                                    QPalette::ColorRole (QWidget::*roleMethod)() const,
                                    const QVariant& value)
 {
@@ -334,7 +334,7 @@ void FormPrivate::initPropertiesDescription()
     propValCaption["RightToLeft"] = i18n("Right to Left");
 }
 
-KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
+KProperty::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
 {
     QStringList names;
     foreach (const QString& name, list) {
@@ -353,5 +353,5 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
             names.append(n);
         }
     }
-    return new KoProperty::Property::ListData(list, names);
+    return new KProperty::ListData(list, names);
 }

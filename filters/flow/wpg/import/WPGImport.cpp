@@ -99,8 +99,7 @@ public:
 private:
 };
 
-K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<WPGImport>();)
-K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(VSDXImportFactory, "calligra_filter_wpg2odg.json", registerPlugin<WPGImport>();)
 
 WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -135,3 +134,5 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
 
     return KoFilter::OK;
 }
+
+#include "WPGImport.moc"

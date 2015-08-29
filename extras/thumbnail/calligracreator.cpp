@@ -33,9 +33,11 @@
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
 
+static int argc = 0;
+
 extern "C"
 {
-    KDE_EXPORT ThumbCreator *new_creator()
+    Q_DECL_EXPORT ThumbCreator *new_creator()
     {
         return new CalligraCreator;
     }
@@ -44,6 +46,7 @@ extern "C"
 CalligraCreator::CalligraCreator()
     : m_part(0)
     , m_doc(0)
+    , m_app(argc, static_cast<char**>(0))
 {
 }
 

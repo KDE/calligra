@@ -41,8 +41,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
         m_pageStyle(page.pageStyle())
 {
     Q_ASSERT(document);
-    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApplyClicked()));
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
+    connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)),
+            this, SLOT(slotButtonClicked(QAbstractButton*)));
     showUnitchooser(true);
     Q_ASSERT(page.isValid());
 
@@ -177,6 +178,14 @@ void KWPageSettingsDialog::slotApplyClicked()
     m_document->firePageSetupChanged();
 }
 
+void KWPageSettingsDialog::slotButtonClicked(QAbstractButton* button)
+{
+    if(button == buttonBox()->button(QDialogButtonBox::Apply))
+    {
+        slotApplyClicked();
+    }
+}
+
 void KWPageSettingsDialog::setDocumentUnit(const KoUnit &unit)
 {
     m_document->setUnit(unit);
@@ -248,6 +257,6 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
     m_columns->setColumns(m_pageStyle.columns());
     m_clonePageStyleButton->setEnabled(pagestyle.isValid());
     m_deletePageStyleButton->setEnabled(pagestyle.isValid() && item->text() != m_document->pageManager()->defaultPageStyle().name());
-    enableButtonOk(pagestyle.isValid());
-    enableButtonApply(pagestyle.isValid());
+    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(pagestyle.isValid());
+    buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(pagestyle.isValid());
 }

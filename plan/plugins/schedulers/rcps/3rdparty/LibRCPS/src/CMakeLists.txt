@@ -27,9 +27,9 @@ else()
 endif()
 
 if(WIN32)
-    kde4_add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
+    add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
 else()
-    kde4_add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
+    add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
 endif()
 
 target_link_libraries(

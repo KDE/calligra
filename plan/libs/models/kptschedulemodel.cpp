@@ -571,7 +571,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KGlobal::locale()->formatDateTime( sm->expected()->start() );
+                return KLocale::global()->formatDateTime( sm->expected()->start() );
             }
             break;
         case Qt::EditRole:
@@ -581,9 +581,9 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KGlobal::locale()->formatDateTime( sm->expected()->start() ), KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
+                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KLocale::global()->formatDateTime( sm->expected()->start() ), KLocale::global()->formatDateTime( m_project->constraintStartTime() ) );
             } else {
-                return i18nc( "@info:tooltip", "Target start: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
+                return i18nc( "@info:tooltip", "Target start: %1", KLocale::global()->formatDateTime( m_project->constraintStartTime() ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -607,7 +607,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KGlobal::locale()->formatDateTime( sm->expected()->end() );
+                return KLocale::global()->formatDateTime( sm->expected()->end() );
             }
             break;
         case Qt::EditRole:
@@ -617,9 +617,9 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KGlobal::locale()->formatDateTime( sm->expected()->end() ), KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
+                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KLocale::global()->formatDateTime( sm->expected()->end() ), KLocale::global()->formatDateTime( m_project->constraintEndTime() ) );
             } else {
-                return i18nc( "@info:tooltip", "Target finish: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
+                return i18nc( "@info:tooltip", "Target finish: %1", KLocale::global()->formatDateTime( m_project->constraintEndTime() ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -784,7 +784,7 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return KGlobal::locale()->formatDuration( g );
+            return KLocale::global()->formatDuration( g );
         }
         case Qt::ToolTipRole: {
             QList<long unsigned int> lst = sm->supportedGranularities();
@@ -793,7 +793,7 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KGlobal::locale()->formatDuration( g ) );
+            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KLocale::global()->formatDuration( g ) );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignRight;
@@ -803,7 +803,7 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
         case Role::EnumList: {
             QStringList sl;
             foreach ( long unsigned int v, sm->supportedGranularities() ) {
-                sl << KGlobal::locale()->formatDuration( v );
+                sl << KLocale::global()->formatDuration( v );
             }
             return sl;
         }
@@ -1147,15 +1147,15 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
             }
             switch ( log.severity ) {
             case Schedule::Log::Type_Debug:
-                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::darkYellow), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Info:
                 break;
             case Schedule::Log::Type_Warning:
-                itm->setData( Qt::blue, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::blue), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Error:
-                itm->setData( Qt::red, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::red), Qt::ForegroundRole );
                 break;
             default:
                 break;

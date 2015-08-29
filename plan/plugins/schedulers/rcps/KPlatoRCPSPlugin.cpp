@@ -29,12 +29,15 @@
 
 #include <librcps.h>
 
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <QApplication>
 #include <kptschedulerplugin.h>
 
-
-KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
+#ifndef PLAN_NOPLUGIN
+KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin, "planrcpsscheduler.json")
+#endif
 
 using namespace KPlato;
 
@@ -42,9 +45,10 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
     kDebug(planDbg())<<rcps_version();
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
-        locale->insertCatalog( "planrcpsplugin" );
+        // QT5TODO: ensure proper loading of catalog, T449
+//         locale->insertCatalog( "planrcpsplugin" );
     }
     m_granularities << (long unsigned int) 1 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000

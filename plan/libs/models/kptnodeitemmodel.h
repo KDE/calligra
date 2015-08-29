@@ -28,6 +28,7 @@
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
 
+class KUrl;
 class KUndo2Command;
 
 namespace KPlato

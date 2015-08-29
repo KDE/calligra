@@ -20,19 +20,19 @@
 #ifndef KFORMEDITOR_PIXMAPEDIT_H
 #define KFORMEDITOR_PIXMAPEDIT_H
 
-#include <koproperty/editors/pixmapedit.h>
+#include <KProperty/PixmapEdit>
 
 #include <kexi_export.h>
 
 namespace KFormDesigner
 {
 
-class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
+class KFORMEDITOR_EXPORT KFDPixmapEdit : public KPropertyPixmapEditor
 {
     Q_OBJECT
 
 public:
-    explicit KFDPixmapEdit(KoProperty::Property *property, QWidget *parent = 0);
+    explicit KFDPixmapEdit(KProperty *property, QWidget *parent = 0);
     virtual ~KFDPixmapEdit();
 
 public Q_SLOTS:

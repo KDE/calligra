@@ -136,7 +136,7 @@ void GNUMERICFilter::dateInit()
 
 uint GNUMERICFilter::GnumericDate::greg2jul(int y, int m, int d)
 {
-    return QDate::gregorianToJulian(y, m, d);
+    return QDate(y, m, d).toJulianDay();
 }
 
 void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & d)
@@ -149,7 +149,7 @@ void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & 
 
     kDebug(30521) << "***** Num:" << num << ", i:" << i;
 
-    QDate::julianToGregorian(i + g_dateOrigin, y, m, d);
+    QDate::fromJulianDay(i + g_dateOrigin).getDate(&y, &m, &d);
     kDebug(30521) << "y:" << y << ", m:" << m << ", d:" << d;
 }
 
@@ -172,8 +172,8 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
     return time;
 }
 
-K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
-K_EXPORT_PLUGIN(GNUMERICFilterFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(GNUMERICFilterFactory, "calligra_filter_gnumeric2sheets.json",
+                           registerPlugin<GNUMERICFilter>();)
 
 GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
         : KoFilter(parent)

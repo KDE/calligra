@@ -29,6 +29,8 @@
 
 #include <QStyleOptionGraphicsItem>
 
+#include <KoJsonTrader.h>
+#include <KoDocumentEntry.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -246,13 +248,21 @@ void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
-    KService::Ptr service = KService::serviceByDesktopName("stagepart");
-    if (service.isNull()) {
+
+    KoDocumentEntry entry;
+    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", QString())) {
+        if (loader->fileName().contains(QLatin1String("stagepart"))) {
+            entry = KoDocumentEntry(loader);
+            break;
+        }
+    }
+    if (entry.isEmpty()) {
         qWarning("Unable to load Stage plugin, aborting!");
         return;
     }
 
-    d->part = service->createInstance<KoPart>(this);
+    // QT5TODO: ownership of d->part unclear
+    d->part = entry.createKoPart();
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);

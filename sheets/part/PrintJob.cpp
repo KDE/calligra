@@ -85,14 +85,14 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
     pageManagers.clear();
     if (printer.printRange() == QPrinter::Selection)
         pageManagers.insert(view->activeSheet(), view->activeSheet()->print());
-    else if (sheetSelectPage->allSheetsButton->isChecked()) {
+    else if (sheetSelectPage->m_ui.allSheetsButton->isChecked()) {
         const QList<Sheet *> sheets = view->doc()->map()->sheetList();
         for (int i = 0; i < sheets.count(); ++i) {
             pageManagers.insert(sheets[i], sheets[i]->print());
         }
-    } else if (sheetSelectPage->activeSheetButton->isChecked()) {
+    } else if (sheetSelectPage->m_ui.activeSheetButton->isChecked()) {
         pageManagers.insert(view->activeSheet(), view->activeSheet()->print());
-    } else if (sheetSelectPage->selectedSheetsButton->isChecked()) {
+    } else if (sheetSelectPage->m_ui.selectedSheetsButton->isChecked()) {
         const QStringList sheetNames = sheetSelectPage->selectedSheets();
         for (int i = 0; i < sheetNames.count(); ++i) {
             Sheet* sheet = view->doc()->map()->findSheet(sheetNames[i]);
@@ -106,8 +106,8 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
 
     // (Re-)Create the pages of the sheets.
     int pageCount = 0;
-    const PageManagerMap::Iterator end(pageManagers.constEnd());
-    for (PageManagerMap::Iterator it(pageManagers.constBegin()); it != end; ++it) {
+    const PageManagerMap::ConstIterator end(pageManagers.constEnd());
+    for (PageManagerMap::ConstIterator it(pageManagers.constBegin()); it != end; ++it) {
         SheetPrint *const pageManager = *it;
         PrintSettings settings = *pageManager->settings();
         // Set the print region, if the selection should be painted.

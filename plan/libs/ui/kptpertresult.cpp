@@ -139,7 +139,7 @@ void PertResult::draw()
             return;
         }
         widget.scheduleName->setText( model()->manager()->name() );
-        KLocale *locale =  KGlobal::locale();
+        KLocale *locale =  KLocale::global();
         Duration f;
         foreach ( Node *n, m_project->allNodes() ) {
             if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {

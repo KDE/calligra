@@ -35,6 +35,7 @@
 #include <QDragMoveEvent>
 #include <QModelIndex>
 #include <QVBoxLayout>
+#include <QPushButton>
 #include <QItemSelection>
 #include <QApplication>
 #include <QResizeEvent>
@@ -45,18 +46,18 @@
 #include <klocale.h>
 #include <kcalendarsystem.h>
 
-#include "KDChartChart"
-#include "KDChartAbstractCoordinatePlane"
-#include "KDChartBarDiagram"
-#include "KDChartLineDiagram"
-#include "KDChartCartesianAxis"
-#include "KDChartCartesianCoordinatePlane"
-#include "KDChartLegend"
-#include "KDChartBackgroundAttributes"
-#include "KDChartGridAttributes"
+#include <KChartChart>
+#include <KChartAbstractCoordinatePlane>
+#include <KChartBarDiagram>
+#include <KChartLineDiagram>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartLegend>
+#include <KChartBackgroundAttributes>
+#include <KChartGridAttributes>
 
 
-using namespace KDChart;
+using namespace KChart;
 
 namespace KPlato
 {
@@ -354,7 +355,7 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
 
     QStringList lst;
     for ( int i = 1; i <= 7; ++i ) {
-        lst << KGlobal::locale()->calendar()->weekDayName( i );
+        lst << KLocale::global()->calendar()->weekDayName( i );
     }
     weekdays->addItems( lst );
     period->setValue( view->period() );
@@ -405,8 +406,8 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, Task
     setCurrentPage( page );
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
 }
 
 //-----------------------------------
@@ -937,7 +938,7 @@ void PerformanceStatusBase::setProject( Project *project )
 void PerformanceStatusBase::slotLocaleChanged()
 {
     kDebug(planDbg());
-    KLocale *locale = m_project ? m_project->locale() : KGlobal::locale();
+    KLocale *locale = m_project ? m_project->locale() : KLocale::global();
     if ( locale ) {
         m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
         m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
@@ -1348,8 +1349,8 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     addPrintingOptions();
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
 }
 
 //-----------------
@@ -1376,9 +1377,10 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
+    //TODO: there was no default button configured, should there?
+//     connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void ProjectStatusViewSettingsDialog::slotOk()

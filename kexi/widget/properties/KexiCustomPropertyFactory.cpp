@@ -21,15 +21,16 @@
 #include "KexiCustomPropertyFactory_p.h"
 #include <kexiutils/identifier.h>
 
-using namespace KoProperty;
+#include <KPropertyFactory>
+#include <KCustomProperty>
 
 #if 0
 //! @internal
-class PixmapIdCustomProperty : public CustomProperty
+class PixmapIdCustomProperty : public KCustomProperty
 {
 public:
     explicit PixmapIdCustomProperty(Property *parent)
-            : CustomProperty(parent) {
+            : KCustomProperty(parent) {
     }
     virtual ~PixmapIdCustomProperty() {}
     virtual void setValue(const QVariant &value, bool rememberOldValue) {
@@ -45,11 +46,11 @@ public:
 };
 
 //! @internal
-class IdentifierCustomProperty : public CustomProperty
+class IdentifierCustomProperty : public KCustomProperty
 {
 public:
     explicit IdentifierCustomProperty(Property *parent)
-            : CustomProperty(parent) {
+            : KCustomProperty(parent) {
     }
     virtual ~IdentifierCustomProperty() {}
     virtual void setValue(const QVariant &value, bool rememberOldValue) {
@@ -69,8 +70,8 @@ public:
 
 //! @todo
 #if 0 //TODO
-class KexiImagePropertyEditorDelegate : public KoProperty::EditorCreatorInterface, 
-                                        public KoProperty::ValuePainterInterface
+class KexiImagePropertyEditorDelegate : public KPropertyEditorCreatorInterface,
+                                        public KPropertyValuePainterInterface
 {
 public:
     KexiImagePropertyEditorDelegate() {}
@@ -81,7 +82,7 @@ public:
 };
 #endif
 
-class KexiIdentifierPropertyEditorDelegate : public KoProperty::EditorCreatorInterface
+class KexiIdentifierPropertyEditorDelegate : public KPropertyEditorCreatorInterface
 {
 public:
     KexiIdentifierPropertyEditorDelegate() {}
@@ -98,7 +99,7 @@ public:
 //---------------
 
 KexiCustomPropertyFactory::KexiCustomPropertyFactory()
-        : KoProperty::Factory()
+        : KPropertyFactory()
 {
 //! @todo addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
     addEditor( KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate );
@@ -106,7 +107,7 @@ KexiCustomPropertyFactory::KexiCustomPropertyFactory()
 
 void KexiCustomPropertyFactory::init()
 {
-    if (KoProperty::FactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
+    if (KPropertyFactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
         return; //already registered
-    KoProperty::FactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
+    KPropertyFactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
 }

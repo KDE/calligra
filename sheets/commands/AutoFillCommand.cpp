@@ -36,7 +36,7 @@
 #include "Value.h"
 #include "ValueConverter.h"
 
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
@@ -182,7 +182,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
 
         if (AutoFillCommand::other == 0) {
             // AutoFillCommand::other = new QStringList();
-            KSharedConfigPtr config = KGlobal::activeComponent().config();
+            KSharedConfigPtr config = KSharedConfig::openConfig();
             AutoFillCommand::other = new QStringList(config->group("Parameters").readEntry("Other list", QStringList()));
         }
 

@@ -25,8 +25,10 @@
 #include <KWDocument.h>
 #include <sheets/part/Doc.h>
 #include <KoPart.h>
+#include <KoJsonTrader.h>
+#include <KoDocumentEntry.h>
+
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 
@@ -53,10 +55,16 @@ KoDocument* openFile(const QString &filename)
 {
     const QString mimetype = KMimeType::findByPath(filename)->name();
 
+    KoPart *part;
     QString error;
-    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                               mimetype, QLatin1String("Calligra/Part"), 0, QString(),
-                               QVariantList(), &error );
+    QList<QPluginLoader *> pluginLoaders = KoJsonTrader::self()->query("Calligra/Part", mimetype);
+    if (!pluginLoaders.isEmpty()) {
+        // take first
+        KoDocumentEntry entry(pluginLoaders[0]);
+        part = entry.createKoPart(&error);
+    } else {
+        error = "Could not find component";
+    }
 
     if (!error.isEmpty()) {
         qWarning() << "Error creating document" << mimetype << error;

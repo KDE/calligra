@@ -47,10 +47,10 @@ public:
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
-    KoProperty::EditorView *editor() const;
+    KPropertyEditorView *editor() const;
 
 protected Q_SLOTS:
-    void slotPropertySetChanged(KoProperty::Set*);
+    void slotPropertySetChanged(KPropertySet*);
 
 protected:
     class Private;

@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kzip.h>
+#include <kurl.h>
 
 #include "KPrHtmlExport.h"
 

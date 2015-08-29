@@ -22,15 +22,15 @@ set(krossmoduleplan_PART_SRCS
     ScriptingWidgets.cpp
 )
 
-kde4_add_ui_files(krossmoduleplan_PART_SRCS
+ki18n_wrap_ui(krossmoduleplan_PART_SRCS
     ScriptingDataQueryView.ui
 )
 
 
-qt4_wrap_cpp(krossmoduleplan_PART_SRCS
+qt5_wrap_cpp(krossmoduleplan_PART_SRCS
 )
 
-kde4_add_plugin(krossmoduleplan SHARED ${krossmoduleplan_PART_SRCS})
+add_library(krossmoduleplan MODULE SHARED ${krossmoduleplan_PART_SRCS})
 
 target_link_libraries(
     krossmoduleplan
@@ -43,7 +43,7 @@ target_link_libraries(
 
 set_target_properties(krossmoduleplan PROPERTIES DEFINE_SYMBOL MAKE_KPLATOSCRIPTING_LIB)
 
-install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krossmoduleplan DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES planscripting.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)

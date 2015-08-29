@@ -155,4 +155,3 @@ void KarbonPatternOptionsWidget::updateControls()
     d->widget.tileOffsetY->setEnabled(tiled);
 }
 
-#include "KarbonPatternOptionsWidget.moc"

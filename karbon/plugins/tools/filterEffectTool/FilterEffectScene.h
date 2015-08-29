@@ -22,7 +22,6 @@
 
 #include <QGraphicsScene>
 #include <QString>
-#include <QSet>
 #include <QMap>
 
 class KoFilterEffect;

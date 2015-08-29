@@ -48,10 +48,10 @@
 #include "pagetool/KWPageToolFactory.h"
 
 KComponentData *CAuFactory::s_instance = 0;
-KAboutData *CAuFactory::s_aboutData = 0;
+K4AboutData *CAuFactory::s_aboutData = 0;
 
-CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+CAuFactory::CAuFactory()
+    : KPluginFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
@@ -78,7 +78,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
     return part;
 }
 
-KAboutData *CAuFactory::aboutData()
+K4AboutData *CAuFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newAuthorAboutData();

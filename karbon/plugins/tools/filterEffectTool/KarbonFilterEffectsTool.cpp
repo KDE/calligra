@@ -43,7 +43,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <knuminput.h>
 
 #include <QWidget>
@@ -51,6 +51,10 @@
 #include <QToolButton>
 #include <QStackedWidget>
 #include <QLabel>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 class KarbonFilterEffectsTool::Private
 {
@@ -320,14 +324,21 @@ void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
 
 void KarbonFilterEffectsTool::editFilter()
 {
-    QPointer<KDialog> dlg = new KDialog();
-    dlg->setCaption(i18n("Filter Effect Editor"));
-    dlg->setButtons(KDialog::Close);
+    QPointer<QDialog> dlg = new QDialog();
+    dlg->setWindowTitle(i18n("Filter Effect Editor"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    QWidget *mainWidget = new QWidget(0);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    dlg->setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+    dlg->connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    dlg->connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
     editor->editShape(d->currentShape, canvas());
 
-    dlg->setMainWidget(editor);
+    mainLayout->addWidget(editor);
+    mainLayout->addWidget(buttonBox);
     dlg->exec();
     delete dlg;
 
@@ -516,4 +527,3 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     return widgets;
 }
 
-#include "KarbonFilterEffectsTool.moc"

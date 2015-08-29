@@ -33,20 +33,18 @@ set(kpr_pageeffect_matrixwipe_SRCS
     waterfallwipe/KPrWaterfallWipeBottomRightStrategy.cpp
 )
 
-kde4_add_plugin(kpr_pageeffect_matrixwipe ${kpr_pageeffect_matrixwipe_SRCS})
+add_library(kpr_pageeffect_matrixwipe MODULE ${kpr_pageeffect_matrixwipe_SRCS})
+
+kcoreaddons_desktop_to_json(kpr_pageeffect_matrixwipe kpr_pageeffect_matrixwipe.desktop)
 
 target_link_libraries(
     kpr_pageeffect_matrixwipe
     calligrastageprivate 
     flake 
     
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    
+    Qt5::Core
+    Qt5::Gui
     )
 
-install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kpr_pageeffect_matrixwipe.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
+install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

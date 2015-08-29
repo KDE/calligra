@@ -31,6 +31,7 @@
 #include <QToolBar>
 #include <QPushButton>
 
+#include <kurl.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -227,11 +228,11 @@ void TableTool::sheetActivated(const QString& sheetName)
 void TableTool::sheetsBtnClicked()
 {
     QPointer<KPageDialog> dialog = new KPageDialog();
-    dialog->setCaption(i18n("Sheets"));
-    dialog->setButtons(KDialog::Ok);
+    dialog->setWindowTitle(i18n("Sheets"));
+    dialog->setStandardButtons(QDialogButtonBox::Ok);
     dialog->setFaceType(KPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
-    dialog->setMainWidget(editor);
+    dialog->layout()->addWidget(editor);
     dialog->exec();
     updateSheetsList();
     delete dialog;

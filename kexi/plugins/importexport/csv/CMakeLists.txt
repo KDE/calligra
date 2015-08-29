@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/kexi/kexiDB ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration)
 
 ########### next target ###############
 
@@ -12,29 +12,27 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsvexport.cpp
 )
 
-kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART_SRCS})
+add_library(kexihandler_csv_importexport MODULE ${kexihandler_csv_importexport_PART_SRCS})
 
 target_link_libraries(
     kexihandler_csv_importexport
     kexicore
     keximigrate
-    kexidb
-    ${CALLIGRADB_LIBS}
     kexiutils
     kexiextendedwidgets
     keximain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    )
+
+    Predicate
+
+    Qt5::Gui
+)
 
 if(MSVC)
    # avoid LNK1169 errors
    set_target_properties(kexihandler_csv_importexport PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
 endif()
 
-install(TARGETS kexihandler_csv_importexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_csv_importexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

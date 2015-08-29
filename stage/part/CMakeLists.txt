@@ -145,16 +145,16 @@ set( calligrastageprivate_LIB_SRCS
    )
 endif()
 
-kde4_add_ui_files(calligrastageprivate_LIB_SRCS
+ki18n_wrap_ui(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
      ui/KPrPresentationTool.ui
      ui/KPrHtmlExport.ui
    )
 
-kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
+add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout ${KDE4_KFILE_LIBS} ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout KF5::Archive Qt5::Svg Qt5::OpenGL Qt5::WebKitWidgets)
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -163,16 +163,13 @@ install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ### calligrastagepart ###
 set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_add_plugin(calligrastagepart ${calligrastagepart_PART_SRCS})
+add_library(calligrastagepart MODULE ${calligrastagepart_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
-
-### desktop files ###
-install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligrastagepart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)

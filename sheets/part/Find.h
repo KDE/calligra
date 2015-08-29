@@ -88,7 +88,4 @@ private Q_SLOTS:
 } //namespace Sheets
 } //namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
-Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
-
 #endif // CALLIGRA_SHEETS_FIND_H

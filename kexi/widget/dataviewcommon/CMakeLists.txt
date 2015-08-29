@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs   )
 
 
 ########### next target ###############
@@ -14,18 +14,18 @@ set(kexidataviewcommon_LIB_SRCS
 )
 
 
-kde4_add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
+add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
 
 target_link_libraries(
     kexidataviewcommon
     kexicore
     kexiutils
     kexiguiutils
-    ${KOPROPERTY_LIBS}
-    kexidb
-    ${CALLIGRADB_LIBS}
-    ${CALLIGRADB_LIBS}
-    ${KDE4_KIO_LIBS}
+
+    Predicate
+    KProperty
+
+    KF5::KIOWidgets
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

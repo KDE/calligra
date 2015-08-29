@@ -34,6 +34,7 @@
 #include <QDoubleValidator>
 #include <QWidget>
 #include <QPushButton>
+#include <qdrawutil.h>
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
@@ -43,6 +44,7 @@
 #include <klocale.h>
 #include <knotification.h>
 #include <kdeversion.h>
+#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 #include "kptdebug.h"
@@ -95,7 +97,7 @@ public:
 void KDatePicker::fillWeeksCombo(const QDate &date)
 {
   // every year can have a different number of weeks
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   // it could be that we had 53,1..52 and now 1..53 which is the same number but different
   // so always fill with new values
@@ -425,9 +427,9 @@ KDatePicker::dateChangedSlot(const QDate &date)
 {
     kDebug(planDbg())<< "KDatePicker::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ").";
 
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem * calendar = KLocale::global()->calendar();
 
-    d->line->setText(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
+    d->line->setText(KLocale::global()->formatDate(date, KLocale::ShortDate));
     d->selectMonth->setText(calendar->monthName(date, KCalendarSystem::ShortName));
     fillWeeksCombo(date);
 
@@ -473,7 +475,7 @@ void
 KDatePicker::monthForwardClicked()
 {
     QDate temp;
-    temp = KGlobal::locale()->calendar()->addMonths( d->table->date(), 1 );
+    temp = KLocale::global()->calendar()->addMonths( d->table->date(), 1 );
 
     setDate( temp );
 }
@@ -482,7 +484,7 @@ void
 KDatePicker::monthBackwardClicked()
 {
     QDate temp;
-    temp = KGlobal::locale()->calendar()->addMonths( d->table->date(), -1 );
+    temp = KLocale::global()->calendar()->addMonths( d->table->date(), -1 );
 
     setDate( temp );
 }
@@ -491,7 +493,7 @@ void
 KDatePicker::yearForwardClicked()
 {
     QDate temp;
-    temp = KGlobal::locale()->calendar()->addYears( d->table->date(), 1 );
+    temp = KLocale::global()->calendar()->addYears( d->table->date(), 1 );
 
     setDate( temp );
 }
@@ -500,7 +502,7 @@ void
 KDatePicker::yearBackwardClicked()
 {
     QDate temp;
-    temp = KGlobal::locale()->calendar()->addYears( d->table->date(), -1 );
+    temp = KLocale::global()->calendar()->addYears( d->table->date(), -1 );
 
     setDate( temp );
 }
@@ -508,7 +510,7 @@ KDatePicker::yearBackwardClicked()
 void
 KDatePicker::weekSelected(int week)
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   QDate date = d->table->date();
   int year = calendar->year(date);
@@ -525,7 +527,7 @@ void
 KDatePicker::selectMonthClicked()
 {
   // every year can have different month names (in some calendar systems)
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
   QDate date = d->table->date();
   const int months = calendar->monthsInYear(date);
 
@@ -552,7 +554,7 @@ KDatePicker::selectMonthClicked()
 void
 KDatePicker::selectYearClicked()
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+  const KCalendarSystem * calendar = KLocale::global()->calendar();
 
   if (!d->selectYear->isChecked ())
   {
@@ -669,8 +671,8 @@ KDatePicker::setFontSize(int s)
 
   for (int i = 1; ; ++i)
     {
-      QString str = KGlobal::locale()->calendar()->monthName(i,
-         KGlobal::locale()->calendar()->year(d->table->date()), KCalendarSystem::ShortName);
+      QString str = KLocale::global()->calendar()->monthName(i,
+         KLocale::global()->calendar()->year(d->table->date()), KCalendarSystem::ShortName);
       if (str.isNull()) break;
       r=metrics.boundingRect(str);
       d->maxMonthRect.setWidth(qMax(r.width(), d->maxMonthRect.width()));

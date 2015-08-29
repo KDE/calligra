@@ -17,8 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-// muahahaha!
-#include "BindingStorage.moc"
-#include "ConditionsStorage.moc"
-#include "RectStorage.moc"
-#include "ValidityStorage.moc"
+#include "RectStorage.h"
+
+// cmake automoc needs this cpp file

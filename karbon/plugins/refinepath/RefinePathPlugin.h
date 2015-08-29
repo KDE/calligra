@@ -24,7 +24,7 @@
 #define REFINEPATHPLUGIN_H
 
 #include <kxmlguiclient.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <QVariantList>
 
 class RefinePathDlg;
@@ -45,7 +45,7 @@ private:
 
 class KIntSpinBox;
 
-class RefinePathDlg : public KDialog
+class RefinePathDlg : public QDialog
 {
     Q_OBJECT
 

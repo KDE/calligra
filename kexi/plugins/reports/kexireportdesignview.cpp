@@ -69,7 +69,7 @@ KexiReportDesignView::~KexiReportDesignView()
 {
 }
 
-KoProperty::Set *KexiReportDesignView::propertySet()
+KPropertySet *KexiReportDesignView::propertySet()
 {
     return m_reportDesigner->itemPropertySet();
 }

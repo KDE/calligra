@@ -13,7 +13,7 @@ set(flowprivate_LIB_SRCS
   #FlowLayout.cpp
 )
 
-kde4_add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
+add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
 
 target_link_libraries(flowprivate kopageapp)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
@@ -26,18 +26,19 @@ install(TARGETS flowprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ### flowpart ###
 set(flowpart_PART_SRCS FlowFactoryInit.cpp )
 
-kde4_add_plugin(flowpart ${flowpart_PART_SRCS})
+add_library(flowpart MODULE ${flowpart_PART_SRCS})
 
 target_link_libraries(flowpart flowprivate)
 
-install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS flowpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(flow_KDEINIT_SRCS "../pics/hi*-app-calligraflow.png")
+file(GLOB ICONS_SRCS "../pics/hi*-app-calligraflow.png")
+ecm_add_app_icon(flow_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
+kf5_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_calligraflow komain)
 

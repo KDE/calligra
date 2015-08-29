@@ -118,7 +118,7 @@ public:
 
     /*! Sets autoSync flag for property \a propertyName.
      This allows to override autoSync flag for certain widget's property, because
-     e.g. KoProperty::EditorView can have autoSync flag set to false or true, but
+     e.g. KPropertyEditorView can have autoSync flag set to false or true, but
      not all properties have to comply with that.
      \a flag equal to cancelled value means there is no overriding (the default). */
     void setAutoSyncForProperty(const QByteArray& propertyName, tristate flag);
@@ -139,7 +139,7 @@ public:
     void setCustomTypeForProperty(const QByteArray& propertyName, int type);
 
     /*! \return custom type for property \a propertyName. If no specific custom type has been assigned,
-     KoProperty::Auto is returned.
+     KProperty::Auto is returned.
      @see setCustomTypeForProperty() */
     int customTypeForProperty(const QByteArray& propertyName) const;
 

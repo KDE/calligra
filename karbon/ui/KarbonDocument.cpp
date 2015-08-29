@@ -88,11 +88,9 @@
 #include <klocale.h>
 #include <kundo2stack.h>
 
-#include <QDomDocument>
-#include <QDomElement>
-#include <QFileInfo>
 #include <QRectF>
 #include <QPainter>
+#include <kglobal.h>
 
 // Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -405,7 +403,7 @@ void KarbonDocument::reorganizeGUI()
 
 void KarbonDocument::initConfig()
 {
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::karbonConfig();
 
     // disable grid by default
     gridData().setShowGrid(false);

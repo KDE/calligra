@@ -33,10 +33,8 @@ class KActionCollection;
 
 class PixmapCollection;
 
-namespace KoProperty {
-class Property;
-class Set;
-}
+class KProperty;
+class KPropertySet;
 
 namespace KFormDesigner
 {
@@ -122,7 +120,7 @@ public:
     //! \return A pointer to the WidgetLibrary supporting this form.
     WidgetLibrary* library() const;
 
-    KoProperty::Set& propertySet();
+    KPropertySet& propertySet();
 
     void setFeatures(Features features);
 
@@ -568,10 +566,10 @@ protected Q_SLOTS:
 
     /*!  This function is called every time a property is modifed.  It also takes
      care of saving set and enum properties. */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
     /*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
-    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyReset(KPropertySet& set, KProperty& property);
 
     /*! Default implementation changes "text" property.
     You have to reimplement this function for editing inside the Form to work if your widget's

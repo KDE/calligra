@@ -10,7 +10,7 @@ endif()
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  ${CMAKE_SOURCE_DIR}/kexi/kexidb )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
 
 
 ########### next target ###############
@@ -64,7 +64,7 @@ else ()
     KexiPasswordWidget.cpp
     KexiDBPasswordDialog.cpp
   )
-  kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
+  ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui
     kexidbconnectionwidget.ui
     kexidbconnectionwidgetdetails.ui
@@ -73,12 +73,12 @@ else ()
   )
 endif ()
 
-kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
+ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
     KexiDBTitlePage.ui
     KexiProjectSelector.ui
 )
 
-kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
+add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
 target_link_libraries(
     kexiextendedwidgets
@@ -87,10 +87,9 @@ target_link_libraries(
     kexiguiutils
     kexicore
     ktexteditor
-    kexidb
-    ${CALLIGRADB_LIBS}
-    ${KOPROPERTY_LIBS}
-    ${KDE4_KDEUI_LIBS}
+
+    Predicate
+    KProperty
 )
 
 if (KEXI_MOBILE)
@@ -98,7 +97,7 @@ if (KEXI_MOBILE)
 else()
   target_link_libraries(
     kexiextendedwidgets
-    ${KDE4_KFILE_LIBS}
+    
     )
 endif()
 

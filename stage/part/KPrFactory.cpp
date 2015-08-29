@@ -28,12 +28,12 @@
 #include <KoPluginLoader.h>
 
 KComponentData* KPrFactory::s_instance = 0;
-KAboutData* KPrFactory::s_aboutData = 0;
+K4AboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( *aboutData(), parent )
+KPrFactory::KPrFactory()
+    : KPluginFactory()
 {
     (void)componentData();
 
@@ -70,7 +70,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     return part;
 }
 
-KAboutData* KPrFactory::aboutData()
+K4AboutData* KPrFactory::aboutData()
 {
     if( !s_aboutData )
         s_aboutData = newKPresenterAboutData();

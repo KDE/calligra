@@ -1,24 +1,24 @@
-include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
 
 ########### next target ###############
 
 set(keximigrate_mysql_PART_SRCS mysqlmigrate.cpp )
 
-kde4_add_plugin(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
+add_library(keximigrate_mysql MODULE ${keximigrate_mysql_PART_SRCS})
 
 
 
 target_link_libraries(
     keximigrate_mysql
     keximigrate
-    kexidb 
     kexiutils
-    ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
+
+    Predicate
+
     ${MYSQL_LIBRARIES}
     )
 
-install(TARGETS keximigrate_mysql  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_mysql  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

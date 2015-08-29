@@ -109,7 +109,7 @@ Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadfinancialmodule.json", FinancialModule)
 
 FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
         : FunctionModule(parent)
@@ -2612,4 +2612,4 @@ Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->div(face, calc->pow(calc->add(rate, 1), years));
 }
 
-#include "FinancialModule.moc"
+#include "financial.moc"

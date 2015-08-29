@@ -75,7 +75,7 @@ Value func_na(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("information", InformationModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadinformationmodule.json", InformationModule)
 
 
 InformationModule::InformationModule(QObject* parent, const QVariantList&)
@@ -431,4 +431,4 @@ Value func_na(valVector, ValueCalc *, FuncExtra *)
     return Value::errorNA();
 }
 
-#include "InformationModule.moc"
+#include "information.moc"

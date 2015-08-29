@@ -88,7 +88,7 @@ void ConfigTaskPanelImpl::initDescription()
                                             KRichTextWidget::SupportAlignment |
                                             KRichTextWidget::SupportFormatPainting );
 
-    kcfg_Description->createActions( collection );
+    collection->addActions(kcfg_Description->createActions());
 
     toolbar->addAction( collection->action( "format_text_bold" ) );
     toolbar->addAction( collection->action( "format_text_italic" ) );

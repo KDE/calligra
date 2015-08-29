@@ -30,8 +30,8 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
-K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
+K_PLUGIN_FACTORY_WITH_JSON(KarbonToolsPluginFactory, "karbon_tools.json",
+                           registerPlugin<KarbonToolsPlugin>();)
 
 KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
         : QObject(parent)
@@ -43,5 +43,4 @@ KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
     
     KoShapeRegistry::instance()->add(new KarbonCalligraphicShapeFactory());
 }
-
-#include "KarbonToolsPlugin.moc"
+#include <KarbonToolsPlugin.moc>

@@ -30,26 +30,20 @@
 
 #include <kpluginfactory.h>
 #include <karbonui_export.h>
-
-class KAboutData;
-class KComponentData;
+#include <kconfiggroup.h>
+#include <KConfigCore/ksharedconfig.h>
 
 class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 {
     Q_OBJECT
 
 public:
-    explicit KarbonFactory(QObject* parent = 0);
+    explicit KarbonFactory();
     ~KarbonFactory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &componentData();
-    static KAboutData* aboutData();
-
-private:
-    static KComponentData* s_instance;
-    static KAboutData* s_aboutData;
+    static const KSharedConfig::Ptr &karbonConfig();
 };
 
 #endif

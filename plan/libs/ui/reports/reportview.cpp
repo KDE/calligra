@@ -30,17 +30,14 @@
 #include "ui_reportsectionswidget.h"
 #include "ui_reporttoolswidget.h"
 
-#include "KoReportODTRenderer.h"
-#include "KoReportPage.h"
-#include "KoReportPreRenderer.h"
-#include "KoReportPrintRenderer.h"
-#include "renderobjects.h"
-#include "KoReportKSpreadRenderer.h"
-#include "KoReportHTMLCSSRenderer.h"
-#include "reportsection.h"
-#include "reportsectiondetail.h"
-#include "reportsectiondetailgroup.h"
-#include "koproperty/EditorView.h"
+#include "KoReportPage"
+#include "KoReportPreRenderer"
+#include "kreport/renderobjects.h"
+#include <KoReportDesigner>
+#include "kreport/reportsection.h"
+#include "kreport/reportsectiondetail.h"
+#include "kreport/reportsectiondetailgroup.h"
+#include <KPropertyEditorView>
 
 #include "kptglobal.h"
 #include "kptaccountsmodel.h"
@@ -69,6 +66,7 @@
 #include <kfiledialog.h>
 #include <kpushbutton.h>
 
+#include <QCloseEvent>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrinter>
@@ -350,7 +348,7 @@ void ReportWidget::slotExport()
     dia->setMode( KFile::File );
     dia->setConfirmOverwrite( true );
     dia->setInlinePreviewShown( true );
-    dia->setCaption( i18nc( "@title:window", "Export Report" ) );
+    dia->setWindowTitle( i18nc( "@title:window", "Export Report" ) );
 //    dia->setFilter( QString( "*.ods|%1\n*|%2" ).arg( i18n( "Open document spreadsheet" ) ).arg( i18n( "All Files" ) ) );
 
     connect(dia, SIGNAL(finished(int)), SLOT(slotExportFinished(int)));
@@ -421,7 +419,7 @@ void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
     }
 }
 
@@ -434,7 +432,7 @@ void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
     }
 }
 
@@ -448,7 +446,7 @@ void ReportWidget::exportToOds( KoReportRendererContext &context )
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to spreadsheet failed"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to spreadsheet failed"));
     }
 }
 
@@ -462,7 +460,7 @@ void ReportWidget::exportToHtml( KoReportRendererContext &context )
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to HTML failed"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to HTML failed"));
     }
 }
 
@@ -476,7 +474,7 @@ void ReportWidget::exportToXHtml( KoReportRendererContext &context )
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to XHTML failed"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to XHTML failed"));
     }
 }
 
@@ -522,7 +520,8 @@ void ReportWidget::slotRefreshView()
     }
     ReportData *rd = createReportData( e );
     m_preRenderer->setSourceData( rd );
-    m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
+    //QT5TODO: see how to make this depend on scripting availability
+//     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
 
     m_reportDocument = m_preRenderer->generate();
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
@@ -667,7 +666,7 @@ void ReportDesignDialog::closeEvent ( QCloseEvent * e )
 {
     if ( m_panel->m_modified ) {
         //NOTE: When the close (x) button in the window frame is clicked, QWidget automatically hides us if we don't handle it
-        KPushButton *b = button( KDialog::Close );
+        QPushButton *b = button( KDialog::Close );
         if ( b ) {
             b->animateClick();
             e->ignore();
@@ -785,7 +784,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     QStandardItemModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
 
-    m_propertyeditor = new KoProperty::EditorView( frame );
+    m_propertyeditor = new KPropertyEditorView( frame );
     l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
@@ -832,7 +831,7 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
     m_sourceeditor->setModel( model );
     m_sourceeditor->setSourceData( element.firstChildElement( "data-source" ) );
 
-    m_propertyeditor = new KoProperty::EditorView( frame );
+    m_propertyeditor = new KPropertyEditorView( frame );
     l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
@@ -861,34 +860,34 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
 void ReportDesignPanel::populateToolbar( KToolBar *tb )
 {
     tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    KAction *a = 0;
+    QAction *a = 0;
 
     a =  KStandardAction::cut( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCut()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditCut()));
     tb->addAction( a );
 
     a =  KStandardAction::copy( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCopy()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditCopy()));
     tb->addAction( a );
 
     a =  KStandardAction::paste( this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditPaste()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditPaste()));
     tb->addAction( a );
 
     const KGuiItem del = KStandardGuiItem::del();
     a = new KAction( del.icon(), del.text(), this );
     a->setToolTip( del.toolTip() );
     a->setShortcut( QKeySequence::Delete );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditDelete()));
     tb->addAction( a );
 
     tb->addSeparator();
 
     a = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotRaiseSelected()));
     tb->addAction( a );
     a = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotLowerSelected()));
     tb->addAction( a );
 
     tb->addSeparator();
@@ -902,15 +901,15 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     m_actionGroup = new QActionGroup(tb);
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << "label"
-        << "field"
-        << "text"
-        << "check"
-        << "report:line"
-        << "chart"
-        << "web"
-        << ""; //separator
-    foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
+        << QLatin1String("org.kde.kreport.line")
+        << QLatin1String("org.kde.kreport.label")
+        << QLatin1String("org.kde.kreport.field")
+        << QLatin1String("org.kde.kreport.text")
+        << QLatin1String("org.kde.kreport.check")
+        << QLatin1String("org.kde.kreport.chart")
+        << QLatin1String("org.kde.kreport.web")
+        << QLatin1String(""); //separator
+    foreach( QAction *a, m_designer->itemActions(m_actionGroup) ) {
         if ( ! itemtypes.contains( a->objectName() ) ) {
             m_actionGroup->removeAction( a );
             continue;
@@ -1048,19 +1047,19 @@ ReportDesigner::ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent)
 void ReportDesigner::setupGui()
 {
     /*KActionCollection *coll = actionCollection();*/
-    KAction *a = 0;
+    QAction *a = 0;
     QString name = "edit_copypaste";
 
     a =  KStandardAction::cut( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(cutActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(cutActivated()));
     addAction( name, a );
 
     a =  KStandardAction::copy( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(copyActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(copyActivated()));
     addAction( name, a );
 
     a =  KStandardAction::paste( this );
-    connect(a, SIGNAL(activated()), this, SIGNAL(pasteActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(pasteActivated()));
     addAction( name, a );
 
     const KGuiItem del = KStandardGuiItem::del();
@@ -1068,19 +1067,19 @@ void ReportDesigner::setupGui()
     a->setObjectName( "edit_delete" );
     a->setToolTip(del.toolTip());
     a->setShortcut( QKeySequence::Delete );
-    connect(a, SIGNAL(activated()), this, SIGNAL(deleteActivated()));
+    connect(a, SIGNAL(triggered(bool)), this, SIGNAL(deleteActivated()));
     addAction( name, a );
 
     name = "reportdesigner_list";
     a = new KAction(koIcon("go-previous-view"), i18n("View report"), this);
     a->setObjectName( "view_report" );
-    connect(a, SIGNAL(activated()), SIGNAL(viewReport()));
+    connect(a, SIGNAL(triggered(bool)), SIGNAL(viewReport()));
     addAction( name, a );
 
     m_undoaction = new KAction(koIcon("edit-undo"), i18n("Undo all changes"), this);
     m_undoaction->setObjectName( "undo_all_changes" );
     m_undoaction->setEnabled( false );
-    connect(m_undoaction, SIGNAL(activated()), SLOT(undoAllChanges()));
+    connect(m_undoaction, SIGNAL(triggered(bool)), SLOT(undoAllChanges()));
     addAction( name, m_undoaction );
     createDockers();
 }
@@ -1181,22 +1180,22 @@ void ReportDesigner::createDockers()
 
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << "label"
-        << "field"
-        << "text"
-        << "check"
-        << "report:line"
-        << "chart"
-        << "web";
+        << QLatin1String("org.kde.kreport.line")
+        << QLatin1String("org.kde.kreport.label")
+        << QLatin1String("org.kde.kreport.field")
+        << QLatin1String("org.kde.kreport.text")
+        << QLatin1String("org.kde.kreport.check")
+        << QLatin1String("org.kde.kreport.chart")
+        << QLatin1String("org.kde.kreport.web");
     QActionGroup *ag = new QActionGroup( this );
     int i = 0;
-    foreach( QAction *a, m_designer->actions( ag ) ) {
+    foreach( QAction *a, m_designer->itemActions( ag ) ) {
         if ( itemtypes.contains( a->objectName() ) ) {
             QToolButton *tb = new QToolButton( w );
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-            if ( tb->objectName() == "web" ) {
+            if ( tb->objectName() == QLatin1String("org.kde.kreport.web") ) {
                 tb->setToolTip( i18nc( "@into:tooltip", "Rich text" ) );
             } else {
                 tb->setToolTip( a->toolTip() );
@@ -1702,4 +1701,3 @@ void GroupSectionEditor::PageBreakItem::setData( const QVariant &value, int role
 } // namespace KPlato
 
 #include "reportview.moc"
-#include "reportview_p.moc"

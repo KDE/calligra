@@ -1,13 +1,17 @@
 
-include_directories( ${OKULAR_INCLUDE_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 ########### next target ###############
 
 set( okularGenerator_odp_SRCS OkularOdpGenerator.cpp )
 
-kde4_add_plugin( okularGenerator_odp ${okularGenerator_odp_SRCS} )
+add_library(okularGenerator_odp MODULE ${okularGenerator_odp_SRCS} )
 
-target_link_libraries( okularGenerator_odp ${OKULAR_LIBRARIES} ${KDE4_KDEUI_LIBS} komain kopageapp )
+target_link_libraries( okularGenerator_odp
+    Okular::Core
+    komain
+    kopageapp
+)
 
 install( TARGETS okularGenerator_odp DESTINATION ${PLUGIN_INSTALL_DIR} )
 

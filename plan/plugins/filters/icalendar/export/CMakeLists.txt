@@ -4,7 +4,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/plan
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${KOMAIN_INCLUDES}
-    ${KDEPIMLIBS_INCLUDE_DIRS}
 )
 
 set(icalendarexport_PART_SRCS 
@@ -12,14 +11,9 @@ set(icalendarexport_PART_SRCS
 )
 
 
-kde4_add_plugin(planicalexport ${icalendarexport_PART_SRCS})
+add_library(planicalexport MODULE ${icalendarexport_PART_SRCS})
+kcoreaddons_desktop_to_json(planicalexport plan_icalendar_export.desktop)
 
-target_link_libraries(planicalexport planprivate kplatokernel komain ${KDEPIMLIBS_KCALCORE_LIBS})
+target_link_libraries(planicalexport planprivate kplatokernel komain KF5::CalendarCore)
 
-install(TARGETS planicalexport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  plan_icalendar_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
+install(TARGETS planicalexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

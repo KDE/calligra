@@ -27,7 +27,8 @@ set(docx2odt_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
+add_library(calligra_filter_docx2odt MODULE ${docx2odt_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_docx2odt calligra_filter_docx2odt.desktop)
 
 target_link_libraries(
     calligra_filter_docx2odt
@@ -38,7 +39,7 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_docx2odt DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -47,7 +48,7 @@ if(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
-kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
+add_library(docxexport MODULE ${docxexport_PART_SRCS})
 
 
 
@@ -58,18 +59,13 @@ target_link_libraries(
     koodf
 )
 
-install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS docxexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 endif()
 
 ########### next target ###############
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_docx2odt.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

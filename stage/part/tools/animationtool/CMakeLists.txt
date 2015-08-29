@@ -19,24 +19,25 @@ set(calligrastagetoolanimation_PART_SRCS
     )
 
 
-#kde4_add_ui_files(calligrastagetoolanimation_PART_SRCS wdg_tool_crop.ui)
+#ki18n_wrap_ui(calligrastagetoolanimation_PART_SRCS wdg_tool_crop.ui)
 
-kde4_add_plugin(calligrastagetoolanimation ${calligrastagetoolanimation_PART_SRCS})
+add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligrastagetoolanimation calligrastagetoolanimation.desktop)
 
 target_link_libraries(
     calligrastagetoolanimation
     calligrastageprivate
-    ${KDE4_PHONON_LIBRARY}
     )
 
-install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagetoolanimation  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  calligrastagetoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ICONS
+    16-actions-animation-stage.png
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    THEME oxygen
+)
 

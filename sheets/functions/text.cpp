@@ -24,7 +24,6 @@
 
 // please keep it in alphabetical order
 #include <QRegExp>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <math.h>
@@ -79,7 +78,7 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("text", TextModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtextmodule.json", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)
@@ -463,7 +462,7 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
     else if (decimalPoint == ",")
         thousandsSeparator = '.';
 
-    KLocale l(*KGlobal::locale());
+    KLocale l(*KLocale::global());
     l.setDecimalSymbol(decimalPoint);
     l.setThousandsSeparator(thousandsSeparator);
     l.setPositiveSign("+");
@@ -918,4 +917,4 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(aText);
 }
 
-#include "TextModule.moc"
+#include "text.moc"

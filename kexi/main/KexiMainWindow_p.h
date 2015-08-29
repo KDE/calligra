@@ -1790,7 +1790,7 @@ public:
     QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
     QMap<KexiPart::Part*, int> recentlySelectedPropertyPanelPages;
     QPointer<KexiPropertyEditorView> propEditor;
-    QPointer<KoProperty::Set> propertySet;
+    QPointer<KPropertySet> propertySet;
 
     KexiNameDialog *nameDialog;
     QTimer timer; //!< helper timer

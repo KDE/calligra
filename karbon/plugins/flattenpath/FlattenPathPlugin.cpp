@@ -42,23 +42,27 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kstandarddirs.h>
 
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
-K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
-K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbon_flattenpath.json",
+                           registerPlugin<FlattenPathPlugin>();)
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/FlattenPathPlugin.rc"), true);
 
 
-    KAction *actionFlattenPath  = new KAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
+    QAction *actionFlattenPath  = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
@@ -92,12 +96,20 @@ void FlattenPathPlugin::slotFlattenPath()
 }
 
 FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption(i18n("Flatten Path"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Flatten Path"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+    
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input fields on the left:
     QGroupBox* group = new QGroupBox(i18n("Properties"), this);
@@ -112,10 +124,15 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     group->setMinimumWidth(300);
 
     // signals and slots:
-    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 
-    setMainWidget(group);
+    mainLayout->addWidget(group);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    mainLayout->addWidget(buttonBox);
 }
 
 qreal FlattenDlg::flatness() const
@@ -128,5 +145,5 @@ void FlattenDlg::setFlatness(qreal value)
     m_flatness->setValue(value);
 }
 
-#include "FlattenPathPlugin.moc"
+#include <FlattenPathPlugin.moc>
 

@@ -14,9 +14,9 @@ set(git_plugin_SRCS
 automoc4_add_library(calligrageminigitplugin MODULE ${git_plugin_SRCS})
 
 target_link_libraries(calligrageminigitplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Declarative
+    Qt5::Gui
+    Qt5::Core
     ${LIBGIT2_LIBRARIES}
     ${LIBQGIT2_LIBRARIES}
     komain

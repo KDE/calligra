@@ -28,14 +28,14 @@ set(planworkfactory_LIB_SRCS
     ../KPlatoXmlLoader.cpp #NB
 )
 
-kde4_add_ui_files(planworkfactory_LIB_SRCS
+ki18n_wrap_ui(planworkfactory_LIB_SRCS
     packagesettings.ui
     taskcompletionpanel.ui
 )
 
-kde4_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
+kconfig_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
 
-kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
+add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
 
 target_link_libraries(
     planworkfactory
@@ -44,8 +44,8 @@ target_link_libraries(
     kplatoui
     planprivate
     komain
-    calligrakdgantt
-    ${KDE4_KPARTS_LIBS}
+    KGantt
+    KF5::Parts
     )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -59,11 +59,12 @@ install(FILES planworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 set(planworkpart_PART_SRCS factoryinit.cpp )
 
 
-kde4_add_plugin(planworkpart ${planworkpart_PART_SRCS})
+add_library(planworkpart MODULE ${planworkpart_PART_SRCS})
+kcoreaddons_desktop_to_json(planworkpart planworkpart.desktop)
 
-target_link_libraries(planworkpart ${QT_QTCORE_LIBRARY} ${KDE4_KPARTS_LIBS} planworkfactory)
+target_link_libraries(planworkpart Qt5::Core KF5::Parts planworkfactory)
 
-install(TARGETS planworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS planworkpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### KPlatoWork application ###############
@@ -71,14 +72,14 @@ install(TARGETS planworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 set(planworkapp_LIB_SRCS application.cpp )
 
 
-kde4_add_library(planworkapp  SHARED ${planworkapp_LIB_SRCS})
+add_library(planworkapp  SHARED ${planworkapp_LIB_SRCS})
 
 target_link_libraries(
     planworkapp
     planworkfactory
     kplatokernel
     komain
-    ${KDE4_KPARTS_LIBS}
+    KF5::Parts
     )
 
 set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -90,7 +91,7 @@ install(TARGETS planworkapp ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(calligraplanwork_KDEINIT_SRCS main.cpp)
 
-kde4_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
+kf5_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -101,11 +102,11 @@ endif ()
 target_link_libraries(
     kdeinit_calligraplanwork
     planworkapp
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${KDE4_KPARTS_LIBS}
+    
+    
+    Qt5::Core
+    Qt5::Gui
+    KF5::Parts
     )
 
 install(TARGETS kdeinit_calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -116,8 +117,7 @@ install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  planworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/planwork)
+install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/planwork)
 install( FILES  planworkrc DESTINATION ${CONFIG_INSTALL_DIR})
 install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

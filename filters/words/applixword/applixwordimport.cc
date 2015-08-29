@@ -34,8 +34,8 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
-K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(APPLIXWORDImportFactory, "calligra_filter_applixword2odt.json",
+                           registerPlugin<APPLIXWORDImport>();)
 
 
 /******************************************************************************

@@ -49,8 +49,8 @@
 
 #include <KoIcon.h>
 
-#include <koproperty/Property.h>
-#include <koproperty/Set.h>
+#include <KProperty>
+#include <KPropertySet>
 
 #include "formIO.h"
 #include "form.h"
@@ -638,7 +638,7 @@ StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
         dynamic_cast<KLineEdit*>(w)->clear();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget")
-        dynamic_cast<KListWidget*>(w)->clear();
+        dynamic_cast<QTreeWidget*>(w)->clear();
 #endif
     else if (classname == "KComboBox")
         dynamic_cast<KComboBox*>(w)->clear();
@@ -928,7 +928,7 @@ StdWidgetFactory::editListContents()
 #endif
 
 void
-StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
+StdWidgetFactory::setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(info);
     Q_UNUSED(w);

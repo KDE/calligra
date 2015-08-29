@@ -28,24 +28,20 @@
 
 class QListView;
 class QListViewItem;
+class QListBoxItem;
 class KListViewItem;
 class KListView;
 class KListBox;
-class QListBoxItem;
-
-namespace KoProperty
-{
-class Property;
-class Set;
-class EditorView;
-}
+class KPropertySet;
+class KProperty;
+class KPropertyEditorView;
 
 namespace KFormDesigner
 {
 
 //! A dialog to edit the contents of a listview (KListView or QListView)
 /*! The dialog contains two pages, one to edit columns and one to edit ist items.
- KoProperty::EditorView is used in columns to edit column properties
+ KPropertyEditorView is used in columns to edit column properties
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
@@ -66,7 +62,7 @@ public Q_SLOTS:
     void removeItem();
     void MoveItemUp();
     void MoveItemDown();
-    void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
+    void changeProperty(KPropertySet& set, KProperty& property);
 
     // Contents page
     void updateButtons(QListViewItem*);
@@ -83,8 +79,8 @@ protected:
 
 protected:
     enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
-    KoProperty::EditorView  *m_editor;
-    KoProperty::Set  *m_propSet;
+    KPropertyEditorView  *m_editor;
+    KPropertySet  *m_propSet;
     KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
     KListBox  *m_listbox;
     KListView  *m_listview;

@@ -34,8 +34,8 @@ KAboutData* FlowFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-FlowFactory::FlowFactory(QObject* parent)
-  : KPluginFactory(*aboutData(), parent)
+FlowFactory::FlowFactory()
+    : KPluginFactory()
 {
     (void) componentData();
 

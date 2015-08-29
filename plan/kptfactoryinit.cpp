@@ -17,8 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kptfactory.h"
+#include "kptfactoryinit.h"
 
-#include <kexportplugin.h>
-
-K_EXPORT_PLUGIN( KPlato::Factory )
+#include "moc_kptfactoryinit.cpp"

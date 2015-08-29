@@ -35,9 +35,9 @@ set(kplatokernel_LIB_SRCS
     KPlatoXmlLoaderBase.cpp
 )
 
-kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
+add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
 
-target_link_libraries(kplatokernel koodf kowidgetutils kundo2 ${KDE4_KFILE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kplatokernel koodf kowidgetutils kundo2 KF5::KIOWidgets Qt5::Gui)
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

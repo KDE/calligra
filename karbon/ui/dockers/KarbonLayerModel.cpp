@@ -39,7 +39,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QAbstractItemModel>
 #include <QMimeData>
 #include <QPainter>
 
@@ -526,6 +525,5 @@ QModelIndex KarbonLayerModel::parentIndexFromShape(const KoShape * child) const
     return createIndex(indexFromChild(grandParentShape, parentShape), 0, parentShape);
 }
 
-#include "KarbonLayerModel.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

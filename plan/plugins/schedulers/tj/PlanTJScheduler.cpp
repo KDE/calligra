@@ -80,7 +80,7 @@ PlanTJScheduler::~PlanTJScheduler()
 
 KLocale *PlanTJScheduler::locale() const
 {
-    return KGlobal::locale();
+    return KLocale::global();
 }
 
 void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttributes *object )

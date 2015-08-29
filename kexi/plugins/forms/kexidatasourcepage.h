@@ -22,7 +22,7 @@
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <db/field.h>
 #include <db/utils.h>
-#include <koproperty/Set.h>
+#include <KPropertySet>
 
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;
@@ -50,7 +50,7 @@ public Q_SLOTS:
     void setFormDataSource(const QString& partClass, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
-    void assignPropertySet(KoProperty::Set* propertySet);
+    void assignPropertySet(KPropertySet* propertySet);
 
 Q_SIGNALS:
     //! Signal emitted when helper button 'go to selected data source' is clicked.

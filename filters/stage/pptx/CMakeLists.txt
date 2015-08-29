@@ -21,7 +21,8 @@ set(pptx2odp_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
+add_library(calligra_filter_pptx2odp MODULE ${pptx2odp_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_pptx2odp calligra_filter_pptx2odp.desktop)
 
 target_link_libraries(
     calligra_filter_pptx2odp
@@ -32,14 +33,9 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pptx2odp DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_pptx2odp.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

@@ -5,8 +5,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
-    ${KOREPORT_INCLUDES}
-    ${KDE4_INCLUDES}
 )
 
 #build a shared library
@@ -29,22 +27,22 @@ else ()
 endif ()
 
 
-qt4_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+qt5_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
 
-kde4_add_plugin(kexihandler_report ${kexihandler_report_SRCS})
+add_library(kexihandler_report MODULE ${kexihandler_report_SRCS})
 
 target_link_libraries(kexihandler_report
-    ${KOREPORT_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTSCRIPT_LIBRARY}
-    kexidb
-    ${CALLIGRADB_LIBS}
+    Qt5::Gui
+    Qt5::Script
     kexicore
-    ${KOPROPERTY_LIBS}
+
+    Predicate
+    KProperty
+    KReport
+
     kexiguiutils
+    KF5::KrossCore
     kexiextendedwidgets
-    ${KDE4_KROSSCORE_LIBS}
 )
 
 if (KEXI_MOBILE)
@@ -56,5 +54,5 @@ else ()
     )
 endif ()
 
-install(TARGETS kexihandler_report DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kexihandler_report DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES kexireporthandler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

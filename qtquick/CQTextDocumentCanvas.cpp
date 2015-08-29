@@ -29,6 +29,8 @@
 
 #include "gemini/ViewModeSwitchEvent.h"
 
+#include <KoJsonTrader.h>
+#include <KoDocumentEntry.h>
 #include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoDocumentResourceManager.h>
@@ -232,13 +234,21 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
 void CQTextDocumentCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
-    KService::Ptr service = KService::serviceByDesktopName("wordspart");
-    if (service.isNull()) {
+
+    KoDocumentEntry entry;
+    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", QString())) {
+        if (loader->fileName().contains(QLatin1String("wordspart"))) {
+            entry = KoDocumentEntry(loader);
+            break;
+        }
+    }
+    if (entry.isEmpty()) {
         qWarning("Unable to load Words plugin, aborting!");
         return;
     }
 
-    d->part = service->createInstance<KoPart>(this);
+    // QT5TODO: ownership of d->part unclear
+    d->part = entry.createKoPart();
     KoDocument* document = d->part->document();
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);

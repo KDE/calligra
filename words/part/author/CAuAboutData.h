@@ -21,20 +21,20 @@
 #ifndef CAUABOUTDATA_H
 #define CAUABOUTDATA_H
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
 
 static const char AUTHOR_DESCRIPTION[] = I18N_NOOP("Author tool");
 static const char AUTHOR_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newAuthorAboutData()
+K4AboutData * newAuthorAboutData()
 {
     // The second argument, "words", apparently enables translations.
     // FIXME: We will probably have to change this when we move into
     //        our own top level directory.
-    KAboutData * aboutData = new KAboutData("author", "words", ki18nc("application name", "Calligra Author"),
-                                            AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), KAboutData::License_LGPL,
+    K4AboutData * aboutData = new K4AboutData("author", "words", ki18nc("application name", "Calligra Author"),
+                                            AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), K4AboutData::License_LGPL,
                                             ki18n("© 2012-%1, The Author Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.calligra.org/author/");

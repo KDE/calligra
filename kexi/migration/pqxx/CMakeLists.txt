@@ -1,27 +1,27 @@
-include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
 
-add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
+kde_enable_exceptions()
 
 ########### next target ###############
 
 set(keximigrate_pqxx_PART_SRCS pqxxmigrate.cpp )
 
-kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
+add_library(keximigrate_pqxx MODULE ${keximigrate_pqxx_PART_SRCS})
 
 
 
 target_link_libraries(
-    keximigrate_pqxx 
-    ${POSTGRESQL_LIBRARIES} 
-    ${PQXX_LIBRARIES} 
-    ${KDE4_KDECORE_LIBS} 
-    keximigrate 
-    kexidb
+    keximigrate_pqxx
+    ${POSTGRESQL_LIBRARIES}
+    ${PQXX_LIBRARIES}
+
+    keximigrate
     kexiutils
-    ${CALLIGRADB_LIBS}
+
+    Predicate
 )
 
-install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

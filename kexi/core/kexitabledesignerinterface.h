@@ -21,16 +21,12 @@
 #define KEXITABLEDESIGNERINTERFACE_H
 
 #include <kexi_export.h>
-#include <koproperty/Property.h>
+#include <KProperty>
 #include <db/tristate.h>
 #include <QVariant>
 
 class QByteArray;
-
-namespace KoProperty
-{
-class Set;
-}
+class KPropertySet;
 
 //! Interface for main Table Designer's commands
 /*! This interface has been specified to enable invoking Table Designer's commands
@@ -77,7 +73,7 @@ public:
      Property set is also created. \a set will be deeply-copied into the new set.
      Existing field will be overwritten, so use insertEmptyRow()
      is you want to move subsequent fields down. */
-    virtual void insertField(int row, KoProperty::Set& set, bool addCommand = false) = 0;
+    virtual void insertField(int row, KPropertySet& set, bool addCommand = false) = 0;
 
     /*! Inserts a new empty row at position \a row. */
     virtual void insertEmptyRow(int row, bool addCommand = false) = 0;
@@ -91,7 +87,7 @@ public:
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int fieldUID, const QByteArray& propertyName,
                                            const QVariant& newValue,
-                                           KoProperty::Property::ListData* const listData = 0,
+                                           KProperty::ListData* const listData = 0,
                                            bool addCommand = false) = 0;
 
     /*! Creates temporary table for the current design and returns debug string for it. */

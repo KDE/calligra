@@ -4,15 +4,15 @@ include_directories(
 )
 
 set(calligrathumbnail_SRCS calligracreator.cpp)
-kde4_add_plugin(calligrathumbnail ${calligrathumbnail_SRCS})
-target_link_libraries(calligrathumbnail komain ${KDE4_KIO_LIBS})
+add_library(calligrathumbnail MODULE ${calligrathumbnail_SRCS})
+target_link_libraries(calligrathumbnail komain KF5::KIOWidgets)
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 if( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
-    kde4_add_plugin(calligraimagethumbnail ${calligraimagethumbnail_SRCS})
+    add_library(calligraimagethumbnail MODULE ${calligraimagethumbnail_SRCS})
     macro_add_compile_flags(calligraimagethumbnail "-DNO_ICON_BLENDING")
-    target_link_libraries(calligraimagethumbnail komain ${KDE4_KIO_LIBS})
+    target_link_libraries(calligraimagethumbnail komain KF5::KIOWidgets)
     install(TARGETS calligraimagethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 endif()
 

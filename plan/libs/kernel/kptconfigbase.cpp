@@ -152,12 +152,12 @@ void ConfigBase::setLocale( KLocale *locale )
 
 const KLocale *ConfigBase::locale() const
 {
-    return m_locale ? m_locale : KGlobal::locale();
+    return m_locale ? m_locale : KLocale::global();
 }
 
 KLocale *ConfigBase::locale()
 {
-    return m_locale ? m_locale : KGlobal::locale();
+    return m_locale ? m_locale : KLocale::global();
 }
 
 //static

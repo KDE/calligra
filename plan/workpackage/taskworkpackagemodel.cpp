@@ -30,7 +30,7 @@
 #include "kptitemmodelbase.h"
 #include "kpttaskcompletedelegate.h"
 
-#include "kdganttglobal.h"
+#include <KGanttGlobal>
 
 #include <QModelIndex>
 #include <QMetaEnum>
@@ -327,15 +327,15 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
     if ( role >= Qt::UserRole ) {
 //        kDebug(planworkDbg())<<this<<n->name()<<column<<role;
         switch ( role ) {
-        case KDGantt::ItemTypeRole:
+        case KGantt::ItemTypeRole:
             switch ( n->type() ) {
-            case Node::Type_Task: return KDGantt::TypeTask;
+            case Node::Type_Task: return KGantt::TypeTask;
             default: break;
             }
-        case KDGantt::StartTimeRole:
+        case KGantt::StartTimeRole:
             kDebug(planworkDbg())<<this<<n->name()<<"start:"<<n->startTime();
             return m_nodemodel.data( n, NodeModel::NodeStartTime, Qt::EditRole );
-        case KDGantt::EndTimeRole:
+        case KGantt::EndTimeRole:
             kDebug(planworkDbg())<<this<<n->name()<<"end:"<<n->endTime();
             return m_nodemodel.data( n, NodeModel::NodeEndTime, Qt::EditRole );
         default: break;

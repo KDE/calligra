@@ -35,11 +35,8 @@
 #include <QFileInfo>
 #include <QPointF>
 #include <QLabel>
-#include <QPainter>
-#include <QLayout>
 #include <QPushButton>
 #include <QToolButton>
-#include <QPaintEvent>
 #include <QGridLayout>
 #include <QRadialGradient>
 #include <QLinearGradient>
@@ -405,5 +402,4 @@ void KarbonGradientEditWidget::stopChanged()
     }
 }
 
-#include "KarbonGradientEditWidget.moc"
 

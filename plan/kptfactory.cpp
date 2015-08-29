@@ -26,15 +26,16 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 namespace KPlato
 {
 
 KComponentData* Factory::s_global = 0L;
-KAboutData* Factory::s_aboutData = 0L;
+K4AboutData* Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory( *aboutData(), parent )
+Factory::Factory()
+    : KPluginFactory()
 {
     global();
 }
@@ -60,7 +61,7 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     return part;
 }
 
-KAboutData* Factory::aboutData()
+K4AboutData* Factory::aboutData()
 {
     if ( !s_aboutData )
         s_aboutData = newAboutData();
@@ -74,7 +75,7 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
+        KGlobal::dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

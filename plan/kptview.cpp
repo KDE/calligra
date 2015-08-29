@@ -59,6 +59,8 @@
 #include <krun.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
+#include <khelpclient.h>
+#include <k4aboutdata.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -103,8 +105,11 @@
 #include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
+// QT5TODO: T450 reenable reports
+#if 0
 #include "reports/reportview.h"
 #include "reports/reportdata.h"
+#endif
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -210,7 +215,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     doc->registerView( this );
 
-    setComponentData( Factory::global() );
+    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
     if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else
@@ -589,6 +594,8 @@ void View::createViews()
 
         ct = "Reports";
         cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
+// QT5TODO: reenable reports
+#if 0
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -596,6 +603,7 @@ void View::createViews()
             doc.setContent( standardTaskStatusReport() );
             rv->loadXML( doc );
         }
+#endif
     }
 }
 
@@ -738,14 +746,14 @@ ViewInfo View::defaultCategoryInfo( const QString &type ) const
     return vi;
 }
 
-void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
+void View::slotOpenUrlRequest( HtmlView *v, const QUrl &url )
 {
     if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
         getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
     }
-    if ( url.protocol() == "help" ) {
-        KToolInvocation::invokeHelp( "", url.fileName() );
+    if ( url.scheme() == QLatin1String("help") ) {
+        KHelpClient::invokeHelp( "", url.fileName() );
         return;
     }
     // try to open the url
@@ -762,7 +770,7 @@ ViewBase *View::createWelcomeView()
 
     slotOpenUrlRequest( v, KUrl( "about:plan/main" ) );
 
-    connect( v, SIGNAL(openUrlRequest(HtmlView*,KUrl)), SLOT(slotOpenUrlRequest(HtmlView*,KUrl)) );
+    connect( v, SIGNAL(openUrlRequest(HtmlView*,QUrl)), SLOT(slotOpenUrlRequest(HtmlView*,QUrl)) );
 
     m_tab->addWidget( v );
     return v;
@@ -892,7 +900,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
-    taskeditor->setTaskModules( Factory::global().dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
+    taskeditor->setTaskModules( KGlobal::dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -1354,6 +1362,8 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
+// QT5TODO: reenable reports
+#if 0
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
@@ -1377,6 +1387,8 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const Q
     connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     v->updateReadWrite( m_readWrite );
     return v;
+#endif
+    return 0;
 }
 
 Project& View::getProject() const
@@ -2683,10 +2695,13 @@ void View::slotCreateReport()
 */
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
+// QT5TODO: reenable reports
+#if 0
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
     connect( vd, SIGNAL(viewCreated(ViewBase*)), dlg, SLOT(slotViewCreated(ViewBase*)) );
     vd->exec();
     delete vd;
+#endif
 }
 
 void View::slotOpenReportFile()
@@ -2713,6 +2728,8 @@ void View::slotOpenReportFileFinished( int result )
         KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
+// QT5TODO: reenable reports
+#if 0
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
@@ -2725,6 +2742,7 @@ void View::slotOpenReportFileFinished( int result )
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
+#endif
 }
 
 void View::slotReportDesignFinished( int /*result */)
@@ -2931,7 +2949,8 @@ void View::setLabel( ScheduleManager *sm )
 
 void View::slotWorkPackageLoaded()
 {
-    kDebug(planDbg())<<getPart()->workPackages();
+    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
+//     kDebug(planDbg())<<getPart()->workPackages();
 }
 
 void View::slotMailWorkpackage( Node *node, Resource *resource )
@@ -3030,7 +3049,7 @@ void View::slotCurrencyConfigFinished( int result )
 void View::saveTaskModule( const KUrl &url, Project *project )
 {
     kDebug(planDbg())<<url<<project;
-    QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
+    QString dir = KGlobal::dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         MainDocument part(getKoPart());
@@ -3153,34 +3172,4 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
-//---------------------------------
-PrintingControlPrivate::PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia )
-    : QObject( dia ),
-    m_job( job ),
-    m_dia( dia )
-{
-    connect(job, SIGNAL(changed()), SLOT(slotChanged()));
-}
-
-void PrintingControlPrivate::slotChanged()
-{
-    if ( ! m_job || ! m_dia ) {
-        return;
-    }
-    QSpinBox *to = m_dia->findChild<QSpinBox*>("to");
-    QSpinBox *from = m_dia->findChild<QSpinBox*>("from");
-    if ( to && from ) {
-        from->setMinimum( m_job->documentFirstPage() );
-        from->setMaximum( m_job->documentLastPage() );
-        from->setValue( from->minimum() );
-        to->setMinimum( from->minimum() );
-        to->setMaximum( from->maximum() );
-        to->setValue( to->maximum() );
-    }
-}
-
-
 }  //KPlato namespace
-
-#include "kptprintingcontrolprivate.moc"
-#include "kptview.moc"

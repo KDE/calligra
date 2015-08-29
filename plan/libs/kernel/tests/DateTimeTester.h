@@ -23,20 +23,6 @@
 #include <QtTest>
 
 #include "kptdatetime.h"
-namespace QTest
-{
-    template<>
-    char *toString(const KPlato::DateTime &dt)
-    {
-        QString s;
-        switch ( dt.timeSpec() ) {
-            case Qt::LocalTime: s = " LocalTime"; break;
-            case Qt::UTC: s = " UTC"; break;
-            case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
-        }
-        return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
-    }
-}
 
 namespace KPlato
 {

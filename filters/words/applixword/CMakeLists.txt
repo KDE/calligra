@@ -3,17 +3,10 @@
 set(applixword2odt_PART_SRCS applixwordimport.cc )
 
 
-kde4_add_plugin(calligra_filter_applixword2odt ${applixword2odt_PART_SRCS})
+add_library(calligra_filter_applixword2odt MODULE ${applixword2odt_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligra_filter_applixword2odt calligra_filter_applixword2odt.desktop)
 
 target_link_libraries(calligra_filter_applixword2odt komain)
 
-install(TARGETS calligra_filter_applixword2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  calligra_filter_applixword2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
+install(TARGETS calligra_filter_applixword2odt  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

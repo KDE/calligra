@@ -7,11 +7,12 @@ set(karboncommon_LIB_SRCS
     commands/KarbonBooleanCommand.cpp
 )
 
-kde4_add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
+add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
+generate_export_header(karboncommon BASE_NAME karboncommon)
 
 target_link_libraries(karboncommon komain kowidgets)
 target_link_libraries(karboncommon LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS karboncommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS karboncommon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

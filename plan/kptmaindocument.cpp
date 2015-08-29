@@ -76,13 +76,14 @@ MainDocument::MainDocument(KoPart *part)
     Q_ASSERT(part);
     m_config.setReadWrite( true );
     // Add library translation files
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if ( locale ) {
-        locale->insertCatalog( "planlibs" );
-        locale->insertCatalog( "kdgantt" );
-        locale->insertCatalog( "timezones4" );
+        // QT5TODO: ensure proper loading of catalogs, T449
+//         locale->insertCatalog( "planlibs" );
+//         locale->insertCatalog( "kdgantt" );
+//         locale->insertCatalog( "timezones4" );
 #ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
+//         locale->insertCatalog( "kabc" );
 #endif
 
         m_config.setLocale( new KLocale( *locale ) );
@@ -537,7 +538,8 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
                 package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
-                kDebug(planDbg())<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
+                // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
+//                 kDebug(planDbg())<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {
                     if ( elem.tagName() != "settings" ) {

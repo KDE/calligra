@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QString>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -56,9 +57,9 @@ QString KPlatoAboutPage::main()
 
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
     res = res.arg( "" );
 
@@ -89,9 +90,9 @@ QString KPlatoAboutPage::intro()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -135,9 +136,9 @@ QString KPlatoAboutPage::tips()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -165,9 +166,9 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
     const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
     const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
 
-    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -200,7 +201,7 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
             "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>."
-        , KGlobal::locale()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
+        , KLocale::global()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
     );
@@ -224,7 +225,7 @@ QString KPlatoAboutPage::tutorial2()
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
             "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>.<p>"
-        , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
+        , KLocale::global()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",
         i18n( "Next: Introduction" )
     );

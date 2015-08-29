@@ -13,13 +13,11 @@ set(odt2mobi_PART_SRCS
 )
 
 
-kde4_add_plugin(calligra_filter_odt2mobi ${odt2mobi_PART_SRCS})
+add_library(calligra_filter_odt2mobi MODULE ${odt2mobi_PART_SRCS})
+target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg)
 
-
-target_link_libraries(calligra_filter_odt2mobi komain)
-
-install(TARGETS calligra_filter_odt2mobi  DESTINATION ${PLUGIN_INSTALL_DIR})
-
+install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+kcoreaddons_desktop_to_json(calligra_filter_odt2mobi calligra_filter_odt2mobi.desktop)
 
 
  ########### install files ###############

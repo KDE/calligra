@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/main   )
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
@@ -7,7 +7,7 @@ add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
 
 
-kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
+add_library(kformdesigner_containers MODULE ${kformdesigner_containers_PART_SRCS})
 
 
 
@@ -15,35 +15,35 @@ target_link_libraries(
     kformdesigner_containers
     kformdesigner
     kundo2
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    
+    
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Xml
     )
 
-install(TARGETS kformdesigner_containers  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kformdesigner_containers  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
 
 set(kformdesigner_stdwidgets_PART_SRCS stdwidgetfactory.cpp )
 
-kde4_add_plugin(kformdesigner_stdwidgets ${kformdesigner_stdwidgets_PART_SRCS})
+add_library(kformdesigner_stdwidgets MODULE ${kformdesigner_stdwidgets_PART_SRCS})
 
 
 
 target_link_libraries(
     kformdesigner_stdwidgets
     kformdesigner
-    ${KOPROPERTY_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    )
 
-install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
+    KProperty
+
+    Qt5::Gui
+    Qt5::Xml
+)
+
+install(TARGETS kformdesigner_stdwidgets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

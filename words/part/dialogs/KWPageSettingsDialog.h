@@ -43,6 +43,7 @@ protected:
 
 private Q_SLOTS:
     void slotApplyClicked();
+    void slotButtonClicked(QAbstractButton* button);
     void setDocumentUnit(const KoUnit &unit);
     void onDocumentUnitChange(const KoUnit &unit);
     void pageStyleCloneClicked();

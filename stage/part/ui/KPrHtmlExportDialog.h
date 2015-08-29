@@ -26,6 +26,9 @@
 #include <QWebPage>
 
 #include <KoPAPageBase.h>
+#include <kdialog.h>
+
+class KUrl;
 
 class KPrHtmlExportDialog  : public KDialog
 {

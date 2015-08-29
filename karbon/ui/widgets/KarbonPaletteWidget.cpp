@@ -251,4 +251,3 @@ void KarbonPaletteWidget::applyScrolling(int delta)
     }
 }
 
-#include "KarbonPaletteWidget.moc"

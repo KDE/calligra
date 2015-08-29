@@ -12,7 +12,7 @@ set(krossmodulewords_PART_SRCS
 	KWScriptingPart.cpp
 )
 
-qt4_wrap_cpp(krossmodulewords_PART_SRCS
+qt5_wrap_cpp(krossmodulewords_PART_SRCS
 	Page.h PageLayout.h
 	Style.h
 	TextDocument.h TextFrame.h TextList.h TextTable.h
@@ -20,8 +20,8 @@ qt4_wrap_cpp(krossmodulewords_PART_SRCS
 	Tool.h
 )
 
-kde4_add_plugin(krossmodulewords ${krossmodulewords_PART_SRCS})
+add_library(krossmodulewords MODULE ${krossmodulewords_PART_SRCS})
 target_link_libraries(krossmodulewords kokross wordsprivate)
-install(TARGETS krossmodulewords DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS krossmodulewords DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krossmodulewords.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)

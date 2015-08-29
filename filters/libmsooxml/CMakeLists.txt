@@ -1,8 +1,7 @@
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
 
-if(QCA2_FOUND)
+if(Qca-qt5_FOUND)
     add_definitions( -DHAVE_QCA2 )
-    include_directories(${QCA2_INCLUDE_DIR})
 endif()
 
 include_directories(
@@ -40,11 +39,12 @@ set(msooxml_LIB_SRCS
     KoOdfExporter.cpp
 )
 
-kde4_add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
+add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
+generate_export_header(komsooxml BASE_NAME komsooxml)
 
-target_link_libraries(komsooxml mso koodf2 koodf komain)
-if(QCA2_FOUND)
-   target_link_libraries(komsooxml ${QCA2_LIBRARIES})
+target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive)
+if(Qca-qt5_FOUND)
+   target_link_libraries(komsooxml qca-qt5)
 endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -55,7 +55,7 @@ update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 
 if (FALSE) # these headers are private for now
 install( FILES
-    komsooxml_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/komsooxml_export.h
     MsooXmlContentTypes.h
     MsooXmlReader.h
     MsooXmlReader_p.h

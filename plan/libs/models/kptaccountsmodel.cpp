@@ -699,9 +699,9 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
             }
             case Period_Week: {
                 // ISO Week numbering always uses Monday as first day of week
-                const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
                     ? Qt::Monday
-                    : KGlobal::locale()->weekStartDay();
+                    : KLocale::global()->weekStartDay();
 
                 int days = firstWeekDay - startDate().dayOfWeek();
                 if ( days > 0 ) {
@@ -715,7 +715,7 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
                 int days = startDate().daysInMonth() - startDate().day() + 1;
                 for ( QDate d = startDate(); d < endDate(); d = d.addDays( days ) ) {
                     ++c;
-                    days = qMin( d.daysTo( endDate() ), d.daysInMonth() );
+                    days = qMin( d.daysTo( endDate() ), static_cast<qint64>(d.daysInMonth()) );
                 }
                 break;
             }
@@ -789,9 +789,9 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
                     }
                     case Period_Week: {
                         // ISO Week numbering always uses Monday as first day of week
-                        const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                        const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
                             ? Qt::Monday
-                            : KGlobal::locale()->weekStartDay();
+                            : KLocale::global()->weekStartDay();
 
                         int days = firstWeekDay - startDate().dayOfWeek();
                         if ( days > 0 ) {
@@ -887,9 +887,9 @@ QVariant CostBreakdownItemModel::cost( const Account *a, int offset, int role ) 
         }
         case Period_Week: {
             // ISO Week numbering always uses Monday as first day of week
-            const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+            const int firstWeekDay = (KLocale::global()->weekNumberSystem() == KLocale::IsoWeekNumber)
                 ? Qt::Monday
-                : KGlobal::locale()->weekStartDay();
+                : KLocale::global()->weekStartDay();
 
             int days = firstWeekDay - startDate().dayOfWeek();
             if ( days > 0 ) {
@@ -1054,7 +1054,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col ).toString( Qt::ISODate );
                 }
                 case Period_Week: {
-                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+                    const KCalendarSystem * calendar = KLocale::global()->calendar();
 #if KDE_IS_VERSION(4,7,0)
                     return calendar->week(startDate().addDays( ( col ) * 7 ));
 #else
@@ -1092,7 +1092,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col );
                 }
                 case Period_Week: {
-                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+                    const KCalendarSystem * calendar = KLocale::global()->calendar();
 #if KDE_IS_VERSION(4,7,0)
                     return calendar->week(startDate().addDays( ( col ) * 7 ));
 #else

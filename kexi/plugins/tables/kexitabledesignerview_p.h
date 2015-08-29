@@ -65,14 +65,14 @@ public:
 
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
-    void setPropertyValueIfNeeded(const KoProperty::Set& set, const QByteArray& propertyName,
+    void setPropertyValueIfNeeded(const KPropertySet& set, const QByteArray& propertyName,
                                   const QVariant& newValue, KexiTableDesignerCommands::Command* commandGroup,
                                   bool forceAddCommand = false, bool rememberOldValue = true,
                                   QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
     void setPropertyValueIfNeeded(
-        const KoProperty::Set& set, const QByteArray& propertyName,
+        const KPropertySet& set, const QByteArray& propertyName,
         const QVariant& newValue, const QVariant& oldValue, KexiTableDesignerCommands::Command* commandGroup,
         bool forceAddCommand = false, bool rememberOldValue = true,
         QStringList* const slist = 0, QStringList* const nlist = 0);
@@ -82,10 +82,10 @@ public:
      Does nothing if visibility should not be changed, i.e. when prop->isVisible()==visible,
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
-    void setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
+    void setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
                                bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
 
-    bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
+    bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
                                     KexiTableDesignerCommands::Command *commandGroup = 0);
 
     /*! \return message used to ask user for accepting saving the design.
@@ -97,7 +97,7 @@ public:
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
-    void updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set);
+    void updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set);
 
     KexiTableDesignerView* designerView;
 

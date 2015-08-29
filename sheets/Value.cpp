@@ -514,7 +514,7 @@ QDateTime Value::asDateTime(const CalculationSettings* settings) const
     QDateTime datetime(settings->referenceDate(), QTime(), Qt::UTC);
 
     const int days = asInteger();
-    const int msecs = qRound((numToDouble(asFloat() - double(days))) * 86400000.0);      // 24*60*60*1000
+    const int msecs = ::round((numToDouble(asFloat() - double(days))) * 86400000.0);      // 24*60*60*1000
     datetime = datetime.addDays(days);
     datetime = datetime.addMSecs(msecs);
 
@@ -536,10 +536,10 @@ QDate Value::asDate(const CalculationSettings* settings) const
 QTime Value::asTime(const CalculationSettings* settings) const
 {
     Q_UNUSED(settings);
-    QTime dt;
+    QTime dt(0, 0, 0, 0);
 
     const int days = asInteger();
-    const int msecs = qRound(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
+    const int msecs = ::round(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
     dt = dt.addMSecs(msecs);
 
     return dt;

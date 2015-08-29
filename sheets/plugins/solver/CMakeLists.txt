@@ -12,13 +12,13 @@ set( solver_PART_SRCS
 	SolverDialog.cpp
 )
 
-kde4_add_ui_files( solver_PART_SRCS
+ki18n_wrap_ui( solver_PART_SRCS
 	SolverDetailsWidget.ui
 	SolverMainWidget.ui
 )
 
-kde4_add_plugin( sheetssolver ${solver_PART_SRCS} )
-
+add_library(sheetssolver MODULE ${solver_PART_SRCS} )
+kcoreaddons_desktop_to_json(sheetssolver sheetssolver.desktop)
 
 
 target_link_libraries( sheetssolver
@@ -26,13 +26,11 @@ target_link_libraries( sheetssolver
         calligrasheetscommon
 )
 
-install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS sheetssolver  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
 install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
-install( FILES sheetssolver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
 
 endif()

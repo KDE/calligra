@@ -970,18 +970,18 @@ void DependencyNodeItem::paintTreeIndicator( bool on )
 void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 {
     m_nodetype = type;
-    m_itemtype = KDGantt::TypeNone;
+    m_itemtype = KGantt::TypeNone;
     QPainterPath p;
     switch ( type ) {
         case Node::Type_Summarytask:
-            m_itemtype = KDGantt::TypeSummary;
+            m_itemtype = KGantt::TypeSummary;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.left() + rect.width() / 2.0, rect.bottom() );
             p.closeSubpath();
             break;
         case Node::Type_Task:
-            m_itemtype = KDGantt::TypeTask;
+            m_itemtype = KGantt::TypeTask;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.bottomRight() );
@@ -989,7 +989,7 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
             p.closeSubpath();
             break;
         case Node::Type_Milestone:
-            m_itemtype = KDGantt::TypeEvent;
+            m_itemtype = KGantt::TypeEvent;
             p.moveTo( rect.left() + ( rect.width() / 2.0 ), rect.top() );
             p.lineTo( rect.right(), rect.top() + ( rect.height() / 2.0 ) );
             p.lineTo( rect.left() + ( rect.width() / 2.0 ), rect.bottom() );
@@ -1962,10 +1962,7 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     : KPageDialog(p),
     m_view( view )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
 
     QTabWidget *tab = new QTabWidget();
 
@@ -1981,7 +1978,7 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void DependencyeditorConfigDialog::slotOk()
@@ -2306,12 +2303,12 @@ void DependencyEditor::setupGui()
     addAction( name, menuAddTask );
 
     actionAddTask  = new KAction( i18n("Add Task..."), this);
-    actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
+    actionAddTask->setShortcut( Qt::CTRL + Qt::Key_I );
     connect( actionAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     menuAddTask->addAction( actionAddTask );
 
     actionAddMilestone  = new KAction( i18n("Add Milestone..."), this );
-    actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
+    actionAddMilestone->setShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I );
     connect( actionAddMilestone, SIGNAL(triggered(bool)), SLOT(slotAddMilestone()) );
     menuAddTask->addAction( actionAddMilestone );
 
@@ -2322,17 +2319,17 @@ void DependencyEditor::setupGui()
     addAction( name, menuAddSubTask );
 
     actionAddSubtask  = new KAction( i18n("Add Sub-Task..."), this );
-    actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    actionAddSubtask->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I );
     connect( actionAddSubtask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     menuAddSubTask->addAction( actionAddSubtask );
 
     actionAddSubMilestone = new KAction( i18n("Add Sub-Milestone..."), this );
-    actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
+    actionAddSubMilestone->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I );
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
     actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
-    actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
+    actionDeleteTask->setShortcut( Qt::Key_Delete );
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     addAction( name, actionDeleteTask );

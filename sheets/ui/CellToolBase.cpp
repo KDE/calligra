@@ -183,7 +183,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->createPopupMenuActions();
     
     // Create the actions.
-    KAction* action = 0;
+    QAction* action = 0;
 
     // -- cell style actions --
 
@@ -1138,12 +1138,13 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void CellToolBase::deactivate()
 {
+    Selection *sel = selection();
     // Disconnect.
-    disconnect(selection(), 0, this, 0);
+    if (sel) disconnect(sel, 0, this, 0);
     // close the cell editor
     deleteEditor(true); // save changes
     // clear the selection rectangle
-    selection()->update();
+    if (sel) sel->update();
 }
 
 void CellToolBase::init()
@@ -3405,7 +3406,7 @@ void CellToolBase::replace()
 void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/)
 {
     selection()->initialize(d->findPos);
-    KDialog *dialog = 0;
+    QDialog *dialog = 0;
     if (d->find)
         dialog = d->find->findNextDialog();
     else

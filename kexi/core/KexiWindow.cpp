@@ -602,7 +602,7 @@ void KexiWindow::setFocus()
     activate();
 }
 
-KoProperty::Set*
+KPropertySet*
 KexiWindow::propertySet()
 {
     KexiView *v = selectedView();

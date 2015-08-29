@@ -1,8 +1,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES})
 
 set(kspread_plugin_tool_calendar_SRCS CalendarTool.cpp CalendarToolFactory.cpp CalendarToolWidget.cpp)
-kde4_add_ui_files(kspread_plugin_tool_calendar_SRCS CalendarToolWidget.ui)
-kde4_add_plugin(kspread_plugin_tool_calendar ${kspread_plugin_tool_calendar_SRCS})
+ki18n_wrap_ui(kspread_plugin_tool_calendar_SRCS CalendarToolWidget.ui)
+add_library(kspread_plugin_tool_calendar MODULE ${kspread_plugin_tool_calendar_SRCS})
+kcoreaddons_desktop_to_json(kspread_plugin_tool_calendar kspread_plugin_tool_calendar.desktop)
+
 target_link_libraries(kspread_plugin_tool_calendar calligrasheetscommon)
-install(TARGETS kspread_plugin_tool_calendar DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kspread_plugin_tool_calendar.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS kspread_plugin_tool_calendar DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

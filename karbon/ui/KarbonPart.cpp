@@ -57,7 +57,7 @@ KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplatesResourcePath(QLatin1String("karbon/templates/"));
-    setComponentData(KarbonFactory::componentData());
+//QT5TODO    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()
@@ -114,4 +114,3 @@ void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
 }
 
 
-#include "KarbonPart.moc"

@@ -34,8 +34,12 @@
 
 
 
-K_PLUGIN_FACTORY(ExportMobiFactory, registerPlugin<ExportMobi>();)
-K_EXPORT_PLUGIN(ExportMobiFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExportMobiFactory, "calligra_filter_odt2mobi.json",
+			   registerPlugin<ExportMobi>();)
+
+// Needed to instantiate the plugin factory.
+#include "exportmobi.moc"
+
 
 ExportMobi::ExportMobi(QObject *parent, const QVariantList &) :
     KoFilter(parent)

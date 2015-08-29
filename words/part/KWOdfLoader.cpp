@@ -55,6 +55,7 @@
 
 // KDE + Qt includes
 #include <QTextCursor>
+#include <kglobal.h>
 #include <kdebug.h>
 
 #include <KoDocumentRdfBase.h>

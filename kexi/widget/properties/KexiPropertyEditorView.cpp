@@ -21,9 +21,9 @@
 #include "KexiPropertyEditorView.h"
 #include "KexiObjectInfoLabel.h"
 #include <KexiMainWindowIface.h>
-#include <koproperty/Set.h>
-#include <koproperty/EditorView.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KPropertyEditorView>
+#include <KProperty>
 
 #include <QLayout>
 
@@ -35,7 +35,7 @@ class KexiPropertyEditorView::Private
 public:
     Private() {
     }
-    KoProperty::EditorView *editor;
+    KPropertyEditorView *editor;
 };
 
 KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
@@ -47,14 +47,14 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
     //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    d->editor = new KoProperty::EditorView(this);
+    d->editor = new KPropertyEditorView(this);
     layout()->addWidget(d->editor);
     setFocusProxy(d->editor);
     infoLabel()->setBuddy(d->editor);
     setFocusPolicy(Qt::WheelFocus);
 
-    connect(d->editor, SIGNAL(propertySetChanged(KoProperty::Set*)),
-            this, SLOT(slotPropertySetChanged(KoProperty::Set*)));
+    connect(d->editor, SIGNAL(propertySetChanged(KPropertySet*)),
+            this, SLOT(slotPropertySetChanged(KPropertySet*)));
 
     slotPropertySetChanged(0);
 }
@@ -74,12 +74,12 @@ QSize KexiPropertyEditorView::minimumSizeHint() const
     return QSize(200, 200);
 }
 
-KoProperty::EditorView *KexiPropertyEditorView::editor() const
+KPropertyEditorView *KexiPropertyEditorView::editor() const
 {
     return d->editor;
 }
 
-void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
+void KexiPropertyEditorView::slotPropertySetChanged(KPropertySet* set)
 {
     //update information about selected object
     updateInfoLabelForPropertySet(set);

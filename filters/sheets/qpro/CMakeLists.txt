@@ -1,6 +1,6 @@
 set(LIBQPRO_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libqpro")
 
-include_directories( ${CMAKE_SOURCE_DIR}/sheets ${LIBQPRO_SOURCES_DIR} ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/sheets ${LIBQPRO_SOURCES_DIR}  ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -14,16 +14,10 @@ set(qpro2sheets_PART_SRCS
 	qproimport.cc
 	qproformula.cc )
 
-kde4_add_plugin(calligra_filter_qpro2sheets ${qpro2sheets_PART_SRCS})
+add_library(calligra_filter_qpro2sheets MODULE ${qpro2sheets_PART_SRCS})
 
-
+kcoreaddons_desktop_to_json(calligra_filter_qpro2sheets calligra_filter_qpro2sheets.desktop)
 
 target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
 
-install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  calligra_filter_qpro2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
+install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -6,9 +6,10 @@ include_directories(
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/*-apps-calligrawords.png")
+ecm_add_app_icon(words_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -16,7 +17,7 @@ if (Q_WS_MAC)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
 endif ()
 
-target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_calligrawords   komain )
 
 install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -34,6 +34,9 @@
 #include <KoIcon.h>
 #include <KoTextDocumentLayout.h>
 
+#include <kglobal.h>
+#include <kconfiggroup.h>
+
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>

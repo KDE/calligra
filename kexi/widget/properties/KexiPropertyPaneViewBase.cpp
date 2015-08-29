@@ -20,9 +20,9 @@
 #include "KexiPropertyPaneViewBase.h"
 #include "KexiObjectInfoLabel.h"
 #include <KexiMainWindowIface.h>
-#include <koproperty/Set.h>
-#include <koproperty/EditorView.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KPropertyEditorView>
+#include <KProperty>
 
 #include <klocale.h>
 
@@ -65,7 +65,7 @@ KexiObjectInfoLabel *KexiPropertyPaneViewBase::infoLabel() const
 }
 
 void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
-        KoProperty::Set* set, const QString& textToDisplayForNullSet)
+        KPropertySet* set, const QString& textToDisplayForNullSet)
 {
     QString className, iconName, objectName;
     if (set) {

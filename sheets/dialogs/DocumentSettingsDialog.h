@@ -31,6 +31,7 @@
 #include <QLabel>
 
 #include <kpagedialog.h>
+#include <klocale.h>
 
 class KVBox;
 class QCheckBox;

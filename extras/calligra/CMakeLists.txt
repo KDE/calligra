@@ -2,7 +2,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 set(calligra_SRCS main.cpp )
 
-kde4_add_executable(calligra ${calligra_SRCS})
+add_executable(calligra ${calligra_SRCS})
 
 target_link_libraries(calligra komain ${KDE4_KIO_LIBS})
 

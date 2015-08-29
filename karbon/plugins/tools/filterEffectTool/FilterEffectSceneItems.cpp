@@ -23,6 +23,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
+#include <QDrag>
 #include <QWidget>
 
 const QSizeF ConnectorSize = QSize(20, 20);

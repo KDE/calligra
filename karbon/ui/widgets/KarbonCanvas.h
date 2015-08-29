@@ -37,7 +37,6 @@
 #include <KoCanvasBase.h>
 
 #include <QWidget>
-#include <QList>
 #include <QBrush>
 
 class KarbonDocument;

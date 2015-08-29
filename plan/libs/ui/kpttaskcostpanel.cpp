@@ -25,6 +25,7 @@
 #include "kptproject.h"
 
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <kdebug.h>
 
@@ -42,7 +43,7 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
         m_locale = project->locale();
     }
     if ( m_locale == 0 ) {
-        m_locale = KGlobal::locale();
+        m_locale = KLocale::global();
     }
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();

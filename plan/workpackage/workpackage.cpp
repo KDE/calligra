@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QTimer>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -60,7 +61,7 @@ WorkPackage::WorkPackage( bool fromProjectStore )
     m_fromProjectStore( fromProjectStore ),
     m_modified( false)
 {
-    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );
+    m_config.setLocale( new KLocale( *( KLocale::global() ) ) );
     m_project->setConfig( &m_config );
 }
 
@@ -72,7 +73,7 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
     Q_ASSERT( project );
     Q_ASSERT ( project->childNode( 0 ) );
 
-    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );
+    m_config.setLocale( new KLocale( *( KLocale::global() ) ) );
     m_project->setConfig( &m_config );
 
     if ( ! project->scheduleManagers().isEmpty() ) {
@@ -387,9 +388,8 @@ QString WorkPackage::fileName( const Part *part ) const
         kWarning()<<"No node in this project";
         return QString();
     }
-    KStandardDirs *sd = part->componentData().dirs();
     QString projectName = m_project->name().remove( ' ' );
-    QString path = sd->saveLocation( "projects", projectName + '/' );
+    QString path = KGlobal::dirs()->saveLocation( "projects", projectName + '/' );
     QString wpName = QString( n->name().remove( ' ' ) + '_' + n->id() + ".planwork" );
     return path + wpName;
 }

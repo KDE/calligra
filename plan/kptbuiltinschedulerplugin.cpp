@@ -126,7 +126,7 @@ KPlatoScheduler::~KPlatoScheduler()
 
 KLocale *KPlatoScheduler::locale() const
 {
-    return KGlobal::locale();
+    return KLocale::global();
 }
 
 void KPlatoScheduler::stopScheduling()

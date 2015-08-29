@@ -53,10 +53,7 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     m_view( view ),
     m_treeview( treeview )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
 
     QTabWidget *tab = new QTabWidget();
 
@@ -72,7 +69,7 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void AccountseditorConfigDialog::slotOk()
@@ -260,19 +257,19 @@ void AccountsEditor::setupGui()
     
     actionAddAccount  = new KAction(koIcon("document-new"), i18n("Add Account"), this);
     actionCollection()->addAction("add_account", actionAddAccount );
-    actionAddAccount->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
+    actionAddAccount->setShortcut( Qt::CTRL + Qt::Key_I );
     connect( actionAddAccount, SIGNAL(triggered(bool)), SLOT(slotAddAccount()) );
     addAction( name, actionAddAccount );
 
     actionAddSubAccount  = new KAction(koIcon("document-new"), i18n("Add Subaccount"), this);
     actionCollection()->addAction("add_subaccount", actionAddSubAccount );
-    actionAddSubAccount->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
+    actionAddSubAccount->setShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I );
     connect( actionAddSubAccount, SIGNAL(triggered(bool)), SLOT(slotAddSubAccount()) );
     addAction( name, actionAddSubAccount );
 
     actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
-    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
+    actionDeleteSelection->setShortcut( Qt::Key_Delete );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
     addAction( name, actionDeleteSelection );
 

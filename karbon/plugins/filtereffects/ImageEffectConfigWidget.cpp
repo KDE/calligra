@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QImageReader>
+#include <KConfigGroup>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

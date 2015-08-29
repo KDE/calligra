@@ -36,8 +36,8 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
-K_EXPORT_PLUGIN(TableShapePluginFactory("calligra_shape_spreadsheet"))
+K_PLUGIN_FACTORY_WITH_JSON(TableShapePluginFactory, "calligra_shape_spreadsheet.json",
+                           registerPlugin<TableShapePlugin>();)
 
 TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 {
@@ -63,3 +63,5 @@ bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
     Q_UNUSED(context);
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
+
+#include "TableShapeFactory.moc"

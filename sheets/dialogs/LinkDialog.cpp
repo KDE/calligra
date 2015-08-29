@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
+#include <kurl.h>
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <klineedit.h>
@@ -70,8 +71,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
         : KPageDialog(parent)
         , d(new Private)
 {
-    setCaption(i18n("Insert Link"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Insert Link"));
     setFaceType(List);
 
     // link for web or ftp
@@ -175,10 +175,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     connect(d->cellText, SIGNAL(textChanged(QString)), this,
             SLOT(setText(QString)));
 
-    showButtonSeparator(true);
     d->internetText->setFocus();
     resize(400, 300);
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 LinkDialog::~LinkDialog()

@@ -46,21 +46,25 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kstandarddirs.h>
 
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
-K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>();)
-K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
+K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbon_roundcorners.json",
+                           registerPlugin<RoundCornersPlugin>();)
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
 {
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/RoundCornersPlugin.rc"));
 
-    KAction *actionRoundCorners  = new KAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
+    QAction *actionRoundCorners  = new QAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 
@@ -102,12 +106,20 @@ void RoundCornersPlugin::slotRoundCorners()
 
 
 RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption(i18n("Round Corners"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Round Corners"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input:
     QGroupBox* group = new QGroupBox(i18n("Properties"), this);
@@ -123,10 +135,15 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
     group->setMinimumWidth(300);
 
     // signals and slots:
-    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 
-    setMainWidget(group);
+    mainLayout->addWidget(group);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    //PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
+    mainLayout->addWidget(buttonBox);
 }
 
 qreal RoundCornersDlg::radius() const
@@ -144,5 +161,4 @@ void RoundCornersDlg::setUnit(const KoUnit &unit)
     m_radius->setUnit(unit);
 }
 
-#include "RoundCornersPlugin.moc"
-
+#include <RoundCornersPlugin.moc>

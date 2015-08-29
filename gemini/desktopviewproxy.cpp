@@ -30,6 +30,8 @@
 #include <klocalizedstring.h>
 #include <krecentfilesaction.h>
 #include <kactioncollection.h>
+#include <kglobal.h>
+#include <kurl.h>
 
 #include <boost/config/posix_features.hpp>
 #include <KConfigGroup>
@@ -92,7 +94,7 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
     recent->disconnect(d->desktopView);
-    connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
+    connect(recent, SIGNAL(urlSelected(QUrl)), this, SLOT(slotFileOpenRecent(QUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
 
@@ -111,12 +113,16 @@ void DesktopViewProxy::fileNew()
 
 void DesktopViewProxy::fileOpen()
 {
+    QStringList mimeFilter;
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1());
-    KService::Ptr service = entry.service();
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1(),
-                                                               KoFilterManager::Import,
-                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    if (entry.loader()) {
+        QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
 
+        mimeFilter << KoFilterManager::mimeFilter(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1(),
+                                                               KoFilterManager::Import,
+                                                               mimeTypes);
+    }
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
@@ -171,7 +177,7 @@ void DesktopViewProxy::loadExistingAsNew()
     d->isImporting = false;
 }
 
-void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
+void DesktopViewProxy::slotFileOpenRecent(const QUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }

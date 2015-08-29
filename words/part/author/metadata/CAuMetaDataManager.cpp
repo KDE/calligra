@@ -142,7 +142,7 @@ void CAuMetaDataManager::callEditor(KoSection *sec) const
     lay->addWidget(w);
 
     KPageDialog dialog(m_doc->documentPart()->currentMainwindow());
-    dialog.setCaption(i18n("Section's options"));
+    dialog.setWindowTitle(i18n("Section's options"));
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         semItem->updateFromEditorData();

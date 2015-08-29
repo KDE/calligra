@@ -52,6 +52,7 @@
 #include <QLabel>
 #include <QResource>
 #include <QTimer>
+#include <QCryptographicHash>
 
 #include <stdio.h>
 
@@ -225,13 +226,13 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
         fileNamesToUpdate->append(remoteFname);
         return;
     }
-    KMD5 md5("");
-    if (!md5.update(file)) {
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    if (!md5.addData(file)) {
         kWarning() << "could not check MD5 for file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
         return;
     }
-    if (!md5.verify(hash)) {
+    if (md5.result() != hash) {
         kDebug() << "not matching file" << localFname << "- update it";
         fileNamesToUpdate->append(remoteFname);
     }

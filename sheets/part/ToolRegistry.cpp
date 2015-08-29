@@ -22,9 +22,10 @@
 #include "CellTool.h"
 #include "CellToolFactory.h"
 
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
+#include <kglobal.h>
 
 #include <KoToolRegistry.h>
 
@@ -63,7 +64,7 @@ void ToolRegistry::loadTools()
     const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
                                         "([X-KDE-PluginInfo-Category] == 'Tool')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
+    const KConfigGroup moduleGroup = KSharedConfig::openConfig()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
     foreach(KPluginInfo pluginInfo, pluginInfos) {
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();

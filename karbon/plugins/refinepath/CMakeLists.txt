@@ -1,18 +1,15 @@
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core   )
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
+set(karbon_refinepath_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineCommand.cpp )
 
-########### next target ###############
+add_library(karbon_refinepath MODULE ${karbon_refinepath_PART_SRCS})
 
-set(karbon_refinepathplugin_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineCommand.cpp )
+kcoreaddons_desktop_to_json(karbon_refinepath karbon_refinepath.desktop)
 
-kde4_add_plugin(karbon_refinepathplugin ${karbon_refinepathplugin_PART_SRCS})
+target_link_libraries(karbon_refinepath karboncommon)
 
-target_link_libraries(karbon_refinepathplugin karboncommon)
-
-install(TARGETS karbon_refinepathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_refinepath  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES RefinePathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES karbonrefinepathplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
+install( FILES RefinePathPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

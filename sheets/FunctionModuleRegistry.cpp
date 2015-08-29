@@ -24,11 +24,14 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 #include <kstandarddirs.h>
+#include <kcomponentdata.h>
 
 #ifndef SHEETS_NO_PLUGINMODULES
 #include <kplugininfo.h>
-#include <kservicetypetrader.h>
+#include <KPluginFactory>
+#include "KoJsonTrader.h"
 #else
 #include "functions/BitOpsModule.h"
 #include "functions/ConversionModule.h"
@@ -64,7 +67,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
+    const KStandardDirs* dirs = KGlobal::dirs();
     const QString fileName = dirs->findResource("functions", module->descriptionFileName());
     if (fileName.isEmpty()) {
         kDebug(36002) << module->descriptionFileName() << "not found.";
@@ -106,62 +109,36 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
-    const quint32 minKSpreadVersion = CALLIGRA_MAKE_VERSION(2, 1, 0);
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
-                                        "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
-    const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    kDebug(36002) << pluginInfos.count() << "function modules found.";
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
-        pluginInfo.load(); // load activation state
-        KPluginLoader loader(*pluginInfo.service());
-        // Let's be paranoid: do not believe the service type.
-        if (loader.pluginVersion() < minKSpreadVersion) {
-            kDebug(36002) << pluginInfo.name()
-            << "was built against Caligra Sheets" << loader.pluginVersion()
-            << "; required version >=" << minKSpreadVersion;
+    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("CalligraSheets/Plugin", QString());
+    kDebug(36002) << offers.count() << "function modules found.";
+    foreach (QPluginLoader *loader, offers) {
+
+        QJsonObject meta = loader->metaData().value("MetaData").toObject().value("KPlugin").toObject();
+        int version = meta.value("X-CalligraSheets-InterfaceVersion").toInt();
+        if (version != 0) {
+            kDebug(36002) << "Skipping" << loader->fileName() << ", because interface version is" << version;
             continue;
         }
-        if (pluginInfo.isPluginEnabled() && !contains(pluginInfo.pluginName())) {
-            // Plugin enabled, but not registered. Add it.
-            KPluginFactory* const factory = loader.factory();
-            if (!factory) {
-                kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
-                continue;
-            }
-            FunctionModule* const module = factory->create<FunctionModule>();
-            if (!module) {
-                kDebug(36002) << "Unable to create function module for" << pluginInfo.name();
-                continue;
-            }
-            add(pluginInfo.pluginName(), module);
+        QString category = meta.value("Category").toString();
+        if (category != "FunctionModule") {
+            kDebug(36002) << "Skipping" << loader->fileName() << ", because category is " << category;
+            continue;
+        }
 
-            // Delays the function registration until the user needs one.
-            if (d->repositoryInitialized) {
-                d->registerFunctionModule(module);
-            }
-        } else if (!pluginInfo.isPluginEnabled() && contains(pluginInfo.pluginName())) {
-            // Plugin disabled, but registered. Remove it.
-            FunctionModule* const module = get(pluginInfo.pluginName());
-            // Delay the function registration until the user needs one.
-            if (d->repositoryInitialized) {
-                d->removeFunctionModule(module);
-            }
-            remove(pluginInfo.pluginName());
-            if (module->isRemovable()) {
-                delete module;
-                delete loader.factory();
-                loader.unload();
-            } else {
-                // Put it back in.
-                add(pluginInfo.pluginName(), module);
-                // Delay the function registration until the user needs one.
-                if (d->repositoryInitialized) {
-                    d->registerFunctionModule(module);
-                }
-            }
+        // TODO: the kde4 version supported enabling/disabling of plugins, do we want that?
+        KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
+        FunctionModule* module = qobject_cast<FunctionModule *>(factory->create());
+        if (!module) {
+            kDebug(36002) << "Unable to create function module for" << loader->fileName();
+            continue;
+        }
+        QString name = meta.value("Name").toString();
+        add(name, module);
+        kDebug(36002) << "Loaded" << name;
+
+        // Delays the function registration until the user needs one.
+        if (d->repositoryInitialized) {
+            d->registerFunctionModule(module);
         }
     }
 #else

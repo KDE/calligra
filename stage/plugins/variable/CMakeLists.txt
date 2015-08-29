@@ -6,16 +6,16 @@ set(kprvariables_PART_SRCS
     Plugin.cpp
    )
 
-kde4_add_plugin(kprvariables ${kprvariables_PART_SRCS})
+add_library(kprvariables MODULE ${kprvariables_PART_SRCS})
+
+kcoreaddons_desktop_to_json(kprvariables kprvariables.desktop)
 
 target_link_libraries(
     kprvariables
     kotextlayout
     calligrastageprivate
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
+    
+    Qt5::Core
     )
 
-install(TARGETS kprvariables  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES kprvariables.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS kprvariables  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

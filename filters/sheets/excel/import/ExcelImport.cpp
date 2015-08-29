@@ -22,7 +22,6 @@
 */
 
 #include "ExcelImport.h"
-#include <ExcelImport.moc>
 
 #include <QString>
 #include <QDate>
@@ -85,8 +84,7 @@
 // using m_chain.outputDocument() to write the spreadsheet to.
 //#define OUTPUT_AS_ODS_FILE
 
-K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExcelImportFactory, "calligra_filter_xls2ods.json", registerPlugin<ExcelImport>();)
 
 static const qreal SIDEWINDERPROGRESS = 40.0;
 static const qreal ODFPROGRESS = 40.0;
@@ -1440,3 +1438,5 @@ void ExcelImport::slotSigProgress(int progress)
 {
     emit sigProgress(int(SIDEWINDERPROGRESS/100.0 * progress + 0.5));
 }
+
+#include "ExcelImport.moc"

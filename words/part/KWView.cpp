@@ -103,10 +103,12 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
+#include <k4aboutdata.h>
 
 #include <limits>
 
@@ -131,7 +133,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    setComponentData(KWFactory::componentData());
+    setComponentName(KWFactory::componentData().componentName(), KWFactory::aboutData()->programName());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
@@ -270,7 +272,7 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    KAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    QAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
@@ -609,7 +611,7 @@ void KWView::formatPage()
         if (item)
             dia->setCurrentPage(item);
     }
-    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
+    connect(dia, SIGNAL(finished(int)), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
 }
 
@@ -1022,7 +1024,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
 #ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem basicitem, const QString &xmlid)
 {
-    hKoRdfSemanticItem item(basicitem);
+    hKoRdfSemanticItem item(static_cast<KoRdfSemanticItem *>(basicitem.data()));
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {

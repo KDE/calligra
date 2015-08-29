@@ -99,12 +99,12 @@ QVariant WorkPackageModel::transmitionTime( const WorkPackage *wp, int role ) co
     }
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( wp->transmitionTime() );
+            return KLocale::global()->formatDateTime( wp->transmitionTime() );
         case Qt::EditRole:
             return wp->transmitionTime();
         case Qt::ToolTipRole: {
             int sts = wp->transmitionStatus();
-            QString t = KGlobal::locale()->formatDateTime( wp->transmitionTime(), KLocale::LongDate, KLocale::TimeZone );
+            QString t = KLocale::global()->formatDateTime( wp->transmitionTime(), KLocale::LongDate, KLocale::TimeZone );
             if ( sts == WorkPackage::TS_Send ) {
                 return i18n( "Work package sent at: %1", t );
             }

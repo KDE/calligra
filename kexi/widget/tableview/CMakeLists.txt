@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs   )
 
 
 ########### next target ###############
@@ -28,7 +28,7 @@ set(kexidatatable_LIB_SRCS
 )
 
 
-kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
+add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
 target_link_libraries(
     kexidatatable
@@ -36,10 +36,11 @@ target_link_libraries(
     kexicore
     kexiutils
     kexiguiutils
-    ${KOPROPERTY_LIBS}
-    kexidb
-    ${CALLIGRADB_LIBS}
-    ${KDE4_KIO_LIBS}
+
+    Predicate
+    KProperty
+
+    KF5::KIOWidgets
 )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

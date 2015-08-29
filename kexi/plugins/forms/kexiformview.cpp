@@ -52,8 +52,8 @@
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
 
-#include <koproperty/Set.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KProperty>
 
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
@@ -582,7 +582,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KoProperty::Set* KexiFormView::propertySet() {
+KPropertySet* KexiFormView::propertySet() {
     return &d->form->propertySet();
 }
 
@@ -1050,7 +1050,7 @@ void
 KexiFormView::updateDataSourcePage()
 {
     if (viewMode() == Kexi::DesignViewMode) {
-        KoProperty::Set &set = form()->propertySet();
+        KPropertySet &set = form()->propertySet();
         const QString dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
         const QString dataSource = set.propertyValue("dataSource").toString();
         formPart()->dataSourcePage()->setFormDataSource(dataSourcePartClass, dataSource);

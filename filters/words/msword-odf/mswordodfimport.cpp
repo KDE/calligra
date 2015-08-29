@@ -44,8 +44,8 @@
 //function prototypes of local functions
 bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
 
-K_PLUGIN_FACTORY(MSWordOdfImportFactory, registerPlugin<MSWordOdfImport>();)
-K_EXPORT_PLUGIN(MSWordOdfImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(MSWordOdfImportFactory, "calligra_filter_doc2odt.json",
+                           registerPlugin<MSWordOdfImport>();)
 
 
 MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList&)

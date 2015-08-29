@@ -69,7 +69,10 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWChangePageStyleCommand.cpp
     commands/KWShapeCreateCommand.cpp
+)
 
+if (SHOULD_BUILD_APP_AUTHOR)
+set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 ##calligra author specific additions
     author/CAuFactory.cpp
     author/CAuView.cpp
@@ -78,19 +81,26 @@ set(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.cpp
     author/CAuDocument.cpp
 )
+endif()
 
+if( SHOULD_BUILD_FEATURE_RDF )
+# TODO: depends hard on Soprano
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
     dockers/KWDebugDocker.cpp
     dockers/KWDebugDockerFactory.cpp
     dockers/KWDebugWidget.cpp
 )
+endif()
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+    )
 
+    if (SHOULD_BUILD_APP_AUTHOR)
+    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         author/dockers/CAuOutlinerDocker.cpp
         author/dockers/CAuOutlinerDockerFactory.cpp
         author/dockers/CAuOutlinerWidget.cpp
@@ -105,9 +115,10 @@ if( SHOULD_BUILD_FEATURE_RDF )
 
         author/metadata/CAuSemanticItemBase.cpp
     )
+    endif()
 endif()
 
-kde4_add_ui_files(wordsprivate_LIB_SRCS
+ki18n_wrap_ui(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWRunAroundProperties.ui
     dialogs/KWAnchoringProperties.ui
@@ -122,7 +133,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.ui
 )
 if( SHOULD_BUILD_FEATURE_RDF )
-    kde4_add_ui_files(wordsprivate_LIB_SRCS
+    ki18n_wrap_ui(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
         author/metadata/CAuSectionRdfEditWidget.ui
         author/metadata/CAuActorRdfEditWidget.ui
@@ -130,7 +141,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 
-kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
+add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain kotextlayout)
 if( SHOULD_BUILD_FEATURE_RDF )
@@ -148,19 +159,18 @@ install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 
-kde4_add_plugin(wordspart ${wordspart_PART_SRCS})
+add_library(wordspart MODULE ${wordspart_PART_SRCS})
 
+kcoreaddons_desktop_to_json(wordspart wordspart.desktop)
 
+target_link_libraries(wordspart   wordsprivate )
 
-target_link_libraries(wordspart ${KDE4_KDECORE_LIBS}  wordsprivate )
-
-install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wordspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
-install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES words.rc words_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/words)
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
@@ -195,11 +205,13 @@ if (SHOULD_BUILD_APP_AUTHOR)
 
 set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
 
-kde4_add_plugin(authorpart ${authorpart_PART_SRCS})
+add_library(authorpart MODULE ${authorpart_PART_SRCS})
 
-target_link_libraries(authorpart ${KDE4_KDECORE_LIBS}  wordsprivate )
+kcoreaddons_desktop_to_json(authorpart author/authorpart.desktop)
 
-install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(authorpart   wordsprivate )
+
+install(TARGETS authorpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### Author exe ###############
 
@@ -207,7 +219,7 @@ set(author_KDEINIT_SRCS author/main.cpp )
 
 #kde4_add_app_icon(author_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/author/hi*-app-calligraauthor.png")
 
-kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
+kf5_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
@@ -215,7 +227,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
 endif ()
 
-target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_calligraauthor   komain )
 
 install(TARGETS kdeinit_calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -226,7 +238,6 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
-install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

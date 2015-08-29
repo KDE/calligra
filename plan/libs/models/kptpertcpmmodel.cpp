@@ -166,7 +166,7 @@ QVariant CriticalPathItemModel::duration( int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration v = m_project->duration( m_manager->scheduleId() );
-            return QVariant(KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) ));
+            return QVariant(KLocale::global()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) ));
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -185,7 +185,7 @@ QVariant CriticalPathItemModel::variance( int role ) const
                 long id = m_manager->scheduleId();
                 v += n->variance( id, presentationUnit( m_project->duration( id ) ) );
             }
-            return KGlobal::locale()->formatNumber( v, 1 );
+            return KLocale::global()->formatNumber( v, 1 );
             break;
         }
         case Qt::EditRole: {
@@ -580,7 +580,7 @@ QVariant PertResultItemModel::earlyStart( const Task *node, int role ) const
         case Qt::DisplayRole:
             return node->earlyStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->earlyStart( m_manager->scheduleId() ).date() );
+            return KLocale::global()->formatDate( node->earlyStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -595,7 +595,7 @@ QVariant PertResultItemModel::earlyFinish( const Task *node, int role ) const
         case Qt::DisplayRole:
             return node->earlyFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->earlyFinish( m_manager->scheduleId() ).date() );
+            return KLocale::global()->formatDate( node->earlyFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -610,7 +610,7 @@ QVariant PertResultItemModel::lateStart( const Task *node, int role ) const
         case Qt::DisplayRole:
             return node->lateStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->lateStart( m_manager->scheduleId() ).date() );
+            return KLocale::global()->formatDate( node->lateStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
             break;
         case Qt::StatusTipRole:
@@ -626,7 +626,7 @@ QVariant PertResultItemModel::lateFinish( const Task *node, int role ) const
         case Qt::DisplayRole:
             return node->lateFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->lateFinish( m_manager->scheduleId() ).date() );
+            return KLocale::global()->formatDate( node->lateFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
             break;
         case Qt::StatusTipRole:

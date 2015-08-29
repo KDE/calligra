@@ -1,6 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
   ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-  ${KDE4_INCLUDES}
+  
 )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
@@ -42,18 +42,17 @@ set(keximigrate_LIB_SRCS AlterSchemaTableModel.cpp
    importoptionsdlg.cpp
    AlterSchemaWidget.cpp)
 
-kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
+add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 
 target_link_libraries(
     keximigrate
     kexicore
-    kexidb
     kexiextendedwidgets
     kexiutils
-    ${CALLIGRADB_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
+
+    Predicate
+
+    Qt5::Gui
     )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

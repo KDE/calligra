@@ -7,7 +7,7 @@ endif ()
 
 set(MDBTOOLS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/kexi/migration/mdb/3rdparty/mdbtools")
 
-include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${MDBTOOLS_SOURCE_DIR}/include )
+include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi  ${MDBTOOLS_SOURCE_DIR}/include )
 
 include(FindIconv)
 if(ICONV_FOUND)
@@ -38,7 +38,7 @@ ${MDBTOOLS_SOURCE_DIR}/libmdb/write.c
 )
 
 
-kde4_add_plugin(keximigrate_mdb ${keximigrate_mdbmigrate_PART_SRCS})
+add_library(keximigrate_mdb MODULE ${keximigrate_mdbmigrate_PART_SRCS})
 
 
 
@@ -46,12 +46,12 @@ target_link_libraries(keximigrate_mdb
 ${GLIB2_LIBRARIES}
 ${ICONV_LIBRARIES}
 keximigrate
-kexidb
 kexiutils
-${CALLIGRADB_LIBS}
+
+Predicate
 )
 
-install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS keximigrate_mdb  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

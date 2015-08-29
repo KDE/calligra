@@ -21,15 +21,15 @@
 #define KEXICUSTOMPROPFACTORY_H
 
 #include <kexi_export.h>
-#include <koproperty/Factory.h>
+#include <KPropertyFactory>
 
-//! Kexi-specific custom property factory for KoProperty library
-class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::Factory
+//! Kexi-specific custom property factory for the KProperty library
+class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KPropertyFactory
 {
 public:
     enum PropertyType {
-        PixmapId = KoProperty::UserDefined + 0,  //!< Shared Kexi pixmap
-        Identifier = KoProperty::UserDefined + 1 //!< string allowing nonempty identifiers
+        PixmapId = KProperty::UserDefined + 0,  //!< Shared Kexi pixmap
+        Identifier = KProperty::UserDefined + 1 //!< string allowing nonempty identifiers
     };
 
     //! Called once to register all property and editor types provided by this factory.

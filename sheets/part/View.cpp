@@ -64,12 +64,14 @@
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
+#include <k4aboutdata.h>
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
+#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 
@@ -437,7 +439,7 @@ void View::Private::initActions()
     actions->preference->setToolTip(i18n("Set various Calligra Sheets options"));
     ac->addAction("preference", actions->preference);
 
-    KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
+    QAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
     ac->addAction("configureNotifications", notifyAction);
 
     // -- calculation actions --
@@ -559,7 +561,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-    setComponentData(Factory::global());
+    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
     setXMLFile("sheets.rc");
 
     // GUI Initializations
@@ -651,6 +653,7 @@ View::~View()
     delete d->scrollTimer;
 
     delete d->selection;
+    d->selection = 0;
     delete d->calcLabel;
     delete d->actions;
     delete d->zoomHandler;
@@ -812,7 +815,7 @@ void View::initView()
     d->viewLayout->setColumnMinimumWidth(2, extent);
     d->viewLayout->setRowMinimumHeight(3, extent);
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel(sb) : 0;
     if (d->calcLabel) {
         d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -967,7 +970,7 @@ void View::initConfig()
     doc()->map()->settings()->setShowColumnHeader(parameterGroup.readEntry("Column Header", true));
     doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
     if (!configFromDoc)
-        doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode", (int)(KGlobalSettings::CompletionAuto)));
+        doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode", (int)(KCompletion::CompletionAuto)));
     doc()->map()->settings()->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
     doc()->map()->settings()->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
     doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));

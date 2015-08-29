@@ -1,24 +1,20 @@
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core   )
 
 
 ########### next target ###############
 
-set(karbon_flattenpathplugin_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.cpp )
+set(karbon_flattenpath_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.cpp )
 
 
-kde4_add_plugin(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
+add_library(karbon_flattenpath MODULE ${karbon_flattenpath_PART_SRCS})
 
+kcoreaddons_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
 
+target_link_libraries(karbon_flattenpath karboncommon)
 
-target_link_libraries(karbon_flattenpathplugin karboncommon)
-
-install(TARGETS karbon_flattenpathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_flattenpath  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  FlattenPathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
-install( FILES  karbonflattenpathplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
-
+install( FILES  FlattenPathPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

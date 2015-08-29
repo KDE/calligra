@@ -32,11 +32,12 @@
 #include <QWidget>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <k4aboutdata.h>
 
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
-        setComponentData(CAuFactory::componentData());
+        setComponentName(CAuFactory::componentData().componentName(), CAuFactory::aboutData()->programName());
         setXMLFile("author.rc");
 
         setupActions();

@@ -4,7 +4,7 @@ include_directories(  ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/kexiutils
 ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES}   )
 
 set(QT_USE_QTUITOOLS true)
 
@@ -39,29 +39,30 @@ startup/KexiPasswordPage.cpp
 
 )
 
-kde4_add_ui_files(keximain_LIB_SRCS
+ki18n_wrap_ui(keximain_LIB_SRCS
   kexifinddialog.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
 )
 
-kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
+add_library(keximain SHARED ${keximain_LIB_SRCS})
 
 target_link_libraries(
     keximain
-    kexidb
     kexicore
     kexiutils
-    ${KOPROPERTY_LIBS}
-    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
     keximigrate
 #TODO:    ${KDE4_KNEWSTUFF_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${QT_QTUITOOLS_LIBRARY}
+
+    Predicate
+    KProperty
+
+    KF5::KIOWidgets
+    
+    Qt5::UiTools
 )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

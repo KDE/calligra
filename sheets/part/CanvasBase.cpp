@@ -513,7 +513,7 @@ bool CanvasBase::dragEnter(const QMimeData* mimeData)
     return false;
 }
 
-bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
+bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source)
 {
     register Sheet * const sheet = activeSheet();
     if (!sheet) {
@@ -594,7 +594,7 @@ void CanvasBase::dragLeave()
 {
 }
 
-bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
+bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source)
 {
     register Sheet * const sheet = activeSheet();
     // FIXME Sheet protection: Not all cells have to be protected.

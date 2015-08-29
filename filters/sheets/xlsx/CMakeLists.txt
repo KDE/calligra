@@ -24,7 +24,8 @@ set(xlsx2ods_PART_SRCS
     FormulaParser.cpp
 )
 
-kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
+add_library(calligra_filter_xlsx2ods MODULE ${xlsx2ods_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_filter_xlsx2ods calligra_filter_xlsx2ods.desktop)
 
 target_link_libraries(
     calligra_filter_xlsx2ods
@@ -36,15 +37,9 @@ target_link_libraries(
     calligrasheetscommon
 )
 
-install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_xlsx2ods.desktop
-#  calligra_filter_ods2xlsx.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -58,4 +53,4 @@ set(TestFormulaParser_SRCS
 )
 
 kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon Qt5::Test)

@@ -105,8 +105,8 @@
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
 #include <widget/KexiDBPasswordDialog.h>
-#include <koproperty/EditorView.h>
-#include <koproperty/Set.h>
+#include <KPropertyEditorView>
+#include <KPropertySet>
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
@@ -319,7 +319,7 @@ int KexiMainWindow::create(int &argc, char *argv[], const KAboutData &aboutData)
     KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
-    KGlobal::locale()->insertCatalog("koproperty");
+    //! @todo KGlobal::locale()->insertCatalog("kproperty");
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
@@ -3478,16 +3478,16 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         return;
     }
     if (d->propEditor) {
-        KoProperty::Set *newSet = _currentWindow ? _currentWindow->propertySet() : 0;
-        if (!newSet || (force || static_cast<KoProperty::Set*>(d->propertySet) != newSet)) {
+        KPropertySet *newSet = _currentWindow ? _currentWindow->propertySet() : 0;
+        if (!newSet || (force || static_cast<KPropertySet*>(d->propertySet) != newSet)) {
             d->propertySet = newSet;
             if (preservePrevSelection || force) {
-                KoProperty::EditorView::SetOptions options = KoProperty::EditorView::ExpandChildItems;
+                KPropertyEditorView::SetOptions options = KPropertyEditorView::ExpandChildItems;
                 if (preservePrevSelection) {
-                    options |= KoProperty::EditorView::PreservePreviousSelection;
+                    options |= KPropertyEditorView::PreservePreviousSelection;
                 }
                 if (sortedProperties) {
-                    options |= KoProperty::EditorView::AlphabeticalOrder;
+                    options |= KPropertyEditorView::AlphabeticalOrder;
                 }
 
                 if (propertyToSelect.isEmpty()) {

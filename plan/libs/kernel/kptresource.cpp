@@ -837,7 +837,7 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
     //kDebug(planDbg())<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     Q_UNUSED(locale);
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
@@ -865,7 +865,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 
 void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> &required) {
     //kDebug(planDbg())<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     if (!node->startTime.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Node start time is not valid" ) );
         return;
@@ -2413,7 +2413,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         ns->logDebug( "Resources: " + ( nl.isEmpty() ? QString( "None" ) : nl.join( ", " ) ) );
     }
 #endif
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale = KLocale::global();
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;

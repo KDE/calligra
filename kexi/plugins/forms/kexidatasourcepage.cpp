@@ -40,8 +40,8 @@
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
-#include <koproperty/Property.h>
-#include <koproperty/Utils.h>
+#include <KProperty>
+#include <KPropertyUtils>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : KexiPropertyPaneViewBase(parent)
@@ -352,7 +352,7 @@ void KexiDataSourcePage::setFormDataSource(const QString& partClass, const QStri
 
 #define KexiDataSourcePage_FADE 1
 
-void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
+void KexiDataSourcePage::assignPropertySet(KPropertySet* propertySet)
 {
     QString objectName;
     if (propertySet)

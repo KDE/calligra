@@ -29,7 +29,7 @@
 #include "kptnode.h"
 #include "kptganttitemdelegate.h"
 
-#include "kdganttglobal.h"
+#include <KGanttGlobal>
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -278,7 +278,7 @@ private:
     GanttItemDelegate m_delegate;
     bool m_editable;
     int m_nodetype;
-    KDGantt::ItemType m_itemtype;
+    KGantt::ItemType m_itemtype;
 };
 
 //-----------------------

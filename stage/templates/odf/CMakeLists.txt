@@ -74,4 +74,27 @@ install( FILES ${otp_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/
 install( FILES ${thumbnail_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/.thumbnail)
 install( FILES .directory DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/)
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/stage/icons )
+ecm_install_icons( ICONS
+    64-actions-blue_orange_vector.png
+    64-actions-burning_desire.png
+    64-actions-business.png
+    64-actions-curious_penguin.png
+    64-actions-flood_light.png
+    64-actions-kde_events.png
+    64-actions-rounded_square.png
+    64-actions-simple_waves.png
+    64-actions-skyline_monotone.png
+    64-actions-skyline_monotone_wide.png
+    64-actions-skyline_morning.png
+    64-actions-skyline_morning_wide.png
+    64-actions-skyline_night.png
+    64-actions-skyline_night_wide.png
+    64-actions-strange_far_hills.png
+    sc-actions-cohere-blue.svgz
+    sc-actions-cohere-gold.svgz
+    sc-actions-cohere-magenta.svgz
+    sc-actions-cohere-red.svgz
+
+    DESTINATION ${DATA_INSTALL_DIR}/stage/icons
+    THEME hicolor
+)

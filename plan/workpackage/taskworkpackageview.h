@@ -26,7 +26,8 @@
 
 #include "kptviewbase.h"
 #include "kptganttview.h"
-#include "kdganttview.h"
+
+#include <KGanttView>
 
 #include <QSplitter>
 
@@ -173,7 +174,7 @@ public:
 
     explicit GanttItemDelegate(QObject *parent = 0);
 
-    void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+    void paintGanttItem( QPainter* painter, const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
     QString toolTip( const QModelIndex &idx ) const;
 
 protected:
@@ -220,7 +221,7 @@ protected:
     Project *m_project;
     GanttItemDelegate *m_ganttdelegate;
     TaskWorkPackageModel *m_itemmodel;
-    KDGantt::TreeViewRowController *m_rowController;
+    KGantt::TreeViewRowController *m_rowController;
 };
 
 class KPLATOWORK_EXPORT TaskWPGanttView : public AbstractView

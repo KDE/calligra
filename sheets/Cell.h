@@ -653,7 +653,7 @@ inline uint qHash(const Cell& cell)
 } // namespace Calligra
 
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
-
+Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
 
 /***************************************************************************
   kDebug support

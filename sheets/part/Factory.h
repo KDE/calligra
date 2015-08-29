@@ -24,7 +24,8 @@
 
 #include "calligra_sheets_export.h"
 
-class KAboutData;
+class K4AboutData;
+class KComponentData;
 
 namespace Calligra
 {
@@ -35,19 +36,19 @@ class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit Factory(QObject* parent = 0);
+    explicit Factory();
     ~Factory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &global();
 
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+    // _Creates_ a K4AboutData but doesn't keep ownership
+    static K4AboutData* aboutData();
 
 private:
     static KComponentData* s_global;
-    static KAboutData* s_aboutData;
+    static K4AboutData* s_aboutData;
 };
 
 } // namespace Sheets

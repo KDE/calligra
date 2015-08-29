@@ -62,8 +62,8 @@
 // is slower then using the Calligra Words API direct.
 //#define OUTPUT_AS_ODT_FILE
 
-K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(AsciiImportFactory, "calligra_filter_ascii2words.json",
+                           registerPlugin<AsciiImport>();)
 
 bool checkEncoding(QTextCodec *codec, QByteArray &data)
 {
@@ -340,3 +340,5 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include "AsciiImport.moc"

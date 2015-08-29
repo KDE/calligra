@@ -21,6 +21,7 @@
 #define EXPORTDIALOG_H
 
 #include <kdialog.h>
+class KUrl;
 
 #include <ui_exportwidget.h>
 

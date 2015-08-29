@@ -346,4 +346,3 @@ void KarbonPatternTool::patternChanged()
     }
 }
 
-#include "KarbonPatternTool.moc"

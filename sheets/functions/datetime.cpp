@@ -78,7 +78,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("datetime", DateTimeModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreaddatetimemodule.json", DateTimeModule)
 
 
 DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)
@@ -581,7 +581,7 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
     int m = calc->conv()->asInteger(args[1]).asInteger();
     int s = calc->conv()->asInteger(args[2]).asInteger();
 
-    QTime res;
+    QTime res(0, 0);
     res = res.addSecs(60 * 60 * h);
     res = res.addSecs(60 * m);
     res = res.addSecs(s);
@@ -1133,4 +1133,4 @@ Value func_date2unix(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(static_cast<int>(datetime.toTime_t()));
 }
 
-#include "DateTimeModule.moc"
+#include "datetime.moc"

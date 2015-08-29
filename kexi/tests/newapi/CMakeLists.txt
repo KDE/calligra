@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi  )
 
 # temp
 #ADD_DEFINITIONS( -DNO_GUI=1 )
@@ -8,6 +8,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} )
 
 set(kexidbtest_SRCS main.cpp )
 
-kde4_add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
+add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
 
-target_link_libraries(kexidbtest ${KDE4_KDEUI_LIBS} kexidb ${CALLIGRADB_LIBS} kexiextendedwidgets kexidatatable kexicore kexidataviewcommon )
+target_link_libraries(kexidbtest Predicate kexiextendedwidgets kexidatatable kexicore kexidataviewcommon)

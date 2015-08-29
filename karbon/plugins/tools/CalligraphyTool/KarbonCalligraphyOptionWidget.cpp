@@ -188,7 +188,7 @@ void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
         return;
     kDebug(38000) << "trying profile" << name;
     // write the new profile in the config file
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
     KConfigGroup generalGroup(&config, "General");
     generalGroup.writeEntry("profile", name);
     config.sync();
@@ -361,7 +361,7 @@ void KarbonCalligraphyOptionWidget::createConnections()
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
 {
     // check if the profiles where already added
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
     KConfigGroup generalGroup(&config, "General");
 
     if (generalGroup.readEntry("defaultProfilesAdded", false))
@@ -402,7 +402,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
 
 void KarbonCalligraphyOptionWidget::loadProfiles()
 {
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
 
     // load profiles as long as they are present
     int i = 0;
@@ -443,7 +443,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
 
 void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 {
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
     KConfigGroup generalGroup(&config, "General");
     QString currentProfile = generalGroup.readEntry("profile", QString());
     kDebug(38000) << currentProfile;
@@ -515,7 +515,7 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
         kDebug(38000) << "new at" << pos << m_comboBox->itemText(pos) << name;
     }
 
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
     QString str = "Profile" + QString::number(profile->index);
     KConfigGroup profileGroup(&config, str);
 
@@ -551,7 +551,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     if (index < 0) return;   // no such profile
 
     // remove the file from the config file
-    KConfig config(KGlobal::mainComponent(), RCFILENAME);
+    KConfig config(RCFILENAME);
     int deletedIndex = m_profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number(deletedIndex);
     kDebug(38000) << deletedGroup;

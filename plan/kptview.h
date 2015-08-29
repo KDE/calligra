@@ -44,6 +44,7 @@ class KToggleAction;
 class QLabel;
 class KConfigSkeleton;
 class KConfigSkeletonItem;
+class KUrl;
 
 class KoView;
 
@@ -286,7 +287,7 @@ protected Q_SLOTS:
     void slotMailWorkpackage( Node *node, Resource *resource = 0 );
     void slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource = 0 );
 
-    void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
+    void slotOpenUrlRequest( HtmlView *v, const QUrl &url );
 
     void slotProjectCalculated( ScheduleManager *sm );
 

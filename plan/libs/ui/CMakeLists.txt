@@ -1,9 +1,6 @@
 
 
 include_directories(
-    ${KDCHART_INCLUDES}
-    ${KDGANTT_INCLUDES}
-
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
@@ -26,11 +23,12 @@ include_directories(
 ########### KPlato private library ###############
 
 set(kplatoui_LIB_SRCS
-    reports/reportview.cpp
-    reports/reportdata.cpp
-    reports/reportsourceeditor.cpp
-    reports/reportscripts.cpp
-    reports/reportexportpanel.cpp
+# QT5TODO: reenable reports
+#     reports/reportview.cpp
+#     reports/reportdata.cpp
+#     reports/reportsourceeditor.cpp
+#     reports/reportscripts.cpp
+#     reports/reportexportpanel.cpp
 
     kptganttitemdelegate.cpp
 
@@ -88,13 +86,14 @@ set(kplatoui_LIB_SRCS
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
 )
-kde4_add_ui_files(kplatoui_LIB_SRCS
-    reports/reportsourceeditor.ui
-    reports/reportnavigator.ui
-    reports/reportexportpanel.ui
-    reports/reportsectionswidget.ui
-    reports/reportgroupsectionswidget.ui
-    reports/reporttoolswidget.ui
+ki18n_wrap_ui(kplatoui_LIB_SRCS
+# QT5TODO: reenable reports
+#     reports/reportsourceeditor.ui
+#     reports/reportnavigator.ui
+#     reports/reportexportpanel.ui
+#     reports/reportsectionswidget.ui
+#     reports/reportgroupsectionswidget.ui
+#     reports/reporttoolswidget.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -134,10 +133,14 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     locale/localemon.ui
 )
 
-kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
+add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
-set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
-target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} calligrakdgantt ${KDE4_KHTML_LIBS} )
+# QT5TODO: reenable reports
+# set(KPLATO_REPORTS_LIBS KProperty KReport)
+target_link_libraries(kplatoui  ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels KChart KGantt KF5::KHtml )
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(kplatoui KF5::AkonadiContact)
+endif()
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

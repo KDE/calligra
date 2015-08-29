@@ -11,8 +11,6 @@ else()
 endif()
 
 include_directories(
-    ${QT_INCLUDES}
-    ${KDE4_INCLUDE_DIR}
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -25,19 +23,20 @@ include_directories(
 add_subdirectory( common )
 add_subdirectory( ui )
 add_subdirectory( plugins )
+add_subdirectory( stencils )
 add_subdirectory( data )
-add_subdirectory( pics )
 add_subdirectory( templates )
 
 ########### next target ###############
 
 set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
-kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
+add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
+kcoreaddons_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbonpart.desktop")
 
 target_link_libraries(karbonpart karbonui)
 
-install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbonpart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -47,19 +46,25 @@ endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" )
-kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
+file(GLOB karbon_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/action/*-actions-*.png")
+ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${KDE_INSTALL_DATADIR}/karbon/icons)
 
-if (Q_WS_MAC)
+file(GLOB karbon_app_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakarbon.png")
+ecm_add_app_icon(karbon_KDEINIT_SRCS ICONS ${karbon_app_icons})
+ecm_install_icons(ICONS ${karbon_app_icons} DESTINATION ${KDE_INSTALL_ICONDIR})
+
+kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
+
+if (Q_OS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
-   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
-endif ()
+   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
+endif()
 
 target_link_libraries(kdeinit_karbon karbonui)
 
-install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(karbon kdeinit_karbon)
-install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

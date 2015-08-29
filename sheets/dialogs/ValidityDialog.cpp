@@ -59,10 +59,10 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
 {
     setFaceType(Tabbed);
-    setCaption(i18n("Validity"));
+    setWindowTitle(i18n("Validity"));
     setModal(true);
-    setButtons(Ok | Cancel | User1);
-    setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
+
+    QPushButton *clearAllButton = buttonBox()->addButton(i18n("Clear &All"), QDialogButtonBox::ActionRole);
 
     m_selection = selection;
 
@@ -212,8 +212,8 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     connect(choose, SIGNAL(activated(int)), this, SLOT(changeIndexCond(int)));
     connect(chooseType, SIGNAL(activated(int)), this, SLOT(changeIndexType(int)));
-    connect(this, SIGNAL(okClicked()), SLOT(OkPressed()));
-    connect(this, SIGNAL(user1Clicked()), SLOT(clearAllPressed()));
+    connect(this, SIGNAL(accepted()), SLOT(OkPressed()));
+    connect(clearAllButton, SIGNAL(clicked(bool)), SLOT(clearAllPressed()));
 
     init();
 }

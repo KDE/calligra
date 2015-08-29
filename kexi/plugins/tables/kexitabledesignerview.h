@@ -20,7 +20,7 @@
 #ifndef KEXITABLEDESIGNERINTERVIEW_H
 #define KEXITABLEDESIGNERINTERVIEW_H
 
-#include <koproperty/Property.h>
+#include <KProperty>
 #include <kexidb/alter.h>
 #include <core/kexitabledesignerinterface.h>
 
@@ -34,10 +34,7 @@ class RecordData;
 class KexiTableDesignerViewPrivate;
 class KUndo2Command;
 
-namespace KoProperty
-{
-class Set;
-}
+class KPropertySet;
 
 namespace KexiTableDesignerCommands
 {
@@ -85,7 +82,7 @@ public:
     /*! Inserts a new \a field for \a row.
      Property set is also created. \a set will be deeply-copied into the new set.
      Used by InsertFieldCommand to insert a new field. */
-    virtual void insertField(int row, KoProperty::Set& set, bool addCommand = false);
+    virtual void insertField(int row, KPropertySet& set, bool addCommand = false);
 
     /*! Inserts a new empty row at position \a row.
      Used by RemoveFieldCommand as a part of undo inserting a new field;
@@ -102,13 +99,13 @@ public:
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int row,
                                            const QByteArray& propertyName, const QVariant& newValue,
-                                           KoProperty::Property::ListData* const listData, bool addCommand);
+                                           KProperty::ListData* const listData, bool addCommand);
 
     /*! Changes property \a propertyName to \a newValue.
      Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
      Used by ChangeFieldPropertyCommand to change field's property. */
     void changeFieldProperty(int fieldUID, const QByteArray& propertyName,
-                             const QVariant& newValue, KoProperty::Property::ListData* const listData = 0,
+                             const QVariant& newValue, KProperty::ListData* const listData = 0,
                              bool addCommand = false);
 
     /*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
@@ -116,7 +113,7 @@ public:
     void changePropertyVisibility(int fieldUID, const QByteArray& propertyName, bool visible);
 
     /*! Builds table field's schema by looking at the \a set. */
-    KexiDB::Field * buildField(const KoProperty::Set &set) const;
+    KexiDB::Field * buildField(const KPropertySet &set) const;
 
     /*! Creates temporary table for the current design and returns debug string for it. */
     virtual QString debugStringForCurrentTableSchema(tristate& result);
@@ -155,7 +152,7 @@ protected Q_SLOTS:
 
     /*! Called after any property has been changed in the current property set,
      to perform some actions (like updating other dependent properties) */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
     /*! Toggles primary key for currently selected field.
      Does nothing for empty row. */
@@ -180,7 +177,7 @@ protected:
      The property set will be asigned to \a row, and owned by this dialog.
      If \a newOne is true, the property set will be marked as newly created.
      \return newly created property set. */
-    KoProperty::Set* createPropertySet(int row, const KexiDB::Field& field, bool newOne = false);
+    KPropertySet* createPropertySet(int row, const KexiDB::Field& field, bool newOne = false);
 
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
@@ -188,7 +185,7 @@ protected:
 
     /*! \return property set associated with currently selected row (i.e. field)
      or 0 if current row is empty. */
-    virtual KoProperty::Set *propertySet();
+    virtual KPropertySet *propertySet();
 
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
@@ -224,7 +221,7 @@ protected:
      and deselects it from previous pkey's row.
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
-    void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
+    void switchPrimaryKey(KPropertySet &propertySet, bool set, bool aWasPKey = false,
                           KexiTableDesignerCommands::Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
@@ -245,7 +242,7 @@ protected:
     /*! Inserts a new \a field for \a row.
      Property set is also created. If \a set is not 0 (the default),
      it will be copied into the new set. Used by insertField(). */
-    void insertFieldInternal(int row, KoProperty::Set* set, const QString& caption, bool addCommand);
+    void insertFieldInternal(int row, KPropertySet* set, const QString& caption, bool addCommand);
 
     //! Reimplemented to pass the information also to the "Lookup" tab
     virtual void propertySetSwitched();

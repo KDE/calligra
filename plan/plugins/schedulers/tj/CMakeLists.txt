@@ -1,6 +1,6 @@
 
 set(LIBTJ_INCLUDE_DIR taskjuggler)
-include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel ${KDE4_INCLUDES} )
+include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
 
 #add_subdirectory( taskjuggler )
 add_subdirectory( tests )
@@ -34,7 +34,8 @@ set ( TJScheduler_SRCS
     taskjuggler/Interval.cpp
 )
 
-kde4_add_plugin( plantjscheduler SHARED ${TJScheduler_SRCS} )
+add_library(plantjscheduler MODULE ${TJScheduler_SRCS} )
+kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
 
 target_link_libraries(
     plantjscheduler
@@ -45,8 +46,4 @@ target_link_libraries(
 
 set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )
 
-install( TARGETS plantjscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-########### install files ###############
-
-install( FILES plantjscheduler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install( TARGETS plantjscheduler DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

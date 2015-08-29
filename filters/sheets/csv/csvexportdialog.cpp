@@ -25,6 +25,7 @@
 
 #include <kcharsets.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 #include <QApplication>
 #include <QTextCodec>

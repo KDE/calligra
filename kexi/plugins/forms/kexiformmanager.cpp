@@ -43,8 +43,8 @@
 #include <formeditor/kexiactionselectiondialog.h>
 #include <formeditor/WidgetTreeWidget.h>
 
-#include <koproperty/Set.h>
-#include <koproperty/Property.h>
+#include <KPropertySet>
+#include <KProperty>
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
@@ -404,7 +404,7 @@ void KexiFormManager::setDataSourceFieldOrExpression(
     if (!formViewWidget)
         return;
     
-    KoProperty::Set& set = formViewWidget->form()->propertySet();
+    KPropertySet& set = formViewWidget->form()->propertySet();
     if (!set.contains("dataSource"))
         return;
 
@@ -511,14 +511,14 @@ void KexiFormManager::slotAssignAction()
         return;
     }
 
-    KoProperty::Set& set = form->propertySet();
+    KPropertySet& set = form->propertySet();
 
     KexiFormEventAction::ActionData data;
-    const KoProperty::Property &onClickActionProp = set.property("onClickAction");
+    const KProperty &onClickActionProp = set.property("onClickAction");
     if (!onClickActionProp.isNull())
         data.string = onClickActionProp.value().toString();
 
-    const KoProperty::Property &onClickActionOptionProp = set.property("onClickActionOption");
+    const KProperty &onClickActionOptionProp = set.property("onClickActionOption");
     if (!onClickActionOptionProp.isNull())
         data.option = onClickActionOptionProp.value().toString();
 

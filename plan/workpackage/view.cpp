@@ -53,6 +53,7 @@
 #include <ktoolinvocation.h>
 #include <kactioncollection.h>
 #include <ktemporaryfile.h>
+#include <kaction.h>
 
 #include <kmessagebox.h>
 

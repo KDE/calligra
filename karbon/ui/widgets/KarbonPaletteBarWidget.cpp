@@ -247,4 +247,3 @@ void KarbonPaletteBarWidget::updateDocumentColors()
     m_colorBar->update();
 }
 
-#include "KarbonPaletteBarWidget.moc"
