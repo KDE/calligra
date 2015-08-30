@@ -28,6 +28,8 @@
 
 #include <convert.h>
 
+#include <QtGlobal>
+
 namespace wvWare {
 
 namespace Word95 {

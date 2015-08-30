@@ -27,6 +27,8 @@
 #include <list>
 #include <stack>
 
+class QString;
+
 namespace wvWare
 {
 

@@ -22,6 +22,8 @@
 #include "word97_generated.h"
 #include "wv2_export.h"
 
+class QString;
+
 namespace wvWare
 {
 
