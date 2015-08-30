@@ -44,6 +44,7 @@ set(kplatomodels_LIB_SRCS
 )
 
 add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
+generate_export_header(kplatomodels)
 
 target_link_libraries(kplatomodels kplatokernel koodf KChart KGantt KF5::KIOWidgets Qt5::Core Qt5::Gui)
 target_link_libraries(kplatomodels kundo2)

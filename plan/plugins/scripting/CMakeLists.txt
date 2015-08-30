@@ -31,6 +31,7 @@ qt5_wrap_cpp(krossmoduleplan_PART_SRCS
 )
 
 add_library(krossmoduleplan MODULE SHARED ${krossmoduleplan_PART_SRCS})
+generate_export_header(krossmoduleplan BASE_NAME kplatoscripting)
 
 target_link_libraries(
     krossmoduleplan

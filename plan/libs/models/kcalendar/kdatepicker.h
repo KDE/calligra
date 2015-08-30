@@ -20,7 +20,7 @@
 #ifndef KPTDATEPICKER_H
 #define KPTDATEPICKER_H
 
-#include "../kplatomodels_export.h"
+#include "kplatomodels_export.h"
 
 #include "kdatetable.h"
 

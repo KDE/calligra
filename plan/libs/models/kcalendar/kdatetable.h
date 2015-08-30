@@ -20,7 +20,7 @@
 #ifndef KPTDATETBL_H
 #define KPTDATETBL_H
 
-#include "../kplatomodels_export.h"
+#include "kplatomodels_export.h"
 
 #include <QValidator>
 #include <QLineEdit>

@@ -36,6 +36,7 @@ set(kplatokernel_LIB_SRCS
 )
 
 add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
+generate_export_header(kplatokernel)
 
 target_link_libraries(kplatokernel koodf kowidgetutils kundo2 KF5::KIOWidgets Qt5::Gui)
 

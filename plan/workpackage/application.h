@@ -23,7 +23,7 @@
 #ifndef KPLATOWORK_APPLICATION_H
 #define KPLATOWORK_APPLICATION_H
 
-#include "kplatowork_export.h"
+#include "planworkapp_export.h"
 
 #include <KoMainWindow.h>
 
@@ -44,7 +44,7 @@ namespace KPlato {
 }
 
 
-class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
+class PLANWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {
     Q_OBJECT
 public:

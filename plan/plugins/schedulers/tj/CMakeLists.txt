@@ -36,6 +36,8 @@ set ( TJScheduler_SRCS
 
 add_library(plantjscheduler MODULE ${TJScheduler_SRCS} )
 kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
+# TODO: only export symbols for tests, not release
+generate_export_header(plantjscheduler BASE_NAME kplatotj)
 
 target_link_libraries(
     plantjscheduler

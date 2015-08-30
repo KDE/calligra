@@ -4,11 +4,6 @@ project(kplato)
 # set kplato debug area
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the KPLATO_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
 if (KF5AkonadiContact_FOUND)
     add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
 endif ()
@@ -19,6 +14,7 @@ endif ()
 
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
+    ${CMAKE_BINARY_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_SOURCE_DIR}/plan/libs/ui
@@ -91,6 +87,7 @@ ki18n_wrap_ui(planprivate_LIB_SRCS
 kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
+generate_export_header(planprivate BASE_NAME kplato)
 
 target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml komain)
 if(KF5AkonadiContact_FOUND)

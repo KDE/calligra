@@ -36,6 +36,7 @@ ki18n_wrap_ui(planworkfactory_LIB_SRCS
 kconfig_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
 
 add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
+generate_export_header(planworkfactory BASE_NAME kplatowork)
 
 target_link_libraries(
     planworkfactory
@@ -73,6 +74,7 @@ set(planworkapp_LIB_SRCS application.cpp )
 
 
 add_library(planworkapp  SHARED ${planworkapp_LIB_SRCS})
+generate_export_header(planworkapp)
 
 target_link_libraries(
     planworkapp

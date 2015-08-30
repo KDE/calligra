@@ -134,6 +134,7 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 )
 
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
+generate_export_header(kplatoui)
 
 # QT5TODO: reenable reports
 # set(KPLATO_REPORTS_LIBS KProperty KReport)

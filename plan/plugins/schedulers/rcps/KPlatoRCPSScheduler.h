@@ -21,8 +21,6 @@
 #ifndef KPLATORCPSSCHEDULER_H
 #define KPLATORCPSSCHEDULER_H
 
-#include "kplatorcps_export.h"
-
 #include "kptschedulerplugin.h"
 
 #include "kptdatetime.h"
