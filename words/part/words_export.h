@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef WORDS_EXPORT
-# if defined(MAKE_WORDSPRIVATE_LIB)
+# if defined(wordsprivate_EXPORTS)
 /* We are building this library */
 #  define WORDS_EXPORT KDE_EXPORT
 # else
@@ -46,7 +46,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_WORDSPRIVATE_LIB)
+# if defined(wordsprivate_EXPORTS)
 #       define WORDS_TEST_EXPORT KDE_EXPORT
 #   else
 #       define WORDS_TEST_EXPORT KDE_IMPORT

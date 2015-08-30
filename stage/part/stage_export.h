@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef STAGE_EXPORT
-# if defined(MAKE_CALLIGRASTAGEPRIVATE_LIB)
+# if defined(calligrastageprivate_EXPORTS)
    /* We are building this library */
 #  define STAGE_EXPORT KDE_EXPORT
 # else
@@ -47,7 +47,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_CALLIGRASTAGEPRIVATE_LIB)
+# if defined(calligrastageprivate_EXPORTS)
 #       define STAGE_TEST_EXPORT KDE_EXPORT
 #   else
 #       define STAGE_TEST_EXPORT KDE_IMPORT
