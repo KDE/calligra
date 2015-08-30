@@ -50,7 +50,7 @@
 
 #include <kdebug.h>
 
-class KPrPage::Private
+class Q_DECL_HIDDEN KPrPage::Private
 {
 public:
     Private( KPrPage * page, KPrDocument * document )

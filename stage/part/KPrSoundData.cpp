@@ -27,7 +27,8 @@
 #include <QIODevice>
 
 // make it a QSharedData
-class KPrSoundData::Private {
+class Q_DECL_HIDDEN KPrSoundData::Private
+{
 public:
     Private(KPrSoundCollection *c)
     : refCount(0)

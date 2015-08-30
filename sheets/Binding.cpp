@@ -32,7 +32,7 @@
 
 using namespace Calligra::Sheets;
 
-class Binding::Private : public QSharedData
+class Q_DECL_HIDDEN Binding::Private : public QSharedData
 {
 public:
     BindingModel* model;

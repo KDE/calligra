@@ -132,9 +132,10 @@ QFont KexiCommandLinkButtonPrivate::descriptionFont() const
 QRect KexiCommandLinkButtonPrivate::titleRect() const
 {
     QRect r = q->rect().adjusted(textOffset(), topMargin(), -rightMargin(), 0);
+    QFontMetrics fm(titleFont());
+    r.setHeight(fm.height());
     if (description.isEmpty())
     {
-        QFontMetrics fm(titleFont());
         r.setTop(r.top() + qMax(0, (q->icon().actualSize(q->iconSize()).height()
                  - fm.height()) / 2));
     }
@@ -155,7 +156,7 @@ int KexiCommandLinkButtonPrivate::textOffset() const
 
 int KexiCommandLinkButtonPrivate::descriptionOffset() const
 {
-    QFontMetrics fm(titleFont());
+    QFontMetrics fm(descriptionFont());
     return topMargin() + fm.height();
 }
 
@@ -326,7 +327,7 @@ void KexiCommandLinkButton::paintEvent(QPaintEvent *)
         option.palette.setColor(QPalette::ButtonText, d->currentColor);
     }
     int arrowWidth = d->isArrowVisible ? 12 : 0;
-    int textflags = Qt::TextShowMnemonic;
+    int textflags = Qt::TextShowMnemonic | Qt::AlignTop;
     if (!style()->styleHint(QStyle::SH_UnderlineShortcut, &option, this))
         textflags |= Qt::TextHideMnemonic;
 
@@ -335,7 +336,7 @@ void KexiCommandLinkButton::paintEvent(QPaintEvent *)
                     textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
 
     //Draw description
-    textflags |= Qt::TextWordWrap | Qt::ElideRight;
+    textflags = Qt::TextWordWrap | Qt::ElideRight | Qt::AlignTop;
     p.setFont(d->descriptionFont());
     p.drawItemText(d->descriptionRect().adjusted(0, 0, -arrowWidth, 0).translated(hOffset, vOffset), textflags,
                     option.palette, isEnabled(), description(), QPalette::ButtonText);

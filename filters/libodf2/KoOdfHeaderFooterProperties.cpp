@@ -37,7 +37,7 @@
 //                         private class
 
 
-class KoOdfHeaderFooterProperties::Private
+class Q_DECL_HIDDEN KoOdfHeaderFooterProperties::Private
 {
 public:
     Private() {};

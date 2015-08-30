@@ -440,173 +440,170 @@ APPLIXWORDImport::specCharfind(QChar a, QChar b) // TODO share this code with ap
 {
     QChar chr;
 
-    if ((a == 'n') && (b == 'p')) chr = 'ﬂ';
+    if ((a == 'n') && (b == 'p'))  chr = 0x00DF; // '√ü';
 
 
-    else if ((a == 'n') && (b == 'c')) chr = '“';
-    else if ((a == 'p') && (b == 'c')) chr = 'Ú';
+    else if ((a == 'n') && (b == 'c'))  chr = 0x00D2; // '√í';
+    else if ((a == 'p') && (b == 'c'))  chr = 0x00F2; // '√≤';
 
-    else if ((a == 'n') && (b == 'd')) chr = '”';
-    else if ((a == 'p') && (b == 'd')) chr = 'Û';
+    else if ((a == 'n') && (b == 'd'))  chr = 0x00D3; // '√ì';
+    else if ((a == 'p') && (b == 'd'))  chr = 0x00F3; // '√≥';
 
-    else if ((a == 'n') && (b == 'e')) chr = '‘';
-    else if ((a == 'p') && (b == 'e')) chr = 'Ù';
+    else if ((a == 'n') && (b == 'e'))  chr = 0x00D4; // '√î';
+    else if ((a == 'p') && (b == 'e'))  chr = 0x00F4; // '√¥';
 
-    else if ((a == 'n') && (b == 'f')) chr = '’';
-    else if ((a == 'p') && (b == 'f')) chr = 'ı';
+    else if ((a == 'n') && (b == 'f'))  chr = 0x00D5; // '√ï';
+    else if ((a == 'p') && (b == 'f'))  chr = 0x00F5; // '√µ';
 
-    else if ((a == 'p') && (b == 'g')) chr = 'ˆ';
-    else if ((a == 'n') && (b == 'g')) chr = '÷';
+    else if ((a == 'n') && (b == 'g'))  chr = 0x00D6; // '√ñ';
+    else if ((a == 'p') && (b == 'g'))  chr = 0x00F6; // '√∂';
 
 
 
-    else if ((a == 'n') && (b == 'j')) chr = 'Ÿ';
-    else if ((a == 'p') && (b == 'j')) chr = '˘';
+    else if ((a == 'n') && (b == 'j'))  chr = 0x00D9; // '√ô';
+    else if ((a == 'p') && (b == 'j'))  chr = 0x00F9; // '√π';
 
-    else if ((a == 'n') && (b == 'k')) chr = '⁄';
-    else if ((a == 'p') && (b == 'k')) chr = '˙';
+    else if ((a == 'n') && (b == 'k'))  chr = 0x00DA; // '√ö';
+    else if ((a == 'p') && (b == 'k'))  chr = 0x00FA; // '√∫';
 
-    else if ((a == 'n') && (b == 'l')) chr = '€';
-    else if ((a == 'p') && (b == 'l')) chr = '˚';
+    else if ((a == 'n') && (b == 'l'))  chr = 0x00DB; // '√õ';
+    else if ((a == 'p') && (b == 'l'))  chr = 0x00FB; // '√ª';
 
-    else if ((a == 'p') && (b == 'm')) chr = '¸';
-    else if ((a == 'n') && (b == 'm')) chr = '‹';
+    else if ((a == 'n') && (b == 'm'))  chr = 0x00DC; // '√ú';
+    else if ((a == 'p') && (b == 'm'))  chr = 0x00FC; // '√º';
 
 
 
-    else if ((a == 'm') && (b == 'a')) chr = '¿';
-    else if ((a == 'o') && (b == 'a')) chr = '‡';
+    else if ((a == 'm') && (b == 'a'))  chr = 0x00C0; // '√Ä';
+    else if ((a == 'o') && (b == 'a'))  chr = 0x00E0; // '√†';
 
-    else if ((a == 'm') && (b == 'b')) chr = '¡';
-    else if ((a == 'o') && (b == 'b')) chr = '·';
+    else if ((a == 'm') && (b == 'b'))  chr = 0x00C1; // '√Å';
+    else if ((a == 'o') && (b == 'b'))  chr = 0x00E1; // '√°';
 
-    else if ((a == 'm') && (b == 'c')) chr = '¬';
-    else if ((a == 'o') && (b == 'c')) chr = '‚';
+    else if ((a == 'm') && (b == 'c'))  chr = 0x00C2; // '√Ç';
+    else if ((a == 'o') && (b == 'c'))  chr = 0x00E2; // '√¢';
 
-    else if ((a == 'm') && (b == 'd')) chr = '√';
-    else if ((a == 'o') && (b == 'd')) chr = '„';
+    else if ((a == 'm') && (b == 'd'))  chr = 0x00C3; // '√É';
+    else if ((a == 'o') && (b == 'd'))  chr = 0x00E3; // '√£';
 
-    else if ((a == 'm') && (b == 'e')) chr = 'ƒ';
-    else if ((a == 'o') && (b == 'e')) chr = '‰';
+    else if ((a == 'm') && (b == 'e'))  chr = 0x00C4; // '√Ñ';
+    else if ((a == 'o') && (b == 'e'))  chr = 0x00E4; // '√§';
 
-    else if ((a == 'm') && (b == 'f')) chr = '≈';
-    else if ((a == 'o') && (b == 'f')) chr = 'Â';
+    else if ((a == 'm') && (b == 'f'))  chr = 0x00C5; // '√Ö';
+    else if ((a == 'o') && (b == 'f'))  chr = 0x00E5; // '√•';
 
-    else if ((a == 'm') && (b == 'g')) chr = '∆';
-    else if ((a == 'o') && (b == 'g')) chr = 'Ê';
+    else if ((a == 'm') && (b == 'g'))  chr = 0x00C6; // '√Ü';
+    else if ((a == 'o') && (b == 'g'))  chr = 0x00E6; // '√¶';
 
 
 
-    else if ((a == 'm') && (b == 'i')) chr = '»';
-    else if ((a == 'o') && (b == 'i')) chr = 'Ë';
+    else if ((a == 'm') && (b == 'i'))  chr = 0x00C8; // '√à';
+    else if ((a == 'o') && (b == 'i'))  chr = 0x00E8; // '√®';
 
-    else if ((a == 'm') && (b == 'j')) chr = '…';
-    else if ((a == 'o') && (b == 'j')) chr = 'È';
+    else if ((a == 'm') && (b == 'j'))  chr = 0x00C9; // '√â';
+    else if ((a == 'o') && (b == 'j'))  chr = 0x00E9; // '√©';
 
-    else if ((a == 'm') && (b == 'k')) chr = ' ';
-    else if ((a == 'o') && (b == 'k')) chr = 'Í';
+    else if ((a == 'm') && (b == 'k'))  chr = 0x00CA; // '√ä';
+    else if ((a == 'o') && (b == 'k'))  chr = 0x00EA; // '√™';
 
-    else if ((a == 'm') && (b == 'l')) chr = 'À';
-    else if ((a == 'o') && (b == 'l')) chr = 'Î';
+    else if ((a == 'm') && (b == 'l'))  chr = 0x00CB; // '√ã';
+    else if ((a == 'o') && (b == 'l'))  chr = 0x00EB; // '√´';
 
 
 
+    else if ((a == 'm') && (b == 'm'))  chr = 0x00CC; // '√å';
+    else if ((a == 'o') && (b == 'm'))  chr = 0x00EC; // '√¨';
 
+    else if ((a == 'm') && (b == 'n'))  chr = 0x00CD; // '√ç';
+    else if ((a == 'o') && (b == 'n'))  chr = 0x00ED; // '√≠';
 
+    else if ((a == 'm') && (b == 'o'))  chr = 0x00CE; // '√é';
+    else if ((a == 'o') && (b == 'o'))  chr = 0x00EE; // '√Æ';
 
-    else if ((a == 'm') && (b == 'm')) chr = 'Ã';
-    else if ((a == 'o') && (b == 'm')) chr = 'Ï';
+    else if ((a == 'm') && (b == 'p'))  chr = 0x00CF; // '√è';
+    else if ((a == 'o') && (b == 'p'))  chr = 0x00EF; // '√Ø';
 
-    else if ((a == 'm') && (b == 'n')) chr = 'Õ';
-    else if ((a == 'o') && (b == 'n')) chr = 'Ì';
 
-    else if ((a == 'm') && (b == 'o')) chr = 'Œ';
-    else if ((a == 'o') && (b == 'o')) chr = 'Ó';
+    else if ((a == 'n') && (b == 'b'))  chr = 0x00D1; // '√ë';
+    else if ((a == 'p') && (b == 'b'))  chr = 0x00F1; // '√±';
 
-    else if ((a == 'm') && (b == 'p')) chr = 'œ';
-    else if ((a == 'o') && (b == 'p')) chr = 'Ô';
 
+    else if ((a == 'k') && (b == 'c'))  chr = 0x00A2; // '¬¢';
+    else if ((a == 'k') && (b == 'j'))  chr = 0x00A9; // '¬©';
+    else if ((a == 'l') && (b == 'f'))  chr = 0x00B5; // '¬µ';
+    else if ((a == 'n') && (b == 'i'))  chr = 0x00D8; // '√ò';
+    else if ((a == 'p') && (b == 'i'))  chr = 0x00F8; // '√∏';
 
-    else if ((a == 'n') && (b == 'b')) chr = '—';
-    else if ((a == 'p') && (b == 'b')) chr = 'Ò';
+    else if ((a == 'l') && (b == 'j'))  chr = 0x00B9; // '¬π';
+    else if ((a == 'l') && (b == 'c'))  chr = 0x00B2; // '¬≤';
+    else if ((a == 'l') && (b == 'd'))  chr = 0x00B3; // '¬≥';
 
+    else if ((a == 'l') && (b == 'm'))  chr = 0x0152; // '≈í';
+    else if ((a == 'l') && (b == 'n'))  chr = 0x0153; // '≈ì';
+    else if ((a == 'l') && (b == 'o'))  chr = 0x0178; // '≈∏';
 
-    else if ((a == 'k') && (b == 'c')) chr = '¢';
-    else if ((a == 'k') && (b == 'j')) chr = '©';
-    else if ((a == 'l') && (b == 'f')) chr = 'µ';
-    else if ((a == 'n') && (b == 'i')) chr = 'ÿ';
-    else if ((a == 'p') && (b == 'i')) chr = '¯';
+    else if ((a == 'l') && (b == 'a'))  chr = 0x00B0; // '¬∞';
 
-    else if ((a == 'l') && (b == 'j')) chr = 'π';
-    else if ((a == 'l') && (b == 'c')) chr = '≤';
-    else if ((a == 'l') && (b == 'd')) chr = '≥';
+    else if ((a == 'k') && (b == 'o'))  chr = 0x00AE; // '¬Æ';
+    else if ((a == 'k') && (b == 'h'))  chr = 0x00A7; // '¬ß';
+    else if ((a == 'k') && (b == 'd'))  chr = 0x00A3; // '¬£';
 
-    else if ((a == 'l') && (b == 'm')) chr = 'º';
-    else if ((a == 'l') && (b == 'n')) chr = 'Ω';
-    else if ((a == 'l') && (b == 'o')) chr = 'æ';
+    else if ((a == 'p') && (b == 'a'))  chr = 0x00F0; // '√∞';
+    else if ((a == 'n') && (b == 'a'))  chr = 0x00D0; // '√ê';
 
-    else if ((a == 'l') && (b == 'a')) chr = '∞';
+    else if ((a == 'l') && (b == 'l'))  chr = 0x00BB; // '¬ª';
+    else if ((a == 'k') && (b == 'l'))  chr = 0x00AB; // '¬´';
 
-    else if ((a == 'k') && (b == 'o')) chr = 'Æ';
-    else if ((a == 'k') && (b == 'h')) chr = 'ß';
-    else if ((a == 'k') && (b == 'd')) chr = '£';
+    else if ((a == 'l') && (b == 'k'))  chr = 0x00BA; // '¬∫';
 
-    else if ((a == 'p') && (b == 'a')) chr = '';
-    else if ((a == 'n') && (b == 'a')) chr = '–';
+    else if ((a == 'l') && (b == 'h'))  chr = 0x00B7; // '¬∑';
 
-    else if ((a == 'l') && (b == 'l')) chr = 'ª';
-    else if ((a == 'k') && (b == 'l')) chr = '´';
+    else if ((a == 'k') && (b == 'b'))  chr = 0x00A1; // '¬°';
 
-    else if ((a == 'l') && (b == 'k')) chr = '∫';
+    else if ((a == 'k') && (b == 'e'))  chr = 0x20AC; // '‚Ç¨';
 
-    else if ((a == 'l') && (b == 'h')) chr = '∑';
+    else if ((a == 'l') && (b == 'b'))  chr = 0x00B1; // '¬±';
 
-    else if ((a == 'k') && (b == 'b')) chr = '°';
+    else if ((a == 'l') && (b == 'p'))  chr = 0x00BF; // '¬ø';
 
-    else if ((a == 'k') && (b == 'e')) chr = '§';
+    else if ((a == 'k') && (b == 'f'))  chr = 0x00A5; // '¬•';
 
-    else if ((a == 'l') && (b == 'b')) chr = '±';
+    else if ((a == 'p') && (b == 'o'))  chr = 0x00FE; // '√æ';
+    else if ((a == 'n') && (b == 'o'))  chr = 0x00DE; // '√û';
 
-    else if ((a == 'l') && (b == 'p')) chr = 'ø';
+    else if ((a == 'n') && (b == 'n'))  chr = 0x00DD; // '√ù';
+    else if ((a == 'p') && (b == 'n'))  chr = 0x00FD; // '√Ω';
+    else if ((a == 'p') && (b == 'p'))  chr = 0x00FF; // '√ø';
 
-    else if ((a == 'k') && (b == 'f')) chr = '•';
+    else if ((a == 'k') && (b == 'k'))  chr = 0x00AA; // '¬™';
 
-    else if ((a == 'p') && (b == 'o')) chr = '˛';
-    else if ((a == 'n') && (b == 'o')) chr = 'ﬁ';
+    else if ((a == 'k') && (b == 'm'))  chr = 0x00AC; // '¬¨';
+    else if ((a == 'p') && (b == 'h'))  chr = 0x00F7; // '√∑';
 
-    else if ((a == 'n') && (b == 'n')) chr = '›';
-    else if ((a == 'p') && (b == 'n')) chr = '˝';
-    else if ((a == 'p') && (b == 'p')) chr = 'ˇ';
+    else if ((a == 'k') && (b == 'g'))  chr = 0x007C; // '|';
 
-    else if ((a == 'k') && (b == 'k')) chr = '™';
+    else if ((a == 'l') && (b == 'e'))  chr = 0x0027; // '\'';
 
-    else if ((a == 'k') && (b == 'm')) chr = '¨';
-    else if ((a == 'p') && (b == 'h')) chr = '˜';
+    else if ((a == 'k') && (b == 'i'))  chr = 0x0161; // '≈°';
 
-    else if ((a == 'k') && (b == 'g')) chr = '|';
+    else if ((a == 'k') && (b == 'n'))  chr = 0x00AD; // '¬≠';
 
-    else if ((a == 'l') && (b == 'e')) chr = '\'';
+    else if ((a == 'k') && (b == 'p'))  chr = 0x00AF; // '¬Ø';
 
-    else if ((a == 'k') && (b == 'i')) chr = '®';
+    else if ((a == 'l') && (b == 'g'))  chr = 0x00B6; // '¬∂';
 
-    else if ((a == 'k') && (b == 'n')) chr = '≠';
+    else if ((a == 'l') && (b == 'i'))  chr = 0x017E; // '≈æ';
 
-    else if ((a == 'k') && (b == 'p')) chr = 'Ø';
+    else if ((a == 'm') && (b == 'h'))  chr = 0x00C7; // '√á';
+    else if ((a == 'o') && (b == 'h'))  chr = 0x00E7; // '√ß';
 
-    else if ((a == 'l') && (b == 'g')) chr = '∂';
+    else if ((a == 'n') && (b == 'h'))  chr = 0x00D7; // '√ó';
 
-    else if ((a == 'l') && (b == 'i')) chr = '∏';
+    else if ((a == 'k') && (b == 'a'))  chr = 0x0020; // ' ';
 
-    else if ((a == 'm') && (b == 'h')) chr = '«';
-    else if ((a == 'o') && (b == 'h')) chr = 'Á';
+    else if ((a == 'a') && (b == 'j'))  chr = 0x0021; // '!';
 
-    else if ((a == 'n') && (b == 'h')) chr = '◊';
-
-    else if ((a == 'k') && (b == 'a')) chr = ' ';
-
-    else if ((a == 'a') && (b == 'j')) chr = '!';
-
-    else  chr = '#';
+    else  chr = 0x0023; // '#';
 
     return chr;
 }

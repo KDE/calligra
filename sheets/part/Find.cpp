@@ -32,7 +32,7 @@
 
 using namespace Calligra::Sheets;
 
-class Find::Private
+class Q_DECL_HIDDEN Find::Private
 {
 public:
     Private() : currentSheet(0), currentSheetView(0) { }

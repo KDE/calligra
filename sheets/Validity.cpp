@@ -40,7 +40,7 @@
 
 using namespace Calligra::Sheets;
 
-class Validity::Private : public QSharedData
+class Q_DECL_HIDDEN Validity::Private : public QSharedData
 {
 public:
     QString message;

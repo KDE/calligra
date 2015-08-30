@@ -145,7 +145,7 @@
 #include <unistd.h>
 #include <KConfigGroup>
 
-class KarbonView::Private
+class Q_DECL_HIDDEN KarbonView::Private
 {
 public:
     Private(KarbonPart *part, KarbonDocument * doc)

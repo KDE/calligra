@@ -38,7 +38,7 @@
 // ================================================================
 //                         class KoOdfListStyle
 
-class KoOdfListStyle::Private
+class Q_DECL_HIDDEN KoOdfListStyle::Private
 {
 public:
     Private();

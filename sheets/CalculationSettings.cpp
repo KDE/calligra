@@ -40,7 +40,7 @@
 
 using namespace Calligra::Sheets;
 
-class CalculationSettings::Private
+class Q_DECL_HIDDEN CalculationSettings::Private
 {
 public:
     KLocale* locale;

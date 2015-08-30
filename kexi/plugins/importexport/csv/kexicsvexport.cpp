@@ -198,7 +198,7 @@ kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
-            kDebug() << "Adding column names";
+            //kDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -219,7 +219,7 @@ kDebug() << 1;
         _ERR;
     }
     for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-        kDebug() << "Adding records";
+        //kDebug() << "Adding records";
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
@@ -270,7 +270,7 @@ kDebug() << 1;
     if (kSaveFile) {
         stream->flush();
         if (!kSaveFile->finalize()) {
-                kDebug() << "Error finalizing stream!";
+            kWarning() << "Error finalizing stream!";
         }
     }
     return true;

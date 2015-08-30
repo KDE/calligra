@@ -55,7 +55,7 @@ extern "C"
 namespace Scripting {
 
     /// \internal d-pointer class.
-    class Module::Private
+    class Q_DECL_HIDDEN Module::Private
     {
         public:
             QPointer<KPlato::MainDocument> doc;

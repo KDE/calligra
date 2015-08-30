@@ -47,7 +47,7 @@ Calligra::Sheets::Formula* s_formula = 0;
 double _function(const gsl_vector* vector, void *params);
 
 
-class Solver::Private
+class Q_DECL_HIDDEN Solver::Private
 {
 public:
     SolverDialog* dialog;

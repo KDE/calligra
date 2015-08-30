@@ -32,7 +32,7 @@
 
 using namespace Calligra::Sheets;
 
-class DatabaseManager::Private
+class Q_DECL_HIDDEN DatabaseManager::Private
 {
 public:
     const Map* map;

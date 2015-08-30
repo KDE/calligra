@@ -31,7 +31,7 @@
 
 using namespace Calligra::Sheets;
 
-class SelectionStrategy::Private
+class Q_DECL_HIDDEN SelectionStrategy::Private
 {
 public:
     Cell startCell;

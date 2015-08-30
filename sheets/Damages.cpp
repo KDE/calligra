@@ -29,21 +29,21 @@
 
 using namespace Calligra::Sheets;
 
-class WorkbookDamage::Private
+class Q_DECL_HIDDEN WorkbookDamage::Private
 {
 public:
     Calligra::Sheets::Map* map;
     Changes changes;
 };
 
-class SheetDamage::Private
+class Q_DECL_HIDDEN SheetDamage::Private
 {
 public:
     Calligra::Sheets::Sheet* sheet;
     Changes changes;
 };
 
-class CellDamage::Private
+class Q_DECL_HIDDEN CellDamage::Private
 {
 public:
     Calligra::Sheets::Sheet* sheet;
@@ -51,7 +51,7 @@ public:
     Changes changes;
 };
 
-class SelectionDamage::Private
+class Q_DECL_HIDDEN SelectionDamage::Private
 {
 public:
     Region region;

@@ -96,7 +96,7 @@
 
 using namespace Calligra::Sheets;
 
-class Cell::Private : public QSharedData
+class Q_DECL_HIDDEN Cell::Private : public QSharedData
 {
 public:
     Private() : sheet(0), column(0), row(0) {}

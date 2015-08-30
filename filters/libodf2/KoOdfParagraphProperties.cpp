@@ -37,7 +37,7 @@
 //                         private class
 
 
-class KoOdfParagraphProperties::Private
+class Q_DECL_HIDDEN KoOdfParagraphProperties::Private
 {
 public:
     Private();
