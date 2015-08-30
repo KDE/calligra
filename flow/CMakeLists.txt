@@ -1,5 +1,7 @@
-
 project(flow)
+
+add_definitions(-DTRANSLATION_DOMAIN=\"flow\")
+
 include_directories(
     ${KOMAIN_INCLUDES}
 )

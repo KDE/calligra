@@ -39,11 +39,6 @@ using namespace KPlato;
 PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    KLocale *locale = KLocale::global();
-    if ( locale ) {
-        // QT5TODO: ensure proper loading of catalog, T449
-//         locale->insertCatalog( "plantjplugin" );
-    }
     m_granularities << (long unsigned int) 5 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000
                     << (long unsigned int) 30 * 60 * 1000

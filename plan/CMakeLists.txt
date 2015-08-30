@@ -1,6 +1,8 @@
 
 project(kplato)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"plan\")
+
 # set kplato debug area
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 

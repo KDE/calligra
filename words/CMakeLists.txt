@@ -1,5 +1,7 @@
 project(words)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"words\")
+
 include_directories(
     ${KOMAIN_INCLUDES}
 )

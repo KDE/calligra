@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligrafilters\")
+
 include(CheckIncludeFiles)
 
 # for xpdf:

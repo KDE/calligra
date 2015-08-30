@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_spreadsheet\")
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/sheets/ui

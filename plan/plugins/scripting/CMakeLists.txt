@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"krossmoduleplan\")
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/plan

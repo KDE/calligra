@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"KarbonTools\")
+
 include_directories(
     ${FLAKE_INCLUDES}
     ${CMAKE_SOURCE_DIR}/karbon 

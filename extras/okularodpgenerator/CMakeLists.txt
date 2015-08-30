@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"okularGenerator_odp\")
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
 

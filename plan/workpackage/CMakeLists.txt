@@ -1,5 +1,7 @@
 #project(planwork)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"planwork\")
+
 add_subdirectory( templates )
 add_subdirectory( pics )
 #add_subdirectory( toolbar )

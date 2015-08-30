@@ -4,6 +4,8 @@ include_directories(
 	${KOTEXT_INCLUDES}
 	${KOKROSS_INCLUDES} )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"krossmodulewords\")
+
 add_subdirectory( scripts )
 
 set(krossmodulewords_PART_SRCS

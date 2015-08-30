@@ -1,5 +1,7 @@
 if(GSL_FOUND)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"sheetssolver\")
+
 include_directories( ${CMAKE_SOURCE_DIR}/sheets
                      ${CMAKE_SOURCE_DIR}/sheets/ui
                      ${KOMAIN_INCLUDES} 

@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"okularGenerator_odt\")
 
 include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part)
 

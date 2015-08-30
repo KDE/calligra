@@ -175,6 +175,8 @@ static int handleUrls(const KCmdLineArgs *args)
 
 int main( int argc, char **argv )
 {
+    KLocalizedString::setApplicationDomain( "calligra-opener" );
+
     K4AboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Opener"),
                          K4AboutData::License_GPL,
@@ -188,7 +190,6 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KApplication app;
-    KGlobal::locale()->insertCatalog("calligra");
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("apps")) {

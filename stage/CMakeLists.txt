@@ -1,5 +1,7 @@
 project(calligra-stage)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"stage\")
+
 include_directories(
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}

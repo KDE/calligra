@@ -1,5 +1,7 @@
 project("braindump")
 
+add_definitions(-DTRANSLATION_DOMAIN=\"braindump\")
+
 include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/braindumpcore)
 
 add_subdirectory(data)

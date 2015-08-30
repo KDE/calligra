@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"krossmodulesheets\")
+
 include_directories( 
         ${CMAKE_SOURCE_DIR}/sheets
         ${CMAKE_SOURCE_DIR}/sheets/commands

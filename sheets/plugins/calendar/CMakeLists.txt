@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"sheetscalendartool\")
+
 include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES})
 
 set(kspread_plugin_tool_calendar_SRCS CalendarTool.cpp CalendarToolFactory.cpp CalendarToolWidget.cpp)

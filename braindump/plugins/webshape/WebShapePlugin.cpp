@@ -33,7 +33,6 @@ K_EXPORT_PLUGIN(WebShapePluginFactory("WebShapePlugin"))
 WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
-    KGlobal::locale()->insertCatalog("braindump");
     // register the shape's factory
     KoShapeRegistry::instance()->add(
         new WebShapeFactory());

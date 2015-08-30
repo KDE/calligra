@@ -142,6 +142,8 @@ bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, cons
 
 int main(int argc, char **argv)
 {
+    KLocalizedString::setApplicationDomain( "koconverter" );
+
     K4AboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Converter"),
                          K4AboutData::License_GPL,
@@ -167,9 +169,6 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
-
-    // Install the libcalligra* translations
-    KGlobal::locale()->insertCatalog("calligra");
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

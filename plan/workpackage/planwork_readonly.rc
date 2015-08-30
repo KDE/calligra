@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KPlatoWork" version="0">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KPlatoWork" version="0" translationDomain="planwork">
 <MenuBar>
     <Menu name="view"><text>&amp;View</text>
     </Menu>

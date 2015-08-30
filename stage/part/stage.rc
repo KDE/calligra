@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="stage" version="124">
+<kpartgui name="stage" version="124" translationDomain="stage">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />

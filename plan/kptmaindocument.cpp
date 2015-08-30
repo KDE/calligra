@@ -75,17 +75,8 @@ MainDocument::MainDocument(KoPart *part)
 {
     Q_ASSERT(part);
     m_config.setReadWrite( true );
-    // Add library translation files
     KLocale *locale = KLocale::global();
     if ( locale ) {
-        // QT5TODO: ensure proper loading of catalogs, T449
-//         locale->insertCatalog( "planlibs" );
-//         locale->insertCatalog( "kdgantt" );
-//         locale->insertCatalog( "timezones4" );
-#ifdef PLAN_KDEPIMLIBS_FOUND
-//         locale->insertCatalog( "kabc" );
-#endif
-
         m_config.setLocale( new KLocale( *locale ) );
     }
 

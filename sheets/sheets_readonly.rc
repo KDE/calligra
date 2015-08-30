@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="2" translationDomain="sheets">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="copy"/>

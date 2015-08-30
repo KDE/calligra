@@ -1,5 +1,7 @@
 project(calligra-sheets)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
+
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}

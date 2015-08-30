@@ -10,6 +10,8 @@ else()
    message(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
 endif()
 
+add_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
+
 include_directories(
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}

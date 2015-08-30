@@ -71,14 +71,6 @@ Module::Module(QObject* parent)
     d->doc = 0;
     d->project = 0;
     d->command = 0;
-
-    KLocale *locale = KLocale::global();
-    if ( locale ) {
-        locale->insertCatalog( "plan" );
-        locale->insertCatalog( "planlibs" );
-        locale->insertCatalog( "timezones4" );
-        locale->insertCatalog( "krossmoduleplan" );
-    }
 }
 
 Module::~Module()
