@@ -231,7 +231,7 @@ QVariant KexiDBReportData::value ( const QString &fld ) const
 {
     int i = fieldNumber ( fld );
 
-    if ( d->cursor )
+    if (d->cursor && i >= 0)
         return d->cursor->value ( i );
 
     return QVariant();
@@ -285,8 +285,13 @@ qint64 KexiDBReportData::recordCount() const
     return 1;
 }
 
-#ifdef KREPORT_SCRIPTING
-QStringList KexiDBReportData::scriptList(const QString& interpreter) const
+static bool isInterpreterSupported(const QString &interpreterName)
+{
+    return 0 == interpreterName.compare(QLatin1String("javascript"), Qt::CaseInsensitive)
+           || 0 == interpreterName.compare(QLatin1String("qtscript"), Qt::CaseInsensitive);
+}
+
+QStringList KexiDBReportData::scriptList() const
 {
     QStringList scripts;
 
@@ -295,7 +300,6 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
         QStringList scriptnames = d->connection->objectNames(KexiPart::ScriptObjectType);
 
         qDebug() << scriptids << scriptnames;
-        qDebug() << interpreter;
 
         //A blank entry
         scripts << "";
@@ -311,7 +315,9 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (parsed && !scriptelem.isNull()) {
-                    if (interpreter == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
+                    if (scriptelem.attribute("scripttype") == "object"
+                        && isInterpreterSupported(scriptelem.attribute("language")))
+                    {
                         scripts << scriptnames[i];
                     }
                 } else {
@@ -328,7 +334,7 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
     return scripts;
 }
 
-QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& language) const
+QString KexiDBReportData::scriptCode(const QString& scriptname) const
 {
     QString scripts;
 
@@ -358,11 +364,12 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
                 }
 
                 QString interpretername = scriptelem.attribute("language");
-                qDebug() << language << interpretername;
                 qDebug() << scriptelem.attribute("scripttype");
                 qDebug() << scriptname << scriptnames[i];
 
-                if (language == interpretername && (scriptelem.attribute("scripttype") == "module" || scriptname == scriptnames[i])) {
+                if ((isInterpreterSupported(interpretername) && scriptelem.attribute("scripttype") == "module")
+                    || scriptname == scriptnames[i])
+                {
                     scripts += '\n' + scriptelem.text().toUtf8();
                 }
                 ++i;
@@ -373,7 +380,6 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
     }
     return scripts;
 }
-#endif
 
 QStringList KexiDBReportData::dataSources() const
 {

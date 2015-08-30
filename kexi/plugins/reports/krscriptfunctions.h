@@ -26,11 +26,12 @@
 #include <KDbCursor>
 
 #include <KoReportData>
+#include <kreportgrouptracker>
 
 /**
  @author
 */
-class KRScriptFunctions : public QObject
+class KRScriptFunctions : public KReportGroupTracker
 {
     Q_OBJECT
 public:
@@ -44,9 +45,12 @@ private:
     QString m_source;
     qreal math(const QString &, const QString &);
 
-    KDbEscapedString m_where;
+    QMap<QString, QVariant> m_groupData;
+
+    KDbEscapedString where();
+
 public Q_SLOTS:
-    void setWhere(const KDbEscapedString&);
+    virtual void setGroupData(const QMap<QString, QVariant> &groupData);
 
     qreal sum(const QString &);
     qreal avg(const QString &);

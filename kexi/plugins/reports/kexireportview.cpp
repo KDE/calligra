@@ -31,13 +31,12 @@
 #include <core/KexiMainWindowIface.h>
 #include <KexiIcon.h>
 
-#ifdef KREPORT_SCRIPTING
-#include "../scripting/kexiscripting/kexiscriptadaptor.h"
-#endif
+//! @todo KEXI3 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 #include <KoReportPage>
 #include <renderobjects>
 #include <KoReportPreRenderer>
+#include <krscripthandler>
 #include "krscriptfunctions.h"
 
 #include <KIO/NetAccess>
@@ -167,10 +166,6 @@ KexiReportView::~KexiReportView()
 {
     qDebug();
     delete m_preRenderer;
-#ifdef KREPORT_SCRIPTING
-    delete m_kexi;
-    delete m_functions;
-#endif
     delete m_reportDocument;
 }
 
@@ -402,23 +397,18 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             m_preRenderer->setName(window()->partItem()->name());
 
-#ifdef KREPORT_SCRIPTING
             //Add a kexi object to provide kexidb and extra functionality
-            if(!m_kexi) {
-                m_kexi = new KexiScriptAdaptor();
-            }
-            m_preRenderer->registerScriptObject(m_kexi, "Kexi");
+//! @todo KEXI3 if we want this            if(!m_kexi) {
+//                m_kexi = new KexiScriptAdaptor();
+//            }
+//            m_preRenderer->registerScriptObject(m_kexi, "Kexi");
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                //Delete old functions
-                if (m_functions) {
-                    delete m_functions;
-                }
-
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
+                connect(m_preRenderer, SIGNAL(groupChanged(QMap<QString, QVariant>)),
+                        m_functions, SLOT(setGroupData(QMap<QString, QVariant>)));
             }
-#endif
 
             if (m_reportDocument) {
                 qDebug() << "=======================================Deleting old document";

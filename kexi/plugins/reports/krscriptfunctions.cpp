@@ -28,38 +28,40 @@ KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KDbConnection* 
 {
     m_cursor = kodata;
     m_connection = conn;
-    m_source = kodata->sourceName();
+
+    if (kodata) {
+        m_source = kodata->sourceName();
+    }
 }
 
 KRScriptFunctions::~KRScriptFunctions()
 {
 }
 
-void KRScriptFunctions::setWhere(const KDbEscapedString&w)
+void KRScriptFunctions::setGroupData(const QMap<QString, QVariant>& groupData)
 {
-    m_where = w;
+    m_groupData = groupData;
 }
 
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
-    qreal ret;
+    QString ret = QLatin1String("0.0");
+
+    if (!m_connection) {
+        return 0.0;
+    }
+
     KDbEscapedString sql = KDbEscapedString("SELECT " + function + "(" + field + ") FROM (" + m_source + ")");
 
-    if (!m_where.isEmpty()) {
-        sql += " WHERE(" + m_where + ')';
+    if (!m_groupData.isEmpty()) {
+        sql += " WHERE(" + where() + ')';
     }
 
     qDebug() << sql;
-    KDbCursor *curs = m_connection->executeQuery(sql);
 
-    if (curs) {
-        ret = curs->value(0).toDouble();
-    } else {
-        ret = 0.0;
-    }
-    delete curs;
+    m_connection->querySingleString(sql,&ret);
 
-    return ret;
+    return ret.toDouble();
 }
 
 qreal KRScriptFunctions::sum(const QString &field)
@@ -106,3 +108,15 @@ QVariant KRScriptFunctions::value(const QString &field)
     return val;
 }
 
+KDbEscapedString KRScriptFunctions::where()
+{
+    QByteArray w;
+    QMap<QString, QVariant>::const_iterator i = m_groupData.constBegin();
+    while (i != m_groupData.constEnd()) {
+        w += QLatin1Char('(') + i.key() + QLatin1String(" = '") + i.value().toString() + QLatin1String("') AND ");
+        ++i;
+    }
+    w.chop(4);
+    //kreportDebug() << w;
+    return KDbEscapedString(w);
+}
