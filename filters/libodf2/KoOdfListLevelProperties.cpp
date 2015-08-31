@@ -37,7 +37,7 @@
 //                         private class
 
 
-class KoOdfListLevelProperties::Private
+class Q_DECL_HIDDEN KoOdfListLevelProperties::Private
 {
 public:
     Private()

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1542,6 +1542,19 @@ public:
 #endif
     }
 
+    bool windowContainerExistsFor(int identifier) {
+        return windowContainers.contains(identifier);
+    }
+
+    void setWindowContainerExistsFor(int identifier, bool set) {
+        if (set) {
+            windowContainers.insert(identifier);
+        }
+        else {
+            windowContainers.remove(identifier);
+        }
+    }
+
 #ifndef KEXI_NO_PENDING_DIALOGS
     void addItemToPendingWindows(const KexiPart::Item* item, PendingJobType jobType) {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
@@ -1941,6 +1954,10 @@ public:
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;
+    //! A set of item identifiers for whose there are KexiWindowContainer instances already.
+    //! This lets to verify that KexiWindow is about to be constructed and opened so multiple
+    //! opening can be avoided.
+    QSet<int> windowContainers;
 #ifndef KEXI_NO_PROCESS_EVENTS
     QHash<int, PendingJobType> pendingWindows; //!< part item identifiers for windows whoose opening has been started
     //! @todo QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts

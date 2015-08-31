@@ -40,7 +40,7 @@
 //                         class KoOdfStyleBase
 
 
-class KoOdfStyleBase::Private
+class Q_DECL_HIDDEN KoOdfStyleBase::Private
 {
 public:
     Private(KoOdfStyleBase::StyleType type);

@@ -26,7 +26,8 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
-class KPrSoundCollection::Private {
+class Q_DECL_HIDDEN KPrSoundCollection::Private
+{
 public:
     QList<KPrSoundData*> sounds;
 };

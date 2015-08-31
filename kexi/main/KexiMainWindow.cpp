@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -2961,6 +2961,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     hideDesignTab(previousItemId, QString());
 
     d->removeWindow(window_id);
+    d->setWindowContainerExistsFor(window->partItem()->identifier(), false);
     QWidget *windowContainer = window->parentWidget();
     d->mainWidget->tabWidget()->removeTab(
         d->mainWidget->tabWidget()->indexOf(windowContainer));
@@ -3118,6 +3119,10 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
             activateWindow(*window);
         alreadyOpened = true;
     } else {
+        if (d->windowContainerExistsFor(item->identifier())) {
+            // window not yet present but window container exists: return 0 and wait
+            return 0;
+        }
         KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
         d->updatePropEditorVisibility(viewMode, part ? part->info() : 0);
         //update tabs before opening
@@ -3127,6 +3132,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 
         // open new tab earlier
         windowContainer = new KexiWindowContainer(d->mainWidget->tabWidget());
+        d->setWindowContainerExistsFor(item->identifier(), true);
         const int tabIndex = d->mainWidget->tabWidget()->addTab(
             windowContainer,
             KIcon(part ? part->info()->itemIconName() : QString()),
@@ -3163,6 +3169,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #ifndef KEXI_NO_PENDING_DIALOGS
         d->removePendingWindow(item->identifier());
 #endif
+        d->setWindowContainerExistsFor(item->identifier(), false);
         d->mainWidget->tabWidget()->removeTab(
             d->mainWidget->tabWidget()->indexOf(windowContainer));
         delete windowContainer;

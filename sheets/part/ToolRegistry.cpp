@@ -31,7 +31,7 @@
 using namespace Calligra::Sheets;
 
 
-class ToolRegistry::Private
+class Q_DECL_HIDDEN ToolRegistry::Private
 {
 public:
 };

@@ -34,7 +34,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CanvasBase::Private
+class Q_DECL_HIDDEN CanvasBase::Private
 {
 public:
     Doc *doc;

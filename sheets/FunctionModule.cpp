@@ -25,7 +25,7 @@
 
 using namespace Calligra::Sheets;
 
-class FunctionModule::Private
+class Q_DECL_HIDDEN FunctionModule::Private
 {
 public:
     QList<QSharedPointer<Function> > functions;

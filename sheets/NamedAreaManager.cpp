@@ -54,7 +54,7 @@ struct NamedArea {
     QRect range;
 };
 
-class NamedAreaManager::Private
+class Q_DECL_HIDDEN NamedAreaManager::Private
 {
 public:
     const Map* map;

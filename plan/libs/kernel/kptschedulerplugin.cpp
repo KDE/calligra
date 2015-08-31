@@ -32,7 +32,7 @@
 namespace KPlato
 {
 
-class SchedulerPlugin::Private
+class Q_DECL_HIDDEN SchedulerPlugin::Private
 {
 public:
     Private() {}

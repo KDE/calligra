@@ -25,7 +25,7 @@
 
 using namespace Calligra::Sheets;
 
-class Function::Private
+class Q_DECL_HIDDEN Function::Private
 {
 public:
     QString name;

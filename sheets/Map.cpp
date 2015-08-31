@@ -74,7 +74,7 @@
 
 using namespace Calligra::Sheets;
 
-class Map::Private
+class Q_DECL_HIDDEN Map::Private
 {
 public:
     DocBase* doc;

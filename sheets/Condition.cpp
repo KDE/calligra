@@ -76,7 +76,7 @@ bool Conditional::operator==(const Conditional &other) const
 //
 /////////////////////////////////////////////////////////////////////////////
 
-class Conditions::Private : public QSharedData
+class Q_DECL_HIDDEN Conditions::Private : public QSharedData
 {
 public:
     QLinkedList<Conditional> conditionList;
