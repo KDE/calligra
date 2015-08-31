@@ -435,5 +435,3 @@ void PertEditor::slotUpdate()
 }
 
 } // namespace KPlato
-
-#include "kptperteditor.moc"

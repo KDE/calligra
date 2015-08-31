@@ -146,5 +146,3 @@ void ScheduleTester::busy()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ScheduleTester )
-
-#include "ScheduleTester.moc"

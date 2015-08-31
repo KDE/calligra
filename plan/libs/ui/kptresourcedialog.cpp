@@ -466,5 +466,3 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
 }
 
 }  //KPlato namespace
-
-#include "kptresourcedialog.moc"

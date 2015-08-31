@@ -224,5 +224,3 @@ void WorkPackageProxyModelTester::testMoveChild()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::WorkPackageProxyModelTester )
-
-#include "WorkPackageProxyModelTester.moc"

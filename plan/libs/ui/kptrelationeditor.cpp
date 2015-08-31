@@ -224,5 +224,3 @@ KoPrintJob *RelationEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptrelationeditor.moc"

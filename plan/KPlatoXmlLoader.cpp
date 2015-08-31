@@ -169,5 +169,3 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
 }
 
 } // namespace KPlato
-
-#include "KPlatoXmlLoader.moc"

@@ -371,5 +371,3 @@ void CalendarTester::workIntervalsFullDays()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::CalendarTester )
-
-#include "CalendarTester.moc"

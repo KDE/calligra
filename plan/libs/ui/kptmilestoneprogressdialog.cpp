@@ -70,5 +70,3 @@ MacroCommand *MilestoneProgressDialog::buildCommand() {
 
 
 }  //KPlato namespace
-
-#include "kptmilestoneprogressdialog.moc"

@@ -1137,5 +1137,3 @@ void PerformanceTester::acwpPrDayProject()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::PerformanceTester )
-
-#include "PerformanceTester.moc"

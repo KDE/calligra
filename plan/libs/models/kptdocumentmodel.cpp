@@ -577,5 +577,3 @@ QModelIndex DocumentItemModel::insertDocument( Document *doc, Document *after )
 }
 
 } //namespace KPlato
-
-#include "kptdocumentmodel.moc"

@@ -577,5 +577,3 @@ void AccountsTester::subaccounts()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::AccountsTester )
-
-#include "AccountsTester.moc"

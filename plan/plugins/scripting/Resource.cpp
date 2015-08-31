@@ -112,5 +112,3 @@ void Scripting::Resource::setChildren( const QList<QObject*> &children )
     }
     qDebug()<<"setTeamMembers:"<<team->teamMembers();
 }
-
-#include "Resource.moc"

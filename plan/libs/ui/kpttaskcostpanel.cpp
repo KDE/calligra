@@ -162,5 +162,3 @@ void TaskCostPanelImpl::slotChanged() {
 }
 
 }  //KPlato namespace
-
-#include "kpttaskcostpanel.moc"

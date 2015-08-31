@@ -494,5 +494,3 @@ void View::slotRemoveCurrentPackage()
 
 
 }  //KPlatoWork namespace
-
-#include "view.moc"

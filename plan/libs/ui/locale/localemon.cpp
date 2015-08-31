@@ -364,5 +364,3 @@ MacroCommand *LocaleConfigMoney::buildCommand()
 }
 
 } // namespace KPlato
-
-#include "localemon.moc"

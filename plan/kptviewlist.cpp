@@ -854,5 +854,3 @@ void ViewListWidget::setModified()
 }
 
 }  //KPlato namespace
-
-#include "kptviewlist.moc"

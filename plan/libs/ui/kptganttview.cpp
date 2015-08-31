@@ -1225,5 +1225,3 @@ KoPrintJob *ResourceAppointmentsGanttView::createPrintJob()
 }
 
 }  //KPlato namespace
-
-#include "kptganttview.moc"

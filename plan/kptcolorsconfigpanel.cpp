@@ -36,5 +36,3 @@ ColorsConfigPanel::ColorsConfigPanel(QWidget *p )
 }
 
 }  //KPlato namespace
-
-#include "kptcolorsconfigpanel.moc"

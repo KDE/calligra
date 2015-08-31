@@ -516,5 +516,3 @@ void FlatProxyModelTester::testInsertRemoveGrandChildren()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::FlatProxyModelTester )
-
-#include "FlatProxyModelTester.moc"

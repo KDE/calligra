@@ -290,5 +290,3 @@ KoPrintJob *AccountsView::createPrintJob()
 
 
 }  //KPlato namespace
-
-#include "kptaccountsview.moc"

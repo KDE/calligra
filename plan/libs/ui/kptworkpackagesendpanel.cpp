@@ -72,5 +72,3 @@ void WorkPackageSendPanel::slotSendClicked()
 
 
 }  //KPlato namespace
-
-#include "kptworkpackagesendpanel.moc"

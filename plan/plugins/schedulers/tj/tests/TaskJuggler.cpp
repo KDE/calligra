@@ -1061,6 +1061,3 @@ void TaskJuggler::units()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::TaskJuggler )
-
-#include "TaskJuggler.moc"
-

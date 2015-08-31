@@ -869,5 +869,3 @@ void CompletionEntryEditor::removeEntry()
 
 
 }  //KPlato namespace
-
-#include "kptusedefforteditor.moc"

@@ -2004,5 +2004,3 @@ QVariant ResourceAppointmentsGanttModel::data( const QModelIndex &index, int rol
 }
 
 } // namespace KPlato
-
-#include "kptresourceappointmentsmodel.moc"

@@ -5039,5 +5039,3 @@ void TaskModuleModel::loadTaskModules( const QStringList &files )
 
 
 } //namespace KPlato
-
-#include "kptnodeitemmodel.moc"

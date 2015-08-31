@@ -159,6 +159,3 @@ void KPlatoWork_MainWindow::slotFileOpen()
         openDocument( file );
     }
 }
-
-
-#include "mainwindow.moc"

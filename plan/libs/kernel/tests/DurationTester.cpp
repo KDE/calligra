@@ -86,5 +86,3 @@ void DurationTester::lessThan() {
 } //namespace KPlato
 
 QTEST_MAIN( KPlato::DurationTester )
-
-#include "DurationTester.moc"

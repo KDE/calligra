@@ -141,4 +141,3 @@ void InsertFileTester::testPert1()
 } //namespace KPlato
 
 QTEST_KDEMAIN(KPlato::InsertFileTester, GUI)
-#include "InsertFileTester.moc"

@@ -3168,5 +3168,3 @@ void ProjectTester::startStart()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
-
-#include "ProjectTester.moc"

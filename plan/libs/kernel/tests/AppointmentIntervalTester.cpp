@@ -865,5 +865,3 @@ void AppointmentIntervalTester::subtractListMidnight()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::AppointmentIntervalTester )
-
-#include "AppointmentIntervalTester.moc"

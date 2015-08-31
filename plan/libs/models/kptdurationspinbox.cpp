@@ -267,6 +267,3 @@ void DurationSpinBox::updateUnit( Duration::Unit unit )
 
 
 } //namespace KPlato
-
-#include "kptdurationspinbox.moc"
-

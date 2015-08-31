@@ -109,5 +109,3 @@ void MilestoneProgressPanelImpl::enableWidgets() {
 
 
 }  //KPlato namespace
-
-#include "kptmilestoneprogresspanel.moc"

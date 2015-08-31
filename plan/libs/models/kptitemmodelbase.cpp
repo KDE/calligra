@@ -733,6 +733,3 @@ bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, in
 }
 
 } //namespace KPlato
-
-#include "kptitemmodelbase.moc"
-

@@ -154,6 +154,3 @@ void TreeComboBox::updateCurrentIndexes( const QModelIndexList &lst )
 }
 
 } //namespace KPlato
-
-#include "kpttreecombobox.moc"
-

@@ -117,5 +117,3 @@ QVariant ProjectAccess::SPI() const
 
 
 } // namespace KPlato
-
-#include "reportscripts.moc"

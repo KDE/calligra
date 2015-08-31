@@ -105,5 +105,3 @@ int KPlatoWork_Application::newInstance()
     kDebug(planworkDbg())<<"started------------------------";
     return 0;
 }
-
-#include "application.moc"

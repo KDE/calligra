@@ -149,5 +149,3 @@ void SummaryTaskGeneralPanel::slotChooseResponsible()
 
 
 }  //KPlato namespace
-
-#include "kptsummarytaskgeneralpanel.moc"

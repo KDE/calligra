@@ -487,5 +487,3 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
 }
 
 }  //KPlatoWork namespace
-
-#include "taskcompletiondialog.moc"

@@ -87,5 +87,3 @@ void SummaryTaskDialog::slotButtonClicked(int button) {
 
 
 }  //KPlato namespace
-
-#include "kptsummarytaskdialog.moc"

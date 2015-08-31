@@ -644,5 +644,3 @@ void AddReportsViewPanel::changed()
 
 
 }  //KPlato namespace
-
-#include "kptviewlistdialog.moc"

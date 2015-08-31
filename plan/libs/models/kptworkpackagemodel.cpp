@@ -556,5 +556,3 @@ void WorkPackageProxyModel::workPackageRemoved(Node *)
 }
 
 } //namespace KPlato
-
-#include "kptworkpackagemodel.moc"

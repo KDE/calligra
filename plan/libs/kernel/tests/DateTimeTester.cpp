@@ -161,5 +161,3 @@ void DateTimeTester::addMillisecond()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::DateTimeTester )
-
-#include "DateTimeTester.moc"

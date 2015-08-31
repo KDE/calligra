@@ -1700,5 +1700,3 @@ void StandardWorktime::save(QDomElement &element) const {
 
 
 }  //KPlato namespace
-
-#include "kptcalendar.moc"

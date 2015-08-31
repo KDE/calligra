@@ -1081,5 +1081,3 @@ void MainDocument::createNewProject()
 }
 
 }  //KPlato namespace
-
-#include "kptmaindocument.moc"

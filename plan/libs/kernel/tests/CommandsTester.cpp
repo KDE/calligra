@@ -533,6 +533,3 @@ void CommandsTester::testProjectModifyDefaultCalendarCmd()
 } // namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::CommandsTester)
-
-#include "CommandsTester.moc"
-

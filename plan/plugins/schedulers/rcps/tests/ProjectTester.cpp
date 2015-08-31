@@ -714,5 +714,3 @@ void ProjectTester::startNotEarlier()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
-
-#include "ProjectTester.moc"

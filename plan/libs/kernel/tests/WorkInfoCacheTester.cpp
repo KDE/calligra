@@ -356,5 +356,3 @@ void WorkInfoCacheTester::timeZone()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::WorkInfoCacheTester )
-
-#include "WorkInfoCacheTester.moc"

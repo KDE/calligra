@@ -96,5 +96,3 @@ void ScriptingTester::test()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ScriptingTester )
-
-#include "ScriptingTester.moc"

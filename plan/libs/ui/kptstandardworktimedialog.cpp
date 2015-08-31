@@ -199,6 +199,3 @@ void StandardWorktimeDialogImpl::slotDayChanged(double value) {
 
 
 }  //KPlato namespace
-
-
-#include "kptstandardworktimedialog.moc"

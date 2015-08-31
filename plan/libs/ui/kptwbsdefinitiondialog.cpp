@@ -57,5 +57,3 @@ void WBSDefinitionDialog::slotOk() {
 
 
 }  //KPlato namespace
-
-#include "kptwbsdefinitiondialog.moc"

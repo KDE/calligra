@@ -177,5 +177,3 @@ void ConfigTaskPanelImpl::currentUnitChanged( int unit )
 }
 
 }  //KPlato namespace
-
-#include "kpttaskdefaultpanel.moc"

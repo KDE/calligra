@@ -96,6 +96,3 @@ void PackageSettingsPanel::setSettings( const WorkPackageSettings &s )
 }
 
 }  //KPlatoWork namespace
-
-
-#include "packagesettings.moc"

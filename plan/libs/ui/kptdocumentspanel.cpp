@@ -235,5 +235,3 @@ MacroCommand *DocumentsPanel::buildCommand()
 
 
 } //namespace KPlato
-
-#include "kptdocumentspanel.moc"

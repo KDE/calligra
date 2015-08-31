@@ -449,5 +449,3 @@ void RelationItemModel::slotNodeChanged( Node *node )
 
 
 } //namespace KPlato
-
-#include "kptrelationmodel.moc"

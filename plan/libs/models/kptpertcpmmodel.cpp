@@ -868,5 +868,3 @@ void PertResultItemModel::slotNodeChanged( Node *)
 
 
 } // namespace KPlato
-
-#include "kptpertcpmmodel.moc"

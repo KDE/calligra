@@ -270,5 +270,3 @@ void EstimateTester::pert() {
 } //namespace KPlato
 
 QTEST_MAIN( KPlato::EstimateTester )
-
-#include "EstimateTester.moc"

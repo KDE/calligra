@@ -170,5 +170,3 @@ void TaskDescriptionDialog::slotButtonClicked( int button )
 
 
 }  //KPlato namespace
-
-#include "kpttaskdescriptiondialog.moc"

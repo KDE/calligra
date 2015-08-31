@@ -1724,5 +1724,3 @@ bool AllocatedResourceItemModel::filterAcceptsRow( int source_row, const QModelI
 }
 
 } // namespace KPlato
-
-#include "kptresourcemodel.moc"

@@ -605,5 +605,3 @@ void ResourceTester::required()
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ResourceTester )
-
-#include "ResourceTester.moc"

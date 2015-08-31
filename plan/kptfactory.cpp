@@ -84,5 +84,3 @@ const KComponentData &Factory::global()
 }
 
 } // KPlato namespace
-
-#include "kptfactory.moc"

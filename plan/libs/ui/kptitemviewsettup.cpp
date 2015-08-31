@@ -282,5 +282,3 @@ void SplitItemViewSettupDialog::addPrintingOptions()
 }
 
 } //namespace KPlato
-
-#include "kptitemviewsettup.moc"

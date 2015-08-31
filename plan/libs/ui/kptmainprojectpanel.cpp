@@ -194,5 +194,3 @@ QDateTime MainProjectPanel::endDateTime()
 
 
 }  //KPlato namespace
-
-#include "kptmainprojectpanel.moc"

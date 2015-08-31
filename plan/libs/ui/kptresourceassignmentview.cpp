@@ -407,6 +407,3 @@ void ResourceAssignmentView::slotUpdate(){
 }
 
 }  //KPlato namespace
-
-#include "kptresourceassignmentview.moc"
-

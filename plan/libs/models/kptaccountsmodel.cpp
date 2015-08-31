@@ -1153,5 +1153,3 @@ void CostBreakdownItemModel::slotAccountChanged( Account *account )
 
 
 } // namespace KPlato
-
-#include "kptaccountsmodel.moc"

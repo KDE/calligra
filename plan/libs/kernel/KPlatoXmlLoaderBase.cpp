@@ -1376,5 +1376,3 @@ bool KPlatoXmlLoaderBase::load(AppointmentInterval& interval, const KoXmlElement
     kDebug(kplatoXmlDebugArea())<<"interval:"<<interval;
     return interval.isValid();
 }
-
-#include "KPlatoXmlLoaderBase.moc"

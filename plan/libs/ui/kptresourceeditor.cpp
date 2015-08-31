@@ -397,5 +397,3 @@ KoPrintJob *ResourceEditor::createPrintJob()
 
 
 } // namespace KPlato
-
-#include "kptresourceeditor.moc"

@@ -67,5 +67,3 @@ void TaskCompleteDelegate::paint( QPainter *painter, const QStyleOptionViewItem 
 }
 
 } //namespace KPlato
-
-#include "kpttaskcompletedelegate.moc"

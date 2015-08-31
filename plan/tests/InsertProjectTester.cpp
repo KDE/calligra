@@ -670,4 +670,3 @@ void InsertProjectTester::testExistingTeamResourceRequest()
 } //namespace KPlato
 
 QTEST_KDEMAIN(KPlato::InsertProjectTester, GUI)
-#include "InsertProjectTester.moc"

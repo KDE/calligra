@@ -68,5 +68,3 @@ MacroCommand *MainProjectDialog::buildCommand() {
 }
 
 }  //KPlato namespace
-
-#include "kptmainprojectdialog.moc"

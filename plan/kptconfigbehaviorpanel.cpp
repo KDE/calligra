@@ -55,5 +55,3 @@ bool ConfigBehaviorPanel::apply() {
 
 
 }  //KPlato namespace
-
-#include "kptconfigbehaviorpanel.moc"

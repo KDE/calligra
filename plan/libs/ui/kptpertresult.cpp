@@ -595,5 +595,3 @@ KoPrintJob *PertCpmView::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptpertresult.moc"

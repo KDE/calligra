@@ -1392,5 +1392,3 @@ void ProjectStatusViewSettingsDialog::slotOk()
 
 
 } // namespace KPlato
-
-#include "kpttaskstatusview.moc"

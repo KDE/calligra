@@ -129,5 +129,3 @@ MacroCommand *RequestResourcesPanel::buildCommand()
 }
 
 }  //KPlato namespace
-
-#include "kptrequestresourcespanel.moc"

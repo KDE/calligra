@@ -2431,5 +2431,3 @@ KoPrintJob *DependencyEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptdependencyeditor.moc"

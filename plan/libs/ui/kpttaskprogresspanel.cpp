@@ -434,5 +434,3 @@ void TaskProgressPanelImpl::slotSelectionChanged( const QItemSelection &sel )
 }
 
 }  //KPlato namespace
-
-#include "kpttaskprogresspanel.moc"

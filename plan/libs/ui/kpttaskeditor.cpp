@@ -1558,5 +1558,3 @@ KoPrintJob *TaskWorkPackageView::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kpttaskeditor.moc"

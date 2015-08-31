@@ -63,5 +63,3 @@ KUndo2Command *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
 
 
 }  //KPlato namespace
-
-#include "kptlocaleconfigmoneydialog.moc"

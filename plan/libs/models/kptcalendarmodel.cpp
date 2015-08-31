@@ -1331,5 +1331,3 @@ int CalendarExtendedItemModel::columnNumber(const QString& name) const
 }
 
 } // namespace KPlato
-
-#include "kptcalendarmodel.moc"

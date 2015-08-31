@@ -896,5 +896,3 @@ void CostBreakdownReportData::createModels()
 }
 
 } //namespace KPlato
-
-#include "reportdata.moc"

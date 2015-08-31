@@ -1386,5 +1386,3 @@ void KPlatoRCPSScheduler::setWeights()
         }
     }
 }
-
-#include "KPlatoRCPSScheduler.moc"
