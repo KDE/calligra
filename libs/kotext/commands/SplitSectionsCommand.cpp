@@ -36,9 +36,9 @@ SplitSectionsCommand::SplitSectionsCommand(QTextDocument *document, SplitType ty
     , m_splitPosition(splitPosition)
 {
     if (m_type == Startings) {
-	setText(kundo2_i18n("Split sections startings"));
+        setText(kundo2_i18n("Split sections startings"));
     } else { // Endings
-	setText(kundo2_i18n("Split sections endings"));
+        setText(kundo2_i18n("Split sections endings"));
     }
 }
 
@@ -60,46 +60,46 @@ void SplitSectionsCommand::redo()
     KoTextDocument koDocument(m_document);
     
     if (!m_first) {
-	KUndo2Command::redo();
-	//FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
-	
-	// All formatting changes will be redone automatically.
-	// Model level is untouched.
+        KUndo2Command::redo();
+        //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+        
+        // All formatting changes will be redone automatically.
+        // Model level is untouched.
     } else {
-	m_first = false;
-	
-	KoTextEditor *editor = koDocument.textEditor();
-	
-	if (m_type == Startings) {
-	    editor->movePosition(QTextCursor::StartOfBlock);
-	    editor->newLine();
-	    editor->movePosition(QTextCursor::PreviousBlock);
-	    
-	    QTextBlockFormat fmt = editor->blockFormat();
-	    KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>());
-	    QList<KoSection *> firstBlockStartings = KoSectionUtils::sectionStartings(fmt).mid(0, m_splitPosition);
-	    QList<KoSection *> moveForward = KoSectionUtils::sectionStartings(fmt).mid(m_splitPosition);
-	    KoSectionUtils::setSectionStartings(fmt, firstBlockStartings);
-	    editor->setBlockFormat(fmt);
-	    editor->movePosition(QTextCursor::NextBlock);
-	    fmt = editor->blockFormat();
-	    KoSectionUtils::setSectionStartings(fmt, moveForward);
-	    editor->setBlockFormat(fmt);
-	    editor->movePosition(QTextCursor::PreviousBlock);
-	} else { // Endings
-	    editor->movePosition(QTextCursor::EndOfBlock);
-	    editor->newLine();
-	    
-	    QTextBlockFormat fmt = editor->blockFormat();
-	    QList<KoSectionEnd *> secondBlockEndings = KoSectionUtils::sectionEndings(fmt).mid(m_splitPosition + 1);
-	    QList<KoSectionEnd *> moveBackward = KoSectionUtils::sectionEndings(fmt).mid(0, m_splitPosition + 1);
-	    KoSectionUtils::setSectionEndings(fmt, secondBlockEndings);
-	    editor->setBlockFormat(fmt);
-	    editor->movePosition(QTextCursor::PreviousBlock);
-	    fmt = editor->blockFormat();
-	    KoSectionUtils::setSectionEndings(fmt, moveBackward);
-	    editor->setBlockFormat(fmt);
-	    editor->movePosition(QTextCursor::NextBlock);
-	}
+        m_first = false;
+        
+        KoTextEditor *editor = koDocument.textEditor();
+        
+        if (m_type == Startings) {
+            editor->movePosition(QTextCursor::StartOfBlock);
+            editor->newLine();
+            editor->movePosition(QTextCursor::PreviousBlock);
+            
+            QTextBlockFormat fmt = editor->blockFormat();
+            KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>());
+            QList<KoSection *> firstBlockStartings = KoSectionUtils::sectionStartings(fmt).mid(0, m_splitPosition);
+            QList<KoSection *> moveForward = KoSectionUtils::sectionStartings(fmt).mid(m_splitPosition);
+            KoSectionUtils::setSectionStartings(fmt, firstBlockStartings);
+            editor->setBlockFormat(fmt);
+            editor->movePosition(QTextCursor::NextBlock);
+            fmt = editor->blockFormat();
+            KoSectionUtils::setSectionStartings(fmt, moveForward);
+            editor->setBlockFormat(fmt);
+            editor->movePosition(QTextCursor::PreviousBlock);
+        } else { // Endings
+            editor->movePosition(QTextCursor::EndOfBlock);
+            editor->newLine();
+            
+            QTextBlockFormat fmt = editor->blockFormat();
+            QList<KoSectionEnd *> secondBlockEndings = KoSectionUtils::sectionEndings(fmt).mid(m_splitPosition + 1);
+            QList<KoSectionEnd *> moveBackward = KoSectionUtils::sectionEndings(fmt).mid(0, m_splitPosition + 1);
+            KoSectionUtils::setSectionEndings(fmt, secondBlockEndings);
+            editor->setBlockFormat(fmt);
+            editor->movePosition(QTextCursor::PreviousBlock);
+            fmt = editor->blockFormat();
+            KoSectionUtils::setSectionEndings(fmt, moveBackward);
+            editor->setBlockFormat(fmt);
+            editor->movePosition(QTextCursor::NextBlock);
+        }
     }
 }

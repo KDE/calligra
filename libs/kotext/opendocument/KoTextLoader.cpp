@@ -433,8 +433,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     //}
 
     if (!rootCallChecker) {
-	// Allow to move end bounds of sections with inserting text
-	KoTextDocument(cursor.block().document()).sectionModel()->allowMovingEndBound();
+        // Allow to move end bounds of sections with inserting text
+        KoTextDocument(cursor.block().document()).sectionModel()->allowMovingEndBound();
     }
 }
 

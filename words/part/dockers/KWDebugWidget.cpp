@@ -93,7 +93,7 @@ void KWDebugWidget::updateData()
 
     QString willShow = "This sections starts here :";
     foreach (const KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
-	QPair<int, int> bnds = sec->bounds();
+        QPair<int, int> bnds = sec->bounds();
         willShow += " \"" + sec->name() + "\"(" + QString::number(bnds.first) + "; " + QString::number(bnds.second) + ")";
     }
     willShow.append("\n");

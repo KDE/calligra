@@ -33,55 +33,55 @@ class SectionFormatDialog::ProxyModel : public QIdentityProxyModel
 {
 public:
     ProxyModel(KoSectionModel *model, QObject *parent = 0)
-	: QIdentityProxyModel(parent)
+        : QIdentityProxyModel(parent)
     {
-	setSourceModel(model);
+        setSourceModel(model);
     }
 
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const
     {
-	Q_UNUSED(parent);
-	return 1; // We have one column with "Name of section"
+        Q_UNUSED(parent);
+        return 1; // We have one column with "Name of section"
     }
 
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const
     {
-	if (orientation != Qt::Horizontal || section != 0) {
-	    return QVariant();
-	}
+        if (orientation != Qt::Horizontal || section != 0) {
+            return QVariant();
+        }
 
-	if (role == Qt::DisplayRole) {
-	    return i18n("Section name");
-	}
-	return QVariant();
+        if (role == Qt::DisplayRole) {
+            return i18n("Section name");
+        }
+        return QVariant();
     }
 
     virtual QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const
     {
-	if (!proxyIndex.isValid() || proxyIndex.column() != 0) {
-	    return QVariant();
-	}
+        if (!proxyIndex.isValid() || proxyIndex.column() != 0) {
+            return QVariant();
+        }
 
-	if (role == Qt::DisplayRole) {
-	    KoSection *ptr = getSectionByIndex(proxyIndex);
-	    return ptr->name();
-	}
-	return QVariant();
+        if (role == Qt::DisplayRole) {
+            KoSection *ptr = getSectionByIndex(proxyIndex);
+            return ptr->name();
+        }
+        return QVariant();
     }
 
     KoSection *getSectionByIndex(const QModelIndex &idx) const
     {
-	return sourceModel()->data(
-	    mapToSource(idx),
-	    KoSectionModel::PointerRole
-	).value<KoSection *>();
+        return sourceModel()->data(
+            mapToSource(idx),
+            KoSectionModel::PointerRole
+        ).value<KoSection *>();
     }
 
 private:
     // Make it private. It is intented to be used only with KoSectionModel that is passed through constructor
     virtual void setSourceModel(QAbstractItemModel *sourceModel)
     {
-	QAbstractProxyModel::setSourceModel(sourceModel);
+        QAbstractProxyModel::setSourceModel(sourceModel);
     }
 };
 
@@ -89,9 +89,9 @@ class SectionFormatDialog::SectionNameValidator : public QValidator
 {
 public:
     SectionNameValidator(QObject *parent, KoSectionModel *sectionManager, KoSection *section)
-	: QValidator(parent)
-	, m_sectionModel(sectionManager)
-	, m_section(section)
+        : QValidator(parent)
+        , m_sectionModel(sectionManager)
+        , m_section(section)
     {
     }
 

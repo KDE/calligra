@@ -40,11 +40,11 @@ class KoSectionPrivate
 public:
     explicit KoSectionPrivate(const QTextCursor &cursor, const QString &_name, KoSection *_parent)
         : document(cursor.block().document())
-	, name(_name)
+        , name(_name)
         , sectionStyle(0)
-	, boundingCursorStart(cursor)
-	, boundingCursorEnd(cursor)
-	, parent(_parent)
+        , boundingCursorStart(cursor)
+        , boundingCursorEnd(cursor)
+        , parent(_parent)
         , inlineRdf(0)
     {
     }
@@ -86,9 +86,9 @@ KoSection::KoSection(const QTextCursor &cursor, const QString &name, KoSection *
     d->boundingCursorEnd.setKeepPositionOnInsert(false); // and end one should move forward
 
     if (parent) {
-	d->level = parent->level() + 1;
+        d->level = parent->level() + 1;
     } else {
-	d->level = 0;
+        d->level = 0;
     }
 }
 
@@ -107,8 +107,8 @@ QPair<int, int> KoSection::bounds() const
 {
     Q_D(const KoSection);
     return QPair<int, int>(
-	d->boundingCursorStart.position(),
-	d->boundingCursorEnd.position()
+        d->boundingCursorStart.position(),
+        d->boundingCursorEnd.position()
     );
 }
 
@@ -175,7 +175,7 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     if (!d->text_protected.isEmpty()) writer->addAttribute("text:text-protected", d->text_protected);
     if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
     if (!d->protection_key_digest_algorithm.isEmpty()) {
-	writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
+        writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
     }
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 
@@ -214,10 +214,28 @@ KoSection *KoSection::parent() const
     return d->parent;
 }
 
-QVector<KoSection *> &KoSection::children()
+QVector<KoSection *> KoSection::children()
 {
     Q_D(KoSection);
     return d->children;
+}
+
+const QVector<KoSection *> &KoSection::children() const
+{
+    Q_D(const KoSection);
+    return d->children;
+}
+
+void KoSection::insertChild(int childIdx, KoSection *section)
+{
+    Q_D(KoSection);
+    d->children.insert(childIdx, section);
+}
+
+void KoSection::removeChild(int childIdx)
+{
+    Q_D(KoSection);
+    d->children.remove(childIdx);
 }
 
 KoTextInlineRdf *KoSection::inlineRdf() const

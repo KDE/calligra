@@ -36,8 +36,8 @@
  * isn't moving if text inserted in its position, and end cursor
  * moves. But in the case of initial document loading, it is necessary
  * to make some end cursors stop moving, so we have:
- * 	KoTextLoader -> calling -> KoSection::setKeepEndBound()
- * 	KoTextLoader -> calling -> KoSectionModel::allowMovingEndBound()
+ *         KoTextLoader -> calling -> KoSection::setKeepEndBound()
+ *         KoTextLoader -> calling -> KoSectionModel::allowMovingEndBound()
  *      ^-- this needed to restore defaul behaviour after load
  *
  * 2) Level. Level means the depth of the section in tree. Root

@@ -1519,24 +1519,24 @@ void KoTextEditor::newSection()
 void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
 {
     if (isEditProtected()) {
-	return;
+        return;
     }
     addCommand(new SplitSectionsCommand(
-	d->document,
-	SplitSectionsCommand::Startings,
-	sectionIdToInsertBefore));
+        d->document,
+        SplitSectionsCommand::Startings,
+        sectionIdToInsertBefore));
     emit cursorPositionChanged();
 }
 
 void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
 {
     if (isEditProtected()) {
-	return;
+        return;
     }
     addCommand(new SplitSectionsCommand(
-	d->document,
-	SplitSectionsCommand::Endings,
-	sectionIdToInsertAfter));
+        d->document,
+        SplitSectionsCommand::Endings,
+        sectionIdToInsertAfter));
     emit cursorPositionChanged();
 }
 

@@ -59,16 +59,16 @@ private:
     friend class DeleteVisitor;
 
     struct SectionDeleteInfo {
-	SectionDeleteInfo(KoSection *_section, int _childIdx)
-	    : section(_section)
-	    , childIdx(_childIdx)
-	{
-	}
-	
-	bool operator<(const SectionDeleteInfo &other) const;
+        SectionDeleteInfo(KoSection *_section, int _childIdx)
+            : section(_section)
+            , childIdx(_childIdx)
+        {
+        }
+        
+        bool operator<(const SectionDeleteInfo &other) const;
 
-	KoSection *section; ///< Section to remove
-	int childIdx; ///< Position of section in parent's children() list
+        KoSection *section; ///< Section to remove
+        int childIdx; ///< Position of section in parent's children() list
     };
 
     QWeakPointer<QTextDocument> m_document;

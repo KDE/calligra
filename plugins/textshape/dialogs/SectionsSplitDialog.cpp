@@ -41,10 +41,10 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
     QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(editor->blockFormat());
     QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(editor->blockFormat());
     foreach (KoSection *sec, secStartings) {
-	m_widget.beforeList->addItem(sec->name());
+        m_widget.beforeList->addItem(sec->name());
     }
     foreach (KoSectionEnd *secEnd, secEndings) {
-	m_widget.afterList->addItem(secEnd->name());
+        m_widget.afterList->addItem(secEnd->name());
     }
     
     connect(m_widget.beforeList, SIGNAL(itemSelectionChanged()), this, SLOT(beforeListSelection()));
@@ -56,25 +56,25 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
 void SectionsSplitDialog::afterListSelection()
 {
     if (m_widget.afterList->selectedItems().size()) { // FIXME: more elegant way to check selection?
-	enableButton(KDialog::Ok, true);
-	m_widget.beforeList->clearSelection();
+        enableButton(KDialog::Ok, true);
+        m_widget.beforeList->clearSelection();
     }
 }
 
 void SectionsSplitDialog::beforeListSelection()
 {
     if (m_widget.beforeList->selectedItems().size()) {
-	enableButton(KDialog::Ok, true);
-	m_widget.afterList->clearSelection();
+        enableButton(KDialog::Ok, true);
+        m_widget.afterList->clearSelection();
     }
 }
 
 void SectionsSplitDialog::okClicked()
 {
     if (m_widget.beforeList->selectedItems().size()) {
-	m_editor->splitSectionsStartings(m_widget.beforeList->currentRow());
+        m_editor->splitSectionsStartings(m_widget.beforeList->currentRow());
     } else {
-	m_editor->splitSectionsEndings(m_widget.afterList->currentRow());
+        m_editor->splitSectionsEndings(m_widget.afterList->currentRow());
     }
 }
 

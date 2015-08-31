@@ -58,22 +58,22 @@ void NewSectionCommand::redo()
 
     if (!m_first) {
         KUndo2Command::redo();
-	//FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+        //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
 
-	// All formatting changes will be redone automatically.
-	// Lets handle Model Level (see KoSectionModel).
-	sectionModel->insertToModel(m_section, m_childIdx);
+        // All formatting changes will be redone automatically.
+        // Lets handle Model Level (see KoSectionModel).
+        sectionModel->insertToModel(m_section, m_childIdx);
     } else {
         m_first = false;
 
         KoTextEditor *editor = koDocument.textEditor();
         editor->newLine();
 
-	m_section = sectionModel->createSection(
-	    editor->constCursor(),
-	    sectionModel->sectionAtPosition(editor->constCursor().position())
-	);
-	m_childIdx = sectionModel->findRowOfChild(m_section);
+        m_section = sectionModel->createSection(
+            editor->constCursor(),
+            sectionModel->sectionAtPosition(editor->constCursor().position())
+        );
+        m_childIdx = sectionModel->findRowOfChild(m_section);
 
         KoSectionEnd *sectionEnd = sectionModel->createSectionEnd(m_section);
         QTextBlockFormat fmt = editor->blockFormat();
@@ -82,7 +82,7 @@ void NewSectionCommand::redo()
         QList<KoSectionEnd *> sectionEndings = KoSectionUtils::sectionEndings(fmt);
 
         sectionStartings.append(m_section);
-	sectionEndings.prepend(sectionEnd);
+        sectionEndings.prepend(sectionEnd);
 
         KoSectionUtils::setSectionStartings(fmt, sectionStartings);
         KoSectionUtils::setSectionEndings(fmt, sectionEndings);

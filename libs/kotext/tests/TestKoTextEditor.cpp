@@ -57,42 +57,42 @@ public:
 
     TestDocument()
     {
-	m_document = new QTextDocument();
+        m_document = new QTextDocument();
 
-	KoTextDocument textDoc(m_document);
-	KoTextEditor *editor = new KoTextEditor(m_document);
-	KUndo2Stack *undoStack = new KUndo2Stack();
-	textDoc.setUndoStack(undoStack);
+        KoTextDocument textDoc(m_document);
+        KoTextEditor *editor = new KoTextEditor(m_document);
+        KUndo2Stack *undoStack = new KUndo2Stack();
+        textDoc.setUndoStack(undoStack);
 
-	textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
-	textDoc.setTextRangeManager(&m_rangeManager);
-	textDoc.setStyleManager(new KoStyleManager(0));
-	textDoc.setTextEditor(editor);
+        textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
+        textDoc.setTextRangeManager(&m_rangeManager);
+        textDoc.setStyleManager(new KoStyleManager(0));
+        textDoc.setTextEditor(editor);
     }
 
     virtual ~TestDocument()
     {
-	delete m_document;
+        delete m_document;
     }
 
     virtual void addShape(KoShape *shape)
     {
-	m_shapes << shape;
+        m_shapes << shape;
     }
 
     virtual void removeShape(KoShape *shape)
     {
-	m_shapes.removeAll(shape);
+        m_shapes.removeAll(shape);
     }
 
     KoTextEditor *textEditor()
     {
-	return KoTextDocument(m_document).textEditor();
+        return KoTextDocument(m_document).textEditor();
     }
 
     KoSectionModel *sectionModel()
     {
-	return KoTextDocument(m_document).sectionModel();
+        return KoTextDocument(m_document).sectionModel();
     }
 
     QList<KoShape *> m_shapes;
@@ -275,17 +275,17 @@ bool TestKoTextEditor::checkStartings(const QVector<QString> &needStartings, KoT
     QList<KoSection *> lst = KoSectionUtils::sectionStartings(editor->blockFormat());
 
     if (lst.size() != needStartings.size()) {
-	kDebug() << QString("Startings list size is wrong."
-		    " Found %1, Expected %2.").arg(lst.size()).arg(needStartings.size());
-	return false;
+        kDebug() << QString("Startings list size is wrong."
+                    " Found %1, Expected %2.").arg(lst.size()).arg(needStartings.size());
+        return false;
     }
 
     for (int i = 0; i < needStartings.size(); i++) {
-	if (lst[i]->name() != needStartings[i]) {
-	    kDebug() << QString("Found unexpected section starting."
-			" Expected %1 section.").arg(needStartings[i]);
-	    return false;
-	}
+        if (lst[i]->name() != needStartings[i]) {
+            kDebug() << QString("Found unexpected section starting."
+                        " Expected %1 section.").arg(needStartings[i]);
+            return false;
+        }
     }
 
     return true;
@@ -296,17 +296,17 @@ bool TestKoTextEditor::checkEndings(const QVector<QString> &needEndings, KoTextE
     QList<KoSectionEnd *> lst = KoSectionUtils::sectionEndings(editor->blockFormat());
 
     if (lst.size() != needEndings.size()) {
-	kDebug() << QString("Endings list size is wrong."
-		    " Found %1, expected %2.").arg(lst.size()).arg(needEndings.size());
-	return false;
+        kDebug() << QString("Endings list size is wrong."
+                    " Found %1, expected %2.").arg(lst.size()).arg(needEndings.size());
+        return false;
     }
 
     for (int i = 0; i < needEndings.size(); i++) {
-	if (lst[i]->correspondingSection()->name() != needEndings[i]) {
-	    kDebug() << QString("Found unexpected section ending."
-			" Expected %1 section.").arg(needEndings[i]);
-	    return false;
-	}
+        if (lst[i]->correspondingSection()->name() != needEndings[i]) {
+            kDebug() << QString("Found unexpected section ending."
+                        " Expected %1 section.").arg(needEndings[i]);
+            return false;
+        }
     }
 
     return true;
@@ -328,11 +328,11 @@ void TestKoTextEditor::checkSectionFormattingLevel(
 
     QCOMPARE(doc->m_document->blockCount(), neededBlockCount);
     for (int i = 0; i < doc->m_document->blockCount(); i++) {
-	if (!checkStartings(needStartings[i], editor)
-		|| !checkEndings(needEndings[i], editor)) {
-	    QFAIL("Wrong section information.");
-	}
-	editor->movePosition(QTextCursor::NextBlock);
+        if (!checkStartings(needStartings[i], editor)
+                || !checkEndings(needEndings[i], editor)) {
+            QFAIL("Wrong section information.");
+        }
+        editor->movePosition(QTextCursor::NextBlock);
     }
 }
 
@@ -343,7 +343,7 @@ void TestKoTextEditor::checkSectionModelLevelRecursive(QModelIndex index, TestKo
     QModelIndex parent = index.parent();
     QCOMPARE(parent.data(KoSectionModel::PointerRole).value<KoSection *>(), handle->parent);
     for (int i = 0; i < handle->children.size(); i++) {
-	checkSectionModelLevelRecursive(index.child(i, 0), handle->children[i]);
+        checkSectionModelLevelRecursive(index.child(i, 0), handle->children[i]);
     }
 }
 
@@ -360,39 +360,39 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
     // This kind of cycle should visit all blocks
     // including ones in tables and frames.
     while (curBlock.isValid()) {
-	QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(curBlock.blockFormat());
-	QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(curBlock.blockFormat());
+        QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(curBlock.blockFormat());
+        QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(curBlock.blockFormat());
 
-	foreach(KoSection *sec, secStartings) {
-	    SectionHandle *handle = new SectionHandle(sec);
-	    if (sectionStack.empty()) {
-		rootSections.push_back(handle);
-		handle->parent = 0;
-	    } else {
-		sectionStack.top()->children.push_back(handle);
-		handle->parent = sectionStack.top()->sec;
-	    }
+        foreach(KoSection *sec, secStartings) {
+            SectionHandle *handle = new SectionHandle(sec);
+            if (sectionStack.empty()) {
+                rootSections.push_back(handle);
+                handle->parent = 0;
+            } else {
+                sectionStack.top()->children.push_back(handle);
+                handle->parent = sectionStack.top()->sec;
+            }
 
-	    allSections.push_back(handle);
-	    sectionStack.push(handle);
-	}
+            allSections.push_back(handle);
+            sectionStack.push(handle);
+        }
 
-	foreach(KoSectionEnd *secEnd, secEndings) {
-	    sectionStack.pop();
-	}
+        foreach(KoSectionEnd *secEnd, secEndings) {
+            sectionStack.pop();
+        }
 
-	curBlock = curBlock.next();
+        curBlock = curBlock.next();
     }
 
     // Now lets compare builded tree with KoSectionModel
     KoSectionModel *model = doc->sectionModel();
     QCOMPARE(model->rowCount(), rootSections.size());
     for (int i = 0; i < rootSections.size(); i++) {
-	checkSectionModelLevelRecursive(model->index(i, 0), rootSections[i]);
+        checkSectionModelLevelRecursive(model->index(i, 0), rootSections[i]);
     }
 
     foreach (SectionHandle *handle, allSections) {
-	delete handle;
+        delete handle;
     }
 }
 
@@ -405,41 +405,41 @@ void TestKoTextEditor::dumpSectionFormattingLevel(TestDocument *doc)
     // This kind of cycle should visit all blocks
     // including ones in tables and frames.
     while (curBlock.isValid()) {
-	result += "    << (QVector<QString>()";
-	QList<KoSection *> l = KoSectionUtils::sectionStartings(curBlock.blockFormat());
-	foreach (KoSection *s, l) {
-	    result += QString(" << \"%1\"").arg(s->name());
-	}
-	result += ")";
-	curBlock = curBlock.next();
-	if (curBlock.isValid()) {
-	    result += "\n";
-	} else {
-	    result += ")\n";
-	}
+        result += "    << (QVector<QString>()";
+        QList<KoSection *> l = KoSectionUtils::sectionStartings(curBlock.blockFormat());
+        foreach (KoSection *s, l) {
+            result += QString(" << \"%1\"").arg(s->name());
+        }
+        result += ")";
+        curBlock = curBlock.next();
+        if (curBlock.isValid()) {
+            result += "\n";
+        } else {
+            result += ")\n";
+        }
     }
 
     result += "    << (QVector< QVector<QString> >()\n";
     curBlock = doc->m_document->firstBlock();
     while (curBlock.isValid()) {
-	result += "    << (QVector<QString>()";
-	QList<KoSectionEnd *> l = KoSectionUtils::sectionEndings(curBlock.blockFormat());
-	foreach (KoSectionEnd *e, l) {
-	    result += QString(" << \"%1\"").arg(e->correspondingSection()->name());
-	}
-	result += ")";
-	curBlock = curBlock.next();
-	if (curBlock.isValid()) {
-	    result += "\n";
-	} else {
-	    result += ")\n";
-	}
+        result += "    << (QVector<QString>()";
+        QList<KoSectionEnd *> l = KoSectionUtils::sectionEndings(curBlock.blockFormat());
+        foreach (KoSectionEnd *e, l) {
+            result += QString(" << \"%1\"").arg(e->correspondingSection()->name());
+        }
+        result += ")";
+        curBlock = curBlock.next();
+        if (curBlock.isValid()) {
+            result += "\n";
+        } else {
+            result += ")\n";
+        }
     }
     result += ";";
 
     QFile out(QString("dump_%1.txt").arg(QTest::currentDataTag()));
     if (out.open(QIODevice::ReadWrite)) {
-	QTextStream(&out) << result;
+        QTextStream(&out) << result;
     }
     out.close();
 }

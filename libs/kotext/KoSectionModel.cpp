@@ -14,26 +14,26 @@ KoSectionModel::KoSectionModel(QTextDocument *doc)
 KoSectionModel::~KoSectionModel()
 {
     foreach(KoSection *sec, m_registeredSections) {
-	delete sec; // This will delete associated KoSectionEnd in KoSection destructor
+        delete sec; // This will delete associated KoSectionEnd in KoSection destructor
     }
 }
 
 KoSection *KoSectionModel::createSection(const QTextCursor &cursor, KoSection *parent, const QString &name)
 {
     if (!isValidNewName(name)) {
-	return 0;
+        return 0;
     }
 
     KoSection *result = new KoSection(cursor, name, parent);
 
     // Lets find our number in parent's children by cursor position
-    QVector<KoSection *> &children = (parent ? parent->children() : m_rootSections);
+    QVector<KoSection *> children = (parent ? parent->children() : m_rootSections);
     int childrenId = children.size();
     for (int i = 0; i < children.size(); i++) {
-	if (cursor.position() < children[i]->bounds().first) {
-	    childrenId = i;
-	    break;
-	}
+        if (cursor.position() < children[i]->bounds().first) {
+            childrenId = i;
+            break;
+        }
     }
     // We need to place link from parent to children in childId place
     // Also need to find corresponding index and declare operations in terms of model
@@ -59,15 +59,15 @@ KoSection *KoSectionModel::sectionAtPosition(int pos)
     int level = -1; // Seeking the section with maximum level
     QHash<QString, KoSection *>::iterator it = m_sectionNames.begin();
     for (; it != m_sectionNames.end(); it++) {
-	QPair<int, int> bounds = it.value()->bounds();
-	if (bounds.first > pos || bounds.second < pos) {
-	    continue;
-	}
+        QPair<int, int> bounds = it.value()->bounds();
+        if (bounds.first > pos || bounds.second < pos) {
+            continue;
+        }
 
-	if (it.value()->level() > level) {
-	    result = it.value();
-	    level = it.value()->level();
-	}
+        if (it.value()->level() > level) {
+            result = it.value();
+            level = it.value()->level();
+        }
     }
 
     return result;
@@ -83,8 +83,8 @@ QString KoSectionModel::possibleNewName()
     QString newName;
     int i = m_registeredSections.count();
     do {
-	i++;
-	newName = i18nc("new numbered section name", "New section %1", i);
+        i++;
+        newName = i18nc("new numbered section name", "New section %1", i);
     } while (!isValidNewName(newName));
 
     return newName;
@@ -93,10 +93,10 @@ QString KoSectionModel::possibleNewName()
 bool KoSectionModel::setName(KoSection *section, const QString &name)
 {
     if (section->name() == name || isValidNewName(name)) {
-	section->setName(name);
-	//TODO: we don't have name in columns, but need something to notify views about change
-	emit dataChanged(m_modelIndex[section], m_modelIndex[section]);
-	return true;
+        section->setName(name);
+        //TODO: we don't have name in columns, but need something to notify views about change
+        emit dataChanged(m_modelIndex[section], m_modelIndex[section]);
+        return true;
     }
     return false;
 }
@@ -105,7 +105,7 @@ void KoSectionModel::allowMovingEndBound()
 {
     QSet<KoSection *>::iterator it = m_registeredSections.begin();
     for (; it != m_registeredSections.end(); it++) {
-	(*it)->setKeepEndBound(false);
+        (*it)->setKeepEndBound(false);
     }
 }
 
@@ -113,9 +113,9 @@ int KoSectionModel::findRowOfChild(KoSection *section) const
 {
     QVector<KoSection *> lookOn;
     if (!section->parent()) {
-	lookOn = m_rootSections;
+        lookOn = m_rootSections;
     } else {
-	lookOn = section->parent()->children();
+        lookOn = section->parent()->children();
     }
 
     int result = lookOn.indexOf(section);
@@ -126,11 +126,11 @@ int KoSectionModel::findRowOfChild(KoSection *section) const
 QModelIndex KoSectionModel::index(int row, int column, const QModelIndex &parentIdx) const
 {
     if (!hasIndex(row, column, parentIdx)) {
-	return QModelIndex();
+        return QModelIndex();
     }
 
     if (!parentIdx.isValid()) {
-	return createIndex(row, column, m_rootSections[row]);
+        return createIndex(row, column, m_rootSections[row]);
     }
 
     KoSection *parent = static_cast<KoSection *>(parentIdx.internalPointer());
@@ -140,13 +140,13 @@ QModelIndex KoSectionModel::index(int row, int column, const QModelIndex &parent
 QModelIndex KoSectionModel::parent(const QModelIndex &child) const
 {
     if (!child.isValid()) {
-	return QModelIndex();
+        return QModelIndex();
     }
 
     KoSection *section = static_cast<KoSection *>(child.internalPointer());
     KoSection *parent = section->parent();
     if (parent) {
-	return createIndex(findRowOfChild(parent), 0, parent);
+        return createIndex(findRowOfChild(parent), 0, parent);
     }
     return QModelIndex();
 }
@@ -154,7 +154,7 @@ QModelIndex KoSectionModel::parent(const QModelIndex &child) const
 int KoSectionModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
-	return m_rootSections.size();
+        return m_rootSections.size();
     }
     return static_cast<KoSection *>(parent.internalPointer())->children().size();
 }
@@ -167,13 +167,13 @@ int KoSectionModel::columnCount(const QModelIndex &/*parent*/) const
 QVariant KoSectionModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
-	return QVariant();
+        return QVariant();
     }
 
     if (index.column() == 0 && role == PointerRole) {
-	QVariant v;
-	v.setValue(static_cast<KoSection *>(index.internalPointer()));
-	return v;
+        QVariant v;
+        v.setValue(static_cast<KoSection *>(index.internalPointer()));
+        return v;
     }
     return QVariant();
 }
@@ -184,15 +184,16 @@ void KoSectionModel::insertToModel(KoSection *section, int childIdx)
 
     KoSection *parent = section->parent();
     if (parent) { // Inserting to some section
-	beginInsertRows(m_modelIndex[parent], childIdx, childIdx);
-	parent->children().insert(childIdx, section);
-	endInsertRows();
-	m_modelIndex[section] = QPersistentModelIndex(index(childIdx, 0, m_modelIndex[parent]));
+        beginInsertRows(m_modelIndex[parent], childIdx, childIdx);
+        parent->insertChild(childIdx, section);
+//         parent->children().insert(childIdx, section);
+        endInsertRows();
+        m_modelIndex[section] = QPersistentModelIndex(index(childIdx, 0, m_modelIndex[parent]));
     } else { // It will be root section
-	beginInsertRows(QModelIndex(), childIdx, childIdx);
-	m_rootSections.insert(childIdx, section);
-	endInsertRows();
-	m_modelIndex[section] = QPersistentModelIndex(index(childIdx, 0, QModelIndex()));
+        beginInsertRows(QModelIndex(), childIdx, childIdx);
+        m_rootSections.insert(childIdx, section);
+        endInsertRows();
+        m_modelIndex[section] = QPersistentModelIndex(index(childIdx, 0, QModelIndex()));
     }
 
     m_registeredSections.insert(section);
@@ -204,13 +205,14 @@ void KoSectionModel::deleteFromModel(KoSection *section)
     KoSection *parent = section->parent();
     int childIdx = findRowOfChild(section);
     if (parent) { // Deleting non root section
-	beginRemoveRows(m_modelIndex[parent], childIdx, childIdx);
-	parent->children().remove(childIdx);
-	endRemoveRows();
+        beginRemoveRows(m_modelIndex[parent], childIdx, childIdx);
+        parent->removeChild(childIdx);
+//         parent->children().remove(childIdx);
+        endRemoveRows();
     } else { // Deleting root section
-	beginRemoveRows(QModelIndex(), childIdx, childIdx);
-	m_rootSections.remove(childIdx);
-	endRemoveRows();
+        beginRemoveRows(QModelIndex(), childIdx, childIdx);
+        m_rootSections.remove(childIdx);
+        endRemoveRows();
     }
     m_modelIndex.remove(section);
     m_sectionNames.remove(section->name());

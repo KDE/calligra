@@ -104,7 +104,10 @@ private:
     KoSection *parent() const;
 
     /// Returns a vector of pointers to the children of the section.
-    QVector<KoSection *> &children();
+    QVector<KoSection *> children();
+
+    /// Returns a vector of pointers to the children of the section. Const version.
+    const QVector<KoSection *> &children() const;
 
     /**
      * Specifies if end bound of section should stay on place when inserting text.
@@ -112,6 +115,16 @@ private:
      * @see QTextCursor::setKeepPositionOnInsert(bool)
      */
     void setKeepEndBound(bool state);
+
+    /**
+     * Inserts @param section to position @param childIdx of children
+     */
+    void insertChild(int childIdx, KoSection *section);
+
+    /**
+     * Removes child on position @param childIdx
+     */
+    void removeChild(int childIdx);
 
     friend class KoSectionModel;
     friend class KoTextLoader; // accesses setKeepEndBound() function

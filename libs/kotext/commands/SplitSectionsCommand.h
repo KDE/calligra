@@ -33,8 +33,8 @@ class SplitSectionsCommand : public KUndo2Command
 public:
     enum SplitType
     {
-	Startings,
-	Endings
+        Startings,
+        Endings
     };
 
     explicit SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition);

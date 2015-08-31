@@ -51,24 +51,24 @@ private:
     // Sections stuff
     struct SectionHandle
     {
-	explicit SectionHandle(KoSection *_sec)
-	    : sec(_sec)
-	    , parent(0)
-	{
-	}
+        explicit SectionHandle(KoSection *_sec)
+            : sec(_sec)
+            , parent(0)
+        {
+        }
 
-	KoSection *sec;
-	KoSection *parent;
-	QList<SectionHandle *> children;
+        KoSection *sec;
+        KoSection *parent;
+        QList<SectionHandle *> children;
     };
 
     bool checkEndings(const QVector<QString> &needEndings, KoTextEditor *editor);
     bool checkStartings(const QVector<QString> &needStartings, KoTextEditor *editor);
     void checkSectionFormattingLevel(
-	TestDocument *doc,
-	int neededBlockCount,
-	const QVector< QVector<QString> > &needStartings,
-	const QVector< QVector<QString> > &needEndings);
+        TestDocument *doc,
+        int neededBlockCount,
+        const QVector< QVector<QString> > &needStartings,
+        const QVector< QVector<QString> > &needEndings);
     void checkSectionModelLevel(TestDocument *doc);
     void checkSectionModelLevelRecursive(QModelIndex index, SectionHandle *handle);
 
