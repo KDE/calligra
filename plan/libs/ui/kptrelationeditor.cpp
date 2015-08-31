@@ -190,7 +190,7 @@ void RelationEditor::slotAddRelation()
     kDebug(planDbg());
 }
 
-void RelationEditor::edit( QModelIndex i )
+void RelationEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
 //        QModelIndex p = m_view->model()->parent( i );

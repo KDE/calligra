@@ -2385,7 +2385,7 @@ void DependencyEditor::slotAddSubMilestone()
     m_currentnode = 0;
 }
 
-void DependencyEditor::edit( QModelIndex i )
+void DependencyEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
 /*        QModelIndex p = m_view->itemModel()->parent( i );

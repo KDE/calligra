@@ -182,7 +182,7 @@ private Q_SLOTS:
     void slotProjectShown( bool );
 
 private:
-    void edit( QModelIndex index );
+    void edit( const QModelIndex &index );
 
 private:
     TaskEditorTreeView *m_view;
