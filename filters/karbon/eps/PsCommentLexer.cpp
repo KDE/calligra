@@ -63,7 +63,7 @@ const char*statetoa(State state)
 
 typedef struct {
     State oldState;
-    char c;
+    signed char c;
     State newState;
     Action action;
 } Transition;
