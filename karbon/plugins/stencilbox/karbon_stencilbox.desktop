@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=Karbon Stencil Box plugin
+Name[ca]=Connector del quadre de patrons del Karbon
+Name[fi]=Karbonin sapluunalaatikkoliitännäinen
+Name[nl]=Plug-in voor Karbon Stencil Box
+Name[pt]='Plugin' de Área de Formas do Karbon
+Name[sv]=Karbon insticksprogram med stencilruta
+Name[uk]=Додаток панелі трафаретів для Karbon
+Name[x-test]=xxKarbon Stencil Box pluginxx
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-PluginInfo-Name=karbon_stencilbox
