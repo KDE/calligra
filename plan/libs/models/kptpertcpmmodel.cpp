@@ -43,6 +43,10 @@ class Task;
 
 typedef QList<Node*> NodeList;
 
+// TODO: find some better values
+static const quintptr ListItemId = static_cast<quintptr>(-1);
+static const quintptr ProjectItemId  = static_cast<quintptr>(-2);
+
 CriticalPathItemModel::CriticalPathItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_manager( 0 )
@@ -487,7 +491,7 @@ QModelIndex PertResultItemModel::parent( const QModelIndex &index ) const
     if ( m_top.value( row ) == 0 ) {
         return QModelIndex();
     }
-    return createIndex( row, 0, -1 );
+    return createIndex( row, 0, ListItemId );
 }
 
 QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &parent ) const
@@ -497,13 +501,13 @@ QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &
     }
     if ( ! parent.isValid() ) {
         if ( row == 0 ) {
-            QModelIndex idx = createIndex(row, column, -2 ); // project
+            QModelIndex idx = createIndex(row, column, ProjectItemId ); // project
             return idx;
         }
         if ( row >= m_top.count() ) {
             return QModelIndex(); // shouldn't happend
         }
-        QModelIndex idx = createIndex(row, column, -1 );
+        QModelIndex idx = createIndex(row, column, ListItemId );
         //kDebug(planDbg())<<parent<<", "<<idx;
         return idx;
     }
@@ -542,7 +546,7 @@ QModelIndex PertResultItemModel::index( const NodeList *lst ) const
     if ( row <= 0 ) {
         return QModelIndex();
     }
-    return createIndex( row, 0, -1 );
+    return createIndex( row, 0, ListItemId );
 }
 
 QVariant PertResultItemModel::name( int row, int role ) const
@@ -829,7 +833,7 @@ bool PertResultItemModel::dropMimeData( const QMimeData *, Qt::DropAction , int 
 
 NodeList *PertResultItemModel::list( const QModelIndex &index ) const
 {
-    if ( index.isValid() && index.internalId() == -1 ) {
+    if ( index.isValid() && index.internalId() == ListItemId ) {
         //kDebug(planDbg())<<index<<"is list: "<<m_top.value( index.row() );
         return m_top.value( index.row() );
     }
@@ -842,7 +846,7 @@ Node *PertResultItemModel::node( const QModelIndex &index ) const
     if ( ! index.isValid() ) {
         return 0;
     }
-    if ( index.internalId() == -2 ) {
+    if ( index.internalId() == ProjectItemId ) {
         return m_project;
     }
     if ( index.internalId() == 0 ) {
