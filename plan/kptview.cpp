@@ -105,11 +105,8 @@
 #include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-// QT5TODO: T450 reenable reports
-#if 0
 #include "reports/reportview.h"
 #include "reports/reportdata.h"
-#endif
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -594,8 +591,6 @@ void View::createViews()
 
         ct = "Reports";
         cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
-// QT5TODO: reenable reports
-#if 0
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -603,7 +598,6 @@ void View::createViews()
             doc.setContent( standardTaskStatusReport() );
             rv->loadXML( doc );
         }
-#endif
     }
 }
 
@@ -1362,8 +1356,6 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-// QT5TODO: reenable reports
-#if 0
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
@@ -1387,8 +1379,6 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const Q
     connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     v->updateReadWrite( m_readWrite );
     return v;
-#endif
-    return 0;
 }
 
 Project& View::getProject() const
@@ -2695,13 +2685,10 @@ void View::slotCreateReport()
 */
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
-// QT5TODO: reenable reports
-#if 0
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
     connect( vd, SIGNAL(viewCreated(ViewBase*)), dlg, SLOT(slotViewCreated(ViewBase*)) );
     vd->exec();
     delete vd;
-#endif
 }
 
 void View::slotOpenReportFile()
@@ -2728,8 +2715,6 @@ void View::slotOpenReportFileFinished( int result )
         KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
-// QT5TODO: reenable reports
-#if 0
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
@@ -2742,7 +2727,6 @@ void View::slotOpenReportFileFinished( int result )
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
-#endif
 }
 
 void View::slotReportDesignFinished( int /*result */)
