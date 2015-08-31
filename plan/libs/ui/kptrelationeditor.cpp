@@ -193,7 +193,7 @@ void RelationEditor::slotAddRelation()
 void RelationEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
-        QModelIndex p = m_view->model()->parent( i );
+//        QModelIndex p = m_view->model()->parent( i );
 //        m_view->setExpanded( p );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
