@@ -49,8 +49,6 @@
 #include <KoIcon.h>
 #include "kptdebug.h"
 
-#include "kdatepicker.moc"
-
 namespace KPlato
 {
 
