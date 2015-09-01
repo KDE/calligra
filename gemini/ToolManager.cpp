@@ -71,5 +71,3 @@ void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
     d->currentTool = qobject_cast<KoToolBase*>(KoToolManager::instance()->toolById(canvas->canvas(), id));
     emit currentToolChanged();
 }
-
-#include "ToolManager.moc"

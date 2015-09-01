@@ -205,6 +205,3 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
 
     return checkoutLocation;
 }
-
-#include "checkoutcreator.moc"
-

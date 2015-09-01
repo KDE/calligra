@@ -98,5 +98,3 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
 
     return m_loadingCompleted;
 }
-
-#include "ThumbnailHelperImpl.moc"

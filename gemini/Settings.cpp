@@ -191,5 +191,3 @@ int Settings::mimeTypeToDocumentClass(QString mimeType) const
 //     }
     return documentClass;
 }
-
-#include "Settings.moc"

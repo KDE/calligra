@@ -181,5 +181,3 @@ void DesktopViewProxy::slotFileOpenRecent(const QUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }
-
-#include "desktopviewproxy.moc"
