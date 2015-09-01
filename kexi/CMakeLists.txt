@@ -32,10 +32,6 @@ if(KEXI_PROJECT_TEMPLATES) # temp.
     message(FATAL_ERROR "Project templates are not yet available.")
 endif()
 
-if (BUILD_TESTING)
-    add_definitions(-DBUILD_TESTING)
-endif()
-
 #See commit # , left here for reference
 #option(KEXI_SQLITE_MIGRATION "If defined, SQLite3 migration to some newer format is possible. Users can see a suitable question on app's startup." OFF)
 

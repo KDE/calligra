@@ -1,5 +1,4 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-add_definitions(-DCOMPILING_TESTS)
 
 include_directories(${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/libs/flake/tests

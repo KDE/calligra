@@ -1,4 +1,4 @@
-if(KDE4_BUILD_TESTS)
+if(BUILD_TESTING)
     If (KEXI_MOBILE)
 
     else()
