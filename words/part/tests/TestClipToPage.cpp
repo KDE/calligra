@@ -59,4 +59,3 @@ void TestClipToPage::testClipToPage()
 }
 
 QTEST_KDEMAIN(TestClipToPage, GUI)
-#include <TestClipToPage.moc>

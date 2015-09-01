@@ -110,5 +110,3 @@ void FrameConfigSharedState::setKeepAspectRatio(bool on)
     m_protectAspectRatio = on;
     emit keepAspectRatioChanged(on);
 }
-
-#include <KWShapeConfigFactory.moc>
