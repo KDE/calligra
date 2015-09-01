@@ -114,5 +114,3 @@ void TestDependencies::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(TestDependencies, GUI)
-
-#include "TestDependencies.moc"

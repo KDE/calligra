@@ -369,5 +369,3 @@ void TestFormula::testInlineArrays()
 }
 
 QTEST_KDEMAIN(TestFormula, GUI)
-
-#include "TestFormula.moc"

@@ -1751,5 +1751,3 @@ void CellStorage::setRowsRepeated(int row, int count)
 #endif
     d->rowRepeatStorage->setRowRepeat(row, count);
 }
-
-#include "CellStorage.moc"

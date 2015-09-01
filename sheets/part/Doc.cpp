@@ -611,5 +611,3 @@ bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QStri
 
     return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);
 }
-
-#include "Doc.moc"

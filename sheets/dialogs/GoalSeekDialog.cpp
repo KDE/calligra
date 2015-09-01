@@ -320,6 +320,3 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     enableButtonOk(ok);
     enableButtonCancel(true);
 }
-
-#include "GoalSeekDialog.moc"
-

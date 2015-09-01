@@ -113,6 +113,3 @@ void RTreeBenchmark::testLookupPerformance()
 }
 
 QTEST_MAIN(RTreeBenchmark)
-
-#include "BenchmarkRTree.moc"
-

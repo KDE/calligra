@@ -394,5 +394,3 @@ void TestEngineeringFunctions::testOCT2HEX()
 }
     
 QTEST_KDEMAIN(TestEngineeringFunctions, GUI)
-
-#include "TestEngineeringFunctions.moc"

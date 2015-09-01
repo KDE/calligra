@@ -114,5 +114,3 @@ void CellTest::testRichText()
 }
 
 QTEST_KDEMAIN(CellTest, GUI)
-
-#include "TestCell.moc"

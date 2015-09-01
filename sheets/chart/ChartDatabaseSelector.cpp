@@ -99,6 +99,3 @@ void ChartDatabaseSelector::showEvent(QShowEvent* event)
     d->selection = static_cast<Selection*>(m_resourceManager->resource(CanvasResource::Selection).value<void*>());
     d->widget.m_cellRegion->setText(d->selection->Region::name());
 }
-
-
-#include "ChartDatabaseSelector.moc"

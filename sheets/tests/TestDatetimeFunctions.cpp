@@ -560,5 +560,3 @@ void TestDatetimeFunctions::testWEEKS()
 }
 
 QTEST_KDEMAIN(TestDatetimeFunctions, GUI)
-
-#include "TestDatetimeFunctions.moc"

@@ -73,5 +73,3 @@ void CellStorageTest::testMergedCellsInsertRowBug()
 }
 
 QTEST_KDEMAIN(CellStorageTest, GUI)
-
-#include "TestCellStorage.moc"

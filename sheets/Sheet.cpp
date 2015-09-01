@@ -3516,5 +3516,3 @@ void Sheet::printDebug()
 
 } // namespace Sheets
 } // namespace Calligra
-
-#include "Sheet.moc"

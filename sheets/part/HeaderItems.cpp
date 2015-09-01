@@ -474,5 +474,3 @@ void SelectAllButtonItem::toolChanged(const QString& toolId)
 {
     doToolChanged(toolId);
 }
-
-#include "HeaderItems.moc"

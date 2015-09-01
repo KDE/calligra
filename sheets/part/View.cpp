@@ -2194,7 +2194,3 @@ void View::slotAutoScroll()
         emit autoScroll(scrollDistance);
     }
 }
-
-
-
-#include "View.moc"

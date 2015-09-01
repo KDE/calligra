@@ -342,5 +342,3 @@ bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
     d->selection->initialize(range, sheet);
     return true;
 }
-
-#include "SubtotalDialog.moc"

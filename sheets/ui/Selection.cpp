@@ -1159,5 +1159,3 @@ Selection::Range::Range(const Region::Range& range)
         m_color(Qt::black)
 {
 }
-
-#include "Selection.moc"

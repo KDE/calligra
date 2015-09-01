@@ -308,5 +308,3 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
 
     m_deleteButton->setEnabled(style->type() != Style::BUILTIN);
 }
-
-#include "StyleManagerDialog.moc"

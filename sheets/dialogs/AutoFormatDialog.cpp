@@ -205,5 +205,3 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
     }
     return true;
 }
-
-#include "AutoFormatDialog.moc"

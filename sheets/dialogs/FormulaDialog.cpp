@@ -764,5 +764,3 @@ void FormulaDialog::closeEvent(QCloseEvent * e)
     deleteLater();
     e->accept();
 }
-
-#include "FormulaDialog.moc"

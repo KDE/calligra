@@ -30,7 +30,6 @@
 */
 #include "DocBase.h"
 #include "DocBase_p.h"
-#include "DocBase.moc"
 
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>

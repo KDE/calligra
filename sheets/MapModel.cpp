@@ -237,5 +237,3 @@ void MapModel::removeSheet(Sheet *sheet)
     kDebug() << "Removed sheet:" << sheet->sheetName();
     emit layoutChanged();
 }
-
-#include "MapModel.moc"

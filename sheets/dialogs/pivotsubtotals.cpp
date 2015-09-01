@@ -87,4 +87,3 @@ PivotSubTotals::~PivotSubTotals()
 {
     delete d;
 }
-#include "PivotSubTotals.moc"

@@ -88,5 +88,3 @@ void DatabaseFilterTest::testOrEquals()
 }
 
 QTEST_KDEMAIN(DatabaseFilterTest, GUI)
-
-#include "TestDatabaseFilter.moc"

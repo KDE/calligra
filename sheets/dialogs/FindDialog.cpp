@@ -163,6 +163,3 @@ bool SearchDlg::searchInAllSheet() const
 {
     return m_findOptions->searchInAllSheet();
 }
-
-
-#include "FindDialog.moc"

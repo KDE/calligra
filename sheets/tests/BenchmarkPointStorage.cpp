@@ -264,5 +264,3 @@ void PointStorageBenchmark::testIterationPerformance()
 }
 
 QTEST_MAIN(PointStorageBenchmark)
-
-#include "BenchmarkPointStorage.moc"

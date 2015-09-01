@@ -527,5 +527,3 @@ void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
     command->add(QPoint(column, row));
     // executed by the parent command
 }
-
-#include "ConsolidateDialog.moc"

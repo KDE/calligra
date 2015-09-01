@@ -102,5 +102,3 @@ void AddNamedAreaDialog::slotOk()
     command->add(region);
     command->execute(m_selection->canvas());
 }
-
-#include "AddNamedAreaDialog.moc"

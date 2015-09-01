@@ -320,5 +320,3 @@ void TestRowFormatStorage::testRemoveRows()
 }
 
 QTEST_KDEMAIN(TestRowFormatStorage, GUI)
-
-#include "TestRowFormatStorage.moc"

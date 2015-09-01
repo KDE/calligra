@@ -47,5 +47,3 @@ void TestUtil::testDecodeFormula()
 }
 
 QTEST_MAIN(TestUtil)
-
-#include "TestUtil.moc"

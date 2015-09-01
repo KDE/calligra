@@ -316,5 +316,3 @@ void LinkDialog::slotOk()
 
     accept();
 }
-
-#include "LinkDialog.moc"

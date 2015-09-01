@@ -78,5 +78,3 @@ void PasteInsertDialog::slotOk()
     m_selection->activeSheet()->map()->addCommand(command);
     accept();
 }
-
-#include "PasteInsertDialog.moc"

@@ -312,5 +312,3 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
     ow.append(optionWidget);
     return ow;
 }
-
-#include "TableTool.moc"

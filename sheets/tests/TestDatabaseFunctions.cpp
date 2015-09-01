@@ -159,5 +159,3 @@ void TestDatabaseFunctions::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(TestDatabaseFunctions, GUI)
-
-#include "TestDatabaseFunctions.moc"

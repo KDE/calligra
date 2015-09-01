@@ -208,5 +208,3 @@ QWidget* ScriptingModule::createSheetsListView(QWidget* parent)
         parent->layout()->addWidget(listview);
     return listview;
 }
-
-#include "ScriptingModule.moc"

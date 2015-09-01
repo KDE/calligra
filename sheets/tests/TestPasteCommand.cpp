@@ -65,5 +65,3 @@ void PasteCommandTest::testKSpreadSnippet()
 }
 
 QTEST_KDEMAIN(PasteCommandTest, GUI)
-
-#include "TestPasteCommand.moc"

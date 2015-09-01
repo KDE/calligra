@@ -166,6 +166,3 @@ void ResizeColumn::slotDefault()
     double points = sheet->map()->defaultColumnFormat()->width();
     m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
-
-
-#include "Resize2Dialog.moc"

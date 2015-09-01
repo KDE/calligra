@@ -138,5 +138,3 @@ QDate CalendarToolWidget::endDate() const
 
 } // namespace Sheets
 } // namespace Calligra
-
-#include "CalendarToolWidget.moc"

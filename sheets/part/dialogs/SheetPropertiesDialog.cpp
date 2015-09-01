@@ -190,5 +190,3 @@ void SheetPropertiesDialog::setCapitalizeFirstLetter(bool b)
 {
     m_widget->capitalizeFirstLetterCheckBox->setChecked(b);
 }
-
-#include "SheetPropertiesDialog.moc"

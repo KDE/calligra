@@ -613,5 +613,3 @@ void ValidityDialog::OkPressed()
 
     accept();
 }
-
-#include "ValidityDialog.moc"

@@ -370,5 +370,3 @@ void TableShape::handleDamages(const QList<Damage*>& damages)
 
     update();
 }
-
-#include "TableShape.moc"

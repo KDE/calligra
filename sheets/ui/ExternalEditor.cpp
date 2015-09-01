@@ -206,5 +206,3 @@ QAction* ExternalEditor::cancelAction() const
 {
     return d->cancelAction;
 }
-
-#include "ExternalEditor.moc"

@@ -197,5 +197,3 @@ void RegionSelector::choiceChanged()
         d->textEdit->setPlainText(area);
     }
 }
-
-#include "RegionSelector.moc"

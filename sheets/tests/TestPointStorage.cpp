@@ -1197,5 +1197,3 @@ void PointStorageTest::testSubStorage()
 }
 
 QTEST_MAIN(PointStorageTest)
-
-#include "TestPointStorage.moc"

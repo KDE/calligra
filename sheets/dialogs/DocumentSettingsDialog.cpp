@@ -213,5 +213,3 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
     m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
     m_money->setText(i18n("Currency format: %1", locale->formatMoney(12.55)));
 }
-
-#include "DocumentSettingsDialog.moc"

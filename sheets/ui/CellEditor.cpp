@@ -899,5 +899,3 @@ void CellEditor::setActiveSubRegion(int index)
         }
     }
 }
-
-#include "CellEditor.moc"

@@ -151,5 +151,3 @@ void SheetsEditor::removeClicked()
     map->removeSheet(sheet);
     delete item;
 }
-
-#include "SheetsEditor.moc"

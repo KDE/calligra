@@ -556,5 +556,3 @@ void ViewAdaptor::decreaseFontSize()
     m_view->decreaseFontSize();
 }
 #endif
-
-#include "ViewAdaptor.moc"

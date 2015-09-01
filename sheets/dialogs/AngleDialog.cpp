@@ -97,6 +97,3 @@ void AngleDialog::slotDefault()
 {
     m_pAngle->setValue(0);
 }
-
-
-#include "AngleDialog.moc"
