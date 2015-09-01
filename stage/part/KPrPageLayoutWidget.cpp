@@ -162,5 +162,3 @@ void KPrPageLayoutWidget::applyLayout( QListWidgetItem * item )
         }
     }
 }
-
-#include "KPrPageLayoutWidget.moc"

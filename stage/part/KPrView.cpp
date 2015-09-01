@@ -580,5 +580,3 @@ void KPrView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
         viewMode()->updateActivePage(newActivePage);
     }
 }
-
-#include "KPrView.moc"

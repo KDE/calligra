@@ -27,5 +27,3 @@ KPrEventActionWidget::KPrEventActionWidget(QWidget * parent)
 KPrEventActionWidget::~KPrEventActionWidget()
 {
 }
-
-#include <KPrEventActionWidget.moc>

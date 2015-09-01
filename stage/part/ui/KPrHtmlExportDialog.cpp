@@ -329,5 +329,3 @@ void KPrHtmlExportDialog::favoriteAction()
         this->addSelectedTemplateToFavorite();
     }
 }
-
-#include "KPrHtmlExportDialog.moc"

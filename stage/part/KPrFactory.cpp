@@ -86,5 +86,3 @@ const KComponentData &KPrFactory::componentData()
     }
     return *s_instance;
 }
-
-#include "KPrFactory.moc"

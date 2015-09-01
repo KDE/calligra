@@ -77,4 +77,3 @@ void TestRenameCustomSlideShowCommand::renameCustomShow()
 }
 
 QTEST_KDEMAIN(TestRenameCustomSlideShowCommand, GUI)
-#include "TestRenameCustomSlideShowCommand.moc"

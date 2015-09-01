@@ -75,5 +75,3 @@ void KPrPdfPrintJob::startPrinting(RemovePolicy removePolicy)
         deleteLater();
     }
 }
-
-#include "KPrPdfPrintJob.moc"

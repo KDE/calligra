@@ -76,5 +76,3 @@ Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex &index) const
 {
     return QAbstractListModel::flags(index);
 }
-
-#include <KPrCollectionItemModel.moc>

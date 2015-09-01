@@ -61,6 +61,3 @@ void KPrPresenterViewSlidesInterface::itemDoubleClicked( const QModelIndex &inde
 {
     emit selectedPageChanged( index.row(), true );
 }
-
-#include "KPrPresenterViewSlidesInterface.moc"
-

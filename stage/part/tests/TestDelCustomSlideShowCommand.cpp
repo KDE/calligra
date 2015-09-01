@@ -75,4 +75,3 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
 
 
 QTEST_KDEMAIN(TestDelCustomSlideShowCommand, GUI)
-#include "TestDelCustomSlideShowCommand.moc"

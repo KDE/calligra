@@ -305,5 +305,3 @@ void KPrAnimationTool::verifyMotionPathChanged(KoShape *shape)
         }
     }
 }
-
-#include "KPrAnimationTool.moc"

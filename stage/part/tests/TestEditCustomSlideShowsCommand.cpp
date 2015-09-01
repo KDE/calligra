@@ -80,4 +80,3 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 }
 
 QTEST_KDEMAIN(TestEditCustomSlideShowsCommand, GUI)
-#include "TestEditCustomSlideShowsCommand.moc"

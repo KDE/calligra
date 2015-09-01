@@ -395,4 +395,3 @@ void TestCustomSlideShows::removeSlidesFromAllCustomSlideShows()
 }
 
 QTEST_KDEMAIN(TestCustomSlideShows,  GUI)
-#include "TestCustomSlideShows.moc"

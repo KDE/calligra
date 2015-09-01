@@ -165,5 +165,3 @@ void KPrHtmlExport::moveResult(KJob *job)
         }
     }
 }
-
-#include "KPrHtmlExport.moc"

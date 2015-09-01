@@ -67,6 +67,3 @@ bool KPrConfigurePresenterViewDialog::presenterViewEnabled()
 {
     return ( ui.presenterViewCheckBox->checkState() == Qt::Checked );
 }
-
-#include "KPrConfigurePresenterViewDialog.moc"
-

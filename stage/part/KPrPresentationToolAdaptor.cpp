@@ -105,6 +105,3 @@ void KPrPresentationToolAdaptor::normalPresentation()
 {
     m_tool->normalPresentation();
 }
-
-
-#include "KPrPresentationToolAdaptor.moc"

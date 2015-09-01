@@ -342,5 +342,3 @@ void KPrPresentationTool::normalPresentation()
 {
    switchStrategy( new KPrPresentationStrategy( this ) );
 }
-
-#include "KPrPresentationTool.moc"

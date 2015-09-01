@@ -523,5 +523,3 @@ void TestShapeAnimations::checkOrder(KPrShapeAnimations *animations)
 }
 
 QTEST_MAIN(TestShapeAnimations)
-#include "TestShapeAnimations.moc"
-

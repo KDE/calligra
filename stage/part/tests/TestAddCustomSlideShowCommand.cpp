@@ -58,4 +58,3 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
 }
 
 QTEST_KDEMAIN(TestAddCustomSlideShowCommand, GUI)
-#include "TestAddCustomSlideShowCommand.moc"

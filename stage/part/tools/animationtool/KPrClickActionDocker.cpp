@@ -143,5 +143,3 @@ void KPrClickActionDocker::addCommand( KUndo2Command * command )
         m_view->kopaCanvas()->addCommand( command );
     }
 }
-
-#include "KPrClickActionDocker.moc"

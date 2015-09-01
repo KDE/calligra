@@ -90,4 +90,3 @@ void TestDeleteSlidesCommand::delSlide()
 }
 
 QTEST_KDEMAIN(TestDeleteSlidesCommand, GUI)
-#include "TestDeleteSlidesCommand.moc"

@@ -207,5 +207,3 @@ void KPrViewModePreviewPageEffect::updatePixmaps()
         m_oldPage = oldPage;
     }
 }
-
-#include "KPrViewModePreviewPageEffect.moc"
