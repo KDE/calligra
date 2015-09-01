@@ -235,7 +235,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
-        docker = dynamic_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
+        docker = static_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
         if (docker->view() != this) {
             docker->setView(this);
         }

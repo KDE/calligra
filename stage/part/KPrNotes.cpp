@@ -107,7 +107,7 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
     writer.endElement(); // draw:page-thumbnail
 
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes().last() );
+    KoShapeLayer* layer = static_cast<KoShapeLayer*>( shapes().last() );
     foreach ( KoShape *shape, layer->shapes() ) {
         if ( shape != m_textShape && shape != m_thumbnailShape ) {
             shape->saveOdf( context );
@@ -120,7 +120,7 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
 bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoXmlElement child;
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes().last() );
+    KoShapeLayer* layer = static_cast<KoShapeLayer*>( shapes().last() );
 
     forEachElement( child, element ) {
         if ( child.namespaceURI() != KoXmlNS::draw )

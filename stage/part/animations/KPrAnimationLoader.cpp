@@ -155,7 +155,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         // use the current substep
         if ((*animationStep)->animationCount()) {
-            subStep = dynamic_cast<KPrAnimationSubStep*>((*animationStep)->animationAt((*animationStep)->animationCount() - 1));
+            subStep = static_cast<KPrAnimationSubStep*>((*animationStep)->animationAt((*animationStep)->animationCount() - 1));
         }
         else {
             subStep = new KPrAnimationSubStep();
