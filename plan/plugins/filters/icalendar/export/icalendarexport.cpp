@@ -182,3 +182,5 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         createTodos(cal, n, id, todo);
     }
 }
+
+#include "icalendarexport.moc"
