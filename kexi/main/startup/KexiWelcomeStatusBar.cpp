@@ -32,7 +32,7 @@
 #include <KConfigGroup>
 #include <KIO/Job>
 #include <KIO/CopyJob>
-#include <kcodecs.h>
+#include <KCodecs>
 #include <KSharedConfig>
 #include <KLocalizedString>
 #include <KMessageBox>
