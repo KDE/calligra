@@ -216,5 +216,3 @@ void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _
         cell.parseUserInput(_text);
     }
 }
-
-#include "CalendarTool.moc"

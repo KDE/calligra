@@ -187,6 +187,3 @@ void SeriesDialog::slotButtonClicked(int button)
 
     accept();
 }
-
-
-#include "SeriesDialog.moc"

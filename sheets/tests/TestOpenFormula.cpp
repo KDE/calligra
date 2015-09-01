@@ -223,5 +223,3 @@ void TestOpenFormula::testReferenceSaving()
 }
 
 QTEST_KDEMAIN(TestOpenFormula, GUI)
-
-#include "TestOpenFormula.moc"

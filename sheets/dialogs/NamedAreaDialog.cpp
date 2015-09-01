@@ -334,5 +334,3 @@ void EditNamedAreaDialog::slotAreaNameModified(const QString& name)
 {
     enableButtonOk(!name.isEmpty());
 }
-
-#include "NamedAreaDialog.moc"

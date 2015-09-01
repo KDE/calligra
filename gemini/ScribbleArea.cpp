@@ -132,5 +132,3 @@ void ScribbleArea::drawLineTo(const QPointF& endPoint)
                                     .adjusted(-rad, -rad, +rad, +rad));
     lastPoint = endPoint;
 }
-
-#include "ScribbleArea.moc"

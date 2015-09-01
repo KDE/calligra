@@ -175,5 +175,3 @@ QObject* TextCursor::insertTable(int rows, int columns)
 
     return new TextTable(this, table);
 }
-
-#include <TextCursor.moc>

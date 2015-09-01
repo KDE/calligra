@@ -659,6 +659,3 @@ void TestTrigFunctions::testSECH()
 }
 
 QTEST_KDEMAIN(TestTrigFunctions, GUI)
-
-
-#include "TestTrigFunctions.moc"

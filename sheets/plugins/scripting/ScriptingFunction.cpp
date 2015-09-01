@@ -329,5 +329,3 @@ bool ScriptingFunction::registerFunction()
     funcimpl->setAcceptArray();
     return true;
 }
-
-#include "ScriptingFunction.moc"

@@ -696,5 +696,3 @@ void SortDialog::moveCriterionDown()
     }
     itemSelectionChanged();
 }
-
-#include "SortDialog.moc"

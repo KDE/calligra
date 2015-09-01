@@ -3553,5 +3553,3 @@ void CellFormatPagePattern::apply(StyleCommand *_obj)
     if (!b_notAnyColor)
         _obj->setBackgroundColor(bgColor);
 }
-
-#include "LayoutDialog.moc"

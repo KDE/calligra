@@ -203,5 +203,3 @@ void SheetTest::testCompareRows()
 }
 
 QTEST_KDEMAIN(SheetTest, GUI)
-
-#include "TestSheet.moc"

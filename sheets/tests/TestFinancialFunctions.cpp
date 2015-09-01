@@ -1190,5 +1190,3 @@ void TestFinancialFunctions::testZEROCOUPON()
 
 
 QTEST_KDEMAIN(TestFinancialFunctions, GUI)
-
-#include "TestFinancialFunctions.moc"

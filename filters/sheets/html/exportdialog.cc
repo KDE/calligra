@@ -119,5 +119,3 @@ int ExportDialog::pixelsBetweenCells() const
 {
     return m_mainwidget->mPixelsBetweenCells->value();
 }
-
-#include <exportdialog.moc>

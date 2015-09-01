@@ -243,5 +243,3 @@ void SheetSelectPage::moveBottom()
     m_ui.ListViewSelected->addItem(item);
     m_ui.ListViewSelected->setCurrentItem(item);
 }
-
-#include "SheetSelectPage.moc"

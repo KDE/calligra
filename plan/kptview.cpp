@@ -235,7 +235,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
-        docker = dynamic_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
+        docker = static_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
         if (docker->view() != this) {
             docker->setView(this);
         }
@@ -2101,6 +2101,7 @@ void View::slotTaskProgress()
             }
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
+                Q_ASSERT( task );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task, this );
                 connect(dia, SIGNAL(finished(int)), SLOT(slotMilestoneProgressFinished(int)));
                 dia->show();

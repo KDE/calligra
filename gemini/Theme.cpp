@@ -450,5 +450,3 @@ void Theme::Private::rebuildFontCache()
         fontMap.insert(itr.key(), font);
     }
 }
-
-#include "Theme.moc"

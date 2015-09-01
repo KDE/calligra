@@ -358,5 +358,3 @@ void TestValue::testAssignment()
 }
 
 QTEST_KDEMAIN(TestValue, GUI)
-
-#include "TestValue.moc"

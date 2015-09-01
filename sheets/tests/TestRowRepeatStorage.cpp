@@ -651,5 +651,3 @@ void TestRowRepeatStorage::testRemoveShiftLeft()
 }
 
 QTEST_KDEMAIN(TestRowRepeatStorage, NoGUI)
-
-#include "TestRowRepeatStorage.moc"

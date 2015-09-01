@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QClipboard>
+#include <QPluginLoader>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
@@ -57,7 +58,9 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
-#include <KoServiceLocator.h>
+#include <KPluginFactory>
+
+#include <KoJsonTrader.h>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
@@ -206,21 +209,13 @@ void View::initActions()
 
 void View::loadExtensions()
 {
-    const KService::List offers = KoServiceLocator::instance()->entries("Braindump/Extensions");
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Braindump/Extensions", QString());
 
-    KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-        QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
+        if (plugin) {
             insertChildClient(plugin);
-        } else {
-            if(!error.isEmpty()) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
-            }
         }
     }
 }

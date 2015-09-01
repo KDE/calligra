@@ -985,4 +985,3 @@ void TestRdf::testRoundtrip()
 }
 
 QTEST_KDEMAIN(TestRdf, GUI)
-#include <TestRdf.moc>

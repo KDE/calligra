@@ -152,5 +152,3 @@ void TestRegion::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(TestRegion, GUI)
-
-#include "TestRegion.moc"

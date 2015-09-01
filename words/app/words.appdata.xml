@@ -27,6 +27,7 @@
   <name xml:lang="sv">Words</name>
   <name xml:lang="uk">Words</name>
   <name xml:lang="x-test">xxWordsxx</name>
+  <name xml:lang="zh-CN">Words</name>
   <summary>Word Processor</summary>
   <summary xml:lang="bs">Program za obradu teksta</summary>
   <summary xml:lang="ca">Processador de textos</summary>
@@ -50,6 +51,7 @@
   <summary xml:lang="sv">Ordbehandlare</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
   <summary xml:lang="x-test">xxWord Processorxx</summary>
+  <summary xml:lang="zh-CN">文字处理器</summary>
   <description>
     <p>
       Words is an intuitive word processor and desktop publisher application.
@@ -98,6 +100,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Frame-based editing</li>
       <li xml:lang="bs">Uređivanje bazirano na okvirima</li>

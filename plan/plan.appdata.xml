@@ -25,6 +25,7 @@
   <name xml:lang="sv">Plan</name>
   <name xml:lang="uk">Plan</name>
   <name xml:lang="x-test">xxPlanxx</name>
+  <name xml:lang="zh-CN">Plan</name>
   <summary>Project Management</summary>
   <summary xml:lang="ast">Xestión de proyeutu</summary>
   <summary xml:lang="bs">Upravljanje projektom</summary>
@@ -47,6 +48,7 @@
   <summary xml:lang="sv">Projekthantering</summary>
   <summary xml:lang="uk">Керування проектами</summary>
   <summary xml:lang="x-test">xxProject Managementxx</summary>
+  <summary xml:lang="zh-CN">项目管理</summary>
   <description>
     <p>
       Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
@@ -91,6 +93,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
       <li xml:lang="bs">Višestruki pogledi: Gantovi dijagrami, pogled resursa, pogled računa</li>

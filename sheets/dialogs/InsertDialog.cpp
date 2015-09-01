@@ -148,5 +148,3 @@ void InsertDialog::slotOk()
 
     accept();
 }
-
-#include "InsertDialog.moc"

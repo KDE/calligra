@@ -621,5 +621,3 @@ void TestInformationFunctions::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(TestInformationFunctions, GUI)
-
-#include "TestInformationFunctions.moc"

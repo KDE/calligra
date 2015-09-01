@@ -135,5 +135,3 @@ void TestBitopsFunctions::testBITRSHIFT()
 }
 
 QTEST_KDEMAIN(TestBitopsFunctions, GUI)
-
-#include "TestBitopsFunctions.moc"

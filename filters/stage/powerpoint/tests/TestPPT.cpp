@@ -116,5 +116,5 @@ TestPPT::testPPT() {
     test.test();
     QVERIFY(true);
 }
+
 QTEST_MAIN(TestPPT)
-#include <TestPPT.moc>

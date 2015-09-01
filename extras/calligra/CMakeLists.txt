@@ -1,6 +1,9 @@
 include_directories( ${KOMAIN_INCLUDES})
 
-set(calligra_SRCS main.cpp )
+set(calligra_SRCS
+    KoServiceLocator.cpp
+    main.cpp
+)
 
 add_executable(calligra ${calligra_SRCS})
 

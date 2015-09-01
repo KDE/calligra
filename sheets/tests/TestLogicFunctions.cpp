@@ -226,5 +226,3 @@ void TestLogicFunctions::testXOR()
 }
 
 QTEST_KDEMAIN(TestLogicFunctions, GUI)
-
-#include "TestLogicFunctions.moc"

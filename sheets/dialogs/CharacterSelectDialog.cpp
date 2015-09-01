@@ -19,7 +19,6 @@
 */
 
 #include "CharacterSelectDialog.h"
-#include "CharacterSelectDialog.moc"
 
 #include <QLayout>
 #include <QGridLayout>

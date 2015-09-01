@@ -999,5 +999,3 @@ KoDocumentResourceManager* Map::resourceManager() const
     if (!doc()) return 0;
     return doc()->resourceManager();
 }
-
-#include "Map.moc"

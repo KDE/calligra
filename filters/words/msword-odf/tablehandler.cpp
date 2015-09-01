@@ -724,5 +724,3 @@ double WordsTableHandler::rowHeight() const
     kDebug(30513) ;
     return qMax(m_tap->dyaRowHeight / 20.0, 20.0);
 }
-
-#include "tablehandler.moc"

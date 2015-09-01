@@ -67,6 +67,3 @@ void KWCreateBookmarkDialog::nameChanged(const QString &bookmarkName)
     else
         enableButtonOk(false);
 }
-
-#include <KWCreateBookmarkDialog.moc>
-

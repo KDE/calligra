@@ -235,5 +235,3 @@ void TestValueFormatter::testCreateNumberFormat()
 
 
 QTEST_KDEMAIN(TestValueFormatter, GUI)
-
-#include "TestValueFormatter.moc"

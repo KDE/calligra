@@ -27,6 +27,7 @@
   <name xml:lang="sv">Karbon</name>
   <name xml:lang="uk">Karbon</name>
   <name xml:lang="x-test">xxKarbonxx</name>
+  <name xml:lang="zh-CN">Karbon</name>
   <summary>Scalable Graphics</summary>
   <summary xml:lang="bs">Grafika koja se može skalirati</summary>
   <summary xml:lang="ca">Gràfics escalables</summary>
@@ -49,6 +50,7 @@
   <summary xml:lang="sv">Skalbar grafik</summary>
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
   <summary xml:lang="x-test">xxScalable Graphicsxx</summary>
+  <summary xml:lang="zh-CN">可缩放图像</summary>
   <description>
     <p>
       Karbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible.
@@ -93,6 +95,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>
         Loading support for ODG, SVG, WPG, WMF, EPS/PS

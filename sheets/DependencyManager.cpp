@@ -650,5 +650,3 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
         }
     }
 }
-
-#include "DependencyManager.moc"

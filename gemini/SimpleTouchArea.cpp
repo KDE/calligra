@@ -61,5 +61,3 @@ bool SimpleTouchArea::sceneEvent(QEvent* event)
 
     return QDeclarativeItem::sceneEvent(event);
 }
-
-#include "SimpleTouchArea.moc"

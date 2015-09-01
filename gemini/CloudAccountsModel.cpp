@@ -277,5 +277,3 @@ void CloudAccountsModel::setAccountDetails(int index, QObject* newDetails)
         d->saveList();
     }
 }
-
-#include "CloudAccountsModel.moc"

@@ -333,4 +333,3 @@ void TestRTree::testPrimitive()
     QCOMPARE(pairs.first().second, true);
 }
 QTEST_MAIN(TestRTree)
-#include "TestRTree.moc"

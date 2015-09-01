@@ -251,5 +251,3 @@ void ClusterBenchmark::testShiftDownPerformance()
 
 
 QTEST_MAIN(ClusterBenchmark)
-
-#include "BenchmarkCluster.moc"

@@ -26,6 +26,7 @@
   <name xml:lang="sv">Flow</name>
   <name xml:lang="uk">Flow</name>
   <name xml:lang="x-test">xxFlowxx</name>
+  <name xml:lang="zh-CN">Flow</name>
   <summary>Flowchart &amp; Diagram Editing</summary>
   <summary xml:lang="bs">Uređivanje dijagrama i organigrama</summary>
   <summary xml:lang="ca">Edició de diagrames de fluxos i diagrames</summary>
@@ -47,6 +48,7 @@
   <summary xml:lang="sv">Flödesdiagram och diagramredigering</summary>
   <summary xml:lang="uk">Редагування блок-схем і діаграм</summary>
   <summary xml:lang="x-test">xxFlowchart &amp; Diagram Editingxx</summary>
+  <summary xml:lang="zh-CN">流程图 &amp; 图标编辑</summary>
   <description>
     <p>
       Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications.
@@ -95,6 +97,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="bs">Kreirajte mrežne dijagrame, organizacione dijagrame, dijagrame toka i drugo</li>

@@ -83,14 +83,11 @@ set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 )
 endif()
 
-if( SHOULD_BUILD_FEATURE_RDF )
-# TODO: depends hard on Soprano
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
     dockers/KWDebugDocker.cpp
     dockers/KWDebugDockerFactory.cpp
     dockers/KWDebugWidget.cpp
 )
-endif()
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}

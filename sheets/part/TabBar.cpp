@@ -855,6 +855,3 @@ void TabBar::wheelEvent(QWheelEvent * e)
 
 } // namespace Sheets
 } // namespace Calligra
-
-#include "TabBar.moc"
-

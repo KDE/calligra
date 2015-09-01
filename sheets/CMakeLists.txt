@@ -1,7 +1,5 @@
 project(calligra-sheets)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
-
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
@@ -11,10 +9,14 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
 
 if (SHOULD_BUILD_PART_SHEETS)
 
-add_subdirectory( data )
+# have their own translation domain
 add_subdirectory( shape )
-add_subdirectory( tests )
 add_subdirectory( plugins )
+
+add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
+
+add_subdirectory( data )
+add_subdirectory( tests )
 add_subdirectory( dtd )
 add_subdirectory( functions )
 

@@ -540,5 +540,3 @@ void SheetAdaptor::handleDamages(const QList<Damage*>& damages)
         }
     }
 }
-
-#include "SheetAdaptor.moc"

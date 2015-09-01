@@ -851,5 +851,3 @@ void MainWindow::Private::notifyDockingModeChange()
     }
 #endif
 }
-
-#include "MainWindow.moc"

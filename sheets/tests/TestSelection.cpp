@@ -461,5 +461,3 @@ void TestSelection::splitting()
 }
 
 QTEST_KDEMAIN(TestSelection, GUI)
-
-#include "TestSelection.moc"

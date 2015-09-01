@@ -956,5 +956,3 @@ void TestMathFunctions::testTRUNC()
 }
 
 QTEST_KDEMAIN(TestMathFunctions, GUI)
-
-#include "TestMathFunctions.moc"

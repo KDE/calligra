@@ -297,5 +297,3 @@ void TestTextFunctions::testTEXT()
 }
 
 QTEST_KDEMAIN(TestTextFunctions, GUI)
-
-#include "TestTextFunctions.moc"

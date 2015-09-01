@@ -64,5 +64,3 @@ void TestStyleStorage::testGarbageCollection()
 }
 
 QTEST_KDEMAIN(TestStyleStorage, GUI)
-
-#include "TestStyleStorage.moc"

@@ -116,5 +116,3 @@ bool Constants::isLandscape() const
 	    return qApp->activeWindow()->height() < qApp->activeWindow()->width();
 	return true;
 }
-
-#include "Constants.moc"

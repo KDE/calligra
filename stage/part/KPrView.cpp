@@ -370,7 +370,7 @@ void KPrView::startPresentation()
 
 void KPrView::startPresentationFromBeginning()
 {
-    KPrDocument * doc = dynamic_cast<KPrDocument *>( kopaDocument() );
+    KPrDocument * doc = static_cast<KPrDocument *>( kopaDocument() );
     QList<KoPAPageBase*> slideshow = doc->slideShow();
     if ( !slideshow.isEmpty() ) {
         setActivePage( slideshow.first() );

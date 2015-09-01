@@ -139,5 +139,3 @@ void TestSort::DescendingOrder()
 }
 
 QTEST_KDEMAIN(TestSort, GUI)
-
-#include "TestSort.moc"

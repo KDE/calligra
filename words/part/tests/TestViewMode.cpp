@@ -210,4 +210,3 @@ void TestViewMode::testPageSetupChanged()
 }
 
 QTEST_KDEMAIN(TestViewMode, GUI)
-#include <TestViewMode.moc>

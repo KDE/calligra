@@ -107,5 +107,3 @@ void BindingManager::updateAllBindings()
             bindings[j].second.update(Region(bindings[j].first.toRect(), sheets[i]));
     }
 }
-
-#include "BindingManager.moc"

@@ -451,5 +451,3 @@ void SelectAllButtonWidget::toolChanged(const QString& toolId)
 {
     doToolChanged(toolId);
 }
-
-#include "HeaderWidgets.moc"

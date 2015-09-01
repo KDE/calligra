@@ -1169,5 +1169,3 @@ bool Document::headersChanged(void) const
     }
     return ret;
 }
-
-#include "document.moc"

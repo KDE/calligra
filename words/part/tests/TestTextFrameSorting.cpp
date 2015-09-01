@@ -204,5 +204,3 @@ KWFrame * TestTextFrameSorting::createCopyFrame(const QPointF &position, KoShape
 
 
 QTEST_KDEMAIN(TestTextFrameSorting, GUI)
-
-#include <TestTextFrameSorting.moc>

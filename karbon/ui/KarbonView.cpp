@@ -120,6 +120,7 @@
 #include <KoIcon.h>
 #include <KoFileDialog.h>
 #include <KoUnit.h>
+#include <KoJsonTrader.h>
 
 // kde header
 #include <QAction>
@@ -132,8 +133,8 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
 #include <kmimetype.h>
+#include <KPluginFactory>
 
 // qt header
 #include <QResizeEvent>
@@ -141,6 +142,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QImageReader>
+#include <QPluginLoader>
 
 #include <unistd.h>
 #include <KConfigGroup>
@@ -257,20 +259,12 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    const KService::List offers = KoServiceLocator::instance()->entries("Karbon/ViewPlugin");
-    KService::List::ConstIterator iter;
-    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-
-        QString error;
-
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Karbon/ViewPlugin", QString());
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
         if (plugin) {
             insertChildClient(plugin);
-        } else {
-            kWarning() << "Fail to create an instance for " << service->name() << " " << error;
         }
     }
 

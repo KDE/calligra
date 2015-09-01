@@ -228,7 +228,3 @@ Inspector::~Inspector()
 {
     delete d;
 }
-
-#include "inspector.moc"
-
-

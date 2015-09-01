@@ -1249,5 +1249,3 @@ void TestStatisticalFunctions::cleanupTestCase()
 }
 
 QTEST_KDEMAIN(TestStatisticalFunctions, GUI)
-
-#include "TestStatisticalFunctions.moc"

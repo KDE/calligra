@@ -253,5 +253,3 @@ void FilterPopup::showPopup(QWidget *parent, const Cell &cell, const QRect &cell
     popup->move(parent->mapToGlobal(position));
     popup->show();
 }
-
-#include "FilterPopup.moc"
