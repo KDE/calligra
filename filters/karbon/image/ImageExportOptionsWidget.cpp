@@ -220,5 +220,3 @@ void ImageExportOptionsWidget::enableBackgroundOpacity(bool enable)
     widget.opacity->setVisible(enable);
     widget.labelOpacity->setVisible(enable);
 }
-
-#include "ImageExportOptionsWidget.moc"

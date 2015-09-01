@@ -1285,5 +1285,3 @@ void WordsGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
     out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
     out.xml.endElement(); //draw:frame
 }
-
-#include "graphicshandler.moc"

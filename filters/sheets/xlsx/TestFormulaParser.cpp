@@ -112,5 +112,3 @@ void TestFormulaParser::testSharedFormulaReferences()
 }
 
 QTEST_KDEMAIN(TestFormulaParser, NoGUI)
-
-#include "TestFormulaParser.moc"

@@ -248,5 +248,3 @@ void LatexExportDialog::removeLanguage()
     m_ui.languagesList->addItem(text);
     delete currentItem;
 }
-
-#include <latexexportdialog.moc>

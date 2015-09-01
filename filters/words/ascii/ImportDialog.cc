@@ -126,5 +126,3 @@ int AsciiImportDialog::getParagraphStrategy() const
     }
     return 0;
 }
-
-#include <ImportDialog.moc>
