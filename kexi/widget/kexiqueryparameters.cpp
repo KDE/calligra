@@ -25,7 +25,6 @@
 #include <KDbQuerySchemaParameter>
 #include <KDbUtils>
 
-#include <knumvalidator.h>
 #include <KLocalizedString>
 
 #include <QDebug>
