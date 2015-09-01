@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
+#include <KoColorModelStandardIds.h>
 
 #include <KoConfig.h>
 #include <KoIcon.h>
@@ -135,7 +136,7 @@ void KisAdvancedColorSpaceSelector::fillLstProfiles()
         }
     }
     d->colorSpaceSelector->lstProfile->setCurrentItem(defaultProfile);
-    d->colorSpaceSelector->lstProfile->blockSignals(true);
+    d->colorSpaceSelector->lstProfile->blockSignals(false);
     colorSpaceChanged();
 }
 
@@ -144,8 +145,25 @@ void KisAdvancedColorSpaceSelector::fillCmbDepths(const KoID& id)
     KoID activeDepth = d->colorSpaceSelector->cmbColorDepth->currentItem();
     d->colorSpaceSelector->cmbColorDepth->clear();
     QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
-    d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
-    if (depths.contains(activeDepth)) {
+    QList<KoID> sortedDepths;
+
+    if (depths.contains(Integer8BitsColorDepthID)) {
+        sortedDepths << Integer8BitsColorDepthID;
+    }
+    if (depths.contains(Integer16BitsColorDepthID)) {
+        sortedDepths << Integer16BitsColorDepthID;
+    }
+    if (depths.contains(Float16BitsColorDepthID)) {
+        sortedDepths << Float16BitsColorDepthID;
+    }
+    if (depths.contains(Float32BitsColorDepthID)) {
+        sortedDepths << Float32BitsColorDepthID;
+    }
+    if (depths.contains(Float64BitsColorDepthID)) {
+        sortedDepths << Float64BitsColorDepthID;
+    }
+    d->colorSpaceSelector->cmbColorDepth->setIDList(sortedDepths);
+    if (sortedDepths.contains(activeDepth)) {
         d->colorSpaceSelector->cmbColorDepth->setCurrent(activeDepth);
     }
 }
@@ -358,6 +376,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->textProfileDescription->appendPlainText(i18nc("From Elle's notes.","Use V2 profiles for exporting finished images to be uploaded to the web or for use with imaging software that can't read V4 profiles."));
         }
     }
+    d->colorSpaceSelector->textProfileDescription->moveCursor(QTextCursor::Start);
 }
 
 QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoint) {
