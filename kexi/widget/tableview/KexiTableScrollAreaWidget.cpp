@@ -21,7 +21,7 @@
 #include "KexiTableScrollArea.h"
 
 #include <QPainter>
-#include <QScrollBar>
+#include <QDebug>
 
 KexiTableScrollAreaWidget::KexiTableScrollAreaWidget(KexiTableScrollArea *area)
     : QWidget(), scrollArea(area)
@@ -38,7 +38,7 @@ void KexiTableScrollAreaWidget::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     p.setClipRect(e->rect());
-    //kDebug() << e->rect() << rect() << scrollArea->viewportGeometry();
+    //qDebug() << e->rect() << rect() << scrollArea->viewportGeometry();
     scrollArea->drawContents(&p);
 }
 

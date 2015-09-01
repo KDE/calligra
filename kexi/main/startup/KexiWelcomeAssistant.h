@@ -21,14 +21,12 @@
 #define KEXIWELCOMEASSISTANT_H
 
 #include "KexiAssistantMessageHandler.h"
-
-#include <db/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
 
-#include <QPointer>
+#include <KDbConnectionData>
 
 class KexiProjectData;
 class KexiWelcomeAssistant;
@@ -45,7 +43,7 @@ public:
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
     void updateRecentProjects();
 
 Q_SIGNALS:
@@ -73,7 +71,7 @@ public:
     ~KexiWelcomeAssistant();
 
     KexiRecentProjects* projects();
-    
+
 public Q_SLOTS:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
@@ -94,7 +92,7 @@ protected:
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
+        const KDbConnectionData& cdata, const QString& databaseName,
         const QString& caption);
 
     friend class KexiMainWelcomePage;

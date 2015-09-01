@@ -22,16 +22,12 @@
 
 #include <QVariant>
 #include <QWidget>
-#include <QPointer>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 class KexiDataItemInterface;
-namespace KexiDB
-{
-class Field;
-class QueryColumnInfo;
-}
+class KDbField;
+class KDbQueryColumnInfo;
 
 //! An helper class used to react on KexiDataItemInterface objects' changes.
 class KEXICORE_EXPORT KexiDataItemChangesListener
@@ -44,10 +40,10 @@ public:
      Called by KexiDataItemInterface::valueChanged() */
     virtual void valueChanged(KexiDataItemInterface* item) = 0;
 
-    /*! Implement this to return information whether we're currently at new row or not.
+    /*! Implement this to return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(auto)"
      label should be displayed. */
-    virtual bool cursorAtNewRow() const = 0;
+    virtual bool cursorAtNewRecord() const = 0;
 
     /*! Implement this to react when length of data has been exceeded. */
     virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded) = 0;
@@ -79,13 +75,13 @@ public:
                   const QVariant* visibleValue = 0);
 
     //! \return field information for this item
-    virtual KexiDB::Field *field() const = 0;
+    virtual KDbField *field() const = 0;
 
     //! \return column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const = 0;
+    virtual KDbQueryColumnInfo* columnInfo() const = 0;
 
     //! Used internally to set column information.
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) = 0;
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo) = 0;
 
     //! Sets listener. No need to reimplement this.
     virtual void installListener(KexiDataItemChangesListener* listener);
@@ -106,7 +102,7 @@ public:
 
     //! \return true if editor's value is empty (not necessary null).
     //! Only few data types can accept "EMPTY" property
-    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! (use KDbField::hasEmptyProperty() to check this).
     //! Used for checking if a given constraint within table of form is met.
     virtual bool valueIsEmpty() = 0;
 
@@ -116,7 +112,7 @@ public:
     virtual QVariant visibleValue();
 
     /*! \return 'readOnly' flag for this item. The flag is usually taken from
-     the item's widget, e.g. KLineEdit::isReadOnly().
+     the item's widget, e.g. QLineEdit::isReadOnly().
      By default, always returns false. */
     virtual bool isReadOnly() const;
 
@@ -193,7 +189,7 @@ public:
 
     virtual void setFocus();
 
-    bool cursorAtNewRow();
+    bool cursorAtNewRecord();
 
     /*! Sets a pointer to a Parent Data Item Interface. This pointer is 0 by default,
      but can be set by parent widget if this interface is a building block of a larger data widget.
@@ -212,7 +208,7 @@ public:
     virtual void handleAction(const QString& actionName);
 
     virtual bool isComboBox() const;
-    
+
     virtual QWidget* internalEditor() const;
 
     //! Called (e.g. by KexiDataItemInterface) to change invalid value so it is valid.

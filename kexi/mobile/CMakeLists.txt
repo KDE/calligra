@@ -10,16 +10,15 @@ endif()
 find_package(Qt4 REQUIRED)
 
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
 )
 
 set(KexiMobile_SRCS main.cpp
-	KexiMobileMainWindow.cpp 
-	KexiMobileWidget.cpp
-	KexiMobileNavigator.cpp 
-        KexiMobileToolbar.cpp
+    KexiMobileMainWindow.cpp
+    KexiMobileWidget.cpp
+    KexiMobileNavigator.cpp
+    KexiMobileToolbar.cpp
 )
 
 qt4_automoc(${KexiMobile_SRCS})
@@ -27,11 +26,11 @@ qt4_automoc(${KexiMobile_SRCS})
 add_executable(keximobile ${KexiMobile_SRCS})
 
 target_link_libraries(keximobile Qt5::Core Qt5::Gui
-	kexiextendedwidgets
-	kexicore
-	kdeui
+    kexiextendedwidgets
+    kexicore
+    kdeui
 
-	Predicate
+    KDb
 )
 
 install(TARGETS keximobile ${INSTALL_TARGETS_DEFAULT_ARGS})

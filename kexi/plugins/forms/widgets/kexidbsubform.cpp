@@ -19,17 +19,18 @@
 */
 
 #include "kexidbsubform.h"
-
 #include "kexidbform.h"
 #include "kexiformmanager.h"
 #include "kexiformview.h"
-#include <db/utils.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <formeditor/formIO.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
+
+#include <KDb>
+
 #include <QFrame>
 #include <QSet>
 
@@ -101,10 +102,13 @@ KexiDBSubForm::setFormName(const QString &name)
     if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
         return;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     // we check if there is a form with this name
-    int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
+    int id;
+    if (true != KDb::idForObjectName(*conn, &id, name, KexiPart::FormObjectType)) {
+        return;
+    }
     if ((id == 0) || (id == view->window()->id())) // == our form
         return; // because of recursion when loading
 
@@ -120,9 +124,9 @@ KexiDBSubForm::setFormName(const QString &name)
 
     // and load the sub form
     QString data;
-    tristate res = conn->loadDataBlock(id, data, QString());
+    tristate res = conn->loadDataBlock(id, &data, QString());
     if (res == true)
-        res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+        res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, &data);
     if (res != true) {
         delete m_widget;
         m_widget = 0;
@@ -137,4 +141,3 @@ KexiDBSubForm::setFormName(const QString &name)
     //KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 
-#include "kexidbsubform.moc"

@@ -19,13 +19,12 @@
 
 #include "kexidbshortcutfile.h"
 #include <core/kexiprojectdata.h>
-#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <kdebug.h>
+#include <KDbConnectionData>
 
-#include <QStringList>
+#include <QDebug>
 #include <QDir>
 
 //! Version of the KexiDBShortcutFile format.
@@ -80,18 +79,25 @@ KexiDBConnShortcutFile::~KexiDBConnShortcutFile()
 {
 }
 
-bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData& data, QString* _groupKey)
+bool KexiDBConnShortcutFile::loadConnectionData(KDbConnectionData* data, QString* _groupKey)
 {
-    KexiProjectData pdata(data);
-    if (!pdata.load(fileName(), _groupKey))
+    Q_ASSERT(data);
+    KexiProjectData pdata(*data);
+    if (!pdata.load(fileName(), _groupKey)) {
+        m_result = pdata.result();
         return false;
-    data = *pdata.connectionData();
+    }
+    *data = *pdata.connectionData();
     return true;
 }
 
-bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& data,
+bool KexiDBConnShortcutFile::saveConnectionData(const KDbConnectionData& data,
         bool savePassword, QString* groupKey, bool overwriteFirstGroup)
 {
     KexiProjectData pdata(data);
-    return pdata.save(fileName(), savePassword, groupKey, overwriteFirstGroup);
+    if (!pdata.save(fileName(), savePassword, groupKey, overwriteFirstGroup)) {
+        m_result = pdata.result();
+        return false;
+    }
+    return true;
 }

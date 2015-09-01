@@ -21,9 +21,13 @@
 #define TABLEVIEW_TEST_H
 
 #include <widget/tableview/KexiDataTableScrollArea.h>
-#include <db/cursor.h>
+
+#include <KDbCursor>
+
+#include <KAboutData>
 
 #include <QDesktopWidget>
+#include <QDebug>
 
 int tableViewTest()
 {
@@ -32,26 +36,26 @@ int tableViewTest()
         return 1;
     }
 
-    KexiDB::TableSchema *persons = conn->tableSchema("persons");
+    KDbTableSchema *persons = conn->tableSchema("persons");
     if (!persons) {
         conn->debugError();
-        kDebug() << "tableViewTest(): !persons";
+        qDebug() << "tableViewTest(): !persons";
         return 1;
     }
 
 // KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
-// KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
-    KexiDB::Cursor *cursor = conn->prepareQuery(*persons , cursor_options);
+// KDbCursor *cursor = conn->executeQuery( "select * from persons", KDbCursor::Buffered );
+    KDbCursor *cursor = conn->prepareQuery(persons , cursor_options);
     if (!cursor) {
         conn->debugError();
-        kDebug() << "tableViewTest(): !cursor";
+        qDebug() << "tableViewTest(): !cursor";
         return 1;
     }
 
     KexiDataTableScrollArea *tv = new KexiDataTableScrollArea(0, cursor);
 
     tv->move((qApp->desktop()->width() - tv->width()) / 2, (qApp->desktop()->height() - tv->height()) / 2);
-    tv->setWindowTitle(QString("%1: %2").arg(KGlobal::mainComponent().aboutData()->programName()).arg(tv->windowTitle()));
+    tv->setWindowTitle(QString("%1: %2").arg(KAboutData::applicationData().displayName()).arg(tv->windowTitle()));
     tv->show();
     tv->setFocus();
 

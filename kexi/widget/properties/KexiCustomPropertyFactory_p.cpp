@@ -19,10 +19,12 @@
 
 #include "KexiCustomPropertyFactory_p.h"
 
-#include <QLineEdit>
-#include <kdebug.h>
 #include <KProperty>
-#include <kexiutils/identifier.h>
+
+#include <KDb>
+#include <KDbIdentifierValidator>
+
+#include <QDebug>
 
 //! @todo
 #if 0 //TODO
@@ -42,8 +44,8 @@ void KexiImagePropertyEdit::selectPixmap()
     QString fileName(KPropertyPixmapEditor::selectPixmapFileName());
     if (fileName.isEmpty())
         return;
-    KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(KUrl(fileName)));
-    setValue((uint)/*! @todo unsafe*/h.id());
+    KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(QUrl(fileName)));
+    setValue(int(/*! @todo unsafe*/h.id()));
 #if 0 //will be reenabled for new image collection
     if (!m_manager->activeForm() || !property())
         return;
@@ -60,7 +62,7 @@ void KexiImagePropertyEdit::selectPixmap()
 
 QVariant KexiImagePropertyEdit::value() const
 {
-    return (uint)/*! @todo unsafe*/m_id;
+    return int(/*! @todo unsafe*/m_id);
 }
 
 void KexiImagePropertyEdit::setValue(const QVariant &value, bool emitChange)
@@ -79,28 +81,27 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
 
 //----------------------------------------------------------------
 
-KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
+KexiIdentifierPropertyEditor::KexiIdentifierPropertyEditor(QWidget *parent)
         : KPropertyStringEditor(parent)
 {
-    KexiUtils::IdentifierValidator *val = new KexiUtils::IdentifierValidator(this);
+    KDbIdentifierValidator *val = new KDbIdentifierValidator(this);
     setValidator(val);
     val->setObjectName("KexiIdentifierPropertyEdit Validator");
 }
 
-KexiIdentifierPropertyEdit::~KexiIdentifierPropertyEdit()
+KexiIdentifierPropertyEditor::~KexiIdentifierPropertyEditor()
 {
 }
 
-void KexiIdentifierPropertyEdit::setValue(const QString &value)
+void KexiIdentifierPropertyEditor::setValue(const QString &value)
 {
     if (value.isEmpty()) {
-        kWarning() << "Value cannot be empty. This call has no effect.";
+        qWarning() << "Value cannot be empty. This call has no effect.";
         return;
     }
-    const QString identifier(KexiUtils::stringToIdentifier(value));
+    const QString identifier(KDb::stringToIdentifier(value));
     if (identifier != value)
-        kDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
+        qDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
     KPropertyStringEditor::setValue(identifier);
 }
 
-#include "KexiCustomPropertyFactory_p.moc"

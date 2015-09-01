@@ -36,17 +36,17 @@ public:
     explicit MySQLMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~MySQLMigrate();
 
-    KexiDB::Field::Type type(const QString& table, const MYSQL_FIELD* t);
+    KDbField::Type type(const QString& table, const MYSQL_FIELD* t);
 
-    KexiDB::Field::Type examineBlobField(const QString& table,
+    KDbField::Type examineBlobField(const QString& table,
                                          const MYSQL_FIELD* fld);
 
     QStringList examineEnumField(const QString& table,
                                  const MYSQL_FIELD* fld);
 
-    void getConstraints(int mysqlConstraints, KexiDB::Field* fld);
+    void getConstraints(int mysqlConstraints, KDbField* fld);
 
-    void getOptions(int flags, KexiDB::Field* fld);
+    void getOptions(int flags, KDbField* fld);
 
 protected:
     //! Driver specific function to return table names
@@ -54,7 +54,7 @@ protected:
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -62,51 +62,51 @@ protected:
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber,
+        const QString& sqlStatement, int columnNumber,
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord);
+                                            KDbRecordData* data, bool *firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+                               KDbConnection *destConn, KDbTableSchema* dstTable);
 
     virtual bool drv_progressSupported() {
         return true;
     }
 
-    virtual bool drv_getTableSize(const QString& table, quint64& size);
+    virtual bool drv_getTableSize(const QString& table, quint64* size);
 
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
-    
+
     //Extended API
     //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName);
-    
+
     //! Move to the next row
     virtual bool drv_moveNext();
-    
+
     //! Move to the previous row
     virtual bool drv_movePrevious();
-    
+
     //! Move to the next row
     virtual bool drv_moveFirst();
-    
+
     //! Move to the previous row
     virtual bool drv_moveLast();
-    
+
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
+    virtual QVariant drv_value(int i);
 
 private:
     MySqlConnectionInternal * const d;
     MYSQL_RES *m_mysqlres;
-    
+
     long m_rows;
     long m_row;
     MYSQL_ROW m_dataRow;
-    
+
     void getRow();
 };
 }

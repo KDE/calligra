@@ -29,14 +29,14 @@
  It is a replacement QDateEdit due to usability problems:
  people are accustomed to use single-character cursor.
  Date format is retrieved from the KDE global settings.
- and input/output is performed using KLineEdit (from KexiInputTableEdit).
+ and input/output is performed using QLineEdit (from KexiInputTableEdit).
 */
 class KexiDateTableEdit : public KexiInputTableEdit
 {
     Q_OBJECT
 
 public:
-    explicit KexiDateTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiDateTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiDateTableEdit();
     virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);

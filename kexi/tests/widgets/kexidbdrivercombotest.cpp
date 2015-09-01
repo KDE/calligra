@@ -22,15 +22,14 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#include <QLayout>
 #include <QPushButton>
+#include <QDebug>
 #include <Q3VBoxLayout>
-#include <kdebug.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kcomponentdata.h>
+#include <QApplication>
 
-#include <db/drivermanager.h>
+#include <KComponentData>
+
+#include <KDbDriverManager>
 #include <widget/kexidbdrivercombobox.h>
 
 /*
@@ -50,8 +49,8 @@ int main(int argc, char** argv)
     KApplication* app = new KApplication(true, true);
 
     // Look for installed database drivers
-    KexiDB::DriverManager manager;
-    KexiDB::Driver::InfoHash drvs = manager.driversInfo();
+    KDbDriverManager manager;
+    KDbDriver::InfoHash drvs = manager.driversInfo();
 
     // Set up a combo box and a quit widget in a new container
     QWidget* vbox = new QWidget();

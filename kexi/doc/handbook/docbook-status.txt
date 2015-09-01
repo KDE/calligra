@@ -32,7 +32,7 @@ Useful parts are now in Chapter 1
 (some bits missing - I'll sort them).
 
 Last Section (Different datatypes) is now moved to Appendix B.
-(There are some discrepancies between HTML and reality, take 
+(There are some discrepancies between HTML and reality, take
 care when editting)
 
 HTML Chapter 4:
@@ -128,7 +128,7 @@ Chapter 7: Command Reference
 aa_00_00_menu.html                NOT READY FOR CONVERSION YET (MERGE DOCS WITH docbook version)
 ab_00_00_shortcuts.html           NOT READY FOR CONVERSION YET (MERGE DOCS WITH docbook version)
 
-Anne-Marie wrote this text (updated by jstaniek), 
+Anne-Marie wrote this text (updated by jstaniek),
 since the Polish version has not been translated into English yet.
 WILL BE REPALCED BY HTML Appendix A. and B.
 

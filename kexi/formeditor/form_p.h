@@ -23,7 +23,7 @@
 #define KFORMDESIGNERFORM_P_H
 
 #include <kundo2stack.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include "resizehandle.h"
 #include "commands.h"
@@ -34,10 +34,10 @@
 #include "pixmapcollection.h"
 #endif
 
-#include <kexiutils/styleproxy.h>
-
 #include <KPropertySet>
 #include <KProperty>
+
+#include <QProxyStyle>
 
 class QStyleOption;
 
@@ -47,10 +47,10 @@ namespace KFormDesigner
 class ObjectTree;
 
 //! Used to alter the widget's style at design time
-class DesignModeStyle : public KexiUtils::StyleProxy
+class DesignModeStyle : public QProxyStyle
 {
 public:
-    explicit DesignModeStyle(QStyle* parentStyle, QObject *parent = 0);
+    explicit DesignModeStyle(const QString &baseStyleName);
 
     //! Reimplemented to remove handling of the State_MouseOver state.
     virtual void drawControl(ControlElement element, const QStyleOption *option,
@@ -81,7 +81,7 @@ public:
 
     void addValueCaption(const QByteArray &value, const QString &caption);
 
-    KProperty::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+    KPropertyListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
     //! Sets color of selected widget(s) to value of @a p.
     //! @a roleMethod can be backgroundColor or foregroundColor.
@@ -136,9 +136,9 @@ public:
     QHash<QByteArray, QString> headerProperties;
 
     //! Format version, set by FormIO or on creating a new form.
-    uint formatVersion;
+    int formatVersion;
     //! Format version, set by FormIO's loader or on creating a new form.
-    uint originalFormatVersion;
+    int originalFormatVersion;
 
 #ifdef KFD_SIGSLOTS
     //! true is slot connection is curently being painted
@@ -148,7 +148,7 @@ public:
     //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
     PropertyCommandGroup  *lastCommandGroup;
-    uint idOfPropertyCommand;
+    int idOfPropertyCommand;
 
     //! Command that being executed through Form::addCommand()
     const Command *executingCommand;

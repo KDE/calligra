@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,125 +18,132 @@
 */
 
 #include "kexiqueryparameters.h"
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kinputdialog.h>
-#include <knumvalidator.h>
-
-#include <db/queryschemaparameter.h>
-#include <db/utils.h>
 #include <kexi_global.h>
 #include "utils/kexidatetimeformatter.h"
 
+#include <KDb>
+#include <KDbQuerySchemaParameter>
+#include <KDbUtils>
+
+#include <knumvalidator.h>
+#include <KLocalizedString>
+
+#include <QDebug>
+#include <QInputDialog>
+
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
-        const KexiDB::Driver &driver, KexiDB::QuerySchema& querySchema, bool &ok)
+        const KDbDriver &driver, KDbQuerySchema* querySchema, bool *ok)
 {
+    Q_ASSERT(ok);
+    Q_ASSERT(querySchema);
     Q_UNUSED(driver);
-    ok = false;
-    const KexiDB::QuerySchemaParameterList params(querySchema.parameters());
+    *ok = false;
+    const QList<KDbQuerySchemaParameter> params(querySchema->parameters());
     QList<QVariant> values;
-    const QString caption(i18nc("Enter Query Parameter Value", "Enter Parameter Value"));
-    for (KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
-            it != params.constEnd(); ++it) {
-        switch ((*it).type) {
-        case KexiDB::Field::Byte:
-        case KexiDB::Field::ShortInteger:
-        case KexiDB::Field::Integer:
-        case KexiDB::Field::BigInteger: {
-//! @todo problem for ranges in case of BigInteger - will disappear when we remove use of KInputDialog
-            int minValue, maxValue;
+    const QString caption(xi18nc("@title:window Enter Query Parameter Value", "Enter Parameter Value"));
+    foreach(const KDbQuerySchemaParameter &parameter, params) {
+        switch (parameter.type) {
+        case KDbField::Byte:
+        case KDbField::ShortInteger:
+        case KDbField::Integer:
+        case KDbField::BigInteger: {
+//! @todo problem for ranges in case of BigInteger - will disappear when we remove use of QInputDialog
+            qlonglong minValue, maxValue;
 //! @todo add support for unsigned parameter here
-            KexiDB::getLimitsForType((*it).type, minValue, maxValue);
-            const int result = KInputDialog::getInteger(
-                                   caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, &ok, parent);
-            if (!ok)
+            KDb::getLimitsForFieldType(parameter.type, &minValue, &maxValue);
+            const int result = QInputDialog::getInt(parent, caption, parameter.message,
+                                                    0, minValue, maxValue, 1/*step*/, ok);
+            if (!*ok)
                 return QList<QVariant>(); //cancelled
             values.append(result);
             break;
         }
-        case KexiDB::Field::Boolean: {
+        case KDbField::Boolean: {
             QStringList list;
-            list << i18nc("Boolean True - Yes", "Yes") << i18nc("Boolean False - No", "No");
-            const QString result = KInputDialog::getItem(
-                                       caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
-            if (!ok || result.isEmpty())
+            list << xi18nc("Boolean True - Yes", "Yes") << xi18nc("Boolean False - No", "No");
+            const QString result = QInputDialog::getItem(parent, caption, parameter.message,
+                                                         list, 0/*current*/, false /* !editable*/,
+                                                         ok);
+            if (!*ok || result.isEmpty())
                 return QList<QVariant>(); //cancelled
             values.append(result == list.first());
             break;
         }
-        case KexiDB::Field::Date: {
-                KexiDateFormatter df;
-                const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
+        case KDbField::Date: {
+            //! @todo KEXI3 re-add the KexiDateFormatter's inputMask for QInputDialog
+            KexiDateFormatter df;
+            const QString result = QInputDialog::getText(parent, caption, parameter.message,
+                                                         QLineEdit::Normal, QString(), ok);
+            //! @todo KEXI3 add time validator
+            // 0/*validator*/, df.inputMask());
+            if (!*ok)
+                return QList<QVariant>(); //cancelled
+            values.append(df.fromString(result));
+            break;
+        }
+        case KDbField::DateTime: {
+            //! @todo KEXI3 re-add the KexiDateTimeFormatter's inputMask for QInputDialog
+            KexiDateFormatter df;
+            KexiTimeFormatter tf;
+            const QString result = QInputDialog::getText(parent, caption, parameter.message,
+                                                         QLineEdit::Normal, QString(), ok);
+            //! @todo KEXI3 add date time validator
+            // 0/*validator*/, KexiDateTimeFormatter::inputMask(df, tf));
+            if (!*ok)
+                return QList<QVariant>(); //cancelled
+            values.append(KexiDateTimeFormatter::fromString(df, tf, result));
+            break;
+        }
+        case KDbField::Time: {
+            //! @todo KEXI3 re-add the KexiTimeFormatter's inputMask for QInputDialog
+            KexiTimeFormatter tf;
+            const QString result = QInputDialog::getText(parent, caption, parameter.message,
+                                                         QLineEdit::Normal, QString(), ok);
 //! @todo add validator
-                                           0/*validator*/, df.inputMask());
-                if (!ok)
-                    return QList<QVariant>(); //cancelled
-                values.append(df.fromString(result));
-                break;
-            }
-        case KexiDB::Field::DateTime: {
-                KexiDateFormatter df;
-                KexiTimeFormatter tf;
-                const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
-//! @todo add validator
-                                           0/*validator*/, KexiDateTimeFormatter::inputMask(df, tf));
-                if (!ok)
-                    return QList<QVariant>(); //cancelled
-                values.append(KexiDateTimeFormatter::fromString(df, tf, result));
-                break;
-            }
-        case KexiDB::Field::Time: {
-                KexiTimeFormatter tf;
-                const QString result = KInputDialog::getText(
-                                           caption, (*it).message, QString(), &ok, parent, 0/*name*/,
-//! @todo add validator
-                                           0/*validator*/, tf.inputMask());
-                if (!ok)
-                    return QList<QVariant>(); //cancelled
-                values.append(tf.fromString(result));
-                break;
-            }
-        case KexiDB::Field::Float:
-        case KexiDB::Field::Double: {
-            // KInputDialog::getDouble() does not work well, use getText and double validator
-            KDoubleValidator validator(0);
-            const QString textResult(
-                KInputDialog::getText(caption, (*it).message, QString(),
-                                      &ok, parent, &validator));
-            if (!ok || textResult.isEmpty())
+            // 0/*validator*/, tf.inputMask());
+            if (!*ok)
+                return QList<QVariant>(); //cancelled
+            values.append(tf.fromString(result));
+            break;
+        }
+        case KDbField::Float:
+        case KDbField::Double: {
+            // QInputDialog::getDouble() does not work well, use getText and double validator
+            //! @todo KEXI3 re-add double validator
+            // QDoubleValidator validator(0);
+            const QString textResult
+                = QInputDialog::getText(parent, caption, parameter.message, QLineEdit::Normal,
+                                        QString(), ok);
+            if (!*ok || textResult.isEmpty())
                 return QList<QVariant>(); //cancelled
 //! @todo this value will be still rounded: consider storing them as a decimal type
 //!    (e.g. using a special qint64+decimalplace class)
-            const double result = textResult.toDouble(&ok); //this is also good for float (to avoid rounding)
-            if (!ok)
+            const double result = textResult.toDouble(ok); //this is also good for float (to avoid rounding)
+            if (!*ok)
                 return QList<QVariant>();
             values.append(result);
             break;
         }
-        case KexiDB::Field::Text:
-        case KexiDB::Field::LongText: {
-            const QString result = KInputDialog::getText(
-                                       caption, (*it).message, QString(), &ok, parent);
-            if (!ok)
+        case KDbField::Text:
+        case KDbField::LongText: {
+            const QString result = QInputDialog::getText(parent, caption, parameter.message,
+                                                         QLineEdit::Normal, QString(), ok);
+            if (!*ok)
                 return QList<QVariant>(); //cancelled
             values.append(result);
             break;
         }
-        case KexiDB::Field::BLOB: {
+        case KDbField::BLOB: {
 //! @todo BLOB input unsupported
             values.append(QByteArray());
         }
         default:
-            kWarning() << "unsupported type " << KexiDB::Field::typeName((*it).type)
-                << "for parameter \"" << (*it).message << "\" - aborting query execution!";
+            qWarning() << "unsupported type " << KDbField::typeName(parameter.type)
+                << "for parameter \"" << parameter.message << "\" - aborting query execution!";
             return QList<QVariant>();
         }
     }
-    ok = true;
+    *ok = true;
     return values;
 }
-

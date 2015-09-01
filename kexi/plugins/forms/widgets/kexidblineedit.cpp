@@ -20,8 +20,11 @@
 
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
+#include <kexiutils/utils.h>
 
-#include <kdebug.h>
+#include <KDbFieldValidator>
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
 #include <QMenu>
 #include <QPainter>
@@ -29,12 +32,8 @@
 #include <QPaintEvent>
 #include <QStyle>
 #include <QStyleOption>
-
-#include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
-#include <kexidb/fieldvalidator.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
+#include <QFontDatabase>
+#include <QProxyStyle>
 
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator
@@ -54,11 +53,11 @@ public:
 //-----
 
 //! A style proxy overriding KexiDBLineEdit style
-class KexiDBLineEditStyle : public KexiUtils::StyleProxy
+class KexiDBLineEditStyle : public QProxyStyle
 {
 public:
-    explicit KexiDBLineEditStyle(QStyle* parentStyle, QObject *parent = 0)
-        : KexiUtils::StyleProxy(parentStyle, parent), indent(0)
+    explicit KexiDBLineEditStyle(const QString &baseStyleName)
+        : QProxyStyle(baseStyleName), indent(0)
     {
     }
     virtual ~KexiDBLineEditStyle() {
@@ -75,7 +74,7 @@ public:
             const KexiFormDataItemInterface *dataItemIface = dynamic_cast<const KexiFormDataItemInterface*>(widget);
             if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
                 if (element == SE_LineEditContents) {
-                    QRect rect = KexiUtils::StyleProxy::subElementRect(SE_LineEditContents, option, widget);
+                    QRect rect = QProxyStyle::subElementRect(SE_LineEditContents, option, widget);
                     if (option->direction == Qt::LeftToRight)
                         return rect.adjusted(indent, 0, 0, 0);
                     else
@@ -83,7 +82,7 @@ public:
                 }
             }
         }
-        return KexiUtils::StyleProxy::subElementRect(element, option, widget);
+        return QProxyStyle::subElementRect(element, option, widget);
     }
     int indent;
 };
@@ -91,7 +90,7 @@ public:
 //-----
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
-        : KLineEdit(parent)
+        : QLineEdit(parent)
         , KexiDBTextWidgetInterface()
         , KexiFormDataItemInterface()
         , m_readWriteValidator(0)
@@ -102,7 +101,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         , m_inStyleChangeEvent(false)
 {
     QFont tmpFont;
-    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    tmpFont.setPointSize(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     m_originalPalette = palette();
     connect(this, SIGNAL(textChanged(QString)),
@@ -112,9 +111,10 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    m_internalStyle = new KexiDBLineEditStyle(style(), this);
+    m_internalStyle = new KexiDBLineEditStyle(style()->objectName());
+    m_internalStyle->setParent(this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
-    m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
+    m_inStyleChangeEvent = true; // do not allow QLineEdit::event() to touch the style
     setStyle(m_internalStyle);
     m_inStyleChangeEvent = false;
     KexiDataItemInterface::setLengthExceededEmittedAtPreviousChange(false);
@@ -126,7 +126,7 @@ KexiDBLineEdit::~KexiDBLineEdit()
 
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
-    KLineEdit::setReadOnly(true);
+    QLineEdit::setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
     if (focusPolicy() & Qt::TabFocus)
         setFocusPolicy(Qt::ClickFocus);
@@ -225,7 +225,7 @@ void KexiDBLineEdit::changeEvent(QEvent *e)
         m_originalPalette = palette();
         updatePalette();
     }
-    KLineEdit::changeEvent(e);
+    QLineEdit::changeEvent(e);
 }
 
 void KexiDBLineEdit::setReadOnly(bool readOnly)
@@ -281,10 +281,10 @@ bool KexiDBLineEdit::cursorAtEnd()
 void KexiDBLineEdit::clear()
 {
     if (!m_internalReadOnly)
-        KLineEdit::clear();
+        QLineEdit::clear();
 }
 
-void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBLineEdit::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     m_textFormatter.setField( cinfo ? cinfo->field : 0 );
@@ -292,9 +292,9 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     if (!cinfo)
         return;
 
-//! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
+//! @todo handle input mask (via QLineEdit::setInputMask()) using a special KDbFieldInputMask class
     delete m_readWriteValidator;
-    KexiDB::FieldValidator* fieldValidator = new KexiDB::FieldValidator(*cinfo->field, this);
+    KDbFieldValidator* fieldValidator = new KDbFieldValidator(*cinfo->field, this);
     if (m_internalReadOnly) {
         m_readWriteValidator = fieldValidator;
     }
@@ -311,7 +311,7 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
-    KLineEdit::paintEvent(pe);
+    QLineEdit::paintEvent(pe);
     KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<KFormDesigner::FormWidgetInterface*>(this);
     if (formWidget->designMode()) {
         KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(this);
@@ -320,7 +320,7 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
             QPainter p(this);
             QStyleOptionFrameV2 option;
             initStyleOption(&option);
-            
+
             int leftMargin, topMargin, rightMargin, bottomMargin;
             getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
             QRect r( style()->subElementRect(QStyle::SE_LineEditContents, &option, this) );
@@ -352,8 +352,8 @@ bool KexiDBLineEdit::event(QEvent * e)
         if (m_inStyleChangeEvent) {
             return true;
         }
-        // let the KLineEdit set its KLineEditStyle
-        if (!KLineEdit::event(e)) {
+        // let the QLineEdit set its KLineEditStyle
+        if (!QLineEdit::event(e)) {
             return false;
         }
         // move the KLineEditStyle inside our internal style as parent
@@ -364,7 +364,7 @@ bool KexiDBLineEdit::event(QEvent * e)
         return true;
     }
 
-    const bool ret = KLineEdit::event(e);
+    const bool ret = QLineEdit::event(e);
     KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
 
     if (e->type() == QEvent::FocusOut) {
@@ -414,17 +414,17 @@ void KexiDBLineEdit::undo()
 
 void KexiDBLineEdit::moveCursorToEnd()
 {
-    KLineEdit::end(false/*!mark*/);
+    QLineEdit::end(false/*!mark*/);
 }
 
 void KexiDBLineEdit::moveCursorToStart()
 {
-    KLineEdit::home(false/*!mark*/);
+    QLineEdit::home(false/*!mark*/);
 }
 
 void KexiDBLineEdit::selectAll()
 {
-    KLineEdit::selectAll();
+    QLineEdit::selectAll();
 }
 
 bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)
@@ -446,28 +446,9 @@ void KexiDBLineEdit::setDataSource(const QString &ds)
     updateTextForDataSource();
 }
 
-void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
+void KexiDBLineEdit::setDataSourcePluginId(const QString &pluginId)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     updateTextForDataSource();
 }
 
-QString KexiDBLineEdit::clickMessage() const
-{
-#if QT_VERSION  >= 0x040700
-    return placeholderText();
-#else
-    return KLineEdit::clickMessage();
-#endif
-}
-
-void KexiDBLineEdit::setClickMessage(const QString &msg)
-{
-#if QT_VERSION  >= 0x040700
-    setPlaceholderText(msg);
-#else
-    KLineEdit::setClickMessage(msg);
-#endif
-}
-
-#include "kexidblineedit.moc"

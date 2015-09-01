@@ -20,9 +20,9 @@
 #include "KexiCloseButton.h"
 #include "utils.h"
 
-#include <KIcon>
 #include <KStandardGuiItem>
 
+#include <QIcon>
 #include <QApplication>
 #include <QStyle>
 #include <QStyleOptionButton>
@@ -78,7 +78,7 @@ void KexiCloseButton::paintEvent(QPaintEvent *e)
     }
     QStyleOptionButton option;
     option.initFrom(this);
-    KIcon icon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &option, this));
+    QIcon icon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &option, this));
     QPainter p(this);
     const int metric = style()->pixelMetric(QStyle::PM_SmallIconSize, &option, this);
     QSize iconSize(metric, metric);
@@ -100,4 +100,3 @@ void KexiCloseButton::paintEvent(QPaintEvent *e)
     style()->drawItemPixmap(&p, iconRect, Qt::AlignCenter, pixmap);
 }
 
-#include "KexiCloseButton.moc"

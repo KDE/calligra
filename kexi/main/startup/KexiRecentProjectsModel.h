@@ -20,7 +20,7 @@
 #ifndef KEXIRECENTPROJECTSMODEL_H
 #define KEXIRECENTPROJECTSMODEL_H
 
-#include <kcategorizedsortfilterproxymodel.h>
+#include <KCategorizedSortFilterProxyModel>
 #include <QAbstractListModel>
 
 class KexiRecentProjects;
@@ -46,7 +46,7 @@ public:
 private:
     const KexiRecentProjects* m_projects;
 };
- 
+
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

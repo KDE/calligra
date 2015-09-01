@@ -20,15 +20,13 @@
 
 #include "WidgetTreeWidget.h"
 
-#include <QPainter>
-#include <QHeaderView>
 #include <QContextMenuEvent>
+#include <QDebug>
 
-#include <kdebug.h>
-#include <kiconeffect.h>
-#include <klocale.h>
+#include <KIconEffect>
+#include <KLocalizedString>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "objecttree.h"
 #include "form.h"
@@ -93,12 +91,12 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
 {
     QString itemName;
     QString itemClass;
-    QString itemIconName;
+    QString iconName;
     Qt::ItemFlags itemFlags = flags();
     WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
     ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(d->data) : d->data;
     if (selectable != d->data) {
-        //kDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
+        //qDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
         if (qobject_cast<QTabWidget*>(selectable->widget())) {
             // tab widget's page
             const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(selectable->widget());
@@ -109,14 +107,14 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 else
                     tabIndex = tabWidget->count();
             }
-            //kDebug() << tabIndex;
+            //qDebug() << tabIndex;
             if (tabIndex >= 0) {
                 if (forcedTabPageName.isEmpty()) {
                     itemName = tabWidget->tabText(tabIndex);
                     if (itemName.isEmpty()) {
                         itemName = forcedTabPageName;
                         if (itemName.isEmpty())
-                            itemName = i18n("Page %1", tabIndex + 1);
+                            itemName = xi18n("Page %1", tabIndex + 1);
                     }
                     else {
                         itemName.remove('&');
@@ -124,12 +122,12 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 }
                 else
                     itemName = forcedTabPageName;
-                itemClass = i18nc("Tab widget's page", "Tab Page");
+                itemClass = xi18nc("Tab widget's page", "Tab Page");
                 d->customSortingKey = QString("tab%1").arg(tabIndex);
-                //kDebug() << "d->customSortingKey" << d->customSortingKey;
+                //qDebug() << "d->customSortingKey" << d->customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
-                itemIconName = koIconName("tabwidget_tab");
+                iconName = koIconName("tabwidget_tab");
             }
         }
     }
@@ -140,9 +138,9 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     if (itemClass.isEmpty()) {
         itemClass = d->data->className();
     }
-    if (itemIconName.isEmpty()) {
+    if (iconName.isEmpty()) {
         if (widgetTreeWidget) {
-            itemIconName = widgetTreeWidget->iconNameForClass(d->data->widget()->metaObject()->className());
+            iconName = widgetTreeWidget->iconNameForClass(d->data->widget()->metaObject()->className());
         }
     }
     // set:
@@ -151,8 +149,8 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     }
     setText(0, itemName);
     setText(1, itemClass);
-    if (!itemIconName.isEmpty()) {
-        QPixmap icon(SmallIcon(itemIconName));
+    if (!iconName.isEmpty()) {
+        QPixmap icon(SmallIcon(iconName));
         if (!(itemFlags & Qt::ItemIsSelectable)) {
             KIconEffect::semiTransparent(icon);
         }
@@ -222,7 +220,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
     : QTreeWidget(parent), d(new Private(options))
 {
     setRootIsDecorated(false);
-    setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
+    setHeaderLabels(QStringList() << xi18n("Widget name") << xi18nc("Widget's type", "Type"));
     installEventFilter(this);
 
     if (!(d->options & DisableSelection)) {
@@ -412,11 +410,11 @@ void WidgetTreeWidget::addItem(KFormDesigner::ObjectTreeItem *item)
 
     WidgetTreeWidgetItem::LoadTreeFlags flags;
     if (dynamic_cast<const InsertPageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "InsertPageCommand";
+        //qDebug() << "InsertPageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "undoing RemovePageCommand";
+        //qDebug() << "undoing RemovePageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     loadTree(item, parent, flags);
@@ -427,12 +425,12 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
     if (!item)
         return;
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        //kDebug() << "RemovePageCommand";
+        //qDebug() << "RemovePageCommand";
     }
     WidgetTreeWidgetItem *it = findItem(item->name());
 
     if (!it) {
-        kWarning() << "cannot remove item with name" << item->name();
+        qWarning() << "cannot remove item with name" << item->name();
         return;
     }
 
@@ -445,7 +443,7 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
 void WidgetTreeWidget::renameItem(const QByteArray &oldname, const QByteArray &newname)
 {
     if (findItemByFirstColumn(newname)) {
-        kWarning() << "item with name" << newname << "already exists, cannot rename";
+        qWarning() << "item with name" << newname << "already exists, cannot rename";
         return;
     }
     WidgetTreeWidgetItem *item = findItemByFirstColumn(oldname);
@@ -514,7 +512,7 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
     int forcedTabPageIndex;
     QString forcedTabPageName;
     if (removePageCommand) {
-        //kDebug() << "undoing RemovePageCommand - fixing item name and index";
+        //qDebug() << "undoing RemovePageCommand - fixing item name and index";
         forcedTabPageIndex = removePageCommand->pageIndex();
         forcedTabPageName = removePageCommand->pageName();
     }
@@ -533,4 +531,3 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
     }
 }
 
-#include "WidgetTreeWidget.moc"

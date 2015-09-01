@@ -20,15 +20,16 @@
 #ifndef KEXI_MIGRATE_MNGR_P_H
 #define KEXI_MIGRATE_MNGR_P_H
 
-#include <db/object.h>
 #include <QMap>
+
+#include <KDbObject>
 
 namespace KexiMigration
 {
 
 /*! Internal class of driver manager.
 */
-class MigrateManagerInternal : public QObject, public KexiDB::Object
+class MigrateManagerInternal : public QObject, public KDbObject
 {
     Q_OBJECT
 public:

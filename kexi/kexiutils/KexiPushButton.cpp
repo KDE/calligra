@@ -18,14 +18,15 @@
 */
 
 #include "KexiPushButton.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDir>
+#include <QUrl>
 
-class KexiPushButtonPrivate
+class KexiPushButton::Private
 {
 public:
-    explicit KexiPushButtonPrivate(KexiPushButton *qq)
+    explicit Private(KexiPushButton *qq)
         : hyperlinkType(KexiPushButton::NoHyperlink)
         , hyperlinkTool(KexiUtils::OpenHyperlinkOptions::DefaultHyperlinkTool)
         , executable(false)
@@ -43,44 +44,17 @@ public:
     QString basePath;
 
     KexiPushButton *q;
-
-    void slotClicked();
 };
-
-void KexiPushButtonPrivate::slotClicked()
-{
-    if (hyperlinkType == KexiPushButton::NoHyperlink) {
-        return;
-    }
-
-    KUrl url(hyperlink);
-
-    if (hyperlinkTool == KexiUtils::OpenHyperlinkOptions::MailerHyperlinkTool && url.protocol().isEmpty()) {
-        url.setScheme("mailto");
-    }
-
-    if (url.isRelative()) {
-        url.setUrl(basePath + QDir::separator() + hyperlink);
-        url.setScheme("file");
-    }
-
-    KexiUtils::OpenHyperlinkOptions opt;
-    opt.allowExecutable = executable;
-    opt.allowRemote = remote;
-    opt.tool = hyperlinkTool;
-    KexiUtils::openHyperLink(url, q, opt);
-
-}
 
 KexiPushButton::KexiPushButton(QWidget *parent)
     : QPushButton(parent)
-    , d(new KexiPushButtonPrivate(this))
+    , d(new Private(this))
 {
 }
 
 KexiPushButton::KexiPushButton(const QString &text, QWidget *parent)
     : QPushButton(parent)
-    , d(new KexiPushButtonPrivate(this))
+    , d(new Private(this))
 {
     setText(text);
 }
@@ -145,4 +119,27 @@ void KexiPushButton::setLocalBasePath(const QString &basePath)
     d->basePath = basePath;
 }
 
-#include "KexiPushButton.moc"
+void KexiPushButton::slotClicked()
+{
+    if (d->hyperlinkType == KexiPushButton::NoHyperlink) {
+        return;
+    }
+
+    QUrl url(d->hyperlink);
+    if (d->hyperlinkTool == KexiUtils::OpenHyperlinkOptions::MailerHyperlinkTool
+            && url.scheme().isEmpty())
+    {
+        url.setScheme("mailto");
+    }
+
+    if (url.isRelative()) {
+        url.setUrl(d->basePath + QDir::separator() + d->hyperlink);
+        url.setScheme("file");
+    }
+
+    KexiUtils::OpenHyperlinkOptions opt;
+    opt.allowExecutable = d->executable;
+    opt.allowRemote = d->remote;
+    opt.tool = d->hyperlinkTool;
+    KexiUtils::openHyperLink(url, this, opt);
+}

@@ -18,40 +18,32 @@
 */
 
 #include "kexidbutils.h"
+#include <KexiIcon.h>
+#include <formeditor/widgetlibrary.h>
+#include <kexiutils/utils.h>
+#include "kexiformpart.h"
+#include "kexiformmanager.h"
+#include <widget/utils/kexicontextmenuutils.h>
+
+#include <KIconLoader>
+#include <KIconEffect>
+
+#include <KDbQuerySchema>
+#include <KDbUtils>
 
 #include <QApplication>
 #include <QFontMetrics>
-
-#include <kmenu.h>
-#include <kiconloader.h>
-#include <kiconeffect.h>
-
-#include <db/queryschema.h>
-#include <db/utils.h>
-
-#include <KoIcon.h>
-
-#include <formeditor/widgetlibrary.h>
-#include <kexiutils/utils.h>
-#include "../kexiformpart.h"
-#include "../kexiformmanager.h"
-#include <widget/utils/kexicontextmenuutils.h>
-
+#include <QMenu>
 
 class KexiDBWidgetContextMenuExtender::Private
 {
 public:
     explicit Private(KexiDataItemInterface* iface_)
       : iface(iface_)
-      , contextMenuHasTitle(false)
     {
     }
 
     KexiDataItemInterface* iface;
-    QPointer<QMenu> contextMenu;
-    QPointer<QAction> titleAction;
-    bool contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
-
 };
 
 
@@ -84,7 +76,7 @@ private:
     QPixmap m_dataSourceRTLTagIcon;
 };
 
-K_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
+Q_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
 
 //-------
 
@@ -121,38 +113,27 @@ KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 
 void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)
 {
-    KMenu kmenu;
-    foreach(QAction* action, menu->actions()) {
-        kmenu.addAction(action);
-    }
-    createTitle(&kmenu);
-    kmenu.exec(globalPos);
+    updateActions(menu);
+    menu->exec(globalPos);
 }
 
-void KexiDBWidgetContextMenuExtender::createTitle(KMenu *menu)
+void KexiDBWidgetContextMenuExtender::updateActions(QMenu *menu)
 {
     if (!menu)
         return;
 
+    // title
     QString icon;
     if (dynamic_cast<QWidget*>(d->iface)) {
         icon = KexiFormManager::self()->library()->iconName(
                    dynamic_cast<QWidget*>(d->iface)->metaObject()->className());
     }
-    d->contextMenuHasTitle = d->iface->columnInfo() ?
-        KexiContextMenuUtils::updateTitle(
-            menu,
-            d->iface->columnInfo()->captionOrAliasOrName(),
-            KexiDB::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
-        : false;
+    KexiContextMenuUtils::updateTitle(
+        menu, d->iface->columnInfo()->captionOrAliasOrName(),
+        KDb::simplifiedFieldTypeName(d->iface->columnInfo()->field->type()), icon);
 
-    updatePopupMenuActions(menu);
-}
-
-void KexiDBWidgetContextMenuExtender::updatePopupMenuActions(QMenu *menu)
-{
+    // actions
     const bool readOnly = d->iface->isReadOnly();
-
     foreach(QAction* action, menu->actions()) {
         const QString text(action->text());
         if (text.startsWith(QObject::tr("Cu&t")) /*do not use i18n()!*/

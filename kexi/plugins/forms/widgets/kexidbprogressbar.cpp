@@ -94,7 +94,7 @@ KexiDBProgressBar::widget()
 
 bool KexiDBProgressBar::cursorAtStart()
 {
-    return false; 
+    return false;
 }
 
 bool KexiDBProgressBar::cursorAtEnd()
@@ -107,4 +107,3 @@ void KexiDBProgressBar::clear()
     //read only widget
 }
 
-#include "kexidbprogressbar.moc"

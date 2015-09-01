@@ -20,18 +20,20 @@
 #define KEXILOOKUPCOLUMNPAGE_H
 
 #include <widget/properties/KexiPropertyPaneViewBase.h>
-#include <db/field.h>
-#include <db/utils.h>
+
+#include <KDbField>
+#include <KDbUtils>
+
 #include <KPropertySet>
 
 class KexiProject;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
-/*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does
+/*! It's data model is basically KDbLookupFieldSchema class, but the page does
  not create it directly but instead updates a property set that defines
  the field currently selected in the designer.
 
- @todo not all features of KexiDB::LookupFieldSchema class are displayed on this page yet
+ @todo not all features of KDbLookupFieldSchema class are displayed on this page yet
  */
 class KexiLookupColumnPage : public KexiPropertyPaneViewBase
 {
@@ -55,10 +57,12 @@ Q_SIGNALS:
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
 protected Q_SLOTS:
-    void slotRowSourceTextChanged(const QString & string);
+    void slotRowSourceTextChanged(const QString &text);
     void slotRowSourceChanged();
     void slotGotoSelectedRowSource();
+    void slotBoundColumnTextChanged(const QString &text);
     void slotBoundColumnSelected();
+    void slotVisibleColumnTextChanged(const QString &text);
     void slotVisibleColumnSelected();
 
 protected:

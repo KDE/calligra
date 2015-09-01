@@ -93,7 +93,7 @@ mdb_read_indices(MdbTableDef *table)
 		pidx = (MdbIndex *) g_malloc0(sizeof(MdbIndex));
 		pidx->table = table;
 		pidx->index_num = mdb_get_int16(tmpbuf, 4);
-		pidx->index_type = tmpbuf[type_offset]; 
+		pidx->index_type = tmpbuf[type_offset];
 		g_ptr_array_add(table->indices, pidx);
 	}
 	g_free(tmpbuf);
@@ -107,9 +107,9 @@ mdb_read_indices(MdbTableDef *table)
 		}
 		tmpbuf = g_malloc(name_sz);
 		read_pg_if_n(mdb, tmpbuf, &cur_pos, name_sz);
-		mdb_unicode2ascii(mdb, tmpbuf, name_sz, pidx->name, MDB_MAX_OBJ_NAME); 
+		mdb_unicode2ascii(mdb, tmpbuf, name_sz, pidx->name, MDB_MAX_OBJ_NAME);
 		g_free(tmpbuf);
-		
+
 	}
 
 	mdb_read_alt_pg(mdb, entry->table_pg);
@@ -131,7 +131,7 @@ mdb_read_indices(MdbTableDef *table)
 			continue;
 		}
 
-		pidx->num_rows = mdb_get_int32(mdb->alt_pg_buf, 
+		pidx->num_rows = mdb_get_int32(mdb->alt_pg_buf,
 				fmt->tab_cols_start_offset +
 				(i*fmt->tab_ridx_entry_size));
 
@@ -165,7 +165,7 @@ mdb_index_hash_text(char *text, char *hash)
 	for (k=0;k<strlen(text);k++) {
 		int c = ((unsigned char *)(text))[k];
 		hash[k] = idx_to_text[c];
-		if (!(hash[k])) fprintf(stderr, 
+		if (!(hash[k])) fprintf(stderr,
 				"No translation available for %02x %d\n", c, c);
 	}
 	hash[strlen(text)]='\0';
@@ -182,10 +182,10 @@ mdb_index_swap_n(unsigned char *src, int sz, unsigned char *dest)
 		dest[j++] = src[i];
 	}
 }
-void 
+void
 mdb_index_cache_sarg(MdbColumn *col, MdbSarg *sarg, MdbSarg *idx_sarg)
 {
-	
+
 	unsigned char *c;
 
 	switch (col->col_type) {
@@ -195,21 +195,21 @@ mdb_index_cache_sarg(MdbColumn *col, MdbSarg *sarg, MdbSarg *idx_sarg)
 
 		case MDB_LONGINT:
 		idx_sarg->value.i = GUINT32_SWAP_LE_BE(sarg->value.i);
-		
+
 		c = (unsigned char *) &(idx_sarg->value.i);
 		c[0] |= 0x80;
-		
-		break;	
+
+		break;
 
 		case MDB_INT:
-		break;	
+		break;
 
 		default:
-		break;	
+		break;
 	}
 }
 #if 0
-int 
+int
 mdb_index_test_sarg(MdbHandle *mdb, MdbColumn *col, MdbSarg *sarg, int offset, int len)
 {
 char tmpbuf[256];
@@ -247,28 +247,28 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 	MdbSarg *sarg;
 	MdbField field;
 	MdbSargNode node;
-	
+
 	int c_len;
 
-	
-	
-		
-	
+
+
+
+
 	for (i=0;i<idx->num_keys;i++) {
-		
+
 		col=g_ptr_array_index(table->columns,idx->key_col_num[i]-1);
 		/*
 		 * This will go away eventually
 		 */
 		if (col->col_type==MDB_TEXT) {
-			
+
 			c_len = strlen(buf);
 		} else {
 			c_len = col->col_size;
-			
+
 		}
 		/*
-		 * If we have no cached index values for this column, 
+		 * If we have no cached index values for this column,
 		 * create them.
 		 */
 		if (col->num_sargs && !col->idx_sarg_cache) {
@@ -276,7 +276,7 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 			for (j=0;j<col->num_sargs;j++) {
 				sarg = g_ptr_array_index (col->sargs, j);
 				idx_sarg = g_memdup(sarg,sizeof(MdbSarg));
-				
+
 				mdb_index_cache_sarg(col, sarg, idx_sarg);
 				g_ptr_array_add(col->idx_sarg_cache, idx_sarg);
 			}
@@ -287,7 +287,7 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 			/* XXX - kludge */
 			node.op = sarg->op;
 			node.value = sarg->value;
-			
+
 			field.value = buf;
 		       	field.siz = c_len;
 		       	field.is_null = FALSE;
@@ -314,9 +314,9 @@ mdb_index_pack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 	start = ipg->idx_starts[elem++];
 
 	while (start) {
-		
+
 		len = ipg->idx_starts[elem] - start;
-		
+
 		for (i=0; i < len; i++) {
 			mask_bit++;
 			if (mask_bit==8) {
@@ -327,7 +327,7 @@ mdb_index_pack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 			/* upon reaching the len, set the bit */
 		}
 		mask_byte = (1 << mask_bit) | mask_byte;
-		
+
 		start = ipg->idx_starts[elem++];
 	}
 	/* flush the last byte if any */
@@ -353,7 +353,7 @@ mdb_index_unpack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 
 	ipg->idx_starts[elem++]=start;
 
-	
+
 	do {
 		len = 0;
 		do {
@@ -365,7 +365,7 @@ mdb_index_unpack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 			mask_byte = mdb->pg_buf[mask_pos];
 			len++;
 		} while (mask_pos <= 0xf8 && !((1 << mask_bit) & mask_byte));
-		
+
 
 		start += len;
 		if (mask_pos < 0xf8) ipg->idx_starts[elem++]=start;
@@ -388,15 +388,15 @@ mdb_index_find_next_on_page(MdbHandle *mdb, MdbIndexPage *ipg)
 
 	/* if this page has not been unpacked to it */
 	if (!ipg->idx_starts[0]){
-		
+
 		mdb_index_unpack_bitmap(mdb, ipg);
 	}
 
-	
-	if (ipg->idx_starts[ipg->start_pos + 1]==0) return 0; 
+
+	if (ipg->idx_starts[ipg->start_pos + 1]==0) return 0;
 	ipg->len = ipg->idx_starts[ipg->start_pos+1] - ipg->idx_starts[ipg->start_pos];
 	ipg->start_pos++;
-	
+
 
 	return ipg->len;
 }
@@ -404,7 +404,7 @@ void mdb_index_page_reset(MdbIndexPage *ipg)
 {
 	ipg->offset = 0xf8; /* start byte of the index entries */
 	ipg->start_pos=0;
-	ipg->len = 0; 
+	ipg->len = 0;
 	ipg->idx_starts[0]=0;
 }
 void mdb_index_page_init(MdbIndexPage *ipg)
@@ -413,7 +413,7 @@ void mdb_index_page_init(MdbIndexPage *ipg)
 	mdb_index_page_reset(ipg);
 }
 /*
- * find the next leaf page if any given a chain. Assumes any exhausted leaf 
+ * find the next leaf page if any given a chain. Assumes any exhausted leaf
  * pages at the end of the chain have been peeled off before the call.
  */
 MdbIndexPage *
@@ -443,13 +443,13 @@ mdb_find_next_leaf(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 	 */
 	do {
 		ipg->len = 0;
-		
+
 		if (!mdb_index_find_next_on_page(mdb, ipg)) {
-			
+
 			return 0;
 		}
 		pg = mdb_get_int32_msb(mdb->pg_buf, ipg->offset + ipg->len - 3) >> 8;
-		
+
 		ipg->offset += ipg->len;
 
 		/*
@@ -458,7 +458,7 @@ mdb_find_next_leaf(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 		 */
 		newipg = mdb_chain_add_page(mdb, chain, pg);
 		newipg = mdb_find_next_leaf(mdb, idx, chain);
-		
+
 		return newipg;
 	} while (!passed);
 	/* no more pages */
@@ -482,7 +482,7 @@ mdb_chain_add_page(MdbHandle *mdb, MdbIndexChain *chain, guint32 pg)
 	return ipg;
 }
 /*
- * returns the bottom page of the IndexChain, if IndexChain is empty it 
+ * returns the bottom page of the IndexChain, if IndexChain is empty it
  * initializes it by reading idx->first_pg (the root page)
  */
 MdbIndexPage *
@@ -502,7 +502,7 @@ mdb_index_read_bottom_pg(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 			return 0;
 	} else {
 		ipg = &(chain->pages[chain->cur_depth - 1]);
-		ipg->len = 0; 
+		ipg->len = 0;
 	}
 
 	mdb_read_pg(mdb, ipg->pg);
@@ -517,24 +517,24 @@ mdb_index_unwind(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 {
 	MdbIndexPage *ipg;
 
-	
+
 	if (chain->cur_depth==1) {
-		
+
 		return NULL;
 	}
-	/* 
-	* unwind the stack until we find something or reach 
+	/*
+	* unwind the stack until we find something or reach
 	* the top.
 	*/
 	ipg = NULL;
 	while (chain->cur_depth>1 && ipg==NULL) {
-		
+
 		chain->cur_depth--;
 		ipg = mdb_find_next_leaf(mdb, idx, chain);
 		if (ipg) mdb_index_find_next_on_page(mdb, ipg);
 	}
 	if (chain->cur_depth==1) {
-		
+
 		return NULL;
 	}
 	return ipg;
@@ -542,7 +542,7 @@ mdb_index_unwind(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 /*
  * the main index function.
  * caller provides an index chain which is the current traversal of index
- * pages from the root page to the leaf.  Initially passed as blank, 
+ * pages from the root page to the leaf.  Initially passed as blank,
  * mdb_index_find_next will store it's state information here. Each invocation
  * then picks up where the last one left off, allowing us to scroll through
  * the index one by one.
@@ -577,20 +577,20 @@ mdb_index_find_next(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32
 					chain->clean_up_mode = 1;
 			}
 			if (chain->clean_up_mode) {
-				
+
 
 				if (!chain->last_leaf_found) return 0;
 				mdb_read_pg(mdb, chain->last_leaf_found);
 				chain->last_leaf_found = mdb_get_int32(
 					mdb->pg_buf, 0x0c);
-				
+
 				mdb_read_pg(mdb, chain->last_leaf_found);
 				/* reuse the chain for cleanup mode */
 				chain->cur_depth = 1;
 				ipg = &chain->pages[0];
 				mdb_index_page_init(ipg);
 				ipg->pg = chain->last_leaf_found;
-				
+
 				if (!mdb_index_find_next_on_page(mdb, ipg))
 					return 0;
 			}
@@ -598,39 +598,39 @@ mdb_index_find_next(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32
 		pg_row = mdb_get_int32_msb(mdb->pg_buf, ipg->offset + ipg->len - 4);
 		*row = pg_row & 0xff;
 		*pg = pg_row >> 8;
-		
+
 		col=g_ptr_array_index(idx->table->columns,idx->key_col_num[0]-1);
 		idx_sz = mdb_col_fixed_size(col);
 		/* handle compressed indexes, single key indexes only? */
 		if (idx->num_keys==1 && idx_sz>0 && ipg->len - 4 < idx_sz) {
-			
-			
+
+
 			memcpy(&ipg->cache_value[idx_sz - (ipg->len - 4)], &mdb->pg_buf[ipg->offset], ipg->len);
-			
+
 		} else {
 			idx_start = ipg->offset + (ipg->len - 4 - idx_sz);
 			memcpy(ipg->cache_value, &mdb->pg_buf[idx_start], idx_sz);
 		}
 
-		
+
 		passed = mdb_index_test_sargs(mdb, idx, (char *)(ipg->cache_value), idx_sz);
 
 		ipg->offset += ipg->len;
 	} while (!passed);
 
-	
-	
+
+
 
 	return ipg->len;
 }
 /*
  * XXX - FIX ME
- * This function is grossly inefficient.  It scans the entire index building 
- * an IndexChain to a specific row.  We should be checking the index pages 
+ * This function is grossly inefficient.  It scans the entire index building
+ * an IndexChain to a specific row.  We should be checking the index pages
  * for matches against the indexed fields to find the proper leaf page, but
  * getting it working first and then make it fast!
  */
-int 
+int
 mdb_index_find_row(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32 pg, guint16 row)
 {
 	MdbIndexPage *ipg;
@@ -650,8 +650,8 @@ mdb_index_find_row(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32 
 			if (chain->cur_depth==1)
 				return 0;
 
-			/* 
-			 * unwind the stack until we find something or reach 
+			/*
+			 * unwind the stack until we find something or reach
 			 * the top.
 			 */
 			while (chain->cur_depth>1) {
@@ -687,14 +687,14 @@ unsigned int i;
 
 	mdb_read_pg(mdb, idx->first_pg);
 	cur_pos = 0xf8;
-	
+
 	for (i=0;i<idx->num_keys;i++) {
 		marker = mdb->pg_buf[cur_pos++];
 		col=g_ptr_array_index(table->columns,idx->key_col_num[i]-1);
-		
+
 	}
 }
-void 
+void
 mdb_index_dump(MdbTableDef *table, MdbIndex *idx)
 {
 	unsigned int i;
@@ -707,9 +707,9 @@ mdb_index_dump(MdbTableDef *table, MdbIndex *idx)
 	if (idx->index_type==1) fprintf(stdout,"index is a primary key\n");
 	for (i=0;i<idx->num_keys;i++) {
 		col=g_ptr_array_index(table->columns,idx->key_col_num[i]-1);
-		fprintf(stdout,"Column %s(%d) Sorted %s Unique: %s\n", 
+		fprintf(stdout,"Column %s(%d) Sorted %s Unique: %s\n",
 			col->name,
-			idx->key_col_num[i], 
+			idx->key_col_num[i],
 			idx->key_col_order[i]==MDB_ASC ? "ascending" : "descending",
 			idx->flags & MDB_IDX_UNIQUE ? "Yes" : "No"
 			);
@@ -717,12 +717,12 @@ mdb_index_dump(MdbTableDef *table, MdbIndex *idx)
 	mdb_index_walk(table, idx);
 }
 /*
- * compute_cost tries to assign a cost to a given index using the sargs 
+ * compute_cost tries to assign a cost to a given index using the sargs
  * available in this query.
  *
  * Indexes with no matching sargs are assigned 0
  * Unique indexes are preferred over non-uniques
- * Operator preference is equal, like, isnull, others 
+ * Operator preference is equal, like, isnull, others
  */
 int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 {
@@ -741,7 +741,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 	}
 
 	col=g_ptr_array_index(table->columns,idx->key_col_num[0]-1);
-	/* 
+	/*
 	 * if this is the first key column and there are no sargs,
 	 * then this index is useless.
 	 */
@@ -759,7 +759,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 	 */
 	if (idx->flags & MDB_IDX_UNIQUE) {
 		if (idx->num_keys == 1) {
-			
+
 			switch (sarg->op) {
 				case MDB_EQUAL:
 					return 1; break;
@@ -773,7 +773,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 		} else {
 			switch (sarg->op) {
 				case MDB_EQUAL:
-					if (not_all_equal) return 2; 
+					if (not_all_equal) return 2;
 					else return 1;
 					break;
 				case MDB_LIKE:
@@ -799,7 +799,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 		} else {
 			switch (sarg->op) {
 				case MDB_EQUAL:
-					if (not_all_equal) return 3; 
+					if (not_all_equal) return 3;
 					else return 2;
 					break;
 				case MDB_LIKE:
@@ -819,7 +819,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
  *
  * Returns strategy to use (table scan, or index scan)
  */
-MdbStrategy 
+MdbStrategy
 mdb_choose_index(MdbTableDef *table, int *choice)
 {
 	unsigned int i;
@@ -831,7 +831,7 @@ mdb_choose_index(MdbTableDef *table, int *choice)
 	for (i=0;i<table->num_idxs;i++) {
 		idx = g_ptr_array_index (table->indices, i);
 		cost = mdb_index_compute_cost(table, idx);
-		
+
 		if (cost && cost < least) {
 			least = cost;
 			*choice = i;
@@ -852,11 +852,11 @@ mdb_index_scan_init(MdbHandle *mdb, MdbTableDef *table)
 		table->chain = g_malloc0(sizeof(MdbIndexChain));
 		table->mdbidx = mdb_clone_handle(mdb);
 		mdb_read_pg(table->mdbidx, table->scan_idx->first_pg);
-		
+
 	}
-	
+
 }
-void 
+void
 mdb_index_scan_free(MdbTableDef *table)
 {
 	if (table->chain) {

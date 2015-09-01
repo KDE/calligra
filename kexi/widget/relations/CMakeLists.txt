@@ -1,11 +1,8 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core   )
-
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core)
 
 ########### next target ###############
 
-set(kexirelationsview_LIB_SRCS 
+set(kexirelationsview_LIB_SRCS
    KexiRelationsScrollArea.cpp
    KexiRelationsConnection.cpp
    KexiRelationsTableContainer.cpp
@@ -16,13 +13,15 @@ set(kexirelationsview_LIB_SRCS
 
 add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 
+generate_export_header(kexirelationsview)
+
 target_link_libraries(
     kexirelationsview
     kexicore
     kexiextendedwidgets
     kexiutils
 
-    Predicate
+    KDb
 
     Qt5::Core
     Qt5::Gui

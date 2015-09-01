@@ -18,18 +18,18 @@
 */
 
 #include "kexidataawareview.h"
-
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
 #include <core/KexiWindow.h>
-#include <db/roweditbuffer.h>
 
-#include <QVBoxLayout>
+#include <KDbRecordEditBuffer>
 
-#include <kactioncollection.h>
-#include <kmenu.h>
+#include <KActionCollection>
+
+#include <QDebug>
+#include <QMenu>
 
 class KexiDataAwareView::Private
 {
@@ -73,10 +73,10 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         connect(this, SIGNAL(closing(bool*)), this, SLOT(slotClosing(bool*)));
 
         //! updating actions on start/stop editing
-        d->dataAwareObject->connectRowEditStartedSignal(
-            this, SLOT(slotUpdateRowActions(int)));
-        d->dataAwareObject->connectRowEditTerminatedSignal(
-            this, SLOT(slotUpdateRowActions(int)));
+        d->dataAwareObject->connectRecordEditingStartedSignal(
+            this, SLOT(slotUpdateRecordActions(int)));
+        d->dataAwareObject->connectRecordEditingTerminatedSignal(
+            this, SLOT(slotUpdateRecordActions(int)));
         d->dataAwareObject->connectUpdateSaveCancelActionsSignal(
             this, SLOT(slotUpdateSaveCancelActions()));
         d->dataAwareObject->connectReloadActionsSignal(
@@ -102,7 +102,7 @@ void KexiDataAwareView::initActions()
         << ac->action("data_save_row")
         << ac->action("data_cancel_row_changes");
 
-    KAction *a = new KAction(this);
+    QAction *a = new QAction(this);
     a->setSeparator(true);
     viewActions << a;
 
@@ -115,7 +115,7 @@ void KexiDataAwareView::initActions()
         << ac->action("edit_find");
     setViewActions(viewActions);
 
-    plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
+    plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRecord()));
     d->actionClient->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
     plugSharedAction("edit_delete", this, SLOT(deleteAndStartEditCurrentCell()));
@@ -124,10 +124,10 @@ void KexiDataAwareView::initActions()
     plugSharedAction("edit_edititem", this, SLOT(startEditOrToggleValue()));
     d->actionClient->plugSharedAction(sharedAction("edit_edititem")); //for proper shortcut
 
-    plugSharedAction("data_save_row", this, SLOT(acceptRowEdit()));
+    plugSharedAction("data_save_row", this, SLOT(acceptRecordEditing()));
     d->actionClient->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
 
-    plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRowEdit()));
+    plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRecordEditing()));
     d->actionClient->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
     d->actionClient->plugSharedAction(sharedAction("edit_insert_empty_row")); //for proper shortcut
 
@@ -135,11 +135,11 @@ void KexiDataAwareView::initActions()
     setAvailable("data_sort_za", d->dataAwareObject->isSortingEnabled());
 //! \todo  plugSharedAction("data_filter", this, SLOT(???()));
 
-    plugSharedAction("data_go_to_first_record", this, SLOT(slotGoToFirstRow()));
-    plugSharedAction("data_go_to_previous_record", this, SLOT(slotGoToPreviusRow()));
-    plugSharedAction("data_go_to_next_record", this, SLOT(slotGoToNextRow()));
-    plugSharedAction("data_go_to_last_record", this, SLOT(slotGoToLastRow()));
-    plugSharedAction("data_go_to_new_record", this, SLOT(slotGoToNewRow()));
+    plugSharedAction("data_go_to_first_record", this, SLOT(slotGoToFirstRecord()));
+    plugSharedAction("data_go_to_previous_record", this, SLOT(slotGoToPreviusRecord()));
+    plugSharedAction("data_go_to_next_record", this, SLOT(slotGoToNextRecord()));
+    plugSharedAction("data_go_to_last_record", this, SLOT(slotGoToLastRecord()));
+    plugSharedAction("data_go_to_new_record", this, SLOT(slotGoToNewRecord()));
 
 //! \todo update availability
     setAvailable("data_go_to_first_record", true);
@@ -175,15 +175,15 @@ void KexiDataAwareView::initActions()
 //! @todo setAvailable("edit_replace", true);
 }
 
-void KexiDataAwareView::slotUpdateRowActions(int row)
+void KexiDataAwareView::slotUpdateRecordActions(int row)
 {
     const bool ro = d->dataAwareObject->isReadOnly();
 // const bool inserting = d->dataAwareObject->isInsertingEnabled();
     const bool deleting = d->dataAwareObject->isDeleteEnabled();
-    const bool emptyInserting = d->dataAwareObject->isEmptyRowInsertingEnabled();
+    const bool emptyInserting = d->dataAwareObject->isEmptyRecordInsertingEnabled();
     const bool editing = isDataEditingInProgress();
     const bool sorting = d->dataAwareObject->isSortingEnabled();
-    const int rows = d->dataAwareObject->rowCount();
+    const int rows = d->dataAwareObject->recordCount();
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
 
     setAvailable("edit_cut", !ro && !insertRowFocusedWithoutEditing);
@@ -202,9 +202,9 @@ void KexiDataAwareView::slotUpdateSaveCancelActions()
 {
     // 'save row' enabled when editing and there's anything to save
     //const bool editing = isDataEditingInProgress();
-    setAvailable("data_save_row", d->dataAwareObject->rowEditing() >= 0);
+    setAvailable("data_save_row", d->dataAwareObject->recordEditing() >= 0);
     // 'cancel row changes' enabled when editing
-    setAvailable("data_cancel_row_changes", d->dataAwareObject->rowEditing() >= 0);
+    setAvailable("data_cancel_row_changes", d->dataAwareObject->recordEditing() >= 0);
 }
 
 QWidget* KexiDataAwareView::mainWidget() const
@@ -248,9 +248,9 @@ QAction* KexiDataAwareView::sharedActionRequested(QKeyEvent *ke, const char *act
 
 bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
 {
-    // kDebug() << "***" << o << e << window()->selectedView() << this;
+    // qDebug() << "***" << o << e << window()->selectedView() << this;
     if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
-        kDebug() << "F O C U S" << e << o;
+        qDebug() << "F O C U S" << e << o;
     }
     if (e->type() == QEvent::ShortcutOverride && o == this) {
         QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -295,7 +295,7 @@ void KexiDataAwareView::reloadActions()
 //! @todo Move this to the table part
     d->dataAwareObject->contextMenu()->clear();
     if (!d->dataAwareObject->contextMenuTitleText().isEmpty()) {
-        d->dataAwareObject->contextMenu()->addTitle(
+        d->dataAwareObject->contextMenu()->addSection(
             d->dataAwareObject->contextMenuTitleIcon(),
             d->dataAwareObject->contextMenuTitleText());
     }
@@ -307,11 +307,11 @@ void KexiDataAwareView::reloadActions()
     bool separatorNeeded = true;
 
     unplugSharedAction("edit_clear_table");
-    plugSharedAction("edit_clear_table", this, SLOT(deleteAllRows()));
+    plugSharedAction("edit_clear_table", this, SLOT(deleteAllRecords()));
 
-    if (d->dataAwareObject->isEmptyRowInsertingEnabled()) {
+    if (d->dataAwareObject->isEmptyRecordInsertingEnabled()) {
         unplugSharedAction("edit_insert_empty_row");
-        plugSharedAction("edit_insert_empty_row", d->internalView, SLOT(insertEmptyRow()));
+        plugSharedAction("edit_insert_empty_row", d->internalView, SLOT(insertEmptyRecord()));
         if (separatorNeeded)
             d->dataAwareObject->contextMenu()->addSeparator();
         plugSharedAction("edit_insert_empty_row", d->dataAwareObject->contextMenu());
@@ -332,23 +332,23 @@ void KexiDataAwareView::reloadActions()
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
     setAvailable("data_sort_za", d->dataAwareObject->isSortingEnabled());
 
-    slotCellSelected(d->dataAwareObject->currentRow(), d->dataAwareObject->currentColumn());
+    slotCellSelected(d->dataAwareObject->currentRecord(), d->dataAwareObject->currentColumn());
 }
 
 void KexiDataAwareView::slotCellSelected(int row, int col)
 {
     Q_UNUSED(col);
-    slotUpdateRowActions(row);
+    slotUpdateRecordActions(row);
 }
 
-void KexiDataAwareView::deleteAllRows()
+void KexiDataAwareView::deleteAllRecords()
 {
-    d->dataAwareObject->deleteAllRows(true/*ask*/, true/*repaint*/);
+    d->dataAwareObject->deleteAllRecords(true/*ask*/, true/*repaint*/);
 }
 
-void KexiDataAwareView::deleteCurrentRow()
+void KexiDataAwareView::deleteCurrentRecord()
 {
-    d->dataAwareObject->deleteCurrentRow();
+    d->dataAwareObject->deleteCurrentRecord();
 }
 
 void KexiDataAwareView::deleteAndStartEditCurrentCell()
@@ -361,20 +361,20 @@ void KexiDataAwareView::startEditOrToggleValue()
     d->dataAwareObject->startEditOrToggleValue();
 }
 
-bool KexiDataAwareView::acceptRowEdit()
+bool KexiDataAwareView::acceptRecordEditing()
 {
-    return d->dataAwareObject->acceptRowEdit();
+    return d->dataAwareObject->acceptRecordEditing();
 }
 
 void KexiDataAwareView::slotClosing(bool* cancel)
 {
-    if (!acceptRowEdit())
+    if (!acceptRecordEditing())
         *cancel = true;
 }
 
-bool KexiDataAwareView::cancelRowEdit()
+bool KexiDataAwareView::cancelRecordEditing()
 {
-    return d->dataAwareObject->cancelRowEdit();
+    return d->dataAwareObject->cancelRecordEditing();
 }
 
 void KexiDataAwareView::sortAscending()
@@ -402,23 +402,23 @@ void KexiDataAwareView::paste()
     d->dataAwareObject->paste();
 }
 
-void KexiDataAwareView::slotGoToFirstRow()
+void KexiDataAwareView::slotGoToFirstRecord()
 {
-    d->dataAwareObject->selectFirstRow();
+    d->dataAwareObject->selectFirstRecord();
 }
-void KexiDataAwareView::slotGoToPreviusRow()
+void KexiDataAwareView::slotGoToPreviusRecord()
 {
-    d->dataAwareObject->selectPrevRow();
+    d->dataAwareObject->selectPreviousRecord();
 }
-void KexiDataAwareView::slotGoToNextRow()
+void KexiDataAwareView::slotGoToNextRecord()
 {
-    d->dataAwareObject->selectNextRow();
+    d->dataAwareObject->selectNextRecord();
 }
-void KexiDataAwareView::slotGoToLastRow()
+void KexiDataAwareView::slotGoToLastRecord()
 {
-    d->dataAwareObject->selectLastRow();
+    d->dataAwareObject->selectLastRecord();
 }
-void KexiDataAwareView::slotGoToNewRow()
+void KexiDataAwareView::slotGoToNewRecord()
 {
     d->dataAwareObject->addNewRecordRequested();
 }
@@ -428,8 +428,8 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 {
     if (!dataAwareObject() || !dataAwareObject()->data())
         return false;
-    const KexiDB::TableViewColumn::List *columns = dataAwareObject()->data()->columns();
-    foreach(KexiDB::TableViewColumn *col, *columns) {
+    const QList<KDbTableViewColumn*> *columns = dataAwareObject()->data()->columns();
+    foreach(const KDbTableViewColumn *col, *columns) {
         if (!col->isVisible())
             continue;
         columnNames.append(col->field()->name());
@@ -439,7 +439,7 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
     //update "look in" selection if there was any
     const int currentColumnNumber = dataAwareObject()->currentColumn();
     if (currentColumnNumber >= 0 && currentColumnNumber < columns->count()) {
-        KexiDB::TableViewColumn *col = columns->at(currentColumnNumber);
+        KDbTableViewColumn *col = columns->at(currentColumnNumber);
         if (col && col->field())
             currentColumnName = col->field()->name();
     }
@@ -470,25 +470,24 @@ tristate KexiDataAwareView::findNextAndReplace(const QVariant& valueToFind,
 
 bool KexiDataAwareView::isDataEditingInProgress() const
 {
-    if (!d->dataAwareObject->rowEditing()
+    if (!d->dataAwareObject->recordEditing()
         || !d->dataAwareObject->data()
-        || !d->dataAwareObject->data()->rowEditBuffer())
+        || !d->dataAwareObject->data()->recordEditBuffer())
     {
         return false;
     }
     // true if edit buffer is not empty or at least there is editor with changed value
-    return !d->dataAwareObject->data()->rowEditBuffer()->isEmpty()
+    return !d->dataAwareObject->data()->recordEditBuffer()->isEmpty()
            || (d->dataAwareObject->editor() && d->dataAwareObject->editor()->valueChanged());
 }
 
 tristate KexiDataAwareView::saveDataChanges()
 {
-    return acceptRowEdit();
+    return acceptRecordEditing();
 }
 
 tristate KexiDataAwareView::cancelDataChanges()
 {
-    return cancelRowEdit();
+    return cancelRecordEditing();
 }
 
-#include "kexidataawareview.moc"

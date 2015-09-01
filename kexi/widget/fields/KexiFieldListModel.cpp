@@ -17,15 +17,17 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-#include <klocalizedstring.h>
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
-#include <kdebug.h>
-#include <drivers/xbase/xbaseexport.h>
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
+#include <KDbUtils>
+
+#include <KLocalizedString>
+
+#include <QDebug>
 #include <QMimeData>
 
 class KexiFieldListModel::Private
@@ -33,7 +35,7 @@ class KexiFieldListModel::Private
 public:
     Private();
     ~Private();
-    KexiDB::TableOrQuerySchema* schema;
+    KDbTableOrQuerySchema* schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
     QList<KexiFieldListModelItem*> items;
@@ -60,7 +62,7 @@ KexiFieldListModel::~KexiFieldListModel()
     delete d;
 }
 
-void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListModel::setSchema(KDbTableOrQuerySchema* schema)
 {
     if (schema && d->schema == schema)
         return;
@@ -73,10 +75,10 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     qDeleteAll(d->items);
     d->items.clear();
     KexiFieldListModelItem *item = 0;
-    KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
+    KDbQueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
     for (int i = -2; i < count; i++) {
-        KexiDB::QueryColumnInfo *colinfo = 0;
+        KDbQueryColumnInfo *colinfo = 0;
         if (i == -2) {
             if (!(d->options & ShowEmptyItem))
                 continue;
@@ -92,7 +94,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
             item->setCaption(colinfo->captionOrAliasOrName());
         }
         d->items.append(item);
-        kDebug() << item->data(0);
+        qDebug() << item->data(0);
     }
 }
 
@@ -110,7 +112,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
         } else if (role == Qt::DecorationRole) {
             return item->icon();
         } else if (role == Qt::UserRole) {
-            kDebug() << item->caption();
+            qDebug() << item->caption();
             return item->caption();
         }
     }
@@ -134,9 +136,9 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
 
     if (orientation == Qt::Horizontal) {
         if (section == 0) {
-            return i18n("Field Name");
+            return xi18n("Field Name");
         } else if (section == 1) {
-            return i18n("Data Type");
+            return xi18n("Data Type");
         }
     }
     return QVariant();

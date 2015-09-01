@@ -1,10 +1,11 @@
 add_subdirectory( factories )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs   )
+include_directories(${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils
+${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
-# Disable list widget because we need to replace it with QTreeWidget 
+# Disable list widget because we need to replace it with QTreeWidget
 # which uses very different API compared to Q3ListView.
 # todo: re-add QTreeWidget?
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
@@ -17,11 +18,12 @@ add_definitions(-DKEXI_NO_PIXMAPCOLLECTION)
 
 ########### next target ###############
 
-set(kformdesigner_LIB_SRCS 
+set(kformdesigner_LIB_SRCS
    container.cpp
    resizehandle.cpp
    widgetfactory.cpp
    widgetlibrary.cpp
+   KexiFormWidgetsPluginMetaData.cpp
    WidgetInfo.cpp
    libactionwidget.cpp
    form.cpp
@@ -47,13 +49,15 @@ set(kformdesigner_LIBS
   kexiutils
   kexicore
   kexiextendedwidgets
+  kundo2
+  kowidgets # KoFileDialog
 
-  Predicate
+  KDb
   KProperty
 )
 
 if(KFD_SIGSLOTS)
-  add_definitions( 
+  add_definitions(
     -DKFD_SIGSLOTS=1
   )
   list(APPEND kformdesigner_LIB_SRCS connectiondialog.cpp)
@@ -62,15 +66,9 @@ endif()
 
 add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
+generate_export_header(kformdesigner)
+
 target_link_libraries(kformdesigner ${kformdesigner_LIBS})
 
 set_target_properties(kformdesigner PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-########### install files ###############
-
-install( FILES
-  widgetfactory.desktop
-  DESTINATION ${SERVICETYPES_INSTALL_DIR}
-)

@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDropDownButton_H
-#define KexiDropDownButton_H
+#ifndef KEXIDROPDOWNBUTTON_H
+#define KEXIDROPDOWNBUTTON_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QToolButton>
 
 //! @short A button for drop-down "Image" menu

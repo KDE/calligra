@@ -30,18 +30,16 @@
 #include "KexiTableScrollArea.h"
 #include "KexiTableScrollAreaHeader.h"
 #include "KexiTableScrollAreaHeaderModel.h"
-
-#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
-#include <QEvent>
+#include <KDbRecordEditBuffer>
+
 #include <QTimer>
-#include <QValidator>
-#include <QPixmap>
 #include <QLabel>
 #include <QList>
 #include <QHash>
 #include <QRubberBand>
+#include <QToolTip>
 
 class KexiTableScrollAreaWidget;
 class KexiTableEdit;
@@ -49,6 +47,7 @@ class QLabel;
 
 //! @short a dynamic tooltip for table view cells
 /*! @internal */
+/*! @todo KEXI3 KexiTableViewCellToolTip
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
@@ -59,6 +58,7 @@ protected:
 
     KexiTableScrollArea *m_tableView;
 };
+*/
 
 /*! KexiTableView's internal structures
  @internal */
@@ -75,9 +75,9 @@ public:
     KexiTableScrollArea *tv;
     KexiTableScrollAreaWidget *scrollAreaWidget;
 
-    //! editors: one for each column (indexed by KexiDB::TableViewColumn)
-    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
-    int rowHeight;
+    //! editors: one for each column (indexed by KDbTableViewColumn)
+    QHash<KDbTableViewColumn*, KexiTableEdit*> editors;
+    int recordHeight;
     QTimer *pUpdateTimer;
     bool editOnDoubleClick;
     bool needAutoScroll;
@@ -134,8 +134,8 @@ public:
 
     QMargins viewportMargins;
 
-    /*! Helper for "highlighted row" effect. */
-    int highlightedRow;
+    /*! Helper for "highlighted record" effect. */
+    int highlightedRecord;
 
     /*! Id of context menu key (cached). */
     int contextMenuKey;
@@ -145,7 +145,7 @@ public:
     QPoint recentCellWithToolTip;
 
     /*! Table cell tooltip */
-    KexiTableViewCellToolTip *cellToolTip;
+    //! @todo KEXI3 KexiTableViewCellToolTip *cellToolTip;
 
     /*! A rubber band for displaying drag indicator. */
     QRubberBand *dragIndicatorRubberBand;

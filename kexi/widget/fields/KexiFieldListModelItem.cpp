@@ -19,10 +19,12 @@
 
 
 #include "KexiFieldListModelItem.h"
-#include <db/utils.h>
 #include <kexiutils/utils.h>
-#include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KexiIcon.h>
+
+#include <KDbUtils>
+
+#include <KLocalizedString>
 
 class KexiFieldListModelItem::Private
 {
@@ -58,7 +60,7 @@ KexiFieldListModelItem::~KexiFieldListModelItem()
 QVariant KexiFieldListModelItem::data(int column) const
 {
     if (column == 0) {
-        return d->fieldName == "*" ? i18n("* (All Columns)") : d->fieldName;
+        return d->fieldName == "*" ? xi18n("* (All Columns)") : d->fieldName;
     } else {
         return d->dateType;
     }

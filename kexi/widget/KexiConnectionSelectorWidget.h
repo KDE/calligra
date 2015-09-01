@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -21,36 +21,37 @@
 #ifndef KEXICONNECTIONSELECTORWIDGET_H
 #define KEXICONNECTIONSELECTORWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include <core/kexidbconnectionset.h>
-#include <db/driver.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-#include <kabstractfilewidget.h>
+#include <KFileWidget>
 
 #include <QPointer>
 #include <QTreeWidgetItem>
-#include <QLineEdit>
 
+class QAbstractButton;
 class KexiFileWidget;
+class KDbDriverMetaData;
 
-//! helper class
+//! An item for a single database connection
 class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
-    ConnectionDataLVItem(KexiDB::ConnectionData *data,
-                         const KexiDB::Driver::Info& info, QTreeWidget* list);
+    ConnectionDataLVItem(KDbConnectionData *data,
+                         const KDbDriverMetaData &driverMetaData, QTreeWidget* list);
     ~ConnectionDataLVItem();
 
-    void update(const KexiDB::Driver::Info& info);
+    void update(const KDbDriverMetaData& driverMetaData);
 
     using QTreeWidgetItem::data;
-    KexiDB::ConnectionData *data() const {
+    KDbConnectionData *data() const {
         return m_data;
     }
 
 protected:
-    KexiDB::ConnectionData *m_data;
+    KDbConnectionData *m_data;
 };
 
 //! @short Widget that allows to select a database connection (file- or server-based)
@@ -72,9 +73,11 @@ public:
      to users. \a startDirOrVariable can be provided to specify a start dir for file browser
      (it can also contain a configuration variable name with "kfiledialog:///" prefix
      as described in KRecentDirs documentation). */
-    KexiConnectionSelectorWidget(KexiDBConnectionSet& conn_set,
-                           const QString& startDirOrVariable,
-                           KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
+    KexiConnectionSelectorWidget(KexiDBConnectionSet *conn_set,
+                                 const QString& startDirOrVariable,
+                                 KFileWidget::OperationMode fileAccessType,
+                                 QWidget* parent = 0);
 
     virtual ~KexiConnectionSelectorWidget();
 
@@ -87,7 +90,7 @@ public:
      has been selected.
      @see selectedConnectionType()
     */
-    KexiDB::ConnectionData* selectedConnectionData() const;
+    KDbConnectionData* selectedConnectionData() const;
 
     /*! \return the name of database file, if file-based connection was selected.
      Returns null string if no selection has been made or server-based connection
@@ -145,10 +148,10 @@ protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
 private:
-    ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
+    ConnectionDataLVItem* addConnectionData(KDbConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
-    
+
     class Private;
     Private * const d;
 };

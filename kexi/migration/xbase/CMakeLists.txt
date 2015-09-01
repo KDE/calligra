@@ -1,4 +1,4 @@
-include_directories( ${XBase_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
+include_directories(${XBase_INCLUDE_DIR})
 
 ########### next target ###############
 
@@ -12,15 +12,9 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 
     ${XBase_LIBRARIES}
-    )
+)
 
-install(TARGETS keximigrate_xbase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  keximigrate_xbase.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
+install(TARGETS keximigrate_xbase DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

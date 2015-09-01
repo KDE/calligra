@@ -17,24 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef MAPBROWSERWIDGET_H
 #define MAPBROWSERWIDGET_H
-
-#include <marble/MarbleWidget.h>
 
 #include "widgetfactory.h"
 #include "container.h"
 #include "FormWidgetInterface.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <qglobal.h>
 
-class MapBrowserWidget : public Marble::MarbleWidget, 
+#include <marble/MarbleWidget.h>
+
+class MapBrowserWidget : public Marble::MarbleWidget,
                          public KFormDesigner::FormWidgetInterface,
                          public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 public:
     explicit MapBrowserWidget(QWidget *parent = 0);
@@ -43,19 +43,19 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
-    
+
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
-    
+
     virtual void setInvalidState(const QString&);
-    
+
     virtual bool isReadOnly() const;
 
 public Q_SLOTS:
@@ -63,12 +63,12 @@ public Q_SLOTS:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
     void slotMapChanged();
     virtual void setReadOnly(bool);
-    
+
 protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
     void deserializeData(const QVariant& serialized);

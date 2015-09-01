@@ -23,10 +23,12 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
+#include "kformdesigner_export.h"
+#include "widgetlibrary.h"
+#include <kexi_global.h>
+
 #include <QMetaProperty>
 #include <QAction>
-#include <kexi_global.h>
-#include "widgetlibrary.h"
 
 class QWidget;
 class KActionCollection;
@@ -57,7 +59,7 @@ class ResizeHandleSet;
   It takes care of widget selection and pasting widgets.
  **/
 //! A simple class representing a form
-class KFORMEDITOR_EXPORT Form : public QObject
+class KFORMDESIGNER_EXPORT Form : public QObject
 {
     Q_OBJECT
 
@@ -120,7 +122,7 @@ public:
     //! \return A pointer to the WidgetLibrary supporting this form.
     WidgetLibrary* library() const;
 
-    KPropertySet& propertySet();
+    KPropertySet* propertySet();
 
     void setFeatures(Features features);
 
@@ -256,7 +258,7 @@ public:
         ExecuteCommand = 1      //!< command is executed in addCommand()
     };
 
-    /*! Adds a command @a command in the form's undo/redo stack and returns true. 
+    /*! Adds a command @a command in the form's undo/redo stack and returns true.
      If @a command is merged with the existing command and deleted, false is returned. */
     bool addCommand(Command *command, AddCommandOption option = ExecuteCommand);
 
@@ -264,20 +266,20 @@ public:
     /*! Takes care about the case when the same property of the same object is changed
      one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
-                            const QVariant &value, const QByteArray &propertyName, 
-                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                            const QVariant &value, const QByteArray &propertyName,
+                            AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                             const QVariant &value, const QByteArray &propertyName,
-                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                            AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     //! Adds @a commandGroup to the undo/redo stack.
     /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
      about the case when the same properties of the same list of objects is changed
-     one-after-one. In this case only values of the command in the present command group 
+     one-after-one. In this case only values of the command in the present command group
      on the stack are changed and @a commandGroup is deleted.*/
     void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
-                                 AddCommandOption addOption, uint idOfPropertyCommand = 0);
+                                 AddCommandOption addOption, int idOfPropertyCommand = 0);
 
     /*! @return Command that being executed through addCommand() or 0 if addCommand()
      is not currently being executed.
@@ -285,7 +287,7 @@ public:
      the original reason for adding widget. */
     const Command* executingCommand() const;
 
-    /*! \return tabstops list. It contains all the widgets that can have focus 
+    /*! \return tabstops list. It contains all the widgets that can have focus
      (i.e. no labels, etc.) in the order of the tabs.*/
     ObjectTreeList* tabStops();
 
@@ -352,13 +354,13 @@ public:
 
     //! \return format version number for this form.
     //! For new forms it is equal to KFormDesigner::version().
-    uint formatVersion() const;
-    void setFormatVersion(uint ver);
+    int formatVersion() const;
+    void setFormatVersion(int ver);
 
     //! \return original format version number for this form (as loaded from .ui XML string)
     //! For new forms it is equal to KFormDesigner::version().
-    uint originalFormatVersion() const;
-    void setOriginalFormatVersion(uint ver);
+    int originalFormatVersion() const;
+    void setOriginalFormatVersion(int ver);
 
 #ifdef KFD_SIGSLOTS
     /*! Related to signal/slots connections.
@@ -373,7 +375,7 @@ public:
 
     //! selection flags used in methods like selectWidget()
     enum WidgetSelectionFlag {
-        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity, 
+        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity,
                                       //!< do not use with ReplacePreviousSelection
         ReplacePreviousSelection = 1, //!< replace the actually selected widget(s)
         MoreWillBeSelected = 0,       //!< indicates that more selections will be added
@@ -398,7 +400,7 @@ public:
     //! @return action from related action collection
     QAction* action(const QString& name);
 
-    void createPropertyCommandsInDesignMode(QWidget* widget, 
+    void createPropertyCommandsInDesignMode(QWidget* widget,
                                             const QHash<QByteArray, QVariant> &propValues,
                                             Command *parentCommand, bool addToActiveForm = true);
 
@@ -410,9 +412,9 @@ public:
     bool isRedoing() const;
 
 public Q_SLOTS:
-    /*! Called when the user presses a widget item of the toolbox. 
+    /*! Called when the user presses a widget item of the toolbox.
       The form enters into "widget inserting" state.
-      Prepares all form's widgets for creation of a new widget 
+      Prepares all form's widgets for creation of a new widget
       (i.e. temporarily changes their cursor). */
     void enterWidgetInsertingState(const QByteArray &classname);
 
@@ -439,15 +441,15 @@ public Q_SLOTS:
      The form widget is always selected alone. */
     void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
 
-    /*! Sets all widgets @a widgets to be the selected for this Form. 
+    /*! Sets all widgets @a widgets to be the selected for this Form.
      Form widget, if present is omitted. */
     void selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags);
 
-    /*! Sets all widgets with @a names to be the selected for this Form. 
+    /*! Sets all widgets with @a names to be the selected for this Form.
      Form widget, if present is omitted. */
     void selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags);
 
-    /*! Removes selection for widget \a w. 
+    /*! Removes selection for widget \a w.
      The widget is removed from the Container's list
      and its resize handle is removed as well. */
     void deselectWidget(QWidget *w);
@@ -507,13 +509,13 @@ public Q_SLOTS:
     void editConnections();
 
     void alignWidgetsToLeft();
-    
+
     void alignWidgetsToRight();
-    
+
     void alignWidgetsToTop();
-    
+
     void alignWidgetsToBottom();
-    
+
     void alignWidgetsToGrid();
 
     void adjustSizeToGrid();
@@ -646,7 +648,7 @@ protected:
     void updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags);
 
 #ifdef KFD_SIGSLOTS
-    //! Sets connection buffer to @a b, which will be owned by the form. 
+    //! Sets connection buffer to @a b, which will be owned by the form.
     //! The previous buffer will be deleted, if there is any.
     void setConnectionBuffer(ConnectionBuffer *b);
 #endif
@@ -712,7 +714,7 @@ protected:
       is the name of the modified property, and @a value is the new value of this property. */
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
-    /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
+    /*! This function creates a QLineEdit to input some text and edit a widget's contents. */
     void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
 
     QString inlineEditorText() const;

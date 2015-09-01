@@ -17,12 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiSearchAndReplaceViewInterface_H
-#define KexiSearchAndReplaceViewInterface_H
+#ifndef KEXISEARCHANDREPLACEVIEWINTERFACE_H
+#define KEXISEARCHANDREPLACEVIEWINTERFACE_H
 
-#include <kexi_export.h>
-#include <db/tristate.h>
+#include "kexicore_export.h"
+
+#include <KDbTristate>
+
 #include <QString>
+
 class QVariant;
 class QStringList;
 
@@ -63,7 +66,7 @@ public:
         enum SearchDirection {
             SearchUp = 0,      //!< Search up (previous) from the current position
             SearchDown = 1,    //!< Search down (next) from the current position (the default)
-            SearchAllRows = 2, //!< Search from the first to the last row
+            SearchAllRecords = 2, //!< Search from the first to the last record
             DefaultSearchDirection = SearchDown //! Used to mark the default
         };
 

@@ -22,26 +22,28 @@
 
 #include "kexiutils_export.h"
 
-#include <kpushbutton.h>
+#include <QPushButton>
+
+class KGuiItem;
 
 //! A flat icon-based button without background that behaves like a link
-class KEXIUTILS_EXPORT KexiLinkButton : public KPushButton
+class KEXIUTILS_EXPORT KexiLinkButton : public QPushButton
 {
     Q_OBJECT
 public:
     explicit KexiLinkButton(QWidget* parent = 0);
 
-    explicit KexiLinkButton(const KIcon &icon, QWidget* parent = 0);
+    explicit KexiLinkButton(const QIcon &icon, QWidget* parent = 0);
 
     explicit KexiLinkButton(const KGuiItem &item, QWidget *parent = 0);
 
     explicit KexiLinkButton(const QPixmap &pixmap, QWidget* parent = 0);
 
     virtual ~KexiLinkButton();
-    
+
     /*! If true, foreground color of the current palette is always used for painting
         the button's icon. This is done by replacing color.
-        The foreground color is QPalette::Text by default, and can be changed 
+        The foreground color is QPalette::Text by default, and can be changed
         using setForegroundRole().
         The icon is expected to be monochrome.
         Works well also after palette change.
@@ -52,14 +54,14 @@ public:
         the button's icon. */
     bool usesForegroundColor() const;
 
-    void setIcon(const KIcon &icon);
-    
+    void setIcon(const QIcon &icon);
+
 protected:
     virtual void changeEvent(QEvent* event);
 
 private:
     void init();
-    void updateIcon(const KIcon &icon);
+    void updateIcon(const QIcon &icon);
 
     class Private;
     Private * const d;

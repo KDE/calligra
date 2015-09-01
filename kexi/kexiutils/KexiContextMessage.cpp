@@ -25,12 +25,13 @@
 #include <QPointer>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QDebug>
 
 #include <kexiutils/utils.h>
 #include "KexiAssistantPage.h"
 #include "KexiLinkWidget.h"
 
-#include <kdebug.h>
+#include <KDbUtils>
 
 class KexiContextMessage::Private
 {
@@ -86,7 +87,7 @@ void KexiContextMessage::addAction(QAction* action, ButtonAlignment alignment)
         d->leftButtonAlignment.insert(action);
     }
 }
-    
+
 QList<QAction*> KexiContextMessage::actions() const
 {
     return d->actions;
@@ -129,7 +130,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
+Q_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
 
 class KexiContextMessageWidget::Private
 {
@@ -147,9 +148,7 @@ public:
     void setDisabledColorsForPage()
     {
         Palette *p = origPagesPalettes->value(page);
-#ifdef __GNUC__
-#warning TODO: remove p in page dtor
-#endif
+//! @todo KEXI3 remove p in page dtor
         if (!p) {
             p = new Palette;
             p->palette = page->palette();
@@ -243,7 +242,7 @@ void KexiContextMessageWidget::init(
     if ((d->page && d->hasActions) || d->contentsWidget) {
         d->setDisabledColorsForPage();
         foreach (KexiLinkWidget* w, d->page->findChildren<KexiLinkWidget*>()) {
-            //kDebug() << w << w->isEnabled();
+            //qDebug() << w << w->isEnabled();
             if (w->isEnabled()) {
                 d->enabledLinks.append(w);
                 w->setEnabled(false);
@@ -297,7 +296,7 @@ KexiContextMessageWidget::~KexiContextMessageWidget()
     }
     repaint();
     if (d->nextFocusWidget) {
-        // kDebug() << d->nextFocusWidget << d->nextFocusWidget->focusProxy();
+        // qDebug() << d->nextFocusWidget << d->nextFocusWidget->focusProxy();
         setFocus(); // a hack to force focus update
         d->nextFocusWidget->setFocus();
     }
@@ -332,19 +331,19 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
         // hide the message when clicking outside when contents widget is present
         QMouseEvent *me = static_cast<QMouseEvent*>(event);
         QWidget *w = QApplication::widgetAt(me->globalPos());
-        //kDebug() << watched << w << w->parentWidget();
-        if (!KexiUtils::hasParent(this, w)) {
+        //qDebug() << watched << w << w->parentWidget();
+        if (!KDbUtils::hasParent(this, w)) {
             actionTriggered();
             return true;
         }
     }
-    
+
     if (watched == d->page && event->type() == QEvent::Resize) {
-        //kDebug() << "RESIZE:" << watched;
+        //qDebug() << "RESIZE:" << watched;
         if (d->trackedWidget) {
             if (d->resizeTrackingPolicy != 0) {
                 // update size
-                //kDebug() << d->origSize << d->page->size() << d->origPageSize;
+                //qDebug() << d->origSize << d->page->size() << d->origPageSize;
                 if (!d->origSize.isValid()) {
                     d->origSize = size();
                 }
@@ -377,7 +376,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Drop:
     case QEvent::EnabledChange:
     case QEvent::Enter:
-#ifdef QT_KEYPAD_NAVIGATION 
+#ifdef QT_KEYPAD_NAVIGATION
     case QEvent::EnterEditFocus:
     case QEvent::LeaveEditFocus:
 #endif
@@ -469,4 +468,3 @@ void KexiContextMessageWidget::setPaletteInherited()
     }
 }
 
-#include "KexiContextMessage.moc"

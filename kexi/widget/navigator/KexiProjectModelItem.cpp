@@ -23,9 +23,10 @@
 
 #include <core/kexipartinfo.h>
 #include <kexiutils/utils.h>
-#include <kicon.h>
+
+#include <QDebug>
+#include <QIcon>
 #include <QtAlgorithms>
-#include <kdebug.h>
 
 class KexiProjectModelItem::Private
 {
@@ -57,15 +58,18 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
     d->groupName = n;
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
-    : d(new Private(&i, 0, p))
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiProjectModelItem *p)
+    : d(new Private(i, 0, p))
 {
+    Q_ASSERT(i);
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
-    : d(new Private(&i, &item, p))
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *item, KexiProjectModelItem *p)
+    : d(new Private(i, item, p))
 {
-    d->icon = SmallIcon(i.itemIconName(), KIconLoader::SizeSmall);
+    Q_ASSERT(i);
+    Q_ASSERT(item);
+    d->icon = SmallIcon(i->iconName(), KIconLoader::SizeSmall);
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()
@@ -81,11 +85,11 @@ void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
 void KexiProjectModelItem::debugPrint() const
 {
     if (d->item) {
-        kDebug() << d->item->captionOrName();
+        qDebug() << d->item->captionOrName();
     } else if (d->info) {
-        kDebug() << d->info->groupName();
+        qDebug() << d->info->groupName();
     } else   {
-        kDebug() << d->groupName;
+        qDebug() << d->groupName;
     }
 
     foreach(KexiProjectModelItem* itm, d->childItems) {
@@ -152,10 +156,10 @@ int KexiProjectModelItem::row()
 {
      if (d->parentItem)
      {
-         //kDebug() << d->parentItem->d->childItems << this << data(0);
+         //qDebug() << d->parentItem->d->childItems << this << data(0);
          return d->parentItem->d->childItems.indexOf(this);
      }
-     kDebug() << "No parent item!";
+     qDebug() << "No parent item!";
      return 0;
 }
 
@@ -220,7 +224,7 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& nam
     KexiProjectModelItem* itm = 0;
 
     foreach(KexiProjectModelItem *child, d->childItems) {
-        if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->partClass() == name) || (child->d->groupName == name)) {
+        if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->pluginId() == name) || (child->d->groupName == name)) {
                 itm = child;
         } else {
                 itm = child->modelItemFromName(name);

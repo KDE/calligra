@@ -18,26 +18,15 @@
 */
 
 #include "KexiFieldListView.h"
-
-#include <QLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QCursor>
-#include <QPoint>
-#include <QApplication>
-#include <QBitmap>
-#include <QStyle>
-#include <QPixmap>
-
-#include <kdebug.h>
-
-#include <klocale.h>
-
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
 #include <kexiutils/utils.h>
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
+#include <KDbUtils>
+
+#include <QPushButton>
+#include <QDebug>
 
 class KexiFieldListView::Private
 {
@@ -55,7 +44,7 @@ public:
     }
 
 
-    KexiDB::TableOrQuerySchema* schema;
+    KDbTableOrQuerySchema* schema;
     KexiFieldListModel *model;
     KexiFieldListOptions options;
 };
@@ -78,7 +67,7 @@ KexiFieldListView::~KexiFieldListView()
     delete d;
 }
 
-void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListView::setSchema(KDbTableOrQuerySchema* schema)
 {
     if (schema && d->schema == schema)
         return;
@@ -99,7 +88,7 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
     setModel(d->model);
 }
 
-KexiDB::TableOrQuerySchema* KexiFieldListView::schema() const {
+KDbTableOrQuerySchema* KexiFieldListView::schema() const {
     return d->schema;
 }
 
@@ -120,14 +109,14 @@ QStringList KexiFieldListView::selectedFieldNames() const
             selectedFields.append(field);
         }
     }
-    
+
     return selectedFields;
 
 }
 
 void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
 {
-    kDebug();
+    qDebug();
     if (schema() && idx.isValid()) {
         //! @todo what about query fields/aliases? it.current()->text(0) can be not enough
         emit fieldDoubleClicked(schema()->table() ? "kexi/table" : "kexi/query",
@@ -135,4 +124,3 @@ void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
     }
 }
 
-#include "KexiFieldListView.moc"

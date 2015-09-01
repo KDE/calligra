@@ -20,6 +20,8 @@
 #ifndef KEXIDBFACTORYBASE_H
 #define KEXIDBFACTORYBASE_H
 
+#include "kexiformutils_export.h"
+
 #include <formeditor/widgetfactory.h>
 
 namespace KFormDesigner
@@ -28,13 +30,17 @@ class Form;
 }
 
 //! Kexi Base Factory
-/*! Provides a number of default features for Kexi widget factories. */
+/*! Provides a number of default features for Kexi widget factories.
+
+    @todo after merging KexiDBFactory with KexiStandardFormWidgetsFactory
+          merge KexiDBFactoryBase with KFormDesigner::WidgetFactory
+*/
 class KEXIFORMUTILS_EXPORT KexiDBFactoryBase : public KFormDesigner::WidgetFactory
 {
     Q_OBJECT
 
 public:
-    KexiDBFactoryBase(QObject *parent, const char *name);
+    explicit KexiDBFactoryBase(QObject *parent);
     virtual ~KexiDBFactoryBase();
 
 protected:

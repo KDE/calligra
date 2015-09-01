@@ -17,28 +17,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KexiIcon.h>
+#include <core/kexiproject.h>
+
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbField>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbIndexSchema>
+#include <KDbParser>
+
+#include <KIconLoader>
+#include <KAboutData>
+
+#include <QApplication>
 #include <QFileInfo>
 #include <QPointer>
-
-#include <kdebug.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kcomponentdata.h>
-#include <kiconloader.h>
-#include <kaboutdata.h>
-
-#include <KoIcon.h>
-
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/field.h>
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/indexschema.h>
-#include <db/parser/parser.h>
-#include <core/kexiproject.h>
+#include <QDebug>
 
 #include <iostream>
 
@@ -52,8 +50,8 @@ int cursor_options = 0;
 bool db_name_required = true;
 
 QPointer<KexiProject> project;
-QPointer<KexiDB::Connection> conn;
-QPointer<KexiDB::Driver> driver;
+QPointer<KDbConnection> conn;
+QPointer<KDbDriver> driver;
 KApplication *app = 0;
 KComponentData *instance = 0;
 
@@ -76,7 +74,7 @@ void exitRoutine()
 
 #define RETURN(code) \
     exitRoutine(); \
-    kDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
+    qDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
     return code
 
 int main(int argc, char** argv)
@@ -90,9 +88,9 @@ int main(int argc, char** argv)
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
 
-    KAboutData aboutData(prgname, 0, ki18n("KexiDBTest"),
+    KAboutData aboutData(prgname, 0, kxi18n("KexiDBTest"),
                          KEXI_VERSION_STRING, KLocalizedString(), KAboutData::License_GPL,
-                         ki18n("(c) 2003-2010, Kexi Team\n"
+                         kxi18n("(c) 2003-2010, Kexi Team\n"
                                "(c) 2003-2006, OpenOffice Software.\n"),
                          KLocalizedString(),
                          "http://www.calligra.org/kexi",
@@ -100,7 +98,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("test <test_name>", ki18n("Available tests:\n"
+    options.add("test <test_name>", kxi18n("Available tests:\n"
                                           "- cursors: test for cursors behaviour\n"
                                           "- schema: test for db schema retrieving\n"
                                           "- dbcreation: test for new db creation\n"
@@ -114,12 +112,12 @@ int main(int argc, char** argv)
                                           "   returns debug string for a given\n"
                                           "   sql statement or error message\n"
                                           "- dr_prop: shows properties of selected driver"));
-    options.add("buffered-cursors", ki18n("Optional switch: turns cursors used in any tests\n"
+    options.add("buffered-cursors", kxi18n("Optional switch: turns cursors used in any tests\n"
                                           " to be buffered"));
-    options.add("query-params <params>", ki18n("Query parameters separated\n"
+    options.add("query-params <params>", kxi18n("Query parameters separated\n"
                 "by '|' character that will be passed to query\n"
                 "statement to replace [...] placeholders."));
-    options.add("", ki18n(" Notes:<nl/>"
+    options.add("", kxi18n(" Notes:<nl/>"
                           "1. 'dr_prop' requires <placeholder>db_name</placeholder> argument.<nl/>"
                           "2. 'parser' test requires <placeholder>db_name</placeholder>,<nl/>"
                           " <placeholder>driver_name</placeholder> and <placeholder>sql_statement</placeholder> arguments<nl/>"
@@ -129,9 +127,9 @@ int main(int argc, char** argv)
                           " test. (<placeholder>new_db_name</placeholder> is removed if already exists).<nl/>"
                           "5. <placeholder>db_name</placeholder> must be a valid kexi database<nl/>"
                           " e.g. created with 'tables' test."));
-    options.add("+driver_name", ki18n("Driver name"));
-    options.add("+[db_name]", ki18n("Database name"));
-    options.add("+[sql_statement]", ki18n("Optional SQL statement (for parser test)"));
+    options.add("+driver_name", kxi18n("Driver name"));
+    options.add("+[db_name]", kxi18n("Database name"));
+    options.add("+[sql_statement]", kxi18n("Optional SQL statement (for parser test)"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -139,12 +137,12 @@ int main(int argc, char** argv)
     tests << "cursors" << "schema" << "dbcreation" << "tables"
           << "tableview" << "parser" << "dr_prop";
     if (!args->isSet("test")) {
-        kDebug() << "No test specified. Use --help.";
+        qDebug() << "No test specified. Use --help.";
         RETURN(1);
     }
     test_name = args->getOption("test");
     if (!tests.contains(test_name)) {
-        kDebug() << QString("No such test \"%1\". Use --help.").arg(test_name);
+        qDebug() << QString("No such test \"%1\". Use --help.").arg(test_name);
         RETURN(1);
     }
 
@@ -157,14 +155,14 @@ int main(int argc, char** argv)
         db_name_required = false;
     }
     if ((int)args->count() < minargs) {
-        kDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs);
+        qDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs);
         RETURN(1);
     }
 
     if (gui) {
         app = new KApplication(true);
         app->setWindowIcon(koIcon("table"));
-        instance = new KComponentData(KGlobal::mainComponent());
+        instance = new KComponentData(KAboutData::applicationData().displayName());
         KIconLoader::global()->addAppDir("kexi");
     } else {
         instance = new KComponentData(prgname);
@@ -172,37 +170,37 @@ int main(int argc, char** argv)
 
     drv_name = args->arg(0);
 
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     QStringList names = manager.driverNames();
-    kDebug() << "DRIVERS: ";
+    qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-        kDebug() << *it;
+        qDebug() << *it;
     if (manager.error() || names.isEmpty()) {
         manager.debugError();
         RETURN(1);
     }
 
     //get driver
-    const KexiDB::Driver::Info drv_info = manager.driverInfo(drv_name);
+    const KDbDriver::Info drv_info = manager.driverInfo(drv_name);
     driver = manager.driver(drv_name);
     if (drv_info.name.isEmpty() || manager.error()) {
         manager.debugError();
         RETURN(1);
     }
-    kDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
+    qDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
 
     //open connection
     if (args->count() >= 2)
         db_name = args->arg(1);
 
     if (db_name_required && db_name.isEmpty()) {
-        kDebug() << prgname << ": database name?";
+        qDebug() << prgname << ": database name?";
         RETURN(1);
     }
     if (!db_name.isEmpty()) {
         //additional switches:
         if (args->isSet("buffered-cursors")) {
-            cursor_options |= KexiDB::Cursor::Buffered;
+            cursor_options |= KDbCursor::Buffered;
         }
         KexiProjectData project_data;
         project_data.setDatabaseName(db_name);
@@ -219,7 +217,7 @@ int main(int argc, char** argv)
             res = project->open(&incompatibleWithKexi);
         if (res != true) {
             if (incompatibleWithKexi)
-                kDebug() << "incompatibleWithKexi";
+                qDebug() << "incompatibleWithKexi";
             project->debugError();
             RETURN(1);
         }
@@ -257,7 +255,7 @@ int main(int argc, char** argv)
     } else if (test_name == "dr_prop")
         r = drPropTest();
     else {
-        kWarning() << "No such test: " << test_name;
+        qWarning() << "No such test: " << test_name;
 //  usage();
         RETURN(1);
     }
@@ -266,7 +264,7 @@ int main(int argc, char** argv)
         app->exec();
 
     if (r)
-        kDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
+        qDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
 
     if (project) {
         if (!project->closeConnection())
@@ -276,8 +274,8 @@ int main(int argc, char** argv)
 //    if (conn && !conn->disconnect())
 //        r = 1;
 
-// kDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount();
-// kDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount();
+// qDebug() << "!!! KDbTransaction::globalcount == " << KDbTransaction::globalCount();
+// qDebug() << "!!! KDbTransactionData::globalcount == " << KDbTransactionData::globalCount();
 
     delete app;
 

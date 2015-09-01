@@ -20,10 +20,11 @@
 #ifndef KEXIFILEWIDGET_H
 #define KEXIFILEWIDGET_H
 
-#include <QSet>
-#include <kfilewidget.h>
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
+#include <KFileWidget>
+
+#include <QSet>
 
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */
@@ -46,8 +47,9 @@ public:
     };
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
     KexiFileWidget(
-        const KUrl &startDirOrVariable, Mode mode, QWidget *parent);
+        const QUrl &startDirOrVariable, Mode mode, QWidget *parent);
 
     virtual ~KexiFileWidget();
 
@@ -71,7 +73,6 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    // KUrl currentURL();
     virtual QString highlightedFile() const;
 
     //! just sets locationWidget()->setCurrentText(fn)
@@ -102,14 +103,12 @@ public Q_SLOTS:
     virtual void accept();
 
 Q_SIGNALS:
-    //entered file name is accepted
-//alread avail. in KFileWidget  void accepted();
     void fileHighlighted();
     void rejected();
 
 protected Q_SLOTS:
     virtual void reject();
-    void slotExistingFileHighlighted(const QString& fileName);
+    void slotExistingFileHighlighted(const QUrl& url);
 
 private:
     void updateFilters();

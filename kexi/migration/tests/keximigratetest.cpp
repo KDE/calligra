@@ -18,9 +18,8 @@
 */
 
 #include <migration/importwizard.h>
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
+#include <QApplication>
+#include <KAboutData>
 
 /*
 This is in no way meant to compile let alone work
@@ -34,7 +33,7 @@ using namespace KexiMigration;
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("keximigratetest", 0, ki18n("Kexi Migrate Test"), "2.0");
+    KAboutData aboutData("keximigratetest", 0, kxi18n("Kexi Migrate Test"), "2.0");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 

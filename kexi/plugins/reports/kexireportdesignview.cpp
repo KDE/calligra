@@ -17,15 +17,18 @@
 * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-#include <kdebug.h>
-#include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
-#include <KoIcon.h>
+#include <KexiIcon.h>
+
 #include <QShortcut>
+#include <QDebug>
+#include <QScrollArea>
+#include <QLayout>
+
+#include <KStandardGuiItem>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
         : KexiView(parent)
@@ -43,24 +46,24 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_editPasteAction = KStandardAction::paste(this);
     m_editPasteAction->setProperty("iconOnly", true);
     const KGuiItem del = KStandardGuiItem::del();
-    m_editDeleteAction = new KAction(del.icon(), del.text(), this);
+    m_editDeleteAction = new QAction(del.icon(), del.text(), this);
     m_editDeleteAction->setObjectName("editdelete");
     m_editDeleteAction->setToolTip(del.toolTip());
     m_editDeleteAction->setWhatsThis(del.whatsThis());
     m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new KAction(i18n("Edit Sections"), this);
-    m_sectionEdit->setObjectName("sectionedit");
+    m_editSectionAction = new QAction(xi18n("Edit Sections"), this);
+    m_editSectionAction->setObjectName("sectionedit");
 
-    m_itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
+    m_itemRaiseAction = new QAction(koIcon("arrow-up"), xi18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
-    m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
+    m_itemLowerAction = new QAction(koIcon("arrow-down"), xi18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
     QList<QAction*> al;
-    KAction *sep = new KAction(QString(), this);
+    QAction *sep = new QAction(QString(), this);
     sep->setSeparator(true);
 
-    al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_sectionEdit << sep << m_itemLowerAction << m_itemRaiseAction;
+    al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_editSectionAction << sep << m_itemLowerAction << m_itemRaiseAction;
     setViewActions(al);
 
 }
@@ -80,20 +83,20 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
     propertySetSwitched();
 }
 
-KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiReportDesignView::storeNewData(const KDbObject& object,
                                                        KexiView::StoreNewDataOptions options,
-                                                       bool &cancel)
+                                                       bool *cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    kDebug() << "new id:" << s->id();
+    KDbObject *s = KexiView::storeNewData(object, options, cancel);
+    qDebug() << "new id:" << s->id();
 
-    if (!s || cancel) {
+    if (!s || *cancel) {
         delete s;
         return 0;
     }
     if (!storeData()) {
-        //failure: remove object's schema data to avoid garbage
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        //failure: remove object's object data to avoid garbage
+        KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject(s->id());
         delete s;
         return 0;
@@ -111,33 +114,33 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     QDomElement conndata = m_sourceSelector->connectionData();
 
     if (conndata.isNull())
-        kDebug() << "Null conn data!";
+        qDebug() << "Null conn data!";
 
     root.appendChild(m_reportDesigner->document());
     root.appendChild(conndata);
     doc.appendChild(root);
 
     QString src  = doc.toString();
-    kDebug() << src;
+    qDebug() << src;
 
     if (storeDataBlock(src, "layout")) {
-        kDebug() << "Saved OK";
+        qDebug() << "Saved OK";
         setDirty(false);
         return true;
     }
 
-    kDebug() << "NOT Saved OK";
+    qDebug() << "NOT Saved OK";
     return false;
 }
 
-tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
-    kDebug() << mode;
-    dontStore = true;
+    qDebug() << mode;
+    *dontStore = true;
     if (m_reportDesigner && mode == Kexi::DataViewMode) {
-        kDebug() << "Saving temp data";
+        qDebug() << "Saving temp data";
         tempData()->reportDefinition = m_reportDesigner->document();
-        kDebug() << m_reportDesigner->document().toDocument().toString();
+        qDebug() << m_reportDesigner->document().toDocument().toString();
         tempData()->reportSchemaChangedInPreviousView = true;
     }
     return true;
@@ -158,7 +161,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 
         m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
-    } 
+    }
     connect(m_reportDesigner, SIGNAL(itemInserted(QString)), this, SIGNAL(itemInserted(QString)));
 
     m_scrollArea->setWidget(m_reportDesigner);
@@ -178,16 +181,16 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
      connect(deleteShortcut, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditDelete()));
 
     //Edit Actions
-    connect(m_editCutAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCut()));
-    connect(m_editCopyAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditCopy()));
-    connect(m_editPasteAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditPaste()));
-    connect(m_editDeleteAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotEditDelete()));
+    connect(m_editCutAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditCut()));
+    connect(m_editCopyAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditCopy()));
+    connect(m_editPasteAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditPaste()));
+    connect(m_editDeleteAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotEditDelete()));
 
-    connect(m_sectionEdit, SIGNAL(activated()), m_reportDesigner, SLOT(slotSectionEditor()));
+    connect(m_editSectionAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotSectionEditor()));
 
     //Raise/Lower
-    connect(m_itemRaiseAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotRaiseSelected()));
-    connect(m_itemLowerAction, SIGNAL(activated()), m_reportDesigner, SLOT(slotLowerSelected()));
+    connect(m_itemRaiseAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotRaiseSelected()));
+    connect(m_itemLowerAction, SIGNAL(triggered()), m_reportDesigner, SLOT(slotLowerSelected()));
     return true;
 }
 

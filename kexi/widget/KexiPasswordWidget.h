@@ -24,7 +24,7 @@
 #ifndef KEXIPASSWORDWIDGET_H
 #define KEXIPASSWORDWIDGET_H
 
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
 #include <QWidget>
 
@@ -113,7 +113,7 @@ public:
      * @param flags a set of KexiPasswordWidgetFlag flags
      */
     explicit KexiPasswordWidget(QWidget *parent = 0L,
-                                const KexiPasswordWidgetFlags& flags = NoFlags);
+                                KexiPasswordWidgetFlags flags = NoFlags);
 
     /**
      * Destructor
@@ -291,14 +291,14 @@ protected:
      */
     virtual bool checkPassword();
 
-private:
-    Q_PRIVATE_SLOT(d, void activated( const QString& userName ))
-    Q_PRIVATE_SLOT(d, void updateFields())
+private slots:
+    void activated(const QString& userName);
+    void updateFields();
 
 private:
-    class KexiPasswordWidgetPrivate;
-    friend class KexiPasswordWidgetPrivate;
-    KexiPasswordWidgetPrivate* const d;
+    class Private;
+    //friend class Private;
+    Private* const d;
 
     Q_DISABLE_COPY(KexiPasswordWidget)
 };

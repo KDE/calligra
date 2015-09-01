@@ -22,10 +22,11 @@
 #define KEXIPROJECT_H
 
 #include <QObject>
-#include <QPointer>
 
-#include <db/tristate.h>
-#include <db/object.h>
+#include <KDbTristate>
+#include <KDbObject>
+#include <KDbResult>
+
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"
@@ -40,11 +41,11 @@
 #define KEXIPROJECT_VERSION_MAJOR 1
 #define KEXIPROJECT_VERSION_MINOR 0
 
-namespace KexiDB
-{
-class Connection;
-class Parser;
-}
+class QFileInfo;
+class KDbConnection;
+class KDbParser;
+class KexiMainWindow;
+class KexiWindow;
 
 namespace KexiPart
 {
@@ -53,21 +54,16 @@ class Info;
 
 struct MissingPart {
     QString name;
-    QString className;
+    QString id;
 };
 typedef QList<MissingPart> MissingPartsList;
 }
 
-class QFileInfo;
-class KexiMainWindow;
-class KexiWindow;
-
 /**
- * @short A project's main controller.
- * It also contains connection data,
- * current file state, etc.
+ * @brief A single project's controller and data structure.
+ * It contains data connection, state, etc.
  */
-class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
+class KEXICORE_EXPORT KexiProject : public QObject, public KDbObject, public KDbResultable
 {
     Q_OBJECT
 
@@ -75,14 +71,14 @@ public:
     /*! Constructor 1. Creates a new object using \a pdata.
      \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
-    explicit KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
+    explicit KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler = 0);
 
     /*! Constructor 2. Like above but sets predefined connections \a conn.
      The connection should be created using the same connection data
      as pdata->connectionData(). The connection will become owned by created KexiProject
      object, so do not destroy it. */
-    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
-                KexiDB::Connection* conn);
+    KexiProject(const KexiProjectData& pdata, KDbMessageHandler* handler,
+                KDbConnection* conn);
 
     ~KexiProject();
 
@@ -112,19 +108,14 @@ public:
 
     /*! Creates new, empty project using project data.
      If \a forceOverwrite is true, existing database project is silently overwritten.
-     Connection is created (accessible then with KexiProject::dbConnection()).
+     KDbConnection is created (accessible then with KexiProject::dbConnection()).
 
-     Since KexiProject inherits KexiDB::Object, it is possible to get error message
+     Since KexiProject inherits KDbObject, it is possible to get error message
      and other information on error.
 
      \return true on success, false on failure, and cancelled when database exists
      but \a forceOverwrite is false. */
     tristate create(bool forceOverwrite = false);
-
-    /*! \return true if there was error during last operation on the object. */
-    bool error() const {
-        return KexiDB::Object::error();
-    }
 
     /**
      * @return true if a we are connected to a database
@@ -132,48 +123,50 @@ public:
     bool isConnected();
 
     /**
-     * @return internal identifier for part class @a partClass.
-     * -1 is returned if the class is unknown.
-     * While the part classes are unique strings like :org.kexi-project.table",
-     * the identifiers are specific to the given physically stored project,
-     * because sets of parts can differ from between various Kexi installations.
+     * @return internal numeric type identifier for plugin ID @a pluginId.
+     * -1 is returned if the ID is unknown.
+     * While the plugin IDs are unique strings like "org.kexi-project.table",
+     * the type identifiers are specific to the given physically stored project
+     * because sets of plugins can differ from between various Kexi installations
+     * and configurations.
+     * @see pluginIdForTypeId()
      */
-    int idForClass(const QString &partClass) const;
+    int typeIdForPluginId(const QString &pluginId) const;
 
     /**
-     * @return part class for internal identifier.
-     * Empty string is returned if the class is unknown.
-     * @see idForClass()
+     * @return plugin ID for a numeric type ID @a typeId.
+     * Empty string is returned if the plugin ID is unknown.
+     * @see typeIdForPluginId()
      */
-    QString classForId(int classId) const;
-    
+    QString pluginIdForTypeId(int typeId) const;
+
     /**
      * @return all items of a type \a i in this project
      */
     KexiPart::ItemDict* items(KexiPart::Info *i);
 
     /**
-     * @return all items of a class \a partClass in this project
+     * @return all items of a plugin ID \a pluginId in this project
      * It is a convenience function.
      */
-    KexiPart::ItemDict* itemsForClass(const QString &partClass);
+    KexiPart::ItemDict* itemsForPluginId(const QString &pluginId);
 
     /**
      * Puts a list of items of a type \a i in this project into \a list.
      * You can then sort this list using ItemList::sort().
      */
-    void getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
+    void getSortedItems(KexiPart::ItemList  *list, KexiPart::Info *i);
 
     /**
-     * Puts a sorted list of items of a class \a partClass into \a list.
-     * You can then sort this list using ItemList::sort().
+     * Puts a sorted list of items that use a plugin ID \a pluginId into \a list.
+     * You can then sort this list using KexiPart::ItemList::sort().
      */
-    void getSortedItemsForClass(KexiPart::ItemList& list, const QString &partClass);
+    void getSortedItemsForPluginId(KexiPart::ItemList *list, const QString &pluginId);
 
     /**
-     * @return item of class \a partClass and name \a name
+     * @return item corresponding with plugin ID \a pluginId and name \a name
      */
-    KexiPart::Item* itemForClass(const QString &partClass, const QString &name);
+    KexiPart::Item* itemForPluginId(const QString &pluginId, const QString &name);
 
     /**
      * @return item of type \a i and name \a name
@@ -188,7 +181,7 @@ public:
     /**
      * @return the database connection associated with this project
      */
-    KexiDB::Connection *dbConnection() const;
+    KDbConnection *dbConnection() const;
 
     /**
      * @return the project's data
@@ -199,25 +192,25 @@ public:
      \a staticObjectArgs can be passed for static object
      (only works when part for this item is of type KexiPart::StaticPart).
      The new widget will be a child of \a parent. */
-    KexiWindow* openObject(QWidget* parent, KexiPart::Item& item,
+    KexiWindow* openObject(QWidget* parent, KexiPart::Item *item,
                            Kexi::ViewMode viewMode = Kexi::DataViewMode,
                            QMap<QString, QVariant>* staticObjectArgs = 0);
 
     //! For convenience
-    KexiWindow* openObject(QWidget* parent, const QString &partClass,
+    KexiWindow* openObject(QWidget* parent, const QString &pluginId,
                            const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
     /*! Remove a part instance pointed by \a item.
      \return true on success. */
-    bool removeObject(KexiPart::Item& item);
+    bool removeObject(KexiPart::Item* item);
 
     /*! Renames a part instance pointed by \a item to a new name \a newName.
      \return true on success. */
-    bool renameObject(KexiPart::Item& item, const QString& newName);
+    bool renameObject(KexiPart::Item* item, const QString& newName);
 
     /*! Renames a part instance pointed by \a item to a new name \a newName.
      \return true on success. */
-    bool setObjectCaption(KexiPart::Item& item, const QString& newCaption);
+    bool setObjectCaption(KexiPart::Item* item, const QString& newCaption);
 
     /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
@@ -229,7 +222,7 @@ public:
      If \a suggestedCaption is not empty, it will be set as a caption
      (with number suffix, to avoid duplicated, e.g. "employees7"
      for "employees" sugested name). Name will be then built based
-     on this caption using KexiUtils::stringToIdentifier().
+     on this caption using KDb::stringToIdentifier().
 
      This method is used before creating new object.
      \return newly created part item or NULL on any error. */
@@ -256,7 +249,7 @@ public:
      */
     KexiPart::MissingPartsList missingParts() const;
 
-    KexiDB::Parser* sqlParser();
+    KDbParser* sqlParser();
 
     /*! Shows dialog for creating new blank project,
      ans creates one. Dialog is not shown if option for automatic creation
@@ -264,13 +257,13 @@ public:
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    static KexiProject* createBlankProject(bool &cancelled, const KexiProjectData& data,
-                                           KexiDB::MessageHandler* handler = 0);
+    static KexiProject* createBlankProject(bool *cancelled, const KexiProjectData& data,
+                                           KDbMessageHandler* handler = 0);
 
     /*! Drops project described by \a data. \return true on success.
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
     static tristate dropProject(const KexiProjectData& data,
-                                KexiDB::MessageHandler* handler, bool dontAsk = false);
+                                KDbMessageHandler* handler, bool dontAsk = false);
 
     //! Helper method to ask user "Could not  open file for reading and writing. Do you want to
     //! open the file as read only?". @return true if user agrees, false if user cancels opening.
@@ -289,14 +282,14 @@ public:
     /*! Loads current user's data block, referenced by \a objectID and \a dataID
      and puts it to \a dataString.
      \return true on success, false on failure and cancelled when there is no such data block
-     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::loadDataBlock(). */
+     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KDbConnection::loadDataBlock(). */
     tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
 
     /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
      The block will be stored in "kexi__userdata" table
      If there is already such record in the table, it's simply overwritten.
      \return true on success
-     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::storeDataBlock(). */
+     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KDbConnection::storeDataBlock(). */
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
 
     /*! Copies urrent user's data blocks referenced by \a sourceObjectID and pointed
@@ -306,13 +299,13 @@ public:
      Copied data blocks will have \a destObjectID object identifier assigned.
      Note that if \a dataID is not specified, all user data blocks found for the \a sourceObjectID
      will be copied.
-     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KexiDB::Connection::copyDataBlock(). */
+     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KDbConnection::copyDataBlock(). */
     bool copyUserDataBlock(int sourceObjectID, int destObjectID, const QString &dataID = QString());
 
     /*! Removes current user's data block referenced by \a objectID and \a dataID.
      \return true on success. Does not fail if the block does not exist.
      Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
-     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KexiDB::Connection::removeDataBlock(). */
+     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KDbConnection::removeDataBlock(). */
     bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:
@@ -323,7 +316,7 @@ protected:
 
     bool initProject();
 
-    //! Used in open() and open(bool&).
+    //! Used in open() and open(bool*).
     tristate openInternal(bool *incompatibleWithKexi);
 
     /*! Kexi itself can define a number of internal database objects (mostly data structures),
@@ -350,15 +343,19 @@ protected:
     /*! \return Kexi part for \a item. */
     KexiPart::Part *findPartFor(const KexiPart::Item& item);
 
+    //! Closes connection without altering the m_result if is actually set. @return true on success.
+    //! Used on failed operations such as useDatabase().
+    bool closeConnectionInternal();
+
 Q_SIGNALS:
     /** signal emitted on error */
-    void error(const QString &title, KexiDB::Object *obj);
+    void error(const QString &title, KDbObject *obj);
 
     /** signal emitted on error (not KexiDB-related) */
     void error(const QString &msg, const QString &desc);
 
     /** New \a item has been stored. */
-    void newItemStored(KexiPart::Item& item);
+    void newItemStored(KexiPart::Item *item);
 
     /** instance pointed by \a item is removed */
     void itemRemoved(const KexiPart::Item &item);
@@ -377,26 +374,27 @@ private:
      If so, error message is set and false is returned. */
     bool checkWritable();
 
-    /*! Retrieves basic information (class, id, name, caption) 
+    /*! Retrieves basic information (pluginId, typeId, name, caption)
      about all items of all types for this project.
      @return true on success. */
     bool retrieveItems();
 
     /**
      * Checks project's kexi__part table.
-     * @a singlePartClass can be provided to only check specified part.
+     * @a singlePluginId can be provided to only check specified part.
      * Internal identifiers of part(s) are remembered.
      *
      * Use @ref missingParts() to get a list of missing parts.
-     * @see idForClass()
+     * @see typeIdForPluginId()
      */
-    bool checkProject(const QString& singlePartClass = QString());
+    bool checkProject(const QString& singlePluginId = QString());
 
     class Private;
     Private * const d;
 
     friend class KexiMainWindow;
     friend class KexiWindow;
+    friend class Private;
 };
 
 #endif

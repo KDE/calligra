@@ -20,11 +20,12 @@
 #ifndef KEXISTARTUPFILEHANDLER_H
 #define KEXISTARTUPFILEHANDLER_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QSet>
 #include <QObject>
-#include <kexi_export.h>
 
-class KUrl;
+class QUrl;
 class KFileDialog;
 class KUrlRequester;
 class KexiContextMessage;
@@ -52,11 +53,13 @@ public:
     };
     Q_DECLARE_FLAGS(Mode, ModeFlag)
 
+/* removed in KEXI3
     KexiStartupFileHandler(
-        const KUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);
+        const QUrl &startDirOrVariable, Mode mode, KFileDialog *dialog);*/
 
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for startDirOrVariable
     KexiStartupFileHandler(
-        const KUrl &startDirOrVariable, Mode mode, KUrlRequester *requester);
+        const QUrl &startDirOrVariable, Mode mode, KUrlRequester *requester);
 
     virtual ~KexiStartupFileHandler();
 
@@ -84,7 +87,7 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    void setLocationText(const QString& fn);
+//removed in KEXI3    void setLocationText(const QString& fn);
 
     //! Sets default extension which will be added after accepting
     //! if user didn't provided one. This method is usable when there is
@@ -110,12 +113,12 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void slotAccepted();
     void saveRecentDir();
-    
+
     void messageWidgetActionYesTriggered();
     void messageWidgetActionNoTriggered();
 
 private:
-    void init(const KUrl &startDirOrVariable, Mode mode);
+    void init(const QUrl &startDirOrVariable, Mode mode);
     void updateFilters();
 
     class Private;

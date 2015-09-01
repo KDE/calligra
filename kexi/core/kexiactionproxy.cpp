@@ -17,17 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kexi_global.h>
 #include "kexiactionproxy.h"
 #include "kexiactionproxy_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kdebug.h>
-#include <kaction.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
+#include <QDebug>
 #include <QWidget>
-#include <QIcon>
-#include <kexi_global.h>
+#include <QAction>
 
 KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
         : m_proxy(proxy)
@@ -111,7 +110,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->addAction(a);
@@ -121,31 +120,31 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->removeAction(a);
 }
 
-KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
+QAction * KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "NO SUCH ACTION:" << action_name;
+        qWarning() << "NO SUCH ACTION:" << action_name;
         return 0;
     }
     QString altName = a->objectName() + "_alt";
 
-    KAction *ka = dynamic_cast<KAction*>(a);
+    QAction *ka = dynamic_cast<QAction*>(a);
     Q_ASSERT(ka);
-    KAction *alt_act = new KAction(0);
+    QAction *alt_act = new QAction(0);
     alt_act->setObjectName(altName);
     alt_act->setText(alternativeText);
     alt_act->setParent(ka->parent());
     alt_act->setIcon(ka->icon());
     alt_act->setShortcut(ka->shortcut());
 
-    QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(trigger()));
+    QObject::connect(alt_act, SIGNAL(triggered()), a, SLOT(trigger()));
     w->addAction(alt_act);
 
     //OK?
@@ -231,7 +230,7 @@ void KexiActionProxy::addActionProxyChild(KexiActionProxy* child)
 
 void KexiActionProxy::takeActionProxyChild(KexiActionProxy* child)
 {
-kDebug() << child;
+    qDebug() << child;
     const int index = m_sharedActionChildren.indexOf(child);
     if (index != -1)
         m_sharedActionChildren.removeAt(index);
@@ -241,6 +240,4 @@ void KexiActionProxy::setActionProxyParent_internal(KexiActionProxy* parent)
 {
     m_actionProxyParent = parent;
 }
-
-#include "kexiactionproxy_p.moc"
 

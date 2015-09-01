@@ -18,9 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include "kformdesigner_export.h"
 
-#include <QMetaObject>
 #include <QDomDocument>
 #include <QFile>
 #include <QTextStream>
@@ -36,10 +35,11 @@
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QImageWriter>
+#include <QDebug>
 
 #include <KoFileDialog.h>
-#include <klocale.h>
-#include <kacceleratormanager.h>
+#include <KAcceleratorManager>
+#include <KLocalizedString>
 
 #include <kexiutils/utils.h>
 #include "FormWidget.h"
@@ -52,11 +52,7 @@
 #include "widgetwithsubpropertiesinterface.h"
 #include "formIO.h"
 
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo KEXI3 TODO pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
 #endif
@@ -97,7 +93,7 @@ using namespace KFormDesigner;
 
 // FormIO itself
 
-KFORMEDITOR_EXPORT uint KFormDesigner::version()
+KFORMDESIGNER_EXPORT int KFormDesigner::version()
 {
     return KFORMDESIGNER_VERSION;
 }
@@ -124,7 +120,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::SaveFile, "SaveForm");
-        dlg.setNameFilter("*.ui|" + i18n("Qt Designer UI Files"));
+        dlg.setNameFilter("*.ui|" + xi18n("Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
@@ -184,7 +180,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     //custom properties
     QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
     QHash<QByteArray, QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
-    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin(); 
+    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin();
         it != itEnd; ++it)
     {
         headerPropertiesEl.setAttribute(it.key(), it.value());
@@ -222,11 +218,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
         tabstop.appendChild(tabStopText);
     }
 
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo KEXI3 TODO pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     // Save the Form 's PixmapCollection
     form->pixmapCollection()->save(uiElement);
@@ -251,8 +243,8 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << errMsg;
-        kDebug() << "line:" << errLine << "col:" << errCol;
+        qDebug() << errMsg;
+        qDebug() << "line:" << errLine << "col:" << errCol;
         return false;
     }
 
@@ -266,7 +258,7 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
 }
 
 bool
-FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool preview)
+FormIO::loadFormFromString(Form *form, QWidget *container, QString *src, bool preview)
 {
     QString errMsg;
     int errLine;
@@ -277,11 +269,11 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 #endif
 
     QDomDocument inBuf;
-    bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
+    bool parsed = inBuf.setContent(*src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kWarning() << errMsg;
-        kWarning() << "line:" << errLine << "col: " << errCol;
+        qWarning() << errMsg;
+        qWarning() << "line:" << errLine << "col: " << errCol;
         return false;
     }
 
@@ -304,7 +296,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::OpenFile, "LoadForm");
-        dlg.setNameFilter("*.ui|" + i18n("Qt Designer UI Files"));
+        dlg.setNameFilter("*.ui|" + xi18n("Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
@@ -317,15 +309,15 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QFile file(_filename);
     if (!file.open(QIODevice::ReadOnly)) {
 //! @todo show err msg to the user
-        kWarning() << "Cannot open the file " << _filename;
+        qWarning() << "Cannot open the file " << _filename;
         return false;
     }
     QDomDocument doc;
     if (!doc.setContent(&file, false/* !namespaceProcessing*/,
                         &errMsg, &errLine, &errCol)) {
 //! @todo show err msg to the user
-        kWarning() << errMsg;
-        kWarning() << errLine << "col:" << errCol;
+        qWarning() << errMsg;
+        qWarning() << errLine << "col:" << errCol;
         return false;
     }
 
@@ -346,26 +338,26 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
         attr = attr.nextSibling().toAttr();
     }
     //update format version information
-    uint ver = 1; //the default
+    int ver = 1; //the default
     if (form->headerProperties()->contains("version")) {
         bool ok;
-        uint v = (*form->headerProperties())["version"].toUInt(&ok);
+        int v = (*form->headerProperties())["version"].toUInt(&ok);
         if (ok)
             ver = v;
     }
-    kDebug() << "original format version: " << ver;
+    qDebug() << "original format version: " << ver;
     form->setOriginalFormatVersion(ver);
     if (ver < KFormDesigner::version()) {
 //! @todo We can either 1) convert from old format and later save in a new one or 2) keep old format.
 //!     To do this we may need to look at the original format version number.
-        kWarning() << "original format is older than current: " << KFormDesigner::version();
+        qWarning() << "original format is older than current: " << KFormDesigner::version();
         form->setFormatVersion(KFormDesigner::version());
     } else
         form->setFormatVersion(ver);
 
     if (ver > KFormDesigner::version()) {
 //! @todo display information about too new format and that "some information will not be available".
-        kWarning() << "original format is newer than current: " << KFormDesigner::version();
+        qWarning() << "original format is newer than current: " << KFormDesigner::version();
     }
 
     // Load the pixmap collection
@@ -383,12 +375,12 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     QDomElement tabStops = ui.firstChildElement("tabstops");
     if (!tabStops.isNull()) {
         int i = 0;
-        uint itemsNotFound = 0;
+        int itemsNotFound = 0;
         for (QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++) {
             QString name = n.toElement().text();
             ObjectTreeItem *item = form->objectTree()->lookup(name);
             if (!item) {
-                kWarning() << "ERROR : no ObjectTreeItem ";
+                qWarning() << "ERROR : no ObjectTreeItem ";
                 continue;
             }
             const int index = form->tabStops()->indexOf(item);
@@ -400,7 +392,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
             }
             if (index == -1) {
                 itemsNotFound++;
-                kDebug() << "FormIO: item '" << name << "' not in list";
+                qDebug() << "FormIO: item '" << name << "' not in list";
             }
         }
     }
@@ -421,7 +413,7 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
                           const char *name, const QVariant &value)
 {
     // Widget specific properties and attributes
-// kDebug() << "Saving the property: " << name;
+// qDebug() << "Saving the property: " << name;
     Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(item->widget());
     QWidget *subwidget = item->widget();
@@ -434,7 +426,7 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
         addSubwidgetFlag = true;
     }
     if (!propertyIsName && propertyId == -1) {
-        kDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
+        qDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
         if (form->library())
             form->library()->saveSpecialProperty(item->widget()->metaObject()->className(), name, value,
                                                  item->widget(), parentNode, parent);
@@ -477,8 +469,8 @@ FormIO::savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode, QDomDoc
         QDomText valueE;
         QDomElement type = parent.createElement("pixmap");
         QByteArray property = propertyE.attribute("name").toLatin1();
-//! @todo  QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
-        if (form->pixmapsStoredInline() /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
+//! @todo  QCString pixmapName = m_currentRecord->widget()->property("pixmapName").toCString();
+        if (form->pixmapsStoredInline() /* (js)too risky: || m_currentRecord->pixmapName(property).isNull() */)
             valueE = parent.createTextNode(saveImage(parent, value.value<QPixmap>()));
         else
             valueE = parent.createTextNode(item->pixmapName(property));
@@ -736,7 +728,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVaria
 }
 
 void
-FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, 
+FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName,
     const QString &property, const QVariant &value)
 {
     QDomElement propertyE = domDoc.createElement(tagName);
@@ -849,10 +841,10 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
     } else if (type == "pixmap") {
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-        if (form->pixmapsStoredInline() || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
+        if (form->pixmapsStoredInline() || !m_currentForm || !m_currentRecord || !m_currentForm->pixmapCollection()->contains(text))
             return loadImage(tag.ownerDocument(), text);
         else {
-            m_currentItem->setPixmapName(name.toLatin1(), text);
+            m_currentRecord->setPixmapName(name.toLatin1(), text);
             return form->pixmapCollection()->getPixmap(text);
         }
 #else
@@ -865,7 +857,7 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
     }
     else if (type == "set") {
         WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
+            = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
         QObject *subobject = (subpropIface && subpropIface->subwidget())
                              ? subpropIface->subwidget() : obj;
         const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1()));
@@ -893,7 +885,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 {
     if (!item)
         return;
-    kDebug() << item->className() << item->widget()->objectName();
+    qDebug() << item->className() << item->widget()->objectName();
     Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     WidgetLibrary *lib = form->library();
 
@@ -948,14 +940,14 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     names.removeOne("layout");
 
     // Save the buddy widget for a label
-    if (   dynamic_cast<QLabel*>(item->widget())
-        && dynamic_cast<QLabel*>(item->widget())->buddy())
+    if (   qobject_cast<QLabel*>(item->widget())
+        && qobject_cast<QLabel*>(item->widget())->buddy())
     {
         savePropertyElement(
             tclass, domDoc, "property", "buddy",
-            dynamic_cast<QLabel*>(item->widget())->buddy()->objectName());
+            qobject_cast<QLabel*>(item->widget())->buddy()->objectName());
     }
-    
+
     if (names.contains("paletteBackgroundColor")) {
         savePropertyElement(
             tclass, domDoc, "property", "paletteBackgroundColor",
@@ -1090,7 +1082,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
     }
     ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
     if (item) {
-        kWarning() << "Widget" << wname << "already exists! Skipping...";
+        qWarning() << "Widget" << wname << "already exists! Skipping...";
         return;
     }
 
@@ -1132,10 +1124,10 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
     item = container->form()->objectTree()->lookup(wname);
-    kDebug() << wname << item << classname << (parent ? parent->objectName() : QString());
+    qDebug() << wname << item << classname << (parent ? parent->objectName() : QString());
     if (!item)  {
         // not yet created
-        kDebug() << "Creating ObjectTreeItem:";
+        qDebug() << "Creating ObjectTreeItem:";
         item =  new ObjectTreeItem(container->form()->library()->displayName(classname),
                                    wname, w, container);
         if (parent)  {
@@ -1143,7 +1135,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
             if (titem)
                 container->form()->objectTree()->addItem(titem, item);
             else
-                kWarning() << "ERROR no parent widget";
+                qWarning() << "ERROR no parent widget";
         } else
             container->form()->objectTree()->addItem(container->objectTree(), item);
     }
@@ -1159,7 +1151,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
         if (el.hasAttribute("rowspan")) { // widget spans multiple cells
             if (layout) {
                 layout->addWidget(
-                    w, 
+                    w,
                     el.attribute("row").toInt(), el.attribute("column").toInt(),
                     el.attribute("rowspan").toInt(), el.attribute("colspan").toInt());
 //! @todo alignment attribute?
@@ -1228,7 +1220,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
     {
         ObjectTreeItem *item = form->objectTree()->lookup(it.key());
         if (!item || !item->widget()) {
-            kDebug() << "Cannot assign buddy for widget "
+            qDebug() << "Cannot assign buddy for widget "
                 << it.value()->objectName() << " to " << it.key();
             continue;
         }
@@ -1268,7 +1260,7 @@ void FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QD
                 item->addSubproperty(name.toLatin1(),
                                      readPropertyValue(container->form(), node.firstChild(), w, name));
                 const QVariant val(readPropertyValue(container->form(), node.firstChild(), w, name));
-                kDebug() << val.toStringList();
+                qDebug() << val.toStringList();
                 item->addSubproperty(name.toLatin1(), val);
                 //subwidget->setProperty(name.toLatin1(), val);
                 item->addModifiedProperty(name.toLatin1(), val);
@@ -1485,7 +1477,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 {
     QDomElement images = domDoc.firstChildElement("UI").firstChildElement("images");
     if (images.isNull())
-        return 0;
+        return QPixmap();
 
     QDomElement image;
     for (QDomNode n = images.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1537,4 +1529,3 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
     return pix;
 }
 
-#include "formIO.moc"

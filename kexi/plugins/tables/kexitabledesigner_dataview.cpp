@@ -19,13 +19,14 @@
 
 #include "kexitabledesigner_dataview.h"
 
-#include <db/connection.h>
-#include <db/cursor.h>
 #include <kexiutils/utils.h>
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include <KexiMainWindowIface.h>
 #include <kexi_global.h>
+
+#include <KDbConnection>
+#include <KDbCursor>
 
 KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
         : KexiDataTableView(parent, true/*db-aware*/)
@@ -43,11 +44,7 @@ KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 {
-#ifdef __GNUC__
-#warning TODO crash
-#else
-#pragma WARNING( TODO crash )
-#endif
+//! @todo KEXI3 crash
     /*TODO
       if (dynamic_cast<KexiDataTableView*>(tableView())
         && dynamic_cast<KexiDataTableView*>(tableView())->cursor())
@@ -57,13 +54,13 @@ KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
       }*/
 }
 
-tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_UNUSED(dontStore);
 
     if (mode != Kexi::DataViewMode) {
         //accept editing before switching
-        if (!acceptRowEdit()) {
+        if (!acceptRecordEditing()) {
             return cancelled;
         }
     }
@@ -76,9 +73,9 @@ tristate KexiTableDesigner_DataView::afterSwitchFrom(Kexi::ViewMode mode)
 
     if (tempData()->tableSchemaChangedInPreviousView) {
         KexiUtils::WaitCursor wait;
-        KexiDB::Cursor *c
+        KDbCursor *c
         = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
-              *tempData()->table);
+              tempData()->table);
         if (!c)
             return false;
         setData(c);
@@ -92,4 +89,3 @@ KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
     return static_cast<KexiTablePart::TempData*>(window()->data());
 }
 
-#include "kexitabledesigner_dataview.moc"

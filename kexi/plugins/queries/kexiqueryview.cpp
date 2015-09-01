@@ -18,20 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexiproject.h>
-#include <db/connection.h>
-#include <db/parser/parser.h>
-#include <db/cursor.h>
-#include <KexiMainWindowIface.h>
-#include <kexiutils/utils.h>
-#include <KexiWindow.h>
-
 #include "kexiqueryview.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerypart.h"
 #include <widget/tableview/KexiTableScrollArea.h>
 #include <widget/kexiqueryparameters.h>
+#include <kexiproject.h>
+#include <KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
+#include <KexiWindow.h>
+
+#include <KDbConnection>
+#include <KDbParser>
+#include <KDbCursor>
 
 //! @internal
 class KexiQueryView::Private
@@ -42,7 +42,7 @@ public:
               currentParams()
     {}
     ~Private() {}
-    KexiDB::Cursor *cursor;
+    KDbCursor *cursor;
     QList<QVariant> currentParams;
     /*! Used in storeNewData(), storeData() to decide whether
      we should ask other view to save changes.
@@ -71,35 +71,37 @@ KexiQueryView::~KexiQueryView()
     delete d;
 }
 
-tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
+tristate KexiQueryView::executeQuery(KDbQuerySchema *query)
 {
     if (!query)
         return false;
     KexiUtils::WaitCursor wait;
-    KexiDB::Cursor *oldCursor = d->cursor;
-    KexiDB::debug(query->parameters());
+    KDbCursor *oldCursor = d->cursor;
+    qDebug() << query->parameters();
     bool ok;
-    KexiDB::Connection * conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KDbConnection * conn = KexiMainWindowIface::global()->project()->dbConnection();
     {
         KexiUtils::WaitCursorRemover remover;
         d->currentParams = KexiQueryParameters::getParameters(this,
-                 *conn->driver(), *query, ok);
+                 *conn->driver(), query, &ok);
     }
     if (!ok) {//input cancelled
         return cancelled;
     }
-    d->cursor = conn->executeQuery(*query, d->currentParams);
+    d->cursor = conn->executeQuery(query, d->currentParams);
     if (!d->cursor) {
         window()->setStatus(
             conn,
-            i18n("Query executing failed."));
+            xi18n("Query executing failed."));
 //! @todo also provide server result and sql statement
         return false;
     }
     setData(d->cursor);
 
 //! @todo remove close() when dynamic cursors arrive
-    d->cursor->close();
+    if (!d->cursor->close()) {
+        return false;
+    }
 
     if (oldCursor)
         oldCursor->connection()->deleteCursor(oldCursor);
@@ -116,7 +118,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     if (mode == Kexi::NoViewMode) {
-        KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(window()->schemaData());
+        KDbQuerySchema *querySchema = static_cast<KDbQuerySchema *>(window()->schemaObject());
         const tristate result = executeQuery(querySchema);
         if (true != result)
             return result;
@@ -129,15 +131,15 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiQueryView::storeNewData(const KDbObject& object,
                                                 KexiView::StoreNewDataOptions options,
-                                                bool &cancel)
+                                                bool *cancel)
 {
     KexiView * view = window()->viewThatRecentlySetDirtyFlag();
     if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, options, cancel);
+        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(object, options, cancel);
     if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, options, cancel);
+        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(object, options, cancel);
     return 0;
 }
 
@@ -155,5 +157,3 @@ QList<QVariant> KexiQueryView::currentParameters() const
 {
     return d->currentParams;
 }
-
-#include "kexiqueryview.moc"

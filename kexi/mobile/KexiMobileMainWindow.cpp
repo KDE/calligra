@@ -19,29 +19,28 @@
  */
 
 #include "KexiMobileMainWindow.h"
-
-#include <QMenu>
-#include <QMenuBar>
-#include <QAction>
-#include <QHBoxLayout>
-
 #include "KexiMobileWidget.h"
 #include "KexiMobileToolbar.h"
 #include "KexiMobileNavigator.h"
-
-#include <db/drivermanager.h>
-
-#include <KoIcon.h>
-
-#include <kdebug.h>
-#include <kmimetype.h>
-#include <QFileDialog>
+#include <KexiIcon.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>
-#include <ktoolbar.h>
+
+#include <KDbDriverManager>
+
+#include <KToolBar>
+
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QHBoxLayout>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QDebug>
+#include <QFileDialog>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {
@@ -81,10 +80,10 @@ void KexiMobileMainWindow::slotOpenDatabase()
 {
     QString fileName;
 
-    fileName = QFileDialog::getOpenFileName(this, i18n("Open Database"), "", i18n("Database Files (*.kexi)"));
+    fileName = QFileDialog::getOpenFileName(this, xi18n("Open Database"), "", xi18n("Database Files (*.kexi)"));
 
     if (!fileName.isNull()) {
-        KexiProject *proj = openProject(KUrl::fromPath(fileName));
+        KexiProject *proj = openProject(QUrl::fromLocalFile(fileName));
         if (proj) {
             m_project = proj;
             m_mobile->databaseOpened(proj);
@@ -94,14 +93,15 @@ void KexiMobileMainWindow::slotOpenDatabase()
     }
 }
 
-KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
+KexiProject *KexiMobileMainWindow::openProject(const QUrl &url)
 {
-    KexiDB::DriverManager driverManager;
-    KexiDB::Driver *driver = 0;
+    KDbDriverManager driverManager;
+    KDbDriver *driver = 0;
 
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
 
-    QString driverName = driverManager.lookupByMime(mimeType->name());
+    QString driverName = driverManager.lookupByMime(mime.name());
     driver = driverManager.driver(driverName.toLower());
 
     qDebug() << driverManager.driverNames();
@@ -124,7 +124,7 @@ KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
 KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
 {
     bool cancelled;
-    KexiWindow* win = openObject(item, Kexi::DataViewMode, cancelled);
+    KexiWindow* win = openObject(item, Kexi::DataViewMode, &cancelled);
 
     if (!cancelled)
         return win;
@@ -134,19 +134,20 @@ KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
 
 
 KexiWindow *
-KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
+KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled,
                                  QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
+    Q_ASSERT(openingCancelled);
     qDebug() << "KexiMobileMainWindow::openObject";
 
     KexiWindow *window = 0;
 
     if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
-            *errorMessage = i18nc(
+            *errorMessage = xi18nc(
                                 "opening is not allowed in \"data view/design view/text view\" mode",
                                 "opening is not allowed in \"%1\" mode", Kexi::nameForViewMode(viewMode));
-        openingCancelled = true;
+        *openingCancelled = true;
         return 0;
     }
     qDebug() << m_project << item;
@@ -160,7 +161,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 #endif
 
     //Create the window
-    window = m_project->openObject(m_mobile, *item, viewMode, staticObjectArgs);
+    window = m_project->openObject(m_mobile, item, viewMode, staticObjectArgs);
     if (window) {
         m_mobile->setActiveObject(window);
     }
@@ -189,26 +190,26 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 
 bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage)
 {
-    kDebug() << viewMode;
+    qDebug() << viewMode;
     //! @todo this can be more complex once we deliver ACLs...
     //1 Load the part
     //2 Return true if the part loads AND the part supports the view mode AND the viewmode is Data
 
-    KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part * part = Kexi::partManager().part(item);
     if (!part) {
         if (errorMessage) {
             *errorMessage = Kexi::partManager().errorMsg();
         }
     }
-    qDebug() << part << item->partClass();
+    qDebug() << part << item->pluginId();
     /*if (part)
-        qDebug() << item->partClass() << part->supportedUserViewModes();*/
+        qDebug() << item->pluginId() << part->supportedUserViewModes();*/
     return part /*&& (part->supportedUserViewModes() & viewMode)*/ && (viewMode == Kexi::DataViewMode);
 }
 
 //========KexiMainWindowIFace====================
 
-void KexiMobileMainWindow::acceptProjectClosingRequested(bool& cancel)
+void KexiMobileMainWindow::acceptProjectClosingRequested(bool *cancel)
 {
 
 }
@@ -268,7 +269,9 @@ QWidget* KexiMobileMainWindow::focusWidget() const
     return 0;
 }
 
-tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName)
+tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part,
+                                                bool *allowOverwriting,
+                                                const QString& messageWhenAskingForName)
 {
     return false;
 }
@@ -278,12 +281,14 @@ void KexiMobileMainWindow::highlightObject(const QString& mime, const QString& n
 
 }
 
-bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool& openingCancelled)
+bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool *openingCancelled)
 {
     return false;
 }
 
-KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs)
+KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name,
+                                             Kexi::ViewMode viewMode, bool *openingCancelled,
+                                             QMap< QString, QVariant >* staticObjectArgs)
 {
     return 0;
 }
@@ -388,4 +393,3 @@ KexiUserFeedbackAgent* KexiMobileMainWindow::userFeedbackAgent() const
 
 
 
-#include "KexiMobileMainWindow.moc"

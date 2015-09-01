@@ -19,26 +19,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLayout>
-#include <QLabel>
-
-#include <klocale.h>
-
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/tableviewdata.h>
-
-#include "KexiDataTableScrollArea.h"
 #include "KexiDataTableView.h"
+#include "KexiDataTableScrollArea.h"
 #include <core/KexiWindow.h>
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
+
+#include <KDb>
+#include <KDbCursor>
+#include <KDbTableViewData>
+
+#include <QDebug>
 
 class KexiDataTableView::Private
 {
 public:
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString,
-                            KexiDB::TransactionGuard *tg)
+                            KDbTransactionGuard *tg)
     {
         if (transaction.isNull()) {
             transaction = KexiMainWindowIface::global()->project()->dbConnection()->beginTransaction();
@@ -48,7 +45,7 @@ public:
             objectID, dataID, dataString);
     }
 
-    KexiDB::Transaction transaction;
+    KDbTransaction transaction;
 };
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, bool dbAware)
@@ -65,7 +62,7 @@ KexiDataTableView::KexiDataTableView(QWidget *parent, bool dbAware)
     KexiDataAwareView::init(view, view, view);
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
+KexiDataTableView::KexiDataTableView(QWidget *parent, KDbCursor *cursor)
         : KexiDataAwareView(parent)
         , d(new Private)
 {
@@ -78,7 +75,7 @@ KexiDataTableView::~KexiDataTableView()
     delete d;
 }
 
-bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
+bool KexiDataTableView::loadTableViewSettings(KDbTableViewData* data)
 {
     Q_ASSERT(data);
     const int id = window()->id();
@@ -91,16 +88,16 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
         }
         else if (true == res) {
             bool ok;
-            const QList<int> columnWidths = KexiDB::deserializeIntList(columnWidthsString, &ok);
+            const QList<int> columnWidths = KDb::deserializeIntList(columnWidthsString, &ok);
             if (!ok) {
-                kWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
+                qWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
                 return false;
             }
-            KexiDB::TableViewColumn::List* columns = data->columns();
+            QList<KDbTableViewColumn*>* columns = data->columns();
             if (columnWidths.count() == columns->count()) {
                 int i = 0;
                 foreach (int width, columnWidths) {
-                    // kDebug() << width;
+                    // qDebug() << width;
                     columns->at(i)->setWidth(width);
                     ++i;
                 }
@@ -111,7 +108,7 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
 }
 
 void
-KexiDataTableView::setData(KexiDB::Cursor *c)
+KexiDataTableView::setData(KDbCursor *c)
 {
     if (!dynamic_cast<KexiDataTableScrollArea*>(mainWidget()))
         return;
@@ -129,27 +126,23 @@ KexiTableScrollArea* KexiDataTableView::tableView() const
 
 bool KexiDataTableView::saveSettings()
 {
-#ifdef __GNUC__
-#warning TODO save only if changed
-#else
-#pragma WARNING(TODO save only if changed)
-#endif
+//! @todo KEXI3 save only if changed
     bool ok = true;
-    KexiDB::TransactionGuard tg;
+    KDbTransactionGuard tg;
     if (dynamic_cast<KexiDataTableScrollArea*>(mainWidget())) { // db-aware
         KexiTableScrollArea* tv = tableView();
         const int id = window()->id();
         if (id > 0 && tv->data()->columnCount() > 0) {
             QStringList widths;
             bool equal = true; // will be only saved if widths are not equal
-            for (uint i = 0; i < tv->data()->columnCount(); ++i) {
+            for (int i = 0; i < tv->data()->columnCount(); ++i) {
                 if (equal) {
-                    equal = tv->data()->column(i)->width() == uint(tv->columnWidth(i));
+                    equal = tv->data()->column(i)->width() == tv->columnWidth(i);
                 }
                 widths.append(QString::number(tv->columnWidth(i)));
             }
             if (   !equal
-                && !d->storeUserDataBlock(id, "columnWidths", KexiDB::variantToString(widths), &tg))
+                && !d->storeUserDataBlock(id, "columnWidths", KDb::variantToString(widths), &tg))
             {
                 return false;
             }
@@ -159,4 +152,3 @@ bool KexiDataTableView::saveSettings()
     return ok;
 }
 
-#include "KexiDataTableView.moc"

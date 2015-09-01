@@ -18,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBSubForm_H
-#define KexiDBSubForm_H
+#ifndef KEXIDBSUBFORM_H
+#define KEXIDBSUBFORM_H
 
+#include "kexiformutils_export.h"
 #include <QScrollArea>
 #include <formeditor/form.h>
 

@@ -20,11 +20,11 @@
 #ifndef EDITLISTVIEW_DIALOG_H
 #define EDITLISTVIEW_DIALOG_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QToolButton>
-#include <kpagedialog.h>
-
-#include <kexi_export.h>
+#include <KPageDialog>
 
 class QListView;
 class QListViewItem;
@@ -45,7 +45,7 @@ namespace KFormDesigner
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
-class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
+class KFORMDESIGNER_EXPORT EditListViewDialog : public KPageDialog
 {
     Q_OBJECT
 

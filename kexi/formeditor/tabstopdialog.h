@@ -21,9 +21,9 @@
 #ifndef TABSTOPEDIT_DIALOG_H
 #define TABSTOPEDIT_DIALOG_H
 
-#include <kdialog.h>
+#include "kformdesigner_export.h"
 
-#include <kexi_export.h>
+#include <QDialog>
 
 class QTreeWidgetItem;
 
@@ -35,7 +35,7 @@ class Form;
 //! A dialog to edit Form tab stops
 /*! The user can change the order by dragging list items or using buttons at the right.
   The tab stops can be arranged automatically (see \ref Form::autoAssignTabStops()). */
-class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
+class KFORMDESIGNER_EXPORT TabStopDialog : public QDialog
 {
     Q_OBJECT
 
@@ -44,6 +44,8 @@ public:
     virtual ~TabStopDialog();
 
     bool autoTabStops() const;
+
+    using QDialog::exec;
 
 public Q_SLOTS:
     int exec(KFormDesigner::Form *form);

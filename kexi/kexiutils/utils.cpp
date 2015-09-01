@@ -1,6 +1,17 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
+   Contains code from kglobalsettings.cpp:
+   Copyright (C) 2000, 2006 David Faure <faure@kde.org>
+   Copyright (C) 2008 Friedrich W. H. Kossebau <kossebau@kde.org>
+
+   Contains code from kdialog.cpp:
+   Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
+   Additions 1999-2000 by Espen Sand (espen@kde.org)
+                       and Holger Freyther <freyther@kde.org>
+             2005-2009 Olivier Goffart <ogoffart @ kde.org>
+             2006      Tobias Koenig <tokoe@kde.org>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,13 +31,14 @@
 #include "utils.h"
 #include "utils_p.h"
 #include "kexiutils_global.h"
+#include <KexiIcon.h>
 
-#include <QRegExp>
 #include <QPainter>
 #include <QImage>
+#include <QImageReader>
+#include <QImageWriter>
 #include <QIcon>
 #include <QMetaProperty>
-#include <QBitmap>
 #include <QFocusEvent>
 #include <QFile>
 #include <QStyle>
@@ -34,16 +46,36 @@
 #include <KMessageBox>
 #include <QFileInfo>
 #include <QClipboard>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QUrl>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QFontDatabase>
+#include <QTextCodec>
+#include <QDebug>
+#include <QFileDialog>
 
-#include <KUrl>
 #include <KRun>
 #include <KToolInvocation>
+#include <KIconEffect>
+#include <KColorScheme>
 #include <KLocalizedString>
-#include <kdebug.h>
-#include <kiconeffect.h>
-#include <kglobalsettings.h>
-#include <kdialog.h>
-#include <kcolorscheme.h>
+#include <KConfigGroup>
+#include <KAboutData>
+
+#if HAVE_LANGINFO_H
+#include <langinfo.h>
+#endif
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+
+static QRgb qt_colorref2qrgb(COLORREF col)
+{
+    return qRgb(GetRValue(col), GetGValue(col), GetBValue(col));
+}
+#endif
 
 using namespace KexiUtils;
 
@@ -70,17 +102,20 @@ void DelayedCursorHandler::show()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
-K_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
+Q_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
 
 void KexiUtils::setWaitCursor(bool noDelay)
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qobject_cast<QApplication*>(qApp)) {
         _delayedCursorHandler->start(noDelay);
+    }
 }
+
 void KexiUtils::removeWaitCursor()
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qobject_cast<QApplication*>(qApp)) {
         _delayedCursorHandler->stop();
+    }
 }
 
 WaitCursor::WaitCursor(bool noDelay)
@@ -207,26 +242,28 @@ QStringList KexiUtils::enumKeysForProperty(const QMetaProperty& metaProperty)
     return result;
 }
 
-QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const QMimeType &mime, bool kdeFormat)
 {
-    if (mime.isNull())
+    if (!mime.isValid()) {
         return QString();
+    }
 
     QString str;
     if (kdeFormat) {
-        if (mime->patterns().isEmpty())
+        if (mime.globPatterns().isEmpty()) {
             str = "*";
-        else
-            str = mime->patterns().join(" ");
+        } else {
+            str = mime.globPatterns().join(" ");
+        }
         str += "|";
     }
-    str += mime->comment();
-    if (!mime->patterns().isEmpty() || !kdeFormat) {
+    str += mime.comment();
+    if (!mime.globPatterns().isEmpty() || !kdeFormat) {
         str += " (";
-        if (mime->patterns().isEmpty())
+        if (mime.globPatterns().isEmpty())
             str += "*";
         else
-            str += mime->patterns().join("; ");
+            str += mime.globPatterns().join("; ");
         str += ")";
     }
     if (kdeFormat)
@@ -236,10 +273,11 @@ QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFo
     return str;
 }
 
-QString KexiUtils::fileDialogFilterString(const QString& mimeString, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const QString& mimeName, bool kdeFormat)
 {
-    KMimeType::Ptr ptr = KMimeType::mimeType(mimeString);
-    return fileDialogFilterString(ptr, kdeFormat);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(mimeName);
+    return fileDialogFilterString(mime, kdeFormat);
 }
 
 QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat)
@@ -249,6 +287,39 @@ QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool 
     for (QStringList::ConstIterator it = mimeStrings.constBegin(); it != endIt; ++it)
         ret += fileDialogFilterString(*it, kdeFormat);
     return ret;
+}
+
+//! @internal
+static QFileDialog* getImageDialog(QWidget *parent, const QString &caption, const QUrl &directory,
+                                   const QList<QByteArray> supportedMimeTypes)
+{
+    QFileDialog *dialog = new QFileDialog(parent, caption);
+    dialog->setDirectoryUrl(directory);
+    const QStringList mimeTypeFilters
+        = KexiUtils::convertTypes<QByteArray, QString, &QString::fromLatin1>(supportedMimeTypes);
+    dialog->setMimeTypeFilters(mimeTypeFilters);
+    return dialog;
+}
+
+QUrl KexiUtils::getOpenImageUrl(QWidget *parent, const QString &caption, const QUrl &directory)
+{
+    QScopedPointer<QFileDialog> dialog(
+        getImageDialog(parent, caption.isEmpty() ? i18n("Open") : caption, directory,
+                       QImageReader::supportedMimeTypes()));
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->exec();
+    return dialog->selectedUrls().value(0);
+}
+
+QUrl KexiUtils::getSaveImageUrl(QWidget *parent, const QString &caption, const QUrl &directory)
+{
+    QScopedPointer<QFileDialog> dialog(
+        getImageDialog(parent, caption.isEmpty() ? i18n("Save") : caption, directory,
+                       QImageWriter::supportedMimeTypes()));
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->exec();
+    return dialog->selectedUrls().value(0);
 }
 
 QColor KexiUtils::blendedColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
@@ -301,72 +372,6 @@ QPixmap KexiUtils::emptyIcon(KIconLoader::Group iconGroup)
     QPixmap noIcon(IconSize(iconGroup), IconSize(iconGroup));
     noIcon.fill(Qt::transparent);
     return noIcon;
-}
-
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QByteArray& array)
-{
-    QDataStream ds(&array, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds << map;
-}
-
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QString& string)
-{
-    QByteArray array;
-    QDataStream ds(&array, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds << map;
-    kDebug() << array[3] << " " << array[4] << " " << array[5];
-    const uint size = array.size();
-    string.clear();
-    string.reserve(size);
-    for (uint i = 0; i < size; i++) {
-        string[i] = QChar(ushort(array[i]) + 1);
-    }
-}
-
-QMap<QString, QString> KexiUtils::deserializeMap(const QByteArray& array)
-{
-    QMap<QString, QString> map;
-    QByteArray ba(array);
-    QDataStream ds(&ba, QIODevice::ReadOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds >> map;
-    return map;
-}
-
-QMap<QString, QString> KexiUtils::deserializeMap(const QString& string)
-{
-    QByteArray array;
-    const uint size = string.length();
-    array.resize(size);
-    for (uint i = 0; i < size; i++) {
-        array[i] = char(string[i].unicode() - 1);
-    }
-    QMap<QString, QString> map;
-    QDataStream ds(&array, QIODevice::ReadOnly);
-    ds.setVersion(QDataStream::Qt_3_1);
-    ds >> map;
-    return map;
-}
-
-QString KexiUtils::stringToFileName(const QString& string)
-{
-    QString _string(string);
-    _string.replace(QRegExp("[\\\\/:\\*?\"<>|]"), " ");
-    return _string.simplified();
-}
-
-void KexiUtils::simpleCrypt(QString& string)
-{
-    for (int i = 0; i < string.length(); i++)
-        string[i] = QChar(string[i].unicode() + 47 + i);
-}
-
-void KexiUtils::simpleDecrypt(QString& string)
-{
-    for (int i = 0; i < string.length(); i++)
-        string[i] = QChar(string[i].unicode() - 47 - i);
 }
 
 static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins, const QRect& rect,
@@ -464,33 +469,6 @@ QPixmap KexiUtils::scaledPixmap(const WidgetMargins& margins, const QRect& rect,
     return px;
 }
 
-QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
-{
-    QString str;
-    unsigned char* cstr_ptr = (unsigned char*) & ptr;
-    for (uint i = 0; i < size; i++) {
-        QString s;
-        s.sprintf("%2.2x", cstr_ptr[i]);
-        str.append(s);
-    }
-    return str;
-}
-
-void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
-{
-    if ((str.length() / 2) < (int)size)
-        return 0;
-    QByteArray array;
-    array.resize(size);
-    bool ok;
-    for (uint i = 0; i < size; i++) {
-        array[i] = (unsigned char)(str.mid(i * 2, 2).toUInt(&ok, 16));
-        if (!ok)
-            return 0;
-    }
-    return *(void**)(array.data());
-}
-
 void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 {
     if (!widget)
@@ -563,16 +541,16 @@ const WidgetMargins KexiUtils::operator+ (
 
 //---------
 
-K_GLOBAL_STATIC(QFont, _smallFont)
+Q_GLOBAL_STATIC(QFont, _smallFont)
 
 QFont KexiUtils::smallFont(QWidget *init)
 {
     if (init) {
         *_smallFont = init->font();
-        const int wdth = KGlobalSettings::desktopGeometry(init).width();
+        const int wdth = QApplication::desktop()->screenGeometry(init).width();
         int size = 10 + qMax(0, wdth - 1100) / 100;
         size = qMin(init->fontInfo().pixelSize(), size);
-        size = qMax(KGlobalSettings::smallestReadableFont().pixelSize(), size);
+        size = qMax(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize(), size);
         _smallFont->setPixelSize(size);
     }
     return *_smallFont;
@@ -599,10 +577,20 @@ void KTextEditorFrame::changeEvent(QEvent *event)
 
 //---------------------
 
+int KexiUtils::marginHint()
+{
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+}
+
+int KexiUtils::spacingHint()
+{
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+}
+
 void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
 {
-    setMargins(layout, KDialog::marginHint());
-    layout->setSpacing( KDialog::spacingHint() );
+    setMargins(layout, KexiUtils::marginHint());
+    layout->setSpacing(KexiUtils::spacingHint());
 }
 
 void KexiUtils::setMargins(QLayout *layout, int value)
@@ -672,7 +660,7 @@ void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
     if (!object || !filter || !object->isWidgetType())
         return;
 
-//    kDebug() << "Installing event filter on widget:" << object 
+//    qDebug() << "Installing event filter on widget:" << object
 //        << "directed to" << filter->objectName();
     object->installEventFilter(filter);
 
@@ -719,39 +707,45 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
 {
     if (url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());
         if (!fileInfo.exists()) {
-            KMessageBox::sorry(parent, i18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
+            KMessageBox::sorry(parent, xi18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
             return;
         }
     }
 
     if (!url.isValid()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, xi18nc("@info", "Invalid hyperlink <link>%1</link>.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 
-    QString type = KMimeType::findByUrl(url)->name();
+    QMimeDatabase db;
+    QString type = db.mimeTypeForUrl(url).name();
 
     if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
-        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, xi18nc("@info", "Executable <link>%1</link> not allowed.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 
     if (!options.allowRemote && !url.isLocalFile()) {
-        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.", url.pathOrUrl()));
+        KMessageBox::sorry(parent, xi18nc("@info", "Remote hyperlink <link>%1</link> not allowed.",
+                                          url.url(QUrl::PreferLocalFile)));
         return;
     }
 
     if (KRun::isExecutableFile(url, type)) {
-        int ret = KMessageBox::warningYesNo(parent
-                                            , i18nc("@info", "Do you want to run this file?"
-                                                    "<warning>Running executables can be dangerous.</warning>")
-                                            , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
-                                            , "AllowRunExecutable", KMessageBox::Dangerous);
+        int ret = KMessageBox::questionYesNo(parent
+                    , xi18nc("@info", "Do you want to run this file?"
+                            "<warning>Running executables can be dangerous.</warning>")
+                    , QString()
+                    , KGuiItem(xi18nc("@action:button Run script file", "Run"), koIconName("system-run"))
+                    , KStandardGuiItem::no()
+                    , "AllowRunExecutable", KMessageBox::Dangerous);
 
         if (ret != KMessageBox::Yes) {
             return;
@@ -806,8 +800,178 @@ QSize KexiUtils::comboBoxArrowSize(QStyle *style)
 void KexiUtils::addDirtyFlag(QString *text)
 {
     Q_ASSERT(text);
-    *text = i18nc("'Dirty (modified) object' flag", "%1*", *text);
+    *text = xi18nc("'Dirty (modified) object' flag", "%1*", *text);
 }
 
-#include "moc_utils.cpp"
-#include "utils_p.moc"
+//! From klocale_kde.cpp
+//! @todo KEXI3 support other OS-es (use from klocale_*.cpp)
+static QByteArray systemCodeset()
+{
+    QByteArray codeset;
+#if HAVE_LANGINFO_H
+    // Qt since 4.2 always returns 'System' as codecForLocale and KDE (for example
+    // KEncodingFileDialog) expects real encoding name. So on systems that have langinfo.h use
+    // nl_langinfo instead, just like Qt compiled without iconv does. Windows already has its own
+    // workaround
+
+    codeset = nl_langinfo(CODESET);
+
+    if ((codeset == "ANSI_X3.4-1968") || (codeset == "US-ASCII")) {
+        // means ascii, "C"; QTextCodec doesn't know, so avoid warning
+        codeset = "ISO-8859-1";
+    }
+#endif
+    return codeset;
+}
+
+QTextCodec* g_codecForEncoding = 0;
+
+bool setEncoding(int mibEnum)
+{
+    QTextCodec *codec = QTextCodec::codecForMib(mibEnum);
+    if (codec) {
+        g_codecForEncoding = codec;
+    }
+
+    return codec != 0;
+}
+
+//! From klocale_kde.cpp
+static void initEncoding()
+{
+    if (!g_codecForEncoding) {
+        // This all made more sense when we still had the EncodingEnum config key.
+
+        QByteArray codeset = systemCodeset();
+
+        if (!codeset.isEmpty()) {
+            QTextCodec *codec = QTextCodec::codecForName(codeset);
+            if (codec) {
+                setEncoding(codec->mibEnum());
+            }
+        } else {
+            setEncoding(QTextCodec::codecForLocale()->mibEnum());
+        }
+
+        if (!g_codecForEncoding) {
+            qWarning() << "Cannot resolve system encoding, defaulting to ISO 8859-1.";
+            const int mibDefault = 4; // ISO 8859-1
+            setEncoding(mibDefault);
+        }
+        Q_ASSERT(g_codecForEncoding);
+    }
+}
+
+QByteArray KexiUtils::encoding()
+{
+    initEncoding();
+    return g_codecForEncoding->name();
+}
+
+namespace {
+
+//! @internal for graphicEffectsLevel()
+class GraphicEffectsLevel
+{
+public:
+    GraphicEffectsLevel() {
+        KConfigGroup g(KSharedConfig::openConfig(), "KDE-Global GUI Settings");
+
+        // Asking for hasKey we do not ask for graphicEffectsLevelDefault() that can
+        // contain some very slow code. If we can save that time, do it. (ereslibre)
+        if (g.hasKey("GraphicEffectsLevel")) {
+            value = ((GraphicEffects) g.readEntry("GraphicEffectsLevel", QVariant((int) NoEffects)).toInt());
+            return;
+        }
+
+        // For now, let always enable animations by default. The plan is to make
+        // this code a bit smarter. (ereslibre)
+        value = ComplexAnimationEffects;
+    }
+    GraphicEffects value;
+};
+}
+
+Q_GLOBAL_STATIC(GraphicEffectsLevel, g_graphicEffectsLevel)
+
+GraphicEffects KexiUtils::graphicEffectsLevel()
+{
+    return g_graphicEffectsLevel->value;
+}
+
+bool KexiUtils::activateItemsOnSingleClick(QWidget *widget)
+{
+    QStyle *style = widget ? widget->style() : QApplication::style();
+    return style->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, widget);
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::inactiveTitleColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("inactiveBackground", QColor(224, 223, 222));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::inactiveTextColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("inactiveForeground", QColor(75, 71, 67));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::activeTitleColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("activeBackground", QColor(48, 174, 232));
+#endif
+}
+
+// NOTE: keep this in sync with kdebase/workspace/kcontrol/colors/colorscm.cpp
+QColor KexiUtils::activeTextColor()
+{
+#ifdef Q_OS_WIN
+    return qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT));
+#else
+    KConfigGroup g(KSharedConfig::openConfig(), "WM");
+    return g.readEntry("activeForeground", QColor(255, 255, 255));
+#endif
+}
+
+QString KexiUtils::makeStandardCaption(const QString &userCaption, CaptionFlags flags)
+{
+    QString caption = KAboutData::applicationData().displayName();
+    if (caption.isEmpty()) {
+        return QCoreApplication::instance()->applicationName();
+    }
+    QString captionString = userCaption.isEmpty() ? caption : userCaption;
+
+    // If the document is modified, add '[modified]'.
+    if (flags & ModifiedCaption) {
+        captionString += QString::fromUtf8(" [") + xi18n("modified") + QString::fromUtf8("]");
+    }
+
+    if (!userCaption.isEmpty()) {
+        // Add the application name if:
+        // User asked for it, it's not a duplication  and the app name (caption()) is not empty
+        if (flags & AppNameCaption &&
+                !caption.isEmpty() &&
+                !userCaption.endsWith(caption)) {
+            // TODO: check to see if this is a transient/secondary window before trying to add the app name
+            //       on platforms that need this
+            captionString += xi18nc("Document/application separator in titlebar", " – ") + caption;
+        }
+    }
+    return captionString;
+}

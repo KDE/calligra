@@ -1,0 +1,25 @@
+[Desktop Entry]
+Name=CSV import/export
+Comment=Kexi Plugin for CSV data import/export
+Type=Service
+Icon=document-import
+Encoding=UTF-8
+
+X-KDE-Library=kexi_csvimportexportplugin
+X-KDE-ServiceTypes=Kexi/ModalDialog
+X-KDE-PluginInfo-Author=Kexi Team
+X-KDE-PluginInfo-Email=kexi@kde.org
+X-KDE-PluginInfo-Name=org.kexi-project.importexport.csv
+X-KDE-PluginInfo-Version=3.0
+X-KDE-PluginInfo-Website=http://kexi-project.org
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Kexi-GroupName=
+X-Kexi-TypeName=
+X-Kexi-ServiceTypesInUserMode=
+X-Kexi-VisibleInProjectNavigator=false
+X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=false

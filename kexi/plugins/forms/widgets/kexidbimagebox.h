@@ -18,18 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBImageBox_H
-#define KexiDBImageBox_H
+#ifndef KEXIDBIMAGEBOX_H
+#define KEXIDBIMAGEBOX_H
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <widget/utils/kexicontextmenuutils.h>
 #include "kexiframe.h"
 #include "kexidbutils.h"
+#include <kexiblobbuffer.h>
+
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QPaintEvent>
-#include <kexiblobbuffer.h>
-
-#include <widget/utils/kexicontextmenuutils.h>
+#include <QPointer>
 
 class KexiDropDownButton;
 class KexiImageContextMenu;
@@ -43,10 +44,10 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
-    Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId STORED false)
-    Q_PROPERTY(uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
+    Q_PROPERTY(int pixmapId READ pixmapId WRITE setPixmapId STORED false)
+    Q_PROPERTY(int storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents)
     Q_PROPERTY(bool smoothTransformation READ smoothTransformation WRITE setSmoothTransformation)
     Q_PROPERTY(bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio)
@@ -67,17 +68,17 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     virtual QVariant value(); // { return m_value.data(); }
 
     QPixmap pixmap() const;
 
-    uint pixmapId() const;
+    int pixmapId() const;
 
-    uint storedPixmapId() const;
+    int storedPixmapId() const;
 
     virtual void setInvalidState(const QString& displayText);
 
@@ -128,11 +129,7 @@ public:
     /*! Overridden to change the policy behaviour a bit:
      NoFocus is returned regardless the real focus flag
      if the data source is empty (see dataSource()). */
-#ifdef __GNUC__
-#warning TODO focusPolicy() is not virtual!
-#else
-#pragma WARNING( TODO focusPolicy() is not virtual! )
-#endif
+//! @todo KEXI3 focusPolicy() is not virtual!
     Qt::FocusPolicy focusPolicy() const;
 
     //! \return the internal focus policy value, i.e. the one unrelated to data source presence.
@@ -143,15 +140,15 @@ public:
     virtual void setFocusPolicy(Qt::FocusPolicy policy);
 
 public Q_SLOTS:
-    void setPixmapId(uint id);
+    void setPixmapId(int id);
 
-    void setStoredPixmapId(uint id);
+    void setStoredPixmapId(int id);
 
     //! Sets the datasource to \a ds
     virtual void setDataSource(const QString &ds);
 
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
 
     virtual void setReadOnly(bool set);
@@ -190,11 +187,11 @@ Q_SIGNALS:
     void idChanged(long id);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool* valueIsNull, bool* valueIsReadOnly);
 
-    void handleInsertFromFileAction(const KUrl& url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
-    void handleSaveAsAction(const QString& fileName);
+    void handleInsertFromFileAction(const QUrl &url);
+    void handleAboutToSaveAsAction(QString* origFilename, QString* mimeType, bool* dataIsEmpty);
+    bool handleSaveAsAction(const QUrl &url);
     void handleCutAction();
     void handleCopyAction();
     void handlePasteAction();
@@ -206,7 +203,7 @@ protected:
     QByteArray data() const;
 
     virtual void contextMenuEvent(QContextMenuEvent * e);
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
     virtual void paintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent* e);
     virtual bool eventFilter(QObject * watched, QEvent * e);

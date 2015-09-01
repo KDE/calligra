@@ -20,8 +20,9 @@
 #ifndef KEXITEXTFORMATTER_H
 #define KEXITEXTFORMATTER_H
 
-#include <kexi_export.h>
-#include <db/field.h>
+#include "kexidatatable_export.h"
+
+#include <KDbField>
 
 //! @short Text formatter used to format QVariant values to text for displaying and back to QVariant
 /*! Used by KexiInputTableEdit, KexiDateTableEdit, KexiTimeTableEdit, KexiDateTimeTableEdit,
@@ -33,7 +34,7 @@ public:
     ~KexiTextFormatter();
 
     //! Assigns \a field to the formatter. This affects its behaviour.
-    void setField(KexiDB::Field* field);
+    void setField(KDbField* field);
 
     /*! \return string converted from \a value.
      A field schema set using setField() is used to perform the formatting.

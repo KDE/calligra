@@ -72,7 +72,7 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 	len_out = dlen;
 
 #if HAVE_ICONV
-	
+
 	while (1) {
 		iconv(mdb->iconv_in, &in_ptr, &len_in, &out_ptr, &len_out);
 		if ((!len_in) || (errno == E2BIG)) break;
@@ -82,7 +82,7 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 		*out_ptr++ = '?';
 		len_out--;
 	}
-	
+
 	dlen -= len_out;
 #else
 	if (IS_JET3(mdb)) {
@@ -99,7 +99,7 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 
 	if (tmp) g_free(tmp);
 	dest[dlen]='\0';
-	
+
 	return dlen;
 }
 
@@ -123,7 +123,7 @@ mdb_ascii2unicode(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 
 #ifdef HAVE_ICONV
 	iconv(mdb->iconv_out, &in_ptr, &len_in, &out_ptr, &len_out);
-	
+
 	dlen -= len_out;
 #else
 	if (IS_JET3(mdb)) {
@@ -207,7 +207,7 @@ void mdb_iconv_init(MdbHandle *mdb)
 #ifdef _WIN32
 			// get the default from OS
 			char default_encoding[] = "CP       ";
-			if (GetLocaleInfoA( MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT), 
+			if (GetLocaleInfoA( MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT),
 			 LOCALE_IDEFAULTANSICODEPAGE, default_encoding+2, sizeof(default_encoding)-2-1 ))
 				mdb->jet3_iconv_code = g_strdup(default_encoding);
 			else

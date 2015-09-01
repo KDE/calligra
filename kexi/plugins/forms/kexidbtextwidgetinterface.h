@@ -17,17 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBTextWidgetInterface_H
-#define KexiDBTextWidgetInterface_H
+#ifndef KEXIDBTEXTWIDGETINTERFACE_H
+#define KEXIDBTEXTWIDGETINTERFACE_H
+
+#include "kexiformutils_export.h"
 
 #include <widget/utils/kexidisplayutils.h>
-#include <QFrame>
+
 #include <QEvent>
 
-namespace KexiDB
-{
-class QueryColumnInfo;
-}
+class KDbQueryColumnInfo;
 
 //! @short An interface providing common text editor's functionality
 /*! Widgets (e.g. KexiDBLineEdit, KexiDBTextEdit) implementing KexiFormDataItemInterface
@@ -38,8 +37,8 @@ public:
     KexiDBTextWidgetInterface();
     ~KexiDBTextWidgetInterface();
 
-    //! Called from KexiFormDataItemInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo) implementation.
-    void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
+    //! Called from KexiFormDataItemInterface::setColumnInfo(KDbQueryColumnInfo* cinfo) implementation.
+    void setColumnInfo(KDbQueryColumnInfo* cinfo, QWidget *w);
 
     //! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
     void paint(QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment,

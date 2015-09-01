@@ -22,25 +22,25 @@
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
 #include "kexiscriptadaptor.h"
-
+#include <kexipart.h>
+#include <kexipartitem.h>
+#include <KexiIcon.h>
 #include <KexiView.h>
 #include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 
-#include <kross/core/manager.h>
-#include <kross/core/action.h>
-#include <kross/core/actioncollection.h>
+#include <Kross/Manager>
+#include <Kross/ActionCollection>
 
-#include <kexipart.h>
-#include <kexipartitem.h>
-#include <KoIcon.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KMessageBox>
 
-#include <QMetaObject>
-#include <QMenu>
+#include <QDebug>
+
+KEXI_PLUGIN_FACTORY(KexiScriptPart, "kexi_scriptplugin.json")
 
 /// \internal
 class KexiScriptPart::Private
@@ -73,12 +73,12 @@ public:
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "script"),
-        i18nc("tooltip", "Create new script"),
-        i18nc("what's this", "Creates new script."),
+        xi18nc("tooltip", "Create new script"),
+        xi18nc("what's this", "Creates new script."),
         l)
   , d(new Private(this))
 {
@@ -93,7 +93,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
     Q_UNUSED(sender);
     if (!item) {
-        kWarning() << "Invalid item.";
+        qWarning() << "Invalid item.";
         return false;
     }
 
@@ -103,7 +103,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
     KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>(
                                      createView(dialog, dialog, *item, Kexi::DesignViewMode));
     if (! view) {
-        kWarning() << "Failed to create a view.";
+        qWarning() << "Failed to create a view.";
         return false;
     }
 
@@ -111,17 +111,17 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
     if (scriptaction) {
 
         const QString dontAskAgainName = "askExecuteScript";
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         QString dontask = config->readEntry(dontAskAgainName).toLower();
 
         bool exec = (dontask == "yes");
         if (!exec && dontask != "no") {
-            exec = KMessageBox::warningContinueCancel(0,
+            exec = KMessageBox::Yes == KMessageBox::questionYesNo(view,
                     futureI18n("Do you want to execute the script \"%1\"?\n\n"
                          "Scripts obtained from unknown sources can contain dangerous code.", scriptaction->text()),
-                    futureI18n("Execute Script?"), KGuiItem(futureI18n("Execute"), koIconName("system-run")),
+                    futureI18n("Execute Script?"), KGuiItem(futureI18nc("@action:button", "Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
-                                                     ) == KMessageBox::Continue;
+                                                     );
         }
 
         if (exec) {
@@ -141,7 +141,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 void KexiScriptPart::initPartActions()
 {
-    kDebug() << ".............";
+    qDebug() << ".............";
 #if 0
     if (m_mainWin) {
         // At this stage the KexiPart::Part::m_mainWin should be defined, so
@@ -156,7 +156,7 @@ void KexiScriptPart::initPartActions()
         if (! Kross::Api::Manager::scriptManager()->hasChild("KexiMainWindow")) {
             Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow");
 
-            // Add the KAction's provided by the ScriptGUIClient to the
+            // Add the QAction's provided by the ScriptGUIClient to the
             // KexiMainWindow.
             //FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
             Q3PopupMenu* popup = m_mainWin->findPopupMenu("tools");
@@ -171,10 +171,10 @@ void KexiScriptPart::initPartActions()
                 if (scriptmenuaction)
                     scriptmenuaction->plug(popup);
                 /*
-                KAction* execscriptmenuaction = d->scriptguiclient->action("executedscripts");
+                QAction * execscriptmenuaction = d->scriptguiclient->action("executedscripts");
                 if(execscriptmenuaction)
                     execscriptmenuaction->plug( popup );
-                KAction* loadedscriptmenuaction = d->scriptguiclient->action("loadedscripts");
+                QAction * loadedscriptmenuaction = d->scriptguiclient->action("loadedscripts");
                 if(loadedscriptmenuaction)
                     loadedscriptmenuaction->plug( popup );
                 */
@@ -186,21 +186,22 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-    kDebug();
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."),
-                       koIconName("configure"), KShortcut(), "script_config_editor");
+    qDebug();
+    createSharedAction(Kexi::DesignViewMode, xi18n("Configure Editor..."),
+                       koIconName("configure"), QKeySequence(), "script_config_editor");
 }
 
 KexiView* KexiScriptPart::createView(QWidget *parent,
                                      KexiWindow *window,
-                                     KexiPart::Item &item,
+                                     KexiPart::Item *item,
                                      Kexi::ViewMode viewMode,
                                      QMap<QString, QVariant>* staticObjectArgs)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(staticObjectArgs);
-    kDebug() << "............. createView";
-    QString partname = item.name();
+    qDebug() << "............. createView";
+    QString partname = item->name();
     if (! partname.isNull()) {
         Kross::Action *action = d->action(partname);
 #if 0
@@ -209,7 +210,7 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
             return 0;
         Kross::Api::ScriptActionCollection* collection = d->scriptguiclient->getActionCollection("projectscripts");
         if (! collection) {
-            collection = new Kross::Api::ScriptActionCollection(i18n("Scripts"), d->scriptguiclient->actionCollection(), "projectscripts");
+            collection = new Kross::Api::ScriptActionCollection(xi18n("Scripts"), d->scriptguiclient->actionCollection(), "projectscripts");
             d->scriptguiclient->addActionCollection("projectscripts", collection);
         }
         const char* name = partname.toLatin1();
@@ -230,12 +231,10 @@ KLocalizedString KexiScriptPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of script <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of script <resource>%1</resource> has been modified."));
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Script <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Script <resource>%1</resource> already exists."));
     return Part::i18nMessage(englishMessage, window);
 }
-
-K_EXPORT_KEXIPART_PLUGIN( KexiScriptPart, script )
 
 #include "kexiscriptpart.moc"

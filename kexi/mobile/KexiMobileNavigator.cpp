@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -18,12 +18,11 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "KexiMobileNavigator.h"
 #include <widget/navigator/KexiProjectModel.h>
 #include <widget/navigator/KexiProjectNavigator.h>
-#include <kdebug.h>
+
+#include <QDebug>
 
 KexiMobileNavigator::KexiMobileNavigator(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f), m_project(0)
 {
@@ -38,7 +37,7 @@ KexiMobileNavigator::KexiMobileNavigator(QWidget* parent, Qt::WindowFlags f): QW
 
     connect(m_reportNavigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)), this, SLOT(slotOpenItem(KexiPart::Item*)));
     connect(m_formNavigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)), this, SLOT(slotOpenItem(KexiPart::Item*)));
-    
+
 }
 
 KexiMobileNavigator::~KexiMobileNavigator()
@@ -57,9 +56,8 @@ void KexiMobileNavigator::setProject(KexiProject* p)
 
 void KexiMobileNavigator::slotOpenItem(KexiPart::Item* item)
 {
-    kDebug();
-    
+    qDebug();
+
     emit(openItem(item));
 }
 
-#include "KexiMobileNavigator.moc"

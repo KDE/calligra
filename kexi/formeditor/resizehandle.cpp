@@ -18,21 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <QPainter>
-#include <QCursor>
-#include <QMouseEvent>
-#include <QPaintEvent>
-
 #include "form.h"
 #include "resizehandle.h"
 #include "container.h"
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 
-#include <KPropertySet>
+#include <QDebug>
+#include <QCursor>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10
@@ -43,7 +38,7 @@ namespace KFormDesigner {
 /**
 * A single widget which represents a small rectangle for resizing a form widget.
 */
-class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
+class KFORMDESIGNER_EXPORT ResizeHandle : public QWidget
 {
 public:
     enum HandlePos {
@@ -279,7 +274,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
         tmph = (tmph < MINIMUM_HEIGHT) ? MINIMUM_HEIGHT : tmph;
     }
 
-    //kDebug() << "geometry: OLD" << d->set->widget()->geometry() << "NEW" << QRect(tmpx, tmpy, tmpw, tmph);
+    //qDebug() << "geometry: OLD" << d->set->widget()->geometry() << "NEW" << QRect(tmpx, tmpy, tmpw, tmph);
     emit d->set->geometryChanged(QRect(tmpx, tmpy, tmpw, tmph));
 
     if (shouldBeMoved && shouldBeResized) {
@@ -374,7 +369,7 @@ void ResizeHandleSet::resizeStarted()
 void ResizeHandleSet::resizeFinished()
 {
     if (d->widget) {
-        //kDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
+        //qDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
     }
 }
 
@@ -388,4 +383,3 @@ Form* ResizeHandleSet::form() const
     return d->form;
 }
 
-#include "resizehandle.moc"

@@ -19,40 +19,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QVBoxLayout>
-#include <QDomDocument>
-
-#include <kdebug.h>
-#include <ktabwidget.h>
-#include <kaction.h>
-#include <kactionmenu.h>
-
-#include <KoIcon.h>
-
+#include "kexiformpart.h"
+#include <KexiIcon.h>
 #include <KexiView.h>
 #include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <kexipartitem.h>
 #include <widget/KexiDataSourceComboBox.h>
-#include <db/connection.h>
-#include <db/fieldlist.h>
-#include <db/field.h>
 #include <kexiutils/utils.h>
-
 #include <kexi_global.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
 #include <formeditor/WidgetTreeWidget.h>
-
-#include <KProperty>
-#include <KPropertySet>
-
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiformmanager.h"
-#include "kexiformpart.h"
 #include "kexidatasourcepage.h"
+
+#include <KDbConnection>
+#include <KDbFieldList>
+#include <KDbField>
+
+#include <KProperty>
+
+#include <KActionMenu>
+
+#include <QVBoxLayout>
+#include <QDomDocument>
+#include <QTabWidget>
+#include <QAction>
+#include <QDebug>
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
@@ -74,12 +71,12 @@ public:
 
 KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "form"),
-        i18nc("tooltip", "Create new form"),
-        i18nc("what's this", "Creates new form."),
+        xi18nc("tooltip", "Create new form"),
+        xi18nc("what's this", "Creates new form."),
         l)
   , d(new Private)
 {
@@ -103,52 +100,52 @@ void KexiFormPart::initPartActions()
 void KexiFormPart::initInstanceActions()
 {
     //connect actions provided by widget factories
-    createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"),
-                       koIconName("edit-clear"), KShortcut(), "formpart_clear_contents");
-    createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order..."),
-                       koIconName("tab_order"), KShortcut(), "formpart_taborder");
-//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
-//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
+    createSharedAction(Kexi::DesignViewMode, xi18n("Clear Widget Contents"),
+                       koIconName("edit-clear"), QKeySequence(), "formpart_clear_contents");
+    createSharedAction(Kexi::DesignViewMode, xi18n("Edit Tab Order..."),
+                       koIconName("tab_order"), QKeySequence(), "formpart_taborder");
+//! @todo createSharedAction(Kexi::DesignViewMode, xi18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
+//! @todo createSharedAction(Kexi::DesignViewMode, xi18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
 
-    createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), koIconName("raise"),
-                       KShortcut(), "formpart_format_raise");
-    createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), koIconName("lower"),
-                       KShortcut(), "formpart_format_lower");
+    createSharedAction(Kexi::DesignViewMode, xi18n("Bring Widget to Front"), koIconName("raise"),
+                       QKeySequence(), "formpart_format_raise");
+    createSharedAction(Kexi::DesignViewMode, xi18n("Send Widget to Back"), koIconName("lower"),
+                       QKeySequence(), "formpart_format_lower");
 
 #ifdef KEXI_SHOW_UNFINISHED
     action = createSharedAction(Kexi::DesignViewMode, futureI18n("Other Widgets"), QString(),
-                                KShortcut(), "other_widgets_menu", "KActionMenu");
+                                QKeySequence(), "other_widgets_menu", "KActionMenu");
 #endif
 
-    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
-                                koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
+    QAction *action = createSharedAction(Kexi::DesignViewMode, xi18n("Align Widgets Position"),
+                                koIconName("aoleft"), QKeySequence(), "formpart_align_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
-                                       KShortcut(), "formpart_align_to_left"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),
-                                       KShortcut(), "formpart_align_to_right"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Top"), koIconName("aotop"),
-                                       KShortcut(), "formpart_align_to_top"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Bottom"), koIconName("aobottom"),
-                                       KShortcut(), "formpart_align_to_bottom"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), koIconName("aopos2grid"),
-                                       KShortcut(), "formpart_align_to_grid"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Left"), koIconName("aoleft"),
+                                       QKeySequence(), "formpart_align_to_left"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Right"), koIconName("aoright"),
+                                       QKeySequence(), "formpart_align_to_right"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Top"), koIconName("aotop"),
+                                       QKeySequence(), "formpart_align_to_top"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Bottom"), koIconName("aobottom"),
+                                       QKeySequence(), "formpart_align_to_bottom"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Grid"), koIconName("aopos2grid"),
+                                       QKeySequence(), "formpart_align_to_grid"));
 
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets Size"), koIconName("aogrid"),
-                                KShortcut(), "formpart_adjust_size_menu", "KActionMenu");
+    action = createSharedAction(Kexi::DesignViewMode, xi18n("Adjust Widgets Size"), koIconName("aogrid"),
+                                QKeySequence(), "formpart_adjust_size_menu", "KActionMenu");
     menu = static_cast<KActionMenu*>(action);
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Fit"), koIconName("aofit"),
-                                       KShortcut(), "formpart_adjust_to_fit"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), koIconName("aogrid"),
-                                       KShortcut(), "formpart_adjust_size_grid"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Shortest"), koIconName("aoshortest"),
-                                       KShortcut(), "formpart_adjust_height_small"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Tallest"), koIconName("aotallest"),
-                                       KShortcut(), "formpart_adjust_height_big"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Narrowest"), koIconName("aonarrowest"),
-                                       KShortcut(), "formpart_adjust_width_small"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), koIconName("aowidest"),
-                                       KShortcut(), "formpart_adjust_width_big"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Fit"), koIconName("aofit"),
+                                       QKeySequence(), "formpart_adjust_to_fit"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Grid"), koIconName("aogrid"),
+                                       QKeySequence(), "formpart_adjust_size_grid"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Shortest"), koIconName("aoshortest"),
+                                       QKeySequence(), "formpart_adjust_height_small"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Tallest"), koIconName("aotallest"),
+                                       QKeySequence(), "formpart_adjust_height_big"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Narrowest"), koIconName("aonarrowest"),
+                                       QKeySequence(), "formpart_adjust_width_small"));
+    menu->addAction(createSharedAction(Kexi::DesignViewMode, xi18n("To Widest"), koIconName("aowidest"),
+                                       QKeySequence(), "formpart_adjust_width_big"));
 }
 
 KexiWindowData*
@@ -158,26 +155,27 @@ KexiFormPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
-                                   KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+                                   KexiPart::Item *item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
-    kDebug();
+    qDebug();
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;
 
     KexiFormView *view = new KexiFormView(parent, win->project()->dbConnection());
-    view->setObjectName(item.name().toLatin1());
+    view->setObjectName(item->name().toLatin1());
     return view;
 }
 
-#ifndef NO_DSWIZARD
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
 void
-KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
+KexiFormPart::generateForm(KDbFieldList *list, QDomDocument &domDoc)
 {
-    //this form generates a .ui from FieldList list
+    //this form generates a .ui from KDbFieldList list
     //basically that is a Label and a LineEdit for each field
     domDoc = QDomDocument("UI");
     QDomElement uiElement = domDoc.createElement("UI");
@@ -245,7 +243,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
         QDomElement vclass = domDoc.createElement("widget");
         baseWidget.appendChild(vclass);
-        vclass.setAttribute("class", "KLineEdit");
+        vclass.setAttribute("class", "QLineEdit");
         QDomElement vNameProperty = domDoc.createElement("property");
         vNameProperty.setAttribute("name", "name");
         QDomElement vType = domDoc.createElement("cstring");
@@ -324,9 +322,9 @@ KLocalizedString KexiFormPart::i18nMessage(
 {
     Q_UNUSED(window);
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of form <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of form <resource>%1</resource> has been modified."));
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Form <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Form <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }
@@ -341,7 +339,7 @@ KFormDesigner::WidgetTreeWidget* KexiFormPart::widgetTreePage() const
     return d->widgetTree;
 }
 
-void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void KexiFormPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 {
     if (!d->dataSourcePage) {
         d->dataSourcePage = new KexiDataSourcePage(0);
@@ -355,9 +353,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 KexiFormManager::self(),
                 SLOT(setFormDataSource(QString,QString)));
         connect(d->dataSourcePage,
-                SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
+                SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KDbField::Type)),
                 KexiFormManager::self(),
-                SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+                SLOT(setDataSourceFieldOrExpression(QString,QString,KDbField::Type)));
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),
@@ -370,7 +368,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     d->dataSourcePage->setProject(prj);
 
     tab->addTab(d->dataSourcePage, koIcon("server-database"), QString());
-    tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
+    tab->setTabToolTip(tab->indexOf(d->dataSourcePage), xi18n("Data Source"));
 
     if (!d->widgetTreeWidget) {
         d->widgetTreeWidget = new QWidget;
@@ -381,7 +379,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
         lyr->addWidget(d->widgetTree);
     }
     tab->addTab(d->widgetTreeWidget, koIcon("widgets"), QString());
-    tab->setTabToolTip(tab->indexOf(d->widgetTreeWidget), i18n("Widgets"));
+    tab->setTabToolTip(tab->indexOf(d->widgetTreeWidget), xi18n("Widgets"));
 }
 
 //----------------
@@ -395,4 +393,3 @@ KexiFormPartTempData::~KexiFormPartTempData()
 {
 }
 
-#include "kexiformpart.moc"

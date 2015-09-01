@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/drivermanager.h>
-#include <db/field.h>
+#include <KDbDriverManager>
+#include <KDbField>
 
 namespace Scripting
 {
@@ -36,9 +36,9 @@ class KexiDBField : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner);
+    KexiDBField(QObject* parent, KDbField* field, bool owner);
     virtual ~KexiDBField();
-    ::KexiDB::Field* field() {
+    KDbField* field() {
         return m_field;
     }
 
@@ -117,15 +117,15 @@ public Q_SLOTS:
     void setDescription(const QString& desc);
 
     /** Returns the length of text if the field type is text. */
-    uint length();
+    int length();
     /** Sets the length for this field. Only works for Text Type (not including LongText). */
-    void setLength(uint length);
+    void setLength(int length);
 
     /** Returns precision for numeric and other fields that have both length and
     precision (floating point types). */
-    uint precision();
+    int precision();
     /** Sets the precision for numeric and other fields. */
-    void setPrecision(uint precision);
+    void setPrecision(int precision);
 
     /** Returns the default value this field has. */
     QVariant defaultValue();
@@ -133,7 +133,7 @@ public Q_SLOTS:
     void setDefaultValue(const QVariant& defaultvalue);
 
 private:
-    ::KexiDB::Field* m_field;
+    KDbField* m_field;
     bool m_owner;
 };
 

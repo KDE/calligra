@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiComboBoxDropDownButton_H
-#define KexiComboBoxDropDownButton_H
+#ifndef KEXICOMBOBOXDROPDOWNBUTTON_H
+#define KEXICOMBOBOXDROPDOWNBUTTON_H
 
-#include <kexi_export.h>
+#include "kexiguiutils_export.h"
+
 #include <QToolButton>
 
 //! @short A drop-down button for combo box widgets

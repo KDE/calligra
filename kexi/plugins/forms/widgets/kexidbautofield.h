@@ -22,13 +22,16 @@
 #ifndef KEXIDBAUTOFIELD_H
 #define KEXIDBAUTOFIELD_H
 
-#include <QWidget>
-#include <QLabel>
-#include <db/field.h>
+#include "kexiformutils_export.h"
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+
+#include <KDbField>
+
+#include <QWidget>
+#include <QLabel>
 
 class QLabel;
 
@@ -48,7 +51,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
     Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor RESET unsetPalette)
     Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition)
     Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType)
@@ -72,14 +75,14 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
     virtual void setDataSource(const QString &ds);
-    virtual void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    virtual void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
 
     virtual void setInvalidState(const QString& text);
     virtual bool isReadOnly() const;
@@ -119,14 +122,14 @@ public:
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
 
-    static WidgetType widgetTypeForFieldType(KexiDB::Field::Type type);
+    static WidgetType widgetTypeForFieldType(KDbField::Type type);
 
-    /*! On design time it is not possible to pass a reference to KexiDB::Field object
+    /*! On design time it is not possible to pass a reference to KDbField object
      so we're just providing field type. Only used when widget type is Auto.
      @internal */
     void setFieldTypeInternal(int kexiDBFieldType);
 
-    /*! On design time it is not possible to pass a reference to KexiDB::Field object
+    /*! On design time it is not possible to pass a reference to KDbField object
      so we're just providing field caption. Only used when widget type is Auto.
      @internal */
     void setFieldCaptionInternal(const QString& text);
@@ -204,7 +207,7 @@ protected:
     void setLabelPositionInternal(LabelPosition position, bool noLabel);
 
     //! Used by KexiDBAutoField::setColumnInfo() and KexiDBComboBox::setColumnInfo()
-    void setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo);
+    void setColumnInfoInternal(KDbQueryColumnInfo* cinfo, KDbQueryColumnInfo* visibleColumnInfo);
 
 private:
     class Private;

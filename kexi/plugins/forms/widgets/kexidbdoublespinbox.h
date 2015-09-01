@@ -18,12 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBDoubleSpinBox_H
-#define KexiDBDoubleSpinBox_H
+#ifndef KEXIDBDOUBLESPINBOX_H
+#define KEXIDBDOUBLESPINBOX_H
 
 #include "kexiformdataiteminterface.h"
 #include <formeditor/FormWidgetInterface.h>
-#include <knuminput.h>
+
+#include <QDoubleSpinBox>
 
 //! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox,
@@ -31,7 +32,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
@@ -41,8 +42,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
@@ -53,7 +54,7 @@ public:
 
     //! \return true if editor's value is empty (not necessary null).
     //! Only few data types can accept "EMPTY" property
-    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! (use KDbField::hasEmptyProperty() to check this).
     //! Used for checking if a given constraint within table or form is met.
     virtual bool valueIsEmpty();
 
@@ -72,8 +73,8 @@ public Q_SLOTS:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
     void slotValueChanged();
     virtual void setReadOnly(bool set);

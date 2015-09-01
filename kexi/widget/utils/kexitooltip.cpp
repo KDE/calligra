@@ -19,20 +19,11 @@
 
 #include "kexitooltip.h"
 
-#include <QPixmap>
-#include <QBitmap>
 #include <QPainter>
-#include <QImage>
 #include <QFont>
-#include <QFontMetrics>
-#include <QTimer>
 #include <QToolTip>
 
-#ifdef __GNUC__
-#warning KexiToolTip ported to Qt4 but not tested
-#else
-#pragma WARNING( KexiToolTip ported to Qt4 but not tested )
-#endif
+//! @todo KEXI3 KexiToolTip ported to Qt4 but not tested
 
 class KexiToolTip::Private
 {
@@ -93,4 +84,3 @@ void KexiToolTip::drawContents(QPainter& p)
     p.drawText(rect(), Qt::AlignCenter, d->value.toString());
 }
 
-#include "kexitooltip.moc"

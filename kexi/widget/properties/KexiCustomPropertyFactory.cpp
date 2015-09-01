@@ -19,10 +19,11 @@
 
 #include "KexiCustomPropertyFactory.h"
 #include "KexiCustomPropertyFactory_p.h"
-#include <kexiutils/identifier.h>
 
 #include <KPropertyFactory>
-#include <KCustomProperty>
+//! @todo KEXI3 #include <KCustomProperty>
+
+#include <KDb>
 
 #if 0
 //! @internal
@@ -56,7 +57,7 @@ public:
     virtual void setValue(const QVariant &value, bool rememberOldValue) {
         Q_UNUSED(rememberOldValue);
         if (!value.toString().isEmpty())
-            m_value = KexiUtils::stringToIdentifier(value.toString()).toLower();
+            m_value = KDb::stringToIdentifier(value.toString()).toLower();
     }
     virtual QVariant value() const {
         return m_value;
@@ -75,9 +76,9 @@ class KexiImagePropertyEditorDelegate : public KPropertyEditorCreatorInterface,
 {
 public:
     KexiImagePropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 #endif
@@ -86,13 +87,13 @@ class KexiIdentifierPropertyEditorDelegate : public KPropertyEditorCreatorInterf
 {
 public:
     KexiIdentifierPropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         Q_UNUSED(type);
         Q_UNUSED(option);
         Q_UNUSED(index);
-        return new KexiIdentifierPropertyEdit(parent);
+        return new KexiIdentifierPropertyEditor(parent);
     }
 };
 

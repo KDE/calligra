@@ -18,48 +18,40 @@
 */
 
 #include "KexiFieldComboBox.h"
-
-#include <QLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QCursor>
-#include <QPoint>
-#include <QApplication>
-#include <QBitmap>
-#include <QStyle>
-#include <QPixmap>
-#include <QLineEdit>
-
-#include <kdebug.h>
-
-#include <kglobalsettings.h>
-#include <klocale.h>
-
-#include <db/tableschema.h>
-#include <db/queryschema.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
-#include <kexidragobjects.h>
 #include <kexiproject.h>
 #include <kexi_global.h>
 #include "KexiFieldListModel.h"
+
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
+#include <KDbTableOrQuerySchema>
+#include <KDbUtils>
+
+#include <QPushButton>
+#include <QPoint>
+#include <QDebug>
+#include <QLineEdit>
 
 //! @internal
 class KexiFieldComboBox::Private
 {
 public:
     Private()
-            : table(true) {
+            : table(true)
+            , insideSetFieldOrExpression(false)
+    {
     }
     ~Private() {
     }
     QPointer<KexiProject> prj;
     QPointer<KexiFieldListModel> model;
-    
+
     QString tableOrQueryName;
     QString fieldOrExpression;
 
     bool table;
+    bool insideSetFieldOrExpression;
 };
 
 //------------------------
@@ -69,7 +61,7 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent)
         , d(new Private())
 {
     setInsertPolicy(NoInsert);
-    setCompletionMode(KGlobalSettings::CompletionPopupAuto);
+    setCompletionMode(KCompletion::CompletionPopupAuto);
 
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)),
@@ -107,13 +99,13 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
     if (d->tableOrQueryName.isEmpty() || !d->prj)
         return;
 
-    KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
+    KDbTableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
     delete d->model;
     d->model = new KexiFieldListModel(this, ShowEmptyItem);
-    
+
     d->model->setSchema(&tableOrQuery);
     setModel(d->model);
 
@@ -133,7 +125,12 @@ bool KexiFieldComboBox::isTableAssigned() const
 
 void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 {
-    kDebug() << string;
+    if (d->insideSetFieldOrExpression) {
+        return;
+    }
+    KexiUtils::BoolBlocker guard(&d->insideSetFieldOrExpression, true);
+
+    qDebug() << string;
     const QString name(string);
     const int pos = name.indexOf('.');
     if (pos == -1) {
@@ -145,7 +142,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
             setCurrentIndex(0);
             lineEdit()->setText(name);
 //! @todo show error
-            kWarning() << "invalid table/query name in" << name;
+            qWarning() << "invalid table/query name in" << name;
             return;
         }
         d->fieldOrExpression = name.mid(pos + 1);
@@ -158,20 +155,20 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 //! @todo show 'the item doesn't match' info?
         return;
     }
-    
+
     setCurrentIndex(index);
     lineEdit()->setText(d->fieldOrExpression);
-    kDebug() << index << currentText() << currentIndex() << lineEdit()->text();
+    qDebug() << index << currentText() << currentIndex() << lineEdit()->text();
 }
 
 void KexiFieldComboBox::setFieldOrExpression(int index)
 {
-    kDebug() << index;
+    qDebug() << index;
     if (index >= 0) {
         index++; //skip 1st empty item
     }
     if (index >= count()) {
-        kWarning() << "index" << index << "out of range 0.." << (count() - 1);
+        qWarning() << "index" << index << "out of range 0.." << (count() - 1);
         index = -1;
     }
     if (index <= 0) {
@@ -181,20 +178,20 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
         setCurrentIndex(index);
         d->fieldOrExpression = itemData(currentIndex(), Qt::DisplayRole).toString();
         lineEdit()->setText(d->fieldOrExpression);
-        kDebug() << currentText() << currentIndex() << lineEdit()->text();
+        qDebug() << currentText() << currentIndex() << lineEdit()->text();
     }
 }
 
 QString KexiFieldComboBox::fieldOrExpression() const
 {
-    kDebug() << d->fieldOrExpression;
+    qDebug() << d->fieldOrExpression;
     return d->fieldOrExpression;
 }
 
 int KexiFieldComboBox::indexOfField() const
 {
-    kDebug();
-    KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
+    qDebug();
+    KDbTableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return -1;
 
@@ -203,14 +200,14 @@ int KexiFieldComboBox::indexOfField() const
 
 QString KexiFieldComboBox::fieldOrExpressionCaption() const
 {
-    kDebug() << itemData(currentIndex()).toString();
+    qDebug() << itemData(currentIndex()).toString();
     return itemData(currentIndex()).toString();
 }
 
 void KexiFieldComboBox::slotActivated(int i)
 {
     d->fieldOrExpression = itemData(i, Qt::DisplayRole).toString();
-    kDebug() << i << d->fieldOrExpression;
+    qDebug() << i << d->fieldOrExpression;
     setFieldOrExpression(d->fieldOrExpression);
     emit selected();
 }
@@ -234,10 +231,9 @@ void KexiFieldComboBox::focusOutEvent(QFocusEvent *e)
 {
     KComboBox::focusOutEvent(e);
     // accept changes if the focus is moved
-    if (!KexiUtils::hasParent(this, focusWidget())) {
+    if (!KDbUtils::hasParent(this, focusWidget())) {
         //(a check needed because drop-down listbox also causes a focusout)
         slotReturnPressed(currentText());
     }
 }
 
-#include "KexiFieldComboBox.moc"

@@ -1,0 +1,25 @@
+[Desktop Entry]
+Name=Table
+Comment=Kexi plugin for handling tables
+Type=Service
+Icon=table
+Encoding=UTF-8
+
+X-KDE-Library=kexi_tableplugin
+X-KDE-ServiceTypes=Kexi/Viewer,Kexi/Designer
+X-KDE-PluginInfo-Author=Kexi Team
+X-KDE-PluginInfo-Email=kexi@kde.org
+X-KDE-PluginInfo-Name=org.kexi-project.table
+X-KDE-PluginInfo-Version=3.0
+X-KDE-PluginInfo-Website=http://kexi-project.org
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Kexi-GroupName=Tables
+X-Kexi-TypeName=table
+X-Kexi-ServiceTypesInUserMode=Kexi/Viewer
+X-Kexi-VisibleInProjectNavigator=true
+X-Kexi-SupportsDataExport=true
+X-Kexi-SupportsPrinting=true

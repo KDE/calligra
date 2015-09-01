@@ -19,21 +19,18 @@
 
 #include "kexicomboboxdropdownbutton.h"
 
-#include <kdebug.h>
-
-#include <QStyle>
+#include <QProxyStyle>
 #include <QStyleOptionToolButton>
 #include <QPainter>
 #include <QEvent>
-
-#include <kexiutils/styleproxy.h>
+#include <QPointer>
 
 //! @internal A style that allows to alter some painting in KexiComboBoxDropDownButton.
-class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
+class KexiComboBoxDropDownButtonStyle : public QProxyStyle
 {
 public:
-    explicit KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
-            : KexiUtils::StyleProxy(parentStyle, parent)
+    explicit KexiComboBoxDropDownButtonStyle(const QString &baseStyleName)
+            : QProxyStyle(baseStyleName)
     {
     }
     virtual ~KexiComboBoxDropDownButtonStyle() {}
@@ -43,7 +40,7 @@ public:
         QStyleOptionToolButton opt(*qstyleoption_cast<const QStyleOptionToolButton*>(option));
         opt.state |= (State_MouseOver | State_DownArrow | State_Sunken);
         opt.state ^= (State_MouseOver | State_DownArrow | State_Sunken);
-        KexiUtils::StyleProxy::drawComplexControl(control, &opt, painter, widget);
+        QProxyStyle::drawComplexControl(control, &opt, painter, widget);
     }
 };
 
@@ -68,6 +65,9 @@ KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
 
 KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 {
+    setStyle(0);
+    delete d->privateStyle;
+    d->privateStyle = 0;
     delete d;
 }
 
@@ -80,7 +80,8 @@ void KexiComboBoxDropDownButton::styleChanged()
         setStyle(0);
         delete static_cast<QStyle*>(d->privateStyle);
     }
-    setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style(), this));
+    setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style()->objectName()));
+    d->privateStyle->setParent(this);
     d->styleChangeEnabled = true;
 }
 

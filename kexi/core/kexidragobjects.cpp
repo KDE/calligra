@@ -23,12 +23,13 @@
 #include <QDataStream>
 #include <QStringList>
 #include <QDragMoveEvent>
-#include <QDropEvent>
-#include <kdebug.h>
+#include <QDomDocument>
+#include <QMimeData>
+#include <QDebug>
 
-bool KexiFieldDrag::canDecode(QMimeSource *e)
+bool KexiFieldDrag::canDecode(QDropEvent *e)
 {
-    return e->provides("kexi/fields");
+    return e->mimeData()->hasFormat("kexi/fields");
 }
 
 bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
@@ -38,7 +39,7 @@ bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
     Q_ASSERT(sourceName);
     Q_ASSERT(fields);
 
-    QByteArray payload(e->encodedData("kexi/fields"));
+    QByteArray payload(e->mimeData()->data("kexi/fields"));
     if (payload.isEmpty()) {//try single
         return false;
     }
@@ -48,7 +49,7 @@ bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
     stream1 >> *sourceMimeType;
     stream1 >> *sourceName;
     stream1 >> *fields;
-// kDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
+// qDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
     return true;
 }
 
@@ -73,7 +74,7 @@ KexiDataProviderDrag::~KexiDataProviderDrag()
 
 bool KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
 {
-    return e->provides("kexi/dataprovider");
+    return e->mimeData()->hasFormat("kexi/dataprovider");
 }
 
 bool KexiDataProviderDrag::decode(QDropEvent* e, QString* sourceMimeType, QString *sourceName)
@@ -89,6 +90,6 @@ bool KexiDataProviderDrag::decode(QDropEvent* e, QString* sourceMimeType, QStrin
     QDataStream stream1(&payload, QIODevice::ReadOnly);
     stream1 >> *sourceMimeType;
     stream1 >> *sourceName;
-//  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
+//  qDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
     return true;
 }

@@ -20,20 +20,19 @@
 #ifndef KEXIDATAAWAREPROPERTYSET_H
 #define KEXIDATAAWAREPROPERTYSET_H
 
-#include <kexi_export.h>
-#include <QPointer>
-#include <QVector>
+#include "kexidataviewcommon_export.h"
+
+#include <KPropertySet>
+
+#include <KDbRecordData>
+#include <KDbTableViewData>
+
 #include <QList>
 #include <QByteArray>
-#include <KPropertySet>
-#include <db/RecordData.h>
-#include <db/tableviewdata.h>
 
+class KDbTableViewData;
 class KexiView;
 class KexiDataAwareObjectInterface;
-namespace KexiDB {
-class TableViewData;
-}
 
 /*! This helper class handles data changes of a single
  object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside
@@ -41,18 +40,18 @@ class TableViewData;
 
  It is currently used in KexiAlterTableDialog and KexiQueryDesignerGuiEditor,
  and may be used for similar purposes, when each KexiDataAwareObjectInterface's
- row can be associated with single KPropertySet object, and given
+ record can be associated with single KPropertySet object, and given
  KexiDataAwareObjectInterface object has to inform the world about currently
- selected row/property set.
+ selected record/property set.
 
  Following functionality is built-in:
  - auto-initializing after resetting of table view's data
- - destroying single property set that is associated with deleted row
- - inserting single property set that and associating it with new row
+ - destroying single property set that is associated with deleted record
+ - inserting single property set that and associating it with new record
  - all property sets are cleared when view's data is cleared (using clear())
  - setting view's 'dirty' flag when needed
  - signalling via KexiView::propertySetSwitched() that current property
-   set has changed (e.g. on moving to other row)
+   set has changed (e.g. on moving to other record)
 */
 class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwarePropertySet : public QObject
 {
@@ -68,33 +67,33 @@ public:
 
     virtual ~KexiDataAwarePropertySet();
 
-    uint size() const;
+    int size() const;
 
     KPropertySet* currentPropertySet() const;
 
-    uint currentRow() const;
-    KPropertySet* at(uint row) const;
+    int currentRecord() const;
+    KPropertySet* at(int record) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KPropertySet* findPropertySetForItem(const KexiDB::RecordData& record);
+    KPropertySet* findPropertySetForItem(const KDbRecordData& record);
 
-    /*! \return number of the first row containing \a propertyName property equal to \a value.
-     This is used e.g. in the Table Designer to find a row by field name.
-     If no such row has been found, -1 is returned. */
-    int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
+    /*! \return number of the first record containing \a propertyName property equal to \a value.
+     This is used e.g. in the Table Designer to find a record by field name.
+     If no such record has been found, -1 is returned. */
+    int findRecordForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
 Q_SIGNALS:
-    /*! Emitted when row is deleted.
-     KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
+    /*! Emitted when a single record is deleted.
+     KexiDataAwareObjectInterface::recordDeleted() signal is usually used but when you're using
      KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
      So use this signal instead. */
-    void rowDeleted();
+    void recordDeleted();
 
-    /*! Emitted when row is inserted.
-     Purpose of this signal is similar to rowDeleted() signal. */
-    void rowInserted();
+    /*! Emitted when record is inserted.
+     Purpose of this signal is similar to recordDeleted() signal. */
+    void recordInserted();
 
     /*! Emitted when the value of @a property is changed in @a set.*/
     void propertyChanged(KPropertySet& set, KProperty& property);
@@ -104,44 +103,44 @@ public Q_SLOTS:
 
     void clear();
 
-    /*! Inserts \a set property set at \a row position.
+    /*! Inserts \a set property set at \a record position.
      If there was a buffer at this position before, it will be destroyed.
      If \a newOne is true, the property set will be marked as newly created,
      simply by adding "newrecord" property.
 
      The property set \a set will be owned by this object, so you should not
      delete this property set by hand but call removeCurrentPropertySet()
-     or remove(uint) instead.
+     or remove(int) instead.
      Note that property set's parent (QObject::parent()) must be null
      or equal to this KexiDataAwarePropertySet object, otherwise this method
      will fail with a warning.
     */
-    void set(uint row, KPropertySet* set, bool newOne = false);
+    void set(int record, KPropertySet* set, bool newOne = false);
 
-    /*! Deletes a property set at \a row position without removing the row. */
-    void eraseAt(uint row);
+    /*! Deletes a property set at \a record position without removing the record. */
+    void eraseAt(int record);
 
 protected Q_SLOTS:
     /*! Handles table view's data source changes. */
-    void slotDataSet(KexiDB::TableViewData *data);
+    void slotDataSet(KDbTableViewData *data);
 
-    //! Called on row delete in a tableview.
-    void slotRowDeleted();
+    //! Called on record delete in a tableview.
+    void slotRecordDeleted();
 
-    //! Called on multiple rows delete in a tableview.
-    void slotRowsDeleted(const QList<int> &rows);
+    //! Called on multiple records delete in a tableview.
+    void slotRecordsDeleted(const QList<int> &records);
 
-    //! Called on \a row insertion in a tableview.
-    void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
+    //! Called on \a data insertion in a tableview.
+    void slotRecordInserted(KDbRecordData* data, int record, bool repaint);
 
     //! Called on selecting another cell in a tableview.
-    void slotCellSelected(int row, int col);
+    void slotCellSelected(int record, int column);
 
     //! Called on clearing tableview's data: just clears all property sets.
     void slotReloadRequested();
 
 protected:
-    void enlargeToFitRow(uint row);
+    void enlargeToFitRecord(int record);
 
 private:
     class Private;

@@ -19,23 +19,25 @@
 #ifndef KEXIREPORTVIEW_H
 #define KEXIREPORTVIEW_H
 
-#include <core/KexiView.h>
-#include <db/connection.h>
-#include <QDomDocument>
-#include "kexireportpart.h"
-#include <KoReportRendererBase.h>
 #include <QGraphicsView>
+
+#include <KDbConnection>
+
+#include <config-kreport.h>
+#include <KoReportRendererBase>
+
+#include <core/KexiView.h>
+#include <core/KexiRecordNavigatorHandler.h>
+#include "kexireportpart.h"
 
 class KoReportPreRenderer;
 class ORODocument;
-class KoReportPage;
-class KexiScriptAdaptor;
+class KReportView;
+//! @todo KEXI3 class KexiScriptAdaptor;
 class KRScriptFunctions;
 #ifndef KEXI_MOBILE
 class KexiRecordNavigator;
 #endif
-
-#include <core/KexiRecordNavigatorHandler.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -49,38 +51,35 @@ public:
     ~KexiReportView();
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-    
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
+
     virtual void addNewRecordRequested();
     virtual void moveToFirstRecordRequested();
     virtual void moveToLastRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToPreviousRecordRequested();
-    virtual void moveToRecordRequested(uint r);
+    virtual void moveToRecordRequested(int r);
     virtual int currentRecord() const;
     virtual int recordCount() const;
 
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
-    QGraphicsView *m_reportView;
-    QGraphicsScene *m_reportScene;
-    KoReportPage *m_reportPage;
-    
+    KReportView *m_reportView;
+
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif
-    int m_currentPage;
-    int m_pageCount;
+
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
-
-    KexiScriptAdaptor *m_kexi;
+    //! @todo KEXI3 KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
 
-    KUrl getExportUrl(const QString &mimetype, const QString &caption,
-                      const QString &lastExportPath, const QString &extension);
+    //! @todo KEXI3 add equivalent of kfiledialog:/// for lastExportPathOrVariable
+    QUrl getExportUrl(const QString &mimetype, const QString &caption,
+                      const QString &lastExportPathOrVariable, const QString &extension);
 
 private Q_SLOTS:
     void slotPrintReport();
@@ -88,7 +87,7 @@ private Q_SLOTS:
     void slotExportAsSpreadsheet();
     void slotExportAsWebPage();
     void slotExportAsTextDocument();
-    void openExportedDocument(const KUrl& destination);
+    void openExportedDocument(const QUrl &destination);
 };
 
 #endif

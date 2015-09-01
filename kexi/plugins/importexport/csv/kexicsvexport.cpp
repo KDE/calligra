@@ -19,8 +19,6 @@
 
 #include "kexicsvexport.h"
 #include "kexicsvwidgets.h"
-#include <db/cursor.h>
-#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -29,15 +27,18 @@
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
 
+#include <KDbCursor>
+#include <KDbUtils>
+#include <KDbTableOrQuerySchema>
+
+#include <KLocalizedString>
+
+#include <QApplication>
 #include <QTextStream>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QClipboard>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <ksavefile.h>
-
+#include <QDebug>
+#include <QSaveFile>
 
 using namespace KexiCSVExport;
 
@@ -46,78 +47,78 @@ Options::Options()
 {
 }
 
-bool Options::assign(QMap<QString, QString>& args)
+bool Options::assign(QMap<QString, QString> *args)
 {
-    mode = (args["destinationType"] == "file")
+    mode = (args->value("destinationType") == "file")
            ? KexiCSVExport::File : KexiCSVExport::Clipboard;
 
-    if (args.contains("delimiter"))
-        delimiter = args["delimiter"];
+    if (args->contains("delimiter"))
+        delimiter = args->value("delimiter");
     else
         delimiter = (mode == File) ? KEXICSV_DEFAULT_FILE_DELIMITER : KEXICSV_DEFAULT_CLIPBOARD_DELIMITER;
 
-    if (args.contains("textQuote"))
-        textQuote = args["textQuote"];
+    if (args->contains("textQuote"))
+        textQuote = args->value("textQuote");
     else
         textQuote = (mode == File) ? KEXICSV_DEFAULT_FILE_TEXT_QUOTE : KEXICSV_DEFAULT_CLIPBOARD_TEXT_QUOTE;
 
     bool ok;
-    itemId = args["itemId"].toInt(&ok);
+    itemId = args->value("itemId").toInt(&ok);
     if (!ok || itemId == 0) //neverSaved items are supported
         return false;
-    if (args.contains("forceDelimiter"))
-        forceDelimiter = args["forceDelimiter"];
-    if (args.contains("addColumnNames"))
-        addColumnNames = (args["addColumnNames"] == "1");
-    useTempQuery = (args["useTempQuery"] == "1");
+    if (args->contains("forceDelimiter"))
+        forceDelimiter = args->value("forceDelimiter");
+    if (args->contains("addColumnNames"))
+        addColumnNames = (args->value("addColumnNames") == "1");
+    useTempQuery = (args->value("useTempQuery") == "1");
     return true;
 }
 
 //------------------------------------
 
-bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
-                               const Options& options, int rowCount, QTextStream *predefinedTextStream)
+bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
+                               const Options& options, int recordCount, QTextStream *predefinedTextStream)
 {
-    KexiDB::Connection* conn = tableOrQuery.connection();
+    KDbConnection* conn = tableOrQuery->connection();
     if (!conn)
         return false;
 
-    KexiDB::QuerySchema* query = tableOrQuery.query();
+    KDbQuerySchema* query = tableOrQuery->query();
     QList<QVariant> queryParams;
     if (!query) {
-        query = tableOrQuery.table()->query();
+        query = tableOrQuery->table()->query();
     }
     else {
         queryParams = KexiMainWindowIface::global()->currentParametersForQuery(query->id());
     }
 
-    if (rowCount == -1)
-        rowCount = KexiDB::rowCount(tableOrQuery, queryParams);
-    if (rowCount == -1)
+    if (recordCount == -1)
+        recordCount = KDb::recordCount(tableOrQuery, queryParams);
+    if (recordCount == -1)
         return false;
 
 //! @todo move this to non-GUI location so it can be also used via command line
 //! @todo add a "finish" page with a progressbar.
-//! @todo look at rowCount whether the data is really large;
+//! @todo look at recordCount whether the data is really large;
 //!       if so: avoid copying to clipboard (or ask user) because of system memory
 
 //! @todo OPTIMIZATION: use fieldsExpanded(true /*UNIQUE*/)
 //! @todo OPTIMIZATION? (avoid multiple data retrieving) look for already fetched data within KexiProject..
 
-    KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
+    KDbQueryColumnInfo::Vector fields(query->fieldsExpanded(KDbQuerySchema::WithInternalFields));
     QString buffer;
 
-    QScopedPointer<KSaveFile> kSaveFile;
+    QScopedPointer<QSaveFile> kSaveFile;
     QTextStream *stream = 0;
     QScopedPointer<QTextStream> kSaveFileTextStream;
 
     const bool copyToClipboard = options.mode == Clipboard;
     if (copyToClipboard) {
 //! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
-        uint bufSize = qMin(uint(rowCount < 0 ? 10 : rowCount) * fields.count() * 20, (uint)128000);
+        int bufSize = qMin((recordCount < 0 ? 10 : recordCount) * fields.count() * 20, 128000);
         buffer.reserve(bufSize);
-        if ((uint)buffer.capacity() < bufSize) {
-            kWarning() << "Cannot allocate memory for " << bufSize
+        if (buffer.capacity() < bufSize) {
+            qWarning() << "Cannot allocate memory for " << bufSize
             << " characters";
             return false;
         }
@@ -126,20 +127,20 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
             stream = predefinedTextStream;
         } else {
             if (options.fileName.isEmpty()) {//sanity
-                kWarning() << "Fname is empty";
+                qWarning() << "Fname is empty";
                 return false;
             }
-            kSaveFile.reset(new KSaveFile(options.fileName));
+            kSaveFile.reset(new QSaveFile(options.fileName));
 
-            kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
+            qDebug() << "QSaveFile Filename:" << kSaveFile->fileName();
 
-            if (kSaveFile->open()) {
+            if (kSaveFile->open(QIODevice::WriteOnly)) {
                 kSaveFileTextStream.reset(new QTextStream(kSaveFile.data()));
                 stream = kSaveFileTextStream.data();
-                kDebug() << "have a stream";
+                qDebug() << "have a stream";
             }
-            if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
-                kWarning() << "Status != 0 or stream == 0";
+            if (QFileDevice::NoError != kSaveFile->error() || !stream) {//sanity
+                qWarning() << "Status != 0 or stream == 0";
 //! @todo show error
                 return false;
             }
@@ -149,7 +150,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //! @todo escape strings
 
 #define _ERR \
-    if (kSaveFile) { kSaveFile->abort(); } \
+    if (kSaveFile) { kSaveFile->cancelWriting(); } \
     return false
 
 #define APPEND(what) \
@@ -159,9 +160,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 #define APPEND_EOLN \
     if (copyToClipboard) { APPEND('\n'); } else { APPEND("\r\n"); }
 
-    kDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
+    qDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
-    const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
+    const int fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
     const QByteArray delimiter(options.delimiter.left(1).toLatin1());
     const bool hasTextQuote = !options.textQuote.isEmpty();
     const QString textQuote(options.textQuote.left(1));
@@ -171,11 +172,11 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     QScopedArrayPointer<bool> isDateTime(new bool[fieldsCount]);
     QScopedArrayPointer<bool> isTime(new bool[fieldsCount]);
     QScopedArrayPointer<bool> isBLOB(new bool[fieldsCount]);
-    QScopedArrayPointer<uint> visibleFieldIndex(new uint[fieldsCount]);
+    QScopedArrayPointer<int> visibleFieldIndex(new int[fieldsCount]);
 // bool isInteger[fieldsCount]; //cache for faster checks
 // bool isFloatingPoint[fieldsCount]; //cache for faster checks
-    for (uint i = 0; i < fieldsCount; i++) {
-        KexiDB::QueryColumnInfo* ci;
+    for (int i = 0; i < fieldsCount; i++) {
+        KDbQueryColumnInfo* ci;
         const int indexForVisibleLookupValue = fields[i]->indexForVisibleLookupValue();
         if (-1 != indexForVisibleLookupValue) {
             ci = query->expandedOrInternalField(indexForVisibleLookupValue);
@@ -186,19 +187,18 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         }
 
         isText[i] = ci->field->isTextType();
-        isDateTime[i] = ci->field->type() == KexiDB::Field::DateTime;
-        isTime[i] = ci->field->type() == KexiDB::Field::Time;
-        isBLOB[i] = ci->field->type() == KexiDB::Field::BLOB;
+        isDateTime[i] = ci->field->type() == KDbField::DateTime;
+        isTime[i] = ci->field->type() == KDbField::Time;
+        isBLOB[i] = ci->field->type() == KDbField::BLOB;
 //  isInteger[i] = fields[i]->field->isIntegerType()
-//   || fields[i]->field->type()==KexiDB::Field::Boolean;
+//   || fields[i]->field->type()==KDbField::Boolean;
 //  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
     }
 
-kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
-        for (uint i = 0; i < fieldsCount; i++) {
-            //kDebug() << "Adding column names";
+        for (int i = 0; i < fieldsCount; i++) {
+            //qDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -213,16 +213,16 @@ kDebug() << 1;
     }
 
     KexiGUIMessageHandler handler;
-    KexiDB::Cursor *cursor = conn->executeQuery(*query, queryParams);
+    KDbCursor *cursor = conn->executeQuery(query, queryParams);
     if (!cursor) {
-        handler.showErrorMessage(conn);
+        handler.showErrorMessage(conn->result());
         _ERR;
     }
-    for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-        //kDebug() << "Adding records";
-        const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
-        for (uint i = 0; i < realFieldCount; i++) {
-            const uint real_i = visibleFieldIndex[i];
+    for (cursor->moveFirst(); !cursor->eof() && !cursor->result().isError(); cursor->moveNext()) {
+        //qDebug() << "Adding records";
+        const int realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
+        for (int i = 0; i < realFieldCount; i++) {
+            const int real_i = visibleFieldIndex[i];
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -243,10 +243,10 @@ kDebug() << 1;
                 APPEND(cursor->value(real_i).toTime().toString(Qt::ISODate));
             } else if (isBLOB[real_i]) { //BLOB is escaped in a special way
                 if (hasTextQuote)
-//! @todo add options to suppport other types from KexiDB::BLOBEscapingType enum...
-                    APPEND(textQuote + KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote);
+//! @todo add options to suppport other types from KDbBLOBEscapingType enum...
+                    APPEND(textQuote + KDb::escapeBLOB(cursor->value(real_i).toByteArray(), KDb::BLOBEscapeHex) + textQuote);
                 else
-                    APPEND(KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex));
+                    APPEND(KDb::escapeBLOB(cursor->value(real_i).toByteArray(), KDb::BLOBEscapeHex));
             } else {//other types
                 APPEND(cursor->value(real_i).toString());
             }
@@ -258,19 +258,19 @@ kDebug() << 1;
         buffer.squeeze();
 
     if (!conn->deleteCursor(cursor)) {
-        handler.showErrorMessage(conn);
+        handler.showErrorMessage(conn->result());
         _ERR;
     }
 
     if (copyToClipboard)
-        kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+        QApplication::clipboard()->setText(buffer, QClipboard::Clipboard);
 
-    kDebug() << "Done";
+    qDebug() << "Done";
 
     if (kSaveFile) {
         stream->flush();
-        if (!kSaveFile->finalize()) {
-            kWarning() << "Error finalizing stream!";
+        if (!kSaveFile->commit()) {
+            qWarning() << "Error commiting the file" << kSaveFile->fileName();
         }
     }
     return true;

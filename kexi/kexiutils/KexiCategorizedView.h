@@ -22,12 +22,12 @@
 
 #include "kexiutils_export.h"
 
-#include <kcategorydrawer.h>
-#include <kcategorizedview.h>
+#include <KCategoryDrawer>
+#include <KCategorizedView>
 
 class QAbstractItemModel;
 
-typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
+typedef KCategoryDrawer KexiCategoryDrawerBase;
 
 //! Modification of category drawer for KCategorizedView: disallows clicking on the drawer
 class KEXIUTILS_EXPORT KexiCategoryDrawer : public KexiCategoryDrawerBase
@@ -41,9 +41,9 @@ class KEXIUTILS_EXPORT KexiCategorySingleSelectionModel : public QItemSelectionM
 {
 public:
     explicit KexiCategorySingleSelectionModel(QAbstractItemModel* model);
-    
+
     using QItemSelectionModel::select;
-    
+
     //! Reimplemented to disable full category selections.
     //! Shouldn't be needed in KDElibs >= 4.5,
     //! where KexiTemplatesCategoryDrawer::mouseButtonPressed() works.

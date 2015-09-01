@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
-   
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -19,17 +19,18 @@
 
 #include "KexiRecentProjectsModel.h"
 #include <kexi.h>
-
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
+#include <KexiIcon.h>
 
-#include <db/utils.h>
-#include <db/drivermanager.h>
+#include <KDbUtils>
+#include <KDbDriverManager>
+#include <KDbDriverMetaData>
 
-#include <KoIcon.h>
+#include <KLocalizedString>
 
-#include <kdatetime.h>
-#include <kdebug.h>
+#include <QFileInfo>
+#include <QDebug>
 
 #include <QFileInfo>
 
@@ -55,32 +56,31 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
 }
 
 //! @return "opened x minutes ago" string or similar
-static QString openedString(const QDateTime& _opened)
+static QString openedString(const QDateTime& opened)
 {
-    //kDebug() << _opened;
-    const KDateTime cur(KDateTime::currentUtcDateTime());
-    const KDateTime opened = KDateTime(_opened);
+    //qDebug() << opened;
+    const QDateTime cur(QDateTime::currentDateTime()); // date/time comparison will take care about timezones
     if (!opened.isValid() || opened >= cur)
         return QString();
-    
+
     const int days = opened.daysTo(cur);
     if (days <= 1 && opened.secsTo(cur) < 24*60*60) {
         const int minutes = opened.secsTo(cur) / 60;
         const int hours = minutes / 60;
         if (hours < 1) {
             if (minutes == 0)
-                return i18n("Opened less than minute ago");
+                return xi18n("Opened less than minute ago");
             else
-                return i18np("Opened 1 minute ago", "Opened %1 minutes ago", minutes);
+                return xi18np("Opened 1 minute ago", "Opened %1 minutes ago", minutes);
         } else {
-            return i18np("Opened 1 hour ago", "Opened %1 hours ago", hours);
+            return xi18np("Opened 1 hour ago", "Opened %1 hours ago", hours);
         }
     } else {
         if (days < 30)
-            return i18np("Opened yesterday", "Opened %1 days ago", days);
+            return xi18np("Opened yesterday", "Opened %1 days ago", days);
         if (days < 365)
-            return i18np("Opened over a month ago", "Opened %1 months ago", days / 30);
-        return i18np("Opened one year ago", "Opened %1 years ago", days / 365);
+            return xi18np("Opened over a month ago", "Opened %1 months ago", days / 30);
+        return xi18np("Opened one year ago", "Opened %1 years ago", days / 365);
     }
     return QString();
 }
@@ -91,7 +91,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
     KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
-    bool fileBased = !pdata->constConnectionData()->dbFileName().isEmpty();
+    bool fileBased = !pdata->connectionData()->databaseName().isEmpty();
     QString opened(openedString(pdata->lastOpened()));
     if (!opened.isEmpty())
         opened.prepend('\n');
@@ -101,7 +101,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         if (fileBased) {
             QString n = pdata->caption().trimmed();
             if (n.isEmpty()) { // file's base name is a good replacement for caption
-                n = QFileInfo(pdata->constConnectionData()->dbFileName()).baseName();
+                n = QFileInfo(pdata->connectionData()->databaseName()).baseName();
             }
             return QString(n + opened);
         }
@@ -110,13 +110,13 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
             if (!n.isEmpty()) {
                 n += '\n';
             }
-            QString serverInfo = pdata->connectionData()->serverInfoString(false /* without user */);
+            QString serverInfo = pdata->connectionData()->toUserVisibleString(KDbConnectionData::NoUserVisibleStringOption);
             // friendly message:
             if (serverInfo == "localhost") {
-                serverInfo = i18n("on local server");
+                serverInfo = xi18n("on local server");
             }
             else {
-                serverInfo = i18n("on \"%1\" server", serverInfo);
+                serverInfo = xi18n("on \"%1\" server", serverInfo);
             }
             return QString(n + serverInfo + opened);
         }
@@ -124,13 +124,17 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
     case Qt::ToolTipRole:
         //! @todo add support for imported entries, e.g. MS Access
         if (fileBased) {
-            return i18nc("File database <file>", "File database %1",
-                         pdata->constConnectionData()->fileName());
+            return xi18nc("File database <file>", "File database %1",
+                         pdata->connectionData()->databaseName());
         }
         else {
-            KexiDB::DriverManager manager;
-            return i18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
-                  manager.driverInfo(pdata->constConnectionData()->driverName).caption);
+            KDbDriverManager manager;
+            const KDbDriverMetaData *driverMetaData = manager.driverMetaData(pdata->connectionData()->driverId());
+            if (!driverMetaData) {
+                return xi18n("database");
+            }
+            return xi18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
+                          driverMetaData->name());
         }
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
@@ -145,7 +149,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         int index = m_categoryNameIndex.value(info->category);
         if (index >= 0 && index < m_templateCategories.count()) {
             QVariantList list;
-            list << index << info->caption; 
+            list << index << info->caption;
             return list;
         }
         return QVariantList();
@@ -189,8 +193,7 @@ bool KexiRecentProjectsProxyModel::subSortLessThan(
 {
     KexiProjectData *pdataLeft = static_cast<KexiProjectData*>(left.internalPointer());
     KexiProjectData *pdataRight = static_cast<KexiProjectData*>(right.internalPointer());
-    //kDebug() << *pdataLeft << *pdataRight;
+    //qDebug() << *pdataLeft << *pdataRight;
     return pdataLeft->lastOpened() < pdataRight->lastOpened();
 }
 
-#include "KexiRecentProjectsModel.moc"

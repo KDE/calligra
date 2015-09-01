@@ -19,8 +19,6 @@
 
 #include "kfdpixmapedit.h"
 
-#include <kdebug.h>
-
 #include <KProperty>
 #include "form.h"
 #include "objecttree.h"
@@ -53,5 +51,4 @@ KFDPixmapEdit::selectPixmap()
 #endif
 }
 
-#include "kfdpixmapedit.moc"
-#warning noi18n # added to disable message extraction in Messages.sh
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

@@ -73,7 +73,7 @@ mdb_write_pg(MdbHandle *mdb, unsigned long pg)
 	return len;
 }
 
-static int 
+static int
 mdb_is_col_indexed(MdbTableDef *table, int colnum)
 {
 	unsigned int i, j;
@@ -128,13 +128,13 @@ mdb_crack_row3(MdbHandle *mdb, int row_start, int row_end, unsigned int bitmask_
  * @row_end: offset to end of row on current page
  * @fields: pointer to MdbField array to be popluated by mdb_crack_row
  *
- * Cracks a row buffer apart into its component fields.  
- * 
+ * Cracks a row buffer apart into its component fields.
+ *
  * A row buffer is that portion of a data page which contains the values for
  * that row.  Its beginning and end can be found in the row offset table.
  *
- * The resulting MdbField array contains pointers into the row for each field 
- * present.  Be aware that by modifying field[]->value, you would be modifying 
+ * The resulting MdbField array contains pointers into the row for each field
+ * present.  Be aware that by modifying field[]->value, you would be modifying
  * the row buffer itself, not a copy.
  *
  * This routine is mostly used internally by mdb_fetch_row() but may have some
@@ -246,7 +246,7 @@ mdb_pack_null_mask(unsigned char *buffer, int num_fields, MdbField *fields)
 		/* column is null if bit is clear (0) */
 		if (!fields[i].is_null) {
 			byte |= 1 << bit;
-			
+
 		}
 		bit++;
 		if (bit==8) {
@@ -257,10 +257,10 @@ mdb_pack_null_mask(unsigned char *buffer, int num_fields, MdbField *fields)
 	/* if we've written any bits to the current byte, flush it */
 	if (bit)
 		buffer[pos++] = byte;
-	
+
 	return pos;
 }
-/* fields must be ordered with fixed columns first, then vars, subsorted by 
+/* fields must be ordered with fixed columns first, then vars, subsorted by
  * column number */
 static int
 mdb_pack_row4(MdbTableDef *table, unsigned char *row_buffer, unsigned int num_fields, MdbField *fields)
@@ -270,7 +270,7 @@ mdb_pack_row4(MdbTableDef *table, unsigned char *row_buffer, unsigned int num_fi
 	unsigned int i;
 
 	row_buffer[pos++] = num_fields & 0xff;
-	row_buffer[pos++] = (num_fields >> 8) & 0xff; 
+	row_buffer[pos++] = (num_fields >> 8) & 0xff;
 
 	/* Fixed length columns */
 	for (i=0;i<num_fields;i++) {
@@ -358,7 +358,7 @@ mdb_pack_row3(MdbTableDef *table, unsigned char *row_buffer, unsigned int num_fi
 	offset_high = (unsigned char *) g_malloc(var_cols+1);
 	offset_high[0] = (pos >> 8) & 0xff;
 	j = 1;
-	
+
 	/* EOD */
 	row_buffer[pos] = pos & 0xff;
 	pos++;
@@ -427,10 +427,10 @@ mdb_new_leaf_pg(MdbCatalogEntry *entry)
 {
 	MdbHandle *mdb = entry->mdb;
 	void *new_pg = g_malloc0(mdb->fmt->pg_size);
-		
+
 	_mdb_put_int16(new_pg, 2, 0x0104);
 	_mdb_put_int32(new_pg, 4, entry->table_pg);
-	
+
 	return new_pg;
 }
 void *
@@ -438,11 +438,11 @@ mdb_new_data_pg(MdbCatalogEntry *entry)
 {
 	MdbFormatConstants *fmt = entry->mdb->fmt;
 	void *new_pg = g_malloc0(fmt->pg_size);
-		
+
 	_mdb_put_int16(new_pg, 2, 0x0101);
 	_mdb_put_int16(new_pg, 2, fmt->pg_size - fmt->row_count_offset - 2);
 	_mdb_put_int32(new_pg, 4, entry->table_pg);
-	
+
 	return new_pg;
 }
 
@@ -451,7 +451,7 @@ mdb_update_indexes(MdbTableDef *table, int num_fields, MdbField *fields, guint32
 {
 	unsigned int i;
 	MdbIndex *idx;
-	
+
 	for (i=0;i<table->num_idxs;i++) {
 		idx = g_ptr_array_index (table->indices, i);
 		mdb_debug(MDB_DEBUG_WRITE,"Updating %s (%d).", idx->name, idx->index_type);
@@ -502,12 +502,12 @@ mdb_update_index(MdbTableDef *table, MdbIndex *idx, unsigned int num_fields, Mdb
 /*
 	for (i = 0; i < idx->num_keys; i++) {
 		fprintf(stdout, "key col %d (%d) is mapped to field %d (%d %d)\n",
-			i, idx->key_col_num[i], idx_xref[i], fields[idx_xref[i]].colnum, 
+			i, idx->key_col_num[i], idx_xref[i], fields[idx_xref[i]].colnum,
 			fields[idx_xref[i]].siz);
 	}
 	for (i = 0; i < num_fields; i++) {
 		fprintf(stdout, "%d (%d %d)\n",
-			i, fields[i].colnum, 
+			i, fields[i].colnum,
 			fields[i].siz);
 	}
 */
@@ -515,12 +515,12 @@ mdb_update_index(MdbTableDef *table, MdbIndex *idx, unsigned int num_fields, Mdb
 	chain = g_malloc0(sizeof(MdbIndexChain));
 
 	mdb_index_find_row(mdb, idx, chain, pgnum, rownum);
-	
-	
-		
-	
+
+
+
+
 	mdb_add_row_to_leaf_pg(table, idx, &chain->pages[chain->cur_depth-1], idx_fields, pgnum, rownum);
-	
+
 	return 1;
 }
 
@@ -562,11 +562,11 @@ mdb_insert_row(MdbTableDef *table, int num_fields, MdbField *fields)
 	}
 
 	mdb_update_indexes(table, num_fields, fields, pgnum, rownum);
- 
+
 	return 1;
 }
 /*
- * Assumes caller has verfied space is available on page and adds the new 
+ * Assumes caller has verfied space is available on page and adds the new
  * row to the current pg_buf.
  */
 guint16
@@ -631,7 +631,7 @@ mdb_add_row_to_pg(MdbTableDef *table, unsigned char *row_buffer, int new_row_siz
 
 	return num_rows;
 }
-int 
+int
 mdb_update_row(MdbTableDef *table)
 {
 int row_start, row_end;
@@ -668,7 +668,7 @@ unsigned int num_fields;
 
 	if (mdb_get_option(MDB_DEBUG_WRITE)) {
 		for (i=0;i<num_fields;i++) {
-			
+
 		}
 	}
 	for (i=0;i<table->num_cols;i++) {
@@ -680,7 +680,7 @@ unsigned int num_fields;
 	}
 
 	new_row_size = mdb_pack_row(table, row_buffer, num_fields, fields);
-	if (mdb_get_option(MDB_DEBUG_WRITE)) 
+	if (mdb_get_option(MDB_DEBUG_WRITE))
 		buffer_dump(row_buffer, 0, new_row_size);
 	if (new_row_size > (old_row_size + mdb_pg_get_freespace(mdb))) {
 		fprintf(stderr, "No space left on this page, update will not occur\n");
@@ -690,7 +690,7 @@ unsigned int num_fields;
 	mdb_replace_row(table, table->cur_row-1, row_buffer, new_row_size);
 	return 0;
 }
-int 
+int
 mdb_replace_row(MdbTableDef *table, int row, void *new_row, int new_row_size)
 {
 MdbCatalogEntry *entry = table->entry;
@@ -722,12 +722,12 @@ int i, pos;
 		memcpy((char*)new_pg + pos, mdb->pg_buf + row_start, row_size);
 		_mdb_put_int16(new_pg, rco + 2 + i*2, pos);
 	}
-	
+
 	/* our row */
 	pos -= new_row_size;
 	memcpy((char*)new_pg + pos, new_row, new_row_size);
 	_mdb_put_int16(new_pg, rco + 2 + row*2, pos);
-	
+
 	/* rows after */
 	for (i=row+1;i<num_rows;i++) {
 		mdb_find_row(mdb, i, &row_start, &row_size);
@@ -754,8 +754,8 @@ int i, pos;
 	return 0;
 }
 static int
-mdb_add_row_to_leaf_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg, MdbField *idx_fields, guint32 pgnum, guint16 rownum) 
-/*,  guint32 pgnum, guint16 rownum) 
+mdb_add_row_to_leaf_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg, MdbField *idx_fields, guint32 pgnum, guint16 rownum)
+/*,  guint32 pgnum, guint16 rownum)
 static int
 mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg)
 */
@@ -814,10 +814,10 @@ mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg)
 
 		row++;
 	}
-	
+
 	/* free space left */
 	_mdb_put_int16(new_pg, 2, mdb->fmt->pg_size - ipg->offset);
-	
+
 
 	mdb_index_swap_n(idx_fields[0].value, col->col_size, key_hash);
 	key_hash[0] |= 0x080;
@@ -832,7 +832,7 @@ mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg)
 	pg_row = (pgnum << 8) | ((rownum-1) & 0xff);
 	_mdb_put_int32_msb(new_pg, ipg->offset + 5, pg_row);
 	ipg->idx_starts[row++] = ipg->offset + ipg->len;
-	
+
 	if (mdb_get_option(MDB_DEBUG_WRITE)) {
 		buffer_dump(mdb->pg_buf, 0, mdb->fmt->pg_size);
 	}

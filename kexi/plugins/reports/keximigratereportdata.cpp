@@ -17,7 +17,7 @@
 */
 
 #include "keximigratereportdata.h"
-#include <kdebug.h>
+#include <KDbTableOrQuerySchema>
 
 class KexiMigrateReportData::Private
 {
@@ -45,8 +45,8 @@ public:
     QString qstrName;
     QString qstrQuery;
     bool valid;
-    KexiDB::TableSchema TableSchema;
-    KexiDB::TableOrQuerySchema *schema;
+    KDbTableSchema tableSchema;
+    KDbTableOrQuerySchema *schema;
     KexiMigration::KexiMigrate *kexiMigrate;
     qint64 position;
 };
@@ -62,7 +62,7 @@ KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
         KexiMigration::MigrateManager mm;
 
         d->kexiMigrate = mm.driver(extConn[0]);
-        KexiDB::ConnectionData cd;
+        KDbConnectionData cd;
         KexiMigration::Data dat;
         cd.setFileName(extConn[1]);
         dat.source = &cd;
@@ -71,10 +71,10 @@ KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
         QStringList names;
 
         if (d->valid) {
-            d->valid = d->kexiMigrate->readTableSchema(extConn[2], d->TableSchema);
+            d->valid = d->kexiMigrate->readTableSchema(extConn[2], d->tableSchema);
         }
         if (d->valid) {
-            d->schema = new KexiDB::TableOrQuerySchema(d->TableSchema);
+            d->schema = new KDbTableOrQuerySchema(d->tableSchema);
         }
         d->valid = d->kexiMigrate->tableNames(names);
         if (d->valid && names.contains(extConn[2])) {
@@ -90,9 +90,9 @@ KexiMigrateReportData::~KexiMigrateReportData()
 
 int KexiMigrateReportData::fieldNumber(const QString &fld) const
 {
-    KexiDB::QueryColumnInfo::Vector flds;
+    KDbQueryColumnInfo::Vector flds;
 
-    uint x = -1;
+    int x = -1;
 
     if (d->schema) {
         flds = d->schema->columns();
@@ -108,7 +108,7 @@ int KexiMigrateReportData::fieldNumber(const QString &fld) const
 
 QStringList KexiMigrateReportData::fieldNames() const
 {
-    KexiDB::QueryColumnInfo::Vector flds;
+    KDbQueryColumnInfo::Vector flds;
     QStringList names;
 
     if (d->schema) {

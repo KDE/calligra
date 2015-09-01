@@ -21,11 +21,10 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
-#include <QHash>
-#include <QPointer>
-#include <QWidget>
+#include "kformdesigner_export.h"
 
-#include <kexi_export.h>
+#include <QHash>
+#include <QWidget>
 
 namespace KFormDesigner
 {
@@ -37,7 +36,7 @@ class ResizeHandleSet;
 * a set of resize handles (for resizing widgets)
 * @author Joseph Wenninger
 */
-class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
+class KFORMDESIGNER_EXPORT ResizeHandleSet: public QObject
 {
     Q_OBJECT
 
@@ -51,11 +50,11 @@ public:
     QWidget *widget() const;
 
     void setWidget(QWidget *modify);
-    
+
     void raise();
-    
+
     void setEditingMode(bool editing);
-    
+
     Form *form() const;
 
 Q_SIGNALS:

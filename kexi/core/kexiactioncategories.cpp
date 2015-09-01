@@ -19,9 +19,9 @@
 
 #include "kexiactioncategories.h"
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QMap>
+
 #include <kexi_global.h>
 
 namespace Kexi
@@ -44,7 +44,7 @@ public:
     bool allObjectTypesAreSupported;
 };
 
-K_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
+Q_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
 
 //! @internal
 class ActionCategories::Private
@@ -128,7 +128,7 @@ void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
     if (a)
         a->allObjectTypesAreSupported = set;
     else
-        kWarning() << "no such action:" << name;
+        qWarning() << "no such action:" << name;
 }
 
 int ActionCategories::actionCategories(const char* name) const

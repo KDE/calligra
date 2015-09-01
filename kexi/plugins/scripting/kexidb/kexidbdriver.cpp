@@ -18,17 +18,14 @@
  ***************************************************************************/
 
 #include "kexidbdriver.h"
-
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-#include <kdebug.h>
-
-#include <db/connection.h>
+#include <KDbConnection>
 
 using namespace Scripting;
 
-KexiDBDriver::KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver)
+KexiDBDriver::KexiDBDriver(QObject* parent, KDbDriver* driver)
         : QObject(parent)
         , m_driver(driver)
 {
@@ -79,15 +76,14 @@ QObject* KexiDBDriver::createConnection(QObject* data)
     return d ? new KexiDBConnection(m_driver->createConnection(*d->data())) : 0;
 }
 
-uint KexiDBDriver::connectionCount()
+int KexiDBDriver::connectionCount()
 {
     return m_driver->connections().count();
 }
 
 //! @todo
-/*QObject* KexiDBDriver::connection(uint index) {
-    QSet<KexiDB::Connection*> list = m_driver->connectionsList();
+/*QObject* KexiDBDriver::connection(int index) {
+    QSet<KDbConnection*> list = m_driver->connectionsList();
     return (index < list.count()) ? list.at(index) : 0;
 }*/
 
-#include "kexidbdriver.moc"

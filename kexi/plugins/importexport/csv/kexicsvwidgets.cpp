@@ -22,15 +22,13 @@
 #include <QDir>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QFrame>
 #include <QVector>
+#include <QLineEdit>
 
-#include <klocale.h>
-#include <klineedit.h>
-#include <kdialog.h>
-#include <kiconloader.h>
-#include <kio/global.h>
+#include <KIconLoader>
+#include <KIO/PixmapLoader>
+#include <KLocalizedString>
 
 #include <kexi_global.h>
 #include <kexiutils/utils.h>
@@ -64,7 +62,7 @@ public:
     QString delimiter;
     QVector<QString> availableDelimiters;
     KComboBox* combo;
-    KLineEdit* delimiterEdit;
+    QLineEdit* delimiterEdit;
 };
 
 class KexiCSVCommentWidget::Private
@@ -77,7 +75,7 @@ public:
     QString commentSymbol;
     QVector<QString> availablecommentSymbols;
     KComboBox* combo;
-    KLineEdit* commentSymbolEdit;
+    QLineEdit* commentSymbolEdit;
 };
 
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent)
@@ -87,19 +85,19 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     setLayout(lyr);
     KexiUtils::setMargins(lyr, 0);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVDelimiterComboBox");
-    d->combo->addItem(i18n("Comma \",\""));    //<-- KEXICSV_DEFAULT_FILE_DELIMITER
-    d->combo->addItem(i18n("Semicolon \";\""));
-    d->combo->addItem(i18n("Tabulator"));
-    d->combo->addItem(i18n("Space \" \""));
-    d->combo->addItem(i18n("Other"));
+    d->combo->addItem(xi18n("Comma \",\""));    //<-- KEXICSV_DEFAULT_FILE_DELIMITER
+    d->combo->addItem(xi18n("Semicolon \";\""));
+    d->combo->addItem(xi18n("Tabulator"));
+    d->combo->addItem(xi18n("Space \" \""));
+    d->combo->addItem(xi18n("Other"));
     lyr->addWidget(d->combo);
     setFocusProxy(d->combo);
 
-    d->delimiterEdit = new KLineEdit(this);
+    d->delimiterEdit = new QLineEdit(this);
     d->delimiterEdit->setObjectName("d->delimiterEdit");
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));
     d->delimiterEdit->setMaxLength(1);
@@ -191,12 +189,12 @@ KexiCSVCommentWidget::KexiCSVCommentWidget(bool lineEditOnBottom, QWidget *paren
     QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     setLayout(lyr);
     KexiUtils::setMargins(lyr, 0);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVcommentSymbolComboBox");
-    d->combo->addItem(i18n("None"));
-    d->combo->addItem(i18n("Hashtag \"#\""));
+    d->combo->addItem(xi18n("None"));
+    d->combo->addItem(xi18n("Hashtag \"#\""));
     lyr->addWidget(d->combo);
 
     setFocusProxy(d->combo);
@@ -248,7 +246,7 @@ KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
 {
     addItem("\"");
     addItem("'");
-    addItem(i18n("None"));
+    addItem(xi18n("None"));
 }
 
 QString KexiCSVTextQuoteComboBox::textQuote() const
@@ -260,7 +258,7 @@ QString KexiCSVTextQuoteComboBox::textQuote() const
 
 void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 {
-    QString q(textQuote.isEmpty() ? i18n("None") : textQuote);
+    QString q(textQuote.isEmpty() ? xi18n("None") : textQuote);
     setCurrentIndex(findText(q));
 }
 
@@ -273,7 +271,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     QVBoxLayout *vbox = new QVBoxLayout;
     setLayout(vbox);
     KexiUtils::setMargins(vbox, 0);
-    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setSpacing(KexiUtils::spacingHint());
     QGridLayout *topbox = new QGridLayout;
     vbox->addLayout(topbox);
 
@@ -282,7 +280,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     d->iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     topbox->addWidget(d->iconLbl, 0, 0, 2, 1);
     topbox->addItem(new QSpacerItem(
-        KDialog::spacingHint(), KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
+        KexiUtils::spacingHint(), KexiUtils::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
         0, 1, 2, 1
     );
 
@@ -337,10 +335,10 @@ void KexiCSVInfoLabel::setFileName(const QString& fileName)
 {
     if (!d->fnameLbl)
         return;
-    d->fnameLbl->setText(QDir::convertSeparators(fileName));
+    d->fnameLbl->setText(QDir::toNativeSeparators(fileName));
     if (!fileName.isEmpty()) {
         d->iconLbl->setPixmap(
-            KIO::pixmapForUrl(KUrl(fileName), 0, KIconLoader::Desktop));
+            KIO::pixmapForUrl(QUrl(fileName), 0, KIconLoader::Desktop));
     }
 }
 
@@ -385,9 +383,10 @@ void KexiCSVInfoLabel::setCommentText(const QString& text)
 QStringList csvMimeTypes()
 {
     QStringList mimetypes;
-    mimetypes << "text/csv" << "text/plain"; // use application/octet-stream if you want
-                                             // all files, but then the others are not necessary
+    mimetypes << "text/csv"
+              << "text/tab-separated-value"
+              << "text/plain"; // use application/octet-stream if you want
+                               // all files, but then the others are not necessary
     return mimetypes;
 }
 
-#include "kexicsvwidgets.moc"

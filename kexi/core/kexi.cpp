@@ -18,29 +18,26 @@
 */
 
 #include "kexi.h"
-#include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
 #include "kexipartmanager.h"
-#include <kexiutils/identifier.h>
-#include <db/msghandler.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
+#include <KexiIcon.h>
 
-#include <KoIcon.h>
+#include <KDb>
+#include <KDbMessageHandler>
+#include <KDbDriverManager>
+#include <KDbDriverMetaData>
+#include <KDbUtils>
 
-#include <QTimer>
-#include <QImage>
+#include <KMessageBox>
+#include <KIconTheme>
+
 #include <QPixmap>
 #include <QPixmapCache>
-#include <QColor>
-#include <QFileInfo>
 #include <QLabel>
-
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <KIconTheme>
-#include <KMimeType>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QFileInfo>
 
 using namespace Kexi;
 
@@ -76,7 +73,7 @@ public:
     KexiDBConnectionSet* connset;
     KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
-    KexiDB::DriverManager driverManager;
+    KDbDriverManager driverManager;
     KexiPart::Manager partManager;
 };
 
@@ -98,7 +95,7 @@ KexiRecentProjects* Kexi::recentProjects()
     return &KexiInternal::self()->recentProjects;
 }
 
-KexiDB::DriverManager& Kexi::driverManager()
+KDbDriverManager& Kexi::driverManager()
 {
     return KexiInternal::self()->driverManager;
 }
@@ -140,15 +137,15 @@ QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
         return Kexi::nameForViewMode(mode, true).remove('&');
 
     if (mode == NoViewMode)
-        return i18n("&No View");
+        return xi18n("&No View");
     else if (mode == DataViewMode)
-        return i18n("&Data View");
+        return xi18n("&Data View");
     else if (mode == DesignViewMode)
-        return i18n("D&esign View");
+        return xi18n("D&esign View");
     else if (mode == TextViewMode)
-        return i18n("&Text View");
+        return xi18n("&Text View");
 
-    return i18n("&Unknown");
+    return xi18n("&Unknown");
 }
 
 //--------------------------------------------------------------------------------
@@ -157,7 +154,7 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
     const char *const id =
         (mode == DataViewMode) ? koIconNameCStr("state_data") :
         (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
-        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        (mode == TextViewMode) ? koIconNameCStr("state_sql"):
         0;
 
     return QLatin1String(id);
@@ -166,25 +163,25 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 //--------------------------------------------------------------------------------
 
 ObjectStatus::ObjectStatus()
-        : msgHandler(0)
+        : m_resultable(0), m_msgHandler(0)
 {
 }
 
 ObjectStatus::ObjectStatus(const QString& message, const QString& description)
-        : msgHandler(0)
+        : m_resultable(0), m_msgHandler(0)
 {
     setStatus(message, description);
 }
 
-ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
-        : msgHandler(0)
+ObjectStatus::ObjectStatus(KDbResultable* resultable, const QString& message, const QString& description)
+        : m_resultable(0), m_msgHandler(0)
 {
-    setStatus(dbObject, message, description);
+    setStatus(resultable, message, description);
 }
 
 ObjectStatus::~ObjectStatus()
 {
-    delete msgHandler;
+    delete m_msgHandler;
 }
 
 const ObjectStatus& ObjectStatus::status() const
@@ -195,51 +192,64 @@ const ObjectStatus& ObjectStatus::status() const
 bool ObjectStatus::error() const
 {
     return !message.isEmpty()
-           || (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
+           || (m_resultable && m_resultable->result().isError());
 }
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)
 {
-    this->dbObj = 0;
+    m_resultable = 0;
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbResultable* resultable, const QString& message, const QString& description)
 {
-    if (dynamic_cast<QObject*>(dbObject)) {
-        dbObj = dynamic_cast<QObject*>(dbObject);
-    }
+    m_resultable = resultable;
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KDbResultInfo* resultInfo, const QString& message, const QString& description)
 {
-    if (result) {
+    if (resultInfo) {
         if (message.isEmpty())
-            this->message = result->msg;
+            this->message = resultInfo->msg;
         else
-            this->message = message + " " + result->msg;
+            this->message = message + " " + resultInfo->msg;
 
         if (description.isEmpty())
-            this->description = result->desc;
+            this->description = resultInfo->desc;
         else
-            this->description = description + " " + result->desc;
+            this->description = description + " " + resultInfo->desc;
     } else
         clearStatus();
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
+void ObjectStatus::setStatus(KDbResultable* resultable, KDbResultInfo* resultInfo,
                              const QString& message, const QString& description)
 {
-    if (!dbObject)
-        setStatus(result, message, description);
-    else if (!result)
-        setStatus(dbObject, message, description);
+    if (!resultable)
+        setStatus(resultInfo, message, description);
+    else if (!resultInfo)
+        setStatus(resultable, message, description);
     else {
-        setStatus(dbObject, message, description);
-        setStatus(result, this->message, this->description);
+        setStatus(resultable, message, description);
+        setStatus(resultInfo, this->message, this->description);
+    }
+}
+
+void ObjectStatus::setStatus(const KDbResult &result, KDbResultInfo* resultInfo,
+                             const QString& message, const QString& description)
+{
+    //! @todo KEXI3 test this
+    if (!result.isError()) {
+        setStatus(resultInfo, message, description);
+    }
+    else {
+        KDbResult r = result;
+        r.prependMessage(message);
+        r.prependMessage(description);
+        setStatus(resultInfo, result.messageTitle(), result.message());
     }
 }
 
@@ -274,52 +284,54 @@ void ObjectStatus::append(const ObjectStatus& otherStatus)
 }
 
 //! @internal
-class ObjectStatusMessageHandler : public KexiDB::MessageHandler
+class ObjectStatusMessageHandler : public KDbMessageHandler
 {
 public:
     explicit ObjectStatusMessageHandler(ObjectStatus *status)
-            : KexiDB::MessageHandler()
+            : KDbMessageHandler()
             , m_status(status) {
     }
     virtual ~ObjectStatusMessageHandler() {
     }
 
-    virtual void showErrorMessageInternal(const QString &title,
-                                          const QString &details = QString())
+    virtual void showErrorMessage(KDbMessageHandler::MessageType messageType,
+                                  const QString &msg,
+                                  const QString &details = QString(),
+                                  const QString &caption = QString())
     {
-        m_status->setStatus(title, details);
+        Q_UNUSED(messageType);
+        Q_UNUSED(caption);
+        m_status->setStatus(msg, details);
     }
 
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString())
+    virtual void showErrorMessage(const KDbResult& result,
+                                  KDbMessageHandler::MessageType messageType = KDbMessageHandler::Error,
+                                  const QString& msg = QString(),
+                                  const QString& caption = QString())
     {
-        m_status->setStatus(obj, msg);
+        Q_UNUSED(messageType);
+        m_status->setStatus(result, 0, caption, msg);
     }
 
     ObjectStatus *m_status;
 };
 
-ObjectStatus::operator KexiDB::MessageHandler*()
+ObjectStatus::operator KDbMessageHandler*()
 {
-    if (!msgHandler)
-        msgHandler = new ObjectStatusMessageHandler(this);
-    return msgHandler;
-}
-
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
-{
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KCmdLineArgs::addCmdLineOptions(kexi_options());
+    if (!m_msgHandler)
+        m_msgHandler = new ObjectStatusMessageHandler(this);
+    return m_msgHandler;
 }
 
 void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_text,
                               QString* line1, QString* line2)
 {
     if (feature_name.isEmpty())
-        *line1 = i18n("This function is not available for version %1 of %2 application.",
+        *line1 = xi18n("This function is not available for version %1 of %2 application.",
                    QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     else {
         QString feature_name_(feature_name);
-        *line1 = i18n(
+        *line1 = xi18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
                   feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
@@ -367,27 +379,27 @@ QString KexiIconName(const QString &baseName)
     return baseName;
 }
 
-KIcon KexiIcon(const QString &baseName)
+QIcon KexiIcon(const QString &baseName)
 {
-    return KIcon(KexiIconName(baseName));
+    return QIcon::fromTheme(KexiIconName(baseName));
 }
 
 QString Kexi::defaultFileBasedDriverIconName()
 {
     if (!isSpecialIconTheme()) {
-        KMimeType::Ptr mimeType(KMimeType::mimeType(
-                                    KexiDB::defaultFileBasedDriverMimeType()));
-        if (!mimeType.isNull()) {
-            return mimeType->iconName();
+        QMimeDatabase db;
+        QMimeType mimeType(db.mimeTypeForName(KDb::defaultFileBasedDriverMimeType()));
+        if (mimeType.isValid()) {
+            return mimeType.iconName();
         }
-        KexiDBWarn << KexiDB::defaultFileBasedDriverMimeType() << "mimetype not installed!";
+        qWarning() << KDb::defaultFileBasedDriverMimeType() << "mimetype not installed!";
     }
     return koIconName("breeze-kexi-file-database");
 }
 
-KIcon Kexi::defaultFileBasedDriverIcon()
+QIcon Kexi::defaultFileBasedDriverIcon()
 {
-    return KIcon(defaultFileBasedDriverIconName());
+    return QIcon::fromTheme(defaultFileBasedDriverIconName());
 }
 
 QString Kexi::serverIconName()
@@ -395,8 +407,25 @@ QString Kexi::serverIconName()
     return KexiIconName("network-server-database");
 }
 
-KIcon Kexi::serverIcon()
+QIcon Kexi::serverIcon()
 {
-    return KIcon(serverIconName());
+    return QIcon::fromTheme(serverIconName());
 }
 
+QString Kexi::appIncorrectlyInstalledMessage()
+{
+    return xi18nc("@info", "<application>%1</application> could have been incorrectly "
+                           "installed or started. The application will be closed.",
+                           QApplication::applicationDisplayName());
+}
+
+QString Kexi::basePathForProject(const KDbConnectionData& connectionData)
+{
+    KDbDriverManager manager;
+    const KDbDriverMetaData* driverMetaData = manager.driverMetaData(connectionData.driverId());
+    if (driverMetaData && driverMetaData->isFileBased()) {
+        const QFileInfo fileinfo(connectionData.databaseName());
+        return fileinfo.path();
+    }
+    return QString();
+}

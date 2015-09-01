@@ -24,6 +24,7 @@
 
 #include <QPainter>
 #include <QScrollBar>
+#include <QDebug>
 
 const int RECT_MARGIN = 300;
 
@@ -55,7 +56,7 @@ void KexiFormScrollAreaWidget::paintEvent(QPaintEvent *e)
 
 void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    //kDebug() << e->pos() << scrollArea->widget()->size();
+    //qDebug() << e->pos() << scrollArea->widget()->size();
     if (!scrollArea->isResizingEnabled()) {
         return;
     }
@@ -117,7 +118,7 @@ void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
         }
         // needs update?
         if (neww != -1 && mainAreaWidget->size() != QSize(neww, newh)) {
-            kDebug() << "mainAreaWidget->size():" << mainAreaWidget->size()
+            qDebug() << "mainAreaWidget->size():" << mainAreaWidget->size()
                      << "neww, newh:" << neww << newh;
             mainAreaWidget->resize(neww, newh);
             scrollArea->refreshContentsSize();

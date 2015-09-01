@@ -21,15 +21,11 @@
 #ifndef KEXIFIELDLISTMODEL_H
 #define KEXIFIELDLISTMODEL_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QModelIndex>
-#include <QPixmap>
-#include <kexi_export.h>
 
-namespace KexiDB
-{
-    class TableOrQuerySchema;
-}
-
+class KDbTableOrQuerySchema;
 
 //! Flags used to alter models behaviour and appearance
 enum KexiFieldListOption {
@@ -42,27 +38,27 @@ enum KexiFieldListOption {
 Q_DECLARE_FLAGS(KexiFieldListOptions, KexiFieldListOption);
 Q_DECLARE_OPERATORS_FOR_FLAGS ( KexiFieldListOptions )
 Q_FLAGS(KexiFieldListOption);
-    
+
 class KEXIEXTWIDGETS_EXPORT KexiFieldListModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
     explicit KexiFieldListModel(QObject* parent = 0, KexiFieldListOptions options = ShowDataTypes | AllowMultiSelection);
     virtual ~KexiFieldListModel();
-    
+
     /*! Sets table or query schema \a schema.
     The schema object will be owned by the KexiFieldListView object. */
-    void setSchema(KexiDB::TableOrQuerySchema* schema);
-    
+    void setSchema(KDbTableOrQuerySchema* schema);
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    
+
     virtual QStringList mimeTypes() const;
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    
+
 private:
     class Private;
     Private * const d;

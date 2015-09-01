@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -33,31 +33,31 @@ public:
     virtual ~KexiMobileToolbar();
 
     void setRecordHandler(KexiRecordNavigatorHandler *handler);
-    
+
 private:
     QAction *m_gotoNavigatorAction;
-    
+
     QAction *m_previousRecord;
     QAction *m_nextRecord;
     QAction *m_recordNumber;
-    
+
     KexiRecordNavigatorHandler *m_recordHandler;
-    
+
     void updatePage();
 
 private Q_SLOTS:
   void openFileClicked();
   void gotoNavigatorClicked();
-  
+
   //Record Navigation
   void recordPrevious();
   void recordNext();
-  
+
 Q_SIGNALS:
     void pageOpenFile();
     void pageNavigator();
     void pageItem();
-    
+
 };
 
 #endif // KEXIMOBILETOOLBAR_H

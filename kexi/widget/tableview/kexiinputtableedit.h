@@ -28,7 +28,7 @@
 #include "kexicelleditorfactory.h"
 #include "kexitextformatter.h"
 
-class KLineEdit;
+class QLineEdit;
 
 /*! @short General purpose cell editor using line edit widget.
 */
@@ -37,7 +37,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    explicit KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiInputTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
 
@@ -48,7 +48,7 @@ public:
 
     //! \return true if editor's value is empty (not null).
     //! Only few field types can accept "EMPTY" property
-    //! (check this with KexiDB::Field::hasEmptyProperty()),
+    //! (check this with KDbField::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();
@@ -109,8 +109,8 @@ protected:
 
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
-    QString m_decsym; //! decimal symbol
-    KLineEdit *m_lineedit;
+    QChar m_decsym; //! decimal symbol
+    QLineEdit *m_lineedit;
 
 Q_SIGNALS:
     void hintClicked();

@@ -19,22 +19,20 @@
 
 #include "utils.h"
 #include "utils_p.h"
+#include <KexiIcon.h>
 
-#include <db/utils.h>
+#include <KDb>
 
-#include <KoIcon.h>
+#include <KGuiItem>
 
-#include <QLayout>
 #include <QThread>
 #include <QHeaderView>
-
-#include <ktabwidget.h>
-#include <kpushbutton.h>
-#include <kguiitem.h>
-#include <kdebug.h>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QDebug>
 
 static DebugWindow* debugWindow = 0;
-static KTabWidget* debugWindowTab = 0;
+static QTabWidget* debugWindowTab = 0;
 static KexiDBDebugTreeWidget* kexiDBDebugPage = 0;
 static QTreeWidget* kexiAlterTableActionDebugPage = 0;
 
@@ -45,7 +43,7 @@ static void addKexiDBDebug(const QString& text)
         return;
     if (QThread::currentThread() != debugWindowTab->thread()) {
 //! @todo send debug using async. signal
-        kWarning() << "Debugging from different thread not supported.";
+        qWarning() << "Debugging from different thread not supported.";
         return;
     }
     if (!kexiDBDebugPage) {
@@ -54,10 +52,10 @@ static void addKexiDBDebug(const QString& text)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_copy = new KPushButton(page);
+        QPushButton *btn_copy = new QPushButton(page);
         btn_copy->setIcon(koSmallIcon("edit-copy"));
         hbox->addWidget(btn_copy);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
+        QPushButton *btn_clear = new QPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
 
         kexiDBDebugPage = new KexiDBDebugTreeWidget(page);
@@ -105,12 +103,12 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
+        QPushButton *btn_exec = new QPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
         btn_exec->setObjectName("executeRealAlterTable");
         hbox->addWidget(btn_exec);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
+        QPushButton *btn_clear = new QPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
-        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
+        QPushButton *btn_sim = new QPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
         btn_sim->setObjectName("simulateAlterTableExecution");
         hbox->addWidget(btn_sim);
 
@@ -136,12 +134,12 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
     // compute availableNestingLevels
     QTreeWidgetItem * lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
         kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
-    //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
+    //qDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
     while (lastItem) {
         lastItem = lastItem->parent();
         availableNestingLevels++;
     }
-    //kDebug() << "availableNestingLevels: " << availableNestingLevels;
+    //qDebug() << "availableNestingLevels: " << availableNestingLevels;
     //go up (availableNestingLevels-levelsToGoUp) levels
     lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
         kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
@@ -150,7 +148,7 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         lastItem = lastItem->parent();
         levelsToGoUp--;
     }
-    //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
+    //qDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
     if (lastItem) {
         if (lastItem->childCount() > 0) {
                li = new QTreeWidgetItem(lastItem, lastItem->child(lastItem->childCount()-1));   //child, after
@@ -164,7 +162,7 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         while (lastItem && lastItem->parent()) {
             lastItem = lastItem->parent();
         }
-        //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
+        //qDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
         if (lastItem && lastItem->parent())
              li = new QTreeWidgetItem(lastItem->parent(), lastItem);   //after
         else if (!lastItem)
@@ -179,13 +177,13 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 {
     Q_UNUSED(parent);
-    KexiDB::setDebugGUIHandler(addKexiDBDebug);
-    KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
+    KDb::setDebugGUIHandler(addKexiDBDebug);
+    KDb::setAlterTableActionDebugHandler(addAlterTableActionDebug);
 
     // (this is internal code - do not use i18n() here)
     debugWindow = new DebugWindow(parent);
     QBoxLayout *lyr = new QVBoxLayout(debugWindow);
-    debugWindowTab = new KTabWidget(debugWindow);
+    debugWindowTab = new QTabWidget(debugWindow);
     debugWindowTab->setObjectName("debugWindowTab");
     lyr->addWidget(debugWindowTab);
     debugWindow->resize(900, 600);
@@ -199,8 +197,8 @@ void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
         const QObject *receiver, const char* slot)
 {
     if (debugWindow) {
-        KPushButton* btn = KexiUtils::findFirstChild<KPushButton*>(
-                               debugWindow, "KPushButton", actionName);
+        QPushButton* btn = KexiUtils::findFirstChild<QPushButton*>(
+                               debugWindow, "QPushButton", actionName);
         if (btn)
             QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
     }

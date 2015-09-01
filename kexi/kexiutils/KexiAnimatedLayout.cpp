@@ -19,11 +19,12 @@
 
 #include "KexiAnimatedLayout.h"
 #include "KexiAnimatedLayout_p.h"
- 
-#include <kglobalsettings.h>
+
+#include <kexiutils/utils.h>
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QDebug>
 
 KexiAnimatedLayout::Private::Private(KexiAnimatedLayout * qq)
  : QWidget(), q(qq), animation(this, "pos")
@@ -42,8 +43,7 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     destinationWidget = destination;
     if (from == destinationWidget)
         return;
-    if (!(KGlobalSettings::self()->graphicEffectsLevel()
-          & KGlobalSettings::SimpleAnimationEffects))
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects))
     {
         // animations not allowed: switch to destination widget immediately
         animationFinished();
@@ -60,7 +60,7 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     buffer = QPixmap(s.width() * 2, s.height());
     buffer.fill(Qt::white);
     from->render(&buffer, startPos);
-    //kDebug() << s << from->geometry() << destinationWidget->geometry();
+    //qDebug() << s << from->geometry() << destinationWidget->geometry();
     destinationWidget->resize(from->size()); // needed because destination could
                                                // have been never displayed
     destinationWidget->render(&buffer, endPos);
@@ -118,9 +118,6 @@ void KexiAnimatedLayout::setCurrentIndex(int index)
     QWidget *w = widget(index);
     if (!w)
         return;
-    
+
     setCurrentWidget(w);
 }
-
-#include "KexiAnimatedLayout.moc"
-#include "KexiAnimatedLayout_p.moc"

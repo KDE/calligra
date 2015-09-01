@@ -27,7 +27,7 @@ int cursorsTest()
     if (!conn->databaseExists(db_name)) {
         if (tablesTest() != 0)
             return 1;
-        kDebug() << "DB created & filled";
+        qDebug() << "DB created & filled";
     }
 
     if (!conn->useDatabase(db_name)) {
@@ -35,22 +35,22 @@ int cursorsTest()
         return 1;
     }
 
-    KexiDB::Cursor *cursor = conn->executeQuery("select * from persons", cursor_options);
-    kDebug() << "executeQuery() = " << !!cursor;
+    KDbCursor *cursor = conn->executeQuery("select * from persons", cursor_options);
+    qDebug() << "executeQuery() = " << !!cursor;
     if (!cursor)
         return 1;
 
-    kDebug() << "Cursor::moveLast() ---------------------";
-    kDebug() << "-- Cursor::moveLast() == " << cursor->moveLast();
+    qDebug() << "Cursor::moveLast() ---------------------";
+    qDebug() << "-- Cursor::moveLast() == " << cursor->moveLast();
     cursor->moveLast();
-    kDebug() << "Cursor::moveFirst() ---------------------";
-    kDebug() << "-- Cursor::moveFirst() == " << cursor->moveFirst();
+    qDebug() << "Cursor::moveFirst() ---------------------";
+    qDebug() << "-- Cursor::moveFirst() == " << cursor->moveFirst();
 
-    /*  kDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
-      kDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
-      kDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
-      kDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
-      kDebug()<<"Cursor::eof() == "<<cursor->eof();*/
+    /*  qDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
+      qDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
+      qDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
+      qDebug()<<"Cursor::moveNext() == "<<cursor->moveNext();
+      qDebug()<<"Cursor::eof() == "<<cursor->eof();*/
     conn->deleteCursor(cursor);
 
     return 0;

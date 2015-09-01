@@ -20,69 +20,82 @@
 #include "importoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
+#include <KConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include <QDir>
 #include <QLabel>
-#include <QTextCodec>
 #include <QCheckBox>
 #include <QGridLayout>
-
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
 
 using namespace KexiMigration;
 
 OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selectedEncoding,
                              QWidget* parent)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
-    setWindowTitle(i18nc("@title:window", "Advanced Import Options"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
+    setWindowTitle(xi18nc("@title:window", "Advanced Import Options"));
     setWindowIcon(koIcon("configure"));
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
     QWidget *plainPage = new QWidget(this);
-    setMainWidget(plainPage);
+    mainLayout->addWidget(plainPage);
     QGridLayout *lyr = new QGridLayout(plainPage);
 
     m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, selectedEncoding);
     m_encodingComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     lyr->addWidget(m_encodingComboBox, 1, 1);
     QLabel* lbl = new QLabel(
-        i18n("<h3>Text encoding for Microsoft Access database</h3>\n"
-             "<p>Database file \"%1\" appears to be created by a version of Microsoft Access older than 2000.</p>"
-             "<p>In order to properly import national characters, you may need to choose a proper text encoding "
-             "if the database was created on a computer with a different character set.</p>",
-             QDir::convertSeparators(databaseFile)),
+        xi18n("<title>Text encoding for Microsoft Access database</title>\n"
+             "<para>Database file <filename>%1</filename> appears to be created by a version of Microsoft Access older than 2000.</para>"
+             "<para>In order to properly import national characters, you may need to choose a proper text encoding "
+             "if the database was created on a computer with a different character set.</para>",
+             QDir::toNativeSeparators(databaseFile)),
         plainPage);
     lbl->setAlignment(Qt::AlignLeft);
     lbl->setWordWrap(true);
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     lyr->addWidget(lbl, 0, 0, 1, 3);
 
-    QLabel* lbl2 = new QLabel(i18n("Text encoding:"), plainPage);
+    QLabel* lbl2 = new QLabel(xi18n("Text encoding:"), plainPage);
     lbl2->setBuddy(m_encodingComboBox);
     lyr->addWidget(lbl2, 1, 0);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
-        i18n("Always use this encoding in similar situations"), plainPage);
+        xi18n("Always use this encoding in similar situations"), plainPage);
     lyr->addWidget(m_chkAlwaysUseThisEncoding, 2, 1, 1, 2);
 
     lyr->addItem(new QSpacerItem(20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 1);
     lyr->addItem(new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 2);
 
     //read config
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     QString defaultEncodingForMSAccessFiles
         = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
     if (!defaultEncodingForMSAccessFiles.isEmpty()) {
         m_encodingComboBox->setSelectedEncoding(defaultEncodingForMSAccessFiles);
         m_chkAlwaysUseThisEncoding->setChecked(true);
     }
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 
     adjustSize();
     m_encodingComboBox->setFocus();
@@ -99,14 +112,13 @@ KexiCharacterEncodingComboBox* OptionsDialog::encodingComboBox() const
 
 void OptionsDialog::accept()
 {
-    KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
+    KConfigGroup importExportGroup(KSharedConfig::openConfig()->group("ImportExport"));
     if (m_chkAlwaysUseThisEncoding->isChecked())
         importExportGroup.writeEntry("defaultEncodingForMSAccessFiles",
                                      m_encodingComboBox->selectedEncoding());
     else
         importExportGroup.deleteEntry("defaultEncodingForMSAccessFiles");
 
-    KDialog::accept();
+    QDialog::accept();
 }
 
-#include "importoptionsdlg.moc"

@@ -20,11 +20,10 @@
 #ifndef SCRIPTING_KEXIDBCURSOR_H
 #define SCRIPTING_KEXIDBCURSOR_H
 
-#include <QString>
 #include <QObject>
 
-#include <db/cursor.h>
-#include <db/roweditbuffer.h>
+#include <KDbCursor>
+#include <KDbRecordEditBuffer>
 
 namespace Scripting
 {
@@ -63,8 +62,7 @@ class KexiDBConnection;
  * connection = driver.createConnection(connectiondata)
  * if not connection.connect(): raise "Failed to connect"
  * if not connection.useDatabase( connectiondata.databaseName() ):
- *     if not connection.useDatabase( connectiondata.fileName() ):
- *         raise "Failed to use database"
+ *     raise "Failed to use database"
  *
  * table = connection.tableSchema("emp")
  * query = table.query()
@@ -83,7 +81,7 @@ class KexiDBCursor : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner);
+    KexiDBCursor(QObject* parent, KDbCursor* cursor, bool owner);
     virtual ~KexiDBCursor();
 
 public Q_SLOTS:
@@ -116,12 +114,12 @@ public Q_SLOTS:
     point to a valid record. */
     int at();
     /** Returns the number of fields available for this cursor. */
-    uint fieldCount();
+    int fieldCount();
     /** Returns the value stored in the passed column number (counting from 0). */
-    QVariant value(uint index);
+    QVariant value(int index);
     /** Set the value for the field defined with index. The new value is buffered
     and does not got written as long as save() is not called. */
-    bool setValue(uint index, QVariant value);
+    bool setValue(int index, QVariant value);
 
     /** Save any changes done with setValue(). You should call this only once at
     the end of all value/setValue iterations cause the cursor is closed once
@@ -132,10 +130,10 @@ private:
     class Record
     {
     public:
-        ::KexiDB::RecordData rowdata;
-        ::KexiDB::RowEditBuffer* buffer;
-        Record(::KexiDB::Cursor* cursor)
-                : buffer(new ::KexiDB::RowEditBuffer(true)) {
+        KDbRecordData rowdata;
+        KDbRecordEditBuffer* buffer;
+        Record(KDbCursor* cursor)
+                : buffer(new KDbRecordEditBuffer(true)) {
             cursor->storeCurrentRow(rowdata);
         }
         ~Record() {
@@ -145,7 +143,7 @@ private:
     QMap<qint64, Record*> m_modifiedrecords;
     void clearBuffers();
 
-    ::KexiDB::Cursor* m_cursor;
+    KDbCursor* m_cursor;
     bool m_owner;
 };
 

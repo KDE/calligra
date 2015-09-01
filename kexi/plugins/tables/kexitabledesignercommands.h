@@ -22,9 +22,11 @@
 
 #include <QPointer>
 
-#include <kexidb/alter.h>
-#include <KPropertySet>
 #include <kundo2command.h>
+
+#include <KDbAlter>
+
+#include <KPropertySet>
 
 #include "kexitabledesignerview.h"
 
@@ -44,7 +46,7 @@ public:
 
     //! Used to collect actions data for AlterTableHandler
     //! Can return 0 if the action should not be passed to AlterTableHandler
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const {
+    virtual KDbAlterTableHandler::ActionBase* createAction() const {
         return 0;
     }
 
@@ -79,20 +81,20 @@ public:
     ChangeFieldPropertyCommand(Command* parent, KexiTableDesignerView* view,
                                const KPropertySet& set, const QByteArray& propertyName,
                                const QVariant& oldValue, const QVariant& newValue,
-                               KProperty::ListData* const oldListData = 0,
-                               KProperty::ListData* const newListData = 0);
+                               KPropertyListData* const oldListData = 0,
+                               KPropertyListData* const newListData = 0);
 
     virtual ~ChangeFieldPropertyCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
-    KProperty::ListData* m_oldListData, *m_listData;
+    KPropertyListData* m_oldListData, *m_listData;
 };
 
 //! @short Undo/redo command used when a field is removed from a table
@@ -108,12 +110,12 @@ public:
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
+    KDbAlterTableHandler::RemoveFieldAction m_alterTableAction;
     KPropertySet* m_set;
     int m_fieldIndex;
 };
@@ -123,17 +125,17 @@ class InsertFieldCommand : public Command
 {
 public:
     InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                       int fieldIndex/*, const KexiDB::Field& field*/, const KPropertySet& set);
+                       int fieldIndex/*, const KDbField& field*/, const KPropertySet& set);
     virtual ~InsertFieldCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KDbAlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString() const;
 
 protected:
-    KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
+    KDbAlterTableHandler::InsertFieldAction *m_alterTableAction;
     KPropertySet m_set;
 };
 
@@ -160,24 +162,24 @@ public:
     virtual void undoInternal();
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     bool m_oldVisibility;
 };
 
 //! @short Undo/redo command used when property visibility is changed
 /*! Internal, only used in addition to property change. */
-class InsertEmptyRowCommand : public Command
+class InsertEmptyRecordCommand : public Command
 {
 public:
-    /*! Creates the InsertEmptyRowCommand object. */
-    InsertEmptyRowCommand(Command* parent, KexiTableDesignerView* view, int row);
-    virtual ~InsertEmptyRowCommand();
+    /*! Creates the InsertEmptyRecordCommand object. */
+    InsertEmptyRecordCommand(Command* parent, KexiTableDesignerView* view, int row);
+    virtual ~InsertEmptyRecordCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
 
 protected:
-    KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+    KDbAlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     int m_row;
 };
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,12 +25,14 @@
 #include <QObject>
 #include <QList>
 
+#include <KDbResult>
+
 #include "widgetfactory.h"
 
 template<class type> class QList;
 template<class type> class QVector;
 class KActionCollection;
-class KAction;
+class QAction;
 class QMenu;
 class QWidget;
 class QVariant;
@@ -42,19 +44,20 @@ namespace KFormDesigner
 
 class Container;
 class ObjectTreeItem;
-class WidgetLibraryPrivate;
 class ActionGroup;
 class WidgetInfo;
 
-typedef QList<KAction*> ActionList;
+typedef QList<QAction *> ActionList;
 
 /**
- * This class searches for factories and provides KActions for widget creation.
+ * A manager class for searching and loading form widget factories
+ *
+ * It also provides actions for widget creation.
  * Every widget can be located using this library.
  * You call WidgetLibrary functions instead of calling directly factories.
  * See WidgetFactory for a description of the functions.
  */
-class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
+class KFORMDESIGNER_EXPORT WidgetLibrary : public QObject, public KDbResultable
 {
     Q_OBJECT
 
@@ -62,9 +65,9 @@ public:
     /*! Constructs WidgetLibrary object.
      In \a supportedFactoryGroups you can provide
      factory group list to be supported. Factory groups are defined by
-     "X-KFormDesigner-FactoryGroup" field in every factory serviece's .desktop file.
+     "X-Kexi-FormWidgetsFactoryGroup" field in every factory serviece's .desktop file.
      By default (when supportedFactoryGroups is empty) only factories having empty
-     "X-KFormDesigner-FactoryGroup" field will be loaded.
+     "X-Kexi-FormWidgetsFactoryGroup" field will be loaded.
      Factory group names are case-insensitive. */
     explicit WidgetLibrary(QObject *parent = 0,
                            const QStringList& supportedFactoryGroups = QStringList());
@@ -134,10 +137,10 @@ public:
 
     WidgetFactory* factory(const char* factoryName) const;
 
-    /*! \return true if advanced properties like "mouseTracking" should
-     be user-visible. True by default (in KFD), but Kexi set's this to false.
-     See WidgetLibraryPrivate class implementation for complete list
-     of advanced properties. */
+    /*! \return true if advanced properties such as "mouseTracking" should
+     be visible to the user. True by default but Kexi sets it to false.
+     See WidgetLibrary::Private() for a complete list of advanced properties (regardless of class)
+     @see WidgetFactory::setAdvancedPropertiesVisible() WidgetLibrary::isPropertyVisible() */
     bool advancedPropertiesVisible() const;
 
     /*! Sets advanced properties to be visible or not. */
@@ -191,14 +194,17 @@ protected:
     /**
      * Lookups widget factories list (note that this function get called once in ctor)
      */
-    void lookupFactories();
+    bool lookup();
 
+#if 0
     /**
      * Loads widget factories found in lookupFactories(). This is called once.
      */
     void loadFactories();
+#endif
 
-    WidgetLibraryPrivate * const d;
+    class Private;
+    Private * const d;
 };
 
 }

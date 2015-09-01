@@ -26,15 +26,14 @@
 #include <QBuffer>
 #include <QPixmap>
 #include <QHash>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QDebug>
+#include <QImageReader>
 
-#include <kdebug.h>
-#include <kimageio.h>
-#include <kglobal.h>
-#include <kmimetype.h>
+#include <KDbConnection>
 
-#include <db/connection.h>
-
-K_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
+Q_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
 
 //-----------------
 
@@ -42,7 +41,9 @@ class KexiBLOBBuffer::Private
 {
 public:
     Private()
-            : maxId(0) {
+            : maxId(0)
+            , conn(0)
+    {
     }
     ~Private() {
         foreach(Item* item, inMemoryItems) {
@@ -59,7 +60,8 @@ public:
     QHash<Id_t, Item*> inMemoryItems; //!< for unstored BLOBs
     QHash<Id_t, Item*> storedItems; //!< for stored items
     QHash<QString, Item*> itemsByURL;
-    QPointer<KexiDB::Connection> conn;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnection>
+    KDbConnection *conn;
 };
 
 //-----------------
@@ -103,7 +105,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
     if (!m_item)
         return;
     if (m_item->stored) {
-        kWarning() << "object for id=" << id << " is aleady stored";
+        qWarning() << "object for id=" << id << " is aleady stored";
         return;
     }
 
@@ -137,7 +139,7 @@ KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, b
 
 KexiBLOBBuffer::Item::~Item()
 {
-    kDebug();
+    qDebug();
     delete m_pixmap;
     m_pixmap = 0;
     delete m_data;
@@ -149,11 +151,11 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 {
 //! @todo ...
     if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
-        const QStringList types(KImageIO::typeForMime(mimeType));
-        if (   types.isEmpty()
-            || !KImageIO::isSupported(mimeType, KImageIO::Reading)
-            || !m_pixmap->loadFromData(*m_data, types.first().toLatin1())
-           )
+        const QMimeDatabase db;
+        const QMimeType mime(db.mimeTypeForName(mimeType));
+        if (!mime.isValid()
+            || !QImageReader::supportedMimeTypes().contains(mimeType.toLatin1())
+            || !m_pixmap->loadFromData(*m_data, mime.preferredSuffix().toLatin1()))
         {
             //! @todo inform about error?
         }
@@ -164,13 +166,14 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 
 /*! @return Extension for QPixmap::save() from @a mimeType.
     @todo default PNG ok? */
-static QString formatFromMimeType(const QString& mimeType, const QString& defaultType = "PNG")
+static QString formatFromMimeType(const QString& mimeType, const QString& defaultFormat = "PNG")
 {
-    const KMimeType::Ptr mime = KMimeType::mimeType(mimeType);
-    if (mime.isNull()) {
-        return defaultType;
+    QMimeDatabase db;
+    const QMimeType mime = db.mimeTypeForName(mimeType);
+    if (!mime.isValid()) {
+        return defaultFormat;
     }
-    return mime->mainExtension().mid(1); // without '.'
+    return mime.preferredSuffix();
 }
 
 QByteArray KexiBLOBBuffer::Item::data() const
@@ -187,12 +190,12 @@ QByteArray KexiBLOBBuffer::Item::data() const
         QBuffer buffer(m_data);
         if (!buffer.open(QIODevice::WriteOnly)) {
             //! @todo err msg
-            kWarning() << "!QBuffer::open()";
+            qWarning() << "!QBuffer::open()";
         }
         if (!m_pixmap->save(&buffer, formatFromMimeType(mimeType).toLatin1()))
         {
             //! @todo err msg
-            kWarning() << "!QPixmap::save()";
+            qWarning() << "!QPixmap::save()";
         }
     }
     return *m_data;
@@ -211,20 +214,20 @@ KexiBLOBBuffer::~KexiBLOBBuffer()
     delete d;
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QUrl &url)
 {
     if (url.isEmpty())
         return KexiBLOBBuffer::Handle();
     if (!url.isValid()) {
-        kWarning() << "INVALID URL" << url;
+        qWarning() << "INVALID URL" << url;
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?
-    Item * item = d->itemsByURL.value(url.prettyUrl());
+    Item * item = d->itemsByURL.value(url.toDisplayString());
     if (item)
         return KexiBLOBBuffer::Handle(item);
 
-    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
+    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.toDisplayString();
 //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);
     if (!f.open(QIODevice::ReadOnly)) {
@@ -238,14 +241,15 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     }
     QFileInfo fi(url.fileName());
     QString caption(fi.baseName().replace('_', ' ').simplified());
-    const KMimeType::Ptr mimeType(KMimeType::findByNameAndContent(fileName, data));
+    QMimeDatabase db;
+    const QMimeType mimeType(db.mimeTypeForFileNameAndData(fileName, data));
 
-    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType->name());
+    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType.name());
     insertItem(item);
 
     //cache
-    item->prettyURL = url.prettyUrl();
-    d->itemsByURL.insert(url.prettyUrl(), item);
+    item->prettyURL = url.toDisplayString();
+    d->itemsByURL.insert(url.toDisplayString(), item);
     return KexiBLOBBuffer::Handle(item);
 }
 
@@ -292,17 +296,17 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
             return KexiBLOBBuffer::Handle(item);
         //retrieve stored BLOB:
         assert(d->conn);
-        KexiDB::TableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
+        KDbTableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
         if (!blobsTable) {
             //! @todo err msg
             return KexiBLOBBuffer::Handle();
         }
         /*  QStringList where;
             where << "o_id";
-            KexiDB::PreparedStatement::Ptr st = d->conn->prepareStatement(
-              KexiDB::PreparedStatement::SelectStatement, *blobsTable, where);*/
-//! @todo use PreparedStatement
-        KexiDB::QuerySchema schema;
+            KDbPreparedStatement::Ptr st = d->conn->prepareStatement(
+              KDbPreparedStatement::SelectStatement, *blobsTable, where);*/
+//! @todo use KDbPreparedStatement
+        KDbQuerySchema schema;
         schema.addField(blobsTable->field("o_data"));
         schema.addField(blobsTable->field("o_name"));
         schema.addField(blobsTable->field("o_caption"));
@@ -310,14 +314,12 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         schema.addField(blobsTable->field("o_folder_id"));
         schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((qint64)id));
 
-        KexiDB::RecordData recordData;
-        tristate res = d->conn->querySingleRecord(
-                           schema,
-                           recordData);
+        KDbRecordData recordData;
+        tristate res = d->conn->querySingleRecord(&schema, &recordData);
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
-            kWarning() << "id=" << id << "stored=" << stored
-                << ": res!=true || recordData.size()<4; res==" << res.toString() 
+            qWarning() << "id=" << id << "stored=" << stored
+                << ": res!=true || recordData.size()<4; res==" << res.toString()
                 << "recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();
         }
@@ -378,7 +380,7 @@ void KexiBLOBBuffer::insertItem(Item *item)
         d->inMemoryItems.insert(item->id, item);
 }
 
-void KexiBLOBBuffer::setConnection(KexiDB::Connection *conn)
+void KexiBLOBBuffer::setConnection(KDbConnection *conn)
 {
     KexiBLOBBuffer::self()->d->conn = conn;
 }
@@ -388,4 +390,3 @@ KexiBLOBBuffer* KexiBLOBBuffer::self()
     return _buffer;
 }
 
-#include "kexiblobbuffer.moc"

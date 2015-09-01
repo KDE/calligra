@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <db/connection.h>
+#include <KDbConnection>
 
 namespace Scripting
 {
@@ -49,7 +49,7 @@ class KexiDBParser;
  * # We need a connectiondata object.
  * connectiondata = drivermanager.createConnectionData()
  * # Fill the new connectiondata object with what we need to connect.
- * connectiondata.setFileName("/home/user/kexisqlite3file.kexi")
+ * connectiondata.setDatabaseName("/home/user/kexisqlite3file.kexi")
  * # Create the database-driver to access the SQLite3 backend.
  * driver = drivermanager.driver("SQLite3")
  * # Create the connection now.
@@ -64,7 +64,7 @@ class KexiDBConnection : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
+    KexiDBConnection(KDbConnection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
     virtual ~KexiDBConnection();
 
 public Q_SLOTS:
@@ -157,7 +157,7 @@ public Q_SLOTS:
     QObject* parser();
 
 private:
-    ::KexiDB::Connection* m_connection;
+    KDbConnection* m_connection;
     QPointer<KexiDBConnectionData> m_connectiondata;
     QPointer<KexiDBDriver> m_driver;
 };

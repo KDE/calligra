@@ -21,13 +21,11 @@
 #define KEXIDBSHORTCUTFILE_H
 
 #include <QString>
+#include <KDbResult>
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
-namespace KexiDB
-{
-class ConnectionData;
-}
+class KDbConnectionData;
 
 /*! Loads and saves information for a "shortcut to a connection" file containing
  connection information with database name (i.e. ProjectData).
@@ -51,11 +49,11 @@ protected:
 };
 
 /*! Loads and saves information for a "shortcut" file containing
- connection information (i.e. KexiDB::ConnectionData).
+ connection information (i.e. KDbConnectionData).
  This is implementation for handling .KEXIC files.
  See http://www.kexi-project.org/wiki/wikiview/index.php@KexiMimeTypes_DataSaving_Loading.html
 */
-class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
+class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile, public KDbResultable
 {
 public:
     /*! Creates a new object for \a fileName. */
@@ -67,7 +65,7 @@ public:
      \a groupKey, if provided will be set to a group key,
      so you can later use it in saveConnectionData().
      \return true on success. */
-    bool loadConnectionData(KexiDB::ConnectionData& data, QString* groupKey = 0);
+    bool loadConnectionData(KDbConnectionData* data, QString* groupKey = 0);
 
     /*! Saves connection data \a data to a shortcut file.
      If \a storePassword is true, password will be saved in the file,
@@ -77,7 +75,7 @@ public:
      instead of creating of a new unique group. This mode is usable for updating .kexic files
      containing single connection data, what's used for storing connections repository.
      \return true on success. */
-    bool saveConnectionData(const KexiDB::ConnectionData& data,
+    bool saveConnectionData(const KDbConnectionData& data,
                             bool savePassword, QString* groupKey = 0, bool overwriteFirstGroup = true);
 
     //! \return filename provided on this object's construction. */

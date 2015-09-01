@@ -18,19 +18,15 @@
 */
 
 #include "SmallToolButton.h"
+#include "utils.h"
 
+#include <QDebug>
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
-#include <QActionEvent>
 #include <QPointer>
 #include <QAction>
-
-#include <kicon.h>
-#include <kglobalsettings.h>
-#include <kdebug.h>
-
-#include "utils.h"
+#include <QIcon>
 
 //! @internal
 class KexiSmallToolButton::Private
@@ -53,7 +49,7 @@ KexiSmallToolButton::KexiSmallToolButton(QWidget* parent)
         , d(new Private)
 {
     init();
-    update(QString(), KIcon());
+    update(QString(), QIcon());
 }
 
 KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
@@ -61,10 +57,10 @@ KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
         , d(new Private)
 {
     init();
-    update(text, KIcon());
+    update(text, QIcon());
 }
 
-KexiSmallToolButton::KexiSmallToolButton(const KIcon& icon, const QString& text,
+KexiSmallToolButton::KexiSmallToolButton(const QIcon& icon, const QString& text,
         QWidget* parent)
         : QToolButton(parent)
         , d(new Private)
@@ -111,7 +107,7 @@ void KexiSmallToolButton::updateAction()
 void KexiSmallToolButton::init()
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    QFont f(KGlobalSettings::toolBarFont());
+    QFont f(font());
     f.setPixelSize(KexiUtils::smallFont().pixelSize());
     setFont(f);
     setAutoRaise(true);
@@ -153,7 +149,7 @@ void KexiSmallToolButton::setIcon(const QIcon& icon)
 
 void KexiSmallToolButton::setIcon(const QString &iconName)
 {
-    setIcon(KIcon(iconName));
+    setIcon(QIcon::fromTheme(iconName));
 }
 
 void KexiSmallToolButton::setText(const QString& text)
@@ -171,8 +167,8 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
     Q_UNUSED(checked);
     if (!d->enableSlotButtonToggled)
         return;
-    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    //QObject *view = KDbUtils::findParent<QObject*>(this, "KexiView");
+    //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotActionToggled = false;
@@ -183,8 +179,8 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
 {
     if (!d->enableSlotActionToggled)
         return;
-    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    //QObject *view = KDbUtils::findParent<QObject*>(this, "KexiView");
+    //qDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
     // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotButtonToggled = false;
@@ -269,4 +265,3 @@ void KexiToolBarSeparator::paintEvent(QPaintEvent *e)
     style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &o, &p, parentWidget());
 }
 
-#include "SmallToolButton.moc"

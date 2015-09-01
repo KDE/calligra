@@ -21,16 +21,15 @@
 #include "kmessagewidget.h"
 #include "kmessagewidget_p.h"
 
-#include <KexiCloseButton.h>
-#include <KoIcon.h>
+#include "KexiCloseButton.h"
+#include "KexiIcon.h"
+#include <kexiutils/utils.h>
 
-#include <kaction.h>
-#include <kcolorscheme.h>
-#include <kdebug.h>
-#include <kglobalsettings.h>
-#include <kstandardaction.h>
-#include <kstandardguiitem.h>
+#include <KColorScheme>
+#include <KStandardAction>
+#include <KStandardGuiItem>
 
+#include <QDebug>
 #include <QEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -40,8 +39,8 @@
 #include <QToolButton>
 #include <QPointer>
 #include <QPainterPath>
-#include <QTransform>
 #include <QTimer>
+#include <QAction>
 
 static const int LAYOUT_SPACING = 6;
 
@@ -108,7 +107,7 @@ void KMessageWidgetFrame::updateCalloutPointerTransformation() const
 
     const QSizeF s(parentWidget()->size());
     m_sizeForRecentTransformation = parentWidget()->size();
-    // kDebug() << size() << parentWidget()->size();
+    // qDebug() << size() << parentWidget()->size();
     const qreal rad = radius;
     // Original: [v    ]
     //           [     ]
@@ -165,7 +164,7 @@ void KMessageWidgetFrame::updateCalloutPointerPosition() const
         return;
     QWidget *messageWidgetParent = parentWidget()->parentWidget();
     if (messageWidgetParent) {
-/*        kDebug() << "m_calloutPointerGlobalPosition:" << m_calloutPointerGlobalPosition
+/*        qDebug() << "m_calloutPointerGlobalPosition:" << m_calloutPointerGlobalPosition
          << "pos():" << pos()
          << "pointerPosition():" << pointerPosition()
          << "(m_calloutPointerGlobalPosition - pos() - pointerPosition()):"
@@ -188,7 +187,7 @@ void KMessageWidgetFrame::paintCalloutPointer()
         return;
     QPainter painter(this);
     painter.setTransform(m_calloutPointerTransformation);
-    
+
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(bgBrush.color(), 1.0));
     painter.setBrush(bgBrush);
@@ -200,7 +199,7 @@ void KMessageWidgetFrame::paintCalloutPointer()
 QPoint KMessageWidgetFrame::pointerPosition() const
 {
     updateCalloutPointerTransformation();
-    //kDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
+    //qDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
     return m_calloutPointerTransformation.map(m_polyline[1]).toPoint();
 }
 
@@ -238,10 +237,7 @@ public:
     void createLayout();
     void updateSnapShot();
     void updateLayout();
-    void slotTimeLineChanged(qreal);
-    void slotTimeLineFinished();
     void updateStyleSheet();
-    void tryClickCloseMessage();
 };
 
 KMessageWidgetPrivate::KMessageWidgetPrivate()
@@ -360,14 +356,14 @@ void KMessageWidgetPrivate::createLayout()
                 && contentsWidget->maximumHeight() < QWIDGETSIZE_MAX
                 && contentsWidget->maximumSize() == contentsWidget->minimumSize())
             {
-                kDebug() << "contentsWidget->maximumSize():" << contentsWidget->maximumSize();
-                kDebug() << "content->size():" << content->size();
+                qDebug() << "contentsWidget->maximumSize():" << contentsWidget->maximumSize();
+                qDebug() << "content->size():" << content->size();
                 contentsWidget->setFixedSize(
                     contentsWidget->maximumSize() - QSize(120, 0));
                 //q->setFixedSize(
                 //    contentsWidget->maximumSize() + QSize(100, 0));
 
-                kFatal() << contentsWidget->maximumSize();
+                qFatal() << contentsWidget->maximumSize();
             }*/
         }
         else {
@@ -425,7 +421,7 @@ void KMessageWidgetPrivate::createLayout()
     // add margins based on outer margins
     int left, top, right, bottom;
     q->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "q->getContentsMargins:" << left << top << right << bottom;
     switch (content->calloutPointerDirection()) {
     case KMessageWidget::Up:
         left += 1;
@@ -491,37 +487,6 @@ void KMessageWidgetPrivate::updateSnapShot()
     content->render(&contentSnapShot, QPoint(), QRegion(), QWidget::DrawChildren);
 }
 
-void KMessageWidgetPrivate::slotTimeLineChanged(qreal value)
-{
-    if (!contentsWidget) {
-        q->setFixedHeight(qMin(value * 2, qreal(1.0)) * content->height());
-    }
-    q->update();
-}
-
-void KMessageWidgetPrivate::slotTimeLineFinished()
-{
-    if (timeLine->direction() == QTimeLine::Forward) {
-        // Show
-        content->move(0, 0);
-        content->updateCalloutPointerPosition();
-        if (resizeToContentsOnTimeLineFinished) {
-            resizeToContentsOnTimeLineFinished = false;
-            content->resize(q->size());
-            updateStyleSheet(); // needed because margins could be changed
-        }
-        //q->setFixedHeight(QWIDGETSIZE_MAX);
-        if (defaultButton) {
-            defaultButton->setFocus();
-        }
-        emit q->animatedShowFinished();
-    } else {
-        // Hide
-        q->hide();
-        emit q->animatedHideFinished();
-    }
-}
-
 void KMessageWidgetPrivate::updateStyleSheet()
 {
     KColorScheme scheme(QPalette::Active, colorSet);
@@ -531,13 +496,13 @@ void KMessageWidgetPrivate::updateStyleSheet()
 
     int left, top, right, bottom;
     content->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "content->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "content->getContentsMargins:" << left << top << right << bottom;
     if (!buttons.isEmpty()) {
         //q->setContentsMargins(0, 0, 0, 0);
         content->setContentsMargins(LAYOUT_SPACING, 0, 0, 0);
     }
     q->getContentsMargins(&left, &top, &right, &bottom);
-    kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
+    qDebug() << "q->getContentsMargins:" << left << top << right << bottom;
 #if 1
     int add = content->radius * 2;
     switch (content->calloutPointerDirection()) {
@@ -575,13 +540,6 @@ void KMessageWidgetPrivate::updateStyleSheet()
     );
     closeButton->setStyle(QApplication::style()); // clear stylesheets style from this button
 #endif
-}
-
-void KMessageWidgetPrivate::tryClickCloseMessage()
-{
-    if (clickClosesMessage) {
-        QTimer::singleShot(100, q, SLOT(animatedHide()));
-    }
 }
 
 //---------------------------------------------------------------------
@@ -636,7 +594,7 @@ KMessageWidget::MessageType KMessageWidget::messageType() const
 void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 {
     d->messageType = type;
-    KIcon icon;
+    QIcon icon;
     d->colorSet = KColorScheme::View;
     switch (type) {
     case Positive:
@@ -685,8 +643,8 @@ void KMessageWidget::setCalloutPointerDirection(KMessageWidget::CalloutPointerDi
 QSize KMessageWidget::sizeHint() const
 {
     ensurePolished();
-    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
-    kDebug() << "QFrame::sizeHint():" << QFrame::sizeHint();
+    qDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+    qDebug() << "QFrame::sizeHint():" << QFrame::sizeHint();
     return QFrame::sizeHint();
 /*    QSize s1(QFrame::sizeHint());
     QSize s2(d->content->sizeHint());
@@ -696,8 +654,8 @@ QSize KMessageWidget::sizeHint() const
 QSize KMessageWidget::minimumSizeHint() const
 {
     ensurePolished();
-    kDebug() << "d->content->minimumSizeHint():" << d->content->minimumSizeHint();
-    kDebug() << "QFrame::minimumSizeHint():" << QFrame::minimumSizeHint();
+    qDebug() << "d->content->minimumSizeHint():" << d->content->minimumSizeHint();
+    qDebug() << "QFrame::minimumSizeHint():" << QFrame::minimumSizeHint();
     return QFrame::minimumSizeHint();
 /*    QSize s1(QFrame::minimumSizeHint());
     QSize s2(d->content->minimumSizeHint());
@@ -710,7 +668,7 @@ bool KMessageWidget::event(QEvent* event)
         d->createLayout();
     }
     else if (event->type() == QEvent::Hide) {
-        //kDebug() << "QEvent::Hide" << event->spontaneous();
+        //qDebug() << "QEvent::Hide" << event->spontaneous();
         if (!event->spontaneous()) {
             if (d->autoDelete) {
                 deleteLater();
@@ -719,7 +677,7 @@ bool KMessageWidget::event(QEvent* event)
     }
     else if (event->type() == QEvent::MouseButtonPress) {
         if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
-            d->tryClickCloseMessage();
+            tryClickCloseMessage();
         }
     }
     return QFrame::event(event);
@@ -822,7 +780,7 @@ void KMessageWidget::setAutoDelete(bool set)
 
 void KMessageWidget::animatedShow()
 {
-    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects)) {
         show();
         return;
     }
@@ -854,7 +812,7 @@ void KMessageWidget::animatedShow()
 
 void KMessageWidget::animatedHide()
 {
-    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+    if (!(KexiUtils::graphicEffectsLevel() & KexiUtils::SimpleAnimationEffects)) {
         hide();
         return;
     }
@@ -894,13 +852,48 @@ QBrush KMessageWidget::borderBrush() const
 
 void KMessageWidget::resizeToContents()
 {
-//    kDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
-//    kDebug() << "sizeHint():" << sizeHint();
-//    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+//    qDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
+//    qDebug() << "sizeHint():" << sizeHint();
+//    qDebug() << "d->content->sizeHint():" << d->content->sizeHint();
     d->resizeToContentsOnTimeLineFinished = true; // try to resize later too if animation in progress
     (void)sizeHint(); // to update d->content->sizeHint()
     setFixedSize(d->content->sizeHint());
 }
 
-#include "kmessagewidget.moc"
-#include "kmessagewidget_p.moc"
+void KMessageWidget::slotTimeLineChanged(qreal value)
+{
+    if (!d->contentsWidget) {
+        setFixedHeight(qMin(value * 2, qreal(1.0)) * d->content->height());
+    }
+    update();
+}
+
+void KMessageWidget::slotTimeLineFinished()
+{
+    if (d->timeLine->direction() == QTimeLine::Forward) {
+        // Show
+        d->content->move(0, 0);
+        d->content->updateCalloutPointerPosition();
+        if (d->resizeToContentsOnTimeLineFinished) {
+            d->resizeToContentsOnTimeLineFinished = false;
+            d->content->resize(size());
+            d->updateStyleSheet(); // needed because margins could be changed
+        }
+        //q->setFixedHeight(QWIDGETSIZE_MAX);
+        if (d->defaultButton) {
+            d->defaultButton->setFocus();
+        }
+        emit animatedShowFinished();
+    } else {
+        // Hide
+        hide();
+        emit animatedHideFinished();
+    }
+}
+
+void KMessageWidget::tryClickCloseMessage()
+{
+    if (d->clickClosesMessage) {
+        QTimer::singleShot(100, this, SLOT(animatedHide()));
+    }
+}

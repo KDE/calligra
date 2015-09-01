@@ -20,7 +20,7 @@
 #ifndef KFORMDESIGNERFORMWIDGETIFACE_H
 #define KFORMDESIGNERFORMWIDGETIFACE_H
 
-#include <kexi_export.h>
+#include "kformdesigner_export.h"
 
 namespace KFormDesigner
 {
@@ -30,7 +30,7 @@ namespace KFormDesigner
  of the widget and other behaviour depending on whether the parent form is in design or data mode
  and edting mode.
  */
-class KFORMEDITOR_EXPORT FormWidgetInterface
+class KFORMDESIGNER_EXPORT FormWidgetInterface
 {
 public:
     //! Initializes the interface. The design flag is set to false by default.
@@ -38,13 +38,13 @@ public:
 
     virtual ~FormWidgetInterface();
 
-    //! @return true if this widget is in design mode 
+    //! @return true if this widget is in design mode
     virtual bool designMode() const;
 
     //! Sets design mode on or off. Sets the arrow mouse cursor for design mode.
     virtual void setDesignMode(bool design);
 
-    //! @return true if this widget is in inline editing mode 
+    //! @return true if this widget is in inline editing mode
     virtual bool editingMode() const;
 
     //! Sets inline editing mode on or off.

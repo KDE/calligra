@@ -19,7 +19,6 @@
 
 #include "KexiDBTitlePage.h"
 
-#include <QLabel>
 
 KexiDBTitlePage::KexiDBTitlePage(const QString& labelText, QWidget* parent)
         : QWidget(parent)

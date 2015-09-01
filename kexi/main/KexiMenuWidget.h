@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.h from Qt 4.7
 
    This library is free software; you can redistribute it and/or
@@ -23,11 +23,12 @@
 #ifndef KEXIMENUWIDGET_H
 #define KEXIMENUWIDGET_H
 
-#include <kstandardaction.h>
-#include <kaction.h>
+#include <KStandardAction>
+
 #include <QWidget>
 #include <QString>
 #include <QIcon>
+#include <QAction>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;
@@ -35,13 +36,13 @@ class QStyleOptionMenuItem;
 class QEventLoop;
 struct KexiMenuWidgetCaused;
 
-class KexiMenuWidgetAction : public KAction
+class KexiMenuWidgetAction : public QAction
 {
     Q_OBJECT
 public:
     explicit KexiMenuWidgetAction(QObject *parent);
     KexiMenuWidgetAction(const QString &text, QObject *parent);
-    KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
+    KexiMenuWidgetAction(const QIcon &icon, const QString &text, QObject *parent);
     KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
 
     void setPersistentlySelected(bool set);

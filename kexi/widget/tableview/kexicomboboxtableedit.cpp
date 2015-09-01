@@ -18,9 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QLayout>
-#include <QStyle>
-#include <QWindowsStyle>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
@@ -28,6 +25,8 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QScrollBar>
+#include <QDebug>
+#include <QLineEdit>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -36,8 +35,6 @@
 #include "KexiTableScrollArea.h"
 #include "KexiTableScrollAreaWidget.h"
 #include "kexi.h"
-
-#include <klineedit.h>
 
 // the right margin is too large when the editor is show, reduce it
 const int RIGHT_MARGIN_DELTA = 6;
@@ -61,14 +58,14 @@ public:
     KexiComboBoxPopup *popup;
     int currentEditorWidth;
     QSize totalSize;
-    KexiDB::TableViewColumn* visibleTableViewColumn;
+    KDbTableViewColumn* visibleTableViewColumn;
     KexiTableEdit* internalEditor;
     int arrowWidth;
 };
 
 //======================================================
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiComboBoxBase()
         , KexiInputTableEdit(column, parent)
         , d(new Private())
@@ -95,11 +92,11 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
     delete d;
 }
 
-void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+void KexiComboBoxTableEdit::createInternalEditor(KDbQuerySchema& schema)
 {
     if (!m_column->visibleLookupColumnInfo() || d->visibleTableViewColumn/*sanity*/)
         return;
-    const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo()->field->type();
+    const KDbField::Type t = m_column->visibleLookupColumnInfo()->field->type();
 //! @todo subtype?
     KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
     if (!item || item->className() == "KexiInputTableEdit")
@@ -107,13 +104,13 @@ void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
     //special cases: BLOB, Bool datatypes
 //! @todo
     //find real type to display
-    KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo();
-    KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+    KDbQueryColumnInfo *ci = m_column->visibleLookupColumnInfo();
+    KDbQueryColumnInfo *visibleLookupColumnInfo = 0;
     if (ci->indexForVisibleLookupValue() != -1) {
         //Lookup field is defined
         visibleLookupColumnInfo = schema.expandedOrInternalField(ci->indexForVisibleLookupValue());
     }
-    d->visibleTableViewColumn = new KexiDB::TableViewColumn(schema, *ci, visibleLookupColumnInfo);
+    d->visibleTableViewColumn = new KDbTableViewColumn(schema, ci, visibleLookupColumnInfo);
 //! todo set d->internalEditor visible and use it to enable data entering by hand
     d->internalEditor = KexiCellEditorFactory::createEditor(*d->visibleTableViewColumn, 0);
     m_lineedit->hide();
@@ -208,10 +205,10 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
         KexiInputTableEdit::setupContents(p, focused, val, txt, align, x, y_offset, w, h);
     }
     if (!val.isNull()) {
-        KexiDB::TableViewData *relData = column()->relatedData();
+        KDbTableViewData *relData = column()->relatedData();
         if (relData) {
-            int rowToHighlight;
-            txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
+            int recordToHighlight;
+            txt = valueForString(val.toString(), &recordToHighlight, 0, 1);
         }
         else if (lookupFieldSchema()) {
         }
@@ -233,9 +230,9 @@ void KexiComboBoxTableEdit::slotButtonClicked()
         m_mouseBtnPressedWhenPopupVisible = false;
         return;
     }
-    kDebug();
+    qDebug();
     if (!popup() || !popup()->isVisible()) {
-        kDebug() << "SHOW POPUP";
+        qDebug() << "SHOW POPUP";
         showPopup();
     }
 }
@@ -264,7 +261,7 @@ void KexiComboBoxTableEdit::show()
 
 bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
 {
-    //kDebug() << ke;
+    //qDebug() << ke;
     const int k = ke->key();
     if ((ke->modifiers() == Qt::NoButton && k == Qt::Key_F4)
             || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Down)) {
@@ -275,7 +272,7 @@ bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
         const bool enterPressed = k == Qt::Key_Enter || k == Qt::Key_Return;
         if (enterPressed && m_internalEditorValueChanged) {
             createPopup(false);
-            selectItemForEnteredValueInLookupTable(m_userEnteredValue);
+            selectRecordForEnteredValueInLookupTable(m_userEnteredValue);
             return true;
         }
 
@@ -292,7 +289,7 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString& s)
 
 int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 {
-    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
+    KDbTableViewData *relData = column() ? column()->relatedData() : 0;
     if (lookupFieldSchema() || relData) {
         // in 'lookupFieldSchema' or  or 'related table data' model
         // we're assuming val is already the text, not the index
@@ -321,8 +318,8 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
             && e->type() != QEvent::HoverEnter
             && e->type() != QEvent::HoverLeave)
     {
-        kDebug() << e << o;
-        kDebug() << "FOCUS WIDGET:" << focusWidget();
+        qDebug() << e << o;
+        qDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
     KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
@@ -381,7 +378,7 @@ void KexiComboBoxTableEdit::selectAll()
 
 void KexiComboBoxTableEdit::setValueInInternalEditor(const QVariant& value)
 {
-    KexiUtils::BoolBlocker guard(m_slotInternalEditorValueChanged_enabled, false);
+    KexiUtils::BoolBlocker guard(&m_slotInternalEditorValueChanged_enabled, false);
     m_lineedit->setText(value.toString());
 }
 
@@ -432,4 +429,3 @@ QVariant KexiComboBoxTableEdit::origValue() const
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 
-#include "kexicomboboxtableedit.moc"

@@ -21,26 +21,23 @@
 #include "kexitableedit.h"
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/tableview/KexiTableScrollArea.h>
-#include <db/field.h>
-#include <db/utils.h>
+
+#include <KDb>
+#include <KDbUtils>
 
 #include <QPalette>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
-
 #ifdef KEXI_MOBILE
-KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
+KexiTableEdit::KexiTableEdit(KDbTableViewColumn &column, QWidget* parent)
         : QWidget(parent)
         , m_column(&column)
         , m_usesSelectedTextColor(true)
         , m_view(0)
 #else
-        KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
+        KexiTableEdit::KexiTableEdit(KDbTableViewColumn &column, QWidget* parent)
         : QWidget(parent)
         , m_column(&column)
         , m_usesSelectedTextColor(true)
@@ -53,21 +50,21 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
 
     //margins
     if (displayedField()->isFPNumericType()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 0;
 #else
         m_leftMargin = 0;
 #endif
         m_rightMargin = 6;
     } else if (displayedField()->isIntegerType()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 1;
 #else
         m_leftMargin = 0;
 #endif
         m_rightMargin = 6;
     } else {//default
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         m_leftMargin = 5;
 #else
         m_leftMargin = 5;
@@ -82,21 +79,21 @@ KexiTableEdit::~KexiTableEdit()
 {
 }
 
-KexiDB::Field *KexiTableEdit::field() const
+KDbField *KexiTableEdit::field() const
 {
     return m_column->field();
 }
 
-KexiDB::QueryColumnInfo *KexiTableEdit::columnInfo() const
+KDbQueryColumnInfo *KexiTableEdit::columnInfo() const
 {
     return m_column->columnInfo();
 }
 
-void KexiTableEdit::setColumnInfo(KexiDB::QueryColumnInfo *)
+void KexiTableEdit::setColumnInfo(KDbQueryColumnInfo *)
 {
 }
 
-KexiDB::TableViewColumn *KexiTableEdit::column() const
+KDbTableViewColumn *KexiTableEdit::column() const
 {
     return m_column;
 }
@@ -143,12 +140,12 @@ QSize KexiTableEdit::totalSize() const
     return QWidget::size();
 }
 
-void KexiTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+void KexiTableEdit::createInternalEditor(KDbQuerySchema& schema)
 {
     Q_UNUSED(schema);
 }
 
-KexiDB::Field *KexiTableEdit::displayedField() const
+KDbField *KexiTableEdit::displayedField() const
 {
     if (m_column->visibleLookupColumnInfo())
         return m_column->visibleLookupColumnInfo()->field; //mainly for lookup field in KexiComboBoxTableEdit:
@@ -211,9 +208,9 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     Q_UNUSED(p);
     Q_UNUSED(focused);
     Q_UNUSED(h);
-    KexiDB::Field *realField = displayedField();
+    KDbField *realField = displayedField();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;
@@ -222,7 +219,7 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     if (realField->isFPNumericType()) {
 //! @todo ADD OPTION to displaying NULL VALUES as e.g. "(null)"
         if (!val.isNull()) {
-            txt = KexiDB::formatNumberForVisibleDecimalPlaces(
+            txt = KDb::formatNumberForVisibleDecimalPlaces(
                       val.toDouble(), realField->visibleDecimalPlaces());
         }
         align |= Qt::AlignRight;
@@ -290,4 +287,3 @@ int KexiTableEdit::rightMargin(bool focused) const
     return focused ? m_rightMarginWhenFocused : m_rightMargin;
 }
 
-#include "kexitableedit.moc"

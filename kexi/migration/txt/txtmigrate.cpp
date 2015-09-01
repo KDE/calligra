@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "txtmigrate.h"
 #include <migration/keximigrate_p.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <QDir>
 
 namespace KexiMigration
@@ -56,23 +56,23 @@ bool TxtMigrate::drv_disconnect()
     delete m_DataFile;
     m_DataFile = 0;
   }
-  
+
   return true;
 }
 
 bool TxtMigrate::drv_tableNames(QStringList& tablenames)
 {
-  tablenames << data()->source->dbFileName();
+  tablenames << data()->source->databaseName();
   return true;
 }
 
-bool TxtMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+bool TxtMigrate::drv_readTableSchema(const QString& originalName, KDbTableSchema& tableSchema)
 {
   if (drv_readFromTable(originalName))
   {
-    for (uint i = 0; i < (uint)m_FieldNames.count(); ++i)
+    for (int i = 0; i < m_FieldNames.count(); ++i)
     {
-      tableSchema.addField( new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text) );
+      tableSchema.addField( new KDbField(m_FieldNames[i], KDbField::Text) );
     }
     tableSchema.setName(originalName);
     return true;
@@ -86,10 +86,10 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
     delete m_DataFile;
     m_DataFile = 0;
   }
-  
+
   m_DataFile = new QFile(m_Folder + '/' + tableName);
 
-  //kDebug() << m_DataFile->fileName();
+  //qDebug() << m_DataFile->fileName();
   m_Row = -1;
   m_FileRow = -1;
 
@@ -104,10 +104,10 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
 
 bool TxtMigrate::drv_moveNext()
 {
-    //kDebug();
+    //qDebug();
   if (m_Row < m_FileRow)
   {
-   m_Row++; 
+   m_Row++;
   }
   else
   {
@@ -124,7 +124,7 @@ bool TxtMigrate::drv_moveNext()
 
 bool TxtMigrate::drv_movePrevious()
 {
-    //kDebug();
+    //qDebug();
   if (m_Row > 0)
   {
     m_Row--;
@@ -133,11 +133,11 @@ bool TxtMigrate::drv_movePrevious()
   return false;
 }
 
-QVariant TxtMigrate::drv_value(uint i)
+QVariant TxtMigrate::drv_value(int i)
 {
-    //kDebug() << m_Row;
-    //kDebug() << m_LastLine;
-    
+    //qDebug() << m_Row;
+    //qDebug() << m_LastLine;
+
     if (m_Row >= 0)   {
         return QVariant(m_FieldValues[m_Row][i]);
     }
@@ -146,14 +146,14 @@ QVariant TxtMigrate::drv_value(uint i)
 
 bool TxtMigrate::drv_moveFirst()
 {
-    //kDebug();
+    //qDebug();
     m_Row = -1;
     return drv_moveNext();
 }
 
 bool TxtMigrate::drv_moveLast()
 {
-    //kDebug();
+    //qDebug();
     while(drv_moveNext()) {}
     return true;
 }

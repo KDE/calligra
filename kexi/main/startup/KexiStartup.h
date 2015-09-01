@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,15 +22,12 @@
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
-#include <db/tristate.h>
 
-class KexiProjectData;
-class KexiProjectData;
+#include <KDbTristate>
+
 class KCmdLineArgs;
-namespace KexiDB
-{
-class ConnectionData;
-}
+class KDbConnectionData;
+class KexiProjectData;
 
 /*! Handles startup actions for Kexi application.
 */
@@ -42,8 +39,7 @@ public:
     KexiStartupHandler();
     virtual ~KexiStartupHandler();
 
-    virtual bool init() { return KexiStartupData::init(); }
-    virtual tristate init(int argc, char **argv);
+    virtual tristate init();
 
     /*! Options for detectActionForFile() */
     enum DetectActionForFileOptions {
@@ -62,28 +58,28 @@ public:
      \return true if actions should be performed or cancelled if action should be cancelled
      In this case there are two possibilities:
      - \a detectedImportAction == true means "import action" should be performed
-     - nonempty \a detectedDriverName means "open action" should be performed.
+     - nonempty \a detectedDriverId means "open action" should be performed.
 
-     \a detectedDriverName can contain following special strings:
+     \a detectedDriverId can contain following special strings:
      - "shortcut" if the file looks like a shortcut to a project/connection file
      - "connection" if the file looks like a connection data file.
 
      \a parent is passed as a parent for potential error message boxes.
-     \a driverName is a preferred driver name.
+     \a _suggestedDriverId is a preferred driver ID.
      \a options should be a combination of DetectActionForFileOptions enum values.
      \a forceReadOnly points to a flag that will be set to true if it was detected
         that the file cannot be written. */
     static tristate detectActionForFile(
-        KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
-        const QString& _suggestedDriverName,
-        const QString &dbFileName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
+        KexiStartupData::Import* detectedImportAction, QString* detectedDriverId,
+        const QString& _suggestedDriverId,
+        const QString &databaseName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
 
     /*! Allows user to select a project with KexiProjectSelectorDialog.
       \return selected project's data
       Returns NULL and sets cancelled to true if the dialog was cancelled.
       Returns NULL and sets cancelled to false if there was an error.
     */
-    KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
+    KexiProjectData* selectProject(KDbConnectionData *cdata, bool *cancelled, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotSaveShortcutFileChanges();
@@ -92,7 +88,18 @@ protected Q_SLOTS:
     void slotAboutToAppQuit();
 
 protected:
-    bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
+//! @todo KEXI3 port getAutoopenObjects()
+//    bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
+
+    //! Handle higher-prioroty options.
+    /*! When such options are present, handle them and immediately exit without showing
+     the GUI even if other options or arguments are present.
+     These options are currently:
+     - options that display configuration or state of Kexi installation
+     @return true if such an option has been found, false if there's failure, cancelled
+             if no such option has been found (in this case processing of other options
+             should continue) */
+    tristate handleHighPriorityOptions();
 
     class Private;
     Private * const d;

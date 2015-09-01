@@ -20,15 +20,13 @@
 #ifndef KEXIFORMDATAPROVIDER_H
 #define KEXIFORMDATAPROVIDER_H
 
+#include "kexidataviewcommon_export.h"
 #include "kexiformdataiteminterface.h"
 #include <QSet>
 #include <QList>
 
-namespace KexiDB
-{
-class QuerySchema;
-class RecordData;
-}
+class KDbQuerySchema;
+class KDbRecordData;
 
 //! @short The KexiFormDataProvider class is a data provider for Kexi Forms
 /*! This provider collects data-aware widgets using setMainWidget().
@@ -57,9 +55,9 @@ public:
         return m_usedDataSources;
     }
 
-    /*! Fills data items with appropriate data fetched from \a cursor.
-     \a newRowEditing == true means that we are at new (not yet inserted) database row. */
-    void fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow);
+    /*! Fills data items with appropriate data fetched from \a data.
+     \a cursorAtNewRecord == true means that we are at new (not yet inserted) database row. */
+    void fillDataItems(KDbRecordData *data, bool cursorAtNewRecord);
 
     /*! Implementation for KexiDataItemChangesListener.
      Reaction for change of \a item. Does nothing here. */
@@ -69,14 +67,14 @@ public:
      Implement this to return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. Returns false here. */
-    virtual bool cursorAtNewRow() const;
+    virtual bool cursorAtNewRecord() const;
 
     /*! Invalidates data sources collected by this provided.
      \a invalidSources is the set of data sources that should
      be omitted for fillDataItems().
      Used by KexiFormView::initDataSource(). */
     void invalidateDataSources(const QSet<QString>& invalidSources,
-                               KexiDB::QuerySchema* query = 0);
+                               KDbQuerySchema* query = 0);
 
     /*! Fills the same data provided by \a value to every data item (other than \a item)
      having the same data source as \a item. This method is called immediately when
@@ -85,8 +83,8 @@ public:
 
 protected:
     QWidget *m_mainWidget;
-    QSet<KexiDB::Field*> *m_duplicatedItems;
-    typedef QMap<KexiFormDataItemInterface*, uint> KexiFormDataItemInterfaceToIntMap;
+    QSet<KDbField*> *m_duplicatedItems;
+    typedef QMap<KexiFormDataItemInterface*, int> KexiFormDataItemInterfaceToIntMap;
     QList<KexiFormDataItemInterface*> m_dataItems;
     QStringList m_usedDataSources;
     KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;

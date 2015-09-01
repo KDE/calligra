@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -23,22 +23,21 @@
 #include "ui_KexiConnectionSelector.h"
 #include "kexiprjtypeselector.h"
 #include "kexidbconnectionwidget.h"
-
-#include <db/drivermanager.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
-
 #include <core/kexi.h>
+#include <KexiIcon.h>
 
-#include <KoIcon.h>
+#include <KDbDriverManager>
+#include <KDbDriverMetaData>
+#include <KDbConnectionData>
+#include <KDbUtils>
+#include <KDbMessageHandler>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kurlcombobox.h>
-#include <kdialog.h>
+#include <KMessageBox>
+#include <KUrlComboBox>
 
-#include <QLabel>
+#include <QDebug>
+#include <QDialog>
 #include <QPushButton>
 #include <QLayout>
 #include <QCheckBox>
@@ -58,9 +57,9 @@ public:
         setObjectName("conn_sel");
         lblIcon->setPixmap(DesktopIcon(Kexi::serverIconName()));
         lblIcon->setFixedSize(lblIcon->pixmap()->size());
-        btn_add->setToolTip(i18n("Add a new database connection"));
-        btn_edit->setToolTip(i18n("Edit selected database connection"));
-        btn_remove->setToolTip(i18n("Remove selected database connections"));
+        btn_add->setToolTip(xi18n("Add a new database connection"));
+        btn_edit->setToolTip(xi18n("Edit selected database connection"));
+        btn_remove->setToolTip(xi18n("Remove selected database connections"));
     }
     ~KexiConnectionSelector()
     {
@@ -69,28 +68,33 @@ public:
 
 /*================================================================*/
 
-ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *data,
-        const KexiDB::Driver::Info& info, QTreeWidget* list)
+ConnectionDataLVItem::ConnectionDataLVItem(KDbConnectionData *data,
+                                           const KDbDriverMetaData &driverMetaData,
+                                           QTreeWidget* list)
         : QTreeWidgetItem(list)
         , m_data(data)
 {
-    update(info);
+    update(driverMetaData);
 }
 
 ConnectionDataLVItem::~ConnectionDataLVItem()
 {
 }
 
-void ConnectionDataLVItem::update(const KexiDB::Driver::Info& info)
+void ConnectionDataLVItem::update(const KDbDriverMetaData &driverMetaData)
 {
-    setText(0, m_data->caption + "  ");
-    const QString sfile = i18n("File");
-    QString drvname = info.caption.isEmpty() ? m_data->driverName : info.caption;
-    if (info.fileBased)
-        setText(1, sfile + " (" + drvname + ")  ");
-    else
-        setText(1, drvname + "  ");
-    setText(2, (info.fileBased ? (QString("<") + sfile.toLower() + ">") : m_data->serverInfoString(true)) + "  ");
+    setText(0, m_data->caption() + "  ");
+    const QString sfile = xi18n("File");
+    QString driverName = driverMetaData.name();
+    QString column1;
+    if (driverMetaData.isFileBased()) {
+        column1 = xi18nc("file (driver name)", "%1 (%2)", sfile, driverName);
+    } else {
+        column1 = driverName;
+    }
+    setText(1, column1 + "  ");
+    setText(2, (driverMetaData.isFileBased() ? QString("<%1>").arg(sfile.toLower())
+                                             : m_data->toUserVisibleString()) + "  ");
 }
 
 /*================================================================*/
@@ -106,14 +110,20 @@ public:
     {
     }
 
+    void updateRemoteListColumns()
+    {
+        remote->list->resizeColumnToContents(0); // name
+        remote->list->resizeColumnToContents(1); // type
+    }
+
     KexiConnectionSelector *remote;
     QWidget* openExistingWidget;
     KexiPrjTypeSelector* prjTypeSelector;
     QString startDirOrVariable;
-    KAbstractFileWidget::OperationMode fileAccessType;
+    KFileWidget::OperationMode fileAccessType;
     QStackedWidget *stack;
     QPointer<KexiDBConnectionSet> conn_set;
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     bool conn_sel_shown; //!< helper
     bool file_sel_shown;
     bool confirmOverwrites;
@@ -124,12 +134,13 @@ public:
 /*================================================================*/
 
 KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
-    KexiDBConnectionSet& conn_set,
-    const QString& startDirOrVariable, KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent)
+    KexiDBConnectionSet *conn_set,
+    const QString& startDirOrVariable, KFileWidget::OperationMode fileAccessType, QWidget* parent)
     : QWidget(parent)
     , d(new Private())
 {
-    d->conn_set = &conn_set;
+    Q_ASSERT(conn_set);
+    d->conn_set = conn_set;
     d->startDirOrVariable = startDirOrVariable;
     d->fileAccessType = fileAccessType;
     m_errorMessagePopup = 0;
@@ -146,8 +157,8 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     connect(d->prjTypeSelector->buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
             this, SLOT(slotPrjTypeSelected(QAbstractButton*)));
     openExistingWidgetLyr->addWidget(d->prjTypeSelector);
-    d->prjTypeSelector->setContentsMargins(0, 0, 0, KDialog::spacingHint());
-    //openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
+    d->prjTypeSelector->setContentsMargins(0, 0, 0, KexiUtils::spacingHint());
+    //openExistingWidgetLyr->addSpacing(KexiUtils::spacingHint());
     QFrame* line = new QFrame(d->openExistingWidget);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -193,21 +204,20 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
     if (btn == d->prjTypeSelector->option_file) { //file-based prj type
         showSimpleConn();
     } else if (btn == d->prjTypeSelector->option_server) { //server-based prj type
-        if (KexiDB::hasDatabaseServerDrivers()) {
+        if (KDbDriverManager().hasDatabaseServerDrivers()) {
             if (!d->conn_sel_shown) {
                 d->conn_sel_shown = true;
                 //show connections (on demand):
-                foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
+                foreach(KDbConnectionData* connData, d->conn_set->list()) {
                     addConnectionData(connData);
                     //   else {
                     //this error should be more verbose:
-                    //    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
+                    //    qWarning() << "no driver found for '" << it.current()->driverName << "'!";
                     //   }
                 }
                 if (d->remote->list->topLevelItemCount() > 0) {
+                    d->updateRemoteListColumns();
                     d->remote->list->sortByColumn(0, Qt::AscendingOrder);
-                    d->remote->list->resizeColumnToContents(0); // name
-                    d->remote->list->resizeColumnToContents(1); // type
                     d->remote->list->topLevelItem(0)->setSelected(true);
                 }
                 d->remote->descGroupBox->layout()->setMargin(2);
@@ -235,10 +245,11 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
     }
 }
 
-ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KexiDB::ConnectionData* data)
+ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KDbConnectionData* data)
 {
-    const KexiDB::Driver::Info info(d->manager.driverInfo(data->driverName));
-    return new ConnectionDataLVItem(data, info, d->remote->list);
+    const KDbDriverMetaData* driverMetaData = d->manager.driverMetaData(data->driverId());
+    return driverMetaData ?
+                new ConnectionDataLVItem(data, *driverMetaData, d->remote->list) : 0;
 }
 
 void KexiConnectionSelectorWidget::showSimpleConn()
@@ -247,8 +258,8 @@ void KexiConnectionSelectorWidget::showSimpleConn()
     if (!d->file_sel_shown) {
         d->file_sel_shown = true;
         fileWidget = new KexiFileWidget(
-            KUrl(d->startDirOrVariable),
-            d->fileAccessType == KAbstractFileWidget::Opening
+            QUrl(d->startDirOrVariable),
+            d->fileAccessType == KFileWidget::Opening
             ? KexiFileWidget::Opening : KexiFileWidget::SavingFileBasedDB,
             d->stack);
         fileWidget->setOperationMode(d->fileAccessType);
@@ -258,17 +269,13 @@ void KexiConnectionSelectorWidget::showSimpleConn()
 
         for (QWidget *w = parentWidget(); w; w = w->parentWidget()) {
             if (w->windowType() == Qt::Dialog) {
-#ifdef __GNUC__
-#warning TODO KFileWidget    connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject()));
-#else
-#pragma WARNING( TODO KFileWidget    connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject())); )
-#endif
+//! @todo KEXI3 KFileWidget    connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject()));
                 break;
             }
         }
     }
     d->stack->setCurrentWidget(fileWidget);
-    connect(fileWidget->locationEdit()->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotConnectionSelected()));
+    connect(fileWidget->locationEdit(), SIGNAL(editTextChanged()), this, SLOT(slotConnectionSelected()));
 }
 
 KexiConnectionSelectorWidget::ConnectionType KexiConnectionSelectorWidget::selectedConnectionType() const
@@ -276,7 +283,7 @@ KexiConnectionSelectorWidget::ConnectionType KexiConnectionSelectorWidget::selec
     return (d->stack->currentWidget() == fileWidget) ? FileBased : ServerBased;
 }
 
-KexiDB::ConnectionData* KexiConnectionSelectorWidget::selectedConnectionData() const
+KDbConnectionData* KexiConnectionSelectorWidget::selectedConnectionData() const
 {
     QList<QTreeWidgetItem *> items = d->remote->list->selectedItems();
     if (items.isEmpty())
@@ -292,12 +299,13 @@ QString KexiConnectionSelectorWidget::selectedFileName()
     if (selectedConnectionType() != KexiConnectionSelectorWidget::FileBased)
         return QString();
     else if (fileWidget->selectedFile().isEmpty()) {
-        KUrl path = fileWidget->baseUrl();
+        QUrl path = fileWidget->baseUrl();
         const QString firstUrl(fileWidget->locationEdit()->lineEdit()->text());
         if (QDir::isAbsolutePath(firstUrl))
-            path = KUrl::fromPath(firstUrl);
+            path = QUrl::fromLocalFile(firstUrl);
         else
-            path.addPath(firstUrl);
+            path = path.adjusted(QUrl::StripTrailingSlash);
+            path.setPath(path.path() + '/' + (firstUrl));
         return path.toLocalFile();
     }
 
@@ -335,8 +343,9 @@ void KexiConnectionSelectorWidget::slotConnectionSelectionChanged()
     d->remote->btn_edit->setEnabled(item);
     d->remote->btn_remove->setEnabled(item);
     QString desc;
-    if (item)
-        desc = item->data()->description;
+    if (item) {
+        desc = item->data()->description();
+    }
     d->descGroupBoxPaintBlocker->setEnabled(desc.isEmpty());
     d->remote->descriptionLabel->setText(desc);
     slotConnectionSelected();
@@ -376,26 +385,29 @@ bool KexiConnectionSelectorWidget::confirmOverwrites() const
 
 void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
 {
-    KexiDB::ConnectionData data;
+    KDbConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
-                               KGuiItem(i18n("&Add"), koIconName("dialog-ok"), i18n("Add database connection")));
-    dlg.setWindowTitle(i18nc("@title:window", "Add a New Database Connection"));
+                               KGuiItem(xi18nc("@action:button Add Database Connection", "&Add"), koIconName("dialog-ok"), xi18n("Add database connection")));
+    dlg.setWindowTitle(xi18nc("@title:window", "Add a New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
     //store this conn. data
-    KexiDB::ConnectionData *newData
-        = new KexiDB::ConnectionData(*dlg.currentProjectData().connectionData());
+    KDbConnectionData *newData
+        = new KDbConnectionData(*dlg.currentProjectData().connectionData());
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->addConnectionData(newData)) {
-        //! @todo msg?
         delete newData;
         return;
     }
 
     ConnectionDataLVItem* item = addConnectionData(newData);
-    d->remote->list->clearSelection();
-    item->setSelected(true);
-    slotConnectionSelectionChanged();
+    if (item) {
+        d->remote->list->clearSelection();
+        d->updateRemoteListColumns();
+        item->setSelected(true);
+        slotConnectionSelectionChanged();
+    }
 }
 
 void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
@@ -407,19 +419,22 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     if (!item)
         return;
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
-                               KGuiItem(i18n("&Save"), koIconName("document-save"),
-                                        i18n("Save changes made to this database connection")));
-    dlg.setWindowTitle(i18nc("@title:window", "Edit Database Connection"));
+                               KGuiItem(xi18nc("@action:button Save Database Connection", "&Save"), koIconName("document-save"),
+                                        xi18n("Save changes made to this database connection")));
+    dlg.setWindowTitle(xi18nc("@title:window", "Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->saveConnectionData(item->data(), *dlg.currentProjectData().connectionData())) {
-        //! @todo msg?
         return;
     }
-    const KexiDB::Driver::Info info(d->manager.driverInfo(item->data()->driverName));
-    item->update(info);
-    slotConnectionSelectionChanged(); //to update descr. edit
+    const KDbDriverMetaData *driverMetaData = d->manager.driverMetaData(item->data()->driverId());
+    if (driverMetaData) {
+        item->update(*driverMetaData);
+        d->updateRemoteListColumns();
+        slotConnectionSelectionChanged(); //to update descr. edit
+    }
 }
 
 void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
@@ -430,10 +445,10 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(items.first());
     if (!item)
         return;
-    if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
-            i18n(
+    if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
+            xi18n(
                 "Do you want to remove database connection \"%1\" from the list of available connections?",
-                item->data()->serverInfoString(true)),
+                item->data()->toUserVisibleString()),
             QString(), //caption
             KStandardGuiItem::remove(), KStandardGuiItem::cancel(),
             QString(), //dont'ask name
@@ -444,15 +459,15 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     QTreeWidgetItem* nextItem = d->remote->list->itemBelow(item);
     if (!nextItem)
         nextItem = d->remote->list->itemAbove(item);
+    KDbMessageGuard mg(d->conn_set);
     if (!d->conn_set->removeConnectionData(item->data()))
         return;
 
-    if (nextItem)
-        nextItem->setSelected(true);
-
     delete item;
 
-    slotConnectionSelectionChanged();
+    if (nextItem)
+        nextItem->setSelected(true);
+    d->updateRemoteListColumns();
 }
 
 void KexiConnectionSelectorWidget::hideConnectonIcon()
@@ -483,16 +498,14 @@ bool KexiConnectionSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 
 void KexiConnectionSelectorWidget::slotConnectionSelected()
 {
-    QList<QTreeWidgetItem *> items;
-    QLineEdit *lineEdit;
     switch (selectedConnectionType()) {
-    case KexiConnectionSelectorWidget::FileBased:
-        lineEdit = fileWidget->locationEdit()->lineEdit();
+    case KexiConnectionSelectorWidget::FileBased: {
+        QLineEdit *lineEdit = fileWidget->locationEdit()->lineEdit();
         d->isConnectionSelected = !lineEdit->text().isEmpty();
         break;
+    }
     case KexiConnectionSelectorWidget::ServerBased:
-        items = d->remote->list->selectedItems();
-        d->isConnectionSelected = !items.isEmpty();
+        d->isConnectionSelected = !d->remote->list->selectedItems().isEmpty();
         break;
     default:;
     }

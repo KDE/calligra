@@ -46,7 +46,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap DESIGNABLE false)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents DESIGNABLE false)
     Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
@@ -59,8 +59,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     virtual QVariant value();
@@ -97,8 +97,8 @@ public Q_SLOTS:
         KexiFormDataItemInterface::setDataSource(ds);
     }
 
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
 
     virtual void setText(const QString& text);
@@ -113,19 +113,12 @@ protected Q_SLOTS:
 
 protected:
     void init();
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
     virtual void paintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent* e);
 
     //! Sets value \a value for a widget.
     virtual void setValueInternal(const QVariant& add, bool removeOld);
-
-    virtual void fontChange(const QFont& font);
-    virtual void styleChange(QStyle& style);
-    virtual void enabledChange(bool enabled);
-
-    virtual void paletteChange(const QPalette& oldPal);
-    virtual void showEvent(QShowEvent* e);
 
     //! Reimplemented to paint using real frame color instead of froeground.
     //! Also allows to paint more types of frame.

@@ -41,7 +41,7 @@ protected:
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -49,20 +49,20 @@ protected:
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber,
+        const QString& sqlStatement, int columnNumber,
         QStringList& stringList, int numRecords = -1);
 
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord);
+                                            KDbRecordData *data, bool *firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+                               KDbConnection *destConn, KDbTableSchema* dstTable);
 
     virtual bool drv_progressSupported() {
         return true;
     }
 
-    virtual bool drv_getTableSize(const QString& table, quint64& size);
+    virtual bool drv_getTableSize(const QString& table, quint64 *size);
 
 private:
     bool query(const QString& sqlStatement) const;
@@ -72,9 +72,9 @@ private:
     //! @return value of a column at position pos as a QString
     QString value(int pos) const;
 
-    KexiDB::Field::Type type(const QString& table, int columnType);
+    KDbField::Type type(const QString& table, int columnType);
 
-    QList<KexiDB::IndexSchema*> readIndexes(const QString& tableName, KexiDB::TableSchema& tableSchema);
+    QList<KDbIndexSchema*> readIndexes(const QString& tableName, KDbTableSchema& tableSchema);
 
     SybaseConnectionInternal * const d;
 };

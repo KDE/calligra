@@ -18,72 +18,63 @@
  */
 
 #include "kexireportview.h"
-#include <KoReportPage.h>
+#include <KReportView>
 #include "kexidbreportdata.h"
-
 #ifndef KEXI_MOBILE
+#include <widget/utils/kexirecordnavigator.h>
+ //! @todo KEXI3
+#if 0
 #include "keximigratereportdata.h"
 #endif
+#endif
+#include <core/KexiWindow.h>
+#include <core/KexiMainWindowIface.h>
+#include <KexiIcon.h>
 
-#include <QLabel>
-#include <QBoxLayout>
-#include <QScrollArea>
+//! @todo KEXI3 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
+
+#include <KoReportPage>
+#include <renderobjects>
+#include <KoReportPreRenderer>
+#include <krscripthandler>
+#include "krscriptfunctions.h"
+
+#include <KIO/NetAccess>
+#include <KRun>
+#include <KActionMenu>
+#include <KMessageBox>
+
 #include <QLayout>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QGraphicsScene>
-#include <QScrollBar>
-
-#include <kdebug.h>
-#include "krscriptfunctions.h"
-#include <kfiledialog.h>
-#include <kio/netaccess.h>
-#include <krun.h>
-#include <kactionmenu.h>
-
-#include <KoIcon.h>
-#include <renderobjects.h>
-#include <KoReportPreRenderer.h>
-
-#ifndef KEXI_MOBILE
-#include <widget/utils/kexirecordnavigator.h>
-#endif
-
-#include <core/KexiWindow.h>
-#include <core/KexiMainWindowIface.h>
-#include "../scripting/kexiscripting/kexiscriptadaptor.h"
+#include <QDebug>
+#include <QFileDialog>
+#include <QMimeDatabase>
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0) //! @todo KEXI3, m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
-    m_reportView = new QGraphicsView(this);
-    // page selector should be always visible:
-    m_reportView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_reportView = new KReportView(this);
     layout()->addWidget(m_reportView);
 
-    m_reportScene = new QGraphicsScene(this);
-    m_reportScene->setSceneRect(0,0,1000,2000);
-    m_reportView->setScene(m_reportScene);
-
-    m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
-
 #ifndef KEXI_MOBILE
-    m_pageSelector = new KexiRecordNavigator(*m_reportView, m_reportView);
+    m_pageSelector = new KexiRecordNavigator(*m_reportView->scrollArea(), m_reportView);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setInsertingEnabled(false);
-    m_pageSelector->setLabelText(i18nc("Page selector label", "Page:"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, i18n("Go to previous page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, i18n("Goes to previous page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, i18n("Go to next page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, i18n("Goes to next page"));
-    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, i18n("Go to last page"));
-    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, i18n("Goes to last page"));
-    m_pageSelector->setNumberFieldToolTips(i18n("Current page number"), i18n("Number of pages"));
+    m_pageSelector->setLabelText(xi18nc("Page selector label", "Page:"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, xi18n("Go to first page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, xi18n("Goes to first page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, xi18n("Go to previous page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, xi18n("Goes to previous page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, xi18n("Go to next page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, xi18n("Goes to next page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, xi18n("Go to last page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, xi18n("Goes to last page"));
+    m_pageSelector->setNumberFieldToolTips(xi18n("Current page number"), xi18n("Number of pages"));
     m_pageSelector->setRecordHandler(this);
 #endif
 
@@ -92,65 +83,65 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("document-print"), i18n("Print"), this));
+    viewActions << (a = new QAction(koIcon("document-print"), xi18n("Print"), this));
     a->setObjectName("print_report");
-    a->setToolTip(i18n("Print report"));
-    a->setWhatsThis(i18n("Prints the current report."));
+    a->setToolTip(xi18n("Print report"));
+    a->setWhatsThis(xi18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
-    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), xi18nc("@title:menu","E&xport As"), this);
     exportMenu->setObjectName("report_export_as");
     exportMenu->setDelayed(false);
 #endif
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(i18n("Export:"), this));
+    viewActions << (a = new QAction(xi18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar!
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.text"),
-                                          i18nc("open dialog to export as text document", "Text Document..."), this));
+    exportMenu->addAction(a = new QAction(koIcon("application-vnd.oasis.opendocument.text"),
+                                          xi18nc("open dialog to export as text document", "Text Document..."), this));
 #endif
     a->setObjectName("export_as_text_document");
-    a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
-    a->setWhatsThis(i18n("Exports the report as a text document (in OpenDocument Text format)."));
+    a->setToolTip(xi18n("Export the report as a text document (in OpenDocument Text format)"));
+    a->setWhatsThis(xi18n("Exports the report as a text document (in OpenDocument Text format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("application-pdf"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-pdf"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-pdf"),
-                                          i18nc("Portable Document Format...", "PDF..."), this));
+    exportMenu->addAction(a = new QAction(koIcon("application-pdf"),
+                                          xi18nc("Portable Document Format...", "PDF..."), this));
 #endif
     a->setObjectName("export_as_pdf");
-    a->setToolTip(i18n("Export as PDF"));
-    a->setWhatsThis(i18n("Exports the current report as PDF."));
+    a->setToolTip(xi18n("Export as PDF"));
+    a->setWhatsThis(xi18n("Exports the current report as PDF."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
-                                          i18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
+    exportMenu->addAction(a = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
+                                          xi18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
-    a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
-    a->setWhatsThis(i18n("Exports the report as a spreadsheet (in OpenDocument Spreadsheet format)."));
+    a->setToolTip(xi18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
+    a->setWhatsThis(xi18n("Exports the report as a spreadsheet (in OpenDocument Spreadsheet format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsSpreadsheet()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
+    viewActions << (a = new QAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
-    exportMenu->addAction(a = new KAction(koIcon("text-html"),
-                                          i18nc("open dialog to export as web page", "Web Page..."), this));
+    exportMenu->addAction(a = new QAction(koIcon("text-html"),
+                                          xi18nc("open dialog to export as web page", "Web Page..."), this));
 #endif
     a->setObjectName("export_as_web_page");
-    a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
-    a->setWhatsThis(i18n("Exports the report as a web page (in HTML format)."));
+    a->setToolTip(xi18n("Export the report as a web page (in HTML format)"));
+    a->setWhatsThis(xi18n("Exports the report as a web page (in HTML format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsWebPage()));
 
@@ -173,10 +164,8 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 KexiReportView::~KexiReportView()
 {
-    kDebug();
+    qDebug();
     delete m_preRenderer;
-    delete m_kexi;
-    delete m_functions;
     delete m_reportDocument;
 }
 
@@ -206,7 +195,7 @@ void KexiReportView::slotExportAsPdf()
         KoReportRendererContext cxt;
 
         cxt.destinationUrl = getExportUrl(QLatin1String("application/pdf"),
-                                          i18n("Export Report as PDF"),
+                                          xi18n("Export Report as PDF"),
                                           "kfiledialog:///LastVisitedPDFExportPath/",
                                           "pdf");
         if (!cxt.destinationUrl.isValid()) {
@@ -225,18 +214,18 @@ void KexiReportView::slotExportAsPdf()
         cxt.painter = &painter;
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.toDisplayString()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
    }
 }
 
-KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
+QUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
                                   const QString &lastExportPath, const QString &extension)
 {
-    KUrl result;
+    QUrl result;
     QString defaultSavePath;
 
     if (lastExportPath.startsWith("kfiledialog:///")) {
@@ -244,15 +233,19 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     }
 
     // loop until an url has been chosen or the file selection has been cancelled
+    const QMimeDatabase db;
+    const QString filterString = db.mimeTypeForName(mimetype).filterString();
+
     while (true) {
-        result = KFileDialog::getSaveUrl(KUrl(defaultSavePath), mimetype, this, caption);
+        QUrl result = QFileDialog::getSaveFileUrl(this, caption, QUrl::fromLocalFile(defaultSavePath),
+                                             filterString);
 
         // not cancelled?
         if (result.isValid()) {
             if (KIO::NetAccess::exists(result, KIO::NetAccess::DestinationSide, this)) {
-                const int answer = KMessageBox::warningContinueCancel(this,
-                    i18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
-                    caption, KGuiItem(i18n("Overwrite")));
+                const KMessageBox::ButtonCode answer = KMessageBox::warningContinueCancel(this,
+                    xi18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
+                    caption, KGuiItem(xi18nc("@action:button Overwrite File", "Overwrite")));
 
                 // if overwriting not wanted, let select another url
                 if (answer == KMessageBox::Cancel) {
@@ -268,12 +261,12 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     return result;
 }
 
-void KexiReportView::openExportedDocument(const KUrl& destination)
+void KexiReportView::openExportedDocument(const QUrl &destination)
 {
     const int answer =
         KMessageBox::questionYesNo(
             this,
-            i18n("Do you want to open exported document?"),
+            xi18n("Do you want to open exported document?"),
             QString(),
             KStandardGuiItem::open(),
             KStandardGuiItem::close());
@@ -292,7 +285,7 @@ void KexiReportView::slotExportAsSpreadsheet()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.spreadsheet"),
-                                          i18n("Export Report as Spreadsheet"),
+                                          xi18n("Export Report as Spreadsheet"),
                                           "kfiledialog:///LastVisitedODSExportPath/",
                                           "ods");
         if (!cxt.destinationUrl.isValid()) {
@@ -301,8 +294,8 @@ void KexiReportView::slotExportAsSpreadsheet()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.toDisplayString()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
@@ -318,7 +311,7 @@ void KexiReportView::slotExportAsTextDocument()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.text"),
-                                          i18n("Export Report as Text Document"),
+                                          xi18n("Export Report as Text Document"),
                                           "kfiledialog:///LastVisitedODTExportPath/",
                                           "odt");
         if (!cxt.destinationUrl.isValid()) {
@@ -327,8 +320,8 @@ void KexiReportView::slotExportAsTextDocument()
 
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this,
-                               i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                               i18n("Export Failed"));
+                               xi18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.toDisplayString()),
+                               xi18n("Export Failed"));
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
@@ -340,7 +333,7 @@ void KexiReportView::slotExportAsWebPage()
     KoReportRendererContext cxt;
     KoReportRendererBase *renderer;
 
-    const QString dialogTitle = i18n("Export Report as Web Page");
+    const QString dialogTitle = xi18n("Export Report as Web Page");
     cxt.destinationUrl = getExportUrl(QLatin1String("text/html"),
                                       dialogTitle,
                                       "kfiledialog:///LastVisitedHTMLExportPath/",
@@ -352,12 +345,12 @@ void KexiReportView::slotExportAsWebPage()
     const int answer =
         KMessageBox::questionYesNo(
             this,
-            i18n("Would you like to export using a Cascading Style Sheet (CSS), "
+            xi18n("Would you like to export using a Cascading Style Sheet (CSS), "
                  "which will give an output closer to the original, "
                  "or export using a HTML Table, which outputs a much simpler format?"),
             dialogTitle,
-            KGuiItem(i18n("Use CSS")),
-            KGuiItem(i18n("Use Table")));
+            KGuiItem(xi18nc("@action:button", "Use CSS")),
+            KGuiItem(xi18nc("@action:button", "Use Table")));
 
     if (answer == KMessageBox::Yes) {
         renderer = m_factory.createInstance("htmlcss");
@@ -368,14 +361,14 @@ void KexiReportView::slotExportAsWebPage()
 
     if (!renderer->render(cxt, m_reportDocument)) {
         KMessageBox::error(this,
-                           i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
-                           i18n("Export Failed"));
+                           xi18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.toDisplayString()),
+                           xi18n("Export Failed"));
     } else {
         openExportedDocument(cxt.destinationUrl);
     }
 }
 
-tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);
@@ -387,68 +380,51 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     Q_UNUSED(mode);
 
-    kDebug();
+    qDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
-        kDebug() << "Schema changed";
+        qDebug() << "Schema changed";
         delete m_preRenderer;
 
-        kDebug() << tempData()->reportDefinition.tagName();
+        qDebug() << tempData()->reportDefinition.tagName();
 
         m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                reportData = sourceData(tempData()->connectionDefinition);    
-            }
-            if (!reportData) {
-                reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
+                reportData = sourceData(tempData()->connectionDefinition);
             }
             m_preRenderer->setSourceData(reportData);
-            
-            m_preRenderer->setName(tempData()->name);
-            m_currentPage = 1;
+
+            m_preRenderer->setName(window()->partItem()->name());
 
             //Add a kexi object to provide kexidb and extra functionality
-            if(!m_kexi) {
-                m_kexi = new KexiScriptAdaptor();
-            }
-            m_preRenderer->registerScriptObject(m_kexi, "Kexi");
-
+//! @todo KEXI3 if we want this            if(!m_kexi) {
+//                m_kexi = new KexiScriptAdaptor();
+//            }
+//            m_preRenderer->registerScriptObject(m_kexi, "Kexi");
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                //Delete old functions
-                if (m_functions) {
-                    delete m_functions;
-                }
-                
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
+                connect(m_preRenderer, SIGNAL(groupChanged(QMap<QString, QVariant>)),
+                        m_functions, SLOT(setGroupData(QMap<QString, QVariant>)));
             }
 
             if (m_reportDocument) {
-                kDebug() << "=======================================Deleting old document";
+                qDebug() << "=======================================Deleting old document";
                 delete m_reportDocument;
             }
-            
+
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
-                m_pageCount = m_reportDocument->pages();
+                m_reportView->setDocument(m_reportDocument);
 #ifndef KEXI_MOBILE
-                m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setRecordCount(m_reportView->pageCount());
                 m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
-
-            m_reportPage = new KoReportPage(this, m_reportDocument);
-            m_reportPage->setObjectName("KexiReportPage");
-
-            m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
-            m_reportScene->addItem(m_reportPage);
-            m_reportPage->setPos(20,20);
-            m_reportView->centerOn(0,0);
-
         } else {
-            KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
+            KMessageBox::error(this, xi18n("Report schema appears to be invalid or corrupt"), xi18n("Opening failed"));
         }
 
 
@@ -461,13 +437,16 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
 {
     KoReportData *kodata = 0;
 
-    if (e.attribute("type") == "internal") {
+    if (e.attribute("type") == "internal" && !e.attribute("source").isEmpty()) {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (e.attribute("type") ==  "external") {
         kodata = new KexiMigrateReportData(e.attribute("source"));
     }
+#endif
 #endif
     return kodata;
 }
@@ -484,59 +463,49 @@ void KexiReportView::addNewRecordRequested()
 
 void KexiReportView::moveToFirstRecordRequested()
 {
-        if (m_currentPage != 1) {
-                m_currentPage = 1;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+
+    m_reportView->moveToFirstPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
+
 }
 
 void KexiReportView::moveToLastRecordRequested()
 {
-        if (m_currentPage != m_pageCount) {
-                m_currentPage = m_pageCount;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToLastPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
 void KexiReportView::moveToNextRecordRequested()
 {
-        if (m_currentPage < m_pageCount) {
-                m_currentPage++;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToNextPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
 void KexiReportView::moveToPreviousRecordRequested()
 {
-        if (m_currentPage > 1) {
-                m_currentPage--;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    m_reportView->moveToPreviousPage();
+    #ifndef KEXI_MOBILE
+    m_pageSelector->setCurrentRecordNumber(m_reportView->currentPage());
+    #endif
 }
 
-void KexiReportView::moveToRecordRequested(uint r)
+void KexiReportView::moveToRecordRequested(int r)
 {
     Q_UNUSED(r);
 }
 
 int KexiReportView::currentRecord() const
 {
-    return m_currentPage;
+    return m_reportView->currentPage();
 }
 
 int KexiReportView::recordCount() const
 {
-    return m_pageCount;
+    return m_reportView->pageCount();
 }

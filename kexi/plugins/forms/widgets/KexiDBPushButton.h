@@ -19,9 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBPushButton_H
-#define KexiDBPushButton_H
+#ifndef KEXIDBPUSHBUTTON_H
+#define KEXIDBPUSHBUTTON_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/kexiformeventhandler.h>
 #include <formeditor/FormWidgetInterface.h>
@@ -38,17 +39,17 @@ class KEXIFORMUTILS_EXPORT KexiDBPushButton : public KexiPushButton,
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
     Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
-    explicit KexiDBPushButton(const QString & text, QWidget * parent);
+    explicit KexiDBPushButton(const QString & text, QWidget * parent = 0);
     ~KexiDBPushButton();
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     virtual QVariant value();
@@ -59,7 +60,7 @@ public:
 
     //! \return true if editor's value is empty (not necessary null).
     //! Only few data types can accept "EMPTY" property
-    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! (use KDbField::hasEmptyProperty() to check this).
     //! Used for checking if a given constraint within table or form is met.
     virtual bool valueIsEmpty();
 
@@ -95,8 +96,8 @@ public Q_SLOTS:
         KexiFormDataItemInterface::setDataSource(ds);
     }
 
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
     virtual void setReadOnly(bool readOnly);
 protected:

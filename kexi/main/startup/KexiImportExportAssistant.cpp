@@ -19,7 +19,7 @@
 
 #include "KexiImportExportAssistant.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <QPointer>
 
 static QString stripText(const QString &text)
@@ -62,15 +62,15 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     KexiMainImportExportPage* mainPage() {
         return page<KexiMainImportExportPage>(&m_mainImportExportPage, q);
     }
-    
+
     template <class C>
     C* page(QPointer<C>* p, KexiImportExportAssistant *parent = 0) {
         if (p->isNull()) {
@@ -81,15 +81,15 @@ public:
     }
 
     QPointer<KexiMainImportExportPage> m_mainImportExportPage;
-    
+
     KexiImportExportAssistant *q;
 };
 
 // ----
 
 KexiImportExportAssistant::KexiImportExportAssistant(
-    const KAction *action_project_import_export_send_,
-    const KAction *action_import_project_,
+    const QAction *action_project_import_export_send_,
+    const QAction *action_import_project_,
     QWidget* parent)
  : KexiAssistantWidget(parent)
  , action_project_import_export_send(action_project_import_export_send_)
@@ -104,7 +104,7 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
 {
     delete d;
 }
-       
+
 void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);

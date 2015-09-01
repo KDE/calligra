@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiContextMenuUtils_H
-#define KexiContextMenuUtils_H
+#ifndef KEXICONTEXTMENUUTILS_H
+#define KEXICONTEXTMENUUTILS_H
 
+#include "kexiguiutils_export.h"
 #include <kexi_global.h>
-#include <db/queryschema.h>
-#include <kmenu.h>
+
+#include <QMenu>
 
 class KActionCollection;
-class KUrl;
+class QUrl;
 
 //! @short A set of helpers for updating popup menu titles
 /*! The functions set meaningful titles like "Emploee : Image".
@@ -35,7 +36,7 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 public:
     /*! Updates title for context menu.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& objectName,
+    static bool updateTitle(QMenu *menu, const QString& objectName,
                             const QString& objectTypeName, const QString& iconName);
 };
 
@@ -47,7 +48,7 @@ public:
  handlers in KexiDBImageBox and KexiBlobTableEdit so these objects can
  respond on requests for data handling.
 */
-class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
+class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public QMenu
 {
     Q_OBJECT
 
@@ -60,7 +61,7 @@ public:
     /*! Updates title for context menu.
      Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& title,
+    static bool updateTitle(QMenu *menu, const QString& title,
                             const QString& iconName = QString());
 
 public Q_SLOTS:
@@ -77,18 +78,18 @@ public Q_SLOTS:
 Q_SIGNALS:
     //! Emitted when actions availability should be performed. Just connect this signal
     //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
-    void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void updateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly);
 
     /*! Emitted before "insertFromFile" action was requested. */
-    void insertFromFileRequested(const KUrl &url);
+    void insertFromFileRequested(const QUrl &url);
 
     /*! Emitted before "saveAs" action was requested.
      You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
      If \a dataIsEmpty is false, saving will be cancelled. */
-    void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    void aboutToSaveAsRequested(QString *origFilename, QString *fileExtension, bool *dataIsEmpty);
 
     //! Emitted when "saveAs" action was requested
-    void saveAsRequested(const QString& fileName);
+    void saveAsRequested(const QUrl& url);
 
     //! Emitted when "cut" action was requested
     void cutRequested();

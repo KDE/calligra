@@ -21,8 +21,9 @@
 #ifndef KEXIRECORDNAVIGATOR_H
 #define KEXIRECORDNAVIGATOR_H
 
+#include "kexiguiutils_export.h"
+
 #include <QWidget>
-#include <kexi_export.h>
 
 class QToolButton;
 class QAbstractScrollArea;
@@ -72,10 +73,10 @@ public:
 
     /*! \return current record number displayed for this navigator.
      can return 0, if the 'text box's content is cleared. */
-    uint currentRecordNumber() const;
+    int currentRecordNumber() const;
 
     /*! \return record count displayed for this navigator. */
-    uint recordCount() const;
+    int recordCount() const;
 
     /*! Sets horizontal bar's \a hbar (at the bottom) geometry so this record navigator
      is properly positioned together with horizontal scroll bar. This method is used
@@ -142,12 +143,12 @@ public Q_SLOTS:
      i.e. a value that will be displayed in the 'record number' text box.
      This can also affect button's enabling and disabling.
      @p r is counted from 1; if it is 0 'record number' text box's content is cleared. */
-    virtual void setCurrentRecordNumber(uint r);
+    virtual void setCurrentRecordNumber(int r);
 
     /*! Sets record count for this navigator.
      This can also affect button's enabling and disabling.
      By default count is 0. */
-    virtual void setRecordCount(uint count);
+    virtual void setRecordCount(int count);
 
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Record:" text. */
@@ -163,7 +164,7 @@ Q_SIGNALS:
     void lastButtonClicked();
     void firstButtonClicked();
     void newButtonClicked();
-    void recordNumberEntered(uint r);
+    void recordNumberEntered(int r);
 
 protected Q_SLOTS:
     void slotPrevButtonClicked();
@@ -182,7 +183,7 @@ protected:
 
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);
-    void updateButtons(uint recCnt);
+    void updateButtons(int recCnt);
 
     class Private;
     Private * const d;

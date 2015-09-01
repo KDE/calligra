@@ -23,9 +23,7 @@
 #include "WidgetInfo.h"
 #include "libactionwidget.h"
 
-#include <KoIcon.h>
-
-#include <kdebug.h>
+#include <KexiIcon.h>
 
 using namespace KFormDesigner;
 
@@ -47,7 +45,7 @@ LibActionWidget::Private::~Private()
 }
 
 LibActionWidget::LibActionWidget(ActionGroup *group, WidgetInfo *w)
-    : KToggleAction(KIcon(w->iconName()), w->name(), group), d(new Private(w))
+    : KToggleAction(QIcon::fromTheme(w->iconName()), w->name(), group), d(new Private(w))
 {
     setObjectName(QLatin1String("library_widget_") + w->className());
     group->addAction(this);
@@ -68,4 +66,3 @@ LibActionWidget::slotToggled(bool checked)
         emit toggled(d->className);
 }
 
-#include "libactionwidget.moc"

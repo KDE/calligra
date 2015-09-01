@@ -20,10 +20,9 @@
 #include "KexiAssistantWidget.h"
 #include "KexiAssistantPage.h"
 #include "KexiAnimatedLayout.h"
+#include <kexiutils/utils.h>
 
-#include <kdialog.h>
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QStyle>
 #include <QStack>
 #include <QPointer>
@@ -35,11 +34,11 @@ public:
         : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     void addPage(KexiAssistantPage* page) {
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
@@ -64,7 +63,7 @@ KexiAssistantWidget::KexiAssistantWidget(QWidget* parent)
     d->lyr = new KexiAnimatedLayout;
     mainLyr->addLayout(d->lyr);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+        + KexiUtils::marginHint();
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 }
 
@@ -82,7 +81,7 @@ void KexiAssistantWidget::previousPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
     if (d->stack.count() < 2) {
-        kWarning() << "Page stack's' count < 2";
+        qWarning() << "Page stack's' count < 2";
         return;
     }
     d->stack.pop();
@@ -93,12 +92,12 @@ void KexiAssistantWidget::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
 }
-    
+
 void KexiAssistantWidget::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
 }
-    
+
 KexiAssistantPage* KexiAssistantWidget::currentPage() const
 {
     return dynamic_cast<KexiAssistantPage*>(d->lyr->currentWidget());
@@ -107,7 +106,7 @@ KexiAssistantPage* KexiAssistantWidget::currentPage() const
 void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
 {
     if (!page) {
-        kWarning() << "!page";
+        qWarning() << "!page";
         return;
     }
     d->lyr->setCurrentWidget(page);
@@ -123,4 +122,3 @@ void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
     }
 }
 
-#include "KexiAssistantWidget.moc"

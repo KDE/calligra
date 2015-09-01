@@ -21,11 +21,12 @@
 #define KEXIREPORTDESIGNVIEW_H
 
 #include <core/KexiView.h>
-#include <QDomDocument>
-#include <KPropertySet>
 #include <kexireportpart.h>
-#include <koreport/wrtembed/KoReportDesigner.h>
-#include <KoReportData.h>
+
+#include <KPropertySet>
+
+#include <KoReportDesigner>
+#include <KoReportData>
 
 class QScrollArea;
 class KexiSourceSelector;
@@ -41,7 +42,7 @@ public:
 
     ~KexiReportDesignView();
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     void triggerAction(const QString &);
 
@@ -55,24 +56,24 @@ private:
     QScrollArea * m_scrollArea;
 
     //Actions
-    KAction *m_editCutAction;
-    KAction *m_editCopyAction;
-    KAction *m_editPasteAction;
-    KAction *m_editDeleteAction;
-    KAction *m_sectionEdit;
-    KAction *m_parameterEdit;
-    KAction *m_itemRaiseAction;
-    KAction *m_itemLowerAction;
+    QAction *m_editCutAction;
+    QAction *m_editCopyAction;
+    QAction *m_editPasteAction;
+    QAction *m_editDeleteAction;
+    QAction *m_editSectionAction;
+    QAction *m_parameterEdit;
+    QAction *m_itemRaiseAction;
+    QAction *m_itemLowerAction;
 
     KexiSourceSelector *m_sourceSelector;
 
 protected:
     virtual KPropertySet *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
-    
+                                             bool *cancel);
+
 private Q_SLOTS:
     void slotDesignerPropertySetChanged();
 

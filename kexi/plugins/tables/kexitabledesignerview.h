@@ -21,21 +21,17 @@
 #define KEXITABLEDESIGNERINTERVIEW_H
 
 #include <KProperty>
-#include <kexidb/alter.h>
-#include <core/kexitabledesignerinterface.h>
 
+#include <KDbAlter>
+
+#include <core/kexitabledesignerinterface.h>
 #include <widget/tableview/KexiDataTableView.h>
 #include "kexitablepart.h"
 
-namespace KexiDB
-{
-class RecordData;
-}
-class KexiTableDesignerViewPrivate;
-class KUndo2Command;
-
+class KDbRecordData;
 class KPropertySet;
-
+class KUndo2Command;
+class KexiTableDesignerViewPrivate;
 namespace KexiTableDesignerCommands
 {
 class Command;
@@ -70,42 +66,42 @@ public:
 
     KexiTablePart::TempData* tempData() const;
 
-    /*! Clears field information entered for row.
+    /*! Clears field information entered for record.
      This is performed by removing values from caption and data type columns.
      Used by InsertFieldCommand to undo inserting a new field. */
-    virtual void clearRow(int row, bool addCommand = false);
+    virtual void clearRecord(int record, bool addCommand = false);
 
-    /*! Inserts a new field with \a caption for \a row.
+    /*! Inserts a new field with \a caption for \a record.
      Property set is also created.  */
-    virtual void insertField(int row, const QString& caption, bool addCommand = false);
+    virtual void insertField(int record, const QString& caption, bool addCommand = false);
 
-    /*! Inserts a new \a field for \a row.
+    /*! Inserts a new \a field for \a record.
      Property set is also created. \a set will be deeply-copied into the new set.
      Used by InsertFieldCommand to insert a new field. */
-    virtual void insertField(int row, KPropertySet& set, bool addCommand = false);
+    virtual void insertField(int record, KPropertySet& set, bool addCommand = false);
 
-    /*! Inserts a new empty row at position \a row.
+    /*! Inserts a new empty record at position \a record.
      Used by RemoveFieldCommand as a part of undo inserting a new field;
-     also used by InsertEmptyRowCommand. */
-    virtual void insertEmptyRow(int row, bool addCommand = false);
+     also used by InsertEmptyRecordCommand. */
+    virtual void insertEmptyRecord(int record, bool addCommand = false);
 
-    /*! Deletes \a row from the table view. Property set is also deleted.
-     All the subsequent fields are moved up. Used for undoing InsertEmptyRowCommand
+    /*! Deletes \a record from the table view. Property set is also deleted.
+     All the subsequent fields are moved up. Used for undoing InsertEmptyRecordCommand
      and by RemoveFieldCommand to remove a field. */
-    virtual void deleteRow(int row, bool addCommand = false);
+    virtual void deleteRecord(int record, bool addCommand = false);
 
-    /*! Changes property \a propertyName to \a newValue for a field at row \a row.
+    /*! Changes property \a propertyName to \a newValue for a field at record \a record.
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
-    virtual void changeFieldPropertyForRow(int row,
+    virtual void changeFieldPropertyForRecord(int record,
                                            const QByteArray& propertyName, const QVariant& newValue,
-                                           KProperty::ListData* const listData, bool addCommand);
+                                           KPropertyListData* const listData, bool addCommand);
 
     /*! Changes property \a propertyName to \a newValue.
-     Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
+     Works exactly like changeFieldPropertyForRecord(); except the field is pointed by \a fieldUID.
      Used by ChangeFieldPropertyCommand to change field's property. */
     void changeFieldProperty(int fieldUID, const QByteArray& propertyName,
-                             const QVariant& newValue, KProperty::ListData* const listData = 0,
+                             const QVariant& newValue, KPropertyListData* const listData = 0,
                              bool addCommand = false);
 
     /*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
@@ -113,7 +109,7 @@ public:
     void changePropertyVisibility(int fieldUID, const QByteArray& propertyName, bool visible);
 
     /*! Builds table field's schema by looking at the \a set. */
-    KexiDB::Field * buildField(const KPropertySet &set) const;
+    KDbField * buildField(const KPropertySet &set) const;
 
     /*! Creates temporary table for the current design and returns debug string for it. */
     virtual QString debugStringForCurrentTableSchema(tristate& result);
@@ -129,33 +125,33 @@ public Q_SLOTS:
     virtual tristate executeRealAlterTable();
 
 protected Q_SLOTS:
-    /*! Equivalent to updateActions(false). Called on row insert/delete
+    /*! Equivalent to updateActions(false). Called on record insert/delete
      in a KexiDataAwarePropertySet. */
     void updateActions();
 
-    virtual void slotUpdateRowActions(int row);
+    virtual void slotUpdateRecordActions(int record);
 
     void slotAboutToShowContextMenu();
 
     //! Called before cell change in tableview.
-    void slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
-                               QVariant& newValue, KexiDB::ResultInfo* result);
+    void slotBeforeCellChanged(KDbRecordData *data, int colnum,
+                               QVariant* newValue, KDbResultInfo* result);
 
-    //! Called on row change in a tableview.
-    void slotRowUpdated(KexiDB::RecordData *record);
+    //! Called on record change in a tableview.
+    void slotRecordUpdated(KDbRecordData *data);
 
-    //! Called before row inserting in tableview.
-    void slotRowInserted();
+    //! Called before record inserting in tableview.
+    void slotRecordInserted();
 
-    //! Called before row deleting in tableview.
-    void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
+    //! Called before record deleting in tableview.
+    void slotAboutToDeleteRecord(KDbRecordData* data, KDbResultInfo* result, bool repaint);
 
     /*! Called after any property has been changed in the current property set,
      to perform some actions (like updating other dependent properties) */
     void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
     /*! Toggles primary key for currently selected field.
-     Does nothing for empty row. */
+     Does nothing for empty record. */
     void slotTogglePrimaryKey();
 
     /*! Undoes the recently performed action. */
@@ -174,30 +170,30 @@ protected:
     void initData();
 
     /*! Creates a new property set for \a field.
-     The property set will be asigned to \a row, and owned by this dialog.
+     The property set will be asigned to \a record, and owned by this dialog.
      If \a newOne is true, the property set will be marked as newly created.
      \return newly created property set. */
-    KPropertySet* createPropertySet(int row, const KexiDB::Field& field, bool newOne = false);
+    KPropertySet* createPropertySet(int record, const KDbField& field, bool newOne = false);
 
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    /*! \return property set associated with currently selected row (i.e. field)
-     or 0 if current row is empty. */
+    /*! \return property set associated with currently selected record (i.e. field)
+     or 0 if current record is empty. */
     virtual KPropertySet *propertySet();
 
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KDbObject* storeNewData(const KDbObject& object,
+                                    KexiView::StoreNewDataOptions options,
+                                    bool *cancel);
 
     /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
-    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
-                                          KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+    virtual KDbObject* copyData(const KDbObject& object,
+                                KexiView::StoreNewDataOptions options,
+                                bool *cancel);
 
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.
@@ -210,22 +206,22 @@ protected:
      This is used in the altertable test suite (kexi/tests/altertable).
      \return true on successful schema creating, false on failure and cancelled when there
      was a problem with user's design (and user has been informed about it). */
-    tristate buildSchema(KexiDB::TableSchema &schema, bool beSilent = false);
+    tristate buildSchema(KDbTableSchema &schema, bool beSilent = false);
 
-    /*! Builds action list usable for KexiDB::AlterTableHandler by looking at undo buffer
+    /*! Builds action list usable for KDbAlterTableHandler by looking at undo buffer
      of commands' history. Used in storeData() */
-    tristate buildAlterTableActions(KexiDB::AlterTableHandler::ActionList &actions);
+    tristate buildAlterTableActions(KDbAlterTableHandler::ActionList &actions);
 
     /*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
      Assigns primary key icon and value for property set \a propertySet,
-     and deselects it from previous pkey's row.
+     and deselects it from previous pkey's record.
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
     void switchPrimaryKey(KPropertySet &propertySet, bool set, bool aWasPKey = false,
                           KexiTableDesignerCommands::Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
-    void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
+    void getSubTypeListData(KDbField::TypeGroup fieldTypeGroup,
                             QStringList& stringsList, QStringList& namesList);
 
     /*! Adds history command \a command to the undo/redo buffer.
@@ -239,10 +235,10 @@ protected:
     void debugCommand(const KUndo2Command* command, int nestingLevel);
 #endif
 
-    /*! Inserts a new \a field for \a row.
+    /*! Inserts a new \a field for \a record.
      Property set is also created. If \a set is not 0 (the default),
      it will be copied into the new set. Used by insertField(). */
-    void insertFieldInternal(int row, KPropertySet* set, const QString& caption, bool addCommand);
+    void insertFieldInternal(int record, KPropertySet* set, const QString& caption, bool addCommand);
 
     //! Reimplemented to pass the information also to the "Lookup" tab
     virtual void propertySetSwitched();

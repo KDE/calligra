@@ -19,18 +19,17 @@
 
 #include "kexitemplateloader.h"
 #include "kexi.h"
-#include <db/utils.h>
 
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kcomponentdata.h>
-#include <kdebug.h>
+#include <KDbUtils>
 
-#include <QApplication>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KAboutData>
+
 #include <QDir>
+#include <QIcon>
+#include <QStandardPaths>
+#include <QApplication>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)
@@ -62,17 +61,18 @@ void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
 {
     KexiTemplateInfoList list;
-//! @todo OK? KGlobal::mainComponent().componentName()
-    const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
-    QString lang(KGlobal::locale()->language());
-    QStringList dirs(KGlobal::dirs()->findDirs("data", subdir));
+//! @todo KEXI3 KAboutData::applicationData().componentName() OK?
+    const QString subdir = KAboutData::applicationData().componentName() + "/templates";
+    const QLocale locale;
+    QString lang(QLocale::languageToString(locale.language()));
+    QStringList dirs(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, subdir));
     while (true) {
         foreach(const QString &dirname, dirs) {
             QDir dir(dirname + lang);
             if (!dir.exists())
                 continue;
             if (!dir.isReadable()) {
-                kWarning() << "\"" << dir.absolutePath() << "\" not readable!";
+                qWarning() << "\"" << dir.absolutePath() << "\" not readable!";
                 continue;
             }
             const QStringList templateDirs(dir.entryList(QDir::Dirs, QDir::Name));
@@ -98,7 +98,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 {
     QDir dir(directory);
     if (!dir.isReadable()) {
-        kWarning() << "\"" << directory << "\" not readable!";
+        qWarning() << "\"" << directory << "\" not readable!";
         return KexiTemplateInfo();
     }
     if (!QFileInfo(directory + "/info.txt").isReadable())
@@ -109,7 +109,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     KexiTemplateInfo info;
     info.name = cg.readEntry("Name");
     if (info.name.isEmpty()) {
-        kWarning() << "\"" << (directory + "/info.txt") << "\" contains no \"name\" field";
+        qWarning() << "\"" << (directory + "/info.txt") << "\" contains no \"name\" field";
         return KexiTemplateInfo();
     }
     QStringList templateFileNameFilters;
@@ -117,14 +117,14 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     const QStringList templateFiles(
         dir.entryList(templateFileNameFilters, QDir::Files | QDir::Readable, QDir::Name));
     if (templateFiles.isEmpty()) {
-        kWarning() << "no readable .kexi template file found in \"" << directory << "\"";
+        qWarning() << "no readable .kexi template file found in \"" << directory << "\"";
         return KexiTemplateInfo();
     }
     info.filename = directory + "/" + templateFiles.first();
     info.description = cg.readEntry("Description");
     const QString iconFileName(cg.readEntry("Icon"));
     if (!iconFileName.isEmpty())
-        info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
+        info.icon = QIcon::fromTheme(directory + '/' + iconFileName);
     if (info.icon.isNull())
         info.icon = Kexi::defaultFileBasedDriverIcon();
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());

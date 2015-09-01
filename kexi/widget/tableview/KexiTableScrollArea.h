@@ -27,9 +27,18 @@
 #ifndef KEXITABLESCROLLAREA_H
 #define KEXITABLESCROLLAREA_H
 
+#include "kexidatatable_export.h"
+#include <widget/utils/kexirecordnavigator.h>
+#include <widget/utils/kexisharedactionclient.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
+#include <config-kexi.h>
+
+#include <KDbTristate>
+#include <KDbTableViewData>
+
 #include <QScrollArea>
 #include <QVariant>
-#include <QToolTip>
 #include <QFocusEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
@@ -38,13 +47,6 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-
-#include <db/tristate.h>
-#include <db/tableviewdata.h>
-#include <widget/utils/kexirecordnavigator.h>
-#include <widget/utils/kexisharedactionclient.h>
-#include <widget/dataviewcommon/kexidataawareobjectiface.h>
-#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;
@@ -96,12 +98,12 @@ public:
         /*! True if background alternate color should be used, true by default. */
         bool backgroundAltering;
 
-        /*! True if full-row-selection mode is set,
-         what means that all cells of the current row are always selected, instead of single cell.
+        /*! True if full-record-selection mode is set,
+         what means that all cells of the current record are always selected, instead of single cell.
          This mode is usable for read-only table views, when we're interested only in navigating
-         by rows. False by default, even for read-only table views.
+         by records. False by default, even for read-only table views.
         */
-        bool fullRowSelection;
+        bool fullRecordSelection;
 
         /*! True if full grid is enabled. By default true if backgroundAltering is false
          or if baseColor == alternateBaseColor.
@@ -118,45 +120,45 @@ public:
          True by default. */
         bool navigatorEnabled;
 
-        /*! True if "row highlight" behaviour is enabled. False by default. */
-        bool rowHighlightingEnabled;
+        /*! True if "record highlight" behaviour is enabled. False by default. */
+        bool recordHighlightingEnabled;
 
-        /*! True if "row highlight over " behaviour is enabled. False by default. */
-        bool rowMouseOverHighlightingEnabled;
+        /*! True if "record highlight over" behaviour is enabled. False by default. */
+        bool recordMouseOverHighlightingEnabled;
 
-        /*! True if selection of a row should be kept when a user moved mouse
-         pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
+        /*! True if selection of a record should be kept when a user moved mouse
+         pointer over other records. Makes only sense when recordMouseOverHighlightingEnabled is true.
          True by default. It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
         bool persistentSelections;
 
-        /*! Color for row highlight, default is intermediate (33%/60%) between
+        /*! Color for record highlight, default is intermediate (33%/60%) between
          active highlight and base color. */
-        QColor rowHighlightingColor;
+        QColor recordHighlightingColor;
 
-        /*! Color for text under row highlight, default is the same as textColor.
-         Used when rowHighlightingEnabled is true. */
-        QColor rowHighlightingTextColor;
+        /*! Color for text under record highlight, default is the same as textColor.
+         Used when recordHighlightingEnabled is true. */
+        QColor recordHighlightingTextColor;
 
-        /*! Color for row highlight for mouseover, default is intermediate (20%/80%) between
-         active highlight and base color. Used when rowMouseOverHighlightingEnabled is true. */
-        QColor rowMouseOverHighlightingColor;
+        /*! Color for record highlight for mouseover, default is intermediate (20%/80%) between
+         active highlight and base color. Used when recordMouseOverHighlightingEnabled is true. */
+        QColor recordMouseOverHighlightingColor;
 
-        /*! Color for text under row highlight for mouseover, default is the same as textColor.
-         Used when rowMouseOverHighlightingEnabled is true. */
-        QColor rowMouseOverHighlightingTextColor;
+        /*! Color for text under record highlight for mouseover, default is the same as textColor.
+         Used when recordMouseOverHighlightingEnabled is true. */
+        QColor recordMouseOverHighlightingTextColor;
 
-        /*! Like rowMouseOverHighlightingColor but for areas painted with alternate color.
+        /*! Like recordMouseOverHighlightingColor but for areas painted with alternate color.
          This is computed using active highlight color and alternateBaseColor. */
-        QColor rowMouseOverAlternateHighlightingColor;
+        QColor recordMouseOverAlternateHighlightingColor;
     };
 
-    explicit KexiTableScrollArea(KexiDB::TableViewData* data = 0, QWidget* parent = 0);
+    explicit KexiTableScrollArea(KDbTableViewData* data = 0, QWidget* parent = 0);
 
     virtual ~KexiTableScrollArea();
 
     //! redeclared to avoid conflict with private QWidget::data
-    inline KexiDB::TableViewData *data() const {
+    inline KDbTableViewData *data() const {
         return KexiDataAwareObjectInterface::data();
     }
 
@@ -168,37 +170,43 @@ public:
 
     /*! Convenience function.
      \return field object that define column \a column or NULL if there is no such column */
-    KexiDB::Field* field(int column) const;
+    KDbField* field(int column) const;
 
-    /*! \return maximum number of rows that can be displayed per one "page"
+    /*! \return maximum number of records that can be displayed per one "page"
      for current table view's size. */
-    virtual int rowsPerPage() const;
+    virtual int recordsPerPage() const;
 
-    QRect cellGeometry(int row, int col) const;
+    /*! \return number of records in this view. */
+    virtual int recordCount() const;
+
+    /*! \return number of the currently selected record number or -1. */
+    virtual int currentRecord() const;
+
+    QRect cellGeometry(int record, int column) const;
     int columnWidth(int col) const;
-    int rowHeight() const;
+    int recordHeight() const;
     int columnPos(int col) const;
-    int rowPos(int row) const;
-    int columnAt(int pos) const;
-    int rowAt(int pos, bool ignoreEnd = false) const;
+    int recordPos(int record) const;
+    int columnNumberAt(int pos) const;
+    int recordNumberAt(int pos, bool ignoreEnd = false) const;
 
     /*! \return true if the last visible column takes up all the available space.
      @see setStretchLastColumn(bool). */
     bool stretchLastColumn() const;
 
-    /*! \return last row visible on the screen (counting from 0).
-     The returned value is guaranteed to be smaller or equal to currentRow() or -1
-     if there are no rows. */
-    virtual int lastVisibleRow() const;
+    /*! \return last record visible on the screen (counting from 0).
+     The returned value is guaranteed to be smaller or equal to currentRecord() or -1
+     if there are no records. */
+    virtual int lastVisibleRecord() const;
 
     /*! Redraws specified cell. */
-    virtual void updateCell(int row, int col);
+    virtual void updateCell(int record, int column);
 
     /*! Redraws the current cell. Implemented after KexiDataAwareObjectInterface. */
     virtual void updateCurrentCell();
 
-    /*! Redraws all cells of specified row. */
-    virtual void updateRow(int row);
+    /*! Redraws all cells of specified record. */
+    virtual void updateRecord(int record);
 
     bool editableOnDoubleClick() const;
     void setEditableOnDoubleClick(bool set);
@@ -217,7 +225,7 @@ public:
 
     void updateViewportMargins();
 
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
     // printing
     // void  setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
     void  print(QPrinter &printer, QPrintDialog &printDialog);
@@ -232,7 +240,7 @@ public:
      Implementation for KexiDataAwareObjectInterface. */
     virtual QRect viewportGeometry() const;
 
-    /*! Reimplemented to update cached fonts and row sizes for the painter. */
+    /*! Reimplemented to update cached fonts and record sizes for the painter. */
     void setFont(const QFont &f);
 
     virtual QSize tableSize() const;
@@ -245,12 +253,12 @@ public:
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
-    /*! \return highlighted row number or -1 if no row is highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled setHighlightedRow() */
-    int highlightedRow() const;
+    /*! \return highlighted record number or -1 if no record is highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled setHighlightedRecord() */
+    int highlightedRecordNumber() const;
 
-    KexiDB::RecordData *highlightedItem() const;
+    KDbRecordData *highlightedRecord() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
     virtual QScrollBar* verticalScrollBar() const;
@@ -258,7 +266,7 @@ public:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
 public Q_SLOTS:
-    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
+    virtual void setData(KDbTableViewData *data, bool owner = true) {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
 
@@ -305,35 +313,35 @@ public Q_SLOTS:
      @note Calling setColumnResizeEnabled(columnCount()-1, bool) can override this property. */
     void setStretchLastColumn(bool set);
 
-    /*! Sets highlighted row number or -1 if no row has to be highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled */
-    void setHighlightedRow(int row);
+    /*! Sets highlighted record number or -1 if no record has to be highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled */
+    void setHighlightedRecordNumber(int record);
 
-    /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
-     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
-    virtual void ensureCellVisible(int row, int col);
+    /*! Ensures that cell at \a record and \a column is visible.
+     If \a column is -1, current column number is used. \a record and \a column, if not -1, must
+     be between 0 and recordCount()-1 (or columnCount()-1 accordingly). */
+    virtual void ensureCellVisible(int record, int column);
 
     /*! Ensures that column \a col is visible.
      If \a col is -1, current column number is used. \a col, if not -1, must be between
      0 and columnCount()-1. */
     virtual void ensureColumnVisible(int col);
 
-    /*! Deletes currently selected row; does nothing if no row
-     is currently selected. If row is in edit mode, editing
+    /*! Deletes currently selected record; does nothing if no record
+     is currently selected. If record is in edit mode, editing
      is cancelled before deleting.  */
-    virtual void deleteCurrentRow();
+    virtual void deleteCurrentRecord();
 
-    /*! Inserts one empty row above row \a row. If \a row is -1 (the default),
-     new row is inserted above the current row (or above 1st row if there is no current).
-     A new item becomes current if row is -1 or if row is equal currentRow().
+    /*! Inserts one empty record above record \a record. If \a record is -1 (the default),
+     new record is inserted above the current record (or above 1st record if there is no current).
+     A new item becomes current if record is -1 or if record is equal currentRecord().
      This method does nothing if:
      -inserting flag is disabled (see isInsertingEnabled())
      -read-only flag is set (see isReadOnly())
-     \ return inserted row's data
+     \ return inserted record's data
     */
-    virtual KexiDB::RecordData *insertEmptyRow(int pos = -1);
+    virtual KDbRecordData *insertEmptyRecord(int pos = -1);
 
     /*! Used when Return key is pressed on cell or "+" nav. button is clicked.
      Also used when we want to continue editing a cell after "invalid value" message
@@ -346,41 +354,41 @@ public Q_SLOTS:
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "row editing" mode is just started. */
+     In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell() {
         KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell();
     }
 
-    /*! Cancels row editing All changes made to the editing
-     row during this current session will be undone.
+    /*! Cancels record editing All changes made to the editing
+     record during this current session will be undone.
      \return true on success or false on failure (e.g. when editor does not exist) */
-    virtual bool cancelRowEdit() {
-        return KexiDataAwareObjectInterface::cancelRowEdit();
+    virtual bool cancelRecordEditing() {
+        return KexiDataAwareObjectInterface::cancelRecordEditing();
     }
 
-    /*! Accepts row editing. All changes made to the editing
-     row during this current session will be accepted (saved).
+    /*! Accepts record editing. All changes made to the editing
+     record during this current session will be accepted (saved).
      \return true if accepting was successful, false otherwise
-     (e.g. when current row contain data that does not meet given constraints). */
-    virtual bool acceptRowEdit() {
-        return KexiDataAwareObjectInterface::acceptRowEdit();
+     (e.g. when current record contain data that does not meet given constraints). */
+    virtual bool acceptRecordEditing() {
+        return KexiDataAwareObjectInterface::acceptRecordEditing();
     }
 
     /*! Specifies, if this table view automatically accepts
-     row editing (using acceptRowEdit()) on accepting any cell's edit
-     (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-    virtual void setAcceptsRowEditAfterCellAccepting(bool set) {
-        KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(set);
+     record editing (using acceptRecordEdit()) on accepting any cell's edit
+     (i.e. after acceptEditor()). \sa acceptsRecordEditingAfterCellAccepting() */
+    virtual void setAcceptsRecordEditAfterCellAccepting(bool set) {
+        KexiDataAwareObjectInterface::setAcceptsRecordEditAfterCellAccepting(set);
     }
 
-    /*! Specifies, if this table accepts dropping data on the rows.
+    /*! Specifies, if this table accepts dropping data on the records.
      If enabled:
-     - dragging over row is indicated by drawing a line at bottom side of this row
-     - dragOverRow() signal will be emitted on dragging,
-      -droppedAtRow() will be emitted on dropping
+     - dragging over record is indicated by drawing a line at bottom side of this record
+     - dragOverRecord() signal will be emitted on dragging,
+      -droppedAtRecord() will be emitted on dropping
      By default this flag is set to false. */
-    virtual void setDropsAtRowEnabled(bool set) {
-        KexiDataAwareObjectInterface::setDropsAtRowEnabled(set);
+    virtual void setDropsAtRecordEnabled(bool set) {
+        KexiDataAwareObjectInterface::setDropsAtRecordEnabled(set);
     }
 
     virtual bool cancelEditor() {
@@ -395,39 +403,39 @@ public Q_SLOTS:
     virtual void setSortingEnabled(bool set);
 
 Q_SIGNALS:
-    void dataSet(KexiDB::TableViewData *data);
+    void dataSet(KDbTableViewData *data);
 
-    void itemSelected(KexiDB::RecordData *);
-    void cellSelected(int row, int column);
+    void itemSelected(KDbRecordData *data);
+    void cellSelected(int record, int column);
 
-    void itemReturnPressed(KexiDB::RecordData *, int row, int col);
-    void itemDblClicked(KexiDB::RecordData *, int row, int col);
-    void itemMouseReleased(KexiDB::RecordData *, int row, int col);
+    void itemReturnPressed(KDbRecordData *data, int record, int column);
+    void itemDblClicked(KDbRecordData *data, int record, int column);
+    void itemMouseReleased(KDbRecordData *data, int record, int column);
 
-    void dragOverRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
-    void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData*& newRecord);
+    void dragOverRecord(KDbRecordData *data, int record, QDragMoveEvent* e);
+    void droppedAtRecord(KDbRecordData *data, int record, QDropEvent *e, KDbRecordData*& newData);
 
     /*! Data has been refreshed on-screen - emitted from initDataContents(). */
     void dataRefreshed();
 
-    void itemChanged(KexiDB::RecordData *, int row, int col);
-    void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
-    void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
+    void itemChanged(KDbRecordData *data, int record, int column);
+    void itemChanged(KDbRecordData *data, int record, int column, const QVariant &oldValue);
+    void itemDeleteRequest(KDbRecordData *data, int record, int column);
     void currentItemDeleteRequest();
     //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
     void newItemAppendedForAfterDeletingInSpreadSheetMode();
     void sortedColumnChanged(int col);
 
-    //! emitted when row editing is started (for updating or inserting)
-    void rowEditStarted(int row);
+    //! emitted when record editing is started (for updating or inserting)
+    void recordEditingStarted(int record);
 
-    //! emitted when row editing is terminated (for updating or inserting)
+    //! emitted when record editing is terminated (for updating or inserting)
     //! no matter if accepted or not
-    void rowEditTerminated(int row);
+    void recordEditingTerminated(int record);
 
     //! emitted when state of 'save/cancel record changes' actions should be updated.
     void updateSaveCancelActions();
-    
+
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();
@@ -437,9 +445,9 @@ protected Q_SLOTS:
         KexiDataAwareObjectInterface::slotDataDestroying();
     }
 
-    virtual void slotRowsDeleted(const QList<int> &);
+    virtual void slotRecordsDeleted(const QList<int> &records);
 
-    //! updates display after many rows deletion
+    //! updates display after deletion of many records
     void slotColumnWidthChanged(int column, int oldSize, int newSize);
 
     void slotSectionHandleDoubleClicked(int section);
@@ -453,30 +461,30 @@ protected Q_SLOTS:
     void slotEditRequested();
 
     /*! Reloads data for this widget.
-     Handles KexiDB::TableViewData::reloadRequested() signal. */
+     Handles KDbTableViewData::reloadRequested() signal. */
     virtual void reloadData();
 
-    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
+    //! Handles KDbTableViewData::recordRepaintRequested() signal
+    virtual void slotRecordRepaintRequested(KDbRecordData* data);
 
-    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
-        KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
+    //! Handles KDbTableViewData::aboutToDeleteRecord() signal. Prepares info for slotRecordDeleted().
+    virtual void slotAboutToDeleteRecord(KDbRecordData* data, KDbResultInfo* result, bool repaint) {
+        KexiDataAwareObjectInterface::slotAboutToDeleteRecord(data, result, repaint);
     }
 
-    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted() {
-        KexiDataAwareObjectInterface::slotRowDeleted();
+    //! Handles KDbTableViewData::recordDeleted() signal to repaint when needed.
+    virtual void slotRecordDeleted() {
+        KexiDataAwareObjectInterface::slotRecordDeleted();
     }
 
-    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint) {
-        KexiDataAwareObjectInterface::slotRowInserted(record, repaint);
+    //! Handles KDbTableViewData::recordInserted() signal to repaint when needed.
+    virtual void slotRecordInserted(KDbRecordData *data, bool repaint) {
+        KexiDataAwareObjectInterface::slotRecordInserted(data, repaint);
     }
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint) {
-        KexiDataAwareObjectInterface::slotRowInserted(record, row, repaint);
+    virtual void slotRecordInserted(KDbRecordData *data, int record, bool repaint) {
+        KexiDataAwareObjectInterface::slotRecordInserted(data, record, repaint);
     }
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
@@ -486,7 +494,7 @@ protected Q_SLOTS:
     }
 
     //! for navigator
-    virtual void moveToRecordRequested(uint row);
+    virtual void moveToRecordRequested(int record);
     virtual void moveToLastRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
@@ -499,7 +507,7 @@ protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
      Called on setData(). Also called once on show event after
-     reloadRequested() signal was received from KexiDB::TableViewData object. */
+     reloadRequested() signal was received from KDbTableViewData object. */
     virtual void initDataContents();
 
     /*! Implementation for KexiDataAwareObjectInterface.
@@ -529,14 +537,14 @@ protected:
     //! temporary
     int bottomMargin() const { return 0; }
 
-    /*! @internal \return true if the row defined by \a record has default
+    /*! @internal \return true if the row defined by \a data has default
      value at column \a col. If this is the case and \a value is not NULL,
      *value is set to the default value. */
-    bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value = 0);
+    bool isDefaultValueDisplayed(KDbRecordData *data, int col, QVariant* value = 0);
 
     //! painting and layout
     void drawContents(QPainter *p);
-    void paintCell(QPainter* p, KexiDB::RecordData *record, int row, int col, const QRect &cr, bool print = false);
+    void paintCell(QPainter* p, KDbRecordData *data, int record, int column, const QRect &cr, bool print = false);
     void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
     void updateGeometries();
 
@@ -595,7 +603,7 @@ protected:
     void showContextMenu(const QPoint& pos = QPoint(-1, -1));
 
     /*! internal */
-    inline void paintRow(KexiDB::RecordData *record,
+    inline void paintRow(KDbRecordData *data,
                          QPainter *pb, int r, int rowp, int cx, int cy,
                          int colfirst, int collast, int maxwc);
 
@@ -628,25 +636,25 @@ protected:
     //! Paste current clipboard contents (e.g. to a cell)
     virtual void paste();
 
-    /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
+    /*! Used in KexiDataAwareObjectInterface::slotRecordDeleted()
      to repaint tow \a row and all visible below. */
-    virtual void updateAllVisibleRowsBelow(int row);
+    virtual void updateAllVisibleRecordsBelow(int row);
 
-    void updateAfterCancelRowEdit();
-    void updateAfterAcceptRowEdit();
+    void updateAfterCancelRecordEditing();
+    void updateAfterAcceptRecordEditing();
 
-    /*! Sets \a cellValue if there is a lookup value for the cell \a record.
+    /*! Sets \a cellValue if there is a lookup value for the cell \a data.
      Used in paintCell() and KexiTableCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
     bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-                               KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
+                               KDbRecordData *data, KDbTableViewColumn *tvcol) const;
 
     /*! Implementation for KexiDataItemChangesListener.
      Reaction for change of \a item. */
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Implementation for KexiDataItemChangesListener. */
-    virtual bool cursorAtNewRow() const;
+    virtual bool cursorAtNewRecord() const;
 
     /*! Implementation for KexiDataItemChangesListener. */
     virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
@@ -685,11 +693,11 @@ protected:
     //! Update section of vertical header
     virtual void updateVerticalHeaderSection(int section);
 
-    virtual void beginInsertItem(KexiDB::RecordData *newRecord, int pos);
+    virtual void beginInsertItem(KDbRecordData *data, int pos);
 
-    virtual void endInsertItem(KexiDB::RecordData *newRecord, int pos);
+    virtual void endInsertItem(KDbRecordData *data, int pos);
 
-    virtual void beginRemoveItem(KexiDB::RecordData *record, int pos);
+    virtual void beginRemoveItem(KDbRecordData *data, int pos);
 
     virtual void endRemoveItem(int pos);
 

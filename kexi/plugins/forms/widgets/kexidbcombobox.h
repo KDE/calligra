@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBComboBox_H
-#define KexiDBComboBox_H
+#ifndef KEXIDBCOMBOBOX_H
+#define KEXIDBCOMBOBOX_H
 
 #include "kexidbutils.h"
 #include "kexidbautofield.h"
@@ -42,10 +42,10 @@ public:
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiDB::TableViewColumn *column() const;
+    virtual KDbTableViewColumn *column() const;
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const;
+    virtual KDbField *field() const;
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant origValue() const;
@@ -67,15 +67,15 @@ public:
 
     //! Reimplemented after KexiDBAutoField: jsut sets \a cinfo without initializing a subwidget.
     //! Initialization is performed by \ref setVisibleColumnInfo().
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo);
 
     /*! Used internally to set visible database column information.
      Reimplemented: performs initialization of the subwidget. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setVisibleColumnInfo(KDbQueryColumnInfo* cinfo);
 
     /*! \return visible database column information for this item.
      Reimplemented. */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
+    virtual KDbQueryColumnInfo* visibleColumnInfo() const;
 
     virtual QColor paletteBackgroundColor() const;
 
@@ -88,8 +88,8 @@ public:
     virtual void undoChanges();
 
 public Q_SLOTS:
-    virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
-    virtual void slotItemSelected(KexiDB::RecordData *record);
+    virtual void slotRecordAccepted(KDbRecordData *data, int record);
+    virtual void slotRecordSelected(KDbRecordData *data);
 
 protected Q_SLOTS:
     virtual void slotInternalEditorValueChanged(const QVariant& v);
@@ -102,7 +102,9 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent *e);
 
-    void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+
+    virtual void changeEvent(QEvent * event);
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -112,12 +114,6 @@ protected:
     //! Creates editor. Reimplemented, because if the combo box is not editable,
     //! editor should not be created.
     virtual void createEditor();
-
-    /*! Reimplemented */
-    virtual void styleChange(QStyle& oldStyle);
-
-    /*! Reimplemented */
-    virtual void fontChange(const QFont & oldFont);
 
     virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 

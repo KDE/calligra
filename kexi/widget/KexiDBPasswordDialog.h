@@ -20,16 +20,14 @@
 #ifndef KEXIDBPASSWORDDIALOG_H
 #define KEXIDBPASSWORDDIALOG_H
 
-#include <kexi_export.h>
-#include <kpassworddialog.h>
-#include <db/tristate.h>
+#include "kexiextwidgets_export.h"
 
+#include <KDbTristate>
+
+#include <KPasswordDialog>
+
+class KDbConnectionData;
 class KexiProjectData;
-class KexiProjectData;
-namespace KexiDB
-{
-class ConnectionData;
-}
 
 //! Database password dialog
 class KEXIEXTWIDGETS_EXPORT KexiDBPasswordDialog : public KPasswordDialog
@@ -45,9 +43,9 @@ public:
     Q_DECLARE_FLAGS(Flags, Flag)
 
     //! Constructs a new password dialog.
-    //! cdata.password is modified only when user provided the password.
+    //! cdata.password() is modified only when user provided the password.
     //! If @a showDetailsButton is true, the dialog displays connection details.
-    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, Flags flags = NoFlags);
+    KexiDBPasswordDialog(QWidget *parent, KDbConnectionData& cdata, Flags flags = NoFlags);
     virtual ~KexiDBPasswordDialog();
 
     bool showConnectionDetailsRequested() const;
@@ -56,10 +54,10 @@ public:
     //! @return true if password is needed and user provided the password, cancelled is password
     //! is needed but user pressed Cancel and false if password is not needed.
     //! data->password is modified only when user provided the password.
-    static tristate getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
+    static tristate getPasswordIfNeeded(KDbConnectionData *data, QWidget *parent = 0);
 
 protected Q_SLOTS:
-    virtual void slotButtonClicked(int button);
+    virtual void slotOkOrDetailsButtonClicked();
     void slotShowConnectionDetails();
 
 protected:

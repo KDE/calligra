@@ -20,7 +20,6 @@
 
 #include "kexidbdoublespinbox.h"
 
-#include <QLineEdit>
 
 KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent)
         : KDoubleSpinBox(parent) , KexiFormDataItemInterface()
@@ -110,4 +109,3 @@ void KexiDBDoubleSpinBox::clear()
     KDoubleSpinBox::setValue(minValue());
 }
 
-#include "kexidbdoublespinbox.moc"

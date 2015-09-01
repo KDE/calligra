@@ -24,16 +24,18 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
-#include <QToolButton>
 #include <QDomDocument>
-#include <kaction.h>
-#include <ktoggleaction.h>
-#include <kactioncollection.h>
-#include <kpagedialog.h>
-#include <ktextedit.h>
-#include <ktoolbar.h>
+#include <QAction>
+#include <QDebug>
+
+#include <KToggleAction>
+#include <KActionCollection>
+#include <KPageDialog>
+#include <KTextEdit>
+#include <KToolBar>
+#include <KSharedConfig>
 
 #include <formeditor/form.h>
 #include <formeditor/widgetlibrary.h>
@@ -80,7 +82,7 @@ public:
     KexiFormManager *q;
 };
 
-K_GLOBAL_STATIC(KexiFormManager, g_manager)
+Q_GLOBAL_STATIC(KexiFormManager, g_manager)
 
 KexiFormManager* KexiFormManager::self()
 {
@@ -117,22 +119,14 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
     if (col) {
         createActions( col );
         //connect actions provided by widget factories
-        connect(col->action("widget_assign_action"), SIGNAL(activated()),
+        connect(col->action("widget_assign_action"), SIGNAL(triggered()),
                 this, SLOT(slotAssignAction()));
     }
 
     d->widgetTree = widgetTree;
     if (d->widgetTree) {
-#ifdef __GNUC__
-#warning "Port this: connect()"
-#else
-#pragma WARNING( Port this: connect() )
-#endif
-#ifdef __GNUC__
-#warning "Port code related to KFormDesigner::FormManager::m_treeview here"
-#else
-#pragma WARNING( Port code related to KFormDesigner::FormManager::m_treeview here )
-#endif
+//! @todo KEXI3 Port this: connect()
+//! @todo KEXI3 Port code related to KFormDesigner::FormManager::m_treeview here
 //! @todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
 //! @todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
     }
@@ -164,7 +158,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->pointerAction = new KToggleAction(
-        koIcon("mouse_pointer"), i18n("Pointer"), d->collection);
+        koIcon("mouse_pointer"), xi18n("Pointer"), d->collection);
     d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
@@ -172,14 +166,14 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->pointerAction->setChecked(true);
 
     d->snapToGridAction = new KToggleAction(
-        i18n("Snap to Grid"), d->collection);
+        xi18n("Snap to Grid"), d->collection);
     d->snapToGridAction->setObjectName("snap_to_grid");
 
 //! @todo
 #if 0
     // Create the Style selection action (with a combo box in toolbar and submenu items)
     KSelectAction *styleAction = new KSelectAction(
-        i18n("Style"), d->collection);
+        xi18n("Style"), d->collection);
     styleAction->setObjectName("change_style");
     connect(styleAction, SIGNAL(triggered()),
             this, SLOT(slotStyle()));
@@ -198,16 +192,16 @@ void KexiFormManager::createActions(KActionCollection* collection)
             break;
         }
     }
-    styleAction->setToolTip(i18n("Set the current view style."));
+    styleAction->setToolTip(xi18n("Set the current view style."));
     styleAction->setMenuAccelsEnabled(true);
 #endif
 
     d->lib->addCustomWidgetActions(d->collection);
 
 #ifdef KEXI_DEBUG_GUI
-    KConfigGroup generalGroup(KGlobal::config()->group("General"));
+    KConfigGroup generalGroup(KSharedConfig::openConfig()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        QAction *a = new QAction(koIcon("run-build-file"), xi18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));
@@ -231,7 +225,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_KexiDBCheckBox"
             << "library_widget_KexiDBImageBox"
             << QString() //sep
-            << "library_widget_KPushButton"
+            << "library_widget_KexiDBPushButton"
             << QString() //sep
             << "library_widget_KexiFrame"
             << "library_widget_QGroupBox"
@@ -293,19 +287,19 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
                                     widget->metaObject(), QMetaMethod::Signal));
 
     if (!_signals.isEmpty()) {
-        const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
-        const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
-        KexiFormView *formView = KexiUtils::findParent<KexiFormView*>(widget);
+        QByteArray handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
+        QByteArray handleDropEventSignal = "handleDropEvent(QDropEvent*)";
+        KexiFormView *formView = KDbUtils::findParent<KexiFormView*>(widget);
 
         foreach(const QMetaMethod& method, _signals) {
-            if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
-                kDebug() << method.signature();
+            if (0 == qstrcmp(method.methodSignature(), handleDragMoveEventSignal)) {
+                qDebug() << method.methodSignature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                             formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
                 }
-            } else if (0 == qstrcmp(method.signature(), handleDropEventSignal)) {
-                kDebug() << method.signature();
+            } else if (0 == qstrcmp(method.methodSignature(), handleDropEventSignal)) {
+                qDebug() << method.methodSignature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDropEvent(QDropEvent*)),
                             formView, SLOT(slotHandleDropEvent(QDropEvent*)));
@@ -375,7 +369,7 @@ void KexiFormManager::enableAction(const char* name, bool enable)
     formViewWidget->setAvailable(translateName(name).toLatin1(), enable);
 }
 
-void KexiFormManager::setFormDataSource(const QString& partClass, const QString& name)
+void KexiFormManager::setFormDataSource(const QString& pluginId, const QString& name)
 {
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget)
@@ -384,37 +378,37 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
     if (!formWidget)
         return;
 
-    QString oldDataSourcePartClass(formWidget->dataSourcePartClass());
+    QString oldDataSourcePartClass(formWidget->dataSourcePluginId());
     QString oldDataSource(formWidget->dataSource());
-    if (partClass != oldDataSourcePartClass || name != oldDataSource) {
+    if (pluginId != oldDataSourcePartClass || name != oldDataSource) {
         QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", name);
-        propValues.insert("dataSourcePartClass", partClass);
+        propValues.insert("dataSourcePartClass", pluginId);
         KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
-            i18n("Set Form's Data Source to \"%1\"", name));
+            xi18n("Set Form's Data Source to \"%1\"", name));
         formViewWidget->form()->createPropertyCommandsInDesignMode(
             formWidget, propValues, group, true /*addToActiveForm*/);
     }
 }
 
 void KexiFormManager::setDataSourceFieldOrExpression(
-    const QString& string, const QString& caption, KexiDB::Field::Type type)
+    const QString& string, const QString& caption, KDbField::Type type)
 {
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget)
         return;
-    
-    KPropertySet& set = formViewWidget->form()->propertySet();
-    if (!set.contains("dataSource"))
+
+    KPropertySet* set = formViewWidget->form()->propertySet();
+    if (!set->contains("dataSource"))
         return;
 
-    set["dataSource"].setValue(string);
+    set->property("dataSource").setValue(string);
 
-    if (set.propertyValue("autoCaption", false).toBool()) {
-        set.changePropertyIfExists("fieldCaptionInternal", caption);
+    if (set->propertyValue("autoCaption", false).toBool()) {
+        set->changePropertyIfExists("fieldCaptionInternal", caption);
     }
-    if (set.propertyValue("widgetType").toString() == "Auto") {
-        set.changePropertyIfExists("fieldTypeInternal", type);
+    if (set->propertyValue("widgetType").toString() == "Auto") {
+        set->changePropertyIfExists("fieldTypeInternal", type);
     }
 }
 
@@ -452,7 +446,7 @@ void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command
             const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
             if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())
                 d->part->dataSourcePage()->setFormDataSource(
-                    formWidget->dataSourcePartClass(), formWidget->dataSource());
+                    formWidget->dataSourcePluginId(), formWidget->dataSource());
         }
     }
 }
@@ -475,18 +469,18 @@ void KexiFormManager::showFormUICode()
     KPageDialog uiCodeDialog;
     uiCodeDialog.setFaceType(KPageDialog::Tabbed);
     uiCodeDialog.setModal(true);
-    uiCodeDialog.setWindowTitle(i18nc("@title:window", "Form's UI Code"));
-    uiCodeDialog.setButtons(KDialog::Close);
+    uiCodeDialog.setWindowTitle(xi18nc("@title:window", "Form's UI Code"));
+    uiCodeDialog.setButtons(QDialog::Close);
     uiCodeDialog.resize(700, 600);
     KTextEdit *currentUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
-    uiCodeDialog.addPage(currentUICodeDialogEditor, i18n("Current"));
+    uiCodeDialog.addPage(currentUICodeDialogEditor, xi18n("Current"));
     currentUICodeDialogEditor->setReadOnly(true);
     QFont f(currentUICodeDialogEditor->font());
     f.setFamily("courier");
     currentUICodeDialogEditor->setFont(f);
 
     KTextEdit *originalUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
-    uiCodeDialog.addPage(originalUICodeDialogEditor, i18n("Original"));
+    uiCodeDialog.addPage(originalUICodeDialogEditor, xi18n("Original"));
     originalUICodeDialogEditor->setReadOnly(true);
     originalUICodeDialogEditor->setFont(f);
     currentUICodeDialogEditor->setPlainText(uiCode);
@@ -511,14 +505,14 @@ void KexiFormManager::slotAssignAction()
         return;
     }
 
-    KPropertySet& set = form->propertySet();
+    KPropertySet* set = form->propertySet();
 
     KexiFormEventAction::ActionData data;
-    const KProperty &onClickActionProp = set.property("onClickAction");
+    const KProperty &onClickActionProp = set->property("onClickAction");
     if (!onClickActionProp.isNull())
         data.string = onClickActionProp.value().toString();
 
-    const KProperty &onClickActionOptionProp = set.property("onClickActionOption");
+    const KProperty &onClickActionOptionProp = set->property("onClickActionOption");
     if (!onClickActionOptionProp.isNull())
         data.option = onClickActionOptionProp.value().toString();
 
@@ -531,13 +525,13 @@ void KexiFormManager::slotAssignAction()
         return;
 
     KexiActionSelectionDialog dlg(dbform, data,
-                                  set.property("objectName").value().toString());
+                                  set->property("objectName").value().toString());
 
     if (dlg.exec() == QDialog::Accepted) {
         data = dlg.currentAction();
         //update property value
-        set.changeProperty("onClickAction", data.string);
-        set.changeProperty("onClickActionOption", data.option);
+        set->changeProperty("onClickAction", data.string);
+        set->changeProperty("onClickActionOption", data.option);
     }
 }
 
@@ -561,4 +555,3 @@ QString KexiFormManager::translateName(const char* name) const
     return n;
 }
 
-#include "kexiformmanager.moc"

@@ -20,7 +20,6 @@
 #ifndef SCRIPTIO_H
 #define SCRIPTIO_H
 
-#include <QDomDocument>
 
 class QObject;
 class Event;
@@ -57,10 +56,8 @@ public:
 
 protected:
     ScriptIO() {
-        ;
     }
     ~ScriptIO() {
-        ;
     }
 };
 

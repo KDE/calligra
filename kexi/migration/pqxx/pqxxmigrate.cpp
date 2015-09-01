@@ -29,21 +29,20 @@
 #  include <postgres.h>
 #endif
 
+#include <KDbCursor>
+#include <KDbUtils>
+#include <KDbDriverManager>
+#include <KDb>
+#include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
+
 #include <QString>
-#include <kdebug.h>
+#include <QDebug>
 #include <QStringList>
 
 //! @todo I maybe should not use stl?
 #include <string>
 #include <vector>
 
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/drivermanager.h>
-#include <kexiutils/identifier.h>
-#include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
-
-using namespace KexiDB;
 using namespace KexiMigration;
 
 /*
@@ -65,8 +64,8 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
     m_conn = 0;
     m_rows = 0;
     m_row = 0;
-    
-    KexiDB::DriverManager manager;
+
+    KDbDriverManager manager;
     setDriver(manager.driver("pqxx"));
 }
 //==================================================================================
@@ -81,28 +80,28 @@ PqxxMigrate::~PqxxMigrate()
 //any any other attributes required by kexi
 //helped by reading the 'tables' test program
 bool PqxxMigrate::drv_readTableSchema(
-    const QString& originalName, KexiDB::TableSchema& tableSchema)
+    const QString& originalName, KDbTableSchema& tableSchema)
 {
     //Perform a query on the table to get some data
-    //kDebug();
+    //qDebug();
     tableSchema.setName(originalName);
     if (!query("select * from " + drv_escapeIdentifier(originalName) + " limit 1"))
         return false;
     //Loop round the fields
-    for (uint i = 0; i < (uint)m_res->columns(); i++) {
+    for (int i = 0; i < m_res->columns(); i++) {
         QString fldName(m_res->column_name(i));
-        KexiDB::Field::Type fldType = type(m_res->column_type(i), fldName);
-        QString fldID(KexiUtils::stringToIdentifier(fldName));
+        KDbField::Type fldType = type(m_res->column_type(i), fldName);
+        QString fldID(KDb::stringToIdentifier(fldName));
         const pqxx::oid toid = tableOid(originalName);
         if (toid == 0)
             return false;
-        KexiDB::Field *f = new KexiDB::Field(fldID, fldType);
+        KDbField *f = new KDbField(fldID, fldType);
         f->setCaption(fldName);
         f->setPrimaryKey(primaryKey(toid, i));
         f->setUniqueKey(uniqueKey(toid, i));
         f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
         tableSchema.addField(f);
-        //kDebug() << "Added field [" << f->name() << "] type [" << f->typeName() << ']';
+        //qDebug() << "Added field [" << f->name() << "] type [" << f->typeName() << ']';
     }
     return true;
 }
@@ -123,39 +122,39 @@ bool PqxxMigrate::drv_tableNames(QStringList& tableNames)
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
-KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
+KDbField::Type PqxxMigrate::type(int t, const QString& fname)
 {
     switch (t) {
     case UNKNOWNOID:
-        return KexiDB::Field::InvalidType;
+        return KDbField::InvalidType;
     case BOOLOID:
-        return KexiDB::Field::Boolean;
+        return KDbField::Boolean;
     case INT2OID:
-        return KexiDB::Field::ShortInteger;
+        return KDbField::ShortInteger;
     case INT4OID:
-        return KexiDB::Field::Integer;
+        return KDbField::Integer;
     case INT8OID:
-        return KexiDB::Field::BigInteger;
+        return KDbField::BigInteger;
     case FLOAT4OID:
-        return KexiDB::Field::Float;
+        return KDbField::Float;
     case FLOAT8OID:
-        return KexiDB::Field::Double;
+        return KDbField::Double;
     case NUMERICOID:
-        return KexiDB::Field::Double;
+        return KDbField::Double;
     case DATEOID:
-        return KexiDB::Field::Date;
+        return KDbField::Date;
     case TIMEOID:
-        return KexiDB::Field::Time;
+        return KDbField::Time;
     case TIMESTAMPOID:
-        return KexiDB::Field::DateTime;
+        return KDbField::DateTime;
     case BYTEAOID:
-        return KexiDB::Field::BLOB;
+        return KDbField::BLOB;
     case BPCHAROID:
-        return KexiDB::Field::Text;
+        return KDbField::Text;
     case VARCHAROID:
-        return KexiDB::Field::Text;
+        return KDbField::Text;
     case TEXTOID:
-        return KexiDB::Field::LongText;
+        return KDbField::LongText;
     }
 
     //Ask the user what to do with this field
@@ -166,42 +165,42 @@ KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool PqxxMigrate::drv_connect()
 {
-    //kDebug() << "drv_connect: " << data()->sourceName;
+    //qDebug() << "drv_connect: " << data()->sourceName;
 
     QString conninfo;
     QString socket;
 
     //Setup local/remote connection
-    if (data()->source->hostName.isEmpty()) {
-        if (data()->source->fileName().isEmpty()) {
+    if (data()->source->hostName().isEmpty()) {
+        if (data()->source->databaseName().isEmpty()) {
             socket = "/tmp/.s.PGSQL.5432";
         } else {
-            socket = data()->source->fileName();
+            socket = data()->source->databaseName();
         }
     } else {
-        conninfo = "host='" + data()->source->hostName + '\'';
+        conninfo = "host='" + data()->source->hostName() + '\'';
     }
 
     //Build up the connection string
     if (data()->source->port == 0)
         data()->source->port = 5432;
 
-    conninfo += QString::fromLatin1(" port='%1'").arg(data()->source->port);
+    conninfo += QString::fromLatin1(" port='%1'").arg(data()->source->port());
     conninfo += QString::fromLatin1(" dbname='%1'").arg(data()->sourceName);
 
-    if (!data()->source->userName.isEmpty())
-        conninfo += QString::fromLatin1(" user='%1'").arg(data()->source->userName);
+    if (!data()->source->userName().isEmpty())
+        conninfo += QString::fromLatin1(" user='%1'").arg(data()->source->userName());
 
-    if (!data()->source->password.isEmpty())
-        conninfo += QString::fromLatin1(" password='%1'").arg(data()->source->password);
+    if (!data()->source->password().isEmpty())
+        conninfo += QString::fromLatin1(" password='%1'").arg(data()->source->password());
 
     try {
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());
         return true;
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
+        qWarning() << "exception - " << e.what();
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     return false;
 }
@@ -221,7 +220,7 @@ bool PqxxMigrate::drv_disconnect()
 //Perform a query on the database and store result in m_res
 bool PqxxMigrate::query(const QString& statement)
 {
-    //kDebug() << "query: " << statement.toLatin1();
+    //qDebug() << "query: " << statement.toLatin1();
     if (!m_conn)
         return false;
 
@@ -239,10 +238,10 @@ bool PqxxMigrate::query(const QString& statement)
         return true;
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
-        kWarning() << "exception - " << e.what();
+        qWarning() << "exception - " << e.what();
         return false;
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     return true;
 }
@@ -271,7 +270,7 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
 
     //Some simple result caching
     if (table == otable) {
-        kDebug() << "Returning table OID from cache...";
+        qDebug() << "Returning table OID from cache...";
         return toid;
     } else {
         otable = table;
@@ -293,11 +292,11 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
             toid = 0;
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         toid = 0;
     } catch (...) {
-        kWarning() << "exception(...)??";
+        qWarning() << "exception(...)??";
     }
     delete tmpres;
     tmpres = 0;
@@ -305,7 +304,7 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
     delete tran;
     tran = 0;
 
-    //kDebug() << "OID for table [" << table << "] is [" << toid << ']';
+    //qDebug() << "OID for table [" << table << "] is [" << toid << ']';
     return toid;
 }
 
@@ -335,18 +334,18 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
             tmpres->at(0).at(0).to(keyf);
             if (keyf - 1 == col) {//-1 because pg counts from 1 and we count from 0
                 pkey = true;
-                kDebug() << "Field is pkey";
+                qDebug() << "Field is pkey";
             } else {
                 pkey = false;
-                kDebug() << "Field is NOT pkey";
+                qDebug() << "Field is NOT pkey";
             }
         } else {
             pkey = false;
-            kDebug() << "Field is NOT pkey";
+            qDebug() << "Field is NOT pkey";
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         pkey = false;
     }
     delete tmpres;
@@ -363,7 +362,7 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
  On success the result is stored in \a string and true is returned.
  \return cancelled if there are no records available. */
 tristate PqxxMigrate::drv_queryStringListFromSQL(
-    const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+    const QString& sqlStatement, int columnNumber, QStringList& stringList, int numRecords)
 {
     std::string result;
     int i = 0;
@@ -389,15 +388,17 @@ tristate PqxxMigrate::drv_queryStringListFromSQL(
 }
 
 tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KexiDB::RecordData& data, bool &firstRecord)
+        KDbRecordData* data, bool *firstRecord)
 {
-    if (firstRecord || !m_res) {
+    Q_ASSERT(data);
+    Q_ASSERT(firstRecord);
+    if (*firstRecord || !m_res) {
         if (m_res)
             clearResultInfo();
         if (!query(sqlStatement))
             return false;
         m_fetchRecordFromSQL_iter = m_res->begin();
-        firstRecord = false;
+        *firstRecord = false;
     } else
         ++m_fetchRecordFromSQL_iter;
 
@@ -406,18 +407,17 @@ tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
         return cancelled;
     }
 
-    std::string result;
     const int numFields = m_fetchRecordFromSQL_iter.size();
-    data.resize(numFields);
+    data->resize(numFields);
     for (int i = 0; i < numFields; i++)
-        data[i] = KexiDB::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i));
+        (*data)[i] = KDb::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i)); //!< @todo KEXI3
     return true;
 }
 
 //=========================================================================
 /*! Copy PostgreSQL table to KexiDB database */
-bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                KexiDB::TableSchema* dstTable)
+bool PqxxMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn,
+                                KDbTableSchema* dstTable)
 {
     std::vector<std::string> R;
 
@@ -426,20 +426,20 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
     pqxx::tablereader stream(T, (srcTable.toLatin1().constData()));
 
     //Loop round each row, reading into a vector of strings
-    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
+    const KDbQueryColumnInfo::Vector fieldsExpanded(dstTable->query()->fieldsExpanded());
     for (int n = 0; (stream >> R); ++n) {
         QList<QVariant> vals;
         std::vector<std::string>::const_iterator i, end(R.end());
         int index = 0;
         for (i = R.begin(); i != end; ++i, index++) {
-            if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::BLOB
-                    || fieldsExpanded.at(index)->field->type() == KexiDB::Field::LongText) {
-                vals.append(KexiDB::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
-            } else if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::Boolean) {
+            if (fieldsExpanded.at(index)->field->type() == KDbField::BLOB
+                    || fieldsExpanded.at(index)->field->type() == KDbField::LongText) {
+                vals.append(KDb::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
+            } else if (fieldsExpanded.at(index)->field->type() == KDbField::Boolean) {
                 vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
             } else
-                vals.append(KexiDB::cstringToVariant((*i).c_str(),
-                                                     fieldsExpanded.at(index)->field, (*i).size()));
+                vals.append(KDb::cstringToVariant((*i).c_str(),
+                                                     fieldsExpanded.at(index)->field->type(), (*i).size()));
         }
         if (!destConn->insertRecord(*dstTable, vals))
             return false;
@@ -475,18 +475,18 @@ bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
             tmpres->at(0).at(0).to(keyf);
             if (keyf - 1 == col) {//-1 because pg counts from 1 and we count from 0
                 ukey = true;
-                kDebug() << "Field is unique";
+                qDebug() << "Field is unique";
             } else {
                 ukey = false;
-                kDebug() << "Field is NOT unique";
+                qDebug() << "Field is NOT unique";
             }
         } else {
             ukey = false;
-            kDebug() << "Field is NOT unique";
+            qDebug() << "Field is NOT unique";
         }
     } catch (const std::exception &e) {
-        kWarning() << "exception - " << e.what();
-        kWarning() << "failed statement - " << statement;
+        qWarning() << "exception - " << e.what();
+        qWarning() << "failed statement - " << statement;
         ukey = false;
     }
 
@@ -521,20 +521,20 @@ bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 
 bool PqxxMigrate::drv_readFromTable(const QString & tableName)
 {
-    //kDebug();
+    //qDebug();
     bool ret;
     ret = false;
-    
+
     try {
         ret = query(QString("SELECT * FROM %1").arg(m_conn->esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
-            //kDebug() << m_rows;
+            //qDebug() << m_rows;
         }
-        
+
     }
     catch (const std::exception &e) {
-        kWarning();
+        qWarning();
     }
 
     return ret;
@@ -552,14 +552,14 @@ bool PqxxMigrate::drv_moveNext()
    else
    {
         return false;
-   }     
+   }
 }
 
 bool PqxxMigrate::drv_movePrevious()
 {
     if (!m_res)
         return false;
-    
+
     if (m_row > 0) {
         m_row --;
         return true;
@@ -567,14 +567,14 @@ bool PqxxMigrate::drv_movePrevious()
     else
     {
         return false;
-    }  
+    }
 }
 
 bool PqxxMigrate::drv_moveFirst()
-{    
+{
     if (!m_res)
         return false;
-    
+
     m_row = 0;
     return true;
 }
@@ -583,12 +583,12 @@ bool PqxxMigrate::drv_moveLast()
 {
     if (!m_res)
         return false;
-    
+
     m_row = m_rows - 1;
     return true;
 }
 
-QVariant PqxxMigrate::drv_value(uint i)
+QVariant PqxxMigrate::drv_value(int i)
 {
     if (m_row < m_rows) {
         QString str = (*m_res)[m_row][i].c_str();
@@ -597,4 +597,3 @@ QVariant PqxxMigrate::drv_value(uint i)
     return QVariant();
 }
 
-#include "pqxxmigrate.moc"

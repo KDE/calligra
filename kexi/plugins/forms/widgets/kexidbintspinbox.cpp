@@ -20,9 +20,6 @@
 
 #include "kexidbintspinbox.h"
 
-#include <QLineEdit>
-#include <knumvalidator.h>
-
 KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent)
         : KIntSpinBox(parent) , KexiFormDataItemInterface()
 {
@@ -111,4 +108,3 @@ void KexiDBIntSpinBox::clear()
     KIntSpinBox::setValue(minValue()); //! \todo ?
 }
 
-#include "kexidbintspinbox.moc"

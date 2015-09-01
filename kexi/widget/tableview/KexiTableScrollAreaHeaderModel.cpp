@@ -19,10 +19,11 @@
 
 #include "KexiTableScrollAreaHeaderModel.h"
 #include "KexiTableScrollArea.h"
+#include <KexiIcon.h>
 
-#include <db/tableviewcolumn.h>
+#include <KDbTableViewColumn>
 
-#include <KoIcon.h>
+#include <QDebug>
 
 class KexiTableScrollAreaHeaderModel::Private
 {
@@ -56,7 +57,7 @@ int KexiTableScrollAreaHeaderModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
-    return scrollArea->rowCount()
+    return scrollArea->recordCount()
             + (scrollArea->isInsertingEnabled() ? 1 : 0);
 }
 
@@ -76,11 +77,11 @@ QVariant KexiTableScrollAreaHeaderModel::data(const QModelIndex& index, int role
 
 QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    //kDebug() << orientation << section << role;
+    //qDebug() << orientation << section << role;
     switch (orientation) {
     case Qt::Horizontal: {
-        KexiDB::TableViewData *data = qobject_cast<KexiTableScrollArea*>(QObject::parent())->data();
-        KexiDB::TableViewColumn *col = data->visibleColumn(section);
+        KDbTableViewData *data = qobject_cast<KexiTableScrollArea*>(QObject::parent())->data();
+        KDbTableViewColumn *col = data->visibleColumn(section);
         if (!col) {
             return QVariant();
         }
@@ -98,7 +99,7 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
             break;
         }
         case Qt::ToolTipRole: {
-            KexiDB::Field *f = col->field();
+            KDbField *f = col->field();
             return f ? f->description() : QString();
         }
         }
@@ -109,17 +110,17 @@ QVariant KexiTableScrollAreaHeaderModel::headerData(int section, Qt::Orientation
         case Qt::DecorationRole: {
             const KexiTableScrollArea *scrollArea = qobject_cast<const KexiTableScrollArea*>(QObject::parent());
             if (scrollArea->isInsertingEnabled()) {
-                const int plusRow = scrollArea->rowCount();
+                const int plusRow = scrollArea->recordCount();
                 if (section == plusRow) {
                     return d->plusPixmap;
                 }
             }
             if (!scrollArea->isReadOnly() &&
-                    section == scrollArea->currentRow() && scrollArea->currentRow() == scrollArea->rowEditing())
+                    section == scrollArea->currentRecord() && scrollArea->currentRecord() == scrollArea->recordEditing())
             {
                 return d->penPixmap;
             }
-            if (section == scrollArea->currentRow()) {
+            if (section == scrollArea->currentRecord()) {
                 return d->pointerPixmap;
             }
         }

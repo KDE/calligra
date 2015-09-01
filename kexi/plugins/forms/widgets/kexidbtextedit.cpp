@@ -21,17 +21,18 @@
 
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
-#include <db/queryschema.h>
 #include <kexiutils/utils.h>
 
-#include <kapplication.h>
-#include <kstandardshortcut.h>
-#include <kdebug.h>
+#include <KDbQuerySchema>
 
+#include <KStandardShortcut>
+
+#include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QLabel>
 #include <QMenu>
+#include <QFontDatabase>
 
 class DataSourceLabel : public QLabel
 {
@@ -81,7 +82,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_paletteChangeEvent_enabled(true)
 {
     QFont tmpFont;
-    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    tmpFont.setPointSize(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 //hmm disabled again because this makes the widget disappear entirely
@@ -107,7 +108,7 @@ void KexiDBTextEdit::setInvalidState(const QString& displayText)
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 //! @todo how about rich text?
-    if (m_columnInfo && m_columnInfo->field->type() == KexiDB::Field::Boolean) {
+    if (m_columnInfo && m_columnInfo->field->type() == KDbField::Boolean) {
 //! @todo temporary solution for booleans!
         KTextEdit::setHtml(add.toBool() ? "1" : "0");
     } else {
@@ -149,11 +150,7 @@ void KexiDBTextEdit::slotTextChanged()
         if (t.length() > (int)m_length) {
             m_slotTextChanged_enabled = false;
             if (acceptRichText()) {
-#ifdef __GNUC__
-#warning todo setHtml(t.left(m_length));
-#else
-#pragma WARNING(todo setHtml(t.left(m_length));
-#endif
+//! @todo KEXI3 setHtml(t.left(m_length));
             }
             else {
                 setPlainText(t.left(m_length));
@@ -184,12 +181,7 @@ bool KexiDBTextEdit::isReadOnly() const
 void KexiDBTextEdit::setReadOnly(bool readOnly)
 {
     KTextEdit::setReadOnly(readOnly);
-#ifdef __GNUC__
-#warning TODO KexiDBTextEdit::setReadOnly() - bg color
-#else
-#pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
-#endif
-//! @todo
+//! @todo KEXI3 KexiDBTextEdit::setReadOnly() - bg color
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
@@ -221,7 +213,7 @@ void KexiDBTextEdit::clear()
     document()->clear();
 }
 
-void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBTextEdit::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     if (!cinfo) {
@@ -229,7 +221,7 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         return;
     }
 
-    if (cinfo->field->type() == KexiDB::Field::Text) {
+    if (cinfo->field->type() == KDbField::Text) {
         if (!designMode()) {
             if (cinfo->field->maxLength() > 0) {
                 m_length = cinfo->field->maxLength();
@@ -351,9 +343,9 @@ void KexiDBTextEdit::setDataSource(const QString &ds)
     updateTextForDataSource();
 }
 
-void KexiDBTextEdit::setDataSourcePartClass(const QString &partClass)
+void KexiDBTextEdit::setDataSourcePluginId(const QString &pluginId)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     updateTextForDataSource();
 }
 
@@ -399,4 +391,3 @@ void KexiDBTextEdit::changeEvent(QEvent *e)
     KTextEdit::changeEvent(e);
 }
 
-#include "kexidbtextedit.moc"

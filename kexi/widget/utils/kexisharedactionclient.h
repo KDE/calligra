@@ -20,10 +20,10 @@
 #ifndef KEXISHAREDACTIONCLIENT_H
 #define KEXISHAREDACTIONCLIENT_H
 
+#include "kexiguiutils_export.h"
+
 #include <QHash>
 #include <QAction>
-
-#include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
 /** See KexiTableView and KexiFormScrollView for example usage.

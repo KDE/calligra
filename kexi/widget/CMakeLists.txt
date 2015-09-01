@@ -1,7 +1,7 @@
 add_subdirectory( utils )
 add_subdirectory( dataviewcommon )
 add_subdirectory( relations )
-  
+
 if(KEXI_MOBILE)
 
 else()
@@ -10,7 +10,7 @@ endif()
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core)
 
 
 ########### next target ###############
@@ -55,8 +55,8 @@ else ()
   list(APPEND kexiextendedwidgets_LIB_SRCS
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
-    kexidbconnectionwidget.cpp 
-# TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
+    kexidbconnectionwidget.cpp
+# TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator)
 #      in kexiactionselectiondialog and remove them
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
@@ -80,26 +80,24 @@ ki18n_wrap_ui(kexiextendedwidgets_LIB_SRCS
 
 add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
-target_link_libraries(
-    kexiextendedwidgets
-    kexidataviewcommon
-    kexiutils
-    kexiguiutils
-    kexicore
-    ktexteditor
+generate_export_header(kexiextendedwidgets BASE_NAME kexiextwidgets)
 
-    Predicate
-    KProperty
+target_link_libraries(kexiextendedwidgets
+    PRIVATE
+        kexidataviewcommon
+        kexiutils
+        kexiguiutils
+        kexicore
+
+        KDb
+        KProperty
+
+        KF5::TextWidgets # KTextEdit
+        KF5::Codecs # KCharsets
+    PUBLIC
+        KF5::KIOFileWidgets # KFileWidget
+        KF5::TextEditor
 )
-
-if (KEXI_MOBILE)
-
-else()
-  target_link_libraries(
-    kexiextendedwidgets
-    
-    )
-endif()
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiextendedwidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

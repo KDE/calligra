@@ -67,5 +67,4 @@ ScriptManager::slotFormDeleted(KFormDesigner::Form *form)
     delete fs;
 }
 
-#include "scriptmanager.moc"
 

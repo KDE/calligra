@@ -31,4 +31,3 @@ KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
 {
 }
 
-#include "kexiquerydesignersqleditor.moc"

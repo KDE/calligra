@@ -23,7 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/driver.h>
+#include <KDbDriver>
+
 #include <kexi_global.h>
 
 namespace Scripting
@@ -45,7 +46,7 @@ namespace Scripting
  * # Create a connectiondata object.
  * connectiondata = kexidb.createConnectionData()
  * # Fill the new connectiondata object with what we need to connect.
- * connectiondata.setFileName("/home/user/kexisqlite3file.kexi")
+ * connectiondata.setDatabaseName("/home/user/kexisqlite3file.kexi")
  * # Print the list of connections before.
  * print driver.connectionsList()
  * # Create the connection now.
@@ -58,7 +59,7 @@ class KexiDBDriver : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver);
+    KexiDBDriver(QObject* parent, KDbDriver* driver);
     virtual ~KexiDBDriver();
 
 public Q_SLOTS:
@@ -93,12 +94,12 @@ public Q_SLOTS:
     could not be created. */
     QObject* createConnection(QObject* data);
     /** Returns the number of connections. */
-    uint connectionCount();
+    int connectionCount();
     /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
-    //! @todo QObject* connection(uint index);
+    //! @todo QObject* connection(int index);
 
 private:
-    ::KexiDB::Driver* m_driver;
+    KDbDriver* m_driver;
 };
 
 }

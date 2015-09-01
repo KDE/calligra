@@ -18,33 +18,43 @@
 */
 
 #include "KexiBugReportDialog.h"
+#include "KexiUserFeedbackAgent.h"
+#include <core/KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
+#include <kexi_version.h>
+
+#include <KAboutData>
+#include <KTitleWidget>
+#include <KToolInvocation>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>
 
-#include <KAboutData>
-#include <KComponentData>
-#include <KLocale>
-#include <KTitleWidget>
-#include <KToolInvocation>
-
-#include <core/KexiMainWindowIface.h>
-#include <kexiutils/utils.h>
-#include <kexi_version.h>
-#include "KexiUserFeedbackAgent.h"
+/*! Make a deep copy so we can modify the version.
+ We need to override the version since it sometimes can look like
+ "2.9 Alpha (git 4e06281 master)" what confuses the bugs.kde.org service.
+ KEXI_VERSION_STRING returns just 2.9 Alpha */
+static KAboutData copyAboutDataWithFixedVersion()
+{
+    KAboutData data = KAboutData::applicationData();
+    data.setVersion(KEXI_VERSION_STRING);
+    return data;
+}
 
 KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
- : KBugReport(parent, true /*modal*/, copyAboutData())
+ : KBugReport(copyAboutDataWithFixedVersion(), parent)
 {
+    setModal(true);
+    setWindowTitle(xi18nc("@title:window", "Report a Bug or Wish"));
     collectData();
-    setWindowTitle(i18nc("@title:window", "Report a Bug or Wish"));
     QWidget *title = KexiUtils::findFirstChild<QWidget*>(this, "KTitleWidget");
     if (title) {
         title->hide();
+        QVBoxLayout* lay = qobject_cast<QVBoxLayout*>(title->layout());
+        lay->insertSpacing(0, 6);
+        lay->addStretch(1);
     }
-    QVBoxLayout* lay = qobject_cast<QVBoxLayout*>(mainWidget()->layout());
-    lay->insertSpacing(0, 6);
-    lay->addStretch(1);
     QGridLayout *glay = KexiUtils::findFirstChild<QGridLayout*>(this, "QGridLayout");
     if (glay) {
         if (glay->itemAtPosition(0, 0) && glay->itemAtPosition(0, 0)->widget()) {
@@ -58,19 +68,19 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
             lbl->setAlignment(Qt::AlignRight);
         }
         if (glay->itemAtPosition(2, 0) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 0)->widget())))) {
-            lbl->setText(i18n("Operating system & platform:"));
+            lbl->setText(xi18n("Operating system & platform:"));
             lbl->setAlignment(Qt::AlignRight);
         }
         if (glay->itemAtPosition(2, 1) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 1)->widget())))) {
             QString op_sys = m_op_sys;
             QString rep_platform = m_rep_platform;
             if (op_sys == "other") {
-                op_sys = i18nc("Other operating system", "Other");
+                op_sys = xi18nc("Other operating system", "Other");
             }
             if (rep_platform == "Other") {
-                rep_platform = i18nc("Other platform", "Other");
+                rep_platform = xi18nc("Other platform", "Other");
             }
-            lbl->setText(i18nc("<operating system>, <platform>", "%1, %2", op_sys, rep_platform));
+            lbl->setText(xi18nc("<operating system>, <platform>", "%1, %2", op_sys, rep_platform));
         }
         if (glay->itemAtPosition(3, 0) && glay->itemAtPosition(3, 0)->widget()) {
             glay->itemAtPosition(3, 0)->widget()->hide(); // compiler label
@@ -80,29 +90,19 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
         }
         glay->addItem(new QSpacerItem(1, 10), glay->count(), 0);
     }
-    mainWidget()->setMinimumHeight(mainWidget()->sizeHint().height()); // WORKAROUND: prevent "cropped" kcombobox
+    //! @todo KEXI3 test it
+    setMinimumHeight(sizeHint().height()); // WORKAROUND: prevent "cropped" kcombobox
     adjustSize();
-}
-
-KAboutData* KexiBugReportDialog::copyAboutData()
-{
-    // Make a deep copy so we can modify the version.
-    m_aboutData = new KAboutData(*KGlobal::mainComponent().aboutData());
-    // We need to override the version since it sometimes can look like
-    // "2.9 Alpha (git 4e06281 master)" what confuses the bugs.kde.org service.
-    // KEXI_VERSION_STRING returns just 2.9 Alpha
-    m_aboutData->setVersion(KEXI_VERSION_STRING);
-    return m_aboutData;
 }
 
 void KexiBugReportDialog::accept()
 {
     // override, based on KBugReport::accept()
-    KUrl url("https://bugs.kde.org/enter_bug.cgi");
+    QUrl url("https://bugs.kde.org/enter_bug.cgi");
     url.addQueryItem("format", "guided"); // use the guided form
     // the string format is product/component, where component is optional
     url.addQueryItem("product", "kexi");
-    url.addQueryItem("version", m_aboutData->version());
+    url.addQueryItem("version", KEXI_VERSION_STRING);
 #if 0   //! @todo add when enter_bug.cgi supports adding comments or when Kexi gets
     //! own Bug Report GUI and communicates using RPC.
     QString desc;
@@ -115,7 +115,7 @@ void KexiBugReportDialog::accept()
     url.addQueryItem("op_sys", m_op_sys);
     url.addQueryItem("rep_platform", m_rep_platform);
     KToolInvocation::invokeBrowser(url.url());
-    KDialog::accept();
+    QDialog::accept();
 }
 
 void KexiBugReportDialog::collectData()
@@ -226,5 +226,3 @@ void KexiBugReportDialog::collectData()
     m_rep_platform = "Other";
 #endif
 }
-
-#include "KexiBugReportDialog.moc"

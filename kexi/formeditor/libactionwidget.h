@@ -21,11 +21,10 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <ktoggleaction.h>
-
-#include <kexi_export.h>
-
+#include "kformdesigner_export.h"
 #include "utils.h"
+
+#include <KToggleAction>
 
 namespace KFormDesigner
 {
@@ -35,7 +34,7 @@ class WidgetInfo;
 /**
  * KToggleAction subclass which remembers the matching class name.
  */
-class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
+class KFORMDESIGNER_EXPORT LibActionWidget : public KToggleAction
 {
     Q_OBJECT
 public:

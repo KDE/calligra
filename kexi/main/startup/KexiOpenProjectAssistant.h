@@ -22,18 +22,17 @@
 #define KEXIOPENPROJECTASSISTANT_H
 
 #include "KexiAssistantMessageHandler.h"
-
 #include <core/kexidbconnectionset.h>
-#include <db/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/utils.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-class KTabWidget;
+#include <KDbConnectionData>
+
+class QTabWidget;
 class KexiProjectData;
-class KexiProjectSet;
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiOpenProjectAssistant;
@@ -46,7 +45,7 @@ public:
     explicit KexiMainOpenProjectPage(QWidget* parent = 0);
     ~KexiMainOpenProjectPage();
 
-    KTabWidget* tabWidget;
+    QTabWidget* tabWidget;
     KexiConnectionSelectorWidget* fileSelector;
     KexiConnectionSelectorWidget* connSelector;
 private Q_SLOTS:
@@ -65,14 +64,14 @@ class KexiProjectDatabaseSelectionPage : public KexiAssistantPage
 public:
     explicit KexiProjectDatabaseSelectionPage(KexiOpenProjectAssistant* parent);
     ~KexiProjectDatabaseSelectionPage();
-    
-    bool setConnection(KexiDB::ConnectionData* data);
+
+    bool setConnection(KDbConnectionData* data);
 
     KexiProjectSelectorWidget* projectSelector;
-    QPointer<KexiDB::ConnectionData> conndataToShow;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnectionData>
+    KDbConnectionData* conndataToShow;
 
 private:
-    KexiProjectSet *m_projectSetToShow;
     KexiOpenProjectAssistant* m_assistant;
 };
 

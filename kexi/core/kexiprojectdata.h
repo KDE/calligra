@@ -21,13 +21,16 @@
 #ifndef KEXIPROJECTDATA_H
 #define KEXIPROJECTDATA_H
 
-#include <kexi_export.h>
-#include <db/connectiondata.h>
-#include <db/schemadata.h>
+#include "kexicore_export.h"
+
+#include <KDbConnectionData>
+#include <KDbResult>
+#include <KDbObject>
+
+#include <KLocalizedString>
 
 #include <QDateTime>
 #include <QList>
-#include <QtDebug>
 
 class KexiProjectDataPrivate;
 
@@ -41,7 +44,7 @@ class KexiProjectDataPrivate;
 
  @todo make it value-based class
 */
-class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
+class KEXICORE_EXPORT KexiProjectData : public QObject, public KDbObject, public KDbResultable
 {
 public:
     typedef QList<KexiProjectData*> List;
@@ -67,9 +70,9 @@ public:
     /*! Creates project data out of connection data @a cdata.
       @a dbname can be provided for server-based connections; it is ignored
       for file-based onces because in this case name is equal to database's filename
-      (cdata.dbFileName()).
+      (cdata.databaseName()).
       @a caption is for setting project's caption. */
-    explicit KexiProjectData(const KexiDB::ConnectionData &cdata,
+    explicit KexiProjectData(const KDbConnectionData &cdata,
                              const QString& dbname = QString(), const QString& caption = QString());
 
     /*! Constructs a copy of \a pdata */
@@ -97,29 +100,26 @@ public:
 
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
-    QString name() const;
-
     /*! \return true if there is the User Mode set in internal
      project settings. */
     bool userMode() const;
 
-    KexiDB::ConnectionData* connectionData();
+    KDbConnectionData* connectionData();
 
-    const KexiDB::ConnectionData* constConnectionData() const;
+    const KDbConnectionData* connectionData() const;
 
     /*! \return database name.
-     In fact, this is the same as KexiDB::SchemaData::name() */
+     In fact, this is the same as KDbObject::name() */
     QString databaseName() const;
-   
+
     void setDatabaseName(const QString& dbName);
 
     /*! \return user-visible string better describing the project than just databaseName().
      For server-based projects returns i18n'd string:
      "<project name>" (connection: user\@server:port).
      For file-based projects returns project's filename.
-     If \a nobr is true, \<nobr\> tags are added around '(connection: user\@server:port)'
-     (useful for displaying in message boxes). */
-    QString infoString(bool nobr = true) const;
+     If \a format controls format of the message (useful for displaying in message boxes). */
+    QString infoString(Kuit::VisualFormat format = Kuit::PlainText) const;
 
     QDateTime lastOpened() const;
 
@@ -147,12 +147,12 @@ public:
      This is set to 0 by default what means KexiDBShortcutFile_version should be used on saving.
      If KexiDBShortcutFile was used to create this KexiProjectData object,
      the version information is retrieved from the file. */
-    uint formatVersion;
+    int formatVersion;
 
 private:
     KexiProjectDataPrivate * const d;
 };
 
-KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d);
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& data);
 
 #endif

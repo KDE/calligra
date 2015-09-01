@@ -20,12 +20,11 @@
 #ifndef WIDGETWITHSUBPROPERTIESINTERFACE_H
 #define WIDGETWITHSUBPROPERTIESINTERFACE_H
 
+#include "kformdesigner_export.h"
+
 #include <QWidget>
-#include <QPointer>
 #include <QVariant>
 #include <QSet>
-
-#include <kexi_export.h>
 
 namespace KFormDesigner
 {
@@ -35,7 +34,7 @@ namespace KFormDesigner
  of its internal editor. For example, if the autofield is of type Image Box,
  the Image Box widget has some specific properties like "lineWidth".
  Such properties are provided by the parent KexiDBAutoField object as subproperties. */
-class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
+class KFORMDESIGNER_EXPORT WidgetWithSubpropertiesInterface
 {
 public:
     WidgetWithSubpropertiesInterface();
@@ -57,7 +56,7 @@ public:
 
     //! \return a value of widget's subproperty. \a ok is set to true on success
     //! and to false on failure.
-    QVariant subproperty(const char * name, bool &ok) const;
+    QVariant subproperty(const char * name, bool *ok) const;
 
     //! Sets a subproperty value \a value for a subproperty \a name
     //! \return true on successful setting and false when there

@@ -20,7 +20,7 @@
 #ifndef KEXI_MIGRATEMANAGERINTERFACE_H
 #define KEXI_MIGRATEMANAGERINTERFACE_H
 
-#include <kexi_export.h>
+#include "kexicore_export.h"
 
 #include <QList>
 #include <QString>
@@ -32,7 +32,7 @@ public:
     virtual ~KexiMigrateManagerInterface() {}
 
     //! Implement to return the list offile MIME types that are supported by migration drivers
-    virtual QList<QString> supportedFileMimeTypes() = 0;
+    virtual QStringList supportedFileMimeTypes() = 0;
 };
 
 #endif

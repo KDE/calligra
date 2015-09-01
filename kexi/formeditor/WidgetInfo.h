@@ -22,12 +22,11 @@
 #ifndef KFORMDESIGNERWIDGETINFO_H
 #define KFORMDESIGNERWIDGETINFO_H
 
-#include <QObject>
-#include <QPointer>
-#include <QHash>
+#include "kformdesigner_export.h"
 
-#include <kexi_export.h>
-#include <db/tristate.h>
+#include <KDbTristate>
+
+#include <QHash>
 
 namespace KFormDesigner
 {
@@ -35,8 +34,8 @@ namespace KFormDesigner
 class WidgetFactory;
 class WidgetLibrary;
 
-//! A class providing properties of widget classes offered by a factory
-class KFORMEDITOR_EXPORT WidgetInfo
+//! A class providing properties of a single widget class offered by a factory
+class KFORMDESIGNER_EXPORT WidgetInfo
 {
 public:
     explicit WidgetInfo(WidgetFactory *f);
@@ -88,7 +87,7 @@ public:
      If this name is found when loading a .ui file, the className() will be used instead.
      It allows to support both KDE and Qt versions of widget, without duplicating code.
      As a rule, className() should always return a class name which is inherited from
-     alternate class. For example KLineEdit class has alternate QLineEdit class.
+     alternate class. For exampleQPushButton class has alternate KexiPushButton class.
 
      \a override parameter overrides class name of a widget,
      even if it was implemented in other factory.
@@ -97,8 +96,8 @@ public:
      (no matter in which factory).
      By forced overriding existing class with other - custom, user
      will be able to see more or less properties and experience different behaviour.
-     For example, in Kexi application, KLineEdit class contains additional
-     "datasource" property for binding to database sources.
+     For example, in Kexi application, KexiDBPushButton class contains additional
+     properties.
     */
     void addAlternateClassName(const QByteArray& alternateName, bool override = false);
 
@@ -145,8 +144,8 @@ public:
 
     /*! @return list of the properties that should automatically be saved
     for a widget of @a classname class.
-    Examples are: custom properties "text" for label or button, "contents" for combobox... 
-    If there is inherited class (see @ref inheritedClass()), autosave properties 
+    Examples are: custom properties "text" for label or button, "contents" for combobox...
+    If there is inherited class (see @ref inheritedClass()), autosave properties
     from that class are prepended to the list. */
     QList<QByteArray> autoSaveProperties() const;
 
@@ -172,9 +171,6 @@ private:
 
     friend class WidgetLibrary;
 };
-
-typedef QList<WidgetInfo*> WidgetInfoList;
-typedef QHash<QByteArray, WidgetInfo*> WidgetInfoHash;
 
 } // namespace KFormDesigner
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,91 +22,90 @@
 #include "kexipartmanager.h"
 #include "KexiMainWindowIface.h"
 
-#include <db/global.h>
-#include <kactioncollection.h>
-#include <KDebug>
+#include <KDbGlobal>
+
+#include <KActionCollection>
+
+#include <QStringList>
+#include <QDebug>
+#include <QJsonArray>
 
 using namespace KexiPart;
 
-Info::Private::Private(const KService::Ptr& aPtr)
-        : ptr(aPtr)
-        , instanceCaption(aPtr->name())
-        , groupName(aPtr->genericName())
-        , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
-        , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
-        , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
-        , broken(false)
-        , idStoredInPartDatabase(false)
+static bool isTrue(KPluginMetaData *metaData, const char* fieldName)
 {
-    bool dataView = true;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsDataView", &dataView);
-    if (dataView) {
+    return 0 == metaData->value(QLatin1String(fieldName))
+                .compare(QLatin1String("true"), Qt::CaseInsensitive);
+}
+
+Info::Private::Private(Info *info, const QJsonObject &rootObject)
+    : untranslatedGroupName(info->value("X-Kexi-GroupName"))
+    , typeName(info->value("X-Kexi-TypeName"))
+    , supportedViewModes(0)
+    , supportedUserViewModes(0)
+    , isVisibleInNavigator(isTrue(info, "X-Kexi-VisibleInProjectNavigator"))
+    , isDataExportSupported(isTrue(info, "X-Kexi-SupportsDataExport"))
+    , isPrintingSupported(isTrue(info, "X-Kexi-SupportsPrinting"))
+    , isExecuteSupported(isTrue(info, "X-Kexi-SupportsExecution"))
+    , isPropertyEditorAlwaysVisibleInDesignMode(
+          isTrue(info, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode"))
+{
+    groupName = info->readTranslatedString(rootObject, "X-Kexi-GroupName", untranslatedGroupName);
+    const QStringList serviceTypes = info->serviceTypes();
+    if (serviceTypes.contains("Kexi/Viewer")) {
         supportedViewModes |= Kexi::DataViewMode;
     }
-    bool designView = true;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsDesignView", &designView);
-    if (designView) {
+    if (serviceTypes.contains("Kexi/Designer")) {
         supportedViewModes |= Kexi::DesignViewMode;
     }
-    bool textView = false;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsTextView", &textView);
-    if (textView) {
+    if (serviceTypes.contains("Kexi/Editor")) {
         supportedViewModes |= Kexi::TextViewMode;
     }
-    dataView = true;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsDataViewInUserMode", &dataView);
-    if (dataView) {
+
+    const QJsonArray userServiceTypes = rootObject.value("X-Kexi-ServiceTypesInUserMode").toArray();
+    if (userServiceTypes.contains(QJsonValue("Kexi/Viewer"))) {
         supportedUserViewModes |= Kexi::DataViewMode;
     }
-    designView = false;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsDesignViewInUserMode", &designView);
-    if (designView) {
+    if (userServiceTypes.contains(QJsonValue("Kexi/Designer"))) {
         supportedUserViewModes |= Kexi::DesignViewMode;
     }
-    textView = false;
-    getBooleanProperty(aPtr, "X-Kexi-SupportsTextViewInUserMode", &textView);
-    if (textView) {
+    if (userServiceTypes.contains(QJsonValue("Kexi/Editor"))) {
         supportedUserViewModes |= Kexi::TextViewMode;
     }
-    
-    isVisibleInNavigator = false;
-    getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
-    isVisibleInNavigator = !isVisibleInNavigator;
-
-    isPropertyEditorAlwaysVisibleInDesignMode = true;
-    getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
-                       &isPropertyEditorAlwaysVisibleInDesignMode);
 }
 
 Info::Private::Private()
-        : broken(false)
-        , isVisibleInNavigator(false)
-        , idStoredInPartDatabase(false)
-        , isPropertyEditorAlwaysVisibleInDesignMode(false)
+    : supportedViewModes(0)
+    , supportedUserViewModes(0)
+    , isVisibleInNavigator(false)
+    , isDataExportSupported(false)
+    , isPrintingSupported(false)
+    , isExecuteSupported(false)
+    , isPropertyEditorAlwaysVisibleInDesignMode(false)
 {
 }
 
 //------------------------------
 
-/*! \return "create" KAction's name for part defined by \a info.
+/*! \return "create" QAction's name for part defined by \a info.
  The result is like "tablepart_create". */
 static QString nameForCreateAction(const Info& info)
 {
-    return info.objectName() + "part_create";
+    return info.id() + ".create";
 }
 
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
+    : QAction(QIcon::fromTheme(info->createIconName()), info->name() + "...", parent)
     , m_info(info)
 {
     setObjectName(nameForCreateAction(*m_info));
     // default tooltip and what's this
-    setToolTip(i18n("Create new object of type \"%1\"",
-                m_info->instanceCaption().toLower()));
-    setWhatsThis(i18n("Creates new object of type \"%1\"",
-                    m_info->instanceCaption().toLower()));
+    setToolTip(xi18n("Create new object of type \"%1\"",
+                m_info->name().toLower()));
+    setWhatsThis(xi18n("Creates new object of type \"%1\"",
+                    m_info->name().toLower()));
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
     connect(this, SIGNAL(newObjectRequested(KexiPart::Info*)),
             &Kexi::partManager(), SIGNAL(newObjectRequested(KexiPart::Info*)));
@@ -119,24 +118,27 @@ void KexiNewObjectAction::slotTriggered()
 
 //------------------------------
 
-Info::Info(KService::Ptr ptr)
-        : d(new Private(ptr))
-{
+//Info::Info(const QString &id, const QString &iconName,
+//           const QString &objectName)
+//        : KPluginMetaData(), d(new Private)
+//{
+//    d->iconName = iconName;
+//    d->objectName = objectName;
+//}
 
+Info::Info(const QPluginLoader &loader)
+    : KexiPluginMetaData(loader), d(new Private(this, rootObject()))
+{
 }
 
-Info::Info(const QString &partClass, const QString &itemIconName,
-           const QString &objectName)
-        : d(new Private)
-{                       
-    d->partClass = partClass;
-    d->itemIconName = itemIconName;
-    d->objectName = objectName;
-}                       
-                       
 Info::~Info()
 {
     delete d;
+}
+
+QString Info::typeName() const
+{
+    return d->typeName;
 }
 
 QString Info::groupName() const
@@ -144,29 +146,14 @@ QString Info::groupName() const
     return d->groupName;
 }
 
-QString Info::instanceCaption() const
+QString Info::untranslatedGroupName() const
 {
-    return d->instanceCaption;
+    return d->untranslatedGroupName;
 }
 
-QString Info::partClass() const
+QString Info::createIconName() const
 {
-    return d->partClass;
-}
-
-QString Info::itemIconName() const
-{
-    return d->itemIconName;
-}
-
-QString Info::createItemIconName() const
-{
-    return d->itemIconName + QLatin1String("_newobj");
-}
-
-QString Info::objectName() const
-{
-    return d->objectName;
+    return iconName() + QLatin1String("_newobj");
 }
 
 Kexi::ViewModes Info::supportedViewModes() const
@@ -179,58 +166,24 @@ Kexi::ViewModes Info::supportedUserViewModes() const
     return d->supportedUserViewModes;
 }
 
-KService::Ptr Info::ptr() const
-{
-    return d->ptr;
-}
-
-bool Info::isBroken() const
-{
-    return d->broken;
-}
-
 bool Info::isVisibleInNavigator() const
 {
     return d->isVisibleInNavigator;
 }
 
-void Info::setBroken(bool broken, const QString& errorMessage)
-{
-    d->broken = broken;
-    d->errorMessage = errorMessage;
-}
-
-QString Info::errorMessage() const
-{
-    return d->errorMessage;
-}
-
-void Info::setIdStoredInPartDatabase(bool set)
-{
-    d->idStoredInPartDatabase = set;
-}
-
-bool Info::isIdStoredInPartDatabase() const
-{
-    return d->idStoredInPartDatabase;
-}
-
 bool Info::isDataExportSupported() const
 {
-    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
-    return val.isValid() ? val.toBool() : false;
+    return d->isDataExportSupported;
 }
 
 bool Info::isPrintingSupported() const
 {
-    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
-    return val.isValid() ? val.toBool() : false;
+    return d->isPrintingSupported;
 }
 
 bool Info::isExecuteSupported() const
 {
-    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
-    return val.isValid() ? val.toBool() : false;
+    return d->isExecuteSupported;
 }
 
 bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
@@ -243,7 +196,7 @@ QAction* Info::newObjectAction()
     if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()
         || !isVisibleInNavigator())
     {
-        kWarning();
+        qWarning();
         return 0;
     }
     QAction *act = KexiMainWindowIface::global()->actionCollection()->action(nameForCreateAction(*this));
@@ -253,5 +206,3 @@ QAction* Info::newObjectAction()
     }
     return act;
 }
-
-#include "kexipartinfo_p.moc"

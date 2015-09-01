@@ -20,15 +20,15 @@
 #ifndef KEXITABLESCROLLAREAHEADER_H
 #define KEXITABLESCROLLAREAHEADER_H
 
+#include "kexidatatable_export.h"
 #include <kexi_global.h>
+
 #include <QHeaderView>
-#include <QPointer>
-#include <QStyle>
 
 class KexiTableScrollArea;
 
 //! @short A header view with additional actions for use with table scroll area.
-/*! Displays field description (Field::description()) text as a tool tip, if available.
+/*! Displays field description (KDbField::description()) text as a tool tip, if available.
  Displays tool tips if a pointed section is not wide enough to fit its label text.
 
  \todo react on indexChange ( int section, int fromIndex, int toIndex ) signal

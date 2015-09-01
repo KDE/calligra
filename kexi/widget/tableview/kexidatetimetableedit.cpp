@@ -24,31 +24,20 @@
 #include <QApplication>
 #include <QPainter>
 #include <QVariant>
-#include <QRect>
-#include <QPalette>
-#include <QColor>
-#include <QFontMetrics>
-#include <QDateTime>
-#include <QCursor>
-#include <QPoint>
-#include <QLayout>
-#include <QToolButton>
 #include <QClipboard>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <klineedit.h>
+#include <QDebug>
+#include <QLineEdit>
 
 #include <kexiutils/utils.h>
 
-KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiDateTimeTableEdit::KexiDateTimeTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiDateTimeTableEdit");
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-    kDebug() << KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter);
+    qDebug() << KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter);
     m_lineedit->setInputMask(
         KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter));
 }
@@ -85,7 +74,7 @@ void KexiDateTimeTableEdit::setupContents(QPainter *p, bool focused, const QVari
     Q_UNUSED(x);
     Q_UNUSED(w);
     Q_UNUSED(h);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;
@@ -122,7 +111,7 @@ bool KexiDateTimeTableEdit::valueIsValid()
 
 bool KexiDateTimeTableEdit::valueChanged()
 {
-    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    //qDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
@@ -156,4 +145,3 @@ void KexiDateTimeTableEdit::handleAction(const QString& actionName)
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)
 
-#include "kexidatetimetableedit.moc"

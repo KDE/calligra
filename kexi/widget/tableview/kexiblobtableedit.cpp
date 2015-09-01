@@ -19,35 +19,29 @@
  */
 
 #include "kexiblobtableedit.h"
+#include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
+#include <kexiutils/utils.h>
+#include <widget/utils/kexidropdownbutton.h>
+#include <widget/utils/kexicontextmenuutils.h>
 
-#include <stdlib.h>
+#include <KIconLoader>
+#include <KLocalizedString>
 
+#include <QDebug>
 #include <QDataStream>
 #include <QFile>
-#include <QLayout>
-#include <QStatusBar>
-#include <QLabel>
 #include <QPixmap>
-#include <QImage>
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>
 #include <QBuffer>
 #include <QCache>
 #include <QScrollBar>
+#include <QTemporaryFile>
+#include <QUrl>
 
-#include <kdebug.h>
-#include <ktemporaryfile.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kurl.h>
-
-#include <kexiutils/utils.h>
-#include <widget/utils/kexidropdownbutton.h>
-#include <widget/utils/kexicontextmenuutils.h>
-
-#include "KexiTableScrollArea.h"
-#include "KexiTableScrollAreaWidget.h"
+#include <stdlib.h>
 
 struct PixmapAndPos {
     QPixmap pixmap;
@@ -75,14 +69,14 @@ public:
 
 //======================================================
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
     KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
-    d->button->setToolTip(i18n("Click to show available actions for this cell"));
+    d->button->setToolTip(xi18n("Click to show available actions for this cell"));
 
     d->menu = new KexiImageContextMenu(this);
     d->menu->installEventFilter(this);
@@ -92,10 +86,10 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *p
                                           "pixmaplabel");
     d->button->setMenu(d->menu);
 
-    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
-    connect(d->menu, SIGNAL(insertFromFileRequested(KUrl)),
-            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool*,bool*)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool*,bool*)));
+    connect(d->menu, SIGNAL(insertFromFileRequested(QUrl)),
+            this, SLOT(handleInsertFromFileAction(QUrl)));
     connect(d->menu, SIGNAL(saveAsRequested(QString)),
             this, SLOT(handleSaveAsAction(QString)));
     connect(d->menu, SIGNAL(cutRequested()),
@@ -114,14 +108,14 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 {
     delete d;
 #if 0
-    kDebug() << "Cleaning up...";
+    qDebug() << "Cleaning up...";
     if (m_tempFile) {
         m_tempFile->unlink();
         //! @todo
     }
     delete m_proc;
     m_proc = 0;
-    kDebug() << "Ready.";
+    qDebug() << "Ready.";
 #endif
 }
 
@@ -138,17 +132,17 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 //! @todo
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
-    kDebug() << "Size of BLOB: " << val.size();
-    m_tempFile = new KTemporaryFile();
+    qDebug() << "Size of BLOB: " << val.size();
+    m_tempFile = new QTemporaryFile();
     m_tempFile->open();
-    kDebug() << "Creating temporary file: " << m_tempFile->fileName();
+    qDebug() << "Creating temporary file: " << m_tempFile->fileName();
     QDataStream stream(m_tempFile);
     stream->writeRawBytes(val.data(), val.size());
     delete m_tempFile;
     m_tempFile = 0;
 
     KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
-    kDebug() << "Mimetype = " << mmr->mimeType();
+    qDebug() << "Mimetype = " << mmr->mimeType();
 
     setViewWidget(new QWidget(this));
 #endif
@@ -185,7 +179,7 @@ KexiBlobTableEdit::value()
     stream.readRawBytes(data, f.size());
     value.duplicate(data, f.size());
     free(data);
-    kDebug() << "Size of BLOB: " << value.size();
+    qDebug() << "Size of BLOB: " << value.size();
     return QVariant(value);
 #endif
 }
@@ -250,12 +244,12 @@ bool KexiBlobTableEdit::cursorAtEnd()
     return true;
 }
 
-void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
+void KexiBlobTableEdit::handleInsertFromFileAction(const QUrl &url)
 {
     if (isReadOnly())
         return;
 
-    QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
+    QString fileName(url.isLocalFile() ? url.toLocalFile() : url.toDisplayString());
 
     //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);
@@ -270,17 +264,19 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
         return;
     }
     f.close();
-// m_valueMimeType = KImageIO::mimeType( fileName );
     setValueInternal(ba, true);
     signalEditRequested();
     //emit acceptRequested();
 }
 
-void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+void KexiBlobTableEdit::handleAboutToSaveAsAction(QString *origFilename, QString *mimeType, bool *dataIsEmpty)
 {
+    Q_ASSERT(origFilename);
+    Q_ASSERT(mimeType);
+    Q_ASSERT(dataIsEmpty);
     Q_UNUSED(origFilename);
-    Q_UNUSED(fileExtension);
-    dataIsEmpty = valueIsEmpty();
+    Q_UNUSED(mimeType);
+    *dataIsEmpty = valueIsEmpty();
 //! @todo no fname stored for now
 }
 
@@ -399,11 +395,13 @@ QSize KexiBlobTableEdit::totalSize() const
     return d->totalSize;
 }
 
-void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly)
 {
+    Q_ASSERT(valueIsNull);
+    Q_ASSERT(valueIsReadOnly);
     emit editRequested();
-    valueIsNull = this->valueIsNull();
-    valueIsReadOnly = d->readOnly || isReadOnly();
+    *valueIsNull = this->valueIsNull();
+    *valueIsReadOnly = d->readOnly || isReadOnly();
 }
 
 void KexiBlobTableEdit::signalEditRequested()
@@ -492,7 +490,7 @@ public:
     QCache<QString, QPixmap> pixmapCache;
 };
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiKIconTableEdit::KexiKIconTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
@@ -550,7 +548,7 @@ void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVar
     Q_UNUSED(y_offset);
 
 #if 0
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;
@@ -594,4 +592,3 @@ void KexiKIconTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiKIconTableEditorFactoryItem, KexiKIconTableEdit)
 
-#include "kexiblobtableedit.moc"

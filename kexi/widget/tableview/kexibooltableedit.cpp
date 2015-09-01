@@ -19,21 +19,18 @@
 
 #include "kexibooltableedit.h"
 
-#include <db/field.h>
+#include <KDbField>
 
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
 
-#include <klocale.h>
-#include <kdebug.h>
-
-
-KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-    kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
-    kDebug() << "type== " << field()->typeName();
+    qDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
+    qDebug() << "type== " << field()->typeName();
     KexiDataItemInterface::setHasFocusableWidget(false);
     KexiDataItemInterface::setAcceptEditorAfterDeleteContents(true);
     m_usesSelectedTextColor = false;
@@ -90,7 +87,7 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
     Q_UNUSED(txt);
     Q_UNUSED(align);
     Q_UNUSED(x);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 // x = 1;
     y_offset = -1;
 #else
@@ -125,7 +122,7 @@ void KexiBoolTableEdit::clickedOnContents()
         else
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
     }
-    kDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
+    qDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
     if (oldValue != m_currentValue) {
         signalValueChanged();
     }
@@ -175,4 +172,3 @@ int KexiBoolTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBoolEditorFactoryItem, KexiBoolTableEdit)
 
-#include "kexibooltableedit.moc"

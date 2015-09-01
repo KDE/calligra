@@ -20,14 +20,13 @@
 #ifndef KFORMEDITOR_PIXMAPEDIT_H
 #define KFORMEDITOR_PIXMAPEDIT_H
 
-#include <KProperty/PixmapEdit>
+#include "kformdesigner_export.h"
 
-#include <kexi_export.h>
 
 namespace KFormDesigner
 {
 
-class KFORMEDITOR_EXPORT KFDPixmapEdit : public KPropertyPixmapEditor
+class KFORMDESIGNER_EXPORT KFDPixmapEdit : public KPropertyPixmapEditor
 {
     Q_OBJECT
 

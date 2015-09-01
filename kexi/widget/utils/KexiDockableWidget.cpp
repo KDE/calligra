@@ -19,8 +19,10 @@
 
 #include "KexiDockableWidget.h"
 #include <kexiutils/utils.h>
-#include <QVBoxLayout>
 
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QPointer>
 
 class KexiDockableWidget::Private
 {

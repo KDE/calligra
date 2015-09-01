@@ -19,11 +19,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include <QDebug>
 #include <QWidget>
 #include <QVariant>
-#include <QDomDocument>
 #include <QTextStream>
+#include <QDomElement>
 
 #include "form.h"
 #include "container.h"
@@ -80,7 +80,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
                                Container *parentContainer, Container *container)
     : d(new Private(classn, name, widget, parentContainer, container))
 {
-    kDebug() << classn << name << widget->objectName() << "parentContainer:" << parentContainer << "container:" << container;
+    qDebug() << classn << name << widget->objectName() << "parentContainer:" << parentContainer << "container:" << container;
 }
 
 ObjectTreeItem::~ObjectTreeItem()
@@ -115,7 +115,7 @@ ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &
 
     if (!d->props.contains(property)) {
         d->props.insert(property, oldValue);
-        kDebug() << "Added this property in the list: " << property << " oldValue: " << oldValue;
+        qDebug() << "Added this property in the list: " << property << " oldValue: " << oldValue;
     }
 }
 
@@ -346,7 +346,7 @@ ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
     parent->addChild(c);
     container()->form()->emitChildAdded(c);
 
-    kDebug() << "adding " << c->name() << " to " << parent->name();
+    qDebug() << "adding " << c->name() << " to " << parent->name();
 }
 
 void

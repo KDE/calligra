@@ -28,11 +28,7 @@
 
 class KexiWindow;
 class KPropertySet;
-
-namespace KexiDB
-{
-class SchemaData;
-}
+class KDbObject;
 
 //! Base class for single view embeddable in KexiWindow.
 /*! This class automatically works as a proxy for shared (application-wide) actions.
@@ -133,6 +129,7 @@ public:
     enum StoreNewDataOption {
         OverwriteExistingData = 1 //!< Overwerite existing object in storeNewData()
     };
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
     QString defaultIconName() const;
 
@@ -140,8 +137,6 @@ public:
 
     /*! For KexiQueryView */
     virtual QList<QVariant> currentParameters() const;
-
-    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
 public Q_SLOTS:
     virtual void setFocus();
@@ -182,7 +177,7 @@ protected:
      (probably after showing some info messages), you need to return cancelled.
      Set \a dontStore to true (it's false by default) if you want to avoid data storing
      by storeData() or storeNewData(). */
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
 
     /*! called by KexiWindow::switchToViewMode() right after window is switched to new mode
      By default does nothing. Reimplement this if you need to do something
@@ -207,54 +202,54 @@ protected:
                              const QByteArray& propertyToSelect = QByteArray());
 
     /*! Tells this view to create and store data of the new object
-     pointed by \a sdata on the backend.
+     pointed by \a object on the backend.
      Called by KexiWindow::storeNewData() and KexiWindow::storeDataAs().
      Default implementation:
-     - makes a deep copy of \a sdata
-     - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData().
+     - makes a deep copy of \a object
+     - stores object data \a object in 'kexi__objects' internal table
+       using KDbConnection::storeNewObjectData().
      Reimplement this for your needs.
      Requirements:
-     - deep copy of \a sdata should be made
-     - schema data should be created at the backend
-       (by calling KexiView::storeNewData(const KexiDB::SchemaData&, KexiView::StoreNewDataOptions,bool&))
-       or using Connection::storeObjectSchemaData() or more specialized method.
-       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
-       (TableSchema inherits SchemaData) to store more information than
-       just schema data. You should use such subclasses if needed.
+     - deep copy of \a object should be made
+     - object data should be created at the backend
+       (by calling KexiView::storeNewData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
+       or using KDbConnection::storeNewObjectData() or more specialized method.
+       For example KexiTableDesignerView uses KDbConnection::createTable(KDbTableSchema) for this
+       (KDbTableSchema inherits KDbObject) to store more information than
+       just the object data. You should use such subclasses if needed.
 
-     Should return newly created schema data object on success.
+     Should return newly created object data object on success.
      In this case, do not store schema object yourself (make a deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KDbObject* storeNewData(const KDbObject& object,
+                                    KexiView::StoreNewDataOptions options,
+                                    bool *cancel);
 
-    /*! Tells this view to fully copy existing object's data pointed by \a sdata on the backend.
-     For example, for database tables it whould copy metadata, copy \a sdata, so the copy will
+    /*! Tells this view to fully copy existing object's data pointed by \a object on the backend.
+     For example, for database tables it whould copy metadata, copy \a object, so the copy will
      have different name, caption and description, and physically copy the table (possibly on
      the server side).
      Called by KexiWindow::storeDataAs().
      Default implementation:
-     - makes a deep copy of \a sdata
-     - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData()
+     - makes a deep copy of \a object
+     - stores object data \a object in 'kexi__objects' internal table
+       using KDbConnection::storeNewObjectData()
      - makes a full copy of data and user data.
      Reimplement this for your needs.
      Requirements:
-     - deep copy of \a sdata should be made
-     - schema data should be created at the backend
-       (by calling KexiView::copyData(const KexiDB::SchemaData&, KexiView::StoreNewDataOptions,bool&))
-       or using Connection::storeObjectSchemaData() or more specialized method.
-       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
-       (TableSchema inherits SchemaData) to store more information than
-      just schema data. Then it copies data table on the server side.
+     - deep copy of \a object should be made
+     - object data should be created at the backend
+       (by calling KexiView::copyData(const KDbObject&, KexiView::StoreNewDataOptions,bool*))
+       or using KDbConnection::storeNewObjectData() or more specialized method.
+       For example KexiTableDesignerView uses KDbConnection::createTable(KDbTableSchema) for this
+       (KDbTableSchema inherits KDbObject) to store more information than
+      just object data. Then it copies data table on the server side.
       You should use such subclasses if needed.
 
-     Should return newly created schema data object on success.
+     Should return newly created object data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* copyData(const KDbObject& object,
                                           KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+                                          bool *cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -262,14 +257,14 @@ protected:
      and \a dataString is set to null string. The default is false.
      \return true on success
      \sa storeDataBlock(). */
-    bool loadDataBlock(QString &dataString, const QString& dataID = QString(),
+    bool loadDataBlock(QString *dataString, const QString& dataID = QString(),
                        bool canBeEmpty = false);
 
     /*! Tells this view to store data changes on the backend.
      Called by KexiWindow::storeData().
      Default implementation:
-     - stores object schema data \a sdata in 'kexi__objects' internal table
-       using Connection::storeObjectSchemaData().
+     - stores object data \a object in 'kexi__objects' internal table
+       using KDbConnection::storeObjectData().
      If \a dontAsk is true, no question dialog will
      be shown to the user. The default is false.
 

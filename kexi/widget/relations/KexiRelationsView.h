@@ -18,18 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiRelationsView_H
-#define KexiRelationsView_H
+#ifndef KEXIRELATIONSVIEW_H
+#define KEXIRELATIONSVIEW_H
 
-#include <KexiView.h>
 #include "KexiRelationsScrollArea.h"
 
-namespace KexiDB
-{
-class Connection;
-class TableSchema;
-class TableOrQuerySchema;
-}
+#include <KexiView.h>
+
+class KDbConnection;
+class KDbTableSchema;
+class KDbTableOrQuerySchema;
 
 //! A Kexi view for displaying relationships.
 /*! It is used for within Query Designer
@@ -42,12 +40,18 @@ public:
     explicit KexiRelationsView(QWidget *parent = 0);
     virtual ~KexiRelationsView();
 
+    //! Sets database connection @a conn for which tables and connections will be displayed.
+    //! If @a conn is 0, contents is cleared.
+    //! @return true on successfull retrieval of table and relation information.
+    //! On failure result is available at conn->result() and KdbMessageGuard can be used.
+    bool setConnection(KDbConnection *conn);
+
     //! \return a hash of added tables
     TablesHash* tables() const;
 
     KexiRelationsTableContainer* table(const QString& name) const;
 
-    const ConnectionSet* connections() const;
+    const QSet<KexiRelationsConnection*>* relationsConnections() const;
 
     void addTable(const QString& t);
 
@@ -61,31 +65,32 @@ public:
     void objectRenamed(const QString &mime, const QString& name, const QString& newName);
 
 Q_SIGNALS:
-    void tableAdded(KexiDB::TableSchema& t);
-    void tableHidden(KexiDB::TableSchema& t);
+    void tableAdded(KDbTableSchema* t);
+    void tableHidden(KDbTableSchema* t);
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
-    void appendFields(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void appendFields(KDbTableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
 
 public Q_SLOTS:
     /*! Adds a table \a t to the area. This changes only visual representation.
      If \a rect is valid, table widget rgeometry will be initialized.
      */
-    void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
+    void addTable(KDbTableSchema *t, const QRect &rect = QRect());
 
-    //! Adds a connection \a con to the area. This changes only visual representation.
+    //! Adds a connection \a conn to the area. This changes only visual representation.
     void addConnection(const SourceConnection& conn);
 
     void removeSelectedObject();
 
-    /*! Removes all tables and coonections from the widget. */
-    void clear();
+    /*! Removes all tables and connections from the widget and refreshes the connection assignment.
+     @return true on success. */
+    bool clear();
 
-    /*! Removes all coonections from the view. */
+    /*! Removes all connections from the view. */
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
+    void hideAllTablesExcept(QList<KDbTableSchema*>* tables);
 
 protected Q_SLOTS:
     void slotAddTable();
@@ -98,7 +103,7 @@ protected Q_SLOTS:
     void appendSelectedFields();
     void openSelectedTable();
     void designSelectedTable();
-    void slotTableHidden(KexiDB::TableSchema &table);
+    void slotTableHidden(KDbTableSchema* table);
     void aboutToShowPopupMenu();
 
 protected:
@@ -109,9 +114,6 @@ protected:
 
     //! Invalidates all actions availability.
     void invalidateActions();
-
-    //! Fills table's combo box with all available table names.
-    void fillTablesCombo();
 
 private:
     class Private;

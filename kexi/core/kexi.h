@@ -22,16 +22,15 @@
 
 #include <QPointer>
 
+#include <KDbDriver>
+
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <db/driver.h>
-
-#include <klocale.h>
 
 class QLabel;
-class KAboutData;
+class KDbDriverManager;
 class KexiRecentProjects;
 
 namespace KexiPart
@@ -39,15 +38,8 @@ namespace KexiPart
 class Manager;
 }
 
-namespace KexiDB
-{
-class DriverManager;
-}
-
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
-
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
     AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
@@ -73,7 +65,7 @@ KEXICORE_EXPORT KexiDBConnectionSet& connset();
 KEXICORE_EXPORT KexiRecentProjects* recentProjects();
 
 //! shared driver manager
-KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
+KEXICORE_EXPORT KDbDriverManager& driverManager();
 
 //! shared part manager
 KEXICORE_EXPORT KexiPart::Manager& partManager();
@@ -102,7 +94,7 @@ public:
 
     ObjectStatus(const QString& message, const QString& description);
 
-    ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
+    ObjectStatus(KDbResultable* resultable, const QString& message, const QString& description);
 
     ~ObjectStatus();
 
@@ -114,13 +106,16 @@ public:
 
     //! Note: for safety, \a dbObject needs to be derived from QObject,
     //! otherwise it won't be assigned
-    void setStatus(KexiDB::Object* dbObject,
+    void setStatus(KDbResultable* resultable,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KexiDB::ResultInfo* result,
+    void setStatus(KDbResultInfo* resultInfo,
                    const QString& message = QString(), const QString& description = QString());
 
-    void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
+    void setStatus(KDbResultable* resultable, KDbResultInfo* resultInfo,
+                   const QString& message = QString(), const QString& description = QString());
+
+    void setStatus(const KDbResult& result, KDbResultInfo* resultInfo,
                    const QString& message = QString(), const QString& description = QString());
 
     void clearStatus();
@@ -129,37 +124,44 @@ public:
 
     void append(const ObjectStatus& otherStatus);
 
-    KexiDB::Object *dbObject() const {
-        return dynamic_cast<KexiDB::Object*>((QObject*)dbObj);
-    }
+    KDbResultable* resultable() const { return m_resultable; }
 
     //! Helper returning pseudo handler that just updates this ObjectStatus object
     //! by receiving a message
-    operator KexiDB::MessageHandler*();
+    operator KDbMessageHandler*();
 
     QString message, description;
 protected:
-    QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
-    KexiDB::MessageHandler* msgHandler;
+    KDbResultable* m_resultable;
+    KDbMessageHandler* m_msgHandler;
 };
 
 /*! \return icon name for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
- @see KexiDB::defaultFileBasedDriverMimeType() */
+ @see KDb::defaultFileBasedDriverMimeType() */
 KEXICORE_EXPORT QString defaultFileBasedDriverIconName();
 
 /*! \return icon for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
  If contains special workaround to properly load mimetype icon according to current theme,
  at least needed for Breeze.
- @see KexiDB::defaultFileBasedDriverIconName() */
-KEXICORE_EXPORT KIcon defaultFileBasedDriverIcon();
+ @see KDb::defaultFileBasedDriverIconName() */
+KEXICORE_EXPORT QIcon defaultFileBasedDriverIcon();
 
 /*! \return icon name for database servers. */
 KEXICORE_EXPORT QString serverIconName();
 
 /*! \return icon for database servers. */
-KEXICORE_EXPORT KIcon serverIcon();
+KEXICORE_EXPORT QIcon serverIcon();
+
+/*! @return message text "Kexi could have been incorrectly installed or started.
+            The application will be closed." useful for critical errors. */
+KEXICORE_EXPORT QString appIncorrectlyInstalledMessage();
+
+//! @return base path (without the filename for file-based connection data @a connectionData.
+//! Empty string is returned if @a connectionData does not point to a file-based connection with
+//! database name specified.
+KEXICORE_EXPORT QString basePathForProject(const KDbConnectionData& connectionData);
 
 }//namespace Kexi
 
@@ -167,7 +169,7 @@ KEXICORE_EXPORT KIcon serverIcon();
 KEXICORE_EXPORT QString KexiIconName(const QString &baseName);
 
 //! @return icon as understood by Kexi. Icon theme support is improved this way.
-KEXICORE_EXPORT KIcon KexiIcon(const QString &baseName);
+KEXICORE_EXPORT QIcon KexiIcon(const QString &baseName);
 
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
@@ -183,5 +185,9 @@ KEXICORE_EXPORT QLabel *KEXI_UNFINISHED_LABEL(
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
     KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString())
+
+//! Implementation of plugin's entry point
+#define KEXI_PLUGIN_FACTORY(class_name, name) \
+    K_PLUGIN_FACTORY_WITH_JSON(class_name ## Factory, name, registerPlugin<class_name>();)
 
 #endif

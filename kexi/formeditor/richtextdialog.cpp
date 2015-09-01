@@ -19,18 +19,18 @@
 
 #include "richtextdialog.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
-#include <QLayout>
 #include <QAction>
 #include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
-#include <ktoolbar.h>
-#include <kfontrequester.h>
-#include <kcolorcombo.h>
-#include <ktextedit.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KToolBar>
+#include <KFontRequester>
+#include <KColorCombo>
+#include <KTextEdit>
+#include <KLocalizedString>
 
 using namespace KFormDesigner;
 
@@ -66,25 +66,22 @@ RichTextDialog::Private::~Private()
 }
 
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
-    : KDialog(parent), d(new Private())
+    : QDialog(parent), d(new Private())
 {
     setObjectName("richtext_dialog");
     setModal(true);
-    setWindowTitle(i18nc("@title:window", "Edit Rich Text"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setWindowTitle(xi18nc("@title:window", "Edit Rich Text"));
 
-    QFrame *frame = new QFrame(this);
-    setMainWidget(frame);
-    QVBoxLayout *lyr = new QVBoxLayout(frame);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
 
-    d->toolbar = new KToolBar(frame);
-    lyr->addWidget(d->toolbar);
+    d->toolbar = new KToolBar(this);
+    mainLayout->addWidget(d->toolbar);
 
     d->fontCombo = new KFontRequester(d->toolbar);
     d->fontComboAction = d->toolbar->addWidget(d->fontCombo);
-    connect(d->fontCombo, SIGNAL(textChanged(QString)),
-            this, SLOT(changeFont(QString)));
+    connect(d->fontCombo, SIGNAL(fontSelected(QFont)),
+            this, SLOT(changeFont(QFont)));
 
     d->toolbar->addSeparator();
 
@@ -92,41 +89,40 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     d->colorComboAction = d->toolbar->addWidget(d->colorCombo);
     connect(d->colorCombo, SIGNAL(activated(QColor)), this, SLOT(changeColor(QColor)));
 
-    d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), i18n("Bold"));
+    d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), xi18n("Bold"));
     d->boldTextAction->setCheckable(true);
-    d->italicTextAction = d->toolbar->addAction(koIcon("format-text-italic"), i18n("Italic"));
+    d->italicTextAction = d->toolbar->addAction(koIcon("format-text-italic"), xi18n("Italic"));
     d->italicTextAction->setCheckable(true);
-    d->underlineTextAction = d->toolbar->addAction(koIcon("format-text-underline"), i18n("Underline"));
+    d->underlineTextAction = d->toolbar->addAction(koIcon("format-text-underline"), xi18n("Underline"));
     d->underlineTextAction->setCheckable(true);
     d->toolbar->addSeparator();
 
-    d->superscriptTextAction = d->toolbar->addAction(koIcon("format-text-superscript"), i18n("Superscript"));
+    d->superscriptTextAction = d->toolbar->addAction(koIcon("format-text-superscript"), xi18n("Superscript"));
     d->superscriptTextAction->setCheckable(true);
-    d->subscriptTextAction = d->toolbar->addAction(koIcon("format-text-subscript"), i18n("Subscript"));
+    d->subscriptTextAction = d->toolbar->addAction(koIcon("format-text-subscript"), xi18n("Subscript"));
     d->subscriptTextAction->setCheckable(true);
     d->toolbar->addSeparator();
 
     d->alignActionGroup = new QActionGroup(this);
-    d->alignLeftAction = d->toolbar->addAction(koIcon("format-justify-left"), i18n("Left Align"));
+    d->alignLeftAction = d->toolbar->addAction(koIcon("format-justify-left"), xi18n("Left Align"));
     d->alignLeftAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignLeftAction);
-    d->alignCenterAction = d->toolbar->addAction(koIcon("format-justify-center"), i18n("Centered"));
+    d->alignCenterAction = d->toolbar->addAction(koIcon("format-justify-center"), xi18n("Centered"));
     d->alignCenterAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignCenterAction);
-    d->alignRightAction = d->toolbar->addAction(koIcon("format-justify-right"), i18n("Right Align"));
+    d->alignRightAction = d->toolbar->addAction(koIcon("format-justify-right"), xi18n("Right Align"));
     d->alignRightAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignRightAction);
-    d->alignJustifyAction = d->toolbar->addAction(koIcon("format-justify-fill"), i18n("Justified"));
+    d->alignJustifyAction = d->toolbar->addAction(koIcon("format-justify-fill"), xi18n("Justified"));
     d->alignJustifyAction->setCheckable(true);
     d->alignActionGroup->addAction(d->alignJustifyAction);
 
     connect(d->toolbar, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(slotActionTriggered(QAction*)));
 
-    d->edit = new KTextEdit(text, frame);
-    lyr->addWidget(d->edit);
+    d->edit = new KTextEdit(text);
     d->edit->setAcceptRichText(true);
-
+    mainLayout->addWidget(d->edit);
 
     connect(d->edit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(slotCurrentCharFormatChanged(QTextCharFormat)));
@@ -134,6 +130,16 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     d->edit->moveCursor(QTextCursor::End);
     slotCurrentCharFormatChanged(d->edit->currentCharFormat());
     d->edit->setFocus();
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 }
 
 RichTextDialog::~RichTextDialog()
@@ -148,9 +154,9 @@ RichTextDialog::text() const
 }
 
 void
-RichTextDialog::changeFont(const QString &font)
+RichTextDialog::changeFont(const QFont &font)
 {
-    d->edit->setFontFamily(font);
+    d->edit->setCurrentFont(font);
 }
 
 void
@@ -225,4 +231,3 @@ RichTextDialog::slotCurrentCharFormatChanged(const QTextCharFormat& f)
 //! @todo add more formatting options (buttons)
 }
 
-#include "richtextdialog.moc"

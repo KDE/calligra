@@ -17,25 +17,22 @@
 */
 
 #include "kexisourceselector.h"
-
-#include <kpushbutton.h>
-#include <klineedit.h>
-
-#include <QLabel>
-#include <klocale.h>
-#include <kdebug.h>
-#include <QDomElement>
 #include "KexiDataSourceComboBox.h"
 #include <kexiproject.h>
+
+#include <KLocalizedString>
+
+#include <QDebug>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QDomElement>
+#include <QVBoxLayout>
 
 //#define NO_EXTERNAL_SOURCES
 
 #ifdef NO_EXTERNAL_SOURCES
-#ifdef __GNUC__
-#warning enable external data sources for 2.3
-#else
-#pragma WARNING( enable external data sources for 2.3 )
-#endif
+//! @todo KEXI3 enable external data sources for 2.3
 #endif
 
 class KexiSourceSelector::Private
@@ -50,24 +47,29 @@ public:
     {
         delete kexiDBData;
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
         delete kexiMigrateData;
+#endif
 #endif
     }
 
-    KexiDB::Connection *conn;
+    KDbConnection *conn;
 
     QVBoxLayout *layout;
     QComboBox *sourceType;
     KexiDataSourceComboBox *internalSource;
-    KLineEdit *externalSource;
-    KPushButton *setData;
+    QLineEdit *externalSource;
+    QPushButton *setData;
 
     KexiDBReportData *kexiDBData;
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     KexiMigrateReportData *kexiMigrateData;
 #endif
-
+#endif
 };
 
 KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
@@ -78,26 +80,28 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->kexiDBData = 0;
 
 #ifndef KEXI_MOBILE
+#ifdef HAVE_KEXIMMIGRATE
     d->kexiMigrateData = 0;
+#endif
 #endif
 
     d->layout = new QVBoxLayout(this);
     d->sourceType = new QComboBox(this);
     d->internalSource = new KexiDataSourceComboBox(this);
     d->internalSource->setProject(project);
-    d->externalSource = new KLineEdit(this);
-    d->setData = new KPushButton(i18n("Set Data"));
+    d->externalSource = new QLineEdit(this);
+    d->setData = new QPushButton(xi18n("Set Data"));
 
     connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
 
-    d->sourceType->addItem(i18n("Internal"), QVariant("internal"));
-    d->sourceType->addItem(i18n("External"), QVariant("external"));
+    d->sourceType->addItem(xi18n("Internal"), QVariant("internal"));
+    d->sourceType->addItem(xi18n("External"), QVariant("external"));
 
 #ifndef NO_EXTERNAL_SOURCES
 
 //!@TODO enable when adding external data
 
-    d->layout->addWidget(new QLabel(i18n("Source Type:"), this));
+    d->layout->addWidget(new QLabel(xi18n("Source Type:"), this));
     d->layout->addWidget(d->sourceType);
     d->layout->addSpacing(10);
 #else
@@ -105,12 +109,12 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->externalSource->setVisible(false);
 #endif
 
-    d->layout->addWidget(new QLabel(i18n("Internal Source:"), this));
+    d->layout->addWidget(new QLabel(xi18n("Internal Source:"), this));
     d->layout->addWidget(d->internalSource);
     d->layout->addSpacing(10);
 
 #ifndef NO_EXTERNAL_SOURCES
-    d->layout->addWidget(new QLabel(i18n("External Source:"), this));
+    d->layout->addWidget(new QLabel(xi18n("External Source:"), this));
     d->layout->addWidget(d->externalSource);
 #endif
     d->layout->addSpacing(20);
@@ -141,7 +145,7 @@ void KexiSourceSelector::setConnectionData(QDomElement c)
 
 QDomElement KexiSourceSelector::connectionData()
 {
-    kDebug();
+    qDebug();
     QDomDocument dd;
     QDomElement conndata = dd.createElement("connection");
 
@@ -170,24 +174,30 @@ KoReportData* KexiSourceSelector::sourceData()
     }
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (d->kexiMigrateData) {
         delete d->kexiMigrateData;
         d->kexiMigrateData = 0;
     }
 #endif
+#endif
 
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal" && d->internalSource->isSelectionValid()) {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPartClass(), d->conn);
+        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPluginId(), d->conn);
         return d->kexiDBData;
     }
 
 #ifndef KEXI_MOBILE
+//! @todo KEXI3
+#if 0
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "external") {
         d->kexiMigrateData = new KexiMigrateReportData(d->externalSource->text());
         return d->kexiMigrateData;
     }
+#endif
 #endif
 
 #else

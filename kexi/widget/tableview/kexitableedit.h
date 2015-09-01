@@ -21,19 +21,16 @@
 #ifndef _KEXITABLEEDIT_H_
 #define _KEXITABLEEDIT_H_
 
+#include "kexidatatable_export.h"
 #include <core/kexidataiteminterface.h>
 
-#include <db/tableviewdata.h>
+#include <KDbTableViewData>
 
 #include <QVariant>
 #include <QKeyEvent>
-#include <QEvent>
 
-namespace KexiDB
-{
-class Field;
-class QueryColumnInfo;
-}
+class KDbField;
+class KDbQueryColumnInfo;
 
 /*! @short Abstract class for a cell editor.
  Handles cell painting and displaying the editor widget.
@@ -43,32 +40,32 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
     Q_OBJECT
 
 public:
-    explicit KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent = 0);
+    explicit KexiTableEdit(KDbTableViewColumn &column, QWidget* parent = 0);
 
     virtual ~KexiTableEdit();
 
     //! Implemented for KexiDataItemInterface.
     //! \return field information for this item
-    virtual KexiDB::Field *field() const;
+    virtual KDbField *field() const;
 
     /*! A rich field information for db-aware data.
      For not-db-aware data it is always 0 (use field() instead. */
-    virtual KexiDB::QueryColumnInfo *columnInfo() const;
+    virtual KDbQueryColumnInfo *columnInfo() const;
 
     //! Implemented for KexiDataItemInterface.
-    //! Does nothing because instead KexiDB::TableViewColumn is used to get field's schema.
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo *);
+    //! Does nothing because instead KDbTableViewColumn is used to get field's schema.
+    virtual void setColumnInfo(KDbQueryColumnInfo *);
 
     //! \return column information for this item
     //! (extended information, comparing to field()).
-    KexiDB::TableViewColumn *column() const;
+    KDbTableViewColumn *column() const;
 
     /*! \return displayed field. This is equal to field() in typical case but can return a different field
      definition if the column contains a lookup field. This distiction is especially used for
      displaying data dependent on the type and specifics of the field definition
      (e.g. text type versus integer type). Note that to compute the editor's value
      we still use field(). */
-    KexiDB::Field *displayedField() const;
+    KDbField *displayedField() const;
 
     /*! Reimplemented: resizes a view(). */
     virtual void resize(int w, int h);
@@ -171,7 +168,7 @@ public:
     /*! Created internal editor for this editor is needed. This method is only implemented
      in KexiComboBoxTableEdit since it's visible value differs from internal value,
      so a different KexiTableEdit object is used to displaying the data. */
-    virtual void createInternalEditor(KexiDB::QuerySchema& schema);
+    virtual void createInternalEditor(KDbQuerySchema& schema);
 
 Q_SIGNALS:
     void editRequested();
@@ -191,7 +188,7 @@ protected:
      displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
     void repaintRelatedCell();
 
-    KexiDB::TableViewColumn *m_column;
+    KDbTableViewColumn *m_column;
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
     bool m_usesSelectedTextColor; //!< set in ctor, @see usesSelectedTextColor()
@@ -210,7 +207,7 @@ private:
         virtual ~factoryclassname(); \
         \
     protected: \
-        virtual KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0); \
+        virtual KexiTableEdit* createEditor(KDbTableViewColumn &column, QWidget* parent = 0); \
     };
 
 //! Implementation of cell editor factory
@@ -225,7 +222,7 @@ private:
     {} \
     \
     KexiTableEdit* factoryclassname::createEditor( \
-            KexiDB::TableViewColumn &column, QWidget* parent) \
+            KDbTableViewColumn &column, QWidget* parent) \
     { \
         return new itemclassname(column, parent); \
     }

@@ -21,13 +21,13 @@
 #ifndef FORMIO_H
 #define FORMIO_H
 
+#include "kformdesigner_export.h"
+
 #include <QHash>
 #include <QPixmap>
 #include <QLabel>
 #include <QPaintEvent>
 #include <QLabel>
-
-#include <kexi_export.h>
 
 class QString;
 class QDomElement;
@@ -37,7 +37,7 @@ class QVariant;
 class QLabel;
 
 //! A blank widget displayed when class is not supported
-class KFORMEDITOR_EXPORT CustomWidget : public QWidget
+class KFORMDESIGNER_EXPORT CustomWidget : public QWidget
 {
     Q_OBJECT
 
@@ -60,10 +60,10 @@ class Container;
 
 //! KFormDesigner API version number. Increased on every breaking of backward compatibility.
 //! Use KFormDesigner::version() to get real version number of the library.
-#define KFORMDESIGNER_VERSION 2
+#define KFORMDESIGNER_VERSION 3
 
 //! \return KFormDesigner API version number for this library. This information is stored
-KFORMEDITOR_EXPORT uint version();
+KFORMDESIGNER_EXPORT int version();
 
 /** This class act as a namespace for all .ui files related functions, ie saving/loading .ui files.
     You don't need to create a FormIO object, as all methods are static.\n
@@ -71,7 +71,7 @@ KFORMEDITOR_EXPORT uint version();
     properties, and pixmaps(pixmap-related code was taken from Qt Designer).
  **/
 //! A class to save/load forms from .ui files
-class KFORMEDITOR_EXPORT FormIO : public QObject
+class KFORMDESIGNER_EXPORT FormIO : public QObject
 {
     Q_OBJECT
 
@@ -114,7 +114,7 @@ public:
     static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src,
                                       bool preview = false);
 
-    static bool loadFormFromString(Form *form, QWidget *container, QString &src,
+    static bool loadFormFromString(Form *form, QWidget *container, QString *src,
                                    bool preview = false);
 
     /*! Loads the .ui file \a filename in the Form \a form. If \a filename is null or not given,

@@ -18,31 +18,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
-
-#include <QLabel>
-#include <QPushButton>
-#include <QCursor>
-#include <QPoint>
-#include <QApplication>
-#include <QBitmap>
-#include <QStyle>
-#include <QEvent>
-#include <QDropEvent>
-#include <QVBoxLayout>
-#include <QMouseEvent>
-#include <QStyleOptionFocusRect>
-#include <QScrollBar>
-
-#include <kdebug.h>
-
 #include <kexiutils/utils.h>
-#include <db/tableschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
 #include "KexiRelationsTableContainer.h"
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"
+
+#include <KDbTableSchema>
+#include <KDbTableOrQuerySchema>
+#include <KDbUtils>
+
+#include <QPushButton>
+#include <QPoint>
+#include <QStyle>
+#include <QVBoxLayout>
+#include <QScrollBar>
+#include <QDebug>
+
+#include <stdlib.h>
 
 class KexiRelationsTableContainer::Private
 {
@@ -59,7 +51,7 @@ public:
 KexiRelationsTableContainer::KexiRelationsTableContainer(
     QWidget* parent,
     KexiRelationsScrollArea *scrollArea,
-    KexiDB::TableOrQuerySchema *schema)
+    KDbTableOrQuerySchema *schema)
         : QFrame(parent)
         , d(new Private)
 {
@@ -91,8 +83,8 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    
-    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
+
+    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu(QPoint)));
 
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
@@ -104,28 +96,28 @@ KexiRelationsTableContainer::~KexiRelationsTableContainer()
     delete d;
 }
 
-KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
+KDbTableOrQuerySchema* KexiRelationsTableContainer::schema() const
 {
     return d->fieldList->schema();
 }
 
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-  emit gotFocus();  
+  emit gotFocus();
   emit contextMenuRequest(d->fieldList->mapToGlobal(p));
 }
 
 void KexiRelationsTableContainer::moved()
 {
-// kDebug()<<"finally emitting moved";
+// qDebug()<<"finally emitting moved";
     emit moved(this);
 }
 
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
-// kDebug();
+// qDebug();
     QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
-// kDebug() << "db2";
+// qDebug() << "db2";
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
 
@@ -137,7 +129,7 @@ void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::setFocus()
 {
-    //kDebug() << "SET FOCUS";
+    //qDebug() << "SET FOCUS";
     //select 1st:
 //!TODO
 #if 0
@@ -162,7 +154,7 @@ void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::unsetFocus()
 {
-    //kDebug() << "UNSET FOCUS";
+    //qDebug() << "UNSET FOCUS";
     d->tableHeader->unsetFocus();
     d->fieldList->clearSelection();
 
@@ -176,7 +168,7 @@ void KexiRelationsTableContainer::slotFieldsDoubleClicked(const QModelIndex &idx
     if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
         return;
     const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
-    kDebug();
+    qDebug();
     emit fieldsDoubleClicked(*t->schema(), t->selectedFieldNames());
 }
 
@@ -185,4 +177,3 @@ QStringList KexiRelationsTableContainer::selectedFieldNames() const
     return d->fieldList->selectedFieldNames();
 }
 
-#include "KexiRelationsTableContainer.moc"

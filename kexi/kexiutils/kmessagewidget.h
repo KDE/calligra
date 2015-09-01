@@ -106,7 +106,7 @@ public:
         Warning,
         Error
     };
-    
+
     enum CalloutPointerDirection {
         NoPointer,
         Up,
@@ -182,13 +182,13 @@ public Q_SLOTS:
 
     /**
      * Show the widget using an animation, unless
-     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     * KexiUtils::graphicsEffectLevel() does not allow simple effects.
      */
     void animatedShow();
 
     /**
      * Hide the widget using an animation, unless
-     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     * KexiUtils::graphicsEffectLevel() does not allow simple effects.
      */
     void animatedHide();
 
@@ -197,7 +197,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void animatedShowFinished();
     void animatedHideFinished();
-    
+
 protected:
     virtual void paintEvent(QPaintEvent *event);
 
@@ -207,13 +207,14 @@ protected:
 
     virtual void showEvent(QShowEvent *event);
 
+private Q_SLOTS:
+    void slotTimeLineChanged(qreal value);
+    void slotTimeLineFinished();
+    void tryClickCloseMessage();
+
 private:
     KMessageWidgetPrivate *const d;
     friend class KMessageWidgetPrivate;
-
-    Q_PRIVATE_SLOT(d, void slotTimeLineChanged(qreal))
-    Q_PRIVATE_SLOT(d, void slotTimeLineFinished())
-    Q_PRIVATE_SLOT(d, void tryClickCloseMessage())
 };
 
 #endif /* KMESSAGEWIDGET_H */

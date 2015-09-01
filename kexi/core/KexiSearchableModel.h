@@ -20,10 +20,12 @@
 #ifndef KEXISEARCHABLEMODEL_H
 #define KEXISEARCHABLEMODEL_H
 
+#include "kexicore_export.h"
 #include <kexi_global.h>
 
 class QModelIndex;
 class QVariant;
+class QString;
 
 class KEXICORE_EXPORT KexiSearchableModel
 {

@@ -20,11 +20,9 @@
 #include "kexidbfieldlist.h"
 #include "kexidbfield.h"
 
-#include <kdebug.h>
-
 using namespace Scripting;
 
-KexiDBFieldList::KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner)
+KexiDBFieldList::KexiDBFieldList(QObject* parent, KDbFieldList* fieldlist, bool owner)
         : QObject(parent)
         , m_fieldlist(fieldlist)
         , m_owner(owner)
@@ -38,20 +36,20 @@ KexiDBFieldList::~KexiDBFieldList()
         delete m_fieldlist;
 }
 
-uint KexiDBFieldList::fieldCount()
+int KexiDBFieldList::fieldCount()
 {
     return m_fieldlist->fieldCount();
 }
 
-QObject* KexiDBFieldList::field(uint index)
+QObject* KexiDBFieldList::field(int index)
 {
-    ::KexiDB::Field* field = m_fieldlist->field(index);
+    KDbField* field = m_fieldlist->field(index);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
 QObject* KexiDBFieldList::fieldByName(const QString& name)
 {
-    ::KexiDB::Field* field = m_fieldlist->field(name);
+    KDbField* field = m_fieldlist->field(name);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
@@ -74,7 +72,7 @@ bool KexiDBFieldList::addField(QObject* field)
     return true;
 }
 
-bool KexiDBFieldList::insertField(uint index, QObject* field)
+bool KexiDBFieldList::insertField(int index, QObject* field)
 {
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
     if (! f) return false;
@@ -99,8 +97,8 @@ bool KexiDBFieldList::setFields(QObject* fieldlist)
     KexiDBFieldList* list = dynamic_cast<KexiDBFieldList*>(fieldlist);
     if (! list) return false;
     list->clear();
-    ::KexiDB::FieldList* fl = list->fieldlist();
-    foreach(::KexiDB::Field *field, *fl->fields()) {
+    KDbFieldList* fl = list->fieldlist();
+    foreach(KDbField *field, *fl->fields()) {
         m_fieldlist->addField(field);
     }
     return true;
@@ -112,8 +110,7 @@ QObject* KexiDBFieldList::subList(QVariantList list)
     foreach(const QVariant& v, list) {
         sl.append(v.toString());
     }
-    ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
+    KDbFieldList* fl = m_fieldlist->subList(sl);
     return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }
 
-#include "kexidbfieldlist.moc"
