@@ -38,8 +38,9 @@
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
-#include "dockers/KWStatisticsDocker.h"
+
 #include "pagetool/KWPageToolFactory.h"
+#include "dockers/KWStatisticsDocker.h"
 #include "dockers/KWNavigationDockerFactory.h"
 
 #ifndef NDEBUG
@@ -96,9 +97,7 @@ const KComponentData &KWFactory::componentData()
         dockRegistry->add(new KWStatisticsDockerFactory());
         dockRegistry->add(new KWNavigationDockerFactory());
 #ifndef NDEBUG
-#ifdef SHOULD_BUILD_RDF
         dockRegistry->add(new KWDebugDockerFactory());
-#endif
 #endif
 
 #ifdef SHOULD_BUILD_RDF

@@ -46,8 +46,8 @@
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoApplication.h>
-#include <KoSectionManager.h>
 #include <KoUnit.h>
+#include <KoSectionModel.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -218,7 +218,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
     m_document->addFrameSet(mainFs);
     textShapeData.setDocument(mainFs->document(), false);
-    sc.setSectionManager(new KoSectionManager(mainFs->document()));
+    sc.setSectionModel(new KoSectionModel(mainFs->document()));
 
     // disable the undo recording during load so the kotexteditor is in sync with
     // the app's undostack
@@ -349,18 +349,18 @@ void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KW
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
 void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle,
-				   const KoXmlElement &masterPage, HFLoadType headerFooter)
+                                   const KoXmlElement &masterPage, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					   headerFooter == LoadHeader ? "header" : "footer");
+                                           headerFooter == LoadHeader ? "header" : "footer");
 
     // The two additional elements <style:header-left> and <style:footer-left>
     // specifies if defined that even and odd pages should be displayed
     // different. If they are missing, the content of odd and even (aka left
     // and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					       headerFooter == LoadHeader ? "header-left" : "footer-left");
+                                               headerFooter == LoadHeader ? "header-left" : "footer-left");
 
     // Used in KWPageStyle to determine if, and what kind of header/footer to use.
     Words::HeaderFooterType hfType = elem.isNull() ? Words::HFTypeNone
@@ -370,15 +370,15 @@ void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &
     // header-left and footer-left
     if (! leftElem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, leftElem,
-			      headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
-			                                 : Words::EvenPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
+                                                         : Words::EvenPagesFooterTextFrameSet);
     }
 
     // header and footer
     if (! elem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, elem,
-			      headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
-			                                 : Words::OddPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
+                                                         : Words::OddPagesFooterTextFrameSet);
     }
 
     if (headerFooter == LoadHeader) {
