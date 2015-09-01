@@ -213,7 +213,7 @@ void View::loadExtensions()
 
     foreach(QPluginLoader *pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = factory->create<KXMLGUIClient>(this, QVariantList());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
         if (plugin) {
             insertChildClient(plugin);
         }
