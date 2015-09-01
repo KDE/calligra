@@ -32,6 +32,7 @@
 
 #include "QuickStateHandler.h"
 
+// QT5TODO: port to Json-based plugin
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
