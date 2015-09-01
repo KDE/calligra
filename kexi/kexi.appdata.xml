@@ -28,6 +28,7 @@
   <name xml:lang="sv">Kexi</name>
   <name xml:lang="uk">Kexi</name>
   <name xml:lang="x-test">xxKexixx</name>
+  <name xml:lang="zh-CN">Kexi</name>
   <summary>Database Creator</summary>
   <summary xml:lang="bs">Kreator baze podataka</summary>
   <summary xml:lang="ca">Generador de bases de dades</summary>
@@ -51,6 +52,7 @@
   <summary xml:lang="sv">Databasskapare</summary>
   <summary xml:lang="uk">Програма для створення баз даних</summary>
   <summary xml:lang="x-test">xxDatabase Creatorxx</summary>
+  <summary xml:lang="zh-CN">数据库创建器</summary>
   <description>
     <p>
       Kexi is a visual database creator, part of the Calligra Suite.
@@ -98,6 +100,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Full visual designers for tables, queries, forms and reports</li>
       <li xml:lang="bs">Potpuni vizualni dizajneri za tablice , upite , obrasce i izvještaje</li>
