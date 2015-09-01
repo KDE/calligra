@@ -2101,6 +2101,7 @@ void View::slotTaskProgress()
             }
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
+                Q_ASSERT( task );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task, this );
                 connect(dia, SIGNAL(finished(int)), SLOT(slotMilestoneProgressFinished(int)));
                 dia->show();
