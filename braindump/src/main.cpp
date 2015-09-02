@@ -31,7 +31,7 @@
 
 int main(int argc, char **argv)
 {
-    KAboutData* about = newBrainDumpAboutData();
+    K4AboutData* about = newBrainDumpAboutData();
     KCmdLineArgs::init(argc, argv, about);
 
     KUniqueApplication app;

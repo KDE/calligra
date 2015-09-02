@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QPluginLoader>
+#include <QMimeData>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
@@ -56,6 +57,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kaction.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <KPluginFactory>
@@ -185,24 +187,24 @@ void View::initActions()
 
     m_deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", m_deleteSelectionAction);
-    m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
+    actionCollection()->setDefaultShortcut(m_deleteSelectionAction, QKeySequence("Del"));
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     // Shapes menu
     // TODO: get an icon "edit-duplicate"
     KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("shapes_duplicate", actionDuplicate);
-    actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
+    actionCollection()->setDefaultShortcut(actionDuplicate, QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
     m_groupShapes = new KAction(koIcon("object-group"), i18n("Group Shapes"), this);
     actionCollection()->addAction("shapes_group", m_groupShapes);
-    m_groupShapes->setShortcut(QKeySequence("Ctrl+G"));
+    actionCollection()->setDefaultShortcut(m_groupShapes, QKeySequence("Ctrl+G"));
     connect(m_groupShapes, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
     m_ungroupShapes  = new KAction(koIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
     actionCollection()->addAction("shapes_ungroup", m_ungroupShapes);
-    m_ungroupShapes->setShortcut(QKeySequence("Ctrl+Shift+G"));
+    actionCollection()->setDefaultShortcut(m_ungroupShapes, QKeySequence("Ctrl+Shift+G"));
     connect(m_ungroupShapes, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
 
 }

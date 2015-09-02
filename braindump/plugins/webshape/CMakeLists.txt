@@ -22,6 +22,7 @@ target_link_libraries(
     flake
     Qt5::Core
     Qt5::WebKitWidgets
+    Qt5::Svg
     )
 install(TARGETS braindump_shape_web DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

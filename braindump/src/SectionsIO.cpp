@@ -24,16 +24,9 @@
 #include <QTimer>
 
 #include <kdebug.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 
-#include "RootSection.h"
-#include "SectionGroup.h"
-#include "Section.h"
 #include <KoStore.h>
 #include <KoOdf.h>
-#include <kio/netaccess.h>
-#include <kio/copyjob.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
@@ -43,6 +36,10 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+
+#include "RootSection.h"
+#include "SectionGroup.h"
+#include "Section.h"
 #include "SectionContainer.h"
 #include "Layout.h"
 #include "LayoutFactoryRegistry.h"
@@ -52,8 +49,8 @@ SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m
 {
     m_timer->start(60 * 1000); // Every minute
     connect(m_timer, SIGNAL(timeout()), SLOT(save()));
-    m_directory = KGlobal::dirs()->localkdedir() + "share/apps/braindump/sections/";
-    KStandardDirs::makeDir(m_directory);
+    m_directory = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/sections/";
+    QDir().mkdir(m_directory);
 
     // Finally load
     load();
@@ -98,7 +95,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     QString fullFileName = sectionsIO->m_directory + filename;
     QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
-    KIO::NetAccess::del(fullFileNameTmpNew, 0);
+    QDir().remove(fullFileNameTmpNew);
 
     const char* mimeType = KoOdf::mimeType(KoOdf::Text);
 
@@ -167,12 +164,11 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     finaly.store = 0;
     delete context;
 
-    KIO::NetAccess::del(fullFileNameTmpOld, 0);
-    KIO::CopyJob *mv = KIO::move(fullFileName, fullFileNameTmpOld);
-    KIO::NetAccess::synchronousRun(mv, 0);
-    mv = KIO::move(fullFileNameTmpNew, fullFileName);
-    KIO::NetAccess::synchronousRun(mv, 0);
-    KIO::NetAccess::del(fullFileNameTmpOld, 0);
+    QDir().remove(fullFileNameTmpOld);
+    QDir().rename(fullFileName, fullFileNameTmpOld);
+    QDir().rename(fullFileNameTmpNew, fullFileName);
+    QDir().remove(fullFileNameTmpOld);
+
     return true;
 }
 
@@ -185,11 +181,9 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
     if(!QFileInfo(fullFileName).exists()) {
         if(QFileInfo(fullFileNameTmpNew).exists()) {
-            KIO::CopyJob *mv = KIO::move(fullFileNameTmpNew, fullFileName);
-            KIO::NetAccess::synchronousRun(mv, 0);
+            QDir().rename(fullFileNameTmpNew, fullFileName);
         } else if(QFileInfo(fullFileNameTmpOld).exists()) {
-            KIO::CopyJob *mv = KIO::move(fullFileNameTmpOld, fullFileName);
-            KIO::NetAccess::synchronousRun(mv, 0);
+            QDir().rename(fullFileNameTmpOld, fullFileName);
         } else {
             return false;
         }
@@ -286,7 +280,7 @@ void SectionsIO::save()
 
     // Last remove unused sections
     foreach(SaveContext * saveContext, contextToRemove) {
-        KIO::NetAccess::del(KUrl(m_directory + saveContext->filename), 0);
+        QDir().remove(m_directory + saveContext->filename);
         m_contextes.remove(saveContext->section);
         delete saveContext;
     }

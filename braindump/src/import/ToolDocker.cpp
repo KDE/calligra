@@ -124,4 +124,4 @@ void ToolDocker::resizeEvent(QResizeEvent*)
     d->tabButton->move(d->lockButton->x() - d->tabButton->width() - 2, d->lockButton->y());
 }
 
-#include <ToolDocker.moc>
+#include <moc_ToolDocker.cpp>

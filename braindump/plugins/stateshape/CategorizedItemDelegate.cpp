@@ -41,7 +41,8 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
-    d->categoryDrawer = new KCategoryDrawer;
+    // QT5TODO: Pass correct param to KCategoryDrawer
+    d->categoryDrawer = new KCategoryDrawer(0);
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {

@@ -22,10 +22,10 @@
 
 #include <kxmlguiwindow.h>
 #include <KoCanvasSupervisor.h>
+#include <KComponentData>
 
 class DockerManager;
 class RootSection;
-class KComponentData;
 class KoDockFactoryBase;
 class View;
 class KActionMenu;

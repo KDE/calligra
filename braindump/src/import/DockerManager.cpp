@@ -70,4 +70,4 @@ void DockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }
 
-#include <DockerManager.moc>
+#include <moc_DockerManager.cpp>
