@@ -102,5 +102,3 @@ void CompositeEffectConfigWidget::valueChanged()
     m_effect->setArithmeticValues(k);
     emit filterChanged();
 }
-
-#include "CompositeEffectConfigWidget.moc"

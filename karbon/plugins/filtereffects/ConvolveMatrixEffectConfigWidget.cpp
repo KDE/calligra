@@ -247,5 +247,3 @@ void ConvolveMatrixEffectConfigWidget::kernelChanged()
     m_effect->setKernel(m_matrixModel->matrix());
     emit filterChanged();
 }
-
-#include "ConvolveMatrixEffectConfigWidget.moc"

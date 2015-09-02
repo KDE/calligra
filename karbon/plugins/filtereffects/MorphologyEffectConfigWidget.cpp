@@ -118,5 +118,3 @@ void MorphologyEffectConfigWidget::radiusYChanged(double y)
 
     emit filterChanged();
 }
-
-#include "MorphologyEffectConfigWidget.moc"

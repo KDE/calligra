@@ -38,5 +38,3 @@ bool MergeEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
 
     return true;
 }
-
-#include "MergeEffectConfigWidget.moc"
