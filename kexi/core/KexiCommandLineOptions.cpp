@@ -188,4 +188,5 @@ KexiCommandLineOptions::KexiCommandLineOptions(QCommandLineParser *parser)
              "Displays list of plugins available for Kexi with their name, description, "
              "version and filenames."))
 {
+    Q_UNUSED(parser);
 }

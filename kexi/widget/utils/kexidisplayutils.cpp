@@ -61,7 +61,7 @@ static const struct Embed {
     const unsigned char *data;
     const char *name;
 } embed_vec[] = {
-    { 245, autonumber_png_data, "autonumber.png" },
+    { autonumber_png_len, autonumber_png_data, "autonumber.png" },
     { 0, 0, 0 }
 };
 
