@@ -7,13 +7,14 @@ In the commits
     29be2c930af51b8a2e231a86a6e55d4ddbca9c3a  (marked with [C])
     7834a2f80a1d0ba74e3926309a2ca1cae4227676  (marked with [D])
     a70041cc794576f2ee5bd1de794dbefb67198b19  (marked with [E])
+    304ad9e9488829256cbbc64890734ae5951183d3  (marked with [F])
 a lot of obsolete code was removed from our source tree. This file lists the
 removed plugins, why they were removed and why you might want to resurrect the
 code if you are interested in working on the features these plugins used to
 provide.
 
 The easiest way to get the source code is to check out the calligra/2.4 branch,
-which is the last release that included this code.
+which is the last release that included all of this code.
 
 
 Filters:
@@ -45,6 +46,10 @@ Filters:
     kformula:
 
        entire set of filters, none have been build since 2006.
+
+    plan:
+
+        mpxj - all files mpxj.sourceforge.net supports (tested were Planner (*.planner) and MS project file formats *.mpx and *.mpp; broken and unmaintained due to API-unstable mpxj and never complete installation instruction  [F]
 
     stage:
 
@@ -127,3 +132,7 @@ Filters:
     Kexi:
 
         plugins/shapes/relationdesign -- broken and unmaintained. please resurrect [E]
+
+    Active:
+
+        active/ -- variant of Calligra for Plasma Active, but that platform died and was qt4-only [F]
