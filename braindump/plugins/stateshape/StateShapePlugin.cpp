@@ -27,7 +27,6 @@
 #include "StateToolFactory.h"
 
 K_PLUGIN_FACTORY(StateShapePluginFactory, registerPlugin<StateShapePlugin>();)
-K_EXPORT_PLUGIN(StateShapePluginFactory( "StateShapePlugin" ) )
 
 
 StateShapePlugin::StateShapePlugin(QObject *parent, const QVariantList &)
