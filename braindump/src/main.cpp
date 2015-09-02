@@ -17,9 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kcmdlineargs.h>
 
-#include <kuniqueapplication.h>
+
+#include <QApplication>
+#include <QCommandLineParser>
+
 #include <kiconloader.h>
 #include <memory>
 
@@ -31,19 +33,27 @@
 
 int main(int argc, char **argv)
 {
-    K4AboutData* about = newBrainDumpAboutData();
-    KCmdLineArgs::init(argc, argv, about);
+    QApplication app(argc, argv);
 
-    KUniqueApplication app;
+    KAboutData about = newBrainDumpAboutData();
+    KAboutData::setApplicationData(about);
+
+    QCommandLineParser parser;
+
+    parser.addVersionOption();
+    parser.addHelpOption();
+
+    parser.process(app);
+
+    about.setupCommandLine(&parser);
+    about.processCommandLine(&parser);
 
     KIconLoader::global()->addAppDir("calligra");
     KoGlobal::initialize();
 
-    KComponentData* m_documentData = new KComponentData(about);
-
     RootSection* doc = new RootSection;
 
-    MainWindow* window = new MainWindow(doc, *m_documentData);
+    MainWindow* window = new MainWindow(doc);
     window->setVisible(true);
 
     app.exec();

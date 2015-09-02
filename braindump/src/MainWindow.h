@@ -34,7 +34,7 @@ class MainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
-    MainWindow(RootSection* document, const KComponentData &componentData);
+    MainWindow(RootSection* document);
     ~MainWindow();
 public:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);

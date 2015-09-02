@@ -46,11 +46,8 @@
 
 #include "StatusBarItem.h"
 
-MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_activeView(0), m_dockerManager(0)
+MainWindow::MainWindow(RootSection* document) : m_doc(document), m_activeView(0), m_dockerManager(0)
 {
-    Q_ASSERT(componentData.isValid());
-    KGlobal::setActiveComponent(componentData);
-
     // then, setup our actions
     setupActions();
 
@@ -71,7 +68,8 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
     activateView(view);
 
     // Position and show toolbars according to user's preference
-    setAutoSaveSettings(componentData.componentName());
+    // QT5TODO: Remove usage of KComponentData
+//    setAutoSaveSettings(componentData.componentName());
 
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->screenGeometry(scnum);
@@ -80,10 +78,11 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
     if(QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
 
-    KConfigGroup config(KGlobal::config(), componentData.componentName());
-    const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
-                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
-    resize(size);
+    // QT5TODO: Figure out a way to do this without KComponentData
+//    KConfigGroup config(KGlobal::config(), componentData.componentName());
+//    const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
+//                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
+//    resize(size);
 
     foreach(QDockWidget * wdg, m_dockWidgets) {
         if((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {

@@ -20,20 +20,16 @@
 #ifndef BRAINDUMPABOUTDATA_H
 #define BRAINDUMPABOUTDATA_H
 
-#include <k4aboutdata.h>
+#include <kaboutdata.h>
 #include <klocale.h>
 
-static const char BRAINDUMP_DESCRIPTION[] = I18N_NOOP("Braindump: directly from your brain to the computer.");
+static const char BRAINDUMP_DESCRIPTION[] = "Braindump: directly from your brain to the computer.";
 static const char BRAINDUMP_VERSION[] = "0.10.9";
 
-inline K4AboutData* newBrainDumpAboutData()
+inline KAboutData newBrainDumpAboutData()
 {
-    K4AboutData* aboutData = new K4AboutData("braindump", 0, ki18n("Braindump"),
-                                           BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION), K4AboutData::License_LGPL,
-                                           ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"), KLocalizedString(),
-                                           "");
-    aboutData->addAuthor(ki18n("Cyrille Berger"), ki18n("Maintainer"), "cberger@cberger.net");
-
+    KAboutData aboutData("braindump", ki18n("Braindump").toString(), BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION).toString(),
+                         KAboutLicense::LGPL, ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger").toString());
     return aboutData;
 }
 
