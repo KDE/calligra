@@ -145,7 +145,7 @@ KexiCommandLineOptions::KexiCommandLineOptions(QCommandLineParser *parser)
     // Options related to database servers:
     user(QStringList() << "u" << "user",
         xi18nc("'user' command line option",
-               "Database server's user name whem connecting to a project. Ignored if the "
+               "Database server's user name when connecting to a project. Ignored if the "
                "project is opened using a shortcut file. Default user name is the same "
                "as the current login (\"%1\").",
                KUser().loginName())),
