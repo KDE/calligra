@@ -19,15 +19,18 @@
 
 #include "WebToolWidget.h"
 
-#include <kundo2command.h>
 #include <QWebPage>
 #include <QWebFrame>
 
-#include "WebShape.h"
-#include "WebTool.h"
+#include <kundo2command.h>
+
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
+
+
+#include "WebShape.h"
+#include "WebTool.h"
 
 class ChangeUrl : public KUndo2Command
 {

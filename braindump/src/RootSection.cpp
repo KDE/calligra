@@ -19,14 +19,14 @@
 
 #include "RootSection.h"
 
+#include <QDebug>
+
 #include <kundo2stack.h>
 
 #include "Section.h"
 #include "SectionsIO.h"
 
 #include "ViewManager.h"
-
-#include <kdebug.h>
 
 RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndo2Stack(this)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
 {
@@ -53,7 +53,7 @@ SectionsIO* RootSection::sectionsIO()
 
 void RootSection::addCommand(Section* _section, KUndo2Command* _command)
 {
-    kDebug() << _command << " is added for section " << _section;
+    qDebug() << _command << " is added for section " << _section;
     m_commandsMap[_command] = _section;
     m_undoStack->push(_command);
 }
@@ -72,14 +72,14 @@ KUndo2Stack* RootSection::undoStack()
 void RootSection::undoIndexChanged(int idx)
 {
     const KUndo2Command* command = m_undoStack->command(idx - 1);
-    kDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
+    qDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
     Section* section = m_commandsMap[command];
     if(!section && idx == m_undoStack->count()) {
         section = m_currentSection;
         m_commandsMap[command] = section;
     }
     m_sectionsSaver->push(section);
-    kDebug() << "save section: " << section;
+    qDebug() << "save section: " << section;
 }
 
 void RootSection::setCurrentSection(Section* _section)

@@ -20,6 +20,7 @@
 #include "StateShapePlugin.h"
 
 #include <kgenericfactory.h>
+
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 

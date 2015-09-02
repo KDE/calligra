@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QDebug>
+
 #include "StateCategory.h"
 #include "StateCategory_p.h"
-
-#include <kdebug.h>
 
 #include "State.h"
 
@@ -54,7 +54,7 @@ QList<QString> StateCategory::stateIds() const
 const State* StateCategory::state(const QString& _id) const
 {
     if(d->states.contains(_id)) return d->states[_id];
-    kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
+    qWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
     return 0;
 }
 

@@ -20,17 +20,17 @@
  */
 #include "DockerManager.h"
 #include "DockerManager_p.h"
-#include "KoDockFactoryBase.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-
-#include "ToolDocker.h"
-
-#include "MainWindow.h"
 
 #include <QList>
 #include <QGridLayout>
+
+#include <klocale.h>
+
+#include "KoDockFactoryBase.h"
+
+#include "ToolDocker.h"
+#include "MainWindow.h"
 
 
 DockerManager::DockerManager(MainWindow *mainWindow)

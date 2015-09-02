@@ -23,8 +23,6 @@
 #include <klocale.h>
 #include <KoShapeContainer.h>
 
-#include <kdebug.h>
-
 FreeLayout::FreeLayout() : Layout("freelayout")
 {
 }

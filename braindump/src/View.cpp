@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <QPluginLoader>
 #include <QMimeData>
+#include <QDebug>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
@@ -55,7 +56,6 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -124,7 +124,7 @@ void View::initGUI()
 {
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-        kDebug() << "Creating docker: " << docker;
+        qDebug() << "Creating docker: " << docker;
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         m_mainWindow->createDockWidget(factory);
     }

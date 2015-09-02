@@ -22,8 +22,7 @@
 #include <QDomDocument>
 #include <QFileInfo>
 #include <QTimer>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <KoStore.h>
 #include <KoOdf.h>
@@ -144,14 +143,14 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     }
 
     if(!context->saveDataCenter(store, manifestWriter)) {
-        kDebug() << "save data centers failed";
+        qDebug() << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
     KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
     if(!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug() << "save embedded documents failed";
+        qDebug() << "save embedded documents failed";
         return false;
     }
 
@@ -188,7 +187,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
             return false;
         }
     }
-    kDebug() << "Loading from " << fullFileName;
+    qDebug() << "Loading from " << fullFileName;
 
     const char* mimeType = KoOdf::mimeType(KoOdf::Text);
     KoStore* store = KoStore::createStore(fullFileName + '/', KoStore::Read, mimeType, KoStore::Directory);
@@ -196,7 +195,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
 
     QString errorMessage;
     if(! odfStore.loadAndParse(errorMessage)) {
-        kError() << "loading and parsing failed:" << errorMessage << endl;
+        qCritical() << "loading and parsing failed:" << errorMessage << endl;
         return false;
     }
 
@@ -211,7 +210,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     KoXmlElement element;
     QList<KoShape*> shapes;
     forEachElement(element, body) {
-        kDebug() << "loading shape" << element.nodeName();
+        qDebug() << "loading shape" << element.nodeName();
 
         if(element.nodeName() == "braindump:section") {
             section->sectionContainer()->loadOdf(element, context, shapes);
@@ -250,9 +249,9 @@ void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGr
 
 void SectionsIO::save()
 {
-    kDebug() << "Start saving";
+    qDebug() << "Start saving";
     if(m_sectionsToSave.isEmpty()) {
-        kDebug() << "No section to save";
+        qDebug() << "No section to save";
         return;
     }
     QList<SaveContext*> contextToRemove = m_contextes.values();
@@ -270,9 +269,9 @@ void SectionsIO::save()
     foreach(SaveContext * saveContext, m_contextes) {
         if(m_sectionsToSave.contains(saveContext->section)) {
             if(saveContext->saveSection(this)) {
-                kDebug() << "Successfully loaded: " << saveContext->section->name();
+                qDebug() << "Successfully loaded: " << saveContext->section->name();
             } else {
-                kDebug() << "Saving failed"; // TODO: Report it
+                qDebug() << "Saving failed"; // TODO: Report it
             }
         }
     }
@@ -329,7 +328,7 @@ void SectionsIO::load()
     // Second: load each section
     foreach(SaveContext * saveContext, m_contextes) {
         if(!saveContext->loadSection(this, SaveContext::VERSION_1)) {
-            kDebug() << "Loading failed"; // TODO: Report it
+            qDebug() << "Loading failed"; // TODO: Report it
         }
     }
 }

@@ -25,7 +25,6 @@
 #include "KoDockFactoryBase.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <ktoolbar.h>
 
 #include "ToolDocker.h"

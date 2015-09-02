@@ -22,15 +22,6 @@
 #include "ToolDocker.h"
 #include "ToolDocker_p.h"
 
-#include <KoDockWidgetTitleBar.h>
-
-#include <KoIcon.h>
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
-
 #include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
@@ -41,6 +32,13 @@
 #include <QStyleOptionFrame>
 #include <QToolButton>
 #include <QTabWidget>
+
+#include <klocale.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+
+#include <KoDockWidgetTitleBar.h>
+#include <KoIcon.h>
 
 ToolDocker::ToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),

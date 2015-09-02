@@ -31,7 +31,6 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <kdebug.h>
 
 #include <../../src/Xml.h>
 

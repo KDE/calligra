@@ -24,6 +24,7 @@
 #include <QDockWidget>
 #include <QLayout>
 #include <QTabBar>
+#include <QDebug>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -42,7 +43,6 @@
 #include "Canvas.h"
 #include "import/DockerManager.h"
 #include <kxmlguifactory.h>
-#include <kdebug.h>
 
 #include "StatusBarItem.h"
 
@@ -238,7 +238,7 @@ void MainWindow::removeStatusBarItem(QWidget* _widget)
             }
         }
     }
-    kWarning() << "Widget " << _widget << " not found in the status bar";
+    qWarning() << "Widget " << _widget << " not found in the status bar";
 }
 
 QList<KoCanvasObserverBase*> MainWindow::canvasObservers() const

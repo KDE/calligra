@@ -84,7 +84,7 @@ Canvas::~Canvas()
     delete m_toolProxy;
     delete m_shapeManager;
 }
-#include <kdebug.h>
+
 void Canvas::setDocumentOffset(const QPoint &offset)
 {
     m_originalOffset = offset;

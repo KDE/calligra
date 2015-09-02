@@ -29,7 +29,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QPointer>
 #include <QGridLayout>

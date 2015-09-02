@@ -20,8 +20,8 @@
 #include "StateShapeFactory.h"
 
 #include "StateShape.h"
-#include <KoProperties.h>
 
+#include <KoProperties.h>
 #include <KoIcon.h>
 #include <klocale.h>
 
