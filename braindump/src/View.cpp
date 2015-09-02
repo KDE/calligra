@@ -30,6 +30,7 @@
 #include <QPluginLoader>
 #include <QMimeData>
 #include <QDebug>
+#include <QAction>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
@@ -57,7 +58,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <KPluginFactory>
@@ -185,24 +185,24 @@ void View::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    m_deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
+    m_deleteSelectionAction = new QAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", m_deleteSelectionAction);
     actionCollection()->setDefaultShortcut(m_deleteSelectionAction, QKeySequence("Del"));
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     // Shapes menu
     // TODO: get an icon "edit-duplicate"
-    KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
+    QAction *actionDuplicate  = new QAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("shapes_duplicate", actionDuplicate);
     actionCollection()->setDefaultShortcut(actionDuplicate, QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    m_groupShapes = new KAction(koIcon("object-group"), i18n("Group Shapes"), this);
+    m_groupShapes = new QAction(koIcon("object-group"), i18n("Group Shapes"), this);
     actionCollection()->addAction("shapes_group", m_groupShapes);
     actionCollection()->setDefaultShortcut(m_groupShapes, QKeySequence("Ctrl+G"));
     connect(m_groupShapes, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
-    m_ungroupShapes  = new KAction(koIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
+    m_ungroupShapes  = new QAction(koIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
     actionCollection()->addAction("shapes_ungroup", m_ungroupShapes);
     actionCollection()->setDefaultShortcut(m_ungroupShapes, QKeySequence("Ctrl+Shift+G"));
     connect(m_ungroupShapes, SIGNAL(triggered()), this, SLOT(ungroupSelection()));

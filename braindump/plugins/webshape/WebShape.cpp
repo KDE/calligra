@@ -20,7 +20,6 @@
 #include "WebShape.h"
 
 #include <QBuffer>
-// #include <QFile>
 #include <QPainter>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
@@ -105,12 +104,12 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
     return true;
 }
 
-const KUrl& WebShape::url()
+const QUrl &WebShape::url()
 {
     return m_url;
 }
 
-void WebShape::setUrl(const KUrl& _url)
+void WebShape::setUrl(const QUrl &_url)
 {
     m_url = _url;
     m_webPage->mainFrame()->load(_url);
