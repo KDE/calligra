@@ -55,6 +55,7 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 #include <KRun>
 #include <KToolInvocation>
@@ -757,10 +758,10 @@ void KexiUtils::openHyperLink(const QUrl &url, QWidget *parent, const OpenHyperl
             KRun::runUrl(url, type, parent);
             break;
         case OpenHyperlinkOptions::BrowserHyperlinkTool:
-            KToolInvocation::invokeBrowser(url.url());
+            QDesktopServices::openUrl(url);
             break;
         case OpenHyperlinkOptions::MailerHyperlinkTool:
-            KToolInvocation::invokeMailer(url);
+            QDesktopServices::openUrl(url);
             break;
     }
 }
