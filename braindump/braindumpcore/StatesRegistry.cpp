@@ -34,7 +34,7 @@
 #include "StateCategory.h"
 #include "StateCategory_p.h"
 
-struct StatesRegistry::Private {
+struct Q_DECL_HIDDEN StatesRegistry::Private {
     static StatesRegistry* s_instance;
     QMap<QString, StateCategory*> categories;
     void parseStatesRC(const QString& _filename);
