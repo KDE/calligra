@@ -32,11 +32,11 @@
 
 #include "KoReportPage"
 #include "KoReportPreRenderer"
-#include "kreport/renderobjects.h"
+#include "renderobjects.h"
 #include <KoReportDesigner>
-#include "kreport/reportsection.h"
-#include "kreport/reportsectiondetail.h"
-#include "kreport/reportsectiondetailgroup.h"
+#include "reportsection.h"
+#include "reportsectiondetail.h"
+#include "reportsectiondetailgroup.h"
 #include <KPropertyEditorView>
 
 #include "kptglobal.h"
