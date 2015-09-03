@@ -817,7 +817,9 @@ KoToolManager::~KoToolManager()
 QList<KoToolAction*> KoToolManager::toolActionList() const
 {
     QList<KoToolAction*> answer;
+#if QT_VERSION >= 0x040700
     answer.reserve(d->tools.count());
+#endif
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
