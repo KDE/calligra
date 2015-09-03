@@ -24,11 +24,12 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
+#include <QDirIterator>
 
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include "State.h"
 #include "StateCategory.h"
@@ -125,8 +126,16 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename)
 
 StatesRegistry::StatesRegistry() : d(new Private)
 {
-    KGlobal::dirs()->addResourceType("stateshape_states", "data", "stateshape/states/");
-    QStringList statesFilenames = KGlobal::dirs()->findAllResources("stateshape_states", "*.xml", KStandardDirs::Recursive);
+    QStringList statesFilenames;
+    const QStringList stateFileDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                                "stateshape/states/",
+                                                                QStandardPaths::LocateDirectory);
+    Q_FOREACH(QString dir, stateFileDirs) {
+        QDirIterator iter(dir, QStringList() << QStringLiteral("*.xml"));
+        while(iter.hasNext()) {
+            statesFilenames.append(iter.next());
+        }
+    }
 
     foreach(const QString & filename, statesFilenames) {
         qDebug() << "Load state: " << filename;

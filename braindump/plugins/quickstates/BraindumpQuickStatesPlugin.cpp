@@ -21,11 +21,11 @@
 
 #include <QPainter>
 #include <QSvgRenderer>
+#include <QStandardPaths>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kgenericfactory.h>
-#include <kstandarddirs.h>
 
 #include "State.h"
 #include "StatesRegistry.h"
@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFacto
 BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "braindump/plugins/quickstates.rc"), true);
 
     // TODO try to use action list, or to get access to the state menu
 
