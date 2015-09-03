@@ -69,6 +69,8 @@ bool adjustIcon(QIcon *icon)
 {
     bool result = false;
 
+#if QT_VERSION >= 0x040700
+
     QString iconName = icon->name();
     if (iconName.isNull()) return result;
 
@@ -86,7 +88,7 @@ bool adjustIcon(QIcon *icon)
         *icon = loadIcon(realIconName);
         result = !icon->isNull();
     }
-
+#endif
     return result;
 }
 
