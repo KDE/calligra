@@ -41,7 +41,7 @@ KoOdfWriters::KoOdfWriters()
 
 //------------------------------------------
 
-class Q_DECL_HIDDEN KoOdfExporter::Private
+class  KoOdfExporter::Private
 {
 public:
     Private() {}

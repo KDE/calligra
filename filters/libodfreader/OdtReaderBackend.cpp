@@ -33,7 +33,7 @@
 //             class OdtReaderBackend::Private
 
 
-class Q_DECL_HIDDEN OdtReaderBackend::Private
+class  OdtReaderBackend::Private
 {
  public:
     Private();

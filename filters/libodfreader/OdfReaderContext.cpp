@@ -34,7 +34,7 @@
 //                 class OdfReaderContext::Private
 
 
-class Q_DECL_HIDDEN OdfReaderContext::Private
+class  OdfReaderContext::Private
 {
 public:
     Private(KoStore *store);

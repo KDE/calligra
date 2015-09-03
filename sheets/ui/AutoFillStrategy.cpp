@@ -24,7 +24,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN AutoFillStrategy::Private
+class  AutoFillStrategy::Private
 {
 public:
     // If we use the lower right corner of the marker to start autofilling, then this

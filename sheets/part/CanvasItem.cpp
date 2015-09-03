@@ -120,7 +120,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN CanvasItem::Private
+class  CanvasItem::Private
 {
 public:
     Selection* selection;

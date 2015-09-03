@@ -19,7 +19,7 @@
 
 #include "KPrEventActionData.h"
 
-class Q_DECL_HIDDEN KPrEventActionData::Private
+class  KPrEventActionData::Private
 {
 public:
     Private(KoShape *s, KoEventAction *ea, KPrSoundCollection *sc)

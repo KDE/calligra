@@ -35,7 +35,7 @@
 //             class KoXmlStreamReader and Private class
 
 
-class Q_DECL_HIDDEN KoXmlStreamReader::Private
+class  KoXmlStreamReader::Private
 {
 public:
     Private(KoXmlStreamReader *qq);
@@ -406,7 +406,7 @@ bool KoXmlStreamReader::isSound() const
 //             class KoXmlStreamAttribute and Private class
 
 
-class Q_DECL_HIDDEN KoXmlStreamAttribute::Private
+class  KoXmlStreamAttribute::Private
 {
 public:
     Private(const QXmlStreamAttribute *attr, const KoXmlStreamReader *r);
@@ -564,7 +564,7 @@ KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute
 //             class KoXmlStreamAttributes and Private class
 
 
-class Q_DECL_HIDDEN KoXmlStreamAttributes::Private : public QSharedData
+class  KoXmlStreamAttributes::Private : public QSharedData
 {
 public:
     Private(const KoXmlStreamReader *r, const QXmlStreamAttributes &qa);

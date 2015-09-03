@@ -114,7 +114,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN Canvas::Private
+class  Canvas::Private
 {
 public:
     View *view;

@@ -27,7 +27,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN PageManager::Private
+class  PageManager::Private
 {
 public:
     Sheet* sheet;

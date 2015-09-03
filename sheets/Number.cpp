@@ -25,7 +25,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN Number::Private : public QSharedData
+class  Number::Private : public QSharedData
 {
 public:
     Private() {

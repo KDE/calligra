@@ -42,7 +42,7 @@ static const int g_maximumCachedStyles = 10000;
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN StyleStorage::Private
+class  StyleStorage::Private
 {
 public:
     Private()

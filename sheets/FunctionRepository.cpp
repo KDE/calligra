@@ -36,7 +36,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN FunctionRepository::Private
+class  FunctionRepository::Private
 {
 public:
     QHash<QString, QSharedPointer<Function> > functions;
