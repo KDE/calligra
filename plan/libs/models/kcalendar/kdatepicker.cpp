@@ -122,11 +122,7 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
     // make sure that the week of the lastDay is always inserted: in Chinese calendar
     // system, this is not always the case
     if(day < lastDay && day.daysTo(lastDay) < 7 &&
-#if KDE_IS_VERSION(4,7,0)
         calendar->week(day) != calendar->week(lastDay))
-#else
-        calendar->weekNumber(day) != calendar->weekNumber(lastDay))
-#endif
       day = lastDay.addDays(-7);
   }
 }
