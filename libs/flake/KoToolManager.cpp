@@ -61,7 +61,7 @@
 #include <QStack>
 #include <QLabel>
 
-class Q_DECL_HIDDEN KoToolAction::Private
+class KoToolAction::Private
 {
 public:
     ToolHelper* toolHelper;
