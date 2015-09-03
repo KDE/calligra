@@ -349,5 +349,3 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent * event)
     ConnectionTarget target(inputEffect, inputIndex);
     emit connectionCreated(source, target);
 }
-
-#include "FilterEffectScene.moc"

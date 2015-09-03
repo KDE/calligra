@@ -27,12 +27,10 @@ Table Of Contents
 5. Calligra libraries
 6. WARNING against Qt 4.8.0 and 4.8.1
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
-8. Plan
-8.1. Runtime dependency of Plan's import filters
-9. Okular plugins
-9.1. Runtime dependency of the Okular ODP plugin
-9.2. Support for PPT, PPTX and more runtime dependency
-9.3. Support for DOC, DOCX, WPD and more runtime dependency
+8. Okular plugins
+8.1. Runtime dependency of the Okular ODP plugin
+8.2. Support for PPT, PPTX and more runtime dependency
+8.3. Support for DOC, DOCX, WPD and more runtime dependency
 
 
 1. Kexi
@@ -239,7 +237,7 @@ koplugin                                                               NO
 kotext
 komain
 koodf
-kordf                                      Words/Author, Active
+kordf                                      Words/Author
 pigment
 kowidgets
 
@@ -297,34 +295,15 @@ build for building distributable packages.
 [1] - http://code.compeng.uni-frankfurt.de/projects/vc
 
 
-8. Plan
-=======
-
-8.1. Runtime dependency of Plan's import filters
-------------------------------------------------
-The two current import filters, for project files from MS Project and Planner,
-both are based on mpxj (http://mpxj.sourceforge.net/, in Java) and Apache
-POI.
-Thus java needs to know how to locate the mpxj and Apache POI jar files:
-if not installed in the normal place where Java finds them, the location will
-have to be given by the PLAN_CLASSPATH environment variable, e.g:
-$ PLAN_CLASSPATH=/path/to/mpxj/mpxj.jar:/path/to/poi/poi.jar calligraplan&
-
-If your distribution is not yet able to provide those dependencies, please
-disable the Plan import filters by patching the toplevel CMakeLists.txt
-in the line before calligra_drop_unbuildable_products() with
-calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
-
-
-9. Okular plugins
+8. Okular plugins
 =================
 
-9.1. Runtime dependency of the Okular ODP plugin
+8.1. Runtime dependency of the Okular ODP plugin
 ------------------------------------------------
 OKULAR_GENERATOR_ODP, the ODP plugin for Okular, in extras/okularodpgenerator,
 has a runtime dependency on the Stage engine, PART_STAGE.
 
-9.2. Support for PPT, PPTX and more runtime dependency
+8.2. Support for PPT, PPTX and more runtime dependency
 ------------------------------------------------------
 The Okular ODP plugin also supports the formats PPT and PPTX, if the respective
 filters FILTER_PPT_TO_ODP and FILTER_PPTX_TO_ODP are built, by the products
@@ -339,7 +318,7 @@ will be installed from the filters/stage/{powerpoint,pptx}.
 So with those desktop files and the Okular ODP plugin installed there is a
 runtime dependency on the Stage engine and the respective filters.
 
-9.3. Support for DOC, DOCX, WPD and more runtime dependency
+8.3. Support for DOC, DOCX, WPD and more runtime dependency
 -----------------------------------------------------------
 The Okular ODT plugin also supports the formats DOC, DOCX and WPD, if the
 respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT and

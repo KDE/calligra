@@ -31,8 +31,8 @@ class KexiTemplatesModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum AdditionalRoles {
-        NameRole = 0x9D419D49,
-        CategoryRole = 0xA2BEF158
+        NameRole = Qt::UserRole,
+        CategoryRole = Qt::UserRole + 1
     };
 
     explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,

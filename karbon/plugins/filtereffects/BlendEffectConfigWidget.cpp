@@ -87,5 +87,3 @@ void BlendEffectConfigWidget::modeChanged(int index)
 
     emit filterChanged();
 }
-
-#include "BlendEffectConfigWidget.moc"

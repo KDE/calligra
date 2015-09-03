@@ -425,7 +425,7 @@ public:
     template<typename T>
     T widgetOfClass(T parent, const char *widgetName) const
     {
-        T w = parent->findChild<T>(widgetName);
+        T w = parent->template findChild<T>(widgetName);
         if (!w) {
             qWarning() << "NO SUCH widget" << widgetName << "in" << parent;
         }

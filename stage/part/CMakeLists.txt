@@ -167,7 +167,7 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 install(TARGETS calligrastagepart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ### GUI files ###
-install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
+install( FILES stage.rc stage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/stage)
 
 install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 

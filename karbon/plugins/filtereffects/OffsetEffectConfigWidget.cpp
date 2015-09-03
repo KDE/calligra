@@ -71,5 +71,3 @@ void OffsetEffectConfigWidget::offsetChanged(double /*offset*/)
     m_effect->setOffset(0.01*QPointF(m_offsetX->value(), m_offsetY->value()));
     emit filterChanged();
 }
-
-#include "OffsetEffectConfigWidget.moc"

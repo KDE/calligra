@@ -234,7 +234,7 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
+install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/author)
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

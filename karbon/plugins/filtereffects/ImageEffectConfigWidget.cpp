@@ -86,5 +86,3 @@ void ImageEffectConfigWidget::selectImage()
 
     emit filterChanged();
 }
-
-#include "ImageEffectConfigWidget.moc"

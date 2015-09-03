@@ -30,6 +30,7 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QDesktopServices>
 
 /*! Make a deep copy so we can modify the version.
  We need to override the version since it sometimes can look like
@@ -114,7 +115,7 @@ void KexiBugReportDialog::accept()
 #endif
     url.addQueryItem("op_sys", m_op_sys);
     url.addQueryItem("rep_platform", m_rep_platform);
-    KToolInvocation::invokeBrowser(url.url());
+    QDesktopServices::openUrl(url);
     QDialog::accept();
 }
 

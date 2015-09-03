@@ -288,5 +288,3 @@ void ComponentTransferEffectConfigWidget::channelSelected(int channel)
     m_currentChannel = static_cast<ComponentTransferEffect::Channel>(channel);
     updateControls();
 }
-
-#include "ComponentTransferEffectConfigWidget.moc"

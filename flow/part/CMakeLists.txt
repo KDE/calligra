@@ -53,5 +53,5 @@ install( PROGRAMS flow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES flow.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 ### GUI files ###
-install( FILES flow.rc DESTINATION ${DATA_INSTALL_DIR}/flow)
+install( FILES flow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/flow)
 install( FILES flowrc DESTINATION ${CONFIG_INSTALL_DIR} )
