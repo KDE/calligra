@@ -30,6 +30,10 @@
   <name xml:lang="x-test">xxKexixx</name>
   <name xml:lang="zh-CN">Kexi</name>
   <summary>Visual database apps builder</summary>
+  <summary xml:lang="pt">Construtor visual de aplicações de bases de dados</summary>
+  <summary xml:lang="sv">Visuellt byggverktyg för databasprogram</summary>
+  <summary xml:lang="uk">Програма для побудови візуальних обробників баз даних</summary>
+  <summary xml:lang="x-test">xxVisual database apps builderxx</summary>
   <description>
     <p>
       Kexi is a visual database applications builder. It can be used for designing database applications,
@@ -37,6 +41,10 @@
       to provide a custom interface to your data. All database objects - tables, queries, forms,
       reports, etc. - are stored in the database, making it easy to share data and design.
     </p>
+    <p xml:lang="pt">O Kexi é um criador de bases de dados visuais, que pode ser usado para desenhar aplicações de bases de dados, inserir e editar dados, executar pesquisas e processar os dados. Poderá criar formulários para oferecer uma interface personalizada para os seus dados. Todos os objectos da base de dados - tabelas, pesquisas, formulários, relatórios, etc. - são guardados na base de dados, tornando simples a partilha e o desenho dos dados.</p>
+    <p xml:lang="sv">Kexi är ett visuell byggverktyg för databasprogram, en del av Calligra-sviten. Den kan användas för att skapa databasprogram, infoga och redigera data, ställa frågor och behandla data. Formulär kan skapas för att tillhandahålla ett anpassat gränssnitt för data. Alla databasobjekt (tabeller, frågor, formulär, rapporter, etc.) lagras i databasen, vilket gör det enkelt att dela data och konstruktion.</p>
+    <p xml:lang="uk">Kexi — програма для створення обробників баз даних у візуальному режимі. Цією програмою можна скористатися для створень мініпрограм для роботи з базами даних, додавання та редагування даних, виконання запитів та обробки даних. За допомогою створених програмою форм ви можете отримати потрібний вам режим доступу до ваших даних. Всі об’єкти баз даних — таблиці, запити, форми, звіти тощо, — зберігаються у самій базі даних, що спрощує поширення даних та представлення даних.</p>
+    <p xml:lang="x-test">xxKexi is a visual database applications builder. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports, etc. - are stored in the database, making it easy to share data and design.xx</p>
     <p>Features:</p>
     <p xml:lang="bs">Osobine:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -102,8 +110,20 @@
       <li xml:lang="uk">Виконання запитів, підтримка параметризованих запитів.</li>
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databases</li>
+      <li xml:lang="pt">Suporta bases de dados SQLite, MySQL, PostgreSQL, xBase e Sybase/MS SQL Server</li>
+      <li xml:lang="sv">Stöder databaserna SQLite, MySQL, PostgreSQL, xBase och Sybase/MS SQL Server</li>
+      <li xml:lang="uk">Підтримка баз даних SQLite, MySQL, PostgreSQL, xBase та Sybase/MS SQL.</li>
+      <li xml:lang="x-test">xxSupports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databasesxx</li>
       <li>The only multiplatform visual tool that can easily import data from MS Access databases</li>
+      <li xml:lang="pt">A única ferramenta gráfica multi-plataforma que consegue importar facilmente bases de dados MS Access</li>
+      <li xml:lang="sv">Det enda visuella verktyget för flera plattformar som enkelt kan importera data från MS Access-databaser</li>
+      <li xml:lang="uk">Єдиний візуальний багатоплатформовий інструмент, здатний без проблем імпортувати дані з баз даних MS Access.</li>
+      <li xml:lang="x-test">xxThe only multiplatform visual tool that can easily import data from MS Access databasesxx</li>
       <li>Support for query design in dedicated SQL view</li>
+      <li xml:lang="pt">Suporta o desenho de pesquisas numa área de SQL dedicada</li>
+      <li xml:lang="sv">Stöd för frågekonstruktion i en dedicerad SQL-vy</li>
+      <li xml:lang="uk">Підтримка створення запитів за допомогою спеціальної панелі SQL.</li>
+      <li xml:lang="x-test">xxSupport for query design in dedicated SQL viewxx</li>
       <li>Designing and displaying relational data using combo boxes (lookup columns)</li>
       <li xml:lang="bs">Izrada i prikazivanje relacijskih podataka pomoću combo kutije ( pregledavanje kolone)</li>
       <li xml:lang="ca">Disseny i visualització de dades relacionals usant quadres combinats (columnes de cerca)</li>
