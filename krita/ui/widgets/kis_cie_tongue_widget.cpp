@@ -48,7 +48,6 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kpixmapsequence.h>
 
 #include <KoColorSpaceRegistry.h>
 
@@ -159,7 +158,6 @@ public:
         whitePoint(3)
         
     {
-        progressPix = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
     
     bool            profileDataAvailable;
@@ -181,7 +179,6 @@ public:
  
     QPixmap         pixmap;
     QPixmap         cietongue;
-    KPixmapSequence progressPix;
  
     QVector <double> Primaries;
     QVector <double> whitePoint;
