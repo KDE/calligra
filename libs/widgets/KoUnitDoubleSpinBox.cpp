@@ -37,8 +37,7 @@
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
 
-class Q_DECL_HIDDEN KoUnitDoubleSpinBox::Private
-{
+class KoUnitDoubleSpinBox::Private {
 public:
     Private(double low, double up, double step)
         : lowerInPoints(low),

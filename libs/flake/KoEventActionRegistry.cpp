@@ -41,7 +41,7 @@ public:
 
 K_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
 
-class Q_DECL_HIDDEN KoEventActionRegistry::Private
+class KoEventActionRegistry::Private
 {
 public:
     QHash<QString, KoEventActionFactoryBase*> presentationEventActionFactories;

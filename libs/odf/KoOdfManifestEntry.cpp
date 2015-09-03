@@ -23,7 +23,7 @@
 
 #include <QString>
 
-class Q_DECL_HIDDEN KoOdfManifestEntry::Private
+class KoOdfManifestEntry::Private
 {
 public:
     Private() {};

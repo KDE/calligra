@@ -38,7 +38,7 @@
 #include <KoXmlNS.h>
 
 
-class Q_DECL_HIDDEN KoTableStyle::Private
+class KoTableStyle::Private
 {
 public:
     Private() : parentStyle(0), next(0) {}

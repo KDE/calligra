@@ -47,7 +47,7 @@
 
 
 /// \internal d-pointer class.
-class Q_DECL_HIDDEN KoScriptingPart::Private
+class KoScriptingPart::Private
 {
 public:
     /**

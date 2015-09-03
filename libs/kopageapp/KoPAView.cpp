@@ -91,7 +91,7 @@
 #include <ktemporaryfile.h>
 
 
-class Q_DECL_HIDDEN KoPAView::Private
+class KoPAView::Private
 {
 public:
     Private( KoPADocument *document )

@@ -28,7 +28,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoMarkerCollection::Private
+class KoMarkerCollection::Private
 {
 public:
     ~Private()

@@ -29,7 +29,7 @@
 #include "KoToolProxy.h"
 #include "KoSelection.h"
 
-class Q_DECL_HIDDEN KoCanvasBase::Private
+class KoCanvasBase::Private
 {
 public:
     Private() : shapeController(0),

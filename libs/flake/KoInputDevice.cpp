@@ -19,7 +19,7 @@
 
 #include "KoInputDevice.h"
 
-class Q_DECL_HIDDEN KoInputDevice::Private
+class KoInputDevice::Private
 {
 public:
     Private(QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)

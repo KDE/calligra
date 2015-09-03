@@ -49,7 +49,7 @@
 #include "KoPartAdaptor.h"
 #endif
 
-class Q_DECL_HIDDEN KoPart::Private
+class KoPart::Private
 {
 public:
     Private(KoPart *_parent)

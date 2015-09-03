@@ -29,7 +29,7 @@
 #include <KoView.h>
 
 /// \internal d-pointer class.
-class Q_DECL_HIDDEN KoScriptingModule::Private
+class KoScriptingModule::Private
 {
 public:
     KoScriptingModule *module;

@@ -28,7 +28,7 @@
 #include <QPainter>
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoPagePreviewWidget::Private
+class KoPagePreviewWidget::Private
 {
 public:
     KoPageLayout pageLayout;

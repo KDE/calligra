@@ -106,8 +106,7 @@ namespace {
     };
 }
 
-class Q_DECL_HIDDEN KoAspectButton::Private
-{
+class KoAspectButton::Private {
 public:
     Private()
         : chain(_chain_24),

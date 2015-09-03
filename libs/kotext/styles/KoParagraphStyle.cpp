@@ -59,7 +59,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
     return tab1.position < tab2.position;
 }
 #endif
-class Q_DECL_HIDDEN KoParagraphStyle::Private
+class KoParagraphStyle::Private
 {
 public:
     Private() : parentStyle(0), defaultStyle(0), list(0), m_inUse(false) {}

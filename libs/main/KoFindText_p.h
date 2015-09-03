@@ -43,7 +43,7 @@
 #include "KoFindOption.h"
 #include "KoDocument.h"
 
-class Q_DECL_HIDDEN KoFindText::Private
+class KoFindText::Private
 {
 public:
     Private(KoFindText* qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }

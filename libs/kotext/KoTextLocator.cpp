@@ -36,7 +36,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 
-class Q_DECL_HIDDEN KoTextLocator::Private
+class KoTextLocator::Private
 {
 public:
     Private(KoTextLocator *q) : q(q), document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(0) { }

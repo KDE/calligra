@@ -107,7 +107,7 @@ private:
     KoShapeManager *m_shapeManager;
 };
 
-class Q_DECL_HIDDEN KoShapePainter::Private
+class KoShapePainter::Private
 {
 public:
     Private()

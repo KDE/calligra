@@ -31,7 +31,7 @@ struct Edge {
     qreal distance;
 };
 
-class Q_DECL_HIDDEN KoTextBlockBorderData::Private
+class KoTextBlockBorderData::Private
 {
 public:
     Private() : refCount(0), mergeWithNext(true) {}

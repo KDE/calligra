@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-class Q_DECL_HIDDEN KoShapeDeleteCommand::Private
+class KoShapeDeleteCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c)

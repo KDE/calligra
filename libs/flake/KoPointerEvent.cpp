@@ -28,7 +28,7 @@
 #include <QTouchEvent>
 #include <QGraphicsSceneMouseEvent>
 
-class Q_DECL_HIDDEN KoPointerEvent::Private
+class KoPointerEvent::Private
 {
 public:
     Private()

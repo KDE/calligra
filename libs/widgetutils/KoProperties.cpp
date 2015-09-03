@@ -22,7 +22,7 @@
 
 #include <QDomDocument>
 
-class Q_DECL_HIDDEN KoProperties::Private
+class KoProperties::Private
 {
 public:
     QMap<QString, QVariant> properties;

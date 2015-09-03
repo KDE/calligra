@@ -24,7 +24,7 @@
 #include "KoXmlWriter.h"
 #include "KoOdfNumberDefinition.h"
 
-class Q_DECL_HIDDEN KoOdfLineNumberingConfiguration::Private
+class KoOdfLineNumberingConfiguration::Private
 {
 public:
     bool lineNumberingEnabled;

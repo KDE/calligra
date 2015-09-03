@@ -44,8 +44,7 @@
 #include <QTabWidget>
 
 
-class Q_DECL_HIDDEN KoToolDocker::Private
-{
+class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock)
         : q(dock)

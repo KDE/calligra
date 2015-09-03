@@ -32,7 +32,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-class Q_DECL_HIDDEN KoZoomController::Private
+class KoZoomController::Private
 {
 public:
     Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)

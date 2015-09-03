@@ -154,7 +154,7 @@ QSize CapNJoinMenu::sizeHint() const
 }
 
 
-class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
+class KoStrokeConfigWidget::Private
 {
 public:
     Private()

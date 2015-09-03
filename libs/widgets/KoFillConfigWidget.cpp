@@ -160,7 +160,7 @@ static const char* const buttonpattern[]={
     "#aaaaabbbbaaaaa#",
     "################"};
 
-class Q_DECL_HIDDEN KoFillConfigWidget::Private
+class KoFillConfigWidget::Private
 {
 public:
     Private()

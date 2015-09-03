@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoGenChanges::Private
+class KoGenChanges::Private
 {
 public:
     Private(KoGenChanges *q)

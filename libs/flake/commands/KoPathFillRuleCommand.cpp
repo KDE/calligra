@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-class Q_DECL_HIDDEN KoPathFillRuleCommand::Private
+class KoPathFillRuleCommand::Private
 {
 public:
     Private(Qt::FillRule fillRule) : newFillRule(fillRule) {

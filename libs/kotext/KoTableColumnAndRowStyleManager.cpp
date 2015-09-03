@@ -30,7 +30,7 @@
 
 #include <QDebug>
 
-class Q_DECL_HIDDEN KoTableColumnAndRowStyleManager::Private : public QSharedData
+class KoTableColumnAndRowStyleManager::Private : public QSharedData
 {
 public:
     Private()  { }

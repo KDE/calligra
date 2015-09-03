@@ -21,7 +21,7 @@
 #include "KoPathShape.h"
 #include <klocale.h>
 
-class Q_DECL_HIDDEN KoPathReverseCommand::Private
+class KoPathReverseCommand::Private
 {
 public:
     Private(const QList<KoPathShape*> &p)

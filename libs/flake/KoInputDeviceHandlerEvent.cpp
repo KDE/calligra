@@ -21,7 +21,7 @@
 #include "KoPointerEvent.h"
 #include <QApplication>
 
-class Q_DECL_HIDDEN KoInputDeviceHandlerEvent::Private
+class KoInputDeviceHandlerEvent::Private
 {
 public:
     Private()

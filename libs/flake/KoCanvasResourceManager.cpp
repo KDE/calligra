@@ -29,7 +29,7 @@
 #include "KoResourceManager_p.h"
 #include <KoColorSpaceRegistry.h>
 
-class Q_DECL_HIDDEN KoCanvasResourceManager::Private
+class KoCanvasResourceManager::Private
 {
 public:
     KoResourceManager manager;
