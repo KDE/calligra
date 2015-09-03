@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Web Browser Widget
+Name[pt]=Elemento de Navegador Web
+Name[sv]=Webbläsarkomponent
+Name[uk]=Віджет перегляду інтернету
+Name[x-test]=xxWeb Browser Widgetxx
 Comment=Kexi plugin providing web browser form widget
+Comment[pt]='Plugin' do Kexi que oferece um elemento gráfico de formulários de navegação Web
+Comment[sv]=Kexi-insticksprogram som tillhandahåller formulärkomponent med webbläsare
+Comment[uk]=Додаток до Kexi, що забезпечує роботу форми віджета навігатора інтернетом
+Comment[x-test]=xxKexi plugin providing web browser form widgetxx
 Type=Service
 Icon=form
 Encoding=UTF-8
