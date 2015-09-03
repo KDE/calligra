@@ -43,7 +43,6 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>
-#include <kdeversion.h>
 #include <kglobalsettings.h>
 
 #include <KoIcon.h>
@@ -115,11 +114,7 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
 
   for (; day <= lastDay ; day = calendar->addDays(day, 7 /*calendar->daysOfWeek()*/) )
   {
-#if KDE_IS_VERSION(4,7,0)
     const int weekNumber = calendar->week(day, &year);
-#else
-    const int weekNumber = calendar->weekNumber(day, &year);
-#endif
     QString week = i18n("Week %1", weekNumber);
     if ( year != calendar->year(day) ) week += '*';  // show that this is a week from a different year
     d->selectWeek->addItem(week);
