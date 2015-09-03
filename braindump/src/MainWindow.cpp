@@ -67,9 +67,7 @@ MainWindow::MainWindow(RootSection* document) : m_doc(document), m_activeView(0)
 
     activateView(view);
 
-    // Position and show toolbars according to user's preference
-    // QT5TODO: Remove usage of KComponentData
-//    setAutoSaveSettings(componentData.componentName());
+    setAutoSaveSettings();
 
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->screenGeometry(scnum);
@@ -77,12 +75,6 @@ MainWindow::MainWindow(RootSection* document) : m_doc(document), m_activeView(0)
     // if the desktop is virtual then use virtual screen size
     if(QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-
-    // QT5TODO: Figure out a way to do this without KComponentData
-//    KConfigGroup config(KGlobal::config(), componentData.componentName());
-//    const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
-//                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
-//    resize(size);
 
     foreach(QDockWidget * wdg, m_dockWidgets) {
         if((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
