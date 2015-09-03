@@ -272,6 +272,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 
 macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file format" "http://www.openexr.com" FALSE "" "Required by the Krita OpenEXR filter")
 
 ##
 ## Look for OpenGL
