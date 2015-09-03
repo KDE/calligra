@@ -952,13 +952,8 @@ QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animat
        QPixmap thumbnail = koIcon("calligrastage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 
         if (
-#if QT_VERSION >= 0x040700
             thumbnail.convertFromImage(createThumbnail(animation->shape(),
                                                        QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))
-#else
-            !(thumbnail = QPixmap::fromImage(createThumbnail(animation->shape(),
-                                                            QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))).isNull()
-#endif
         ) {
             thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
         }
@@ -1003,13 +998,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
                                 Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(m_path);
             QPixmap iconPixmap;
-            if (
-#if QT_VERSION >= 0x040700
-                iconPixmap.convertFromImage(thumb)
-#else
-                !(iconPixmap = QPixmap::fromImage(thumb)).isNull()
-#endif
-            ) {
+            if (iconPixmap.convertFromImage(thumb)) {
                 return iconPixmap;
             }
         }

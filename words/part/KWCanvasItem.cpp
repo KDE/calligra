@@ -153,9 +153,7 @@ void KWCanvasItem::inputMethodEvent(QInputMethodEvent *event)
 
 void KWCanvasItem::updateInputMethodInfo()
 {
-#if QT_VERSION  >= 0x040700
     updateMicroFocus();
-#endif
 }
 
 void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
