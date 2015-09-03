@@ -148,11 +148,17 @@ bool KisPaintOpPreset::load()
     QByteArray ba;
 
     if (filename().startsWith("bundle://")) {
-        qDebug() << "bundle";
         QString bn = filename().mid(9);
-        int pos = bn.lastIndexOf(":");
-        QString fn = bn.right(bn.size() - pos - 1);
-        bn = bn.left(pos);
+
+        int bundlePos = bn.indexOf(".bundle:");
+        if(bundlePos == -1) {
+            qWarning() << "Error parsing bundle path" << bn;
+            return false;
+        }
+
+        int colonPos = bundlePos + 7;
+        QString fn = bn.right(bn.size() - colonPos - 1);
+        bn = bn.left(colonPos);
 
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {
