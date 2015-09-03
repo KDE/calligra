@@ -23,7 +23,7 @@
 
 #include <QDebug>
 
-class Q_DECL_HIDDEN KisColorManager::Private {
+class KisColorManager::Private {
 public:
     Private(QObject *parent)
         : colord(new KisColord(parent))
