@@ -6,7 +6,8 @@
 #include "PAMock.h"
 #include "commands/KPrDeleteSlidesCommand.h"
 #include "KPrCustomSlideShows.h"
-#include <qtest_kde.h>
+
+#include <QTest>
 
 
 void TestDeleteSlidesCommand::delSlide()
@@ -89,4 +90,4 @@ void TestDeleteSlidesCommand::delSlide()
     QCOMPARE(doc.customSlideShows()->getByName(customShowName2), slideList2);
 }
 
-QTEST_KDEMAIN(TestDeleteSlidesCommand, GUI)
+QTEST_MAIN(TestDeleteSlidesCommand)

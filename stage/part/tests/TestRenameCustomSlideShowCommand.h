@@ -20,7 +20,7 @@
 #ifndef TESTRENAMECUSTOMSLIDESHOWCOMMAND_H
 #define TESTRENAMECUSTOMSLIDESHOWCOMMAND_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestRenameCustomSlideShowCommand : public QObject
 {

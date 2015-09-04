@@ -30,6 +30,8 @@
 #include "PAMock.h"
 #include "MockShapeAnimation.h"
 
+#include <QTest>
+
 const int ANIMATIONS_COUNT = 9;
 
 void TestShapeAnimations::initTestCase()
