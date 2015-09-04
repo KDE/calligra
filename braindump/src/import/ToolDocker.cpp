@@ -34,7 +34,8 @@
 #include <QTabWidget>
 
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
+#include <klocalizedstring.h>
 
 #include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>
@@ -45,7 +46,7 @@ ToolDocker::ToolDocker(QWidget *parent)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg(KSharedConfig::openConfig(), "DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
     d->hasTitle = cfg.readEntry("Locked", true);
 
@@ -96,7 +97,7 @@ ToolDocker::ToolDocker(QWidget *parent)
 
 ToolDocker::~ToolDocker()
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg(KSharedConfig::openConfig(), "DockWidget sharedtooldocker");
     cfg.writeEntry("TabbedMode", d->tabbed);
     cfg.writeEntry("Locked", d->hasTitle);
     cfg.sync();
