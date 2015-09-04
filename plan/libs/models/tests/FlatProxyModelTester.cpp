@@ -24,7 +24,7 @@
 #include <QStandardItem>
 #include <QSortFilterProxyModel>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace KPlato
@@ -515,4 +515,4 @@ void FlatProxyModelTester::testInsertRemoveGrandChildren()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::FlatProxyModelTester )
+QTEST_GUILESS_MAIN( KPlato::FlatProxyModelTester )

@@ -35,7 +35,6 @@
 #include "kdatetable.h"
 #include "kdatetable_p.h"
 
-#include <kdeversion.h>
 #include <kconfig.h>
 #include <kcolorscheme.h>
 #include <kglobal.h>
@@ -548,11 +547,7 @@ bool KDateTable::event( QEvent *event )
             if ( d->m_weekNumberDelegate )
             {
                 const KCalendarSystem * calendar = KLocale::global()->calendar();
-#if KDE_IS_VERSION(4,7,0)
                 const int weekNumber = calendar->week( pCellDate );
-#else
-                const int weekNumber = calendar->weekNumber( pCellDate );
-#endif
                 text = d->m_weekNumberDelegate->data( weekNumber, Qt::ToolTipRole, d->m_model ).toString();
             }
         }
@@ -651,11 +646,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     QDate pCellDate = dateFromPos( pos );
     if ( d->m_weekNumberDelegate )
     {
-#if KDE_IS_VERSION(4,7,0)
       const int weekNumber = calendar->week( pCellDate );
-#else
-      const int weekNumber = calendar->weekNumber( pCellDate );
-#endif
       size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, weekNumber, d->m_model ).size();
     }
   }

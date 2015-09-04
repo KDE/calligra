@@ -55,7 +55,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kio/global.h>
 #include <kio/jobclasses.h>
 #include <kio/netaccess.h>
@@ -595,7 +595,7 @@ bool MainDocument::extractFiles( KoStore *store, Package *package )
 
 bool MainDocument::extractFile( KoStore *store, Package *package, const Document *doc )
 {
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile;
     if ( ! tmpfile.open() ) {
         kError()<<"Failed to open temporary file";
         return false;

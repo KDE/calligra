@@ -34,7 +34,6 @@
 #include <KoIcon.h>
 
 #include <kcalendarsystem.h>
-#include <kdeversion.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -1055,11 +1054,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                 }
                 case Period_Week: {
                     const KCalendarSystem * calendar = KLocale::global()->calendar();
-#if KDE_IS_VERSION(4,7,0)
                     return calendar->week(startDate().addDays( ( col ) * 7 ));
-#else
-                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
-#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;
@@ -1093,11 +1088,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                 }
                 case Period_Week: {
                     const KCalendarSystem * calendar = KLocale::global()->calendar();
-#if KDE_IS_VERSION(4,7,0)
                     return calendar->week(startDate().addDays( ( col ) * 7 ));
-#else
-                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
-#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;

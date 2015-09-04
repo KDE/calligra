@@ -1,6 +1,19 @@
 [Desktop Entry]
 Name=Standard Widgets
+Name[fi]=Vakioelementit
+Name[nl]=Standaardwidgets
+Name[pt]=Elementos-Padrão
+Name[pt_BR]=Elementos padrão
+Name[sv]=Standardkomponenter
+Name[uk]=Стандартні віджети
+Name[x-test]=xxStandard Widgetsxx
 Comment=Kexi plugin providing standard form widgets
+Comment[nl]=Kexi-plug-in levert standaard formulierwidgets
+Comment[pt]='Plugin' do Kexi que oferece elementos gráficos de formulários
+Comment[pt_BR]=Plugin do Kexi que oferece elementos gráficos de formulários
+Comment[sv]=Kexi insticksprogram som tillhandahåller standardkomponenter för formulär
+Comment[uk]=Додаток до Kexi, що забезпечує роботу форми стандартних віджетів
+Comment[x-test]=xxKexi plugin providing standard form widgetsxx
 Type=Service
 Icon=form
 Encoding=UTF-8

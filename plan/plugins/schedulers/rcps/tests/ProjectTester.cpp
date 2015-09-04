@@ -33,7 +33,7 @@
 
 #include <QDir>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include "tests/DateTimeTester.h"
@@ -713,4 +713,4 @@ void ProjectTester::startNotEarlier()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
+QTEST_GUILESS_MAIN( KPlato::ProjectTester )

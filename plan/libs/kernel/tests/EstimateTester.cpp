@@ -269,4 +269,4 @@ void EstimateTester::pert() {
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::EstimateTester )
+QTEST_GUILESS_MAIN( KPlato::EstimateTester )

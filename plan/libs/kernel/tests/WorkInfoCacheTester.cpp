@@ -24,7 +24,7 @@
 #include "kptdatetime.h"
 #include "kptglobal.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <QDir>
 
 #include <klocale.h>
@@ -355,4 +355,4 @@ void WorkInfoCacheTester::timeZone()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::WorkInfoCacheTester )
+QTEST_GUILESS_MAIN( KPlato::WorkInfoCacheTester )

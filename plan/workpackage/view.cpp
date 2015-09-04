@@ -52,7 +52,7 @@
 #include <kxmlguifactory.h>
 #include <ktoolinvocation.h>
 #include <kactioncollection.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kaction.h>
 
 #include <kmessagebox.h>
@@ -386,8 +386,8 @@ void View::slotSendPackage()
             default: break;
         }
     }*/
-    KTemporaryFile temp;
-    temp.setSuffix( ".planwork" );
+
+    QTemporaryFile temp(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
     temp.setAutoRemove( false );
     if ( ! temp.open() ) {
         KMessageBox::error( 0, i18n("Could not open temporary file. Sending is aborted." ) );

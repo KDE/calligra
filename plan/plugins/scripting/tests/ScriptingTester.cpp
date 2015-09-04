@@ -22,7 +22,7 @@
 
 #include "Module.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <Kross/Action>
 #include <Kross/Manager>
 #include <kdebug.h>
@@ -95,4 +95,4 @@ void ScriptingTester::test()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ScriptingTester )
+QTEST_GUILESS_MAIN( KPlato::ScriptingTester )

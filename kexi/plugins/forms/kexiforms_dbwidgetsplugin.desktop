@@ -1,6 +1,19 @@
 [Desktop Entry]
 Name=Database Widgets
+Name[fi]=Tietokantaelementit
+Name[nl]=Databasewidgets
+Name[pt]=Elementos de Bases de Dados
+Name[pt_BR]=Elementos de banco de dados
+Name[sv]=Databaskomponenter
+Name[uk]=Віджети бази даних
+Name[x-test]=xxDatabase Widgetsxx
 Comment=Kexi plugin providing database form widgets
+Comment[nl]=Kexi-plug-in levert formulierwidgets voor database
+Comment[pt]='Plugin' do Kexi que oferece elementos gráficos de formulários de bases de dados
+Comment[pt_BR]=Plugin do Kexi que oferece elementos gráficos de formulários de bancos de dados
+Comment[sv]=Kexi-insticksprogram som tillhandahåller komponenter för databasformulär
+Comment[uk]=Додаток до Kexi, що забезпечує роботу віджетів форм бази даних
+Comment[x-test]=xxKexi plugin providing database form widgetsxx
 Type=Service
 Icon=form
 Encoding=UTF-8

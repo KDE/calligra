@@ -25,7 +25,7 @@
 #include <kptproject.h>
 #include <kptresource.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace KPlato {
@@ -532,4 +532,4 @@ void CommandsTester::testProjectModifyDefaultCalendarCmd()
 }
 } // namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::CommandsTester)
+QTEST_GUILESS_MAIN( KPlato::CommandsTester)

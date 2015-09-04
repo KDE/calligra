@@ -85,4 +85,4 @@ void DurationTester::lessThan() {
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::DurationTester )
+QTEST_GUILESS_MAIN( KPlato::DurationTester )

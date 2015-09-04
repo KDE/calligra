@@ -50,11 +50,7 @@
 #include <kactioncollection.h>
 
 
-#if QT_VERSION >= 0x040700
 #define ConnectCursor Qt::DragLinkCursor
-#else
-#define ConnectCursor Qt::UpArrowCursor
-#endif
 
 namespace KPlato
 {

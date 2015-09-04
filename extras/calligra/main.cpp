@@ -32,7 +32,6 @@
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <kdeversion.h>
 #include <kurl.h>
 
 #include <calligraversion.h>
@@ -125,11 +124,7 @@ static int handleUrls(const KCmdLineArgs *args)
         foreach (KService::Ptr service, mimeServices) {
             //kDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
             kDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
-#if KDE_IS_VERSION( 4, 6, 0 )
                 << service->hasMimeType(mimetype->name());
-#else
-                << service->hasMimeType(mimetype.data());
-#endif
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
                 kDebug() << "FOUND:" << service->name();

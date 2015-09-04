@@ -27,7 +27,7 @@
 #include <kptmap.h>
 
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kptglobal.h"
 #include "kptxmlloaderobject.h"
@@ -604,4 +604,4 @@ void ResourceTester::required()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ResourceTester )
+QTEST_GUILESS_MAIN( KPlato::ResourceTester )

@@ -22,7 +22,7 @@
 #include <kptduration.h>
 
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace QTest
@@ -85,7 +85,6 @@ void DateTimeTester::subtractSecond()
     
 }
 
-#if QT_VERSION  >= 0x040700
 void DateTimeTester::subtractMillisecond()
 {
     DateTime dt1(QDate(2006, 1, 1), QTime(0, 0, 0, 0 ));
@@ -110,10 +109,8 @@ void DateTimeTester::subtractMillisecond()
 
     QVERIFY((dt2-dt1).toString() == d.toString());
     QVERIFY((dt1-dt2).toString() == d.toString()); // result always positive
-    QVERIFY((dt2-d) == dt1);
-    
+    QVERIFY((dt2-d) == dt1);   
 }
-#endif
 
 void DateTimeTester::addDay()
 {
@@ -160,4 +157,4 @@ void DateTimeTester::addMillisecond()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::DateTimeTester )
+QTEST_GUILESS_MAIN( KPlato::DateTimeTester )

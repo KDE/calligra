@@ -160,13 +160,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
                     startDragPos = event->x() - lineRect.x();
                     m_move = true;
                     m_resizedRow = row;
-                    setCursor(
-#if QT_VERSION >= 0x040700
-                              Qt::DragMoveCursor
-#else
-                              Qt::ClosedHandCursor
-#endif
-                              );
+                    setCursor(Qt::DragMoveCursor);
                 }
             }
         }
@@ -261,13 +255,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         else {
             if (lineRect.contains(event->x(), event->y())) {
-                setCursor(
-#if QT_VERSION >= 0x040700
-                          Qt::DragMoveCursor
-#else
-                          Qt::ClosedHandCursor
-#endif
-                          );
+                setCursor(Qt::DragMoveCursor);
             }
             else {
                 setCursor(Qt::ArrowCursor);

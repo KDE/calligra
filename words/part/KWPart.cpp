@@ -33,7 +33,6 @@
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
-#include <KoDocumentInfoDlg.h>
 
 #include <kmessagebox.h>
 
