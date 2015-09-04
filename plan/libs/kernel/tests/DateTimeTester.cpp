@@ -22,7 +22,7 @@
 #include <kptduration.h>
 
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace QTest
@@ -157,4 +157,4 @@ void DateTimeTester::addMillisecond()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::DateTimeTester )
+QTEST_GUILESS_MAIN( KPlato::DateTimeTester )

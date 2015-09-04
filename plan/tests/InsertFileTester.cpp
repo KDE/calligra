@@ -28,7 +28,7 @@
 
 #include <kurl.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QFileInfo>
 
@@ -140,4 +140,4 @@ void InsertFileTester::testPert1()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN(KPlato::InsertFileTester, GUI)
+QTEST_MAIN(KPlato::InsertFileTester)

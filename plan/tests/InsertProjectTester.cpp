@@ -29,7 +29,7 @@
 
 #include <KoXmlReader.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 namespace KPlato
 {
@@ -669,4 +669,4 @@ void InsertProjectTester::testExistingTeamResourceRequest()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN(KPlato::InsertProjectTester, GUI)
+QTEST_MAIN(KPlato::InsertProjectTester)

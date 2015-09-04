@@ -29,7 +29,7 @@
 
 #include <QModelIndex>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace QTest
@@ -361,4 +361,4 @@ void ResourceModelTester::externalOverbook()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ResourceModelTester )
+QTEST_GUILESS_MAIN( KPlato::ResourceModelTester )

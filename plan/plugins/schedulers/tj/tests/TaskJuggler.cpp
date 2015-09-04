@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include "tests/DateTimeTester.h"
@@ -1060,4 +1060,4 @@ void TaskJuggler::units()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::TaskJuggler )
+QTEST_GUILESS_MAIN( KPlato::TaskJuggler )

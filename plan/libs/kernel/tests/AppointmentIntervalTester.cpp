@@ -21,7 +21,7 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include <QMultiMap>
@@ -864,4 +864,4 @@ void AppointmentIntervalTester::subtractListMidnight()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::AppointmentIntervalTester )
+QTEST_GUILESS_MAIN( KPlato::AppointmentIntervalTester )
