@@ -22,7 +22,7 @@
 #include <QRectF>
 #include <QDebug>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoShape.h>
 

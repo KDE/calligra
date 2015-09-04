@@ -18,9 +18,10 @@
 
 #include "CategorizedItemDelegate.h"
 
+#include <QPainter>
+
 #include <kcategorydrawer.h>
 #include <kcategorizedsortfilterproxymodel.h>
-#include <QPainter>
 
 struct CategorizedItemDelegate::Private {
     QAbstractItemDelegate* fallback;

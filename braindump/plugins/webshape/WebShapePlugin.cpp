@@ -19,11 +19,10 @@
 
 #include "WebShapePlugin.h"
 
-#include <klocale.h>
 #include <kpluginfactory.h>
+
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
-#include <kglobal.h>
 
 #include "WebShapeFactory.h"
 #include "WebToolFactory.h"

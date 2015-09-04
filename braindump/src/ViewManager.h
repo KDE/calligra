@@ -20,9 +20,9 @@
 #ifndef _VIEWMANAGER_H_
 #define _VIEWMANAGER_H_
 
-#include <KoShapeBasedDocumentBase.h>
-
 #include <QList>
+
+#include <KoShapeBasedDocumentBase.h>
 
 class RootSection;
 class Section;

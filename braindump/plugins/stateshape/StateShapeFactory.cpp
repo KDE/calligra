@@ -19,12 +19,12 @@
 
 #include "StateShapeFactory.h"
 
-#include "StateShape.h"
+#include <KLocalizedString>
 
 #include <KoProperties.h>
 #include <KoIcon.h>
-#include <klocale.h>
 
+#include "StateShape.h"
 
 StateShapeFactory::StateShapeFactory()
     : KoShapeFactoryBase(STATESHAPEID,

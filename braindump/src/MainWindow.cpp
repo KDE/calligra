@@ -31,7 +31,6 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
 #include <kstandardaction.h>
 #include <kstatusbar.h>
 

@@ -22,7 +22,7 @@
 #include <QPainter>
 
 #include <kundo2command.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

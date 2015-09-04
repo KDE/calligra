@@ -19,15 +19,17 @@
 
 #include "Layout.h"
 
+#include <QEvent>
+#include <QPainter>
+#include <QCoreApplication>
+
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+
 #include <Utils.h>
-#include <QEvent>
-#include <QPainter>
-#include <QCoreApplication>
 
 struct Layout::Private : public KoShape {
     Private() : eventSent(false) {}

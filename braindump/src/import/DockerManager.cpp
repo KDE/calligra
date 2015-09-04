@@ -21,11 +21,8 @@
 #include "DockerManager.h"
 #include "DockerManager_p.h"
 
-
 #include <QList>
 #include <QGridLayout>
-
-#include <klocale.h>
 
 #include "KoDockFactoryBase.h"
 

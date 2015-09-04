@@ -18,11 +18,13 @@
  */
 
 #include "StateToolFactory.h"
-#include "StateTool.h"
-#include "StateShape.h"
+
+#include <KLocalizedString>
 
 #include <KoIcon.h>
-#include <klocale.h>
+
+#include "StateTool.h"
+#include "StateShape.h"
 
 StateToolFactory::StateToolFactory()
     : KoToolFactoryBase("StateToolFactoryID")

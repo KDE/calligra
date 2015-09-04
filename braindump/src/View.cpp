@@ -32,6 +32,10 @@
 #include <QDebug>
 #include <QAction>
 
+#include <kactioncollection.h>
+#include <kstatusbar.h>
+#include <KPluginFactory>
+
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -47,23 +51,9 @@
 #include <KoCopyController.h>
 #include "KoZoomController.h"
 #include <KoZoomAction.h>
-
-#include "Canvas.h"
-#include "RootSection.h"
-#include "Section.h"
-#include "ViewManager.h"
-#include "import/DockerManager.h"
-#include "KoToolBoxFactory.h"
-
 #include <KoIcon.h>
-
-#include <klocale.h>
-#include <kactioncollection.h>
-#include <kstatusbar.h>
-#include <KPluginFactory>
-
+#include "KoToolBoxFactory.h"
 #include <KoJsonTrader.h>
-
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
 #include "KoShapeDeleteCommand.h"
@@ -71,6 +61,11 @@
 #include "KoShapeGroupCommand.h"
 #include "KoShapeUngroupCommand.h"
 
+#include "Canvas.h"
+#include "RootSection.h"
+#include "Section.h"
+#include "ViewManager.h"
+#include "import/DockerManager.h"
 #include "MainWindow.h"
 #include "SectionContainer.h"
 #include "SectionsBoxDock.h"

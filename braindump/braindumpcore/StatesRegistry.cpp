@@ -21,15 +21,13 @@
 
 #include <QDomDocument>
 #include <QFile>
-#include <QDebug>
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <QDebug>
 
-#include <kcomponentdata.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "State.h"
 #include "StateCategory.h"

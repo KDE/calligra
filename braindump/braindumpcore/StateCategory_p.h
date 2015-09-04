@@ -23,6 +23,7 @@
 #include "StateCategory.h"
 
 #include <QMap>
+
 struct Q_DECL_HIDDEN StateCategory::Private {
     QString id, name;
     QMap<QString, const State*> states;

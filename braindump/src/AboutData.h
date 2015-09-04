@@ -21,7 +21,7 @@
 #define BRAINDUMPABOUTDATA_H
 
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 static const char BRAINDUMP_DESCRIPTION[] = "Braindump: directly from your brain to the computer.";
 static const char BRAINDUMP_VERSION[] = "0.10.9";

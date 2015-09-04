@@ -22,7 +22,6 @@
 
 #include <kxmlguiwindow.h>
 #include <KoCanvasSupervisor.h>
-#include <KComponentData>
 
 class DockerManager;
 class RootSection;

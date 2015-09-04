@@ -19,12 +19,12 @@
 
 #include "WebShapeFactory.h"
 
-#include <KoIcon.h>
-#include <klocale.h>
-
 #include <QWebPage>
 #include <QWebFrame>
 
+#include <KLocalizedString>
+
+#include <KoIcon.h>
 #include <KoProperties.h>
 
 #include "WebShape.h"
