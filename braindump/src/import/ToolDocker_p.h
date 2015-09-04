@@ -25,10 +25,7 @@
 #include "ToolDocker.h"
 
 #include <KoDockWidgetTitleBar.h>
-
 #include <KoIcon.h>
-
-#include <klocale.h>
 
 #include <QPointer>
 #include <QGridLayout>

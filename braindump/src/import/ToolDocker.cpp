@@ -33,7 +33,6 @@
 #include <QToolButton>
 #include <QTabWidget>
 
-#include <klocale.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
