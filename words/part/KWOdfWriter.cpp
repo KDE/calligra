@@ -53,7 +53,7 @@
 #include <QBuffer>
 #include <QTextCursor>
 #include <kdebug.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 static const struct {
     const char * tag;
@@ -221,13 +221,13 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     if (!contentWriter)
         return false;
 
-    KTemporaryFile tmpChangeFile;
+    QTemporaryFile tmpChangeFile;
     tmpChangeFile.open();
     KoXmlWriter *changeWriter = new KoXmlWriter(&tmpChangeFile, 1);
     if (!changeWriter)
         return false;
 
-    KTemporaryFile tmpTextBodyFile;
+    QTemporaryFile tmpTextBodyFile;
     tmpTextBodyFile.open();
     KoXmlWriter *tmpBodyWriter = new KoXmlWriter(&tmpTextBodyFile, 1);
     if (!tmpBodyWriter)

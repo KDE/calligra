@@ -44,7 +44,7 @@
 
 #include <kdebug.h>
 #include <kzip.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     KZip* zip = new KZip(m_chain->inputFile());
     kDebug() << "Store created";
 
-    KTemporaryFile* tempFile = 0;
+    QTemporaryFile* tempFile = 0;
 
     if (!zip->open(QIODevice::ReadOnly)) {
         errorMessage = i18n("Could not open the requested file %1", m_chain->inputFile());
@@ -257,7 +257,7 @@ QCA::Cipher createCipher(const QByteArray& blockKey, const QByteArray& hn, const
 }
 #endif
 
-KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
+QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 {
 #ifdef HAVE_QCA2
     QCA::Initializer qcainit;
@@ -395,7 +395,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             }
 
             OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
-            KTemporaryFile* outf = new KTemporaryFile;
+            QTemporaryFile* outf = new QTemporaryFile;
             outf->open();
 
             aes.clear();
@@ -510,7 +510,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             kDebug() << "key value:" << QCA::arrayToHex(keyValue);
 
             OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
-            KTemporaryFile* outf = new KTemporaryFile;
+            QTemporaryFile* outf = new QTemporaryFile;
             outf->open();
 
             bytes_read = dataStream->read(buffer, 8);

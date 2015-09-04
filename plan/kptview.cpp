@@ -52,7 +52,7 @@
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kfiledialog.h>
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
@@ -2941,9 +2941,8 @@ void View::slotWorkPackageLoaded()
 void View::slotMailWorkpackage( Node *node, Resource *resource )
 {
     kDebug(planDbg());
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
     tmpfile.setAutoRemove( false );
-    tmpfile.setSuffix( ".planwork" );
     if ( ! tmpfile.open() ) {
         kDebug(planDbg())<<"Failed to open file";
         KMessageBox::error(0, i18n("Failed to open temporary file" ) );
@@ -2981,9 +2980,8 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
     QStringList attachURLs;
 
     foreach ( Node *n, nodes ) {
-        KTemporaryFile tmpfile;
+        QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
         tmpfile.setAutoRemove( false );
-        tmpfile.setSuffix( ".planwork" );
         if ( ! tmpfile.open() ) {
             kDebug(planDbg())<<"Failed to open file";
             KMessageBox::error(0, i18n("Failed to open temporary file" ) );

@@ -22,7 +22,7 @@
 #include "KPrSoundData.h"
 #include "KPrSoundCollection.h"
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kdebug.h>
 #include <QIODevice>
 
@@ -46,7 +46,7 @@ public:
     int refCount;
     QString storeHref;
     KPrSoundCollection *collection;
-    KTemporaryFile *tempFile;
+    QTemporaryFile *tempFile;
     bool taggedForSaving;
 };
 
@@ -150,7 +150,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
     delete d->tempFile;
     d->tempFile = 0;
 
-    d->tempFile = new KTemporaryFile();
+    d->tempFile = new QTemporaryFile();
     if(! d->tempFile->open())
         return false;
     char * data = new char[32 * 1024];
