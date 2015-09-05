@@ -282,8 +282,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     {
         KisScreenSizeChoiceDialog dlg(0,
-                                      wintabDesktopRect,
-                                      qtDesktopRect);
+                                      qtDesktopRect,
+                                      wintabDesktopRect);
 
         KisExtendedModifiersMapper mapper;
         KisExtendedModifiersMapper::ExtendedModifiers modifiers =
