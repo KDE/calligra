@@ -20,7 +20,6 @@
 #include "writer.h"
 
 #include "KoGenStyles.h"
-#include <QRegExp>
 
 Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
                bool stylesxml_)
