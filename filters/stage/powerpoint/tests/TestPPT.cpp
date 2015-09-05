@@ -23,6 +23,8 @@
 #include <KoOdf.h>
 #include <QDebug>
 #include <QDir>
+#include <QBuffer>
+#include <QTest>
 
 // KDESRCDIR is defined by KDE build system
 #ifndef KDESRCDIR
