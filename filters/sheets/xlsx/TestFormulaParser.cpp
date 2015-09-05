@@ -24,7 +24,7 @@
  */
 #include "TestFormulaParser.h"
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
@@ -111,4 +111,4 @@ void TestFormulaParser::testSharedFormulaReferences()
     QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=F8(R50)"));
 }
 
-QTEST_KDEMAIN(TestFormulaParser, NoGUI)
+QTEST_GUILESS_MAIN(TestFormulaParser)
