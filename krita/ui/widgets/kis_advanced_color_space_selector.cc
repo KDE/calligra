@@ -52,7 +52,9 @@ struct KisAdvancedColorSpaceSelector::Private {
     QString knsrcFile;
 };
 
-KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, const QString &caption) : QDialog(parent), d(new Private)
+KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, const QString &caption)
+    : QDialog(parent)
+    , d(new Private)
 {
 
     setObjectName("KisAdvancedColorSpaceSelector");
