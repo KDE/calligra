@@ -24,7 +24,7 @@
 #include <ValueConverter.h>
 #include <ValueParser.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Format::Type)
 Q_DECLARE_METATYPE(Calligra::Sheets::Style::FloatFormat)
@@ -234,4 +234,4 @@ void TestValueFormatter::testCreateNumberFormat()
 }
 
 
-QTEST_KDEMAIN(TestValueFormatter, GUI)
+QTEST_MAIN(TestValueFormatter)

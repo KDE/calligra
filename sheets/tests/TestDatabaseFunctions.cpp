@@ -158,4 +158,4 @@ void TestDatabaseFunctions::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestDatabaseFunctions, GUI)
+QTEST_MAIN(TestDatabaseFunctions)

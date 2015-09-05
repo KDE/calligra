@@ -23,6 +23,8 @@
 
 #include "BenchmarkCluster.h"
 
+#include <QTest>
+
 using namespace KSpread;
 class Cell;
 

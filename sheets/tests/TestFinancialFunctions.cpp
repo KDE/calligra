@@ -21,6 +21,8 @@
 
 #include "TestKspreadCommon.h"
 
+#include <QTest>
+
 void TestFinancialFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -1188,5 +1190,4 @@ void TestFinancialFunctions::testZEROCOUPON()
     CHECK_EVAL("ZERO_COUPON(1000;.25;1)",     Value(800));
 }
 
-
-QTEST_KDEMAIN(TestFinancialFunctions, GUI)
+QTEST_MAIN(TestFinancialFunctions)

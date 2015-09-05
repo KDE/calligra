@@ -18,7 +18,7 @@
 */
 #include "TestPasteCommand.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoPart.h>
 
@@ -64,4 +64,4 @@ void PasteCommandTest::testKSpreadSnippet()
     QCOMPARE(Cell(sheet, 2, 4).value(), Value(3));
 }
 
-QTEST_KDEMAIN(PasteCommandTest, GUI)
+QTEST_MAIN(PasteCommandTest)

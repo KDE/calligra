@@ -955,4 +955,4 @@ void TestMathFunctions::testTRUNC()
     CHECK_EVAL("=TRUNC(-1.5)",     Value(-1));
 }
 
-QTEST_KDEMAIN(TestMathFunctions, GUI)
+QTEST_MAIN(TestMathFunctions)

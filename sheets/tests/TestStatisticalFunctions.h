@@ -21,8 +21,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_STATISTICAL_FUNCTIONS
 #define CALLIGRA_SHEETS_TEST_STATISTICAL_FUNCTIONS
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 #include <Value.h>
 

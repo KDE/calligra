@@ -20,8 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_VALUEFORMATTER
 #define CALLIGRA_SHEETS_TEST_VALUEFORMATTER
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 namespace Calligra
 {

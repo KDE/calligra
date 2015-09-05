@@ -20,8 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_DEPENDENCIES
 #define CALLIGRA_SHEETS_TEST_DEPENDENCIES
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 namespace Calligra
 {

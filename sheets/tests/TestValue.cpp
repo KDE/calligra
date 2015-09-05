@@ -357,4 +357,4 @@ void TestValue::testAssignment()
     delete v2;
 }
 
-QTEST_KDEMAIN(TestValue, GUI)
+QTEST_MAIN(TestValue)

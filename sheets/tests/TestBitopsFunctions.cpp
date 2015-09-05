@@ -20,6 +20,8 @@
 
 #include "TestKspreadCommon.h"
 
+#include <QTest>
+
 void TestBitopsFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -134,4 +136,4 @@ void TestBitopsFunctions::testBITRSHIFT()
     CHECK_EVAL("BITRSHIFT(281474976710649 ; 0)", Value(281474976710649LL));
 }
 
-QTEST_KDEMAIN(TestBitopsFunctions, GUI)
+QTEST_MAIN(TestBitopsFunctions)

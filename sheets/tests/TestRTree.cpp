@@ -4,6 +4,8 @@
 
 #include "TestRTree.h"
 
+#include <QTest>
+
 using namespace Calligra::Sheets;
 
 class TestClass : public QSharedData
@@ -332,4 +334,5 @@ void TestRTree::testPrimitive()
     QCOMPARE(pairs.first().first.toRect(), QRect(2, 5, 1, 2));
     QCOMPARE(pairs.first().second, true);
 }
+
 QTEST_MAIN(TestRTree)

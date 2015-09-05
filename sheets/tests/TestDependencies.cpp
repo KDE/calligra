@@ -19,7 +19,7 @@
 
 #include "TestDependencies.h"
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include "CellStorage.h"
 #include "DependencyManager.h"
@@ -113,4 +113,4 @@ void TestDependencies::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestDependencies, GUI)
+QTEST_MAIN(TestDependencies)

@@ -34,7 +34,7 @@
 #include <sheets/OdfLoadingContext.h>
 #include <sheets/Value.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -113,4 +113,4 @@ void CellTest::testRichText()
     }
 }
 
-QTEST_KDEMAIN(CellTest, GUI)
+QTEST_MAIN(CellTest)
