@@ -2,6 +2,7 @@
 Name=Database Widgets
 Name[fi]=Tietokantaelementit
 Name[nl]=Databasewidgets
+Name[pl]=Baza danych elementów interfejsu
 Name[pt]=Elementos de Bases de Dados
 Name[pt_BR]=Elementos de banco de dados
 Name[sv]=Databaskomponenter
@@ -9,6 +10,7 @@ Name[uk]=Віджети бази даних
 Name[x-test]=xxDatabase Widgetsxx
 Comment=Kexi plugin providing database form widgets
 Comment[nl]=Kexi-plug-in levert formulierwidgets voor database
+Comment[pl]=Wtyczka Kexi dostarczająca formularze bazodanowe
 Comment[pt]='Plugin' do Kexi que oferece elementos gráficos de formulários de bases de dados
 Comment[pt_BR]=Plugin do Kexi que oferece elementos gráficos de formulários de bancos de dados
 Comment[sv]=Kexi-insticksprogram som tillhandahåller komponenter för databasformulär

@@ -2,6 +2,7 @@
 Name=Map Widget
 Name[fi]=Karttaelementti
 Name[nl]=Kaartwidget
+Name[pl]=Element interfejsu mapy
 Name[pt]=Elemento de Mapa
 Name[pt_BR]=Elemento de mapa
 Name[sv]=Kartkomponenter
@@ -9,6 +10,7 @@ Name[uk]=Віджет карти
 Name[x-test]=xxMap Widgetxx
 Comment=Kexi plugin providing map browser form widget
 Comment[nl]=Kexi-plug-in levert formulierwidget voor kaartenbrowser
+Comment[pl]=Wtyczka Kexi dostarczająca formularze przeglądania map
 Comment[pt]='Plugin' do Kexi que oferece um elemento gráfico de formulários de navegação em mapas
 Comment[pt_BR]=Plugin do Kexi que oferece um elemento gráfico de formulários de navegação em mapas
 Comment[sv]=Kexi-insticksprogram som tillhandahåller formulärkomponent med kartbläddrare

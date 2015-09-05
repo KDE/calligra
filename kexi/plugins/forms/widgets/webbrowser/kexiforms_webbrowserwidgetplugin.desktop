@@ -2,6 +2,7 @@
 Name=Web Browser Widget
 Name[fi]=Verkkoselainelementti
 Name[nl]=Webbrowserwidget
+Name[pl]=Element interfejsu przeglądarki sieciowej
 Name[pt]=Elemento de Navegador Web
 Name[pt_BR]=Elemento de navegador Web
 Name[sv]=Webbläsarkomponent
@@ -9,6 +10,7 @@ Name[uk]=Віджет перегляду інтернету
 Name[x-test]=xxWeb Browser Widgetxx
 Comment=Kexi plugin providing web browser form widget
 Comment[nl]=Kexi-plug-in levert formulierwidget voor webbrowser
+Comment[pl]=Wtyczka Kexi dostarczająca formularze przeglądania sieci
 Comment[pt]='Plugin' do Kexi que oferece um elemento gráfico de formulários de navegação Web
 Comment[pt_BR]=Plugin do Kexi que oferece um elemento gráfico de formulários de navegação na Web
 Comment[sv]=Kexi-insticksprogram som tillhandahåller formulärkomponent med webbläsare
