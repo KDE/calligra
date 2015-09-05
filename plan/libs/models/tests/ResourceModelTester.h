@@ -20,7 +20,7 @@
 #ifndef KPlato_ResourceModelTester_h
 #define KPlato_ResourceModelTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptresourceappointmentsmodel.h"
 

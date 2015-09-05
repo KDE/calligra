@@ -20,7 +20,7 @@
 #ifndef KPlato_FlatProxyModelTester_h
 #define KPlato_FlatProxyModelTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptflatproxymodel.h"
 

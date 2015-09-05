@@ -27,6 +27,7 @@
 #include "kptschedule.h"
 
 
+#include <QDir>
 #include <QTest>
 #include <kdebug.h>
 #include <kconfiggroup.h>
