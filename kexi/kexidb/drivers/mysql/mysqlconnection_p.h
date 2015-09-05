@@ -85,6 +85,12 @@ public:
     int res; //!< result code of last operation on server
     //! Get lower_case_table_name variable value so we know if there's case sensitivity supported for table and database names
     bool lowerCaseTableNames;
+    //! Server version known after successfull connection.
+    //! Equal to major_version*10000 + release_level*100 + sub_version
+    //! 0 if not known.
+    //! See https://dev.mysql.com/doc/refman/5.7/en/mysql-get-server-version.html
+    //! @todo store in Connection base class as a property or as public server info
+    unsigned long serverVersion;
 };
 
 

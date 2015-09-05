@@ -44,14 +44,14 @@ MySqlConnectionInternal::MySqlConnectionInternal(KexiDB::Connection* connection)
         , mysql_owned(true)
         , res(0)
         , lowerCaseTableNames(false)
+        , serverVersion(0)
 {
 }
 
 MySqlConnectionInternal::~MySqlConnectionInternal()
 {
     if (mysql_owned && mysql) {
-        mysql_close(mysql);
-        mysql = 0;
+        db_disconnect();
     }
 }
 
@@ -106,8 +106,10 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
     QByteArray pwd(data.password.isNull() ? QByteArray() : data.password.toLatin1());
     mysql_real_connect(mysql, hostName.toLatin1(), data.userName.toLatin1(),
                        pwd.constData(), 0, data.port, localSocket, 0);
-    if (mysql_errno(mysql) == 0)
+    if (mysql_errno(mysql) == 0) {
+        serverVersion = mysql_get_server_version(mysql);
         return true;
+    }
 
     storeResult(); //store error msg, if any - can be destroyed after disconnect()
     db_disconnect();
@@ -120,6 +122,7 @@ bool MySqlConnectionInternal::db_disconnect()
 {
     mysql_close(mysql);
     mysql = 0;
+    serverVersion = 0;
     KexiDBDrvDbg;
     return true;
 }
