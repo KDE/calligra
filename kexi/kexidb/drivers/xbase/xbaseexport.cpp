@@ -152,13 +152,15 @@ bool xBaseExportPrivate::appendRecord( const QString& sourceTableName , KexiDB::
   return true;
 }
 
-int xBaseExportPrivate::fieldLength(KexiDB::Field* f ) {
-  if ( f->type() == KexiDB::Field::Text ) {
+int xBaseExportPrivate::fieldLength(KexiDB::Field* f)
+{
+  const Field::Type t = f->type(); // cache: evaluating type of expressions can be expensive
+  if (KexiDB::Field::isTextType(t)) {
     return f->maxLength();
   }
   // return the max possible (string)length of the types
   // see http://linux.techass.com/projects/xdb/xbasedocs/xbase_c3.html
-  switch(type( f->type())) {
+  switch(type(t)) {
     case XB_CHAR_FLD:
       return 254;
     case XB_LOGICAL_FLD:

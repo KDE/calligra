@@ -32,8 +32,8 @@ FieldValidator::FieldValidator(const Field &field, QObject* parent)
 //! @todo merge this code with KexiTableEdit code!
 //! @todo set maximum length validator
 //! @todo handle input mask (via QLineEdit::setInputMask()
-    const Field::Type t = field.type();
-    if (field.isIntegerType()) {
+    const Field::Type t = field.type(); // cache: evaluating type of expressions can be expensive
+    if (Field::isIntegerType(t)) {
         QValidator *validator = 0;
         const bool u = field.isUnsigned();
         int bottom = 0, top = 0;
@@ -54,7 +54,7 @@ FieldValidator::FieldValidator(const Field &field, QObject* parent)
         if (!validator)
             validator = new KIntValidator(bottom, top, 0); //the default
         addSubvalidator(validator);
-    } else if (field.isFPNumericType()) {
+    } else if (Field::isFPNumericType(t)) {
         QValidator *validator;
         if (t == Field::Float) {
             if (field.isUnsigned()) //ok?

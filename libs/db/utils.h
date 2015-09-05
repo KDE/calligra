@@ -507,22 +507,28 @@ inline QVariant cstringToVariant(const char* data, KexiDB::Field* f, int length 
         return QVariant();
     // from mo st to least frequently used types:
 
-    if (!f || f->isTextType())
+    const Field::Type type = f ? f->type() : KexiDB::Field::LongText; // cache: evaluating type of expressions can be expensive
+    if (KexiDB::Field::isTextType(type)) {
         return QString::fromUtf8(data, length);
-    if (f->isIntegerType()) {
-        if (f->type() == KexiDB::Field::BigInteger)
+    }
+    if (KexiDB::Field::isIntegerType(type)) {
+        if (type == KexiDB::Field::BigInteger) {
             return QVariant(QString::fromLatin1(data, length).toLongLong());
+        }
         return QVariant(QString::fromLatin1(data, length).toInt());
     }
-    if (f->isFPNumericType())
+    if (KexiDB::Field::isFPNumericType(type)) {
         return QString::fromLatin1(data, length).toDouble();
-    if (f->type() == KexiDB::Field::BLOB)
+    }
+    if (type == KexiDB::Field::BLOB) {
         return QByteArray::fromRawData(data, length);
+    }
     // the default
 //! @todo date/time?
     QVariant result(QString::fromUtf8(data, length));
-    if (!result.convert(KexiDB::Field::variantType(f->type())))
+    if (!result.convert(KexiDB::Field::variantType(type))) {
         return QVariant();
+    }
     return result;
 }
 

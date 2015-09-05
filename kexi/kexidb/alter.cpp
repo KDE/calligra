@@ -1025,6 +1025,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         foreach(Field* f, *newTable->fields()) {
             QString renamedFieldName(fieldHash.value(f->name()));
             QString sourceSQLString;
+            const Field::Type type = f->type(); // cache: evaluating type of expressions can be expensive
             if (!renamedFieldName.isEmpty()) {
                 //this field should be renamed
                 sourceSQLString = d->conn->escapeIdentifier(renamedFieldName);
@@ -1033,15 +1034,15 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 //! @todo support expressions (eg. TODAY()) as a default value
 //! @todo this field can be notNull or notEmpty - check whether the default is ok
 //!       (or do this checking also in the Table Designer?)
-                sourceSQLString = d->conn->driver()->valueToSQL(f->type(), f->defaultValue());
+                sourceSQLString = d->conn->driver()->valueToSQL(type, f->defaultValue());
             } else if (f->isNotNull()) {
                 //this field cannot be null
                 sourceSQLString = d->conn->driver()->valueToSQL(
-                                      f->type(), KexiDB::emptyValueForType(f->type()));
+                                      type, KexiDB::emptyValueForType(type));
             } else if (f->isNotEmpty()) {
                 //this field cannot be empty - use any nonempty value..., e.g. " " for text or 0 for number
                 sourceSQLString = d->conn->driver()->valueToSQL(
-                                      f->type(), KexiDB::notEmptyValueForType(f->type()));
+                                      type, KexiDB::notEmptyValueForType(type));
             }
 //! @todo support unique, validatationRule, unsigned flags...
 //! @todo check for foreignKey values...

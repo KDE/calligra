@@ -978,6 +978,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
         const bool autoinc = field->isAutoIncrement();
         const bool pk = field->isPrimaryKey() || (autoinc && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
 //TODO: warning: ^^^^^ this allows only one autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
+        const Field::Type type = field->type(); // cache: evaluating type of expressions can be expensive
         if (autoinc && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
             if (pk)
                 v += m_driver->beh->AUTO_INCREMENT_TYPE + ' ' + m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
@@ -987,18 +988,18 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
             if (autoinc && !m_driver->beh->AUTO_INCREMENT_TYPE.isEmpty())
                 v += m_driver->beh->AUTO_INCREMENT_TYPE;
             else
-                v += m_driver->sqlTypeName(field->type(), field->precision());
+                v += m_driver->sqlTypeName(type, field->precision());
 
             if (field->isUnsigned())
                 v += (' ' + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
 
-            if (field->isFPNumericType() && field->precision() > 0) {
+            if (Field::isFPNumericType(type) && field->precision() > 0) {
                 if (field->scale() > 0)
                     v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
                 else
                     v += QString::fromLatin1("(%1)").arg(field->precision());
             }
-            else if (field->type() == Field::Text) {
+            else if (type == Field::Text) {
                 uint realMaxLen;
                 if (m_driver->beh->TEXT_TYPE_MAX_LENGTH == 0) {
                     realMaxLen = field->maxLength(); // allow to skip (N)
@@ -1606,13 +1607,14 @@ static QVariant buildLengthValue(const Field& f)
 //! builds a list of values for field's \a f properties. Used by createTable().
 void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
 {
+    const Field::Type type = f->type(); // cache: evaluating type of expressions can be expensive
     vals.clear();
     vals
     << QVariant(f->table()->id())
-    << QVariant(f->type())
+    << QVariant(type)
     << QVariant(f->name())
     << buildLengthValue(*f)
-    << QVariant(f->isFPNumericType() ? f->precision() : 0)
+    << QVariant(Field::isFPNumericType(type) ? f->precision() : 0)
     << QVariant(f->constraints())
     << QVariant(f->options())
     // KexiDB::variantToString() is needed here because the value can be of any QVariant type,
@@ -2860,13 +2862,14 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
     //for each field:
     foreach(Field* f, *tableSchema.fields()) {
         QDomElement extendedTableSchemaFieldEl;
-        if (f->visibleDecimalPlaces() >= 0/*nondefault*/ && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
+        const Field::Type type = f->type(); // cache: evaluating type of expressions can be expensive
+        if (f->visibleDecimalPlaces() >= 0/*nondefault*/ && KexiDB::supportsVisibleDecimalPlacesProperty(type)) {
             addFieldPropertyToExtendedTableSchemaData(
                 f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc,
                 extendedTableSchemaMainEl, extendedTableSchemaFieldEl,
                 extendedTableSchemaStringIsEmpty);
         }
-        if (f->type() == Field::Text) {
+        if (type == Field::Text) {
             if (f->maxLengthStrategy() == Field::DefaultMaxLength) {
                 addFieldPropertyToExtendedTableSchemaData(
                     f, "maxLengthIsDefault", true, doc,

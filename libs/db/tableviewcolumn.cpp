@@ -330,9 +330,10 @@ bool TableViewColumn::acceptsFirstChar(const QChar& ch) const
     // if lookup column is present
     Field *visibleField = d->visibleLookupColumnInfo
                                   ? d->visibleLookupColumnInfo->field : d->field;
-    if (visibleField->isNumericType()) {
+    const Field::Type type = visibleField->type(); // cache: evaluating type of expressions can be expensive
+    if (Field::isNumericType(type)) {
         if (ch == '.' || ch == ',')
-            return visibleField->isFPNumericType();
+            return Field::isFPNumericType(type);
         if (ch == '-')
             return !visibleField->isUnsigned();
         if (ch == '+' || (ch >= '0' && ch <= '9'))
@@ -340,7 +341,7 @@ bool TableViewColumn::acceptsFirstChar(const QChar& ch) const
         return false;
     }
 
-    switch (visibleField->type()) {
+    switch (type) {
     case Field::Boolean:
         return false;
     case Field::Date:
