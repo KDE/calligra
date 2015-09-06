@@ -37,6 +37,7 @@ Name[uk]=Форма
 Name[x-test]=xxFormxx
 Name[zh_TW]=表單
 Comment=Kexi plugin for handling forms
+Comment[ca]=Connector del Kexi per gestionar formularis
 Comment[de]=Kexi-Modul für die Bearbeitung von Formularen
 Comment[nl]=Kexi-plug-in voor behandeling van formulieren
 Comment[pl]=Wtyczka Kexi do obsługi formularzy

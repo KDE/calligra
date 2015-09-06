@@ -38,6 +38,7 @@ Name[x-test]=xxQueryxx
 Name[zh_CN]=查询
 Name[zh_TW]=查詢
 Comment=Kexi plugin for handling queries
+Comment[ca]=Connector del Kexi per gestionar consultes
 Comment[de]=Kexi-Modul für die Bearbeitung von Abfragen
 Comment[nl]=Kexi-plug-in voor behandeling van queries
 Comment[pl]=Wtyczka Kexi do obsługi zapytań

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Map Widget
+Name[ca]=Estris de mapes
 Name[fi]=Karttaelementti
 Name[nl]=Kaartwidget
 Name[pl]=Element interfejsu mapy
@@ -9,6 +10,7 @@ Name[sv]=Kartkomponenter
 Name[uk]=Віджет карти
 Name[x-test]=xxMap Widgetxx
 Comment=Kexi plugin providing map browser form widget
+Comment[ca]=Connecto del Kexi que proporciona estris de formularis de navegació de mapes
 Comment[nl]=Kexi-plug-in levert formulierwidget voor kaartenbrowser
 Comment[pl]=Wtyczka Kexi dostarczająca formularze przeglądania map
 Comment[pt]='Plugin' do Kexi que oferece um elemento gráfico de formulários de navegação em mapas
