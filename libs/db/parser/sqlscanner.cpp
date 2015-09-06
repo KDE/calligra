@@ -610,7 +610,7 @@ char *yytext;
 #line 1 "sqlscanner.l"
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -646,8 +646,7 @@ extern void setError(const QString& errName, const QString& errDesc);
 /* *** Please reflect changes to this file in ../driver_p.cpp *** */
 /*identifier    [a-zA-Z_][a-zA-Z_0-9]* */
 /* quoted_identifier (\"[a-zA-Z_0-9]+\") */
-/* todo: support for real numbers */
-#line 651 "sqlscanner.cpp"
+#line 650 "sqlscanner.cpp"
 
 #define INITIAL 0
 
@@ -829,11 +828,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 58 "sqlscanner.l"
+#line 56 "sqlscanner.l"
 
 
 
-#line 837 "sqlscanner.cpp"
+#line 836 "sqlscanner.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -914,7 +913,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 61 "sqlscanner.l"
+#line 59 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_EQUAL;
@@ -922,7 +921,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 66 "sqlscanner.l"
+#line 64 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_EQUAL2;
@@ -930,7 +929,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 71 "sqlscanner.l"
+#line 69 "sqlscanner.l"
 {
     ECOUNT;
     return '=';
@@ -938,7 +937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 76 "sqlscanner.l"
+#line 74 "sqlscanner.l"
 {
     ECOUNT;
     return LESS_OR_EQUAL;
@@ -946,7 +945,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 81 "sqlscanner.l"
+#line 79 "sqlscanner.l"
 {
     ECOUNT;
     return GREATER_OR_EQUAL;
@@ -954,7 +953,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 86 "sqlscanner.l"
+#line 84 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_IN;
@@ -962,7 +961,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 91 "sqlscanner.l"
+#line 89 "sqlscanner.l"
 {
 //TODO: what about hex or octal values?
     //we're using QString:toLongLong() here because atoll() is not so portable:
@@ -979,33 +978,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 105 "sqlscanner.l"
+#line 103 "sqlscanner.l"
 {
-    char *p = yytext;
-    if (yytext[0]=='.') { /* no integer part */
-        yylval.realValue.integer = 0;
-    }
-    else {
-        yylval.realValue.integer = atoi(p);
-        int i=0;
-        while (p && i < yyleng && *p != '.') {
-            i++;
-            p++;
-        }
-        if (i==0 || !p || *p!='.') {
-            yylval.realValue.fractional = 0;
-            return REAL_CONST;
-        }
-    }
-    /* fractional part */
-    p++;
-    yylval.realValue.fractional = atoi(p);
+    ECOUNT;
+    yylval.binaryValue = new QByteArray(yytext, yyleng);
     return REAL_CONST;
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 128 "sqlscanner.l"
+#line 109 "sqlscanner.l"
 {
     ECOUNT;
     return AND;
@@ -1013,7 +995,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 133 "sqlscanner.l"
+#line 114 "sqlscanner.l"
 {
     ECOUNT;
     return AS;
@@ -1021,7 +1003,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 138 "sqlscanner.l"
+#line 119 "sqlscanner.l"
 {
     ECOUNT;
     return CREATE;
@@ -1029,7 +1011,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 143 "sqlscanner.l"
+#line 124 "sqlscanner.l"
 {
     ECOUNT;
     return FROM;
@@ -1037,7 +1019,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 148 "sqlscanner.l"
+#line 129 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_TYPE;
@@ -1045,7 +1027,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 153 "sqlscanner.l"
+#line 134 "sqlscanner.l"
 {
     ECOUNT;
     return JOIN;
@@ -1053,7 +1035,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 158 "sqlscanner.l"
+#line 139 "sqlscanner.l"
 {
     ECOUNT;
     return LEFT;
@@ -1061,7 +1043,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 163 "sqlscanner.l"
+#line 144 "sqlscanner.l"
 {
     ECOUNT;
     return LIKE;
@@ -1070,7 +1052,7 @@ YY_RULE_SETUP
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 168 "sqlscanner.l"
+#line 149 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_LIKE;
@@ -1078,7 +1060,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 173 "sqlscanner.l"
+#line 154 "sqlscanner.l"
 {
     ECOUNT;
     return BETWEEN;
@@ -1087,7 +1069,7 @@ YY_RULE_SETUP
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 178 "sqlscanner.l"
+#line 159 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_BETWEEN;
@@ -1096,7 +1078,7 @@ YY_RULE_SETUP
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 183 "sqlscanner.l"
+#line 164 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_SIMILAR_TO;
@@ -1105,7 +1087,7 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 188 "sqlscanner.l"
+#line 169 "sqlscanner.l"
 {
     ECOUNT;
     return SIMILAR_TO;
@@ -1114,7 +1096,7 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 193 "sqlscanner.l"
+#line 174 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_IS_NOT_NULL;
@@ -1123,7 +1105,7 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 198 "sqlscanner.l"
+#line 179 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_IS_NULL;
@@ -1131,7 +1113,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 203 "sqlscanner.l"
+#line 184 "sqlscanner.l"
 {
     ECOUNT;
     return NOT;
@@ -1139,7 +1121,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 208 "sqlscanner.l"
+#line 189 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_IS;
@@ -1147,7 +1129,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 213 "sqlscanner.l"
+#line 194 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_NULL;
@@ -1155,7 +1137,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 218 "sqlscanner.l"
+#line 199 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_ON;
@@ -1163,7 +1145,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 223 "sqlscanner.l"
+#line 204 "sqlscanner.l"
 {
     ECOUNT;
     return OR;
@@ -1171,7 +1153,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 228 "sqlscanner.l"
+#line 209 "sqlscanner.l"
 { /* also means OR for numbers (mysql) */
     ECOUNT;
     return CONCATENATION;
@@ -1179,7 +1161,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 233 "sqlscanner.l"
+#line 214 "sqlscanner.l"
 {
     ECOUNT;
     return BITWISE_SHIFT_LEFT;
@@ -1187,7 +1169,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 238 "sqlscanner.l"
+#line 219 "sqlscanner.l"
 {
     ECOUNT;
     return BITWISE_SHIFT_RIGHT;
@@ -1195,7 +1177,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 243 "sqlscanner.l"
+#line 224 "sqlscanner.l"
 {
     ECOUNT;
     return XOR;
@@ -1203,7 +1185,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 248 "sqlscanner.l"
+#line 229 "sqlscanner.l"
 {
     ECOUNT;
     return RIGHT;
@@ -1211,7 +1193,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 253 "sqlscanner.l"
+#line 234 "sqlscanner.l"
 {
     ECOUNT;
     return SELECT;
@@ -1219,7 +1201,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 258 "sqlscanner.l"
+#line 239 "sqlscanner.l"
 {
     ECOUNT;
     return TABLE;
@@ -1227,7 +1209,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 263 "sqlscanner.l"
+#line 244 "sqlscanner.l"
 {
     ECOUNT;
     return WHERE;
@@ -1235,7 +1217,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 268 "sqlscanner.l"
+#line 249 "sqlscanner.l"
 {
     ECOUNT;
     return ORDER;
@@ -1243,7 +1225,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 273 "sqlscanner.l"
+#line 254 "sqlscanner.l"
 {
     ECOUNT;
     return BY;
@@ -1251,7 +1233,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 278 "sqlscanner.l"
+#line 259 "sqlscanner.l"
 {
     ECOUNT;
     return ASC;
@@ -1259,7 +1241,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 283 "sqlscanner.l"
+#line 264 "sqlscanner.l"
 {
     ECOUNT;
     return DESC;
@@ -1268,7 +1250,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 288 "sqlscanner.l"
+#line 269 "sqlscanner.l"
 {
     ECOUNT;
     yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
@@ -1279,7 +1261,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 296 "sqlscanner.l"
+#line 277 "sqlscanner.l"
 {
     KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")";
     ECOUNT;
@@ -1295,7 +1277,7 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 308 "sqlscanner.l"
+#line 289 "sqlscanner.l"
 {
     KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")";
     ECOUNT;
@@ -1306,14 +1288,14 @@ YY_RULE_SETUP
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 315 "sqlscanner.l"
+#line 296 "sqlscanner.l"
 {
     ECOUNT;
 }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 319 "sqlscanner.l"
+#line 300 "sqlscanner.l"
 {
     KexiDBDbg << "char: '" << yytext[0] << "'";
     ECOUNT;
@@ -1322,10 +1304,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 325 "sqlscanner.l"
+#line 306 "sqlscanner.l"
 ECHO;
 	YY_BREAK
-#line 1329 "sqlscanner.cpp"
+#line 1311 "sqlscanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2320,7 +2302,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 325 "sqlscanner.l"
+#line 306 "sqlscanner.l"
 
 
 

@@ -677,7 +677,7 @@ QString ConstExpr::toString(const Driver *driver, QuerySchemaParameterValueListI
 //TODO: better escaping!
         return QLatin1Char('\'') + value.toString() + QLatin1Char('\'');
     else if (m_token == REAL_CONST)
-        return QString::number(value.toPoint().x()) + QLatin1Char('.') + QString::number(value.toPoint().y());
+        return QString::fromLatin1(value.toByteArray());
     else if (m_token == DATE_CONST)
         return QLatin1Char('\'') + value.toDate().toString(Qt::ISODate) + QLatin1Char('\'');
     else if (m_token == DATETIME_CONST)

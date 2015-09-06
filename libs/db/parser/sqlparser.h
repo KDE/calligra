@@ -125,9 +125,9 @@ union YYSTYPE
 #line 477 "sqlparser.y" /* yacc.c:1909  */
 
     QString* stringValue;
+    QByteArray* binaryValue;
     qint64 integerValue;
     bool booleanValue;
-    struct realType realValue;
     KexiDB::Field::Type colType;
     KexiDB::Field *field;
     KexiDB::BaseExpr *expr;
