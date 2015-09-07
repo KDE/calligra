@@ -320,7 +320,7 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
     return false;
 }
 
-void KPrPresentationTool::runHyperlink(QString hyperLink)
+void KPrPresentationTool::runHyperlink(const QString &hyperLink)
 {
     QUrl url = QUrl::fromUserInput(hyperLink);
 

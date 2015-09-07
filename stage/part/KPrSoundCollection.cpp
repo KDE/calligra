@@ -55,7 +55,7 @@ void KPrSoundCollection::removeSound(KPrSoundData *image) {
     }
 }
 
-KPrSoundData *KPrSoundCollection::findSound(QString title)
+KPrSoundData *KPrSoundCollection::findSound(const QString &title)
 {
     for (int i = 0; i < d->sounds.size(); ++i) {
         if (d->sounds.at(i)->title() == title)
