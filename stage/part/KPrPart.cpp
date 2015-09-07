@@ -25,7 +25,6 @@
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include "KPrShapeManagerDisplayMasterStrategy.h"
