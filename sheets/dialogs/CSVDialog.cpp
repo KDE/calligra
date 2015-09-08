@@ -78,7 +78,7 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         KoFileDialog dialog(parent, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import CSV Data File"));
         dialog.setNameFilter(i18n("CSV data files (*.csv)"));
-        m_filename = dialog.url();
+        m_filename = dialog.filename();
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);

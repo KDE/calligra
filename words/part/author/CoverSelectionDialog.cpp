@@ -74,7 +74,7 @@ void CoverSelectionDialog::open()
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setImageFilters();
 
-    QString fileName = dialog.url();
+    QString fileName = dialog.filename();
 
     if (!fileName.isEmpty()) {
         CoverImage cover;

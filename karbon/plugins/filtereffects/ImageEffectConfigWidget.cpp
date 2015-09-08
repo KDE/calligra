@@ -73,7 +73,7 @@ void ImageEffectConfigWidget::selectImage()
     dialog.setCaption(i18n("Select image"));
     dialog.setImageFilters();
 
-    QString fname = dialog.url();
+    QString fname = dialog.filename();
 
     if (fname.isEmpty()) return;
 

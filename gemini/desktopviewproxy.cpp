@@ -128,7 +128,7 @@ void DesktopViewProxy::fileOpen()
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if (filename.isEmpty()) return;
 
     DocumentManager::instance()->recentFileManager()->addRecent(filename);

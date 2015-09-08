@@ -486,7 +486,7 @@ void KarbonView::fileImportGraphic()
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Choose Graphic to Add"));
     dialog.setMimeTypeFilters(imageFilter);
-    QString fname = dialog.url();
+    QString fname = dialog.filename();
 
     if (fname.isEmpty()) return;
 

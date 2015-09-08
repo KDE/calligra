@@ -611,7 +611,7 @@ void MainWindow::openFile()
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if(!filename.isEmpty()) {
         QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename));
     }
