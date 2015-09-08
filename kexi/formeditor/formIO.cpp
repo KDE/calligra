@@ -121,7 +121,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::SaveFile, "SaveForm");
         dlg.setNameFilter("*.ui|" + xi18n("Qt Designer UI Files"));
-        _filename = dlg.url();
+        _filename = dlg.filename();
         if (_filename.isEmpty()) {
             return false;
         }
@@ -297,7 +297,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::OpenFile, "LoadForm");
         dlg.setNameFilter("*.ui|" + xi18n("Qt Designer UI Files"));
-        _filename = dlg.url();
+        _filename = dlg.filename();
         if (_filename.isEmpty()) {
             return false;
         }
