@@ -175,9 +175,9 @@ KDbRecordData* KexiComboBoxBase::selectRecordForEnteredValueInLookupTable(const 
     const int visibleColumn = visibleColumnIndex();
     if (-1 == visibleColumn)
         return 0;
-    KDbTableViewDataIterator it(lookupData->begin());
+    KDbTableViewDataConstIterator it(lookupData->constBegin());
     int record;
-    for (record = 0;it != lookupData->end();++it, record++) {
+    for (record = 0;it != lookupData->constEnd();++it, record++) {
         if (valueIsText) {
             if ((*it)->at(visibleColumn).toString().trimmed().compare(txt, Qt::CaseInsensitive) == 0)
                 break;
