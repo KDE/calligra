@@ -56,7 +56,12 @@
 #include <memory>
 
 #ifdef HAVE_QCA2
+// QCA headers have "slots" and "signals", which QT_NO_SIGNALS_SLOTS_KEYWORDS does not like
+#define slots Q_SLOTS
+#define signals Q_SIGNALS
 #include <QtCrypto>
+#undef slots
+#undef signals
 #endif
 
 using namespace MSOOXML;
@@ -781,5 +786,3 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParse(const QString& filename, 
 {
     return Utils::loadAndParse(doc, m_zip, errorMessage, filename);
 }
-
-#include "MsooXmlImport.moc"
