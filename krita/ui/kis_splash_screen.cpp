@@ -41,6 +41,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
+    setFixedWidth(440);
 
     setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
 
