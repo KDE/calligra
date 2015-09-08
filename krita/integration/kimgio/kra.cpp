@@ -19,11 +19,6 @@
 #include <QIODevice>
 #include <QFile>
 
-#include <kis_group_layer.h>
-#include <KisDocument.h>
-#include <kis_image.h>
-#include <kra/kis_kra_loader.h>
-
 KraHandler::KraHandler()
 {
 }
