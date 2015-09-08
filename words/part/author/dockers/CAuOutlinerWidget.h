@@ -47,7 +47,7 @@ public:
     void setCanvas(KWCanvas* canvas);
     void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void sectionClicked(QModelIndex idx);
     void updateSelection();

@@ -148,7 +148,7 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     m_radius->setLineStepPt(0.1);
     layout->addWidget(m_radius, 2, 1);
 
-    // signals and slots:
+    // signals and Q_SLOTS:
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
     connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 

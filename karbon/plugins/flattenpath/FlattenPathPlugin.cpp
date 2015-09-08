@@ -123,7 +123,7 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     group->setLayout(layout);
     group->setMinimumWidth(300);
 
-    // signals and slots:
+    // signals and Q_SLOTS:
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
     connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
 

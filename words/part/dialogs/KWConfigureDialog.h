@@ -43,7 +43,7 @@ public Q_SLOTS:
     void slotApply();
     void slotDefault();
 
-protected slots:
+protected Q_SLOTS:
     void handleButtonClicked(QAbstractButton* button);
 
 private:

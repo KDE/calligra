@@ -112,10 +112,10 @@ public:
     QString commentSymbol() const;
     void setcommentSymbol(const QString& commentSymbol);
 
-signals:
+Q_SIGNALS:
     void commentSymbolChanged(const QString& commentSymbol);
 
-protected slots:
+protected Q_SLOTS:
 //    //! only called when a delimiter was set by user directly
     void slotcommentSymbolChanged(int idx);
     void slotcommentSymbolChangedInternal(int idx);

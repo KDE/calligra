@@ -71,7 +71,7 @@ public:
     EditRichTextAction(KFormDesigner::Container *container,
                        QWidget *receiver, QObject *parent,
                        KexiStandardFormWidgetsFactory *factory);
-protected slots:
+protected Q_SLOTS:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;

@@ -64,7 +64,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *ev);
     virtual void paintEvent(QPaintEvent *ev);
 
-protected slots:
+protected Q_SLOTS:
     bool eventFilter(QObject *obj, QEvent *ev);
     void updatePos();
 

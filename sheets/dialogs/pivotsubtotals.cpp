@@ -51,7 +51,7 @@ public:
     explicit PivotOptions(QWidget* parent, Selection* selection);
     ~PivotOptions();
     QString returnFunction();
-public slots:
+public Q_SLOTS:
     void on_Ok_clicked();
 private:
     

@@ -291,7 +291,7 @@ protected:
      */
     virtual bool checkPassword();
 
-private slots:
+private Q_SLOTS:
     void activated(const QString& userName);
     void updateFields();
 

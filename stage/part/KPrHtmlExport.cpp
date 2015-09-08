@@ -145,7 +145,7 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 
 void KPrHtmlExport::copyFromTmpToDest()
 {
-    KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
+    KIO::CopyJob *job = KIO::moveAs(QUrl::fromLocalFile(m_tmpDirPath), m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));

@@ -79,7 +79,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
-    m_url = element.attribute("url");
+    m_url.setUrl(element.attribute("url"));
     m_scrollPosition.setX(element.attribute("scroll_x", "0").toDouble());
     m_scrollPosition.setY(element.attribute("scroll_y", "0").toDouble());
     m_zoom = element.attribute("zoom", "1.0").toDouble();
