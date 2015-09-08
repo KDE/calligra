@@ -20,7 +20,7 @@
 #ifndef KPlato_ScheduleTester_h
 #define KPlato_ScheduleTester_h
 
-#include <QtTest>
+#include <QObject>
 #include <QDate>
 #include <QTime>
 

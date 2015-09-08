@@ -559,4 +559,4 @@ void TestDatetimeFunctions::testWEEKS()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS(\"2002-02-18\"; \"2002-02-26\"; 0)", Value(1));
 }
 
-QTEST_KDEMAIN(TestDatetimeFunctions, GUI)
+QTEST_MAIN(TestDatetimeFunctions)

@@ -225,4 +225,4 @@ void TestLogicFunctions::testXOR()
     //CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
 }
 
-QTEST_KDEMAIN(TestLogicFunctions, GUI)
+QTEST_MAIN(TestLogicFunctions)

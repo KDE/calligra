@@ -2,8 +2,8 @@ project(stagepart)
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
-if (!WIN32) ## Disable tests in Windows whilst they break builds
-	add_subdirectory(tests)
+if (NOT WIN32) ## Disable tests in Windows whilst they break builds
+    add_subdirectory(tests)
 endif()
 add_subdirectory(tools)
 

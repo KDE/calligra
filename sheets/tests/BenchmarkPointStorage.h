@@ -20,8 +20,7 @@
 #ifndef CALLIGRA_SHEETS_POINT_STORAGE_BENCHMARK
 #define CALLIGRA_SHEETS_POINT_STORAGE_BENCHMARK
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 namespace Calligra
 {

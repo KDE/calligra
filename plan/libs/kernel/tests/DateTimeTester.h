@@ -20,7 +20,7 @@
 #ifndef KPlato_DateTimeTester_h
 #define KPlato_DateTimeTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptdatetime.h"
 

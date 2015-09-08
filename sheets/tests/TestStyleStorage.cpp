@@ -22,7 +22,7 @@
 #include <StyleStorage.h>
 #include <Map.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -63,4 +63,4 @@ void TestStyleStorage::testGarbageCollection()
     }
 }
 
-QTEST_KDEMAIN(TestStyleStorage, GUI)
+QTEST_MAIN(TestStyleStorage)

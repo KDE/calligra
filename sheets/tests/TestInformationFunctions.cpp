@@ -620,4 +620,4 @@ void TestInformationFunctions::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestInformationFunctions, GUI)
+QTEST_MAIN(TestInformationFunctions)

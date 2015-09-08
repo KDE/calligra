@@ -1,16 +1,20 @@
 [Desktop Entry]
 Name=CSV import/export
+Name[ca]=Importació/exportació de CSV
 Name[de]=CSV-Import/Export
 Name[fi]=CSV-tuonti/vienti
 Name[nl]=CSV importeren/exporteren
+Name[pl]=Importowanie/eksportowanie CSV
 Name[pt]=Importação/exportação de CSV
 Name[pt_BR]=Importação/exportação de CSV
 Name[sv]=CSV-import/export
 Name[uk]=Імпортування і експортування CSV
 Name[x-test]=xxCSV import/exportxx
 Comment=Kexi Plugin for CSV data import/export
+Comment[ca]=Connector del Kexi d'importació/exportació de CSV
 Comment[de]=Kexi-Modul für CSV-Daten-Import/Export
 Comment[nl]=Kexi-plug-in voor importeren/exporteren van CSV-gegevens
+Comment[pl]=Wtyczka importu/eksportu danych CSV dla Kexi
 Comment[pt]='Plugin' do Kexi para a importação/exportação de dados em CSV
 Comment[pt_BR]=Plugin do Kexi para importação/exportação de dados CSV
 Comment[sv]=Kexi insticksprogram för import/export av CSV-data

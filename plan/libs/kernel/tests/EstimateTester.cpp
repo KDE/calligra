@@ -20,6 +20,8 @@
 #include "kptduration.h"
 #include "kptnode.h"
 
+#include <QTest>
+
 namespace KPlato
 {
 

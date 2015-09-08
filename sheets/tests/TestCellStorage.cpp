@@ -24,7 +24,7 @@
 #include <sheets/Sheet.h>
 #include <sheets/Value.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -72,4 +72,4 @@ void CellStorageTest::testMergedCellsInsertRowBug()
     QCOMPARE(storage->mergedYCells(1, 3), 2);
 }
 
-QTEST_KDEMAIN(CellStorageTest, GUI)
+QTEST_MAIN(CellStorageTest)

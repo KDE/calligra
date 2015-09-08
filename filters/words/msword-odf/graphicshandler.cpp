@@ -62,13 +62,6 @@ QString format(double v) {
     static const QRegExp r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
-QString pt(double v) {
-    static const QString pt("pt");
-    return format(v) + pt;
-}
-QString percent(double v) {
-    return format(v) + '%';
-}
 QString mm(double v) {
     static const QString mm("mm");
     return format(v) + mm;

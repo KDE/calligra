@@ -194,7 +194,7 @@ KexiCSVCommentWidget::KexiCSVCommentWidget(bool lineEditOnBottom, QWidget *paren
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVcommentSymbolComboBox");
     d->combo->addItem(xi18n("None"));
-    d->combo->addItem(xi18n("Hashtag \"#\""));
+    d->combo->addItem(xi18n("Hash \"#\""));
     lyr->addWidget(d->combo);
 
     setFocusProxy(d->combo);

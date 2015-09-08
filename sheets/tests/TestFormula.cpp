@@ -368,4 +368,4 @@ void TestFormula::testInlineArrays()
 #endif
 }
 
-QTEST_KDEMAIN(TestFormula, GUI)
+QTEST_MAIN(TestFormula)

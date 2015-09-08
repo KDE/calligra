@@ -20,7 +20,7 @@
 #ifndef KPlato_ResourceTester_h
 #define KPlato_ResourceTester_h
 
-#include <QtTest>
+#include <QObject>
 
 namespace KPlato
 {

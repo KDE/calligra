@@ -23,7 +23,7 @@
 
 #include <math.h>
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include <CellStorage.h>
 #include <Formula.h>
@@ -1248,4 +1248,4 @@ void TestStatisticalFunctions::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestStatisticalFunctions, GUI)
+QTEST_MAIN(TestStatisticalFunctions)

@@ -19,6 +19,8 @@
 #include "DurationTester.h"
 #include <kptduration.h>
 
+#include <QTest>
+
 namespace KPlato
 {
 
