@@ -86,7 +86,7 @@ private:
      * Runs url string defined inside hyperlink
      * @param hyperLink the hyperlink string
      */
-    void runHyperlink(QString hyperLink);
+    void runHyperlink(const QString &hyperLink);
 
     KPrViewModePresentation & m_viewMode;
     QSet<KoEventAction *> m_eventActions;

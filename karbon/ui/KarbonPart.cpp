@@ -49,7 +49,6 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
 
 #include <kconfiggroup.h>
 
