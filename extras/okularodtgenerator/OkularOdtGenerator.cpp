@@ -253,29 +253,17 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
-// API change
-#if OKULAR_IS_VERSION(0, 16, 60)
     request->page()->setPixmap( request->observer(), pix );
-#else
-    request->page()->setPixmap( request->id(), pix );
-#endif
 
     signalPixmapRequestDone( request );
 }
 
-#if OKULAR_IS_VERSION(0, 20, 60)
 Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
-#else
-const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
-{
-    return &m_documentInfo;
-}
-#endif
 
 const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {

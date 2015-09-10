@@ -160,29 +160,16 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
     }
 
-// API change
-#if OKULAR_IS_VERSION(0, 16, 60)
    request->page()->setPixmap( request->observer(), pix );
-#else
-   request->page()->setPixmap( request->id(), pix );
-#endif
-
 
     signalPixmapRequestDone( request );
 }
 
-#if OKULAR_IS_VERSION(0, 20, 60)
 Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
-#else
-const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
-{
-    return &m_documentInfo;
-}
-#endif
 
 #include "OkularOdpGenerator.moc"
