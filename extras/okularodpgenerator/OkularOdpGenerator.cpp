@@ -23,6 +23,8 @@
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <calligraversion.h>
 
@@ -35,8 +37,6 @@
 
 #include <kglobal.h>
 #include <kaboutdata.h>
-#include <kpluginfactory.h>
-#include <kmimetype.h>
 
 #include <okular/core/page.h>
 
@@ -72,7 +72,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
     KComponentData cd("OkularOdpGenerator", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
 
-    const QString mimetype = KMimeType::findByPath(fileName)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
