@@ -16,19 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import "components"
-import org.calligra.CalligraComponents 0.1 as Calligra
+import org.kde.calligra 1.0 as Calligra
 
 Item {
     id: base;
     signal canvasInteractionStarted();
-    property alias document: wordsCanvas.document;
-    property alias textEditor: wordsCanvas.textEditor;
+    property alias document: wordsDocument.document;
+    property alias textEditor: wordsDocument.textEditor;
     property QtObject canvas: wordsCanvas;
-    property alias source: wordsCanvas.source;
+    property alias source: wordsDocument.source;
     property alias navigateMode: controllerFlickable.enabled;
     property double toolbarOpacity: base.state === "readermode" ? 0.3 : 1;
+    Calligra.Document {
+        id: wordsDocument;
+        onStatusChanged: {
+            if(status == Calligra.DocumentStatus.Loading) {
+                baseLoadingDialog.visible = true;
+            }
+            else if(status == Calligra.DocumentStatus.Loaded) {
+                console.debug("doc and part: " + wordsDocument.document + " " + wordsDocument.part);
+                mainWindow.setDocAndPart(wordsDocument.document, wordsDocument.part);
+                baseLoadingDialog.hideMe();
+            }
+        }
+        onCurrentIndexChanged: navigatorListView.positionViewAtIndex(currentIndex - 1, ListView.Center);
+    }
+    Calligra.ContentsModel {
+        id: wordsContentModel;
+        document: wordsDocument;
+        useToC: false;
+        thumbnailSize: Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
+    }
     onNavigateModeChanged: {
         if(navigateMode === true) {
             // This means we've just changed back from having edited stuff.
@@ -67,12 +87,12 @@ Item {
     Flickable {
         id: bgScrollArea;
         anchors.fill: parent;
-        contentHeight: controllerItem.documentSize.height;
+        contentHeight: wordsDocument.documentSize.height;
         interactive: base.state !== "readermode";
         boundsBehavior: controllerFlickable.boundsBehavior;
         Item {
             width: parent.width;
-            height: controllerItem.documentSize.height;
+            height: wordsDocument.documentSize.height;
             MouseArea {
                 anchors.fill: parent;
                 property int oldX: 0
@@ -149,21 +169,12 @@ Item {
             bottom: parent.bottom;
             horizontalCenter: parent.horizontalCenter;
         }
-        
-        width: Math.min(controllerItem.documentSize.width, base.width);
+        width: Math.min(wordsDocument.documentSize.width, base.width);
 
-        Calligra.TextDocumentCanvas {
+        Calligra.View {
             id: wordsCanvas;
             anchors.fill: parent;
-
-            onLoadingBegun: baseLoadingDialog.visible = true;
-            onLoadingFinished: {
-                console.debug("doc and part: " + doc() + " " + part());
-                mainWindow.setDocAndPart(doc(), part());
-                baseLoadingDialog.hideMe();
-                thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
-            }
-            onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Center);
+            document: wordsDocument;
         }
 
         Flickable {
@@ -187,15 +198,15 @@ Item {
                 }
             }
 
-            boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
+            boundsBehavior: wordsDocument.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
 
             function pageUp() {
                 if(base.state === "readermode") {
-                    if(wordsCanvas.currentPageNumber === 1) {
-                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                    if(wordsDocument.currentIndex === 1) {
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsDocument.indexCount) + 1;
                     }
                     else {
-                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsDocument.currentIndex - 1) + 1;
                     }
                 }
                 else {
@@ -204,7 +215,7 @@ Item {
             }
             function pageDown() {
                 if(base.state === "readermode") {
-                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsDocument.currentIndex + 1) + 1;
                 }
                 else {
                     controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
@@ -217,14 +228,14 @@ Item {
                 source: Settings.theme.icon("intel-Words-Handle-cursor");
                 opacity: wordsCanvas.hasSelection ? 1 : 0;
                 Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                x: wordsCanvas.selectionStartPos.x - width / 2;
-                y: wordsCanvas.selectionStartPos.y - (height - 4);
+                x: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.x - width / 2 : 0;
+                y: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.y - (height - 4) : 0;
                 Rectangle {
                     anchors {
                         top: parent.bottom;
                         horizontalCenter: parent.horizontalCenter;
                     }
-                    height: wordsCanvas.selectionStartPos.height - 4;
+                    height: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.height - 4 : 0;
                     width: 4;
                     color: "#009bcd";
                 }
@@ -235,14 +246,14 @@ Item {
                 source: Settings.theme.icon("intel-Words-Handle-cursor");
                 opacity: wordsCanvas.hasSelection ? 1 : 0;
                 Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                x: wordsCanvas.selectionEndPos.x - width / 2;
-                y: wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4);
+                x: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.x - width / 2 : 0;
+                y: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4) : 0;
                 Rectangle {
                     anchors {
                         bottom: parent.top;
                         horizontalCenter: parent.horizontalCenter;
                     }
-                    height: wordsCanvas.selectionEndPos.height - 4;
+                    height: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.height - 4 : 0;
                     width: 4;
                     color: "#009bcd";
                 }
@@ -253,21 +264,18 @@ Item {
                 y: controllerFlickable.contentY;
                 height: controllerFlickable.height;
                 width: controllerFlickable.width;
-                
+
                 enabled: base.state !== "readermode";
 
                 onPinchStarted: {
                     base.canvasInteractionStarted();
-                    controllerItem.beginZoomGesture();
                 }
                 onPinchUpdated: {
                     var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
-                    controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
+                    controllerItem.zoomAroundPoint(pinch.scale - pinch.previousScale, newCenter.x, newCenter.y );
                 }
                 onPinchFinished: {
-                    controllerItem.endZoomGesture();
                     controllerFlickable.returnToBounds();
-                    controllerItem.returnToBounds();
                 }
 
                 MouseArea {
@@ -339,9 +347,9 @@ Item {
                 }
             }
 
-            Calligra.CanvasControllerItem {
+            Calligra.ViewController {
                 id: controllerItem;
-                canvas: wordsCanvas;
+                view: wordsCanvas;
                 flickable: controllerFlickable;
                 property bool pageChanging: false;
                 zoom: 1.0;
@@ -419,7 +427,7 @@ Item {
             ScriptAction {
                 script: {
                     d.zoomToFit();
-                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber) + 1;
+                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsDocument.currentIndex) + 1;
 					base.canvasInteractionStarted();
                     if(mainWindow.maximized) {
                         mainWindow.fullScreen = true;
@@ -594,11 +602,12 @@ Item {
                 rightMargin: 1;
             }
             clip: true;
-            model: wordsCanvas.documentModel;
+            model: wordsContentModel;
             delegate: Item {
                 width: Settings.theme.adjustedPixel(190);
                 height: Settings.theme.adjustedPixel(190);
-                Image {
+                Calligra.ImageDataItem {
+                    id: navigatorThumbnail;
                     anchors {
                         top: parent.top;
                         right: parent.right;
@@ -606,16 +615,14 @@ Item {
                         margins: Settings.theme.adjustedPixel(5);
                     }
                     width: Settings.theme.adjustedPixel(140);
-                    fillMode: Image.PreserveAspectFit;
-                    source: model.decoration;
-                    smooth: true;
-                    Rectangle {
-                        anchors.fill: parent;
-                        color: "transparent";
-                        border.width: 1;
-                        border.color: "black";
-                        opacity: 0.1;
-                    }
+                    data: model.thumbnail;
+                }
+                Rectangle {
+                    anchors.fill: navigatorThumbnail;
+                    color: "transparent";
+                    border.width: 1;
+                    border.color: "black";
+                    opacity: 0.1;
                 }
                 Label {
                     anchors {
@@ -630,7 +637,8 @@ Item {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
-                        controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1) + 1;
+                        wordsDocument.currentIndex = model.contentIndex;
+//                         controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1) + 1;
                         base.canvasInteractionStarted();
                     }
                 }
@@ -643,7 +651,7 @@ Item {
                 id: visualiserContainer;
                 property double scale: height / controllerFlickable.contentHeight;
                 width: parent.width;
-                height: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.documentModel.rowCount() * Settings.theme.adjustedPixel(190);
+                height: (wordsDocument === null) ? 0 : wordsDocument.indexCount * Settings.theme.adjustedPixel(190);
                 x: 0;
                 y: -navigatorListView.contentY;
                 Rectangle {
@@ -677,7 +685,7 @@ Item {
         Label {
             anchors.centerIn: parent;
             color: Settings.theme.color("components/overlay/text");
-            text: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.currentPageNumber + " of " + wordsCanvas.documentModel.rowCount();
+            text: (wordsDocument === null) ? 0 : wordsDocument.currentIndex + " of " + wordsDocument.indexCount;
         }
     }
     Item {

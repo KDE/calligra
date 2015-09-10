@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
-import QtWebKit 1.0
+import QtQuick 2.0
+import QtWebKit 3.0
 import "../../../components"
 
 Page {

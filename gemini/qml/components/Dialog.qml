@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.calligra 1.0
 
 Item {
     id: base;
+    enabled: (visible && opacity > 0.0);
 
     property alias title: dialogTitle.text;
     property alias message: dialogText.text;
