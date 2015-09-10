@@ -63,7 +63,7 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(PLAN_MIME_TYPE, componentData());
 }
 
-void Part::openTemplate(const KUrl &url)
+void Part::openTemplate(const QUrl &url)
 {
     m_document->setLoadingTemplate(true);
     KoPart::openTemplate(url);
