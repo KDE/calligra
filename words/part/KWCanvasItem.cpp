@@ -156,6 +156,12 @@ void KWCanvasItem::updateInputMethodInfo()
     updateMicroFocus();
 }
 
+void KWCanvasItem::updateCanvas(const QRectF &rc)
+{
+    Q_UNUSED(rc)
+    emit canvasUpdated();
+}
+
 void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     painter->fillRect(option->exposedRect, QColor::fromRgb(232, 233, 234));
