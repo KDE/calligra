@@ -173,7 +173,8 @@ extern "C" int main(int argc, char **argv)
          splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
     }
     else {
-        int i = random() % 3;
+        qsrand(QDateTime::currentMSecsSinceEpoch());
+        int i = qrand() % 3;
         if (i < 1) {
             splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_summer_holidays_xpm));
         }
