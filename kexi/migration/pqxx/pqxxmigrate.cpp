@@ -432,14 +432,16 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KDbConnection *destConn
         std::vector<std::string>::const_iterator i, end(R.end());
         int index = 0;
         for (i = R.begin(); i != end; ++i, index++) {
-            if (fieldsExpanded.at(index)->field->type() == KDbField::BLOB
-                    || fieldsExpanded.at(index)->field->type() == KDbField::LongText) {
+            KDbField *field = fieldsExpanded.at(index)->field;
+            const KDbField::Type type = field->type(); // cache: evaluating type of expressions can be expensive
+            if (type == KDbField::BLOB || type == KDbField::LongText) {
                 vals.append(KDb::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
-            } else if (fieldsExpanded.at(index)->field->type() == KDbField::Boolean) {
+            } else if (type == KDbField::Boolean) {
                 vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
-            } else
+            } else {
                 vals.append(KDb::cstringToVariant((*i).c_str(),
-                                                     fieldsExpanded.at(index)->field->type(), (*i).size()));
+                                                     type, (*i).size()));
+            }
         }
         if (!destConn->insertRecord(*dstTable, vals))
             return false;

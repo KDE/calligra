@@ -189,7 +189,8 @@ bool KexiInputTableEdit::valueIsEmpty()
 
 QVariant KexiInputTableEdit::value()
 {
-    if (field()->isFPNumericType()) {//==KDbField::Double || m_type==KDbField::Float) {
+    const KDbField::Type type = field()->type(); // cache: evaluating type of expressions can be expensive
+    if (KDbField::isFPNumericType(type)) {//==KDbField::Double || type==KDbField::Float) {
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
         if (m_decsym != '.')
@@ -197,10 +198,10 @@ QVariant KexiInputTableEdit::value()
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();
-    } else if (field()->isIntegerType()) {
+    } else if (KDbField::isIntegerType(type)) {
 //! @todo check constraints
         bool ok;
-        if (KDbField::BigInteger == field()->type()) {
+        if (KDbField::BigInteger == type) {
             if (field()->isUnsigned()) {
                 const quint64 result = m_lineedit->text().toULongLong(&ok);
                 return ok ? QVariant(result) : QVariant();
@@ -209,7 +210,7 @@ QVariant KexiInputTableEdit::value()
                 return ok ? QVariant(result) : QVariant();
             }
         }
-        if (KDbField::Integer == field()->type()) {
+        if (KDbField::Integer == type) {
             if (field()->isUnsigned()) {
                 const uint result = m_lineedit->text().toUInt(&ok);
                 return ok ? QVariant(result) : QVariant();

@@ -186,13 +186,14 @@ bool KexiCSVExport::exportData(KDbTableOrQuerySchema *tableOrQuery,
             visibleFieldIndex[i] = i;
         }
 
-        isText[i] = ci->field->isTextType();
-        isDateTime[i] = ci->field->type() == KDbField::DateTime;
-        isTime[i] = ci->field->type() == KDbField::Time;
-        isBLOB[i] = ci->field->type() == KDbField::BLOB;
-//  isInteger[i] = fields[i]->field->isIntegerType()
-//   || fields[i]->field->type()==KDbField::Boolean;
-//  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
+        const KDbField::Type t = ci->field->type(); // cache: evaluating type of expressions can be expensive
+        isText[i] = KDbField::isTextType(t);
+        isDateTime[i] = t == KDbField::DateTime;
+        isTime[i] = t == KDbField::Time;
+        isBLOB[i] = t == KDbField::BLOB;
+//  isInteger[i] = KDbField::isIntegerType(t)
+//   || t == KDbField::Boolean;
+//  isFloatingPoint[i] = KDbField::isFPNumericType(t);
     }
 
     // 1. Output column names

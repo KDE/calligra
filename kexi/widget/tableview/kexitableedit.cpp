@@ -49,14 +49,15 @@ KexiTableEdit::KexiTableEdit(KDbTableViewColumn &column, QWidget* parent)
     setPalette(pal);
 
     //margins
-    if (displayedField()->isFPNumericType()) {
+    const KDbField::Type type = displayedField()->type(); // cache: evaluating type of expressions can be expensive
+    if (KDbField::isFPNumericType(type)) {
 #ifdef Q_OS_WIN
         m_leftMargin = 0;
 #else
         m_leftMargin = 0;
 #endif
         m_rightMargin = 6;
-    } else if (displayedField()->isIntegerType()) {
+    } else if (KDbField::isIntegerType(type)) {
 #ifdef Q_OS_WIN
         m_leftMargin = 1;
 #else
@@ -216,14 +217,15 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     y_offset = 0;
 #endif
 
-    if (realField->isFPNumericType()) {
+    const KDbField::Type type = realField->type(); // cache: evaluating type of expressions can be expensive
+    if (KDbField::isFPNumericType(type)) {
 //! @todo ADD OPTION to displaying NULL VALUES as e.g. "(null)"
         if (!val.isNull()) {
             txt = KDb::formatNumberForVisibleDecimalPlaces(
                       val.toDouble(), realField->visibleDecimalPlaces());
         }
         align |= Qt::AlignRight;
-    } else if (realField->isIntegerType()) {
+    } else if (KDbField::isIntegerType(type)) {
         qint64 num = val.toLongLong();
         align |= Qt::AlignRight;
         if (!val.isNull())
