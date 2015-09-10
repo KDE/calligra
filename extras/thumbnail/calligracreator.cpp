@@ -104,8 +104,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     // load the document content
     m_loadingCompleted = false;
 
-    KUrl url;
-    url.setPath(path);
+    const QUrl url = QUrl::fromLocalFile(path);
     if (!m_doc->openUrl(url)) {
         delete m_doc;
         m_doc = 0;
