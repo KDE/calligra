@@ -74,6 +74,7 @@
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
 #include <kaction.h>
+#include <klocale.h>
 
 // Qt
 #include <QApplication>

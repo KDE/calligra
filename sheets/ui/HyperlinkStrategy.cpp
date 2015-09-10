@@ -31,9 +31,9 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
-#include <kurl.h>
 
 #include <QTimer>
+#include <QUrl>
 
 using namespace Calligra::Sheets;
 
@@ -79,7 +79,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     Q_UNUSED(modifiers)
     selection()->activeSheet()->showStatusMessage(i18n("Link %1 activated", d->url));
 
-    const KUrl url(d->url);
+    const QUrl url(d->url);
     if (!url.isValid() || url.isRelative()) {
         const Region region(d->url, selection()->activeSheet()->map(), selection()->activeSheet());
         if (region.isValid()) {

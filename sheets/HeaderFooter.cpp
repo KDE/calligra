@@ -29,13 +29,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kurl.h>
 
 #include <KoDocumentInfo.h>
 
 #include <QDate>
 #include <QPainter>
 #include <QTime>
+#include <QUrl>
 
 #include <pwd.h>
 #include <unistd.h>

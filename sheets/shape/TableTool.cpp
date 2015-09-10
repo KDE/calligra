@@ -30,8 +30,8 @@
 #include <QSpinBox>
 #include <QToolBar>
 #include <QPushButton>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -96,7 +96,7 @@ TableTool::~TableTool()
 
 void TableTool::importDocument()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
+    QString file = KFileDialog::getOpenFileName(QUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!
@@ -116,7 +116,7 @@ void TableTool::importDocument()
 
 void TableTool::exportDocument()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
+    QString file = KFileDialog::getSaveFileName(QUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!

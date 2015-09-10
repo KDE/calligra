@@ -67,7 +67,7 @@ public:
 protected:
     virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
 
-    virtual void openTemplate(const KUrl& url); /// reimplemented
+    virtual void openTemplate(const QUrl& url); /// reimplemented
 
     Doc *m_document;
 

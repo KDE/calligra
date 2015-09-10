@@ -77,7 +77,7 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(SHEETS_MIME_TYPE, componentData());
 }
 
-void Part::openTemplate(const KUrl& url)
+void Part::openTemplate(const QUrl& url)
 {
     m_document->map()->loadingInfo()->setLoadTemplate(true);
     KoPart::openTemplate(url);

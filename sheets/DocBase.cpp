@@ -73,7 +73,7 @@ DocBase::DocBase(KoPart *part)
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
 
     // Document Url for FILENAME function and page header/footer.
-    d->map->calculationSettings()->setFileName(url().prettyUrl());
+    d->map->calculationSettings()->setFileName(url().toDisplayString());
 
     KoShapeRegistry *registry = KoShapeRegistry::instance();
     foreach (const QString &id, registry->keys()) {
@@ -153,7 +153,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     }
 
     // Document Url for FILENAME function and page header/footer.
-    d->map->calculationSettings()->setFileName(url().prettyUrl());
+    d->map->calculationSettings()->setFileName(url().toDisplayString());
 
     KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
@@ -250,7 +250,7 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
     }
 
     // Document Url for FILENAME function and page header/footer.
-    d->map->calculationSettings()->setFileName(url().prettyUrl());
+    d->map->calculationSettings()->setFileName(url().toDisplayString());
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
 

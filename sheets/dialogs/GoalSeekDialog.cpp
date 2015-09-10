@@ -26,6 +26,7 @@
 #include "GoalSeekDialog.h"
 
 #include <ktextedit.h>
+#include <klocale.h>
 
 #include "CalculationSettings.h"
 #include "Cell.h"
