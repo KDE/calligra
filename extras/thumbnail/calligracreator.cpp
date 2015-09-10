@@ -25,10 +25,11 @@
 #include <KoDocument.h>
 #include <KoDocumentEntry.h>
 
-#include <kmimetype.h>
 // Qt
 #include <QPainter>
 #include <QTimer>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
@@ -86,7 +87,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     delete store;
 
     // load document and render the thumbnail ourselves
-    const QString mimetype = KMimeType::findByPath(path)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(path).name();
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
