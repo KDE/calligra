@@ -12,6 +12,7 @@ Name[uk]=Імпортування і експортування CSV
 Name[x-test]=xxCSV import/exportxx
 Comment=Kexi Plugin for CSV data import/export
 Comment[ca]=Connector del Kexi d'importació/exportació de CSV
+Comment[cs]=Modul Kexi pro import a export dat CSV
 Comment[de]=Kexi-Modul für CSV-Daten-Import/Export
 Comment[nl]=Kexi-plug-in voor importeren/exporteren van CSV-gegevens
 Comment[pl]=Wtyczka importu/eksportu danych CSV dla Kexi
