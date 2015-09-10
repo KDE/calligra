@@ -35,8 +35,7 @@
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
 
-#include <kglobal.h>
-#include <kaboutdata.h>
+#include <KAboutData>
 
 #include <okular/core/page.h>
 
@@ -119,14 +118,14 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
 
