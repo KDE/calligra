@@ -26,12 +26,12 @@
 #include <QDir>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 #include <krecentfilesaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>
-#include <kurl.h>
 
 #include <boost/config/posix_features.hpp>
 #include <KConfigGroup>

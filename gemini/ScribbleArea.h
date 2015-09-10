@@ -22,16 +22,17 @@
 #ifndef SCRIBBLEAREA_H
 #define SCRIBBLEAREA_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
+#include <QImage>
 
-class ScribbleArea : public QDeclarativeItem
+class ScribbleArea : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    explicit ScribbleArea(QDeclarativeItem* parent = 0);
+    explicit ScribbleArea(QQuickItem* parent = 0);
     virtual ~ScribbleArea();
 
     Q_INVOKABLE void clear();
@@ -50,11 +51,10 @@ Q_SIGNALS:
 
 protected:
     virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent* event);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void paint(QPainter* painter);
 
 private:
     void drawLineTo(const QPointF &endPoint);

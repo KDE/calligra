@@ -36,8 +36,8 @@ public:
     QPointer<KoToolBase> currentTool;
 };
 
-ToolManager::ToolManager(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+ToolManager::ToolManager(QQuickItem* parent)
+    : QQuickItem(parent)
     , d(new Private)
 {
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),

@@ -34,7 +34,7 @@ set(calligragemini_SRCS
     RecentFileManager.cpp
     Settings.cpp
     SimpleTouchArea.cpp
-    TouchDeclarativeView.cpp
+#     TouchDeclarativeView.cpp
     PropertyContainer.cpp
     Theme.cpp
     ToolManager.cpp
@@ -76,7 +76,8 @@ target_link_libraries(calligrageminithumbnailhelper
 add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
-    Qt5::Declarative
+    Qt5::Quick
+    Qt5::Qml
     Qt5::OpenGL
     Qt5::Gui
     Qt5::Core

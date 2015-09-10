@@ -20,13 +20,14 @@
  */
 
 #include "MainWindow.h"
+#include <QHBoxLayout>
 #include "desktopviewproxy.h"
 
 #include <QApplication>
 #include <QResizeEvent>
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
+#include <QQuickView>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
@@ -36,12 +37,12 @@
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kcmdlineargs.h>
-#include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -50,7 +51,6 @@
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <KConfigGroup>
-#include <kdialog.h>
 
 #include <gemini/ViewModeSwitchEvent.h>
 #include <KoCanvasBase.h>
@@ -70,9 +70,9 @@
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
 #include <KoJsonTrader.h>
+#include <KoDialog.h>
 
 #include "PropertyContainer.h"
-#include "TouchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
 #include "QmlGlobalEngine.h"
@@ -107,7 +107,7 @@ public:
         , desktopView(0)
         , currentView(0)
         , settings(0)
-        , slateMode(false)
+        , slateMode(true)
         , docked(false)
         , touchKoView(0)
         , desktopKoView(0)
@@ -131,7 +131,8 @@ public:
     }
     MainWindow* q;
     bool allowClose;
-    TouchDeclarativeView* touchView;
+    QWidget* touchWidget;
+    QQuickView* touchView;
     QPointer<KoMainWindow> desktopView;
     QObject* currentView;
     Settings *settings;
@@ -156,7 +157,7 @@ public:
 
     void initTouchView(QObject* parent)
     {
-        touchView = new TouchDeclarativeView();
+        touchView = new QQuickView();
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
@@ -190,10 +191,13 @@ public:
         QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
 #else
         QStringList dirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
+        dirs.append(KGlobal::dirs()->findDirs("lib", "qml"));
         if(dirs.length() < 1) {
             KMessageBox::sorry(q, i18n("The Calligra Qt Quick components were not found. This means your installation is broken."));
         } else {
-            touchView->engine()->addImportPath(dirs.value(0));
+            Q_FOREACH(QString dir, dirs) {
+                touchView->engine()->addImportPath(dir);
+            }
         }
         QString mainqml = KGlobal::dirs()->findResource("data", "calligragemini/calligragemini.qml");
 #endif
@@ -205,7 +209,7 @@ public:
         QFileInfo fi(mainqml);
 
         touchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-        touchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+        touchView->setResizeMode( QQuickView::SizeRootObjectToView );
 
         toDesktop = new KAction(q);
         toDesktop->setEnabled(true);
@@ -322,18 +326,18 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
-    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KoDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
-        flags |= KDialog::ModifiedCaption;
+        flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -375,7 +379,16 @@ void MainWindow::switchToTouch()
         d->desktopView->setParent(0);
     }
 
-    setCentralWidget(d->touchView);
+    QWidget* container = QWidget::createWindowContainer(d->touchView);
+    d->touchWidget = new QWidget();
+    d->touchWidget->setLayout(new QVBoxLayout());
+    d->touchWidget->layout()->setContentsMargins(0,0,0,0);
+    d->touchWidget->layout()->setSpacing(0);
+    d->touchWidget->layout()->addWidget(container);
+    setCentralWidget(d->touchWidget);
+    qApp->processEvents();
+    d->touchView->setVisible(true);
+    resize(size());
     emit switchedToTouch();
 
     if (d->slateMode) {
@@ -390,7 +403,7 @@ void MainWindow::switchToTouch()
 
 void MainWindow::touchChange()
 {
-    if (centralWidget() != d->touchView || !d->syncObject)
+    if (centralWidget() != d->touchWidget || !d->syncObject)
         return;
 
     if (d->desktopView)
@@ -439,8 +452,13 @@ void MainWindow::switchToDesktop()
 
     if (d->currentTouchPage == "MainPage")
     {
+        d->touchWidget->setParent(0);
         d->touchView->setParent(0);
+        d->touchView->setVisible(false);
         setCentralWidget(d->desktopView);
+        if(d->touchWidget) {
+            d->touchWidget = 0;
+        }
     }
 
     if (view) {
@@ -674,7 +692,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 {
     Q_UNUSED(key)
     Q_UNUSED(v)
-    if(centralWidget() == d->touchView)
+    if(centralWidget() == d->touchWidget)
         return;
 }
 

@@ -29,11 +29,9 @@
 #include <KoDocument.h>
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
-#include <KMimeTypeTrader>
-#include <KMimeType>
 
 RecentImageImageProvider::RecentImageImageProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
 {
 }
 

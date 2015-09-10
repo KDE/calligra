@@ -25,7 +25,7 @@
 
 #include <QObject>
 
-class KUrl;
+class QUrl;
 class KoMainWindow;
 class MainWindow;
 class DesktopViewProxy : public QObject

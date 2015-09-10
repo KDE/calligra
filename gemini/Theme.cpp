@@ -29,11 +29,11 @@
 #include <QFontDatabase>
 #include <QApplication>
 #include <QWidget>
-#include <QDeclarativeComponent>
+#include <QQmlComponent>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 #include <KIconLoader>
 
 #include "QmlGlobalEngine.h"
@@ -105,7 +105,8 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(d->id))).directory();
+        QString path = QUrl(KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(d->id))).path();
+        d->basePath = path.left(path.lastIndexOf('/'));
         emit idChanged();
     }
 }
@@ -372,7 +373,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
     qml = KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(id));
 #endif
 
-    QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
+    QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml));
 
     if(themeComponent.isError()) {
