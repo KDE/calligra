@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <klocale.h>
 
 #include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>

@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <kfilterdev.h>
 #include <kpluginfactory.h>
+#include <klocale.h>
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>
 #include <QApplication>
