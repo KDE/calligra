@@ -253,8 +253,8 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
 
-    KUrl url(uri);
-    if (url.protocol() == "newfile") {
+    QUrl url(uri);
+    if (url.scheme() == "newfile") {
         KWDocument* doc = qobject_cast<KWDocument*>(document);
         doc->initEmpty();
         KWPageStyle style = doc->pageManager()->defaultPageStyle();
@@ -286,7 +286,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
 
         doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
         doc->relayout();
-    } else if (url.protocol() == "template") {
+    } else if (url.scheme() == "template") {
         qApp->setOverrideCursor(Qt::BusyCursor);
         // Nip away the manually added template:// bit of the uri passed from the caller
         bool ok = document->loadNativeFormat(uri.mid(11));

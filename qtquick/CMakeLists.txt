@@ -74,7 +74,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
+kde4_add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_SRCS})
 
 target_link_libraries(calligraqtquickcomponentsplugin
     Qt5::Declarative
