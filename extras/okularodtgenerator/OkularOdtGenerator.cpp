@@ -110,8 +110,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     }
 
     m_doc = static_cast<KWDocument*>(part->document());
-    KUrl url;
-    url.setPath(fileName);
+    const QUrl url = QUrl::fromLocalFile(fileName);
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // show error dialogs
     if (!m_doc->openUrl(url)) {

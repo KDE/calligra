@@ -85,8 +85,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     KoPADocument* doc = qobject_cast<KoPADocument*>(part->document());
     m_doc = doc;
-    KUrl url;
-    url.setPath(fileName);
+    const QUrl url = QUrl::fromLocalFile(fileName);
     doc->setCheckAutoSaveFile(false);
     doc->setAutoErrorHandlingEnabled(false); // show error dialogs
     if (!doc->openUrl(url)) {
