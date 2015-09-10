@@ -57,7 +57,7 @@ public:
     virtual ~KPlatoWork_MainWindow();
 
     KPlatoWork::Part *rootDocument() const { return m_part; }
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl & url);
 
     virtual QString configFile() const;
 

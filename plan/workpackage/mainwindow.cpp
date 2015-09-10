@@ -103,7 +103,7 @@ void KPlatoWork_MainWindow::setCaption( const QString &, bool modified )
     KParts::MainWindow::setCaption( QString(), modified );
 }
 
-bool KPlatoWork_MainWindow::openDocument(const KUrl & url)
+bool KPlatoWork_MainWindow::openDocument(const QUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()));
