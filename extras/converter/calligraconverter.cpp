@@ -20,12 +20,13 @@
 */
 
 #include <QTimer>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <K4AboutData>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
@@ -40,7 +41,7 @@
 
 #include <calligraversion.h>
 
-bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
+bool convertPdf(const QUrl &uIn, const QString &inputFormat, const QUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
 {
     Q_UNUSED(outputFormat);
 
@@ -126,7 +127,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     return true;
 }
 
-bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, bool batch)
+bool convert(const QUrl &uIn, const QString &inputFormat, const QUrl &uOut, const QString &outputFormat, bool batch)
 {
     Q_UNUSED(inputFormat);
 
@@ -177,8 +178,8 @@ int main(int argc, char **argv)
         return 3;
     }
 
-    KUrl urlIn = args->url(0);
-    KUrl urlOut = args->url(1);
+    const QUrl urlIn = args->url(0).url();
+    const QUrl urlOut = args->url(1).url();
 
     // Are we in batch mode or in interactive mode.
     bool batch = args->isSet("batch");
@@ -191,31 +192,31 @@ int main(int argc, char **argv)
         KIO::UDSEntry entry;
         if (KIO::NetAccess::stat(urlOut, entry, 0L)) {   // this file exists => backup
             kDebug() << "Making backup...";
-            KUrl backup(urlOut);
+            QUrl backup(urlOut);
             backup.setPath(urlOut.path() + '~');
             KIO::FileCopyJob *job = KIO::file_copy(urlOut, backup, -1, KIO::Overwrite | KIO::HideProgressInfo);
             job->exec();
         }
     }
 
-
-    KMimeType::Ptr inputMimetype = KMimeType::findByUrl(urlIn);
-    if (inputMimetype->name() == KMimeType::defaultMimeType()) {
-        kError() << i18n("Mimetype for input file %1 not found!", urlIn.prettyUrl()) << endl;
+    QMimeDatabase db;
+    QMimeType inputMimetype = db.mimeTypeForUrl(urlIn);
+    if (!inputMimetype.isValid() || inputMimetype.isDefault()) {
+        kError() << i18n("Mimetype for input file %1 not found!", urlIn.toDisplayString()) << endl;
         return 1;
     }
 
-    KMimeType::Ptr outputMimetype;
+    QMimeType outputMimetype;
     if (args->isSet("mimetype")) {
         QString mime = args->getOption("mimetype");
-        outputMimetype = KMimeType::mimeType(mime);
-        if (! outputMimetype) {
+        outputMimetype = db.mimeTypeForName(mime);
+        if (! outputMimetype.isValid()) {
             kError() << i18n("Mimetype not found %1", mime) << endl;
             return 1;
         }
     } else {
-        outputMimetype = KMimeType::findByUrl(urlOut, 0, false, true /* file doesn't exist */);
-        if (outputMimetype->name() == KMimeType::defaultMimeType()) {
+        outputMimetype = db.mimeTypeForUrl(urlOut);
+        if (!outputMimetype.isValid() || outputMimetype.isDefault()) {
             kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
             return 1;
         }
@@ -223,15 +224,15 @@ int main(int argc, char **argv)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    QString outputFormat = outputMimetype->name();
+    QString outputFormat = outputMimetype.name();
     bool ok = false;
     if (outputFormat == "application/pdf") {
         QString orientation = args->getOption("print-orientation");
         QString papersize = args->getOption("print-papersize");
         QString margin = args->getOption("print-margin");
-        ok = convertPdf(urlIn, inputMimetype->name(), urlOut, outputFormat, orientation, papersize, margin);
+        ok = convertPdf(urlIn, inputMimetype.name(), urlOut, outputFormat, orientation, papersize, margin);
     } else {
-        ok = convert(urlIn, inputMimetype->name(), urlOut, outputFormat, batch);
+        ok = convert(urlIn, inputMimetype.name(), urlOut, outputFormat, batch);
     }
 
     QTimer::singleShot(0, &app, SLOT(quit()));
