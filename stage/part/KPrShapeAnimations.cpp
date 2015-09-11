@@ -1009,7 +1009,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+            return QIcon::fromTheme(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
         }
     }
     return koIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
