@@ -277,7 +277,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
    </item>
   </layout>
  </widget>
- <pixmapfunction>KIcon</pixmapfunction>
+ <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KPushButton</class>
