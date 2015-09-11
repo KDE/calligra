@@ -34,7 +34,7 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     setCheckable(true);
     setAutoRaise(true);
 #if QT_VERSION >= 0x040700
-    setIcon(KIcon(m_toolAction->iconName());
+    setIcon(KIcon(m_toolAction->iconName()));
 #else
     setIcon(themedIcon(m_toolAction->iconName()));
 #endif
