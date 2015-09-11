@@ -23,7 +23,7 @@
 
 #include <QTextEdit>
 #include <KActionCollection>
-#include <kicon.h>
+#include <KoIcon.h>
 
 using namespace Soprano;
 
@@ -82,8 +82,8 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
 
     actions->addAction("text_undo", m_editWidgetUI.synopRichTextWidget, SLOT(undo()));
     actions->addAction("text_redo", m_editWidgetUI.synopRichTextWidget, SLOT(redo()));
-    actions->action("text_undo")->setIcon(KIcon("edit-undo"));
-    actions->action("text_redo")->setIcon(KIcon("edit-redo"));
+    actions->action("text_undo")->setIcon(koIcon("edit-undo"));
+    actions->action("text_redo")->setIcon(koIcon("edit-redo"));
     m_editWidgetUI.undoToolButton->setDefaultAction(actions->action("text_undo"));
     m_editWidgetUI.redoToolButton->setDefaultAction(actions->action("text_redo"));
 
