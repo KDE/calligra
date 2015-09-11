@@ -21,11 +21,8 @@
 
 #include "widgetfactory.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <kdialog.h>
-# include <keditlistwidget.h>
+#include <KEditListWidget>
+#include <KLocalizedString>
 
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -44,6 +41,11 @@
 #include <KPropertySet>
 #include <kexiutils/utils.h>
 
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QDebug>
+
 using namespace KFormDesigner;
 
 InternalPropertyHandlerInterface::InternalPropertyHandlerInterface()
@@ -58,7 +60,7 @@ InternalPropertyHandlerInterface::~InternalPropertyHandlerInterface()
 
 WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(
     const QByteArray& _classname, QWidget *_widget, Container *_container)
-    : classname(_classname), widget(_widget), container(_container), 
+    : classname(_classname), widget(_widget), container(_container),
       geometry(_widget ? _widget->geometry() : QRect()),
       alignment( Qt::AlignLeft ),
       useFrame( false ), multiLine( false ), execute( true ), transparentBackground( false )
@@ -75,7 +77,7 @@ public:
 
     WidgetLibrary *library;
 
-    WidgetInfoHash classesByName;
+    QHash<QByteArray, WidgetInfo*> classesByName;
     QSet<QByteArray>* hiddenClasses;
 
     //! i18n stuff
@@ -101,10 +103,9 @@ WidgetFactory::Private::~Private()
     delete hiddenClasses;
 }
 
-WidgetFactory::WidgetFactory(QObject *parent, const char *name)
+WidgetFactory::WidgetFactory(QObject *parent)
     : QObject(parent), d(new Private())
 {
-    setObjectName(QString("kformdesigner_") + name);
 }
 
 WidgetFactory::~WidgetFactory()
@@ -118,7 +119,7 @@ void WidgetFactory::addClass(WidgetInfo *w)
     if (oldw == w)
         return;
     if (oldw) {
-        kWarning() << "class with name '"
+        qWarning() << "class with name '"
             << w->className()
             << "' already exists for factory '" << objectName() << "'";
         return;
@@ -133,7 +134,7 @@ void WidgetFactory::hideClass(const char *classname)
     d->hiddenClasses->insert(QByteArray(classname).toLower());
 }
 
-const WidgetInfoHash& WidgetFactory::classes() const
+QHash<QByteArray, WidgetInfo*> WidgetFactory::classes() const
 {
     return d->classesByName;
 }
@@ -145,21 +146,38 @@ void WidgetFactory::disableFilter(QWidget *w, Container *container)
 
 bool WidgetFactory::editList(QWidget *w, QStringList &list) const
 {
-    KDialog dialog(w->topLevelWidget());
+    //! @todo KEXI3 port to QDialog
+#if 1
+    Q_UNUSED(w);
+    Q_UNUSED(list);
+#else
+    QDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setWindowTitle(i18nc("@title:window", "Edit Contents of %1", w->objectName()));
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog.setWindowTitle(xi18nc("@title:window", "Edit Contents of %1", w->objectName()));
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    dialog.setLayout(mainLayout);
     KEditListWidget *edit = new KEditListWidget(&dialog);
     edit->setObjectName("editlist");
-    dialog.setMainWidget(edit);
     edit->insertStringList(list);
+    mainLayout->addWidget(edit);
+
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mainLayout->addWidget(buttonBox);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
 
     if (dialog.exec() == QDialog::Accepted) {
         list = edit->items();
         return true;
     }
+#endif
     return false;
 }
 
@@ -186,11 +204,11 @@ WidgetFactory::editListWidget(QListWidget *listwidget) const
 void WidgetFactory::changeProperty(Form *form, QWidget *widget, const char *name, const QVariant &value)
 {
     if (form->selectedWidget()) { // single selection
-        form->propertySet().changePropertyIfExists(name, value);
+        form->propertySet()->changePropertyIfExists(name, value);
         widget->setProperty(name, value);
     }
     else {
-        // If eg multiple labels are selected, 
+        // If eg multiple labels are selected,
         // we only want to change the text of one of them (the one the user cliked on)
         if (widget) {
             widget->setProperty(name, value);
@@ -207,7 +225,7 @@ WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
 {
     if (multiple) {
         return property == "font" || property == "paletteBackgroundColor" || property == "enabled"
-               || property == "paletteForegroundColor" || property == "cursor" 
+               || property == "paletteForegroundColor" || property == "cursor"
                || property == "paletteBackgroundPixmap";
     }
 
@@ -359,4 +377,3 @@ void WidgetFactory::setValueDescription(const char *valueName, const QString &de
     d->propValDesc.insert(valueName, description);
 }
 
-#include "widgetfactory.moc"

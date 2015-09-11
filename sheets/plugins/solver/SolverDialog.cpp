@@ -57,5 +57,3 @@ void SolverDialog::finishDialog()
 {
     deleteLater();
 }
-
-#include "SolverDialog.moc"

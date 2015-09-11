@@ -123,5 +123,3 @@ Node *InsertFilePanel::afterNode() const
 
 
 }  //KPlato namespace
-
-#include "kptinsertfiledlg.moc"

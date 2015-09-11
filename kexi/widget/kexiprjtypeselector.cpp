@@ -18,12 +18,11 @@
  */
 
 #include "kexiprjtypeselector.h"
-
-#include <KoIcon.h>
-#include <QLabel>
-#include <db/driver.h>
-#include <db/utils.h>
+#include <KexiIcon.h>
 #include <core/kexi.h>
+
+#include <KDbDriver>
+#include <KDbUtils>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
         : QWidget(parent)
@@ -50,4 +49,3 @@ void KexiPrjTypeSelector::slotSelectionChanged(QAbstractButton *btn)
     frame_server->setEnabled(btn == option_server);
 }
 
-#include "kexiprjtypeselector.moc"

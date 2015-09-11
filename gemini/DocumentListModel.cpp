@@ -84,7 +84,10 @@ void SearchThread::run()
 }
 
 DocumentListModel::DocumentListModel(QObject *parent)
-    : QAbstractListModel(parent), m_groupBy(GroupByName)
+    : QAbstractListModel(parent)
+    , m_searchThread(0)
+    , m_groupBy(GroupByName)
+    , m_filter(UnknownType)
 {
     qRegisterMetaType<DocumentInfo>();
 
@@ -199,11 +202,11 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
 QString DocumentListModel::prettyTime(QDateTime theTime)
 {
     if( theTime.date().day() == QDateTime::currentDateTime().date().day() )
-        return KGlobal::locale()->formatDateTime( theTime, KLocale::FancyShortDate );
+        return KLocale::global()->formatDateTime( theTime, KLocale::FancyShortDate );
     else if( theTime.daysTo( QDateTime::currentDateTime() ) < 7 )
-        return KGlobal::locale()->formatDate( theTime.date(), KLocale::FancyShortDate );
+        return KLocale::global()->formatDate( theTime.date(), KLocale::FancyShortDate );
     else
-        return KGlobal::locale()->formatDate( theTime.date(), KLocale::ShortDate );
+        return KLocale::global()->formatDate( theTime.date(), KLocale::ShortDate );
 }
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const

@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kexidbslider.h"
-#include <knumvalidator.h>
 
 KexiDBSlider::KexiDBSlider(QWidget *parent)
     : KexiSlider(parent) , KexiFormDataItemInterface()
@@ -109,4 +108,3 @@ void KexiDBSlider::clear()
     KexiSlider::setValue(minimum());
 }
 
-#include "kexidbslider.moc"

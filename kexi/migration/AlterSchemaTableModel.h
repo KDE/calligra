@@ -21,11 +21,10 @@
 
 #include <QModelIndex>
 #include <QList>
-#include <db/RecordData.h>
 
-namespace KexiDB {
-class TableSchema;
-}
+#include <KDbRecordData>
+
+class KDbTableSchema;
 
 class AlterSchemaTableModel : public QAbstractTableModel
 {
@@ -38,18 +37,18 @@ class AlterSchemaTableModel : public QAbstractTableModel
         virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
         virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-        void setSchema(KexiDB::TableSchema*);
-        void setData(const QList<KexiDB::RecordData>& data);
-        void setRowCount(const int i);
+        void setSchema(KDbTableSchema*);
+        void setData(const QList<KDbRecordData>& data);
+        void setRecordCount(int i);
     private:
         //! Reimplemented just to avoid 'hidden' warnings
         virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) {
             return QAbstractTableModel::setData(index, value, role);
         }
 
-        KexiDB::TableSchema *m_schema;
-        QList<KexiDB::RecordData> m_data; //Small amount of data to display to user
-        int m_rowCount;
+        KDbTableSchema *m_schema;
+        QList<KDbRecordData> m_data; //Small amount of data to display to user
+        int m_recordCount;
 };
 
 #endif // ALTERSCHEMATABLEMODEL_H

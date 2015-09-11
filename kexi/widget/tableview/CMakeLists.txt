@@ -1,7 +1,4 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs   )
-
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core)
 
 ########### next target ###############
 
@@ -14,21 +11,22 @@ set(kexidatatable_LIB_SRCS
    KexiDataTableScrollArea.cpp
    KexiTableScrollAreaWidget.cpp
    kexicelleditorfactory.cpp
-   kexitableedit.cpp 
-   kexiinputtableedit.cpp 
-   kexiblobtableedit.cpp 
-   kexibooltableedit.cpp 
-   kexicomboboxbase.cpp 
-   kexicomboboxtableedit.cpp 
-   kexicomboboxpopup.cpp 
-   kexidatetableedit.cpp 
-   kexitimetableedit.cpp 
-   kexidatetimetableedit.cpp 
+   kexitableedit.cpp
+   kexiinputtableedit.cpp
+   kexiblobtableedit.cpp
+   kexibooltableedit.cpp
+   kexicomboboxbase.cpp
+   kexicomboboxtableedit.cpp
+   kexicomboboxpopup.cpp
+   kexidatetableedit.cpp
+   kexitimetableedit.cpp
+   kexidatetimetableedit.cpp
    kexitextformatter.cpp
 )
 
-
 add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
+
+generate_export_header(kexidatatable)
 
 target_link_libraries(
     kexidatatable
@@ -37,7 +35,7 @@ target_link_libraries(
     kexiutils
     kexiguiutils
 
-    Predicate
+    KDb
     KProperty
 
     KF5::KIOWidgets

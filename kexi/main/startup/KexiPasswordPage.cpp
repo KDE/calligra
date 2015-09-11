@@ -19,13 +19,13 @@
 
 #include "KexiPasswordPage.h"
 #include <widget/KexiPasswordWidget.h>
-#include <db/connectiondata.h>
 
-#include <KLocale>
-#include <KLineEdit>
+#include <KDbConnectionData>
 
+#include <KLocalizedString>
+
+#include <QLineEdit>
 #include <QVBoxLayout>
-#include <QFontMetrics>
 
 class KexiPasswordPage::Private
 {
@@ -41,7 +41,7 @@ KexiPasswordPage::KexiPasswordPage(const QString &title, QWidget* parent)
 }
 
 KexiPasswordPage::KexiPasswordPage(QWidget* parent)
-    : KexiAssistantPage(i18nc("@title:window", "Database Password"), QString(), parent), d(new Private)
+    : KexiAssistantPage(xi18nc("@title:window", "Database Password"), QString(), parent), d(new Private)
 {
     init();
 }
@@ -54,7 +54,7 @@ void KexiPasswordPage::init()
     d->widget = new KexiPasswordWidget(0,
         KexiPasswordWidget::ShowUsernameLine | KexiPasswordWidget::ShowDomainLine
         | KexiPasswordWidget::UsernameReadOnly | KexiPasswordWidget::DomainReadOnly);
-    KLineEdit *passEdit = d->widget->findChild<KLineEdit*>("passEdit");
+    QLineEdit *passEdit = d->widget->findChild<QLineEdit*>("passEdit");
     Q_ASSERT(passEdit);
     passEdit->setMaximumWidth(passEdit->fontMetrics().width("W")*24);
     lyr->addWidget(d->widget);
@@ -117,16 +117,16 @@ void KexiPasswordPage::setDatabaseName(const QString& databaseName)
     d->widget->setDatabaseName(databaseName);
 }
 
-void KexiPasswordPage::setConnectionData(const KexiDB::ConnectionData &data)
+void KexiPasswordPage::setConnectionData(const KDbConnectionData &data)
 {
-    setPassword(data.savePassword ? data.password : QString());
-    setUserName(data.userName);
-    setServer(data.serverInfoString(false));
+    setPassword(data.savePassword() ? data.password() : QString());
+    setUserName(data.userName());
+    setServer(data.toUserVisibleString(KDbConnectionData::NoUserVisibleStringOption));
 }
 
-void KexiPasswordPage::updateConnectionData(KexiDB::ConnectionData *data)
+void KexiPasswordPage::updateConnectionData(KDbConnectionData *data)
 {
     if (data) {
-        data->password = password();
+        data->setPassword(password());
     }
 }

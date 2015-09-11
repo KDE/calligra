@@ -20,7 +20,7 @@
 #ifndef KEXIRECENTPROJECTSMODEL_H
 #define KEXIRECENTPROJECTSMODEL_H
 
-#include <kcategorizedsortfilterproxymodel.h>
+#include <KCategorizedSortFilterProxyModel>
 #include <QAbstractListModel>
 
 class KexiRecentProjects;
@@ -30,8 +30,8 @@ class KexiRecentProjectsModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum AdditionalRoles {
-        NameRole = 0x9D419D49,
-        CategoryRole = 0xA2BEF158
+        NameRole = Qt::UserRole,
+        CategoryRole = Qt::UserRole + 1
     };
 
     explicit KexiRecentProjectsModel(const KexiRecentProjects& projects,
@@ -46,7 +46,7 @@ public:
 private:
     const KexiRecentProjects* m_projects;
 };
- 
+
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

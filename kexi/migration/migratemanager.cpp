@@ -23,22 +23,18 @@
 #include "migratemanager_p.h"
 #include "keximigrate.h"
 #include "keximigrate_p.h"
-
 #include <core/KexiMainWindowIface.h>
 
-#include <KoServiceLocator.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kservice.h>
+#include <QDebug>
+#include <QApplication>
 
 #include <assert.h>
 
-#include <QApplication>
-
 //remove debug
 #undef KexiDBDbg
-#define KexiDBDbg if (0) kDebug()
+#define KexiDBDbg if (0) qDebug()
 
 using namespace KexiMigration;
 
@@ -48,7 +44,7 @@ MigrateManagerInternal* MigrateManagerInternal::s_self = 0L;
  Temporary, needed because MigrateManagerInternal::m_drivers is autodeleted
  drivers currently own KexiMigrate::Data members so these are destroyed when
  last MigrateManager instance is deleted. Remove this hack when
- KexiMigrate is split into Driver and Connection. */
+ KexiMigrate is split into KDbDriver and KDbConnection. */
 MigrateManager __manager;
 
 MigrateManagerInternal::MigrateManagerInternal() /* protected */
@@ -101,16 +97,16 @@ bool MigrateManagerInternal::lookupDrivers()
         connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAppQuits()));
     }
 //! @todo for Qt-only version check for KComponentData wrapper
-//  KexiDBWarn << "cannot work without KComponentData (KGlobal::mainComponent()==0)!";
+//  qWarning() << "cannot work without KComponentData (KGlobal::mainComponent()==0)!";
 //  setError("Driver Manager cannot work without KComponentData (KGlobal::mainComponent()==0)!");
 
     lookupDriversNeeded = false;
-    clearError();
+    clearResult();
     KService::List tlist = KoServiceLocator::instance()->entries("Kexi/MigrationDriver");
     foreach(KService::Ptr ptr, tlist) {
         const QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
         if (srv_name.isEmpty()) {
-            KexiDBWarn << "X-Kexi-MigrationDriverName must be set for migration driver"
+            qWarning() << "X-Kexi-MigrationDriverName must be set for migration driver"
             << ptr->property("Name").toString() << "service!\n -- skipped!";
             continue;
         }
@@ -118,7 +114,7 @@ bool MigrateManagerInternal::lookupDrivers()
             continue;
         }
 
-//! @todo could be merged. Copied from KexiDB::DriverManager.
+//! @todo could be merged. Copied from KDbDriverManager.
 //<COPIED>
         QString srv_ver_str = ptr->property("X-Kexi-KexiMigrationVersion").toString();
         QStringList lst(srv_ver_str.split('.'));
@@ -129,7 +125,7 @@ bool MigrateManagerInternal::lookupDrivers()
         if (ok)
             minor_ver = lst[1].toUInt(&ok);
         if (!ok) {
-            KexiDBWarn << "problem with detecting" << srv_name.toLower() << "driver's version -- skipping it!";
+            qWarning() << "problem with detecting" << srv_name.toLower() << "driver's version -- skipping it!";
             possibleProblems += QString("\"%1\" migration driver has unrecognized version; "
                                         "required driver version is \"%2.%3\"")
                                 .arg(srv_name.toLower())
@@ -137,7 +133,7 @@ bool MigrateManagerInternal::lookupDrivers()
             continue;
         }
         if (!KexiMigration::version().matches(major_ver, minor_ver)) {
-            KexiDBWarn << QString("'%1' driver"
+            qWarning() << QString("'%1' driver"
                                   " has version '%2' but required migration driver version is '%3.%4'\n"
                                   " -- skipping this driver!").arg(srv_name.toLower()).arg(srv_ver_str)
             .arg(KexiMigration::version().major).arg(KexiMigration::version().minor);
@@ -156,7 +152,7 @@ bool MigrateManagerInternal::lookupDrivers()
                 if (!m_services_by_mimetype.contains(mime)) {
                     m_services_by_mimetype.insert(mime, ptr);
                 } else {
-                    KexiDBWarn << "more than one driver for" << mime << "mime type!";
+                    qWarning() << "more than one driver for" << mime << "mime type!";
                 }
             }
         }
@@ -166,7 +162,7 @@ bool MigrateManagerInternal::lookupDrivers()
     }
 
     if (tlist.isEmpty()) {
-        setError(ERR_DRIVERMANAGER, i18n("Could not find any import/export database drivers."));
+        setError(ERR_DRIVERMANAGER, xi18n("Could not find any import/export database drivers."));
         return false;
     }
     return true;
@@ -175,11 +171,11 @@ bool MigrateManagerInternal::lookupDrivers()
 KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 {
     if (!lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return 0;
     }
 
-    clearError();
+    clearResult();
     KexiDBDbg << "loading" << name;
 
     KexiMigrate *drv = name.isEmpty() ? 0 : m_drivers.value(name.toLatin1().toLower());
@@ -188,7 +184,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 
     if (!m_services_lcase.contains(name.toLower())) {
         setError(ERR_DRIVERMANAGER,
-                 i18n("Could not find import/export database driver \"%1\".", name));
+                 xi18n("Could not find import/export database driver \"%1\".", name));
         return 0;
     }
 
@@ -196,7 +192,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     KexiPluginLoader loader(ptr, "X-Kexi-MigrationDriverName");
     if (!KexiMigration::version().matches(loader.majorVersion(), loader.minorVersion())) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
-                 i18n(
+                 xi18n(
                      "Incompatible migration driver's \"%1\" version: found version %2, expected version %3.",
                      name,
                      QString("%1.%2").arg(loader.majorVersion()).arg(loader.minorVersion()),
@@ -207,10 +203,9 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     drv = loader.createPlugin<KexiMigrate>(this);
     if (!drv) {
         setError(ERR_DRIVERMANAGER,
-                 i18n("Could not load import/export database driver \"%1\".", name));
+                 xi18n("Could not load import/export database driver \"%1\".", name));
         return 0;
     }
-    KGlobal::locale()->insertCatalog("kexi" + name.toLower() + "driver");
 
     KexiDBDbg << "loading succeeded:" << name;
     KexiDBDbg << "drv=" << (long)drv;
@@ -257,17 +252,17 @@ MigrateManager::~MigrateManager()
 
 const QStringList MigrateManager::driverNames()
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return QStringList();
     }
     if (d_int->m_services.isEmpty()) {
-        kWarning() << "MigrateManager::ServicesMap is empty";
+        qWarning() << "MigrateManager::ServicesMap is empty";
         return QStringList();
     }
     if (d_int->error()) {
-        kWarning() << "Error:" << d_int->errorMsg();
+        qWarning() << "Error:" << d_int->errorMsg();
         return QStringList();
     }
     return d_int->m_services.keys();
@@ -275,16 +270,16 @@ const QStringList MigrateManager::driverNames()
 
 QString MigrateManager::driverForMimeType(const QString &mimeType)
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         setError(d_int);
         return 0;
     }
 
     KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.toLower()];
     if (!ptr) {
-        kWarning() << "No such mimetype" << mimeType;
+        qWarning() << "No such mimetype" << mimeType;
         return QString();
     }
 
@@ -293,10 +288,10 @@ QString MigrateManager::driverForMimeType(const QString &mimeType)
 
 KexiMigrate* MigrateManager::driver(const QString& name)
 {
-    clearError();
+    clearResult();
     KexiMigrate *drv = d_int->driver(name);
     if (d_int->error()) {
-        kWarning() << "Error:" << name << d_int->errorMsg();
+        qWarning() << "Error:" << name << d_int->errorMsg();
         setError(d_int);
     }
     return drv;
@@ -324,7 +319,7 @@ void MigrateManager::drv_clearServerResult()
     d_int->m_serverResultName.clear();
 }
 
-QString MigrateManager::possibleProblemsInfoMsg() const
+QString MigrateManager::possibleProblemsMessage() const
 {
     if (d_int->possibleProblems.isEmpty())
         return QString();
@@ -339,14 +334,12 @@ QString MigrateManager::possibleProblemsInfoMsg() const
     return str;
 }
 
-QList<QString> MigrateManager::supportedFileMimeTypes()
+QStringList MigrateManager::supportedFileMimeTypes()
 {
-    clearError();
+    clearResult();
     if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
+        qWarning() << "lookupDrivers failed";
         return QStringList();
     }
     return d_int->m_services_by_mimetype.keys();
 }
-
-#include "migratemanager_p.moc"

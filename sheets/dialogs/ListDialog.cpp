@@ -328,5 +328,3 @@ void ListDialog::slotCopy()
         d->list->addItem(d->list->currentItem()->text());
     }
 }
-
-#include "ListDialog.moc"

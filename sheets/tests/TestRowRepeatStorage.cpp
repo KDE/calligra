@@ -20,7 +20,7 @@
 
 #include <QVector>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "../RowRepeatStorage.h"
 #include "../calligra_sheets_limits.h"
@@ -650,6 +650,4 @@ void TestRowRepeatStorage::testRemoveShiftLeft()
     }
 }
 
-QTEST_KDEMAIN(TestRowRepeatStorage, NoGUI)
-
-#include "TestRowRepeatStorage.moc"
+QTEST_GUILESS_MAIN(TestRowRepeatStorage)

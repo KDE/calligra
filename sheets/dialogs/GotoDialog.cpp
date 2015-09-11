@@ -95,5 +95,3 @@ void GotoDialog::slotOk()
         m_nameCell->setItemText(m_nameCell->currentIndex(), "");
     }
 }
-
-#include "GotoDialog.moc"

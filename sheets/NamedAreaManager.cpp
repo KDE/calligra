@@ -298,5 +298,3 @@ QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
     }
     return element;
 }
-
-#include "NamedAreaManager.moc"

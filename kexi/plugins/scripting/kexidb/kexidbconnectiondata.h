@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/connection.h>
-#include <db/connectiondata.h>
+#include <KDbConnection>
+#include <KDbConnectionData>
 
 namespace Scripting
 {
@@ -37,9 +37,9 @@ class KexiDBConnectionData : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
+    KexiDBConnectionData(QObject* parent, KDbConnectionData* data, bool owner);
     virtual ~KexiDBConnectionData();
-    ::KexiDB::ConnectionData* data() {
+    KDbConnectionData* data() {
         return m_data;
     }
 
@@ -106,13 +106,13 @@ public Q_SLOTS:
     /** Return the database path. */
     const QString dbPath() const;
     /** Return the database filename. */
-    const QString dbFileName() const;
+    const QString databaseName() const;
 
     /** Return a user-friendly string representation. */
-    const QString serverInfoString() const;
+    const QString toUserVisibleString() const;
 
 private:
-    ::KexiDB::ConnectionData* m_data;
+    KDbConnectionData* m_data;
     QString m_dbname;
     bool m_owner;
 };

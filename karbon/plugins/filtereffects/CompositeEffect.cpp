@@ -74,11 +74,7 @@ QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilte
     }
 
     if (m_operation == Arithmetic) {
-#if QT_VERSION >= 0x040700
         const QRgb *src = (QRgb*)images[1].constBits();
-#else
-        const QRgb *src = (QRgb*)images[1].bits();
-#endif
         QRgb *dst = (QRgb*)result.bits();
         int w = result.width();
 

@@ -157,11 +157,7 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
 {
     QImage result = image;
 
-#if QT_VERSION >= 0x040700
     const QRgb *src = (const QRgb*)image.constBits();
-#else
-    const QRgb *src = (const QRgb*)image.bits();
-#endif
     QRgb *dst = (QRgb*)result.bits();
     int w = result.width();
 

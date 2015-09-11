@@ -20,6 +20,7 @@
 #include "LayoutFactoryRegistry.h"
 
 #include <QMap>
+
 #include "LayoutFactory.h"
 #include "Layout.h"
 #include "layouts/FreeLayout.h"

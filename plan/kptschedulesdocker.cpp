@@ -109,6 +109,3 @@ QDockWidget* SchedulesDockerFactory::createDockWidget()
 }
 
 } //namespace KPlato
-
-#include "kptschedulesdocker.moc"
-

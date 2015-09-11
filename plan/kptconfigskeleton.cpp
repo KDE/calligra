@@ -30,6 +30,3 @@ KPlatoConfigSkeleton::KPlatoConfigSkeleton()
 
 KPlatoConfigSkeleton::~KPlatoConfigSkeleton()
 {}
-
-
-#include "kptconfigskeleton.moc"

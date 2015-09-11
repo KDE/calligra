@@ -278,5 +278,3 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
 }
 
 }  //KPlato namespace
-
-#include "kptintervaledit.moc"

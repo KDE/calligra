@@ -19,16 +19,16 @@
 
 #include "WebShapePlugin.h"
 
-#include <klocale.h>
 #include <kpluginfactory.h>
+
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include "WebShapeFactory.h"
 #include "WebToolFactory.h"
 
-K_PLUGIN_FACTORY(WebShapePluginFactory, registerPlugin<WebShapePlugin>();)
-K_EXPORT_PLUGIN(WebShapePluginFactory("WebShapePlugin"))
+K_PLUGIN_FACTORY_WITH_JSON(WebShapePluginFactory, "braindump_shape_web.json", registerPlugin<WebShapePlugin>();)
+
 
 WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)
     : QObject(parent)

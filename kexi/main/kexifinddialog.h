@@ -20,11 +20,12 @@
 #ifndef KEXIFINDDIALOG_H
 #define KEXIFINDDIALOG_H
 
-#include <QDialog>
 #include "ui_kexifinddialog.h"
 #include <core/kexisearchandreplaceiface.h>
 
-class KAction;
+#include <QDialog>
+
+class QAction;
 
 //! @short A Kexi-specific "Find" dialog.
 /*! Also used for as replace dialog.
@@ -41,8 +42,8 @@ public:
     virtual ~KexiFindDialog();
 
     //! Sets actions that receive button clicks and shortcuts within the dialog. Should be called once.
-    void setActions(KAction *findnext, KAction *findprev,
-                    KAction *replace, KAction *replaceall);
+    void setActions(QAction *findnext, QAction *findprev,
+                    QAction *replace, QAction *replaceall);
 
     //! Shows the dialog as a modal dialog.
     virtual void show();
@@ -90,7 +91,7 @@ public Q_SLOTS:
     void setReplaceMode(bool set);
 
     /*! Sets object name for caption, so for example it will be set
-     to i18n("Find \"Persons\"")). */
+     to xi18n("Find \"Persons\"")). */
     void setObjectNameForCaption(const QString& name);
 
     /*! Enables of disables the find/replace/replace all buttons.

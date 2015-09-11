@@ -26,7 +26,7 @@
 #include <QDir>
 
 #ifdef HAS_POPPLER
-#include <poppler/qt5/poppler-qt5.h>
+#include <poppler-qt5.h>
 #endif
 
 class CompareView;

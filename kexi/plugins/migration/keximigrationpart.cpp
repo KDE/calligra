@@ -25,6 +25,8 @@
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 
+KEXI_PLUGIN_FACTORY(KexiMigrationPart, "kexi_migrationplugin.json")
+
 KexiMigrationPart::KexiMigrationPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
@@ -52,4 +54,4 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     return w;
 }
 
-K_EXPORT_KEXIPART_PLUGIN( KexiMigrationPart, migration )
+#include "keximigrationpart.moc"

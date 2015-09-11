@@ -1016,5 +1016,3 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KGan
 }
 
 } // namespace KPlato
-
-#include "kptganttitemdelegate.moc"

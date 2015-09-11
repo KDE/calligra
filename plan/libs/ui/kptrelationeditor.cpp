@@ -190,10 +190,10 @@ void RelationEditor::slotAddRelation()
     kDebug(planDbg());
 }
 
-void RelationEditor::edit( QModelIndex i )
+void RelationEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
-        QModelIndex p = m_view->model()->parent( i );
+//        QModelIndex p = m_view->model()->parent( i );
 //        m_view->setExpanded( p );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
@@ -224,5 +224,3 @@ KoPrintJob *RelationEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptrelationeditor.moc"

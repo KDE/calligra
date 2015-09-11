@@ -18,9 +18,10 @@
 
 #include "CategorizedItemDelegate.h"
 
+#include <QPainter>
+
 #include <kcategorydrawer.h>
 #include <kcategorizedsortfilterproxymodel.h>
-#include <QPainter>
 
 struct CategorizedItemDelegate::Private {
     QAbstractItemDelegate* fallback;
@@ -41,7 +42,8 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
-    d->categoryDrawer = new KCategoryDrawer;
+    // QT5TODO: Pass correct param to KCategoryDrawer
+    d->categoryDrawer = new KCategoryDrawer(0);
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {

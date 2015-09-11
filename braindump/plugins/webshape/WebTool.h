@@ -20,8 +20,9 @@
 #ifndef _WEB_TOOL_H_
 #define _WEB_TOOL_H_
 
-#include <KoToolBase.h>
 #include <QPointF>
+
+#include <KoToolBase.h>
 
 class WebShape;
 class KoShape;

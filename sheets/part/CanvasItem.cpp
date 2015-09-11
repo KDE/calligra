@@ -493,5 +493,3 @@ void CanvasItem::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
 {
     sheetView(sheet)->updateAccessedCellRange(location);
 }
-
-#include "CanvasItem.moc"

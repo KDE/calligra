@@ -224,5 +224,3 @@ QVariant ScriptingDataQueryView::selectedProperties() const
     }
     return lst;
 }
-
-#include "ScriptingWidgets.moc"

@@ -44,7 +44,7 @@
  * mdb_exit:
  *
  * Cleans up the LibMDB library.  This function should be called exactly once
- * by the calling program prior to exiting (or prior to final use of LibMDB 
+ * by the calling program prior to exiting (or prior to final use of LibMDB
  * functions).
  *
  **/

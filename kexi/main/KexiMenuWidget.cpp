@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.cpp from Qt 4.7
 
    Based on oxygenhelper.cpp
@@ -29,21 +29,18 @@
 */
 
 #include "KexiMenuWidget.h"
-#include <kcolorscheme.h>
-#include <kcolorutils.h>
-#include <kglobalsettings.h>
-#include <kiconloader.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KColorScheme>
+#include <KColorUtils>
+#include <KIconLoader>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
+#include <KLocalizedString>
 
+#include <QDebug>
 #include <QCache>
 #include <QStyle>
 #include <QEvent>
 #include <QTimer>
-#include <QLayout>
 #include <QMenu>
 #include <QPainter>
 #include <QApplication>
@@ -54,25 +51,29 @@
 #ifndef QT_NO_WHATSTHIS
 # include <QWhatsThis>
 #endif
-
-#include "KexiMenuWidget_p.h"
 #include <QWidgetAction>
-#include <QToolButton>
 #include <QPushButton>
 #include <QScopedPointer>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFontDatabase>
+
+#include <KColorScheme>
+
+#include "KexiMenuWidget_p.h"
 
 const int calligraLogoPixmapInternalWidth = 100;
 const int calligraLogoPixmapInternalHeight = 71;
 const char calligraUrl[] = "http://www.calligra.org";
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
  : _componentData("oxygen", 0, KComponentData::SkipMainComponentRegistration)
 {
     _config = _componentData.config();
-    _contrast = KGlobalSettings::contrastF(_config);
+    _contrast = KColorScheme::contrastF(_config);
     // background contrast is calculated so that it is 0.9
     // when KGlobalSettings contrast value of 0.7
     _bgcontrast = qMin(1.0, 0.9*_contrast/0.7);
@@ -357,6 +358,7 @@ void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
 }
 
 // </oxygen>
+#endif // 0
 
 class KexiMenuWidgetActionPrivate
 {
@@ -369,41 +371,39 @@ public:
 };
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
- : KAction(text, parent)
+ : QAction(text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
-KexiMenuWidgetAction::KexiMenuWidgetAction(const KIcon &icon, const QString &text,
+KexiMenuWidgetAction::KexiMenuWidgetAction(const QIcon &icon, const QString &text,
                                            QObject *parent)
- : KAction(icon, text, parent)
+ : QAction(icon, text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
-    QScopedPointer<KAction> tmp(KStandardAction::create(id, 0, 0, 0));
+    QScopedPointer<QAction> tmp(KStandardAction::create(id, 0, 0, 0));
     setIcon(tmp->icon());
     setText(tmp->text());
-    setShortcut(tmp->shortcut(DefaultShortcut), DefaultShortcut);
-    setShortcut(tmp->shortcut(ActiveShortcut), ActiveShortcut);
+    setShortcut(tmp->shortcut());
 }
-
 
 void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
-    //kDebug() << "^^^^" << objectName() << set;
+    //qDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -412,25 +412,20 @@ bool KexiMenuWidgetAction::persistentlySelected() const
     return d->persistentlySelected;
 }
 
-// from qobject_p.h
-class QBoolBlocker
-{
-public:
-    inline QBoolBlocker(bool &b, bool value=true):block(b), reset(b){block = value;}
-    inline ~QBoolBlocker(){block = reset; }
-private:
-    bool &block;
-    bool reset;
-};
-
 KexiMenuWidget *KexiMenuWidgetPrivate::mouseDown = 0;
 int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 
 void KexiMenuWidgetPrivate::init()
 {
+//! @todo KEXI3 port OxygenHelper
+#if 0
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
     bespin = oxygenHelper ? false : q->style()->objectName() == "bespin";
     qtcurve = oxygenHelper ? false : q->style()->objectName() == "qtcurve";
+#else
+    bespin = q->style()->objectName() == "bespin";
+    qtcurve = q->style()->objectName() == "qtcurve";
+#endif
 
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);
@@ -518,11 +513,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
     const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q),
               vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q),
               icone = KIconLoader::SizeMedium;
-#ifdef __GNUC__
-#warning todo adjust this size for smaller displays
-#else
-#pragma WARNING( todo adjust this size for smaller displays )
-#endif
+//! @todo KEXI3 adjust this size for smaller displays
               //style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
     const int fw = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
     const int deskFw = frameWidth(&opt);
@@ -543,7 +534,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
         hasCheckableItems |= action->isCheckable();
         QIcon is = action->icon();
         if (!is.isNull()) {
-            maxIconWidth = qMax<uint>(maxIconWidth, icone + 4);
+            maxIconWidth = qMax<int>(maxIconWidth, icone + 4);
         }
     }
 
@@ -968,7 +959,7 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
     }
 
     //figure out which scroll flags
-    uint newScrollFlags = QMenuScroller::ScrollNone;
+    int newScrollFlags = QMenuScroller::ScrollNone;
     if (newOffset < 0) //easy and cheap one
         newScrollFlags |= QMenuScroller::ScrollUp;
     int saccum = newOffset;
@@ -1201,7 +1192,7 @@ bool KexiMenuWidgetPrivate::mouseEventTaken(QMouseEvent *e)
 
 void KexiMenuWidgetPrivate::activateCausedStack(const QList<QPointer<QWidget> > &causedStack, QAction *action, QAction::ActionEvent action_e, bool self)
 {
-    QBoolBlocker guard(activationRecursionGuard);
+    KexiUtils::BoolBlocker guard(&activationRecursionGuard, true);
     if(self)
         action->activate(action_e);
 
@@ -1915,7 +1906,7 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
             pos.setY(screen.top() + desktopFrame);
         if (pos.y() + size.height() - 1 > screen.bottom() - desktopFrame) {
             if (d->scroll) {
-                d->scroll->scrollFlags |= uint(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown);
+                d->scroll->scrollFlags |= int(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown);
                 int y = qMax(screen.y(),pos.y());
                 size.setHeight(screen.bottom() - (desktopFrame * 2) - y);
             } else {
@@ -2089,10 +2080,10 @@ void KexiMenuWidgetPrivate::updateLogoPixmap()
     else {
         isLight = KexiUtils::isLightColorScheme();
     }
-    const QString calligraLogo = KStandardDirs::locate("data",
-        isLight
-         ? "kexi/pics/calligra-logo-white-glow.png"
-         : "kexi/pics/calligra-logo-black-glow.png");
+    const QString calligraLogo = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        isLight ? "kexi/pics/calligra-logo-white-glow.png"
+                : "kexi/pics/calligra-logo-black-glow.png");
     calligraLogoPixmap = QPixmap(calligraLogo);
 }
 
@@ -2163,7 +2154,7 @@ void KexiMenuWidgetPrivate::updateLogo()
         updateLogoPixmap();
         clickableLogoArea = new ClickableLogoArea(q);
         clickableLogoArea->setCursor(Qt::PointingHandCursor);
-        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", QLatin1String(calligraUrl)));
+        clickableLogoArea->setToolTip(xi18n("Visit Calligra home page at %1", QLatin1String(calligraUrl)));
     }
     clickableLogoArea->setGeometry(logoRect);
 }
@@ -2209,11 +2200,14 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     QPainter p(this);
     QRegion emptyArea = QRegion(rect());
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
     if (d->oxygenHelper) {
         //d->oxygenHelper->renderWindowBackground(&p, rect(), this, palette());
         d->oxygenHelper->renderMenuBackground(&p, rect(), this, palette());
 //        d->oxygenHelper->drawFloatFrame(&p, rect(), palette().window().color(), true);
     }
+#endif
 
     QStyleOptionMenuItem menuOpt;
     menuOpt.initFrom(this);
@@ -2241,7 +2235,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect.setX(opt.rect.width() - opt.lineWidth);
         opt.rect.setWidth(opt.lineWidth);
         style()->drawControl(QStyle::CE_ShapedFrame, &opt, &p);
-        
+
         /*
         QStyleOption opt;
         opt.initFrom(this);
@@ -2289,9 +2283,12 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
         bool transparentBackground = !(opt.state & QStyle::State_Selected);
+//! @todo KEXI3 port OxygenHelper
+#if 0
         if (d->oxygenHelper && action->isSeparator()) {
             transparentBackground = false;
         }
+#endif
         if (transparentBackground) {
             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
             if (!d->bespin) {
@@ -2366,7 +2363,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     style()->drawControl(QStyle::CE_MenuEmptyArea, &menuOpt, &p, this);
 
     // version
-    p.setFont(KGlobalSettings::smallestReadableFont());
+    p.setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     QColor textColor;
     textColor = palette().color(QPalette::Base);
     p.setPen(QPen(textColor));
@@ -2438,10 +2435,10 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-    //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
+    //qDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
         if (!action->menu()){
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
             //On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
 #endif
@@ -2586,7 +2583,7 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
         else if (key == Qt::Key_Right)
             key = Qt::Key_Left;
     }
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     if (key == Qt::Key_Tab) //means down
         key = Qt::Key_Down;
     if (key == Qt::Key_Backtab) //means up
@@ -2805,10 +2802,12 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
 
         d->setSyncAction();
 
-        if (d->currentAction->menu())
-            ; /*d->popupAction(d->currentAction, 0, true);*/
-        else
+        if (d->currentAction->menu()) {
+            /*d->popupAction(d->currentAction, 0, true);*/
+        }
+        else {
             d->activateAction(d->currentAction, QAction::Trigger);
+        }
         key_consumed = true;
         break; }
 
@@ -3097,7 +3096,7 @@ void KexiMenuWidget::internalDelayedPopup()
 */
 void KexiMenuWidget::setNoReplayFor(QWidget *noReplayFor)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->noReplayFor = noReplayFor;
 #else
     Q_UNUSED(noReplayFor);

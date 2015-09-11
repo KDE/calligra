@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <KLocalizedString>
+
+#include <KoIcon.h>
+
 #include "WebToolFactory.h"
 #include "WebTool.h"
 #include "WebShape.h"
-
-#include <KoIcon.h>
-#include <klocale.h>
 
 WebToolFactory::WebToolFactory()
     : KoToolFactoryBase("WebToolFactoryID")

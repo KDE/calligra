@@ -27,7 +27,6 @@
 #include "kexipart.h"
 #include "KexiView.h"
 
-#include <QPointer>
 #include <QEvent>
 #include <QCloseEvent>
 
@@ -105,7 +104,7 @@ public:
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
-    virtual QString itemIconName();
+    virtual QString iconName();
 
     /*! \return true if this dialog supports switching to \a mode.
      \a mode is one of Kexi::ViewMode enum elements.
@@ -150,15 +149,14 @@ public:
      or NULL if there is no view set (or the view has no set assigned). */
     KPropertySet *propertySet();
 
-    KexiDB::SchemaData* schemaData() const;
+    //! @return schema object associated with this window
+    KDbObject* schemaObject() const;
 
-    void setSchemaData(KexiDB::SchemaData* schemaData);
-
-    //! Sets 'owned' property for schema data.
-    //! If true, the window will delete the schema data before destruction.
-    //! By default schema data is not owned.
-    //! @see setSchemaData(), KexiPart::loadSchemaData(), KexiPart::loadAndSetSchemaData()
-    void setSchemaDataOwned(bool set);
+    //! Sets 'owned' property for object data.
+    //! If true, the window will delete the object data before destruction.
+    //! By default object data is not owned.
+    //! @see setSchemaObject(), KexiPart::loadSchemaObject(), KexiPart::loadAndSetSchemaObject()
+    void setSchemaObjectOwned(bool set);
 
     /*! Used by KexiView subclasses. \return temporary data shared between
      views */
@@ -193,19 +191,19 @@ public Q_SLOTS:
     /*! Internal. Called by KexiMainWindow::saveObject().
      Tells this dialog to create and store data of the new object
      to the backend.
-     Object's schema data has been never stored,
+     Object's object data has been never stored,
      so it is created automatically, using information obtained
      form part item. On success, part item's ID is updated to new value,
-     and schema data is set. \sa schemaData().
+     and object data is set. \sa schemaObject().
      \return true on success, false on failure and cancelled when storing has been cancelled. */
     tristate storeNewData(KexiView::StoreNewDataOptions options = 0);
 
     /*! Internal. Called by KexiMainWindow::saveObject().
      Tells this dialog to create and store a copy of data of existing object to the backend.
-     Object's schema data has been never stored,
+     Object data has been never stored,
      so it is created automatically, using information obtained
      form the part item. On success, part item's ID is updated to new value,
-     and schema data is set. \sa schemaData().
+     and object data is set. \sa schemaObject().
      \return true on success, false on failure and cancelled when storing has been cancelled. */
     tristate storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOptions options);
 
@@ -249,8 +247,8 @@ protected Q_SLOTS:
 
 protected:
     //! Used by KexiPart::Part
-    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
-               KexiPart::Item& item);
+    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part *part,
+               KexiPart::Item *item);
 
     //! Used by KexiInternalPart
     KexiWindow();
@@ -260,7 +258,7 @@ protected:
      Only used for parts of class KexiPart::StaticPart. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode,
                               QMap<QString, QVariant>* staticObjectArgs,
-                              bool& proposeOpeningInTextViewModeBecauseOfProblems);
+                              bool *proposeOpeningInTextViewModeBecauseOfProblems);
 
     void registerWindow();
 
@@ -290,6 +288,9 @@ protected:
     //! Used by KexiView
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
+
+    //! Sets schema object associated with this window to @a schemaObject
+    void setSchemaObject(KDbObject* schemaObject);
 
 private Q_SLOTS:
     /*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()

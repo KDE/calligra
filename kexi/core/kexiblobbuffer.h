@@ -22,15 +22,11 @@
 
 #include <QObject>
 #include <QPixmap>
+#include <QUrl>
 
-#include <kurl.h>
+#include "kexicore_export.h"
 
-#include <kexi_export.h>
-
-namespace KexiDB
-{
-class Connection;
-}
+class KDbConnection;
 
 //! Application-wide buffer for local BLOB data like pixmaps.
 /*! For now only pixmaps are supported
@@ -91,7 +87,7 @@ public:
     //! Access to KexiBLOBBuffer singleton
     static KexiBLOBBuffer* self();
 
-    static void setConnection(KexiDB::Connection *conn);
+    static void setConnection(KDbConnection *conn);
 
     //! Object handle used by KexiBLOBBuffer
     class KEXICORE_EXPORT Handle
@@ -165,7 +161,7 @@ public:
      and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from
      external source, so stored() will be equal to false for returned handle.
      \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
-    Handle insertPixmap(const KUrl& url);
+    Handle insertPixmap(const QUrl &url);
 
     /*! Inserts a new BLOB data.
      @param data The data for BLOB object.
@@ -219,7 +215,7 @@ private:
         QString name;
         QString caption; //!< @todo for future use within image gallery
         QString mimeType;
-        uint refs;
+        int refs;
         Id_t id;
         Id_t folderId;
         bool stored;

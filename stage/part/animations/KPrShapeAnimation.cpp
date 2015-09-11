@@ -216,12 +216,12 @@ void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::PresetClass presetClas
     m_class = presetClass;
 }
 
-void KPrShapeAnimation::setId(QString id)
+void KPrShapeAnimation::setId(const QString &id)
 {
     m_id = id;
 }
 
-void KPrShapeAnimation::setPresetSubType(QString subType)
+void KPrShapeAnimation::setPresetSubType(const QString &subType)
 {
     m_presetSubType = subType;
 }

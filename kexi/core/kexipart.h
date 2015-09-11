@@ -24,17 +24,17 @@
 #include <QObject>
 #include <QMap>
 
-#include <db/tristate.h>
-#include <db/pluginloader.h>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexipartbase.h"
+
+#include <KDbTristate>
 
 class KActionCollection;
 class KexiWindow;
 class KexiWindowData;
 class KexiView;
-class KAction;
-class KShortcut;
+class QAction;
+class QKeySequence;
 
 namespace KexiPart
 {
@@ -44,10 +44,10 @@ class StaticPartInfo;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectType {
-    UnknownObjectType = KexiDB::UnknownObjectType, //!< -1, helper
-    AnyObjectType = KexiDB::AnyObjectType,         //!<  0, helper
-    TableObjectType = KexiDB::TableObjectType,     //!<  1, like in KexiDB::ObjectType
-    QueryObjectType = KexiDB::QueryObjectType,     //!<  2, like in KexiDB::ObjectType
+    UnknownObjectType = KDb::UnknownObjectType, //!< -1, helper
+    AnyObjectType = KDb::AnyObjectType,         //!<  0, helper
+    TableObjectType = KDb::TableObjectType,     //!<  1, like in KDb::ObjectType
+    QueryObjectType = KDb::QueryObjectType,     //!<  2, like in KDb::ObjectType
     FormObjectType = 3,
     ReportObjectType = 4,
     ScriptObjectType = 5,
@@ -99,7 +99,7 @@ public:
      \a viewMode is one of Kexi::ViewMode enum.
      \a staticObjectArgs can be passed for static Kexi Parts.
      The new widget will be a child of \a parent. */
-    KexiWindow* openInstance(QWidget* parent, KexiPart::Item &item,
+    KexiWindow* openInstance(QWidget* parent, KexiPart::Item *item,
                              Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
@@ -116,8 +116,8 @@ public:
      You shouldn't use by hand transactions here.
 
      Default implementation just removes object from kexi__* system structures
-     at the database backend using KexiDB::Connection::removeObject(). */
-    virtual tristate remove(KexiPart::Item & item);
+     at the database backend using KDbConnection::removeObject(). */
+    virtual tristate remove(KexiPart::Item *item);
 
     /*! Renames stored data pointed by \a item to \a newName
      (example: table name is altered in the database).
@@ -130,7 +130,7 @@ public:
      You shouldn't use by hand transactions here.
 
      Default implementation does nothing and returns true. */
-    virtual tristate rename(KexiPart::Item &item, const QString& newName);
+    virtual tristate rename(KexiPart::Item *item, const QString& newName);
 
     /*! Creates and returns a new temporary data for a window  \a window.
      This method is called on openInstance() once per dialog.
@@ -141,7 +141,7 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a dialog. */
     virtual KexiView* createView(QWidget *parent, KexiWindow *window,
-                                 KexiPart::Item &item,
+                                 KexiPart::Item *item,
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
@@ -177,7 +177,7 @@ public:
      * or a temporary unsaved query if there are unsaved modifications.
      * The query can be used for example by data exporting routines so user can
      * export result of a running unsaved query without prior saving it. For implementation in plugins. */
-    virtual KexiDB::QuerySchema *currentQuery(KexiView* view);
+    virtual KDbQuerySchema *currentQuery(KexiView* view);
 
     /*! @internal
      Creates GUIClients for this part, attached to the main window.
@@ -213,50 +213,50 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    /*! Can be reimplemented if schema data is extended behind the default set of properties.
+    /*! Can be reimplemented if object data is extended behind the default set of properties.
      This is the case for table and query schema objects,
-     where object of KexiDB::SchemaData subclass is returned.
+     where object of KDbObject subclass is returned.
      In this case value pointed by @a ownedByWindow is set to false.
      Default implemenatation owned (value pointed by @a ownedByWindow is set to true). */
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
-            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KDbObject* loadSchemaObject(KexiWindow *window,
+            const KDbObject& object, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
-    bool loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID = QString());
+    bool loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID = QString());
 
     /*! Creates shared action for action collection declared
      for 'instance actions' of this part.
      See KexiSharedActionHost::createSharedAction() for details.
-     Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
-     that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedAction(Kexi::ViewMode mode, const QString &text,
-                                const QString &pix_name, const KShortcut &cut, const char *name,
+     Pass desired QAction subclass with \a subclassName (e.g. "KToggleAction") to have
+     that subclass allocated instead just QAction (what is the default). */
+    QAction * createSharedAction(Kexi::ViewMode mode, const QString &text,
+                                const QString &pix_name, const QKeySequence &cut, const char *name,
                                 const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action. */
-    KAction* createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
-                                      const QString &pix_name, const KShortcut &cut, const char *name);
+    QAction * createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+                                      const QString &pix_name, const QKeySequence &cut, const char *name);
 
     /*! Creates shared action for action collection declared
      for 'part actions' of this part.
      See KexiSharedActionHost::createSharedAction() for details.
-     Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
-     that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedPartAction(const QString &text,
-                                    const QString &pix_name, const KShortcut &cut, const char *name,
+     Pass desired QAction subclass with \a subclassName (e.g. "KToggleAction") to have
+     that subclass allocated instead just QAction (what is the default). */
+    QAction * createSharedPartAction(const QString &text,
+                                    const QString &pix_name, const QKeySequence &cut, const char *name,
                                     const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action
      for 'part actions' of this part. */
-    KAction* createSharedPartToggleAction(const QString &text,
-                                          const QString &pix_name, const KShortcut &cut, const char *name);
+    QAction * createSharedPartToggleAction(const QString &text,
+                                          const QString &pix_name, const QKeySequence &cut, const char *name);
 
     void setActionAvailable(const char *action_name, bool avail);
 
 private:
-    //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
+    //! Calls loadSchemaObject() (virtual), updates ownership of object data for @a window
     //! and assigns the created data to @a window.
-    void loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
-                              Kexi::ViewMode viewMode);
+    void loadAndSetSchemaObject(KexiWindow *window, const KDbObject& object,
+                               Kexi::ViewMode viewMode);
 
     Q_DISABLE_COPY(Part)
 

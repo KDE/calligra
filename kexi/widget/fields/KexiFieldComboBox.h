@@ -20,12 +20,10 @@
 #ifndef KEXIFIELDCOMBOBOX_H
 #define KEXIFIELDCOMBOBOX_H
 
-#include <kcombobox.h>
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 
-namespace KexiDB
-{
-}
+#include <KComboBox>
+
 class KexiProject;
 
 /*! This widget provides a list of fields from a table or query

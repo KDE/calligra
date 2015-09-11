@@ -346,5 +346,3 @@ KoPrintJob *AccountsEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptaccountseditor.moc"

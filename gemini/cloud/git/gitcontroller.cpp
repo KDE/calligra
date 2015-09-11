@@ -629,5 +629,3 @@ void GitController::pull()
     d->opThread->setAutoDelete(true);
     QThreadPool::globalInstance()->start(d->opThread);
 }
-
-#include "gitcontroller.moc"

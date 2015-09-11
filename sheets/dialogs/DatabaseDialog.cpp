@@ -1034,7 +1034,4 @@ void DatabaseDialog::tableViewClicked(QListWidgetItem *)
 //   kDebug() <<"clicked";
 }
 
-
-#include "DatabaseDialog.moc"
-
 #endif // QT_NO_SQL

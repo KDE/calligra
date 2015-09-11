@@ -319,5 +319,3 @@ namespace RtfReader
 	}
     }
 }
-
-#include "rtfreader.moc"

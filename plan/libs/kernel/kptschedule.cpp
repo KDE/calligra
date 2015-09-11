@@ -2064,5 +2064,3 @@ QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log )
     dbg.nospace()<<"Schedule::Log: "<<log.formatMsg();
     return dbg.space();
 }
-
-#include "kptschedule.moc"

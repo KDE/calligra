@@ -25,20 +25,17 @@
 #include "KexiLinkButton.h"
 #include "KexiCloseButton.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
-#include <kacceleratormanager.h>
-#include <kstandardguiitem.h>
-#include <klocale.h>
+#include <KAcceleratorManager>
+#include <KStandardGuiItem>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QPointer>
-#include <QEvent>
-
-#include <kdebug.h>
 
 class KexiAssistantPage::Private {
-public:    
+public:
     explicit Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
     {
     }
@@ -70,14 +67,14 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
                     QLatin1String("KexiAssistantPage:back"),
                     KStandardGuiItem::back().plainText(), q);
                 (*button)->setFormat(
-                    i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
+                    xi18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
             }
             else {
                 *button = new KexiLinkWidget(
                     QLatin1String("KexiAssistantPage:next"),
-                    i18nc("Button text: Next page in assistant (wizard)", "Next"), q);
+                    xi18nc("Button text: Next page in assistant (wizard)", "Next"), q);
                 (*button)->setFormat(
-                    i18nc("Next button arrow: next button in assistant (wizard)", "%L ›"));
+                    xi18nc("Next button arrow: next button in assistant (wizard)", "%L ›"));
             }
             int space = (*button)->fontMetrics().height() / 2;
             Qt::Alignment align;
@@ -121,7 +118,7 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
-    
+
     d->cancelButton = new KexiCloseButton;
     connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
@@ -225,4 +222,3 @@ QString KexiAssistantPage::description() const
     return d->descriptionLabel->text();
 }
 
-#include "KexiAssistantPage.moc"

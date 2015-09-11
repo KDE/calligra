@@ -17,19 +17,22 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include <QLayout>
-#include <QLabel>
-#include <QMetaObject>
 #include <QClipboard>
 #include <QApplication>
 #include <QDomDocument>
 #include <QStackedWidget>
+#include <QDebug>
+#include <QMimeData>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kacceleratormanager.h>
+#include <KMessageBox>
+#include <KAcceleratorManager>
+#include <KLocalizedString>
 
+#include <KPropertySet>
+
+#include "kformdesigner_export.h"
 #include "WidgetInfo.h"
 #include "formIO.h"
 #include "container.h"
@@ -39,8 +42,6 @@
 #include "events.h"
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
-#include <KProperty>
-#include <KPropertySet>
 #include <kexiutils/utils.h>
 
 #include "commands.h"
@@ -85,11 +86,11 @@ void Command::redo()
 
 void Command::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c)
+//! qDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c)
 {
     dbg.nospace() << "Command";
     const int count = c.childCount();
@@ -163,7 +164,7 @@ void PropertyCommand::init()
 
 void PropertyCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 Form* PropertyCommand::form() const
@@ -227,7 +228,7 @@ void PropertyCommand::execute()
             }
         }
     }
-    d->form->propertySet().changeProperty(d->propertyName, d->value);
+    d->form->propertySet()->changeProperty(d->propertyName, d->value);
     d->form->setUndoing(false);
 }
 
@@ -247,13 +248,13 @@ void PropertyCommand::undo()
         WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
         QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
         if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName)) {
-            //kDebug() << "OLD" << d->propertyName << subWidget->property(d->propertyName);
-            //kDebug() << "NEW" << d->propertyName << it.value();
+            qDebug() << "OLD" << d->propertyName << subWidget->property(d->propertyName);
+            qDebug() << "NEW" << d->propertyName << it.value();
             subWidget->setProperty(d->propertyName, it.value());
         }
     }
 
-    d->form->propertySet().changeProperty(d->propertyName, d->oldValues.constBegin().value());
+    d->form->propertySet()->changeProperty(d->propertyName, d->oldValues.constBegin().value());
     d->form->setUndoing(false);
 }
 
@@ -295,7 +296,7 @@ QVariant PropertyCommand::oldValue() const
     return d->oldValues.constBegin().value();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
 {
     dbg.nospace() << "PropertyCommand text=" << c.text() << "widgets=" << c.oldValues().keys()
         << "value=" << c.value() << "oldValues=" << c.oldValues().values();
@@ -344,7 +345,7 @@ int GeometryPropertyCommand::id() const
 
 void GeometryPropertyCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void GeometryPropertyCommand::execute()
@@ -396,7 +397,7 @@ QPoint GeometryPropertyCommand::oldPos() const
     return d->oldPos;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPropertyCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPropertyCommand &c)
 {
     dbg.nospace() << "GeometryPropertyCommand pos=" << c.pos() << "oldPos=" << c.oldPos()
         << "widgets=" << c.d->names;
@@ -420,14 +421,14 @@ public:
 };
 }
 
-AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment, 
+AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment,
                                          const QWidgetList &list, Command *parent)
         : Command(parent), d( new Private )
 {
     d->form = &form;
     d->alignment = alignment;
     foreach (QWidget *w, list) {
-        d->pos.insert(w->objectName().toLatin1().constData(), w->pos());
+        d->pos.insert(qPrintable(w->objectName()), w->pos());
     }
 
     switch (d->alignment) {
@@ -462,7 +463,7 @@ int AlignWidgetsCommand::id() const
 
 void AlignWidgetsCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void AlignWidgetsCommand::execute()
@@ -555,14 +556,14 @@ void AlignWidgetsCommand::undo()
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
         if (item && item->widget())
         {
-            item->widget()->move(d->pos.value(item->widget()->objectName().toLatin1().constData()));
+            item->widget()->move(d->pos.value(qPrintable(item->widget()->objectName())));
             // we restore selection
             d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection | Form::Raise);
         }
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidgetsCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidgetsCommand &c)
 {
     dbg.nospace() << "AlignWidgetsCommand text=" << c.text() << "form=" << c.d->form->widget()->objectName()
         << "widgets=" << c.d->pos.keys();
@@ -600,9 +601,9 @@ AdjustSizeCommand::AdjustSizeCommand(Form& form, Adjustment type, const QWidgetL
                 w = w->parentWidget();
         }
 
-        d->sizes.insert(w->objectName().toLatin1().constData(), w->size());
+        d->sizes.insert(qPrintable(w->objectName()), w->size());
         if (d->type == SizeToGrid) // SizeToGrid also move widgets
-            d->pos.insert(w->objectName().toLatin1().constData(), w->pos());
+            d->pos.insert(qPrintable(w->objectName()), w->pos());
     }
 
     switch (d->type) {
@@ -640,7 +641,7 @@ int AdjustSizeCommand::id() const
 
 void AdjustSizeCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void AdjustSizeCommand::execute()
@@ -805,16 +806,16 @@ void AdjustSizeCommand::undo()
     for (QHash<QByteArray, QSize>::ConstIterator it = d->sizes.constBegin(); it != endIt; ++it) {
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
         if (item && item->widget()) {
-            item->widget()->resize(d->sizes[item->widget()->objectName().toLatin1().constData()]);
+            item->widget()->resize(d->sizes[qPrintable(item->widget()->objectName())]);
             if (d->type == SizeToGrid)
-                item->widget()->move(d->pos[item->widget()->objectName().toLatin1().constData()]);
-            d->form->selectWidget(item->widget(), 
+                item->widget()->move(d->pos[qPrintable(item->widget()->objectName())]);
+            d->form->selectWidget(item->widget(),
                 Form::AddToPreviousSelection | Form::LastSelection | Form::Raise); // restore selection
         }
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AdjustSizeCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AdjustSizeCommand &c)
 {
     dbg.nospace() << "AdjustSizeCommand text=" << c.text() << "form="
         << c.d->form->widget()->objectName() << "widgets=" << c.d->sizes.keys();
@@ -846,13 +847,13 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container, Command *pa
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
-    //kDebug() << "containerName:" << d->containerName;
+    //qDebug() << "containerName:" << d->containerName;
     d->_class = d->form->selectedClass();
     d->pos = container.selectionOrInsertingBegin();
     d->widgetName = d->form->objectTree()->generateUniqueName(
                  d->form->library()->namePrefix(d->_class).toLatin1(),
                  /* !numberSuffixRequired */false);
-    //kDebug() << "widgetName:" << d->widgetName;
+    //qDebug() << "widgetName:" << d->widgetName;
     d->insertRect = container.selectionOrInsertingRectangle();
     init();
 }
@@ -864,11 +865,11 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
-    //kDebug() << "containerName:" << d->containerName;
+    //qDebug() << "containerName:" << d->containerName;
     d->_class = className;
     d->pos = pos;
     //d->insertRect is null (default)
-    //kDebug() << "namePrefix:" << namePrefix;
+    //qDebug() << "namePrefix:" << namePrefix;
     if (namePrefix.isEmpty()) {
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      d->form->library()->namePrefix(d->_class).toLatin1());
@@ -876,7 +877,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      namePrefix, false /* !numberSuffixRequired */);
     }
-    //kDebug() << "widgetName:" << d->widgetName;
+    //qDebug() << "widgetName:" << d->widgetName;
     init();
 }
 
@@ -892,7 +893,7 @@ int InsertWidgetCommand::id() const
 
 void InsertWidgetCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void InsertWidgetCommand::init()
@@ -942,10 +943,10 @@ void InsertWidgetCommand::execute()
         d->form->abortWidgetInserting();
         WidgetInfo *winfo = d->form->library()->widgetInfoForClassName(d->_class);
         KMessageBox::sorry(d->form ? d->form->widget() : 0,
-                           i18n("Could not insert widget of type \"%1\". "
+                           xi18n("Could not insert widget of type \"%1\". "
                                 "A problem with widget's creation encountered.",
                                 winfo ? winfo->name() : QString()));
-        kWarning() << "widget creation failed";
+        qWarning() << "widget creation failed";
         return;
     }
     Q_ASSERT(!w->objectName().isEmpty());
@@ -996,7 +997,7 @@ void InsertWidgetCommand::execute()
     // it's already created in Container's constructor
     ObjectTreeItem *item = d->form->objectTree()->lookup(d->widgetName);
     if (!item) { //not yet created...
-        //kDebug() << "Creating ObjectTreeItem:";
+        //qDebug() << "Creating ObjectTreeItem:";
         item = new ObjectTreeItem(d->form->library()->displayName(d->_class), d->widgetName, w, container);
         d->form->objectTree()->addItem(container->objectTree(), item);
     }
@@ -1027,7 +1028,7 @@ void InsertWidgetCommand::execute()
             w->metaObject()->className(), w, item->container() ? item->container() : container);
     }
 //! @todo update widget's width for entered text's metrics
-    //kDebug() << "widget added " << this;
+    //qDebug() << "widget added " << this;
 }
 
 void InsertWidgetCommand::undo()
@@ -1040,7 +1041,7 @@ void InsertWidgetCommand::undo()
     container->deleteWidget(widget);
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertWidgetCommand &c)
 {
     dbg.nospace() << "InsertWidgetCommand text=" << c.text() << "generatedName=" << c.d->widgetName
         << "container=" << c.d->containerName
@@ -1126,7 +1127,7 @@ int PasteWidgetCommand::id() const
 
 void PasteWidgetCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void PasteWidgetCommand::execute()
@@ -1142,12 +1143,12 @@ void PasteWidgetCommand::execute()
     bool parsed = domDoc.setContent(d->data, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kWarning() << errMsg;
-        kWarning() << "line: " << errLine << "col: " << errCol;
+        qWarning() << errMsg;
+        qWarning() << "line: " << errLine << "col: " << errCol;
         return;
     }
 
-    //kDebug() << domDoc.toString();
+    //qDebug() << domDoc.toString();
     if (!domDoc.firstChildElement("UI").hasChildNodes()) // nothing in the doc
         return;
 
@@ -1155,8 +1156,8 @@ void PasteWidgetCommand::execute()
     if (el.isNull())
         return;
     QDomNode n;
-    for (n = el.nextSibling(); !n.isNull() && n.toElement().tagName() != "widget"; n = n.nextSibling())
-        ;
+    for (n = el.nextSibling(); !n.isNull() && n.toElement().tagName() != "widget"; n = n.nextSibling()) {
+    }
     if (n.isNull()) {
         // only one "widget" child tag, so we can paste it at cursor pos
         QDomElement el = domDoc.firstChildElement("UI").firstChildElement("widget").toElement();
@@ -1207,8 +1208,8 @@ void PasteWidgetCommand::execute()
             }
             else {
                 moveWidgetBy(
-                    el, container, 
-                    QPoint(-minX, -minY) + d->pos // fix position by subtracting the original 
+                    el, container,
+                    QPoint(-minX, -minY) + d->pos // fix position by subtracting the original
                                                   // offset and adding the new one
                 );
             }
@@ -1307,7 +1308,7 @@ void PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, con
     int rw = wi.text().toInt();
     int rh = h.text().toInt();
     QRect r(rx + p.x(), ry + p.y(), rw, rh);
-    //kDebug() << "Moving widget by " << p << "from " << rx << ry << "to" << r.topLeft();
+    //qDebug() << "Moving widget by " << p << "from " << rx << ry << "to" << r.topLeft();
 
     QWidget *w = d->form->widget()->childAt(r.x() + 6, r.y() + 6);
 
@@ -1363,7 +1364,7 @@ PasteWidgetCommand::fixNames(QDomElement &el)
     }
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PasteWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PasteWidgetCommand &c)
 {
     dbg.nospace() << "PasteWidgetCommand pos=" << c.d->pos
         << "widgets=" << c.d->names << "container=" << c.d->containerName
@@ -1411,7 +1412,7 @@ int DeleteWidgetCommand::id() const
 
 void DeleteWidgetCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void DeleteWidgetCommand::execute()
@@ -1460,7 +1461,7 @@ void DeleteWidgetCommand::undo()
     d->form->setInteractiveMode(true);
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DeleteWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DeleteWidgetCommand &c)
 {
     dbg.nospace() << "DeleteWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName();
@@ -1492,8 +1493,8 @@ public:
 }
 
 DuplicateWidgetCommand::DuplicateWidgetCommand(
-    const Container& container, 
-    const QWidgetList &list, 
+    const Container& container,
+    const QWidgetList &list,
     const QPoint& copyToPoint,
     Command *parent)
         : Command(parent), d( new Private )
@@ -1519,7 +1520,7 @@ int DuplicateWidgetCommand::id() const
 
 void DuplicateWidgetCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void DuplicateWidgetCommand::execute()
@@ -1532,7 +1533,7 @@ void DuplicateWidgetCommand::undo()
     d->pasteCommand->undo();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DuplicateWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DuplicateWidgetCommand &c)
 {
     dbg.nospace() << "DuplicateWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName();
@@ -1578,7 +1579,7 @@ int CutWidgetCommand::id() const
 
 void CutWidgetCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void CutWidgetCommand::execute()
@@ -1597,7 +1598,7 @@ void CutWidgetCommand::undo()
     cb->setMimeData( d2->data ); // restore prev. clipboard contents
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
 {
     dbg.nospace() << "CutWidgetCommand containers=" << c.d->containers.keys()
         << "parents=" << c.d->parents.keys() << "form=" << c.d->form->widget()->objectName()
@@ -1635,7 +1636,7 @@ int PropertyCommandGroup::id() const
 
 void PropertyCommandGroup::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void PropertyCommandGroup::execute()
@@ -1643,7 +1644,7 @@ void PropertyCommandGroup::execute()
     KUndo2Command::redo();
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommandGroup &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommandGroup &c)
 {
     dbg.nospace() << "PropertyCommandGroup" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1672,7 +1673,7 @@ public:
 }
 
 InlineTextEditingCommand::InlineTextEditingCommand(
-    Form& form, QWidget *widget, const QByteArray &editedWidgetClass, 
+    Form& form, QWidget *widget, const QByteArray &editedWidgetClass,
     const QString &text, Command *parent)
  : Command(parent)
  , d( new Private )
@@ -1696,7 +1697,7 @@ int InlineTextEditingCommand::id() const
 
 void InlineTextEditingCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void InlineTextEditingCommand::execute()
@@ -1743,7 +1744,7 @@ bool InlineTextEditingCommand::mergeWith(const KUndo2Command * command)
     if (   form() == inlineTextEditingCommand->form()
         && text() == inlineTextEditingCommand->oldText())
     {
-        //kDebug() << "Changed from" << text() << "to" << inlineTextEditingCommand->text();
+        //qDebug() << "Changed from" << text() << "to" << inlineTextEditingCommand->text();
         d->text = inlineTextEditingCommand->text();
         return true;
     }
@@ -1765,7 +1766,7 @@ QString InlineTextEditingCommand::oldText() const
     return d->oldText;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineTextEditingCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineTextEditingCommand &c)
 {
     dbg.nospace() << "InlineTextEditingCommand" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1810,7 +1811,7 @@ int InsertPageCommand::id() const
 
 void InsertPageCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void InsertPageCommand::execute()
@@ -1840,16 +1841,16 @@ void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pa
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
         const QString realPageName = pageName.isEmpty() ?
-            i18n("Page %1", tab->count() + 1) : pageName;
+            xi18n("Page %1", tab->count() + 1) : pageName;
         if (pageIndex < 0)
             pageIndex = tab->count();
         tab->insertTab(pageIndex, page, realPageName);
         tab->setCurrentWidget(page);
         item->addModifiedProperty("title", realPageName);
     } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(parent);
         stack->addWidget(page);
         stack->setCurrentWidget(page);
         item->addModifiedProperty("stackIndex", stack->indexOf(page));
@@ -1875,10 +1876,10 @@ void InsertPageCommand::undo(const QString& name)
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
         tab->removeTab(tab->indexOf(page));
     } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        QStackedWidget *stack = qobject_cast<QStackedWidget*>(parent);
         int index = stack->indexOf(page);
         if (index > 0)
             index--;
@@ -1896,7 +1897,7 @@ void InsertPageCommand::undo(const QString& name)
     delete com;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertPageCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertPageCommand &c)
 {
     dbg.nospace() << "InsertPageCommand" << static_cast<const Command&>(c);
     return dbg.space();
@@ -1927,7 +1928,7 @@ RemovePageCommand::RemovePageCommand(Container *container, QWidget *parent)
 {
     d->containername = container->widget()->objectName();
     d->form = container->form();
-    TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+    TabWidgetBase *tab = qobject_cast<TabWidgetBase*>(parent);
     if (tab) {
         d->name = tab->currentWidget()->objectName();
         d->pageName = tab->tabText(tab->currentIndex());
@@ -1951,7 +1952,7 @@ int RemovePageCommand::id() const
 
 void RemovePageCommand::debug() const
 {
-    kDebug() << *this;
+    qDebug() << *this;
 }
 
 void RemovePageCommand::execute()
@@ -1974,7 +1975,7 @@ QString RemovePageCommand::pageName() const
     return d->pageName;
 }
 
-KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const RemovePageCommand &c)
+KFORMDESIGNER_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const RemovePageCommand &c)
 {
     dbg.nospace() << "RemovePageCommand" << static_cast<const Command&>(c);
     return dbg.space();

@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
+#include <klocale.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>

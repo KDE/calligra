@@ -2815,5 +2815,3 @@ void Project::emitLocaleChanged()
 
 
 }  //KPlato namespace
-
-#include "kptproject.moc"

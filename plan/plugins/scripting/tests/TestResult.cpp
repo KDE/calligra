@@ -57,6 +57,3 @@ void TestResult::setMessage( const QString &m )
     qDebug()<<m;
     message = m;
 }
-
-
-#include "TestResult.moc"

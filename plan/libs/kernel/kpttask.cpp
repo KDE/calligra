@@ -3834,5 +3834,3 @@ QDebug operator<<( QDebug dbg, const KPlato::Completion::UsedEffort::ActualEffor
     return dbg;
 }
 #endif
-
-#include "kpttask.moc"

@@ -25,6 +25,7 @@
   <name xml:lang="sv">Stage</name>
   <name xml:lang="uk">Stage</name>
   <name xml:lang="x-test">xxStagexx</name>
+  <name xml:lang="zh-CN">Stage</name>
   <summary>Presentation</summary>
   <summary xml:lang="bs">Prezentacija</summary>
   <summary xml:lang="ca">Presentació</summary>
@@ -46,6 +47,7 @@
   <summary xml:lang="sv">Presentation</summary>
   <summary xml:lang="uk">Презентації</summary>
   <summary xml:lang="x-test">xxPresentationxx</summary>
+  <summary xml:lang="zh-CN">演示</summary>
   <description>
     <p>
       Calligra Stage is an easy to use yet still flexible presentation application.
@@ -92,6 +94,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Multiple master slides</li>
       <li xml:lang="bs">Više master slajdova</li>

@@ -19,9 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBCommandLinkButton_H
-#define KexiDBCommandLinkButton_H
+#ifndef KEXIDBCOMMANDLINKBUTTON_H
+#define KEXIDBCOMMANDLINKBUTTON_H
 
+#include "kexiformutils_export.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <formeditor/kexiformeventhandler.h>
@@ -38,7 +39,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButto
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
     Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
 
 public:
     KexiDBCommandLinkButton(const QString &text, const QString &description, QWidget * parent = 0);
@@ -47,8 +48,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     virtual QVariant value();
@@ -89,8 +90,8 @@ public Q_SLOTS:
         KexiFormDataItemInterface::setDataSource(ds);
     }
 
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
     virtual void setReadOnly(bool readOnly);
 

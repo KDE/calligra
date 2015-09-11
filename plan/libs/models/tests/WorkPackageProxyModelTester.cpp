@@ -24,7 +24,7 @@
 
 #include <QModelIndex>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include "../../kernel/tests/debug.cpp"
@@ -223,6 +223,4 @@ void WorkPackageProxyModelTester::testMoveChild()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::WorkPackageProxyModelTester )
-
-#include "WorkPackageProxyModelTester.moc"
+QTEST_GUILESS_MAIN( KPlato::WorkPackageProxyModelTester )

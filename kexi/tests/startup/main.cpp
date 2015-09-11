@@ -17,14 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <kapplication.h>
+#include <QDebug>
+#include <QApplication>
 
-//#include <tableview/kexitableview.h>
-/*#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>*/
+#include <KAboutData>
 
 #include "main/startup/KexiStartupDialog.h"
 #include "main/startup/KexiConnSelector.h"
@@ -41,8 +37,8 @@ int main(int argc, char* argv[])
     /* KexiTableView tv;
       app.setMainWidget(&tv);
 
-      KexiDB::TableViewData data;
-      KexiDB::TableViewColumn col;
+      KDbTableViewData data;
+      KDbTableViewColumn col;
       col.type = QVariant::Int; col.caption = "Id"; data.addColumn( col );
       col.type = QVariant::String; col.caption = "Name"; data.addColumn( col );
       col.type = QVariant::Int; col.caption = "Age"; data.addColumn( col );
@@ -51,14 +47,14 @@ int main(int argc, char* argv[])
 
     //some connection data
     KexiDBConnectionSet connset;
-    KexiDB::ConnectionData *conndata;
-    conndata = new KexiDB::ConnectionData();
+    KDbConnectionData *conndata;
+    conndata = new KDbConnectionData();
     conndata->name = "My connection 1";
     conndata->driverName = "mysql";
     conndata->hostName = "host.net";
     conndata->userName = "user";
     connset.addConnectionData(conndata);
-    conndata = new KexiDB::ConnectionData();
+    conndata = new KDbConnectionData();
     conndata->name = "My connection 2";
     conndata->driverName = "mysql";
     conndata->hostName = "myhost.org";
@@ -76,41 +72,41 @@ int main(int argc, char* argv[])
 
     KexiStartupDialog startup(KexiStartupDialog::Everything, 0, connset, prj_set, 0, "dlg");
     int e = startup.exec();
-    kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
+    qDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
 
     if (e == QDialog::Accepted) {
         int r = startup.result();
         if (r == KexiStartupDialog::TemplateResult) {
-            kDebug() << "Template key == " << startup.selectedTemplateKey();
+            qDebug() << "Template key == " << startup.selectedTemplateKey();
             if (startup.selectedTemplateKey() == "blank") {
 #if 0
                 KexiConnSelectorDialog sel(connset, 0, "sel");
                 e = sel.exec();
-                kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
+                qDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
                 if (e == QDialog::Accepted) {
-                    kDebug() << "Selected conn. type: " << (sel.selectedConnectionType() == KexiConnSelectorWidget::FileBased ? "File based" : "Server based");
+                    qDebug() << "Selected conn. type: " << (sel.selectedConnectionType() == KexiConnSelectorWidget::FileBased ? "File based" : "Server based");
                     if (sel.selectedConnectionType() == KexiConnSelectorWidget::ServerBased) {
-                        kDebug() << "SERVER: " << sel.selectedConnectionData()->serverInfoString();
+                        qDebug() << "SERVER: " << sel.selectedConnectionData()->toUserVisibleString();
                     }
                 }
 #endif
             }
         } else if (r == KexiStartupDialog::OpenExistingResult) {
-            kDebug() << "Existing project --------";
+            qDebug() << "Existing project --------";
             QString selFile = startup.selectedExistingFile();
             if (!selFile.isEmpty())
-                kDebug() << "Project File: " << selFile;
+                qDebug() << "Project File: " << selFile;
             else if (startup.selectedExistingConnection()) {
-                kDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString();
+                qDebug() << "Existing connection: " << startup.selectedExistingConnection()->toUserVisibleString();
                 //ok, now we are trying to show daabases for this conenction to this user
                 //! @todo
             }
         } else if (r == KexiStartupDialog::OpenRecentResult) {
-            kDebug() << "Recent project --------";
+            qDebug() << "Recent project --------";
             const KexiProjectData *data = startup.selectedProjectData();
             if (data) {
-                kDebug() << "Selected project: database=" << data->databaseName()
-                << " connection=" << data->constConnectionData()->serverInfoString();
+                qDebug() << "Selected project: database=" << data->databaseName()
+                << " connection=" << data->connectionData()->toUserVisibleString();
             }
         }
     }

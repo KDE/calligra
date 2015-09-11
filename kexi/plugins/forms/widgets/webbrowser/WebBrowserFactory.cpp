@@ -23,25 +23,27 @@
 #include <formeditor/formIO.h>
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
+#include <KexiIcon.h>
+#include <kexi.h>
 
-#include <KoIcon.h>
+#include <KLocalizedString>
 
 #include <QVariant>
 #include <QVariantList>
+#include <QDebug>
 
-#include <kdebug.h>
-#include <klocale.h>
+KEXI_PLUGIN_FACTORY(WebBrowserFactory, "kexiforms_webbrowserwidgetplugin.json")
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
-  : KexiDBFactoryBase(parent, "webbrowser")
+  : KexiDBFactoryBase(parent)
 {
     Q_UNUSED(args);
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
     webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
-    webBrowser->setName(i18n("Web Browser"));
+    webBrowser->setName(xi18n("Web Browser"));
     webBrowser->setNamePrefix(
-        i18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
+        xi18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
             "webBrowser1, webBrowser2 are generated. "
             "This string can be used to refer the widget object as variables in programming "
             "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
@@ -49,12 +51,13 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
             "start with upper case letter. Example: smallCamelCase. "
             "Moreover, try to make this prefix as short as possible.",
             "webBrowser"));
-    webBrowser->setDescription(i18n("Web widget with browsing features."));
+    webBrowser->setDescription(xi18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
 
-    setPropertyDescription("zoomFactor", i18n("Zoom Factor"));
-    setPropertyDescription("url", i18n("Url"));
+    setPropertyDescription("textScale", xi18n("Text Scale"));
+    setPropertyDescription("zoomFactor", xi18n("Zoom Factor"));
+    setPropertyDescription("url", xi18n("Url"));
 }
 
 WebBrowserFactory::~WebBrowserFactory()
@@ -77,10 +80,10 @@ QWidget* WebBrowserFactory::createWidget(const QByteArray& classname,
 
     if (w){
         w->setObjectName(name);
-        kDebug() << w << w->objectName() << "created";
+        qDebug() << w << w->objectName() << "created";
         return w;
     }
-    kWarning() << "w == 0";
+    qWarning() << "w == 0";
     return 0;
 }
 
@@ -107,7 +110,5 @@ bool WebBrowserFactory::previewWidget(const QByteArray &classname,
     Q_UNUSED(widget);
     return true;
 }
-     
-K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
 
 #include "WebBrowserFactory.moc"

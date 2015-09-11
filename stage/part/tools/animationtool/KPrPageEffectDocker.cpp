@@ -297,5 +297,3 @@ void KPrPageEffectDocker::cleanup( QObject* object )
 
     m_view = 0;
 }
-
-#include "KPrPageEffectDocker.moc"

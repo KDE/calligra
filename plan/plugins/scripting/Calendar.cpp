@@ -53,6 +53,3 @@ QObject *Scripting::Calendar::childAt( int index )
     KPlato::Calendar *c = m_calendar->childAt( index );
     return c == 0 ? 0 : m_project->calendar( c );
 }
-
-
-#include "Calendar.moc"

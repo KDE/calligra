@@ -83,5 +83,3 @@ void CommentDialog::slotOk()
     command->execute(m_selection->canvas());
     accept();
 }
-
-#include "CommentDialog.moc"

@@ -20,11 +20,12 @@
 #ifndef KEXIASSISTANTMESSAGEHANDLER_H
 #define KEXIASSISTANTMESSAGEHANDLER_H
 
-#include <db/msghandler.h>
+#include <KDbMessageHandler>
 
+class KDbObject;
 class KexiContextMessageWidget;
 
-class KexiAssistantMessageHandler : public KexiDB::MessageHandler
+class KexiAssistantMessageHandler : public KDbMessageHandler
 {
 public:
     KexiAssistantMessageHandler();
@@ -32,12 +33,24 @@ public:
     ~KexiAssistantMessageHandler();
 
 protected:
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessageInternal(const QString &msg,
-                                          const QString &details = QString());
+    //! Shows error message with @a title (it is not caption) and details.
+    //! Implementation for KDbMessageHandler.
+    virtual void showErrorMessage(
+        KDbMessageHandler::MessageType messageType,
+        const QString &message,
+        const QString &details = QString(),
+        const QString &caption = QString()
+    );
 
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+    /*! Shows error message with @a msg text. Existing error message from @a obj object
+     is also copied, if present. */
+    //! Implementation for KDbMessageHandler.
+    virtual void showErrorMessage(
+        const KDbResult& result,
+        KDbMessageHandler::MessageType messageType = Error,
+        const QString& message = QString(),
+        const QString& caption = QString()
+    );
 
     virtual QWidget* calloutWidget() const = 0;
 

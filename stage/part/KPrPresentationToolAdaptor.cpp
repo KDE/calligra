@@ -70,7 +70,7 @@ void KPrPresentationToolAdaptor::startDrawPresentation(int pointx, int pointy, i
     if (m_viewModePresentation.isActivated()) {
         if (! dynamic_cast< KPrPresentationDrawStrategy* >(m_tool->strategy())) {
             m_tool->drawOnPresentation();
-            KPrPresentationDrawWidget *widget=dynamic_cast< KPrPresentationDrawWidget *>(m_tool->strategy()->widget());
+            KPrPresentationDrawWidget *widget = static_cast< KPrPresentationDrawWidget *>(m_tool->strategy()->widget());
             widget->updateSize(penSize);
             widget->updateColor(color);
         }
@@ -105,6 +105,3 @@ void KPrPresentationToolAdaptor::normalPresentation()
 {
     m_tool->normalPresentation();
 }
-
-
-#include "KPrPresentationToolAdaptor.moc"

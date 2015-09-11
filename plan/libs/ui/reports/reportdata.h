@@ -259,7 +259,7 @@ public:
     //!Return the list of field names, used for legends in a chart
     virtual QStringList fieldNames() const;
 
-    void addExpression( const QString &field, const QVariant &value, int relation = '=' );
+    void addExpression( const QString &field, const QVariant &value, char relation = '=' );
 
     bool cbs;
 

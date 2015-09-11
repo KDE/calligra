@@ -22,11 +22,12 @@
 #ifndef KFORMDESIGNERWIDGETFACTORY_H
 #define KFORMDESIGNERWIDGETFACTORY_H
 
-#include <QPixmap>
 #include <QVariant>
-#include "WidgetInfo.h"
+#include <QRect>
 
-#include <db/pluginloader.h>
+#include <KPluginFactory>
+
+#include "kformdesigner_export.h"
 
 class QWidget;
 class QListWidget;
@@ -44,15 +45,16 @@ class Container;
 class ObjectTreeItem;
 class Form;
 class WidgetLibrary;
+class WidgetInfo;
 
 //! Used by WidgetFactory
-class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
+class KFORMDESIGNER_EXPORT InternalPropertyHandlerInterface
 {
 protected:
     InternalPropertyHandlerInterface();
-    
+
     virtual ~InternalPropertyHandlerInterface();
-    
+
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
@@ -119,10 +121,10 @@ protected:
   * "orientationSelectionPopup:verticalIcon" - the same for "Vertical" item.
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:horizontalText" - sets a i18n'd text for "Horizontal" item
-    for objects of class 'ClassName', e.g. i18n("Insert Horizontal Line").
+    for objects of class 'ClassName', e.g. xi18n("Insert Horizontal Line").
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
-    e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
+    e.g. xi18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
   * "dontStartEditingOnInserting" - if true, WidgetFactory::startInlineEditing() will not be executed upon
     widget inseting by a user.
   * "forceShowAdvancedProperty:{propertyname}" - set it to true for "{propertyname}" advanced property
@@ -130,14 +132,14 @@ protected:
     has been called. For example, setting "forceShowAdvancedProperty:pixmap" to true
     unhides "pixmap" property for a given class.
 
-  See StdWidgetFactory::StdWidgetFactory() for properties like "Line:orientationSelectionPopup:horizontalIcon".
+  See KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory() for properties like "Line:orientationSelectionPopup:horizontalIcon".
 
   \n\n
   See the standard factories in formeditor/factories for an example of factories,
   and how to deal with complex widgets (eg tabwidget).
   */
-class KFORMEDITOR_EXPORT WidgetFactory : public QObject,
-                                         public InternalPropertyHandlerInterface
+class KFORMDESIGNER_EXPORT WidgetFactory : public QObject,
+                                           public InternalPropertyHandlerInterface
 {
     Q_OBJECT
 public:
@@ -152,7 +154,8 @@ public:
     };
     Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
-    explicit WidgetFactory(QObject *parent, const char *name = 0);
+    explicit WidgetFactory(QObject *parent);
+
     virtual ~WidgetFactory();
 
     /*! Adds a new class described by \a w. */
@@ -167,7 +170,7 @@ public:
     /**
      * \return all classes which are provided by this factory
      */
-    const WidgetInfoHash& classes() const;
+    QHash<QByteArray, WidgetInfo*> classes() const;
 
     /**
      * Creates a widget (and if needed a KFormDesigner::Container)
@@ -196,12 +199,12 @@ public:
     //! Arguments used by Form::createInlineEditor() and startInlineEditing()
     /*! @a text is the text to display by default in the line edit.
        @a widget is the edited widget, @a geometry is the geometry the new line
-       edit should have, and @a alignment is Qt::Alignment of the new line edit. 
-       If @a useFrame is false (the default), the line edit has no frame. 
-       if @a multiLine is false (the default), the line edit has single line. 
-       @a background describes line edit's background. 
+       edit should have, and @a alignment is Qt::Alignment of the new line edit.
+       If @a useFrame is false (the default), the line edit has no frame.
+       if @a multiLine is false (the default), the line edit has single line.
+       @a background describes line edit's background.
        If @a execute is true (the default), createInlineEditor() will be executed. */
-    class KFORMEDITOR_EXPORT InlineEditorCreationArguments {
+    class KFORMDESIGNER_EXPORT InlineEditorCreationArguments {
     public:
         InlineEditorCreationArguments(
             const QByteArray& _classname, QWidget *_widget, Container *_container);
@@ -218,7 +221,7 @@ public:
         bool transparentBackground;
     };
 
-    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 
+    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents
        of the widget directly within the Form,
        e.g. creates a line edit to change the text of a label. @a args is
        used to pass the arguments back to the caller.
@@ -313,13 +316,13 @@ protected:
     /*! This function creates a little dialog (a KEditListBox) to modify the contents
      of a list (of strings). It can be used to modify the contents
      of a combo box for instance. The modified list is copied
-     into \a list if the user presses "Ok" and true is returned. 
+     into \a list if the user presses "Ok" and true is returned.
      When user presses "Cancel" false is returned. */
     bool editList(QWidget *w, QStringList &list) const;
 
     /*! This function creates a little editor to modify rich text. It supports alignment,
      subscript and superscript and all basic formatting properties.
-     If the user presses "Ok", the edited text is put into @a text and true is returned. 
+     If the user presses "Ok", the edited text is put into @a text and true is returned.
      If the user presses "Cancel" false is returned. */
     bool editRichText(QWidget *w, QString &text) const;
 
@@ -374,11 +377,6 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
-
-//! Implementation of a form designer-compatible widget factory
-#define K_EXPORT_KEXIFORMWIDGETS_PLUGIN( class_name, internal_name ) \
-    KEXI_EXPORT_PLUGIN("formwidgets", class_name, internal_name, \
-                       KFORMDESIGNER_VERSION, 0, 0)
 
 }
 #endif

@@ -21,7 +21,6 @@
 #define KEXIALTERTABLEDIALOG_P_H
 
 #include "kexitabledesignerview.h"
-#include <QList>
 #include <kundo2command.h>
 #include <QByteArray>
 
@@ -83,27 +82,27 @@ public:
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
     void setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
-                               bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
+                               bool visible, bool *changed, KexiTableDesignerCommands::Command *commandGroup);
 
-    bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
+    bool updatePropertiesVisibility(KDbField::Type fieldType, KPropertySet &set,
                                     KexiTableDesignerCommands::Command *commandGroup = 0);
 
     /*! \return message used to ask user for accepting saving the design.
      \a emptyTable is set to true if the table designed contains no rows.
      If \a skipWarning is true, no warning about data loss is appended (useful when
      only non-physical altering actions will be performed). */
-    QString messageForSavingChanges(bool &emptyTable, bool skipWarning = false);
+    QString messageForSavingChanges(bool *emptyTable, bool skipWarning = false);
 
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
-    void updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set);
+    void updateIconForRecord(KDbRecordData *data, KPropertySet *set);
 
     KexiTableDesignerView* designerView;
 
     KexiTableScrollArea *view; //!< helper
 
-    KexiDB::TableViewData *data;
+    KDbTableViewData *data;
 
     KexiDataAwarePropertySet *sets;
 
@@ -129,12 +128,12 @@ public:
     bool slotPropertyChanged_subType_enabled;
     //! used in slotPropertyChanged() to disable addHistoryCommand()
     bool addHistoryCommand_in_slotPropertyChanged_enabled;
-    //! used in slotRowUpdated() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowUpdated_enabled;
-    //! used in slotAboutToDeleteRow() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled;
-    //! used in slotRowInserted() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowInserted_enabled;
+    //! used in slotRecordUpdated() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotRecordUpdated_enabled;
+    //! used in slotAboutToDeleteRecord() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotAboutToDeleteRecord_enabled;
+    //! used in slotRecordInserted() to disable addHistoryCommand()
+    bool addHistoryCommand_in_slotRecordInserted_enabled;
 
     //! used to disable slotBeforeCellChanged()
     bool slotBeforeCellChanged_enabled;

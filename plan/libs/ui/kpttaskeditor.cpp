@@ -863,7 +863,7 @@ void TaskEditor::slotAddSubtask()
     edit( idx );
 }
 
-void TaskEditor::edit( QModelIndex i )
+void TaskEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
@@ -1558,5 +1558,3 @@ KoPrintJob *TaskWorkPackageView::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kpttaskeditor.moc"

@@ -18,24 +18,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QPainter>
-#include <QPixmap>
-#include <QColor>
-#include <QApplication>
-#include <QPolygon>
-#include <QScrollBar>
-
-#include <kdebug.h>
-
-#include <math.h>
-
+#include "KexiRelationsConnection.h"
 #include "KexiRelationsScrollArea.h"
 #include "KexiRelationsView.h"
-#include "KexiRelationsConnection.h"
-#include <db/tableschema.h>
-#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
+
+#include <KDbTableSchema>
+#include <KDbTableOrQuerySchema>
+#include <KDbUtils>
+
+#include <QPainter>
+#include <QColor>
+#include <QPolygon>
+#include <QScrollBar>
+#include <QDebug>
+
+#include <math.h>
 
 //! @internal
 class KexiRelationsConnection::Private
@@ -60,13 +59,13 @@ KexiRelationsConnection::KexiRelationsConnection(
         : d(new Private)
 {
     d->scrollArea = scrollArea;
-// kDebug();
+// qDebug();
 
     d->masterTable = masterTbl;
     if (!masterTbl || !detailsTbl) {
-        kDebug() << "expect sig11";
-        kDebug() << masterTbl;
-        kDebug() << detailsTbl;
+        qDebug() << "expect sig11";
+        qDebug() << masterTbl;
+        qDebug() << detailsTbl;
     }
 
     d->detailsTable = detailsTbl;
@@ -101,9 +100,9 @@ KexiRelationsConnection::drawConnection(QPainter *p)
     int sideNy = ry - fm.height();
 //! @todo details char can be also just a '1' for some cases
     QChar sideNChar(0x221E); //infinity char
-    uint sideNCharWidth = 2 + 2 + fm.width(sideNChar);
+    int sideNCharWidth = 2 + 2 + fm.width(sideNChar);
     QChar side1Char('1');
-    uint side1CharWidth = 2 + 2 + fm.width(side1Char);
+    int side1CharWidth = 2 + 2 + fm.width(side1Char);
     p->setBrush(p->pen().color());
 
     QPen pen(p->pen());
@@ -263,23 +262,23 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
     float my = y2 - y1;
     float mag = sqrt(mx * mx + my * my);
     float u = (((p.x() - x1) * (x2 - x1)) + ((p.y() - y1) * (y2 - y1))) / (mag * mag);
-    kDebug() << "u: " << u;
+    qDebug() << "u: " << u;
 
     float iX = x1 + u * (x2 - x1);
     float iY = y1 + u * (y2 - y1);
-    kDebug() << "px: " << p.x();
-    kDebug() << "py: " << p.y();
-    kDebug() << "ix: " << iX;
-    kDebug() << "iy: " << iY;
+    qDebug() << "px: " << p.x();
+    qDebug() << "py: " << p.y();
+    qDebug() << "ix: " << iX;
+    qDebug() << "iy: " << iY;
 
     float dX = iX - p.x();
     float dY = iY - p.y();
 
-    kDebug() << "dx: " << dX;
-    kDebug() << "dy: " << dY;
+    qDebug() << "dx: " << dX;
+    qDebug() << "dy: " << dY;
 
     float distance = sqrt(dX * dX + dY * dY);
-    kDebug() << "distance: " << distance;
+    qDebug() << "distance: " << distance;
 
     if (distance <= tolerance)
         return true;

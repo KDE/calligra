@@ -21,15 +21,18 @@
 #ifndef KEXIDBCONNECTIONWIDGET_H
 #define KEXIDBCONNECTIONWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include "ui_kexidbconnectionwidget.h"
 #include "ui_kexidbconnectionwidgetdetails.h"
 
 #include <kexiprojectdata.h>
 
-#include <ktabwidget.h>
-#include <kdialog.h>
+#include <KGuiItem>
 
-class KPushButton;
+#include <QTabWidget>
+#include <QDialog>
+
+class QPushButton;
 class KexiDBDriverComboBox;
 class KexiDBConnectionTabWidget;
 
@@ -50,16 +53,16 @@ public:
     /*! Sets connection data \a data.
      \a shortcutFileName is only used to check if the file is writable
      (if no, "save changes" button will be disabled). */
-    void setData(const KexiDB::ConnectionData& data,
+    void setData(const KDbConnectionData& data,
                  const QString& shortcutFileName = QString());
 
     KexiProjectData data();
 
     //! \return a pointer to 'save changes' button. You can call hide() for this to hide it.
-    KPushButton* saveChangesButton() const;
+    QPushButton* saveChangesButton() const;
 
     //! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
-    KPushButton* testConnectionButton() const;
+    QPushButton* testConnectionButton() const;
 
     KexiDBDriverComboBox *driversCombo() const;
 
@@ -97,7 +100,7 @@ public:
     ~KexiDBConnectionWidgetDetails();
 };
 
-class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
+class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public QTabWidget
 {
     Q_OBJECT
 
@@ -110,7 +113,7 @@ public:
      (if no, "save changes" button will be disabled). */
     void setData(const KexiProjectData& data, const QString& shortcutFileName = QString());
 
-    void setData(const KexiDB::ConnectionData& data,
+    void setData(const KDbConnectionData& data,
                  const QString& shortcutFileName = QString());
 
     KexiProjectData currentProjectData();
@@ -134,7 +137,7 @@ protected:
 };
 
 
-class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public KDialog
+class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public QDialog
 {
     Q_OBJECT
 
@@ -157,7 +160,7 @@ public:
      (if no, "save changes" button will be disabled).
      The shortcut file is in .KEXIC format.
      See above constructor for more details. */
-    KexiDBConnectionDialog(QWidget* parent, const KexiDB::ConnectionData& data,
+    KexiDBConnectionDialog(QWidget* parent, const KDbConnectionData& data,
                            const QString& shortcutFileName = QString(),
                            const KGuiItem& acceptButtonGuiItem = KGuiItem());
 

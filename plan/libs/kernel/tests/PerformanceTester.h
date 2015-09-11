@@ -20,7 +20,7 @@
 #ifndef KPlato_PerformanceTester_h
 #define KPlato_PerformanceTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptdatetime.h"
 #include "kptproject.h"

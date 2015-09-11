@@ -21,7 +21,6 @@
 #ifndef KEXIFORMVIEW_H
 #define KEXIFORMVIEW_H
 
-#include <QTimer>
 #include <QDragMoveEvent>
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -33,15 +32,12 @@
 #include <core/kexiblobbuffer.h>
 #include <formeditor/form.h>
 
-#include "kexiformpart.h"
+#include "kexiformutils_export.h"
 
-#define NO_DSWIZARD
+#define KEXI_NO_FORM_DATASOURCE_WIZARD
 
 class KexiFormPart;
 class KexiFormPartTempData;
-namespace KexiDB
-{
-}
 namespace KFormDesigner
 {
 class Container;
@@ -126,12 +122,12 @@ protected Q_SLOTS:
     void slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname);
 
 protected:
-    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual KPropertySet* propertySet();
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
     virtual tristate storeData(bool dontAsk = false);
     KexiFormPartTempData* tempData() const;
     KexiFormPart* formPart() const;

@@ -18,34 +18,36 @@
 */
 
 #include "AlterSchemaTableModel.h"
-#include <db/tableschema.h>
-#include <kdebug.h>
+
+#include <KDbTableSchema>
+
+#include <QDebug>
 
 #define ROWS_FOR_PREVIEW 3
 
 AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )
 {
-    kDebug();
+    qDebug();
     m_schema = 0;
     m_rowCount = ROWS_FOR_PREVIEW;
 }
 
 AlterSchemaTableModel::~AlterSchemaTableModel()
 {
-    kDebug();
+    qDebug();
 }
 
 QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) const
 {
     if (!index.isValid())
         return QVariant();
-    
+
     if (index.column() >= (int)m_schema->fieldCount())
         return QVariant();
-    
+
     if (role == Qt::DisplayRole) {
         if (m_data.length() > index.row()) {
-            const KexiDB::RecordData r( m_data[index.row()] );
+            const KDbRecordData r( m_data[index.row()] );
             if (r.size() <= index.column())
                 return QVariant();
             return r[index.column()];
@@ -65,7 +67,7 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
 
     if (orientation == Qt::Horizontal) {
         if (m_schema) {
-            KexiDB::Field *fld = m_schema->field(section);
+            KDbField *fld = m_schema->field(section);
             if (fld)
                 return m_schema->field(section)->captionOrName();
         }
@@ -89,10 +91,10 @@ int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
     return m_rowCount;
 }
 
-void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
+void AlterSchemaTableModel::setSchema(KDbTableSchema *ts)
 {
     m_schema = ts;
-    kDebug() << m_schema->fieldCount();
+    qDebug() << m_schema->fieldCount();
 
     beginInsertColumns(QModelIndex(), 0, m_schema->fieldCount() - 1);
     endInsertColumns();
@@ -100,12 +102,12 @@ void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
     emit layoutChanged();
 }
 
-void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData>& data)
+void AlterSchemaTableModel::setData(const QList<KDbRecordData>& data)
 {
     m_data = data;
 }
 
-void AlterSchemaTableModel::setRowCount(const int i)
+void AlterSchemaTableModel::setRowCount(int i)
 {
     if (i != m_rowCount) {
         m_rowCount = i;

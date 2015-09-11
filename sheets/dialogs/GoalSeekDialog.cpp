@@ -26,6 +26,7 @@
 #include "GoalSeekDialog.h"
 
 #include <ktextedit.h>
+#include <klocale.h>
 
 #include "CalculationSettings.h"
 #include "Cell.h"
@@ -320,6 +321,3 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     enableButtonOk(ok);
     enableButtonCancel(true);
 }
-
-#include "GoalSeekDialog.moc"
-

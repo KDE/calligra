@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,33 +19,32 @@
 */
 
 #include "kexipartmanager.h"
-
-#include <QApplication>
-
-#include <kservicetype.h>
-#include <kservice.h>
-#include <kdebug.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <klocale.h>
-#include <kaboutdata.h>
-#include <kglobal.h>
-
-#include <KoServiceLocator.h>
-
 #include "kexipart.h"
 #include "kexiinternalpart.h"
 #include "kexipartinfo.h"
-#include "kexistaticpart.h"
+//! @todo KEXI3 #include "kexistaticpart.h"
 #include "kexi_version.h"
+#include "KexiJsonTrader.h"
 
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/pluginloader.h>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbMessageHandler>
+
+#include <KLocalizedString>
+#include <KPluginFactory>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
+#include <QApplication>
+#include <QDebug>
+#include <QGlobalStatic>
+
 
 using namespace KexiPart;
 
 typedef QHash<QString, KexiInternalPart*> KexiInternalPartDict;
+
+Q_GLOBAL_STATIC_WITH_ARGS(KexiJsonTrader, KexiPartTrader_instance, ("kexi"))
 
 class Manager::Private
 {
@@ -53,14 +52,11 @@ public:
     explicit Private(Manager *manager_);
     ~Private();
 
-    template <typename PartClass>
-    PartClass* part(Info *i, QHash<QString, PartClass*> &partDict);
-
     Manager *manager;
     PartDict parts;
     KexiInternalPartDict internalParts;
     PartInfoList partlist;
-    PartInfoDict partsByClass;
+    PartInfoDict partsByPluginId;
     bool lookupDone;
     bool lookupResult;
 };
@@ -69,7 +65,7 @@ Manager::Private::Private(Manager *manager_)
     : manager(manager_)
     , lookupDone(false)
     , lookupResult(false)
-{  
+{
 }
 
 Manager::Private::~Private()
@@ -78,52 +74,10 @@ Manager::Private::~Private()
     partlist.clear();
 }
 
-template <typename PartClass>
-PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
-{
-    manager->clearError();
-    if (!i)
-        return 0;
-    if (!manager->lookup())
-        return 0;
-
-    if (i->isBroken()) {
-        manager->setError(i->errorMessage());
-        return 0;
-    }
-
-    PartClass *p = partDict.value(i->partClass());
-    if (!p && !i->ptr().isNull()) {
-        KexiPluginLoader loader(i->ptr(), "X-Kexi-Class");
-        if (loader.majorVersion() != KEXI_PART_VERSION) {
-            i->setBroken(true,
-                i18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
-                      "found version %2, expected version %3.",
-                      i->objectName(),
-                      loader.majorVersion(),
-                      KEXI_PART_VERSION));
-            manager->setError(i->errorMessage());
-            return 0;
-        }
-        p = loader.createPlugin<PartClass>(manager);
-        if (!p) {
-            kWarning() << "failed";
-            i->setBroken(true, i18nc("@info", "Error while loading plugin <resource>%1</resource>",
-                                     i->objectName()));
-            manager->setError(i->errorMessage());
-            return 0;
-        }
-        p->setInfo(i);
-        p->setObjectName(QString("%1 plugin").arg(i->objectName()));
-        partDict.insert(i->partClass(), p);
-    }
-    return p;
-}
-
 //---
 
 Manager::Manager(QObject *parent)
-    : QObject(parent), d(new Private(this))
+    : QObject(parent), KDbResultable(), d(new Private(this))
 {
 }
 
@@ -132,159 +86,215 @@ Manager::~Manager()
     delete d;
 }
 
-static QString appIncorrectlyInstalledMessage()
+template <typename PartClass>
+PartClass* Manager::part(Info *info, QHash<QString, PartClass*> *partDict)
 {
-    return i18nc("@info", "<application>%1</application> could have been incorrectly installed or started. The application will be closed.",
-                 KGlobal::mainComponent().aboutData()->programName());
+    if (!info) {
+        return 0;
+    }
+    clearResult();
+    KDbMessageGuard mg(this);
+    if (!lookup()) {
+        return 0;
+    }
+    if (!info->isValid()) {
+        m_result = KDbResult(info->errorMessage());
+        return 0;
+    }
+    PartClass *p = partDict->value(info->pluginId());
+    if (p) {
+        return p;
+    }
+
+    // actual loading
+    KPluginFactory *factory = qobject_cast<KPluginFactory*>(info->instantiate());
+    if (!factory) {
+        m_result = KDbResult(ERR_OBJECT_NOT_FOUND,
+                             xi18nc("@info", "Could not load Kexi plugin file \"%1\".",
+                                    info->fileName()));
+        info->setErrorMessage(m_result.message());
+        qWarning() << m_result.message();
+        return 0;
+    }
+    p = factory->create<PartClass>(this);
+    if (!p) {
+        m_result = KDbResult(ERR_CANNOT_LOAD_OBJECT,
+                             i18n("Could not open Kexi plugin \"%1\".").arg(info->fileName()));
+        qWarning() << m_result.message();
+        return 0;
+    }
+    p->setInfo(info);
+    p->setObjectName(QString("%1 plugin").arg(info->id()));
+    partDict->insert(info->pluginId(), p);
+    return p;
+}
+
+//! @return a string list @a list with removed whitespace from the beginning and end of each string.
+//! Empty strings are also removed.
+static QStringList cleanupStringList(const QStringList &list)
+{
+    QStringList result;
+    foreach(const QString &item, list) {
+        QString cleanedItem = item.trimmed();
+        if (!cleanedItem.isEmpty()) {
+            result.append(cleanedItem);
+        }
+    }
+    return result;
 }
 
 bool Manager::lookup()
 {
-//! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
-    if (d->lookupDone)
+    if (d->lookupDone) {
         return d->lookupResult;
+    }
     d->lookupDone = true;
     d->lookupResult = false;
     d->partlist.clear();
-    d->partsByClass.clear();
+    d->partsByPluginId.clear();
     d->parts.clear();
 
-    if (!KServiceType::serviceType("Kexi/Handler")) {
-        kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        m_serverErrorMsg = i18nc("@info", "No <resource>%1</resource> service type installed.",
-                                 QLatin1String("Kexi/Handler"));
-        setError(appIncorrectlyInstalledMessage());
-        return false;
-    }
-
-    KConfigGroup cg(KGlobal::config()->group("Parts"));
-    if (qApp && !cg.hasKey("Order")) {
-        m_serverErrorMsg = i18nc("@info",
-                                 "Missing or invalid default application configuration. No <resource>%1</resource> key.",
-                                 QLatin1String("Parts/Order"));
-        setError(appIncorrectlyInstalledMessage());
-        return false;
-    }
-    const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order
-    QVector<KService::Ptr> ordered(sl_order.count());
-
-    //compute order
-    const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/Handler");
-    foreach(KService::Ptr ptr, tlist) {
-        // check type name (class is optional)
-        QString partClass = ptr->property("X-Kexi-Class", QVariant::String).toString();
-        //QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
-        //kDebug() << partName << partClass;
-        if (partClass.isEmpty()) {
-            kWarning() << "No class name (X-Kexi-Class) specified for Kexi Part" << ptr->desktopEntryName() << ptr->entryPath() << "-- skipping!";
+    // load visual order of plugins
+    KConfigGroup cg(KSharedConfig::openConfig()->group("Parts"));
+    const QStringList orderedPluginIds = cleanupStringList(
+        cg.readEntry("Order", "org.kexi-project.table,"
+                              "org.kexi-project.query,"
+                              "org.kexi-project.form,"
+                              "org.kexi-project.report,"
+                              "org.kexi-project.macro,"
+                              "org.kexi-project.script").split(','));
+    QVector<Info*> orderedInfos(orderedPluginIds.count());
+    QStringList serviceTypes;
+    serviceTypes << "Kexi/Viewer" << "Kexi/Designer" << "Kexi/Editor"
+                 << "Kexi/ModalDialog";
+    const QList<QPluginLoader*> offers = KexiPartTrader_instance->query(serviceTypes);
+    foreach(QPluginLoader *loader, offers) {
+        QScopedPointer<Info> info(new Info(*loader));
+        if (info->id().isEmpty()) {
+            qWarning() << "No plugin ID (X-KDE-PluginInfo-Name) specified for Kexi Part"
+                       << info->fileName() << "-- skipping!";
             continue;
         }
-        if (   (!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
-            || (!Kexi::tempShowScripts() && partClass == "org.kexi-project.script")
+        // check version
+        if (info->majorVersion() != KEXI_PART_VERSION) {
+            qWarning() << "Kexi plugin" << info->id() << "has version (X-KDE-PluginInfo-Version)"
+                       << info->majorVersion() << "but required version is" << KEXI_PART_VERSION
+                       << "-- skipping!";
+            continue;
+        }
+        // skip experimental types
+        if (   (!Kexi::tempShowMacros() && info->id() == "org.kexi-project.macro")
+            || (!Kexi::tempShowScripts() && info->id() == "org.kexi-project.script")
            )
         {
             continue;
         }
-        // check version
-        bool ok;
-        const int ver = ptr->property("X-Kexi-PartVersion").toInt(&ok);
-        if (!ok) {
-            kWarning() << "No version (X-Kexi-PartVersion) specified for Kexi Part" << ptr->desktopEntryName() << "-- skipping!";
+        // skip duplicates
+        if (d->partsByPluginId.contains(info->id())) {
+            qWarning() << "More than one Kexi plugin with ID"
+                       << info->id() << info->fileName() << "-- skipping this one";
             continue;
         }
-        if (ver != KEXI_PART_VERSION) {
-            kWarning() << "kexi part" << partClass << "has version (X-Kexi-PartVersion)"
-                       << ver << "but required version is" << KEXI_PART_VERSION << "-- skipping!";
-            continue;
-        }
-        const int idx = sl_order.indexOf(partClass);
-        if (idx != -1) {
-            ordered[idx] = ptr;
+        // find correct place for plugins visible in Navigator
+        if (info->isVisibleInNavigator()) {
+            const int index = orderedPluginIds.indexOf(info->id());
+            if (index != -1) {
+                orderedInfos[index] = info.data();
+            }
+            else {
+                orderedInfos.append(info.data());
+            }
+            // append later when we know order
         }
         else {
-            ordered.append(ptr);
+            // append now
+            d->partlist.append(info.data());
         }
+        d->partsByPluginId.insert(info->pluginId(), info.data());
+        info.take();
     }
-    //fill final list using computed order
-    for (int i = 0; i < ordered.size(); i++) {
-        KService::Ptr ptr = ordered[i];
-        if (ptr) {
-            Info *info = new Info(ptr);
-            // to avoid duplicates
-            if (!info->partClass().isEmpty()) {
-                d->partsByClass.insert(info->partClass(), info);
-                //kDebug() << "inserting info to" << info->partClass();
-            }
-            d->partlist.append(info);
+
+    // fill the final list using computed order
+    for (int i = 0; i < orderedInfos.size(); i++) {
+        Info *info = orderedInfos[i];
+        if (!info) {
+            continue;
         }
+        //qDebug() << "adding Kexi part info" << info->pluginId();
+        d->partlist.insert(i, info);
     }
+    // now the d->partlist is: [ordered plugins visible in Navigator] [other plugins in unspecified order]
     d->lookupResult = true;
     return true;
 }
 
-Part* Manager::part(Info *i)
+Part* Manager::part(Info *info)
 {
-    Part *p = d->part<Part>(i, d->parts);
+    KDbMessageGuard mg(this);
+    Part *p = part<Part>(info, &d->parts);
     if (p) {
         emit partLoaded(p);
     }
     return p;
 }
 
-static QString realPartClass(const QString &className)
+static QString realPluginId(const QString &pluginId)
 {
-    if (className.contains('.')) {
-        return className;
+    if (pluginId.contains('.')) {
+        return pluginId;
     }
     else {
         // not like "org.kexi-project.table" - construct
         return QString::fromLatin1("org.kexi-project.")
-            + QString(className).remove("kexi/");
+            + QString(pluginId).remove("kexi/");
     }
 }
 
-Part* Manager::partForClass(const QString &className)
+Part* Manager::partForPluginId(const QString &pluginId)
 {
-    Info* info = infoForClass(className);
+    Info* info = infoForPluginId(pluginId);
     return part(info);
 }
 
-Info* Manager::infoForClass(const QString &className)
+Info* Manager::infoForPluginId(const QString &pluginId)
 {
+    KDbMessageGuard mg(this);
     if (!lookup())
         return 0;
-    const QString realClass = realPartClass(className);
-    Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
+    const QString realId = realPluginId(pluginId);
+    Info *i = realId.isEmpty() ? 0 : d->partsByPluginId.value(realId);
     if (i)
         return i;
-    setError(i18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
+    m_result = KDbResult(xi18nc("@info", "No plugin for ID <resource>%1</resource>", realId));
     return 0;
 }
 
+/*! @todo KEXI3
 void Manager::insertStaticPart(StaticPart* part)
 {
     if (!part)
         return;
+    KDbMessageGuard mg(this);
     if (!lookup())
         return;
     d->partlist.append(part->info());
-    if (!part->info()->partClass().isEmpty())
-        d->partsByClass.insert(part->info()->partClass(), part->info());
-    d->parts.insert(part->info()->partClass(), part);
+    if (!part->info()->pluginId().isEmpty())
+        d->partsByPluginId.insert(part->info()->pluginId(), part->info());
+    d->parts.insert(part->info()->pluginId(), part);
 }
+*/
 
-KexiInternalPart* Manager::internalPartForClass(const QString& className)
+KexiInternalPart* Manager::internalPartForPluginId(const QString& pluginId)
 {
-    Info* info = infoForClass(className);
-    return d->part<KexiInternalPart>(info, d->internalParts);
+    Info* info = infoForPluginId(pluginId);
+    return info ? part<KexiInternalPart>(info, &d->internalParts) : 0;
 }
 
 PartInfoList* Manager::infoList()
 {
+    KDbMessageGuard mg(this);
     if (!lookup()) {
         return 0;
     }
     return &d->partlist;
 }
-
-#include "kexipartmanager.moc"

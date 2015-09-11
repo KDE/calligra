@@ -239,5 +239,3 @@ QBrush Config::milestoneFinishedColor() const
 }
 
 }  //KPlato namespace
-
-#include "kptconfig.moc"

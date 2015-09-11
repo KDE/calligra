@@ -525,5 +525,3 @@ QModelIndex PerformanceDataCurrentDateModel::mapIndex( const QModelIndex &idx ) 
 }
 
 } //namespace KPlato
-
-#include "kptnodechartmodel.moc"

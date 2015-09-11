@@ -767,4 +767,3 @@ void TestPageManager::testRemovePageSpread()
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)
-#include <TestPageManager.moc>

@@ -158,6 +158,4 @@ void TestDatabaseFunctions::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestDatabaseFunctions, GUI)
-
-#include "TestDatabaseFunctions.moc"
+QTEST_MAIN(TestDatabaseFunctions)

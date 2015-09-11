@@ -368,6 +368,4 @@ void TestFormula::testInlineArrays()
 #endif
 }
 
-QTEST_KDEMAIN(TestFormula, GUI)
-
-#include "TestFormula.moc"
+QTEST_MAIN(TestFormula)

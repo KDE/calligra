@@ -188,5 +188,3 @@ void WorkPackageMergeDialog::slotChanged()
 }
 
 } // namespace KPlato
-
-#include "kptworkpackagemergedialog.moc"

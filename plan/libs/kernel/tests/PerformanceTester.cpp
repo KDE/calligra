@@ -23,7 +23,7 @@
 #include "kpteffortcostmap.h"
 #include "kptcommand.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include "debug.cpp"
@@ -1136,6 +1136,4 @@ void PerformanceTester::acwpPrDayProject()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::PerformanceTester )
-
-#include "PerformanceTester.moc"
+QTEST_GUILESS_MAIN( KPlato::PerformanceTester )

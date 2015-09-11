@@ -107,5 +107,3 @@ TjMessageHandler::debugMessage( const QString &msg, const CoreAttributes *object
 }
 
 } // namespace TJ
-
-#include "TjMessageHandler.moc"

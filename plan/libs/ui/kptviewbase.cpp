@@ -2235,5 +2235,3 @@ QModelIndex DoubleTreeViewBase::indexAt( const QPoint &pos ) const
 }
 
 } // namespace KPlato
-
-#include "kptviewbase.moc"

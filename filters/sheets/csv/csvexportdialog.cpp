@@ -303,5 +303,3 @@ QString CSVExportDialog::getEndOfLine(void) const
 
     return strReturn;
 }
-
-#include "csvexportdialog.moc"

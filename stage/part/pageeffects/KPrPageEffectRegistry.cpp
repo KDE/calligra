@@ -40,7 +40,7 @@ public:
     bool initDone;
 };
 
-struct KPrPageEffectRegistry::Private
+struct Q_DECL_HIDDEN KPrPageEffectRegistry::Private
 {
     QHash<QPair<QString, bool>, KPrPageEffectFactory *> tagToFactory;
 };

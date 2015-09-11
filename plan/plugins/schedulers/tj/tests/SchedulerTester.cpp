@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 #include "tests/DateTimeTester.h"
@@ -213,7 +213,4 @@ void SchedulerTester::compare( const QString &fname, Node *n, long id1, long id2
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::SchedulerTester )
-
-#include "SchedulerTester.moc"
-
+QTEST_GUILESS_MAIN( KPlato::SchedulerTester )

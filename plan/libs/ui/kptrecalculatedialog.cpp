@@ -58,5 +58,3 @@ QDateTime RecalculateDialog::dateTime() const {
 
 
 }  //KPlato namespace
-
-#include "kptrecalculatedialog.moc"

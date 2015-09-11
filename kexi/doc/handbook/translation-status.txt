@@ -2,7 +2,7 @@ Kexi Handbook: README
 ---------------------
 
 0. Notes
-- For now let's leave <img> tags untouched. We will need to prepare english 
+- For now let's leave <img> tags untouched. We will need to prepare english
   screenshots because for now only polish version exists.
 - Development version of this handbook generated out of the docbook sources:
   http://docs.kde.org/development/en/calligra/kexi/index.html

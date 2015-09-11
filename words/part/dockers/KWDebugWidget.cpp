@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,21 +18,20 @@
  */
 
 #include "KWDebugWidget.h"
+#include <frames/KWTextFrameSet.h>
+#include <KWView.h>
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
-#include <KoSectionManager.h>
-#include <KoDocumentRdf.h>
 #include <KoElementReference.h>
 #include <KoShapeController.h>
-#include <KoRdfPrefixMapping.h>
-#include <KoTextInlineRdf.h>
 #include <KoSectionUtils.h>
 
 #include <QHBoxLayout>
 #include <QTimer>
+#include <QString>
 
 KWDebugWidget::KWDebugWidget(QWidget *parent)
     : QWidget(parent)
@@ -94,7 +93,8 @@ void KWDebugWidget::updateData()
 
     QString willShow = "This sections starts here :";
     foreach (const KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
-        willShow += " \"" + sec->name() + "\"";
+        QPair<int, int> bnds = sec->bounds();
+        willShow += " \"" + sec->name() + "\"(" + QString::number(bnds.first) + "; " + QString::number(bnds.second) + ")";
     }
     willShow.append("\n");
 
@@ -123,111 +123,10 @@ void KWDebugWidget::unsetCanvas()
 
 void KWDebugWidget::doSetMagic()
 {
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    if (!editor) {
-        return;
-    }
-
-    QTextDocument *doc = editor->document();
-    KoSectionManager *manager = KoTextDocument(doc).sectionManager();
-
-    int pos = editor->position();
-
-    KoSection *sec = manager->sectionAtPosition(pos);
-
-    if (!sec) {
-        return;
-    }
-
-    KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
-    if (!kwdoc) {
-        return;
-    }
-
-    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
-    if (!rdf) {
-        return;
-    }
-//     KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(doc, sec);
-//     sec->setInlineRdf(inlineRdf);
-
-//     rdf->rememberNewInlineRdfObject(inlineRdf);
-
-    Soprano::Node sectionNode = Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE"));
-
-    rdf->prefixMapping()->insert("cau", "http://www.caligra.org/author#");
-
-    qDebug() << rdf->model()->addStatement(
-        sectionNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("cau:Section")),
-        rdf->manifestRdfNode());
-
-//     qDebug() << rdf->model()->addStatement(
-//         sectionNode,
-//         Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:idref")),
-//         Soprano::Node::createLiteralNode(inlineRdf->xmlId()),
-//         rdf->manifestRdfNode());
-
-    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
-
-    qDebug() << rdf->model()->addStatement(
-        sectionNode,
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
-        Soprano::Node::createLiteralNode("Some TEST descr"),
-        authorContext);
-
-    Soprano::Node authorRdfFileNode = Soprano::Node::createBlankNode("CAU_META_DATA_FILE");
-    qDebug() << rdf->model()->addStatement(
-        authorRdfFileNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
-        rdf->manifestRdfNode());
-
-    qDebug() << rdf->model()->addStatement(
-        authorRdfFileNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
-        Soprano::Node::createLiteralNode("author.rdf"),
-        rdf->manifestRdfNode());
+    updateData();
 }
 
 void KWDebugWidget::doGetMagic()
 {
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    if (!editor) {
-        return;
-    }
-
-    QTextDocument *doc = editor->document();
-    KoSectionManager *manager = KoTextDocument(doc).sectionManager();
-
-    int pos = editor->position();
-
-    KoSection *sec = manager->sectionAtPosition(pos);
-
-    if (!sec) {
-        return;
-    }
-
-    KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
-    if (!kwdoc) {
-        return;
-    }
-
-    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
-    if (!rdf) {
-        return;
-    }
-
-//     KoTextInlineRdf *inlineRdf = sec->inlineRdf();
-
-    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
-
-    Soprano::StatementIterator it = rdf->model()->listStatements(
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE")),
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
-        Soprano::Node::createEmptyNode(),
-        authorContext);
-
-    m_buttonGet->setText(it.current().object().toString());
+    m_canvas->view()->setShowSectionBounds(true);
 }

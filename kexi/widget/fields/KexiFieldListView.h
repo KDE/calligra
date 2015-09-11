@@ -20,16 +20,13 @@
 #ifndef KEXIFIELDLISTVIEW_H
 #define KEXIFIELDLISTVIEW_H
 
-#include <QPixmap>
-#include <QListView>
-#include <kexi_export.h>
+#include "kexiextwidgets_export.h"
 #include <kexi.h>
 #include "KexiFieldListModel.h"
 
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
+#include <QListView>
+
+class KDbTableOrQuerySchema;
 
 /*! This widget provides a list of fields from a table or query.
 */
@@ -43,10 +40,10 @@ public:
 
     /*! Sets table or query schema \a schema.
      The schema object will be owned by the KexiFieldListView object. */
-    void setSchema(KexiDB::TableOrQuerySchema* schema);
+    void setSchema(KDbTableOrQuerySchema* schema);
 
     /*! \return table or query schema schema set for this widget. */
-    KexiDB::TableOrQuerySchema* schema() const;
+    KDbTableOrQuerySchema* schema() const;
 
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;

@@ -25,6 +25,8 @@
 
 #include "BenchmarkPointStorage.h"
 
+#include <QTest>
+
 using namespace Calligra::Sheets;
 
 void PointStorageBenchmark::testInsertionPerformance_loadingLike()
@@ -264,5 +266,3 @@ void PointStorageBenchmark::testIterationPerformance()
 }
 
 QTEST_MAIN(PointStorageBenchmark)
-
-#include "BenchmarkPointStorage.moc"

@@ -24,8 +24,10 @@
 #include <mdbtools.h>
 
 #include <migration/keximigrate.h>
-#include <db/field.h>
-#include <db/connection.h>
+
+#include <KDbField>
+#include <KDbConnection>
+
 #include <QByteArray>
 
 namespace KexiMigration
@@ -41,7 +43,7 @@ public:
     virtual ~MDBMigrate();
 
     //! Convert an MDB type to a KexiDB type, prompting user if necessary.
-    KexiDB::Field::Type type(int type);
+    KDbField::Type type(int type);
 
     //! Get the table definition for a given table name
     /*! Look up the table definition for the given table.  This only returns a ptr
@@ -54,10 +56,10 @@ public:
 
     QVariant toQVariant(const char* data, unsigned int len, int type);
 
-    bool getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef);
+    bool getPrimaryKey(KDbTableSchema* table, MdbTableDef* tableDef);
 
     //! Reimplemented to add support for "sourceDatabaseHasNonUnicodeEncoding" property
-    //! @todo this should be in Connection class but Migration framework has no such yet!
+    //! @todo this should be in KDbConnection class but Migration framework has no such yet!
     virtual QVariant propertyValue(const QByteArray& propName);
 
 protected:
@@ -66,7 +68,7 @@ protected:
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -76,12 +78,12 @@ protected:
 
     /*! Copy MDB table to KexiDB database */
     virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+                               KDbConnection *destConn, KDbTableSchema* dstTable);
 
     virtual bool drv_progressSupported() {
         return true;
     }
-    virtual bool drv_getTableSize(const QString& table, qulonglong& size);
+    virtual bool drv_getTableSize(const QString& table, quint64 *size);
 
 private:
     void initBackend();

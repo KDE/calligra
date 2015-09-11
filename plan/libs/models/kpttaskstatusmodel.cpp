@@ -783,5 +783,3 @@ int TaskStatusItemModel::sortRole( int column ) const
 }
 
 } // namespace KPlato
-
-#include "kpttaskstatusmodel.moc"

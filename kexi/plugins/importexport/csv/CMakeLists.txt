@@ -1,39 +1,37 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration)
+include_directories(${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget)
 
-########### next target ###############
-
-set(kexihandler_csv_importexport_PART_SRCS 
-   kexicsv_importexportpart.cpp 
+# the main plugin
+set(kexi_csvimportexportplugin_SRCS
+   KexiCsvImportExportPlugin.cpp
    KexiCSVImportDialogModel.cpp
-   kexicsvimportdialog.cpp 
+   kexicsvimportdialog.cpp
    kexicsvimportoptionsdlg.cpp
-   kexicsvwidgets.cpp 
+   kexicsvwidgets.cpp
    kexicsvexportwizard.cpp
    kexicsvexport.cpp
 )
 
-add_library(kexihandler_csv_importexport MODULE ${kexihandler_csv_importexport_PART_SRCS})
+add_library(kexi_csvimportexportplugin MODULE ${kexi_csvimportexportplugin_SRCS})
+kcoreaddons_desktop_to_json(kexi_csvimportexportplugin kexi_csvimportexportplugin.desktop)
 
-target_link_libraries(
-    kexihandler_csv_importexport
-    kexicore
-    keximigrate
-    kexiutils
-    kexiextendedwidgets
-    keximain
+target_link_libraries(kexi_csvimportexportplugin
+    PRIVATE
+        kexicore
+        kexiutils
+        kexiextendedwidgets
+        keximain
 
-    Predicate
+        KDb
 
-    Qt5::Gui
+        KF5::Codecs
+        KF5::KIOWidgets #for KIO::pixmapForUrl...
+
+        Qt5::Gui
 )
 
 if(MSVC)
    # avoid LNK1169 errors
-   set_target_properties(kexihandler_csv_importexport PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
+   set_target_properties(kexi_csvimportexportplugin PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
 endif()
 
-install(TARGETS kexihandler_csv_importexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES  kexicsv_importexporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS kexi_csvimportexportplugin  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

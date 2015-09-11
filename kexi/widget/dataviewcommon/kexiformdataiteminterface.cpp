@@ -19,8 +19,9 @@
 
 #include "kexiformdataiteminterface.h"
 #include <kexidataawareobjectiface.h>
-#include <db/queryschema.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
 
 KexiFormDataItemInterface::KexiFormDataItemInterface()
         : KexiDataItemInterface()
@@ -44,7 +45,7 @@ void KexiFormDataItemInterface::undoChanges()
 // m_disable_signalValueChanged = false;
 }
 
-KexiDB::Field* KexiFormDataItemInterface::field() const
+KDbField* KexiFormDataItemInterface::field() const
 {
     return m_columnInfo ? m_columnInfo->field : 0;
 }
@@ -63,7 +64,7 @@ void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool dis
 void KexiFormDataItemInterface::cancelEditor()
 {
     QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
-    KexiFormScrollView* view = KexiUtils::findParent<KexiFormScrollView*>(parentWidget);
+    KexiFormScrollView* view = KDbUtils::findParent<KexiFormScrollView*>(parentWidget);
     if (view)
         view->cancelEditor();
 }

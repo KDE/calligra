@@ -93,6 +93,3 @@ QDockWidget* ViewListDockerFactory::createDockWidget()
 }
 
 } //namespace KPlato
-
-#include "kptviewlistdocker.moc"
-

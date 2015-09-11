@@ -357,6 +357,4 @@ void TestValue::testAssignment()
     delete v2;
 }
 
-QTEST_KDEMAIN(TestValue, GUI)
-
-#include "TestValue.moc"
+QTEST_MAIN(TestValue)

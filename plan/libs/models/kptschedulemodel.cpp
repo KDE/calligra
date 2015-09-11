@@ -1215,5 +1215,3 @@ Qt::ItemFlags ScheduleLogItemModel::flags( const QModelIndex &index ) const
 }
 
 } // namespace KPlato
-
-#include "kptschedulemodel.moc"

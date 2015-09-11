@@ -135,9 +135,9 @@ public:
      *
      * @param id QString with the animation name
      */
-    void setId(QString id);
+    void setId(const QString &id);
 
-    void setPresetSubType(QString subType);
+    void setPresetSubType(const QString &subType);
 
     /**
      * @brief Returns stored class of the animation

@@ -392,7 +392,5 @@ void TestEngineeringFunctions::testOCT2HEX()
     CHECK_EVAL("=OCT2HEX(\"55\")", Value("2D"));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETOCT2HEX(\"12\")", Value("A"));
 }
-    
-QTEST_KDEMAIN(TestEngineeringFunctions, GUI)
 
-#include "TestEngineeringFunctions.moc"
+QTEST_MAIN(TestEngineeringFunctions)

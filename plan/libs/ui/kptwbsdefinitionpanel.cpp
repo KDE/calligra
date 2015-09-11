@@ -224,5 +224,3 @@ void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
 
 
 }  //KPlato namespace
-
-#include "kptwbsdefinitionpanel.moc"

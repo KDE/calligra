@@ -19,4 +19,6 @@
 
 #include "kexiformpart.h"
 
-K_EXPORT_KEXIPART_PLUGIN( KexiFormPart, form )
+KEXI_PLUGIN_FACTORY(KexiFormPart, "kexi_formplugin.json")
+
+#include "kexiforms.moc"

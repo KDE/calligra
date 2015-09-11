@@ -65,7 +65,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
-#include <KoInteractionTool.h>
 #include <KoView.h>
 #include <KoUnit.h>
 
@@ -611,5 +610,3 @@ bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QStri
 
     return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);
 }
-
-#include "Doc.moc"

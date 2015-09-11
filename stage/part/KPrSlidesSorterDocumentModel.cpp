@@ -427,5 +427,3 @@ bool KPrSlidesSorterDocumentModel::moveSlides(const QList<KoPAPageBase *> &slide
     }
     return false;
 }
-
-#include "KPrSlidesSorterDocumentModel.moc"

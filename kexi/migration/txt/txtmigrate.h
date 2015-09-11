@@ -47,13 +47,13 @@ public:
     //! Get table names in source
     virtual bool drv_tableNames(QStringList& tablenames);
 
-    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*)
+    virtual bool drv_copyTable(const QString&, KDbConnection*, KDbTableSchema*)
     {
         return false;
     }
 
     //! Read schema for a given table
-    virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    virtual bool drv_readTableSchema(const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName);
@@ -65,10 +65,10 @@ public:
     virtual bool drv_movePrevious();
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
-    
+    virtual QVariant drv_value(int i);
+
     virtual bool drv_moveFirst();
-    
+
     virtual bool drv_moveLast();
 
   private:
@@ -84,7 +84,7 @@ public:
     QVector<QStringList> m_FieldValues;
 
     long m_Row;
-    
+
     long m_FileRow;
 };
 

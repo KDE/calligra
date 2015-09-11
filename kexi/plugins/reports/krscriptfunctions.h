@@ -15,36 +15,43 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef KRSCRIPTFUNCTIONS_H
 #define KRSCRIPTFUNCTIONS_H
-#include <QScriptEngine>
+
 #include <QObject>
 #include <QString>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <KoReportData.h>
+
+#include <KDbConnection>
+#include <KDbCursor>
+
+#include <KoReportData>
+#include <kreportgrouptracker>
 
 /**
  @author
 */
-class KRScriptFunctions : public QObject
+class KRScriptFunctions : public KReportGroupTracker
 {
     Q_OBJECT
 public:
-    KRScriptFunctions(const KoReportData *, KexiDB::Connection*);
+    KRScriptFunctions(const KoReportData *, KDbConnection*);
 
     ~KRScriptFunctions();
-    
+
 private:
-    KexiDB::Connection *m_connection;
+    KDbConnection *m_connection;
     const KoReportData *m_cursor;
     QString m_source;
     qreal math(const QString &, const QString &);
 
-    QString m_where;
+    QMap<QString, QVariant> m_groupData;
+
+    KDbEscapedString where();
+
 public Q_SLOTS:
-    void setWhere(const QString&);
-    
+    virtual void setGroupData(const QMap<QString, QVariant> &groupData);
+
     qreal sum(const QString &);
     qreal avg(const QString &);
     qreal min(const QString &);

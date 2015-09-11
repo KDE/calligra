@@ -18,20 +18,18 @@
 */
 
 #include "WebBrowserWidget.h"
-#include <QtWebKit>
-#include <QWebHistory>
 #include <QWebView>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QAction>
 #include <QWidget>
-#include <QApplication>
-#include <klocale.h>
-#include <kguiitem.h>
-#include <kstandardguiitem.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 
+#include <KGuiItem>
+#include <KStandardGuiItem>
+#include <KGuiItem>
+#include <KStandardGuiItem>
+#include <KLocalizedString>
 
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
@@ -44,10 +42,13 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     setMinimumWidth(minimumHeight());
     QPair< KGuiItem, KGuiItem > backForward = KStandardGuiItem::backAndForward();
     m_view = new QWebView(this);
-    m_reload = new KPushButton(i18n("Reload"),this);
-    m_stop = new KPushButton(KStandardGuiItem::stop());
-    m_back = new KPushButton(backForward.first);
-    m_forward = new KPushButton(backForward.second);
+    m_reload = new QPushButton(xi18n("Reload"),this);
+    m_stop = new QPushButton;
+    KGuiItem::assign(m_stop,KStandardGuiItem::stop());
+    m_back = new QPushButton;
+    KGuiItem::assign(m_back, backForward.first);
+    m_forward = new QPushButton;
+    KGuiItem::assign(m_forward, backForward.second);
     h_layout = new QHBoxLayout;
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
@@ -58,7 +59,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     v_layout->addWidget(m_view);
     v_layout->addLayout(h_layout);
     setLayout(v_layout);
-  
+
     if (!designMode()){
         m_pbar =new QProgressBar();
         h_layout->addWidget(m_pbar);
@@ -74,15 +75,15 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     connect(m_view,SIGNAL(loadProgress(int)),m_pbar,SLOT(setValue(int)));
     connect(m_view,SIGNAL(loadFinished(bool)),SLOT(hide_bar()));
 }
-  
+
 WebBrowserWidget::~WebBrowserWidget()
 {
 
 }
 
-void WebBrowserWidget::setDataSourcePartClass(const QString &ds)
+void WebBrowserWidget::setDataSourcePluginId(const QString &ds)
 {
-    KexiFormDataItemInterface::setDataSourcePartClass(ds);
+    KexiFormDataItemInterface::setDataSourcePluginId(ds);
 }
 
 void WebBrowserWidget::setDataSource(const QString &ds)
@@ -92,7 +93,7 @@ void WebBrowserWidget::setDataSource(const QString &ds)
 
 void WebBrowserWidget::hide_bar()
 {
-    m_pbar->setVisible(false);    
+    m_pbar->setVisible(false);
 }
 
 void WebBrowserWidget::setUrl(const QString& url)
@@ -171,10 +172,10 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
     if (isReadOnly())
         return;
     m_urlChanged_enabled = false;
-    
+
     if (removeOld) {
         setUrl(add.toString());
-    }       
+    }
     else {
         setUrl(KexiDataItemInterface::originalValue().toString() + add.toString());
     }
@@ -183,7 +184,7 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
         setUrl(add.toString());
     }
     else {
-        setUrl(KexiDataItemInterface::originalValue().toString() + add.toString()) ;
+        setUrl(KexiDataItemInterface::originalValue().toString() + add.toString());
     }
 
     m_urlChanged_enabled = true;
@@ -203,5 +204,3 @@ void  WebBrowserWidget::setReadOnly(bool val)
 {
     m_readOnly = val;
 }
-
-#include "WebBrowserWidget.moc"

@@ -53,7 +53,7 @@ typedef boost::multi_index_container<
     >
 > EffectStrategies;
 
-struct KPrPageEffectFactory::Private
+struct Q_DECL_HIDDEN KPrPageEffectFactory::Private
 {
     Private( const QString & id, const QString & name )
     : id( id )

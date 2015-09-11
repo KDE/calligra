@@ -546,7 +546,3 @@ void ConditionalDialog::slotOk()
 
     accept();
 }
-
-#include "ConditionalDialog.moc"
-
-

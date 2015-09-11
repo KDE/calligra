@@ -40,7 +40,7 @@
 
 class QSize;
 class KZip;
-class KTemporaryFile;
+class QTemporaryFile;
 class KoStore;
 
 namespace MSOOXML
@@ -111,7 +111,7 @@ protected:
     virtual void writeConfigurationSettings(KoXmlWriter* settings) const;
 
     bool isPasswordProtectedFile(QString &filename);
-    KTemporaryFile* tryDecryptFile(QString &filename);
+    QTemporaryFile* tryDecryptFile(QString &filename);
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
             MsooXmlRelationships *relationships, QString& errorMessage) = 0;

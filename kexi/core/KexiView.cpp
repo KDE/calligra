@@ -19,58 +19,57 @@
 
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
-
 #include "KexiWindow.h"
 #include "kexiproject.h"
 #include "kexipartinfo.h"
-#include <KPropertySet>
-
-#include <db/connection.h>
-#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
 
 #include <widgetutils/KoGroupButton.h>
 
-#include <kdebug.h>
-#include <kdialog.h>
-#include <kactioncollection.h>
-#include <kmenu.h>
-#include <kglobalsettings.h>
+#include <KPropertySet>
+
+#include <KDbConnection>
+#include <KDbUtils>
+
+#include <KActionCollection>
+
+#include <QDebug>
+#include <QDialog>
+#include <QMenu>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>
 #include <QVBoxLayout>
-#include <QLabel>
 
 //! @internal Action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
+class KEXICORE_EXPORT KexiToggleViewModeAction : public QAction
 {
 public:
     //! Creates action for toggling to view mode @a mode. @a slot should have signature
     //! matching switchedTo(Kexi::ViewMode mode) signal.
     KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent)
-        : KAction(
-            KIcon(Kexi::iconNameForViewMode(mode)),
+        : QAction(
+            QIcon::fromTheme(Kexi::iconNameForViewMode(mode)),
             Kexi::nameForViewMode(mode, true/*withAmpersand*/),
             parent)
     {
         setCheckable(true);
         if (mode == Kexi::DataViewMode) {
             setObjectName("view_data_mode");
-            setToolTip(i18n("Switch to data view"));
-            setWhatsThis(i18n("Switches to data view."));
+            setToolTip(xi18n("Switch to data view"));
+            setWhatsThis(xi18n("Switches to data view."));
         } else if (mode == Kexi::DesignViewMode) {
             setObjectName("view_design_mode");
-            setToolTip(i18n("Switch to design view"));
-            setWhatsThis(i18n("Switches to design view."));
+            setToolTip(xi18n("Switch to design view"));
+            setWhatsThis(xi18n("Switches to design view."));
         } else if (mode == Kexi::TextViewMode) {
             setObjectName("view_text_mode");
-            setToolTip(i18n("Switch to text view"));
-            setWhatsThis(i18n("Switches to text view."));
+            setToolTip(xi18n("Switch to text view"));
+            setWhatsThis(xi18n("Switches to text view."));
         } else {
-            kWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
+            qWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
         }
     }
 };
@@ -110,7 +109,7 @@ public:
         }
     }
 
-    KMenu* mainMenu()
+    QMenu* mainMenu()
     {
         if (m_mainMenu) {
             return m_mainMenu;
@@ -119,15 +118,15 @@ public:
             return 0;
         }
         KexiSmallToolButton* menuButton = new KexiSmallToolButton(
-                         KIcon(),
-                         window->part()->info()->instanceCaption() + " ",
+                         QIcon(),
+                         window->part()->info()->name() + " ",
                          topBarHWidget);
-        menuButton->setToolTip(i18n("Menu for the current window"));
-        menuButton->setWhatsThis(i18n("Shows menu for the current window."));
+        menuButton->setToolTip(xi18n("Menu for the current window"));
+        menuButton->setWhatsThis(xi18n("Shows menu for the current window."));
         menuButton->setPopupMode(QToolButton::InstantPopup);
         topBarLyr->insertWidget(0, menuButton);
 
-        m_mainMenu = new KMenu;
+        m_mainMenu = new QMenu;
         menuButton->setMenu(m_mainMenu);
         return m_mainMenu;
     }
@@ -139,7 +138,7 @@ public:
         if (!window->supportsViewMode(mode)) {
             return 0;
         }
-        KAction *a = new KexiToggleViewModeAction(mode, q);
+        QAction *a = new KexiToggleViewModeAction(mode, q);
         toggleViewModeActions.insert(mode, a);
 
         KoGroupButton *btn = new KoGroupButton(pos, parent);
@@ -148,7 +147,7 @@ public:
         btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         btn->setText(text);
         btn->setIcon(a->icon());
-        QFont f(KGlobalSettings::toolBarFont());
+        QFont f(q->font());
         f.setPixelSize(KexiUtils::smallFont().pixelSize());
         btn->setFont(f);
         btn->setToolTip(a->toolTip());
@@ -209,7 +208,7 @@ public:
     //! did not succeed, so for the second time we block this call.
     tristate recentResultOfSwitchToViewModeInternal;
 private:
-    KMenu* m_mainMenu;
+    QMenu* m_mainMenu;
 };
 
 //----------------------------------------------------------
@@ -220,8 +219,8 @@ KexiView::KexiView(QWidget *parent)
         , d(new Private(this))
 {
     QWidget *wi = this;
-    while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow"))
-        ;
+    while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow")) {
+    }
     d->window = (wi && wi->inherits("KexiWindow")) ? static_cast<KexiWindow*>(wi) : 0;
     if (d->window) {
         //init view mode number for this view (obtained from window where this view is created)
@@ -244,7 +243,7 @@ KexiView::KexiView(QWidget *parent)
         d->mainLyr->addWidget(d->topBarHWidget);
         QHBoxLayout *topBarHLyr = new QHBoxLayout(d->topBarHWidget); //needed unless KexiFlowLayout properly handles contents margins
         topBarHLyr->setContentsMargins(0, 0, 0, 0);
-        topBarHLyr->addSpacing(KDialog::marginHint() / 2);
+        topBarHLyr->addSpacing(KexiUtils::spacingHint() / 2);
         d->topBarLyr = new KexiFlowLayout(topBarHLyr, 0, 2);
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
@@ -267,9 +266,9 @@ KexiView::KexiView(QWidget *parent)
         if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode) {
             QAction *a = sharedAction("project_save");
             d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
-            d->saveDesignButton->setText(i18n("Save"));
-            d->saveDesignButton->setToolTip(i18n("Save current design"));
-            d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
+            d->saveDesignButton->setText(xi18n("Save"));
+            d->saveDesignButton->setToolTip(xi18n("Save current design"));
+            d->saveDesignButton->setWhatsThis(xi18n("Saves changes made to the current design."));
             d->topBarLyr->addWidget(d->saveDesignButton);
 
             a = sharedAction("project_saveas");
@@ -326,7 +325,7 @@ KexiPart::Part* KexiView::part() const
     return d->window ? d->window->part() : 0;
 }
 
-tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool & dontStore)
+tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool *dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);
@@ -396,69 +395,72 @@ void KexiView::setDirty()
     setDirty(true);
 }
 
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiView::storeNewData(const KDbObject& object,
                                            KexiView::StoreNewDataOptions options,
-                                           bool &cancel)
+                                           bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
-    *new_schema = sdata;
+    QScopedPointer<KDbObject> newObject(new KDbObject);
+    *newObject = object;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
-        || !conn->removeDataBlock(new_schema->id()) // for sanity
-        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    if (!conn->storeNewObjectData(newObject.data())
+        || !conn->removeDataBlock(newObject->id()) // for sanity
+        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(newObject->id()) // for sanity
        )
     {
         return 0;
     }
-    d->newlyAssignedID = new_schema->id();
-    return new_schema.take();
+    d->newlyAssignedID = newObject->id();
+    return newObject.take();
 }
 
-KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
+KDbObject* KexiView::copyData(const KDbObject& object,
                                         KexiView::StoreNewDataOptions options,
-                                        bool &cancel)
+                                        bool *cancel)
 {
+    Q_ASSERT(cancel);
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
-    *new_schema = sdata;
+    QScopedPointer<KDbObject> newObject(new KDbObject);
+    *newObject = object;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
-        || !conn->copyDataBlock(d->window->id(), new_schema->id())
-        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    if (!conn->storeNewObjectData(newObject.data())
+        || !conn->copyDataBlock(d->window->id(), newObject->id())
+        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), newObject->id())
        )
     {
         return 0;
     }
-    d->newlyAssignedID = new_schema->id();
-    return new_schema.take();
+    d->newlyAssignedID = newObject->id();
+    return newObject.take();
 }
 
 tristate KexiView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    if (!d->window || !d->window->schemaData())
+    if (!d->window || !d->window->schemaObject())
         return false;
-    if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*d->window->schemaData(), false /*existing object*/)) {
+    if (!KexiMainWindowIface::global()->project()
+            ->dbConnection()->storeObjectData(d->window->schemaObject()))
+    {
         return false;
     }
     setDirty(false);
     return true;
 }
 
-bool KexiView::loadDataBlock(QString &dataString, const QString& dataID, bool canBeEmpty)
+bool KexiView::loadDataBlock(QString *dataString, const QString& dataID, bool canBeEmpty)
 {
     if (!d->window)
         return false;
     const tristate res = KexiMainWindowIface::global()->project()->dbConnection()
                          ->loadDataBlock(d->window->id(), dataString, dataID);
     if (canBeEmpty && ~res) {
-        dataString.clear();
+        dataString->clear();
         return true;
     }
     return res == true;
@@ -491,26 +493,26 @@ bool KexiView::removeDataBlock(const QString& dataID)
 bool KexiView::eventFilter(QObject *o, QEvent *e)
 {
     if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
-//        kDebug() << "this=[" << o->metaObject()->className()
+//        qDebug() << "this=[" << o->metaObject()->className()
 //            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
 //            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())
 //            << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
-        if (KexiUtils::hasParent(this, o)) {
+        if (KDbUtils::hasParent(this, o)) {
             if (e->type() == QEvent::FocusOut && qApp->focusWidget()
-                    && !KexiUtils::hasParent(this, qApp->focusWidget())) {
+                    && !KDbUtils::hasParent(this, qApp->focusWidget())) {
                 //focus out: when currently focused widget is not a parent of this view
                 emit focus(false);
             } else if (e->type() == QEvent::FocusIn) {
                 emit focus(true);
             }
             if (e->type() == QEvent::FocusOut) {
-//    kDebug() << focusWidget()->className() << " " << focusWidget()->name();
-//    kDebug() << o->className() << " " << o->name();
-                KexiView *v = KexiUtils::findParent<KexiView*>(o);
+//    qDebug() << focusWidget()->className() << " " << focusWidget()->name();
+//    qDebug() << o->className() << " " << o->name();
+                KexiView *v = KDbUtils::findParent<KexiView*>(o);
                 if (v) {
                     while (v->d->parentView)
                         v = v->d->parentView;
-                    if (KexiUtils::hasParent(this, static_cast<QWidget*>(v->focusWidget())))
+                    if (KDbUtils::hasParent(this, static_cast<QWidget*>(v->focusWidget())))
                         v->d->lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
                 }
             }
@@ -558,7 +560,7 @@ void KexiView::removeView(Kexi::ViewMode mode)
 void KexiView::setFocus()
 {
     if (!d->lastFocusedChildBeforeFocusOut.isNull()) {
-//  kDebug() << "FOCUS: " << d->lastFocusedChildBeforeFocusOut->className() << " " << d->lastFocusedChildBeforeFocusOut->name();
+//  qDebug() << "FOCUS: " << d->lastFocusedChildBeforeFocusOut->className() << " " << d->lastFocusedChildBeforeFocusOut->name();
         QWidget *w = d->lastFocusedChildBeforeFocusOut;
         d->lastFocusedChildBeforeFocusOut = 0;
         w->setFocus();
@@ -642,7 +644,7 @@ void KexiView::toggleViewModeButtonBack()
 
 void KexiView::createViewModeToggleButtons()
 {
-    d->topBarLyr->addSpacing(KDialog::spacingHint());
+    d->topBarLyr->addSpacing(KexiUtils::spacingHint());
 
     QWidget *btnCont = new QWidget(d->topBarHWidget);
     QHBoxLayout *btnLyr = new QHBoxLayout;
@@ -650,14 +652,14 @@ void KexiView::createViewModeToggleButtons()
     btnLyr->setContentsMargins(0, 0, 0, 0);
     btnCont->setLayout(btnLyr);
     d->topBarLyr->addWidget(btnCont);
-    d->topBarLyr->addSpacing(KDialog::spacingHint());
+    d->topBarLyr->addSpacing(KexiUtils::spacingHint());
 
     d->addViewButton(KoGroupButton::GroupLeft, Kexi::DataViewMode, btnCont,
-                     SLOT(slotSwitchToDataViewModeInternal(bool)), i18n("Data"), btnLyr);
+                     SLOT(slotSwitchToDataViewModeInternal(bool)), xi18n("Data"), btnLyr);
     d->addViewButton(d->window->supportsViewMode(Kexi::TextViewMode) ? KoGroupButton::GroupCenter
                                                                      : KoGroupButton::GroupRight,
                      Kexi::DesignViewMode, btnCont,
-                     SLOT(slotSwitchToDesignViewModeInternal(bool)), i18n("Design"), btnLyr);
+                     SLOT(slotSwitchToDesignViewModeInternal(bool)), xi18n("Design"), btnLyr);
     KoGroupButton *btn = d->addViewButton(KoGroupButton::GroupRight, Kexi::TextViewMode,
                                           btnCont, SLOT(slotSwitchToTextViewModeInternal(bool)),
                                           QString(), btnLyr);
@@ -769,4 +771,3 @@ QList<QVariant> KexiView::currentParameters() const
     return QList<QVariant>();
 }
 
-#include "KexiView.moc"

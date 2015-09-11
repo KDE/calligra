@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef MAPBROWSERFACTORY_H
 #define MAPBROWSERFACTORY_H
 
@@ -39,7 +38,7 @@ public:
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
 
-    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget* w);
+    virtual void setPropertyOptions(KPropertySet& set, const KFormDesigner::WidgetInfo& info, QWidget* w);
 };
 
 #endif // MAPBROWSERFACTORY_H

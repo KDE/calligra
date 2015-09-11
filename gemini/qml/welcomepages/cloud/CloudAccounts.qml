@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.calligra 1.0
 import Calligra.Gemini.Dropbox 1.0
 import "../../components"

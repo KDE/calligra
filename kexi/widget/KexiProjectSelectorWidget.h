@@ -20,10 +20,11 @@
 #ifndef KEXIPROJECTSELECTORWIDGET_H
 #define KEXIPROJECTSELECTORWIDGET_H
 
+#include "kexiextwidgets_export.h"
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 #include <QTreeWidget>
 
@@ -69,7 +70,7 @@ public:
     QLabel *label() const;
 
     QTreeWidget* list() const;
-    
+
 Q_SIGNALS:
     void projectExecuted(KexiProjectData*);
     void selectionChanged(KexiProjectData*);
@@ -81,7 +82,7 @@ protected Q_SLOTS:
 
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    
+
     class Private;
     Private * const d;
 
@@ -98,7 +99,7 @@ public:
      You should test if project set was properly loaded using projectSet()->error().
     */
     KexiProjectSelectorDialog(QWidget *parent,
-                              const KexiDB::ConnectionData& cdata,
+                              const KDbConnectionData& cdata,
                               bool showProjectNameColumn = true, bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorDialog();

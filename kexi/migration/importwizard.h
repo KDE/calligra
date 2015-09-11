@@ -22,12 +22,12 @@
 #ifndef KEXIMIGRATIONIMPORTWIZARD_H
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
-#include <kassistantdialog.h>
-
-#include <db/tristate.h>
 #include "migratemanager.h"
 
-#include <QProgressBar>
+#include <KDbTristate>
+
+#include <KAssistantDialog>
+
 #include <QLabel>
 
 class QLabel;
@@ -36,10 +36,6 @@ class KPageWidgetItem;
 namespace Kexi
 {
 class ObjectStatus;
-}
-
-namespace KexiDB
-{
 }
 
 namespace KexiMigration
@@ -74,7 +70,7 @@ protected Q_SLOTS:
 
 private:
     void parseArguments();
-    
+
     void setupIntro();
     void setupSrcConn();
     void setupSrcDB();

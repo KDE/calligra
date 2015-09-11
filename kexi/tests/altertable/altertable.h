@@ -17,13 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef AlterTableTester_H
-#define AlterTableTester_H
+#ifndef ALTERTABLETESTER_H
+#define ALTERTABLETESTER_H
 
 #include <QUrlOperator>
-#include <QtNetwork>
-#include <QNetworkProtocol>
-#include <db/tristate.h>
+
+#include <KDbTristate>
 
 class KexiTableDesignerInterface;
 class KexiWindow;
@@ -35,7 +34,7 @@ public:
     AlterTableTester();
     ~AlterTableTester();
 
-    tristate run(bool &closeAppRequested);
+    tristate run(bool *closeAppRequested);
 
 protected Q_SLOTS:
     void slotFinishedCopying(QNetworkOperation*);

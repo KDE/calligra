@@ -66,5 +66,3 @@ KoResourceServer<FilterEffectResource>* FilterResourceServerProvider::filterEffe
     m_filterEffectThread->barrier();
     return m_filterEffectServer;
 }
-
-#include "FilterResourceServerProvider.moc"

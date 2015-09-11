@@ -18,22 +18,21 @@
 */
 
 #include "kexiformeventhandler.h"
-
-#include <QWidget>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kactioncollection.h>
-#include <kaction.h>
-
-#include <db/tableviewdata.h>
-#include <db/queryschema.h>
 #include <KexiMainWindowIface.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 #include <kexipartmanager.h>
 #include <kexiproject.h>
+
+#include <KDbTableViewData>
+#include <KDbQuerySchema>
+
+#include <KActionCollection>
+
+#include <QWidget>
+#include <QAction>
+#include <QDebug>
 
 KexiFormEventAction::ActionData::ActionData()
 {
@@ -45,10 +44,11 @@ bool KexiFormEventAction::ActionData::isEmpty() const
 }
 
 KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
-    QString& actionType, QString& actionArg, bool& ok) const
+    QString& actionType, QString& actionArg, bool *ok) const
 {
+    Q_ASSERT(ok);
     const int idx = string.indexOf(':');
-    ok = false;
+    *ok = false;
     if (idx == -1)
         return 0;
     const QString _actionType = string.left(idx);
@@ -57,13 +57,13 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
         return 0;
     KexiPart::Info *info = 0;
     if (_actionType != "kaction" && _actionType != "currentForm") {
-        info = Kexi::partManager().infoForClass(QString("org.kexi-project.%1").arg(_actionType));
+        info = Kexi::partManager().infoForPluginId(QString("org.kexi-project.%1").arg(_actionType));
         if (!info)
             return 0;
     }
     actionType = _actionType;
     actionArg = _actionArg;
-    ok = true;
+    *ok = true;
     return info;
 }
 
@@ -91,7 +91,7 @@ KexiFormEventAction::Private::~Private()
 
 KexiFormEventAction::KexiFormEventAction(QObject* parent,
         const QString& actionName, const QString& objectName, const QString& actionOption)
-        : KAction(parent)
+        : QAction(parent)
         ,d(new Private(actionName, objectName, actionOption))
 {
     connect(this, SIGNAL(triggered()), this, SLOT(trigger()));
@@ -104,11 +104,11 @@ KexiFormEventAction::~KexiFormEventAction()
 
 void KexiFormEventAction::slotTrigger()
 {
-    kDebug() << d->actionName << d->objectName;
+    qDebug() << d->actionName << d->objectName;
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
-    KexiPart::Part* part = Kexi::partManager().partForClass(
+    KexiPart::Part* part = Kexi::partManager().partForPluginId(
                                QString("org.kexi-project.%1").arg(d->actionName));
     if (!part)
         return;
@@ -120,11 +120,11 @@ void KexiFormEventAction::slotTrigger()
         if (part->info()->isExecuteSupported())
             part->execute(item, parent());
         else
-            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, &actionCancelled);
     } else {
 //! @todo react on failure...
         if (d->actionOption == "open")
-            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, &actionCancelled);
         else if (d->actionOption == "execute")
             part->execute(item, parent());
         else if (d->actionOption == "print") {
@@ -146,11 +146,11 @@ void KexiFormEventAction::slotTrigger()
             if (part->info()->isDataExportSupported())
                 KexiMainWindowIface::global()->executeCustomActionForObject(item, d->actionOption);
         } else if (d->actionOption == "new")
-            KexiMainWindowIface::global()->newObject(part->info(), actionCancelled);
+            KexiMainWindowIface::global()->newObject(part->info(), &actionCancelled);
         else if (d->actionOption == "design")
-            KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, &actionCancelled);
         else if (d->actionOption == "editText")
-            KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, actionCancelled);
+            KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, &actionCancelled);
         else if (d->actionOption == "close") {
             tristate res = KexiMainWindowIface::global()->closeObject(item);
             if (~res)
@@ -210,10 +210,10 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
             continue;
 
         QString actionType, actionArg;
-        KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
+        KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, &ok);
         if (!ok)
             continue;
-        kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
+        qDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
         if (actionType == "kaction" || actionType == "currentForm") {
             QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
                                   actionArg);

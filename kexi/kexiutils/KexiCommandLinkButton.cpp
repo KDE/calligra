@@ -21,7 +21,6 @@
 #include "KexiCommandLinkButton.h"
 #include <QStylePainter>
 #include <QStyleOption>
-#include <QTextDocument>
 #include <QTextLayout>
 #include <QColor>
 #include <QFont>

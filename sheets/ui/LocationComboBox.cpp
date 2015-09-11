@@ -273,5 +273,3 @@ void LocationComboBox::slotSelectionChanged()
         updateAddress();
     }
 }
-
-#include "LocationComboBox.moc"

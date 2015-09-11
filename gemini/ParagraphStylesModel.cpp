@@ -200,5 +200,3 @@ void ParagraphStylesModel::setZoomLevel(const qreal& newZoom)
         dataChanged(index(0), index(d->styles.count() - 1));
     emit zoomLevelChanged();
 }
-
-#include "ParagraphStylesModel.moc"

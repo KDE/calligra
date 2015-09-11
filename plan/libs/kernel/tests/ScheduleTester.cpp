@@ -22,7 +22,7 @@
 #include "kptschedule.h"
 
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kdebug.h>
 
 namespace QTest
@@ -145,6 +145,4 @@ void ScheduleTester::busy()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ScheduleTester )
-
-#include "ScheduleTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ScheduleTester )

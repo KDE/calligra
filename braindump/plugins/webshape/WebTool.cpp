@@ -19,8 +19,10 @@
 
 #include "WebTool.h"
 
-#include <kundo2command.h>
 #include <QPainter>
+
+#include <kundo2command.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -28,7 +30,6 @@
 #include <KoSelection.h>
 
 #include "WebShape.h"
-#include <klocalizedstring.h>
 #include "WebToolWidget.h"
 
 class ChangeScroll : public KUndo2Command

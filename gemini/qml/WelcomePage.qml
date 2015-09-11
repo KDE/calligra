@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.3
 import org.calligra 1.0
 import "components"
 import "welcomepages"
@@ -191,6 +192,7 @@ Page {
                                 return elements[name];
                             }
                             onClicked: {
+                                console.debug("boop! " + index);
                                 if(model.selected) {
                                     return;
                                 }
@@ -224,7 +226,7 @@ Page {
             }
             color: "#e8e9ea";
         }
-        PageStack {
+        StackView {
             id: welcomeStack;
             clip: true;
             anchors {
@@ -234,7 +236,7 @@ Page {
                 right: parent.right;
                 bottom: parent.bottom;
             }
-            initialPage: welcomePageFilebrowser;
+            initialItem: welcomePageFilebrowser;
         }
         Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
         Component { id: welcomePageRecent; WelcomePageRecent { } }

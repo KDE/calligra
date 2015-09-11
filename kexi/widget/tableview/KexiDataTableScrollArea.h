@@ -24,10 +24,7 @@
 
 #include "KexiTableScrollArea.h"
 
-namespace KexiDB
-{
-class Cursor;
-}
+class KDbCursor;
 
 /**
  * Database-aware table widget.
@@ -44,11 +41,11 @@ public:
 
     /*! Creates a table widget and fills it using data from \a cursor.
      Cursor will be opened (with open()) if it is not yet opened.
-     Cursor must be defined on query schema, not raw statement (see Connection::prepareQuery()
-     and Connection::executeQuery()), otherwise the table view remain not filled with data.
+     Cursor must be defined on query schema, not raw statement (see KDbConnection::prepareQuery()
+     and KDbConnection::executeQuery()), otherwise the table view remain not filled with data.
      Cursor \a cursor will not be owned by this object.
      */
-    KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor);
+    KexiDataTableScrollArea(QWidget *parent, KDbCursor *cursor);
 
     ~KexiDataTableScrollArea();
 
@@ -56,11 +53,11 @@ public:
 
     /*! Fills table view with data using \a cursor. \return true on success.
      Cursor \a cursor will not be owned by this object. */
-    bool setData(KexiDB::Cursor *cursor);
+    bool setData(KDbCursor *cursor);
 
     /*! \return cursor used as data source for this table view,
      or NULL if no valid cursor is defined. */
-    KexiDB::Cursor *cursor() {
+    KDbCursor *cursor() {
         return m_cursor;
     }
 
@@ -68,11 +65,11 @@ public:
      * @returns the number of records in the data set, (if data set is present)
      * @note not all of the records have to be processed
      */
-    int recordCount() const {
+    virtual int recordCount() const {
         return m_data->count();
     }
 
-#ifndef KEXI_NO_PRINT
+#ifdef KEXI_TABLE_PRINT_SUPPORT
 //  virtual void print(KPrinter &printer);
 #endif
 
@@ -81,7 +78,7 @@ protected:
 
 private:
     //db stuff
-    KexiDB::Cursor *m_cursor;
+    KDbCursor *m_cursor;
 };
 
 #endif

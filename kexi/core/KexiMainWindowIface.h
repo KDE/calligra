@@ -26,7 +26,7 @@
 #include <QMap>
 
 #include <kexi_global.h>
-#include <db/tristate.h>
+#include <KDbTristate>
 
 #include "KexiMigrateManagerInterface.h"
 #include "kexisharedactionhost.h"
@@ -72,22 +72,10 @@ public:
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project() = 0;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KActionCollection* actionCollection() const = 0;
-#else
-#pragma WARNING( TODO virtual KActionCollection* actionCollection() const = 0; )
-#endif
-#endif
+//! @todo KEXI3 virtual KActionCollection* actionCollection() const = 0;
     virtual KActionCollection* actionCollection() const = 0;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual QWidget* focusWidget() const = 0;
-#else
-#pragma WARNING( TODO virtual QWidget* focusWidget() const = 0; )
-#endif
-#endif
+//! @todo KEXI3 virtual QWidget* focusWidget() const = 0;
     virtual QWidget* focusWidget() const = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */
@@ -111,7 +99,7 @@ public:
 // Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
-    virtual void acceptProjectClosingRequested(bool& cancel) = 0;
+    virtual void acceptProjectClosingRequested(bool *cancel) = 0;
 
     //! Emitted before closing the project (and destroying all it's data members).
     //! You can do you cleanup of your structures here.
@@ -124,16 +112,16 @@ public:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
-    virtual bool newObject(KexiPart::Info *info, bool& openingCancelled) = 0;
+    virtual bool newObject(KexiPart::Info *info, bool *openingCancelled) = 0;
 
     //! Opens object pointed by \a item in a view \a viewMode
     virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-                                   bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
+                                   bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
                                    QString* errorMessage = 0) = 0;
 
     //! For convenience
     virtual KexiWindow* openObject(const QString& mime, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled,
+                                   Kexi::ViewMode viewMode, bool *openingCancelled,
                                    QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.
@@ -212,7 +200,7 @@ public:
      * Do not store the pointer after the window is closed to avoid dangling pointers.
     \see KexiPart::Part::currentQuery(KexiView*) KexiWindow::isDirty()
     */
-    virtual KexiDB::QuerySchema* unsavedQuery(int identifier) = 0;
+    virtual KDbQuerySchema* unsavedQuery(int identifier) = 0;
 
     /*! Displays a dialog for entering object's name and title.
      Used on new object saving.

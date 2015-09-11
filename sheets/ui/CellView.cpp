@@ -59,6 +59,7 @@
 
 // KDE
 #include <kcolorutils.h>
+#include <klocale.h>
 
 // Calligra
 #include <KoPostscriptPaintDevice.h>

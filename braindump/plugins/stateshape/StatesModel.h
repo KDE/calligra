@@ -21,7 +21,6 @@
 #define _STATESMODEL_H_
 
 #include <QAbstractListModel>
-
 #include <QImage>
 
 class State;

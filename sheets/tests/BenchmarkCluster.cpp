@@ -23,6 +23,8 @@
 
 #include "BenchmarkCluster.h"
 
+#include <QTest>
+
 using namespace KSpread;
 class Cell;
 
@@ -251,5 +253,3 @@ void ClusterBenchmark::testShiftDownPerformance()
 
 
 QTEST_MAIN(ClusterBenchmark)
-
-#include "BenchmarkCluster.moc"

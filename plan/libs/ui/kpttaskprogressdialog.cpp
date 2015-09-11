@@ -80,5 +80,3 @@ MacroCommand *TaskProgressDialog::buildCommand() {
 
 
 }  //KPlato namespace
-
-#include "kpttaskprogressdialog.moc"

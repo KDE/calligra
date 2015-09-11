@@ -22,7 +22,7 @@
 #define _CALLIGRACREATOR_H_
 
 // KDE
-#include <kio/thumbcreator.h>
+#include <KIO/ThumbCreator>
 // Qt
 #include <QApplication>
 #include <QEventLoop>

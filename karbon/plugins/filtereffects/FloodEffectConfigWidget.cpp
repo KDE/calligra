@@ -62,5 +62,3 @@ void FloodEffectConfigWidget::colorChanged()
     m_effect->setFloodColor(m_actionStopColor->currentColor());
     emit filterChanged();
 }
-
-#include "FloodEffectConfigWidget.moc"

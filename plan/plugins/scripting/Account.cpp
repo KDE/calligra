@@ -119,5 +119,3 @@ QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &schedule )
     }
     return map;
 }
-
-#include "Account.moc"

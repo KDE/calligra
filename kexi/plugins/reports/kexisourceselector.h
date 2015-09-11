@@ -20,14 +20,15 @@
 #define KEXISOURCESELECTOR_H
 
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QComboBox>
 
-#include <db/connection.h>
-#include <KoReportData.h>
+#include <KDbConnection>
+
+#include <KoReportData>
+
 #include "kexidbreportdata.h"
+#ifdef HAVE_KEXI_MIGRATE
 #include "keximigratereportdata.h"
-
+#endif
 class KexiProject;
 
 //! @todo rename to KexiReportDataSourcePage

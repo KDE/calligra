@@ -1,11 +1,9 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs   )
+include_directories(${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core)
 
 
 ########### next target ###############
 
-set(kexidataviewcommon_LIB_SRCS 
+set(kexidataviewcommon_LIB_SRCS
    kexidataawareobjectiface.cpp
    kexidataawarepropertyset.cpp
    kexidataawareview.cpp
@@ -13,8 +11,9 @@ set(kexidataviewcommon_LIB_SRCS
    kexiformdataiteminterface.cpp
 )
 
-
 add_library(kexidataviewcommon SHARED ${kexidataviewcommon_LIB_SRCS})
+
+generate_export_header(kexidataviewcommon)
 
 target_link_libraries(
     kexidataviewcommon
@@ -22,10 +21,11 @@ target_link_libraries(
     kexiutils
     kexiguiutils
 
-    Predicate
+    KDb
     KProperty
 
     KF5::KIOWidgets
+    KF5::XmlGui #KActionCollection...
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

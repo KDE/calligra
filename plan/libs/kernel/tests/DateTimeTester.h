@@ -20,7 +20,7 @@
 #ifndef KPlato_DateTimeTester_h
 #define KPlato_DateTimeTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptdatetime.h"
 
@@ -35,10 +35,7 @@ private Q_SLOTS:
     void subtractHour();
     void subtractMinute();
     void subtractSecond();
-
-#if QT_VERSION  >= 0x040700
     void subtractMillisecond();
-#endif
 
     void addDay();
     void addHour();

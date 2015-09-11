@@ -20,7 +20,7 @@
 #ifndef KEXISERVERDRIVERNOTFOUNDMESSAGE_H
 #define KEXISERVERDRIVERNOTFOUNDMESSAGE_H
 
-#include "kexi_export.h"
+#include "kexiextwidgets_export.h"
 #include <kexiutils/KexiContextMessage.h>
 #include <QWidget>
 
@@ -30,9 +30,9 @@ class KEXIEXTWIDGETS_EXPORT KexiServerDriverNotFoundMessage: public KexiContextM
     Q_OBJECT
 public:
     explicit KexiServerDriverNotFoundMessage(QWidget *parent);
-    
+
     virtual ~KexiServerDriverNotFoundMessage();
-    
+
 };
 
 #endif

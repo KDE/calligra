@@ -72,21 +72,21 @@ public:
 
     /**
      * Try to call \a storeData with new data we like to store. On
-     * success the matching \a KexiDB::SchemaData is returned.
+     * success the matching \a KDbObject is returned.
      *
-     * \param sdata The source \a KexiDB::SchemaData instance.
+     * \param object The source \a KDbObject instance.
      * \param cancel Cancel on failure and don't try to clean
      *       possible temporary created data up.
-     * \return The matching \a KexiDB::SchemaData instance or NULL
+     * \return The matching \a KDbObject instance or NULL
      *        if storing failed.
      */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+    virtual KDbObject* storeNewData(const KDbObject& object,
                                              KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+                                             bool *cancel);
 
     /**
      * Try to store the modified data in the already opened and
-     * currently used \a KexiDB::SchemaData instance.
+     * currently used \a KDbObject instance.
      */
     virtual tristate storeData(bool dontAsk = false);
 

@@ -21,19 +21,22 @@
 #define KEXIGUIMSGHANDLER_H
 
 #include <core/kexi.h>
-#include <db/msghandler.h>
 
-class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
+#include <KDbMessageHandler>
+
+class KEXICORE_EXPORT KexiGUIMessageHandler : public KDbMessageHandler
 {
 public:
     explicit KexiGUIMessageHandler(QWidget *parent = 0);
     virtual ~KexiGUIMessageHandler();
 
-    using KexiDB::MessageHandler::showErrorMessage;
+    using KDbMessageHandler::showErrorMessage;
 
-    void showErrorMessage(const QString&, const QString&, KexiDB::Object *obj);
+    void showErrorMessage(const QString &message, const QString &details, KDbResultable *resultable);
+    void showErrorMessage(const QString &message, KDbResultable *resultable);
     void showErrorMessage(Kexi::ObjectStatus *status);
     void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
+    void showErrorMessage(const QString &title, const QString &details);
 
     /*! Displays a "Sorry" message with \a title text and optional \a details. */
     void showSorryMessage(const QString &title, const QString &details = QString());
@@ -49,20 +52,44 @@ public:
     virtual void showWarningContinueMessage(const QString &title, const QString &details = QString(),
                                             const QString& dontShowAgainName = QString());
 
+    /*! Shows error message with @a title (it is not caption) and details. */
+    virtual void showErrorMessage(
+        KDbMessageHandler::MessageType messageType,
+        const QString &message,
+        const QString &details = QString(),
+        const QString &caption = QString()
+    );
+
+    /*! Shows error message with @a message text. Existing error message from @a obj object
+     is also copied, if present. */
+    virtual void showErrorMessage(
+        const KDbResult& result,
+        KDbMessageHandler::MessageType messageType = Error,
+        const QString& message = QString(),
+        const QString& caption = QString()
+    );
+
+    /*! Interactively asks a question. For GUI version, message boxes are used.
+     @a defaultResult is returned in case when no message handler is installed.
+     @a message should contain translated string.
+     Value of ButtonCode is returned.
+     Reimplement this. This implementation does nothing, just returns @a defaultResult. */
+    virtual KDbMessageHandler::ButtonCode askQuestion(
+            KDbMessageHandler::QuestionType messageType,
+            const QString &message,
+            const QString &caption = QString(),
+            KDbMessageHandler::ButtonCode defaultResult = KDbMessageHandler::Yes,
+            const KDbGuiItem &buttonYes = KDbGuiItem(),
+            const KDbGuiItem &buttonNo = KDbGuiItem(),
+            const QString &dontShowAskAgainName = QString(),
+            KDbMessageHandler::Options options = 0,
+            KDbMessageHandler* msgHandler = 0);
+
+    //! @return GUI message redirection for this handler or 0 if there is no GUI redirection.
+    KexiGUIMessageHandler* guiRedirection();
+
 protected:
-    using KexiDB::MessageHandler::showErrorMessageInternal;
-
-    virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
-
-    /*! Interactively asks a question using KMessageBox.
-     See KexiDB::MessageHandler::askQuestionInternal() for details. */
-    virtual int askQuestionInternal(const QString& message,
-                                    KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                                    const KGuiItem &buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem &buttonNo = KStandardGuiItem::no(),
-                                    const QString &dontShowAskAgainName = QString(),
-                                    KMessageBox::Options options = KMessageBox::Notify);
+    //using KDbMessageHandler::showErrorMessage;
 };
 
 #endif

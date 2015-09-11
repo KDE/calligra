@@ -18,20 +18,21 @@
  */
 
 #include "KexiProjectSelectorWidget.h"
-
-#include <db/drivermanager.h>
-#include <db/connectiondata.h>
-#include <db/utils.h>
 #include <core/kexi.h>
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KDbDriverManager>
+#include <KDbDriverMetaData>
+#include <KDbConnectionData>
+#include <KDbUtils>
+#include <KDbMessageHandler>
 
+#include <KLocalizedString>
+#include <KGuiItem>
+
+#include <QDebug>
 #include <QLabel>
 #include <QPushButton>
-#include <QLayout>
-#include <QPixmap>
 #include <QKeyEvent>
 
 #include <assert.h>
@@ -68,34 +69,41 @@ class ProjectDataLVItem : public QTreeWidgetItem
 {
 public:
     ProjectDataLVItem(KexiProjectData *d,
-                      const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector)
+                      const KDbDriverMetaData &driverMetaData,
+                      KexiProjectSelectorWidget *selector)
             : QTreeWidgetItem(selector->list())
             , data(d)
     {
         int colnum = 0;
-        const KexiDB::ConnectionData *cdata = data->constConnectionData();
+        const KDbConnectionData cdata = *data->connectionData();
         if (selector->d->showProjectNameColumn)
             setText(colnum++, data->caption() + "  ");
 
         setText(colnum++, data->databaseName() + "  ");
 
         if (selector->d->showConnectionColumns) {
-            QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
-            if (info.fileBased) {
-                setText(colnum++, i18n("File (%1)", drvname));
-            } else {
-                setText(colnum++, drvname + "  ");
+            QString driverName = driverMetaData.name();
+            if (driverName.isEmpty()) {
+                KDbDriverManager manager;
+                const KDbDriverMetaData *driverMetaDataFromCdata = manager.driverMetaData(cdata.driverId());
+                if (driverMetaDataFromCdata) {
+                    driverName = driverMetaDataFromCdata->name();
+                }
             }
-
+            if (driverMetaData.isFileBased()) {
+                setText(colnum++, xi18n("File (%1)", driverName) + "  ");
+            } else {
+                setText(colnum++, driverName + "  ");
+            }
             QString conn;
-            if (cdata->caption.isEmpty()) {
-                conn = cdata->serverInfoString();
+            if (cdata.caption().isEmpty()) {
+                conn = cdata.toUserVisibleString();
             }
             else {
-                conn = i18nc("caption: server_info", "%1: %2",
-                             cdata->caption, cdata->serverInfoString());
+                conn = xi18nc("caption: server_info", "%1: %2",
+                              cdata.caption(), cdata.toUserVisibleString());
             }
-            setText(3, conn + "  ");
+            setText(colnum++, conn + "  ");
         }
     }
     ~ProjectDataLVItem() {}
@@ -176,7 +184,7 @@ void KexiProjectSelectorWidget::slotItemExecuted(QTreeWidgetItem *item)
 
 void KexiProjectSelectorWidget::slotItemExecuted()
 {
-    kDebug();
+    qDebug();
     if (!d->selectable)
         return;
     QList<QTreeWidgetItem *> items = list()->selectedItems();
@@ -204,28 +212,29 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     if (!d->prj_set)
         return;
 //! @todo what with project set's ownership?
-    if (d->prj_set->error()) {
-        kDebug() << "d->prj_set->error() !";
+    if (d->prj_set->result().isError()) {
+        qDebug() << "d->prj_set->error()" << d->prj_set->result();
         return;
     }
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     KexiProjectData::List prjlist = d->prj_set->list();
     foreach(KexiProjectData* data, prjlist) {
-        KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
-        if (!info.name.isEmpty()) {
-            ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
+        KDbMessageGuard mg(manager.resultable());
+        const KDbDriverMetaData *driverMetaData = manager.driverMetaData(data->connectionData()->driverId());
+        if (driverMetaData) {
+            ProjectDataLVItem *item = new ProjectDataLVItem(data, *driverMetaData, this);
             if (!d->selectable) {
                 Qt::ItemFlags flags = item->flags();
                 (flags |= Qt::ItemIsSelectable) ^= Qt::ItemIsSelectable;
                 item->setFlags(flags);
             }
-            if (info.fileBased)
+            if (driverMetaData->isFileBased())
                 item->setIcon(0, d->fileicon);
             else
                 item->setIcon(0, d->dbicon);
         }
         else {
-            kWarning() << "no driver found for" << data->constConnectionData()->driverName;
+            qWarning() << "no driver found for" << data->connectionData()->driverId();
         }
     }
     list()->setSortingEnabled(true);
@@ -288,20 +297,22 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
-        const KexiDB::ConnectionData& cdata,
+        const KDbConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18nc("@title:window", "Open Project"));
-    KexiDB::ConnectionData _cdata(cdata);
-    KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
+    setWindowTitle(xi18nc("@title:window", "Open Project"));
+    KDbConnectionData _cdata(cdata);
+    // errors are handled in KexiStartupHandler::selectProject() ...
+    KexiProjectSet *prj_set = new KexiProjectSet;
     init(prj_set, showProjectNameColumn, showConnectionColumns);
-    setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
-                                  i18n("Open Database Connection")));
+    KGuiItem okItem(xi18nc("@action:button", "&Open"), koIconName("document-open"),
+                    xi18n("Open Database Connection"));
+    KGuiItem::assign(button(QDialogButtonBox::Ok), okItem);
 
-    d->sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",
-                                 _cdata.serverInfoString(false)));
+    d->sel->label()->setText(xi18n("Select a project on <resource>%1</resource> database server to open:",
+                                   _cdata.toUserVisibleString(KDbConnectionData::NoUserVisibleStringOption)));
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
@@ -314,20 +325,21 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 {
     setObjectName("KexiProjectSelectorDialog");
     setModal(true);
-    setButtons(
+    setStandardButtons(
 #ifdef KEXI_SHOW_UNFINISHED
         //! @todo re-add Help when doc is available
-        Help |
+        QDialogButtonBox::Help |
 #endif
-        Ok | Cancel
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel
     );
-    setDefaultButton(Ok);
+    button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(Plain);
     setSizeGripEnabled(true);
 
     d->sel = new KexiProjectSelectorWidget(this, prj_set,
                                           showProjectNameColumn, showConnectionColumns);
-    setMainWidget(d->sel);
+    //! @todo KEXI3 test this
+    addPage(d->sel, QString());
     setWindowIcon(d->sel->windowIcon());
     d->sel->setFocus();
 
@@ -349,13 +361,13 @@ void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 
 void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pdata)
 {
-    enableButtonOk(pdata);
+    button(QDialogButtonBox::Ok)->setEnabled(pdata);
 }
 
 void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
 {
     KPageDialog::showEvent(event);
-    KPageDialog::centerOnScreen(this);
+    //! @todo KPageDialog::centerOnScreen(this);
 }
 
 KexiProjectSet* KexiProjectSelectorDialog::projectSet() const

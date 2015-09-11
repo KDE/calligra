@@ -19,25 +19,20 @@
 */
 
 #include "connectiondialog.h"
-
-#include <QLayout>
-#include <QLabel>
-#include <QRegExp>
-#include <QMetaObject>
-
-#include <kpushbutton.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <KoIcon.h>
+#include <KexiIcon.h>
 #include "kexitableview.h"
-
 #include "events.h"
 #include "form.h"
 #include "objecttree.h"
 
-#include <db/tableviewdata.h>
+#include <KDbTableViewData>
+
+#include <KMessageBox>
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QRegExp>
+#include <QPushButton>
 
 using namespace KFormDesigner;
 
@@ -50,11 +45,11 @@ public:
     Form *form;
     ConnectionBuffer *buffer;
     KexiTableView  *table;
-    KexiDB::TableViewData  *data;
-    KexiDB::TableViewData *widgetsColumnData,
+    KDbTableViewData  *data;
+    KDbTableViewData *widgetsColumnData,
     *slotsColumnData, *signalsColumnData;
     QLabel  *pixmapLabel, *textLabel;
-    KPushButton *addButton, *removeButton;
+    QPushButton *addButton, *removeButton;
 };
 
 ConnectionDialog::Private::Private(Form *f)
@@ -77,7 +72,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 {
     setObjectName("connections_dialog");
     setModal(true);
-    setWindowTitle(i18nc("@title:window", "Edit Form Connections"));
+    setWindowTitle(xi18nc("@title:window", "Edit Form Connections"));
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Details);
     setDefaultButton(KDialog::Ok);
 
@@ -103,7 +98,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     //setStatusOk();
 
     // And the KexiTableView ////////
-    d->data = new KexiDB::TableViewData();
+    d->data = new KDbTableViewData();
     d->table = new KexiTableView(0, frame, "connections_tableview");
     d->table->setSpreadSheetMode(true);
     d->table->setInsertingEnabled(true);
@@ -114,16 +109,16 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 
     connect(d->table, SIGNAL(cellSelected(int,int)),
             this, SLOT(slotCellSelected(int,int)));
-    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
-            this, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
+    connect(d->table->data(), SIGNAL(recordInserted(KDbRecordData*,bool)),
+            this, SLOT(slotRecordInserted(KDbRecordData*,bool)));
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
-    d->addButton = new KPushButton(koIcon("document-new"), i18n("&New Connection"), frame);
+    d->addButton = new QPushButton(koIcon("document-new"), xi18n("&New Connection"), frame);
     vlayout->addWidget(d->addButton);
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(newItem()));
 
-    d->removeButton = new KPushButton(koIcon("edit-delete"), i18n("&Remove Connection"), frame);
+    d->removeButton = new QPushButton(koIcon("edit-delete"), xi18n("&Remove Connection"), frame);
     vlayout->addWidget(d->removeButton);
     connect(d->removeButton, SIGNAL(clicked()), this, SLOT(removeItem()));
 
@@ -143,28 +138,28 @@ ConnectionDialog::~ConnectionDialog()
 void
 ConnectionDialog::initTable()
 {
-    KexiDB::TableViewColumn *col0 = new KexiDB::TableViewColumn(i18n("OK?"), KexiDB::Field::Text);
-    col0->field()->setSubType("KIcon");
+    KDbTableViewColumn *col0 = new KDbTableViewColumn(xi18n("OK?"), KDbField::Text);
+    col0->field()->setSubType("QIcon");
     col0->setReadOnly(true);
-    col0->field()->setDescription(i18n("Connection correctness"));
+    col0->field()->setDescription(xi18n("Connection correctness"));
     d->data->addColumn(col0);
 
-    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
-    d->widgetsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col1 = new KDbTableViewColumn(xi18n("Sender"), KDbField::Enum);
+    d->widgetsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col1->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col1);
 
-    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn(i18n("Signal"), KexiDB::Field::Enum);
-    d->signalsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col2 = new KDbTableViewColumn(xi18n("Signal"), KDbField::Enum);
+    d->signalsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col2->setRelatedData(d->signalsColumnData);
     d->data->addColumn(col2);
 
-    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn(i18n("Receiver"), KexiDB::Field::Enum);
+    KDbTableViewColumn *col3 = new KDbTableViewColumn(xi18n("Receiver"), KDbField::Enum);
     col3->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col3);
 
-    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn(i18n("Slot"), KexiDB::Field::Enum);
-    d->slotsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KDbTableViewColumn *col4 = new KDbTableViewColumn(xi18n("Slot"), KDbField::Enum);
+    d->slotsColumnData = new KDbTableViewData(KDbField::Text, KDbField::Text);
     col4->setRelatedData(d->slotsColumnData);
     d->data->addColumn(col4);
 
@@ -173,10 +168,10 @@ ConnectionDialog::initTable()
     d->table->maximizeColumnsWidth(c);
     d->table->setColumnResizeEnabled(4, true);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
-            this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
-    connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
-    connect(d->table, SIGNAL(itemSelected(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KDbRecordData*,int,QVariant*,KDbResultInfo*)),
+            this, SLOT(slotCellChanged(KDbRecordData*,int,QVariant*,KDbResultInfo*)));
+    connect(d->data, SIGNAL(recordUpdated(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
+    connect(d->table, SIGNAL(itemSelected(KDbRecordData*)), this, SLOT(checkConnection(KDbRecordData*)));
 }
 
 void ConnectionDialog::exec()
@@ -188,16 +183,16 @@ void ConnectionDialog::exec()
 void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
-    KexiDB::RecordData *record = d->table->itemAt(row);
-    if (!record)
+    KDbRecordData *data = d->table->itemAt(row);
+    if (!data)
         return;
     if (col == 2) // signal col
-        updateSignalList(record);
+        updateSignalList(data);
     else if (col == 4) // slot col
-        updateSlotList(record);
+        updateSlotList(data);
 }
 
-void ConnectionDialog::slotRowInserted(KexiDB::RecordData* item, bool)
+void ConnectionDialog::slotRecordInserted(KDbRecordData* item, bool)
 {
     d->buffer->append(new Connection());
     checkConnection(item);
@@ -208,13 +203,13 @@ ConnectionDialog::slotOk()
 {
     // First we update our buffer contents
     for (int i = 0; i < d->table->rows(); i++) {
-        KexiDB::RecordData *record = d->table->itemAt(i);
+        KDbRecordData *data = d->table->itemAt(i);
         Connection *c = d->buffer->at(i);
 
-        c->setSender((*record)[1].toString());
-        c->setSignal((*record)[2].toString());
-        c->setReceiver((*record)[3].toString());
-        c->setSlot((*record)[4].toString());
+        c->setSender((*data)[1].toString());
+        c->setSignal((*data)[2].toString());
+        c->setReceiver((*data)[3].toString());
+        c->setSlot((*data)[4].toString());
     }
 
     // then me make it replace form's current one
@@ -228,38 +223,38 @@ ConnectionDialog::updateTableData()
 {
     // First we update the columns data
     foreach (ObjectTreeItem *item, *d->form->objectTree()->hash()) {
-        KexiDB::RecordData *record = d->widgetsColumnData->createItem();
-        (*record)[0] = item->name();
-        (*record)[1] = (*record)[0];
-        d->widgetsColumnData->append(record);
+        KDbRecordData *data = d->widgetsColumnData->createItem();
+        (*data)[0] = item->name();
+        (*data)[1] = (*data)[0];
+        d->widgetsColumnData->append(data);
     }
 
     // Then we fill the columns with the form connections
     foreach (Connection *c, *d->form->connectionBuffer()) {
-        KexiDB::RecordData *record = d->table->data()->createItem();
-        (*record)[1] = c->sender();
-        (*record)[2] = c->signal();
-        (*record)[3] = c->receiver();
-        (*record)[4] = c->slot();
-        d->table->insertItem(record, d->table->rows());
+        KDbRecordData *newData = d->table->data()->createItem();
+        (*newData )[1] = c->sender();
+        (*newData )[2] = c->signal();
+        (*newData )[3] = c->receiver();
+        (*newData )[4] = c->slot();
+        d->table->insertItem(newData , d->table->rows());
     }
 
     d->buffer = new ConnectionBuffer(*(d->form->connectionBuffer()));
 }
 
 void
-ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
+ConnectionDialog::setStatusOk(KDbRecordData *data)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
-    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is OK.")));
+    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is OK.")));
 
-    if (!record)
-        record = d->table->selectedItem();
+    if (!data)
+        data = d->table->selectedItem();
     if (d->table->currentRow() >= d->table->rows())
-        record = 0;
+        data = 0;
 
-    if (record)
-        (*record)[0] = "dialog-ok";
+    if (data)
+        (*data)[0] = "dialog-ok";
     else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
@@ -267,18 +262,18 @@ ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
+ConnectionDialog::setStatusError(const QString &msg, KDbRecordData *data)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
-    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is invalid.")) + msg);
+    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(xi18n("The connection is invalid.")) + msg);
 
-    if (!record)
-        record = d->table->selectedItem();
+    if (!data)
+        data = d->table->selectedItem();
     if (d->table->currentRow() >= d->table->rows())
-        record = 0;
+        data = 0;
 
-    if (record)
-        (*record)[0] = "dialog-cancel";
+    if (data)
+        (*data)[0] = "dialog-cancel";
     else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
@@ -286,16 +281,16 @@ ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
 }
 
 void
-ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant&, KexiDB::ResultInfo*)
+ConnectionDialog::slotCellChanged(KDbRecordData *data, int col, QVariant*, KDbResultInfo*)
 {
     switch (col) {
         // sender changed, we clear siganl and slot
     case 1:
-        (*record)[2] = QString("");
+        (*data)[2] = QString("");
         // signal or receiver changed, we clear the slot cell
     case 2:
     case 3: {
-        (*record)[4] = QString("");
+        (*data)[4] = QString("");
         break;
     }
     default:
@@ -304,11 +299,11 @@ ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant&
 }
 
 void
-ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
+ConnectionDialog::updateSlotList(KDbRecordData *data)
 {
-    d->slotsColumnData->deleteAllRows();
-    QString widget = (*record)[1].toString();
-    QString signal = (*record)[2].toString();
+    d->slotsColumnData->deleteAllRecords();
+    QString widget = (*data)[1].toString();
+    QString signal = (*data)[2].toString();
 
     if ((widget.isEmpty()) || signal.isEmpty())
         return;
@@ -329,62 +324,62 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
         if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
             continue;
 
-        KexiDB::RecordData *record = d->slotsColumnData->createItem();
-        (*record)[0] = QString::fromLatin1(method.signature());
-        (*record)[1] = (*record)[0];
-        d->slotsColumnData->append(record);
+        KDbRecordData *newData = d->slotsColumnData->createItem();
+        (*newData)[0] = QString::fromLatin1(method.signature());
+        (*newData)[1] = (*newData)[0];
+        d->slotsColumnData->append(newData);
     }
 }
 
 void
-ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
+ConnectionDialog::updateSignalList(KDbRecordData *data)
 {
-    ObjectTreeItem *tree = d->form->objectTree()->lookup((*record)[1].toString());
+    ObjectTreeItem *tree = d->form->objectTree()->lookup((*data)[1].toString());
     if (!tree || !tree->widget())
         return;
 
-    d->signalsColumnData->deleteAllRows();
+    d->signalsColumnData->deleteAllRecords();
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
     foreach(const QMetaMethod &method, list) {
-        KexiDB::RecordData *record = d->signalsColumnData->createItem();
-        (*record)[0] = QString::fromLatin1(method.signature());
-        (*record)[1] = (*record)[0];
-        d->signalsColumnData->append(record);
+        KDbRecordData *newData = d->signalsColumnData->createItem();
+        (*newData )[0] = QString::fromLatin1(method.signature());
+        (*newData )[1] = (*newData )[0];
+        d->signalsColumnData->append(newData );
     }
 }
 
 void
-ConnectionDialog::checkConnection(KexiDB::RecordData *record)
+ConnectionDialog::checkConnection(KDbRecordData *data)
 {
     // First we check if one column is empty
     for (int i = 1; i < 5; i++) {
-        if (!record || (*record)[i].toString().isEmpty()) {
-            setStatusError("<qt>" + i18n("You have not selected item: <b>%1</b>.",
-                                d->data->column(i)->captionAliasOrName()) + "</qt>", record);
+        if (!data || (*data)[i].toString().isEmpty()) {
+            setStatusError(xi18n("You have not selected item: <resource>%1</resource>.",
+                                d->data->column(i)->captionAliasOrName()), data);
             return;
         }
     }
 
     // Then we check if signal/slot args are compatible
-    QString signal = (*record)[2].toString();
+    QString signal = (*data)[2].toString();
     signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
-    QString slot = (*record)[4].toString();
+    QString slot = (*data)[4].toString();
     slot.remove(QRegExp(".*[(]|[)]"));
 
     if (!signal.startsWith(slot, Qt::CaseSensitive)) {
-        setStatusError(i18n("The signal/slot arguments are not compatible."), record);
+        setStatusError(xi18n("The signal/slot arguments are not compatible."), data);
         return;
     }
 
-    setStatusOk(record);
+    setStatusOk(data);
 }
 
 void
 ConnectionDialog::newItem()
 {
-    d->table->acceptRowEdit();
+    d->table->acceptRecordEditing();
     d->table->setCursorPosition(d->table->rows(), 1);
 }
 
@@ -408,12 +403,12 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
         return;
 
     Connection *c = new Connection(connection);
-    KexiDB::RecordData *record = d->table->data()->createItem();
-    (*record)[1] = c->sender();
-    (*record)[2] = c->signal();
-    (*record)[3] = c->receiver();
-    (*record)[4] = c->slot();
-    d->table->insertItem(record, d->table->rows());
+    KDbRecordData *newData = d->table->data()->createItem();
+    (*newData)[1] = c->sender();
+    (*newData)[2] = c->signal();
+    (*newData)[3] = c->receiver();
+    (*newData)[4] = c->slot();
+    d->table->insertItem(newData, d->table->rows());
     d->buffer->append(c);
 }
 
@@ -433,19 +428,17 @@ ConnectionDialog::removeItem()
     if (d->table->currentRow() == -1 || d->table->currentRow() >= d->table->rows())
         return;
 
-    const int confirm
-        = KMessageBox::warningYesNo(parentWidget(),
-              i18n("Do you want to delete this connection?"),
+    if (KMessageBox::Yes != KMessageBox::questionYesNo(parentWidget(),
+              xi18n("Do you want to delete this connection?"),
               QString(),
-              KGuiItem(i18n("&Delete Connection")),
+              KGuiItem(xi18nc("@action:button", "&Delete Connection")),
               KStandardGuiItem::no(),
-              "AskBeforeDeleteConnection"/*config entry*/);
-    if (confirm != KMessageBox::Yes)
+              "AskBeforeDeleteConnection"/*config entry*/))
+    {
         return;
-
+    }
     d->buffer->removeAt(d->table->currentRow());
     d->table->deleteItem(d->table->selectedItem());
 }
 
-#include "connectiondialog.moc"
-#warning noi18n # added to disable message extraction in Messages.sh
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

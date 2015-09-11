@@ -1,1 +1,0 @@
-install( FILES  kexirc  DESTINATION ${CONFIG_INSTALL_DIR})

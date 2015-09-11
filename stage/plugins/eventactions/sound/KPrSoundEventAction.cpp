@@ -124,5 +124,3 @@ void KPrSoundEventAction::finished()
     delete m_media;
     m_media = 0;
 }
-
-#include <KPrSoundEventAction.moc>

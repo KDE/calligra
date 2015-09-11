@@ -24,14 +24,14 @@
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
-class KTemporaryFile;
-class KUrl;
+class QTemporaryFile;
+class QUrl;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
     Q_OBJECT
 public:
-    explicit KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiBlobTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiBlobTableEdit();
 
     bool valueIsNull();
@@ -75,10 +75,10 @@ public:
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool *valueIsNull, bool *valueIsReadOnly);
 
-    void handleInsertFromFileAction(const KUrl& url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    void handleInsertFromFileAction(const QUrl &url);
+    void handleAboutToSaveAsAction(QString *origFilename, QString *mimeType, bool *dataIsEmpty);
     void handleSaveAsAction(const QString& fileName);
     void handleCutAction();
     void handleCopyAction();
@@ -109,7 +109,7 @@ protected:
 
     class Private;
     Private * const d;
-    //! @todo  KTemporaryFile* m_tempFile;
+    //! @todo  QTemporaryFile* m_tempFile;
     //! @todo  KProcess* m_proc;
     //! @todo  QTextEdit *m_content;
 };
@@ -126,7 +126,7 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 class KexiKIconTableEdit : public KexiTableEdit
 {
 public:
-    explicit KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiKIconTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiKIconTableEdit();
 
@@ -135,7 +135,7 @@ public:
 
     //! \return true if editor's value is empty (not null).
     //! Only few field types can accept "EMPTY" property
-    //! (check this with KexiDB::Field::hasEmptyProperty()),
+    //! (check this with KDbField::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();

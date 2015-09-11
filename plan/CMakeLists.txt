@@ -1,8 +1,6 @@
 
 project(kplato)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"plan\")
-
 # set kplato debug area
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 
@@ -39,6 +37,7 @@ add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 
+add_definitions(-DTRANSLATION_DOMAIN=\"plan\")
 
 ########### KPlato private library ###############
 

@@ -20,16 +20,13 @@
  */
 
 #include "KexiDataTableScrollArea.h"
-
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <db/connection.h>
-#include <db/cursor.h>
-
 #include "KexiDataTableScrollArea.h"
 #include "KexiDataTableView.h"
 
+#include <KDbConnection>
+#include <KDbCursor>
+
+#include <QDebug>
 
 KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
         : KexiTableScrollArea(0, parent)
@@ -37,7 +34,7 @@ KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
     init();
 }
 
-KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor)
+KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KDbCursor *cursor)
         : KexiTableScrollArea(0, parent)
 {
     init();
@@ -54,7 +51,7 @@ KexiDataTableScrollArea::init()
     m_cursor = 0;
 }
 
-bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
+bool KexiDataTableScrollArea::setData(KDbCursor *cursor)
 {
     if (!cursor) {
         clearColumns();
@@ -67,8 +64,8 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     m_cursor = cursor;
 
     if (!m_cursor->query()) {
-        kWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
-        m_cursor->debug();
+        qWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
+        qDebug() << *m_cursor;
         clearColumns();
         return false;
     }
@@ -79,13 +76,12 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     }
 
     if (!m_cursor->isOpened() && !m_cursor->open()) {
-        kWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
-        m_cursor->debug();
+        qWarning() << "Cannot open cursor\n--aborting setData().\n" << *m_cursor;
         clearColumns();
         return false;
     }
 
-    KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
+    KDbTableViewData *tv_data = new KDbTableViewData(m_cursor);
     KexiDataTableView* dataTable = qobject_cast<KexiDataTableView*>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);
@@ -98,10 +94,9 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     setWindowTitle(windowTitle);
 
     //PRIMITIVE!! data setting:
-    tv_data->preloadAllRows();
+    tv_data->preloadAllRecords();
 
     KexiTableScrollArea::setData(tv_data);
     return true;
 }
 
-#include "KexiDataTableScrollArea.moc"

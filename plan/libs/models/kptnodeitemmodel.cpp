@@ -1571,6 +1571,9 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
         }
         case Qt::EditRole: {
             const Task *t = dynamic_cast<const Task*>( node );
+            if ( t == 0 ) {
+                return QVariant();
+            }
             return t->completion().remainingEffort().toDouble( Duration::Unit_h );
         }
         case Role::DurationUnit:
@@ -5039,5 +5042,3 @@ void TaskModuleModel::loadTaskModules( const QStringList &files )
 
 
 } //namespace KPlato
-
-#include "kptnodeitemmodel.moc"

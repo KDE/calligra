@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,11 +19,15 @@
 
 #include "kexistartupdata.h"
 #include "kexi.h"
+#include "KexiCommandLineOptions.h"
+#include "config-kexi.h"
 
-#include <db/driver.h>
-#include <db/drivermanager.h>
+#include <KDbDriver>
+#include <KDbDriverManager>
 
-#include <QFileInfo>
+#include <KAboutData>
+
+#include <QCommandLineParser>
 
 class KexiStartupData::Private
 {
@@ -31,6 +35,8 @@ public:
     Private();
     ~Private();
 
+    QCommandLineParser parser;
+    KexiCommandLineOptions options;
     KexiProjectData *projectData;
     Action action;
     KexiStartupData::Import importActionData;
@@ -45,8 +51,9 @@ public:
 };
 
 KexiStartupData::Private::Private()
-    :projectData(0), action(KexiStartupData::DoNothing), forcedUserMode(false)
-      ,forcedDesignMode(false), isProjectNavigatorVisible(false), forcedFullScreen(false)
+    : options(0/*&parser*/)
+    , projectData(0), action(KexiStartupData::DoNothing), forcedUserMode(false)
+    , forcedDesignMode(false), isProjectNavigatorVisible(false), forcedFullScreen(false)
 {
 }
 
@@ -156,4 +163,84 @@ bool KexiStartupData::forcedFullScreen() const
 void KexiStartupData::setForcedFullScreen(bool set)
 {
     d->forcedFullScreen = set;
+}
+
+//! Command line options
+KexiCommandLineOptions KexiStartupData::options() const
+{
+    return d->options;
+}
+
+tristate KexiStartupData::parseOptions()
+{
+    //KAboutData::applicationData().setupCommandLine(&d->parser);
+    //d->parser.addHelpOption();
+    //d->parser.addVersionOption();
+    d->parser.setApplicationDescription(KAboutData::applicationData().shortDescription());
+
+#define ADD_OPTION(o) \
+    if (!d->parser.addOption(d->options.o)) { \
+        qWarning() << "Could not add option" << d->options.o.names(); \
+        return false; \
+    } else { qDebug() << "OK" << d->options.o.names(); }
+    ADD_OPTION(createDb)
+    ADD_OPTION(createAndOpenDb)
+    ADD_OPTION(dropDb)
+    ADD_OPTION(dbDriver)
+    ADD_OPTION(fileType)
+    ADD_OPTION(connectionShortcut)
+    ADD_OPTION(readOnly)
+    ADD_OPTION(userMode)
+    ADD_OPTION(designMode)
+    ADD_OPTION(showNavigator)
+    ADD_OPTION(hideMenu)
+    ADD_OPTION(open)
+    ADD_OPTION(design)
+    ADD_OPTION(editText)
+    ADD_OPTION(execute)
+    ADD_OPTION(newObject)
+#ifndef KEXI_NO_QUICK_PRINTING
+    ADD_OPTION(print)
+    ADD_OPTION(printPreview)
+#endif
+    ADD_OPTION(user)
+    ADD_OPTION(host)
+    ADD_OPTION(port)
+    ADD_OPTION(localSocket)
+    ADD_OPTION(skipConnDialog)
+    ADD_OPTION(fullScreen)
+    ADD_OPTION(listPlugins)
+#undef ADD_OPTION
+
+    d->parser.addPositionalArgument("file",
+        xi18nc("<file> argument description for the command line",
+               "Kexi database project filename, Kexi shortcut filename, or name of a Kexi "
+               "database project on a server to open."));
+
+    qDebug() << QCoreApplication::instance()->arguments();
+    if (!d->parser.parse(QCoreApplication::instance()->arguments())) {
+        return false;
+    }
+    KAboutData::applicationData().processCommandLine(&d->parser);
+    return true;
+}
+
+bool KexiStartupData::isSet(const QCommandLineOption & option) const
+{
+    return d->parser.isSet(option);
+}
+
+QString	KexiStartupData::value(const QCommandLineOption & option) const
+{
+    return d->parser.value(option);
+}
+
+QStringList KexiStartupData::positionalArguments() const
+{
+    return d->parser.positionalArguments();
+}
+
+QString KexiStartupData::helpText() const
+{
+    return d->parser.helpText();
 }

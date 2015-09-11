@@ -21,12 +21,13 @@
 #ifndef KEXIPARTBASE_H
 #define KEXIPARTBASE_H
 
-#include <QObject>
-#include <KLocalizedString>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
 
-class KTabWidget;
+#include <KLocalizedString>
+#include <KPluginFactory>
+
+class QTabWidget;
 class KexiWindow;
 
 namespace KexiPart
@@ -34,7 +35,7 @@ namespace KexiPart
 class Info;
 
 //! @short The base class for Kexi frontend parts (plugins)
-//! @see KexiPart::Part KexiInternalPart 
+//! @see KexiPart::Part KexiInternalPart
 class KEXICORE_EXPORT PartBase : public QObject, protected KexiUtils::InternalPropertyMap
 {
     Q_OBJECT
@@ -62,8 +63,8 @@ public:
      @note As number of %n parameters is unspecified,
      you should add appropriate number of parameters using .subs().
      to result of i18nMessage().
-     In your your implementation, you should use ki18n(I18N_NOOP())
-     or ki18nc(I18N_NOOP2()) instead of i18n() or i18nc().
+     In your your implementation, you should use kxi18nc(I18NC_NOOP("@info", "..."))
+     instead of i18n().
      Example:
      @code
       QString tableName = "Employees";
@@ -81,7 +82,7 @@ public:
      type (mime type) of its contents differs from previous one.
      For example, if a user switched from Table Designer to Form Designer,
      additional tab containing Form Designer's object tree should be shown. */
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
 protected:
     /*!
@@ -89,7 +90,7 @@ protected:
      @param parent parent of this plugin
      @param list extra arguments passed to the plugin
     */
-    PartBase(QObject *parent, 
+    PartBase(QObject *parent,
         const QVariantList& list);
 
     /*! Sets Info structure for this part. */
@@ -101,14 +102,8 @@ protected:
     Private * const d;
 
     friend class Manager;
-    //friend class ::KexiWindow;
-    //friend class GUIClient;
 };
 
 } // namespace KexiPart
-
-//! Implementation of plugin's entry point
-#define K_EXPORT_KEXIPART_PLUGIN( class_name, internal_name ) \
-    KEXI_EXPORT_PLUGIN( "kexihandler", class_name, internal_name, KEXI_PART_VERSION, 0, 0 )
 
 #endif

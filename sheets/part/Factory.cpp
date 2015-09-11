@@ -85,5 +85,3 @@ const KComponentData &Factory::global()
     }
     return *s_global;
 }
-
-#include "Factory.moc"

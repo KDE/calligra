@@ -28,9 +28,9 @@ using namespace KexiPart;
 
 //------------------------------
 
-StaticPartInfo::StaticPartInfo(const QString& partClass, const QString& itemIcon,
+StaticPartInfo::StaticPartInfo(const QString& pluginId, const QString& itemIcon,
                                const QString& objectName)
-        : Info(partClass, itemIcon, objectName)
+        : Info(pluginId, itemIcon, objectName)
 {
 }
 
@@ -40,9 +40,9 @@ StaticPartInfo::~StaticPartInfo()
 
 //------------------------------
 
-StaticPart::StaticPart(const QString& partClass, const QString& itemIcon,
+StaticPart::StaticPart(const QString& pluginId, const QString& itemIcon,
                        const QString& objectName)
-        : Part(&Kexi::partManager(), new StaticPartInfo(partClass, itemIcon, objectName))
+        : Part(&Kexi::partManager(), new StaticPartInfo(pluginId, itemIcon, objectName))
 {
     Kexi::partManager().insertStaticPart(this);
 }
@@ -52,7 +52,7 @@ StaticPart::~StaticPart()
 }
 
 KexiView* StaticPart::createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode)
+                                 KexiPart::Item *item, Kexi::ViewMode viewMode)
 {
     Q_UNUSED(parent);
     Q_UNUSED(window);

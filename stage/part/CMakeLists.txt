@@ -2,13 +2,8 @@ project(stagepart)
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the STAGE_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
-if (!WIN32) ## Disable tests in Windows whilst they break builds
-	add_subdirectory(tests)
+if (NOT WIN32) ## Disable tests in Windows whilst they break builds
+    add_subdirectory(tests)
 endif()
 add_subdirectory(tools)
 
@@ -172,7 +167,7 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 install(TARGETS calligrastagepart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ### GUI files ###
-install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
+install( FILES stage.rc stage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/stage)
 
 install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 

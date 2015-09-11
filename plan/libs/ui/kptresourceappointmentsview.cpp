@@ -381,5 +381,3 @@ KoPrintJob *ResourceAppointmentsView::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptresourceappointmentsview.moc"

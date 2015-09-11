@@ -20,9 +20,11 @@
 #ifndef KEXIDATETIMEFORMATTER_H
 #define KEXIDATETIMEFORMATTER_H
 
-#include <kexi_export.h>
-#include <QDateTimeEdit>
-#include <QRegExp>
+#include "kexiguiutils_export.h"
+
+#include <QDate>
+#include <QDateTime>
+#include <QVariant>
 
 //! @short Date formatter used by KexiDateTableEdit and KexiDateTimeTableEdit
 class KEXIGUIUTILS_EXPORT KexiDateFormatter

@@ -23,58 +23,24 @@
 
 //#define KEXI_IMPL_WARNINGS
 
-#include <kmainwindow.h>
+#include "keximain_export.h"
+
+#include <KMainWindow>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
 
-#include <QApplication>
-#include <QMainWindow>
+#include <QTabWidget>
 
 class QPaintEvent;
+class KDbObject;
+class KDbConnectionData;
 class KexiProjectData;
-
-namespace KexiDB
-{
-class Object;
-class ConnectionData;
-}
+class KexiMainWidget;
 namespace KexiPart
 {
 class Info;
 class Part;
 }
-
-class KexiMainWidget;
-
-#include <ktabwidget.h>
-
-//! @internal tab widget acting as central widget for KexiMainWindow
-class KexiMainWindowTabWidget : public KTabWidget
-{
-    Q_OBJECT
-public:
-    KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
-    virtual ~KexiMainWindowTabWidget();
-public Q_SLOTS:
-    void closeTab();
-    tristate closeAllTabs();
-
-protected:
-    //! Implemented to add context menu
-    void contextMenu(int index, const QPoint& point);
-
-    //! Reimplemented to hide frame when no tabs are displayed
-    virtual void paintEvent(QPaintEvent * event);
-
-    KexiMainWidget *m_mainWidget;
-    KAction *m_closeAction;
-    KAction *m_closeAllTabsAction;
-
-private:
-    int m_tabIndex;
-
-    void setTabIndexFromContextMenu(const int clickedIndex);
-};
 
 #define KexiMainWindowSuper QWidget //KMainWindow
 
@@ -98,12 +64,15 @@ public:
         return KexiMainWindowSuper::focusWidget();
     }
 
-    /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
-     kdemain() has to destroy the latter on exit.
-     \return result 1 on error and 0 on success (the result can be used as a result of kdemain())
+    /*! Used by the main Kexi's routine. Creates a new Kexi main window and a new
+     QApplication object.
+     If @a componentName is provided, it is assigned to application's KAboutData::componentName.
+     It's not used by Kexi itself but this is useful for test application that are based
+     on KexiMainWindow.
+     @return result 1 on error and 0 on success (the result can be used as a result of main())
      @note Yes, the data referred to by argc and argv must stay valid for the entire lifetime
-           of the QApplication object so int& is used. */
-    static int create(int &argc, char *argv[], const KAboutData &aboutData);
+          of the QApplication object so int& is used. */
+    static int create(int &argc, char *argv[], const QString &componentName = QString());
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project();
@@ -160,14 +129,14 @@ public:
     void restoreDesignTabAndActivateIfNeeded(const QString &tabName);
 
     //! Shows design tab again when switching between objects or views.
-    void restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode, int previousItemId);
+    void restoreDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode, int previousItemId);
 
     //! Sets currently visible design tab when switching to design view, according to object type opened.
-    virtual void activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode);
+    virtual void activateDesignTabIfNeeded(const QString &pluginId, Kexi::ViewMode viewMode);
 
-    //! Hides design tabs when they are closed (depending on class @a partClass).
-    //! If @a partClass is empty, all tabs get hidden.
-    virtual void hideDesignTab(int itemId, const QString &partClass = QString());
+    //! Hides design tabs when they are closed (depending on ID @a pluginId).
+    //! If @a pluginId is empty, all tabs get hidden.
+    virtual void hideDesignTab(int itemId, const QString &pluginId = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
@@ -209,12 +178,13 @@ public Q_SLOTS:
      clicked multiple times on the same Project navigator's item. In this case @a openingCancelled
      is not set; the caller should not display error message but the opening should be silently abandoned. */
     virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-                                   bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
+                                   bool *openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
                                    QString* errorMessage = 0);
 
     //! For convenience
-    virtual KexiWindow* openObject(const QString& partClass, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0);
+    virtual KexiWindow* openObject(const QString& pluginId, const QString& name,
+                                   Kexi::ViewMode viewMode, bool *openingCancelled,
+                                   QMap<QString, QVariant>* staticObjectArgs = 0);
 
     /*! Closes the object for \a item.
      \return true on success (closing can be dealyed though), false on failure and cancelled
@@ -234,7 +204,7 @@ public Q_SLOTS:
     virtual QList<QVariant> currentParametersForQuery(int queryId) const;
 
     /*! Implemented for KexiMainWindowIface. */
-    virtual KexiDB::QuerySchema *unsavedQuery(int queryId);
+    virtual KDbQuerySchema *unsavedQuery(int queryId);
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
@@ -244,7 +214,7 @@ public Q_SLOTS:
                                       const QString& messageWhenAskingForName = QString());
 
     /*! Implemented for KexiMainWindow */
-    virtual void highlightObject(const QString& partClass, const QString& name);
+    virtual void highlightObject(const QString& pluginId, const QString& name);
 
     /*! Opens project pointed by \a projectData.
      Application state (e.g. actions) is updated.
@@ -262,7 +232,7 @@ public Q_SLOTS:
      * If connection shortcut has been found and \a dbName is not provided,
       'kexi --skip-dialog file.kexic' is executed (or the connection is opened
       directly if there's no porject opened in the current Kexi main window. */
-    tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata,
+    tristate openProject(const QString& aFileName, KDbConnectionData *cdata,
                          const QString& dbName = QString(),
                          const KexiProjectData::AutoOpenObjects& autoopenObjects = KexiProjectData::AutoOpenObjects());
 
@@ -330,7 +300,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
-    void acceptProjectClosingRequested(bool& cancel);
+    void acceptProjectClosingRequested(bool *cancel);
 
     //! Emitted before closing the project (and destroying all it's data members).
     //! You can do you cleanup of your structures here.
@@ -354,7 +324,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action);
+    void setupMainMenuActionShortcut(QAction * action);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
@@ -392,7 +362,7 @@ protected:
      \a cancelled will be set to true (false otherwise).
      \a shortcutFileName, if not 0, will be set to a shortcut filename
      (in case when server database project was selected). */
-    KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
+    KexiProjectData* createBlankProjectData(bool *cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
 
     /*! Reimplemented from KexiSharedActionHost:
      accepts only KexiDockBase and KexiWindow subclasses.  */
@@ -424,7 +394,7 @@ protected:
                                        Kexi::ViewMode prevViewMode, KexiPart::Part *curWindowPart, Kexi::ViewMode curViewMode);
 
     /*! Used in openProject when running another Kexi process is required. */
-    tristate openProjectInExternalKexiInstance(const QString& aFileName, KexiDB::ConnectionData *cdata, const QString& dbName);
+    tristate openProjectInExternalKexiInstance(const QString& aFileName, KDbConnectionData *cdata, const QString& dbName);
 
     /*! Used in openProject when running another Kexi process is required. */
     tristate openProjectInExternalKexiInstance(const QString& aFileName, const QString& fileNameForConnectionData, const QString& dbName);
@@ -440,8 +410,8 @@ protected:
      @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
-    //! Activates design tab when switching to design view, according to \a partClass.
-    void activateDesignTab(const QString &partClass);
+    //! Activates design tab when switching to design view, according to \a pluginId.
+    void activateDesignTab(const QString &pluginId);
 
 protected Q_SLOTS:
     tristate createNewProject(const KexiProjectData &projectData);
@@ -463,7 +433,7 @@ protected Q_SLOTS:
      in view mode other than \a viewMode, the mode is not changed.
      \sa KexiProjectNavigator::openOrActivateItem() */
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item,
-                                        Kexi::ViewMode viewMode, bool &openingCancelled);
+                                        Kexi::ViewMode viewMode, bool *openingCancelled);
 
     //! For convenience
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode);
@@ -471,19 +441,19 @@ protected Q_SLOTS:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
-    virtual bool newObject(KexiPart::Info *info, bool& openingCancelled);
+    virtual bool newObject(KexiPart::Info *info, bool *openingCancelled);
 
     //! For convenience
     bool newObject(KexiPart::Info *info) {
         bool openingCancelled;
-        return newObject(info, openingCancelled);
+        return newObject(info, &openingCancelled);
     }
 
     //! For convenience
     KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
                            QMap<QString, QVariant>* staticObjectArgs = 0) {
         bool openingCancelled;
-        return openObject(item, viewMode, openingCancelled, staticObjectArgs);
+        return openObject(item, viewMode, &openingCancelled, staticObjectArgs);
     }
 
     /*! Removes object pointed by \a item from current project.
@@ -494,12 +464,12 @@ protected Q_SLOTS:
     /*! Renames object pointed by \a item to a new name \a _newName.
      Sets \a success to false on failure. Used as a slot connected
      to KexiProjectNavigator::renameItem() signal. */
-    void renameObject(KexiPart::Item *item, const QString& _newName, bool &succes);
+    void renameObject(KexiPart::Item *item, const QString& _newName, bool *succes);
 
     /*! Changes caption of object pointed by \a item to \a _newCaption.
      Sets \a success to false on failure. Used as a slot connected
      to KexiProjectNavigator::changeItemCaption() signal. */
-    void setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &succes);
+    void setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool *succes);
 
     /*! Reaction for object rename (signalled by KexiProject).
      If this item has opened window, it's caption is updated,
@@ -576,9 +546,13 @@ protected Q_SLOTS:
     /*! Shows Project Migration Wizard. \return true on successful migration,
      cancelled on cancellation, and false on failure.
      If \a mimeType and \a databaseName are not empty, the wizard will only ask about
-     parameters of destination project and skip pages related to source project.
-     \a cdata connection data can be also provided to preselect server-based connections. */
-    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata = 0);
+     parameters of destination project and skip pages related to source project. */
+    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName);
+
+    /*! @overload tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName)
+     @a cdata is used preselect a server-based connection. */
+    tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
+                                        const KDbConnectionData &cdata);
 
     //! Receives "selectionChanged()" signal from navigator to update some actions.
     void slotPartItemSelectedInNavigator(KexiPart::Item* item);
@@ -635,14 +609,14 @@ protected Q_SLOTS:
 private:
     //! Adds action @a name with text @a text and optional shortcut @a shortcut.
     //! This is helper method containing workaround for Kexi
-    //! until KAction::setShortcut() works again.
+    //! until QAction::setShortcut() works again.
     //! @return created action
-    KAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
+    QAction * addAction(const char *name, const QString &text, const char *shortcut = 0);
 
     //! Like @ref addAction(const char *, const QString&, const char *) but also adds
     //! icon @a icon.
     //! @return created action
-    KAction* addAction(const char *name, const KIcon &icon, const QString& text,
+    QAction * addAction(const char *name, const QIcon &icon, const QString& text,
                        const char *shortcut = 0);
 
     class MessageHandler;

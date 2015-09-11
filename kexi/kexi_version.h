@@ -25,8 +25,10 @@
 #ifndef _KEXI_VERSION_
 #define _KEXI_VERSION_
 
-#include "kexi_export.h"
 #include <calligraversion.h>
+#include "kexicore_export.h"
+
+class QString;
 
 #define KEXI_APP_NAME "Kexi"
 #define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
@@ -61,7 +63,7 @@ namespace Kexi
  * In contrary to that macro this function returns the number of the actually
  * installed Kexi version, not the number of the Kexi version that was
  * installed when the program was compiled.
- * @return the version number, encoded in a single uint
+ * @return the version number, encoded in a single int
  */
 KEXICORE_EXPORT unsigned int version();
 /**
@@ -89,7 +91,7 @@ KEXICORE_EXPORT unsigned int versionRelease();
  */
 KEXICORE_EXPORT const char *versionString();
 /**
- * @return the Kexi version string (versionString()) but appends extra information 
+ * @return the Kexi version string (versionString()) but appends extra information
  * such as "(git 4e06281 master)" if available.
  */
 KEXICORE_EXPORT const char *fullVersionString();
@@ -99,7 +101,7 @@ KEXICORE_EXPORT const char *fullVersionString();
  * In contrary to KEXI_STABLE_VERSION macro this function returns the number
  * of the actually installed Kexi version, not the number of the Kexi version that was
  * installed when the program was compiled.
- * @return the version number, encoded in a single uint
+ * @return the version number, encoded in a single int
  * @see Kexi::version()
  * @see KEXI_STABLE_VERSION
  */
@@ -138,6 +140,6 @@ KEXICORE_EXPORT QString stableVersionString();
  * files every time you are increasing this value.
  */
 
-#define KEXI_PART_VERSION 2
+#define KEXI_PART_VERSION 3
 
 #endif /* _KEXI_VERSION_ */

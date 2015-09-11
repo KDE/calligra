@@ -21,8 +21,7 @@
 
 #include <QEvent>
 
-#include <kcolorscheme.h>
-#include <kdebug.h>
+#include <KColorScheme>
 
 class KexiLinkWidget::Private
 {
@@ -120,4 +119,3 @@ void KexiLinkWidget::changeEvent(QEvent* event)
     QLabel::changeEvent(event);
 }
 
-#include "KexiLinkWidget.moc"

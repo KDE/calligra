@@ -24,12 +24,11 @@
 
 #include "keximigratedata.h"
 
-#include <db/tableschema.h>
-#include <db/connection.h>
+#include <KDbTableSchema>
+#include <KDbConnection>
 
 #include <QVariantList>
 #include <QByteArray>
-#include <QPointer>
 
 namespace Kexi
 {
@@ -50,7 +49,7 @@ class ObjectStatus;
 #define KEXI_MIGRATION_VERSION_MINOR 1
 
 /*! KexiMigration implementation version. @see KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR */
-#define KEXI_MIGRATION_VERSION KexiDB::DatabaseVersionInfo(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR)
+#define KEXI_MIGRATION_VERSION KDbDatabaseVersionInfo(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR)
 
 /*!
  * \namespace KexiMigration
@@ -60,7 +59,7 @@ namespace KexiMigration
 {
 
 //! \return KexiMigration version info
-KEXIMIGR_EXPORT KexiDB::DatabaseVersionInfo version();
+KEXIMIGR_EXPORT KDbDatabaseVersionInfo version();
 
 //! @short Imports non-native databases into Kexi projects.
 /*! A generic API for importing schema and data from an existing
@@ -76,7 +75,7 @@ Basic idea is this:
 
 See kexi/doc/dev/kexi_import.txt for more info.
 */
-class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
+class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KDbObject
 {
     Q_OBJECT
 
@@ -100,7 +99,7 @@ public:
      In this case you should ask about accepting database overwriting.
      Used in ImportWizard::import(). */
     bool checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
-            bool& acceptingNeeded);
+            bool* acceptingNeeded);
 
     /*! Checks if the source- and the destination databases are identical.
     \return true if they are identical else false. */
@@ -117,24 +116,24 @@ public:
         return drv_progressSupported();
     }
 
-//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+//! @todo This is copied from KDbDriver. One day it will be merged with KexiDB.
     //! \return property value for \a propertyName available for this driver.
     //! If there's no such property defined for driver, Null QVariant value is returned.
     virtual QVariant propertyValue(const QByteArray& propertyName);
 
-//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+//! @todo This is copied from KDbDriver. One day it will be merged with KexiDB.
     void setPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
-//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+//! @todo This is copied from KDbDriver. One day it will be merged with KexiDB.
     //! \return translated property caption for \a propertyName.
     //! If there's no such property defined for driver, empty string value is returned.
     QString propertyCaption(const QByteArray& propertyName) const;
 
-    //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+    //! @todo This is copied from KDbDriver. One day it will be merged with KexiDB.
     //! Set translated property caption for \a propertyName.
     void setPropertyCaption(const QByteArray& propertyName, const QString &caption);
 
-//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+//! @todo This is copied from KDbDriver. One day it will be merged with KexiDB.
     //! \return a list of property names available for this driver.
     QList<QByteArray> propertyNames() const;
 
@@ -146,7 +145,7 @@ public:
     bool tableNames(QStringList& tablenames);
 
     //! Read schema for a given table (driver specific)
-    bool readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    bool readTableSchema(const QString& originalName, KDbTableSchema& tableSchema);
 
     //!Position the source dataset at the start of a table
     bool readFromTable(const QString& tableName);
@@ -164,7 +163,7 @@ public:
     bool moveLast();
 
     //!Read the data at the given row/field
-    QVariant value(uint i);
+    QVariant value(int i);
 
 Q_SIGNALS:
     void progressPercent(int percent);
@@ -183,7 +182,7 @@ protected:
 
     //! Read schema for a given table (driver specific)
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema) = 0;
+        const QString& originalName, KDbTableSchema& tableSchema) = 0;
 
     /*! Fetches maximum number from table \a tableName, column \a columnName
      into \a result. On success true is returned. If there is no records in the table,
@@ -206,7 +205,7 @@ protected:
       (so e.g. keximdb driver does not need this). */
 //! @todo SQL-dependent!
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber, QStringList& stringList,
+        const QString& sqlStatement, int columnNumber, QStringList& stringList,
         int numRecords = -1) {
         Q_UNUSED(sqlStatement); Q_UNUSED(columnNumber); Q_UNUSED(stringList);
         Q_UNUSED(numRecords);
@@ -220,7 +219,7 @@ protected:
      This implementation uses drv_queryStringListFromSQL() with numRecords == 1. */
 //! @todo SQL-dependent!
     virtual tristate drv_querySingleStringFromSQL(const QString& sqlStatement,
-            uint columnNumber, QString& string);
+            int columnNumber, QString& string);
 
     /*! Fetches single record from result obtained
      by running \a sqlStatement.
@@ -231,8 +230,8 @@ protected:
      \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data,
-                                            bool &firstRecord) {
+                                            KDbRecordData* data,
+                                            bool *firstRecord) {
         Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
         return cancelled;
     }
@@ -240,8 +239,8 @@ protected:
     //! Copy a table from source DB to target DB (driver specific)
     //! - create copies of KexiDB tables
     //! - create copies of non-KexiDB tables
-    virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                               KexiDB::TableSchema* dstTable) = 0;
+    virtual bool drv_copyTable(const QString& srcTable, KDbConnection *destConn,
+                               KDbTableSchema* dstTable) = 0;
 
     virtual bool drv_progressSupported() {
         return false;
@@ -264,7 +263,7 @@ protected:
 
       \return size of the specified table
     */
-    virtual bool drv_getTableSize(const QString&, quint64&) {
+    virtual bool drv_getTableSize(const QString&, quint64*) {
         return false;
     }
 
@@ -272,7 +271,7 @@ protected:
 
 //! @todo user should be asked ONCE using a convenient wizard's page, not a popup dialog
     //! Prompt user to select a field type for unrecognized fields
-    KexiDB::Field::Type userType(const QString& fname);
+    KDbField::Type userType(const QString& fname);
 
     virtual QString drv_escapeIdentifier(const QString& str) const;
 
@@ -296,13 +295,13 @@ protected:
     virtual bool drv_moveLast() { return false; }
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i) { Q_UNUSED(i); return QVariant(); };
+    virtual QVariant drv_value(int i) { Q_UNUSED(i); return QVariant(); };
 
     //! @return Database driver for this migration.
-    KexiDB::Driver *driver();
+    KDbDriver *driver();
 
     //! Sets database driver for this migration.
-    void setDriver(KexiDB::Driver *driver);
+    void setDriver(KDbDriver *driver);
 
 private:
     /*! Estimate size of migration job

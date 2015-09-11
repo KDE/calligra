@@ -21,15 +21,15 @@
 #ifndef _KEXICOMBOBOXBASE_H_
 #define _KEXICOMBOBOXBASE_H_
 
-#include <db/field.h>
+#include "kexidatatable_export.h"
 #include "kexiinputtableedit.h"
-#include <db/lookupfieldschema.h>
-#include <db/tristate.h>
 
+#include <KDbField>
+#include <KDbLookupFieldSchema>
+#include <KDbTristate>
+
+class KDbTableViewColumn;
 class KexiComboBoxPopup;
-namespace KexiDB {
-class TableViewColumn;
-}
 
 /*! @short A base class for handling data-aware combo boxes.
  This class is used by KexiComboBoxTableEdit and KexiDBComboBox.
@@ -41,10 +41,10 @@ public:
     virtual ~KexiComboBoxBase();
 
     //! \return column related to this combo; for KexiComboBoxTableEdit 0 is returned here
-    virtual KexiDB::TableViewColumn *column() const = 0;
+    virtual KDbTableViewColumn *column() const = 0;
 
     //! \return database field related to this combo
-    virtual KexiDB::Field *field() const = 0;
+    virtual KDbField *field() const = 0;
 
     //! \return the original value
     virtual QVariant origValue() const = 0;
@@ -69,10 +69,10 @@ public:
     void showPopup();
 
     //! Call this from slot
-    virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
+    virtual void slotRecordAccepted(KDbRecordData *data, int record);
 
     //! Call this from slot
-    virtual void slotItemSelected(KexiDB::RecordData*);
+    virtual void slotRecordSelected(KDbRecordData* data);
 
     //! Call this from slot
     void slotInternalEditorValueChanged(const QVariant &v);
@@ -83,26 +83,26 @@ public:
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    //! Used to select row item for a user-entered value \a v.
+    //! Used to select record item for a user-entered value \a v.
     //! Only for "lookup table" mode.
-    KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
+    KDbRecordData* selectRecordForEnteredValueInLookupTable(const QVariant& v);
 
     /*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
      If \a allowNulls is true, NULL is returend if no matched column found, else:
      \a str is returned.
      Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string
      for column #1 for id-column #0 */
-    QString valueForString(const QString& str, int* row, uint lookInColumn,
-                           uint returnFromColumn, bool allowNulls = false);
+    QString valueForString(const QString& str, int* record, int lookInColumn,
+                           int returnFromColumn, bool allowNulls = false);
 
     //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)
     void setValueOrTextInInternalEditor(const QVariant& value);
 
-    //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
-    KexiDB::LookupFieldSchema* lookupFieldSchema() const;
+    //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined record source)
+    KDbLookupFieldSchema* lookupFieldSchema() const;
 
-    int rowToHighlightForLookupTable() const;
+    int recordToHighlightForLookupTable() const;
 
     //! Implement this to perform "move cursor to end" in the internal editor
     virtual void moveCursorToEndInInternalEditor() = 0;
@@ -169,7 +169,7 @@ protected:
     //! Set to false as soon as the item corresponding with the current
     //! value is selected in the popup table. This avoids selecting item
     //! for origValue() and thus loosing the recent choice.
-    bool m_updatePopupSelectionOnShow; 
+    bool m_updatePopupSelectionOnShow;
     bool m_moveCursorToEndInInternalEditor_enabled;
     bool m_selectAllInInternalEditor_enabled;
     bool m_setValueInInternalEditor_enabled;

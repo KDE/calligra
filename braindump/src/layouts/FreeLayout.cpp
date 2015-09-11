@@ -20,10 +20,10 @@
 #include "FreeLayout.h"
 
 #include <QRectF>
-#include <klocale.h>
-#include <KoShapeContainer.h>
 
-#include <kdebug.h>
+#include <KLocalizedString>
+
+#include <KoShapeContainer.h>
 
 FreeLayout::FreeLayout() : Layout("freelayout")
 {

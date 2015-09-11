@@ -23,9 +23,10 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
-#include <KLocale>
+#include <KLocalizedString>
+#include <KStandardGuiItem>
 
 #include <QAction>
 
@@ -44,7 +45,7 @@ public:
 };
 
 KexiAssistantMessageHandler::KexiAssistantMessageHandler()
-    : KexiDB::MessageHandler(), d(new Private)
+    : KDbMessageHandler(), d(new Private)
 {
 }
 
@@ -53,15 +54,23 @@ KexiAssistantMessageHandler::~KexiAssistantMessageHandler()
     delete d;
 }
 
-void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, const QString &details)
+void KexiAssistantMessageHandler::showErrorMessage(KDbMessageHandler::MessageType messageType,
+                                                   const QString &message,
+                                                   const QString &details,
+                                                   const QString &caption)
 {
-    QString _msg(msg);
-    _msg += details;
-    KexiContextMessage message(_msg);
+    Q_UNUSED(caption);
+    Q_UNUSED(messageType);
+    if (!messagesEnabled()) {
+        return;
+    }
+    QString msg(message);
+    msg += details;
+    KexiContextMessage contextMessage(msg);
     //! @todo hide details by default
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            koIcon("view-refresh"), i18n("Try Again"), dynamic_cast<QWidget*>(this));
+            koIcon("view-refresh"), xi18n("Try Again"), dynamic_cast<QWidget*>(this));
         QObject::connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                          dynamic_cast<QWidget*>(this), SLOT(tryAgainActionTriggered()));
     }
@@ -71,13 +80,13 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
                          dynamic_cast<QWidget*>(this), SLOT(cancelActionTriggered()));
     }
     d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
-    message.addAction(d->messageWidgetActionTryAgain);
-    message.setDefaultAction(d->messageWidgetActionNo);
-    message.addAction(d->messageWidgetActionNo);
+    contextMessage.addAction(d->messageWidgetActionTryAgain);
+    contextMessage.setDefaultAction(d->messageWidgetActionNo);
+    contextMessage.addAction(d->messageWidgetActionNo);
     // (delete not needed here because KexiContextMessageWidget deletes itself)
     d->messageWidget = new KexiContextMessageWidget(
         dynamic_cast<QWidget*>(this), 0 /*contents->formLayout*/,
-        0/*contents->le_dbname*/, message);
+        0/*contents->le_dbname*/, contextMessage);
     KexiAssistantWidget *assistant = dynamic_cast<KexiAssistantWidget*>(this);
     if (assistant && assistant->currentPage()) {
         if (assistant->currentPage()->focusWidget()) {
@@ -93,16 +102,22 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
         b->mapToGlobal(QPoint(0, b->height() / 2)));
 }
 
-void KexiAssistantMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
+void KexiAssistantMessageHandler::showErrorMessage(const KDbResult& result,
+                                                   KDbMessageHandler::MessageType messageType,
+                                                   const QString& message,
+                                                   const QString& caption)
 {
-    if (!obj) {
-        showErrorMessage(msg);
+    if (!messagesEnabled()) {
         return;
     }
-    QString _msg, _details;
-    KexiTextMessageHandler textHandler(_msg, _details);
-    textHandler.showErrorMessage(obj, msg);
-    showErrorMessage(_msg, _details);
+    if (!result.isError()) {
+        showErrorMessage(messageType, message, caption);
+        return;
+    }
+    QString msg, details;
+    KexiTextMessageHandler textHandler(&msg, &details);
+    textHandler.showErrorMessage(result, messageType, message, caption);
+    showErrorMessage(messageType, msg, details);
 }
 
 KexiContextMessageWidget* KexiAssistantMessageHandler::messageWidget()

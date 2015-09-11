@@ -21,17 +21,18 @@
  */
 
 #include "ThumbnailHelperImpl.h"
+#include <QMimeDatabase>
 
 #include <KoDocument.h>
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KoStore.h>
-#include <KMimeType>
 
 #include <QTimer>
 #include <QImage>
 #include <QApplication>
 #include <QPainter>
+#include <QMimeType>
 
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
@@ -57,7 +58,8 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
     // reason. As a direct consequence, we do not attempt to load that image.
     QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
 
-    const QString mimetype = KMimeType::findByPath(in)->name();
+    QMimeDatabase db;
+    const QString mimetype = db.mimeTypeForFile(in).name();
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
@@ -73,7 +75,7 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
     connect(m_doc, SIGNAL(completed()), SLOT(onLoadingCompleted()));
 
     // load the document content
-    KUrl url;
+    QUrl url;
     url.setPath(in);
     if (!m_doc->openUrl(url)) {
         delete m_doc;
@@ -98,5 +100,3 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
 
     return m_loadingCompleted;
 }
-
-#include "ThumbnailHelperImpl.moc"

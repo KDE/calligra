@@ -85,5 +85,3 @@ const KComponentData &Factory::global()
 }
 
 } // KPlatoWork namespace
-
-#include "factory.moc"

@@ -566,7 +566,7 @@ private Q_SLOTS:
     void slotDeleteTask();
 
 private:
-    void edit( QModelIndex index );
+    void edit( const QModelIndex &index );
 
 private:
     DependencyView *m_view;

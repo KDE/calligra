@@ -20,11 +20,13 @@
 #include "ColumnLayout.h"
 
 #include <QRectF>
+#include <QDebug>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <Utils.h>
+#include <KLocalizedString>
+
 #include <KoShape.h>
+
+#include <Utils.h>
 
 ColumnLayout::ColumnLayout() : Layout("columnlayout"), m_isUpdating(false)
 {
@@ -85,20 +87,20 @@ void ColumnLayout::relayout()
     if(m_isUpdating) return;
     m_isUpdating = true;
     // First sort them
-    kDebug() << "<moh>";
+    qDebug() << "<moh>";
     foreach(KoShape * _shape, m_shapes) {
-        kDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
+        qDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
     }
-    kDebug() << "</moh>";
+    qDebug() << "</moh>";
     qSort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
     // Update position
     qreal y = 0;
-    kDebug() << "<Updating>";
+    qDebug() << "<Updating>";
     foreach(KoShape * shape, m_shapes) {
         bool dependOnOtherShape = false;
         foreach(KoShape * otherShape, m_shapes) {
             if(otherShape->hasDependee(shape)) {
-                kDebug() << shape << " depends on " << otherShape;
+                qDebug() << shape << " depends on " << otherShape;
                 dependOnOtherShape = true;
                 break;
             }
@@ -113,7 +115,7 @@ void ColumnLayout::relayout()
             shape->update();
         }
     }
-    kDebug() << "</Updating>";
+    qDebug() << "</Updating>";
     emit(boundingBoxChanged(boundingBox()));
     m_isUpdating = false;
 }

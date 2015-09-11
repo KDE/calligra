@@ -194,5 +194,3 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
 }
 
 }  //KPlato namespace
-
-#include "kptrelationdialog.moc"

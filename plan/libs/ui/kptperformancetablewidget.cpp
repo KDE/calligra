@@ -76,5 +76,3 @@ QSize PerformanceTableView::minimumSizeHint() const
 }
 
 } // namespace KPlato
-
-#include "kptperformancetablewidget.moc"

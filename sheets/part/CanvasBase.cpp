@@ -555,6 +555,8 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
         kDebug(36005) << "has text";
         dragMarkingRect = QRect(1, 1, 1, 1);
     }
+#else
+    Q_UNUSED(source);
 #endif
     const QPoint dragAnchor = selection()->boundingRect().topLeft();
     double xpos = sheet->columnPosition(dragAnchor.x());

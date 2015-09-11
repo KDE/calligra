@@ -256,5 +256,3 @@ void MapViewModel::gotoSheetActionTriggered(QAction *action)
         }
     }
 }
-
-#include "MapViewModel.moc"

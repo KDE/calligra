@@ -19,25 +19,7 @@
 
 #include "kexitabledesignerview_p.h"
 #include "kexitabledesignerview.h"
-
-#include <QLayout>
-#include <QLabel>
-#include <QSplitter>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kactioncollection.h>
-
-#include <KPropertySet>
-
 #include <kexi_global.h>
-#include <db/cursor.h>
-#include <db/tableschema.h>
-#include <db/connection.h>
-#include <db/utils.h>
-#include <db/roweditbuffer.h>
-#include <db/error.h>
-#include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <widget/dataviewcommon/kexidataawarepropertyset.h>
@@ -46,6 +28,21 @@
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
 #include "kexitabledesignercommands.h"
+
+#include <KPropertySet>
+
+#include <KDbCursor>
+#include <KDbTableSchema>
+#include <KDbConnection>
+#include <KDbUtils>
+#include <KDbRecordEditBuffer>
+#include <KDbError>
+#include <KDb>
+
+#include <KActionCollection>
+#include <KLocalizedString>
+
+#include <QDebug>
 
 using namespace KexiTableDesignerCommands;
 
@@ -60,9 +57,9 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
         , slotPropertyChanged_primaryKey_enabled(true)
         , slotPropertyChanged_subType_enabled(true)
         , addHistoryCommand_in_slotPropertyChanged_enabled(true)
-        , addHistoryCommand_in_slotRowUpdated_enabled(true)
-        , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
-        , addHistoryCommand_in_slotRowInserted_enabled(true)
+        , addHistoryCommand_in_slotRecordUpdated_enabled(true)
+        , addHistoryCommand_in_slotAboutToDeleteRecord_enabled(true)
+        , addHistoryCommand_in_slotRecordInserted_enabled(true)
         , slotBeforeCellChanged_enabled(true)
         , tempStoreDataUsingRealAlterTable(false)
 {
@@ -70,7 +67,7 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     history = new KUndo2Stack();
     historyActionCollection->addAction("edit_undo", history->createUndoAction(historyActionCollection, "edit_undo"));
     historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
-    
+
     internalPropertyNames
         << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
         << "boundColumn" << "visibleColumn";
@@ -97,8 +94,8 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     KProperty& property = set[propertyName];
 
     //remember because we'll change list data soon
-    KProperty::ListData *oldListData = property.listData() ?
-            new KProperty::ListData(*property.listData()) : 0;
+    KPropertyListData *oldListData = property.listData() ?
+            new KPropertyListData(*property.listData()) : 0;
     if (slist && nlist) {
         if (slist->isEmpty() || nlist->isEmpty()) {
             property.setListData(0);
@@ -139,18 +136,19 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KPropertySet& set, KProperty* prop,
-        bool visible, bool &changed, Command *commandGroup)
+        bool visible, bool *changed, Command *commandGroup)
 {
+    Q_ASSERT(changed);
     if (prop->isVisible() != visible) {
         if (commandGroup) {
                 new ChangePropertyVisibilityCommand(commandGroup, designerView, set, prop->name(), visible);
         }
         prop->setVisible(visible);
-        changed = true;
+        *changed = true;
     }
 }
 
-bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KPropertySet &set,
+bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KDbField::Type fieldType, KPropertySet &set,
         Command *commandGroup)
 {
     bool changed = false;
@@ -158,94 +156,94 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     bool visible;
 
     prop = &set["subType"];
-    kDebug() << "subType=" << prop->value().toInt()
+    qDebug() << "subType=" << prop->value().toInt()
         << " type=" << set["type"].value().toInt();
 
     //if there is no more than 1 subType name or it's a PK: hide the property
     visible =
         (prop->listData() && prop->listData()->keys.count() > 1 /*disabled || isObjectTypeGroup*/)
         && set["primaryKey"].value().toBool() == false;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["objectType"];
     const bool isObjectTypeGroup
-        = set["type"].value().toInt() == (int)KexiDB::Field::BLOB; // used only for BLOBs
+        = set["type"].value().toInt() == (int)KDbField::BLOB; // used only for BLOBs
     visible = isObjectTypeGroup;
-    setVisibilityIfNeeded(set, prop,  visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop,  visible, &changed, commandGroup);
 
     prop = &set["unsigned"];
-    visible = KexiDB::Field::isNumericType(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = KDbField::isNumericType(fieldType);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["maxLength"];
-    visible = (fieldType == KexiDB::Field::Text);
+    visible = (fieldType == KDbField::Text);
     if (prop->isVisible() != visible) {
 //    prop->setVisible( visible );
         //update the length when it makes sense
-        const int lengthToSet = visible ? KexiDB::Field::defaultMaxLength() : 0;
+        const int lengthToSet = visible ? KDbField::defaultMaxLength() : 0;
         setPropertyValueIfNeeded(set, "maxLength", lengthToSet,
                                  commandGroup, false, false /*!rememberOldValue*/);
 //  if (lengthToSet != prop->value().toInt())
 //   prop->setValue( lengthToSet, false );
 //    changed = true;
     }
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 #ifdef KEXI_SHOW_UNFINISHED
     prop = &set["precision"];
-    visible = KexiDB::Field::isFPNumericType(fieldType);
+    visible = KDbField::isFPNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 #endif
     prop = &set["visibleDecimalPlaces"];
-    visible = KexiDB::supportsVisibleDecimalPlacesProperty(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = KDb::supportsVisibleDecimalPlacesProperty(fieldType);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["unique"];
-    visible = fieldType != KexiDB::Field::BLOB;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = fieldType != KDbField::BLOB;
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["indexed"];
-    visible = fieldType != KexiDB::Field::BLOB;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = fieldType != KDbField::BLOB;
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["allowEmpty"];
-    visible = KexiDB::Field::hasEmptyProperty(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = KDbField::hasEmptyProperty(fieldType);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
     prop = &set["autoIncrement"];
-    visible = KexiDB::Field::isAutoIncrementAllowed(fieldType);
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    visible = KDbField::isAutoIncrementAllowed(fieldType);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 
 //! @todo remove this when BLOB supports default value
 #ifndef KEXI_SHOW_UNFINISHED
     prop = &set["defaultValue"];
     visible = !isObjectTypeGroup;
-    setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
+    setVisibilityIfNeeded(set, prop, visible, &changed, commandGroup);
 #endif
 
     return changed;
 }
 
-QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, bool skipWarning)
+QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool *emptyTable, bool skipWarning)
 {
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    bool ok;
-    emptyTable = conn->isEmpty(*designerView->tempData()->table, ok) && ok;
-    return i18n("Do you want to save the design now?")
-           + ((emptyTable || skipWarning) ? QString() :
+    Q_ASSERT(emptyTable);
+    KDbConnection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    *emptyTable = true == conn->isEmpty(designerView->tempData()->table);
+    return xi18n("Do you want to save the design now?")
+           + ((*emptyTable || skipWarning) ? QString() :
               (QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design",
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KPropertySet& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KDbRecordData *data, KPropertySet *set)
 {
     QVariant icon;
-    if (!set["rowSource"].value().toString().isEmpty()
-            && !set["rowSourceType"].value().toString().isEmpty()) {
+    if (!set->property("rowSource").value().toString().isEmpty()
+        && !set->property("rowSourceType").value().toString().isEmpty())
+    {
         icon = "combo";
     }
     //show/hide icon in the table
-    view->data()->clearRowEditBuffer();
-    view->data()->updateRowEditBuffer(&record, COLUMN_ID_ICON, icon);
-    view->data()->saveRowChanges(record, true);
+    view->data()->clearRecordEditBuffer();
+    view->data()->updateRecordEditBuffer(data, COLUMN_ID_ICON, icon);
+    view->data()->saveRecordChanges(data, true);
 }
-

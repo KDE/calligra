@@ -163,5 +163,3 @@ void CellTool::definePrintRange()
     command->add(*selection());
     d->canvas->doc()->addCommand(command);
 }
-
-#include "CellTool.moc"

@@ -20,17 +20,14 @@
  */
 #include "DockerManager.h"
 #include "DockerManager_p.h"
-#include "KoDockFactoryBase.h"
-
-#include <klocale.h>
-#include <kdebug.h>
-
-#include "ToolDocker.h"
-
-#include "MainWindow.h"
 
 #include <QList>
 #include <QGridLayout>
+
+#include "KoDockFactoryBase.h"
+
+#include "ToolDocker.h"
+#include "MainWindow.h"
 
 
 DockerManager::DockerManager(MainWindow *mainWindow)
@@ -70,4 +67,4 @@ void DockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }
 
-#include <DockerManager.moc>
+#include <moc_DockerManager.cpp>

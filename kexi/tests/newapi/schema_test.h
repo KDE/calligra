@@ -23,28 +23,28 @@
 int schemaTest()
 {
     if (!conn->useDatabase(db_name)) {
-        kDebug() << conn->errorMsg();
+        qDebug() << conn->errorMsg();
         return 1;
     }
 
-    KexiDB::TableSchema *t = conn->tableSchema("persons");
+    KDbTableSchema *t = conn->tableSchema("persons");
     if (t)
-        t->debug();
+        qDebug() << *t;
     else
-        kDebug() << "!persons";
+        qDebug() << "!persons";
     t = conn->tableSchema("cars");
     if (t)
-        t->debug();
+        qDebug() << *t;
     else
-        kDebug() << "!cars";
+        qDebug() << "!cars";
     /*
     // some tests
       {
-        KexiDB::Field::ListIterator iter = t->fieldsIterator();
-        KexiDB::Field::List *lst = t->fields();
+        KDbField::ListIterator iter = t->fieldsIterator();
+        KDbField::List *lst = t->fields();
         lst->clear();
         for (;iter.current();++iter) {
-          kDebug() << "FIELD=" << iter.current()->name();
+          qDebug() << "FIELD=" << iter.current()->name();
     //   iter.current()->setName("   ");
         }
       }*/

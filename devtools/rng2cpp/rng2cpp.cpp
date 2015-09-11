@@ -26,11 +26,7 @@
 #include <QSet>
 #include <QVector>
 
-#if QT_VERSION < 0x040800
-#   define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(QString(what))))
-#else
-#   define assert(cond, what) Q_ASSERT_X(cond, "", qPrintable(what))
-#endif
+#define assert(cond, what) Q_ASSERT_X(cond, "", qPrintable(what))
 
 static const QString ns = "writeodf";
 

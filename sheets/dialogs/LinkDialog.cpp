@@ -33,9 +33,9 @@
 #include <KoIcon.h>
 
 #include <QLabel>
+#include <QUrl>
 #include <QVBoxLayout>
 
-#include <kurl.h>
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <klineedit.h>
@@ -209,7 +209,7 @@ QString LinkDialog::link() const
         if (! subject.isEmpty())
             str.append(QString("?subject=%1").arg(QString(QUrl::toPercentEncoding(subject))));
     } else if (currentPage() == d->p3) {
-        KUrl url = d->fileLink->url();
+        QUrl url = d->fileLink->url();
         if (url.isValid()) {
             str = url.url();
         } else {
@@ -316,5 +316,3 @@ void LinkDialog::slotOk()
 
     accept();
 }
-
-#include "LinkDialog.moc"

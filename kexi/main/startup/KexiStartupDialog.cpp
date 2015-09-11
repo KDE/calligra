@@ -23,30 +23,25 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
-#include <db/utils.h>
+#include <KexiIcon.h>
 
-#include <KoIcon.h>
+#include <KDbUtils>
 
-#include <QLayout>
-#include <QTabWidget>
-#include <QComboBox>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
+#include <QDebug>
 #include <QCheckBox>
-#include <QPoint>
 #include <QObject>
-#include <QApplication>
-
-#include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QListView>
-
-#include <klocale.h>
-
-#include <kcomponentdata.h>
-#include <kdebug.h>
-#include <kmimetype.h>
-#include <kconfig.h>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 //! @internal
 class KexiStartupDialog::Private
@@ -83,13 +78,13 @@ public:
 
     int result;
 
-    KIcon kexi_sqlite_icon;
+    QIcon kexi_sqlite_icon;
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;
     KexiFileWidget *openExistingFileWidget; //! embedded file widget
     KexiConnectionSelectorWidget *openExistingConnWidget;
-    KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
+    KDbConnectionData* selectedExistingConnection; //! helper for returning selected connection
 
     //! true if the dialog contain single page, not tabs
     bool singlePage;
@@ -98,11 +93,11 @@ public:
 static QString captionForDialogType(int type)
 {
     if (type == KexiStartupDialog::Templates)
-        return i18n("Create Project");
+        return xi18n("Create Project");
     else if (type == KexiStartupDialog::OpenExisting)
-        return i18n("Open Existing Project");
+        return xi18n("Open Existing Project");
 
-    return i18n("Choose Project");
+    return xi18n("Choose Project");
 }
 
 /*================================================================*/
@@ -114,14 +109,18 @@ KexiStartupDialog::KexiStartupDialog(
         : KPageDialog(parent)
         , d(new Private())
 {
-    d->singlePage = dialogType == KexiStartupDialog::Templates
-                    || dialogType == KexiStartupDialog::OpenExisting;
-    setFaceType(d->singlePage ? Plain : Tabbed);
-    setCaption(captionForDialogType(dialogType));
-    setButtons(Help | Ok | Cancel);
     d->connSet = &connSet;
     d->dialogType = dialogType;
     d->dialogOptions = dialogOptions;
+    d->singlePage = dialogType == KexiStartupDialog::Templates
+                    || dialogType == KexiStartupDialog::OpenExisting;
+    setFaceType(d->singlePage ? Plain : Tabbed);
+    setWindowTitle(captionForDialogType(dialogType));
+
+    // buttons
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     if (dialogType == OpenExisting) {//this dialog has "open" tab only!
         setWindowIcon(koIcon("document-open"));
@@ -151,7 +150,7 @@ KexiStartupDialog::KexiStartupDialog(
                 this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
         d->templatesWidget->setFocus();
     }
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
     setCurrentPage(firstPage);
     updateDialogOKButton(firstPage);
     adjustSize();
@@ -168,7 +167,7 @@ void KexiStartupDialog::showEvent(QShowEvent *e)
     //just some cleanup
     d->result = -1;
 
-    KDialog::centerOnScreen(this);
+    //! @todo QDialog::centerOnScreen(this);
 }
 
 int KexiStartupDialog::result() const
@@ -181,7 +180,7 @@ void KexiStartupDialog::done(int r)
     if (d->result != -1) //already done!
         return;
 
-// kDebug() << r;
+// qDebug() << r;
 // updateSelectedTemplateKeyInfo();
 
     if (r == QDialog::Rejected) {
@@ -217,7 +216,7 @@ void KexiStartupDialog::done(int r)
     }
 
     //save settings
-    KConfigGroup group = KGlobal::config()->group("Startup");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Startup");
     if (d->openExistingConnWidget)
         group.writeEntry("OpenExistingType",
                          (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
@@ -238,9 +237,9 @@ void KexiStartupDialog::reject()
 void KexiStartupDialog::setupPageTemplates()
 {
     QFrame *pageTemplatesFrame = new QFrame(this);
-    d->pageTemplates = addPage(pageTemplatesFrame, i18n("Create Project"));
+    d->pageTemplates = addPage(pageTemplatesFrame, xi18n("Create Project"));
     QVBoxLayout *lyr = new QVBoxLayout(pageTemplatesFrame);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
     lyr->setMargin(0);
 
     d->templatesWidget = new KPageWidget(pageTemplatesFrame);
@@ -256,7 +255,7 @@ void KexiStartupDialog::setupPageTemplates()
             this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
     if (d->dialogOptions & CheckBoxDoNotShowAgain) {
-        d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), pageTemplatesFrame);
+        d->chkDoNotShow = new QCheckBox(xi18n("Do not show me this dialog again"), pageTemplatesFrame);
         d->chkDoNotShow->setObjectName("chkDoNotShow");
         lyr->addWidget(d->chkDoNotShow);
     }
@@ -266,16 +265,16 @@ void KexiStartupDialog::setupPageTemplates()
     QVBoxLayout *tmplyr;
 
     //- page "blank db"
-    QString clickMsg("\n\n" + i18n("Click <interface>OK</interface> button to proceed."));
+    QString clickMsg("\n\n" + xi18n("Click <interface>OK</interface> button to proceed."));
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget,
-                                           i18n("Blank Database"));
-    d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
+                                           xi18n("Blank Database"));
+    d->templPageWidgetItem_BlankDatabase->setHeader(xi18n("New Blank Database Project"));
     d->templPageWidgetItem_BlankDatabase->setIcon(koIcon("x-office-document"));
     tmplyr = new QVBoxLayout(templPageWidget);
-    tmplyr->setSpacing(KDialog::spacingHint());
+    tmplyr->setSpacing(KexiUtils::spacingHint());
     QLabel *lbl_blank = new QLabel(
-        i18n("Kexi will create a new blank database project.") + clickMsg, templPageWidget);
+        xi18n("Kexi will create a new blank database project.") + clickMsg, templPageWidget);
     lbl_blank->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     lbl_blank->setWordWrap(true);
     lbl_blank->setMargin(0);
@@ -285,14 +284,14 @@ void KexiStartupDialog::setupPageTemplates()
     //- page "import db"
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_ImportExisting = d->templatesWidget->addPage(templPageWidget,
-                                            i18n("Import Existing Database"));
+                                            xi18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
-        i18n("Import Existing Database as New Database Project"));
+        xi18n("Import Existing Database as New Database Project"));
     d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
     tmplyr = new QVBoxLayout(templPageWidget);
-    tmplyr->setSpacing(KDialog::spacingHint());
+    tmplyr->setSpacing(KexiUtils::spacingHint());
     QLabel *lbl_import = new QLabel(
-        i18n("Kexi will import the structure and data of an existing database "
+        xi18n("Kexi will import the structure and data of an existing database "
              "as a new database project.") + clickMsg, templPageWidget);
     lbl_import->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     lbl_import->setWordWrap(true);
@@ -345,32 +344,33 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
                  || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
 #endif
     } else if (pageWidgetItem == d->pageOpenExisting) {
-        kDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
+        qDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
         enable =
             (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
             ? !d->openExistingFileWidget->highlightedFile().isEmpty()
             : (bool)d->openExistingConnWidget->selectedConnectionData();
-//kDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
+//qDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
     }
-    enableButton(Ok, enable);
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(enable);
 }
 
 void KexiStartupDialog::setupPageOpenExisting()
 {
     QWidget *pageOpenExistingWidget = new QFrame(this);
-    d->pageOpenExisting = addPage(pageOpenExistingWidget, i18n("Open Existing Project"));
+    d->pageOpenExisting = addPage(pageOpenExistingWidget, xi18n("Open Existing Project"));
 
     QVBoxLayout *lyr = new QVBoxLayout(pageOpenExistingWidget);
-    lyr->setSpacing(KDialog::spacingHint());
+    lyr->setSpacing(KexiUtils::spacingHint());
     lyr->setMargin(0);
 
-    d->openExistingConnWidget = new KexiConnectionSelectorWidget(*d->connSet,
-            "kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
+    d->openExistingConnWidget = new KexiConnectionSelectorWidget(d->connSet,
+            "kfiledialog:///OpenExistingOrCreateNewProject", KFileWidget::Opening,
             pageOpenExistingWidget);
     d->openExistingConnWidget->setObjectName("KexiConnectionSelectorWidget");
     d->openExistingConnWidget->hideConnectonIcon();
     lyr->addWidget(d->openExistingConnWidget);
-    KConfigGroup group = KGlobal::config()->group("Startup");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Startup");
     if (group.readEntry("OpenExistingType", "File") == "File")
         d->openExistingConnWidget->showSimpleConn();
     else {
@@ -379,8 +379,8 @@ void KexiStartupDialog::setupPageOpenExisting()
     }
     d->openExistingFileWidget = d->openExistingConnWidget->fileWidget;
     connect(d->openExistingFileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(d->openExistingFileWidget, SIGNAL(fileHighlighted()),
-            this, SLOT(existingFileHighlighted()));
+    connect(d->openExistingFileWidget, SIGNAL(selectionChanged()),
+            this, SLOT(existingFileSelected()));
     connect(d->openExistingConnWidget, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
             this, SLOT(connectionItemForOpenExistingExecuted(ConnectionDataLVItem*)));
     connect(d->openExistingConnWidget, SIGNAL(connectionItemHighlighted(ConnectionDataLVItem*)),
@@ -396,23 +396,24 @@ void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVIt
 
 void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataLVItem *item)
 {
-    enableButtonOk(item);
+    QPushButton *okButton = buttonBox()->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(item);
 }
 
 void KexiStartupDialog::slotOk()
 {
-// kDebug();
+// qDebug();
 }
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
-// kDebug() << "simple";
+// qDebug() << "simple";
     d->openExistingConnWidget->showSimpleConn();
 }
 
 void KexiStartupDialog::showAdvancedConnForOpenExisting()
 {
-// kDebug() << "adv";
+// qDebug() << "adv";
     d->openExistingConnWidget->showAdvancedConn();
 }
 
@@ -429,14 +430,14 @@ QString KexiStartupDialog::selectedFileName() const
         return QString();
 }
 
-KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
+KDbConnectionData* KexiStartupDialog::selectedExistingConnection() const
 {
     return d->selectedExistingConnection;
 }
 
-void KexiStartupDialog::existingFileHighlighted()
+void KexiStartupDialog::existingFileSelected()
 {
-    //kDebug();
+    //qDebug();
     updateDialogOKButton(0);
 }
 
@@ -491,4 +492,3 @@ KexiProjectData::AutoOpenObjects KexiStartupDialog::autoopenObjects() const
 }
 #endif
 
-#include "KexiStartupDialog.moc"

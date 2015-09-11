@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -26,9 +26,7 @@
 //temporary
 //#define KexiStatusBar_KTEXTEDITOR_USED
 
-#include <kstatusbar.h>
-
-class KMenu;
+#include <QStatusBar>
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor
@@ -38,7 +36,7 @@ namespace KTextEditor
 }
 #endif
 
-class KexiStatusBar : public KStatusBar
+class KexiStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
@@ -61,14 +59,9 @@ protected Q_SLOTS:
     void setCursorPosition(int line, int col);
 #endif
 
-protected:
-    int m_msgID, m_readOnlyID;
-
-#ifdef KexiStatusBar_KTEXTEDITOR_USED
-    KTextEditor::ViewCursorInterface * m_cursorIface;
-    KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
-#endif
-    KMenu *m_viewMenu;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

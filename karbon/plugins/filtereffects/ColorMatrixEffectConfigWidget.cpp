@@ -169,5 +169,3 @@ void ColorMatrixEffectConfigWidget::typeChanged(int index)
     }
     emit filterChanged();
 }
-
-#include "ColorMatrixEffectConfigWidget.moc"

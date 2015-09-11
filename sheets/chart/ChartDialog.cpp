@@ -53,5 +53,3 @@ QList<KoShapeConfigFactoryBase*> ChartDialog::panels(Map *map)
     answer.append(new ChartDatabaseSelectorFactory(map));
     return answer;
 }
-
-#include "ChartDialog.moc"

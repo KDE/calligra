@@ -706,5 +706,3 @@ bool TaskWorkPackageModel::isDocument( const QModelIndex &idx ) const
 
 
 } //namespace KPlato
-
-#include "taskworkpackagemodel.moc"

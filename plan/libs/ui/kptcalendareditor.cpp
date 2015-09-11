@@ -833,5 +833,3 @@ void CalendarEditor::slotSetUndefined()
 
 
 } // namespace KPlato
-
-#include "kptcalendareditor.moc"

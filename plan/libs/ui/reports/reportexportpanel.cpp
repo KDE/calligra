@@ -45,5 +45,3 @@ int ReportExportPanel::selectedFormat() const
 }
 
 } //namespace KPlato
-
-#include "reportexportpanel.moc"

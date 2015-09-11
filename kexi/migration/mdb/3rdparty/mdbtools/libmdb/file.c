@@ -26,7 +26,7 @@
 /*
 typedef struct {
 	int		pg_size;
-	guint16		row_count_offset; 
+	guint16		row_count_offset;
 	guint16		tab_num_rows_offset;
 	guint16		tab_num_cols_offset;
 	guint16		tab_num_idxs_offset;
@@ -43,7 +43,7 @@ typedef struct {
 	guint16         tab_col_offset_var;
 	guint16         tab_col_offset_fixed;
 	guint16         tab_row_col_num_offset;
-} MdbFormatConstants; 
+} MdbFormatConstants;
 */
 MdbFormatConstants MdbJet4Constants = {
 	4096, 0x0c, 16, 45, 47, 51, 55, 56, 63, 12, 15, 23, 5, 25, 59, 7, 21, 9
@@ -75,13 +75,13 @@ static char *mdb_find_file(const char *file_name)
 	if (!stat(file_name, &status)) {
 		return g_strdup(file_name);
 	}
-	
+
 	/* Now pull apart $MDBPATH and try those */
 	mdbpath = (gchar *) getenv("MDBPATH");
 	/* no path, can't find file */
 	if (!mdbpath || !strlen(mdbpath)) return NULL;
 
-	dir = g_strsplit(mdbpath, ":", 0); 
+	dir = g_strsplit(mdbpath, ":", 0);
 	while (dir[i]) {
 		if (!strlen(dir[i])) continue;
 		tmpfname = g_strconcat(dir[i++], "/", file_name, NULL);
@@ -105,7 +105,7 @@ static char *mdb_find_file(const char *file_name)
  * JET3 databases have no usincode support but only ANSI code page (e.g. CP1252)
  * (not ISO), so you need to decide what code page strings in the MDB file are encoded in.
  *
- * Use this function after mdb_open()) but BEFORE any operation which reads text strings 
+ * Use this function after mdb_open()) but BEFORE any operation which reads text strings
  * from the MDB file.
  * "MDB_JET3_CHARSET" environment variable has priority over this setting.
  *
@@ -126,7 +126,7 @@ void mdb_set_encoding(MdbHandle *mdb, const char *encoding_name)
  * @flags: MDB_NOFLAGS for read-only, MDB_WRITABLE for read/write
  *
  * Opens an MDB file and returns an MdbHandle to it.  MDB File may be relative
- * to the current directory, a full path to the file, or relative to a 
+ * to the current directory, a full path to the file, or relative to a
  * component of $MDBPATH.
  *
  * Return value: pointer to MdbHandle structure.
@@ -151,10 +151,10 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	mdb->f->refs = 1;
 	mdb->f->fd = -1;
 	mdb->f->filename = mdb_find_file(filename);
-	if (!mdb->f->filename) { 
+	if (!mdb->f->filename) {
 		fprintf(stderr, "Can't alloc filename\n");
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	if (flags & MDB_WRITABLE) {
 		mdb->f->writable = TRUE;
@@ -170,7 +170,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	mdb->f->fd = open(mdb->f->filename, open_flags);
 
 	if (mdb->f->fd==-1) {
-		fprintf(stderr,"Couldn't open file %s\n",mdb->f->filename); 
+		fprintf(stderr,"Couldn't open file %s\n",mdb->f->filename);
 		mdb_close(mdb);
 		return NULL;
 	}
@@ -181,7 +181,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	}
 	if (mdb->pg_buf[0] != 0) {
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	mdb->f->jet_version = mdb_get_int32(mdb->pg_buf, 0x14);
 	if (IS_JET4(mdb)) {
@@ -191,7 +191,7 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
 	} else {
 		fprintf(stderr,"Unknown Jet version.\n");
 		mdb_close(mdb);
-		return NULL; 
+		return NULL;
 	}
 	mdb_iconv_init(mdb);
 
@@ -205,10 +205,10 @@ MdbHandle *mdb_open(const char *filename, MdbFileFlags flags)
  * Dereferences MDB file, closes if reference count is 0, and destroys handle.
  *
  **/
-void 
+void
 mdb_close(MdbHandle *mdb)
 {
-	if (!mdb) return;	
+	if (!mdb) return;
 	mdb_free_catalog(mdb);
 #if !MDB_NO_STATS
 	g_free(mdb->stats);
@@ -272,8 +272,8 @@ MdbHandle *mdb_clone_handle(MdbHandle *mdb)
 	return newmdb;
 }
 
-/* 
-** mdb_read a wrapper for read that bails if anything is wrong 
+/*
+** mdb_read a wrapper for read that bails if anything is wrong
 */
 ssize_t mdb_read_pg(MdbHandle *mdb, unsigned long pg)
 {
@@ -282,7 +282,7 @@ ssize_t mdb_read_pg(MdbHandle *mdb, unsigned long pg)
 	if (pg && mdb->cur_pg == pg) return mdb->fmt->pg_size;
 
 	len = _mdb_read_pg(mdb, mdb->pg_buf, pg);
-	
+
 	mdb->cur_pg = pg;
 	/* kan - reset the cur_pos on a new page read */
 	mdb->cur_pos = 0; /* kan */
@@ -302,12 +302,12 @@ static ssize_t _mdb_read_pg(MdbHandle *mdb, void *pg_buf, unsigned long pg)
 	off_t offset = pg * mdb->fmt->pg_size;
 
         fstat(mdb->f->fd, &status);
-        if (status.st_size < offset) { 
+        if (status.st_size < offset) {
                 fprintf(stderr,"offset %lu is beyond EOF\n",offset);
                 return 0;
         }
 #if !MDB_NO_STATS
-	if (mdb->stats && mdb->stats->collect) 
+	if (mdb->stats && mdb->stats->collect)
 		mdb->stats->pg_reads++;
 #endif
 	lseek(mdb->f->fd, offset, SEEK_SET);
@@ -319,7 +319,7 @@ static ssize_t _mdb_read_pg(MdbHandle *mdb, void *pg_buf, unsigned long pg)
 	else if (len<mdb->fmt->pg_size) {
 		/* fprintf(stderr,"EOF reached %d bytes returned.\n",len, mdb->fmt->pg_size); */
 		return 0;
-	} 
+	}
 	return len;
 }
 void mdb_swap_pgbuf(MdbHandle *mdb)
@@ -404,7 +404,7 @@ double mdb_pg_get_double(MdbHandle *mdb, int offset)
 }
 
 
-int 
+int
 mdb_set_pos(MdbHandle *mdb, int pos)
 {
 	if (pos<0 || pos >= (int)mdb->fmt->pg_size) return 0;

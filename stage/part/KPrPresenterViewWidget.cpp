@@ -144,6 +144,3 @@ void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
     m_mainWidget->setActivePage( index );
     m_slidesWidget->setActivePage( index );
 }
-
-#include "KPrPresenterViewWidget.moc"
-

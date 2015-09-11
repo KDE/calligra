@@ -218,5 +218,3 @@ KoPrintJob *ResourceAllocationEditor::createPrintJob()
 
 
 } // namespace KPlato
-
-#include "kptresourceallocationeditor.moc"

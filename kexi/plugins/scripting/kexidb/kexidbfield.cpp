@@ -22,7 +22,7 @@
 
 using namespace Scripting;
 
-KexiDBField::KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner)
+KexiDBField::KexiDBField(QObject* parent, KDbField* field, bool owner)
         : QObject(parent)
         , m_field(field)
         , m_owner(owner)
@@ -42,7 +42,7 @@ const QString KexiDBField::type()
 }
 void KexiDBField::setType(const QString type)
 {
-    m_field->setType(::KexiDB::Field::typeForString(type));
+    m_field->setType(KDbField::typeForString(type));
 }
 
 const QString KexiDBField::subType()
@@ -148,6 +148,7 @@ const QString KexiDBField::caption()
 {
     return m_field->caption();
 }
+
 void KexiDBField::setCaption(const QString& caption)
 {
     m_field->setCaption(caption);
@@ -162,21 +163,21 @@ void KexiDBField::setDescription(const QString& desc)
     m_field->setDescription(desc);
 }
 
-uint KexiDBField::length()
+int KexiDBField::length()
 {
     return m_field->maxLength();
 }
 
-void KexiDBField::setLength(uint length)
+void KexiDBField::setLength(int length)
 {
     m_field->setMaxLength(length);
 }
 
-uint KexiDBField::precision()
+int KexiDBField::precision()
 {
     return m_field->precision();
 }
-void KexiDBField::setPrecision(uint precision)
+void KexiDBField::setPrecision(int precision)
 {
     m_field->setPrecision(precision);
 }
@@ -190,4 +191,3 @@ void KexiDBField::setDefaultValue(const QVariant& defaultvalue)
     m_field->setDefaultValue(defaultvalue);
 }
 
-#include "kexidbfield.moc"

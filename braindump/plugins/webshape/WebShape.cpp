@@ -20,7 +20,6 @@
 #include "WebShape.h"
 
 #include <QBuffer>
-// #include <QFile>
 #include <QPainter>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
@@ -31,7 +30,6 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <kdebug.h>
 
 #include <../../src/Xml.h>
 
@@ -81,7 +79,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
-    m_url = element.attribute("url");
+    m_url.setUrl(element.attribute("url"));
     m_scrollPosition.setX(element.attribute("scroll_x", "0").toDouble());
     m_scrollPosition.setY(element.attribute("scroll_y", "0").toDouble());
     m_zoom = element.attribute("zoom", "1.0").toDouble();
@@ -106,12 +104,12 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
     return true;
 }
 
-const KUrl& WebShape::url()
+const QUrl &WebShape::url()
 {
     return m_url;
 }
 
-void WebShape::setUrl(const KUrl& _url)
+void WebShape::setUrl(const QUrl &_url)
 {
     m_url = _url;
     m_webPage->mainFrame()->load(_url);

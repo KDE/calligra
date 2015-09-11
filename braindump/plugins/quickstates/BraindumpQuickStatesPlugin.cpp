@@ -21,24 +21,25 @@
 
 #include <QPainter>
 #include <QSvgRenderer>
+#include <QStandardPaths>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kgenericfactory.h>
-#include <kstandarddirs.h>
 
 #include "State.h"
 #include "StatesRegistry.h"
 
 #include "QuickStateHandler.h"
 
+// QT5TODO: port to Json-based plugin
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
 BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "braindump/plugins/quickstates.rc"), true);
 
     // TODO try to use action list, or to get access to the state menu
 
@@ -48,7 +49,7 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
     foreach(const QString & catId, StatesRegistry::instance()->categorieIds()) {
         foreach(const QString & stateId, StatesRegistry::instance()->stateIds(catId)) {
             const State* state = StatesRegistry::instance()->state(catId, stateId);
-            KAction* action = new KAction(state->name(), this);
+            QAction * action = new QAction(state->name(), this);
             actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
             actionMenu->addAction(action);
             QuickStateHandler* handler = new QuickStateHandler(catId, stateId, this);

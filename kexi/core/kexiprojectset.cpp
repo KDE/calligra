@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,12 +20,10 @@
 #include "kexiprojectset.h"
 #include "kexi.h"
 
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/msghandler.h>
-#include <db/drivermanager.h>
-
-#include <kdebug.h>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbMessageHandler>
+#include <KDbDriverManager>
 
 //! @internal
 class KexiProjectSetPrivate
@@ -36,59 +34,59 @@ public:
     }
     ~KexiProjectSetPrivate()
     {
-        foreach (KexiProjectData* data, list) {
-            delete data;
-        }
+        qDeleteAll(list);
     }
     KexiProjectData::List list;
 };
 
-KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
+KexiProjectSet::KexiProjectSet(KDbMessageHandler* handler)
+        : KDbResultable()
         , d(new KexiProjectSetPrivate())
 {
-}
-
-KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData* conndata,
-                               KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
-        , d(new KexiProjectSetPrivate())
-{
-    Q_ASSERT(conndata);
-    KexiDB::Driver *drv = Kexi::driverManager().driver(conndata->driverName);
-    if (!drv) {
-        setError(&Kexi::driverManager());
-        return;
-    }
-    KexiDB::Connection *conn = drv->createConnection(*conndata);
-    if (!conn) {
-        setError(drv);
-        return;
-    }
-    if (!conn->connect()) {
-        setError(conn);
-        delete conn;
-        return;
-    }
-    QStringList dbnames = conn->databaseNames(false/*skip system*/);
-    if (conn->error()) {
-        setError(conn);
-        delete conn;
-        return;
-    }
-    delete conn;
-    conn = 0;
-    for (QStringList::ConstIterator it = dbnames.constBegin(); it != dbnames.constEnd(); ++it) {
-        // project's caption is just the same as database name - nothing better is available
-        KexiProjectData *pdata = new KexiProjectData(*conndata, *it, *it);
-        d->list.append(pdata);
-    }
-    clearError();
+    setMessageHandler(handler);
 }
 
 KexiProjectSet::~KexiProjectSet()
 {
     delete d;
+}
+
+bool KexiProjectSet::setConnectionData(KDbConnectionData* conndata)
+{
+    Q_ASSERT(conndata);
+    clearResult();
+    qDeleteAll(d->list);
+    d->list.clear();
+
+    KDbMessageGuard mg(this);
+    KDbDriver *drv = Kexi::driverManager().driver(conndata->driverId());
+    if (!drv) {
+        m_result = Kexi::driverManager().result();
+        return false;
+    }
+    QStringList dbnames;
+    QScopedPointer<KDbConnection> conn(drv->createConnection(*conndata));
+    {
+        if (!conn) {
+            m_result = drv->result();
+            return false;
+        }
+        if (!conn->connect()) {
+            m_result = conn->result();
+            return false;
+        }
+        dbnames = conn->databaseNames(false/*skip system*/);
+        if (conn->result().isError()) {
+            m_result = conn->result();
+            return false;
+        }
+    }
+    for (QStringList::ConstIterator it = dbnames.constBegin(); it != dbnames.constEnd(); ++it) {
+        // project's caption is just the same as database name - nothing better is available
+        KexiProjectData *pdata = new KexiProjectData(*conndata, *it, *it);
+        addProjectData(pdata);
+    }
+    return true;
 }
 
 void KexiProjectSet::addProjectData(KexiProjectData *data)
@@ -108,10 +106,10 @@ KexiProjectData::List KexiProjectSet::list() const
 
 KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
 {
-    const QString _dbName(dbName.toLower());
     foreach(KexiProjectData* data, d->list) {
-        if (data->databaseName().toLower() == _dbName)
+        if (0 == QString::compare(data->databaseName(), dbName, Qt::CaseInsensitive)) {
             return data;
+        }
     }
     return 0;
 }

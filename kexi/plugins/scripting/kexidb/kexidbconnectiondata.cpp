@@ -19,11 +19,10 @@
 
 #include "kexidbconnectiondata.h"
 
-#include <QVariant>
 
 using namespace Scripting;
 
-KexiDBConnectionData::KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner)
+KexiDBConnectionData::KexiDBConnectionData(QObject* parent, KDbConnectionData* data, bool owner)
         : QObject(parent)
         , m_data(data)
         , m_owner(owner)
@@ -139,13 +138,12 @@ const QString KexiDBConnectionData::dbPath() const
 {
     return m_data->dbPath();
 }
-const QString KexiDBConnectionData::dbFileName() const
+const QString KexiDBConnectionData::databaseName() const
 {
-    return m_data->dbFileName();
+    return m_data->databaseName();
 }
-const QString KexiDBConnectionData::serverInfoString() const
+const QString KexiDBConnectionData::toUserVisibleString() const
 {
-    return m_data->serverInfoString(true);
+    return m_data->toUserVisibleString();
 }
 
-#include "kexidbconnectiondata.moc"

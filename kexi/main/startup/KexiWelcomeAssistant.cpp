@@ -22,40 +22,36 @@
 #include "KexiWelcomeStatusBar.h"
 #include "KexiPasswordPage.h"
 #include "KexiMainWindow.h"
-
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <db/utils.h>
-#include <db/object.h>
-#include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kdialog.h>
+#include <KDbUtils>
+#include <KDbObject>
+#include <KDb>
 
-#include <QLayout>
+#include <KLocalizedString>
+
+#include <QDebug>
 #include <QCheckBox>
-#include <QPaintEvent>
-#include <QPainter>
-#include <QProgressBar>
 #include <QTimer>
- 
+#include <QHBoxLayout>
+
 KexiMainWelcomePage::KexiMainWelcomePage(
    KexiWelcomeAssistant* assistant, QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Welcome to Kexi"),
-                  i18nc("@info", "Select one of the recently used projects to open."),
+ : KexiAssistantPage(xi18nc("@title:window", "Welcome to Kexi"),
+                  xi18nc("@info", "Select one of the recently used projects to open."),
                   parent)
  , m_assistant(assistant)
 {
     QWidget* contents = new QWidget;
     QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
-    
+
     m_recentProjects = new KexiCategorizedView;
     // do not alter background palette
     QPalette pal(m_recentProjects->palette());
@@ -67,15 +63,15 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+        + KexiUtils::marginHint();
     //not needed in grid:
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(activated(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    
+
     m_statusBar = new KexiWelcomeStatusBar;
     contentsLyr->addWidget(m_statusBar);
-    
+
     setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
@@ -96,7 +92,7 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
         return;
     QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
     KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
-    //kDebug() << *pdata;
+    //qDebug() << *pdata;
     if (pdata) {
         m_assistant->openProjectOrShowPasswordPage(pdata);
     }
@@ -116,12 +112,12 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
-        mainWindow->redirectMessagesTo(0);
+        mainWindow->setRedirection(0);
     }
-    
+
     KexiMainWelcomePage* mainWelcomePage() {
         return page<KexiMainWelcomePage>(&m_mainWelcomePage, q);
     }
@@ -161,7 +157,7 @@ KexiWelcomeAssistant::KexiWelcomeAssistant(
  , d(new Private(this))
 {
     d->mainWindow = parent;
-    d->mainWindow->redirectMessagesTo(this);
+    d->mainWindow->setRedirection(this);
     d->messageWidgetActionNo = 0;
     d->messageWidgetActionTryAgain = 0;
     d->projects = projects;
@@ -210,9 +206,9 @@ void KexiWelcomeAssistant::emitOpenProject(KexiProjectData *data)
 
 void KexiWelcomeAssistant::openProjectOrShowPasswordPage(KexiProjectData *data)
 {
-    KexiDB::ConnectionData *cdata = data->connectionData();
+    KDbConnectionData *cdata = data->connectionData();
     if (cdata) {
-        if (cdata->passwordNeeded()) {
+        if (cdata->isPasswordNeeded()) {
             d->projectData = data;
             d->passwordPage()->setConnectionData(*cdata);
             d->passwordPage()->showDatabaseName(true);
@@ -247,4 +243,3 @@ QWidget* KexiWelcomeAssistant::calloutWidget() const
     return currentPage()->nextButton();
 }
 
-#include "KexiWelcomeAssistant.moc"

@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -18,8 +18,7 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <KApplication>
-#include <kcmdlineargs.h>
+#include <QApplication>
 #include <KAboutData>
 
 #include "KexiMobileMainWindow.h"
@@ -27,12 +26,12 @@
 int main(int argc, char** argv)
 {
     KAboutData aboutData( "keximobile", "keximobile",
-      ki18n("Kexi Mobile"), "0.2",
-      ki18n("A mobile optimized version of Kexi from Calligra Suite"),
+      kxi18n("Kexi Mobile"), "0.2",
+      kxi18n("A mobile optimized version of Kexi from Calligra Suite"),
       KAboutData::License_LGPL,
-      ki18n("Copyright (c) 2014 Adam Pigg") );
+      kxi18n("Copyright (c) 2014 Adam Pigg") );
     KCmdLineArgs::init( argc, argv, &aboutData );
-  
+
     KApplication app;
     KexiMobileMainWindow foo;
     foo.show();

@@ -21,12 +21,12 @@
 #include "KexiSearchLineEdit.h"
 #include <KexiSearchableModel.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocalizedString>
 
 #include <kexiutils/completer/KexiCompleter.h>
 #include <kexiutils/KexiTester.h>
 
+#include <QDebug>
 #include <QShortcut>
 #include <QKeySequence>
 #include <QTreeView>
@@ -114,9 +114,9 @@ QVariant KexiSearchLineEditCompleterPopupModel::data(const QModelIndex &index, i
 QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
                                                          const QModelIndex &parent) const
 {
-    //kDebug() << row;
+    //qDebug() << row;
     if (!hasIndex(row, column, parent)) {
-        kDebug() << "!hasIndex";
+        qDebug() << "!hasIndex";
         return QModelIndex();
     }
 
@@ -232,7 +232,7 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 class KexiSearchLineEditPopupItemDelegate : public QStyledItemDelegate
 {
 public:
-    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer) 
+    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer)
      : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
     {
     }
@@ -281,26 +281,23 @@ protected:
         textOption.setAlignment(QStyle::visualAlignment(option->direction, option->displayAlignment));
         QTextLayout textLayout;
         textLayout.setTextOption(textOption);
-        QFont f(option->font);
-        if (highlightMatchingSubstrings) {
-            f.setWeight(QFont::Black);
-        }
-        textLayout.setFont(f);
+        textLayout.setFont(option->font);
         QString text = option->text;
         textLayout.setText(text);
-
-        viewItemTextLayout(textLayout, textRect.width());
 
         if (highlightMatchingSubstrings) {
             QList<QTextLayout::FormatRange> formats;
             QString substring = m_completer->completionPrefix();
+            QColor underLineColor(p->pen().color());
+            underLineColor.setAlpha(128);
+            QTextLayout::FormatRange formatRange;
+            formatRange.format.setFontUnderline(true);
+            formatRange.format.setUnderlineColor(underLineColor);
 
             for (int i = 0; i < text.length();) {
                 i = text.indexOf(substring, i, Qt::CaseInsensitive);
                 if (i == -1)
                     break;
-                QTextLayout::FormatRange formatRange;
-                formatRange.format.setFontWeight(QFont::Normal);
                 formatRange.length = substring.length();
                 formatRange.start = i;
                 formats.append(formatRange);
@@ -308,11 +305,14 @@ protected:
             }
             textLayout.setAdditionalFormats(formats);
         }
+        viewItemTextLayout(textLayout, textRect.width());
+
         const int lineCount = textLayout.lineCount();
         QPointF position = textRect.topLeft();
         for (int i = 0; i < lineCount; ++i) {
             const QTextLine line = textLayout.lineAt(i);
-            line.draw(p, position);
+            const QPointF adjustPos(0, qreal(textRect.height() - line.rect().height()) / 2.0);
+            line.draw(p, position + adjustPos);
             position.setY(position.y() + line.y() + line.ascent());
         }
     }
@@ -339,6 +339,9 @@ static void fixLeftMargin(QLineEdit *lineEdit)
     if (st == "breeze" || st == "gtk+") {
         add = 4; // like QLineEditIconButton::IconMargin
     }
+    else if (st == "fusion") {
+        add = 2;
+    }
     if (add != 0) {
         QMargins margins(lineEdit->textMargins());
         margins.setLeft(margins.left() + add);
@@ -349,7 +352,7 @@ static void fixLeftMargin(QLineEdit *lineEdit)
 // ----
 
 KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
- : KLineEdit(parent), d(new Private(this))
+ : QLineEdit(parent), d(new Private(this))
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
@@ -364,12 +367,12 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     // Moreover, sorting KexiCompleter::CaseInsensitivelySortedModel breaks
     // filtering so only table names are displayed.
     d->completer->setModelSorting(KexiCompleter::UnsortedModel);
-    
+
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
     treeView->setItemDelegate(
         d->delegate = new KexiSearchLineEditPopupItemDelegate(treeView, d->completer));
-    
+
     // forked initialization like in QLineEdit::setCompleter:
     d->completer->setWidget(this);
     if (hasFocus()) {
@@ -380,8 +383,8 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
                                  // Qt::ClickFocus would make it impossible to find
                                  // previously focus widget in KexiSearchLineEdit::setFocus().
                                  // We need this information to focus back when pressing Escape key.
-    setClearButtonShown(true);
-    setClickMessage(i18n("Search"));
+    setClearButtonEnabled(true);
+    setPlaceholderText(xi18n("Search"));
     fixLeftMargin(this);
 }
 
@@ -409,7 +412,7 @@ void KexiSearchLineEdit::disconnectCompleter()
 
 void KexiSearchLineEdit::slotClearShortcutActivated()
 {
-    //kDebug() << (QWidget*)d->previouslyFocusedWidget << text();
+    //qDebug() << (QWidget*)d->previouslyFocusedWidget << text();
     d->removeHighlightingForSearchableObject();
     if (text().isEmpty() && d->previouslyFocusedWidget) {
         // after second Escape, go back to previously focused widget
@@ -459,7 +462,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
+    //qDebug() << source.second->searchableData(source.first, Qt::EditRole);
     d->highlightSearchableObject(source);
 }
 
@@ -468,8 +471,8 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
     QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
     if (!source.first.isValid())
         return;
-    //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
-    
+    //qDebug() << source.second->searchableData(source.first, Qt::EditRole);
+
     d->highlightSearchableObject(source);
     d->removeHighlightingForSearchableObject();
     if (source.second->activateSearchableObject(source.first)) {
@@ -480,7 +483,7 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
 // forked bits from QLineEdit::inputMethodEvent()
 void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
 {
-    KLineEdit::inputMethodEvent(e);
+    QLineEdit::inputMethodEvent(e);
     if (isReadOnly() || !e->isAccepted())
         return;
     if (!e->commitString().isEmpty()) {
@@ -490,23 +493,23 @@ void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void KexiSearchLineEdit::setFocus()
 {
-    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //qDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
     //         << "window()->focusWidget():" << window()->focusWidget();
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
     }
-    KLineEdit::setFocus();
+    QLineEdit::setFocus();
 }
 
 // forked bits from QLineEdit::focusInEvent()
 void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 {
-    //kDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
+    //qDebug() << "d->previouslyFocusedWidget:" << (QWidget*)d->previouslyFocusedWidget
     //         << "window()->focusWidget():" << window()->focusWidget();
     if (!d->previouslyFocusedWidget && window()->focusWidget() != this) {
         d->previouslyFocusedWidget = window()->focusWidget();
     }
-    KLineEdit::focusInEvent(e);
+    QLineEdit::focusInEvent(e);
     d->completer->setWidget(this);
     connectCompleter();
     update();
@@ -515,7 +518,7 @@ void KexiSearchLineEdit::focusInEvent(QFocusEvent *e)
 // forked bits from QLineEdit::focusOutEvent()
 void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
 {
-    KLineEdit::focusOutEvent(e);
+    QLineEdit::focusOutEvent(e);
     disconnectCompleter();
     update();
     if (e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason) {
@@ -534,7 +537,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 {
     bool inlineCompletionAccepted = false;
 
-    //kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
+    //qDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
 
     KexiCompleter::CompletionMode completionMode = d->completer->completionMode();
     if ((completionMode == KexiCompleter::PopupCompletion
@@ -604,16 +607,16 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
             }
             return;
         }
-        //kDebug() << "currentRow:" << d->completer->currentRow();
-        //kDebug() << "currentIndex:" << d->completer->currentIndex().isValid();
-        //kDebug() << "currentCompletion:" << d->completer->currentCompletion();
+        //qDebug() << "currentRow:" << d->completer->currentRow();
+        //qDebug() << "currentIndex:" << d->completer->currentIndex().isValid();
+        //qDebug() << "currentCompletion:" << d->completer->currentCompletion();
         if (d->completer->popup() && d->completer->completionCount() > 1) {
-            //kDebug () << "11111" << d->completer->completionPrefix()
+            //qDebug() << "11111" << d->completer->completionPrefix()
             //          << d->completer->completionCount();
-            
+
             // more than one item on completion list, find exact match, if found, accept
             for (int i = 0; i < d->completer->completionCount(); i++) {
-                //kDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
+                //qDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
                 if (d->completer->completionPrefix()
                     == d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString())
                 {
@@ -639,7 +642,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         // applying completion since there is item selected
         d->completer->popup()->hide();
         connectCompleter();
-        KLineEdit::keyPressEvent(event); /* executes this:
+        QLineEdit::keyPressEvent(event); /* executes this:
                                             if (hasAcceptableInput() || fixup()) {
                                                 emit returnPressed();
                                                 emit editingFinished();
@@ -652,7 +655,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     }
 
     if (event == QKeySequence::MoveToNextChar) {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
@@ -666,7 +669,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 #endif
     }
     else if (event == QKeySequence::MoveToPreviousChar) {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
@@ -699,7 +702,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
                 break;
             case Qt::Key_Delete:
                 if (!isReadOnly()) {
-                    KLineEdit::keyPressEvent(event);
+                    QLineEdit::keyPressEvent(event);
                     complete(Qt::Key_Delete);
                     return;
                 }
@@ -712,13 +715,13 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     if (!isReadOnly()) {
         QString t = event->text();
         if (!t.isEmpty() && t.at(0).isPrint()) {
-            KLineEdit::keyPressEvent(event);
+            QLineEdit::keyPressEvent(event);
             complete(event->key());
             return;
         }
     }
 
-    KLineEdit::keyPressEvent(event);
+    QLineEdit::keyPressEvent(event);
 }
 
 void KexiSearchLineEdit::changeEvent(QEvent *event)

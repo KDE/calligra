@@ -23,7 +23,10 @@
 
 #include "kexidbfactorybase.h"
 
+class QAction;
+
 //! Kexi Factory (DB widgets + subform)
+//! @todo merge with KexiStandardFormWidgetsFactory
 class KexiDBFactory : public KexiDBFactoryBase
 {
     Q_OBJECT
@@ -59,7 +62,7 @@ protected:
     virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
             const QByteArray& property);
 
-    KAction* m_assignAction;
+    QAction * m_assignAction;
 };
 
 #endif

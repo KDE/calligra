@@ -267,7 +267,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
     if (uri.endsWith(QLatin1String("otp"), Qt::CaseInsensitive)) {
-        KUrl url(uri);
+        QUrl url(uri);
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
         d->document->undoStack()->clear();
@@ -285,7 +285,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
             d->document->initEmpty();
         }
     } else {
-        d->document->openUrl (KUrl (uri));
+        d->document->openUrl (QUrl (uri));
     }
 
     d->document->setModified(false);

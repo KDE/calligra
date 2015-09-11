@@ -31,7 +31,7 @@
 
 #include <QDir>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "debug.cpp"
 
@@ -370,6 +370,4 @@ void CalendarTester::workIntervalsFullDays()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::CalendarTester )
-
-#include "CalendarTester.moc"
+QTEST_GUILESS_MAIN( KPlato::CalendarTester )

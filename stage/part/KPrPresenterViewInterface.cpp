@@ -130,6 +130,3 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
     }
     m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
 }
-
-#include "KPrPresenterViewInterface.moc"
-

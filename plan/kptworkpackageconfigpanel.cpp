@@ -39,5 +39,3 @@ WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p )
 }
 
 }  //KPlato namespace
-
-#include "kptworkpackageconfigpanel.moc"

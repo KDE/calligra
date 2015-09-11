@@ -19,18 +19,19 @@
 
 #include "Settings.h"
 #include "DocumentListModel.h"
+
 #include <QApplication>
+#include <QUrl>
+#include <QMimeType>
 
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <KMimeType>
-#include <kurl.h>
 
 #include "Theme.h"
 #include "PropertyContainer.h"
-#include <qtquick/CQTextDocumentCanvas.h>
+// #include <qtquick/CQTextDocumentCanvas.h>
 #include <KoDocumentEntry.h>
 #include <part/KWDocument.h>
 #include <stage/part/KPrDocument.h>
@@ -43,7 +44,7 @@ public:
     QString currentFile;
     QString currentFileClass;
     bool temporaryFile;
-    QDeclarativeItem *focusItem;
+    QQuickItem *focusItem;
     Theme* theme;
 };
 
@@ -79,19 +80,20 @@ void Settings::setCurrentFile(const QString& fileName)
         emit currentFileChanged();
     }
     else if (fileName != d->currentFile) {
-        KUrl url(fileName);
+        QUrl url(fileName);
         if(url.scheme() == "newfile") {
             d->currentFileClass = url.queryItemValue("mimetype");
         }
         else {
-            KMimeType::Ptr mimeType = KMimeType::findByUrl(fileName);
-            KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForUrl(fileName);
+            KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());
             if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
                 d->currentFileClass = WORDS_MIME_TYPE;
             } else if(documentEntry.supportsMimeType(STAGE_MIME_TYPE)) {
                 d->currentFileClass = STAGE_MIME_TYPE;
             } else {
-                d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType->name());
+                d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType.name());
             }
         }
         d->currentFile = fileName;
@@ -112,12 +114,12 @@ void Settings::setTemporaryFile(bool temp)
     }
 }
 
-QDeclarativeItem* Settings::focusItem()
+QQuickItem* Settings::focusItem()
 {
     return d->focusItem;
 }
 
-void Settings::setFocusItem(QDeclarativeItem* item)
+void Settings::setFocusItem(QQuickItem* item)
 {
     if (item != d->focusItem) {
         d->focusItem = item;
@@ -191,5 +193,3 @@ int Settings::mimeTypeToDocumentClass(QString mimeType) const
 //     }
     return documentClass;
 }
-
-#include "Settings.moc"

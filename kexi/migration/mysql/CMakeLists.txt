@@ -1,4 +1,4 @@
-include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
+include_directories(${MYSQL_INCLUDE_DIR})
 
 ########### next target ###############
 
@@ -13,14 +13,9 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 
     ${MYSQL_LIBRARIES}
     )
 
-install(TARGETS keximigrate_mysql  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  keximigrate_mysql.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS keximigrate_mysql  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

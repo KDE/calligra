@@ -20,23 +20,12 @@
 #ifndef KEXINAMEWIDGET_H
 #define KEXINAMEWIDGET_H
 
+#include "kexiextwidgets_export.h"
+
 #include <QLabel>
-#include <QLayout>
-#include <QGridLayout>
 
-#include <kexi_export.h>
-
-class KLineEdit;
-
-namespace KexiDB
-{
-class Validator;
-}
-
-namespace KexiUtils
-{
-class MultiValidator;
-}
+class QLineEdit;
+class KDbValidator;
 
 //! A widget displaying object's name and caption and allowing editing.
 //! @see KexiNameDialog
@@ -56,8 +45,8 @@ public:
 
     QLabel* captionLabel() const;
     QLabel* nameLabel() const;
-    KLineEdit* captionLineEdit() const;
-    KLineEdit* nameLineEdit() const;
+    QLineEdit* captionLineEdit() const;
+    QLineEdit* nameLineEdit() const;
 
     QString messageText() const;
     void setMessageText(const QString& msg);
@@ -87,12 +76,12 @@ public:
     /*! \return true if name or caption is empty. */
     bool empty() const;
 
-    KexiDB::Validator *nameValidator() const;
+    KDbValidator *nameValidator() const;
 
     /*! Adds subvalidator for name field. In fact it is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
-     \sa MultiValidator::addSubvalidator(). */
-    void addNameSubvalidator(KexiDB::Validator* validator, bool owned = true);
+     \sa KDbMultiValidator::addSubvalidator(). */
+    void addNameSubvalidator(KDbValidator* validator, bool owned = true);
 
     /*! \return true if name text cannot be empty (true by default). */
     bool isNameRequired() const;

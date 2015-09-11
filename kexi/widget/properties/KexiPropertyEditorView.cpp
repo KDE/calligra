@@ -27,7 +27,7 @@
 
 #include <QLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 //! @internal
 class KexiPropertyEditorView::Private
@@ -43,7 +43,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
         , d(new Private())
 {
     setObjectName("KexiPropertyEditorView");
-    setWindowTitle(i18nc("@title:window", "Properties"));
+    setWindowTitle(xi18nc("@title:window", "Properties"));
     //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
@@ -86,4 +86,3 @@ void KexiPropertyEditorView::slotPropertySetChanged(KPropertySet* set)
     d->editor->setEnabled(set);
 }
 
-#include "KexiPropertyEditorView.moc"

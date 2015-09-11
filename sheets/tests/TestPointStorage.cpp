@@ -24,6 +24,8 @@
 
 #include "TestPointStorage.h"
 
+#include <QTest>
+
 using namespace Calligra::Sheets;
 
 void PointStorageTest::testInsertion()
@@ -1197,5 +1199,3 @@ void PointStorageTest::testSubStorage()
 }
 
 QTEST_MAIN(PointStorageTest)
-
-#include "TestPointStorage.moc"

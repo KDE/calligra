@@ -129,5 +129,3 @@ void KPrSoundEventActionWidget::updateCombo( const QString & title )
 
     m_soundCombo->blockSignals( false );
 }
-
-#include "KPrSoundEventActionWidget.moc"

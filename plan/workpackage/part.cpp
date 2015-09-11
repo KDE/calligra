@@ -843,5 +843,3 @@ bool Part::saveFile()
 }
 
 }  //KPlatoWork namespace
-
-#include "part.moc"

@@ -96,5 +96,3 @@ void ShowDialog::accept()
     map->addDamage(new SheetDamage(m_selection->activeSheet(), SheetDamage::ContentChanged));
     KDialog::accept();
 }
-
-#include "ShowDialog.moc"

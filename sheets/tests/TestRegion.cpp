@@ -19,7 +19,7 @@
 
 #include "TestRegion.h"
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include "calligra_sheets_limits.h"
 #include "Map.h"
@@ -151,6 +151,4 @@ void TestRegion::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestRegion, GUI)
-
-#include "TestRegion.moc"
+QTEST_MAIN(TestRegion)

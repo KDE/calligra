@@ -19,7 +19,8 @@
 
 #include "kexidataiteminterface.h"
 
-#include <kdebug.h>
+#include <QDebug>
+#include <QPointer>
 
 KexiDataItemChangesListener::KexiDataItemChangesListener()
 {
@@ -92,7 +93,7 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 {
     d->disable_signalValueChanged = true; //to prevent emmiting valueChanged()
     if (dynamic_cast<QObject*>(this)) {
-        /*kDebug() <<
+        /*qDebug() <<
             dynamic_cast<QObject*>(this)->metaObject()->className()
             << dynamic_cast<QWidget*>(this)->objectName()
             << "value=" << value << "add=" << add;*/
@@ -154,7 +155,7 @@ void KexiDataItemInterface::emitLengthExceededIfNeeded(bool lengthExceeded)
 
 bool KexiDataItemInterface::valueChanged()
 {
-    //kDebug() << d->origValue.toString() << " ? " << value().toString();
+    //qDebug() << d->origValue.toString() << " ? " << value().toString();
     return d->origValue != value();
 }
 
@@ -199,9 +200,9 @@ void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* pa
     d->parentDataItemInterface = parentDataItemInterface;
 }
 
-bool KexiDataItemInterface::cursorAtNewRow()
+bool KexiDataItemInterface::cursorAtNewRecord()
 {
-    return listener() ? listener()->cursorAtNewRow() : false;
+    return listener() ? listener()->cursorAtNewRecord() : false;
 }
 
 bool KexiDataItemInterface::isComboBox() const

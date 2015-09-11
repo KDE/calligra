@@ -30,8 +30,7 @@
 #include <QUrl>
 #include<QWebView>
 
-class KPushButton;
-
+class QPushButton;
 class QWebView;
 class QVBoxLayout;
 class QWebHistory;
@@ -45,16 +44,16 @@ class WebBrowserWidget : public QWidget,
                          public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
-    
+
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(QString url READ url WRITE setUrl)
     Q_PROPERTY(qreal zoomFactor READ zoomFactor WRITE setZoomFactor)
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QIcon icon READ icon)
     Q_PROPERTY(bool modified READ modified)
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
-     
+
 public:
     explicit WebBrowserWidget(QWidget *parent = 0);
     ~WebBrowserWidget();
@@ -62,15 +61,15 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     inline QString url() const {
 
         return m_view->url().toString();
     }
-    
+
     inline bool modified() const {
 
          return m_view->isModified();
@@ -85,17 +84,17 @@ public:
 
         return m_view->zoomFactor();
     }
-  
-    inline QIcon icon() const 
+
+    inline QIcon icon() const
     {
         return m_view->icon();
     }
-    
+
     inline qreal textScale () const
     {
       return m_view->textSizeMultiplier();
-    }  
-    
+    }
+
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
@@ -104,19 +103,19 @@ public:
     virtual void clear();
     void updateToolBar();
     bool isReadOnly() const;
-    virtual void setReadOnly(bool readOnly);  
+    virtual void setReadOnly(bool readOnly);
     virtual void setInvalidState(const QString& displayText);
 
 public Q_SLOTS:
     void setDataSource(const QString &ds);
-    void setDataSourcePartClass(const QString &ds);
+    void setDataSourcePluginId(const QString &ds);
     void setUrl(const QString& url);
     void setZoomFactor(qreal factor);
     void setTextScale(qreal scale);
     void hide_bar();
-    
+
 protected:
-    virtual void setValueInternal(const QVariant& add, bool removeOld); 
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
     void setUrl(const QUrl& url);
     bool m_readOnly;
 
@@ -126,11 +125,11 @@ private:
     QWebHistory* m_history;
     QProgressBar* m_pbar;
     bool  m_urlChanged_enabled;
-    KPushButton* m_back;
-    KPushButton* m_forward;
-    KPushButton* m_reload;  
-    KPushButton* m_stop;  
+    QPushButton* m_back;
+    QPushButton* m_forward;
+    QPushButton* m_reload;
+    QPushButton* m_stop;
     QHBoxLayout* h_layout;
 };
 
-#endif 
+#endif

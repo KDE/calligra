@@ -22,7 +22,6 @@
 #ifndef KEXISCRIPTPART_H
 #define KEXISCRIPTPART_H
 
-#include <QDomDocument>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -77,7 +76,7 @@ protected:
      */
     virtual KexiView* createView(QWidget *parent,
                                  KexiWindow *window,
-                                 KexiPart::Item &item,
+                                 KexiPart::Item *item,
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
 

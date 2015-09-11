@@ -19,21 +19,18 @@
 */
 
 #include "kexidblabel.h"
+#include <kexiutils/utils.h>
+#include <formeditor/utils.h>
 
-#include <QBitmap>
+#include <KDbField>
+
 #include <QPainter>
 #include <qdrawutil.h>
-#include <QApplication>
 #include <QPaintEvent>
 #include <QLabel>
 #include <QShowEvent>
 #include <QResizeEvent>
-
-#include <kdebug.h>
-
-#include <db/field.h>
-#include <kexiutils/utils.h>
-#include <formeditor/utils.h>
+#include <QDebug>
 
 //! @internal
 class KexiDBLabel::Private
@@ -177,7 +174,7 @@ const QPixmap* KexiDBLabel::pixmap() const
     return QLabel::pixmap();
 }
 
-void KexiDBLabel::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBLabel::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
@@ -188,31 +185,6 @@ void KexiDBLabel::resizeEvent(QResizeEvent* e)
     if (isVisible())
         d->resizeEvent = true;
     QLabel::resizeEvent(e);
-}
-
-void KexiDBLabel::fontChange(const QFont& font)
-{
-    QLabel::fontChange(font);
-}
-
-void KexiDBLabel::styleChange(QStyle& style)
-{
-    QLabel::styleChange(style);
-}
-
-void KexiDBLabel::enabledChange(bool enabled)
-{
-    QLabel::enabledChange(enabled);
-}
-
-void KexiDBLabel::paletteChange(const QPalette& oldPal)
-{
-    Q_UNUSED(oldPal);
-}
-
-void KexiDBLabel::showEvent(QShowEvent* e)
-{
-    QLabel::showEvent(e);
 }
 
 void KexiDBLabel::setText(const QString& text)
@@ -226,4 +198,3 @@ void KexiDBLabel::setText(const QString& text)
 #define ClassName KexiDBLabel
 #define SuperClassName QLabel
 #include "kexiframeutils_p.cpp"
-#include "kexidblabel.moc"

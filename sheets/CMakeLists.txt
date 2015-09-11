@@ -1,7 +1,5 @@
 project(calligra-sheets)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
-
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
@@ -11,10 +9,14 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
 
 if (SHOULD_BUILD_PART_SHEETS)
 
-add_subdirectory( data )
+# have their own translation domain
 add_subdirectory( shape )
-add_subdirectory( tests )
 add_subdirectory( plugins )
+
+add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
+
+add_subdirectory( data )
+add_subdirectory( tests )
 add_subdirectory( dtd )
 add_subdirectory( functions )
 
@@ -336,7 +338,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
+install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

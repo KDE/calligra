@@ -22,6 +22,7 @@
 #include "kptview.h"
 
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
@@ -52,7 +53,7 @@
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kfiledialog.h>
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
@@ -105,11 +106,8 @@
 #include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-// QT5TODO: T450 reenable reports
-#if 0
 #include "reports/reportview.h"
 #include "reports/reportdata.h"
-#endif
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -238,7 +236,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
-        docker = dynamic_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
+        docker = static_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
         if (docker->view() != this) {
             docker->setView(this);
         }
@@ -594,8 +592,6 @@ void View::createViews()
 
         ct = "Reports";
         cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
-// QT5TODO: reenable reports
-#if 0
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -603,7 +599,6 @@ void View::createViews()
             doc.setContent( standardTaskStatusReport() );
             rv->loadXML( doc );
         }
-#endif
     }
 }
 
@@ -1362,8 +1357,6 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-// QT5TODO: reenable reports
-#if 0
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
@@ -1387,8 +1380,6 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const Q
     connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     v->updateReadWrite( m_readWrite );
     return v;
-#endif
-    return 0;
 }
 
 Project& View::getProject() const
@@ -2111,6 +2102,7 @@ void View::slotTaskProgress()
             }
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
+                Q_ASSERT( task );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task, this );
                 connect(dia, SIGNAL(finished(int)), SLOT(slotMilestoneProgressFinished(int)));
                 dia->show();
@@ -2695,13 +2687,10 @@ void View::slotCreateReport()
 */
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
-// QT5TODO: reenable reports
-#if 0
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
     connect( vd, SIGNAL(viewCreated(ViewBase*)), dlg, SLOT(slotViewCreated(ViewBase*)) );
     vd->exec();
     delete vd;
-#endif
 }
 
 void View::slotOpenReportFile()
@@ -2728,8 +2717,6 @@ void View::slotOpenReportFileFinished( int result )
         KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
-// QT5TODO: reenable reports
-#if 0
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
@@ -2742,7 +2729,6 @@ void View::slotOpenReportFileFinished( int result )
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
-#endif
 }
 
 void View::slotReportDesignFinished( int /*result */)
@@ -2956,9 +2942,8 @@ void View::slotWorkPackageLoaded()
 void View::slotMailWorkpackage( Node *node, Resource *resource )
 {
     kDebug(planDbg());
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
     tmpfile.setAutoRemove( false );
-    tmpfile.setSuffix( ".planwork" );
     if ( ! tmpfile.open() ) {
         kDebug(planDbg())<<"Failed to open file";
         KMessageBox::error(0, i18n("Failed to open temporary file" ) );
@@ -2996,9 +2981,8 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
     QStringList attachURLs;
 
     foreach ( Node *n, nodes ) {
-        KTemporaryFile tmpfile;
+        QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
         tmpfile.setAutoRemove( false );
-        tmpfile.setSuffix( ".planwork" );
         if ( ! tmpfile.open() ) {
             kDebug(planDbg())<<"Failed to open file";
             KMessageBox::error(0, i18n("Failed to open temporary file" ) );

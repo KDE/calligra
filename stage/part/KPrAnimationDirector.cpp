@@ -513,5 +513,3 @@ void KPrAnimationDirector::deactivate()
         step->deactivate();
     }
 }
-
-#include "KPrAnimationDirector.moc"

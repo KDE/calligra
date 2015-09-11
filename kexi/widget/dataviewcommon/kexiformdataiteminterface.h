@@ -20,14 +20,12 @@
 #ifndef KEXIFORMDATAITEMINTERFACE_H
 #define KEXIFORMDATAITEMINTERFACE_H
 
+#include "kexidataviewcommon_export.h"
 #include <widget/utils/kexidisplayutils.h>
 #include <core/kexidataiteminterface.h>
 #include <QWidget>
 
-namespace KexiDB
-{
-class Field;
-}
+class KDbField;
 
 //! An interface for declaring form widgets to be data-aware.
 class KEXIDATAVIEWCOMMON_EXPORT KexiFormDataItemInterface : public KexiDataItemInterface
@@ -48,20 +46,19 @@ public:
         m_dataSource = ds;
     }
 
-    /*! \return the class of the part for the widget's data source.
-     Data source part class means here types like "org.kexi-project.table" 
-     or "org.kexi-project.query" if the data source is set to object
-     (as within form or subform)
+    /*! \return the plugin ID of the part for the widget's data source.
+     It means IDs like "org.kexi-project.table" or "org.kexi-project.query" if the data
+     source is set to object (as within form or subform)
      or is empty if the data source is set to table field or query column. */
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePluginId() const {
         return m_dataSourcePartClass;
     }
 
-    /*! Sets the class of the part for the data widget's data source.
-     Data source usually means here a "org.kexi-project.table" or "org.kexi-project.query".
-     @see dataSourcePartClass() */
-    inline void setDataSourcePartClass(const QString &partClass) {
-        m_dataSourcePartClass = partClass;
+    /*! Sets the plugin ID of the part for the data widget's data source.
+     It usually means here a "org.kexi-project.table" or "org.kexi-project.query".
+     @see dataSourcePluginId() */
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        m_dataSourcePartClass = pluginId;
     }
 
     /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()
@@ -94,14 +91,14 @@ public:
 
     /*! Changes 'read only' flag, for this widget.
      Typically this flag can be passed to a widget itself,
-     e.g. KLineEdit::setReadOnly(bool). */
+     e.g. QLineEdit::setReadOnly(bool). */
     virtual void setReadOnly(bool readOnly) = 0;
 
     //! \return database column information for this item
-    virtual KexiDB::Field* field() const;
+    virtual KDbField* field() const;
 
     //! \return database column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const {
+    virtual KDbQueryColumnInfo* columnInfo() const {
         return m_columnInfo;
     }
 
@@ -109,19 +106,19 @@ public:
      Reimplement if you need to do additional actions,
      e.g. set data validator based on field type. Don't forget about
      calling superclass implementation. */
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setColumnInfo(KDbQueryColumnInfo* cinfo) {
         m_columnInfo = cinfo;
     }
 
     /*! Used internally to set visible database column information.
      Reimplemented in KexiDBComboBox: except for combo box, this does nothing. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setVisibleColumnInfo(KDbQueryColumnInfo* cinfo) {
         Q_UNUSED(cinfo);
     }
 
     /*! \return visible database column information for this item.
      Except for combo box, this is exactly the same as columnInfo(). */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const {
+    virtual KDbQueryColumnInfo* visibleColumnInfo() const {
         return columnInfo();
     }
 
@@ -162,7 +159,7 @@ public:
 protected:
     QString m_dataSource;
     QString m_dataSourcePartClass;
-    KexiDB::QueryColumnInfo* m_columnInfo;
+    KDbQueryColumnInfo* m_columnInfo;
     KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
     KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()
     bool m_displayDefaultValue; //!< used by setDisplayDefaultValue()

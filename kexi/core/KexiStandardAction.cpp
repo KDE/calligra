@@ -19,14 +19,14 @@
 
 #include "KexiStandardAction.h"
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
+
+#include <KActionCollection>
+#include <KLocalizedString>
 
 #include <QHash>
-#include <kglobal.h>
-#include <kshortcut.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <klocale.h>
+#include <QKeySequence>
+#include <QAction>
 
 namespace KexiStandardAction
 {
@@ -34,7 +34,7 @@ namespace KexiStandardAction
 //! @internal
 struct Info {
     StandardAction id;
-    KShortcut shortcut;
+    QKeySequence shortcut;
     const char* psName;
     const char* psText;
     const char* psToolTip;
@@ -44,16 +44,16 @@ struct Info {
 
 //! @internal
 static const Info g_rgActionInfo[] = {
-    { SortAscending, KShortcut(), "data_sort_az", I18N_NOOP("&Ascending"),
+    { SortAscending, QKeySequence(), "data_sort_az", I18N_NOOP("&Ascending"),
         I18N_NOOP("Sort data in ascending order"),
         I18N_NOOP("Sorts data in ascending order (from A to Z and from 0 to 9). Data from selected column is used for sorting."),
         koIconNameCStr("view-sort-ascending") },
-    { SortDescending, KShortcut(), "data_sort_za", I18N_NOOP("&Descending"),
+    { SortDescending, QKeySequence(), "data_sort_za", I18N_NOOP("&Descending"),
       I18N_NOOP("Sort data in descending order"),
       I18N_NOOP("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."),
       koIconNameCStr("view-sort-descending") },
 
-    { ActionNone, KShortcut(), 0, 0, 0, 0, 0 }
+    { ActionNone, QKeySequence(), 0, 0, 0, 0, 0 }
 };
 
 //! @internal
@@ -68,7 +68,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(ActionsInfoHash, g_rgActionInfoHash)
+Q_GLOBAL_STATIC(ActionsInfoHash, g_rgActionInfoHash)
 
 inline const Info* infoPtr(StandardAction id)
 {
@@ -77,22 +77,22 @@ inline const Info* infoPtr(StandardAction id)
 
 //---------------------------------------------
 
-KAction *create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
+QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {
-    KAction *pAction = 0;
+    QAction *pAction = 0;
     const Info* pInfo = infoPtr(id);
 
     if (pInfo) {
-        pAction = new KAction(parent);
+        pAction = new QAction(parent);
         pAction->setObjectName(pInfo->psName);
-        KShortcut cut(pInfo->shortcut);
+        QKeySequence cut(pInfo->shortcut);
         if (!cut.isEmpty())
             pAction->setShortcut(cut);
         pAction->setText(i18n(pInfo->psText));
         pAction->setToolTip(i18n(pInfo->psToolTip));
         pAction->setWhatsThis(i18n(pInfo->psWhatsThis));
         if (pInfo->psIconName)
-            pAction->setIcon(KIcon(QLatin1String(pInfo->psIconName)));
+            pAction->setIcon(QIcon::fromTheme(QLatin1String(pInfo->psIconName)));
     }
 
     if (recvr && slot)
@@ -113,7 +113,7 @@ const char* name(StandardAction id)
 }
 
 #define CREATE_METHOD(methodName, enumName) \
-    KAction *methodName(const QObject *recvr, const char *slot, QObject *parent) \
+    QAction *methodName(const QObject *recvr, const char *slot, QObject *parent) \
     { \
         return KexiStandardAction::create(enumName, recvr, slot, parent); \
     }

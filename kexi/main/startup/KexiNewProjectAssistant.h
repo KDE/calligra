@@ -25,13 +25,15 @@
 #include "KexiAssistantMessageHandler.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <core/kexidbconnectionset.h>
-#include <db/connectiondata.h>
-#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
+
+#include <KDbConnectionData>
+#include <KDbMessageHandler>
+#include <KDbResult>
 
 #include <QPointer>
 
@@ -46,7 +48,7 @@ public:
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
 protected Q_SLOTS:
     void slotItemClicked(const QModelIndex& index);
 private:
@@ -60,7 +62,7 @@ class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,
 public:
     explicit KexiProjectStorageTypeSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectStorageTypeSelectionPage();
-    
+
     bool fileTypeSelected() const { return m_fileTypeSelected; }
 private Q_SLOTS:
     void buttonClicked();
@@ -84,7 +86,7 @@ public:
     KexiDBTitlePage* contents;
     KexiStartupFileHandler *fileHandler;
     QPointer<KexiContextMessageWidget> messageWidget;
-private Q_SLOTS:    
+private Q_SLOTS:
     void titleTextChanged(const QString & text);
     void askForOverwriting(const KexiContextMessage& message);
 private:
@@ -99,7 +101,7 @@ class KexiProjectCreationPage : public KexiAssistantPage
 public:
     explicit KexiProjectCreationPage(QWidget* parent = 0);
     virtual ~KexiProjectCreationPage();
-    
+
     QProgressBar* m_progressBar;
 };
 
@@ -112,7 +114,7 @@ public:
 
     KexiConnectionSelectorWidget* connSelector;
 private:
-	QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
+    QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;
@@ -129,10 +131,11 @@ public:
         KexiNewProjectAssistant* parent);
     virtual ~KexiProjectDatabaseNameSelectionPage();
 
-    bool setConnection(KexiDB::ConnectionData* data);
+    bool setConnection(KDbConnectionData* data);
 
     KexiServerDBNamePage* contents;
-    QPointer<KexiDB::ConnectionData> conndataToShow;
+    //! @todo KEXI3 use equivalent of QPointer<KDbConnectionData>
+    KDbConnectionData* conndataToShow;
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
 
@@ -144,7 +147,6 @@ private Q_SLOTS:
 private:
     QString enteredDbName() const;
     KexiNewProjectAssistant* m_assistant;
-    KexiGUIMessageHandler* m_msgHandler;
     KexiProjectSet *m_projectSetToShow;
     KexiProjectSelectorWidget* m_projectSelector;
 
@@ -158,7 +160,8 @@ private:
 class KexiProjectData;
 
 class KexiNewProjectAssistant : public KexiAssistantWidget,
-                                public KexiAssistantMessageHandler
+                                public KexiAssistantMessageHandler,
+                                public KDbResultable
 {
     Q_OBJECT
 public:
@@ -179,7 +182,7 @@ protected:
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
+        const KDbConnectionData& cdata, const QString& databaseName,
         const QString& caption);
 
     class Private;

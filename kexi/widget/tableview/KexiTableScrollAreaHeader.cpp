@@ -23,23 +23,23 @@
 
 #include <QApplication>
 #include <QToolTip>
-#include <QStyle>
+#include <QProxyStyle>
 #include <QStyleOptionHeader>
 #include <QMouseEvent>
 #include <QHelpEvent>
 #include <QPainter>
+#include <QDebug>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <kexiutils/utils.h>
-#include <kexiutils/styleproxy.h>
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableScrollAreaHeader.
-class KexiTableScrollAreaHeaderStyle : public KexiUtils::StyleProxy
+class KexiTableScrollAreaHeaderStyle : public QProxyStyle
 {
 public:
-    KexiTableScrollAreaHeaderStyle(QStyle *parentStyle, KexiTableScrollAreaHeader *widget)
-            : KexiUtils::StyleProxy(parentStyle, widget)
+    KexiTableScrollAreaHeaderStyle(const QString &baseStyleName)
+            : QProxyStyle(baseStyleName)
     {
     }
     virtual ~KexiTableScrollAreaHeaderStyle() {}
@@ -55,7 +55,7 @@ public:
             const int currentSection = headerWidget->orientation() == Qt::Horizontal
                                      ? headerWidget->currentIndex().column()
                                      : headerWidget->currentIndex().row();
-//            kDebug() << headerWidget->orientation() << currentSection <<
+//            qDebug() << headerWidget->orientation() << currentSection <<
 //                        headerWidget->currentIndex().row() << headerWidget->currentIndex().column();
 
             if (newOption.section >= 0) {
@@ -64,9 +64,9 @@ public:
                     f1 = 34;
                     f2 = 66;
                 }
-                else if (headerWidget->scrollArea()->appearance().rowMouseOverHighlightingEnabled
+                else if (headerWidget->scrollArea()->appearance().recordMouseOverHighlightingEnabled
                          && headerWidget->orientation() == Qt::Vertical
-                         && newOption.section == headerWidget->scrollArea()->highlightedRow())
+                         && newOption.section == headerWidget->scrollArea()->highlightedRecordNumber())
                 {
                     f1 = 10;
                     f2 = 90;
@@ -84,13 +84,13 @@ public:
                     // For mouse-over styles such as Breeze fill color and animate,
                     // what's in conflict with what we do: disable this.
                     newOption.state &= (0xffffffff ^ QStyle::State_MouseOver);
-                    //kDebug() << newOption.rect;
+                    //qDebug() << newOption.rect;
                 }
-                StyleProxy::drawControl(ce, &newOption, painter, widget);
+                QProxyStyle::drawControl(ce, &newOption, painter, widget);
                 return;
             }
         }
-        StyleProxy::drawControl(ce, option, painter, widget);
+        QProxyStyle::drawControl(ce, option, painter, widget);
     }
 };
 
@@ -123,9 +123,9 @@ KexiTableScrollAreaHeader::KexiTableScrollAreaHeader(Qt::Orientation orientation
 
 KexiTableScrollAreaHeader::~KexiTableScrollAreaHeader()
 {
+    setModel(0); // avoid referencing deleted model
     setStyle(0);
     delete d->privateStyle;
-    setModel(0); // avoid referencing deleted model
     delete d;
 }
 
@@ -146,7 +146,8 @@ void KexiTableScrollAreaHeader::styleChanged()
         setStyle(0);
         delete static_cast<QStyle*>(d->privateStyle);
     }
-    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style(), this));
+    setStyle(d->privateStyle = new KexiTableScrollAreaHeaderStyle(style()->objectName()));
+    d->privateStyle->setParent(this);
     d->styleChangeEnabled = true;
 }
 
@@ -208,7 +209,7 @@ void KexiTableScrollAreaHeader::mouseMoveEvent(QMouseEvent *e)
 {
     if (orientation() == Qt::Vertical) {
         const int section = logicalIndexAt(e->y());
-        scrollArea()->setHighlightedRow(section);
+        scrollArea()->setHighlightedRecordNumber(section);
     }
     QHeaderView::mouseMoveEvent(e);
 }
@@ -216,7 +217,7 @@ void KexiTableScrollAreaHeader::mouseMoveEvent(QMouseEvent *e)
 void KexiTableScrollAreaHeader::leaveEvent(QEvent *e)
 {
     if (orientation() == Qt::Vertical) {
-        scrollArea()->setHighlightedRow(-1);
+        scrollArea()->setHighlightedRecordNumber(-1);
     }
     QHeaderView::leaveEvent(e);
 }
@@ -269,27 +270,27 @@ QSize KexiTableScrollAreaHeader::sectionSizeFromContents(int logicalIndex) const
     opt.fontMetrics = QFontMetrics(fnt);
     opt.text = model()->headerData(logicalIndex, orientation(),
                                     Qt::DisplayRole).toString();
-    //kDebug() << opt.text;
+    //qDebug() << opt.text;
     QVariant variant = model()->headerData(logicalIndex, orientation(), Qt::DecorationRole);
-    //kDebug() << variant;
+    //qDebug() << variant;
 //            opt.icon = qvariant_cast<QIcon>(variant);
 //            if (opt.icon.isNull())
 //                opt.icon = qvariant_cast<QPixmap>(variant);
     QSize size = style()->sizeFromContents(QStyle::CT_HeaderSection, &opt, QSize(), this);
-    //kDebug() << size;
+    //qDebug() << size;
     if (isSortIndicatorShown()) {
         int margin = style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
         if (orientation() == Qt::Horizontal)
             size.rwidth() += size.height() + margin;
         else
             size.rheight() += size.width() + margin;
-        //kDebug() << "margin" << margin;
+        //qDebug() << "margin" << margin;
     }
-    //kDebug() << size << "---";
-    //kDebug() << orientation() << logicalIndex << s;
+    //qDebug() << size << "---";
+    //qDebug() << orientation() << logicalIndex << s;
     if (orientation() == Qt::Horizontal) {
-        KexiDB::TableViewData *data = scrollArea()->data();
-        KexiDB::TableViewColumn *col = data->visibleColumn(logicalIndex);
+        KDbTableViewData *data = scrollArea()->data();
+        KDbTableViewColumn *col = data->visibleColumn(logicalIndex);
         if (col && col->width() > 0) {
             size.setWidth(col->width());
         }
@@ -310,7 +311,7 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
                 continue;
             QSize hint = sectionSizeFromContents(i);
             height = qMax(height, hint.height());
-            //kDebug() << "height:" << height;
+            //qDebug() << "height:" << height;
         }
         return QSize(width, height);
     }
@@ -319,11 +320,11 @@ QSize KexiTableScrollAreaHeader::sizeHint() const
         QStyleOptionHeader opt;
         initStyleOption(&opt);
         if (scrollArea()) {
-            //kDebug() << "scrollArea()->width():" << scrollArea()->width();
+            //qDebug() << "scrollArea()->width():" << scrollArea()->width();
             height = scrollArea()->viewport()->height() - 1;
         }
-        //kDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
-        return QSize(scrollArea()->rowHeight()
+        //qDebug() << scrollArea()->style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this);
+        return QSize(scrollArea()->recordHeight()
                        + style()->pixelMetric(QStyle::PM_HeaderMargin, &opt, this),
                      height);
     }
@@ -335,4 +336,3 @@ void KexiTableScrollAreaHeader::setSortingEnabled(bool set)
     setSortIndicatorShown(set);
 }
 
-#include "KexiTableScrollAreaHeader.moc"

@@ -902,5 +902,3 @@ void Account::printDebug(const QString& indent) {
 }
 #endif
 } //namespace KPlato
-
-#include "kptaccount.moc"

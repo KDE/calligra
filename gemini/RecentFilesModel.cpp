@@ -146,5 +146,3 @@ void RecentFilesModel::addRecent(const QString &_url)
     if (d->recentFileManager)
         d->recentFileManager->addRecent(_url);
 }
-
-#include "RecentFilesModel.moc"

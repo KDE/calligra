@@ -760,5 +760,3 @@ KWFrame *TestFrameLayout::createCopyFrame(const QPointF &position, KoShape *orig
 }
 
 QTEST_KDEMAIN(TestFrameLayout, GUI)
-
-#include <TestFrameLayout.moc>

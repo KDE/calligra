@@ -23,7 +23,7 @@
 #include <QTextStream>
 #include <QDir>
 #include <kio/copyjob.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <krun.h>
@@ -46,8 +46,8 @@ void KPrHtmlExport::exportHtml(const KPrHtmlExport::Parameter &parameters)
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
-    m_tmpDirPath = tmpDir.name();
+    QTemporaryDir tmpDir;
+    m_tmpDirPath = tmpDir.path();
     tmpDir.setAutoRemove(false);
     extractStyle();
     exportImageToTmpDir();
@@ -68,15 +68,15 @@ KUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
+    QTemporaryDir tmpDir;
     tmpDir.setAutoRemove(false);
-    m_tmpDirPath = tmpDir.name();
+    m_tmpDirPath = tmpDir.path();
     extractStyle();
     exportImageToTmpDir();
     generateHtml();
 
     KUrl previewUrl;
-    previewUrl.setPath(tmpDir.name());
+    previewUrl.setPath(tmpDir.path());
     previewUrl.addPath("slide0.html");
     return previewUrl;
 }
@@ -145,7 +145,7 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 
 void KPrHtmlExport::copyFromTmpToDest()
 {
-    KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
+    KIO::CopyJob *job = KIO::moveAs(QUrl::fromLocalFile(m_tmpDirPath), m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
@@ -154,7 +154,7 @@ void KPrHtmlExport::copyFromTmpToDest()
 
 void KPrHtmlExport::moveResult(KJob *job)
 {
-    KTempDir::removeDir(m_tmpDirPath);
+    QDir((m_tmpDirPath)).removeRecursively();
     if (job->error()) {
         KMessageBox::error(m_parameters.kprView, job->errorText());
     }
@@ -165,5 +165,3 @@ void KPrHtmlExport::moveResult(KJob *job)
         }
     }
 }
-
-#include "KPrHtmlExport.moc"

@@ -16,47 +16,52 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "krscriptfunctions.h"
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
+#include "krscriptfunctions.h"
+
+#include <KDbCursor>
+#include <KDbUtils>
+
+#include <QDebug>
+
+KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KDbConnection* conn)
 {
     m_cursor = kodata;
     m_connection = conn;
-    m_source = kodata->sourceName();
+
+    if (kodata) {
+        m_source = kodata->sourceName();
+    }
 }
 
 KRScriptFunctions::~KRScriptFunctions()
 {
 }
 
-void KRScriptFunctions::setWhere(const QString&w)
+void KRScriptFunctions::setGroupData(const QMap<QString, QVariant>& groupData)
 {
-    m_where = w;
+    m_groupData = groupData;
 }
 
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
-    qreal ret;
-    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')' ;
+    QString ret = QLatin1String("0.0");
 
-    if (!m_where.isEmpty()) {
-        sql += " WHERE(" + m_where + ')';
+    if (!m_connection) {
+        return 0.0;
     }
 
-    kDebug() << sql;
-    KexiDB::Cursor *curs = m_connection->executeQuery(sql);
+    KDbEscapedString sql = KDbEscapedString("SELECT " + function + "(" + field + ") FROM (" + m_source + ")");
 
-    if (curs) {
-        ret = curs->value(0).toDouble();
-    } else {
-        ret = 0.0;
+    if (!m_groupData.isEmpty()) {
+        sql += " WHERE(" + where() + ')';
     }
-    delete curs;
 
-    return ret;
+    qDebug() << sql;
+
+    m_connection->querySingleString(sql,&ret);
+
+    return ret.toDouble();
 }
 
 qreal KRScriptFunctions::sum(const QString &field)
@@ -88,7 +93,7 @@ QVariant KRScriptFunctions::value(const QString &field)
 {
     QVariant val;
     if (!m_cursor) {
-        kDebug() << "No cursor to get value of field " << field;
+        qDebug() << "No cursor to get value of field " << field;
         return val;
     }
 
@@ -103,3 +108,15 @@ QVariant KRScriptFunctions::value(const QString &field)
     return val;
 }
 
+KDbEscapedString KRScriptFunctions::where()
+{
+    QByteArray w;
+    QMap<QString, QVariant>::const_iterator i = m_groupData.constBegin();
+    while (i != m_groupData.constEnd()) {
+        w += QLatin1Char('(') + i.key() + QLatin1String(" = '") + i.value().toString() + QLatin1String("') AND ");
+        ++i;
+    }
+    w.chop(4);
+    //kreportDebug() << w;
+    return KDbEscapedString(w);
+}

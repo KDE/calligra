@@ -153,5 +153,3 @@ void AccountsviewConfigPanel::slotChanged() {
 
 
 }  //KPlato namespace
-
-#include "kptaccountsviewconfigdialog.moc"

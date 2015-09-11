@@ -144,5 +144,3 @@ void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
     event->accept();
     runPreview();
 }
-
-#include "KPrPreviewWidget.moc"

@@ -258,5 +258,3 @@ void PixmapCachingSheetView::invalidate()
 
     SheetView::invalidate();
 }
-
-#include "PixmapCachingSheetView.moc"

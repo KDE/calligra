@@ -2397,5 +2397,3 @@ QDomElement WordsTextHandler::insertAnchor(const QString& fsname)
     return QDomElement();
 }
 #endif // TEXTHANDLER_OBSOLETE
-
-#include "texthandler.moc"

@@ -23,6 +23,8 @@
 #include <KoOdf.h>
 #include <QDebug>
 #include <QDir>
+#include <QBuffer>
+#include <QTest>
 
 // KDESRCDIR is defined by KDE build system
 #ifndef KDESRCDIR
@@ -116,5 +118,5 @@ TestPPT::testPPT() {
     test.test();
     QVERIFY(true);
 }
+
 QTEST_MAIN(TestPPT)
-#include <TestPPT.moc>

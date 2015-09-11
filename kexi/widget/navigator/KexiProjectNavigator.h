@@ -22,12 +22,14 @@
 #ifndef KEXIPROJECTNAVIGATOR_H
 #define KEXIPROJECTNAVIGATOR_H
 
-#include <QPointer>
-#include <KMenu>
+#include "kexiextwidgets_export.h"
 #include <kexi.h>
 
-class KIcon;
-class KAction;
+#include <QPointer>
+#include <QMenu>
+
+class QIcon;
+class QAction;
 class KActionCollection;
 class QModelIndex;
 class KexiProjectModel;
@@ -40,7 +42,7 @@ namespace KexiPart
 class KexiProject;
 
 /*! @internal */
-class KexiMenuBase : public KMenu
+class KexiMenuBase : public QMenu
 {
 public:
     KexiMenuBase(QWidget *parent, KActionCollection *collection);
@@ -103,13 +105,13 @@ public:
      items for only one part class are displayed. In the latter case, no group (parent)
      items are displayed.
      Previous items are removed. */
-    void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
+    void setProject(KexiProject* prj, const QString& itemsPluginId = QString(),
                     QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
      empty (i.e. all part classes are displayed). */
-    QString itemsPartClass() const;
+    QString itemsPluginId() const;
 
     KexiPart::Item* selectedPartItem() const;
 
@@ -159,7 +161,7 @@ protected Q_SLOTS:
     void slotExecuteItem(const QModelIndex &item);
     void slotSelectionChanged(const QModelIndex& i);
     void slotSettingsChanged(int);
-    
+
     void slotNewObject();
     void slotOpenObject();
     void slotDesignObject();
@@ -180,7 +182,7 @@ protected Q_SLOTS:
 protected:
     void itemRenameDone();
 
-    KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
+    QAction * addAction(const QString& name, const QIcon& icon, const QString& text,
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );

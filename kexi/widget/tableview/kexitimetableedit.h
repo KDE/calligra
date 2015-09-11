@@ -27,14 +27,14 @@
  It is a replacement QTimeEdit due to usability problems:
  people are accustomed to use single-character cursor.
  Time format is retrieved from the KDE global settings
- and input/output is performed using KLineEdit (from KexiInputTableEdit).
+ and input/output is performed using QLineEdit (from KexiInputTableEdit).
 */
 class KexiTimeTableEdit : public KexiInputTableEdit
 {
     Q_OBJECT
 
 public:
-    explicit KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiTimeTableEdit(KDbTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiTimeTableEdit();
     virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);

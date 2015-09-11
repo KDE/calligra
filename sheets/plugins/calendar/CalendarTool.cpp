@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
-#include <kdeversion.h>
 
 using namespace Calligra::Sheets;
 
@@ -168,12 +167,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
             monthheader = false;
         }
         if (weekheader) {
-            setText(sheet, row, colstart,
-#if KDE_IS_VERSION(4,7,0)
-                    QString::number(cs->week(current)));
-#else
-                    QString::number(cs->weekNumber(current)));
-#endif
+            setText(sheet, row, colstart, QString::number(cs->week(current)));
             col++;
             weekheader = false;
 
@@ -216,5 +210,3 @@ void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _
         cell.parseUserInput(_text);
     }
 }
-
-#include "CalendarTool.moc"

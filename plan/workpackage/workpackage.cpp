@@ -820,5 +820,3 @@ void CopySchedulesCmd::clearSchedules()
 
 
 }  //KPlatoWork namespace
-
-#include "workpackage.moc"

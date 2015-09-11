@@ -18,18 +18,6 @@
 */
 
 #include "altertable.h"
-
-#include <unistd.h>
-
-#include <QApplication>
-#include <QFile>
-#include <QDir>
-#include <QRegExp>
-#include <QClipboard>
-
-#include <kdebug.h>
-#include <kaboutdata.h>
-
 #include <main/KexiMainWindow.h>
 #include <core/KexiWindow.h>
 #include <core/KexiView.h>
@@ -37,14 +25,26 @@
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
 #include <kexiutils/utils.h>
-#include <db/connection.h>
-#include <db/utils.h>
+
+#include <KDbConnection>
+#include <KDbUtils>
+
+#include <KAboutData>
+
+#include <QApplication>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
+#include <QClipboard>
+#include <QDebug>
+
+#include <unistd.h>
 
 QString testFilename;
 QFile testFile;
 QTextStream testFileStream;
 QStringList testFileLine;
-uint testLineNumber = 0;
+int testLineNumber = 0;
 QString origDbFilename, dbFilename;
 int variableI = 1; // simple variable 'i' support
 int newArgc;
@@ -56,7 +56,7 @@ void showError(const QString& msg)
 {
     QString msg_(msg);
     msg_.prepend(QString("Error at line %1: ").arg(testLineNumber));
-    kDebug() << msg_;
+    qDebug() << msg_;
 }
 
 /* Reads a single line from testFileStream, fills testFileLine, updates testLineNumber
@@ -182,23 +182,23 @@ bool castStringToQVariant(const QString& string, const QCString& type, QVariant&
     }
     const QVariant::Type vtype = typeNameToQVariantType(type);
     bool ok;
-    result = KexiDB::stringToVariant(string, vtype, ok);
+    result = KDb::stringToVariant(string, vtype, &ok);
     return ok;
 }
 
 // returns a number parsed from argument; if argument is i or i++, variableI is used
 // 'ok' is set to false on failure
-static int getNumber(const QString& argument, bool& ok)
+static int getNumber(const QString& argument, bool *ok)
 {
     int result;
-    ok = true;
+    *ok = true;
     if (argument == "i" || argument == "i++") {
         result = variableI;
         if (argument == "i++")
             variableI++;
     } else {
-        result = argument.toInt(&ok);
-        if (!ok) {
+        result = argument.toInt(ok);
+        if (!*ok) {
             showError(QString("Invalid value '%1'").arg(argument));
             return -1;
         }
@@ -241,7 +241,7 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
     QCString propertyType(testFileLine[3].toLatin1());
     QString propertyValueString(testFileLine[4]);
     if (propertyName == "type")
-        newValue = (int)KexiDB::Field::typeForString(testFileLine[4]);
+        newValue = (int)KDbField::typeForString(testFileLine[4]);
     else {
         if (!castStringToQVariant(propertyValueString, propertyType, newValue)) {
             showError(QString("Could not set property '%1' value '%2' of type '%3'")
@@ -250,18 +250,18 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
         }
     }
     bool ok;
-    int row = getNumber(testFileLine[1], ok) - 1;
+    int row = getNumber(testFileLine[1], &ok) - 1;
     if (!ok)
         return false;
     designerIface->changeFieldPropertyForRow(row, propertyName, newValue, 0, true);
     if (propertyName == "type") {
         //clean subtype name, e.g. from "longText" to "LongText", because dropdown list is case-sensitive
         QString realSubTypeName;
-        if (KexiDB::Field::BLOB == KexiDB::Field::typeForString(testFileLine[4]))
+        if (KDbField::BLOB == KDbField::typeForString(testFileLine[4]))
 //! @todo hardcoded!
             realSubTypeName = "image";
         else
-            realSubTypeName = KexiDB::Field::typeString(KexiDB::Field::typeForString(testFileLine[4]));
+            realSubTypeName = KDbField::typeString(KDbField::typeForString(testFileLine[4]));
         designerIface->changeFieldPropertyForRow(row, "subType", realSubTypeName, 0, true);
     }
     return true;
@@ -295,7 +295,7 @@ bool AlterTableTester::showSchema(KexiWindow* window, bool copyToClipboard)
     if (copyToClipboard)
         QApplication::clipboard()->setText(schemaDebugString);
     else
-        kDebug() << QString("Schema for '%1' table:\n").arg(window->partItem()->name())
+        qDebug() << QString("Schema for '%1' table:\n").arg(window->partItem()->name())
         + schemaDebugString + "\nendSchema";
     return true;
 }
@@ -351,7 +351,7 @@ bool AlterTableTester::checkSchema(KexiWindow* window)
     if (!getSchemaDump(window, schemaDebugString))
         return false;
     bool result = checkInternal(window, schemaDebugString, "endSchema", true /*skipColonsAndStripWhiteSpace*/);
-    kDebug() << QString("Schema check for table '%1': %2").arg(window->partItem()->name())
+    qDebug() << QString("Schema check for table '%1': %2").arg(window->partItem()->name())
     .arg(result ? "OK" : "Failed");
     return result;
 }
@@ -378,7 +378,7 @@ bool AlterTableTester::showActions(KexiWindow* window, bool copyToClipboard)
     if (copyToClipboard)
         QApplication::clipboard()->setText(actionsDebugString);
     else
-        kDebug() << QString("Simplified actions for altering table '%1':\n").arg(window->partItem()->name())
+        qDebug() << QString("Simplified actions for altering table '%1':\n").arg(window->partItem()->name())
         + actionsDebugString + "\n";
     return true;
 }
@@ -389,7 +389,7 @@ bool AlterTableTester::checkActions(KexiWindow* window)
     if (!getActionsDump(window, actionsDebugString))
         return false;
     bool result = checkInternal(window, actionsDebugString, "endActions", true /*skipColonsAndStripWhiteSpace*/);
-    kDebug() << QString("Actions check for table '%1': %2").arg(window->partItem()->name())
+    qDebug() << QString("Actions check for table '%1': %2").arg(window->partItem()->name())
     .arg(result ? "OK" : "Failed");
     return result;
 }
@@ -438,7 +438,7 @@ bool AlterTableTester::showTableData(KexiWindow* window, bool copyToClipboard)
     if (copyToClipboard)
         QApplication::clipboard()->setText(dataString);
     else
-        kDebug() << QString("Contents of table '%1':\n").arg(window->partItem()->name()) + dataString + "\n";
+        qDebug() << QString("Contents of table '%1':\n").arg(window->partItem()->name()) + dataString + "\n";
     return true;
 }
 
@@ -448,7 +448,7 @@ bool AlterTableTester::checkTableData(KexiWindow* window)
     if (!getTableDataDump(window, dataString))
         return false;
     bool result = checkInternal(window, dataString, "endTableData", false /*!skipColonsAndStripWhiteSpace*/);
-    kDebug() << QString("Table '%1' contents: %2").arg(window->partItem()->name())
+    qDebug() << QString("Table '%1' contents: %2").arg(window->partItem()->name())
     .arg(result ? "OK" : "Failed");
     return result;
 }
@@ -459,19 +459,20 @@ bool AlterTableTester::closeWindow(KexiWindow* window)
         return true;
     QString name = window->partItem()->name();
     tristate result = true == win->closeDialog(window, true/*layoutTaskBar*/, true/*doNotSaveChanges*/);
-    kDebug() << QString("Closing window for table '%1': %2").arg(name)
+    qDebug() << QString("Closing window for table '%1': %2").arg(name)
     .arg(result == true ? "OK" : (result == false ? "Failed" : "Cancelled"));
     return result == true;
 }
 
 //! Processes test file
-tristate AlterTableTester::run(bool &closeAppRequested)
+tristate AlterTableTester::run(bool *closeAppRequested)
 {
-    closeAppRequested = false;
+    Q_ASSERT(closeAppRequested);
+    *closeAppRequested = false;
     while (!m_finishedCopying)
         qApp->processEvents(300);
 
-    kDebug() << "Database copied to temporary: " << dbFilename;
+    qDebug() << "Database copied to temporary: " << dbFilename;
 
     if (!checkItemsNumber(2))
         return false;
@@ -493,7 +494,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         return false;
     }
     bool openingCancelled;
-    KexiWindow* window = win->openObject(item, Kexi::DesignViewMode, openingCancelled);
+    KexiWindow* window = win->openObject(item, Kexi::DesignViewMode, &openingCancelled);
     if (!window) {
         showError(QString("Could not open table '%1'").arg(item->name()));
         return false;
@@ -531,7 +532,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
                 if (!checkItemsNumber(2))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
                 designerIface->deleteRow(row, true);
@@ -540,19 +541,19 @@ tristate AlterTableTester::run(bool &closeAppRequested)
                 if (!checkItemsNumber(3))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
                 designerIface->insertField(row, testFileLine[2], true);
                 continue;
-            } else if (command == "insertEmptyRow") {
+            } else if (command == "insertEmptyRecord") {
                 if (!checkItemsNumber(2))
                     return false;
                 bool ok;
-                int row = getNumber(testFileLine[1], ok) - 1;
+                int row = getNumber(testFileLine[1], &ok) - 1;
                 if (!ok)
                     return false;
-                designerIface->insertEmptyRow(row, true);
+                designerIface->insertEmptyRecord(row, true);
                 continue;
             } else if (command == "changeFieldProperty") {
                 if (!checkItemsNumber(5) || !changeFieldProperty(designerIface))
@@ -606,7 +607,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         if (command == "stop") {
             if (!checkItemsNumber(1))
                 return false;
-            kDebug() << QString("Test STOPPED at line %1.").arg(testLineNumber);
+            qDebug() << QString("Test STOPPED at line %1.").arg(testLineNumber);
             break;
         } else if (command == "closeWindow") {
             if (!checkItemsNumber(1) || !closeWindow(window))
@@ -617,8 +618,8 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         } else if (command == "quit") {
             if (!checkItemsNumber(1) || !closeWindow(window))
                 return false;
-            closeAppRequested = true;
-            kDebug() << QString("Quitting the application...");
+            *closeAppRequested = true;
+            qDebug() << QString("Quitting the application...");
             break;
         } else {
             showError(QString("No such command '%1'").arg(command));
@@ -643,7 +644,7 @@ int main(int argc, char *argv[])
 {
     // args: <.altertable test filename>
     if (argc < 2) {
-        kWarning() << "Please specify test filename.\nOptions: \n"
+        qWarning() << "Please specify test filename.\nOptions: \n"
         "\t-close - closes the main window when test finishes";
         return quit(1);
     }
@@ -655,7 +656,7 @@ int main(int argc, char *argv[])
     testFilename = argv[argc-1];
     testFile.setName(testFilename);
     if (!testFile.open(IO_ReadOnly)) {
-        kWarning() << QString("Opening test file %1 failed.").arg(testFilename);
+        qWarning() << QString("Opening test file %1 failed.").arg(testFilename);
         return quit(1);
     }
     //load db name
@@ -681,16 +682,15 @@ int main(int argc, char *argv[])
     //QObject::connect(win, SIGNAL(projectOpened()), &tester, SLOT(run()));
 
     bool closeAppRequested;
-    res = tester.run(closeAppRequested);
+    res = tester.run(&closeAppRequested);
     if (true != res) {
         if (false == res)
-            kWarning() << QString("Running test for file '%1' failed.").arg(testFilename);
+            qWarning() << QString("Running test for file '%1' failed.").arg(testFilename);
         return quit(res == false ? 1 : 0);
     }
-    kDebug() << QString("Tests from file '%1': OK").arg(testFilename);
+    qDebug() << QString("Tests from file '%1': OK").arg(testFilename);
     result = (closeOnFinish || closeAppRequested) ? 0 : qApp->exec();
     quit(result);
     return result;
 }
 
-#include "altertable.moc"

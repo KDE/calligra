@@ -340,5 +340,3 @@ void SplitterView::slotEditCopy()
 }
 
 } // namespace KPlato
-
-#include "kptsplitterview.moc"

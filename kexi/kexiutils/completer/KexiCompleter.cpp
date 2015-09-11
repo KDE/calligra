@@ -148,7 +148,6 @@
 #include <QStringListModel>
 #include <QDirModel>
 #include <QFileSystemModel>
-#include <QHeaderView>
 #include <QListView>
 #include <QApplication>
 #include <QEvent>
@@ -836,11 +835,11 @@ KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelInde
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *q)
+KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *qq)
 : widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
   role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(KexiCompleter::UnsortedModel),
   wrap(true), eatFocusOut(true),
-  hiddenBecauseNoMatch(false), q(q)
+  hiddenBecauseNoMatch(false), q(qq)
 {
 }
 
@@ -1768,7 +1767,7 @@ QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
     if (list.count() == 1) // only the separator or some other text
         return list[0];
-    list[0].clear() ; // the join below will provide the separator
+    list[0].clear(); // the join below will provide the separator
 #endif
 
     return list.join(QDir::separator());

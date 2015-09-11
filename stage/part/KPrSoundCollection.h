@@ -52,7 +52,7 @@ public:
      */
     bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
 
-    KPrSoundData *findSound(QString title);
+    KPrSoundData *findSound(const QString &title);
 
     QStringList titles();
 

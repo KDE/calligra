@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -18,12 +18,13 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#ifndef KexiMobile_H
-#define KexiMobile_H
+#ifndef KEXIMOBILE_H
+#define KEXIMOBILE_H
 
-#include <QMainWindow>
 #include <core/KexiMainWindowIface.h>
-#include <kurl.h>
+
+#include <QUrl>
+#include <QMainWindow>
 
 class KexiMobileToolbar;
 class QHBoxLayout;
@@ -37,11 +38,11 @@ public:
     virtual ~KexiMobileMainWindow();
 
 public Q_SLOTS:
-    
+
     KexiWindow* openObject(KexiPart::Item* item);
-    
-    //KexiMainWindowIface Overrides    
-    virtual void acceptProjectClosingRequested(bool& cancel);
+
+    //KexiMainWindowIface Overrides
+    virtual void acceptProjectClosingRequested(bool *cancel);
     virtual void acceptPropertySetEditing();
     virtual KActionCollection* actionCollection() const;
     virtual void addSearchableModel(KexiSearchableModel*);
@@ -54,11 +55,12 @@ public Q_SLOTS:
     virtual KexiWindow* currentWindow() const;
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
     virtual QWidget* focusWidget() const;
-    virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
+    virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part,
+                                      bool *allowOverwriting, const QString& messageWhenAskingForName = QString());
     virtual void highlightObject(const QString& mime, const QString& name);
-    virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
-    virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
-    virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
+    virtual bool newObject(KexiPart::Info* info, bool *openingCancelled);
+    virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool *openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
+    virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool *openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
     virtual tristate printItem(KexiPart::Item* item);
     virtual tristate printPreviewForItem(KexiPart::Item* item);
     virtual KexiProject* project();
@@ -75,22 +77,22 @@ public Q_SLOTS:
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString());
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
     virtual bool userMode() const;
-    
-    
+
+
 public Q_SLOTS:
     void slotOpenDatabase();
-    
+
 private:
     KexiMobileWidget *m_mobile;
     KexiMobileToolbar *m_toolbar;
     QAction *m_openFileAction;
     KexiProject *m_project;
     QHBoxLayout *m_layout;
-    
+
     void setupToolbar();
-    
-    KexiProject* openProject(const KUrl &url);
+
+    KexiProject* openProject(const QUrl &url);
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage);
 };
 
-#endif // KexiMobile_H
+#endif // KEXIMOBILE_H

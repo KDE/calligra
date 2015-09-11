@@ -22,12 +22,13 @@
 #ifndef FORMEDITORCONTAINER_H
 #define FORMEDITORCONTAINER_H
 
+#include "kformdesigner_export.h"
+#include "utils.h"
+#include "form.h"
+
 #include <QPointer>
 #include <QWidget>
 #include <QMouseEvent>
-
-#include "utils.h"
-#include "form.h"
 
 class QEvent;
 class QLayout;
@@ -43,7 +44,7 @@ class ObjectTreeItem;
  * and direct it to the Container.
  */
 //! A class for redirecting events
-class KFORMEDITOR_EXPORT EventEater : public QObject
+class KFORMDESIGNER_EXPORT EventEater : public QObject
 {
     Q_OBJECT
 
@@ -71,7 +72,7 @@ private:
  the background is dotted.
  */
 //! A class to make a container from any widget
-class KFORMEDITOR_EXPORT Container : public QObject
+class KFORMDESIGNER_EXPORT Container : public QObject
 {
     Q_OBJECT
 
@@ -211,7 +212,7 @@ private:
 
 //! Interface for adding dynamically created (at design time) widget to event eater.
 /*! This is currently used by KexiDBFieldEdit from Kexi forms. */
-class KFORMEDITOR_EXPORT DesignTimeDynamicChildWidgetHandler
+class KFORMDESIGNER_EXPORT DesignTimeDynamicChildWidgetHandler
 {
 public:
     DesignTimeDynamicChildWidgetHandler();

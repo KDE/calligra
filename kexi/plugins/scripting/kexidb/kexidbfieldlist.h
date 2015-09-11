@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <db/drivermanager.h>
-#include <db/fieldlist.h>
+#include <KDbDriverManager>
+#include <KDbFieldList>
 
 namespace Scripting
 {
@@ -58,18 +58,18 @@ class KexiDBFieldList : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
+    KexiDBFieldList(QObject* parent, KDbFieldList* fieldlist, bool owner);
     virtual ~KexiDBFieldList();
-    ::KexiDB::FieldList* fieldlist() {
+    KDbFieldList* fieldlist() {
         return m_fieldlist;
     }
 
 public Q_SLOTS:
 
     /** Returns the number of fields. */
-    uint fieldCount();
+    int fieldCount();
     /** Return the \a KexiDBField specified by the index-number passed as an argument. */
-    QObject* field(uint index);
+    QObject* field(int index);
     /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
     QObject* fieldByName(const QString& name);
 
@@ -82,7 +82,7 @@ public Q_SLOTS:
     bool addField(QObject* field);
     /** Inserts the \a KexiDBField object passed as the second argument
     into the field list at the position defined by the first argument. */
-    bool insertField(uint index, QObject* field);
+    bool insertField(int index, QObject* field);
     /** Removes the \a KexiDBField object passed as an argument from the field list. */
     bool removeField(QObject* field);
     /** Removes all KexiDBField objects from the fieldlist. */
@@ -95,7 +95,7 @@ public Q_SLOTS:
     QObject* subList(QVariantList list);
 
 private:
-    ::KexiDB::FieldList* m_fieldlist;
+    KDbFieldList* m_fieldlist;
     bool m_owner;
 };
 

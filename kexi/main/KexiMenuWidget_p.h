@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu_p.h from Qt 4.7
 
    based on oxygenhelper.h
@@ -31,17 +31,17 @@
 #ifndef KEXIMENUWIDGET_P_H
 #define KEXIMENUWIDGET_P_H
 
-#include <kcomponentdata.h>
-#include <ksharedconfig.h>
+#include "KexiMenuWidget.h"
+
+#include <KSharedConfig>
+
 #include <QStyleOption>
-#include <QDateTime>
 #include <QCache>
 #include <QMap>
 #include <QHash>
 #include <QBasicTimer>
 #include <QPointer>
 #include <QAbstractButton>
-#include "KexiMenuWidget.h"
 
 class QEventLoop;
 
@@ -115,8 +115,7 @@ public:
     ColorCache m_backgroundRadialColorCache;
     ColorMap m_lowThreshold;
     ColorMap m_highThreshold;
-                                
-    KComponentData _componentData;
+
     KSharedConfigPtr _config;
     qreal _contrast;
     qreal _bgcontrast;
@@ -136,7 +135,10 @@ public:
     virtual ~KexiMenuWidgetPrivate()
     {
         delete scroll;
+//! @todo KEXI3 port OxygenHelper
+#if 0
         delete oxygenHelper;
+#endif
     }
     void init();
 
@@ -146,8 +148,8 @@ public:
     KexiMenuWidget *q;
 
     //item calculations
-    mutable uint itemsDirty;
-    mutable uint maxIconWidth, tabWidth;
+    mutable int itemsDirty;
+    mutable int maxIconWidth, tabWidth;
     QRect actionRect(QAction *) const;
 
     mutable QVector<QRect> actionRects;
@@ -155,16 +157,16 @@ public:
     void updateActionRects() const;
     QRect popupGeometry(const QWidget *widget) const;
     QRect popupGeometry(int screen = -1) const;
-    mutable uint ncols : 4; //4 bits is probably plenty
-    uint collapsibleSeparators;
+    mutable int ncols : 4; //4 bits is probably plenty
+    int collapsibleSeparators;
 
     bool activationRecursionGuard;
 
     //selection
     static KexiMenuWidget *mouseDown;
     QPoint mousePopupPos;
-    uint hasHadMouse;
-    uint aboutToHide;
+    int hasHadMouse;
+    int aboutToHide;
     int motions;
     QAction *currentAction;
     QBasicTimer menuDelayTimer;
@@ -263,11 +265,14 @@ public:
     bool hasFrame;
 
     QPointer<KexiMenuWidgetAction> previousPersistentlySelectedAction;
-    
+
     //! True if persistent selections are enabled. False by default.
     //bool persistentSelectionsEnabled;
 
+//! @todo KEXI3 port OxygenHelper
+#if 0
     OxygenHelper *oxygenHelper;
+#endif
     bool bespin;
     bool qtcurve;
 

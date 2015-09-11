@@ -1,0 +1,38 @@
+[Desktop Entry]
+Name=Web Browser Widget
+Name[ca]=Estri navegador web
+Name[cs]=Widget webového prohlížeče
+Name[fi]=Verkkoselainelementti
+Name[nl]=Webbrowserwidget
+Name[pl]=Element interfejsu przeglądarki sieciowej
+Name[pt]=Elemento de Navegador Web
+Name[pt_BR]=Elemento de navegador Web
+Name[sv]=Webbläsarkomponent
+Name[uk]=Віджет перегляду інтернету
+Name[x-test]=xxWeb Browser Widgetxx
+Comment=Kexi plugin providing web browser form widget
+Comment[ca]=Connecto del Kexi que proporciona estris de formularis de navegació web
+Comment[nl]=Kexi-plug-in levert formulierwidget voor webbrowser
+Comment[pl]=Wtyczka Kexi dostarczająca formularze przeglądania sieci
+Comment[pt]='Plugin' do Kexi que oferece um elemento gráfico de formulários de navegação Web
+Comment[pt_BR]=Plugin do Kexi que oferece um elemento gráfico de formulários de navegação na Web
+Comment[sv]=Kexi-insticksprogram som tillhandahåller formulärkomponent med webbläsare
+Comment[uk]=Додаток до Kexi, що забезпечує роботу форми віджета навігатора інтернетом
+Comment[x-test]=xxKexi plugin providing web browser form widgetxx
+Type=Service
+Icon=form
+Encoding=UTF-8
+
+X-KDE-Library=kexiforms_webbrowserwidgetplugin
+X-KDE-ServiceTypes=Kexi/FormWidgets
+X-KDE-PluginInfo-Author=Kexi Team
+X-KDE-PluginInfo-Email=kexi@kde.org
+X-KDE-PluginInfo-Name=org.kexi-project.form.widgets.web
+X-KDE-PluginInfo-Version=3.0
+X-KDE-PluginInfo-Website=http://kexi-project.org
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Kexi-FormWidgetsFactoryGroup=

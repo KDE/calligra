@@ -907,6 +907,3 @@ void Scripting::Project::slotAddCommand( KUndo2Command *cmd )
 {
     m_module->addCommand( cmd );
 }
-
-
-#include "Project.moc"

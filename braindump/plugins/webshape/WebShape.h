@@ -20,8 +20,8 @@
 #ifndef _WEBSHAPE_H_
 #define _WEBSHAPE_H_
 
+#include <QUrl>
 #include <KoShape.h>
-#include <kurl.h>
 
 #define WEBSHAPEID "WebShape"
 
@@ -39,8 +39,8 @@ public:
                const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const KUrl& url();
-    void setUrl(const KUrl& _url);
+    const QUrl &url();
+    void setUrl(const QUrl &_url);
     bool isCached() const;
     void setCached(bool _cache);
     void setCache(const QString&);
@@ -56,7 +56,7 @@ private:
 private Q_SLOTS:
     void loadFinished(bool);
 private:
-    KUrl m_url;
+    QUrl m_url;
     QWebPage* m_webPage;
     bool m_cached;
     QString m_cache;

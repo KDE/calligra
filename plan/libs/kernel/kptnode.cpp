@@ -1856,5 +1856,3 @@ QList<qint64> Estimate::scales() const
 
 
 }  //KPlato namespace
-
-#include "kptnode.moc"

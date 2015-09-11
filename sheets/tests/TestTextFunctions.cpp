@@ -296,6 +296,4 @@ void TestTextFunctions::testTEXT()
     CHECK_EVAL("TEXT(TIME(13;10;43);\"hh:mm\")", Value("13:10"));
 }
 
-QTEST_KDEMAIN(TestTextFunctions, GUI)
-
-#include "TestTextFunctions.moc"
+QTEST_MAIN(TestTextFunctions)

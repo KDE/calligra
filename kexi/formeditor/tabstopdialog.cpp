@@ -19,20 +19,18 @@
 */
 
 #include <QCheckBox>
-
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QFrame>
+#include <QPushButton>
+#include <QDialogButtonBox>
+#include <QDebug>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kpushbutton.h>
+#include <KLocalizedString>
 
-#include <KoIcon.h>
+#include <KexiIcon.h>
 
 #include "form.h"
 #include "WidgetTreeWidget.h"
-
 #include "tabstopdialog.h"
 
 using namespace KFormDesigner;
@@ -48,7 +46,7 @@ public:
     ~Private();
 
     WidgetTreeWidget *widgetTree;
-    KPushButton *btnUp, *btnDown;
+    QPushButton *btnUp, *btnDown;
     QCheckBox *check;
 };
 
@@ -62,18 +60,18 @@ TabStopDialog::Private::~Private()
 
 }
 
-TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Private())
+TabStopDialog::TabStopDialog(QWidget *parent)    : QDialog(parent), d(new Private())
 {
     setObjectName("tabstop_dialog");
     setModal(true);
-    setWindowTitle(i18nc("@title:window", "Edit Tab Order"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setWindowTitle(xi18nc("@title:window", "Edit Tab Order"));
 
-    QFrame *frame = new QFrame(this);
-    setMainWidget(frame);
-    QGridLayout *l = new QGridLayout(frame);
-    d->widgetTree = new WidgetTreeWidget(frame,
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    QGridLayout *l = new QGridLayout;
+    mainLayout->addLayout(l);
+    d->widgetTree = new WidgetTreeWidget(this,
         WidgetTreeWidget::DisableSelection | WidgetTreeWidget::DisableContextMenu);
     d->widgetTree->setObjectName("tabstops:widgetTree");
     d->widgetTree->setDragEnabled(true);
@@ -84,32 +82,39 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
 
     d->widgetTree->setForm(0);
     connect(d->widgetTree, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
-#ifdef __GNUC__
-#warning TODO connect(d->widgetTree, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-#else
-#pragma WARNING( TODO connect(d->widgetTree, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*))); )
-#endif
+
+//! @todo KEXI3 TODO connect(d->widgetTree, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
-    d->btnUp = new KPushButton(koIcon("arrow-up"), i18n("Move Up"), frame);
-    d->btnUp->setToolTip(i18n("Move widget up"));
+    d->btnUp = new QPushButton(koIcon("arrow-up"), xi18n("Move Up"), this);
+    d->btnUp->setToolTip(xi18n("Move widget up"));
     vbox->addWidget(d->btnUp);
     connect(d->btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-    d->btnDown = new KPushButton(koIcon("arrow-down"), i18n("Move Down"), frame);
-    d->btnDown->setToolTip(i18n("Move widget down"));
+    d->btnDown = new QPushButton(koIcon("arrow-down"), xi18n("Move Down"), this);
+    d->btnDown->setToolTip(xi18n("Move widget down"));
     vbox->addWidget(d->btnDown);
     connect(d->btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
     vbox->addStretch();
 
-    d->check = new QCheckBox(i18n("Handle tab order automatically"), frame);
+    d->check = new QCheckBox(xi18n("Handle tab order automatically"), this);
     d->check->setObjectName("tabstops_check");
     connect(d->check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
     l->addWidget(d->check, 1, 0, 1, 2);
 
+    // buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     updateGeometry();
-    setInitialSize(QSize(500 + d->btnUp->width(), qMax(400, d->widgetTree->height())));
+    resize(QSize(500 + d->btnUp->width(), qMax(400, d->widgetTree->height())));
 }
 
 TabStopDialog::~TabStopDialog()
@@ -140,7 +145,7 @@ int TabStopDialog::exec(Form *form)
         firstItem->setSelected(true);
     }
 
-    if (QDialog::Rejected == KDialog::exec())
+    if (QDialog::Rejected == QDialog::exec())
         return QDialog::Rejected;
 
     //accepted
@@ -215,4 +220,3 @@ bool TabStopDialog::autoTabStops() const
     return d->check->isChecked();
 }
 
-#include "tabstopdialog.moc"

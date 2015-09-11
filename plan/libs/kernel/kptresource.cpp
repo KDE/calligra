@@ -2577,5 +2577,3 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
 
 
 }  //KPlato namespace
-
-#include "kptresource.moc"

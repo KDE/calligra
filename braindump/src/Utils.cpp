@@ -20,8 +20,11 @@
 #include "Utils.h"
 
 #include <QRectF>
+
 #include <KoShape.h>
+
 #include <KoShapeContainer.h>
+
 #include "SectionGroup.h"
 #include "Section.h"
 #include "SectionContainer.h"

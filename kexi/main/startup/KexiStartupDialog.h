@@ -20,11 +20,13 @@
 #ifndef KexiStartupDialog_h
 #define KexiStartupDialog_h
 
-#include <kpagedialog.h>
-
+#include "keximain_export.h"
 #include <kexi_global.h>
-#include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
+
+#include <KDbConnectionData>
+
+#include <KPageDialog>
 
 class KexiProjectData;
 class KexiDBConnectionSet;
@@ -109,7 +111,7 @@ public:
       (if "Open Existing" tab was selected and this connection data was clicked).
       Returns NULL if no such selection has been made or other tab was selected.
     */
-    KexiDB::ConnectionData* selectedExistingConnection() const;
+    KDbConnectionData* selectedExistingConnection() const;
 
 public Q_SLOTS:
     virtual void done(int r);
@@ -129,7 +131,7 @@ protected Q_SLOTS:
     void templateSelected(const QString& fileName);
 
     //! helper
-    void existingFileHighlighted();
+    void existingFileSelected();
     void showSimpleConnForOpenExisting();
     void showAdvancedConnForOpenExisting();
     void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);

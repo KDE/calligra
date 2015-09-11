@@ -23,17 +23,18 @@
 #include <KexiMainWindowIface.h>
 
 #include <KIO/Job>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kaboutdata.h>
-#include <KComponentData>
-#include <kdeversion.h>
+#include <KConfigGroup>
+#include <KAboutData>
+#include <kwidgetsaddons_version.h> // no kdeversion.h anymore but this is nice enough here
+#include <KSharedConfig>
+#include <KLocalizedString>
 
+#include <QDebug>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QProcess>
 #include <QUuid>
+#include <QLocale>
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -56,16 +57,16 @@ class KexiUserFeedbackAgent::Private
 {
 public:
     Private()
-     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+     : configGroup(KConfigGroup(KSharedConfig::openConfig()->group("User Feedback")))
      , areas(KexiUserFeedbackAgent::NoAreas)
      , sentDataInThisSession(KexiUserFeedbackAgent::NoAreas)
      , url(QLatin1String("http://www.kexi-project.org/feedback"))
      , redirectChecked(false)
     {
     }
-    
+
     void updateData();
-    
+
     KConfigGroup configGroup;
     KexiUserFeedbackAgent::Areas areas;
     KexiUserFeedbackAgent::Areas sentDataInThisSession;
@@ -81,7 +82,7 @@ public:
 
 void KexiUserFeedbackAgent::Private::updateData()
 {
-    kDebug();
+    qDebug();
     keys.clear();
     data.clear();
     areasForKeys.clear();
@@ -96,10 +97,11 @@ void KexiUserFeedbackAgent::Private::updateData()
     ADD("app_ver_minor", Kexi::versionMinor(), BasicArea);
     ADD("app_ver_release", Kexi::versionRelease(), BasicArea);
 
-    ADD("kde_ver", KDE::versionString(), BasicArea);
-    ADD("kde_ver_major", KDE::versionMajor(), BasicArea);
-    ADD("kde_ver_minor", KDE::versionMinor(), BasicArea);
-    ADD("kde_ver_release", KDE::versionRelease(), BasicArea);
+    //! @TODO KEXI3 For kde_ver_* use runtime information like KDE::versionMajor(), not the macro (KF5 libs lack it unfortunately)
+    ADD("kde_ver", KWIDGETSADDONS_VERSION_STRING, BasicArea);
+    ADD("kde_ver_major", KWIDGETSADDONS_VERSION_MAJOR, BasicArea);
+    ADD("kde_ver_minor", KWIDGETSADDONS_VERSION_MINOR, BasicArea);
+    ADD("kde_ver_release", KWIDGETSADDONS_VERSION_PATCH, BasicArea);
 #ifdef Q_OS_LINUX
     {
         ADD("os", "linux", SystemInfoArea);
@@ -221,16 +223,16 @@ void KexiUserFeedbackAgent::Private::updateData()
     SYSTEM_INFO sysInfo;
     char* releaseStr;
     releaseStr = new char[6]; // "xx.xx\0"
-    
+
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&versionInfo);
     GetSystemInfo(&sysInfo);
-    
+
     snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
     ADD("os_release", releaseStr, SystemInfoArea);
-    
+
     delete [6] releaseStr;
-    
+
     switch(sysInfo.wProcessorArchitecture) {
     case PROCESSOR_ARCHITECTURE_AMD64:
         ADD("os_machine", "x86_64", SystemInfoArea);
@@ -252,11 +254,13 @@ void KexiUserFeedbackAgent::Private::updateData()
     ADD("screen_height", screen.height(), ScreenInfoArea);
     ADD("screen_count", QApplication::desktop()->screenCount(), ScreenInfoArea);
 
-    ADD("country", KGlobal::locale()->country(), RegionalSettingsArea);
-    ADD("language", KGlobal::locale()->language(), RegionalSettingsArea);
-    ADD("date_format", KGlobal::locale()->dateFormat(), RegionalSettingsArea);
-    ADD("short_date_format", KGlobal::locale()->dateFormatShort(), RegionalSettingsArea);
-    ADD("time_format", KGlobal::locale()->timeFormat(), RegionalSettingsArea);
+    QLocale locale;
+    ADD("country", QLocale::countryToString(locale.country()), RegionalSettingsArea);
+    ADD("language", QLocale::languageToString(locale.language()), RegionalSettingsArea);
+    ADD("date_format", locale.dateFormat(QLocale::LongFormat), RegionalSettingsArea);
+    ADD("short_date_format", locale.dateFormat(QLocale::ShortFormat), RegionalSettingsArea);
+    ADD("time_format", locale.timeFormat(QLocale::LongFormat), RegionalSettingsArea);
+    //! @todo KEXI3 "short_time_format"
     ADD("right_to_left", QApplication::isRightToLeft(), RegionalSettingsArea);
 #undef ADD
 }
@@ -278,7 +282,7 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
     if (d->configGroup.readEntry("RegionalSettings", false)) {
         d->areas |= RegionalSettingsArea;
     }
-    
+
     // load or create uid
     QString uidString = d->configGroup.readEntry("Uid", QString());
     d->uid = QUuid(uidString);
@@ -343,11 +347,11 @@ inline QString escapeJson(const QString& s)
 
 void KexiUserFeedbackAgent::sendData()
 {
-    kDebug();
+    qDebug();
     if (d->areas == NoAreas) {
         return;
     }
-    if (KGlobal::mainComponent().aboutData()->programName() != i18n(KEXI_APP_NAME)) {
+    if (KAboutData::applicationData().displayName() != KEXI_APP_NAME) {
         // Do not send feedback if this is not really Kexi but a test app based on Kexi
         return;
     }
@@ -367,9 +371,9 @@ void KexiUserFeedbackAgent::sendData()
                         + escapeJson(d->data.value(key).toString()).toUtf8() + '"');
         }
     }
-    kDebug() << postData;
-    
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    qDebug() << postData;
+
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, QUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
@@ -383,7 +387,7 @@ void KexiUserFeedbackAgent::sendDataFinished(KJob* job)
     KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
     QByteArray result = sendJob->data();
     result.chop(1); // remove \n
-    kDebug() << result;
+    qDebug() << result;
     if (result == "ok") {
         d->sentDataInThisSession = d->areas;
     }
@@ -397,8 +401,8 @@ QVariant KexiUserFeedbackAgent::value(const QString& key) const
 void KexiUserFeedbackAgent::sendRedirectQuestion()
 {
     QByteArray postData = "get_url";
-    kDebug() << postData;
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    qDebug() << postData;
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, QUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
@@ -407,19 +411,19 @@ void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KJob* job)
 {
     if (job->error()) {
         //! @todo error...
-        kDebug() << "Error, no URL Redirect";
+        qDebug() << "Error, no URL Redirect";
     }
     else {
         KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
         QByteArray result = sendJob->data();
         result.chop(1); // remove \n
-        kDebug() << result;
+        qDebug() << result;
         if (result.isEmpty()) {
-            kDebug() << "No URL Redirect";
+            qDebug() << "No URL Redirect";
         }
         else {
             d->url = QString::fromUtf8(result);
-            kDebug() << "URL Redirect to" << d->url;
+            qDebug() << "URL Redirect to" << d->url;
         }
     }
     d->redirectChecked = true;

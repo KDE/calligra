@@ -20,14 +20,9 @@
 
 #include "KexiMainWindowIface.h"
 
-#include <kdebug.h>
+//Q_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
 
-//K_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
-#ifdef __GNUC__
-#warning not threadsafe
-#else
-#pragma WARNING( not threadsafe )
-#endif
+//! @todo KEXI3 not threadsafe
 KexiMainWindowIface* kexiMainWindow = 0;
 
 KexiMainWindowIface::KexiMainWindowIface()
@@ -38,6 +33,7 @@ KexiMainWindowIface::KexiMainWindowIface()
 
 KexiMainWindowIface::~KexiMainWindowIface()
 {
+    kexiMainWindow = 0;
 }
 
 KexiMainWindowIface* KexiMainWindowIface::global()

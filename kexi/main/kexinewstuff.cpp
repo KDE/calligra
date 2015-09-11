@@ -19,12 +19,12 @@
 
 #ifdef HAVE_KNEWSTUFF
 
-#include <kdebug.h>
-#include <ktar.h>
-#include <QDir>
-#include <kfiledialog.h>
-#include <klocale.h>
+#include <KTar>
+#include <KSharedConfig>
+#include <KLocalizedString>
 
+#include <QDebug>
+#include <QFileDialog>
 
 #include "kexinewstuff.h"
 
@@ -37,7 +37,7 @@ KexiNewStuff::KexiNewStuff(QWidget *parent)
     // fails to download something, it still marks the thing as
     // successfully downloaded and therefore we arn't able to
     // download it again :-/
-    KGlobal::config()->deleteGroup("KNewStuffStatus");
+    KSharedConfig::openConfig()->deleteGroup("KNewStuffStatus");
 }
 
 KexiNewStuff::~KexiNewStuff()
@@ -47,24 +47,24 @@ KexiNewStuff::~KexiNewStuff()
 bool
 KexiNewStuff::install(const QString &fileName)
 {
-    kDebug() << fileName;
+    qDebug() << fileName;
 
     KTar archive(fileName);
     if (!archive.open(QIODevice::ReadOnly)) {
-        kDebug() << QString("Failed to open archivefile \"%1\"").arg(fileName);
+        qDebug() << QString("Failed to open archivefile \"%1\"").arg(fileName);
         return false;
     }
     const KArchiveDirectory *archiveDir = archive.directory();
-    const QString destDir = KFileDialog::getExistingDirectory(
-                                "kfiledialog:///DownloadExampleDatabases", parentWidget(),
-                                i18n("Choose Directory Where to Install Example Database"));
+    //! @todo KEXI3 add equivalent of kfiledialog:///
+    //"kfiledialog:///DownloadExampleDatabases"
+    const QString destDir = QFileDialog::getExistingDirectory(
+        parentWidget(), QString(), xi18n("Choose Directory Where to Install Example Database"));
     if (destDir.isEmpty()) {
-        kWarning() << "Destination-directory is empty.";
+        qWarning() << "Destination-directory is empty.";
         return false;
     }
     archiveDir->copyTo(destDir);
     archive.close();
-
     return true;
 }
 
@@ -73,6 +73,6 @@ KexiNewStuff::createUploadFile(const QString &)
 {
     return true;
 }
-
 #endif
-#warning noi18n # added to disable message extraction in Messages.sh
+
+//! @todo KEXI3 noi18n # added to disable message extraction in Messages.sh

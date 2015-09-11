@@ -32,6 +32,7 @@
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+
 #include <QStackedWidget>
 #include <QLabel>
 #include <QStatusBar>
@@ -39,8 +40,9 @@
 #include <QIntValidator>
 #include <QToolButton>
 #include <QTimer>
+#include <QAction>
+
 #include <ksqueezedtextlabel.h>
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -134,7 +136,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     connect(m_pageLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoPage()));
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageCount()));
 
-    KAction *action = new KAction(i18n("Page Number"), this);
+    QAction *action = new QAction(i18n("Page Number"), this);
     action->setObjectName("pages_current_total");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowPage());
@@ -147,7 +149,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     connect(m_lineLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoLine()));
     m_lineLabel->setVisible(document->config().statusBarShowLineNumber());
 
-    action = new KAction(i18n("Line Number"), this);
+    action = new QAction(i18n("Line Number"), this);
     action->setObjectName("textcursor_position");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowLineNumber());
@@ -164,7 +166,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageStyle()));
     m_pageStyleLabel->setVisible(document->config().statusBarShowPageStyle());
 
-    action = new KAction(i18n("Page Style"), this);
+    action = new QAction(i18n("Page Style"), this);
     action->setObjectName("pagestyle_current_name");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowPageStyle());
@@ -178,7 +180,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_pageSizeLabel->setVisible(document->config().statusBarShowPageSize());
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageSize()));
 
-    action = new KAction(i18n("Page Size"), this);
+    action = new QAction(i18n("Page Size"), this);
     action->setObjectName("pagestyle_current_size");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowPageSize());
@@ -193,7 +195,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_modifiedLabel->setVisible(document->config().statusBarShowModified());
     connect(document, SIGNAL(modified(bool)), this, SLOT(setModified(bool)));
 
-    action = new KAction(i18n("Saved/Modified"), this);
+    action = new QAction(i18n("Saved/Modified"), this);
     action->setObjectName("doc_save_state");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowModified());
@@ -206,7 +208,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_statusbar->addWidget(m_mousePosLabel);
     m_mousePosLabel->setVisible(document->config().statusBarShowMouse());
 
-    action = new KAction(i18n("Mouse Cursor X:Y"), this);
+    action = new QAction(i18n("Mouse Cursor X:Y"), this);
     action->setObjectName("mousecursor_position");
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowMouse());
@@ -220,7 +222,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
             this, SLOT(setText(QString)));
 
-    m_zoomAction = new KAction(i18n("Zoom Controller"), this);
+    m_zoomAction = new QAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
     m_zoomAction->setCheckable(true);
     m_zoomAction->setChecked(document->config().statusBarShowZoom());

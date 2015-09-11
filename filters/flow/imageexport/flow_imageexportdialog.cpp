@@ -81,5 +81,3 @@ int ImageExportDialog::margin() const
 }
 
 }
-
-#include "flow_imageexportdialog.moc"

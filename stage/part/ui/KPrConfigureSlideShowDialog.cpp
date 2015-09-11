@@ -75,6 +75,3 @@ void KPrConfigureSlideShowDialog::editCustomSlideShow()
     m_view->showSlidesSorter();
     accept();
 }
-
-#include "KPrConfigureSlideShowDialog.moc"
-

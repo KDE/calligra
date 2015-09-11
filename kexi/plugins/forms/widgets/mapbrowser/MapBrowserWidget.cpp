@@ -17,13 +17,10 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "MapBrowserWidget.h"
 #include <kexiutils/utils.h>
 
-#include <kdebug.h>
-
-#include <QPointF>
+#include <QDebug>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -33,7 +30,7 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
     m_internalReadOnly(false)
 {
 #ifndef Q_CC_MSVC
-#warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
+//! @todo KEXI3 this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
 #endif
   setMapThemeId("earth/srtm/srtm.dgml");
   m_defaultZoom = 1200; // with this value "more or less" entire earth fits the window. Please check the MarbleWidget::setZoom documentation for more info.
@@ -59,8 +56,8 @@ void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld)
     Q_UNUSED(add);
     Q_UNUSED(removeOld);
     m_slotMapChanged_enabled = false;
-    //kDebug() << "add:" << add;
-    //kDebug() << "originalValue():" << originalValue();
+    //qDebug() << "add:" << add;
+    //qDebug() << "originalValue():" << originalValue();
     deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
 }
@@ -115,11 +112,11 @@ QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
 
 void MapBrowserWidget::deserializeData(const QVariant& serialized)
 {
-    //kDebug() << "seting new data";
+    //qDebug() << "seting new data";
     QString serializedData = serialized.toString();
-    //kDebug() << "serializedData:" << serializedData << ";" << serialized;
+    //qDebug() << "serializedData:" << serializedData << ";" << serialized;
     QStringList dataList = serializedData.split(';');
-    //kDebug() << "splited:" << dataList;
+    //qDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
         setAnimationsEnabled(false);
         setCenterLatitude(dataList[0].toDouble());
@@ -138,8 +135,6 @@ void MapBrowserWidget::slotMapChanged()
 
 void MapBrowserWidget::resizeEvent(QResizeEvent *event)
 {
-    KexiUtils::BoolBlocker guard(m_slotMapChanged_enabled, false);
+    KexiUtils::BoolBlocker guard(&m_slotMapChanged_enabled, false);
     Marble::MarbleWidget::resizeEvent(event);
 }
-
-#include "MapBrowserWidget.moc"

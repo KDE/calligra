@@ -368,6 +368,3 @@ KPrDeclarations * KPrDocument::declarations() const
 {
     return m_declarations;
 }
-
-#include "KPrDocument.moc"
-

@@ -20,16 +20,6 @@
 */
 
 #include "kexidbautofield.h"
-
-#include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QMetaObject>
-#include <QApplication>
-
-#include <kdebug.h>
-#include <klocale.h>
-
 #include "kexidbcheckbox.h"
 #include "kexidbimagebox.h"
 #include "kexidblabel.h"
@@ -38,11 +28,18 @@
 #include "kexidbcombobox.h"
 #include "KexiDBPushButton.h"
 #include "kexidbform.h"
-
 #include <kexi_global.h>
-#include <db/queryschema.h>
 #include <formeditor/utils.h>
 #include <kexiutils/utils.h>
+
+#include <KDbQuerySchema>
+
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QDebug>
 
 #define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
@@ -60,7 +57,7 @@ public:
     QBoxLayout  *layout;
     QLabel  *label;
     QString  caption;
-    KexiDB::Field::Type fieldTypeInternal;
+    KDbField::Type fieldTypeInternal;
     QString fieldCaptionInternal;
     QBrush baseBrush; //!< needed because for unbound mode editor==0
     QBrush textBrush; //!< needed because for unbound mode editor==0
@@ -86,7 +83,7 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-    init(QString()/*i18n("Auto Field")*/, Auto, pos);
+    init(QString()/*xi18n("Auto Field")*/, Auto, pos);
 }
 
 KexiDBAutoField::~KexiDBAutoField()
@@ -100,7 +97,7 @@ KexiDBAutoField::~KexiDBAutoField()
 void
 KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 {
-    d->fieldTypeInternal = KexiDB::Field::InvalidType;
+    d->fieldTypeInternal = KDbField::InvalidType;
     d->layout = 0;
     setSubwidget(0);
     d->label = new QLabel(text, this);
@@ -140,7 +137,7 @@ KexiDBAutoField::createEditor()
     }
 
     QWidget *newSubwidget;
-    //kDebug() << "widgetType:" << d->widgetType;
+    //qDebug() << "widgetType:" << d->widgetType;
     switch (d->widgetType) {
     case Text:
     case Double: //! @todo setup validator
@@ -174,7 +171,7 @@ KexiDBAutoField::createEditor()
         break;
     }
 
-    //kDebug() << newSubwidget;
+    //qDebug() << newSubwidget;
     setSubwidget(newSubwidget);   //this will also allow to declare subproperties, see KFormDesigner::WidgetWithSubpropertiesInterface
     if (newSubwidget) {
         newSubwidget->setObjectName(
@@ -204,9 +201,9 @@ KexiDBAutoField::createEditor()
 
 void KexiDBAutoField::copyPropertiesToEditor()
 {
-    //kDebug() << subwidget();
+    //qDebug() << subwidget();
     if (subwidget()) {
-//  kDebug() << "base col: " <<  d->baseColor.name() <<
+//  qDebug() << "base col: " <<  d->baseColor.name() <<
 //   "; text col: " << d->textColor.name();
         QPalette p(subwidget()->palette());
         p.setBrush(QPalette::Base, d->baseBrush);
@@ -246,7 +243,7 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
         }
         d->label->setAlignment(align);
         if (d->widgetType == Boolean
-                || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !designMode())) {
+                || (d->widgetType == Auto && fieldTypeInternal() == KDbField::InvalidType && !designMode())) {
             d->label->hide();
         } else {
             d->label->show();
@@ -366,7 +363,7 @@ bool
 KexiDBAutoField::valueChanged()
 {
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    //kDebug() << KexiDataItemInterface::originalValue();
+    //qDebug() << KexiDataItemInterface::originalValue();
     if (iface)
         return iface->valueChanged();
     return false;
@@ -450,14 +447,14 @@ KexiDBAutoField::clear()
 void
 KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 {
-    d->fieldTypeInternal = (KexiDB::Field::Type)kexiDBFieldType;
-    KexiDB::Field::Type fieldType;
+    d->fieldTypeInternal = (KDbField::Type)kexiDBFieldType;
+    KDbField::Type fieldType;
     //find real fied type to use
-    if (d->fieldTypeInternal == KexiDB::Field::InvalidType) {
+    if (d->fieldTypeInternal == KDbField::InvalidType) {
         if (visibleColumnInfo())
-            fieldType = KexiDB::Field::Text;
+            fieldType = KDbField::Text;
         else
-            fieldType = KexiDB::Field::InvalidType;
+            fieldType = KDbField::InvalidType;
     } else
         fieldType = d->fieldTypeInternal;
 
@@ -482,27 +479,27 @@ KexiDBAutoField::setFieldCaptionInternal(const QString& text)
 }
 
 void
-KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+KexiDBAutoField::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     setColumnInfoInternal(cinfo, cinfo);
 }
 
 void
-KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo)
+KexiDBAutoField::setColumnInfoInternal(KDbQueryColumnInfo* cinfo, KDbQueryColumnInfo* visibleColumnInfo)
 {
     // change widget type depending on field type
     if (d->widgetType_property == Auto) {
         WidgetType newWidgetType = Auto;
-        KexiDB::Field::Type fieldType;
+        KDbField::Type fieldType;
         if (cinfo)
             fieldType = visibleColumnInfo->field->type();
         else if (dataSource().isEmpty())
-            fieldType = KexiDB::Field::InvalidType;
+            fieldType = KDbField::InvalidType;
         else
-            fieldType = KexiDB::Field::Text;
+            fieldType = KDbField::Text;
 
-        if (fieldType != KexiDB::Field::InvalidType) {
+        if (fieldType != KDbField::InvalidType) {
             newWidgetType = KexiDBAutoField::widgetTypeForFieldType(fieldType);
         }
         if (d->widgetType != newWidgetType || newWidgetType == Auto) {
@@ -520,33 +517,33 @@ KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::Q
 
 //static
 KexiDBAutoField::WidgetType
-KexiDBAutoField::widgetTypeForFieldType(KexiDB::Field::Type type)
+KexiDBAutoField::widgetTypeForFieldType(KDbField::Type type)
 {
     switch (type) {
-    case KexiDB::Field::Integer:
-    case KexiDB::Field::ShortInteger:
-    case KexiDB::Field::BigInteger:
+    case KDbField::Integer:
+    case KDbField::ShortInteger:
+    case KDbField::BigInteger:
         return Integer;
-    case  KexiDB::Field::Boolean:
+    case  KDbField::Boolean:
         return Boolean;
-    case KexiDB::Field::Float:
-    case KexiDB::Field::Double:
+    case KDbField::Float:
+    case KDbField::Double:
         return Double;
-    case KexiDB::Field::Date:
+    case KDbField::Date:
         return Date;
-    case KexiDB::Field::DateTime:
+    case KDbField::DateTime:
         return DateTime;
-    case KexiDB::Field::Time:
+    case KDbField::Time:
         return Time;
-    case KexiDB::Field::Text:
+    case KDbField::Text:
         return Text;
-    case KexiDB::Field::LongText:
+    case KDbField::LongText:
         return MultiLineText;
-    case KexiDB::Field::Enum:
+    case KDbField::Enum:
         return ComboBox;
-    case KexiDB::Field::InvalidType:
+    case KDbField::InvalidType:
         return Auto;
-    case KexiDB::Field::BLOB:
+    case KDbField::BLOB:
         return Image;
     default:
         break;
@@ -656,7 +653,7 @@ KexiDBAutoField::setFocusPolicy(Qt::FocusPolicy policy)
 void
 KexiDBAutoField::updateInformationAboutUnboundField()
 {
-    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
+    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePluginId().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
         d->label->setText(futureI18nc2("Unbound Auto Field", "%1 (unbound)", objectName()));
     }
@@ -697,7 +694,7 @@ QColor KexiDBAutoField::paletteBackgroundColor() const
 
 void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 {
-    //kDebug();
+    //qDebug();
 //! @todo how about brush?
     d->baseBrush.setColor(color);
     copyPropertiesToEditor();
@@ -750,7 +747,7 @@ void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
 QVariant KexiDBAutoField::property(const char * name) const
 {
     bool ok;
-    QVariant val = KFormDesigner::WidgetWithSubpropertiesInterface::subproperty(name, ok);
+    QVariant val = KFormDesigner::WidgetWithSubpropertiesInterface::subproperty(name, &ok);
     if (ok)
         return val;
     return QWidget::property(name);
@@ -809,4 +806,3 @@ bool KexiDBAutoField::keyPressed(QKeyEvent *ke)
     return false;
 }
 
-#include "kexidbautofield.moc"

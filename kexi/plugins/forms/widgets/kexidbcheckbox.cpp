@@ -19,9 +19,9 @@
 */
 
 #include "kexidbcheckbox.h"
-
 #include <kexiutils/utils.h>
-#include <db/queryschema.h>
+
+#include <KDbQuerySchema>
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
         : QCheckBox(text, parent), KexiFormDataItemInterface()
@@ -185,4 +185,3 @@ void KexiDBCheckBox::paintEvent(QPaintEvent* e)
     }
 }
 
-#include "kexidbcheckbox.moc"

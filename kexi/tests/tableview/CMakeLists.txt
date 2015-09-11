@@ -1,16 +1,8 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi   )
-
-
-########### next target ###############
-
 set(kexitableviewtest_SRCS main.cpp )
-
 
 add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 
-target_link_libraries(kexitableviewtest Predicate kexiextendedwidgets)
+target_link_libraries(kexitableviewtest KDb kexiextendedwidgets)
 
 install(TARGETS kexitableviewtest  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

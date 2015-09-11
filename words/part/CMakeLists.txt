@@ -83,14 +83,11 @@ set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 )
 endif()
 
-if( SHOULD_BUILD_FEATURE_RDF )
-# TODO: depends hard on Soprano
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
     dockers/KWDebugDocker.cpp
     dockers/KWDebugDockerFactory.cpp
     dockers/KWDebugWidget.cpp
 )
-endif()
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -237,7 +234,7 @@ install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
+install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/author)
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

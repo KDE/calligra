@@ -152,5 +152,3 @@ void ShowColRow::slotOk()
 
     accept();
 }
-
-#include "ShowColRowDialog.moc"

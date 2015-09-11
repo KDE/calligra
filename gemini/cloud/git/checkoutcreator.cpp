@@ -132,9 +132,9 @@ CheckoutCreator::~CheckoutCreator()
 
 QString CheckoutCreator::getFile(QString caption, QString filter, QString extraSubDir) const
 {
-    KUrl searchDir;
+    QUrl searchDir;
     if(QDir::home().exists(extraSubDir))
-        searchDir = KUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
+        searchDir = QUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
     QString url = KFileDialog::getOpenFileName(searchDir, filter, 0, caption);
     return url;
 }
@@ -205,6 +205,3 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
 
     return checkoutLocation;
 }
-
-#include "checkoutcreator.moc"
-

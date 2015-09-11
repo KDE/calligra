@@ -22,10 +22,9 @@
 #include <kexiutils/SmallToolButton.h>
 #include <KexiView.h>
 
+#include <QDebug>
 #include <QLabel>
 #include <QBoxLayout>
-#include <khbox.h>
-#include <kdebug.h>
 #include <QEvent>
 #include <QApplication>
 
@@ -39,7 +38,8 @@ public:
     Qt::Orientation orientation;
     QLabel *lbl;
     QBoxLayout *lyr;
-    KHBox *lbl_b;
+    QWidget *lbl_b;
+    QHBoxLayout *lbl_bLyr;
 };
 
 //==========================
@@ -56,9 +56,12 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption,
     d->lyr->setContentsMargins(0, 0, 0, 0);
     d->lyr->setSpacing(0);
 
-    d->lbl_b = new KHBox(this);
+    d->lbl_b = new QWidget(this);
+    d->lbl_bLyr = new QHBoxLayout(d->lbl_b);
+    d->lbl_bLyr->setMargin(0);
     d->lyr->addWidget(d->lbl_b);
     d->lbl = new QLabel(caption, d->lbl_b);
+    d->lbl_bLyr->addWidget(d->lbl);
     d->lbl->setContentsMargins(6, 0, 0, 0);
     d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->lbl->setAutoFillBackground(true);
@@ -89,10 +92,11 @@ void KexiSectionHeader::setWidget(QWidget * widget)
     }
 }
 
-void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
+void KexiSectionHeader::addButton(const QIcon& icon, const QString& toolTip,
                                   const QObject * receiver, const char * member)
 {
     KexiSmallToolButton *btn = new KexiSmallToolButton(icon, QString(), d->lbl_b);
+    d->lbl_bLyr->addWidget(btn);
     if (receiver && member) {
         connect(btn, SIGNAL(clicked()), receiver, member);
     }
@@ -112,7 +116,7 @@ bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
 
 void KexiSectionHeader::slotFocus(bool in)
 {
-    kDebug() << in;
+    qDebug() << in;
     in = in || qApp->focusWidget() == this;
     QPalette pal(d->lbl->palette());
     pal.setBrush(QPalette::Window,
@@ -141,4 +145,3 @@ QString KexiSectionHeader::caption() const
     return d->lbl->text();
 }
 
-#include "kexisectionheader.moc"

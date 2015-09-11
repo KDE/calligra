@@ -531,5 +531,3 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
     m_scene->initialize(m_effects);
     fitScene();
 }
-
-#include "FilterEffectEditWidget.moc"

@@ -24,32 +24,20 @@
 #include <QApplication>
 #include <QPainter>
 #include <QVariant>
-#include <QRect>
-#include <QPalette>
-#include <QColor>
-#include <QFontMetrics>
-#include <QDateTime>
-#include <QCursor>
-#include <QPoint>
-#include <QLayout>
-#include <QToolButton>
 #include <QClipboard>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <klineedit.h>
+#include <QDebug>
+#include <QLineEdit>
 
 #include <kexiutils/utils.h>
 
-
-KexiDateTableEdit::KexiDateTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
+KexiDateTableEdit::KexiDateTableEdit(KDbTableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiDateTableEdit");
 
 //! @todo add QValidator so date like "2006-59-67" cannot be even entered
 
-    kDebug() << m_formatter.inputMask();
+    qDebug() << m_formatter.inputMask();
     m_lineedit->setInputMask(m_formatter.inputMask());
 }
 
@@ -87,7 +75,7 @@ void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
     Q_UNUSED(x);
     Q_UNUSED(w);
     Q_UNUSED(h);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;
@@ -128,7 +116,7 @@ bool KexiDateTableEdit::valueIsValid()
 
 bool KexiDateTableEdit::valueChanged()
 {
-    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    //qDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
@@ -158,4 +146,3 @@ void KexiDateTableEdit::handleAction(const QString& actionName)
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateEditorFactoryItem, KexiDateTableEdit)
 
-#include "kexidatetableedit.moc"

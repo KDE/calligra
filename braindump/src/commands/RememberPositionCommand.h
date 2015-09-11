@@ -24,6 +24,7 @@
 #include <QList>
 #include <QMap>
 #include <QRectF>
+
 #include <kundo2command.h>
 
 class KoShape;

@@ -19,11 +19,13 @@
 
 #include "KexiTester.h"
 
-#include <kdebug.h>
-#include <kglobal.h>
-
+#include <QDebug>
 #include <QMap>
 #include <QWidget>
+
+#ifndef COMPILING_TESTS
+# undef kexiTester
+#endif
 
 KexiTestObject::KexiTestObject(QObject *object, const QString &name)
  : m_object(object), m_name(name)
@@ -47,12 +49,15 @@ KexiTester::~KexiTester()
     delete d;
 }
 
-//static
-KexiTester* KexiTester::self()
+//! @internal
+class KexiTesterInternal : public KexiTester
 {
-    K_GLOBAL_STATIC(KexiTester, g_kexiTester)
-    return g_kexiTester;
-}
+public:
+    KexiTesterInternal() {}
+    Private* dPtr() { return d; }
+};
+
+Q_GLOBAL_STATIC(KexiTesterInternal, g_kexiTester)
 
 QObject *KexiTester::object(const QString &name) const
 {
@@ -65,10 +70,15 @@ QWidget *KexiTester::widget(const QString &name) const
     return qobject_cast<QWidget*>(o);
 }
 
+KexiTester& kexiTester()
+{
+    return *g_kexiTester;
+}
+
 KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object)
 {
     if (!object.m_object) {
-        kWarning() << "No object provided";
+        qWarning() << "No object provided";
         return tester;
     }
     QString realName = object.m_name;
@@ -76,11 +86,10 @@ KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject
         realName = object.m_object->objectName();
     }
     if (realName.isEmpty()) {
-        kWarning() << "No name for object provided, won't add";
+        qWarning() << "No name for object provided, won't add";
         return tester;
     }
-    KexiTester::self()->d->objects.insert(realName, object.m_object);
+    g_kexiTester->dPtr()->objects.insert(realName, object.m_object);
     return tester;
 }
 
-#include "KexiTester.moc"

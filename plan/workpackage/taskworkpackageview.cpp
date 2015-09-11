@@ -933,5 +933,3 @@ void TaskWPGanttView::saveContext()
 }
 
 } // namespace KPlatoWork
-
-#include "taskworkpackageview.moc"

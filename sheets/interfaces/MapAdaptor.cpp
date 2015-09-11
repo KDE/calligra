@@ -117,5 +117,3 @@ QString MapAdaptor::insertSheet(const QString& name)
 //     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 //     return true;
 // }
-
-#include "MapAdaptor.moc"

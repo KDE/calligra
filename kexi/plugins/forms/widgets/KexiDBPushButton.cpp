@@ -22,9 +22,10 @@
 #include "KexiDBPushButton.h"
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
-#include <db/connection.h>
-#include <KUrl>
-#include <QDebug>
+
+#include <KDbConnection>
+
+#include <QUrl>
 
 class KexiDBPushButtonPrivate
 {
@@ -38,7 +39,11 @@ KexiDBPushButton::KexiDBPushButton(const QString & text, QWidget * parent)
         : KexiPushButton(text, parent)
         , d(new KexiDBPushButtonPrivate)
 {
-    setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
+    QString basePath = Kexi::basePathForProject(
+        KexiMainWindowIface::global()->project()->dbConnection()->data());
+    if (!basePath.isEmpty()) {
+        setLocalBasePath(basePath);
+    }
 }
 
 KexiDBPushButton::~KexiDBPushButton()
@@ -54,10 +59,10 @@ void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         KexiPushButton::setHyperlink(KexiDataItemInterface::originalValue().toString());
     }
-    KUrl url(KexiDataItemInterface::originalValue().toString());
+    QUrl url(KexiDataItemInterface::originalValue().toString());
     QFontMetrics f(font());
     QString text;
-    QString path = url.pathOrUrl();
+    QString path = url.url(QUrl::PreferLocalFile);
     if (url.isLocalFile()){
         QString fileName = url.fileName();
         text = f.elidedText(path.left(path.size() - fileName.size()),
@@ -67,7 +72,7 @@ void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
 
     }
     setText(text);
-    setToolTip(url.pathOrUrl());
+    setToolTip(url.url(QUrl::PreferLocalFile));
 }
 
 QVariant KexiDBPushButton::value()
@@ -147,4 +152,3 @@ void KexiDBPushButton::setOnClickActionOption(const QString& option)
 {
      d->onClickActionData.option = option;
 }
-#include "KexiDBPushButton.moc"

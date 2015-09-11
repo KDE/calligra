@@ -58,5 +58,3 @@ Ui::KPrPresentationTool KPrPresentationToolWidget::presentationToolUi()
 {
     return m_uiWidget;
 }
-
-#include "KPrPresentationToolWidget.moc"

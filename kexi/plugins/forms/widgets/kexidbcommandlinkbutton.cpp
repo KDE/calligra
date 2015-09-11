@@ -22,9 +22,10 @@
 #include "kexidbcommandlinkbutton.h"
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
-#include <db/connection.h>
-#include <KUrl>
-#include <QDebug>
+
+#include <KDbConnection>
+
+#include <QUrl>
 
 class KexiDBCommandLinkButtonPrivate
 {
@@ -39,7 +40,11 @@ KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString &text,
         : KexiCommandLinkButton(text, description, parent)
         , d(new KexiDBCommandLinkButtonPrivate)
 {
-    setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
+    QString basePath = Kexi::basePathForProject(
+        KexiMainWindowIface::global()->project()->dbConnection()->data());
+    if (!basePath.isEmpty()) {
+        setLocalBasePath(basePath);
+    }
 }
 
 KexiDBCommandLinkButton::~KexiDBCommandLinkButton()
@@ -56,9 +61,9 @@ void KexiDBCommandLinkButton::setValueInternal(const QVariant& add, bool removeO
         KexiPushButton::setHyperlink(KexiDataItemInterface::originalValue().toString());
     }
 
-    KUrl url(KexiDataItemInterface::originalValue().toString());
-    setDescription(url.pathOrUrl());
-    setToolTip(url.pathOrUrl());
+    QUrl url(KexiDataItemInterface::originalValue().toString());
+    setDescription(url.url(QUrl::PreferLocalFile));
+    setToolTip(url.url(QUrl::PreferLocalFile));
 }
 
 QVariant KexiDBCommandLinkButton::value()
@@ -138,4 +143,3 @@ void KexiDBCommandLinkButton::setOnClickActionOption(const QString& option)
      d->onClickActionData.option = option;
 }
 
-#include "kexidbcommandlinkbutton.moc"

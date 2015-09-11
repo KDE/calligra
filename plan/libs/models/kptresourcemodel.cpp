@@ -1277,6 +1277,8 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
     emit executeCommand( m );
     return true;
 #else
+    Q_UNUSED(group);
+    Q_UNUSED(data);
     return false;
 #endif
 }
@@ -1724,5 +1726,3 @@ bool AllocatedResourceItemModel::filterAcceptsRow( int source_row, const QModelI
 }
 
 } // namespace KPlato
-
-#include "kptresourcemodel.moc"

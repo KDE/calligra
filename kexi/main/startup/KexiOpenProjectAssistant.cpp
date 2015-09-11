@@ -22,26 +22,25 @@
 #include "KexiStartup.h"
 #include "KexiPasswordPage.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/KexiLinkWidget.h>
-#include <db/utils.h>
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexi.h>
+#include <KexiIcon.h>
 
-#include <KoIcon.h>
+#include <KDbUtils>
+#include <KDbDriverManager>
 
-#include <KTabWidget>
-
+#include <QTabWidget>
 #include <QTimer>
 #include <QVBoxLayout>
 
 KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project"),
-                     i18nc("@info", "Select project to open. "
+ : KexiAssistantPage(xi18nc("@title:window", "Open Project"),
+                     xi18nc("@info", "Select project to open. "
                           "You can choose project stored in file or on database server."),
                      parent)
  , connSelector(0)
@@ -49,34 +48,34 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
 {
     setNextButtonVisible(true);
 
-    tabWidget = new KTabWidget;
+    tabWidget = new QTabWidget;
     tabWidget->setElideMode(Qt::ElideNone);
-    tabWidget->setAutomaticResizeTabs(true);
+    //! @todo KEXI3 tabWidget->setAutomaticResizeTabs(true);
     tabWidget->setDocumentMode(true);
 
     m_fileSelectorWidget = new QWidget;
     tabWidget->addTab(m_fileSelectorWidget, Kexi::defaultFileBasedDriverIcon(),
-                      i18nc("@title:tab", "Projects Stored in File"));
+                      xi18nc("@title:tab", "Projects Stored in File"));
     fileSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
+        &Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Opening);
+        KFileWidget::Opening);
     fileSelector->hide(); // delayed opening
     fileSelector->showSimpleConn();
     fileSelector->layout()->setContentsMargins(0, 0, 0, 0);
     fileSelector->hideHelpers();
     fileSelector->hideDescription();
     //connect(fileSelector->fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(fileSelector->fileWidget, SIGNAL(fileHighlighted()),
+    connect(fileSelector->fileWidget, SIGNAL(selectionChanged()),
             this, SLOT(next()));
-                      
+
     m_connSelectorWidget = new QWidget;
     tabWidget->addTab(m_connSelectorWidget, Kexi::serverIcon(),
-                      i18nc("@title:tab", "Projects Stored on Database Server"));
+                      xi18nc("@title:tab", "Projects Stored on Database Server"));
 
     setFocusWidget(tabWidget);
     setContents(tabWidget);
-    
+
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     // delayed opening:
     QTimer::singleShot(500, this, SLOT(init()));
@@ -86,7 +85,7 @@ void KexiMainOpenProjectPage::init()
 {
     // file-based:
     QVBoxLayout* fileSelectorLayout = new QVBoxLayout(m_fileSelectorWidget);
-    fileSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+    fileSelectorLayout->setContentsMargins(0, KexiUtils::marginHint() * 2, 0, 0);
     fileSelectorLayout->addWidget(fileSelector);
     fileSelector->show();
 }
@@ -102,20 +101,20 @@ void KexiMainOpenProjectPage::tabChanged(int index)
     }
 
     if (index == 1) {
-        if (KexiDB::hasDatabaseServerDrivers()) {
+        if (KDbDriverManager().hasDatabaseServerDrivers()) {
             if (!connSelector) {
                 // server-based:
-                connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+                connSelectorLayout->setContentsMargins(0, KexiUtils::marginHint() * 2, 0, 0);
                 QLabel* connSelectorLabel = new QLabel(
-                    i18nc("@info",
+                    xi18nc("@info",
                           "<para>Select database server's connection with project you wish to open.</para>"
                           "<para>Here you may also add, edit or remove connections from the list.</para>"));
                 connSelectorLayout->addWidget(connSelectorLabel);
-                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelectorLayout->addSpacing(KexiUtils::marginHint());
                 connSelector = new KexiConnectionSelectorWidget(
-                    Kexi::connset(),
+                    &Kexi::connset(),
                     "kfiledialog:///OpenExistingOrCreateNewProject",
-                    KAbstractFileWidget::Opening);
+                    KFileWidget::Opening);
                 connSelectorLayout->addWidget(connSelector);
 
                 connSelector->showAdvancedConn();
@@ -131,7 +130,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
                 setNextButtonVisible(false);
                 setDescription(QString());
                 m_errorMessagePopup = new KexiServerDriverNotFoundMessage(m_connSelectorWidget);
-                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelectorLayout->addSpacing(KexiUtils::marginHint());
                 connSelectorLayout->addWidget(m_errorMessagePopup);
                 connSelectorLayout->setAlignment(m_errorMessagePopup, Qt::AlignTop);
                 m_errorMessagePopup->setAutoDelete(false);
@@ -149,12 +148,13 @@ KexiMainOpenProjectPage::~KexiMainOpenProjectPage()
 
 KexiProjectDatabaseSelectionPage::KexiProjectDatabaseSelectionPage(
    KexiOpenProjectAssistant* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project on Database Server"), QString(), parent)
+ : KexiAssistantPage(xi18nc("@title:window", "Open Project on Database Server"), QString(), parent)
+ , conndataToShow(0)
  , m_assistant(parent)
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-    nextButton()->setLinkText(i18n("Open"));
+    nextButton()->setLinkText(xi18n("Open"));
 
     projectSelector = new KexiProjectSelectorWidget(
         this, 0,
@@ -173,27 +173,25 @@ KexiProjectDatabaseSelectionPage::~KexiProjectDatabaseSelectionPage()
 {
 }
 
-bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* data)
+bool KexiProjectDatabaseSelectionPage::setConnection(KDbConnectionData* data)
 {
-    if (conndataToShow != data) {
-        projectSelector->setProjectSet(0);
-        conndataToShow = 0;
-        if (data) {
-            m_projectSetToShow = new KexiProjectSet(data, m_assistant);
-            if (m_projectSetToShow->error()) {
-                delete m_projectSetToShow;
-                m_projectSetToShow = 0;
-                return false;
-            }
-            conndataToShow = data;
-            //-refresh projects list
-            projectSelector->setProjectSet(m_projectSetToShow);
+    projectSelector->setProjectSet(0);
+    conndataToShow = 0;
+    if (data) {
+        KexiProjectSet *projectSetToShow = new KexiProjectSet(m_assistant);
+        if (!projectSetToShow->setConnectionData(data)) {
+            //! @todo show error
+            delete projectSetToShow;
+            return false;
         }
+        conndataToShow = data;
+        //-refresh projects list
+        projectSelector->setProjectSet(projectSetToShow);
     }
     if (conndataToShow) {
         setDescription(
-            i18nc("@info", "Select project on database server <resource>%1 (%2)</resource> to open.",
-                  conndataToShow->caption, conndataToShow->serverInfoString(true)));
+            xi18nc("@info", "Select project on database server <resource>%1 (%2)</resource> to open.",
+                  conndataToShow->caption(), conndataToShow->toUserVisibleString()));
     }
     return true;
 }
@@ -207,11 +205,11 @@ public:
      : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
+
     KexiMainOpenProjectPage* projectOpenPage() {
         return page<KexiMainOpenProjectPage>(&m_projectOpenPage);
     }
@@ -264,10 +262,10 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
                 d->m_projectOpenPage->fileSelector->fileWidget->highlightedFile());
         }
         else { // server-based
-            KexiDB::ConnectionData *cdata
+            KDbConnectionData *cdata
                 = d->m_projectOpenPage->connSelector->selectedConnectionData();
             if (cdata) {
-                if (cdata->passwordNeeded()) {
+                if (cdata->isPasswordNeeded()) {
                     d->passwordPage()->setConnectionData(*cdata);
                     setCurrentPage(d->passwordPage());
                     return;
@@ -279,7 +277,7 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         }
     }
     else if (page == d->m_passwordPage) {
-        KexiDB::ConnectionData *cdata
+        KDbConnectionData *cdata
             = d->projectOpenPage()->connSelector->selectedConnectionData();
         d->passwordPage()->updateConnectionData(cdata);
         if (cdata && d->projectDatabaseSelectionPage()->setConnection(cdata)) {
@@ -321,5 +319,3 @@ QWidget* KexiOpenProjectAssistant::calloutWidget() const
 {
     return currentPage()->nextButton();
 }
-
-#include "KexiOpenProjectAssistant.moc"

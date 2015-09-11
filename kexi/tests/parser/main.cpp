@@ -2,22 +2,22 @@
 #include <string>
 
 #include <QFileInfo>
+#include <QDebug>
 
-#include <kdebug.h>
-#include <kcomponentdata.h>
+#include <KComponentData>
 
-#include <db/drivermanager.h>
-#include <db/driver.h>
-#include <db/connection.h>
-#include <db/cursor.h>
-#include <db/parser/parser.h>
+#include <KDbDriverManager>
+#include <KDbDriver>
+#include <KDbConnection>
+#include <KDbCursor>
+#include <KDbParser>
 
 using namespace std;
 QByteArray prgname;
 
 int main(int argc, char **argv)
 {
-    kDebug() << "main()";
+    qDebug() << "main()";
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
     KComponentData componentData(prgname);
@@ -27,42 +27,42 @@ int main(int argc, char **argv)
     QByteArray drv_name(argv[1]);
     QByteArray db_name = QString(argv[2]).toLower().toLatin1();
 
-    KexiDB::DriverManager manager;
+    KDbDriverManager manager;
     QStringList names = manager.driverNames();
-    kDebug() << "DRIVERS: ";
+    qDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-        kDebug() << *it;
-    if (manager.error()) {
-        kDebug() << manager.errorMsg();
+        qDebug() << *it;
+    if (manager.result().isError()) {
+        qDebug() << manager.result();
         return 1;
     }
 
     //get driver
-    KexiDB::Driver *driver = manager.driver(drv_name);
-    if (!driver || manager.error()) {
-        kDebug() << manager.errorMsg();
+    KDbDriver *driver = manager.driver(drv_name);
+    if (!driver || manager.result().isError()) {
+        qDebug() << manager.result();
         return 1;
     }
 
     //connection data that can be later reused
-    KexiDB::ConnectionData conn_data;
-    conn_data.setFileName(db_name);
+    KDbConnectionData conn_data;
+    conn_data.setDatabaseName(db_name);
 
-    KexiDB::Connection *conn = driver->createConnection(conn_data);
-    if (!conn || driver->error()) {
-        kDebug() << "error: " << driver->errorMsg();
+    KDbConnection *conn = driver->createConnection(conn_data);
+    if (!conn || driver->result().isError()) {
+        qDebug() << "error: " << driver->result();
         return 1;
     }
     if (!conn->connect()) {
-        kDebug() << "error: " << conn->errorMsg();
+        qDebug() << "error: " << conn->errorMsg();
         return 1;
     }
     if (!conn->useDatabase(db_name)) {
-        kDebug() << "error: " << conn->errorMsg();
+        qDebug() << "error: " << conn->errorMsg();
         return 1;
     }
 
-    KexiDB::Parser *parser = new KexiDB::Parser(conn);
+    KDbParser *parser = new KDbParser(conn);
 
     std::string cmd;
     while (cmd != "quit") {
@@ -70,27 +70,29 @@ int main(int argc, char **argv)
         getline(std::cin, cmd);
         parser->parse(cmd.c_str());
         switch (parser->operation()) {
-        case KexiDB::Parser::OP_Error:
-            kDebug() << "***********************";
-            kDebug() << "* error               *";
-            kDebug() << "***********************";
+        case KDbParser::OP_Error:
+            qDebug() << "***********************";
+            qDebug() << "* error               *";
+            qDebug() << "***********************";
             break;
-        case KexiDB::Parser::OP_CreateTable: {
-            kDebug() << "Schema of table: " << parser->table()->name();
-            parser->table()->debug();
+        case KDbParser::OP_CreateTable: {
+            if (parser->table()) {
+                qDebug() << "Schema of table: " << parser->table()->name();
+                qDebug() << *parser->table();
+            }
             break;
         }
-        case KexiDB::Parser::OP_Select: {
-            kDebug() << "Select statement: ";
-            KexiDB::QuerySchema *q = parser->query();
-            q->debug();
+        case KDbParser::OP_Select: {
+            qDebug() << "Select statement: ";
+            KDbQuerySchema *q = parser->query();
+            if (q) {
+                qDebug() << *q;
+            }
             delete q;
             break;
         }
         default:
-            kDebug() << "main(): not implemented in main.cpp";
-
-
+            qDebug() << "main(): not implemented in main.cpp";
         }
         parser->clear();
     }

@@ -19,13 +19,13 @@
 #ifndef TOUCHDECLARATIVEVIEW_H
 #define TOUCHDECLARATIVEVIEW_H
 
-#include <QDeclarativeView>
+#include <QtQuick/QQuickView>
 #include <QPointer>
 
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
  */
-class TouchDeclarativeView : public QDeclarativeView
+class TouchDeclarativeView : public QQuickView
 {
     Q_OBJECT
 
@@ -33,8 +33,8 @@ class TouchDeclarativeView : public QDeclarativeView
     Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
-    explicit TouchDeclarativeView(QWidget *parent = 0);
-    TouchDeclarativeView(const QUrl &url, QWidget *parent = 0);
+    explicit TouchDeclarativeView(QWindow *parent = 0);
+    TouchDeclarativeView(const QUrl &url, QWindow *parent = 0);
     virtual ~TouchDeclarativeView();
 
     QWidget* canvasWidget() const;
@@ -48,18 +48,17 @@ Q_SIGNALS:
     void drawCanvasChanged();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
-    virtual bool event(QEvent* event);
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+//     void resizeEvent(QResizeEvent *event);
+//     virtual bool event(QEvent* event);
+//     virtual bool eventFilter(QObject* watched, QEvent* e);
 
-    void drawBackground(QPainter *painter, const QRectF &rect);
+//     void drawBackground(QPainter *painter, const QRectF &rect);
+
 private:
-
     bool m_drawCanvas;
     QPointer<QWidget> m_canvasWidget;
     bool m_GLInitialized;
-    QGraphicsItem* m_sketchView;
     Q_SLOT void resetInitialized();
 };
 
-#endif // SKETCHDECLARATIVEVIEW_H
+#endif // TOUCHDECLARATIVEVIEW_H

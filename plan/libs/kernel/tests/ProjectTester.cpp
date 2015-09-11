@@ -27,7 +27,8 @@
 #include "kptschedule.h"
 
 
-#include <qtest_kde.h>
+#include <QDir>
+#include <QTest>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 
@@ -3167,6 +3168,4 @@ void ProjectTester::startStart()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
-
-#include "ProjectTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ProjectTester )

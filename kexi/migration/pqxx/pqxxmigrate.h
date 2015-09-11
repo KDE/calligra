@@ -23,9 +23,8 @@
 
 #include <migration/keximigrate.h>
 
-//Kexi Includes
-#include <db/field.h>
-#include <db/connection.h>
+#include <KDbField>
+#include <KDbConnection>
 
 #include <pqxx/pqxx>
 
@@ -47,14 +46,14 @@ protected:
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString& originalName, KDbTableSchema& tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber, QStringList& stringList,
+        const QString& sqlStatement, int columnNumber, QStringList& stringList,
         int numRecords = -1);
 
     /*! Fetches single record from result obtained
@@ -66,10 +65,10 @@ protected:
     \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord);
+                                            KDbRecordData *data, bool *firstRecord);
 
     virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+                               KDbConnection *destConn, KDbTableSchema* dstTable);
 
     //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName);
@@ -87,8 +86,8 @@ protected:
     virtual bool drv_moveLast();
 
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i);
-                               
+    virtual QVariant drv_value(int i);
+
 
 private:
     //! perform a query on the database
@@ -100,7 +99,7 @@ private:
     pqxx::oid tableOid(const QString& tablename);
 
     //! Convert the pqxx type to a kexi type
-    KexiDB::Field::Type type(int t, const QString& fname);
+    KDbField::Type type(int t, const QString& fname);
 
     //! Find out the field constraints
     //! Return whether or not the field is a pkey

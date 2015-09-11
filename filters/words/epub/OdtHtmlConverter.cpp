@@ -691,7 +691,8 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
                     nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
                     unknownNamespaces.insert(attrPair.first, nsShort);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
+                QString s = QString("xmlns:") + nsShort.toLatin1();
+                writer.addAttribute(s.toLatin1(), attrPair.first);
             }
             QString attr(nsShort + ':' + attrPair.second);
             writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,

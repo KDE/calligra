@@ -997,6 +997,3 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
         }
     }
 }
-
-
-#include "PlanTJScheduler.moc"

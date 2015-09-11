@@ -218,5 +218,3 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
     d->completionListBox->setFocus();
     d->completionPopup->show();
 }
-
-#include "FunctionCompletion.moc"

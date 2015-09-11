@@ -22,7 +22,8 @@
 
 #include <QAbstractListModel>
 
-#include <kcategorizedsortfilterproxymodel.h>
+#include <KCategorizedSortFilterProxyModel>
+
 #include <core/kexitemplateloader.h>
 
 class KexiTemplatesModel : public QAbstractListModel
@@ -30,8 +31,8 @@ class KexiTemplatesModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum AdditionalRoles {
-        NameRole = 0x9D419D49,
-        CategoryRole = 0xA2BEF158
+        NameRole = Qt::UserRole,
+        CategoryRole = Qt::UserRole + 1
     };
 
     explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
@@ -48,7 +49,7 @@ private:
     class Private;
     Private* const d;
 };
- 
+
 class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

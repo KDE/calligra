@@ -467,5 +467,3 @@ void FlatProxyModel::initiateMaps( const QModelIndex &sourceParent )
 
 
 } // namespace KPlato
-
-#include "kptflatproxymodel.moc"

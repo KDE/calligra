@@ -21,24 +21,22 @@
 #ifndef KEXI_CSVEXPORTWIZARD_H
 #define KEXI_CSVEXPORTWIZARD_H
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KAssistantDialog>
 
 #include "kexicsvexport.h"
-#include <kassistantdialog.h>
 
 class QCheckBox;
 class QGroupBox;
-class KPushButton;
+class QPushButton;
 class KexiFileWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiCharacterEncodingComboBox;
 class KPageWidgetItem;
-namespace KexiDB
-{
-class TableOrQuerySchema;
-}
+class KDbTableOrQuerySchema;
 
 /*! @short Kexi CSV export wizard
  Supports exporting to a file and to a clipboard. */
@@ -52,7 +50,7 @@ public:
 
     virtual ~KexiCSVExportWizard();
 
-    bool cancelled() const;
+    bool canceled() const;
 
 protected Q_SLOTS:
     virtual void next();
@@ -69,7 +67,7 @@ protected:
     //! \return default text quote depending on mode.
     QString defaultTextQuote() const;
 
-    //! Helper, works like KGlobal::config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
+    //! Helper, works like KSharedConfig::openConfig()->readBoolEntry(const char*, bool) but if mode is Clipboard,
     //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
@@ -78,7 +76,7 @@ protected:
     //! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
     QString readEntry(const char *key, const QString& defaultValue = QString());
 
-    //! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
+    //! Helper, works like KSharedConfig::openConfig()->writeEntry(const char*,bool) but if mode is Clipboard,
     //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
@@ -95,17 +93,17 @@ protected:
     QWidget* m_exportOptionsWidget;
     KPageWidgetItem *m_fileSavePage;
     KPageWidgetItem *m_exportOptionsPage;
-    KPushButton *m_showOptionsButton;
-    KPushButton *m_defaultsBtn;
+    QPushButton *m_showOptionsButton;
+    QPushButton *m_defaultsBtn;
     QGroupBox* m_exportOptionsSection;
     KexiCSVInfoLabel *m_infoLblFrom, *m_infoLblTo;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     KexiCSVTextQuoteComboBox* m_textQuote;
     KexiCharacterEncodingComboBox *m_characterEncodingCombo;
     QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
-    KexiDB::TableOrQuerySchema* m_tableOrQuery;
+    KDbTableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
-    bool m_cancelled;
+    bool m_canceled;
 };
 
 #endif

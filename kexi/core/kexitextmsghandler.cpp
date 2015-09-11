@@ -18,10 +18,12 @@
 */
 
 #include "kexitextmsghandler.h"
-
 #include "kexi.h"
-#include <db/utils.h>
 #include <kexiutils/utils.h>
+
+#include <KDbUtils>
+
+#include <KLocalizedString>
 
 class KexiTextMessageHandler::Private
 {
@@ -44,11 +46,12 @@ KexiTextMessageHandler::Private::~Private()
 
 }
 
-KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)
+KexiTextMessageHandler::KexiTextMessageHandler(QString *messageTarget, QString *detailsTarget)
         : KexiGUIMessageHandler(0)
-        ,d(new Private(&messageTarget, &detailsTarget))
+        ,d(new Private(messageTarget, detailsTarget))
 {
-
+    Q_ASSERT(messageTarget);
+    Q_ASSERT(detailsTarget);
 }
 
 KexiTextMessageHandler::~KexiTextMessageHandler()
@@ -56,26 +59,37 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
     delete d;
 }
 
-void KexiTextMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
+void KexiTextMessageHandler::showErrorMessage(const QString &title, const QString &details)
 {
-    showMessageInternal(KexiDB::MessageHandler::Error, title, details);
+    if (!messagesEnabled()) {
+        return;
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showErrorMessage(title, details);
+        return;
+    }
+    showMessage(KDbMessageHandler::Error, title, details);
 }
 
-void KexiTextMessageHandler::showMessageInternal(MessageType type,
-                                                 const QString &title, const QString &details,
-                                                 const QString& dontShowAgainName)
+void KexiTextMessageHandler::showMessage(MessageType type,
+                                         const QString &title, const QString &details,
+                                         const QString& dontShowAgainName)
 {
     Q_UNUSED(type);
     Q_UNUSED(dontShowAgainName);
-    if (!m_enableMessages)
+    if (!messagesEnabled()) {
         return;
-
+    }
+    if (guiRedirection()) {
+        guiRedirection()->showMessage(type, title, details, dontShowAgainName);
+        return;
+    }
     //'wait' cursor is a nonsense now
     KexiUtils::removeWaitCursor();
 
     QString msg(title);
     if (title.isEmpty())
-        msg = i18n("Unknown error");
+        msg = xi18n("Unknown error");
     msg = "<qt><p>" + msg + "</p>";
     *d->messageTarget = msg;
     *d->detailsTarget = details;

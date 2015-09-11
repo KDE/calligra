@@ -21,11 +21,13 @@
 #ifndef KEXIPROJECTMODELITEM_H
 #define KEXIPROJECTMODELITEM_H
 
+#include "kexiextwidgets_export.h"
+#include <core/kexipartitem.h>
+#include <kexi.h>
+
 #include <QVariant>
 #include <QString>
 #include <QIcon>
-#include <core/kexipartitem.h>
-#include <kexi.h>
 
 namespace KexiPart
 {
@@ -42,10 +44,10 @@ public:
     explicit KexiProjectModelItem(const QString& n, KexiProjectModelItem *parent = 0);
 
     //! Creates group item for part \a i
-    explicit KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *parent = 0);
+    explicit KexiProjectModelItem(KexiPart::Info *i, KexiProjectModelItem *parent = 0);
 
     //! Creates item for object \a item defined by part \a i for \a parent
-    KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *parent = 0);
+    KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *item, KexiProjectModelItem *parent = 0);
 
     virtual ~KexiProjectModelItem();
 

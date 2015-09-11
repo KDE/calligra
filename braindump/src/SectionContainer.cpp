@@ -33,11 +33,11 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoShapeLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
 #include "Layout.h"
-#include <KoDocumentResourceManager.h>
 #include "RootSection.h"
 #include "ViewManager.h"
 

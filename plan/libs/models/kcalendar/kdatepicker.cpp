@@ -43,13 +43,10 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>
-#include <kdeversion.h>
 #include <kglobalsettings.h>
 
 #include <KoIcon.h>
 #include "kptdebug.h"
-
-#include "kdatepicker.moc"
 
 namespace KPlato
 {
@@ -117,11 +114,7 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
 
   for (; day <= lastDay ; day = calendar->addDays(day, 7 /*calendar->daysOfWeek()*/) )
   {
-#if KDE_IS_VERSION(4,7,0)
     const int weekNumber = calendar->week(day, &year);
-#else
-    const int weekNumber = calendar->weekNumber(day, &year);
-#endif
     QString week = i18n("Week %1", weekNumber);
     if ( year != calendar->year(day) ) week += '*';  // show that this is a week from a different year
     d->selectWeek->addItem(week);
@@ -129,11 +122,7 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
     // make sure that the week of the lastDay is always inserted: in Chinese calendar
     // system, this is not always the case
     if(day < lastDay && day.daysTo(lastDay) < 7 &&
-#if KDE_IS_VERSION(4,7,0)
         calendar->week(day) != calendar->week(lastDay))
-#else
-        calendar->weekNumber(day) != calendar->weekNumber(lastDay))
-#endif
       day = lastDay.addDays(-7);
   }
 }

@@ -60,5 +60,3 @@ void BlurEffectConfigWidget::stdDeviationChanged(double stdDeviation)
     m_effect->setDeviation(QPointF(newDev, newDev));
     emit filterChanged();
 }
-
-#include "BlurEffectConfigWidget.moc"

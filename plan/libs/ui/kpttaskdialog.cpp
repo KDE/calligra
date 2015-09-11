@@ -225,5 +225,3 @@ MacroCommand *SubTaskAddDialog::buildCommand()
 }
 
 }  //KPlato namespace
-
-#include "kpttaskdialog.moc"

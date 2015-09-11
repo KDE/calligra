@@ -1070,5 +1070,3 @@ QList<Resource*> ResourceAllocationItemModel::required( const QModelIndex &idx )
 }
 
 } // namespace KPlato
-
-#include "kptresourceallocationmodel.moc"

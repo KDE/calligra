@@ -20,17 +20,16 @@
 #ifndef KEXICELLEDITORFACTORY_H
 #define KEXICELLEDITORFACTORY_H
 
-#include <QVariant>
+#include "kexidatatable_export.h"
+#include <kexi_global.h>
+
+#include <KDbField>
+
 #include <QWidget>
 
-#include <kexi_global.h>
-#include <db/field.h>
-
+class KDbTableViewColumn;
 class KexiCellEditorFactoryItem;
 class KexiTableEdit;
-namespace KexiDB {
-class TableViewColumn;
-}
 
 //! A singleton class providing access to cell editor factories
 class KEXIDATATABLE_EXPORT KexiCellEditorFactory
@@ -40,23 +39,23 @@ public:
     virtual ~KexiCellEditorFactory();
 
     /*! Registers factory item for \a type and (optional) \a subType.
-     \a subType is usually obtained (e.g. in KexiTableView) from KexiDB::Field::subType().
-     Passing KexiDB::Field::Invalid as type will set default item,
+     \a subType is usually obtained (e.g. in KexiTableView) from KDbField::subType().
+     Passing KDbField::Invalid as type will set default item,
      i.e. the one that will be used when no other item is defined for given data type.
      You can register the same \a item many times for different types and subtypes.
      Once registered, \a item object will be owned by the factory, so you shouldn't
      care about deleting it. */
-    static void registerItem(KexiCellEditorFactoryItem& item, uint type,
+    static void registerItem(KexiCellEditorFactoryItem& item, int type,
                              const QString& subType = QString());
 
     /*! \return item for \a type and (optional) \a subType.
      If no item found, the one with empty subtype is tried.
      If still no item found, the default is tried. Eventually, may return NULL. */
-    static KexiCellEditorFactoryItem* item(uint type, const QString& subType = QString());
+    static KexiCellEditorFactoryItem* item(int type, const QString& subType = QString());
 
     /*! Creates a new editor for \a column. If \a parent is of QScrollArea, the new editor
      will be created inside parent->viewport() instead. */
-    static KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0);
+    static KexiTableEdit* createEditor(KDbTableViewColumn &column, QWidget* parent = 0);
 
 protected:
     static void init();
@@ -73,7 +72,7 @@ public:
     }
 
 protected:
-    virtual KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0) = 0;
+    virtual KexiTableEdit* createEditor(KDbTableViewColumn &column, QWidget* parent = 0) = 0;
 
     QString m_className;
     friend class KexiCellEditorFactory;

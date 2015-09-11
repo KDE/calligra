@@ -773,5 +773,3 @@ QList<QAction*> ScheduleHandlerView::actionList( const QString &name ) const
 }
 
 } // namespace KPlato
-
-#include "kptscheduleeditor.moc"

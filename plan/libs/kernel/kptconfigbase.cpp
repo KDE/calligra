@@ -170,5 +170,3 @@ QBrush ConfigBase::gradientBrush( const QColor &c )
 }
 
 }  //KPlato namespace
-
-#include "kptconfigbase.moc"

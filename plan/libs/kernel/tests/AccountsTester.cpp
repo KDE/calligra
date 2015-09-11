@@ -25,7 +25,7 @@
 #include "kpttask.h"
 
 #include "debug.cpp"
-#include <qtest_kde.h>
+#include <QTest>
 
 namespace KPlato
 {
@@ -576,6 +576,4 @@ void AccountsTester::subaccounts()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::AccountsTester )
-
-#include "AccountsTester.moc"
+QTEST_GUILESS_MAIN( KPlato::AccountsTester )

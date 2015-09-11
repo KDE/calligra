@@ -22,8 +22,7 @@
 #ifndef KEXI_MIGRATE_DATA_H
 #define KEXI_MIGRATE_DATA_H
 
-#include <db/connection.h>
-#include <kexidb/kexidb_export.h>
+#include <KDbConnection>
 
 class KexiProjectData;
 
@@ -39,7 +38,7 @@ public:
     ~Data();
 
     //! Connection data for the source database
-    KexiDB::ConnectionData* source;
+    KDbConnectionData* source;
 
     //! Name of the source database
     QString sourceName;

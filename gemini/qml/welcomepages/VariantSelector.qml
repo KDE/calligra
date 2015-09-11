@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.calligra 1.0
 import "../components"
 
@@ -25,6 +25,7 @@ Item {
     property alias model: variantView.model;
     property string selectorType: "stage";
     anchors.fill: parent;
+    enabled: (visible && opacity > 0.0);
     opacity: 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     MouseArea { anchors.fill: parent; onClicked: {} }

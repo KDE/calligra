@@ -108,5 +108,3 @@ void SpecialPasteDialog::slotToggled(bool b)
     multiplicationButton->setEnabled(!b);
     divisionButton->setEnabled(!b);
 }
-
-#include "SpecialPasteDialog.moc"

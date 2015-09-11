@@ -20,7 +20,7 @@
 #ifndef KPlato_WorkInfoCacheTester_h
 #define KPlato_WorkInfoCacheTester_h
 
-#include <QtTest>
+#include <QObject>
 
 namespace KPlato
 {

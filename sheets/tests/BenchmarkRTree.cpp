@@ -18,12 +18,12 @@
 */
 #include "BenchmarkRTree.h"
 
-#include <QtTest>
-
 #include <kdebug.h>
 
 // #include "rtree.h"
 #include "RTree.h"
+
+#include <QTest>
 
 using namespace std;
 using namespace Calligra::Sheets;
@@ -113,6 +113,3 @@ void RTreeBenchmark::testLookupPerformance()
 }
 
 QTEST_MAIN(RTreeBenchmark)
-
-#include "BenchmarkRTree.moc"
-

@@ -21,10 +21,9 @@
 #define _STATE_H_
 
 #include <QString>
+#include <QSvgRenderer>
 
 #include "braindumpcore_export.h"
-
-class QSvgRenderer;
 
 class StateCategory;
 

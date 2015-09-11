@@ -1176,5 +1176,3 @@ Project::checkSchedule(int sc) const
 // }
 
 } // namespace TJ
-
-#include "Project.moc"

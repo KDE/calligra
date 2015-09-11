@@ -43,5 +43,3 @@ WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks,  Schedu
 
 
 }  //KPlato namespace
-
-#include "kptworkpackagesenddialog.moc"

@@ -20,7 +20,7 @@
 #ifndef KEXIDATAAWAREVIEW_H
 #define KEXIDATAAWAREVIEW_H
 
-#include <kexi_export.h>
+#include "kexidataviewcommon_export.h"
 #include <KexiView.h>
 #include <core/kexisearchandreplaceiface.h>
 
@@ -74,41 +74,41 @@ public:
                                         const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
 public Q_SLOTS:
-    void deleteAllRows();
-    void deleteCurrentRow();
+    void deleteAllRecords();
+    void deleteCurrentRecord();
     void deleteAndStartEditCurrentCell();
     void startEditOrToggleValue();
-    bool acceptRowEdit();
-    bool cancelRowEdit();
+    bool acceptRecordEditing();
+    bool cancelRecordEditing();
     void sortAscending();
     void sortDescending();
     void copySelection();
     void cutSelection();
     void paste();
-    void slotGoToFirstRow();
-    void slotGoToPreviusRow();
-    void slotGoToNextRow();
-    void slotGoToLastRow();
-    void slotGoToNewRow();
+    void slotGoToFirstRecord();
+    void slotGoToPreviusRecord();
+    void slotGoToNextRecord();
+    void slotGoToLastRecord();
+    void slotGoToNewRecord();
 
     /*! @return true if data editing is in progress.
      * Implemented for KexiView. */
     bool isDataEditingInProgress() const;
 
-    /*! Identical to acceptRowEdit()
-     * @todo replace acceptRowEdit() with this method
+    /*! Identical to acceptRecordEditing()
+     * @todo replace acceptRecordEditing() with this method
      * Implemented for KexiView. */
     virtual tristate saveDataChanges();
 
-    /*! Identical to cancelRowEdit()
-     * @todo replace cancelRowEdit() with this method
+    /*! Identical to cancelRecordEditing()
+     * @todo replace cancelRecordEditing() with this method
      * Implemented for KexiView. */
     virtual tristate cancelDataChanges();
 
 protected Q_SLOTS:
-    void slotCellSelected(int row, int col);
+    void slotCellSelected(int record, int column);
     void reloadActions();
-    void slotUpdateRowActions(int row);
+    void slotUpdateRecordActions(int record);
     //! Updates 'save/cancel record changes' actions
     void slotUpdateSaveCancelActions();
     void slotClosing(bool* cancel);

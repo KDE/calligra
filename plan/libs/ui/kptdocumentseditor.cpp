@@ -300,5 +300,3 @@ void DocumentsEditor::saveContext( QDomElement &context ) const
 
 
 } // namespace KPlato
-
-#include "kptdocumentseditor.moc"

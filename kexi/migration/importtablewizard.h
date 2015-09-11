@@ -20,21 +20,18 @@
 #ifndef IMPORTTABLEWIZARD_H
 #define IMPORTTABLEWIZARD_H
 
-#include <kassistantdialog.h>
-#include <kexidb/kexidb_export.h>
+#include <KAssistantDialog>
+
 #include <QPointer>
 
-class KexiConnectionSelectorWidget;
 class QListWidget;
 class QLabel;
 class QProgressBar;
 class QCheckBox;
+class KDbConnection;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
-
-namespace KexiDB {
-    class Connection;
-}
 
 namespace Kexi {
     class ObjectStatus;
@@ -50,7 +47,7 @@ class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog
 {
 Q_OBJECT
     public:
-        explicit ImportTableWizard(KexiDB::Connection* curDB, QWidget* parent = 0, QMap<QString, QString>* args = 0, Qt::WFlags flags = 0);
+        explicit ImportTableWizard(KDbConnection* curDB, QWidget* parent = 0, QMap<QString, QString>* args = 0, Qt::WFlags flags = 0);
         virtual ~ImportTableWizard( );
 
         virtual void back();
@@ -63,7 +60,7 @@ Q_OBJECT
 
     private:
 
-        KexiDB::Connection* m_connection;
+        KDbConnection* m_connection;
         KexiConnectionSelectorWidget *m_srcConnSel;
         KexiMigration::MigrateManager *m_migrateManager;
         QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
@@ -81,7 +78,7 @@ Q_OBJECT
         QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_progressLbl, *m_rowsImportedLbl, *m_finishLbl;
         QProgressBar *m_importingProgressBar;
         QCheckBox *m_finishCheckBox;
-        KPushButton* m_importOptionsButton;
+        QPushButton* m_importOptionsButton;
         bool m_importComplete;
         bool m_importWasCanceled;
         unsigned m_rowCount;

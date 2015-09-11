@@ -66,4 +66,11 @@ void FlowView::updateGui()
     selectionChanged();
 }
 
+void FlowView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
+{
+    if (page == activePage() ) {
+        viewMode()->updateActivePage(newActivePage);
+    }
+}
+
 #include "FlowView.moc"

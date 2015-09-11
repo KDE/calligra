@@ -19,6 +19,8 @@
 #include "DurationTester.h"
 #include <kptduration.h>
 
+#include <QTest>
+
 namespace KPlato
 {
 
@@ -85,6 +87,4 @@ void DurationTester::lessThan() {
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::DurationTester )
-
-#include "DurationTester.moc"
+QTEST_GUILESS_MAIN( KPlato::DurationTester )

@@ -1,4 +1,4 @@
-include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi   )
+include_directories( ${PostgreSQL_INCLUDE_DIRS} ${PQXX_INCLUDE_DIR})
 
 kde_enable_exceptions()
 
@@ -18,12 +18,7 @@ target_link_libraries(
     keximigrate
     kexiutils
 
-    Predicate
+    KDb
 )
 
-install(TARGETS keximigrate_pqxx  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  keximigrate_pqxx.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS keximigrate_pqxx  DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})

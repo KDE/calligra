@@ -26,12 +26,12 @@
 #include <QDir>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 #include <krecentfilesaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>
-#include <kurl.h>
 
 #include <boost/config/posix_features.hpp>
 #include <KConfigGroup>
@@ -128,7 +128,7 @@ void DesktopViewProxy::fileOpen()
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if (filename.isEmpty()) return;
 
     DocumentManager::instance()->recentFileManager()->addRecent(filename);
@@ -181,5 +181,3 @@ void DesktopViewProxy::slotFileOpenRecent(const QUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }
-
-#include "desktopviewproxy.moc"

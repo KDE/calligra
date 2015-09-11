@@ -24,6 +24,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QTextDocument>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <calligraversion.h>
 
@@ -39,9 +41,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTextLayoutRootArea.h>
 
-#include <kglobal.h>
-#include <kaboutdata.h>
-#include <kmimetype.h>
+#include <KAboutData>
 
 #include <okular/core/page.h>
 
@@ -98,7 +98,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     KComponentData cd("OkularOdtGenerator", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
 
-    const QString mimetype = KMimeType::findByPath(fileName)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
@@ -110,8 +110,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     }
 
     m_doc = static_cast<KWDocument*>(part->document());
-    KUrl url;
-    url.setPath(fileName);
+    const QUrl url = QUrl::fromLocalFile(fileName);
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // show error dialogs
     if (!m_doc->openUrl(url)) {
@@ -148,14 +147,14 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
 
@@ -253,29 +252,17 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
-// API change
-#if OKULAR_IS_VERSION(0, 16, 60)
     request->page()->setPixmap( request->observer(), pix );
-#else
-    request->page()->setPixmap( request->id(), pix );
-#endif
 
     signalPixmapRequestDone( request );
 }
 
-#if OKULAR_IS_VERSION(0, 20, 60)
 Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
-#else
-const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
-{
-    return &m_documentInfo;
-}
-#endif
 
 const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {

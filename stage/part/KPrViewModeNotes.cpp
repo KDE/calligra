@@ -171,7 +171,7 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     }
     KPrNotes *notes = prPage->pageNotes();
     notes->updatePageThumbnail();
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(notes->shapes().last());
+    KoShapeLayer* layer = static_cast<KoShapeLayer*>(notes->shapes().last());
 
     m_canvas->shapeManager()->setShapes(layer->shapes());
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());

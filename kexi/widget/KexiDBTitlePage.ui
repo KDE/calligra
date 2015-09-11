@@ -43,7 +43,7 @@
          <height>0</height>
         </size>
        </property>
-       <property name="showClearButton" stdset="0">
+       <property name="clearButtonEnabled" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -133,13 +133,13 @@
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <extends>QWidget</extends>
+   <header location="global">KUrlRequester</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header location="global">KLineEdit</header>
   </customwidget>
  </customwidgets>
  <resources/>

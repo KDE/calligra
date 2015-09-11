@@ -1,30 +1,30 @@
-#include <kdebug.h>
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
+#include <QDebug>
+#include <QApplication>
 
-#include <db/connection.h>
-#include <db/drivermanager.h>
-#include <db/cursor.h>
+#include <KAboutData>
+
+#include <KDbConnection>
+#include <KDbDriverManager>
+#include <KDbCursor>
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("kexicrash", 0, ki18n("kexicrash"), "0.1");
+    KAboutData aboutData("kexicrash", 0, kxi18n("kexicrash"), "0.1");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
-    KexiDB::DriverManager manager;
-    KexiDB::Driver* driver = manager.driver("sqlite3");
-    KexiDB::ConnectionData cd;
+    KDbDriverManager manager;
+    KDbDriver* driver = manager.driver("sqlite3");
+    KDbConnectionData cd;
 
     QString fname("d.kexi");
     cd.setFileName(fname);
 
-    KexiDB::Connection *connection = driver->createConnection(cd);
+    KDbConnection *connection = driver->createConnection(cd);
     connection->connect();
     connection->useDatabase(fname);
 
-    KexiDB::Cursor *cursor = connection->executeQuery("select * from abc", KexiDB::Cursor::Buffered);
+    KDbCursor *cursor = connection->executeQuery("select * from abc", KDbCursor::Buffered);
     //cursor->moveFirst();
     if (cursor) {
         cursor->moveNext();

@@ -18,23 +18,23 @@
 */
 
 #include "kexifinddialog.h"
+#include <kexiutils/utils.h>
 
-#include <kstandardguiitem.h>
-#include <kstandardaction.h>
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kdialog.h>
-#include <kaction.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
+#include <KStandardGuiItem>
+#include <KStandardAction>
+#include <KComboBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
 
+#include <QDebug>
+#include <QDialog>
 #include <QCheckBox>
-#include <QLabel>
 #include <QLayout>
 #include <QList>
 #include <QShortcut>
 #include <QPointer>
+#include <QAction>
 
 #include <kexi_global.h>
 
@@ -43,7 +43,7 @@ class KexiFindDialog::Private
 {
 public:
     Private() :
-        confGroup(KGlobal::config()->group("FindDialog"))
+        confGroup(KSharedConfig::openConfig()->group("FindDialog"))
     {
     }
     ~Private() {
@@ -53,24 +53,16 @@ public:
     //! Connects action \a action with appropriate signal \a member
     //! and optionally adds shortcut that will receive shortcut for \a action
     //! at global scope of the dialog \a parent.
-    void setActionAndShortcut(KAction *action, QWidget* parent, const char* member) {
-#ifdef __GNUC__
-#warning not tested: setActionAndShortcut::setActionAndShortcut()
-#else
-#pragma WARNING( not tested: setActionAndShortcut::setActionAndShortcut() )
-#endif
+    void setActionAndShortcut(QAction *action, QWidget* parent, const char* member) {
+//! @todo KEXI3 not tested: setActionAndShortcut::setActionAndShortcut()
         if (!action)
             return;
         QObject::connect(parent, member, action, SLOT(trigger()));
         if (action->shortcut().isEmpty())
             return;
         // we want to handle dialog-wide shortcut as well
-        if (!action->shortcut().primary().isEmpty()) {
-            QShortcut *shortcut = new QShortcut(action->shortcut().primary(), parent, member);
-            shortcuts.append(shortcut);
-        }
-        if (!action->shortcut().alternate().isEmpty()) {
-            QShortcut *shortcut = new QShortcut(action->shortcut().alternate(), parent, member);
+        if (!action->shortcut().isEmpty()) {
+            QShortcut *shortcut = new QShortcut(action->shortcut(), parent, member);
             shortcuts.append(shortcut);
         }
     }
@@ -78,10 +70,10 @@ public:
     QStringList lookInColumnNames;
     QStringList lookInColumnCaptions;
     QString objectName; //!< for caption
-    QPointer<KAction> findnextAction;
-    QPointer<KAction> findprevAction;
-    QPointer<KAction> replaceAction;
-    QPointer<KAction> replaceallAction;
+    QPointer<QAction> findnextAction;
+    QPointer<QAction> findprevAction;
+    QPointer<QAction> replaceAction;
+    QPointer<QAction> replaceallAction;
     QList<QShortcut*> shortcuts;
     KConfigGroup confGroup;
     bool replaceMode;
@@ -98,9 +90,9 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     setupUi(this);
     m_search->setCurrentIndex(
         (int)KexiSearchAndReplaceViewInterface::Options::SearchDown);
-    layout()->setMargin(KDialog::marginHint());
-    layout()->setSpacing(KDialog::spacingHint());
-    KAction *a = KStandardAction::findNext(0, 0, 0);
+    layout()->setMargin(KexiUtils::marginHint());
+    layout()->setSpacing(KexiUtils::spacingHint());
+    QAction *a = KStandardAction::findNext(0, 0, 0);
     m_btnFind->setText(a->text());
     m_btnFind->setIcon(a->icon());
     delete a;
@@ -136,8 +128,8 @@ KexiFindDialog::~KexiFindDialog()
     delete d;
 }
 
-void KexiFindDialog::setActions(KAction *findnext, KAction *findprev,
-                                KAction *replace, KAction *replaceall)
+void KexiFindDialog::setActions(QAction *findnext, QAction *findprev,
+                                QAction *replace, QAction *replaceall)
 {
     d->findnextAction = findnext;
     d->findprevAction = findprev;
@@ -186,8 +178,8 @@ void KexiFindDialog::setLookInColumnList(const QStringList& columnNames,
     d->lookInColumnNames = columnNames;
     d->lookInColumnCaptions = columnCaptions;
     m_lookIn->clear();
-    m_lookIn->addItem(i18n("(All fields)"));
-    m_lookIn->addItem(i18n("(Current field)"));
+    m_lookIn->addItem(xi18n("(All fields)"));
+    m_lookIn->addItem(xi18n("(Current field)"));
     m_lookIn->addItems(d->lookInColumnCaptions);
 }
 
@@ -201,7 +193,7 @@ void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
     else {
         index = d->lookInColumnNames.indexOf(columnName);
         if (index == -1) {
-            kWarning() << QString(
+            qWarning() << QString(
                 "KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
             .arg(columnName);
             return;
@@ -239,14 +231,14 @@ void KexiFindDialog::setObjectNameForCaption(const QString& name)
     d->objectName = name;
     if (d->replaceMode) {
         if (name.isEmpty())
-            setWindowTitle(i18nc("@title:window", "Replace"));
+            setWindowTitle(xi18nc("@title:window", "Replace"));
         else
-            setWindowTitle(i18nc("@title:window", "Replace in <resource>%1</resource>", name));
+            setWindowTitle(xi18nc("@title:window", "Replace in <resource>%1</resource>", name));
     } else {
         if (name.isEmpty())
-            setWindowTitle(i18nc("@title:window", "Find"));
+            setWindowTitle(xi18nc("@title:window", "Find"));
         else
-            setWindowTitle(i18nc("@title:window", "Find in <resource>%1</resource>", name));
+            setWindowTitle(xi18nc("@title:window", "Find in <resource>%1</resource>", name));
     }
 }
 
@@ -269,7 +261,7 @@ void KexiFindDialog::updateMessage(bool found)
     if (found)
         setMessage(QString());
     else
-        setMessage(i18n("The search item was not found"));
+        setMessage(xi18n("The search item was not found"));
 }
 
 void KexiFindDialog::addToFindHistory()
@@ -313,4 +305,3 @@ KexiSearchAndReplaceViewInterface::Options KexiFindDialog::options() const
     return options;
 }
 
-#include "kexifinddialog.moc"

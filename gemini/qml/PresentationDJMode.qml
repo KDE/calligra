@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import "components"
 import org.calligra 1.0
-import org.calligra.CalligraComponents 0.1
+import org.kde.calligra 1.0 as Calligra
 
 Rectangle {
     id: base;
@@ -55,11 +55,21 @@ Rectangle {
             anchors.fill: parent;
             opacity: 0.6;
         }
-        Thumbnail {
+        Calligra.ImageDataItem {
+//             id: thumbnail;
             anchors.fill: parent;
-            content: presentationModel.thumbnail(currentSlide);
+//             anchors.horizontalCenter: parent.horizontalCenter;
+
+//             width: parent.ListView.view.thumbnailWidth;
+//             height: parent.ListView.view.thumbnailHeight;
+
+            data: presentationModel.thumbnail(currentSlide);
             visible: fakePieChart.opacity === 0 && fakePieChartTapped.opacity === 0;
         }
+//         Thumbnail {
+//             anchors.fill: parent;
+//             content: presentationModel.thumbnail(currentSlide);
+//         }
         Image {
             id: fakePieChart;
             opacity: 0;
@@ -135,10 +145,21 @@ Rectangle {
             anchors.fill: parent;
             opacity: 0.6;
         }
-        Thumbnail {
+        Calligra.ImageDataItem {
+//             id: thumbnail;
             anchors.fill: parent;
-            content: presentationModel.thumbnail(currentSlide + 1);
+//             anchors.horizontalCenter: parent.horizontalCenter;
+
+//             width: parent.ListView.view.thumbnailWidth;
+//             height: parent.ListView.view.thumbnailHeight;
+
+            data: presentationModel.thumbnail(currentSlide + 1);
+//             visible: fakePieChart.opacity === 0 && fakePieChartTapped.opacity === 0;
         }
+//         Thumbnail {
+//             anchors.fill: parent;
+//             content: presentationModel.thumbnail(currentSlide + 1);
+//         }
         MouseArea {
             anchors.fill: parent;
             onClicked: {

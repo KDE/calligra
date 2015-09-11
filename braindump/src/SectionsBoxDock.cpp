@@ -19,9 +19,9 @@
 
 #include "SectionsBoxDock.h"
 
-#include <KoIcon.h>
-
 #include <kmenu.h>
+
+#include <KoIcon.h>
 
 #include "DocumentModel.h"
 #include "Section.h"

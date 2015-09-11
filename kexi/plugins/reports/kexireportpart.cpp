@@ -1,7 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,17 +20,16 @@
 
 #include "kexireportpart.h"
 
-#include <QLabel>
+#include <QTabWidget>
+#include <QDebug>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <KoIcon.h>
+#include <KLocalizedString>
+
+#include <KexiIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-#include <ktabwidget.h>
-
 #include "kexisourceselector.h"
 
 //! @internal
@@ -50,12 +49,12 @@ public:
 
 KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
   : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        xi18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
               "Use '_' character instead of spaces. First character should be a..z character. "
               "If you cannot use latin characters in your language, use english word.",
               "report"),
-        i18nc("tooltip", "Create new report"),
-        i18nc("what's this", "Creates new report."),
+        xi18nc("tooltip", "Create new report"),
+        xi18nc("what's this", "Creates new report."),
         l)
   , d(new Private)
 {
@@ -72,16 +71,17 @@ KLocalizedString KexiReportPart::i18nMessage(
 {
     Q_UNUSED(window);
     if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
-        return ki18n(I18N_NOOP("Design of report <resource>%1</resource> has been modified."));
+        return kxi18nc(I18NC_NOOP("@info", "Design of report <resource>%1</resource> has been modified."));
     if (englishMessage == "Object <resource>%1</resource> already exists.")
-        return ki18n(I18N_NOOP("Report <resource>%1</resource> already exists."));
+        return kxi18nc(I18NC_NOOP("@info", "Report <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }
 
 KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
-                                     KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+                                     KexiPart::Item *item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
+    Q_ASSERT(item);
     Q_UNUSED(window);
     Q_UNUSED(item);
 
@@ -101,66 +101,51 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    QList<QAction*> reportActions = KoReportDesigner::actions(&d->toolboxActionGroup);
+    QList<QAction*> reportActions = KoReportDesigner::itemActions(&d->toolboxActionGroup);
 
     foreach(QAction* action, reportActions) {
         connect(action, SIGNAL(triggered(bool)), this, SLOT(slotToolboxActionTriggered(bool)));
         win->addToolBarAction("report", action);
         d->toolboxActionsByName.insert(action->objectName(), action);
     }
-    
+
 }
 
-QString KexiReportPart::loadReport(const QString& name)
+KDbObject* KexiReportPart::loadSchemaObject(
+    KexiWindow *window, const KDbObject& object, Kexi::ViewMode viewMode,
+    bool *ownedByWindow)
 {
-    KexiMainWindowIface *win = KexiMainWindowIface::global();
-    KexiDB::Connection *conn;
-    if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {
-        kDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
-        return QString();
-    }
-    QString src, did;
-    KexiDB::SchemaData sd;
-
-    if (conn->loadObjectSchemaData(win->project()->idForClass("org.kexi-project.report"), name, sd) != true
-        && conn->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true /* compat. */)
+    QString layout;
+    if (   !loadDataBlock(window, &layout, "layout") == true
+        && !loadDataBlock(window, &layout, "pgzreport_layout") == true /* compat */)
     {
-        kWarning() << "failed to load schema data";
-        return QString();
+        return 0;
     }
 
-    kDebug() << "***Object ID:" << sd.id();
-
-    if (   win->project()->dbConnection()->loadDataBlock(sd.id(), src, "layout") == true
-        || win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true /* compat */)
-    {
-        return src;
+    QDomDocument doc;
+    if (!doc.setContent(layout)) {
+        return 0;
     }
+    qDebug() << doc.toString();
 
-    kWarning() << "Unable to load document";
-    return QString();
+    KexiReportPart::TempData * temp = static_cast<KexiReportPart::TempData*>(window->data());
+    const QDomElement root = doc.documentElement();
+    temp->reportDefinition = root.firstChildElement("report:content");
+    if (temp->reportDefinition.isNull()) {
+        qWarning() << "no report report:content element found in report" << window->partItem()->name();
+        return 0;
+    }
+    temp->connectionDefinition = root.firstChildElement("connection");
+    if (temp->connectionDefinition.isNull()) {
+        qWarning() << "no report report:content element found in report" << window->partItem()->name();
+        return 0;
+    }
+    return KexiPart::Part::loadSchemaObject(window, object, viewMode, ownedByWindow);
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
-    kDebug();
-    const QString document(loadReport(window->partItem()->name()));
-    KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-    
-    QDomDocument doc;
-    doc.setContent(document);
-    
-    kDebug() << doc.toString();
-    
-    QDomElement root = doc.documentElement();
-    QDomElement korep = root.firstChildElement("report:content");
-    QDomElement conn = root.firstChildElement("connection");
-
-    td->reportDefinition = korep;
-    td->connectionDefinition = conn;
-
-    td->name = window->partItem()->name();
-    return td;
+    return new KexiReportPart::TempData(window);
 }
 
 KexiReportPart::TempData::TempData(QObject* parent)
@@ -169,13 +154,13 @@ KexiReportPart::TempData::TempData(QObject* parent)
 {
 }
 
-void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void KexiReportPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
 {
     if (!d->sourceSelector) {
         d->sourceSelector = new KexiSourceSelector(KexiMainWindowIface::global()->project(), tab);
     }
     tab->addTab(d->sourceSelector, koIcon("server-database"), QString());
-    tab->setTabToolTip(tab->indexOf(d->sourceSelector), i18n("Data Source"));
+    tab->setTabToolTip(tab->indexOf(d->sourceSelector), xi18n("Data Source"));
 }
 
 void KexiReportPart::slotToolboxActionTriggered(bool checked)
@@ -214,4 +199,3 @@ void KexiReportPart::slotItemInserted(const QString& entity)
     }
 }
 
-#include "kexireportpart.moc"

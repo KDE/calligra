@@ -25,13 +25,13 @@
 #include "kexidbschema.h"
 #include "kexidbparser.h"
 
-#include <db/transaction.h>
+#include <KDbTransaction>
 
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace Scripting;
 
-KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
+KexiDBConnection::KexiDBConnection(KDbConnection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
         : QObject()
         , m_connection(connection)
         , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(this, connection->data(), false))
@@ -117,9 +117,9 @@ const QStringList KexiDBConnection::tableNames() const
 const QStringList KexiDBConnection::queryNames() const
 {
     bool ok = true;
-    QStringList queries = m_connection->objectNames(::KexiDB::QueryObjectType, &ok);
+    QStringList queries = m_connection->objectNames(KDb::QueryObjectType, &ok);
     if (! ok) {
-        kDebug() << QString("Failed to determinate querynames.");
+        qDebug() << QString("Failed to determinate querynames.");
         return QStringList();
     }
     return queries;
@@ -127,24 +127,24 @@ const QStringList KexiDBConnection::queryNames() const
 
 QObject* KexiDBConnection::executeQueryString(const QString& sqlquery)
 {
-    // The ::KexiDB::Connection::executeQuery() method does not check if we pass a valid SELECT-statement
+    // The KDbConnection::executeQuery() method does not check if we pass a valid SELECT-statement
     // or e.g. a DROP TABLE operation. So, let's check for such dangerous operations right now.
-    ::KexiDB::Parser parser(m_connection);
+    KDbParser parser(m_connection);
     if (! parser.parse(sqlquery)) {
-        kDebug() << QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error());
+        qDebug() << QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error());
         return 0;
     }
-    if (parser.query() == 0 || parser.operation() != ::KexiDB::Parser::OP_Select) {
-        kDebug() << QString("Invalid query operation \"%1\"").arg(parser.operationString());
+    if (parser.query() == 0 || parser.operation() != KDbParser::OP_Select) {
+        qDebug() << QString("Invalid query operation \"%1\"").arg(parser.operationString());
         return 0;
     }
-    ::KexiDB::Cursor* cursor = m_connection->executeQuery(sqlquery);
+    KDbCursor* cursor = m_connection->executeQuery(sqlquery);
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
 QObject* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschema)
 {
-    ::KexiDB::Cursor* cursor = m_connection->executeQuery(*queryschema->queryschema());
+    KDbCursor* cursor = m_connection->executeQuery(queryschema->queryschema());
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
@@ -187,7 +187,7 @@ bool KexiDBConnection::alterTableName(KexiDBTableSchema* tableschema, const QStr
 
 QObject* KexiDBConnection::tableSchema(const QString& tablename)
 {
-    ::KexiDB::TableSchema* tableschema = m_connection->tableSchema(tablename);
+    KDbTableSchema* tableschema = m_connection->tableSchema(tablename);
     return tableschema ? new KexiDBTableSchema(this, tableschema, false) : 0;
 }
 
@@ -200,7 +200,7 @@ bool KexiDBConnection::isEmptyTable(KexiDBTableSchema* tableschema) const
 
 QObject* KexiDBConnection::querySchema(const QString& queryname)
 {
-    ::KexiDB::QuerySchema* queryschema = m_connection->querySchema(queryname);
+    KDbQuerySchema* queryschema = m_connection->querySchema(queryname);
     return queryschema ? new KexiDBQuerySchema(this, queryschema, false) : 0;
 }
 
@@ -215,7 +215,6 @@ bool KexiDBConnection::setAutoCommit(bool enabled)
 
 QObject* KexiDBConnection::parser()
 {
-    return new KexiDBParser(this, new ::KexiDB::Parser(m_connection), true);
+    return new KexiDBParser(this, new KDbParser(m_connection), true);
 }
 
-#include "kexidbconnection.moc"

@@ -26,7 +26,8 @@
 #include "commands/KPrEditCustomSlideShowsCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
-#include <qtest_kde.h>
+
+#include <QTest>
 
 void TestEditCustomSlideShowsCommand::moveSingleSlide()
 {
@@ -79,5 +80,4 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     QCOMPARE(modifiedSlideShow.at(2), initialSlideShow.at(1));
 }
 
-QTEST_KDEMAIN(TestEditCustomSlideShowsCommand, GUI)
-#include "TestEditCustomSlideShowsCommand.moc"
+QTEST_MAIN(TestEditCustomSlideShowsCommand)

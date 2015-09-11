@@ -65,11 +65,10 @@ KLocalizedString PartBase::i18nMessage(const QString& englishMessage, KexiWindow
     Q_UNUSED(window);
     if (QString(englishMessage).startsWith(':'))
         return KLocalizedString();
-    return ki18n(englishMessage.toLatin1());
+    return kxi18nc("@info", englishMessage.toLatin1());
 }
 
-void PartBase::setupCustomPropertyPanelTabs(KTabWidget *)
+void PartBase::setupCustomPropertyPanelTabs(QTabWidget *)
 {
 }
 
-#include "kexipartbase.moc"

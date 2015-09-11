@@ -45,7 +45,6 @@ using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY_WITH_JSON(HTMLExportFactory, "calligra_filter_sheets2html.json",
                            registerPlugin<HTMLExport>();)
-K_EXPORT_PLUGIN(HTMLExportFactory("calligrafilters"))
 
 const QString html_table_tag = "table";
 const QString html_table_options = QString(" border=\"%1\" cellspacing=\"%2\"");

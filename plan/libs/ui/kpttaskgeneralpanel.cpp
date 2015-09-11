@@ -567,8 +567,4 @@ Calendar *TaskGeneralPanelImpl::calendar() const
     return m_calendars.value( calendarCombo->currentIndex() );
 }
 
-
-
 }  //KPlato namespace
-
-#include "kpttaskgeneralpanel.moc"

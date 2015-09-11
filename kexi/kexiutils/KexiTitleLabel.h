@@ -36,7 +36,7 @@ protected:
 private:
     void updateFont();
     void init();
-    
+
     class Private;
     Private * const d;
 };

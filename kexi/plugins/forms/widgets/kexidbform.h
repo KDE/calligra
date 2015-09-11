@@ -21,6 +21,7 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
+#include "kexiformutils_export.h"
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
 #include <formeditor/FormWidgetInterface.h>
@@ -41,7 +42,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm : public QWidget,
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePluginId WRITE setDataSourcePluginId)
     Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops)
     //original "size" property is not designable, so here's a custom (not storable) replacement
     Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal STORED false)
@@ -54,8 +55,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
-        return KexiFormDataItemInterface::dataSourcePartClass();
+    inline QString dataSourcePluginId() const {
+        return KexiFormDataItemInterface::dataSourcePluginId();
     }
 
     //! no effect
@@ -90,8 +91,8 @@ public Q_SLOTS:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    inline void setDataSourcePluginId(const QString &pluginId) {
+        KexiFormDataItemInterface::setDataSourcePluginId(pluginId);
     }
 
     //! This implementation just disables read only widget

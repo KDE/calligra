@@ -192,5 +192,3 @@ void TemplatesModel::setShowWide(const bool& newValue)
     d->refresh();
     endResetModel();
 }
-
-#include "TemplatesModel.moc"

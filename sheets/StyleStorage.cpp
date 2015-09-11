@@ -934,5 +934,3 @@ StyleManager* StyleStorage::styleManager() const
 {
     return d->map->styleManager();
 }
-
-#include "StyleStorage.moc"

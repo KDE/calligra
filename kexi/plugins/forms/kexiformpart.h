@@ -29,18 +29,12 @@
 #include <kexiformview.h>
 
 class QDomDocument;
-
 namespace KFormDesigner
 {
 class Form;
 class WidgetTreeWidget;
 }
-
-namespace KexiDB
-{
-class FieldList;
-}
-
+class KDbFieldList;
 class KexiDataSourcePage;
 
 class KexiFormPartTempData : public KexiWindowData
@@ -75,8 +69,8 @@ public:
 
     KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
 
-#ifndef NO_DSWIZARD
-    void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
+#ifndef KEXI_NO_FORM_DATASOURCE_WIZARD
+    void generateForm(KDbFieldList *list, QDomDocument &domDoc);
 #endif
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
@@ -86,12 +80,12 @@ protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, 
+                                 KexiPart::Item *item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+    virtual void setupCustomPropertyPanelTabs(QTabWidget *tab);
 
 private:
     class Private;

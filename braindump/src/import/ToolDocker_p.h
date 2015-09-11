@@ -25,11 +25,7 @@
 #include "ToolDocker.h"
 
 #include <KoDockWidgetTitleBar.h>
-
 #include <KoIcon.h>
-
-#include <klocale.h>
-#include <kdebug.h>
 
 #include <QPointer>
 #include <QGridLayout>
@@ -66,10 +62,10 @@ public:
     Qt::DockWidgetArea dockingArea;
     bool tabbed :1;
     bool hasTitle :1;
-    KIcon lockIcon;
-    KIcon unlockIcon;
-    KIcon tabIcon;
-    KIcon unTabIcon;
+    QIcon lockIcon;
+    QIcon unlockIcon;
+    QIcon tabIcon;
+    QIcon unTabIcon;
     QToolButton *lockButton;
     QToolButton *tabButton;
 

@@ -98,5 +98,3 @@ KoPrintJob *HtmlView::createPrintJob()
 
 
 } // namespace KPlato
-
-#include "kpthtmlview.moc"

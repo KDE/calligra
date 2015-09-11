@@ -11,17 +11,17 @@ Additional guidelines:
 
 
 #2. Try do not overuse html formatting tags like <qt>  in translated strings is you
-do not need to. Eg. rather use 
+do not need to. Eg. rather use
 
   "<qt>" + i18n("Connection error: <b>%</b>") + "</qt>"
 
-instead of 
+instead of
 
   i18n("<qt>Connection error: <b>%</b></qt>");
 
 
 
-#3. Use " instead of ' , ie.: 
+#3. Use " instead of ' , ie.:
 
   i18n("Object \"%1\" not found.") --GOOD
 
@@ -29,7 +29,7 @@ instead of :
 
   i18n("Object '%1' not found.") --BAD
 
-Also, do not use <b> tags around "" ie. 
+Also, do not use <b> tags around "" ie.
 
   i18n("Object <b>\"%1\"</b> not found.") --BAD
 

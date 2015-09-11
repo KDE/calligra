@@ -24,9 +24,12 @@ target_link_libraries(
     braindump_shape_state
     flake
     Qt5::Core
+    Qt5::Svg
     braindumpcore
     )
 install(TARGETS braindump_shape_state DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+
+kcoreaddons_desktop_to_json(braindump_shape_state braindump_shape_state.desktop)
 
 ########### install files ###############
 

@@ -21,7 +21,10 @@
 #ifndef KEXIPROPERTYEDITORVIEW_H
 #define KEXIPROPERTYEDITORVIEW_H
 
+#include "kexiextwidgets_export.h"
 #include "KexiPropertyPaneViewBase.h"
+
+#include <KPropertyEditorView>
 
 //! @short The container (acts as a dock window) for KexiPropertyEditor.
 /*! The widget displays KexiObjectInfoLabel on its top, to show user what

@@ -200,5 +200,3 @@ void Module::addCommand( KUndo2Command *cmd )
 }
 
 } //namespace Scripting
-
-#include "Module.moc"

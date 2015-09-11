@@ -18,7 +18,7 @@
 */
 #include "TestSort.h"
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include <KoCanvasBase.h>
 
@@ -138,6 +138,4 @@ void TestSort::DescendingOrder()
     QCOMPARE(storage->value(2,3),Value());
 }
 
-QTEST_KDEMAIN(TestSort, GUI)
-
-#include "TestSort.moc"
+QTEST_MAIN(TestSort)

@@ -18,13 +18,14 @@
  */
 
 #include "kexicharencodingcombobox.h"
+#include <kexiutils/utils.h>
+
+#include <KCharsets>
+#include <KLocalizedString>
 
 #include <QTextCodec>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kcharsets.h>
+#include <QLocale>
+#include <QDebug>
 
 class KexiCharacterEncodingComboBox::Private {
 public:
@@ -38,20 +39,20 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
     QWidget* parent, const QString& selectedEncoding)
   : KComboBox(parent), d(new Private)
 {
-    QString defaultEncoding(QString::fromLatin1(KGlobal::locale()->encoding()));
+    QString defaultEncoding(QString::fromLatin1(KexiUtils::encoding()));
     QString defaultEncodingDescriptiveName;
 
     QString _selectedEncoding = selectedEncoding;
     if (_selectedEncoding.isEmpty())
-        _selectedEncoding = QString::fromLatin1(KGlobal::locale()->encoding());
+        _selectedEncoding = defaultEncoding;
 
-    QStringList descEncodings(KGlobal::charsets()->descriptiveEncodingNames());
+    QStringList descEncodings(KCharsets::charsets()->descriptiveEncodingNames());
 
-    uint id = 0;
+    int id = 0;
     foreach(const QString &descEncoding, descEncodings) {
         bool found = false;
-        QString name(KGlobal::charsets()->encodingForName(descEncoding));
-        QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(name, found);
+        QString name(KCharsets::charsets()->encodingForName(descEncoding));
+        QTextCodec *codecForEnc = KCharsets::charsets()->codecForName(name, found);
         if (found) {
             addItem(descEncoding);
             if (codecForEnc->name() == defaultEncoding || name == defaultEncoding) {
@@ -70,7 +71,7 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
     //prepend default encoding, if present
     if (!defaultEncodingDescriptiveName.isEmpty()) {
         d->defaultEncodingAdded = true;
-        QString desc = i18nc("Text encoding: Default", "Default: %1",
+        QString desc = xi18nc("Text encoding: Default", "Default: %1",
                              defaultEncodingDescriptiveName);
         insertItem(0, desc);
         if (_selectedEncoding == defaultEncoding) {
@@ -88,9 +89,9 @@ KexiCharacterEncodingComboBox::~KexiCharacterEncodingComboBox()
 QString KexiCharacterEncodingComboBox::selectedEncoding() const
 {
     if (defaultEncodingSelected()) {
-        return QString::fromLatin1(KGlobal::locale()->encoding());
+        return QString::fromLatin1(KexiUtils::encoding());
     } else {
-        return KGlobal::charsets()->encodingForName(currentText());
+        return KCharsets::charsets()->encodingForName(currentText());
     }
 }
 
@@ -98,7 +99,7 @@ void KexiCharacterEncodingComboBox::setSelectedEncoding(const QString& encodingN
 {
     QString desc = d->encodingDescriptionForName[encodingName];
     if (desc.isEmpty()) {
-        kWarning() << "no such encoding" << encodingName;
+        qWarning() << "no such encoding" << encodingName;
         return;
     }
     setCurrentIndex(findText(desc));

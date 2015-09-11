@@ -27,6 +27,14 @@
 #include <QTimer>
 #include <QApplication>
 #include <QClipboard>
+#include <QPluginLoader>
+#include <QMimeData>
+#include <QDebug>
+#include <QAction>
+
+#include <kactioncollection.h>
+#include <kstatusbar.h>
+#include <KPluginFactory>
 
 #include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
@@ -43,22 +51,9 @@
 #include <KoCopyController.h>
 #include "KoZoomController.h"
 #include <KoZoomAction.h>
-
-#include "Canvas.h"
-#include "RootSection.h"
-#include "Section.h"
-#include "ViewManager.h"
-#include "import/DockerManager.h"
-#include "KoToolBoxFactory.h"
-
 #include <KoIcon.h>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kactioncollection.h>
-#include <kstatusbar.h>
-#include <KoServiceLocator.h>
-
+#include "KoToolBoxFactory.h"
+#include <KoJsonTrader.h>
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
 #include "KoShapeDeleteCommand.h"
@@ -66,6 +61,11 @@
 #include "KoShapeGroupCommand.h"
 #include "KoShapeUngroupCommand.h"
 
+#include "Canvas.h"
+#include "RootSection.h"
+#include "Section.h"
+#include "ViewManager.h"
+#include "import/DockerManager.h"
 #include "MainWindow.h"
 #include "SectionContainer.h"
 #include "SectionsBoxDock.h"
@@ -119,7 +119,7 @@ void View::initGUI()
 {
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-        kDebug() << "Creating docker: " << docker;
+        qDebug() << "Creating docker: " << docker;
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         m_mainWindow->createDockWidget(factory);
     }
@@ -180,47 +180,39 @@ void View::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    m_deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
+    m_deleteSelectionAction = new QAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", m_deleteSelectionAction);
-    m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
+    actionCollection()->setDefaultShortcut(m_deleteSelectionAction, QKeySequence("Del"));
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     // Shapes menu
     // TODO: get an icon "edit-duplicate"
-    KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
+    QAction *actionDuplicate  = new QAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("shapes_duplicate", actionDuplicate);
-    actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
+    actionCollection()->setDefaultShortcut(actionDuplicate, QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    m_groupShapes = new KAction(koIcon("object-group"), i18n("Group Shapes"), this);
+    m_groupShapes = new QAction(koIcon("object-group"), i18n("Group Shapes"), this);
     actionCollection()->addAction("shapes_group", m_groupShapes);
-    m_groupShapes->setShortcut(QKeySequence("Ctrl+G"));
+    actionCollection()->setDefaultShortcut(m_groupShapes, QKeySequence("Ctrl+G"));
     connect(m_groupShapes, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
-    m_ungroupShapes  = new KAction(koIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
+    m_ungroupShapes  = new QAction(koIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
     actionCollection()->addAction("shapes_ungroup", m_ungroupShapes);
-    m_ungroupShapes->setShortcut(QKeySequence("Ctrl+Shift+G"));
+    actionCollection()->setDefaultShortcut(m_ungroupShapes, QKeySequence("Ctrl+Shift+G"));
     connect(m_ungroupShapes, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
 
 }
 
 void View::loadExtensions()
 {
-    const KService::List offers = KoServiceLocator::instance()->entries("Braindump/Extensions");
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Braindump/Extensions", QString());
 
-    KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-        QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
+        if (plugin) {
             insertChildClient(plugin);
-        } else {
-            if(!error.isEmpty()) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
-            }
         }
     }
 }

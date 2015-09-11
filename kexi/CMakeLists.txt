@@ -8,22 +8,46 @@ option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
-option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
+option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires KDB_DEBUG_GUI to be set too)" OFF)
 option(KEXI_SHOW_UNFINISHED, "Show unfinished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
-# Experimental:
-option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
-option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF)
+# Extra GUI features
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
+# Experimental:
+option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
+
+# Not available:
+option(KEXI_MACROS_SUPPORT "Experimental: Enable macros in Kexi" OFF)
+if(KEXI_MACROS_SUPPORT) # temp.
+    message(FATAL_ERROR "Macros are not yet available.")
+endif()
+option(KEXI_TABLE_PRINT_SUPPORT "Experimental: Enable printing of tabular view in Kexi" OFF) # broken since Kexi 2
+if(KEXI_TABLE_PRINT_SUPPORT) # temp.
+    message(FATAL_ERROR "Table printing is not yet available.")
+endif()
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" OFF) # broken since Kexi 2
+if(KEXI_PROJECT_TEMPLATES) # temp.
+    message(FATAL_ERROR "Project templates are not yet available.")
+endif()
+
+#See commit # , left here for reference
+#option(KEXI_SQLITE_MIGRATION "If defined, SQLite3 migration to some newer format is possible. Users can see a suitable question on app's startup." OFF)
+
 add_definitions(
-  -DKEXI_NO_CURSOR_PROPERTY
-  -DKEXI_NO_CTXT_HELP
-  -DKEXI_NO_SUBFORM
-  -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-  -DKEXI_NO_AUTOFIELD_WIDGET
+  -DKEXI_NO_CURSOR_PROPERTY  # broken
+  -DKEXI_NO_CTXT_HELP        # broken
+  -DKEXI_NO_SUBFORM          # broken
+  -DKEXI_NO_QUICK_PRINTING   # print/print preview/print setup for tables/queries in the navigator
+  -DKEXI_NO_AUTOFIELD_WIDGET # broken, to be removed
 )
+
+add_definitions(-DTRANSLATION_DOMAIN=\"kexi\")
+
+set(KEXI_PLUGIN_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/kexi)
+set(KEXI_FORM_WIDGETS_PLUGIN_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/kexi/forms/widgets)
+
 
 #no default: add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
@@ -68,14 +92,16 @@ add_subdirectory( widget )
 add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
-add_subdirectory( tests )
+if (BUILD_TESTING)
+#TODO KEXI3 add_subdirectory( tests )
+endif()
 
 if(KEXI_MOBILE)
 
 else()
   add_subdirectory( main )
   add_subdirectory( formeditor )
-  add_subdirectory( migration )
+#TODO KEXI3  add_subdirectory( migration )
 endif()
 
 ########### next target ###############
@@ -84,7 +110,7 @@ if(KEXI_MOBILE)
   add_subdirectory( mobile )
 else()
   set(kexi_SRCS main.cpp )
-  file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
+  file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakexi.png")
   ecm_add_app_icon(kexi_SRCS ICONS ${ICONS_SRCS})
   add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi
@@ -92,7 +118,7 @@ else()
     keximain
     kexicore
 
-    Predicate
+    KDb
   )
   install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()

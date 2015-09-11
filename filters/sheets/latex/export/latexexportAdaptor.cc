@@ -38,5 +38,3 @@ void LatexExportAdaptor::useDefaultConfig()
 {
     _dialog->accept();
 }
-
-#include "latexexportAdaptor.moc"

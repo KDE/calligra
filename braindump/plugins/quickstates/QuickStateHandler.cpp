@@ -19,12 +19,12 @@
 
 #include "QuickStateHandler.h"
 
+#include <QTextCursor>
+
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
-
 #include <KoToolProxy.h>
-#include <QTextCursor>
 #include <KoShapeRegistry.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>

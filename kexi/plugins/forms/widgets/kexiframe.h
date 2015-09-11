@@ -17,12 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiFrame_H
-#define KexiFrame_H
+#ifndef KEXIFRAME_H
+#define KEXIFRAME_H
+
+#include "kexiformutils_export.h"
+
+#include <formeditor/FormWidgetInterface.h>
 
 #include <QFrame>
-#include <formeditor/FormWidgetInterface.h>
-#include <kexi_export.h>
 
 //! @short Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,

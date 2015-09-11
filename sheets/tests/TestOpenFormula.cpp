@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include <Formula.h>
 #include <FunctionModuleRegistry.h>
@@ -222,6 +222,4 @@ void TestOpenFormula::testReferenceSaving()
     QCOMPARE(Region::saveOdf("'Sheet 2'!A1:B4"), QString("'Sheet 2'.A1:'Sheet 2'.B4"));
 }
 
-QTEST_KDEMAIN(TestOpenFormula, GUI)
-
-#include "TestOpenFormula.moc"
+QTEST_MAIN(TestOpenFormula)

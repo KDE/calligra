@@ -148,6 +148,3 @@ void KWSelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item)
     Q_UNUSED(item);
     accept();
 }
-
-#include <KWSelectBookmarkDialog.moc>
-

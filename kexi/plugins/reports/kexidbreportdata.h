@@ -22,10 +22,11 @@
 #include <QString>
 #include <QStringList>
 
-#include <db/cursor.h>
-#include <db/utils.h>
+#include <KDbCursor>
+#include <KDbUtils>
 
-#include <KoReportData.h>
+#include <config-kreport.h>
+#include <KoReportData>
 
 /**
 
@@ -33,21 +34,21 @@
 class KexiDBReportData : public KoReportData
 {
 public:
-    KexiDBReportData(const QString &objectName, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &objectName, KDbConnection *conn);
 
     /*!
-     * @a partClass specifies @a objectName type: a table or query.
+     * @a pluginId specifies type of @a objectName, a table or query.
      * Types accepted:
      * -"org.kexi-project.table"
      * -"org.kexi-project.query"
      * -empty QString() - attempt to resolve @a objectName
      */
-    KexiDBReportData(const QString &objectName, const QString& partClass, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &objectName, const QString& pluginId, KDbConnection *conn);
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;
     virtual void setSorting(const QList<SortedField>& sorting);
-    virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
+    virtual void addExpression(const QString &field, const QVariant &value, char relation = '=');
 
     virtual QString sourceName() const;
     virtual int fieldNumber(const QString &field) const;
@@ -65,8 +66,8 @@ public:
     virtual qint64 recordCount() const;
 
     //Utility Functions
-    virtual QStringList scriptList(const QString& language) const;
-    virtual QString scriptCode(const QString& script, const QString& language) const;
+    virtual QStringList scriptList() const;
+    virtual QString scriptCode(const QString& script) const;
     virtual QStringList dataSources() const;
     virtual KoReportData* data(const QString&);
 
@@ -74,7 +75,7 @@ private:
     class Private;
     Private * const d;
 
-    bool getSchema(const QString& partClass = QString());
+    bool getSchema(const QString& pluginId = QString());
 };
 
 #endif

@@ -22,9 +22,7 @@
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 
-#include <kdebug.h>
 #include <KProperty>
-#include <KPropertySet>
 
 namespace KFormDesigner {
 class WidgetInfo::Private
@@ -189,7 +187,7 @@ QByteArray WidgetInfo::parentFactoryName() const
 
 void WidgetInfo::setParentFactoryName(const QByteArray& parentFactoryName)
 {
-    d->parentFactoryName = QByteArray("kformdesigner_") + parentFactoryName;
+    d->parentFactoryName = parentFactoryName;
 }
 
 void WidgetInfo::addAlternateClassName(const QByteArray& alternateName, bool override)
@@ -247,7 +245,7 @@ QList<QByteArray> WidgetInfo::autoSaveProperties() const
 
 void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int type)
 {
-    if (propertyName.isEmpty() || type == (int)KProperty::Auto)
+    if (propertyName.isEmpty() || type == int(KProperty::Auto))
         return;
     if (!d->customTypesForProperty) {
         d->customTypesForProperty = new QHash<QByteArray, int>();

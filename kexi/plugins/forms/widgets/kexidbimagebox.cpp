@@ -19,6 +19,23 @@
 */
 
 #include "kexidbimagebox.h"
+#include <KexiIcon.h>
+#include <widget/utils/kexidropdownbutton.h>
+#include <kexiutils/utils.h>
+#include <formeditor/widgetlibrary.h>
+#include <formeditor/utils.h>
+#include <kexi_global.h>
+#include "kexidbutils.h"
+#include "kexiformpart.h"
+#include "kexiformmanager.h"
+
+#include <KDbField>
+#include <KDbUtils>
+#include <KDbQuerySchema>
+
+#include <KIconLoader>
+#include <KLocalizedString>
+#include <KIconEffect>
 
 #include <QApplication>
 #include <QPixmap>
@@ -26,32 +43,14 @@
 #include <QStyleOptionFocusRect>
 #include <QStyleOptionFrameV3>
 #include <QClipboard>
-
 #include <QFile>
-#include <QImage>
 #include <QBuffer>
 #include <QPainter>
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kimageio.h>
-#include <kstandarddirs.h>
-#include <kiconeffect.h>
-
-#include <KoIcon.h>
-#include <widget/utils/kexidropdownbutton.h>
-#include <kexiutils/utils.h>
-#include <db/field.h>
-#include <db/utils.h>
-#include <db/queryschema.h>
-#include <formeditor/widgetlibrary.h>
-#include <formeditor/utils.h>
-#include <kexi_global.h>
-
-#include "kexidbutils.h"
-#include "kexiformpart.h"
-#include "kexiformmanager.h"
+#include <QMimeDatabase>
+#include <QStandardPaths>
+#include <QMimeType>
+#include <QImageReader>
+#include <QDebug>
 
 //! @internal
 struct KexiDBImageBox_Static {
@@ -61,7 +60,7 @@ struct KexiDBImageBox_Static {
     QPixmap *small;
 };
 
-K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
+Q_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 
 KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         : KexiFrame(parent)
@@ -103,12 +102,12 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
-    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
-    connect(m_contextMenu, SIGNAL(insertFromFileRequested(KUrl)),
-            this, SLOT(handleInsertFromFileAction(KUrl)));
-    connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
-            this, SLOT(handleSaveAsAction(QString)));
+    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool*,bool*)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool*,bool*)));
+    connect(m_contextMenu, SIGNAL(insertFromFileRequested(QUrl)),
+            this, SLOT(handleInsertFromFileAction(QUrl)));
+    connect(m_contextMenu, SIGNAL(saveAsRequested(QUrl)),
+            this, SLOT(handleSaveAsAction(QUrl)));
     connect(m_contextMenu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(m_contextMenu, SIGNAL(copyRequested()),
@@ -154,8 +153,6 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
         m_value = KexiDataItemInterface::originalValue().toByteArray();
     bool ok = !m_value.isEmpty();
     if (ok) {
-        ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
-        ///ok = KImageIO::canRead( type );
         ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true;
         if (loadPixmap) {
             m_currentScaledPixmap = QPixmap(); // clear cache
@@ -216,7 +213,7 @@ QPixmap KexiDBImageBox::pixmap() const
     return m_pixmap;
 }
 
-uint KexiDBImageBox::pixmapId() const
+int KexiDBImageBox::pixmapId() const
 {
     if (dataSource().isEmpty()) {
         //not db-aware
@@ -225,7 +222,7 @@ uint KexiDBImageBox::pixmapId() const
     return 0;
 }
 
-void KexiDBImageBox::setPixmapId(uint id)
+void KexiDBImageBox::setPixmapId(int id)
 {
     if (m_insideSetData) //avoid recursion
         return;
@@ -233,7 +230,7 @@ void KexiDBImageBox::setPixmapId(uint id)
     repaint();
 }
 
-uint KexiDBImageBox::storedPixmapId() const
+int KexiDBImageBox::storedPixmapId() const
 {
     if (dataSource().isEmpty() && m_data.stored()) {
         //not db-aware
@@ -242,7 +239,7 @@ uint KexiDBImageBox::storedPixmapId() const
     return 0;
 }
 
-void KexiDBImageBox::setStoredPixmapId(uint id)
+void KexiDBImageBox::setStoredPixmapId(int id)
 {
     setData(KexiBLOBBuffer::self()->objectForId(id, /*stored*/true));
     repaint();
@@ -324,7 +321,7 @@ void KexiDBImageBox::insertFromFile()
     m_contextMenu->insertFromFile();
 }
 
-void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
+void KexiDBImageBox::handleInsertFromFileAction(const QUrl &url)
 {
     if (!dataSource().isEmpty() && isReadOnly())
         return;
@@ -338,7 +335,7 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
         repaint();
     } else {
         //db-aware
-        QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
+        QString fileName(url.isLocalFile() ? url.toLocalFile() : url.toDisplayString());
 
         //! @todo download the file if remote, then set fileName properly
         QFile f(fileName);
@@ -352,7 +349,8 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
             f.close();
             return;
         }
-        m_valueMimeType = KMimeType::findByUrl(fileName, 0, url.isLocalFile())->name();
+        QMimeDatabase db;
+        m_valueMimeType = db.mimeTypeForFile(fileName, QMimeDatabase::MatchExtension).name();
         setValueInternal(ba, true);
     }
 
@@ -363,36 +361,45 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
 }
 
 void KexiDBImageBox::handleAboutToSaveAsAction(
-    QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+    QString* origFilename, QString* mimeType, bool *dataIsEmpty)
 {
+    Q_ASSERT(origFilename);
+    Q_ASSERT(mimeType);
+    Q_ASSERT(dataIsEmpty);
     if (data().isEmpty()) {
-        kWarning() << "no pixmap!";
-        dataIsEmpty = false;
+        qWarning() << "no pixmap!";
+        *dataIsEmpty = false;
         return;
     }
     if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
-        origFilename = m_data.originalFileName();
-        if (!origFilename.isEmpty())
-            origFilename = QString("/") + origFilename;
-        if (!m_data.mimeType().isEmpty())
-            fileExtension = KImageIO::typeForMime(m_data.mimeType()).first().toLower();
+        *origFilename = m_data.originalFileName();
+        if (!origFilename->isEmpty()) {
+            *origFilename = QLatin1String("/") + *origFilename;
+        }
+        const QMimeDatabase db;
+        const QMimeType mime(db.mimeTypeForName(m_data.mimeType()));
+        if (!m_data.mimeType().isEmpty() && QImageReader::supportedMimeTypes().contains(mime.name().toLatin1())) {
+            *mimeType = mime.name();
+        }
     }
 }
 
-void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
+bool KexiDBImageBox::handleSaveAsAction(const QUrl &url)
 {
-    QFile f(fileName);
+    //! @todo handle remote URLs
+    QFile f(url.toLocalFile());
     if (!f.open(QIODevice::WriteOnly)) {
         //! @todo err msg
-        return;
+        return false;
     }
     f.write(data());
     if (f.error() != QFile::NoError) {
         //! @todo err msg
         f.close();
-        return;
+        return false;
     }
     f.close();
+    return true;
 }
 
 void KexiDBImageBox::handleCutAction()
@@ -464,14 +471,16 @@ void KexiDBImageBox::handleShowPropertiesAction()
     //! @todo
 }
 
-void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool* valueIsNull, bool* valueIsReadOnly)
 {
-    valueIsNull = !(
+    Q_ASSERT(valueIsNull);
+    Q_ASSERT(valueIsReadOnly);
+    *valueIsNull = !(
                          (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
                       || (!dataSource().isEmpty() && !this->valueIsNull())  /*db-aware pixmap available*/
                   );
     // read-only if static pixmap or db-aware pixmap for read-only widget:
-    valueIsReadOnly =
+    *valueIsReadOnly =
            (!designMode() && dataSource().isEmpty())
         || (!dataSource().isEmpty() && isReadOnly())
         || (designMode() && !dataSource().isEmpty());
@@ -499,7 +508,7 @@ void KexiDBImageBox::updateActionStrings()
 
     if (m_chooser) {
         if (popupMenuAvailable() && dataSource().isEmpty()) { //this may work in the future (see @todo below)
-            m_chooser->setToolTip(i18n("Click to show actions for this image box"));
+            m_chooser->setToolTip(xi18n("Click to show actions for this image box"));
         } else {
             QString beautifiedImageBoxName;
             if (designMode()) {
@@ -511,7 +520,7 @@ void KexiDBImageBox::updateActionStrings()
                 beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
             }
             m_chooser->setToolTip(
-                i18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
+                xi18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
         }
     }
 }
@@ -636,7 +645,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         p.setFont(f);
         QString text;
         if (dataSource().isEmpty()) {
-            text = objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)");
+            text = objectName() + "\n" + xi18nc("Unbound Image Box", "(unbound)");
         }
         else {
             text = dataSource();
@@ -697,7 +706,8 @@ void KexiDBImageBox::updatePixmap()
         return;
 
     if (!KexiDBImageBox_static->pixmap) {
-        const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
+        const QString fname(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                   QLatin1String("kexi/pics/imagebox.png")));
         QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
             koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {
@@ -705,9 +715,9 @@ void KexiDBImageBox::updatePixmap()
             KIconEffect::semiTransparent(pm);
         }
         KexiDBImageBox_static->pixmap = new QPixmap(pm);
-        KexiDBImageBox_static->small = new QPixmap( 
+        KexiDBImageBox_static->small = new QPixmap(
             KexiDBImageBox_static->pixmap->scaled(
-                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2, 
+                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2,
                 Qt::KeepAspectRatio, Qt::SmoothTransformation) );
     }
 }
@@ -745,7 +755,7 @@ void KexiDBImageBox::resizeEvent(QResizeEvent * e)
     }
 }
 
-void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBImageBox::setColumnInfo(KDbQueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     //updating strings and title is needed
@@ -882,4 +892,3 @@ void KexiDBImageBox::setMidLineWidth(int w)
     update();
 }
 
-#include "kexidbimagebox.moc"

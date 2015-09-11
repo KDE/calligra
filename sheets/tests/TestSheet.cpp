@@ -34,7 +34,7 @@
 #include <CellStorage.h>
 #include <OdfSavingContext.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -202,6 +202,4 @@ void SheetTest::testCompareRows()
     QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
 }
 
-QTEST_KDEMAIN(SheetTest, GUI)
-
-#include "TestSheet.moc"
+QTEST_MAIN(SheetTest)

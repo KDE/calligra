@@ -50,11 +50,7 @@
 #include <kactioncollection.h>
 
 
-#if QT_VERSION >= 0x040700
 #define ConnectCursor Qt::DragLinkCursor
-#else
-#define ConnectCursor Qt::UpArrowCursor
-#endif
 
 namespace KPlato
 {
@@ -2385,7 +2381,7 @@ void DependencyEditor::slotAddSubMilestone()
     m_currentnode = 0;
 }
 
-void DependencyEditor::edit( QModelIndex i )
+void DependencyEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
 /*        QModelIndex p = m_view->itemModel()->parent( i );
@@ -2431,5 +2427,3 @@ KoPrintJob *DependencyEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptdependencyeditor.moc"

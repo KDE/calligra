@@ -768,5 +768,3 @@ void SheetView::setActiveHighlightColor(const QColor &color)
         invalidate();
     }
 }
-
-#include "SheetView.moc"

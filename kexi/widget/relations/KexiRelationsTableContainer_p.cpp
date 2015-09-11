@@ -18,29 +18,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLayout>
+#include "KexiRelationsTableContainer_p.h"
+#include "KexiRelationsScrollArea.h"
+//! @todo KEXI3 Port #include <kexidragobjects.h>
+#include <kexiutils/utils.h>
+
+#include <KDbTableSchema>
+#include <KDbUtils>
+
 #include <QLabel>
 #include <QPushButton>
-#include <QCursor>
 #include <QPoint>
-#include <QApplication>
-#include <QBitmap>
 #include <QStyle>
 #include <QEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
-#include <QStyleOptionFocusRect>
 #include <QScrollBar>
-
-#include <kdebug.h>
-
-#include <kglobalsettings.h>
-
-#include <db/tableschema.h>
-#include <db/utils.h>
-#include <kexidragobjects.h>
-#include "KexiRelationsTableContainer_p.h"
-#include "KexiRelationsScrollArea.h"
+#include <QDebug>
 
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
     const QString& text, QWidget *parent)
@@ -48,10 +42,10 @@ KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
 {
     setAutoFillBackground(true);
     setContentsMargins(2, 2, 2, 2);
-    m_activeBG = KGlobalSettings::activeTitleColor();
-    m_activeFG = KGlobalSettings::activeTextColor();
-    m_inactiveBG = KGlobalSettings::inactiveTitleColor();
-    m_inactiveFG = KGlobalSettings::inactiveTextColor();
+    m_activeBG = KexiUtils::activeTitleColor();
+    m_activeFG = KexiUtils::activeTextColor();
+    m_inactiveBG = KexiUtils::inactiveTitleColor();
+    m_inactiveFG = KexiUtils::inactiveTextColor();
 
     installEventFilter(this);
 }
@@ -110,7 +104,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
                 parentWidget()->move(newPos);
                 m_grabX = static_cast<QMouseEvent*>(ev)->globalPos().x();
                 m_grabY = static_cast<QMouseEvent*>(ev)->globalPos().y();
-                // kDebug()<<"HEADER:emitting moved";
+                // qDebug()<<"HEADER:emitting moved";
                 emit moved();
             }
             return true;
@@ -121,7 +115,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 {
-    //kDebug();
+    //qDebug();
     static_cast<KexiRelationsTableContainer*>(parentWidget())->setFocus();
     ev->accept();
     if (ev->button() == Qt::LeftButton) {
@@ -141,7 +135,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 {
-    //kDebug();
+    //qDebug();
     if (m_dragging && ev->button() & Qt::LeftButton) {
         setCursor(Qt::ArrowCursor);
         m_dragging = false;
@@ -153,7 +147,7 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 //=====================================================================================
 
 KexiRelationsTableFieldList::KexiRelationsTableFieldList(
-    KexiDB::TableOrQuerySchema* tableOrQuerySchema,
+    KDbTableOrQuerySchema* tableOrQuerySchema,
     KexiRelationsScrollArea *scrollArea, QWidget *parent)
         : KexiFieldListView(parent, ShowAsterisk)
         , m_scrollArea(scrollArea)
@@ -176,7 +170,7 @@ QSize KexiRelationsTableFieldList::sizeHint() const
 {
     QFontMetrics fm(fontMetrics());
 
-// kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i")
+// qDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i")
 //  << ", " << fm.width(schema()->name()+"  ");
 //! @todo
     return KexiFieldListView::sizeHint();
@@ -186,7 +180,7 @@ int KexiRelationsTableFieldList::globalY(const QString &item)
 {
     QAbstractItemModel *themodel = model();
     QModelIndex idx;
-    
+
     for (int i = 0; i < themodel->rowCount(); ++i) {
         idx = themodel->index(i, 0);
         QVariant data = themodel->data(idx);
@@ -194,13 +188,13 @@ int KexiRelationsTableFieldList::globalY(const QString &item)
             break;
         }
     }
-    
+
     if (idx.isValid()) {
         QRect r = this->rectForIndex(idx);
         int y = r.y() + r.height()/2;
-        
+
         //Not sure what this line is supposed to do...is it to check if the item is visible?
-        if (visualRect(idx).y() > viewport()->height()){   
+        if (visualRect(idx).y() > viewport()->height()){
             y = 0;
         } else if (y == 0) {
             y = height();
@@ -218,6 +212,9 @@ void KexiRelationsTableFieldList::dragEnterEvent(QDragEnterEvent* event)
 
 void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
 {
+//! @todo KEXI3 Port kexidragobjects.cpp
+    Q_UNUSED(event);
+#if 0
     QModelIndex receiver = indexAt(event->pos());
     if (!receiver.isValid() || !KexiFieldDrag::canDecode(event))
         return;
@@ -225,42 +222,45 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     QString srcTable;
     QStringList srcFields;
     QString srcField;
-    
+
     if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         event->ignore();
         return;
     }
-    
+
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query"){
         event->ignore();
         return;
     }
-    
+
     if (srcFields.count() != 1) {
         event->ignore();
         return;
     }
-    
+
     srcField = srcFields[0];
-    
+
     if (srcTable == schema()->name()) {
         event->ignore();
         return;
     }
-        
+
     QString f = model()->data(receiver, Qt::DisplayRole).toString();
-    
-    //kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
+
+    //qDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
+#endif
 }
-
 
 void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 {
-    //kDebug();
+    //qDebug();
+//! @todo KEXI3 Port kexidragobjects.cpp
+    Q_UNUSED(event);
+#if 0
     QModelIndex idx = indexAt(event->pos());
-    
+
     if (!idx.isValid() || !KexiFieldDrag::canDecode(event)) {
         event->ignore();
         return;
@@ -269,20 +269,20 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
     QString srcTable;
     QStringList srcFields;
     QString srcField;
-    
+
     if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         return;
     }
-    
+
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query") {
         return;
     }
-    
+
     if (srcFields.count() != 1) {
         return;
     }
     srcField = srcFields[0];
-//  kDebug() << "srcfield:" << srcField;
+//  qDebug() << "srcfield:" << srcField;
 
     QString rcvField = model()->data(idx, Qt::DisplayRole).toString();
 
@@ -294,8 +294,9 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 
     m_scrollArea->addConnection(s);
 
-    //kDebug() << srcTable << ":" << srcField << schema()->name() << ":" << rcvField;
+    //qDebug() << srcTable << ":" << srcField << schema()->name() << ":" << rcvField;
     event->accept();
+#endif
 }
 
 void KexiRelationsTableFieldList::slotContentsMoving(int, int)
@@ -313,9 +314,8 @@ void KexiRelationsTableFieldList::contentsMousePressEvent(QMouseEvent *ev)
 bool KexiRelationsTableFieldList::eventFilter(QObject *o, QEvent *ev)
 {
     if (o == verticalScrollBar() || o == horizontalScrollBar()) {
-        //kDebug() << ev->type();
+        //qDebug() << ev->type();
     }
     return KexiFieldListView::eventFilter(o, ev);
 }
 
-#include "KexiRelationsTableContainer_p.moc"

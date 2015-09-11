@@ -20,14 +20,14 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 
-#include <db/tableschema.h>
-#include <db/queryschema.h>
+#include <KDbTableSchema>
+#include <KDbQuerySchema>
 
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace Scripting;
 
-KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner)
+KexiDBCursor::KexiDBCursor(QObject* parent, KDbCursor* cursor, bool owner)
         : QObject(parent)
         , m_cursor(cursor)
         , m_owner(owner)
@@ -100,27 +100,27 @@ int KexiDBCursor::at()
 {
     return m_cursor->at();
 }
-uint KexiDBCursor::fieldCount()
+int KexiDBCursor::fieldCount()
 {
     return m_cursor->fieldCount();
 }
 
-QVariant KexiDBCursor::value(uint index)
+QVariant KexiDBCursor::value(int index)
 {
     return m_cursor->value(index);
 }
 
-bool KexiDBCursor::setValue(uint index, QVariant value)
+bool KexiDBCursor::setValue(int index, QVariant value)
 {
-    ::KexiDB::QuerySchema* query = m_cursor->query();
+    KDbQuerySchema* query = m_cursor->query();
     if (! query) {
-        kWarning() << "Invalid query, index=" << index << " value=" << value;
+        qWarning() << "Invalid query, index=" << index << " value=" << value;
         return false;
     }
 
-    ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
+    KDbQueryColumnInfo* column = query->fieldsExpanded().at(index);
     if (! column) {
-        kWarning() << "Invalid column, index=" << index << " value=" << value;
+        qWarning() << "Invalid column, index=" << index << " value=" << value;
         return false;
     }
 
@@ -156,5 +156,4 @@ bool KexiDBCursor::save()
     return ok;
 }
 
-#include "kexidbcursor.moc"
 

@@ -229,5 +229,3 @@ QVariantList ScriptingSheetsListView::sheets()
     }
     return list;
 }
-
-#include "ScriptingWidgets.moc"
