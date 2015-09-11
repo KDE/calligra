@@ -173,14 +173,18 @@ extern "C" int main(int argc, char **argv)
          splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
     }
     else {
+#if QT_VERSION >= 0x040700
         qsrand(QDateTime::currentMSecsSinceEpoch());
         int i = qrand() % 3;
         if (i < 1) {
             splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_summer_holidays_xpm));
         }
         else {
+#endif
             splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+#if QT_VERSION >= 0x040700
         }
+#endif
     }
 
     app.setSplashScreen(splash);
