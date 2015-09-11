@@ -241,24 +241,24 @@ void KPrView::initActions()
     m_actionViewModeNormal = new QAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
-    m_actionViewModeNormal->setShortcut(QKeySequence("CTRL+F5"));
+    actionCollection()->setDefaultShortcut(m_actionViewModeNormal, QKeySequence("CTRL+F5"));
     actionCollection()->addAction("view_normal", m_actionViewModeNormal);
     connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
 
     m_actionViewModeNotes = new QAction(m_notesMode->name(), this);
     m_actionViewModeNotes->setCheckable(true);
-    m_actionViewModeNotes->setShortcut(QKeySequence("CTRL+F6"));
+    actionCollection()->setDefaultShortcut(m_actionViewModeNotes, QKeySequence("CTRL+F6"));
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
     m_actionViewModeSlidesSorter = new QAction(m_slidesSorterMode->name(), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
-    m_actionViewModeSlidesSorter->setShortcut(QKeySequence("CTRL+F7"));
+    actionCollection()->setDefaultShortcut(m_actionViewModeSlidesSorter, QKeySequence("CTRL+F7"));
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
     connect(m_actionViewModeSlidesSorter, SIGNAL(triggered()), this, SLOT(showSlidesSorter()));
 
     if ( QAction *action = actionCollection()->action("view_masterpages") )
-        action->setShortcut(QKeySequence("CTRL+F8"));
+        actionCollection()->setDefaultShortcut(action, QKeySequence("CTRL+F8"));
 
     m_actionInsertPictures = new QAction(i18n("Insert Pictures as Slides..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
@@ -281,11 +281,11 @@ void KPrView::initActions()
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL(triggered()), this, SLOT(startPresentation()) );
     QAction* action = new QAction( i18n( "From Current Slide" ), this );
-    action->setShortcut(QKeySequence("Shift+F5"));
+    actionCollection()->setDefaultShortcut(action, QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(startPresentation()) );
     action = new QAction( i18n( "From First Slide" ), this );
-    action->setShortcut(QKeySequence("F5"));
+    actionCollection()->setDefaultShortcut(action, QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(startPresentationFromBeginning()) );
 
@@ -309,21 +309,21 @@ void KPrView::initActions()
     connect( action, SIGNAL(triggered()), this, SLOT(configurePresenterView()) );
 
     m_actionDrawOnPresentation = new QAction( i18n( "Draw on the presentation..." ), this );
-    m_actionDrawOnPresentation->setShortcut(Qt::Key_P);
+    actionCollection()->setDefaultShortcut(m_actionDrawOnPresentation, Qt::Key_P);
     m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
     connect( m_actionDrawOnPresentation, SIGNAL(triggered()), this, SLOT(drawOnPresentation()) );
     m_actionDrawOnPresentation->setEnabled(false);
 
     m_actionHighlightPresentation = new QAction( i18n( "Highlight the presentation..." ), this );
-    m_actionHighlightPresentation->setShortcut(Qt::Key_H);
+    actionCollection()->setDefaultShortcut(m_actionHighlightPresentation, Qt::Key_H);
     m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
     connect( m_actionHighlightPresentation, SIGNAL(triggered()), this, SLOT(highlightPresentation()) );
     m_actionHighlightPresentation->setEnabled(false);
 
     m_actionBlackPresentation = new QAction( i18n( "Blackscreen on the presentation..." ), this );
-    m_actionBlackPresentation->setShortcut(Qt::Key_B);
+    actionCollection()->setDefaultShortcut(m_actionBlackPresentation, Qt::Key_B);
     m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
     connect( m_actionBlackPresentation, SIGNAL(triggered()), this, SLOT(blackPresentation()) );
