@@ -103,7 +103,6 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
@@ -266,7 +265,7 @@ void KWView::buildAssociatedWidget() {
 
 void KWView::setupActions()
 {
-    m_actionFormatFrameSet  = new KAction(i18n("Shape Properties..."), this);
+    m_actionFormatFrameSet  = new QAction(i18n("Shape Properties..."), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
@@ -277,7 +276,7 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
     // -------------- File menu
-    m_actionCreateTemplate = new KAction(i18n("Create Template From Document..."), this);
+    m_actionCreateTemplate = new QAction(i18n("Create Template From Document..."), this);
     m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
     m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
     actionCollection()->addAction("extra_template", m_actionCreateTemplate);
@@ -291,14 +290,14 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
-    action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
+    action = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
     actionCollection()->addAction("edit_delete", action);
 
     // -------------- View menu
-    action = new KAction(i18n("Show Formatting Characters"), this);
+    action = new QAction(i18n("Show Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
@@ -307,7 +306,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
 
-    action = new KAction(i18n("Show Field Shadings"), this);
+    action = new QAction(i18n("Show Field Shadings"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_fieldshadings", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowInlineObjectVisualization(bool)));
@@ -316,7 +315,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the shaded background of fields"));
     action->setWhatsThis(i18n("Toggle the visualization of fields (variables etc.) by drawing their background in a contrasting color."));
 
-    action = new KAction(i18n("Show Text Shape Borders"), this);
+    action = new QAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
@@ -325,7 +324,7 @@ void KWView::setupActions()
     action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
 
-    action = new KAction(i18n("Show Table Borders"), this);
+    action = new QAction(i18n("Show Table Borders"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_tableborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
@@ -334,7 +333,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 
-    action = new KAction(i18n("Show Section Bounds"), this);
+    action = new QAction(i18n("Show Section Bounds"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_sectionbounds", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionBounds(bool)));
@@ -343,7 +342,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of section bounds"));
     action->setWhatsThis(i18n("Toggle the display of section bounds.<br/><br/>When this is enabled, any section bounds will be indicated with a thin gray horizontal brackets."));
 
-    action = new KAction(i18n("Show Rulers"), this);
+    action = new QAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
     action->setToolTip(i18n("Shows or hides rulers"));
     action->setWhatsThis(i18n("The rulers are the white measuring spaces top and left of the "
@@ -378,25 +377,25 @@ void KWView::setupActions()
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
 #ifdef SHOULD_BUILD_RDF
-    action = new KAction(i18n("Semantic Stylesheets..."), this);
+    action = new QAction(i18n("Semantic Stylesheets..."), this);
     actionCollection()->addAction("edit_semantic_stylesheets", action);
     action->setToolTip(i18n("Modify and add semantic stylesheets"));
     action->setWhatsThis(i18n("Stylesheets are used to format the display of information which is stored in RDF."));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 
     if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
+        QAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
         actionCollection()->addAction("insert_semanticobject_ref", createRef);
         KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
         actionCollection()->addAction("insert_semanticobject_new", subMenu);
-        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
+        foreach(QAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
             subMenu->addAction(action);
         }
     }
 #endif
 
     // -------------- Settings menu
-    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
+    action = new QAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
     // not sure why this isn't done through KStandardAction, but since it isn't
@@ -405,19 +404,19 @@ void KWView::setupActions()
     action->setMenuRole(QAction::PreferencesRole);
 
     // -------------- Page tool
-    action = new KAction(i18n("Page Layout..."), this);
+    action = new QAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action);
     action->setToolTip(i18n("Change properties of entire page"));
     action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
 
-    m_actionViewHeader = new KAction(i18n("Create Header"), this);
+    m_actionViewHeader = new QAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
     if (m_currentPage.isValid())
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(enableHeader()));
 
-    m_actionViewFooter = new KAction(i18n("Create Footer"), this);
+    m_actionViewFooter = new QAction(i18n("Create Footer"), this);
     actionCollection()->addAction("insert_footer", m_actionViewFooter);
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
@@ -442,25 +441,25 @@ void KWView::setupActions()
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
 
-    m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
+    m_actionEditCustomVarsEdit = new QAction(i18n("Custom Variables..."), 0,
             this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
             actionCollection(), "custom_vars");
 
-    m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
+    m_actionEditCustomVars = new QAction(i18n("Edit Variable..."), 0,
             this, SLOT(editCustomVariable()),
             actionCollection(), "edit_customvars");
 
-    m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
+    m_actionImportStyle= new QAction(i18n("Import Styles..."), 0,
             this, SLOT(importStyle()),
             actionCollection(), "import_style");
 
-    m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
+    m_actionConfigureCompletion = new QAction(i18n("Configure Completion..."), 0,
             this, SLOT(configureCompletion()),
             actionCollection(), "configure_completion");
     m_actionConfigureCompletion->setToolTip(i18n("Change the words and options for autocompletion"));
     m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
 
-    new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
+    new QAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
     */
 }
 
