@@ -349,6 +349,7 @@ Item {
 
             Calligra.ViewController {
                 id: controllerItem;
+                objectName: "controllerItem";
                 view: wordsCanvas;
                 flickable: controllerFlickable;
                 property bool pageChanging: false;

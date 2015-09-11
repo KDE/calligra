@@ -110,6 +110,7 @@ public:
         , slateMode(true)
         , docked(false)
         , touchKoView(0)
+        , touchEventReceiver(0)
         , desktopKoView(0)
         , desktopViewProxy(0)
         , forceDesktop(false)
@@ -141,6 +142,7 @@ public:
     bool docked;
     QString currentTouchPage;
     KoView* touchKoView;
+    QObject* touchEventReceiver;
     KoView* desktopKoView;
     DesktopViewProxy* desktopViewProxy;
 
@@ -418,7 +420,7 @@ void MainWindow::touchChange()
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToTouchModeEvent, view, d->touchView, d->syncObject);
-        QApplication::sendEvent(d->touchView, &switchedEvent);
+        QApplication::sendEvent(d->touchEventReceiver, &switchedEvent);
         d->syncObject = 0;
         qApp->processEvents();
     }
@@ -447,7 +449,7 @@ void MainWindow::switchToDesktop()
     //Notify the view we are switching away from that we are about to switch away from it
     //giving it the possibility to set up the synchronisation object.
     ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
-    QApplication::sendEvent(d->touchView, &aboutToSwitchEvent);
+    QApplication::sendEvent(d->touchEventReceiver, &aboutToSwitchEvent);
     qApp->processEvents();
 
     if (d->currentTouchPage == "MainPage")
@@ -481,6 +483,7 @@ void MainWindow::setDocAndPart(QObject* document, QObject* part)
         disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
+    d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
     if(DocumentManager::instance()->document()) {
         connect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }

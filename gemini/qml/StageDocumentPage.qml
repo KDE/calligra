@@ -103,6 +103,7 @@ Item {
 
                 Calligra.ViewController {
                     id: controllerItem;
+                    objectName: "controllerItem";
                     view: stageCanvas;
                     flickable: controllerFlickable;
                     minimumZoomFitsWidth: true;
