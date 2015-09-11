@@ -467,7 +467,7 @@ ViewListItem *ViewListWidget::addView(QTreeWidgetItem *category, const QString &
     item->setView( view );
     item->setDocument( doc );
     if (! iconName.isEmpty()) {
-        item->setData(0, Qt::DecorationRole, KIcon(iconName));
+        item->setData(0, Qt::DecorationRole, QIcon::fromTheme(iconName));
     }
     item->setFlags( ( item->flags() | Qt::ItemIsEditable ) & ~Qt::ItemIsDropEnabled );
     insertViewListItem( item, category, index );
