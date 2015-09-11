@@ -21,6 +21,7 @@
  */
 
 #include "ViewController.h"
+#include <KoToolManager.h>
 
 #include <QtCore/QDebug>
 #include <QTimer>
@@ -30,7 +31,10 @@
 #include <QSGSimpleTextureNode>
 
 #include <KoCanvasController.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
 #include <KoZoomMode.h>
+#include "gemini/ViewModeSwitchEvent.h"
 
 #include "Document.h"
 #include "View.h"
@@ -270,6 +274,43 @@ void ViewController::setUseZoomProxy(bool proxy)
 
         emit useZoomProxyChanged();
     }
+}
+
+bool ViewController::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if (d->canvasController) {
+                syncObject->documentOffset = d->canvasController->documentOffset();
+                syncObject->zoomLevel = zoom();
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->shapes = d->canvasController->canvas()->shapeManager()->shapes();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if (d->canvasController && syncObject->initialized) {
+                d->canvasController->canvas()->shapeManager()->setShapes(syncObject->shapes);
+
+                KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
+                qApp->processEvents();
+
+                setZoom(syncObject->zoomLevel);
+
+                qApp->processEvents();
+                emit d->canvasController->proxyObject->moveDocumentOffset(syncObject->documentOffset);
+            }
+
+            return true;
+        }
+    }
+    return QQuickItem::event(event);
 }
 
 void ViewController::zoomAroundPoint(float amount, float x, float y)

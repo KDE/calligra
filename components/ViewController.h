@@ -198,6 +198,10 @@ public:
      */
     void setUseZoomProxy(bool proxy);
 
+    /**
+     * Reimlemented from superclass
+     */
+    virtual bool event(QEvent* event);
 public Q_SLOTS:
     /**
      * \brief Zoom by a specific amount around a centre point.
