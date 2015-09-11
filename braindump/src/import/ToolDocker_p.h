@@ -45,10 +45,10 @@ public:
         : q(dock)
         , tabbed(false)
         , hasTitle(false)
-        , lockIcon(koIconName("object-locked"))
-        , unlockIcon(koIconName("object-unlocked"))
-        , tabIcon(koIconName("tab-new"))
-        , unTabIcon(koIconName("tab-close"))
+        , lockIcon(koIcon("object-locked"))
+        , unlockIcon(koIcon("object-unlocked"))
+        , tabIcon(koIcon("tab-new"))
+        , unTabIcon(koIcon("tab-close"))
     {
     }
 
