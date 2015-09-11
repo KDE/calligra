@@ -26,7 +26,6 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kaction.h>
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 #include <k4aboutdata.h>
@@ -235,24 +234,24 @@ void KPrView::initActions()
        setXMLFile( "stage.rc" );
 
     // do special stage stuff here
-    m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
+    m_actionExportHtml = new QAction(i18n("Export as HTML..."), this);
     actionCollection()->addAction("file_export_html", m_actionExportHtml);
     connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
 
-    m_actionViewModeNormal = new KAction(m_normalMode->name(), this);
+    m_actionViewModeNormal = new QAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
     m_actionViewModeNormal->setShortcut(QKeySequence("CTRL+F5"));
     actionCollection()->addAction("view_normal", m_actionViewModeNormal);
     connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
 
-    m_actionViewModeNotes = new KAction(m_notesMode->name(), this);
+    m_actionViewModeNotes = new QAction(m_notesMode->name(), this);
     m_actionViewModeNotes->setCheckable(true);
     m_actionViewModeNotes->setShortcut(QKeySequence("CTRL+F6"));
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
-    m_actionViewModeSlidesSorter = new KAction(m_slidesSorterMode->name(), this);
+    m_actionViewModeSlidesSorter = new QAction(m_slidesSorterMode->name(), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
     m_actionViewModeSlidesSorter->setShortcut(QKeySequence("CTRL+F7"));
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
@@ -261,7 +260,7 @@ void KPrView::initActions()
     if ( QAction *action = actionCollection()->action("view_masterpages") )
         action->setShortcut(QKeySequence("CTRL+F8"));
 
-    m_actionInsertPictures = new KAction(i18n("Insert Pictures as Slides..."), this);
+    m_actionInsertPictures = new QAction(i18n("Insert Pictures as Slides..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
     connect(m_actionInsertPictures, SIGNAL(triggered()), this, SLOT(insertPictures()));
 
@@ -270,22 +269,22 @@ void KPrView::initActions()
     viewModesGroup->addAction(m_actionViewModeNotes);
     viewModesGroup->addAction(m_actionViewModeSlidesSorter);
 
-    m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
+    m_actionCreateAnimation = new QAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL(triggered()), this, SLOT(createAnimation()) );
 
-    m_actionEditCustomSlideShows = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
+    m_actionEditCustomSlideShows = new QAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
     connect( m_actionEditCustomSlideShows, SIGNAL(triggered()), this, SLOT(editCustomSlideShows()) );
 
     m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL(triggered()), this, SLOT(startPresentation()) );
-    KAction* action = new KAction( i18n( "From Current Slide" ), this );
+    QAction* action = new QAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(startPresentation()) );
-    action = new KAction( i18n( "From First Slide" ), this );
+    action = new QAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL(triggered()), this, SLOT(startPresentationFromBeginning()) );
@@ -301,29 +300,29 @@ void KPrView::initActions()
         showStatusbarAction->setChecked(! statusBar()->isHidden());
     }
 
-    action = new KAction( i18n( "Configure Slide Show..." ), this );
+    action = new QAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
     connect( action, SIGNAL(triggered()), this, SLOT(configureSlideShow()) );
 
-    action = new KAction( i18n( "Configure Presenter View..." ), this );
+    action = new QAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
     connect( action, SIGNAL(triggered()), this, SLOT(configurePresenterView()) );
 
-    m_actionDrawOnPresentation = new KAction( i18n( "Draw on the presentation..." ), this );
+    m_actionDrawOnPresentation = new QAction( i18n( "Draw on the presentation..." ), this );
     m_actionDrawOnPresentation->setShortcut(Qt::Key_P);
     m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
     connect( m_actionDrawOnPresentation, SIGNAL(triggered()), this, SLOT(drawOnPresentation()) );
     m_actionDrawOnPresentation->setEnabled(false);
 
-    m_actionHighlightPresentation = new KAction( i18n( "Highlight the presentation..." ), this );
+    m_actionHighlightPresentation = new QAction( i18n( "Highlight the presentation..." ), this );
     m_actionHighlightPresentation->setShortcut(Qt::Key_H);
     m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
     connect( m_actionHighlightPresentation, SIGNAL(triggered()), this, SLOT(highlightPresentation()) );
     m_actionHighlightPresentation->setEnabled(false);
 
-    m_actionBlackPresentation = new KAction( i18n( "Blackscreen on the presentation..." ), this );
+    m_actionBlackPresentation = new QAction( i18n( "Blackscreen on the presentation..." ), this );
     m_actionBlackPresentation->setShortcut(Qt::Key_B);
     m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
@@ -408,7 +407,7 @@ void KPrView::createAnimation()
 void KPrView::showNormal()
 {
     setViewMode(m_normalMode);
-    KAction *action = (KAction*) actionCollection()->action("view_normal");
+    QAction *action = actionCollection()->action("view_normal");
     tabBar()->setCurrentIndex(0);
     if (action){
         action-> setChecked(true);
