@@ -40,7 +40,6 @@
 #include <QUrl>
 
 #include <kglobal.h>
-#include <kicon.h>
 #include <kiconloader.h>
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
@@ -71,6 +70,7 @@
 #include <KoFileDialog.h>
 #include <KoJsonTrader.h>
 #include <KoDialog.h>
+#include <KoIcon.h>
 
 #include "PropertyContainer.h"
 #include "RecentFileManager.h"
@@ -302,7 +302,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Calligra Gemini"));
-    setWindowIcon(KIcon("calligragemini"));//gemini"));
+    setWindowIcon(koIcon("calligragemini"));//gemini"));
 
     foreach(const QString &fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
