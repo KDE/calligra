@@ -628,8 +628,8 @@ char *yytext;
    Boston, MA 02110-1301, USA.
 */
 #line 22 "sqlscanner.l"
-#include <field.h>
-#include <expression.h>
+#include <db/field.h>
+#include <db/expression.h>
 
 #include "sqlparser.h"
 #include "sqltypes.h"
@@ -828,7 +828,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 56 "sqlscanner.l"
+#line 57 "sqlscanner.l"
 
 
 
@@ -913,7 +913,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 59 "sqlscanner.l"
+#line 60 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_EQUAL;
@@ -921,7 +921,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 64 "sqlscanner.l"
+#line 65 "sqlscanner.l"
 {
     ECOUNT;
     return NOT_EQUAL2;
@@ -929,7 +929,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 69 "sqlscanner.l"
+#line 70 "sqlscanner.l"
 {
     ECOUNT;
     return '=';
@@ -937,7 +937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 74 "sqlscanner.l"
+#line 75 "sqlscanner.l"
 {
     ECOUNT;
     return LESS_OR_EQUAL;
@@ -945,7 +945,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 79 "sqlscanner.l"
+#line 80 "sqlscanner.l"
 {
     ECOUNT;
     return GREATER_OR_EQUAL;
@@ -953,7 +953,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 84 "sqlscanner.l"
+#line 85 "sqlscanner.l"
 {
     ECOUNT;
     return SQL_IN;
@@ -961,18 +961,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 89 "sqlscanner.l"
+#line 90 "sqlscanner.l"
 {
 //TODO: what about hex or octal values?
     //we're using QString:toLongLong() here because atoll() is not so portable:
     ECOUNT;
     bool ok;
-    yylval.integerValue = QString(yytext).toLongLong( &ok );
+    yylval.integerValue = QByteArray(yytext).toLongLong(&ok);
     if (!ok) {
         setError(i18n("Invalid integer number"),i18n("This integer number may be too large."));
         return SCAN_ERROR;
     }
-//    yylval.integerValue = atol(yytext);
     return INTEGER_CONST;
 }
 	YY_BREAK
@@ -1307,7 +1306,7 @@ YY_RULE_SETUP
 #line 306 "sqlscanner.l"
 ECHO;
 	YY_BREAK
-#line 1311 "sqlscanner.cpp"
+#line 1310 "sqlscanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
