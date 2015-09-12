@@ -21,6 +21,7 @@
 %{
 #include <db/field.h>
 #include <db/expression.h>
+#include <db/utils.h>
 
 #include "sqlparser.h"
 #include "sqltypes.h"
@@ -44,6 +45,7 @@ extern void setError(const QString& errName, const QString& errDesc);
 
 whitespace    [ \t\n]
 digit         [0-9]
+hex_digit     [0-9a-fA-F]
 string        (['][^']*[']|["][^\"]*["])
 /*identifier    [a-zA-Z_][a-zA-Z_0-9]* */
 identifier    [a-zA-Z_0-9]+
@@ -53,6 +55,10 @@ query_parameter    \[[^\[\]]+\]
 integer            {digit}+
 decimal            (({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
+/* SQL standard */
+hex_x              (X[']{hex_digit}*['])
+/* ODBC standard */
+hex_0x             (0x{hex_digit}+)
 
 %%
 
@@ -88,7 +94,7 @@ real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][
 }
 
 {integer} {
-//TODO: what about hex or octal values?
+//TODO: what about octal values?
     //we're using QString:toLongLong() here because atoll() is not so portable:
     ECOUNT;
     bool ok;
@@ -98,6 +104,30 @@ real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][
         return SCAN_ERROR;
     }
     return INTEGER_CONST;
+}
+
+{hex_x} {
+    // e.g. X'DEADbeef1234'
+    ECOUNT;
+    bool ok;
+    yylval.binaryValue = new QByteArray(KexiDB::xHexToByteArray(yytext, yyleng, &ok));
+    if (!ok) {
+        setError(i18n("Invalid hexadecimal sequence"),i18n("This value should be in format X'HEXADECIMALNUMBERS'."));
+        return SCAN_ERROR;
+    }
+    return HEX_LITERAL;
+}
+
+{hex_0x} {
+    // e.g. 0xDEADbeef1234
+    ECOUNT;
+    bool ok;
+    yylval.binaryValue = new QByteArray(KexiDB::zeroXHexToByteArray(yytext, yyleng, &ok));
+    if (!ok) {
+        setError(i18n("Invalid hexadecimal sequence"),i18n("This value should be in format 0xHEXADECIMALNUMBERS."));
+        return SCAN_ERROR;
+    }
+    return HEX_LITERAL;
 }
 
 {decimal} {

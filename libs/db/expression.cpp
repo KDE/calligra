@@ -649,9 +649,11 @@ Field::Type ConstExpr::type()
         }
         else
             return Field::Text;
-    } else if (m_token == REAL_CONST)
+    } else if (m_token == REAL_CONST) {
         return Field::Double;
-    else if (m_token == DATE_CONST)
+    } else if (m_token == HEX_LITERAL) {
+        return Field::BLOB;
+    } else if (m_token == DATE_CONST)
         return Field::Date;
     else if (m_token == DATETIME_CONST)
         return Field::DateTime;
@@ -678,7 +680,10 @@ QString ConstExpr::toString(const Driver *driver, QuerySchemaParameterValueListI
         return QLatin1Char('\'') + value.toString() + QLatin1Char('\'');
     else if (m_token == REAL_CONST)
         return QString::fromLatin1(value.toByteArray());
-    else if (m_token == DATE_CONST)
+    else if (m_token == HEX_LITERAL) {
+        return driver ? driver->escapeBLOB(value.toByteArray())
+                      :  KexiDB::escapeBLOB(value.toByteArray(), KexiDB::BLOBEscapeXHex);
+    } else if (m_token == DATE_CONST)
         return QLatin1Char('\'') + value.toDate().toString(Qt::ISODate) + QLatin1Char('\'');
     else if (m_token == DATETIME_CONST)
         return QLatin1Char('\'') + value.toDateTime().date().toString(Qt::ISODate)

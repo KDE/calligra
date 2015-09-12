@@ -69,51 +69,52 @@ extern int yydebug;
     DISTINCT = 270,
     DOUBLE_QUOTED_STRING = 271,
     FROM = 272,
-    JOIN = 273,
-    KEY = 274,
-    LEFT = 275,
-    LESS_OR_EQUAL = 276,
-    SQL_NULL = 277,
-    SQL_IS = 278,
-    SQL_IS_NULL = 279,
-    SQL_IS_NOT_NULL = 280,
-    ORDER = 281,
-    PRIMARY = 282,
-    SELECT = 283,
-    INTEGER_CONST = 284,
-    REAL_CONST = 285,
-    RIGHT = 286,
-    SQL_ON = 287,
-    DATE_CONST = 288,
-    DATETIME_CONST = 289,
-    TIME_CONST = 290,
-    TABLE = 291,
-    IDENTIFIER = 292,
-    IDENTIFIER_DOT_ASTERISK = 293,
-    QUERY_PARAMETER = 294,
-    VARCHAR = 295,
-    WHERE = 296,
-    SCAN_ERROR = 297,
-    UNION = 298,
-    EXCEPT = 299,
-    INTERSECT = 300,
-    OR = 301,
-    AND = 302,
-    XOR = 303,
-    NOT = 304,
-    GREATER_OR_EQUAL = 305,
-    NOT_EQUAL = 306,
-    NOT_EQUAL2 = 307,
-    SQL_IN = 308,
-    LIKE = 309,
-    NOT_LIKE = 310,
-    ILIKE = 311,
-    SIMILAR_TO = 312,
-    NOT_SIMILAR_TO = 313,
-    SIMILAR = 314,
-    BETWEEN = 315,
-    NOT_BETWEEN = 316,
-    UMINUS = 317
+    HEX_LITERAL = 273,
+    JOIN = 274,
+    KEY = 275,
+    LEFT = 276,
+    LESS_OR_EQUAL = 277,
+    SQL_NULL = 278,
+    SQL_IS = 279,
+    SQL_IS_NULL = 280,
+    SQL_IS_NOT_NULL = 281,
+    ORDER = 282,
+    PRIMARY = 283,
+    SELECT = 284,
+    INTEGER_CONST = 285,
+    REAL_CONST = 286,
+    RIGHT = 287,
+    SQL_ON = 288,
+    DATE_CONST = 289,
+    DATETIME_CONST = 290,
+    TIME_CONST = 291,
+    TABLE = 292,
+    IDENTIFIER = 293,
+    IDENTIFIER_DOT_ASTERISK = 294,
+    QUERY_PARAMETER = 295,
+    VARCHAR = 296,
+    WHERE = 297,
+    SCAN_ERROR = 298,
+    UNION = 299,
+    EXCEPT = 300,
+    INTERSECT = 301,
+    OR = 302,
+    AND = 303,
+    XOR = 304,
+    NOT = 305,
+    GREATER_OR_EQUAL = 306,
+    NOT_EQUAL = 307,
+    NOT_EQUAL2 = 308,
+    SQL_IN = 309,
+    LIKE = 310,
+    NOT_LIKE = 311,
+    ILIKE = 312,
+    SIMILAR_TO = 313,
+    NOT_SIMILAR_TO = 314,
+    SIMILAR = 315,
+    BETWEEN = 316,
+    NOT_BETWEEN = 317,
+    UMINUS = 318
   };
 #endif
 
@@ -122,7 +123,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 477 "sqlparser.y" /* yacc.c:1909  */
+#line 492 "sqlparser.y" /* yacc.c:1909  */
 
     QString* stringValue;
     QByteArray* binaryValue;
@@ -138,7 +139,7 @@ union YYSTYPE
     OrderByColumnInternal::List *orderByColumns;
     QVariant *variantValue;
 
-#line 133 "sqlparser.tab.h" /* yacc.c:1909  */
+#line 134 "sqlparser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
