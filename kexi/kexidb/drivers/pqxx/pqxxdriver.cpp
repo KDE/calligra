@@ -164,7 +164,7 @@ QByteArray pqxxSqlDriver::drv_escapeIdentifier(const QByteArray& str) const
 //
 QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 {
-    return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
+    return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeByteaHex);
 }
 
 QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant& v) const

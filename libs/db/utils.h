@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -426,13 +426,15 @@ CALLIGRADB_EXPORT QVariant notEmptyValueForType(Field::Type type);
 enum BLOBEscapingType {
     BLOBEscapeXHex = 1,        //!< escaping like X'1FAD', used by sqlite (hex numbers)
     BLOBEscape0xHex,           //!< escaping like 0x1FAD, used by mysql (hex numbers)
-    BLOBEscapeHex,              //!< escaping like 1FAD without quotes or prefixes
-    BLOBEscapeOctal           //!< escaping like 'zk\\000$x', used by pgsql
-    //!< (only non-printable characters are escaped using octal numbers)
-    //!< See http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+    BLOBEscapeHex,             //!< escaping like 1FAD without quotes or prefixes
+    BLOBEscapeOctal,           //!< escaping like 'zk\\000$x', used by pgsql
+                               //!< (only non-printable characters are escaped using octal numbers)
+                               //!< See http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+    BLOBEscapeByteaHex         //!< "bytea hex" escaping, e.g. E'\xDEADBEEF'::bytea used by pgsql
+                               //!< (only non-printable characters are escaped using octal numbers)
+                               //!< See http://www.postgresql.org/docs/9.5/interactive/datatype-binary.html
 };
 
-//! @todo reverse function for BLOBEscapeOctal is available: processBinaryData() in pqxxcursor.cpp - move it here
 /*! \return a string containing escaped, printable representation of \a array.
  Escaping is controlled by \a type. For empty array, QString() is returned,
  so if you want to use this function in an SQL statement, empty arrays should be
@@ -445,6 +447,16 @@ CALLIGRADB_EXPORT QString escapeBLOB(const QByteArray& array, BLOBEscapingType t
  described at http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
  This function is used by PostgreSQL KexiDB and migration drivers. */
 CALLIGRADB_EXPORT QByteArray pgsqlByteaToByteArray(const char* data, int length);
+
+/*! \return byte array converted from \a data of length \a length.
+ \a data is escaped in format X'*', where * is one or more bytes in hexadecimal format.
+ See BLOBEscapeXHex. */
+CALLIGRADB_EXPORT QByteArray xHexToByteArray(const char* data, int length, bool *ok);
+
+/*! \return byte array converted from \a data of length \a length.
+ \a data is escaped in format 0x*, where * is one or more bytes in hexadecimal format.
+ See BLOBEscape0xHex. */
+CALLIGRADB_EXPORT QByteArray zeroXHexToByteArray(const char* data, int length, bool *ok);
 
 /*! \return int list converted from string list.
    If \a ok is not 0, *ok is set to result of the conversion.
