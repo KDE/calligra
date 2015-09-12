@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,8 @@ class ConnectionInternal;
 class DriverManager;
 class DriverBehaviour;
 class DriverPrivate;
+class NArgExpr;
+class QuerySchemaParameterValueListIterator;
 
 //! Generic database abstraction.
 /*! This class is a prototype of the database driver for implementations.
@@ -291,6 +293,53 @@ public:
 
     //! @return a structure that provides detailed information about driver's default behaviour.
     const DriverBehaviour* behaviour() const { return beh; }
+
+    //! Generates native (driver-specific) HEX() function call.
+    //! Default implementation uses HEX(val).
+    virtual QString hexFunctionToString(KexiDB::NArgExpr *args,
+                                        QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) IFNULL() function call.
+    //! Default implementation uses IFNULL().
+    virtual QString ifnullFunctionToString(KexiDB::NArgExpr *args,
+                                           QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) LENGTH() function call.
+    //! Default implementation uses LENGTH().
+    virtual QString lengthFunctionToString(KexiDB::NArgExpr *args,
+                                           QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) GREATEST() and LEAST() function calls.
+    //! Default implementation just uses GREATEST() and LEAST(), respectively.
+    //! (this works only with MySQL >= 5.0.13).
+    //! For backends workarounds are added.
+    virtual QString greatestOrLeastFunctionToString(const QString &name,
+                                                    KexiDB::NArgExpr *args,
+                                                    QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) RANDOM() and RANDOM(X,Y) function calls.
+    //! Accepted @a args can contain zero or two positive integer arguments X, Y; X < Y.
+    //! In case of numeric arguments, RANDOM(X, Y) returns a random integer that is equal
+    //! or greater than X and less than Y.
+    //! Default implementation for RANDOM() returns F() where F is behaviour()->RANDOM_FUNCTION.
+    //! This works with PostgreSQL.
+    //! Default implementation for RANDOM(X,Y) returns (X + FLOOR(F()*(Y-X+1))) where
+    //! F is behaviour()->RANDOM_FUNCTION. This works with PostgreSQL.
+    virtual QString randomFunctionToString(KexiDB::NArgExpr *args,
+                                           QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) CEILING() and FLOOR() function calls.
+    //! Default implementation USES CEILING() and FLOOR(), respectively.
+    //! Special case is for SQLite.
+    virtual QString ceilingOrFloorFunctionToString(const QString &name,
+                                                   KexiDB::NArgExpr *args,
+                                                   QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) UNICODE() function call.
+    //! Default implementation USES UNICODE().
+    //! Special case is for MYSQL and PostgreSQL.
+    virtual QString unicodeFunctionToString(KexiDB::NArgExpr *args,
+                                            QuerySchemaParameterValueListIterator* params) const;
 
 protected:
     /*! Used by DriverManager.

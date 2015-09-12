@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "connectiondata.h"
 #include "admin.h"
 #include "utils.h"
+#include "expression.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -68,6 +69,7 @@ DriverBehaviour::DriverBehaviour()
         , SELECT_1_SUBQUERY_SUPPORTED(false)
         , TEXT_TYPE_MAX_LENGTH(0)
         , LIKE_OPERATOR("LIKE")
+        , RANDOM_FUNCTION("RANDOM")
 {
 }
 
@@ -365,6 +367,57 @@ void Driver::initDriverSpecificKeywords(const char* const* keywords)
 bool Driver::isDriverSpecificKeyword(const QByteArray& word) const
 {
     return d->driverSpecificSQLKeywords.contains(word);
+}
+
+QString Driver::hexFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("HEX"), this, args, params);
+}
+
+QString Driver::ifnullFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("IFNULL"), this, args, params);
+}
+
+QString Driver::lengthFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("LENGTH"), this, args, params);
+}
+
+QString Driver::greatestOrLeastFunctionToString(const QString &name, KexiDB::NArgExpr *args,
+                                                QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(name, this, args, params);
+}
+
+QString Driver::randomFunctionToString(KexiDB::NArgExpr *args,
+                                       QuerySchemaParameterValueListIterator* params) const
+{
+    static QLatin1String randomStatic("()");
+    if (!args || args->args() < 1 ) {
+        return beh->RANDOM_FUNCTION + randomStatic;
+    }
+    Q_ASSERT(args->args() == 2);
+    const QString x(args->arg(0)->toString(this, params));
+    const QString y(args->arg(1)->toString(this, params));
+    static QLatin1String floorRandomStatic("+FLOOR(");
+    static QLatin1String floorRandomStatic2("()*(");
+    static QLatin1String floorRandomStatic3(")))");
+    return QLatin1Char('(') + x + floorRandomStatic + beh->RANDOM_FUNCTION
+            + floorRandomStatic2 + y + QLatin1Char('-') + x + floorRandomStatic3;
+}
+
+QString Driver::ceilingOrFloorFunctionToString(const QString &name,
+                                               KexiDB::NArgExpr *args,
+                                               QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(name, this, args, params);
+}
+
+QString Driver::unicodeFunctionToString(KexiDB::NArgExpr *args,
+                                        QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("UNICODE"), this, args, params);
 }
 
 //---------------

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -196,6 +197,10 @@ bool pqxxSqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
         if (d->version) {
 //! @todo set version using the connection pointer when we drop libpqxx for libpq
         }
+        //! @todo call on first use of SOUNDEX(), etc.;
+        //!       it's not possible now because we don't have connection context in FunctionExpr
+        drv_executeSQL("CREATE EXTENSION fuzzystrmatch");
+
         return true;
     } catch (const std::exception &e) {
         KexiDBDrvDbg << "exception -" << e.what();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +64,36 @@ public:
      Can be reimplemented for other drivers, e.g. the SQLite3 driver returns " COLLATE ''". 
      Default implementation returns empty string. */
     virtual QString collationSQL() const;
+
+    //! Generates native (driver-specific) GREATEST() and LEAST() function calls.
+    //! Uses MAX() and MIN(), respectively.
+    //! If arguments are of text type, to each argument default (unicode) collation
+    //! is assigned that is configured for SQLite by KexiDB.
+    //! Example: SELECT MAX('ą' COLLATE '', 'z' COLLATE '').
+    virtual QString greatestOrLeastFunctionToString(const QString &name,
+                                                    KexiDB::NArgExpr *args,
+                                                    QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) RANDOM() and RANDOM(X,Y) function calls.
+    //! Accepted @a args can contain zero or two positive integer arguments X, Y; X < Y.
+    //! In case of numeric arguments, RANDOM(X, Y) returns a random integer that is equal
+    //! or greater than X and less than Y.
+    //! Because SQLite returns integer between -9223372036854775808 and +9223372036854775807,
+    //! RANDOM() for SQLite is equal to (RANDOM()+9223372036854775807)/18446744073709551615.
+    //! Similarly, RANDOM(X,Y) for SQLite is equal to
+    //! (X + CAST((Y-X) * (RANDOM()+9223372036854775807)/18446744073709551615 AS INT)).
+    virtual QString randomFunctionToString(KexiDB::NArgExpr *args,
+                                           QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) CEILING() and FLOOR() function calls.
+    //! Default implementation USES CEILING() and FLOOR(), respectively.
+    //! For CEILING() uses:
+    //! (CASE WHEN X = CAST(X AS INT) THEN CAST(X AS INT) WHEN X >= 0 THEN CAST(X AS INT) + 1 ELSE CAST(X AS INT) END).
+    //! For FLOOR() uses:
+    //! (CASE WHEN X >= 0 OR X = CAST(X AS INT) THEN CAST(X AS INT) ELSE CAST(X AS INT) - 1 END).
+    virtual QString ceilingOrFloorFunctionToString(const QString &name,
+                                                   KexiDB::NArgExpr *args,
+                                                   QuerySchemaParameterValueListIterator* params) const;
 
 protected:
     virtual QString drv_escapeIdentifier(const QString& str) const;
