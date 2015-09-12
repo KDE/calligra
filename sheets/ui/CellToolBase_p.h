@@ -55,7 +55,7 @@ class CharacterSelectDialog;
 class CellEditor;
 class Sheet;
 
-class Q_DECL_HIDDEN CellToolBase::Private
+class  CellToolBase::Private
 {
 public:
     Private(CellToolBase* parent) : q(parent) {}

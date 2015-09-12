@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoSemanticStylesheetsEditor::Private
+class KoSemanticStylesheetsEditor::Private
 {
 public:
     Ui::KoSemanticStylesheetsEditor *m_ui;

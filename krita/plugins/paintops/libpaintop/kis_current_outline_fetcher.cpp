@@ -47,9 +47,9 @@ struct KisCurrentOutlineFetcher::Private {
 
     bool isDirty;
 #if QT_VERSION >= 0x040700
-    QTime lastUpdateTime;
-#else
     QElapsedTimer lastUpdateTime;
+#else
+    QTime lastUpdateTime;
 #endif
 
     qreal lastRotationApplied;

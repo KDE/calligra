@@ -40,12 +40,10 @@ K_EXPORT_PLUGIN(ToolCropFactory("krita"))
 
 
 ToolCrop::ToolCrop(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolCropFactory(QStringList()));
-
-
 }
 
 ToolCrop::~ToolCrop()

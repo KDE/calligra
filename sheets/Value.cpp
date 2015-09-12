@@ -51,7 +51,7 @@ private:
     ValueStorage m_storage;
 };
 
-class Q_DECL_HIDDEN Value::Private : public QSharedData
+class  Value::Private : public QSharedData
 {
 public:
 

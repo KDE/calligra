@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoInlineObjectRegistry::Private
+class KoInlineObjectRegistry::Private
 {
 public:
     void insertFactory(KoInlineObjectFactoryBase *factory);

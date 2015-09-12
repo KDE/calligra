@@ -180,15 +180,18 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 // KexiDBDrvDbg << pos;
     //from most to least frequently used types:
     if (f) { //We probably have a schema type query so can use kexi to determin the row type
-        if ((f->isIntegerType()) || (/*ROWID*/!f && m_containsROWIDInfo && pos == m_fieldCount)) {
+        const Field::Type type = f->type(); // cache: evaluating type of expressions can be expensive
+        if (type == Field::Null || type == Field::InvalidType) {
+            return QVariant();
+        } else if (Field::isIntegerType(type) || (/*ROWID*/!f && m_containsROWIDInfo && pos == m_fieldCount)) {
             return (*m_res)[at()][pos].as(int());
-        } else if (f->isTextType()) {
+        } else if (Field::isTextType(type)) {
             return QString::fromUtf8((*m_res)[at()][pos].c_str()); //utf8?
-        } else if (f->isFPNumericType()) {
+        } else if (Field::isFPNumericType(type)) {
             return (*m_res)[at()][pos].as(double());
-        } else if (f->type() == Field::Boolean) {
+        } else if (type == Field::Boolean) {
             return QString((*m_res)[at()][pos].c_str()).toLower() == "t" ? QVariant(true) : QVariant(false);
-        } else if (f->typeGroup() == Field::BLOBGroup) {
+        } else if (Field::typeGroup(type) == Field::BLOBGroup) {
 //   pqxx::result::field r = (*m_res)[at()][pos];
 //   kDebug() << r.name() << ", " << r.c_str() << ", " << r.type() << ", " << r.size();
             return ::pgsqlByteaToByteArray((*m_res)[at()][pos]);

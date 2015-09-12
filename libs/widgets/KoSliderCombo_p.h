@@ -65,7 +65,7 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
     QMenu::mousePressEvent(e);
 }
 
-class Q_DECL_HIDDEN KoSliderCombo::KoSliderComboPrivate {
+class  KoSliderCombo::KoSliderComboPrivate {
 public:
     KoSliderCombo *thePublic;
     QValidator *m_validator;

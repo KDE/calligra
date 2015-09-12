@@ -22,7 +22,7 @@
 
 #include "KoFindOptionSet.h"
 
-class Q_DECL_HIDDEN KoFindBase::Private
+class KoFindBase::Private
 {
 public:
     Private() : currentMatch(0), options(0) { }

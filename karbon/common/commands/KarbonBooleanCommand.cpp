@@ -28,7 +28,7 @@
 
 #include <QPainterPath>
 
-class Q_DECL_HIDDEN KarbonBooleanCommand::Private
+class  KarbonBooleanCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase * c)

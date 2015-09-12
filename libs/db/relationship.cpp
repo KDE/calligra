@@ -166,13 +166,16 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
         Field *masterField = *masterIt;
         Field *detailsField = *detailsIt;
         // while (f1 && f2) {
-        if (masterField->type() != detailsField->type()
-                && masterField->isIntegerType() != detailsField->isIntegerType()
-                && masterField->isTextType() != detailsField->isTextType()) {
+        const Field::Type masterType = masterField->type(); // cache: evaluating type of expressions can be expensive
+        const Field::Type detailsType = detailsField->type();
+        if (masterType != detailsType
+                && Field::isIntegerType(masterType) != Field::isIntegerType(detailsType)
+                && Field::isTextType(masterType) != Field::isTextType(detailsType))
+        {
             KexiDBWarn << "Relationship::setIndices(INDEX on '" << masterIndex->table()->name()
             << "',INDEX on " << detailsIndex->table()->name() << "): !equal field types: "
-            << Driver::defaultSQLTypeName(masterField->type()) << " " << masterField->name() << ", "
-            << Driver::defaultSQLTypeName(detailsField->type()) << " " << detailsField->name();
+            << Driver::defaultSQLTypeName(masterType) << " " << masterField->name() << ", "
+            << Driver::defaultSQLTypeName(detailsType) << " " << detailsField->name();
             m_pairs.clear();
             return;
         }

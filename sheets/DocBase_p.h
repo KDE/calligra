@@ -42,7 +42,7 @@ namespace Sheets {
 class Map;
 class SheetAccessModel;
 
-class Q_DECL_HIDDEN DocBase::Private
+class  DocBase::Private
 {
 public:
     Map *map;

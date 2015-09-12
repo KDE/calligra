@@ -85,7 +85,7 @@ using namespace Calligra::Sheets;
 
 const int s_borderSpace = 1;
 
-class Q_DECL_HIDDEN CellView::Private : public QSharedData
+class  CellView::Private : public QSharedData
 {
 public:
     Private(Style* defaultStyle, qreal defaultWidth, qreal defaultHeight)

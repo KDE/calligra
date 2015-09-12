@@ -309,14 +309,16 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
             parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
             return false;
         }
-
-        if (!(!Field::isNumericType(list[0]->type()) || !Field::isNumericType(list[1]->type()) || !Field::isNumericType(list[2]->type()))) {
+        const Field::Type type0 = list[0]->type(); // cache: evaluating type of expressions can be expensive
+        const Field::Type type1 = list[1]->type();
+        const Field::Type type2 = list[2]->type();
+        if (!(!Field::isNumericType(type0) || !Field::isNumericType(type1) || !Field::isNumericType(type1))) {
             return true;
-        } else if (!(!Field::isTextType(list[0]->type()) || !Field::isTextType(list[1]->type()) || !Field::isTextType(list[2]->type()))) {
+        } else if (!(!Field::isTextType(type0) || !Field::isTextType(type1) || !Field::isTextType(type2))) {
             return true;
         }
 
-        if ((list[0]->type() == list[1]->type() && list[1]->type() == list[2]->type())) {
+        if (type0 == type1 && type1 == type2) {
             return true;
         }
 

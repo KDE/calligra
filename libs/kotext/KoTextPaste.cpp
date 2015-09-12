@@ -39,7 +39,7 @@
 #include <Soprano/Soprano>
 #endif
 
-class Q_DECL_HIDDEN KoTextPaste::Private
+class KoTextPaste::Private
 {
 public:
     Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel,

@@ -30,7 +30,7 @@
 
 using namespace MSOOXML;
 
-class Q_DECL_HIDDEN MsooXmlRelationships::Private
+class  MsooXmlRelationships::Private
 {
 public:
     Private()

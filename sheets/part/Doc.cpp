@@ -110,7 +110,7 @@
 using namespace std;
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN Doc::Private
+class  Doc::Private
 {
 public:
     Map *map;

@@ -40,7 +40,7 @@
 //                         class KoOdfPageLayout
 
 
-class Q_DECL_HIDDEN KoOdfPageLayout::Private
+class  KoOdfPageLayout::Private
 {
 public:
     Private();

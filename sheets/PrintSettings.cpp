@@ -37,7 +37,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN PrintSettings::Private
+class  PrintSettings::Private
 {
 public:
     KoPageLayout pageLayout;

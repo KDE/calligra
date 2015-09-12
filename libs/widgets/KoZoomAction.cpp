@@ -43,7 +43,7 @@
 
 #include <math.h>
 
-class Q_DECL_HIDDEN KoZoomAction::Private
+class KoZoomAction::Private
 {
 public:
 

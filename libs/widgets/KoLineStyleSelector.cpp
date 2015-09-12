@@ -24,7 +24,7 @@
 #include <QPen>
 #include <QPainter>
 
-class Q_DECL_HIDDEN KoLineStyleSelector::Private
+class KoLineStyleSelector::Private
 {
 public:
     Private(QWidget *parent)

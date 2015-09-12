@@ -21,7 +21,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN ApplicationSettings::Private
+class  ApplicationSettings::Private
 {
 public:
     QColor gridColor;

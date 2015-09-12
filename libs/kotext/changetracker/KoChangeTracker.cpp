@@ -53,7 +53,7 @@
 #include <QTextList>
 #include <QTextTable>
 
-class Q_DECL_HIDDEN KoChangeTracker::Private
+class KoChangeTracker::Private
 {
 public:
     Private()

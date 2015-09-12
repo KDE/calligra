@@ -43,7 +43,7 @@ VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport& _import
 {
 }
 
-class Q_DECL_HIDDEN VmlDrawingReader::Private
+class  VmlDrawingReader::Private
 {
 public:
     Private() {

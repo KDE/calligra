@@ -40,6 +40,8 @@ class FlowView : public KoPAView
     /// Called when the doc emits updateGui
     void updateGui();
 
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
+
   protected:
     /// Creates and initializes the GUI.
     void initializeGUI();

@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include "KoShape.h"
 
-class Q_DECL_HIDDEN KoShapeRenameCommand::Private
+class KoShapeRenameCommand::Private
 {
 public:
     Private(KoShape *shape, const QString &newName)

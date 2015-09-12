@@ -23,7 +23,7 @@
 #include "KoXmlWriter.h"
 #include "KoOdfNumberDefinition.h"
 
-class Q_DECL_HIDDEN KoOdfNotesConfiguration::Private
+class KoOdfNotesConfiguration::Private
 {
 public:
     KoOdfNotesConfiguration::NoteClass noteClass;

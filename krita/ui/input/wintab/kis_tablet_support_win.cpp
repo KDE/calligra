@@ -211,7 +211,21 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
 
+    QRect qtDesktopRect = QApplication::desktop()->geometry();
     qDebug() << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
+    qDebug() << "Desktop:\n\tIs Virtual Desktop" << QApplication::desktop()->isVirtualDesktop();
+    qDebug() << "\tHas" << QApplication::desktop()->screenCount() << "screens";
+    qDebug() << "\tPrimary screen is " << QApplication::desktop()->primaryScreen();\
+    qDebug() << "\tDesktop widget geometry is" << qtDesktopRect;
+    qDebug() << "\tPrimary screen geom " <<  QApplication::desktop()->screenGeometry( QApplication::desktop()->primaryScreen());
+    // Let's sum up the widths and heights...
+    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        QRect rc = QApplication::desktop()->screenGeometry(i);
+        qDebug() << "Screen" << i << "geom" << QApplication::desktop()->screenGeometry(i)
+                 << "available geom" << QApplication::desktop()->availableGeometry(i);
+    }
+
+
 }
 
 /**
@@ -270,7 +284,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-
     QRect qtDesktopRect = QApplication::desktop()->geometry();
     QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
                             lc.lcSysExtX, lc.lcSysExtY);
@@ -279,7 +292,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     qDebug() << ppVar(wintabDesktopRect);
 
     QRect desktopRect = wintabDesktopRect;
-
     {
         KisScreenSizeChoiceDialog dlg(0,
                                       wintabDesktopRect,

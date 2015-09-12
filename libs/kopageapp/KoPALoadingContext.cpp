@@ -26,7 +26,7 @@
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 
-class Q_DECL_HIDDEN KoPALoadingContext::Private
+class KoPALoadingContext::Private
 {
 public:
     QMap<QString, KoPAMasterPage*> masterPages;

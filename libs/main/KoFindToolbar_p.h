@@ -41,7 +41,7 @@
 class KSqueezedTextLabel;
 class QLabel;
 
-class Q_DECL_HIDDEN KoFindToolbar::Private
+class KoFindToolbar::Private
 {
 public:
     Private(KoFindToolbar *qq) : q(qq) { }

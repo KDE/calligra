@@ -43,7 +43,7 @@ class ToolHelper;
 class CanvasData;
 class KoToolProxy;
 
-class Q_DECL_HIDDEN KoToolManager::Private
+class KoToolManager::Private
 {
 public:
     Private(KoToolManager *qq);

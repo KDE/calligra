@@ -28,7 +28,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN RowFormatStorage::Private
+class  RowFormatStorage::Private
 {
 public:
     Private();

@@ -32,7 +32,7 @@
 
 #define OVERLAPPREVENTION 1000
 
-class Q_DECL_HIDDEN KoTextLayoutNoteArea::Private
+class KoTextLayoutNoteArea::Private
 {
 public:
     Private()

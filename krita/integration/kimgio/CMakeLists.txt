@@ -2,11 +2,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita/ui/ora ${CMAKE_SOURCE_DIR}/krita/
 
 set(kimg_kra_LIB_SRCS kra.cpp)
 kde4_add_plugin(kimg_kra ${kimg_kra_LIB_SRCS})
-target_link_libraries(kimg_kra kritaui)
+target_link_libraries(kimg_kra ${KDE4_KIO_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
 set(kimg_ora_LIB_SRCS ora.cpp)
 kde4_add_plugin(kimg_ora ${kimg_ora_LIB_SRCS})
-target_link_libraries(kimg_ora kritaui)
+target_link_libraries(kimg_ora ${KDE4_KIO_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
 install(TARGETS kimg_ora DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/imageformats/ )
 install(TARGETS kimg_kra DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/imageformats/ )

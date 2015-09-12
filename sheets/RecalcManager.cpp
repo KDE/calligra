@@ -41,7 +41,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN RecalcManager::Private
+class  RecalcManager::Private
 {
 public:
     /**

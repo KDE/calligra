@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include "KoShape.h"
 
-class Q_DECL_HIDDEN KoShapeRunAroundCommand::Private
+class KoShapeRunAroundCommand::Private
 {
 public:
     Private(KoShape *s, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour)

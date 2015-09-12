@@ -43,7 +43,7 @@
 //                 class KoOdfStyleManager
 
 
-class Q_DECL_HIDDEN KoOdfStyleManager::Private
+class  KoOdfStyleManager::Private
 {
 public:
     Private() {};

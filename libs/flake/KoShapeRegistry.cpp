@@ -47,7 +47,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-class Q_DECL_HIDDEN KoShapeRegistry::Private
+class KoShapeRegistry::Private
 {
 public:
     void insertFactory(KoShapeFactoryBase *factory);

@@ -42,7 +42,7 @@
 
 Q_DECLARE_METATYPE(QList<KoColumns::ColumnDatum>)
 
-class Q_DECL_HIDDEN KoSectionStyle::Private
+class KoSectionStyle::Private
 {
 public:
     Private() : parentStyle(0) {}

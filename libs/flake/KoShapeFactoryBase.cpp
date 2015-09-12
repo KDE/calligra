@@ -41,7 +41,7 @@
 
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoShapeFactoryBase::Private
+class KoShapeFactoryBase::Private
 {
 public:
     Private(const QString &_id, const QString &_name, const QString &_deferredPluginName)

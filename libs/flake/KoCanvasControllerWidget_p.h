@@ -45,7 +45,7 @@
 
 #include <KoConfig.h>
 
-class Q_DECL_HIDDEN KoCanvasControllerWidget::Private
+class KoCanvasControllerWidget::Private
 {
 public:
 

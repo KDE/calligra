@@ -36,7 +36,7 @@
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
 
-class Q_DECL_HIDDEN KoBookmark::Private
+class KoBookmark::Private
 {
 public:
     Private(const QTextDocument *doc)

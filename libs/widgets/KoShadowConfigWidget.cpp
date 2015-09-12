@@ -37,7 +37,7 @@
 
 #include <math.h>
 
-class Q_DECL_HIDDEN KoShadowConfigWidget::Private
+class KoShadowConfigWidget::Private
 {
 public:
     Private()

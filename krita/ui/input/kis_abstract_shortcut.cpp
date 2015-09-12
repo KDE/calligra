@@ -18,7 +18,7 @@
 
 #include "kis_abstract_shortcut.h"
 
-class Q_DECL_HIDDEN KisAbstractShortcut::Private
+class KisAbstractShortcut::Private
 {
 public:
     KisAbstractInputAction *action;

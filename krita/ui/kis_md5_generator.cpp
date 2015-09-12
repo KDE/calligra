@@ -36,8 +36,16 @@ QByteArray KisMD5Generator::generateHash(QString filename)
     QByteArray ba;
     if(filename.startsWith("bundle://")) {
         QString bn = filename.mid(9);
-        QString fn = bn.mid(bn.indexOf(":") + 1);
-        bn = bn.left(bn.indexOf(":"));
+
+        int bundlePos = bn.indexOf(".bundle:");
+        if(bundlePos == -1) {
+            qWarning() << "Error parsing bundle path" << bn;
+            return ba;
+        }
+
+        int colonPos = bundlePos + 7;
+        QString fn = bn.right(bn.size() - colonPos - 1);
+        bn = bn.left(colonPos);
 
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {

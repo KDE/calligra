@@ -34,7 +34,7 @@
 //                         private class
 
 
-class Q_DECL_HIDDEN KoOdfStyleProperties::Private
+class  KoOdfStyleProperties::Private
 {
 public:
     Private() {};

@@ -28,7 +28,7 @@
 #include <kconfiggroup.h>
 
 
-class Q_DECL_HIDDEN KoPluginLoader::Private
+class KoPluginLoader::Private
 {
 public:
     QStringList loadedServiceTypes;

@@ -51,7 +51,7 @@ using namespace Calligra::Sheets;
  *
  *****************************************************************************/
 
-class Q_DECL_HIDDEN RowFormat::Private
+class  RowFormat::Private
 {
 public:
     Sheet*      sheet;
@@ -312,7 +312,7 @@ bool RowFormat::operator==(const RowFormat& other) const
  *
  *****************************************************************************/
 
-class Q_DECL_HIDDEN ColumnFormat::Private
+class  ColumnFormat::Private
 {
 public:
     Sheet*          sheet;

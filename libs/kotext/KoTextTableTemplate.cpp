@@ -52,7 +52,7 @@ static const struct {
 
 static const unsigned int numTemplateStyles = sizeof(templateStyles) / sizeof(*templateStyles);
 
-class Q_DECL_HIDDEN KoTextTableTemplate::Private
+class KoTextTableTemplate::Private
 {
 public:
     Private() { }

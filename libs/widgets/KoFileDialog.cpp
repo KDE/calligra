@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kurl.h>
 
-class Q_DECL_HIDDEN KoFileDialog::Private
+class KoFileDialog::Private
 {
 public:
     Private(QWidget *parent_,

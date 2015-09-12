@@ -23,7 +23,7 @@
 #include <QRectF>
 #include <QTransform>
 
-class Q_DECL_HIDDEN KoFilterEffectRenderContext::Private
+class KoFilterEffectRenderContext::Private
 {
 public:
     Private(const KoViewConverter &viewConverter)

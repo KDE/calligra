@@ -46,7 +46,7 @@ struct Relation
     uint inheritsTransform :1;
 };
 
-class Q_DECL_HIDDEN KoTextShapeContainerModel::Private
+class KoTextShapeContainerModel::Private
 {
 public:
     QHash<const KoShape*, Relation> children;

@@ -66,7 +66,6 @@
 /// Use this function to load an icon that fits the current color theme
 inline KIcon themedIcon(const QString &name, bool fast = false) {
     Q_UNUSED(fast);
-
     static bool firstUse = true;
     if (firstUse) {
         // workaround for some kde-related crash
@@ -75,12 +74,20 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
         firstUse = false;
     }
 
+    QString realName;
+
     // try load themed icon
     QColor background = qApp->palette().background().color();
     bool useDarkIcons = background.value() > 100;
     const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
-    QString realName = QLatin1String(prefix) + name;
+    realName = QLatin1String(prefix) + name;
+
+    bool absent = KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty();
+    if (absent) {
+        realName = name;
+    }
+
     KIcon icon(realName);
 
     // fallback
