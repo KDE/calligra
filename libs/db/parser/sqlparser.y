@@ -1147,10 +1147,10 @@ aExprList:
 ;
 
 aExprList2:
-aExpr ',' aExprList2
+aExprList2 ',' aExpr
 {
-    $$ = $3;
-    $$->prepend( $1 );
+    $$ = $1;
+    $$->add( $3 );
 }
 | aExpr
 {
