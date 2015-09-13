@@ -2,6 +2,7 @@
 Name=CSV import/export
 Name[ca]=Importació/exportació de CSV
 Name[de]=CSV-Import/Export
+Name[en_GB]=CSV import/export
 Name[fi]=CSV-tuonti/vienti
 Name[nl]=CSV importeren/exporteren
 Name[pl]=Importowanie/eksportowanie CSV
@@ -14,6 +15,7 @@ Comment=Kexi Plugin for CSV data import/export
 Comment[ca]=Connector del Kexi d'importació/exportació de CSV
 Comment[cs]=Modul Kexi pro import a export dat CSV
 Comment[de]=Kexi-Modul für CSV-Daten-Import/Export
+Comment[en_GB]=Kexi Plugin for CSV data import/export
 Comment[nl]=Kexi-plug-in voor importeren/exporteren van CSV-gegevens
 Comment[pl]=Wtyczka importu/eksportu danych CSV dla Kexi
 Comment[pt]='Plugin' do Kexi para a importação/exportação de dados em CSV
