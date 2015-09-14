@@ -10,8 +10,7 @@ endif ()
 set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
-                     ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
-                     
+                     ${LIBMATHVIEW_INCLUDE_DIRS}
                      ${KOMAIN_INCLUDES}
 )
 
@@ -19,51 +18,13 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
 
 set( koformula_LIB_SRCS
    FormulaDebug.cpp
-   AttributeManager.cpp
-   FormulaRenderer.cpp
-   FormulaData.cpp
-   FormulaCursor.cpp
-   FormulaEditor.cpp
    FormulaCommand.cpp
-   ElementFactory.cpp 
-   Dictionary.cpp
-
-   elements/BasicElement.cpp
-   elements/FixedElement.cpp
-   elements/RowElement.cpp
-   elements/FormulaElement.cpp 
-   elements/TextElement.cpp
-   elements/FractionElement.cpp
-   elements/SpaceElement.cpp
-   elements/GlyphElement.cpp
-   elements/IdentifierElement.cpp
-   elements/OperatorElement.cpp
-   elements/MultiscriptElement.cpp
-   elements/SubSupElement.cpp
-   elements/UnderOverElement.cpp
-   elements/FencedElement.cpp 
-   elements/TableElement.cpp
-   elements/TableRowElement.cpp
-   elements/TableDataElement.cpp
-   elements/RootElement.cpp
-   elements/EncloseElement.cpp
-   elements/ActionElement.cpp
-   elements/PaddedElement.cpp
-   elements/ErrorElement.cpp
-   elements/StyleElement.cpp
-   elements/TokenElement.cpp
-   elements/NumberElement.cpp
-   elements/StringElement.cpp
-   elements/PhantomElement.cpp
-   elements/SquareRootElement.cpp
-   elements/AnnotationElement.cpp
-   elements/UnknownElement.cpp
 )
 
 add_library(koformula SHARED ${koformula_LIB_SRCS})
 generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
-target_link_libraries(koformula  PUBLIC komain)
+target_link_libraries(koformula PUBLIC komain ${LIBMATHVIEW_LIBRARIES})
 
 set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -119,6 +80,5 @@ target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
 install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 add_subdirectory( pics ) 
-add_subdirectory( fonts ) 
-add_subdirectory( tests )
+add_subdirectory( fonts )
 add_subdirectory( templates )

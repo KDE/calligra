@@ -529,6 +529,15 @@ if(WIN32)
 endif()
 
 ##
+## Test for LibMathView
+##
+macro_optional_find_package(LibMathView)
+macro_log_feature(LIBMATHVIEW_FOUND "LibMathView"
+                  "A library for rendering MathML documents"
+                  "https://github.com/khaledhosny/libmathview" FALSE ""
+                  ""Required to edit and render math formulas"")
+
+##
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
@@ -870,6 +879,11 @@ calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
     KChart_FOUND "KChart devel not found"
+)
+
+
+calligra_drop_product_on_bad_condition( PLUGIN_FORMULASHAPE
+    LIBMATHVIEW_FOUND "LibMathView devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE
