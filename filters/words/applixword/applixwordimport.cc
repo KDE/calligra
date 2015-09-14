@@ -34,6 +34,8 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
+#include <CalligraVersionWrapper.h>
+
 K_PLUGIN_FACTORY_WITH_JSON(APPLIXWORDImportFactory, "calligra_filter_applixword2odt.json",
                            registerPlugin<APPLIXWORDImport>();)
 
@@ -772,7 +774,7 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CalligraVersionWrapper::versionString()));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

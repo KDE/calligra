@@ -39,7 +39,7 @@
 #include <KoPrintJob.h>
 #include <KoView.h>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 bool convertPdf(const QUrl &uIn, const QString &inputFormat, const QUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
 {
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 {
     KLocalizedString::setApplicationDomain( "koconverter" );
 
-    K4AboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
+    K4AboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CalligraVersionWrapper::versionString().toLatin1(),
                          ki18n("Calligra Document Converter"),
                          K4AboutData::License_GPL,
                          ki18n("(c) 2001-2011 Calligra developers"));

@@ -41,21 +41,12 @@
 
 //#include "sketch/SketchInputContext.h"
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #include <calligragitversion.h>
 
 int main( int argc, char** argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-#else
-    version = calligraVersion;
-#endif
-
+    QString version = CalligraVersionWrapper::versionString(true);
 
     K4AboutData aboutData("calligragemini",
                          "calligrawords",
@@ -63,7 +54,7 @@ int main( int argc, char** argv )
                          version.toLatin1(),
                          ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
                          K4AboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CalligraVersionWrapper::versionYear()),
                          KLocalizedString(),
                          "http://www.calligra.org",
                          "submit@bugs.kde.org");

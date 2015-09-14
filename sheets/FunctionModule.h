@@ -20,8 +20,6 @@
 #ifndef CALLIGRA_SHEETS_FUNCTION_MODULE
 #define CALLIGRA_SHEETS_FUNCTION_MODULE
 
-#include <calligraversion.h>
-
 #include <QList>
 #include <QObject>
 #include <QSharedPointer>

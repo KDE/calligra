@@ -33,7 +33,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 #include <sheets/CellStorage.h>
 #include <sheets/Map.h>
@@ -185,8 +185,8 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
           "<meta http-equiv=\"Content-Type\" " +
           QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name())) +
           "<meta name=\"Generator\" "
-          "content=\"KSpread HTML Export Filter Version = "
-          CALLIGRA_VERSION_STRING
+          "content=\"KSpread HTML Export Filter Version = " +
+          CalligraVersionWrapper::versionString() +
           "\">\n";
 
     // Insert stylesheet
