@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kio/job.h>
 
 #include <KoDocumentEntry.h>
