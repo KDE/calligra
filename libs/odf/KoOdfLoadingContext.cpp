@@ -37,7 +37,7 @@
 
 
 
-class Q_DECL_HIDDEN KoOdfLoadingContext::Private
+class KoOdfLoadingContext::Private
 {
 public:
     Private(KoOdfStylesReader &sr, KoStore *s)

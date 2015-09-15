@@ -126,49 +126,47 @@ public:
         } else if (!f || type == SQLITE_TEXT) {
 //TODO: support for UTF-16
 #define GET_sqlite3_column_text QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) )
-            if (!f || f->isTextType())
+            const Field::Type t = f ? f->type() : Field::LongText; // cache: evaluating type of expressions can be expensive
+            if (Field::isTextType(t)) {
                 return GET_sqlite3_column_text;
-            else {
-                switch (f->type()) {
-                case Field::Date:
-                    return QDate::fromString(GET_sqlite3_column_text, Qt::ISODate);
-                case Field::Time:
-                    //QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-                    return KexiDB::stringToHackedQTime(GET_sqlite3_column_text);
-                case Field::DateTime: {
-                    QString tmp(GET_sqlite3_column_text);
-                    tmp[10] = 'T'; //for ISODate compatibility
-                    return QDateTime::fromString(tmp, Qt::ISODate);
-                }
-                case Field::Boolean:
-                    return sqliteStringToBool(GET_sqlite3_column_text);
-                default:
-                    return QVariant(); //TODO
-                }
+            } else if (t == Field::Date) {
+                return QDate::fromString(GET_sqlite3_column_text, Qt::ISODate);
+            } else if (t == Field::Time) {
+                //QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+                return KexiDB::stringToHackedQTime(GET_sqlite3_column_text);
+            } else if (t == Field::DateTime) {
+                QString tmp(GET_sqlite3_column_text);
+                tmp[10] = 'T'; //for ISODate compatibility
+                return QDateTime::fromString(tmp, Qt::ISODate);
+            } else if (t == Field::Boolean) {
+                return sqliteStringToBool(GET_sqlite3_column_text);
+            } else {
+                return QVariant(); //TODO
             }
         } else if (type == SQLITE_INTEGER) {
-            switch (f->type()) {
-            case Field::Byte:
-            case Field::ShortInteger:
-            case Field::Integer:
+            const Field::Type t = f->type();  // cache: evaluating type of expressions can be expensive
+            if (t == Field::BigInteger) {
+                return QVariant(qint64(sqlite3_column_int64(prepared_st_handle, i)));
+            } else if (Field::isIntegerType(t)) {
                 return QVariant(sqlite3_column_int(prepared_st_handle, i));
-            case Field::BigInteger:
-                return QVariant((qint64)sqlite3_column_int64(prepared_st_handle, i));
-            case Field::Boolean:
+            } else if (t == Field::Boolean) {
                 return sqlite3_column_int(prepared_st_handle, i) != 0;
-            default:;
+            } else if (Field::isFPNumericType(t)) { //WEIRD, YEAH?
+                return QVariant(double(sqlite3_column_int(prepared_st_handle, i)));
+            } else {
+                return QVariant(); //TODO
             }
-            if (f->isFPNumericType()) //WEIRD, YEAH?
-                return QVariant((double)sqlite3_column_int(prepared_st_handle, i));
-            else
-                return QVariant(); //TODO
         } else if (type == SQLITE_FLOAT) {
-            if (f && f->isFPNumericType())
+            const Field::Type t = f->type(); // cache: evaluating type of expressions can be expensive
+            if (Field::isFPNumericType(t)) {
                 return QVariant(sqlite3_column_double(prepared_st_handle, i));
-            else if (!f || f->isIntegerType())
-                return QVariant((double)sqlite3_column_double(prepared_st_handle, i));
-            else
+            } else if (t == Field::BigInteger) {
+                return QVariant(qint64(sqlite3_column_int64(prepared_st_handle, i)));
+            } else if (Field::isIntegerType(t)) {
+                return QVariant(int(sqlite3_column_double(prepared_st_handle, i)));
+            } else {
                 return QVariant(); //TODO
+            }
         } else if (type == SQLITE_BLOB) {
             if (f && f->type() == Field::BLOB) {
 //! @todo efficient enough?

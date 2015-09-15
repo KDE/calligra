@@ -157,7 +157,7 @@ using namespace Calligra::Sheets;
 
 class ViewActions;
 
-class Q_DECL_HIDDEN View::Private
+class  View::Private
 {
 public:
     View* view;

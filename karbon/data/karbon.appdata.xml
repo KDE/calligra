@@ -180,6 +180,7 @@
       <li xml:lang="pt-BR">Área de camadas para tratamento de documentos complexos, incluindo miniaturas, suporte a agrupamento de formas com arrastar e soltar, controle de visibilidade das formas ou seu bloqueio</li>
       <li xml:lang="sk">Docker vrstiev pre ľahkú manipuláciu so zložitými dokumentami vrátane náhľadu miniatúr, podpora pre zoskupovanie tvarov cez drag and drop, ovládanie viditeľnosti tvarov alebo zamykanie</li>
       <li xml:lang="sv">Lagerpanel för enkel hantering av komplexa dokument inklusive miniatyrbilder för förhandsgranskning, stöd för att gruppera former via drag och släpp, styra eller låsning synlighet av former</li>
+      <li xml:lang="tr">Küçük resimleri görüntüleme, sürükle bırak ile şekilleri gruplandırma desteği, şekillerin görünürlüklerini kontrol etme veya kilitleme dahil karmaşık belgeleri kolay kullanma araci</li>
       <li xml:lang="uk">Панель шарів для полегшення обробки складних документів з мініатюрами об’єктів, підтримка групування форм перетягуванням зі скиданням, керування показом форм та блокуванням.</li>
       <li xml:lang="x-test">xxLayer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or lockingxx</li>
       <li>
@@ -218,6 +219,7 @@
       <li xml:lang="pt-BR">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
       <li xml:lang="sk">Rôzne kresliace nástroje na vytváranie tvarov ciest vrátane nástroja na kreslenie cesty, nástroja ceruzky ako aj kaligrafického kresliaceho nástroja</li>
       <li xml:lang="sv">Diverse ritverktyg för att skapa konturformer som inkluderar ett konturritverktyg, ett pennverktyg samt ett kalligrafiskt ritverktyg</li>
+      <li xml:lang="tr">Yol şekilleri yaratmak için, kaligrafi çizim aracı ile birlikte bir kalem aracı, bir yol çizim aracı dahil çeşitli çizim araçları</li>
       <li xml:lang="uk">Різноманітні інструменти малювання для створення контурів, зокрема інструмент малювання контуру, олівець та інструмент каліграфічного малювання.</li>
       <li xml:lang="x-test">xxVarious drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing toolxx</li>
       <li>
@@ -277,6 +279,7 @@
       <li xml:lang="pt-BR">Inclui diversas formas predefinidas, incluindo formas básicas como estrelas, círculos/elipses, retângulos e imagens</li>
       <li xml:lang="sk">Obsahuje mnoho preddefinovaných tvarov vrátane základných tvarov ako hviezdy, kružnica/elipsa, obdĺžnik, obrázok</li>
       <li xml:lang="sv">Innehåller många fördefinierade former inklusive grundläggande former som stjärnor, cirkel/ellips, rektangel, bild</li>
+      <li xml:lang="tr">Yıldız, daire/elips, dikdörtgen, resim gibi birçok öntanımlı basit şekil icerir</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
       <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, imagexx</li>
       <li>
@@ -335,6 +338,7 @@
       <li xml:lang="pt-BR">Expansível através da criação de plugins para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="sk">Rozšíriteľný pomocou písania pluginov pre nové nástroje, tvary a dockery</li>
       <li xml:lang="sv">Utökningsbart genom att skriva insticksprogram för nya verktyg, former och paneler</li>
+      <li xml:lang="tr">Yeni araçlar, şekiller ve dockerlar için eklenti yazarak genişletilebilir</li>
       <li xml:lang="uk">Можливість розширення додатками нових інструментів, форм та панелей.</li>
       <li xml:lang="x-test">xxExtensible by writing plugins for new tools, shapes and dockersxx</li>
     </ul>

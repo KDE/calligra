@@ -152,7 +152,7 @@
 
 #include <unistd.h>
 
-class Q_DECL_HIDDEN KarbonView::Private
+class  KarbonView::Private
 {
 public:
     Private(KarbonPart *part, KarbonDocument * doc)

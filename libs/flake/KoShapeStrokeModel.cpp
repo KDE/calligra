@@ -23,7 +23,7 @@
 
 #include <QAtomicInt>
 
-class Q_DECL_HIDDEN KoShapeStrokeModel::Private
+class KoShapeStrokeModel::Private
 {
 public:
     Private() : refCount(0) { }

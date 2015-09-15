@@ -33,7 +33,7 @@
 #include <QDragEnterEvent>
 #include <QPainter>
 
-class Q_DECL_HIDDEN KoDualColorButton::Private
+class KoDualColorButton::Private
 {
   public:
     Private(const KoColor &fgColor, const KoColor &bgColor,

@@ -129,7 +129,7 @@ static QString createObjectName(const QString &sheetName)
 }
 
 
-class Q_DECL_HIDDEN Sheet::Private
+class  Sheet::Private
 {
 public:
     Private(Sheet* sheet) : rows(sheet) {}

@@ -23,8 +23,7 @@
 #include "KoModeBox_p.h"
 #include "KoModeBoxDocker_p.h"
 
-class Q_DECL_HIDDEN KoModeBoxFactory::Private
-{
+class KoModeBoxFactory::Private {
 public:
     KoCanvasControllerWidget *canvasController;
     QString applicationName;

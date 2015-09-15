@@ -19,8 +19,7 @@
 
 #include "KoFilterEffectFactoryBase.h"
 #include <QString>
-
-class Q_DECL_HIDDEN KoFilterEffectFactoryBase::Private
+class KoFilterEffectFactoryBase::Private
 {
 public:
     Private(const QString &_id, const QString &_name) : id(_id), name(_name)

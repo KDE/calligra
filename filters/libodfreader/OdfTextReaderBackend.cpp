@@ -33,7 +33,7 @@
 //             class OdfTextReaderBackend::Private
 
 
-class Q_DECL_HIDDEN OdfTextReaderBackend::Private
+class  OdfTextReaderBackend::Private
 {
  public:
     Private();

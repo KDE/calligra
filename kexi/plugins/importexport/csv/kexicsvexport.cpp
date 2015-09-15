@@ -184,13 +184,14 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
             visibleFieldIndex[i] = i;
         }
 
-        isText[i] = ci->field->isTextType();
-        isDateTime[i] = ci->field->type() == KexiDB::Field::DateTime;
-        isTime[i] = ci->field->type() == KexiDB::Field::Time;
-        isBLOB[i] = ci->field->type() == KexiDB::Field::BLOB;
-//  isInteger[i] = fields[i]->field->isIntegerType()
-//   || fields[i]->field->type()==KexiDB::Field::Boolean;
-//  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
+        const KexiDB::Field::Type t = ci->field->type(); // cache: evaluating type of expressions can be expensive
+        isText[i] = KexiDB::Field::isTextType(t);
+        isDateTime[i] = t == KexiDB::Field::DateTime;
+        isTime[i] = t == KexiDB::Field::Time;
+        isBLOB[i] = t == KexiDB::Field::BLOB;
+//  isInteger[i] = KexiDB::Field::isIntegerType(t)
+//   || t == KexiDB::Field::Boolean;
+//  isFloatingPoint[i] = KexiDB::Field::isFPNumericType(t);
     }
 
 kDebug() << 1;

@@ -47,7 +47,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN FunctionModuleRegistry::Private
+class  FunctionModuleRegistry::Private
 {
 public:
     void registerFunctionModule(FunctionModule* module);

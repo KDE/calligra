@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoTextEditingPlugin::Private
+class KoTextEditingPlugin::Private
 {
 public:
     QHash<QString, KAction*> actionCollection;

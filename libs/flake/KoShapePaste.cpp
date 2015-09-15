@@ -39,7 +39,7 @@
 #include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
-class Q_DECL_HIDDEN KoShapePaste::Private
+class KoShapePaste::Private
 {
 public:
     Private(KoCanvasBase *cb, KoShapeLayer *l) : canvas(cb), layer(l) {}

@@ -34,7 +34,7 @@
 #endif
 
 
-class Q_DECL_HIDDEN KisTransactionData::Private
+class KisTransactionData::Private
 {
 public:
     KisPaintDeviceSP device;

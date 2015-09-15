@@ -29,8 +29,7 @@
 
 #define GAP 0
 
-class Q_DECL_HIDDEN KoPositionSelector::Private
-{
+class KoPositionSelector::Private {
 public:
     Private()
         : position(KoFlake::TopLeftCorner)

@@ -36,7 +36,7 @@
 #include <QImage>
 #include <QRectF>
 
-class Q_DECL_HIDDEN KoShapeShadow::Private
+class KoShapeShadow::Private
 {
 public:
     Private()

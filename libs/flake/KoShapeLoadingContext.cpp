@@ -38,7 +38,7 @@ uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
 
 static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
 
-class Q_DECL_HIDDEN KoShapeLoadingContext::Private
+class KoShapeLoadingContext::Private
 {
 public:
     Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)

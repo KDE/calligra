@@ -22,7 +22,7 @@
 #include "KoRdfSemanticItemFactoryBase.h"
 
 
-class Q_DECL_HIDDEN KoRdfSemanticItemFactoryBase::Private
+class KoRdfSemanticItemFactoryBase::Private
 {
 public:
     Private(const QString &identifier)

@@ -43,7 +43,7 @@
 #include "KoMarkerData.h"
 
 
-class Q_DECL_HIDDEN KoShapeStroke::Private
+class KoShapeStroke::Private
 {
 public:
     void paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const;

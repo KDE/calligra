@@ -432,14 +432,16 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
         std::vector<std::string>::const_iterator i, end(R.end());
         int index = 0;
         for (i = R.begin(); i != end; ++i, index++) {
-            if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::BLOB
-                    || fieldsExpanded.at(index)->field->type() == KexiDB::Field::LongText) {
+            KexiDB::Field *field = fieldsExpanded.at(index)->field;
+            const KexiDB::Field::Type type = field->type(); // cache: evaluating type of expressions can be expensive
+            if (type == KexiDB::Field::BLOB || type == KexiDB::Field::LongText) {
                 vals.append(KexiDB::pgsqlByteaToByteArray((*i).c_str(), (*i).size()));
-            } else if (fieldsExpanded.at(index)->field->type() == KexiDB::Field::Boolean) {
+            } else if (type == KexiDB::Field::Boolean) {
                 vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
-            } else
+            } else {
                 vals.append(KexiDB::cstringToVariant((*i).c_str(),
-                                                     fieldsExpanded.at(index)->field, (*i).size()));
+                                                     field, (*i).size()));
+            }
         }
         if (!destConn->insertRecord(*dstTable, vals))
             return false;

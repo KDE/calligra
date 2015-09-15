@@ -1426,14 +1426,18 @@ void QuerySchema::setWhereExpression(BaseExpr *expr)
 void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& value, int relation)
 {
     int token;
-    if (value.isNull())
+    if (value.isNull()) {
         token = SQL_NULL;
-    else if (field->isIntegerType()) {
-        token = INTEGER_CONST;
-    } else if (field->isFPNumericType()) {
-        token = REAL_CONST;
-    } else {
-        token = CHARACTER_STRING_LITERAL;
+    }
+    else {
+        const Field::Type type = field->type(); // cache: evaluating type of expressions can be expensive
+        if (Field::isIntegerType(type)) {
+            token = INTEGER_CONST;
+        } else if (Field::isFPNumericType(type)) {
+            token = REAL_CONST;
+        } else {
+            token = CHARACTER_STRING_LITERAL;
+        }
 //! @todo date, time
     }
 

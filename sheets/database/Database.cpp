@@ -35,7 +35,7 @@ using namespace Calligra::Sheets;
 class Sort;
 class SubtotalRules;
 
-class Q_DECL_HIDDEN Database::Private : public QSharedData
+class  Database::Private : public QSharedData
 {
 public:
     Private()

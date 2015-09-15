@@ -26,7 +26,7 @@
 
 #include <QPainter>
 
-class Q_DECL_HIDDEN KoGuidesData::Private
+class KoGuidesData::Private
 {
 public:
     Private() : showGuideLines(true), guidesColor(Qt::lightGray) {}

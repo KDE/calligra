@@ -70,8 +70,9 @@ MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args)
 #if MYSQL_VERSION_ID < 40000
     d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
     d->properties["default_server_encoding"] = MYSQL_CHARSET; //nothing better
-#elif MYSQL_VERSION_ID < 50000
-//! @todo ??? d->properties["client_library_version"] = mysql_get_client_version();
+#else
+    // https://dev.mysql.com/doc/refman/5.7/en/mysql-get-client-version.html
+    d->properties["client_library_version"] = int(mysql_get_client_version());
 #endif
 
     d->typeNames[Field::Byte] = "TINYINT";

@@ -32,7 +32,7 @@
 #include <QColor>
 #include <QGradientStops>
 
-class Q_DECL_HIDDEN SvgStyleParser::Private
+class SvgStyleParser::Private
 {
 public:
     Private(SvgLoadingContext &loadingContext)

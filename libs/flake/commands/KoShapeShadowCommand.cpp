@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-class Q_DECL_HIDDEN KoShapeShadowCommand::Private
+class KoShapeShadowCommand::Private
 {
 public:
     Private() {}

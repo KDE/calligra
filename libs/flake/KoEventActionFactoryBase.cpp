@@ -19,7 +19,7 @@
 
 #include "KoEventActionFactoryBase.h"
 
-class Q_DECL_HIDDEN KoEventActionFactoryBase::Private
+class KoEventActionFactoryBase::Private
 {
 public:
     Private(const QString & id, const QString & action)

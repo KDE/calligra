@@ -29,8 +29,7 @@
 #include <QDomDocument>
 
 
-class Q_DECL_HIDDEN KoResourceTagStore::Private
-{
+class KoResourceTagStore::Private {
 public:
     QMultiHash<QByteArray, QString> md5ToTag;
     QMultiHash<QString, QString> identifierToTag;

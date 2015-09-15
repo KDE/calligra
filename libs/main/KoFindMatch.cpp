@@ -24,7 +24,7 @@
 
 #include <QVariant>
 
-class Q_DECL_HIDDEN KoFindMatch::Private : public QSharedData
+class KoFindMatch::Private : public QSharedData
 {
 public:
     Private() { }

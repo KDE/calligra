@@ -48,7 +48,7 @@ using namespace Calligra::Sheets;
   class Selection::Private
 ****************************************************************************/
 
-class Q_DECL_HIDDEN Selection::Private
+class  Selection::Private
 {
 public:
     Private() {

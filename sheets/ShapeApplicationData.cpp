@@ -21,7 +21,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN ShapeApplicationData::Private
+class  ShapeApplicationData::Private
 {
 public:
     bool anchoredToCell;

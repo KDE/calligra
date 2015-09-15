@@ -30,7 +30,7 @@
 
 #include <QXmlStreamReader>
 
-class Q_DECL_HIDDEN KoOdfReadStore::Private
+class KoOdfReadStore::Private
 {
 public:
     Private(KoStore *s)

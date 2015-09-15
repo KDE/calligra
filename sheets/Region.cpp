@@ -37,7 +37,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class Q_DECL_HIDDEN Region::Private : public QSharedData
+class  Region::Private : public QSharedData
 {
 public:
     Private()

@@ -23,7 +23,7 @@
 
 #include <KShortcut>
 
-class Q_DECL_HIDDEN KoToolFactoryBase::Private
+class KoToolFactoryBase::Private
 {
 public:
     Private(const QString &i)

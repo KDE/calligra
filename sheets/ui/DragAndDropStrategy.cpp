@@ -41,7 +41,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN DragAndDropStrategy::Private
+class  DragAndDropStrategy::Private
 {
 public:
     Private() : started(false) { }

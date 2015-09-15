@@ -24,8 +24,7 @@
 #include <QSize>
 #include <QPoint>
 
-class Q_DECL_HIDDEN KoCanvasController::Private
-{
+class KoCanvasController::Private {
 public:
     Private()
         : canvasMode(Centered)

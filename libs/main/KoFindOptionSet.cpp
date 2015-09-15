@@ -23,7 +23,7 @@
 
 #include <QHash>
 
-class Q_DECL_HIDDEN KoFindOptionSet::Private
+class KoFindOptionSet::Private
 {
 public:
     Private() : nextID(0) { }

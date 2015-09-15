@@ -127,10 +127,12 @@ void AlterSchemaWidget::typeActivated(int typ)
     m_newSchema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
 
     //Only set the pkey check enabled if the field type is integer
-    m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt())));
+    const bool isInteger = KexiDB::Field::isIntegerType(
+                KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
+    m_columnPKey->setEnabled(isInteger);
 
     //If the field type is not integer, then the field cannot be a pkey
-    if (!KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()))) {
+    if (!isInteger) {
         m_newSchema->field(m_selectedColumn)->setPrimaryKey(false);
     }
 }

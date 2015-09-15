@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-class Q_DECL_HIDDEN KoShapeDistributeCommand::Private
+class KoShapeDistributeCommand::Private
 {
 public:
     Private() : command(0) {}

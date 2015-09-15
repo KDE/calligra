@@ -44,7 +44,7 @@
 
 using namespace writeodf;
 
-class Q_DECL_HIDDEN KoInlineNote::Private
+class KoInlineNote::Private
 {
 public:
     Private(KoInlineNote::Type t)

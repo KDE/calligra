@@ -18,7 +18,7 @@
 
 #include "kis_operation_ui_factory.h"
 
-class Q_DECL_HIDDEN KisOperationUIFactory::Private {
+class KisOperationUIFactory::Private {
 
 public:
     Private() {}

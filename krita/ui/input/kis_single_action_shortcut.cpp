@@ -20,7 +20,7 @@
 
 #include "kis_abstract_input_action.h"
 
-class Q_DECL_HIDDEN KisSingleActionShortcut::Private
+class KisSingleActionShortcut::Private
 {
 public:
     QList<Qt::Key> modifiers;

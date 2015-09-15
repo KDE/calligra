@@ -37,7 +37,7 @@
 //                         private class
 
 
-class Q_DECL_HIDDEN KoOdfGraphicProperties::Private
+class  KoOdfGraphicProperties::Private
 {
 public:
     Private() {};

@@ -41,7 +41,7 @@
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN SheetModel::Private
+class  SheetModel::Private
 {
 public:
     Sheet* sheet;

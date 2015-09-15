@@ -21,7 +21,7 @@
 #include "KoXmlNS.h"
 #include <kdebug.h>
 
-class Q_DECL_HIDDEN KoOasisSettings::Private
+class KoOasisSettings::Private
 {
 };
 

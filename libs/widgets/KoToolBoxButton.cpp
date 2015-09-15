@@ -23,7 +23,7 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kshortcut.h>
-
+#include <KoIcon.h>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)
@@ -33,8 +33,11 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     // ensure same L&F
     setCheckable(true);
     setAutoRaise(true);
+#if QT_VERSION >= 0x040700
     setIcon(KIcon(m_toolAction->iconName()));
-
+#else
+    setIcon(themedIcon(m_toolAction->iconName()));
+#endif
     setDataFromToolAction();
 
     connect(this, SIGNAL(clicked(bool)), m_toolAction, SLOT(trigger()));

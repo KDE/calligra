@@ -19,7 +19,7 @@
 
 #include "KoInputDeviceHandler.h"
 
-class Q_DECL_HIDDEN KoInputDeviceHandler::Private
+class KoInputDeviceHandler::Private
 {
 public:
     Private(const QString &devId)
