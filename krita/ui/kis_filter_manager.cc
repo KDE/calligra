@@ -68,6 +68,7 @@ struct KisFilterManager::Private {
     KisSafeFilterConfigurationSP lastConfiguration;
     KisSafeFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
+    QRect currentApplyRect;
 
     QSignalMapper actionsMapper;
 
@@ -254,6 +255,9 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::CancelSilentlyMarker);
         image->cancelStroke(d->currentStrokeId);
         d->currentStrokeId.clear();
+    } else {
+        image->waitForDone();
+        d->currentApplyRect = d->view->activeNode()->exactBounds();
     }
 
     KisPostExecutionUndoAdapter *undoAdapter =
@@ -274,7 +278,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
 
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(d->view->activeNode()->exactBounds(), size);
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(d->currentApplyRect, size);
 
         foreach(const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
@@ -282,7 +286,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         }
     } else {
         image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(d->view->activeNode()->exactBounds(), false));
+                      new KisFilterStrokeStrategy::Data(d->currentApplyRect, false));
     }
 
     d->currentlyAppliedConfiguration = filterConfig;
