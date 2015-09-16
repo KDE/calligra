@@ -484,6 +484,10 @@ KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& data)
 {
     dbg.space() << "KexiProjectData" << "databaseName=" << data.databaseName()
         << "lastOpened=" << data.lastOpened() << "description=" << data.description()
-        << "connectionData=(" << data << ")";
+        << "connectionData=(";
+    if (data.connectionData()) {
+        dbg.nospace() << *data.connectionData();
+    }
+    dbg.nospace() << ")";
     return dbg.space();
 }
