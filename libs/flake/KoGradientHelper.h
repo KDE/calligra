@@ -17,24 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTHELPER_H
-#define KARBONGRADIENTHELPER_H
+#ifndef KO_GRADIENT_HELPER_H
+#define KO_GRADIENT_HELPER_H
 
-#include <karboncommon_export.h>
+#include <flake_export.h>
 #include <QBrush>
 
 class QGradient;
 
-namespace KarbonGradientHelper
+namespace KoGradientHelper
 {
 /// creates default gradient
-KARBONCOMMON_EXPORT QGradient *defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
+FLAKE_EXPORT QGradient *defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
 
 /// Converts gradient type, preserving as much data as possible
-KARBONCOMMON_EXPORT QGradient *convertGradient(const QGradient *gradient, QGradient::Type newType);
+FLAKE_EXPORT QGradient *convertGradient(const QGradient *gradient, QGradient::Type newType);
 
 /// Calculates color at given position from given gradient stops
-KARBONCOMMON_EXPORT QColor colorAt(qreal position, const QGradientStops &stops);
+FLAKE_EXPORT QColor colorAt(qreal position, const QGradientStops &stops);
 };
 
-#endif // KARBONGRADIENTHELPER_H
+#endif

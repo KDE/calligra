@@ -20,9 +20,9 @@
 
 #include "KarbonGradientTool.h"
 #include "KarbonGradientEditStrategy.h"
+#include "KarbonCursor.h"
 
-#include <KarbonGradientEditWidget.h>
-#include <KarbonCursor.h>
+#include <KoGradientEditWidget.h>
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
@@ -36,7 +36,7 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoResourceServerProvider.h>
 #include <KoGradientBackground.h>
-#include <KarbonGradientHelper.h>
+#include <KoGradientHelper.h>
 #include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoResource.h>
@@ -139,7 +139,7 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
     QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection * selection = canvas()->shapeManager()->selection();
 
-    KarbonGradientEditWidget::GradientTarget target = m_gradientWidget->target();
+    KoGradientEditWidget::GradientTarget target = m_gradientWidget->target();
 
     GradientStrategy * newStrategy = 0;
 
@@ -147,7 +147,7 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
         if (! selection->isSelected(shape))
             continue;
 
-        if (target == KarbonGradientEditWidget::FillGradient) {
+        if (target == KoGradientEditWidget::FillGradient) {
             // target is fill so check the background style
             if (! dynamic_cast<KoGradientBackground*>(shape->background().data())) {
                 QSharedPointer<KoGradientBackground>  fill(new KoGradientBackground(*m_gradient));
@@ -265,9 +265,9 @@ void KarbonGradientTool::mouseReleaseEvent(KoPointerEvent *event)
         if (m_gradientWidget) {
             m_gradientWidget->setGradient(*m_currentStrategy->gradient());
             if (m_currentStrategy->target() == GradientStrategy::Fill)
-                m_gradientWidget->setTarget(KarbonGradientEditWidget::FillGradient);
+                m_gradientWidget->setTarget(KoGradientEditWidget::FillGradient);
             else
-                m_gradientWidget->setTarget(KarbonGradientEditWidget::StrokeGradient);
+                m_gradientWidget->setTarget(KoGradientEditWidget::StrokeGradient);
             m_gradientWidget->setStopIndex(m_currentStrategy->selectedColorStop());
         }
         m_currentStrategy->setEditing(false);
@@ -288,9 +288,9 @@ void KarbonGradientTool::mouseDoubleClickEvent(KoPointerEvent *event)
         if (m_gradientWidget) {
             m_gradientWidget->setGradient(*m_currentStrategy->gradient());
             if (m_currentStrategy->target() == GradientStrategy::Fill)
-                m_gradientWidget->setTarget(KarbonGradientEditWidget::FillGradient);
+                m_gradientWidget->setTarget(KoGradientEditWidget::FillGradient);
             else
-                m_gradientWidget->setTarget(KarbonGradientEditWidget::StrokeGradient);
+                m_gradientWidget->setTarget(KoGradientEditWidget::StrokeGradient);
         }
         canvas()->updateCanvas(m_currentStrategy->boundingRect(*canvas()->viewConverter()));
     }
@@ -448,9 +448,9 @@ void KarbonGradientTool::initialize()
             m_gradientWidget->setGradient(*m_gradient);
         }
         if (strategy->target() == GradientStrategy::Fill)
-            m_gradientWidget->setTarget(KarbonGradientEditWidget::FillGradient);
+            m_gradientWidget->setTarget(KoGradientEditWidget::FillGradient);
         else
-            m_gradientWidget->setTarget(KarbonGradientEditWidget::StrokeGradient);
+            m_gradientWidget->setTarget(KoGradientEditWidget::StrokeGradient);
     }
 }
 
@@ -492,7 +492,7 @@ void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
 
 QList<QPointer<QWidget> > KarbonGradientTool::createOptionWidgets()
 {
-    m_gradientWidget = new KarbonGradientEditWidget();
+    m_gradientWidget = new KoGradientEditWidget();
     if (m_gradient) {
         m_gradientWidget->setGradient(*m_gradient);
     }
@@ -542,19 +542,19 @@ void KarbonGradientTool::gradientChanged()
     QGradient::Spread spread = m_gradientWidget->spread();
     QGradientStops stops = m_gradientWidget->stops();
 
-    if (m_gradientWidget->target() == KarbonGradientEditWidget::FillGradient) {
+    if (m_gradientWidget->target() == KoGradientEditWidget::FillGradient) {
         QList<QSharedPointer<KoShapeBackground> > newFills;
         foreach(KoShape * shape, selectedShapes) {
             QSharedPointer<KoGradientBackground> newFill;
             QSharedPointer<KoGradientBackground> oldFill = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
             if (oldFill) {
-                QGradient * g = KarbonGradientHelper::convertGradient(oldFill->gradient(), type);
+                QGradient * g = KoGradientHelper::convertGradient(oldFill->gradient(), type);
                 g->setSpread(spread);
                 g->setStops(stops);
                 newFill = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g, oldFill->transform()));
             }
             else {
-                QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);
+                QGradient * g = KoGradientHelper::defaultGradient(type, spread, stops);
                 newFill = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g));
             }
             newFills.append(newFill);
@@ -571,14 +571,14 @@ void KarbonGradientTool::gradientChanged()
                 newStroke = new KoShapeStroke(1.0);
             QBrush newGradient;
             if (newStroke->lineBrush().gradient()) {
-                QGradient * g = KarbonGradientHelper::convertGradient(newStroke->lineBrush().gradient(), type);
+                QGradient * g = KoGradientHelper::convertGradient(newStroke->lineBrush().gradient(), type);
                 g->setSpread(spread);
                 g->setStops(stops);
                 newGradient = QBrush(*g);
                 delete g;
             }
             else {
-                QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);
+                QGradient * g = KoGradientHelper::defaultGradient(type, spread, stops);
                 newGradient = QBrush(*g);
                 delete g;
             }

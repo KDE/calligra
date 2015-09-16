@@ -21,7 +21,7 @@
 */
 
 #include "KarbonSmallStylePreview.h"
-#include <KarbonGradientHelper.h>
+#include <KoGradientHelper.h>
 #include <KoCheckerBoardPainter.h>
 #include <KoGradientBackground.h>
 #include <KoCanvasBase.h>
@@ -72,7 +72,7 @@ protected:
             QSharedPointer<KoGradientBackground>  gradientFill = qSharedPointerDynamicCast<KoGradientBackground>(m_fill);
             if (gradientFill) {
                 const QGradient * gradient = gradientFill->gradient();
-                QGradient * defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
+                QGradient * defGradient = KoGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
                 QBrush brush(*defGradient);
                 delete defGradient;
                 painter.setBrush(brush);
@@ -139,7 +139,7 @@ protected:
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
                 if (brush.gradient()) {
-                    QGradient * defGradient = KarbonGradientHelper::defaultGradient(brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
+                    QGradient * defGradient = KoGradientHelper::defaultGradient(brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
                     QBrush brush(*defGradient);
                     delete defGradient;
                     painter.setBrush(brush);

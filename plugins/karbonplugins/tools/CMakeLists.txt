@@ -4,9 +4,6 @@ add_definitions(-DTRANSLATION_DOMAIN=\"KarbonTools\")
 
 include_directories(
     ${FLAKE_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/karbon 
-    ${CMAKE_SOURCE_DIR}/karbon/ui
-    ${CMAKE_SOURCE_DIR}/karbon/ui/widgets 
     ${CMAKE_CURRENT_SOURCE_DIR}/filterEffectTool
 )
 
@@ -14,6 +11,7 @@ include_directories(
 
 set(karbon_tools_PART_SRCS
    KarbonToolsPlugin.cpp
+   KarbonCursor.cpp
    CalligraphyTool/KarbonCalligraphyTool.cpp
    CalligraphyTool/KarbonCalligraphyOptionWidget.cpp
    CalligraphyTool/KarbonCalligraphyToolFactory.cpp
@@ -39,17 +37,19 @@ set(karbon_tools_PART_SRCS
    filterEffectTool/FilterEffectResource.cpp
    filterEffectTool/FilterResourceServerProvider.cpp
    filterEffectTool/FilterRegionEditStrategy.cpp
+    KarbonPatternOptionsWidget.cpp
 )
 
 ki18n_wrap_ui(karbon_tools_PART_SRCS
     filterEffectTool/FilterEffectEditWidget.ui
+    KarbonPatternOptionsWidget.ui
 )
 
 add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
 
 kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
 
-target_link_libraries(karbon_tools karboncommon karbonui kowidgets)
+target_link_libraries(karbon_tools kowidgets KF5::KDELibs4Support)
 
 install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

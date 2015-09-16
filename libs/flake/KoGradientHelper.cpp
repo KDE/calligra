@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonGradientHelper.h"
+#include "KoGradientHelper.h"
 
 #include <QGradient>
 #include <math.h>
 
-QGradient* KarbonGradientHelper::defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
+QGradient* KoGradientHelper::defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
 {
     QGradient *gradient = 0;
     switch (type) {
@@ -45,7 +45,7 @@ QGradient* KarbonGradientHelper::defaultGradient(QGradient::Type type, QGradient
     return gradient;
 }
 
-QGradient* KarbonGradientHelper::convertGradient(const QGradient * gradient, QGradient::Type newType)
+QGradient* KoGradientHelper::convertGradient(const QGradient * gradient, QGradient::Type newType)
 {
     QPointF start, stop;
     // try to preserve gradient positions
@@ -103,7 +103,7 @@ QGradient* KarbonGradientHelper::convertGradient(const QGradient * gradient, QGr
     return newGradient;
 }
 
-QColor KarbonGradientHelper::colorAt(qreal position, const QGradientStops &stops)
+QColor KoGradientHelper::colorAt(qreal position, const QGradientStops &stops)
 {
     if (! stops.count())
         return QColor();

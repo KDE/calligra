@@ -163,6 +163,9 @@ protected:
     QTransform m_matrix;          ///< matrix to map handle into document coordinate system
     KoShapeStroke m_oldStroke;  ///< the old stroke
 private:
+
+    qreal scalarProduct(const QPointF &p1, const QPointF &p2);
+
     typedef QPair<QPointF, QPointF> StopHandle;
     QColor invertedColor(const QColor &color);
     QList<StopHandle> stopHandles(const KoViewConverter &converter) const;

@@ -19,7 +19,6 @@
  */
 
 #include "KarbonGradientEditStrategy.h"
-#include <KarbonGlobal.h>
 
 #include <KoFlake.h>
 #include <KoShape.h>
@@ -27,7 +26,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoGradientBackground.h>
-#include <KarbonGradientHelper.h>
+#include <KoGradientHelper.h>
 
 #include <QBrush>
 #include <QGradient>
@@ -40,6 +39,12 @@ int GradientStrategy::m_handleRadius = 3;
 int GradientStrategy::m_grabSensitivity = 3;
 
 const qreal stopDistance = 15.0;
+
+/// Returns scalar product of two given vectors
+qreal GradientStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
+{
+    return p1.x() * p2.x() + p1.y() * p2.y();
+}
 
 
 GradientStrategy::GradientStrategy(KoShape *shape, const QGradient * gradient, Target target)
@@ -210,7 +215,7 @@ qreal GradientStrategy::projectToGradientLine(const QPointF &point)
     if (diffLength == 0.0f)
         return 0.0f;
     // project mouse position relative to stop position on gradient line
-    qreal scalar = KarbonGlobal::scalarProduct(point - startPoint, diff / diffLength);
+    qreal scalar = scalarProduct(point - startPoint, diff / diffLength);
     return scalar /= diffLength;
 }
 
@@ -277,7 +282,7 @@ bool GradientStrategy::handleDoubleClick(const QPointF &mouseLocation)
         if (distToLine > m_handleRadius*m_handleRadius)
             return false;
 
-        QColor newColor = KarbonGradientHelper::colorAt(scalar, m_stops);
+        QColor newColor = KoGradientHelper::colorAt(scalar, m_stops);
         m_stops.append(QGradientStop(scalar, newColor));
     } else if (m_selection == Stop) {
         // double click on stop handle removes gradient stop

@@ -20,13 +20,11 @@
 #ifndef KARBONPATTERNOPTIONSWIDGET_H
 #define KARBONPATTERNOPTIONSWIDGET_H
 
-#include <karbonui_export.h>
-
 #include <KoPatternBackground.h>
 
 #include <QWidget>
 
-class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget {
+class KarbonPatternOptionsWidget : public QWidget {
     Q_OBJECT
 public:
     explicit KarbonPatternOptionsWidget(QWidget *parent = 0);

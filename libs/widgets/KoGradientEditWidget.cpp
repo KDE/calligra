@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KarbonGradientEditWidget.h"
+#include "KoGradientEditWidget.h"
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
@@ -28,10 +28,10 @@
 #include <KoSliderCombo.h>
 #include <KoColorPopupAction.h>
 
-#include <kcombobox.h>
 #include <klocale.h>
-#include <knuminput.h>
 
+#include <QDoubleSpinBox>
+#include <QComboBox>
 #include <QFileInfo>
 #include <QPointF>
 #include <QLabel>
@@ -135,12 +135,12 @@ void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGrad
     }
 }
 
-KarbonGradientEditWidget::KarbonGradientEditWidget(QWidget* parent)
+KoGradientEditWidget::KoGradientEditWidget(QWidget* parent)
         : QWidget(parent)
         , m_gradOpacity(1.0), m_stopIndex(-1), m_checkerPainter(4)
         , m_type(QGradient::LinearGradient), m_spread(QGradient::PadSpread)
 {
-    setObjectName("KarbonGradientEditWidget");
+    setObjectName("KoGradientEditWidget");
     // create a default gradient
     m_stops.append(QGradientStop(0.0, Qt::white));
     m_stops.append(QGradientStop(1.0, Qt::green));
@@ -150,31 +150,31 @@ KarbonGradientEditWidget::KarbonGradientEditWidget(QWidget* parent)
     updateUI();
 }
 
-KarbonGradientEditWidget::~KarbonGradientEditWidget()
+KoGradientEditWidget::~KoGradientEditWidget()
 {
 }
 
-void KarbonGradientEditWidget::setupUI()
+void KoGradientEditWidget::setupUI()
 {
     QGridLayout* editLayout = new QGridLayout(this);
 
     int row = 0;
     editLayout->addWidget(new QLabel(i18n("Target:"), this), row, 0);
-    m_gradientTarget = new KComboBox(false, this);
+    m_gradientTarget = new QComboBox(this);
     m_gradientTarget->insertItem(0, i18n("Line"));
     m_gradientTarget->insertItem(1, i18n("Fill"));
     m_gradientTarget->setCurrentIndex(FillGradient);
     editLayout->addWidget(m_gradientTarget, row, 1, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Type:"), this), ++row, 0);
-    m_gradientType = new KComboBox(false, this);
+    m_gradientType = new QComboBox(this);
     m_gradientType->insertItem(0, i18nc("Linear gradient type", "Linear"));
     m_gradientType->insertItem(1, i18nc("Radial gradient type", "Radial"));
     m_gradientType->insertItem(2, i18nc("Conical gradient type", "Conical"));
     editLayout->addWidget(m_gradientType, row, 1, 1, 2);
 
     editLayout->addWidget(new QLabel(i18n("Repeat:"), this), ++row, 0);
-    m_gradientRepeat = new KComboBox(false, this);
+    m_gradientRepeat = new QComboBox(this);
     m_gradientRepeat->insertItem(0, i18nc("No gradient spread", "None"));
     m_gradientRepeat->insertItem(1, i18n("Reflect"));
     m_gradientRepeat->insertItem(2, i18n("Repeat"));
@@ -188,8 +188,9 @@ void KarbonGradientEditWidget::setupUI()
     editLayout->addWidget(new QLabel(i18n("Color stop:"), this), ++row, 0);
     m_stopColor = new QToolButton(this);
     editLayout->addWidget(m_stopColor, row, 1);
-    m_stopPosition = new KDoubleNumInput(this);
-    m_stopPosition->setRange(0.0, 1.0, 0.01, false);
+    m_stopPosition = new QDoubleSpinBox(this);
+    m_stopPosition->setRange(0.0, 1.0);
+    m_stopPosition->setSingleStep(0.01);
     editLayout->addWidget(m_stopPosition, row, 2);
     m_actionStopColor = new KoColorPopupAction(this);
     m_actionStopColor ->setToolTip(i18n("Stop color."));
@@ -204,7 +205,7 @@ void KarbonGradientEditWidget::setupUI()
     editLayout->setRowStretch(++row, 1);
 }
 
-void KarbonGradientEditWidget::setupConnections()
+void KoGradientEditWidget::setupConnections()
 {
     connect(m_gradientType, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
@@ -215,7 +216,7 @@ void KarbonGradientEditWidget::setupConnections()
     connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
 }
 
-void KarbonGradientEditWidget::blockChildSignals(bool block)
+void KoGradientEditWidget::blockChildSignals(bool block)
 {
     m_gradientType->blockSignals(block);
     m_gradientRepeat->blockSignals(block);
@@ -225,7 +226,7 @@ void KarbonGradientEditWidget::blockChildSignals(bool block)
     m_stopPosition->blockSignals(block);
 }
 
-void KarbonGradientEditWidget::updateUI()
+void KoGradientEditWidget::updateUI()
 {
     blockChildSignals(true);
 
@@ -259,12 +260,12 @@ void KarbonGradientEditWidget::updateUI()
     blockChildSignals(false);
 }
 
-qreal KarbonGradientEditWidget::opacity() const
+qreal KoGradientEditWidget::opacity() const
 {
     return m_opacity->value() / 100.0;
 }
 
-void KarbonGradientEditWidget::setOpacity(qreal opacity)
+void KoGradientEditWidget::setOpacity(qreal opacity)
 {
     if (opacity < 0.0 || opacity > 1.0)
         return;
@@ -273,13 +274,13 @@ void KarbonGradientEditWidget::setOpacity(qreal opacity)
     m_opacity->setValue(int(opacity*100.0));
 }
 
-void KarbonGradientEditWidget::setStopIndex(int index)
+void KoGradientEditWidget::setStopIndex(int index)
 {
     m_stopIndex = index;
     updateUI();
 }
 
-void KarbonGradientEditWidget::setGradient(const QGradient & gradient)
+void KoGradientEditWidget::setGradient(const QGradient & gradient)
 {
     m_stops = gradient.stops();
     m_type = gradient.type();
@@ -288,50 +289,50 @@ void KarbonGradientEditWidget::setGradient(const QGradient & gradient)
     updateUI();
 }
 
-KarbonGradientEditWidget::GradientTarget KarbonGradientEditWidget::target()
+KoGradientEditWidget::GradientTarget KoGradientEditWidget::target()
 {
     return (GradientTarget)m_gradientTarget->currentIndex();
 }
 
-void KarbonGradientEditWidget::setTarget(GradientTarget target)
+void KoGradientEditWidget::setTarget(GradientTarget target)
 {
     m_gradientTarget->setCurrentIndex(target);
 }
 
-QGradient::Spread KarbonGradientEditWidget::spread() const
+QGradient::Spread KoGradientEditWidget::spread() const
 {
     return m_spread;
 }
 
-void KarbonGradientEditWidget::setSpread(QGradient::Spread spread)
+void KoGradientEditWidget::setSpread(QGradient::Spread spread)
 {
     m_spread = spread;
     updateUI();
 }
 
-QGradient::Type KarbonGradientEditWidget::type() const
+QGradient::Type KoGradientEditWidget::type() const
 {
     return m_type;
 }
 
-void KarbonGradientEditWidget::setType(QGradient::Type type)
+void KoGradientEditWidget::setType(QGradient::Type type)
 {
     m_type = type;
     updateUI();
 }
 
-QGradientStops KarbonGradientEditWidget::stops() const
+QGradientStops KoGradientEditWidget::stops() const
 {
     return m_stops;
 }
 
-void KarbonGradientEditWidget::setStops(const QGradientStops &stops)
+void KoGradientEditWidget::setStops(const QGradientStops &stops)
 {
     m_stops = stops;
     updateUI();
 }
 
-void KarbonGradientEditWidget::combosChange(int)
+void KoGradientEditWidget::combosChange(int)
 {
     m_type = static_cast<QGradient::Type>(m_gradientType->currentIndex());
     m_spread = static_cast<QGradient::Spread>(m_gradientRepeat->currentIndex());
@@ -339,7 +340,7 @@ void KarbonGradientEditWidget::combosChange(int)
     emit changed();
 }
 
-void KarbonGradientEditWidget::opacityChanged(qreal value, bool final)
+void KoGradientEditWidget::opacityChanged(qreal value, bool final)
 {
     Q_UNUSED(final);
 
@@ -352,7 +353,7 @@ void KarbonGradientEditWidget::opacityChanged(qreal value, bool final)
     emit changed();
 }
 
-void KarbonGradientEditWidget::addGradientToPredefs()
+void KoGradientEditWidget::addGradientToPredefs()
 {
     KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
 
@@ -393,7 +394,7 @@ void KarbonGradientEditWidget::addGradientToPredefs()
         delete g;
 }
 
-void KarbonGradientEditWidget::stopChanged()
+void KoGradientEditWidget::stopChanged()
 {
     if (m_stopIndex >= 0 && m_stopIndex < m_stops.count()) {
         m_stops[m_stopIndex].first = m_stopPosition->value();

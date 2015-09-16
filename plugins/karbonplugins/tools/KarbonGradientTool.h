@@ -26,7 +26,7 @@
 #include <QMultiMap>
 
 class GradientStrategy;
-class KarbonGradientEditWidget;
+class KoGradientEditWidget;
 class KUndo2Command;
 class KoShape;
 class KoResource;
@@ -71,7 +71,7 @@ private:
     QMultiMap<KoShape*, GradientStrategy*> m_strategies; ///< the list of gradient strategies
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
-    KarbonGradientEditWidget * m_gradientWidget;
+    KoGradientEditWidget * m_gradientWidget;
     KUndo2Command * m_currentCmd;
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };

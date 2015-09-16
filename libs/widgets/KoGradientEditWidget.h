@@ -19,16 +19,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONGRADIENTEDITWIDGET_H
-#define KARBONGRADIENTEDITWIDGET_H
+#ifndef KO_GRADIENT_EDIT_WIDGET_H
+#define KO_GRADIENT_EDIT_WIDGET_H
 
-#include <karbonui_export.h>
+#include <kowidgets_export.h>
 #include <KoCheckerBoardPainter.h>
 #include <QWidget>
 
 class KoSliderCombo;
-class KComboBox;
-class KDoubleNumInput;
+class QComboBox;
+class QDoubleSpinBox;
 class KoColorPopupAction;
 class QToolButton;
 class QPushButton;
@@ -39,7 +39,7 @@ class QPushButton;
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KARBONUI_EXPORT KarbonGradientEditWidget : public QWidget
+class KOWIDGETS_EXPORT KoGradientEditWidget : public QWidget
 {
     Q_OBJECT
 
@@ -53,10 +53,10 @@ public:
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KarbonGradientEditWidget(QWidget* parent = 0L);
+    explicit KoGradientEditWidget(QWidget* parent = 0L);
 
     /// Destroys the widget
-    virtual ~KarbonGradientEditWidget();
+    virtual ~KoGradientEditWidget();
 
     /**
      * Sets a new gradient to edit.
@@ -114,12 +114,12 @@ protected:
     void blockChildSignals(bool block);
 
 private:
-    KComboBox *m_gradientTarget;
-    KComboBox *m_gradientRepeat;
-    KComboBox *m_gradientType;
+    QComboBox *m_gradientTarget;
+    QComboBox *m_gradientRepeat;
+    QComboBox *m_gradientType;
     QPushButton *m_addToPredefs;
     KoSliderCombo *m_opacity;
-    KDoubleNumInput *m_stopPosition;
+    QDoubleSpinBox *m_stopPosition;
     QToolButton *m_stopColor;
     qreal m_gradOpacity;    ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
