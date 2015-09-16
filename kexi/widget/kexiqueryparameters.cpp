@@ -21,9 +21,9 @@
 #include <kexi_global.h>
 #include "utils/kexidatetimeformatter.h"
 
-#include <KDb>
 #include <KDbQuerySchemaParameter>
 #include <KDbUtils>
+#include <KDbDriver>
 
 #include <KLocalizedString>
 
