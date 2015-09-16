@@ -179,7 +179,7 @@ KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
     return 0;
 }
 
-QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
+QWidget* KexiSharedActionHost::findWindow(QWidget * /*w*/)
 {
     return 0;
 }
