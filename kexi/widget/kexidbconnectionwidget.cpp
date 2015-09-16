@@ -293,13 +293,7 @@ KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
 
 void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
 {
-    mainWidget->setData(data, shortcutFileName);
-    detailsWidget->chkUseSocket->setChecked(data.connectionData()->useLocalSocketFile());
-    detailsWidget->customSocketEdit->setUrl(data.connectionData()->localSocketFileName());
-    detailsWidget->customSocketEdit->setEnabled(detailsWidget->chkUseSocket->isChecked());
-    detailsWidget->chkSocketDefault->setChecked(data.connectionData()->localSocketFileName().isEmpty());
-    detailsWidget->chkSocketDefault->setEnabled(detailsWidget->chkUseSocket->isChecked());
-    detailsWidget->descriptionEdit->setText(data.description());
+    setData(*data.connectionData(), shortcutFileName);
 }
 
 void KexiDBConnectionTabWidget::setData(const KDbConnectionData& data,
@@ -307,7 +301,7 @@ void KexiDBConnectionTabWidget::setData(const KDbConnectionData& data,
 {
     mainWidget->setData(data, shortcutFileName);
     detailsWidget->chkUseSocket->setChecked(data.useLocalSocketFile());
-    detailsWidget->customSocketEdit->setUrl(data.localSocketFileName());
+    detailsWidget->customSocketEdit->setUrl(QUrl::fromLocalFile(data.localSocketFileName()));
     detailsWidget->customSocketEdit->setEnabled(detailsWidget->chkUseSocket->isChecked());
     detailsWidget->chkSocketDefault->setChecked(data.localSocketFileName().isEmpty());
     detailsWidget->chkSocketDefault->setEnabled(detailsWidget->chkUseSocket->isChecked());
