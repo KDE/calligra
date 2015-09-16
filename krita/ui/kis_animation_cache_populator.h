@@ -39,7 +39,10 @@ public:
      */
     bool regenerate(KisAnimationFrameCacheSP cache, int frame);
 
-public slots:
+Q_SIGNALS:
+    void sigPrivateStartWaitingForConvertedFrame();
+
+public Q_SLOTS:
     void slotStart();
 
     void slotRequestRegeneration();
@@ -48,6 +51,8 @@ private slots:
     void slotTimer();
     void slotFrameReady(int frame);
     void slotInfoConverted();
+
+    void slotPrivateStartWaitingForConvertedFrame();
 
 private:
     struct Private;

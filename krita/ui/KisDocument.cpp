@@ -548,7 +548,18 @@ public:
         }
     }
 
+    void setImageAndInitIdleWatcher(KisImageSP _image) {
+        image = _image;
 
+        imageIdleWatcher.setTrackedImage(image);
+
+        if (image) {
+            imageIdleConnection.reset(
+                new KisSignalAutoConnection(
+                    &imageIdleWatcher, SIGNAL(startedIdleMode()),
+                    image.data(), SLOT(explicitRegenerateLevelOfDetail())));
+        }
+    }
 };
 
 KisDocument::KisDocument()
@@ -2000,7 +2011,7 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
         // Disconnect existing sig/slot connections
         d->image->disconnect(this);
     }
-    d->image = image;
+    d->setImageAndInitIdleWatcher(image);
 
     return true;
 }
@@ -2488,7 +2499,7 @@ bool KisDocument::newImage(const QString& name,
 
     KisConfig cfg;
 
-    KisImageWSP image;
+    KisImageSP image;
     KisPaintLayerSP layer;
 
     if (!cs) return false;
@@ -2625,18 +2636,12 @@ void KisDocument::setCurrentImage(KisImageWSP image)
         d->image->disconnect(this);
         d->shapeController->setImage(0);
     }
-    d->image = image;
+    d->setImageAndInitIdleWatcher(image);
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     d->image->initialRefreshGraph();
     setAutoSave(KisConfig().autoSaveInterval());
-
-    d->imageIdleWatcher.setTrackedImage(image);
-    d->imageIdleConnection.reset(
-        new KisSignalAutoConnection(
-            &d->imageIdleWatcher, SIGNAL(startedIdleMode()),
-            image.data(), SLOT(explicitRegenerateLevelOfDetail())));
 }
 
 void KisDocument::initEmpty()

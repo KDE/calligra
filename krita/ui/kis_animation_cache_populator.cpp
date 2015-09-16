@@ -96,8 +96,6 @@ struct KisAnimationCachePopulator::Private
         if (frame != requestedFrame) return;
 
         imageRequestConnection.reset();
-        enterState(WaitingForConvertedFrame);
-
         requestInfo = requestCache->fetchFrameData(frame);
 
         QFuture<void> requestFuture =
@@ -106,6 +104,12 @@ struct KisAnimationCachePopulator::Private
                             requestInfo));
 
         infoConversionWatcher.setFuture(requestFuture);
+
+        /**
+         * This method is called from the context of the image worker
+         * threads, so we cannot modify timers here.
+         */
+        emit q->sigPrivateStartWaitingForConvertedFrame();
     }
 
     void infoConverted() {
@@ -304,6 +308,7 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
     : m_d(new Private(this, part))
 {
     connect(&m_d->timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
+    connect(this, SIGNAL(sigPrivateStartWaitingForConvertedFrame()), SLOT(slotPrivateStartWaitingForConvertedFrame()));
 }
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
@@ -337,6 +342,11 @@ void KisAnimationCachePopulator::slotInfoConverted()
 void KisAnimationCachePopulator::slotRequestRegeneration()
 {
     m_d->enterState(Private::WaitingForIdle);
+}
+
+void KisAnimationCachePopulator::slotPrivateStartWaitingForConvertedFrame()
+{
+    m_d->enterState(Private::WaitingForConvertedFrame);
 }
 
 #include "kis_animation_cache_populator.moc"
