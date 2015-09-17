@@ -48,6 +48,7 @@ Comment[pt]=Área de apresentação da visão geral da imagem
 Comment[pt_BR]=Área de apresentação do resumo da imagem
 Comment[sk]=Panel na zobrazenie prehľadu obrázku
 Comment[sv]=Dockningsfönster för att visa en översiktsbild
+Comment[tr]=Bir resim genel görünümü göstermek için araç panosu
 Comment[uk]=Панель для показу ескіза зображення
 Comment[x-test]=xxDocker for showing an image overviewxx
 X-KDE-ServiceTypes=Krita/Dock
