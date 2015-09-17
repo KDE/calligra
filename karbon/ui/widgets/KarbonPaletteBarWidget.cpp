@@ -32,6 +32,7 @@
 #include <KoShapeStroke.h>
 
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <QToolButton>
