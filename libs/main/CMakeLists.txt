@@ -61,7 +61,6 @@ set(komain_LIB_SRCS
     KoFindBase.cpp
     KoFindMatch.cpp
     KoFindText.cpp
-    KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
     KoFindStyle.cpp
@@ -149,7 +148,6 @@ install( FILES
     KoFilterVertex.h
     KoFindBase.h
     KoFindText.h
-    KoFindToolbar.h
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h

@@ -24,7 +24,6 @@
 #define KOFINDTOOLBAR_H
 
 #include <QWidget>
-#include "komain_export.h"
 
 class KActionCollection;
 class KoFindBase;
@@ -35,7 +34,7 @@ class KoFindBase;
  * field, previous/next buttons and an options selector. It uses the methods
  * provided by KoFindBase to find and navigate search matches.
  */
-class KOMAIN_EXPORT KoFindToolbar : public QWidget
+class KoFindToolbar : public QWidget
 {
     Q_OBJECT
 public:

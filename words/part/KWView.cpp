@@ -39,6 +39,7 @@
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWConfigureDialog.h"
 #include "commands/KWShapeCreateCommand.h"
+#include "widgets/KoFindToolbar.h"
 #include "ui_KWInsertImage.h"
 #include "gemini/ViewModeSwitchEvent.h"
 #include "WordsDebug.h"
@@ -93,7 +94,6 @@
 
 #include <KoComponentData.h>
 #include <KoFindText.h>
-#include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
 

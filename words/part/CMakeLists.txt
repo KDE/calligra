@@ -45,6 +45,8 @@ set(wordsprivate_LIB_SRCS
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
 
+    widgets/KoFindToolbar.cpp
+
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWRunAroundProperties.cpp
     dialogs/KWAnchoringProperties.cpp

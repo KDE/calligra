@@ -22,13 +22,13 @@
 
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QAction>
 #include <QMenu>
 #include <QTimer>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
-#include <QAction>
 #include <kactioncollection.h>
 #include <kcolorscheme.h>
 
