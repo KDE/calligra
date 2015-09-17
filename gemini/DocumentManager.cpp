@@ -197,7 +197,7 @@ void DocumentManager::delayedOpenDocument()
 {
     d->document = 0;
     QMimeDatabase db;
-    QMimeType mimeType = db.mimeTypeForUrl(d->openDocumentFilename);
+    QMimeType mimeType = db.mimeTypeForUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());
     d->part = documentEntry.createKoPart();
     if (d->part) {
@@ -253,7 +253,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->document->saveAs(d->saveAsFilename);
+    d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();

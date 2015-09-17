@@ -107,7 +107,7 @@ Document *DocumentsPanel::selectedDocument() const
 
 void DocumentsPanel::slotAddUrl()
 {
-    QPointer<KUrlRequesterDialog> dlg = new KUrlRequesterDialog( QString(), QString(), this );
+    QPointer<KUrlRequesterDialog> dlg = new KUrlRequesterDialog( QUrl(), QString(), this );
     dlg->setWindowTitle( i18nc( "@title:window", "Attach Document" ) );
     if ( dlg->exec() == QDialog::Accepted && dlg ) {
         if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
@@ -132,7 +132,7 @@ void DocumentsPanel::slotChangeUrl()
     if ( doc == 0 ) {
         return slotAddUrl();
     }
-    KUrlRequesterDialog *dlg = new KUrlRequesterDialog( doc->url().url(), QString(), this );
+    KUrlRequesterDialog *dlg = new KUrlRequesterDialog( doc->url(), QString(), this );
     dlg->setWindowTitle( i18nc( "@title:window", "Modify Url" ) );
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( doc->url() != dlg->selectedUrl() ) {

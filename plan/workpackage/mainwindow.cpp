@@ -156,6 +156,6 @@ void KPlatoWork_MainWindow::slotFileOpen()
 {
     QString file = KFileDialog::getOpenFileName( KUrl(), "*.planwork" );
     if ( ! file.isEmpty() ) {
-        openDocument( file );
+        openDocument( QUrl::fromUserInput(file) );
     }
 }

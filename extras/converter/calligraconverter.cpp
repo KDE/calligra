@@ -178,8 +178,8 @@ int main(int argc, char **argv)
         return 3;
     }
 
-    const QUrl urlIn = args->url(0).url();
-    const QUrl urlOut = args->url(1).url();
+    const QUrl urlIn = args->url(0);
+    const QUrl urlOut = args->url(1);
 
     // Are we in batch mode or in interactive mode.
     bool batch = args->isSet("batch");
