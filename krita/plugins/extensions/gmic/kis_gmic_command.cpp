@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QTime>
 
-KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, KisGmicDataSP data, const QByteArray &customCommands):
+KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer<GMICImageWrapperList> images, KisGmicDataSP data, const QByteArray &customCommands):
     m_gmicCommandString(gmicCommandString),
     m_images(images),
     m_data(data),
@@ -53,12 +53,14 @@ void KisGmicCommand::redo()
     {
         m_firstRedo = false;
         dbgPlugins << "Calling G'MIC interpreter:";
-        for (unsigned int i = 0; i<m_images->_width; ++i)
-        {
-            dbgPlugins << "G'MIC Input image " << i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
-        }
+//        for (unsigned int i = 0; i<m_images->_width; ++i)
+//        {
+//            dbgPlugins << "G'MIC Input image " << i << " = "
+//                       << KisGmicCommand::gmicDimensionString(m_images->_data[i])
+//                       << ", buffer : "
+//                       << m_images->_data[i]._data;
+//        }
 
-        gmic_list<char> images_names; // unused
         QString gmicCmd = "-v - -* 255 "; // turn off verbose mode
         gmicCmd.append(m_gmicCommandString);
         dbgPlugins << "G'Mic command executed: " << gmicCmd;
@@ -68,13 +70,14 @@ void KisGmicCommand::redo()
         QTime timer;
         timer.start();
 
-        try
-        {
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands.constData(), include_default_commands, &m_data->progressPtr(), &m_data->cancelPtr());
-        }
-        catch (gmic_exception &e)
-        {
-            QString message = QString::fromUtf8(e.what());
+        const char *result = GMICWrapper::doGmic(gmicCmd.toLocal8Bit().constData(),
+                                                 m_images,
+                                                 m_customCommands.constData(),
+                                                 include_default_commands,
+                                                 &m_data->progressPtr(),
+                                                 &m_data->cancelPtr());
+        if (result) {
+            QString message = QString::fromUtf8(result);
             dbgPlugins << "Error encountered when calling G'MIC : " << message;
             int elapsed = timer.elapsed();
             dbgPlugins << "Filtering failed after " << elapsed << " ms";
@@ -98,7 +101,7 @@ void KisGmicCommand::redo()
 }
 
 
-QString KisGmicCommand::gmicDimensionString(const gmic_image<float>& img)
+QString KisGmicCommand::gmicDimensionString(const GMICImageWrapper& img)
 {
     return QString("%1x%2x%3x%4").arg(img._width).arg(img._height).arg(img._depth).arg(img._spectrum);
 }

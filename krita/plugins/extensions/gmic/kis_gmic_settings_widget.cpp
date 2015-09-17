@@ -41,7 +41,7 @@
 #include <kseparator.h>
 
 #include <KoFileDialog.h>
-#include <kfiledialog.h> // For kisurlrequester...
+//#include <kfiledialog.h> // For kisurlrequester...
 
 const static int DELAY = 250;
 

@@ -35,9 +35,9 @@
 
 
 #include "kis_import_gmic_processing_visitor.h"
-#include <gmic.h>
+#include <GMICWrapper.h>
 
-KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<gmic_list<float> > images, const QRect &dstRect, KisSelectionSP selection)
+KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<GMICImageWrapperList > images, const QRect &dstRect, KisSelectionSP selection)
     : m_nodes(nodes),
       m_images(images),
       m_dstRect(dstRect),
@@ -50,7 +50,7 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     int index = m_nodes->indexOf(node);
     if (index >= 0)
     {
-        gmic_image<float> &gimg = m_images->_data[index];
+        GMICImageWrapper &gimg = m_images->_data[index];
         dbgPlugins << "Importing layer index" << index << "Size: "<< gimg._width << "x" << gimg._height << "colorchannels: " << gimg._spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();

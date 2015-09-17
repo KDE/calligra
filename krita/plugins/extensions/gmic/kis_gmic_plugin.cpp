@@ -64,7 +64,7 @@
 
 #include <kis_processing_visitor.h>
 #include <kis_gmic_small_applicator.h>
-#include "gmic.h"
+#include "GMICWrapper.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KisGmicPluginFactory, "kritagmic.json", registerPlugin<KisGmicPlugin>();)
 

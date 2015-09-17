@@ -20,7 +20,7 @@
 #ifndef __KIS_GMIC_COMMAND_H
 #define __KIS_GMIC_COMMAND_H
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 
 #include <QSharedPointer>
 
@@ -30,7 +30,7 @@
 
 #include "kis_gmic_data.h"
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 
 class QString;
 
@@ -38,7 +38,7 @@ class KisGmicCommand : public QObject, public KUndo2Command
 {
     Q_OBJECT
 public:
-    KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, KisGmicDataSP data, const QByteArray &customCommands = QByteArray());
+    KisGmicCommand(const QString &gmicCommandString, QSharedPointer<GMICImageWrapperList> images, KisGmicDataSP data, const QByteArray &customCommands = QByteArray());
     virtual ~KisGmicCommand();
 
     void undo();
@@ -51,11 +51,11 @@ Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
-    static QString gmicDimensionString(const gmic_image<float>& img);
+    static QString gmicDimensionString(const GMICImageWrapper& img);
 
 private:
     const QString m_gmicCommandString;
-    QSharedPointer<gmic_list<float> > m_images;
+    QSharedPointer<GMICImageWrapperList> m_images;
     KisGmicDataSP m_data;
     const QByteArray m_customCommands;
     bool m_firstRedo;

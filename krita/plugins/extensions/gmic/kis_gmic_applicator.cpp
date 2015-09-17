@@ -26,7 +26,7 @@
 #include "kis_image.h"
 #include <kis_selection.h>
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 #include "kis_gmic_synchronize_layers_command.h"
 #include "kis_export_gmic_processing_visitor.h"
 #include "kis_gmic_synchronize_image_size_command.h"
@@ -66,7 +66,7 @@ void KisGmicApplicator::preview()
             emitSignals, m_actionName);
     dbgPlugins << "Created applicator " << m_applicator;
 
-    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
+    QSharedPointer<GMICImageWrapperList> gmicLayers(new GMICImageWrapperList);
     gmicLayers->assign(m_kritaNodes->size());
 
     m_gmicData = KisGmicDataSP(new KisGmicData());

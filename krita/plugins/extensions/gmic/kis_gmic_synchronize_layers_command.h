@@ -30,7 +30,7 @@
 #include <kis_node.h>
 #include <kis_types.h>
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 
 class KisImageCommand;
 
@@ -38,7 +38,7 @@ class KisGmicSynchronizeLayersCommand : public KUndo2Command
 {
 public:
     KisGmicSynchronizeLayersCommand(KisNodeListSP nodes,
-                                    QSharedPointer< gmic_list<float> > images,
+                                    QSharedPointer<GMICImageWrapperList> images,
                                     KisImageWSP image,
                                     const QRect &dstRect = QRect(),
                                     const KisSelectionSP selection = 0
@@ -51,7 +51,7 @@ public:
 
 private:
     KisNodeListSP m_nodes;
-    QSharedPointer< gmic_list<float> > m_images;
+    QSharedPointer<GMICImageWrapperList> m_images;
     KisImageWSP m_image;
     QRect m_dstRect;
     KisSelectionSP m_selection;

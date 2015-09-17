@@ -25,7 +25,7 @@
 
 #include <QSharedPointer>
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 
 #include <kis_node.h>
 class KisUndoAdapter;
@@ -34,13 +34,13 @@ class KisImportGmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     KisImportGmicProcessingVisitor(const KisNodeListSP nodes,
-                                   QSharedPointer<gmic_list<float> > images,
+                                   QSharedPointer<GMICImageWrapperList > images,
                                    const QRect &dstRect,
                                    const KisSelectionSP selection
                                   );
 
 
-    static void gmicImageToPaintDevice(gmic_image<float>& srcGmicImage,
+    static void gmicImageToPaintDevice(GMICImageWrapper& srcGmicImage,
                                        KisPaintDeviceSP dstPaintDevice, KisSelectionSP selection = 0, const QRect &dstRect = QRect());
 
 
@@ -50,7 +50,7 @@ protected:
 
 private:
     const KisNodeListSP m_nodes;
-    QSharedPointer<gmic_list<float> > m_images;
+    QSharedPointer<GMICImageWrapperList > m_images;
     QRect m_dstRect;
     const KisSelectionSP m_selection;
 };

@@ -23,7 +23,7 @@
 #include <kis_node.h>
 #include <kis_debug.h>
 
-KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer<gmic_list<float> > images, QRect rc)
+KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer<GMICImageWrapperList> images, QRect rc)
     : m_nodes(nodes),
       m_images(images),
       m_rc(rc)
@@ -40,7 +40,7 @@ void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     {
         /* fill the image with data here */
         KisPaintDeviceSP device = node->paintDevice();
-        gmic_image<float> &gimg = m_images->_data[index];
+        GMICImageWrapper gimg = m_images->data(index);
 
         quint32 x = m_rc.width();
         quint32 y = m_rc.height();

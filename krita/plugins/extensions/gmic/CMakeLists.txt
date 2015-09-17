@@ -25,12 +25,14 @@ endif()
 
 set(gmic_sources_SRCS
   ${GMIC_SOURCE_DIR}/gmic.cpp
+  ${GMIC_SOURCE_DIR}/GMICWrapper.cpp
 )
 
 set(gmic_headers_SRCS
   ${GMIC_SOURCE_DIR}/CImg.h
   ${GMIC_SOURCE_DIR}/gmic_def.h
   ${GMIC_SOURCE_DIR}/gmic.h
+  ${GMIC_SOURCE_DIR}/GMICWrapper.h
 )
 
 # Mandatory flags

@@ -25,11 +25,9 @@
 #include <QTimer>
 #include <kis_debug.h>
 
-#include <CImg.h>
-#include <gmic.h>
-
-
 #include <KoResourcePaths.h>
+
+#include <GMICWrapper.h>
 
 KisGmicUpdater::KisGmicUpdater(const QString &updateurl, QObject *parent): QObject(parent),m_url(updateurl)
 {
@@ -48,7 +46,7 @@ void KisGmicUpdater::start()
 
     QString userAgent("org.krita.gmic/");
 
-    QString version = QString("%0.%1.%2.%3").arg(gmic_version/1000).arg((gmic_version/100)%10).arg((gmic_version/10)%10).arg(gmic_version%10);
+    QString version = QString("%0.%1.%2.%3").arg(GMICWrapper::version()/1000).arg((GMICWrapper::version()/100)%10).arg((GMICWrapper::version()/10)%10).arg(GMICWrapper::version()%10);
 
     userAgent.append(version);
     dbgPlugins << "userAgent" << userAgent.toLatin1();
@@ -85,11 +83,7 @@ void KisGmicUpdater::finishedDownload(QNetworkReply*reply)
 
     QString filePathDst = path + fileName;
 
-    std::FILE *file = std::fopen(tmpfilePath.toUtf8().constData(),"rb");
-    cimg_library::CImg<unsigned char> buffer;
-    buffer.load_cimg(file);
-    buffer.save_raw(filePathDst.toUtf8().constData());
-    std::fclose(file);
+    GMICWrapper::saveLibrary(tmpfilePath.toUtf8().constData(), filePathDst.toUtf8().constData());
 
     if (!QFile::remove(tmpfilePath))
     {

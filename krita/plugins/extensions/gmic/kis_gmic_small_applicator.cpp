@@ -106,7 +106,7 @@ void KisGmicSmallApplicator::run()
                 return;
             }
 
-            QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
+            QSharedPointer<GMICImageWrapperList> gmicLayers(new GMICImageWrapperList);
             gmicLayers->assign(previewKritaNodes->size());
 
             KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);

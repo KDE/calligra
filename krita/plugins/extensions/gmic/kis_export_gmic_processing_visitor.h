@@ -27,7 +27,7 @@
 #include <kis_types.h>
 #include <kis_node.h>
 
-#include <gmic.h>
+#include <GMICWrapper.h>
 
 class KisNode;
 class KisUndoAdapter;
@@ -37,19 +37,16 @@ class KisUndoAdapter;
 class KisExportGmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer< gmic_list<float> > images, QRect rc = QRect());
+    KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer<GMICImageWrapperList> images, QRect rc = QRect());
 
 protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter){ Q_UNUSED(layer); Q_UNUSED(undoAdapter); }
 
 private:
-    void convertToGmicImageOpti(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-    void init();
-private:
 
     KisNodeListSP m_nodes;
-    QSharedPointer<gmic_list<float> > m_images;
+    QSharedPointer<GMICImageWrapperList> m_images;
     QRect m_rc; // size of the layer has to be same for some filters, e.g. colorize, use image size
 };
 
