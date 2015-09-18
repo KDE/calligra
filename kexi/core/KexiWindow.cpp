@@ -103,7 +103,7 @@ public:
     Kexi::ViewModes openedViewModes;
     Kexi::ViewMode currentViewMode;
 
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     KexiContextHelpInfo *contextHelpInfo;
 #endif
     int id;
@@ -140,7 +140,7 @@ KexiWindow::KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes,
     d->item = item;
     d->supportedViewModes = supportedViewModes;
     createSubwidgets();
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     d->contextHelpInfo = new KexiContextHelpInfo();
 #endif
     updateCaption();
@@ -153,7 +153,7 @@ KexiWindow::KexiWindow()
         , m_destroying(false)
 {
     createSubwidgets();
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     d->contextHelpInfo = new KexiContextHelpInfo();
 #endif
     updateCaption();
@@ -289,15 +289,15 @@ int KexiWindow::id() const
 void KexiWindow::setContextHelp(const QString& caption,
                                 const QString& text, const QString& iconName)
 {
-#ifdef KEXI_NO_CTXT_HELP
-    Q_UNUSED(caption);
-    Q_UNUSED(text);
-    Q_UNUSED(iconName);
-#else
+#ifdef KEXI_SHOW_CONTEXT_HELP
     d->contextHelpInfo->caption = caption;
     d->contextHelpInfo->text = text;
     d->contextHelpInfo->text = iconName;
     updateContextHelp();
+#else
+    Q_UNUSED(caption);
+    Q_UNUSED(text);
+    Q_UNUSED(iconName);
 #endif
 }
 

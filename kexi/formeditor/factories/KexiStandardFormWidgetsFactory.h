@@ -71,7 +71,7 @@ public:
         const QVariant &value) { KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value); }
 
 public Q_SLOTS:
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     void  editListContents();
 #endif
 protected Q_SLOTS:
@@ -84,7 +84,7 @@ protected:
     virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
                                   const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     void saveTreeItem(QTreeWidgetItem *item, QDomNode &parentNode, QDomDocument &domDoc);
     void readTreeItem(QDomElement &node, QTreeWidgetItem *parent, QTreeWidget *treewidget);
 #endif

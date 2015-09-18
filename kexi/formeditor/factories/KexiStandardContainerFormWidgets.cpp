@@ -235,49 +235,6 @@ VFlow::sizeHint() const
         return QSize(700, 50); // default
 }
 
-/////// Sub forms ////////////////////////:
-
-#if 0
-SubForm::SubForm(KFormDesigner::Form *parentForm, QWidget *parent)
-        : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
-{
-    setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-    viewport()->setPaletteBackgroundColor(colorGroup().mid());
-}
-
-SubForm::~SubForm()
-{
-}
-
-void
-SubForm::setFormName(const QString &name)
-{
-    if (name.isEmpty())
-        return;
-
-    QFileInfo info(name);
-    if (!info.exists() || (m_parentForm && info.fileName() == m_parentForm->filename())) {
-//! @todo ???
-        return; // we check if this form is valid
-    }
-
-    // we create the container widget
-    delete m_widget;
-    m_widget = new QWidget(viewport());
-    m_widget->setObjectName("subform_widget");
-    addChild(m_widget);
-    m_form = new KFormDesigner::Form(m_parentForm);
-    m_form->setObjectName(this->objectName());
-    m_form->createToplevel(m_widget);
-
-    // and load the sub form
-    KFormDesigner::FormIO::loadFormFromFile(m_form, m_widget, name);
-    m_form->setMode(KFormDesigner::Form::DesignMode);
-
-    m_formName = name;
-}
-#endif //0
-
 /////   Internal actions
 
 AddTabAction::AddTabAction(KFormDesigner::Container *container,

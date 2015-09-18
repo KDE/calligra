@@ -48,7 +48,7 @@ public:
 
     /*! \return the plugin ID of the part for the widget's data source.
      It means IDs like "org.kexi-project.table" or "org.kexi-project.query" if the data
-     source is set to object (as within form or subform)
+     source is set to object (as within form)
      or is empty if the data source is set to table field or query column. */
     inline QString dataSourcePluginId() const {
         return m_dataSourcePartClass;

@@ -44,7 +44,6 @@ ecm_install_icons(ICONS
     16-actions-state_data.png
     16-actions-state_edit.png
     16-actions-state_sql.png
-    16-actions-subform.png
     16-actions-table.png
     16-actions-table_newobj.png
     16-actions-tabwidget.png
@@ -113,7 +112,6 @@ ecm_install_icons(ICONS
     22-actions-state_data.png
     22-actions-state_edit.png
     22-actions-state_sql.png
-    22-actions-subform.png
     22-actions-table.png
     22-actions-table_newobj.png
     22-actions-tabwidget.png

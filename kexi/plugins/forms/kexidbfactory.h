@@ -25,7 +25,7 @@
 
 class QAction;
 
-//! Kexi Factory (DB widgets + subform)
+//! Kexi Factory for data-aware widgets
 //! @todo merge with KexiStandardFormWidgetsFactory
 class KexiDBFactory : public KexiDBFactoryBase
 {

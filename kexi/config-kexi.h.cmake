@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
 #ifndef KEXI_CONFIG_H
 #define KEXI_CONFIG_H
 
@@ -53,5 +72,29 @@
 //! @def KEXI_AUTORISE_TABBED_TOOLBAR
 //! @brief If defined, tabs in the main tabbed toolbar autorise in Kexi
 #cmakedefine KEXI_AUTORISE_TABBED_TOOLBAR
+
+//! @def KEXI_FORM_CURSOR_PROPERTY_SUPPORT
+//! @brief If defined, "cursor" property is displayed in the form designer
+#cmakedefine KEXI_FORM_CURSOR_PROPERTY_SUPPORT
+
+//! @def KEXI_SHOW_CONTEXT_HELP
+//! @brief If defined, context help is displayed in Kexi main window
+#cmakedefine KEXI_SHOW_CONTEXT_HELP
+
+//! @def KEXI_QUICK_PRINTING_SUPPORT
+//! @brief If defined, print/print preview/print setup for tables/queries is enabled in the project navigator
+#cmakedefine KEXI_QUICK_PRINTING_SUPPORT
+
+//! @def KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
+//! @brief If defined, "auto field" form widget is available in the form designer
+#cmakedefine KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
+
+//! @def KEXI_LIST_FORM_WIDGET_SUPPORT
+//! @brief If defined, "list" form widget is available in the form designer
+#cmakedefine KEXI_LIST_FORM_WIDGET_SUPPORT
+
+//! @def KEXI_PIXMAP_COLLECTIONS_SUPPORT
+//! @brief If defined, support for pixmap collections is enabled
+#cmakedefine KEXI_PIXMAP_COLLECTIONS_SUPPORT
 
 #endif

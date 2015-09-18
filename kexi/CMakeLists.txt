@@ -18,6 +18,15 @@ option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed tool
 # Experimental:
 option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
 
+# Broken:
+option(KEXI_FORM_CURSOR_PROPERTY_SUPPORT "Broken: Enable \"cursor\" property in the form designer" OFF)
+option(KEXI_SHOW_CONTEXT_HELP "Broken: Enable context help in Kexi main window" OFF)
+option(KEXI_QUICK_PRINTING_SUPPORT "Broken: Enable print/print preview/print setup for tables/queries in the project navigator" OFF)
+option(KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT "Broken: Enable \"auto field\" form widget in the form designer" OFF)
+# OFF because we need to replace it with QTreeWidget which uses very different API compared to Q3ListView. Re-add QTreeWidget?
+option(KEXI_LIST_FORM_WIDGET_SUPPORT "Broken: Enable \"list\" form widget in the form designer" OFF)
+option(KEXI_PIXMAP_COLLECTIONS_SUPPORT "Broken: Enable support for pixmap collections" OFF)
+
 # Not available:
 option(KEXI_MACROS_SUPPORT "Experimental: Enable macros in Kexi" OFF)
 if(KEXI_MACROS_SUPPORT) # temp.
@@ -34,14 +43,6 @@ endif()
 
 #See commit 1e433a54cd9, left here for reference
 #option(KEXI_SQLITE_MIGRATION "If defined, SQLite3 migration to some newer format is possible. Users can see a suitable question on app's startup." OFF)
-
-add_definitions(
-  -DKEXI_NO_CURSOR_PROPERTY  # broken
-  -DKEXI_NO_CTXT_HELP        # broken
-  -DKEXI_NO_SUBFORM          # broken
-  -DKEXI_NO_QUICK_PRINTING   # print/print preview/print setup for tables/queries in the navigator
-  -DKEXI_NO_AUTOFIELD_WIDGET # broken, to be removed
-)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kexi\")
 

@@ -53,7 +53,7 @@
 #include "formIO.h"
 
 //! @todo KEXI3 TODO pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
 #include "pixmapcollection.h"
 #endif
 
@@ -219,7 +219,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     }
 
 //! @todo KEXI3 TODO pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     // Save the Form 's PixmapCollection
     form->pixmapCollection()->save(uiElement);
 #endif
@@ -364,7 +364,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     form->setPixmapsStoredInline(ui.firstChildElement("pixmapinproject").isNull()
                                  || !ui.firstChildElement("images").isNull());
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     form->pixmapCollection()->load(ui.namedItem("collection"));
 #endif
 
@@ -840,7 +840,7 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
         return s;
     } else if (type == "pixmap") {
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
         if (form->pixmapsStoredInline() || !m_currentForm || !m_currentRecord || !m_currentForm->pixmapCollection()->contains(text))
             return loadImage(tag.ownerDocument(), text);
         else {

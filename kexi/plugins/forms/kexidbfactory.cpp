@@ -49,9 +49,6 @@
 #include "widgets/kexidbslider.h"
 #include "widgets/kexidbprogressbar.h"
 #include "widgets/kexidbdatepicker.h"
-#ifndef KEXI_NO_SUBFORM
-# include "widgets/kexidbsubform.h"
-#endif
 #include "kexidataawarewidgetinfo.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
@@ -89,23 +86,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setDescription(xi18n("A form widget"));
         addClass(wi);
     }
-
-#ifndef KEXI_NO_SUBFORM
-    {
-// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
-//         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-//         wi->setIconName(koIconName("subform"));
-//         wi->setClassName("KexiDBSubForm");
-//         wi->addAlternateClassName("KexiSubForm", true/*override*/); //older
-//         wi->setName(xi18nc("Sub Form widget", "Sub Form"));
-//         wi->setNamePrefix(
-//             i18nc("Widget name. This string will be used to name widgets of this class. "
-//                   "It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-//         wi->setDescription(xi18n("A form widget included in another Form"));
-//         wi->setAutoSyncForProperty("formName", false);
-//         addClass(wi);
-    }
-#endif
 
     {
         // inherited
@@ -265,7 +245,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setDescription(xi18n("A check box with text label"));
         addClass(wi);
     }
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     {
 // Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
 //         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
@@ -398,7 +378,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     setPropertyDescription("spellCheckingLanguage", xi18n("Spell Checking Language"));
 
     setPropertyDescription("widgetType", xi18n("Editor Type"));
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     //for autofield's type: inherit i18n from KexiDB
     setValueDescription("Auto", futureI18nc("AutoField editor's type", "Auto"));
     setValueDescription("Text", KDbField::typeName(KDbField::Text));
@@ -487,11 +467,6 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     if (c == "KexiDBLineEdit") {
         w = new KexiDBLineEdit(p);
     }
-#ifndef KEXI_NO_SUBFORM
-    if (c == "KexiDBSubForm") {
-        w = new KexiDBSubForm(container->form(), p);
-    }
-#endif
     else if (c == "KexiDBTextEdit") {
         w = new KexiDBTextEdit(p);
     }
@@ -505,7 +480,7 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KexiDBImageBox(designMode, p);
         connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
     }
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     else if (c == "KexiDBAutoField") {
         w = new KexiDBAutoField(p);
     }
@@ -656,21 +631,6 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         }
         return true;
     }
-#ifndef KEXI_NO_SUBFORM
-    else if (args.classname == "KexiDBSubForm") {
-//! @todo
-        // open the form in design mode
-        KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(args.widget);
-        args.execute = false;
-        if (KexiMainWindowIface::global()) {
-            bool openingCancelled;
-            KexiMainWindowIface::global()->openObject(
-                "org.kexi-project.form", subform->formName(), Kexi::DesignViewMode,
-                &openingCancelled);
-        }
-        return true;
-    }
-#endif
 #if 0
     else if (   args.classname == "KexiDBDateEdit" || args.classname == "KexiDBDateTimeEdit"
              || args.classname == "KexiDBTimeEdit" /*|| classname == "KexiDBIntSpinBox" || classname == "KexiDBDoubleSpinBox"*/)
@@ -784,7 +744,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "widgetType"
              && property != "fieldTypeInternal"
              && property != "fieldCaptionInternal" //hide properties that come with KexiDBAutoField
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
              && property != "foregroundLabelColor"
              && property != "backgroundLabelColor"
 #endif
@@ -804,12 +764,6 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "textInteractionFlags"
 //! @todo support textInteractionFlags property of QLabel and QTextEdit
              ;
-#ifndef KEXI_NO_SUBFORM
-    else if (classname == "KexiDBSubForm")
-        ok = property != "dragAutoScroll"
-             && property != "resizePolicy"
-             && property != "focusPolicy";
-#endif
     else if (classname == "KexiDBForm")
         ok = property != "iconText"
              && property != "geometry" /*nonsense for toplevel widget; for size, "size" property is used*/;

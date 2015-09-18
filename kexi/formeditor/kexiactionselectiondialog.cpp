@@ -286,7 +286,7 @@ public:
             itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "execute");
             itm->setIcon(koIcon("media-playback-start"));
         }
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
         if (part->info()->isPrintingSupported()) {
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
                 "print", this, futureI18n("Print"));

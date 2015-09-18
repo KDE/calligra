@@ -260,30 +260,4 @@ Q_SIGNALS:
     void handleDropEvent(QDropEvent *e);
 };
 
-//! @todo SubForm
-#if 0
-//! A form embedded as a widget inside other form
-class SubForm : public QScrollArea
-{
-    Q_OBJECT
-    Q_PROPERTY(QString formName READ formName WRITE setFormName)
-
-public:
-    SubForm(KFormDesigner::Form *parentForm, QWidget *parent);
-    ~SubForm();
-
-    //! \return the name of the subform inside the db
-    QString   formName() const {
-        return m_formName;
-    }
-    void      setFormName(const QString &name);
-
-private:
-    KFormDesigner::Form   *m_form;
-    KFormDesigner::Form   *m_parentForm;
-    QWidget  *m_widget;
-    QString   m_formName;
-};
-#endif //0
-
 #endif

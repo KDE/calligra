@@ -25,12 +25,13 @@
 #include <kundo2stack.h>
 #include <KActionCollection>
 
+#include <config-kexi.h>
 #include "resizehandle.h"
 #include "commands.h"
 #include "form.h"
 
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
 #include "pixmapcollection.h"
 #endif
 
@@ -119,7 +120,7 @@ public:
     ConnectionBuffer  *connBuffer;
 #endif
 
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     PixmapCollection  *pixcollection;
 #endif
 
