@@ -166,12 +166,10 @@ QString KexiCSVDelimiterWidget::delimiter() const
 
 void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 {
-    QVector<QString>::ConstIterator it = d->availableDelimiters.constBegin();
-    int index = 0;
-    for (; it != d->availableDelimiters.constEnd(); ++it, index++) {
-        if (*it == delimiter) {
-            d->combo->setCurrentIndex(index);
-            slotDelimiterChangedInternal(index);
+    for (int i=0; i < d->availableDelimiters.size(); ++i) { // we cannot use iterator here because of msvc
+        if (d->availableDelimiters[i] == delimiter) {       // (see https://bugreports.qt.io/browse/QTBUG-45368)
+            d->combo->setCurrentIndex(i);
+            slotDelimiterChangedInternal(i);
             return;
         }
     }
@@ -229,17 +227,14 @@ QString KexiCSVCommentWidget::commentSymbol() const {
 
 void KexiCSVCommentWidget::setcommentSymbol(const QString& commentSymbol)
 {
-    QVector<QString>::ConstIterator it = d->availablecommentSymbols.constBegin();
-    int index = 0;
-    for (; it != d->availablecommentSymbols.constEnd(); ++it, index++) {
-        if (*it == commentSymbol) {
-            d->combo->setCurrentIndex(index);
-            slotcommentSymbolChangedInternal(index);
+    for (int i=0; i < d->availablecommentSymbols.size(); ++i) { // we cannot use iterator here because of msvc
+        if (d->availablecommentSymbols[i] == commentSymbol) {   // (see https://bugreports.qt.io/browse/QTBUG-45368)
+            d->combo->setCurrentIndex(i);
+            slotcommentSymbolChangedInternal(i);
             return;
         }
     }
 }
-
 
 KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
         : KComboBox(parent)
