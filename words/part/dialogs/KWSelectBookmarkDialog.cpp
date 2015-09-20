@@ -115,7 +115,7 @@ void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
 }
 
 KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     ui = new KWSelectBookmark(nameList, this);
     setMainWidget(ui);

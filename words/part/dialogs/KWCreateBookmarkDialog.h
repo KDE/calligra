@@ -22,9 +22,8 @@
 
 #include <ui_KWCreateBookmark.h>
 
-#include <QWidget>
 #include <QList>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KWCreateBookmark : public QWidget
 {
@@ -40,7 +39,7 @@ private:
     Ui::CreateBookmark widget;
 };
 
-class KWCreateBookmarkDialog : public KDialog
+class KWCreateBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:

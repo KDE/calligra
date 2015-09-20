@@ -37,7 +37,7 @@ QString KWCreateBookmark::bookmarkName()
 }
 
 KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_nameList(nameList)
 {
     if (suggestedName.isEmpty() || m_nameList.contains(suggestedName)) {

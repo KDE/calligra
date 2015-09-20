@@ -22,8 +22,7 @@
 
 #include <ui_KWSelectBookmark.h>
 
-#include <QWidget>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KWSelectBookmark : public QWidget
 {
@@ -50,7 +49,7 @@ private:
     QWidget *parentWidget;
 };
 
-class KWSelectBookmarkDialog : public KDialog
+class KWSelectBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:
