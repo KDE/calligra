@@ -21,7 +21,7 @@
 #ifndef KARBONCONFIGINTERFACEPAGE_H
 #define KARBONCONFIGINTERFACEPAGE_H
 
-#include <kvbox.h>
+#include <KoVBox.h>
 #include <ksharedconfig.h>
 
 class KarbonView;
@@ -29,7 +29,7 @@ class KIntNumInput;
 class KColorButton;
 class QCheckBox;
 
-class KarbonConfigInterfacePage : public KVBox
+class KarbonConfigInterfacePage : public KoVBox
 {
     Q_OBJECT
 
