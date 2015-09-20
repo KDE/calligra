@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
+KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
         : QWidget(parent)
 {
     widget.setupUi(this);
@@ -36,7 +36,7 @@ QString KWCreateBookmark::bookmarkName()
     return widget.bookmarkName->currentText();
 }
 
-KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
+KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
         : KoDialog(parent),
         m_nameList(nameList)
 {

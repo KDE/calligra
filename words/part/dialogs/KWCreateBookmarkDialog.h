@@ -22,14 +22,14 @@
 
 #include <ui_KWCreateBookmark.h>
 
-#include <QList>
+#include <QStringList>
 #include <KoDialog.h>
 
 class KWCreateBookmark : public QWidget
 {
     Q_OBJECT
 public:
-    KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString bookmarkName();
 
 Q_SIGNALS:
@@ -43,7 +43,7 @@ class KWCreateBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString newBookmarkName();
 
 private Q_SLOTS:
@@ -51,7 +51,7 @@ private Q_SLOTS:
 
 private:
     KWCreateBookmark *ui;
-    QList<QString> m_nameList;
+    QStringList m_nameList;
 };
 
 #endif

@@ -28,7 +28,7 @@ class KWSelectBookmark : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KWSelectBookmark(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmark(const QStringList &nameList, QWidget *parent = 0);
     QString bookmarkName() const;
     int bookmarkRow() const;
 
@@ -53,7 +53,7 @@ class KWSelectBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmarkDialog(const QStringList &nameList, QWidget *parent = 0);
     QString selectedBookmarkName();
 
 Q_SIGNALS:

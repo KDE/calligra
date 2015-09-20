@@ -25,7 +25,7 @@
 
 static QString lastBookMarkItem;
 
-KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
+KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
         : QWidget(parent),
         parentWidget(parent)
 {
@@ -114,7 +114,7 @@ void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
     emit bookmarkItemDoubleClicked(item);
 }
 
-KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
+KWSelectBookmarkDialog::KWSelectBookmarkDialog(const QStringList &nameList, QWidget *parent)
         : KoDialog(parent)
 {
     ui = new KWSelectBookmark(nameList, this);
