@@ -1,2 +1,2 @@
-
-install( FILES  cmex10.ttf Arev.ttf ArevIt.ttf ArevBd.ttf ArevBI.ttf  DESTINATION ${DATA_INSTALL_DIR}/formulashape/fonts )
+file(GLOB MathFonts "*.otf")
+install(FILES ${MathFonts} DESTINATION ${DATA_INSTALL_DIR}/fonts/calligra)

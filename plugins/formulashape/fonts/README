@@ -1,10 +1,49 @@
-This directory includes the fonts packaged with KFormula.
+This directory includes the fonts packaged with Formula Shape.
 
-From BaKoMa fonts cmex.ttf is included. Its license is included in
-LICENSE.BAKOMA. It's site at CTAN is:
-http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/
+Formula Shape uses Libmathview for formula layout, which uses information in
+OpenType Math Tables.
+http://blogs.msdn.com/b/murrays/archive/2014/04/27/opentype-math-tables.aspx
 
-Arev fonts are also included. These fonts are derived from Bitstream Vera
-fonts and so both Bitstream Vera's license (included in LICENSE.BITSTREAM) and
-Arev license (included in LICENSE.AREV) apply. Arev fonts' homepage is:
-http://tavmjong.free.fr/FONTS/
+Only opentype fonts with OpenType Math Tables can be used with formula shape,
+and resulted formula layout is font-dependent.
+
+These fonts are included:
+
+xits-math.otf
+xits-mathbold.otf
+
+XITS Math is a Times-like typeface derived from STIX Fonts.
+url        https://github.com/khaledhosny/xits-math
+revision   c916ffc751bcea289b2b84f638aa553ef1e519f4
+license    OFL 1.1
+
+Asana-Math.otf
+
+Asana Math is a Palatino-like typeface derived from pxfonts
+url        http://www.ctan.org/tex-archive/fonts/Asana-Math/
+revision   2015-06-02 18:30
+license    OFL 1.1
+
+euler.otf
+
+Neo Euler is an Opentype MATH-enabled port of AMS Euler font
+url        https://github.com/khaledhosny/euler-otf
+revision   6c76de44dcff216f2d91d0638386cb575a52ded5
+license    OFL 1.1
+
+latinmodern-math.otf
+
+Latin Modern Math is an Opentype MATH-enabled port of Computer Modern
+url        http://www.gust.org.pl/projects/e-foundry/lm-math
+revision   1.959
+license    GFL 1.0, LPPL 1.3c+
+
+texgyrebonum-math.otf
+texgyrepagella-math.otf
+texgyreschola-math.otf
+texgyretermes-math.otf
+
+TeX Gyre Math Fonts from TeX Gyre Math Project.
+url        http://www.gust.org.pl/projects/e-foundry/tg-math/download/index_html
+revision   bonum 1.005, pagella 1.632, schola 1.533, termes 1.543
+license    GFL 1.0, LPPL 1.3c+
