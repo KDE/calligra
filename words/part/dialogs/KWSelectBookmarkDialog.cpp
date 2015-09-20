@@ -20,7 +20,8 @@
 #include "KWSelectBookmarkDialog.h"
 
 #include <kmessagebox.h>
-#include <kinputdialog.h>
+
+#include <QInputDialog>
 
 static QString lastBookMarkItem;
 
@@ -76,11 +77,11 @@ void KWSelectBookmark::slotBookmarkRename()
     QString curName = item->text();
     QString newName = item->text();
     while (true) {
-        newName = KInputDialog::getText(i18n("Rename Bookmark"),
+        newName = QInputDialog::getText(parentWidget,
+                                        i18n("Rename Bookmark"),
                                         i18n("Please provide a new name for the bookmark"),
-                                        newName,
-                                        0,
-                                        parentWidget);
+                                        QLineEdit::Normal,
+                                        newName);
         if (curName != newName && ! newName.isNull()) {
             if (newName.isEmpty())
                 continue;
