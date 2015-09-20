@@ -24,7 +24,7 @@
 #include "ui_kptviewlisteditview.h"
 #include "ui_kptviewlisteditcategory.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <QWidget>
 
@@ -41,7 +41,7 @@ class EditCategoryPanel;
 class ViewBase;
 class AddReportsViewPanel;
 
-class ViewListDialog : public KDialog
+class ViewListDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -91,7 +91,7 @@ private:
     bool m_viewtipChanged;
 };
 
-class ViewListEditViewDialog : public KDialog
+class ViewListEditViewDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -130,7 +130,7 @@ private:
     QMap<QString, ViewListItem*> m_categories;
 };
 
-class ViewListEditCategoryDialog : public KDialog
+class ViewListEditCategoryDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -168,7 +168,7 @@ private:
 };
 
 //-------- Reports
-class ViewListReportsDialog : public KDialog
+class ViewListReportsDialog : public KoDialog
 {
     Q_OBJECT
 public:

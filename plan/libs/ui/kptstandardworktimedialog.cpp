@@ -81,7 +81,7 @@ public:
 };
 
 StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
-    : KDialog(parent),
+    : KoDialog(parent),
       project(p)
 {
     setCaption( i18n("Estimate Conversions") );

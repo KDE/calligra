@@ -33,7 +33,7 @@
 
 #include <KoReportRendererBase>
 
-#include <KDialog>
+#include <KoDialog.h>
 
 #include <QDomDocument>
 
@@ -222,7 +222,7 @@ protected Q_SLOTS:
     void setButtonsEnabled();
 };
 
-class KPLATOUI_EXPORT ReportDesignDialog : public KDialog
+class KPLATOUI_EXPORT ReportDesignDialog : public KoDialog
 {
     Q_OBJECT
 public:

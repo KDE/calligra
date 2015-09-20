@@ -32,7 +32,7 @@ namespace KPlato
 {
 
 TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *p)
-    : KDialog( p),
+    : KoDialog( p),
     m_node( &task )
 {
     setCaption( i18n("Task Progress") );

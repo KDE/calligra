@@ -132,7 +132,7 @@ void TaskDescriptionPanelImpl::slotChanged()
 
 //-----------------------------
 TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p, bool readOnly )
-    : KDialog(p)
+    : KoDialog(p)
 {
     setCaption( i18n( "Task Description" ) );
     if ( readOnly ) {
@@ -158,13 +158,13 @@ MacroCommand *TaskDescriptionDialog::buildCommand()
 
 void TaskDescriptionDialog::slotButtonClicked( int button )
 {
-    if (button == KDialog::Ok) {
+    if (button == KoDialog::Ok) {
         if ( ! m_descriptionTab->ok() ) {
             return;
         }
         accept();
     } else {
-        KDialog::slotButtonClicked( button );
+        KoDialog::slotButtonClicked( button );
     }
 }
 

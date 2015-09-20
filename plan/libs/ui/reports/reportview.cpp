@@ -634,7 +634,7 @@ void ReportNavigator::setButtonsEnabled()
 
 //----------------------------
 ReportDesignDialog::ReportDesignDialog( QWidget *parent )
-    : KDialog( parent ),
+    : KoDialog( parent ),
     m_view( 0 )
 {
     setCaption( i18nc( "@title:window", "Report Designer" ) );
@@ -644,15 +644,15 @@ ReportDesignDialog::ReportDesignDialog( QWidget *parent )
 }
 
 ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent )
-    : KDialog( parent ),
+    : KoDialog( parent ),
     m_view( 0 )
 {
     setCaption( i18nc( "@title:window", "Report Designer" ) );
-    setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
-    setButtonText( KDialog::User1, i18n( "Save To View" ) );
-    setButtonIcon(KDialog::User1, koIcon("window-new"));
-    setButtonText( KDialog::User2, i18n( "Save To File" ) );
-    setButtonIcon(KDialog::User2, koIcon("document-save-as"));
+    setButtons( KoDialog::Close | KoDialog::User1 | KoDialog::User2 );
+    setButtonText( KoDialog::User1, i18n( "Save To View" ) );
+    setButtonIcon(KoDialog::User1, koIcon("window-new"));
+    setButtonText( KoDialog::User2, i18n( "Save To File" ) );
+    setButtonIcon(KoDialog::User2, koIcon("document-save-as"));
 
     m_panel = new ReportDesignPanel( element, models, this );
 
@@ -666,19 +666,19 @@ void ReportDesignDialog::closeEvent ( QCloseEvent * e )
 {
     if ( m_panel->m_modified ) {
         //NOTE: When the close (x) button in the window frame is clicked, QWidget automatically hides us if we don't handle it
-        QPushButton *b = button( KDialog::Close );
+        QPushButton *b = button( KoDialog::Close );
         if ( b ) {
             b->animateClick();
             e->ignore();
             return;
         }
     }
-    KDialog::closeEvent ( e );
+    KoDialog::closeEvent ( e );
 }
 
 void ReportDesignDialog::slotButtonClicked( int button )
 {
-    if ( button == KDialog::Close ) {
+    if ( button == KoDialog::Close ) {
         if ( m_panel->m_modified ) {
             int res = KMessageBox::warningContinueCancel( this,
                     i18nc( "@info", "The report definition has been modified.<br/>"
@@ -692,7 +692,7 @@ void ReportDesignDialog::slotButtonClicked( int button )
         reject();
         return;
     }
-    KDialog::slotButtonClicked( button );
+    KoDialog::slotButtonClicked( button );
 }
 
 void ReportDesignDialog::slotSaveToFile()

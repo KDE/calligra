@@ -29,10 +29,10 @@ namespace KPlato
 {
 
 InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Insert File") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
     

@@ -24,7 +24,7 @@
 
 #include "ui_kpttaskdescriptionpanelbase.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace KPlato
 {
@@ -66,7 +66,7 @@ protected:
     void initDescription( bool readOnly );
 };
 
-class KPLATOUI_EXPORT TaskDescriptionDialog : public KDialog
+class KPLATOUI_EXPORT TaskDescriptionDialog : public KoDialog
 {
     Q_OBJECT
 public:

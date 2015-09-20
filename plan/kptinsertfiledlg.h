@@ -22,7 +22,7 @@
 
 #include "ui_kptinsertfilepanel.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KUrl;
 
@@ -33,7 +33,7 @@ class Project;
 class Node;
 class InsertFilePanel;
 
-class InsertFileDialog : public KDialog
+class InsertFileDialog : public KoDialog
 {
     Q_OBJECT
 public:

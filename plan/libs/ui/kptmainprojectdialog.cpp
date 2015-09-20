@@ -31,7 +31,7 @@ namespace KPlato
 {
 
 MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*name*/)
-    : KDialog( parent),
+    : KoDialog( parent),
       project(p)
 {
     setWindowTitle( i18n("Project Settings") );

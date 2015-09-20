@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 
 namespace KPlato
@@ -33,7 +33,7 @@ class Task;
 class Node;
 class MacroCommand;
 
-class KPLATOUI_EXPORT MilestoneProgressDialog : public KDialog {
+class KPLATOUI_EXPORT MilestoneProgressDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit MilestoneProgressDialog(Task &task, QWidget *parent=0);

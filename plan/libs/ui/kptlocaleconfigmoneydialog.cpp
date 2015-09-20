@@ -30,7 +30,7 @@ namespace KPlato
 {
 
 LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
-    : KDialog( p)
+    : KoDialog( p)
 {
     setCaption( i18n("Currency Settings") );
     setButtons( Ok|Cancel );

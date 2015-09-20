@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KLocale;
 class KUndo2Command;
@@ -33,7 +33,7 @@ namespace KPlato
 class LocaleConfigMoney;
 class Project;
 
-class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
+class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);

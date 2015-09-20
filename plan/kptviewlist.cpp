@@ -635,7 +635,7 @@ void ViewListWidget::slotConfigureItem()
     if ( m_contextitem == 0 ) {
         return;
     }
-    KDialog *dlg = 0;
+    KoDialog *dlg = 0;
     if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
         kDebug(planDbg())<<m_contextitem<<":"<<m_contextitem->type();
         dlg = new ViewListEditCategoryDialog( *this, m_contextitem, this );

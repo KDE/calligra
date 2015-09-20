@@ -41,7 +41,7 @@ namespace KPlatoWork
 {
 
 TaskCompletionDialog::TaskCompletionDialog(WorkPackage &p, ScheduleManager *sm, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Task Progress") );
     setButtons( Ok|Cancel );

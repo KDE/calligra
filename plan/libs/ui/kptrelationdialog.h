@@ -24,8 +24,9 @@
 #include "kplatoui_export.h"
 
 #include "ui_relationpanel.h"
+#include <KoDialog.h>
+
 #include <QWidget>
-#include <kdialog.h>
 
 namespace KPlato
 {
@@ -44,7 +45,7 @@ public:
     explicit RelationPanel(QWidget *parent = 0);
 };
 
-class KPLATOUI_EXPORT AddRelationDialog : public KDialog
+class KPLATOUI_EXPORT AddRelationDialog : public KoDialog
 {
     Q_OBJECT
 public:

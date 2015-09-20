@@ -671,7 +671,7 @@ void MainDocument::workPackageMergeDialogFinished( int result )
     if ( dlg == 0 ) {
         return;
     }
-    if ( result == KDialog::Yes ) {
+    if ( result == KoDialog::Yes ) {
         // merge the oldest first
         foreach( int i, dlg->checkedList() ) {
             mergeWorkPackage( m_workpackages.values().at( i ) );
