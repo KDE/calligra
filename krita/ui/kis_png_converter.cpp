@@ -877,7 +877,16 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     }
 
     if (options.forceSRGB) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+
+        const KoColorSpace* cs = 0;
+        QString s = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, device->colorSpace()->colorDepthId());
+        const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
+        if (csf) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), csf->defaultProfile());
+        }
+        else {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        }
         device = new KisPaintDevice(*device);
         device->convertTo(cs);
     }

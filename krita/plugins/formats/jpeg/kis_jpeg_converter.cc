@@ -479,7 +479,15 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
 
     if (options.forceSRGB) {
-        const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        const KoColorSpace* dst = 0;
+        QString s = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, layer->colorSpace()->colorDepthId());
+        const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
+        if (csf) {
+            dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), csf->defaultProfile());
+        }
+        else {
+            dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
         delete tmp;
         cs = dst;
