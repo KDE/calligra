@@ -28,7 +28,7 @@
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
 
-class KUrl;
+class QUrl;
 class KUndo2Command;
 
 namespace KPlato
@@ -355,7 +355,7 @@ protected:
     bool dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     KUndo2Command *createAllocationCommand( Task &task, const QList<Resource*> &lst );
     bool dropUrlMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
-    bool importProjectFile( const KUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    bool importProjectFile( const QUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
 protected:
     Node *m_node; // for sanety check
@@ -497,15 +497,15 @@ public:
     bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     QMimeData *mimeData( const QModelIndexList &idx ) const;
 
-    bool importProject( const KUrl &url, bool emitsignal = true );
+    bool importProject( const QUrl &url, bool emitsignal = true );
 
 public Q_SLOTS:
     void loadTaskModules( const QStringList &files );
 
 Q_SIGNALS:
     void executeCommand( KUndo2Command *cmd );
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void saveTaskModule( const QUrl &url, Project *project );
+    void removeTaskModule( const QUrl &url );
 
 protected:
     void stripProject( Project *project ) const;

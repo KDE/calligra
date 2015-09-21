@@ -107,14 +107,14 @@ public:
 
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
-    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
+    bool saveWorkPackageUrl( const QUrl & _url, const Node *node, long id, Resource *resource = 0  );
     void mergeWorkPackages();
     void mergeWorkPackage( const Package *package );
     void terminateWorkPackage( const Package *package );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
-    bool loadWorkPackage( Project &project, const KUrl &url );
-    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const KUrl& url );
+    bool loadWorkPackage( Project &project, const QUrl &url );
+    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const QUrl& url );
     QMap<KDateTime, Package*> workPackages() const { return m_workpackages; }
 
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );

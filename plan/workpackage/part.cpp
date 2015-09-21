@@ -48,6 +48,7 @@
 #include <QFileSystemWatcher>
 #include <kundo2qstack.h>
 #include <QPointer>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -56,7 +57,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
-#include <kurl.h>
 #include <kopenwithdialog.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
@@ -90,7 +90,7 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 {
 }
 
-// DocumentChild::DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent)
+// DocumentChild::DocumentChild( KParts::ReadWritePart *editor, const QUrl &url, const Document *doc, Part *parent)
 //     : KoDocumentChild( parent ),
 //     m_doc( doc ),
 //     m_type( Type_Unknown ),
@@ -128,7 +128,7 @@ WorkPackage *DocumentChild::parentPackage() const
     return static_cast<WorkPackage*>( parent() );
 }
 
-void DocumentChild::setFileInfo( const KUrl &url )
+void DocumentChild::setFileInfo( const QUrl &url )
 {
     m_fileinfo.setFile( url.path() );
     //kDebug(planworkDbg())<<url;
@@ -173,11 +173,11 @@ bool DocumentChild::setDoc( const Document *doc )
 {
     Q_ASSERT ( m_doc == 0 );
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().url() ) );
         return false;
     }
     m_doc = doc;
-    KUrl url;
+    QUrl url;
     if ( parentPackage()->newDocuments().contains( doc ) ) {
         url = parentPackage()->newDocuments().value( doc );
         Q_ASSERT( url.isValid() );
@@ -185,7 +185,7 @@ bool DocumentChild::setDoc( const Document *doc )
     } else if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc );
         if ( url.url().isEmpty() ) {
-            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().url() ) );
             return false;
         }
         m_copy = true;
@@ -193,7 +193,7 @@ bool DocumentChild::setDoc( const Document *doc )
         url = doc->url();
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.url() ) );
         return false;
     }
     setFileInfo( url );
@@ -204,15 +204,15 @@ bool DocumentChild::openDoc( const Document *doc, KoStore *store )
 {
     Q_ASSERT ( m_doc == 0 );
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().path() ) );
         return false;
     }
     m_doc = doc;
-    KUrl url;
+    QUrl url;
     if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc, store );
         if ( url.url().isEmpty() ) {
-            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().path() ) );
             return false;
         }
         m_copy = true;
@@ -220,7 +220,7 @@ bool DocumentChild::openDoc( const Document *doc, KoStore *store )
         url = doc->url();
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.url() ) );
         return false;
     }
     setFileInfo( url );
@@ -232,14 +232,14 @@ bool DocumentChild::editDoc()
     Q_ASSERT( m_doc != 0 );
     kDebug(planworkDbg())<<"file:"<<filePath();
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br> %1", m_doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br> %1", m_doc->url().path() ) );
         return false;
     }
     if ( ! m_fileinfo.exists() ) {
         KMessageBox::error( 0, i18n( "File does not exist:<br>%1", fileName() )  );
         return false;
     }
-    KUrl filename( filePath() );
+    QUrl filename = QUrl::fromLocalFile( filePath() );
     KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
     KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
     bool editing = startProcess( service, filename );
@@ -249,17 +249,17 @@ bool DocumentChild::editDoc()
     return editing;
 }
 
-bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
+bool DocumentChild::startProcess( KService::Ptr service, const QUrl &url )
 {
     QStringList args;
-    KUrl::List files;
+    QList<QUrl> files;
     if ( url.isValid() ) {
         files << url;
     }
     if ( service ) {
         args = KRun::processDesktopExec( *service, files );
     } else {
-        KUrl::List list;
+        QList<QUrl> list;
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog( list, i18n("Edit with:"), QString(), 0 );
         if ( dlg->exec() == QDialog::Accepted && dlg ){
             args << dlg->text();
@@ -642,10 +642,10 @@ bool Part::completeLoading( KoStore * )
     return true;
 }
 
-KUrl Part::extractFile( const Document *doc )
+QUrl Part::extractFile( const Document *doc )
 {
     WorkPackage *wp = findWorkPackage( doc );
-    return wp == 0 ? KUrl() : wp->extractFile( doc );
+    return wp == 0 ? QUrl() : wp->extractFile( doc );
 }
 
 int Part::docType( const Document *doc ) const
@@ -718,7 +718,7 @@ void Part::viewWorkpackageDocument( Document *doc )
     if ( doc == 0 ) {
         return;
     }
-    KUrl filename;
+    QUrl filename;
     if ( doc->sendAs() == Document::SendAs_Copy ) {
         filename = extractFile( doc );
     } else {
@@ -740,7 +740,7 @@ bool Part::removeDocument( Document *doc )
     return wp->removeDocument( this, doc );
 }
 
-bool Part::viewDocument( const KUrl &filename )
+bool Part::viewDocument( const QUrl &filename )
 {
     kDebug(planworkDbg())<<"url:"<<filename;
     if ( ! filename.isValid() ) {

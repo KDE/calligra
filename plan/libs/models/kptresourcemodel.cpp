@@ -1355,13 +1355,13 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return createResources( g, data->data( f ) );
     }
     if ( data->hasFormat( "text/uri-list" ) ) {
-        const KUrl::List urls = KUrl::List::fromMimeData( data );
+        const QList<QUrl> urls = data->urls();
         if ( urls.isEmpty() ) {
             return false;
         }
         bool result = false;
-        foreach ( const KUrl &url, urls ) {
-            if ( url.protocol() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
+        foreach ( const QUrl &url, urls ) {
+            if ( url.scheme() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
                 kDebug(planDbg())<<url<<"is not 'akonadi' or does not exist";
                 continue;
             }

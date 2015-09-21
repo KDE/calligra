@@ -343,7 +343,7 @@ void ReportWidget::slotExport()
 {
     ReportExportPanel *p = new ReportExportPanel();
     p->setObjectName( "ReportExportPanel" );
-    KFileDialog *dia = new KFileDialog( KUrl(), QString(), this, p );
+    KFileDialog *dia = new KFileDialog( QUrl(), QString(), this, p );
     dia->setOperationMode( KFileDialog::Saving );
     dia->setMode( KFile::File );
     dia->setConfirmOverwrite( true );
@@ -697,12 +697,12 @@ void ReportDesignDialog::slotButtonClicked( int button )
 
 void ReportDesignDialog::slotSaveToFile()
 {
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), QString(), this);
+    QPointer<KFileDialog> dialog = new KFileDialog(QUrl(), QString(), this);
     dialog->exec();
     if ( ! dialog ) {
         return;
     }
-    KUrl url(dialog->selectedUrl());
+    QUrl url(dialog->selectedUrl());
     delete dialog;
 
     if (url.isEmpty()) {

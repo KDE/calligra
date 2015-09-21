@@ -397,7 +397,7 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
     return true;
 }
 
-bool MainDocument::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Resource *resource )
+bool MainDocument::saveWorkPackageUrl( const QUrl &_url, const Node *node, long id, Resource *resource )
 {
     //kDebug(planDbg())<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -409,7 +409,7 @@ bool MainDocument::saveWorkPackageUrl( const KUrl &_url, const Node *node, long 
     return ret;
 }
 
-bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
+bool MainDocument::loadWorkPackage( Project &project, const QUrl &url )
 {
     kDebug(planDbg())<<url;
     if ( ! url.isLocalFile() ) {
@@ -419,14 +419,14 @@ bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
     KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
 //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
-        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        kDebug(planDbg())<<"bad store"<<url.toDisplayString();
         delete store;
 //        QApplication::restoreOverrideCursor();
         return false;
     }
     if ( ! store->open( "root" ) ) { // "old" file format (maindoc.xml)
         // i18n( "File does not have a maindoc.xml: %1", file );
-        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        kDebug(planDbg())<<"No root"<<url.toDisplayString();
         delete store;
 //        QApplication::restoreOverrideCursor();
         return false;
@@ -463,7 +463,7 @@ bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &/*url*/ )
+Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const QUrl &/*url*/ )
 {
     QString value;
     bool ok = true;
@@ -637,7 +637,7 @@ void MainDocument::checkForWorkPackages( bool keep )
 void MainDocument::checkForWorkPackage()
 {
     if ( ! m_infoList.isEmpty() ) {
-        loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
+        loadWorkPackage( *m_project, QUrl::fromLocalFile( m_infoList.takeLast().absoluteFilePath() ) );
         if ( ! m_infoList.isEmpty() ) {
             QTimer::singleShot ( 0, this, SLOT(checkForWorkPackage()) );
             return;
@@ -806,10 +806,10 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
     bool docsaved = false;
     if ( package->settings.documents ) {
         //TODO: handle remote files
-        QMap<QString, KUrl>::const_iterator it = package->documents.constBegin();
-        QMap<QString, KUrl>::const_iterator end = package->documents.constEnd();
+        QMap<QString, QUrl>::const_iterator it = package->documents.constBegin();
+        QMap<QString, QUrl>::const_iterator end = package->documents.constEnd();
         for ( ; it != end; ++it ) {
-            KUrl src( it.key() );
+            const QUrl src = QUrl::fromLocalFile(it.key());
             KIO::Job *job = KIO::move( src, it.value(), KIO::Overwrite );
             if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
                 docsaved = true;
@@ -953,7 +953,7 @@ void MainDocument::insertFile( const QString &filename, Node *parent, Node *afte
     connect(doc, SIGNAL(completed()), SLOT(insertFileCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
-    doc->openUrl( KUrl( filename ) );
+    doc->openUrl( QUrl::fromLocalFile( filename ) );
 }
 
 void MainDocument::insertFileCompleted()

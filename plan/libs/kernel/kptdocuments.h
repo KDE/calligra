@@ -25,8 +25,8 @@
 #include <KoXmlReaderForward.h>
 
 #include <QList>
+#include <QUrl>
 
-#include <kurl.h>
 #include <klocale.h>
 
 class KoStore;
@@ -47,7 +47,7 @@ public:
     enum SendAs { SendAs_None, SendAs_Copy, SendAs_Reference };
     
     Document();
-    explicit Document( const KUrl &url, Type type = Type_Reference, SendAs sendAs = SendAs_Reference );
+    explicit Document( const QUrl &url, Type type = Type_Reference, SendAs sendAs = SendAs_Reference );
     ~Document();
     
     bool operator==( const Document &doc ) const;
@@ -66,8 +66,8 @@ public:
     static QStringList sendAsList( bool trans = false );
     static QString sendAsToString( SendAs snd, bool trans = false );
     
-    KUrl url() const { return m_url; }
-    void setUrl( const KUrl &url );
+    QUrl url() const { return m_url; }
+    void setUrl( const QUrl &url );
     bool isValid() const;
     
     QString status() const { return m_status; }
@@ -78,7 +78,7 @@ public:
 
 private:
     Type m_type;
-    KUrl m_url;
+    QUrl m_url;
     QString m_status;
     SendAs m_sendAs;
     QString m_name;
@@ -100,11 +100,11 @@ public:
     void deleteAll();
     QList<Document*> documents() const { return m_docs; }
     void addDocument( Document *doc );
-    void addDocument( const KUrl &url, Document::Type = Document::Type_None );
+    void addDocument( const QUrl &url, Document::Type = Document::Type_None );
     Document *takeDocument( int index );
     Document *takeDocument( Document *doc );
     Document *findDocument( const Document *doc ) const;
-    Document *findDocument( const KUrl &url ) const;
+    Document *findDocument( const QUrl &url ) const;
 //    Document *document( int index ) const;
     
     bool contains( const Document *doc ) const { return m_docs.contains( const_cast<Document*>( doc ) ); }

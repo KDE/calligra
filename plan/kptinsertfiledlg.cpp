@@ -45,7 +45,7 @@ InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget
     connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
 }
 
-KUrl InsertFileDialog::url() const
+QUrl InsertFileDialog::url() const
 {
     return m_panel->url();
 }
@@ -91,10 +91,10 @@ void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 
 void InsertFilePanel::changed( const QString &text )
 {
-    emit enableButtonOk( KIO::NetAccess::exists( KUrl( text ), KIO::NetAccess::SourceSide, 0 ) );
+    emit enableButtonOk( KIO::NetAccess::exists( QUrl::fromUserInput( text ), KIO::NetAccess::SourceSide, 0 ) );
 }
 
-KUrl InsertFilePanel::url() const
+QUrl InsertFilePanel::url() const
 {
     return ui.ui_url->url();
 }

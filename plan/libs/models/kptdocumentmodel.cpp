@@ -345,7 +345,7 @@ bool DocumentItemModel::setUrl( Document *doc, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( KUrl( value.toString() ) == doc->url() ) {
+            if ( QUrl( value.toString() ) == doc->url() ) {
                 return false;
             }
             //m_part->addCommand( new DocumentModifyUrlCmd( *doc, value.toString(), "Modify Document Url" ) );

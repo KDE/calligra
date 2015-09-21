@@ -22,10 +22,10 @@
 #include <KoDocument.h>
 
 #include <QVBoxLayout>
+#include <QUrl>
 
 #include <klocale.h>
 #include <khtmlview.h>
-#include <kurl.h>
 
 #include "kptdebug.h"
 
@@ -58,7 +58,7 @@ void HtmlView::slotOpenUrlRequest(const QUrl &url, const KParts::OpenUrlArgument
     emit openUrlRequest( this, url );
 }
 
-bool HtmlView::openHtml( const KUrl &url )
+bool HtmlView::openHtml( const QUrl &url )
 {
     return m_htmlPart->openUrl( url );
 }

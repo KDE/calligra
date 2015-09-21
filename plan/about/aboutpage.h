@@ -21,7 +21,7 @@
 #define KPLATO_ABOUTPAGE_H
 
 class KHTMLPart;
-class KUrl;
+class QUrl;
 class QString;
 
 namespace KPlato {
@@ -36,7 +36,7 @@ public:
     KPlatoAboutPage();
     ~KPlatoAboutPage();
 
-    void generatePage( KHTMLPart &part, const KUrl &url );
+    void generatePage( KHTMLPart &part, const QUrl &url );
 
     void setProject( Project *project ) { m_project = project; }
 
