@@ -533,9 +533,7 @@ public:
 
     ~Private()
     {
-        KDbMessageHandler *h = q->messageHandler();
         q->setMessageHandler(0);
-        delete h;
     }
 
     KexiTemplateSelectionPage* templateSelectionPage() {
