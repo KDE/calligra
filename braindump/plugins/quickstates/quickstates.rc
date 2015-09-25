@@ -1,7 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="braindumpquickstates" version="1" translationDomain="braindump">
-<MenuBar>
-    <Action name="States"/>
-</MenuBar>
-
-</kpartgui>

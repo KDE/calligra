@@ -1,4 +1,0 @@
-- Generate Table of Contents for Text Documents in ContentsModel
-- Limit documentSize of spreadsheets to cells that actually contain data
-- Double-buffer rendering in View
-- Don't use QQuickPaintedItem for ViewController, just QQuickItem with QSG items.

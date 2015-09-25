@@ -1,5 +1,0 @@
-README
-======
-LibRCPS is a library for calculating resource constrained project scheduling
-problems using genetic algorithms. There is a manual in ./doc and a webpage at
-http://www.librcps.org that will go into greater detail.

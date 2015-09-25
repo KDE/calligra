@@ -1,5 +1,0 @@
-[KNewStuff3]
-ProvidersUrl=http://download.kde.org/ocs/providers.xml
-Categories=Calligra Flow Stencil
-TargetDir=karbon/stencils
-Uncompress=archive 
