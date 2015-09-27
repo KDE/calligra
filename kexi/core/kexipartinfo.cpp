@@ -97,7 +97,7 @@ static QString nameForCreateAction(const Info& info)
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : QAction(QIcon::fromTheme(info->createIconName()), info->name() + "...", parent)
+    : QAction(QIcon::fromTheme(KexiIconName(info->iconName())), info->name() + "...", parent)
     , m_info(info)
 {
     setObjectName(nameForCreateAction(*m_info));
@@ -149,11 +149,6 @@ QString Info::groupName() const
 QString Info::untranslatedGroupName() const
 {
     return d->untranslatedGroupName;
-}
-
-QString Info::createIconName() const
-{
-    return iconName() + QLatin1String("_newobj");
 }
 
 Kexi::ViewModes Info::supportedViewModes() const

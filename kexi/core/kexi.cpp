@@ -363,20 +363,30 @@ QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_
 
 //--------------------------------------------------------------------------------
 
-static bool isSpecialIconTheme()
+static inline bool isFlatIconTheme()
 {
     const QString theme(KIconTheme::current().toLower());
     return theme.contains(QLatin1String("breeze"))
            || theme.contains(QLatin1String("highcontrast"));
 }
 
+QString IconWithKexiPrefix(const QString &baseName)
+{
+    return QLatin1String("kexi_") + baseName;
+}
+
+QString IconWithKexiOxygenPrefix(const QString &baseName)
+{
+    return QLatin1String("kexi_ox_") + baseName;
+}
+
 QString KexiIconName(const QString &baseName)
 {
-    if (isSpecialIconTheme()) {
+    if (isFlatIconTheme()) {
         //! @todo use prefix based on KIconTheme::current()?
-        return QLatin1String("breeze-") + baseName;
+        return IconWithKexiPrefix(baseName);
     }
-    return baseName;
+    return IconWithKexiOxygenPrefix(baseName);
 }
 
 QIcon KexiIcon(const QString &baseName)
@@ -386,7 +396,7 @@ QIcon KexiIcon(const QString &baseName)
 
 QString Kexi::defaultFileBasedDriverIconName()
 {
-    if (!isSpecialIconTheme()) {
+    if (!isFlatIconTheme()) {
         QMimeDatabase db;
         QMimeType mimeType(db.mimeTypeForName(KDb::defaultFileBasedDriverMimeType()));
         if (mimeType.isValid()) {
@@ -394,7 +404,7 @@ QString Kexi::defaultFileBasedDriverIconName()
         }
         qWarning() << KDb::defaultFileBasedDriverMimeType() << "mimetype not installed!";
     }
-    return koIconName("breeze-kexi-file-database");
+    return IconWithKexiPrefix("file-database");
 }
 
 QIcon Kexi::defaultFileBasedDriverIcon()
@@ -404,7 +414,10 @@ QIcon Kexi::defaultFileBasedDriverIcon()
 
 QString Kexi::serverIconName()
 {
-    return KexiIconName("network-server-database");
+    if (!isFlatIconTheme()) {
+        return koIconName("network-server-database");
+    }
+    return IconWithKexiPrefix("network-server-database");
 }
 
 QIcon Kexi::serverIcon()

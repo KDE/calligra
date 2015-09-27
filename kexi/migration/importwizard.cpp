@@ -135,7 +135,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 {
     setModal(true);
     setWindowTitle(xi18nc("@title:window", "Import Database"));
-    setWindowIcon(KexiIcon(koIconName("database-import")));
+    setWindowIcon(KexiIcon("database-import"));
 
     KexiMainWindowIface::global()->setReasonableDialogSize(this);
 

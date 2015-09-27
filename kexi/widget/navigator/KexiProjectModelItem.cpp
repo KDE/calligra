@@ -69,7 +69,7 @@ KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *it
 {
     Q_ASSERT(i);
     Q_ASSERT(item);
-    d->icon = SmallIcon(i->iconName(), KIconLoader::SizeSmall);
+    d->icon = QIcon::fromTheme(KexiIconName(i->iconName()));
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()

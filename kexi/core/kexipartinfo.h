@@ -66,11 +66,6 @@ public:
     QString untranslatedGroupName() const;
 
     /**
-     * @return the icon name for a item
-     */
-    QString createIconName() const;
-
-    /**
      * @return supported modes for dialogs created by this part, i.e. a combination
      * of Kexi::ViewMode enum elements. Modes are declared in related .desktop files
      * in the X-KDE-ServiceTypes field by specifying a list of types, currently

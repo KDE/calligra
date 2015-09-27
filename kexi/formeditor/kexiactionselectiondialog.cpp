@@ -229,7 +229,7 @@ public:
                 itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "navObject");
                 itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, info->typeName());
                 itm->setData(ActionSelectorDialogTreeItem::ActionPluginIdRole, info->pluginId());
-                itm->setIcon(QIcon::fromTheme(part->info()->iconName()));
+                itm->setIcon(QIcon::fromTheme(KexiIconName(part->info()->iconName())));
             }
         }
 

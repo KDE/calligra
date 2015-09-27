@@ -149,8 +149,9 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsWidget, true/*showFnameLine*/);
     KexiPart::Info *partInfo = Kexi::partManager().infoForPluginId(
             QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
-    if (partInfo)
-        m_infoLblFrom->setIcon(partInfo->iconName());
+    if (partInfo) {
+        m_infoLblFrom->setIcon(KexiIconName(partInfo->iconName()));
+    }
     m_infoLblFrom->separator()->hide();
     m_infoLblFrom->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblFrom, 0, 0, 1, 2);

@@ -622,7 +622,7 @@ void KexiMainWindow::setupActions()
 #else
     d->action_project_relations = d->dummy_action;
 #endif
-    d->action_tools_import_project = addAction("tools_import_project", KexiIcon(koIconName("database-import")),
+    d->action_tools_import_project = addAction("tools_import_project", KexiIcon("database-import"),
                                                xi18n("&Import Database..."));
     d->action_tools_import_project->setToolTip(xi18n("Import entire database as a Kexi project"));
     d->action_tools_import_project->setWhatsThis(
@@ -650,7 +650,7 @@ void KexiMainWindow::setupActions()
         d->action_project_import_data_table = 0;
     else {
         d->action_project_import_data_table = addAction("project_import_data_table",
-            KexiIcon(koIconName("kexi-document-empty")),
+            KexiIcon("document-empty"),
             /*! @todo: change to "file_import" with a table or so */
             xi18nc("Import->Table Data From File...", "Import Data From &File..."));
         d->action_project_import_data_table->setToolTip(xi18n("Import table data from a file"));

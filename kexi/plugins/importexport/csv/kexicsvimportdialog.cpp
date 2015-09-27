@@ -789,7 +789,7 @@ void KexiCSVImportDialog::createImportPage()
     }
     m_toLabel = new KexiCSVInfoLabel(xi18n("To table:"), m_importWidget, true);
     KexiPart::Info *partInfo = Kexi::partManager().infoForPluginId("org.kexi-project.table");
-    m_toLabel->setIcon(partInfo->iconName());
+    m_toLabel->setIcon(KexiIconName(partInfo->iconName()));
 
     m_importProgressLabel = new QLabel(m_importWidget);
     m_importingProgressBar = new QProgressBar(m_importWidget);

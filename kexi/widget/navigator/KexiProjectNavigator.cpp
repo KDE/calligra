@@ -367,7 +367,7 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
             if (d->newObjectAction) {
                 d->newObjectAction->setText(
                     xi18n("&Create Object: %1...", it->partInfo()->name() ));
-                d->newObjectAction->setIcon(QIcon::fromTheme(it->partInfo()->createIconName()));
+                d->newObjectAction->setIcon(QIcon::fromTheme(KexiIconName(it->partInfo()->iconName())));
             }
         #if 0
              } else {
@@ -479,7 +479,7 @@ void KexiProjectNavigator::slotRename()
     dialog.widget()->setNameText(partItem->name());
     dialog.setWindowTitle(
         xi18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>", partItem->name()));
-    dialog.setDialogIcon(info->iconName());
+    dialog.setDialogIcon(KexiIconName(info->iconName()));
     dialog.setAllowOverwriting(true);
 
     bool overwriteNeeded;
@@ -631,7 +631,7 @@ void KexiProjectNavigator::slotUpdateEmptyStateLabel()
     if (d->model->objectsCount() == 0) {
         // handle the empty state with care... http://www.pinterest.com/romanyakimovich/ui-empty-states/
         if (!d->emptyStateLabel) {
-            QString imgPath = KIconLoader::global()->iconPath(KexiIconName(koIconName("kexi-document-empty")), - KIconLoader::SizeMedium);
+            QString imgPath = KIconLoader::global()->iconPath(KexiIconName("document-empty"), - KIconLoader::SizeLarge);
             qDebug() << imgPath;
             d->emptyStateLabel = new QLabel(
                 xi18nc("@info Message for empty state in project navigator",
@@ -696,7 +696,7 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
     clear();
     addSection(QString());
     KexiContextMenuUtils::updateTitle(this, partItem->name(), partInfo->name(),
-                                      partInfo->iconName());
+                                      KexiIconName(partInfo->iconName()));
 
     if (m_actionCollection->action("open_object")
             && m_actionCollection->action("open_object")->isEnabled()

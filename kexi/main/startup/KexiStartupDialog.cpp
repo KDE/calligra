@@ -287,7 +287,7 @@ void KexiStartupDialog::setupPageTemplates()
                                             xi18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         xi18n("Import Existing Database as New Database Project"));
-    d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon(koIconName("database-import")));
+    d->templPageWidgetItem_ImportExisting->setIcon(KexiIcon("database-import"));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KexiUtils::spacingHint());
     QLabel *lbl_import = new QLabel(

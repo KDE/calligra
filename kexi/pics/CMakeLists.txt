@@ -10,11 +10,8 @@ ecm_install_icons(ICONS
     16-actions-check.png
     16-actions-clear_table_contents.png
     16-actions-combo.png
-    16-actions-database-import.png
     16-actions-delete_table_row.png
-    16-actions-form.png
     16-actions-form_action.png
-    16-actions-form_newobj.png
     16-actions-frame.png
     16-actions-groupbox.png
     16-actions-insert_table_row.png
@@ -23,25 +20,15 @@ ecm_install_icons(ICONS
     16-actions-line_horizontal.png
     16-actions-line_vertical.png
     16-actions-lineedit.png
-    16-actions-macro.png
-    16-actions-macro_newobj.png
     16-actions-mouse_pointer.png
     16-actions-multiple_obj.png
     16-actions-new_sign.png
     16-actions-pixmaplabel.png
-    16-actions-query.png
-    16-actions-query_newobj.png
     16-actions-radio.png
     16-actions-relation.png
-    16-actions-report.png
-    16-actions-report_newobj.png
-    16-actions-script.png
-    16-actions-script_newobj.png
     16-actions-state_data.png
     16-actions-state_edit.png
     16-actions-state_sql.png
-    16-actions-table.png
-    16-actions-table_newobj.png
     16-actions-tabwidget.png
     16-actions-tabwidget_tab.png
     16-actions-test_it.png
@@ -64,13 +51,10 @@ ecm_install_icons(ICONS
     22-actions-check.png
     22-actions-clear_table_contents.png
     22-actions-combo.png
-    22-actions-database-import.png
     22-actions-dateedit.png
     22-actions-datetimeedit.png
     22-actions-delete_table_row.png
-    22-actions-form.png
     22-actions-form_action.png
-    22-actions-form_newobj.png
     22-actions-frame.png
     22-actions-groupbox.png
     22-actions-insert_table_row.png
@@ -83,28 +67,19 @@ ecm_install_icons(ICONS
     22-actions-listbox.png
     22-actions-listwidget.png
     22-actions-lower.png
-    22-actions-macro.png
-    22-actions-macro_newobj.png
     22-actions-mouse_pointer.png
     22-actions-multiple_obj.png
     22-actions-new_sign.png
     22-actions-pixmaplabel.png
     22-actions-progress.png
-    22-actions-query.png
-    22-actions-query_newobj.png
     22-actions-radio.png
     22-actions-raise.png
     22-actions-relation.png
-    22-actions-report.png
-    22-actions-report_newobj.png
-    22-actions-signalslot.png
     22-actions-slider.png
     22-actions-spin.png
     22-actions-state_data.png
     22-actions-state_edit.png
     22-actions-state_sql.png
-    22-actions-table.png
-    22-actions-table_newobj.png
     22-actions-tabwidget.png
     22-actions-tabwidget_tab.png
     22-actions-test_it.png
@@ -113,26 +88,14 @@ ecm_install_icons(ICONS
     22-actions-unknown_widget.png
     22-actions-widgets.png
     32-actions-clear_table_contents.png
-    32-actions-database-import.png
     32-actions-delete_table_row.png
-    32-actions-form.png
     32-actions-form_action.png
-    32-actions-form_newobj.png
     32-actions-insert_table_row.png
     32-actions-key.png
-    32-actions-macro.png
-    32-actions-macro_newobj.png
     32-actions-new_sign.png
     32-actions-pixmaplabel.png
-    32-actions-query.png
-    32-actions-query_newobj.png
-    32-actions-report.png
-    32-actions-report_newobj.png
     32-actions-state_data.png
     32-actions-state_sql.png
-    32-actions-table.png
-    32-actions-table_newobj.png
-    48-actions-database-import.png
     48-actions-form_action.png
     48-actions-key.png
     64-actions-form_action.png
@@ -145,5 +108,6 @@ install(FILES
         calligra-logo-black-glow.png
         DESTINATION ${DATA_INSTALL_DIR}/kexi/pics)
 
+add_subdirectory(hicolor)
 add_subdirectory(oxygen)
 add_subdirectory(app)

@@ -171,6 +171,11 @@ KEXICORE_EXPORT QString KexiIconName(const QString &baseName);
 //! @return icon as understood by Kexi. Icon theme support is improved this way.
 KEXICORE_EXPORT QIcon KexiIcon(const QString &baseName);
 
+//! @return icon name with kexi_ prefix.
+KEXICORE_EXPORT QString IconWithKexiPrefix(const QString &baseName);
+
+//! @return icon name with kexi_ox_ prefix for non-breeze themes.
+KEXICORE_EXPORT QString IconWithKexiOxygenPrefix(const QString &baseName);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

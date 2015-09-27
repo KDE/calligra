@@ -385,7 +385,7 @@ QString KexiWindow::iconName()
         }
         return QString();
     }
-    return d->part->info()->iconName();
+    return KexiIconName(d->part->info()->iconName());
 }
 
 KexiPart::GUIClient* KexiWindow::guiClient() const

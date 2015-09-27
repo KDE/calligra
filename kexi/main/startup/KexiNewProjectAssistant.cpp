@@ -97,7 +97,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = xi18n("Blank database");
     info.description = xi18n("Database project without any objects");
-    info.icon = KexiIcon(koIconName("kexi-document-empty"));
+    info.icon = KexiIcon("document-empty");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
 
