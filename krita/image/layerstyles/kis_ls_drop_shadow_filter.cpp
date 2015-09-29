@@ -38,6 +38,7 @@
 
 #include "kis_psd_layer_style.h"
 
+#include "kis_multiple_projection.h"
 #include "kis_ls_utils.h"
 
 
@@ -107,7 +108,7 @@ struct ShadowRectsData
 };
 
 void applyDropShadow(KisPaintDeviceSP srcDevice,
-                     KisPaintDeviceSP dstDevice,
+                     KisMultipleProjection *dst,
                      const QRect &applyRect,
                      const psd_layer_effects_context *context,
                      const psd_layer_effects_shadow_base *shadow,
@@ -215,9 +216,10 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
 
-    KisLsUtils::applyFinalSelection(baseSelection,
+    KisLsUtils::applyFinalSelection(KisMultipleProjection::defaultProjectionId(),
+                                    baseSelection,
                                     srcDevice,
-                                    dstDevice,
+                                    dst,
                                     d.srcRect,
                                     d.dstRect,
                                     context,
@@ -244,17 +246,17 @@ KisLsDropShadowFilter::getShadowStruct(KisPSDLayerStyleSP style) const
 }
 
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
-                                            KisPaintDeviceSP dst,
+                                            KisMultipleProjection *dst,
                                             const QRect &applyRect,
                                             KisPSDLayerStyleSP style,
                                             KisLayerStyleFilterEnvironment *env) const
 {
     KIS_ASSERT_RECOVER_RETURN(style);
 
-    const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
-    if (!shadowStruct->effectEnabled()) return;
+    const psd_layer_effects_shadow_base *config = getShadowStruct(style);
+    if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
-    applyDropShadow(src, dst, applyRect, style->context(), shadowStruct, env);
+    applyDropShadow(src, dst, applyRect, style->context(), config, env);
 }
 
 QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const

@@ -27,6 +27,7 @@ class psd_layer_effects_shadow_base;
 struct psd_layer_effects_overlay_base;
 class KisLayerStyleFilterEnvironment;
 class KoPattern;
+class KisMultipleProjection;
 
 
 namespace KisLsUtils
@@ -81,15 +82,17 @@ namespace KisLsUtils
                            const psd_layer_effects_overlay_base *config,
                            KisLayerStyleFilterEnvironment *env);
 
-    void applyFinalSelection(KisSelectionSP baseSelection,
+    void applyFinalSelection(const QString &projectionId,
+                             KisSelectionSP baseSelection,
                              KisPaintDeviceSP srcDevice,
-                             KisPaintDeviceSP dstDevice,
+                             KisMultipleProjection *dst,
                              const QRect &srcRect,
                              const QRect &dstRect,
                              const psd_layer_effects_context *context,
                              const psd_layer_effects_shadow_base *config,
                              const KisLayerStyleFilterEnvironment *env);
 
+    bool checkEffectEnabled(const psd_layer_effects_shadow_base *config, KisMultipleProjection *dst);
 }
 
 #endif /* __KIS_LS_UTILS_H */
