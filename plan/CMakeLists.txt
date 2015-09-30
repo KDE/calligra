@@ -143,7 +143,6 @@ install( FILES  plan.rc plan_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/plan
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install( FILES  plan_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install(FILES plan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 install(FILES
