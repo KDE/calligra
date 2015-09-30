@@ -197,9 +197,11 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                 }
             }
         }
-        KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
-        if (shapeAnimation && animation) {
-            shapeAnimation->addAnimation(animation);
+        if (shapeAnimation) {
+            KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
+            if (animation) {
+                shapeAnimation->addAnimation(animation);
+            }
         }
     }
 
