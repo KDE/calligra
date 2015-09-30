@@ -15,4 +15,3 @@ kcoreaddons_desktop_to_json(braindumpquickstates braindumpquickstates.desktop)
 ########### install files ###############
 
 install( FILES  quickstates.rc  DESTINATION ${DATA_INSTALL_DIR}/braindump/plugins)
-install( FILES  braindumpquickstates.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
