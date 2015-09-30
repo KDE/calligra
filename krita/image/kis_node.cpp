@@ -598,6 +598,14 @@ void KisNode::syncLodCache()
         QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
         Q_UNUSED(dirtyRegion);
     }
+
+    KisPaintDeviceSP originalDevice = original();
+    if (originalDevice && originalDevice != device) {
+        QRegion dirtyRegion = originalDevice->syncLodCache(originalDevice->defaultBounds()->currentLevelOfDetail());
+        Q_UNUSED(dirtyRegion);
+    }
+
+    projectionPlane()->syncLodCache();
 }
 
 #include "kis_node.moc"
