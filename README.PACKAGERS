@@ -242,14 +242,6 @@ pigment
 kowidgets
 
 
-6. WARNING against Qt 4.8.0 and 4.8.1
-=====================================
-
-Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built.
-Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT.
-Patch against Qt can be found in qt48setx.patch in this directory
-
-
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 ========================================================================
 
