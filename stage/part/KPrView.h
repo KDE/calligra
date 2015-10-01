@@ -159,7 +159,6 @@ protected Q_SLOTS:
 
 private:
     KPrPart *m_part;
-    KActionMenu *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;

@@ -275,16 +275,16 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
     connect( m_actionEditCustomSlideShows, SIGNAL(activated()), this, SLOT(editCustomSlideShows()) );
 
-    m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
-    actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
-    connect( m_actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) );
+    KActionMenu *actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
+    actionCollection()->addAction( "slideshow_start", actionStartPresentation );
+    connect( actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) ); // for the toolbar button
     KAction* action = new KAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
-    m_actionStartPresentation->addAction( action );
+    actionStartPresentation->addAction( action );
     connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
     action = new KAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
-    m_actionStartPresentation->addAction( action );
+    actionStartPresentation->addAction( action );
     connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
