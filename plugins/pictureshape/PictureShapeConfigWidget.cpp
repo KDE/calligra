@@ -76,11 +76,11 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
+    // ## this is awful. Qt5: use m_fileWidget->setMimeFilter(QImageReader::supportedMimeTypes()) directly
     foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilters << QString("image/") + format;
     }
     m_fileWidget->setMimeFilter(imageFilters);
-    //m_fileWidget->setFilter("image/png image/jpeg image/gif");
     layout->addWidget(m_fileWidget);
     setLayout(layout);
     connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));
