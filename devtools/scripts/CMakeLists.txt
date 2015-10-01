@@ -4,7 +4,6 @@
 # Stores the list of all files from PATH_TO_TEST_FILES in the variable list_of_test_files
 
 set(PATH_TO_TEST_FILES "" CACHE FILEPATH "This variable is used to set the path to the calligra conversion and validation test files - used under calligra/tools/scripts/")
-message( status ${PATH_TO_TEST_FILES} )
 if ( EXISTS ${PATH_TO_TEST_FILES} )
         file(GLOB_RECURSE list_of_test_files RELATIVE ${PATH_TO_TEST_FILES} "${PATH_TO_TEST_FILES}/*")
 
