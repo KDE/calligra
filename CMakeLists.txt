@@ -114,6 +114,8 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
+# FIXME: find if that still needs to be an option
+option(USEOPENGL "Allow the use of OpenGL" ON)
 option(GHNS "support Get Hot New Stuff" OFF)
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
