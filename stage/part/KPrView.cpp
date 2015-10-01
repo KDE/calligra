@@ -277,17 +277,17 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
     connect( m_actionEditCustomSlideShows, SIGNAL(triggered()), this, SLOT(editCustomSlideShows()) );
 
-    m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
-    actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
-    connect( m_actionStartPresentation, SIGNAL(triggered()), this, SLOT(startPresentation()) );
-    QAction* action = new QAction( i18n( "From Current Slide" ), this );
-    actionCollection()->setDefaultShortcut(action, QKeySequence("Shift+F5"));
-    m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(triggered()), this, SLOT(startPresentation()) );
-    action = new QAction( i18n( "From First Slide" ), this );
-    actionCollection()->setDefaultShortcut(action, QKeySequence("F5"));
-    m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(triggered()), this, SLOT(startPresentationFromBeginning()) );
+    KActionMenu *actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
+    actionCollection()->addAction( "slideshow_start", actionStartPresentation );
+    connect( actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) ); // for the toolbar button
+    KAction* action = new KAction( i18n( "From Current Slide" ), this );
+    action->setShortcut(QKeySequence("Shift+F5"));
+    actionStartPresentation->addAction( action );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
+    action = new KAction( i18n( "From First Slide" ), this );
+    action->setShortcut(QKeySequence("F5"));
+    actionStartPresentation->addAction( action );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
     showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));

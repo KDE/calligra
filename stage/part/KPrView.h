@@ -159,7 +159,6 @@ protected Q_SLOTS:
 
 private:
     KPrPart *m_part;
-    KActionMenu *m_actionStartPresentation;
     QAction *m_actionCreateAnimation;
     QAction *m_actionViewModeNormal;
     QAction *m_actionViewModeNotes;
