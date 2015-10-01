@@ -279,7 +279,7 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
         kDebug(30010) << "create thumbnail" << this << key << size;
     }
     else {
-        kDebug(30010) << "thumbnail in cache " << this;
+        //kDebug(30010) << "thumbnail in cache " << this;
     }
     return pm;
 #else
