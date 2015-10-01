@@ -86,7 +86,7 @@ void CropWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    if(!m_pictureShape)
+    if(!m_pictureShape || m_imageRect.isNull())
         return;
 
     QPainter painter(this);
