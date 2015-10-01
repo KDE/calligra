@@ -1,5 +1,0 @@
-add_subdirectory( comics )
-add_subdirectory( design )
-add_subdirectory( dslr )
-#add_subdirectory( film )
-add_subdirectory( texture )

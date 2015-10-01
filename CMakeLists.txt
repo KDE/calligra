@@ -114,18 +114,8 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
-option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
-if (WIN32)
-    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
-endif ()
 option(GHNS "support Get Hot New Stuff" OFF)
-# TODO: orthogonal setting, results in minimal features, yet needs to be defined
-# option(TINY "compile a tiny Calligra" OFF)
-
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
-
-# TODO: remove option and migration code below before 3.0 release
-option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
  #######################
 ########################
@@ -222,8 +212,8 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         WidgetsAddons 
         WindowSystem
         XmlGui 
-    OPTIONAL_COMPONENTS
         NotifyConfig
+    OPTIONAL_COMPONENTS
         Activities
         KHtml
 )
@@ -332,7 +322,7 @@ endif()
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 if (NOT Boost_FOUND)
-    message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
+    message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets.")
 endif ()
 
 if (APPLE)
@@ -354,32 +344,11 @@ macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 
 ##
-## Look for OpenGL
-##
-set(HAVE_OPENGL 0)
-if (USEOPENGL)
-    macro_optional_find_package(OpenGL)
-
-    if(OPENGL_FOUND)
-        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-        if(QT_QTOPENGL_FOUND)
-            message(STATUS "Found Qt OpenGL support")
-            set(HAVE_OPENGL 1)
-        else()
-            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif()
-    else()
-        message(STATUS "Did NOT find OpenGL libraries")
-    endif()
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
-endif()
-
-##
 ## Test for GNU Scientific Library
 ##
 macro_optional_find_package(GSL)
 macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by Krita's Transform tool and Sheets' solver plugin")
+                  FALSE "1.7" "Required by Sheets' solver plugin")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -453,20 +422,13 @@ macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
-macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets and Krita")
+macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets")
 
 ##
 ## Test for QCA2
 ##
 macro_optional_find_package(Qca-qt5 2.1.0)
 macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
-
-##
-## Test for exiv2
-##
-set(EXIV2_MIN_VERSION "0.16")
-macro_optional_find_package(Exiv2)
-macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
 ##
 ## Test for soprano
@@ -478,7 +440,6 @@ macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
-
 
 ##
 ## Test for marble
@@ -507,11 +468,12 @@ else()
     endif()
 endif()
 macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
+
 ##
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management")
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
@@ -527,7 +489,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the pigment for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 
@@ -596,17 +558,6 @@ if(HAVE_VC)
     endif ()
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
-
-##
-## Test for Xinput
-##
-if(NOT WIN32 AND NOT APPLE)
-  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else()
-  set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
-#Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
@@ -680,7 +631,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ## Test SharedMimeInfo
 ##
 macro_optional_find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types SVM or all of MSOOXML.")
 
 ##
 ## Test for Okular
@@ -762,7 +713,7 @@ macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
 ## Test for qt-poppler
 ##
 macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
+macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter and CSTester PDF feature")
 
 ## The Karbon pdf-importer needs the not-officially-supported XPDF Headers
 ## Installing these is off by default in poppler sources, so lets make
@@ -956,15 +907,6 @@ calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
 )
 
-calligra_drop_product_on_bad_condition( APP_KRITA
-    EIGEN3_FOUND "Eigen devel not found"
-    EXIV2_FOUND "libexiv2 devel not found"
-    HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
-    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found"
-    Boost_SYSTEM_FOUND "boost-system devel not found"
-    REQUIRED_Xinput_FOUND "Xinput devel not found "
-)
-
 calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
     KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
@@ -1088,7 +1030,6 @@ calligra_drop_products_on_old_flag(braindump APP_BRAINDUMP)
 calligra_drop_products_on_old_flag(flow APP_FLOW)
 calligra_drop_products_on_old_flag(karbon APP_KARBON)
 calligra_drop_products_on_old_flag(kexi APP_KEXI)
-calligra_drop_products_on_old_flag(krita APP_KRITA)
 calligra_drop_products_on_old_flag(plan  APP_PLAN)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
 calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
@@ -1141,10 +1082,6 @@ if(SHOULD_BUILD_APP_PLAN)
 endif()
 
 add_subdirectory(sheets)
-
-if(SHOULD_BUILD_APP_KRITA)
-  add_subdirectory(krita)
-endif()
 
 if(SHOULD_BUILD_APP_KARBON)
   add_subdirectory(karbon)

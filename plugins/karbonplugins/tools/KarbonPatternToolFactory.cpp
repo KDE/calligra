@@ -28,7 +28,7 @@ KarbonPatternToolFactory::KarbonPatternToolFactory()
         : KoToolFactoryBase("KarbonPatternTool")
 {
     setToolTip(i18n("Pattern editing"));
-    setToolType("karbon,krita");
+    setToolType("karbon");
     setIconName(koIconNameCStr("pattern"));
     setPriority(3);
 }

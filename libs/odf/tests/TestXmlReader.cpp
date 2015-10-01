@@ -610,7 +610,6 @@ void TestXmlReader::testDocument()
     xmlstream << "<calligra>";
     xmlstream << "  <words/>\n";
     xmlstream << "  <kpresenter/>\n";
-    xmlstream << "  <krita/>\n";
     xmlstream << "</calligra>";
     xmldevice.close();
 

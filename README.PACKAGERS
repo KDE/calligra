@@ -20,17 +20,14 @@ Table Of Contents
 1.3. Other Kexi plugins to package separately
 1.4. Kexi development files
 1.5. Quick command-line tests of Kexi installation
-2. Krita
-2.1. Krita development files
-3. Debug information
-4. Calligra plugins
-5. Calligra libraries
-6. WARNING against Qt 4.8.0 and 4.8.1
-7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
-8. Okular plugins
-8.1. Runtime dependency of the Okular ODP plugin
-8.2. Support for PPT, PPTX and more runtime dependency
-8.3. Support for DOC, DOCX, WPD and more runtime dependency
+2. Debug information
+3. Calligra plugins
+4. Calligra libraries
+5. IMPORTANT On using CPU vector capabilities in Calligra Libs
+6. Okular plugins
+6.1. Runtime dependency of the Okular ODP plugin
+6.2. Support for PPT, PPTX and more runtime dependency
+6.3. Support for DOC, DOCX, WPD and more runtime dependency
 
 
 1. Kexi
@@ -159,21 +156,7 @@ This will:
 - create a new empty form
 
 
-2. Krita
-========
-
-2.1. Krita development files
-----------------------------
-
-Location: calligra/krita/image, calligra/krita/ui
-
-These directories contain header files that are installed and can be
-used by plugin developers to extend Krita with new tools, colorspaces,
-paint-ops and more.  If your distribution packages development files
-separately, it may be a good idea to make a package with these headers.
-
-
-3. Debug information
+2. Debug information
 ====================
 
 For alpha and beta packages, please build with debug output enabled, but for
@@ -181,7 +164,7 @@ production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended
 A significant performance increase will be the result.
 
 
-4. Calligra plugins
+3. Calligra plugins
 ===================
 
 Calligra applications can use plugins, placed in plugins/ subdirectory.
@@ -218,7 +201,7 @@ So if e.g. a user just installs the Krita package, this should not pull in all
 the things that KDEPIM/Akonadi pulls in.
 
 
-5. Calligra libraries
+4. Calligra libraries
 =====================
 
 Calligra share common functionality within libraries, placed in libs/
@@ -242,15 +225,7 @@ pigment
 kowidgets
 
 
-6. WARNING against Qt 4.8.0 and 4.8.1
-=====================================
-
-Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built.
-Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT.
-Patch against Qt can be found in qt48setx.patch in this directory
-
-
-7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
+5. IMPORTANT On using CPU vector capabilities in Calligra Libs
 ========================================================================
 
 IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
@@ -295,15 +270,15 @@ build for building distributable packages.
 [1] - http://code.compeng.uni-frankfurt.de/projects/vc
 
 
-8. Okular plugins
+6. Okular plugins
 =================
 
-8.1. Runtime dependency of the Okular ODP plugin
+6.1. Runtime dependency of the Okular ODP plugin
 ------------------------------------------------
 OKULAR_GENERATOR_ODP, the ODP plugin for Okular, in extras/okularodpgenerator,
 has a runtime dependency on the Stage engine, PART_STAGE.
 
-8.2. Support for PPT, PPTX and more runtime dependency
+6.2. Support for PPT, PPTX and more runtime dependency
 ------------------------------------------------------
 The Okular ODP plugin also supports the formats PPT and PPTX, if the respective
 filters FILTER_PPT_TO_ODP and FILTER_PPTX_TO_ODP are built, by the products
@@ -318,7 +293,7 @@ will be installed from the filters/stage/{powerpoint,pptx}.
 So with those desktop files and the Okular ODP plugin installed there is a
 runtime dependency on the Stage engine and the respective filters.
 
-8.3. Support for DOC, DOCX, WPD and more runtime dependency
+6.3. Support for DOC, DOCX, WPD and more runtime dependency
 -----------------------------------------------------------
 The Okular ODT plugin also supports the formats DOC, DOCX and WPD, if the
 respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT and

@@ -1,6 +1,6 @@
 [calligra]
 ColorSpacePlugins=
-ColorSpacePluginsDisabled=kritakscolorspacesplugin,krita_ctlcs_plugin,kolcmsengine
+ColorSpacePluginsDisabled=
 FlakePluginsDisabled=kexirelationdesignshape
 TextEditingPluginsDisabled=thesaurustool,spellcheck
 

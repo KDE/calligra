@@ -94,7 +94,6 @@ calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)"  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(APP_KRITA "Krita app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
@@ -412,25 +411,6 @@ calligra_define_productset(KEXI "Full Kexi (for Desktop)"
     OPTIONAL
         FEATURE_SCRIPTING
         PLUGIN_KEXI_SPREADSHEETMIGRATION
-)
-calligra_define_productset(KRITA "Full Krita"
-    REQUIRES
-        APP_KRITA
-    OPTIONAL
-        # extras
-        FILEMANAGER_PROPERTIES
-        FILEMANAGER_QUICKPRINT
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_COLORENGINES
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_SPACENAVIGATOR
-        PLUGIN_VECTORSHAPE
 )
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
     REQUIRES

@@ -1,7 +1,0 @@
-<schema prefix="mkn" uri="http://www.calligra.org/krita/xmp/MakerNote/1.0/">
-  <structures>
-  </structures>
-  <properties>
-    <text name="RawData" />
-  </properties>
-</schema>

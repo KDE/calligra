@@ -1300,7 +1300,7 @@ void KoMainWindow::slotFileOpen()
     if (!isImporting()) {
         KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setCaption(i18n("Open Document"));
-        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+        dialog.setDefaultDir(qApp->applicationName().contains("karbon")
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
@@ -1309,7 +1309,7 @@ void KoMainWindow::slotFileOpen()
     } else {
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import Document"));
-        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+        dialog.setDefaultDir(qApp->applicationName().contains("karbon")
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                 : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));

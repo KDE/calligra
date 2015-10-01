@@ -28,7 +28,7 @@ KarbonGradientToolFactory::KarbonGradientToolFactory()
         : KoToolFactoryBase("KarbonGradientTool")
 {
     setToolTip(i18n("Gradient editing"));
-    setToolType("karbon, krita");
+    setToolType("karbon");
     setIconName(koIconNameCStr("format-fill-color"));
     // or probably rather "fill-gradient", please request that icon on TechBase
     setPriority(3);

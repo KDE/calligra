@@ -1,9 +1,9 @@
 [calligra]
-ColorSpaceExtensionsPluginsDisabled=krita_colorspaces_extensions
-ColorSpacePluginsDisabled=kolcmsengine,kritakscolorspacesplugin,krita_ctlcs_plugin
+ColorSpaceExtensionsPluginsDisabled=
+ColorSpacePluginsDisabled=kolcmsengine
 FlakePluginsDisabled=kexirelationdesignshape
 TextEditingPluginsDisabled=thesaurustool
-ShapePluginsDisabled=kritashape
+ShapePluginsDisabled=
 TextInlinePluginsDisabled=kprvariables
 
 [KoShapeCollection]

@@ -161,7 +161,7 @@ public:
                         currentAuxWidgets.insert(s);
                     }
                 }
-                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
+                if (specialCount == currentWidgetList.count()) {
                     housekeeperLayout->setRowStretch(cnt, 10000);
                 }
                 break;

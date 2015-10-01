@@ -1,7 +1,7 @@
 # Set general plugin options
 [calligra]
-ColorSpaceExtensionsPluginsDisabled=krita_colorspaces_extensions
-ColorSpacePluginsDisabled=kolcmsengine,kritakscolorspacesplugin,krita_ctlcs_plugin
+ColorSpaceExtensionsPluginsDisabled=
+ColorSpacePluginsDisabled=kolcmsengine
 FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
 TextInlinePluginsDisabled=kprvariables

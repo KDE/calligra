@@ -8,7 +8,6 @@ calligra_define_productset(DESKTOP "Calligra for Desktop"
         FLOW
         KARBON
         KEXI
-        KRITA
         PLAN
         SHEETS
         STAGE

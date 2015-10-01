@@ -10,10 +10,6 @@ if( SHOULD_BUILD_APP_KARBON )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} karbon_print.desktop )
 endif()
 
-if( SHOULD_BUILD_APP_KRITA )
-    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} krita_print.desktop )
-endif()
-
 if( SHOULD_BUILD_APP_SHEETS )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} sheets_print.desktop )
 endif()

@@ -142,7 +142,6 @@ application-x-kformula
 application-x-kgetlist
 application-x-kontour
 application-x-kplato
-application-x-krita
 application-x-kvtml
 application-x-kword
 application-x-lha
@@ -687,7 +686,6 @@ kplato
 kpresenter
 krdc
 krfb
-krita
 ksnapshot
 ksniffer
 kspread

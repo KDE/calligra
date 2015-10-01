@@ -49,12 +49,12 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
                 << "Palettes (*.gpl *.pal *.act *.aco *.colors)";
 
     m_mimeFilter = QStringList()
-            << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
+            << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
             << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
             << "image/x-portable-bitmap" << "image/png" << "image/jp2"
             << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
             << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-            << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
+            << "image/gif" << "image/x-xbitmap"
             << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
             << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
             << "image/x-wmf" << "application/x-karbon"

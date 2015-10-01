@@ -1009,12 +1009,6 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url
 {
     if (!url.isLocalFile()) return mimeType;
 
-    if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
-
-    if(url.toLocalFile().endsWith(".kranimseq")) return "application/x-kranim-sequence";
-
-    if (url.toLocalFile().endsWith(".kranim")) return "application/x-krita-animation";
-
     if (url.toLocalFile().endsWith(".kpp")) return "image/png";
 
     QStringList imageMimeTypes;

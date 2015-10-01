@@ -159,18 +159,15 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    KoResourcePaths::addResourceType("ko_patterns", "data", "krita/patterns/", true);
     KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
     KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
     KoResourcePaths::addResourceType("ko_gradients", "data", "karbon/gradients/");
-    KoResourcePaths::addResourceType("ko_gradients", "data", "krita/gradients/", true);
     KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
     KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
     KoResourcePaths::addResourceType("ko_palettes", "data", "calligra/palettes/");
     KoResourcePaths::addResourceType("ko_palettes", "data", "karbon/palettes/");
-    KoResourcePaths::addResourceType("ko_palettes", "data", "krita/palettes/", true);
 
     KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));

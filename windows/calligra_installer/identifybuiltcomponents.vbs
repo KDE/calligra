@@ -24,7 +24,6 @@ CheckForApp "calligraflow.exe", "flow"
 CheckForApp "calligraplan.exe", "plan"
 
 CheckForApp "karbon.exe", "karbon"
-CheckForApp "krita.exe", "krita"
 
 CheckForApp "kexi.exe", "kexi"
 

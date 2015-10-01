@@ -8,7 +8,6 @@ calligra_define_productset(OSX "Calligra for OS X Desktop"
         BRAINDUMP
         FLOW
         KARBON
-        KRITA
         PLAN
         SHEETS
         STAGE

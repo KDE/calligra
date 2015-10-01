@@ -610,7 +610,6 @@ void TestXmlReaderWithoutSpaces::testDocument()
     xmlstream << "<calligra>";
     xmlstream   << "<words/>\n";
     xmlstream   << "<stage/>\n";
-    xmlstream   << "<krita/>\n";
     xmlstream << "</calligra>";
     xmldevice.close();
 

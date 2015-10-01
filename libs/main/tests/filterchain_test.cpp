@@ -41,15 +41,6 @@ int main(int /*argc*/, char ** /*argv*/)
         chain->dump();
     }
 
-    mimeType = "application/x-krita";
-    chain = g.chain(manager, mimeType);
-    if (!chain)
-        kDebug() << "Chain for 'application/x-krita' is not available, OK";
-    else {
-        kError() << "Chain 'application/x-krita' is available!" << endl;
-        chain->dump();
-    }
-
     mimeType = "text/csv";
     chain = g.chain(manager, mimeType);
     if (!chain)
