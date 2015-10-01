@@ -258,7 +258,7 @@ public:
      */
     void setDuration(const QModelIndex &index, const int duration);
 
-    KPrShapeAnimation *animationByRow(const int row) const;
+    KPrShapeAnimation *animationByRow(int row, int *pGroup = 0, KPrShapeAnimation::NodeType *pNodeType = 0) const;
 
     /**
      * @brief add new animation after index
@@ -290,13 +290,6 @@ Q_SIGNALS:
 
 private:
 
-    struct AnimationTmpData
-    {
-        int group;
-        KPrShapeAnimation::NodeType nodeType;
-    };
-
-    KPrShapeAnimation *animationByRow(const int row, AnimationTmpData &currentData) const;
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
