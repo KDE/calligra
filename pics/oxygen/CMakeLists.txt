@@ -30,8 +30,6 @@ ecm_install_icons(
         32-mimetypes-x-shape-text.png
         48-actions-table.png
         sc-actions-table.svgz
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
     THEME oxygen
- )
-
-
+)
