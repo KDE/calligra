@@ -48,11 +48,11 @@ private:
     KFileWidget *m_fileWidget;
 };
 
-class LoadWaiter : public QObject
+class PictureShapeLoadWaiter : public QObject
 {
     Q_OBJECT
 public:
-    explicit LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+    explicit PictureShapeLoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
 
 public Q_SLOTS:
     void setImageData(KJob *job);
