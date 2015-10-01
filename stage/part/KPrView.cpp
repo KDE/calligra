@@ -123,6 +123,7 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
 
 KPrView::~KPrView()
 {
+    stopPresentation();
     saveZoomConfig(zoomMode(), zoom());
     delete m_presentationMode;
     delete m_notesMode;
