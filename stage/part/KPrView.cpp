@@ -287,6 +287,12 @@ void KPrView::initActions()
     actionStartPresentation->addAction( action );
     connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
+    m_actionStopPresentation = new KAction( i18n( "Stop presentation" ), this );
+    actionCollection()->addAction( "slideshow_stop", m_actionStopPresentation );
+    m_actionStopPresentation->setShortcut(Qt::Key_Escape);
+    connect(m_actionStopPresentation, SIGNAL(activated()), this, SLOT(stopPresentation()));
+    m_actionStopPresentation->setEnabled(false);
+
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
     showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
     showStatusbarAction->setToolTip(i18n("Shows or hides the status bar"));
@@ -362,6 +368,7 @@ void KPrView::startPresentation()
     m_actionDrawOnPresentation->setEnabled(true);
     m_actionHighlightPresentation->setEnabled(true);
     m_actionBlackPresentation->setEnabled(true);
+    m_actionStopPresentation->setEnabled(true);
     setViewMode( m_presentationMode );
 }
 
@@ -380,6 +387,7 @@ void KPrView::stopPresentation()
     m_actionDrawOnPresentation->setEnabled(false);
     m_actionHighlightPresentation->setEnabled(false);
     m_actionBlackPresentation->setEnabled(false);
+    m_actionStopPresentation->setEnabled(false);
 
     if ( isPresentationRunning() ) {
         m_presentationMode->activateSavedViewMode();
