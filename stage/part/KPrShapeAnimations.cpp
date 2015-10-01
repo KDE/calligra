@@ -285,8 +285,8 @@ void KPrShapeAnimations::add(KPrShapeAnimation *animation)
         KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
         animation->setSubStep(newSubStep);
     }
-    if (!steps().contains(animation->step())) {
-        if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= steps().count())) {
+    if (!m_shapeAnimations.contains(animation->step())) {
+        if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= m_shapeAnimations.count())) {
             m_shapeAnimations.insert(animation->stepIndex(), animation->step());
         }
         else {
@@ -330,8 +330,8 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
         animation->setSubStepIndex(step->indexOfAnimation(subStep));
         step->removeAnimation(subStep);
         if (step->animationCount() <= 0) {
-            animation->setStepIndex(steps().indexOf(step));
-            steps().removeAll(step);
+            animation->setStepIndex(m_shapeAnimations.indexOf(step));
+            m_shapeAnimations.removeAll(step);
         }
     }
     animation->setAnimIndex(subStep->indexOfAnimation(animation));
@@ -555,7 +555,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                  newStep = new KPrAnimationStep();
 
                  // Add step after original one
-                 int currentStepIndex = steps().indexOf(animation->step());
+                 int currentStepIndex = m_shapeAnimations.indexOf(animation->step());
                  insertStep(currentStepIndex + 1, newStep);
 
                  //reparent children
@@ -595,7 +595,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
 
                 // Add step after original one
                 //insert new Step
-                int currentStepIndex = steps().indexOf(animation->step());
+                int currentStepIndex = m_shapeAnimations.indexOf(animation->step());
                 insertStep(currentStepIndex + 1, newStep);
 
                 //reparent children
@@ -858,7 +858,7 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(int row, int *pGroup, KPrS
         int stepChild = -1;
         if (step->animationCount() > 0) {
             currentNodeType = KPrShapeAnimation::OnClick;
-            groupCount = groupCount + 1;
+            ++groupCount;
         }
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
@@ -909,13 +909,13 @@ void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, con
     // insert step and substep
     if (previousAnimation.isValid()) {
         KPrShapeAnimation *previous = animationByRow(previousAnimation.row());
-        stepIndex = steps().indexOf(previous->step()) + 1;
+        stepIndex = m_shapeAnimations.indexOf(previous->step()) + 1;
     }
-    else if (steps().count() < 1) {
+    else if (m_shapeAnimations.count() < 1) {
         stepIndex = -1;
     }
     else {
-        stepIndex = steps().count();
+        stepIndex = m_shapeAnimations.count();
     }
 
     // Setup new Animation
@@ -969,7 +969,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
     QString name = getAnimationName(animation, true);
     // Return Path Motion Animation icon
     if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
-        QPainterPath m_path = QPainterPath();
+        QPainterPath m_path;
         for (int i = 0; i < animation->animationCount(); i++) {
             if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(animation->animationAt(i))) {
                 m_path = motion->pathOutline();
