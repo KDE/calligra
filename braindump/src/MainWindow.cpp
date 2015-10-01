@@ -35,6 +35,7 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
+#include <KoDockRegistry.h>
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
@@ -86,6 +87,7 @@ MainWindow::MainWindow(RootSection* document) : m_doc(document), m_activeView(0)
             wdg->setVisible(true);
         }
     }
+
     forceDockTabFonts();
 }
 
@@ -154,16 +156,6 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = m_dockWidgetMap[ factory->id()];
     }
 
-    KConfigGroup group(KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont  = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
-#ifdef Q_WS_MAC
-    dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
-#endif
-    dockWidget->setFont(dockWidgetFont);
-
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
     return dockWidget;
@@ -174,10 +166,7 @@ void MainWindow::forceDockTabFonts()
     QObjectList chis = children();
     for(int i = 0; i < chis.size(); ++i) {
         if(chis.at(i)->inherits("QTabBar")) {
-            QFont dockWidgetFont  = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-            qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
-            dockWidgetFont.setPointSizeF(pointSize);
-            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+            ((QTabBar *)chis.at(i))->setFont(KoDockRegistry::dockFont());
         }
     }
 }
