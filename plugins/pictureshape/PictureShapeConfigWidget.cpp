@@ -73,6 +73,7 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
     // ## this is awful. Qt5: use m_fileWidget->setMimeFilter(QImageReader::supportedMimeTypes()) directly
