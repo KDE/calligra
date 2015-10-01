@@ -80,8 +80,11 @@ if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
     add_subdirectory( semanticitems )
 endif()
 
+if(SHOULD_BUILD_PLUGIN_KARBONPLUGINS)
+    add_subdirectory( karbonplugins )
+endif()
+
 #add_subdirectory( videoshape )
 #add_subdirectory( commentshape )
 
 add_subdirectory( staging )
-add_subdirectory( karbonplugins )
