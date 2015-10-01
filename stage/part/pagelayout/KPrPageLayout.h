@@ -90,8 +90,7 @@ private:
     QString m_name;
     // placeholders used in the layout
     QList<KPrPlaceholder *> m_placeholders;
-    // the type of the layout.
-    // if one placeholder as a presentation:object="handout" then the layout is of tyle Handout
+    // The type of the layout: if one placeholder has a presentation:object="handout" attribute then the layout is of style Handout
     Type m_layoutType;
 };
 
