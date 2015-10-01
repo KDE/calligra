@@ -21,8 +21,13 @@ ecm_install_icons( ICONS
     1024-apps-calligrawords.png
     sc-apps-calligrawords.svgz
 
+    DESTINATION ${ICON_INSTALL_DIR}
+    THEME hicolor
+)
+
+ecm_install_icons( ICONS
     22-actions-tool_pagelayout.png
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${DATA_INSTALL_DIR}/words/icons
     THEME hicolor
 )
