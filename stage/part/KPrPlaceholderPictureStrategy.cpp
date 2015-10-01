@@ -61,8 +61,9 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
                     shape->setSize( data->imageSize() );
                 }
             }
+            KIO::NetAccess::removeTempFile(tmpFile);
         } else {
-            kWarning() << "open image " << url.prettyUrl() << "failed";
+            kWarning() << "open image" << url << "failed";
         }
     }
     return shape;
