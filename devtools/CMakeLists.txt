@@ -2,8 +2,11 @@ if(SHOULD_BUILD_APP_CSTESTER)
     add_subdirectory( cstester )
 endif()
 
-if (SHOULD_BUILD_APP_DEVTOOLS)
+if (SHOULD_BUILD_APP_SLIDECOMPARE)
     add_subdirectory(slidecompare)
+endif()
+
+if (SHOULD_BUILD_APP_DEVTOOLS)
     add_subdirectory(scripts)
 endif ()
 
