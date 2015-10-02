@@ -12889,13 +12889,6 @@
 					</choice>
 				</attribute>
 			</optional>
-			<optional>
-				<attribute name="calligra:number-length">
-					<choice>
-						<value>extra-short</value>
-					</choice>
-				</attribute>
-			</optional>
 		</interleave>
 	</define>
 	<define name="number-year">
