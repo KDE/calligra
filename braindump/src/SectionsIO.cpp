@@ -94,7 +94,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     QString fullFileName = sectionsIO->m_directory + filename;
     QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
-    QDir().remove(fullFileNameTmpNew);
+    QDir(fullFileNameTmpNew).removeRecursively();
 
     const char* mimeType = KoOdf::mimeType(KoOdf::Text);
 
@@ -163,10 +163,10 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     finaly.store = 0;
     delete context;
 
-    QDir().remove(fullFileNameTmpOld);
+    QDir(fullFileNameTmpOld).removeRecursively();
     QDir().rename(fullFileName, fullFileNameTmpOld);
     QDir().rename(fullFileNameTmpNew, fullFileName);
-    QDir().remove(fullFileNameTmpOld);
+    QDir(fullFileNameTmpOld).removeRecursively();
 
     return true;
 }
@@ -279,7 +279,7 @@ void SectionsIO::save()
 
     // Last remove unused sections
     foreach(SaveContext * saveContext, contextToRemove) {
-        QDir().remove(m_directory + saveContext->filename);
+        QDir(m_directory + saveContext->filename).removeRecursively();
         m_contextes.remove(saveContext->section);
         delete saveContext;
     }
