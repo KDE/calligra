@@ -125,6 +125,7 @@
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databases</li>
       <li xml:lang="ca">Permet bases de dades SQLite, MySQL, PostgreSQL, xBase i Sybase/MS SQL Server</li>
+      <li xml:lang="de">Unterstützt Datenbanken wie SQLite, MySQL, PostgreSQL, xBase und Sybase/MS SQL Server</li>
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databases</li>
       <li xml:lang="es">Permite usar servidores de bases de datos SQLite, MySQL, PostgreSQL, xBase y Sybase/MS SQL</li>
       <li xml:lang="fi">SQLite-, MySQL-, PostgreSQL-, xBase- ja Sybase/MS SQL Server -tietokantojen tuki</li>
