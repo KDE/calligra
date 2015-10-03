@@ -42,7 +42,8 @@ ki18n_wrap_ui(braindump_SRCS
     forms/wdgsectionproperties.ui
 )
 
-ecm_add_app_icon( braindump_SRCS ICONS "../data/icons/hi*-app-braindump.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/*-apps-braindump.png")
+ecm_add_app_icon( braindump_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(braindump ${braindump_SRCS})
 
