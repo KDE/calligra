@@ -81,9 +81,8 @@ public:
         FlowStart = 3000,        ///< Base number for Flow specific values.
         PlanStart = 4000,        ///< Base number for Plan specific values.
         StageStart = 5000,       ///< Base number for Stage specific values.
-        KritaStart = 6000,       ///< Base number for Krita specific values.
-        WordsStart = 7000,       ///< Base number for Words specific values.
-        VariableManagerStart = 8000, ///< Start of numbers reserved for the KoVariableManager
+        WordsStart = 6000,       ///< Base number for Words specific values.
+        VariableManagerStart = 7000, ///< Start of numbers reserved for the KoVariableManager
         UserGet = 12000,         ///< User defined variable user-field-get
         UserInput = 12001        ///< User defined variable user-field-input
     };
