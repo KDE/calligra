@@ -5,6 +5,8 @@ if(NOT WIN32)
 	add_subdirectory(tests)
 endif()
 
+add_subdirectory(data)
+
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
 
 include_directories( 
