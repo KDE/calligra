@@ -632,7 +632,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     Destroys the undo stack, deleting any commands that are on it. If the
     stack is in a KUndo2Group, the stack is automatically removed from the group.
 
-    \sa KUndo2QStack()The number of last strokes which Krita should store separately
+    \sa KUndo2QStack()
 */
 
 KUndo2QStack::~KUndo2QStack()
