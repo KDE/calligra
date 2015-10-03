@@ -2,19 +2,6 @@ ecm_install_icons(
     ICONS
         16-actions-curve-connector.png
         16-actions-lines-connector.png
-        16-actions-object-align-horizontal-center-calligra.png
-        16-actions-object-align-horizontal-left-calligra.png
-        16-actions-object-align-horizontal-right-calligra.png
-        16-actions-object-align-vertical-bottom-calligra.png
-        16-actions-object-align-vertical-bottom-top-calligra.png
-        16-actions-object-align-vertical-center-calligra.png
-        16-actions-object-align-vertical-top-calligra.png
-        16-actions-object-group-calligra.png
-        16-actions-object-order-back-calligra.png
-        16-actions-object-order-front-calligra.png
-        16-actions-object-order-lower-calligra.png
-        16-actions-object-order-raise-calligra.png
-        16-actions-object-ungroup-calligra.png
         16-actions-standard-connector.png
         16-actions-straight-connector.png
         16-actions-table.png
