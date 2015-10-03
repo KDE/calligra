@@ -676,7 +676,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFormula()));
     action->setToolTip(i18n("Insert math expression"));
 
-    action = new KAction(koIcon("accessories-character-map"), i18n("S&pecial Character..."), this);
+    action = new KAction(koIcon("character-set"), i18n("S&pecial Character..."), this);
     addAction("insertSpecialChar", action);
     action->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertSpecialChar()));
