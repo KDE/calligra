@@ -30,7 +30,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-//KPresenter includes
+//Stage includes
 #include <KPrDocument.h>
 
 KPrCustomSlideShows::KPrCustomSlideShows()

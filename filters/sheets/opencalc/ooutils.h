@@ -74,11 +74,11 @@ void importBorders(QDomElement& parentElement, const KoStyleStack& styleStack);
 
 /////////// Text properties ///////////
 
-// From style:text-underline to words/kpresenter's underline/underlinestyleline
+// From style:text-underline to Words/Stage's underline/underlinestyleline
 void importUnderline(const QString& text_underline, QString& underline, QString& styleline);
 
 // From style:text-position (for subscript/superscript)
-// to words/kpresenter's value/relativetextsize
+// to Words/Stage's value/relativetextsize
 void importTextPosition(const QString& text_position, QString& value, QString& relativetextsize);
 
 void createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo);

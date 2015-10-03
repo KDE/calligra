@@ -1117,7 +1117,7 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
         // TODO (js): What if two zoom levels are constantly being
         //            requested?  At the moment, this *is* the case,
         //            due to the fact that the shape is also rendered
-        //            in the page overview in KPresenter Every time
+        //            in the page overview in Stage. Every time
         //            the window is hidden and shown again, a repaint
         //            is requested --> laggy performance, especially
         //            when quickly switching through windows.

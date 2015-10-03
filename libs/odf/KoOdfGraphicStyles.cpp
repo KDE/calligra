@@ -176,7 +176,7 @@ QString KoOdfGraphicStyles::saveOdfHatchStyle(KoGenStyles& mainStyles, const QBr
 {
     KoGenStyle hatchStyle(KoGenStyle::HatchStyle /*no family name*/);
     hatchStyle.addAttribute("draw:color", brush.color().name());
-    //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
+    //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into Stage
     switch (brush.style()) {
     case Qt::HorPattern:
         hatchStyle.addAttribute("draw:style", "single");
@@ -504,7 +504,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                 tmpBrush.setStyle(Qt::Dense7Pattern);
 
             } else
-                debugOdf << " transparency is not defined into kpresenter :" << transparency;
+                debugOdf << " transparency is not defined into Stage :" << transparency;
         }
     } else if (fill == "hatch") {
         QString style = styleStack.property(KoXmlNS::draw, "fill-hatch-name");
@@ -525,13 +525,13 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                 tmpBrush.setColor(draw->attributeNS(KoXmlNS::draw, "color", QString()));
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "distance")) {
-                //todo implemente it into kpresenter
+                //todo implemente it into Stage
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "display-name")) {
-                //todo implement it into kpresenter
+                //todo implement it into Stage
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "style")) {
-                //todo implemente it into kpresenter
+                //todo implemente it into Stage
                 QString styleHash = draw->attributeNS(KoXmlNS::draw, "style", QString());
                 if (styleHash == "single") {
                     switch (angle) {

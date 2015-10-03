@@ -992,7 +992,7 @@ bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const 
         // errors during zoom the resulting pixmap *might* be
         // 1 pixel or 2 pixels wider/higher than desired: we just
         // remove the additional columns/rows.  This can be done
-        // since KPresenter is leaving a minimal border below/at
+        // since Stage is leaving a minimal border below/at
         // the right of the image anyway.
         if ( size != pix.size() ) {
             pix = pix.copy( 0, 0, size.width(), size.height() );

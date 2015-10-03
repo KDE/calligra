@@ -420,7 +420,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
         // TODO: What if two zoom levels are constantly being requested?
         // At the moment, this *is* the case, due to the fact
         // that the shape is also rendered in the page overview
-        // in KPresenter
+        // in Stage
         // Every time the window is hidden and shown again, a repaint is
         // requested --> laggy performance, especially when quickly
         // switching through windows

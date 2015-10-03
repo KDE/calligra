@@ -56,7 +56,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and words have have SavePage too
+    enum SaveFlag { SaveAll, SaveSelected }; // Stage and Words have have SavePage too
 
     /**
      * Creates a new document.

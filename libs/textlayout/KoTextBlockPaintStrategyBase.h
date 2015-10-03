@@ -28,7 +28,7 @@ class QBrush;
 
 /**
  * This class is used to control aspects of textblock painting
- * Which is used when KPresenter animates text.
+ * Which is used when Stage animates text.
  */
 class KOTEXTLAYOUT_EXPORT KoTextBlockPaintStrategyBase
 {

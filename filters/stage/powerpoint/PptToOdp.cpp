@@ -2130,7 +2130,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         (m_filter->*m_setProgress)(55);
     }
 
-    // NOTE: kpresenter specific: default graphic style and
+    // NOTE: Stage specific: default graphic style and
     // drawing-page style have higher precedence than those defined by
     // the corresponding <master-page> element.  This is the case when
     // the presentation slide inherits background objects from the
@@ -2794,7 +2794,7 @@ PptToOdp::processParagraph(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, cf, tc, text, start, end, &min_fontsize);
 
-    //NOTE: Process empty list items as paragraphs to prevent kpresenter
+    //NOTE: Process empty list items as paragraphs to prevent Stage
     //displaying those.
     m_isList = ( pf.isList() && (start < end) );
 

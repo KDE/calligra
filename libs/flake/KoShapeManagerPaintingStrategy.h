@@ -33,7 +33,7 @@ class QRectF;
 /**
  * This implements the painting strategy for the KoShapeManager
  *
- * This is done to make it possible to have e.g. animations in kpresenter.
+ * This is done to make it possible to have e.g. animations in Stage.
  *
  * This class implements the default strategy which is normally used.
  */

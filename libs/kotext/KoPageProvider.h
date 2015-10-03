@@ -26,7 +26,7 @@
 class KoShape;
 class KoTextPage;
 
-/// \internal  this is a hack for kpresenter
+/// \internal  this is a hack for Stage
 class KOTEXT_EXPORT KoPageProvider
 {
 public:

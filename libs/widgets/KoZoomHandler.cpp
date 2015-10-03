@@ -73,7 +73,7 @@ void KoZoomHandler::setZoomedResolution( qreal zoomedResolutionX, qreal zoomedRe
 {
     // zoom() doesn't matter, it's only used in setZoom() to calculated the zoomed resolutions
     // Here we know them. The whole point of this method is to allow a different zoom factor
-    // for X and for Y, as can be useful for e.g. fullscreen kpresenter presentations.
+    // for X and for Y, as can be useful for e.g. fullscreen Stage presentations.
     m_zoomedResolutionX = zoomedResolutionX;
     m_zoomedResolutionY = zoomedResolutionY;
 }

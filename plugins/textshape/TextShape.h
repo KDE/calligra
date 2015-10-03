@@ -104,7 +104,7 @@ public:
     virtual void update() const;
     virtual void update(const QRectF &shape) const;
 
-    // required for kpresenter hack
+    // required for Stage hack
     void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
 
     /// reimplemented
