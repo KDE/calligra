@@ -171,21 +171,6 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Krita
-
-Introduction
-    Basically a copy of the goals described in the general Calligra handbook.
-Working with Krita
-    Working with painting tools
-    Working with filters
-    Working with selections
-    Working with layers
-    <more technologies?>
-<usecases>
-Reference Guide
-
---------------------------------------------------------------------------------
-
 Plan
 
 Introduction

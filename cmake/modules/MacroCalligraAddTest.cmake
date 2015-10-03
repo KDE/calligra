@@ -5,7 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 # Adds a single test with proper prefix.
-# Prefixes help to select subsets of tests to run, e.g. only Krita tests or Flake tests.
+# Prefixes help to select subsets of tests to run, e.g. only Words tests or Flake tests.
 #
 # Usage: calligra_add_test(<prefix> <test_basename> <libraries_to_link>)
 #

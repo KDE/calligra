@@ -37,8 +37,8 @@ class KoDocumentSectionModel;
  * See the relevant (extensive) Qt documentation about the design
  * basis for this widget.
  *
- * Usage: simply use this widget in your designer .ui file. Krita's
- * and karbon's layerboxes are KoDocumentSectionView based.
+ * Usage: simply use this widget in your designer .ui file. Karbon's
+ * layerboxes are KoDocumentSectionView based.
  */
 class KOMAIN_EXPORT KoDocumentSectionView: public QTreeView
 {

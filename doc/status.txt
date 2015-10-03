@@ -69,10 +69,6 @@ Karbon
 
 Easy: no documentation at all.
 
-Krita
-
-Running text (descriptive chapters) is still to be added.
-
 Plan
 
 Text on how to use the program is missing: the only chapters available deal

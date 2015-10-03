@@ -31,8 +31,8 @@
  * Model class for use with KoDocumentSectionView. The document
  * sections that an application uses need to inherit from this class
  * to be displayable in the KoDocumentSectionView. That would be,
- * for instance, pages in Words or KPresenter, layers in Krita or
- * Karbon, sheets in KSpread.
+ * for instance, pages in Words or KPresenter, layers in Karbon,
+ * sheets in KSpread.
  *
  * The KoDocumentSectionView will display a thumbnail and a row of
  * icon properties for every document section.

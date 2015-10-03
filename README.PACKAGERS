@@ -197,7 +197,7 @@ their own package. That package should not be an automatic dependency on any
 other Calligra package, but only installed explicitely by the user. Reason are
 the external dependencies with these plugins, especially kdepimlibs.
 
-So if e.g. a user just installs the Krita package, this should not pull in all
+So if e.g. a user just installs the Braindump package, this should not pull in all
 the things that KDEPIM/Akonadi pulls in.
 
 
@@ -233,10 +233,10 @@ IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
           2) Vc libary should be present on the building system only,
              it need not be installed on all the client systems.
 
-Krita and Pigment can make use of the vector capabilities of the
+Pigment can make use of the vector capabilities of the
 user's CPU. To make it possible Vc library [1] should be present in
 the host system. This is a static library and fully included into the
-final Pigment/Krita binary, so it is not necessary to have it
+final Pigment binary, so it is not necessary to have it
 installed in the client system.
 
 The code generation is generally controlled by two factors: the
@@ -252,7 +252,7 @@ architectures.
 2) Vc library is present. PACKAGERS_BUILD=OFF (default).
 
 All the calligra binaries are optimized for the host CPU. This is the
-most efficient type of build of Krita. But be careful, because such
+most efficient type of build of Calligra. But be careful, because such
 binaries are not portable among different CPU architectures! Using
 this build for packages distributed to many users will most probably
 result in SIGILL crashes on the client system. Use this option for
