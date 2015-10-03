@@ -22,13 +22,9 @@
 #define KOICON_H
 
 // Qt
-
-#include <QApplication>
-#include <QPalette>
-#include <QColor>
 #include <QIcon>
 
-// KDE
+// KF5
 #include <kiconloader.h>
 
 /**
