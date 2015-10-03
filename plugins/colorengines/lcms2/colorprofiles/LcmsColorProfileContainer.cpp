@@ -173,6 +173,9 @@ bool LcmsColorProfileContainer::init()
         //in a named color profile. We retrieve more information elsewhere.
         if (cmsIsTag(d->profile, cmsSigColorantTableTag)) {
             d->namedColorList = ((cmsNAMEDCOLORLIST *)cmsReadTag (d->profile, cmsSigColorantTableTag));
+// QT5TODO: check if this does anything, besides failing as stack-buffer-overflow,
+//          due to name, prefix, suffix not being a buffer, just single char
+#if 0
             for (cmsUInt16Number i=0;i<cmsNamedColorCount(d->namedColorList);i++) {
                 char name;
                 char prefix;
@@ -183,6 +186,7 @@ bool LcmsColorProfileContainer::init()
                 //qDebug()<<d->name<<i<<","<< name<<","<< prefix<<","<< suffix;
                 //if (pcs){qDebug()<<pcs;} else {qDebug()<<"no pcs retrieved";}
             }
+#endif
         }
         //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
         if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
