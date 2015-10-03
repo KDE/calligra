@@ -1700,10 +1700,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordRight;
 #ifdef Q_WS_MAC
         // Don't reject "alt" key, it may be used for typing text on Mac OS
-        else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
+        else if ((event->modifiers() & Qt::ControlModifier)
 #else
-        else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
+        else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier))
 #endif
+            || event->text().length() == 0 || event->key() == Qt::Key_Escape) {
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
