@@ -205,6 +205,31 @@ QVariant KPrShapeAnimations::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
+void KPrShapeAnimations::dump() const
+{
+    kDebug() << "Share animations:";
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        kDebug() << "  Step:";
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                kDebug() << "    Substep" << a;
+                for (int sub=0; sub < a->animationCount(); ++sub) {
+                    QAbstractAnimation *baseAnim = a->animationAt(sub);
+                    KPrShapeAnimation *anim = dynamic_cast<KPrShapeAnimation *>(baseAnim);
+                    if (anim) {
+                        kDebug() << "      Animation" << anim << getAnimationName(anim);
+                    } else {
+                        kDebug() << "      NOT a KPrShapeAnimation!" << anim;
+                    }
+                }
+            } else {
+                kDebug() << "    NOT a KPrAnimationSubStep!" << animation;
+            }
+        }
+    }
+}
+
 int KPrShapeAnimations::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
