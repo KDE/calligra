@@ -90,8 +90,6 @@ set(kowidgets_LIB_SRCS
 
     KoGlobal.cpp
     KoTableView.cpp
-    
-    KoIconUtils.cpp
 
     WidgetsDebug.cpp
 
