@@ -290,6 +290,7 @@ Q_SIGNALS:
 
 private:
 
+    void dump() const;
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
