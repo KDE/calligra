@@ -90,12 +90,6 @@ int main( int argc, char** argv )
 
     QString envStringSet;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "calligra gemini", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
-        _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
-        envStringSet.append("KDEHOME ");
-    }
     if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
         envStringSet.append("KDESYCOCA ");
@@ -103,14 +97,6 @@ int main( int argc, char** argv )
     if (!env.contains("XDG_DATA_DIRS")) {
         _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
         envStringSet.append("XDG_DATA_DIRS ");
-    }
-    if (!env.contains("KDEDIR")) {
-        _putenv_s("KDEDIR", appdir.absolutePath().toLocal8Bit());
-        envStringSet.append("KDEDIR ");
-    }
-    if (!env.contains("KDEDIRS")) {
-        _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
-        envStringSet.append("KDEDIRS");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
               + appdir.absolutePath() + "/lib" + ";"

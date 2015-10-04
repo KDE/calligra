@@ -224,18 +224,8 @@ bool KoApplication::start()
     appdir.cdUp();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    if (!env.contains("KDEHOME")) {
-        qputenv("KDEHOME", QFile::encodeName(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
-    }
     if (!env.contains("XDG_DATA_DIRS")) {
         qputenv("XDG_DATA_DIRS", QFile::encodeName(appdir.absolutePath() + "/share"));
-    }
-    if (!env.contains("KDEDIR")) {
-        qputenv("KDEDIR", QFile::encodeName(appdir.absolutePath()));
-    }
-    if (!env.contains("KDEDIRS")) {
-        qputenv("KDEDIRS", QFile::encodeName(appdir.absolutePath()));
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
