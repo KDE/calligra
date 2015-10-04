@@ -20,6 +20,8 @@
 #include "FormulaPart.h"
 #include "FormulaDocument.h"
 
+#include <kcomponentdata.h>
+
 FormulaPart::FormulaPart(QObject *parent)
     : KoPart(parent)
 {

@@ -32,6 +32,7 @@
 
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <kcomponentdata.h>
 
 KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)

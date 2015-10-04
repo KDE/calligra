@@ -20,6 +20,8 @@
 #include "ChartPart.h"
 #include "ChartDocument.h"
 
+#include <kcomponentdata.h>
+
 ChartPart::ChartPart(QObject *parent)
     : KoPart(parent)
 {

@@ -33,6 +33,8 @@
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
 
+#include <kcomponentdata.h>
+
 using namespace Calligra::Sheets;
 
 Part::Part(QObject *parent)

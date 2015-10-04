@@ -24,8 +24,6 @@
 #define KOPART_H
 
 #include <QList>
-
-#include <kcomponentdata.h>
 #include <QUrl>
 
 #include "komain_export.h"
@@ -37,6 +35,8 @@ class KoView;
 class KoView;
 class KoOpenPane;
 class QGraphicsItem;
+
+class KComponentData;
 
 /**
  * Override this class in your application. It's the main entry point that

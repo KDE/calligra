@@ -109,6 +109,7 @@
 #include <ktoolbar.h>
 #include <kmenubar.h>
 #include <k4aboutdata.h>
+#include <kcomponentdata.h>
 
 #include <limits>
 

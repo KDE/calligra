@@ -26,6 +26,8 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
+#include <kcomponentdata.h>
+
 #include <CalligraVersionWrapper.h>
 
 #include <KoDocumentEntry.h>

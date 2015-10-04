@@ -35,6 +35,7 @@
 #include <KoShapeManager.h>
 
 #include <kmessagebox.h>
+#include <kcomponentdata.h>
 
 KWPart::KWPart(QObject *parent)
     : KoPart(parent)

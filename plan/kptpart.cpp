@@ -24,6 +24,7 @@
 #include "kptfactory.h"
 
 #include <kglobal.h>
+#include <kcomponentdata.h>
 
 Part::Part(QObject *parent)
     : KoPart(parent)

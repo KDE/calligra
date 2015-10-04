@@ -46,6 +46,7 @@
 #include <KoConfigAuthorPage.h>
 #include <KoUnit.h>
 
+#include <kcomponentdata.h>
 #include <kplugininfo.h>
 // #include <kpluginselector.h>
 #include <kservicetypetrader.h>

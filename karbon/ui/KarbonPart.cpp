@@ -51,6 +51,7 @@
 #include <KoCanvasBase.h>
 
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 
 KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
