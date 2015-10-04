@@ -43,8 +43,7 @@
 #include <QAction>
 
 #include <ksqueezedtextlabel.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");
@@ -309,7 +308,8 @@ void KWStatusBar::updatePageSize()
     QString text;
     if (page.isValid() && page.pageStyle().isValid()) {
         KoPageLayout l = page.pageStyle().pageLayout();
-        text = QString("%1x%2").arg(KGlobal::locale()->formatNumber(l.width, 0)).arg(KGlobal::locale()->formatNumber(l.height, 0));
+        QLocale locale;
+        text = QString::fromLatin1("%1x%2").arg(locale.toString(l.width, 'f', 0), locale.toString(l.height, 'f', 0));
     }
     m_pageSizeLabel->setText(text);
 }

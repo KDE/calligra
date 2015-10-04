@@ -37,6 +37,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
+#include <QLocale>
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
@@ -425,32 +426,33 @@ void KWStatisticsWidget::unsetCanvas()
 
 void KWStatisticsWidget::updateDataUi()
 {
+    QLocale locale;
     // calculate Flesch reading ease score:
     float flesch_score = 0;
     if (m_words > 0 && m_sentences > 0) {
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     }
-    QString flesch = KGlobal::locale()->formatNumber(flesch_score);
+    QString flesch = locale.toString(flesch_score, 'f', 2);
     QString newText[8];
-    newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
+    newText[0] = locale.toString(m_words);
     m_countWords->setText(newText[0]);
 
-    newText[1] = KGlobal::locale()->formatNumber(m_sentences, 0);
+    newText[1] = locale.toString(m_sentences);
     m_countSentences->setText(newText[1]);
 
-    newText[2] = KGlobal::locale()->formatNumber(m_syllables, 0);
+    newText[2] = locale.toString(m_syllables);
     m_countSyllables->setText(newText[2]);
 
-    newText[3] = KGlobal::locale()->formatNumber(m_lines, 0);
+    newText[3] = locale.toString(m_lines);
     m_countLines->setText(newText[3]);
 
-    newText[4] = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
+    newText[4] = locale.toString(m_charsWithSpace);
     m_countSpaces->setText(newText[4]);
 
-    newText[5] = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
+    newText[5] = locale.toString(m_charsWithoutSpace);
     m_countNospaces->setText(newText[5]);
 
-    newText[6] = KGlobal::locale()->formatNumber(m_cjkChars, 0);
+    newText[6] = locale.toString(m_cjkChars);
     m_countCjkchars->setText(newText[6]);
 
     newText[7] = flesch;
