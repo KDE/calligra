@@ -409,7 +409,7 @@ void setSelectionInfo(QDomNode * sheet, Sheet * /* table */)
     QDomNode selections =  sheet->namedItem("Selections");
     QDomNode selection = selections.namedItem("Selection");
 
-    /* Kspread does not support multiple selections.. */
+    /* Calligra Sheets does not support multiple selections.. */
     /* This code will set the selection to the last one GNUmeric's multiple
        selections. */
     while (!selection.isNull()) {
@@ -1081,7 +1081,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 
                     QDomElement style_element = gnumericStyle.toElement(); // try to convert the node to an element.
 
-                    kDebug(30521) << "Style valid for kspread";
+                    kDebug(30521) << "Style valid for Calligra Sheets";
                     kspread_cell = Cell(table, column, row);
 
                     if (style_element.hasAttribute("Fore")) {
@@ -1203,7 +1203,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString halign_string = style_element.attribute("HAlign");
 
                         if (halign_string == "1") {
-                            /* General: No equivalent in Kspread. */
+                            /* General: No equivalent in Calligra Sheets. */
                         } else if (halign_string == "2") {
                             style.setHAlign(Style::Left);
                         } else if (halign_string == "4") {
@@ -1211,9 +1211,9 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         } else if (halign_string == "8") {
                             style.setHAlign(Style::Center);
                         } else if (halign_string == "16") {
-                            /* Fill: No equivalent in Kspread. */
+                            /* Fill: No equivalent in Calligra Sheets. */
                         } else if (halign_string == "32") {
-                            /* Justify: No equivalent in Kspread */
+                            /* Justify: No equivalent in Calligra Sheets */
                         } else if (halign_string == "64") {
                             /* Centered across selection*/
                         }
@@ -1224,14 +1224,14 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString valign_string = style_element.attribute("VAlign");
 
                         if (valign_string == "1") {
-                            /* General: No equivalent in Kspread. */
+                            /* General: No equivalent in Calligra Sheets. */
                             style.setVAlign(Style::Top);
                         } else if (valign_string == "2") {
                             style.setVAlign(Style::Bottom);
                         } else if (valign_string == "4") {
                             style.setVAlign(Style::Middle);
                         } else if (valign_string == "8") {
-                            /* Justify: No equivalent in Kspread */
+                            /* Justify: No equivalent in Calligra Sheets */
                         }
                     }
 
@@ -1993,7 +1993,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         //not for cell, so gnumeric define a style as : col start=0 col end=255
         //rowstart=0 rowend=255 => we create 255*255 cells
         //and gnumeric stocke all area and not just modify area
-        //=> not good for kspread.
+        //=> not good for Calligra Sheets.
         // Norbert: activated again, only cells with texts get modified, nothing else created
         setStyleInfo(&sheet, table);
 

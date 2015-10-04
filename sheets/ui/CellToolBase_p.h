@@ -29,7 +29,7 @@
 #ifndef CALLIGRA_SHEETS_CELL_TOOL_BASE_P
 #define CALLIGRA_SHEETS_CELL_TOOL_BASE_P
 
-// KSpread
+// Sheets
 #include "CellToolBase.h"
 
 // dialogs

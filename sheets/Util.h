@@ -97,7 +97,7 @@ int         penCompare(QPen const & pen1, QPen const & pen2);
 
 /**
  * \ingroup NativeFormat
- * This namespace collects methods related to KSpread's old native file format
+ * This namespace collects methods related to old KSpread file format
  * encoding/decoding.
  */
 namespace NativeFormat

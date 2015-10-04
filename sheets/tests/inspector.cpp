@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 #include <QPen>
 
-// KSpread
+// Sheets
 #include "Cell.h"
 #include "DependencyManager.h"
 #include "Map.h"

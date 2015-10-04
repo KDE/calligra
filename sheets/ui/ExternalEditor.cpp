@@ -19,7 +19,7 @@
 
 #include "ExternalEditor.h"
 
-// KSpread
+// Sheets
 #include "CellEditor.h"
 #include "CellToolBase.h"
 #include "FormulaEditorHighlighter.h"

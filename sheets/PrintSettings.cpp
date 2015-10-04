@@ -23,7 +23,7 @@
 // Local
 #include "PrintSettings.h"
 
-// KSpread
+// Sheets
 #include "calligra_sheets_limits.h"
 #include "Region.h"
 

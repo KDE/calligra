@@ -1,5 +1,5 @@
-OpenDocument support in KSpread
-===============================
+OpenDocument support in Calligra Sheets
+=======================================
 
 Supported Features (OpenDocument's view)
 ========================================
@@ -9,7 +9,7 @@ Legend
 Status field:
 DONE	Loading and saving have been implemented.
 ----	No work has been done on this task yet.
-noop	feature not supported by KSpread yet
+noop	feature not supported by Calligra Sheets yet
 R	loading implemented
 r	loading with minor issues (comment on next line)
 W	saving implemented
@@ -178,8 +178,8 @@ Item								Prio	Status
 
 ==============================================================================
 
-Supported Features (KSpread's view)
-===================================
+Supported Features (Calligra Sheets' view)
+==========================================
 
 *Legend*
    [ ] Not implemented
@@ -223,7 +223,7 @@ Sheet
    [x] Marker position (Not reload)
    [x] Sheet properties (view options)
    [ ] Value highlighting
-   [ ] Sheet tab color (Not supported by kspread)
+   [ ] Sheet tab color (Not supported by Calligra Sheets)
 
 Document/Workbook
    [x] Active sheet
@@ -268,12 +268,12 @@ Configuration Settings
   REMARKS, INCOMPATIBILITIES, etc
 ===========================================================
 
-KSpread does not support rich text. Any cells/annotations which contain
+Calligra Sheets does not support rich text. Any cells/annotations which contain
 rich text will be converted to simple plain text.
 
-Link may not fully compatible since KSpread can only link the whole cell,
+Link may not fully compatible since Calligra Sheets can only link the whole cell,
 not partial text. For example, if the text is "Visit the website" where only
-the string "website" is a hyperlink to an URL, in KSpread the whole string
+the string "website" is a hyperlink to an URL, in Calligra Sheets the whole string
 "Visit the website" becomes the link. Consequently, if the text contains
 two or more links, only the first link will be used.
 (I will fixe when we convert it to kotext)

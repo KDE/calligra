@@ -296,7 +296,7 @@ FormulaDialog::~FormulaDialog()
 void FormulaDialog::slotPressReturn()
 {
     //laurent 2001-07-07 desactivate this code
-    //because kspread crash.
+    //because Calligra Sheets crash.
     //TODO fix it
     /*
     if( !functions->currentText().isEmpty() )

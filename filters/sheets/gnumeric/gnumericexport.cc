@@ -649,13 +649,13 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     cell_style.setAttribute("Rotation", QString::number(-1*style.angle()));
 
     // The indentation in GNumeric is an integer value. In Calligra Sheets, it's a double.
-    // Save the double anyway, makes it even better when importing the document back in KSpread.
+    // Save the double anyway, makes it even better when importing the document back in Calligra Sheets.
     // TODO verify if it's correct, in import we "* 10.0"
     cell_style.setAttribute("Indent", QString::number(style.indentation()));
 
     cell_style.setAttribute("Locked", !style.notProtected());
 
-    // A KSpread cell can have two options to hide: only formula hidden, or everything hidden.
+    // A Calligra Sheets cell can have two options to hide: only formula hidden, or everything hidden.
     // I only consider a cell with everything hidden as hidden.
     // Gnumeric hides everything or nothing.
     cell_style.setAttribute("Hidden", style.hideAll());
@@ -1080,7 +1080,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.setAttribute("HideGrid", !table->getShowGrid() ? "true" : "false");
         sheet.setAttribute("HideColHeader", (!ksdoc->map()->settings()->showColumnHeader() ? "true" : "false"));
         sheet.setAttribute("HideRowHeader", (!ksdoc->map()->settings()->showRowHeader() ? "true" : "false"));
-        /* Not available in KSpread ?
+        /* Not available in Calligra Sheets ?
          * sheet.setAttribute("DisplayOutlines", "true");
          * sheet.setAttribute("OutlineSymbolsBelow", "true");
          * sheet.setAttribute("OutlineSymbolsRight", "true");
@@ -1106,7 +1106,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.appendChild(tmp);
 
         // Zoom value doesn't appear to be correct
-        // KSpread 200% gives zoom() = 2.5, this in GNumeric = 250%
+        // Calligra Sheets 200% gives zoom() = 2.5, this in GNumeric = 250%
         tmp = gnumeric_doc.createElement("gmr:Zoom");
         if (view)
             tmp.appendChild(gnumeric_doc.createTextNode(QString::number(view->zoomHandler()->zoom())));

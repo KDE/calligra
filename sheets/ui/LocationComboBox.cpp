@@ -19,7 +19,7 @@
 
 #include "LocationComboBox.h"
 
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

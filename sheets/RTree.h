@@ -44,7 +44,7 @@ namespace Sheets
  * \brief An R-Tree template
  * \ingroup Storage
  *
- * An R-Tree template extended by special needs of KSpread:
+ * An R-Tree template extended by special needs of Calligra Sheets:
  * \li adjusts the rectangles on insertion to avoid unwanted overlapping
  * (caused by different intersection/containment behaviour of QRectF and QRect)
  * \li checks for sane rectangle dimensions
@@ -99,7 +99,7 @@ public:
      * This will insert a data item into the tree. If necessary the tree will
      * adjust itself.
      *
-     * \note Reimplemented for KSpread, because of the QRectF behaviour differs from
+     * \note Reimplemented for Calligra Sheets, because of the QRectF behaviour differs from
      * the one of QRect. Intersection or containment for boundary lines or points is
      * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
      * QRect it does not. Therefore, this method subtracts 0.1 from the width and
@@ -135,7 +135,7 @@ public:
     /**
      * @brief Find all data items which intersects rect
      *
-     * \note Reimplemented for KSpread, because of the QRectF behaviour differs from
+     * \note Reimplemented for Calligra Sheets, because of the QRectF behaviour differs from
      * the one of QRect. Intersection or containment for boundary lines or points is
      * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
      * QRect it does not. Therefore, this method subtracts 0.1 from the width and

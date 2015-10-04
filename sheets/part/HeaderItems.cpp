@@ -66,7 +66,7 @@
 #include <KoPointerEvent.h>
 #include <KoUnit.h>
 
-// KSpread
+// Sheets
 #include "CanvasItem.h"
 #include "Cell.h"
 #include "Doc.h"

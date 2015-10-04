@@ -659,7 +659,7 @@ bool KoOdfChartWriter::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     }
 
     // Area diagrams are special in that Excel displays the areas in another
-    // order than OpenOffice.org and KSpread. To make sure the same areas are
+    // order than OpenOffice.org and Calligra Sheets. To make sure the same areas are
     // visible we do the same as OpenOffice.org does and reverse the order.
     if (chart()->m_impl->name() == "area") {
         for (int i = chart()->m_series.count() - 1; i >= 0; --i) {

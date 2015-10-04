@@ -1661,7 +1661,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     int maxColumn = 1;
     KoXmlNode rowNode = sheetElement.firstChild();
     // Some spreadsheet programs may support more rows than
-    // KSpread so limit the number of repeated rows.
+    // Calligra Sheets so limit the number of repeated rows.
     // FIXME POSSIBLE DATA LOSS!
 
     // First load all style information for rows, columns and cells
@@ -1898,7 +1898,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         bool ok = true;
         int n = column.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
         if (ok)
-            // Some spreadsheet programs may support more rows than KSpread so
+            // Some spreadsheet programs may support more rows than Calligra Sheets so
             // limit the number of repeated rows.
             // FIXME POSSIBLE DATA LOSS!
             number = qMin(n, KS_colMax - indexCol + 1);
@@ -2060,7 +2060,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         bool ok = true;
         int n = row.attributeNS(KoXmlNS::table, sNumberRowsRepeated, QString()).toInt(&ok);
         if (ok)
-            // Some spreadsheet programs may support more rows than KSpread so
+            // Some spreadsheet programs may support more rows than Calligra Sheets so
             // limit the number of repeated rows.
             // FIXME POSSIBLE DATA LOSS!
             number = qMin(n, KS_rowMax - rowIndex + 1);
@@ -2130,7 +2130,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         bool ok = false;
         const int n = cellElement.attributeNS(KoXmlNS::table, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
-        // KSpread so limit the number of repeated columns.
+        // Calligra Sheets so limit the number of repeated columns.
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
         columnMaximal = qMax(numberColumns, columnMaximal);
 

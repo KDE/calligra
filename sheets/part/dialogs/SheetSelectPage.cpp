@@ -27,7 +27,7 @@
 
 // Calligra includes
 #include <KoIcon.h>
-// KSpread includes
+// Sheets
 
 using namespace Calligra::Sheets;
 

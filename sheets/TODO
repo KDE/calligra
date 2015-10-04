@@ -1,4 +1,4 @@
-This file describes the tasks at hand for making KSpread a better product.
+This file describes the tasks at hand for making Calligra Sheets a better product.
 
 Legend
 ======
@@ -65,10 +65,10 @@ Item										Prio	Status
   - "Insert Link...": same as for "Insert Comment...", if applicable
 
 * Source code organization                                                      3       ----
-  - Move the .cpp/.h files in kspread/ to kspread/core/.
-  - Move kspread/functions/ to kspread/plugins/functions/.
-  - Move kspread/dialogs/ to kspread/ui/dialogs/.
-  - Move kspread/commands/ to kspread/core/commands/.
+  - Move the .cpp/.h files in sheets/ to sheets/core/.
+  - Move sheets/functions/ to sheets/plugins/functions/.
+  - Move sheets/dialogs/ to sheets/ui/dialogs/.
+  - Move sheets/commands/ to sheets/core/commands/.
 
 * User Interface                                                                1       ----
   - Add a 'Go' ('Navigation') menu to select the active sheet. Reuse the actions
@@ -208,7 +208,7 @@ Item										Prio	Status
   entiation between absolute and relative addresses is not possible. Therefore,
   a table name has to exist in the address and dollar signs are ignored.")
   OpenOffice does allow their movement though; an autofilter moves there.
-  KSpread should go the most generic way: allow range movements and allow
+  Calligra Sheets should go the most generic way: allow range movements and allow
   to fix the ranges by dollar signs, even if these are ignored in the ODF in
   this case.
 
@@ -278,7 +278,7 @@ Item										Prio	Status
         - named areas ("Bookmarks" menu)
 
 * Modularization                                                                3       ----
-    The goal is to make KSpread more modular. Functionality like cell content
+    The goal is to make Calligra Sheets more modular. Functionality like cell content
     validation (Validity), source and target cell ranges for external data or
     named areas should become optional. Maybe even more like (conditional)
     styles, comments, cell fusions, etc, so that what's left is the bare
@@ -364,7 +364,7 @@ Things not in bugzilla
 
 * OpenFormula compliance (Medium group)
   - implement all functions of the Small and Medium group	      1 ----
-    see calligra/kspread/functions/TODO
+    see calligra/sheets/functions/TODO
   - implement the calculation settings				      1 ----
     see section 8.5.2 in [1] and section 3.3 in [2]
 

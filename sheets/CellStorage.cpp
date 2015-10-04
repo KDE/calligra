@@ -35,7 +35,7 @@
 // Calligra
 #include <KoXmlWriter.h>
 
-// KSpread
+// Sheets
 #include "BindingStorage.h"
 #include "ConditionsStorage.h"
 #include "Damages.h"

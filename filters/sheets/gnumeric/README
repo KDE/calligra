@@ -1,6 +1,6 @@
-This is a GNUmeric import and export filter for kspread.
+This is a GNUmeric import and export filter for Calligra Sheets.
 
-This is heavily based on the kspread CSV import and export filters.
+This is heavily based on the Calligra Sheets CSV import and export filters.
 
 It has been tested with Gnumeric v0.61 and kspread v1.0.
 

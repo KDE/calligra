@@ -41,7 +41,7 @@ class View;
 class CellProxy;
 
 /**
-* The ViewAdaptor class provides access to a view on a KSpread document.
+* The ViewAdaptor class provides access to a view on a Calligra Sheets document.
 */
 class CALLIGRA_SHEETS_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {

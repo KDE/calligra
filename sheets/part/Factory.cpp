@@ -42,7 +42,7 @@ Factory::Factory()
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is KSpread.
+    // main app is Calligra Sheets.
     (void)global();
 }
 

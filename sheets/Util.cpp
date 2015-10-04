@@ -363,7 +363,7 @@ QPen Calligra::Sheets::Odf::decodePen(const QString &border)
         pen.setStyle(Qt::NoPen);
         return pen;
     }
-    //code from koborder, for the moment kspread doesn't use koborder
+    //code from koborder, for the moment Calligra Sheets doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
     QByteArray _style = border.section(' ', 1, 1).toLatin1();

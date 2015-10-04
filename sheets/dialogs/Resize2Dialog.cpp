@@ -37,7 +37,7 @@
 #include <KoUnit.h>
 #include <KoUnitDoubleSpinBox.h>
 
-// KSpread
+// Sheets
 #include <Global.h>
 #include <Localization.h>
 #include "Map.h"

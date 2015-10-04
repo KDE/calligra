@@ -45,7 +45,7 @@
 
 #include <KoCanvasBase.h>
 
-// KSpread
+// Sheets
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

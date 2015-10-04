@@ -37,7 +37,7 @@
 // Qt
 #include <QExplicitlySharedDataPointer>
 
-// KSpread
+// Sheets
 #include "Global.h"
 #include "Style.h"
 

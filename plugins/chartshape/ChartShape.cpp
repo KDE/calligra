@@ -982,14 +982,14 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     helper->tableSource = &d->tableSource;
     helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
 
-    // Get access to sheets in KSpread
+    // Get access to sheets in Calligra Sheets
     QAbstractItemModel *sheetAccessModel = 0;
     if (resourceManager() &&
-         resourceManager()->hasResource(75751149)) { // duplicated from kspread
+         resourceManager()->hasResource(75751149)) { // duplicated from Calligra Sheets
         QVariant var = resourceManager()->resource(75751149);
         sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
         if (sheetAccessModel) {
-            // We're embedded in KSpread, which means KSpread provides the data
+            // We're embedded in Calligra Sheets, which means Calligra Sheets provides the data
             d->usesInternalModelOnly = false;
             d->tableSource.setSheetAccessModel(sheetAccessModel);
             helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
@@ -1162,7 +1162,7 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.
     //
-    //        Also, I have to check with the other apps, e.g. kspread,
+    //        Also, I have to check with the other apps, e.g. Calligra Sheets,
     //        if it works there too.
     //
     QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();

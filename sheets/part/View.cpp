@@ -190,7 +190,7 @@ public:
     // all UI actions
     ViewActions* actions;
 
-    // if true, kspread is still loading the document
+    // if true, Calligra Sheets is still loading the document
     // don't try to refresh the view
     bool loading;
 
@@ -732,7 +732,7 @@ void View::initView()
     d->canvas->resourceManager()->setResource(CanvasResource::Selection, variant);
     variant.setValue<QObject*>(doc()->map()->bindingManager());
 
-    // Load the KSpread Tools
+    // Load the Calligra Sheets Tools
     ToolRegistry::instance()->loadTools();
 
     if (mainWindow())

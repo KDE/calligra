@@ -103,7 +103,7 @@ EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
 {
     Function *f;
 
-    f = new Function("BASE",        func_base);     // KSpread-specific, like in Quattro-Pro
+    f = new Function("BASE",        func_base);     // Calligra Sheets-specific, like in Quattro-Pro
     f->setParamCount(1, 3);
     add(f);
     f = new Function("BESSELI",     func_besseli);

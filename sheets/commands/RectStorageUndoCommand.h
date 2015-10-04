@@ -25,7 +25,7 @@
 #include <QPair>
 #include <kundo2command.h>
 
-// KSpread
+// Sheets
 #include "ModelSupport.h"
 #include "SheetModel.h"
 

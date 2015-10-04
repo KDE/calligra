@@ -149,7 +149,7 @@ Doc::Doc(KoPart *part)
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
 #endif
 
-    // Init chart shape factory with KSpread's specific configuration panels.
+    // Init chart shape factory with Calligra Sheets' specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
         QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);

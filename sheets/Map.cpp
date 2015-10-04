@@ -241,7 +241,7 @@ bool Map::completeLoading(KoStore *store)
     // Initial build of all cell dependencies.
     d->dependencyManager->updateAllDependencies(this, dependencyUpdater);
     // Recalc the whole workbook now, since there may be formulas other spreadsheets support,
-    // but KSpread does not.
+    // but Calligra Sheets does not.
     d->recalcManager->recalcMap(recalcUpdater);
 
     return true;

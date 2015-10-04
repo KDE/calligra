@@ -1,4 +1,4 @@
-This is a CSV filter for kspread.
+This is a CSV filter for Calligra Sheets.
 
 At first it was only an input filter, hence the files named "csvfilter*".
 Then I added an export filter and named it csvexport*

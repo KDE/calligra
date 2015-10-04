@@ -328,7 +328,7 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to KSpread's old file format
+    //BEGIN Methods related to old KSpread file format
     //
 
     /**
@@ -350,7 +350,7 @@ public:
     bool loadChildren(KoStore* _store);
 
     //
-    //END Methods related to KSpread's old file format
+    //END Methods related to old KSpread file format
     //
     //////////////////////////////////////////////////////////////////////////
     //

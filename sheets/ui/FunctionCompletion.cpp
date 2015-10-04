@@ -19,7 +19,7 @@
 
 #include "FunctionCompletion.h"
 
-// KSpread
+// Sheets
 #include "CellEditor.h"
 #include "Function.h"
 #include "FunctionDescription.h"

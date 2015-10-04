@@ -19,7 +19,7 @@
 
 #include "CellEditor.h"
 
-// KSpread
+// Sheets
 #include "ApplicationSettings.h"
 #include "CellToolBase.h"
 #include "Formula.h"

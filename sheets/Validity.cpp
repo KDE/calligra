@@ -27,7 +27,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-// KSpread
+// Sheets
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "Map.h"

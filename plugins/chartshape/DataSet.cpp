@@ -432,7 +432,7 @@ QVariant DataSet::Private::data(const CellRegion &region, int index, int role) c
     // Check if the data point is valid
     const bool validDataPoint = isValidDataPoint(dataPoint);
 
-    // Remove, since it makes kspread crash when inserting a chart for
+    // Remove, since it makes Calligra Sheets crash when inserting a chart for
     // a 1x1 cell region.
     //Q_ASSERT(validDataPoint);
     if (!validDataPoint)

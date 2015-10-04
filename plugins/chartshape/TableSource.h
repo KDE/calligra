@@ -82,10 +82,10 @@ public:
 
     /**
      * Sets the KSpread::SheetAccessModel instance to use to get notified
-     * about added/removed/renamed sheets in KSpread.
+     * about added/removed/renamed sheets in Calligra Sheets.
      *
-     * This method is only relevant if the chart is embedded in KSpread or
-     * somehow needs access to KSpread's sheets.
+     * This method is only relevant if the chart is embedded in Calligra Sheets or
+     * somehow needs access to Calligra Sheets' sheets.
      */
     void setSheetAccessModel(QAbstractItemModel *model);
 

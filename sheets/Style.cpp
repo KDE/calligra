@@ -950,7 +950,7 @@ QString Style::saveOdfStyleNumericDate(KoGenStyles&mainStyles, Format::Type _sty
     QString format;
     bool locale = false;
     switch (_style) {
-        //TODO fixme use locale of kspread and not kglobal
+        //TODO fixme use locale of Calligra Sheets and not kglobal
     case Format::ShortDate:
         format = KLocale::global()->dateFormatShort();
         locale = true;

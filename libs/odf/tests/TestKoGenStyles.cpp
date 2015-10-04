@@ -288,10 +288,10 @@ void TestKoGenStyles::testDefaultStyle()
     defaultStyle.writeStyle(&writer, coll, "style:default-style", defaultStyleName, "style:paragraph-properties");
     TEST_END_QTTEST("<r>\n <style:default-style style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:default-style>\n</r>\n");
 
-    // The kspread case: not writing out all properties, only if they differ
+    // The Calligra Sheets case: not writing out all properties, only if they differ
     // from the default style.
     // KoGenStyles doesn't fetch info from the parent style when testing
-    // for equality, so KSpread uses isEmpty() to check for equality-to-parent.
+    // for equality, so Calligra Sheets uses isEmpty() to check for equality-to-parent.
     KoGenStyle dataStyle(KoGenStyle::ParagraphStyle, "paragraph", defaultStyleName);
     QVERIFY(dataStyle.isEmpty());
     // and then it doesn't look up the auto style, but rather uses the parent style directly.

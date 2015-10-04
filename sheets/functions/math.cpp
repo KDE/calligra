@@ -164,7 +164,7 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     f = new Function("FACTDOUBLE",    func_factdouble);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE");
     add(f);
-    f = new Function("FIB",           func_fib);  // KSpread-specific, like Quattro-Pro's FIB
+    f = new Function("FIB",           func_fib);  // Calligra Sheets-specific, like Quattro-Pro's FIB
     add(f);
     f = new Function("FLOOR",         func_floor);
     f->setParamCount(1, 3);

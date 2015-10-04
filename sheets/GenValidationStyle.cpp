@@ -24,7 +24,7 @@
 // Calligra
 #include <KoXmlWriter.h>
 
-// KSpread
+// Sheets
 #include "Validity.h"
 #include "ValueConverter.h"
 

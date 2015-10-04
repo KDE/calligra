@@ -26,7 +26,7 @@
 
 /*
     The formula parsing, compiling and evaluating is based on
-    kspreads formula engine written by Ariya Hidayat.
+    Calligra Sheets formula engine written by Ariya Hidayat.
     There is a DESIGN.html file in the kspreads directory which
     explains how the engine is working.
     The engine was stripped down a little to only support the

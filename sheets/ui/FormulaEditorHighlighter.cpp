@@ -19,7 +19,7 @@
 
 #include "FormulaEditorHighlighter.h"
 
-// KSpread
+// Sheets
 #include "Formula.h"
 #include "Selection.h"
 #include "Sheet.h"

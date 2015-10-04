@@ -45,7 +45,7 @@
 // Calligra
 #include "calligra_sheets_export.h"
 
-// KSpread
+// Sheets
 #include "Condition.h"
 
 #include "KoXmlReaderForward.h"

@@ -2154,7 +2154,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
     else if ((!t.isEmpty()) && (t[0] == '!')) {
         // KSpread pre 1.4 stores hyperlink as rich text (first char is '!')
         // extract the link and the correspoding text
-        // This is a rather dirty hack, but enough for KSpread generated XML
+        // This is a rather dirty hack, but enough for Calligra Sheets generated XML
         bool inside_tag = false;
         QString qml_text;
         QString tag;

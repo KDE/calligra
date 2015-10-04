@@ -30,7 +30,7 @@ namespace Sheets
 
 /**
  * \ingroup Embedding
- * KSpread specific data attached to each shape.
+ * Calligra Sheets specific data attached to each shape.
  */
 class CALLIGRA_SHEETS_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
 {

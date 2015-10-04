@@ -899,7 +899,7 @@ QString Region::loadOdf(const QString& expression)
     bool isRange = false;
     enum { Start, InQuotes } state = Start;
     int i = 0;
-    // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+    // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
     if (expression[i] == '$')
         ++i;
     while (i < expression.count()) {
@@ -920,7 +920,7 @@ QString Region::loadOdf(const QString& expression)
                 result.append(temp);
                 result.append(':');
                 temp.clear();
-                // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+                // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
                 if (i + 2 < expression.count() && expression[i+1] == '$' && expression[i+2] != '.')
                     ++i;
             } else if (expression[i] == ' ') { // range separator

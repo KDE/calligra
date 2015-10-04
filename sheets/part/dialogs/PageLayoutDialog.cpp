@@ -19,7 +19,7 @@
 
 #include "PageLayoutDialog.h"
 
-// KSpread
+// Sheets
 #include "part/Doc.h"
 #include "Map.h"
 #include "PrintSettings.h"

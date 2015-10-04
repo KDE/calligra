@@ -133,7 +133,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
         }
     }
 
-    // replace all OpenDocument internal parent names by KSpread's style names
+    // replace all OpenDocument internal parent names by Calligra Sheets' style names
     foreach(CustomStyle* style, m_styles) {
         if (!style->parentName().isNull()) {
             const QString parentOdfName = style->parentName();

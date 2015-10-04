@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <ktextedit.h>
 
-//KSpread includes
+// Sheets
 #include "Cell.h"
 #include "ui/Selection.h"
 #include "Sheet.h"

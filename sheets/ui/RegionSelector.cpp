@@ -19,7 +19,7 @@
 
 #include "RegionSelector.h"
 
-// KSpread
+// Sheets
 #include "FormulaEditorHighlighter.h"
 #include "Selection.h"
 

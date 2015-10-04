@@ -66,7 +66,7 @@ class TabBar;
 
 /**
  * @class View
- * @brief The View class displays a KSpread document.
+ * @brief The View class displays a Calligra Sheets document.
  * View is used to display a spreadsheet document and provide
  * the interface for the user to perform editing and data analysis.
  *

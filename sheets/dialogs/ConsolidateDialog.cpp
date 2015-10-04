@@ -44,7 +44,7 @@
 
 #include <KoIcon.h>
 
-//KSpread Includes
+// Sheets
 #include <Global.h>
 #include "calligra_sheets_limits.h"
 #include <Localization.h>

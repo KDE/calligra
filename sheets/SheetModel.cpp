@@ -19,7 +19,7 @@
 
 #include "SheetModel.h"
 
-// KSpread
+// Sheets
 #include "Binding.h"
 #include "Cell.h"
 #include "CellStorage.h"
@@ -83,7 +83,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
             return QVariant();
         }
     }
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     const Cell cell = Cell(d->sheet, index.column() + 1, index.row() + 1).masterCell();
     const Style style = cell.effectiveStyle();
     if (role == Qt::DisplayRole) {
@@ -163,7 +163,7 @@ Qt::ItemFlags SheetModel::flags(const QModelIndex& index) const
 
 QVariant SheetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             return Cell::columnName(section + 1);
@@ -216,7 +216,7 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
             return false;
         }
     }
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     const int column = index.column() + 1;
     const int row = index.row() + 1;
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();

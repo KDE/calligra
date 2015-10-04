@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-// KSpread
+// Sheets
 #include "ui/Selection.h"
 #include "Sheet.h"
 

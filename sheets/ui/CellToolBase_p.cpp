@@ -43,7 +43,7 @@
 #include "CellToolBase_p.h"
 #include "CellToolBase.h"
 
-// KSpread
+// Sheets
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"

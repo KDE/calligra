@@ -86,7 +86,7 @@
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Global.h"

@@ -65,7 +65,7 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 
-// KSpread
+// Sheets
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"

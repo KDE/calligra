@@ -602,7 +602,7 @@ void ChartConfigWidget::open(KoShape* shape)
 
     d->tableSource = d->shape->tableSource();
 
-// NOTE: There's no single source table anymore, a KSpread workbook allows multiple to be used with a chart.
+// NOTE: There's no single source table anymore, a Calligra Sheets workbook allows multiple to be used with a chart.
 //    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>(d->shape->internalModel());
 // NOTE: This is obsolete, ChartShape::usesInternalModelOnly() is now used instead.
 //    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>(d->shape->model());

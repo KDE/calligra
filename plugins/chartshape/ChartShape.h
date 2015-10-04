@@ -175,7 +175,7 @@ public:
     /**
      * Sets the SheetAccessModel to be used by this chart.
      *
-     * See kspread/SheetAccessModel.h for details.
+     * See sheets/SheetAccessModel.h for details.
      */
     void setSheetAccessModel(QAbstractItemModel* model);
 

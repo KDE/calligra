@@ -37,7 +37,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "FormulaStorage.h"
 #include "LoadingInfo.h"

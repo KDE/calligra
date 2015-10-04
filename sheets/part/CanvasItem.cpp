@@ -89,7 +89,7 @@
 #include <KoShapeManagerPaintingStrategy.h>
 #include <KoCanvasResourceManager.h>
 
-// KSpread
+// Sheets
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Damages.h"

@@ -1,6 +1,6 @@
 /*************************************************************************
  * This implementation has been taken from the OpenOffice 1.0 and modified
- * to use KSpread data types.
+ * to use Calligra Sheets data types.
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *

@@ -19,7 +19,7 @@
 
 #include "RegionModel.h"
 
-// KSpread
+// Sheets
 #include "Region.h"
 #include "Sheet.h"
 

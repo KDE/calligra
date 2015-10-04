@@ -31,7 +31,7 @@
 // KDE
 #include <klocale.h>
 
-// KSpread
+// Sheets
 #include "calligra_sheets_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"

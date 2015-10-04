@@ -29,7 +29,7 @@
 // Local
 #include "SortDialog.h"
 
-// KSpread
+// Sheets
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"

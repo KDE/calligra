@@ -12,13 +12,13 @@ cell(s) for calculating the result. For example, if cell A11 has the formula
 A10 must be correctly calculated first before the sum can be obtained for
 cell A11. This is called <i>dependency</i>.</p>
 
-<p>As for now, KSpread tries to manage dependency by storing the dependent
+<p>As for now, Calligra Sheets tries to manage dependency by storing the dependent
 cells or ranges in the cell itself. This is not too efficient. If a cell
 is very simple, i.e. stored only value, not formula, such scheme will just
 waste a couple of bytes of pointers for the dependency data structure.
 It is much more wiser to simply create one <i>dependency manager</i> for each
 worksheet; it should be responsible for maintaining and handling cell
-dependencies for that sheet. Also KSpread always stores ranges which depend
+dependencies for that sheet. Also Calligra Sheets always stores ranges which depend
 on one particular cell and ranges whose one of its dependent is that cell
 (and these are all in the cell structure itself). This is not necessary as
 that information is redundant. The dependency manager should be able to handle

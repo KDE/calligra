@@ -29,7 +29,7 @@
 #include "CellToolBase.h"
 #include "CellToolBase_p.h"
 
-// KSpread
+// Sheets
 #include "ActionOptionWidget.h"
 #include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"

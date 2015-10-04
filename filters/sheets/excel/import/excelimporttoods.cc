@@ -537,7 +537,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         addConfigItem(entry, "FirstLetterUpper", false);
         addConfigItem(entry, "ShowFormulaIndicator", false);
         addConfigItem(entry, "ShowCommentIndicator", true);
-        addConfigItem(entry, "ShowPageOutline", sheet->isPageBreakViewEnabled()); // best match kspread provides
+        addConfigItem(entry, "ShowPageOutline", sheet->isPageBreakViewEnabled()); // best match Sheets provides
         addConfigItem(entry, "lcmode", false);
         addConfigItem(entry, "autoCalc", sheet->autoCalc());
         addConfigItem(entry, "ShowColumnNumber", false);
