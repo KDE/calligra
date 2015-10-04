@@ -33,12 +33,11 @@
 #include <QPainter>
 #include <QImage>
 #include <QFont>
+#include <QStandardPaths>
 
 //KF5 Headers
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 //Calligra Headers
@@ -230,8 +229,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     KoShapeLoadingContext shapeContext(context, 0);
     KoXmlDocument doc;
 
-    const KStandardDirs* dirs = KGlobal::dirs();
-    const QString filePath = dirs->findResource("data", "stage/animations/animations.xml");
+    const QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "stage/animations/animations.xml");
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         QString errorMessage;
