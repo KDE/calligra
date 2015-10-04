@@ -559,17 +559,10 @@ set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
-    set(KDE4_ICON_DIR ${KDE_INSTALL_FULL_ICONDIR})
-    message(STATUS "using oxygen application icons from ${KDE4_ICON_DIR}")
-
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
                         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
                         LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
                         ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-else()
-    set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
 endif()
 
 ##
