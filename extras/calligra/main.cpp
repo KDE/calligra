@@ -21,7 +21,7 @@
 
 #include <k4aboutdata.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <KoServiceLocator.h>
