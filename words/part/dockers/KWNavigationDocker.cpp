@@ -19,12 +19,13 @@
 
 #include "KWNavigationDocker.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <KoCanvasResourceManager.h>
 #include <KWCanvas.h>
 
 #include <dockers/KWNavigationWidget.h>
+
+#include <klocalizedstring.h>
 
 KWNavigationDocker::KWNavigationDocker()
     : m_canvasReset(false)

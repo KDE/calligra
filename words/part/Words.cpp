@@ -20,7 +20,7 @@
 #include "Words.h"
 #include "frames/KWTextFrameSet.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 namespace Words
 {

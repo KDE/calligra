@@ -20,7 +20,6 @@
 
 #include "KWRdfDockerTree.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 

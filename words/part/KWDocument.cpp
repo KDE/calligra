@@ -82,7 +82,7 @@
 #include <KoUpdater.h>
 
 // KDE + Qt includes
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

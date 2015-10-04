@@ -25,7 +25,7 @@
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape)
 {

@@ -25,7 +25,6 @@
 
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <klocale.h>
 #include <QFile>
 #include <QPair>
 

@@ -19,10 +19,11 @@
 
 #include "KWDebugDocker.h"
 
-#include <klocale.h>
 #include <KWCanvas.h>
 
 #include <dockers/KWDebugWidget.h>
+
+#include <klocalizedstring.h>
 
 KWDebugDocker::KWDebugDocker()
     : m_debugWidget(new KWDebugWidget(this))

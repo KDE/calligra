@@ -19,10 +19,11 @@
 
 #include "CAuOutlinerDocker.h"
 
-#include <klocale.h>
 #include <KWCanvas.h>
 
 #include <author/dockers/CAuOutlinerWidget.h>
+
+#include <klocalizedstring.h>
 
 CAuOutlinerDocker::CAuOutlinerDocker()
     : m_outlinerWidget(new CAuOutlinerWidget(this))

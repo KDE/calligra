@@ -22,7 +22,7 @@
 #define CAUABOUTDATA_H
 
 #include <k4aboutdata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <calligraversion.h>
 
 static const char AUTHOR_DESCRIPTION[] = I18N_NOOP("Author tool");

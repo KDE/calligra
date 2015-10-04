@@ -41,7 +41,6 @@
 
 #include <changetracker/KoChangeTracker.h>
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <QTextDocument>
 #include <QTextBlock>

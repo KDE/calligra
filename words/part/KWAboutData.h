@@ -21,7 +21,7 @@
 #define KWABOUTDATA_H
 
 #include <k4aboutdata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <calligraversion.h>
 
 static const char WORDS_DESCRIPTION[] = I18N_NOOP("Word processor");

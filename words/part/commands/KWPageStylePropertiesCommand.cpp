@@ -25,7 +25,6 @@
 
 #include <KoShapeMoveCommand.h>
 
-#include <klocale.h>
 #include <kdebug.h>
 
 KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent)

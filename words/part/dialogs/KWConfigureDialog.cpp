@@ -30,7 +30,7 @@
 #include <KoDocument.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPushButton>
 

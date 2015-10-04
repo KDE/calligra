@@ -28,6 +28,7 @@
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include <KoTextEditor.h>
 #include <KoShapeController.h>
 #include <KoToolProxy.h>
@@ -35,13 +36,12 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <kmenu.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <QTextDocument>
-#include <kmenu.h>
 
-#include "KoRdfSemanticTreeWidgetItem.h"
 
 KWRdfDocker::KWRdfDocker()
     : m_canvas(0),

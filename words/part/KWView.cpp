@@ -99,7 +99,7 @@
 #include <QScrollBar>
 #include <QPushButton>
 #include <QClipboard>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>

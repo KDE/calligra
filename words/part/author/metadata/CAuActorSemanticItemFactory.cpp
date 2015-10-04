@@ -22,8 +22,8 @@
 
 // plugin
 #include <author/metadata/CAuActorRdf.h>
-// KDE
-#include <KLocale>
+// KF5
+#include <klocalizedstring.h>
 // Qt
 #include <QMimeData>
 

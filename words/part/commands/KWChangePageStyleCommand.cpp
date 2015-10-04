@@ -20,7 +20,6 @@
 #include "KWChangePageStyleCommand.h"
 #include "../KWDocument.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 
 KWChangePageStyleCommand::KWChangePageStyleCommand(KWDocument *document, KWPage &page, const KWPageStyle &newStyle, KUndo2Command *parent)
