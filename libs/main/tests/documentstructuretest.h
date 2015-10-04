@@ -22,8 +22,6 @@
 
 #include <QObject>
 
-class KComponentData;
-
 class DocumentStructureTest : public QObject
 {
     Q_OBJECT
@@ -41,9 +39,6 @@ private Q_SLOTS:
     void predefinedMetaData();
     void multipleDocumentContents();
     void singleDocumentContents();
-
-private:
-    KComponentData *componentData;
 };
 
 #endif // DOCUMENTSTRUCTURETEST_H

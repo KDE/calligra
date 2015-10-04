@@ -19,12 +19,11 @@
 
 #include "KoFilterChain.h"
 #include "KoFilterManager.h"
-#include "kcomponentdata.h"
+
 #include <kdebug.h>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-    KComponentData componentData("filterchain_test");    // we need an instance when using the trader
     CalligraFilter::Graph g("application/x-kspread");
     g.dump();
     g.setSourceMimeType("application/vnd.oasis.opendocument.text");

@@ -28,17 +28,14 @@
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoXmlNS.h>
-#include <kcomponentdata.h>
 
 // May the testing begin
 DocumentStructureTest::DocumentStructureTest()
 {
-    componentData = new KComponentData("DocumentStructureTest");
 }
 
 DocumentStructureTest::~DocumentStructureTest()
 {
-    delete componentData;
 }
 
 // initTestCase/cleanupTestCase are called beginning and end of test suite

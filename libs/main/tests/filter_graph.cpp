@@ -21,16 +21,15 @@
 #include <QByteArray>
 #include <QList>
 #include <QPluginLoader>
+
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
-#include "kcomponentdata.h"
+
 #include <kdebug.h>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-    KComponentData componentData("filter_graph");    // we need an instance when using the trader
-
     QByteArray output = "digraph filters {\n";
 
     // The following code is shamelessly copied over from Calligra::Graph::buildGraph
