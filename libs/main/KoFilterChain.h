@@ -52,7 +52,7 @@ namespace CalligraFilter
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KOMAIN_EXPORT KoFilterChain : public KShared
+class KOMAIN_EXPORT KoFilterChain : public QSharedData
 {
     // Only Calligra::Graph is allowed to construct instances and
     // add chain links.
@@ -60,7 +60,7 @@ class KOMAIN_EXPORT KoFilterChain : public KShared
     friend class KoFilterManager;
 
 public:
-    typedef KSharedPtr<KoFilterChain> Ptr;
+    typedef QExplicitlySharedDataPointer<KoFilterChain> Ptr;
 
     virtual ~KoFilterChain();
 
