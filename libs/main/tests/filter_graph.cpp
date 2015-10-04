@@ -71,8 +71,8 @@ int main(int /*argc*/, char ** /*argv*/)
     for (; it != end; ++it) {
         kDebug() << "import" << (*it)->import << " export" << (*it)->export_;
         // First add the "starting points"
-        QStringList::ConstIterator importIt = (*it)->import.begin();
-        QStringList::ConstIterator importEnd = (*it)->import.end();
+        QStringList::ConstIterator importIt = (*it)->import.constBegin();
+        QStringList::ConstIterator importEnd = (*it)->import.constEnd();
         for (; importIt != importEnd; ++importIt) {
             // already there?
             if (! vertices.contains(*importIt)) {
@@ -83,8 +83,8 @@ int main(int /*argc*/, char ** /*argv*/)
             }
         }
 
-        QStringList::ConstIterator exportIt = (*it)->export_.begin();
-        QStringList::ConstIterator exportEnd = (*it)->export_.end();
+        QStringList::ConstIterator exportIt = (*it)->export_.constBegin();
+        QStringList::ConstIterator exportEnd = (*it)->export_.constEnd();
 
         for (; exportIt != exportEnd; ++exportIt) {
             // First make sure the export vertex is in place
@@ -95,7 +95,7 @@ int main(int /*argc*/, char ** /*argv*/)
                 vertices.append(*exportIt);
             }
             // Then create the appropriate edges
-            importIt = (*it)->import.begin();
+            importIt = (*it)->import.constBegin();
             for (; importIt != importEnd; ++importIt) {
                 output += "    \"";
                 output += (*importIt).toLatin1();
