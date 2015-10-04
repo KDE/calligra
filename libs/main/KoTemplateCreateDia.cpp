@@ -37,27 +37,29 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QInputDialog>
-
+#include <QUrl>
 #include <QTemporaryFile>
 #include <QLineEdit>
-#include <klocalizedstring.h>
+
 #include <KoIcon.h>
 #include <KoDocument.h>
 #include <KoTemplates.h>
 #include <KoTemplateTree.h>
 #include <KoTemplateGroup.h>
 #include <KoTemplate.h>
+#include <KoResourcePaths.h>
+
+#include <klocalizedstring.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <QUrl>
 #include <kdebug.h>
 #include <KoNetAccess.h>
 #include <kiconloader.h>
 #include <k4aboutdata.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 #include <kio/job.h>
-#include <kglobal.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -281,7 +283,7 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -439,7 +441,7 @@ void KoTemplateCreateDia::slotAddGroup() {
         KMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

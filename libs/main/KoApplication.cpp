@@ -39,6 +39,7 @@
 #include "KoPart.h"
 #include <KoJsonTrader.h>
 #include <KoConfig.h>
+#include <KoResourcePaths.h>
 
 #include <klocalizedstring.h>
 #include <kcmdlineargs.h>
@@ -503,9 +504,9 @@ bool KoApplication::start()
                         QString desktopName(args->arg(argNumber));
                         const QString templatesResourcePath = part->templatesResourcePath();
 
-                        QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
+                        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
                         if (paths.isEmpty()) {
-                            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
+                            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
                         }
                         if (paths.isEmpty()) {
                             KMessageBox::error(0, i18n("No template found for: %1", desktopName));

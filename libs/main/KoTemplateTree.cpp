@@ -26,13 +26,12 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kdebug.h>
-
-#include <kglobal.h>
 #include <kstandarddirs.h>
-#include <KoNetAccess.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
+#include <KoNetAccess.h>
+#include <KoResourcePaths.h>
 #include <KoTemplate.h>
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
@@ -60,7 +59,7 @@ void KoTemplateTree::readTemplateTree()
 void KoTemplateTree::writeTemplateTree()
 {
 
-    QString localDir = KGlobal::dirs()->saveLocation("data", m_templatesResourcePath);
+    const QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
 
     foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -137,7 +136,7 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 void KoTemplateTree::readGroups()
 {
 
-    QStringList dirs = KGlobal::dirs()->findDirs("data", m_templatesResourcePath);
+    const QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

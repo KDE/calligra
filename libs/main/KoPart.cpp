@@ -32,6 +32,7 @@
 
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
+#include <KoResourcePaths.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -298,9 +299,9 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
-                QString desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + "*/" + fullTemplateName);
+                QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + fullTemplateName);
+                    desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
