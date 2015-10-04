@@ -45,12 +45,10 @@
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <krecentdirs.h>
 
@@ -224,9 +222,6 @@ bool KoApplication::start()
 #endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
-
-    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
-    KGlobal::dirs()->addPrefix(appdir.absolutePath());
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
