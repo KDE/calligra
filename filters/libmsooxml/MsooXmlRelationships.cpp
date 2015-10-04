@@ -24,7 +24,11 @@
 #include "MsooXmlRelationships.h"
 #include "MsooXmlRelationshipsReader.h"
 #include "MsooXmlImport.h"
+
 #include <KoOdfExporter.h>
+
+#include <klocalizedstring.h>
+
 #include <QSet>
 #include <kdebug.h>
 

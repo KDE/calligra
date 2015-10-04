@@ -48,7 +48,6 @@
 #include <wv2/src/paragraphproperties.h>
 #include <wv2/src/associatedstrings.h>
 
-#include <klocale.h>
 #include <KoStore.h>
 #include <KoFontFace.h>
 

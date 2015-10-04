@@ -36,7 +36,6 @@
 #include <kdebug.h>
 #include <KoGenStyle.h>
 
-class QLocale;
 class KZip;
 struct KoOdfWriters;
 class KoCharacterStyle;

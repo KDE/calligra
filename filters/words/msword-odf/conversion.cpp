@@ -36,7 +36,7 @@
 #include <QMap>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 //#define CONVERSION_DEBUG_SHD
 

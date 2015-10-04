@@ -54,6 +54,8 @@
 #include <KoGenStyles.h>
 #include <KoUnit.h>
 
+#include <klocalizedstring.h>
+
 #include <QGlobalStatic>
 #include <QDomDocument>
 #include <QColor>

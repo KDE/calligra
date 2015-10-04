@@ -28,6 +28,8 @@
 #include <KoXmlWriter.h>
 #include <KoCharacterStyle.h>
 
+#include <klocalizedstring.h>
+
 QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 {
     dbg.nospace() << "QXmlStreamReader(";

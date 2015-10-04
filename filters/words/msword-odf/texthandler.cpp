@@ -39,8 +39,10 @@
 #include <QUrl>
 #include <QBuffer>
 #include <QFontInfo>
+
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
+
 #include <KoGenStyle.h>
 #include <KoFontFace.h>
 

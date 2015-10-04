@@ -24,7 +24,7 @@
 #include <QRadioButton>
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcharsets.h>
 #include <kglobal.h>
 #include <kdebug.h>
