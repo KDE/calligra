@@ -324,7 +324,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
     if (d->startUpWidget) {
         d->startUpWidget->show();
     } else {
-        d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templatesResourcePath);
+        d->startUpWidget = createOpenPane(mainWindow, d->templatesResourcePath);
         mainWindow->setCentralWidget(d->startUpWidget);
     }
 
@@ -369,12 +369,11 @@ void KoPart::startCustomDocument()
     deleteOpenPane();
 }
 
-KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
-                                   const QString& templatesResourcePath)
+KoOpenPane *KoPart::createOpenPane(QWidget *parent, const QString& templatesResourcePath)
 {
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templatesResourcePath);
+    KoOpenPane *openPane = new KoOpenPane(parent, mimeFilter, templatesResourcePath);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {
         openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);

@@ -536,7 +536,7 @@ KoPrintJob *KWView::createPrintJob()
 void KWView::createTemplate()
 {
     KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".ott",
-                                        KWFactory::componentData(), m_document, this);
+                                        m_document, this);
 }
 
 void KWView::enableHeader()

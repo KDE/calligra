@@ -37,9 +37,8 @@
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
 
-KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath,
-                               const KComponentData &componentData, bool readTree) :
-        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
+KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath, bool readTree) :
+        m_templatesResourcePath(templatesResourcePath), m_defaultGroup(0),
         m_defaultTemplate(0)
 {
     if (readTree)

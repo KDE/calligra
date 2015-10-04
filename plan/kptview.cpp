@@ -469,7 +469,7 @@ void View::initiateViews()
 void View::slotCreateTemplate()
 {
     KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".plant",
-                                        Factory::global(), getPart(), this);
+                                        getPart(), this);
 }
 
 void View::slotCreateNewProject()

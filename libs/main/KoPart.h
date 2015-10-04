@@ -240,10 +240,9 @@ protected:
     /**
      * Creates the open widget showed at application start up.
      * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
+    KoOpenPane *createOpenPane(QWidget *parent,
                                const QString& templatesResourcePath = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;

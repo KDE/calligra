@@ -22,8 +22,6 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-#include <kcomponentdata.h>
-
 ////////////////////////////////////
 // class KoDetailsPane
 ///////////////////////////////////
@@ -31,22 +29,20 @@
 class KoDetailsPanePrivate
 {
 public:
-    KoDetailsPanePrivate(const KComponentData &componentData)
-            : m_componentData(componentData) {
+    KoDetailsPanePrivate() {
         m_model = new QStandardItemModel;
     }
     ~KoDetailsPanePrivate() {
         delete m_model;
     }
 
-    KComponentData m_componentData;
     QStandardItemModel* m_model;
 };
 
-KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
+KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
         : QWidget(parent),
         Ui_KoDetailsPaneBase(),
-        d(new KoDetailsPanePrivate(_componentData))
+        d(new KoDetailsPanePrivate)
 {
     d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -70,11 +66,6 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentDa
 KoDetailsPane::~KoDetailsPane()
 {
     delete d;
-}
-
-KComponentData KoDetailsPane::componentData() const
-{
-    return d->m_componentData;
 }
 
 bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)

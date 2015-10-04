@@ -22,7 +22,6 @@
 #define koTemplateTree_h
 
 #include <QList>
-#include <kcomponentdata.h>
 #include "komain_export.h"
 
 class KoTemplate;
@@ -32,15 +31,11 @@ class KOMAIN_EXPORT KoTemplateTree
 {
 
 public:
-    KoTemplateTree(const QString &templatesResourcePath, const KComponentData &instance,
-                   bool readTree = false);
+    KoTemplateTree(const QString &templatesResourcePath, bool readTree = false);
     ~KoTemplateTree();
 
     QString templatesResourcePath() const {
         return m_templatesResourcePath;
-    }
-    KComponentData componentData() const {
-        return m_componentData;
     }
     void readTemplateTree();
     void writeTemplateTree();
@@ -64,7 +59,6 @@ private:
                        const QString &localDir);
 
     QString m_templatesResourcePath;
-    KComponentData m_componentData;
     QList<KoTemplateGroup*> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;

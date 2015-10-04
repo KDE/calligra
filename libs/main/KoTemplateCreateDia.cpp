@@ -57,7 +57,6 @@
 #include <k4aboutdata.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kcomponentdata.h>
 #include <kglobal.h>
 
 // ODF thumbnail extent
@@ -65,9 +64,8 @@ static const int thumbnailExtent = 128;
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate(const KComponentData &componentData, const QString &filePath, const QPixmap &thumbnail)
-         : m_componentData( componentData )
-         , m_filePath(filePath)
+    KoTemplateCreateDiaPrivate(const QString &filePath, const QPixmap &thumbnail)
+         : m_filePath(filePath)
          , m_thumbnail(thumbnail)
     {
         m_tree=0;
@@ -95,7 +93,6 @@ public:
     QTreeWidget *m_groups;
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
-    KComponentData m_componentData;
     QString m_filePath;
     QPixmap m_thumbnail;
     bool m_changed;
@@ -108,10 +105,10 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, const KComponentData &componentData,
+KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath,
                                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
   : KoDialog(parent)
-  , d(new KoTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
+  , d(new KoTemplateCreateDiaPrivate(filePath, thumbnail))
 {
 
     setButtons( KoDialog::Ok|KoDialog::Cancel );
@@ -144,7 +141,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, c
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree = new KoTemplateTree(templatesResourcePath, componentData, true);
+    d->m_tree = new KoTemplateTree(templatesResourcePath, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -182,7 +179,8 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath, c
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->programName() ) );
+    // QT5TODO: think about restoring this
+//     d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
@@ -214,7 +212,6 @@ void KoTemplateCreateDia::slotSelectionChanged()
 
 void KoTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
-                                         const KComponentData &componentData,
                                          KoDocument *document, QWidget *parent)
 {
     QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/") + qAppName() + QLatin1String("_XXXXXX") + suffix);
@@ -232,7 +229,7 @@ void KoTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
 
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
 
-    KoTemplateCreateDia *dia = new KoTemplateCreateDia(templatesResourcePath, componentData, fileName, thumbnail, parent);
+    KoTemplateCreateDia *dia = new KoTemplateCreateDia(templatesResourcePath, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
 
@@ -379,7 +376,7 @@ void KoTemplateCreateDia::slotOk() {
     if ( d->m_defaultTemplate->isChecked() )
     {
 
-      KConfigGroup grp( d->m_componentData.config(), "TemplateChooserDialog" );
+      KConfigGroup grp(KSharedConfig::openConfig(), "TemplateChooserDialog");
       grp.writeEntry( "LastReturnType", "Template" );
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + '/' + t->file() );

@@ -1179,7 +1179,7 @@ void View::updateReadWrite(bool readwrite)
 void View::createTemplate()
 {
     KoTemplateCreateDia::createTemplate(doc()->documentPart()->templatesResourcePath(), ".ots",
-                                        Factory::global(), doc(), this);
+                                        doc(), this);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)

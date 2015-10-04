@@ -22,10 +22,11 @@
 #include "KoTemplateGroup.h"
 #include "KoTemplate.h"
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 #include <QStandardItemModel>
-#include <kcomponentdata.h>
 #include <QUrl>
-#include <kconfiggroup.h>
 
 class KoTemplatesPanePrivate
 {
@@ -39,15 +40,15 @@ public:
 };
 
 
-KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
+KoTemplatesPane::KoTemplatesPane(QWidget* parent, const QString& header,
                                  KoTemplateGroup *group, KoTemplate* defaultTemplate)
-        : KoDetailsPane(parent, _componentData, header)
+        : KoDetailsPane(parent, header)
         , d(new KoTemplatesPanePrivate)
 {
     setFocusProxy(m_documentList);
 
     m_openButton->setText(i18n("Use This Template"));
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
@@ -132,7 +133,7 @@ void KoTemplatesPane::openFile(const QModelIndex& index)
 {
     if (index.isValid()) {
         QStandardItem* item = model()->itemFromIndex(index);
-        KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
         cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
@@ -155,7 +156,7 @@ void KoTemplatesPane::alwaysUseClicked()
         d->m_alwaysUseTemplate = item->data(Qt::UserRole + 1).toString();
     }
 
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
     cfgGrp.sync();
     emit alwaysUseChanged(this, d->m_alwaysUseTemplate);

@@ -27,7 +27,6 @@
 
 class QString;
 class QPixmap;
-class KComponentData;
 class KoDocument;
 class KoTemplateCreateDiaPrivate;
 
@@ -42,13 +41,12 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KoDialog
     Q_OBJECT
 
 private:
-    KoTemplateCreateDia( const QString &templatesResourcePath, const KComponentData &instance,
+    KoTemplateCreateDia( const QString &templatesResourcePath,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
     ~KoTemplateCreateDia();
 
 public:
     static void createTemplate(const QString &templatesResourcePath, const char *suffix,
-                               const KComponentData &componentData,
                                KoDocument *document, QWidget *parent = 0);
 
 private Q_SLOTS:
