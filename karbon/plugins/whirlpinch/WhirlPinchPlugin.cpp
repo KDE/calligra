@@ -47,10 +47,10 @@
 #include <kdebug.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <QAction>
 
+#include <QAction>
 #include <QGroupBox>
 #include <QLabel>
 #include <QGridLayout>

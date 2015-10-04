@@ -42,7 +42,7 @@
 #include <KoShapeGroup.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kmenu.h>

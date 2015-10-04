@@ -33,7 +33,7 @@
 
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QToolButton>
 #include <QHBoxLayout>

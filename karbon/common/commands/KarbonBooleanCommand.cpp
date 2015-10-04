@@ -24,7 +24,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QPainterPath>
 

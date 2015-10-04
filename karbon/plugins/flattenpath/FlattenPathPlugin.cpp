@@ -41,7 +41,7 @@
 #include <kpluginfactory.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QAction>
 #include <kstandarddirs.h>
 

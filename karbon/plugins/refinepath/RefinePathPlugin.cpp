@@ -43,10 +43,10 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <QAction>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
+#include <QAction>
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>

@@ -30,7 +30,6 @@
 #include "KarbonCursor.h"
 #include <KoGradientHelper.h>
 
-#include <klocale.h>
 #include <kcolordialog.h>
 
 #include <QBitmap>

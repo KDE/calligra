@@ -46,7 +46,6 @@
 #include <KoUnit.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <QPainter>
 #include <QPaintEvent>

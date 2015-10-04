@@ -30,7 +30,7 @@
 #include <KoSelection.h>
 
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <math.h>
 

@@ -125,7 +125,7 @@
 // kde header
 #include <QAction>
 #include <kcolormimedata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>

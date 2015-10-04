@@ -44,11 +44,11 @@
 
 #include <kpluginfactory.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <QAction>
 #include <kstandarddirs.h>
 
+#include <QAction>
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>

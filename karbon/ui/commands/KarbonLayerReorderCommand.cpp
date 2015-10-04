@@ -26,7 +26,7 @@
 #include "KarbonLayerReorderCommand.h"
 #include <KarbonDocument.h>
 #include <KoShapeLayer.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent)
         : KUndo2Command(parent), m_document(document), m_cmdType(commandType)

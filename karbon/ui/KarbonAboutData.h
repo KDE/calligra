@@ -20,7 +20,7 @@
 #define KARBON_ABOUTDATA_H
 
 #include <k4aboutdata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 #include <calligraversion.h>
 

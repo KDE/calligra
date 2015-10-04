@@ -34,7 +34,7 @@
 #include <KoShapeStroke.h>
 #include <KoViewConverter.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
 #include <QPushButton>

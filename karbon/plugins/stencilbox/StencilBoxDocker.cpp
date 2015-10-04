@@ -33,7 +33,7 @@
 #include <KoProperties.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>

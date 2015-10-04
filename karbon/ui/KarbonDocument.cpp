@@ -85,7 +85,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kundo2stack.h>
 
 #include <QRectF>

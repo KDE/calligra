@@ -32,7 +32,7 @@
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoApplication.h>
 
 #include <KarbonFactory.h>
