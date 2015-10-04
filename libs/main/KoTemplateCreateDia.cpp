@@ -52,7 +52,6 @@
 #include <klocalizedstring.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <KoNetAccess.h>
 #include <kiconloader.h>
@@ -332,7 +331,8 @@ void KoTemplateCreateDia::slotOk() {
             ignore = true;
     }
 
-    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+    QDir dummyDir;
+    if(!dummyDir.mkpath(templateDir) || !dummyDir.mkpath(iconDir)) {
         d->m_tree->writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;

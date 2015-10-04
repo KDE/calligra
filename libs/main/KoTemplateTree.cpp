@@ -26,7 +26,6 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
@@ -75,7 +74,7 @@ void KoTemplateTree::writeTemplateTree()
             //kDebug( 30003 ) <<"touched";
             if (!group->isHidden()) {
                 //kDebug( 30003 ) <<"not hidden";
-                KStandardDirs::makeDir(localDir + group->name()); // create the local group dir
+                QDir().mkpath(localDir + group->name()); // create the local group dir
             } else {
                 //kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
@@ -84,7 +83,7 @@ void KoTemplateTree::writeTemplateTree()
                     //kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
                     //kDebug( 30003 ) <<"global";
-                    KStandardDirs::makeDir(localDir + group->name());
+                    QDir().mkpath(localDir + group->name());
                 }
             }
         }
