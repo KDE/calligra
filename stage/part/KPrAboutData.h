@@ -21,7 +21,7 @@
 #define KPRABOUTDATA_H
 
 #include <k4aboutdata.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <calligraversion.h>
 
 static const char description[] = I18N_NOOP("Calligra Presentation Tool");

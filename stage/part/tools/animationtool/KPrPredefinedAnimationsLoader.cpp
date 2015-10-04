@@ -34,15 +34,15 @@
 #include <QImage>
 #include <QFont>
 
-//KDE Headers
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KoIcon.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
 //Calligra Headers
+#include <KoIcon.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfReadStore.h>

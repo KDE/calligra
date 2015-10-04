@@ -29,7 +29,8 @@
 #include <QEvent>
 #include <QPainter>
 #include <QTimer>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

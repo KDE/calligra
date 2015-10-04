@@ -18,7 +18,8 @@
 */
 
 #include "KPrDoubleSweepWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "KPrDoubleSweepWipeStrategy.h"
 

@@ -55,8 +55,8 @@
 #include <KoCutController.h>
 #include <KoViewItemContextBar.h>
 
-//KDE Headers
-#include <klocale.h>
+// KF5 Headers
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>

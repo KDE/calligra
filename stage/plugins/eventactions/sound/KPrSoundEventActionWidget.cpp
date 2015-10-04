@@ -21,10 +21,10 @@
 
 #include <QComboBox>
 #include <QVBoxLayout>
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kurl.h>
 
+#include <kfiledialog.h>
+#include <klocalizedstring.h>
+#include <kurl.h>
 
 #include <KoEventActionAddCommand.h>
 #include <KoEventActionRemoveCommand.h>

@@ -19,9 +19,11 @@
 
 #include "KPrPlaceholderTool.h"
 
-#include <kundo2command.h>
 #include <QPainter>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
+
+#include <kundo2command.h>
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>

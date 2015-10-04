@@ -18,7 +18,8 @@
 */
 
 #include "KPrSaloonDoorWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "KPrSaloonDoorWipeStrategy.h"
 

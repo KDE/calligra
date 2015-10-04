@@ -19,7 +19,7 @@
 
 #include "KPrSpaceRotationEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrSpaceRotationFromBottomStrategy.h"
 #include "KPrSpaceRotationFromTopStrategy.h"

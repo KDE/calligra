@@ -21,7 +21,7 @@
 */
 #include "KPrView.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>

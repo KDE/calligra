@@ -30,7 +30,7 @@
 #include <QMenu>
 #include <QIcon>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 #include <KoPACanvasBase.h>

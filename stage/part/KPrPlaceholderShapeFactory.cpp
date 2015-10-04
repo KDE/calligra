@@ -19,7 +19,7 @@
 
 #include "KPrPlaceholderShapeFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoXmlNS.h>
 #include <KoOdfWorkaround.h>

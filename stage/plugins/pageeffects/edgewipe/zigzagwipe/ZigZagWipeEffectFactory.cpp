@@ -20,7 +20,7 @@
 #include "ZigZagWipeEffectFactory.h"
 #include "ZigZagWipeStrategy.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #define ZigZagWipeEffectId "ZigZagWipeEffect"
 

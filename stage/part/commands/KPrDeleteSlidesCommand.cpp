@@ -20,7 +20,7 @@
 
 #include "KPrDeleteSlidesCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrDocument.h"
 #include "KoPAPageBase.h"

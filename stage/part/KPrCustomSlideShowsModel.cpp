@@ -28,8 +28,8 @@
 #include "commands/KPrDelCustomSlideShowCommand.h"
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 
-//KDE headers
-#include "KLocalizedString"
+//KF5 headers
+#include <klocalizedstring.h>
 
 //Qt headers
 #include <QIcon>

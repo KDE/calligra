@@ -44,12 +44,12 @@
 #include <QTimer>
 #include <QActionGroup>
 
-//KDE Headers
-#include <KoIcon.h>
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 //Calligra Headers
+#include <KoIcon.h>
 #include <KoSelection.h>
 #include <KoCanvasController.h>
 #include <KoPAViewBase.h>

@@ -18,7 +18,8 @@
  */
 
 #include "VeeWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "VeeWipeStrategy.h"
 

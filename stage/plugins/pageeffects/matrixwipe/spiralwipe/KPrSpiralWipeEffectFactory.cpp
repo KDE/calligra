@@ -19,7 +19,7 @@
 
 #include "KPrSpiralWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrSpiralWipeStrategy.h"
 

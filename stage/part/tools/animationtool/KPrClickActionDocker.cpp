@@ -25,7 +25,8 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QEvent>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KPrDocument.h>

@@ -26,8 +26,8 @@
 #include <QLabel>
 #include <QPainter>
 
-//KDE Headers
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 
 //Calligra Headers
 #include <KoPointerEvent.h>

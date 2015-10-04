@@ -24,7 +24,7 @@
 #include <QStackedLayout>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>

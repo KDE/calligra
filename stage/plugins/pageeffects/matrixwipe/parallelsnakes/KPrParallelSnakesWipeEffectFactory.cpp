@@ -19,7 +19,7 @@
 
 #include "KPrParallelSnakesWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrParallelSnakesWipeVerticalStrategy.h"
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"

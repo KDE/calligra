@@ -18,7 +18,8 @@
  */
 
 #include "BarnDoorWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "BarnDoorWipeStrategy.h"
 

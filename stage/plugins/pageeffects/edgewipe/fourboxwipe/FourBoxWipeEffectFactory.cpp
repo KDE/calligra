@@ -18,7 +18,8 @@
  */
 
 #include "FourBoxWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "CornersInWipeStrategy.h"
 #include "CornersOutWipeStrategy.h"

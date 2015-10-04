@@ -26,7 +26,8 @@
 #include <QPen>
 #include <QTextOption>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
+
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>

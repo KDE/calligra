@@ -19,7 +19,7 @@
 
 #include "KPrBoxSnakesWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrBoxSnakesWipeStrategy.h"
 

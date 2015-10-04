@@ -20,7 +20,7 @@
 
 #include "KPrFadeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrFadeCrossStrategy.h"
 #include "KPrFadeOverColorStrategy.h"

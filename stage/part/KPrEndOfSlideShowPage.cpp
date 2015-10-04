@@ -19,7 +19,8 @@
 
 #include "KPrEndOfSlideShowPage.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
+
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>

@@ -23,7 +23,7 @@
 #include "KPrView.h"
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 KPrAnimationToolFactory::KPrAnimationToolFactory()

@@ -22,7 +22,9 @@
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrShapeAnimations.h"
 
-//QT Headers
+#include <klocalizedstring.h>
+
+//Qt Headers
 #include <QPainter>
 #include <QScrollArea>
 #include <QEvent>
@@ -31,8 +33,6 @@
 #include <QDebug>
 #include <QStyle>
 #include <QStyleOptionHeader>
-
-#include <klocale.h>
 
 //Default height of the header
 const int HEADER_HEIGHT = 20;

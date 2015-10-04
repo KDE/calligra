@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QWebFrame>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kzip.h>

@@ -18,7 +18,8 @@
  */
 
 #include "DiagonalWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "DiagonalWipeStrategy.h"
 

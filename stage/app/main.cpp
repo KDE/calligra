@@ -22,7 +22,7 @@
 #include <KoApplication.h>
 #include "KPrDocument.h"
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )

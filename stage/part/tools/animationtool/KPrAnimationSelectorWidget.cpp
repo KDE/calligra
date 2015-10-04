@@ -35,8 +35,8 @@
 #include <QFont>
 #include <QToolButton>
 
-//KDE Headers
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>

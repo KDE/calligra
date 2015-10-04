@@ -43,11 +43,11 @@
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>
-
-//KDE Headers
 #include <KoIcon.h>
+
+//KF5 Headers
 #include <kiconloader.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 const int COLUMN_COUNT = 10;

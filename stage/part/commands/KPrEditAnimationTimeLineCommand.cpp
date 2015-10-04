@@ -21,7 +21,8 @@
 #include "KPrEditAnimationTimeLineCommand.h"
 
 #include "animations/KPrShapeAnimation.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 KPrEditAnimationTimeLineCommand::KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation,
                                                                  const int begin, const int duration, KUndo2Command *parent)
