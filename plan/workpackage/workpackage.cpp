@@ -34,14 +34,13 @@
 #include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
+#include <KoResourcePaths.h>
 
 #include <QDir>
 #include <QUrl>
 #include <QTimer>
 
-#include <kglobal.h>
 #include <kdebug.h>
-#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -389,7 +388,7 @@ QString WorkPackage::fileName( const Part *part ) const
         return QString();
     }
     QString projectName = m_project->name().remove( ' ' );
-    QString path = KGlobal::dirs()->saveLocation( "projects", projectName + '/' );
+    const QString path = KoResourcePaths::saveLocation( "projects", projectName + '/' );
     QString wpName = QString( n->name().remove( ' ' ) + '_' + n->id() + ".planwork" );
     return path + wpName;
 }

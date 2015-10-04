@@ -22,6 +22,8 @@
 #include "part.h"
 #include "aboutdata.h"
 
+#include <KoResourcePaths.h>
+
 #include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -74,8 +76,8 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        KGlobal::dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
-        KGlobal::dirs()->addResourceType("projects", "data", "planwork/projects/");
+        KoResourcePaths::addResourceType("planwork_template", "data", "planwork/templates/");
+        KoResourcePaths::addResourceType("projects", "data", "planwork/projects/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

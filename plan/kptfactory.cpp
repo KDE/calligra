@@ -21,11 +21,13 @@
 #include "kptmaindocument.h"
 #include "kptpart.h"
 #include "kptaboutdata.h"
+
+#include <KoResourcePaths.h>
+
 #include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
 #include <kglobal.h>
 
 namespace KPlato
@@ -75,7 +77,7 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        KGlobal::dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
+        KoResourcePaths::addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

@@ -27,6 +27,7 @@
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
 #include <KoIcon.h>
+#include <KoResourcePaths.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -58,7 +59,6 @@
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
-#include <kstandarddirs.h>
 #include <kservicetypetrader.h>
 #include <khelpclient.h>
 #include <k4aboutdata.h>
@@ -895,7 +895,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
-    taskeditor->setTaskModules( KGlobal::dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
+    taskeditor->setTaskModules( KoResourcePaths::findAllResources( "plan_taskmodules", QString(), KoResourcePaths::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -3031,7 +3031,7 @@ void View::slotCurrencyConfigFinished( int result )
 void View::saveTaskModule( const QUrl &url, Project *project )
 {
     kDebug(planDbg())<<url<<project;
-    QString dir = KGlobal::dirs()->saveLocation( "plan_taskmodules" );
+    const QString dir = KoResourcePaths::saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         MainDocument part(getKoPart());

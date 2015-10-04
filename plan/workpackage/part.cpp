@@ -40,6 +40,7 @@
 #include <KoXmlReader.h>
 #include <KoStore.h>
 #include <KoDocumentInfo.h>
+#include <KoResourcePaths.h>
 
 #include <QPainter>
 #include <QFileInfo>
@@ -55,7 +56,6 @@
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kopenwithdialog.h>
 #include <kmimetype.h>
@@ -65,8 +65,6 @@
 #include <kprocess.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-
-#include <KoMainWindow.h>
 
 #include "debugarea.h"
 
@@ -460,7 +458,7 @@ void Part::addWorkPackage( WorkPackage *wp )
 bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
-    QStringList lst = KGlobal::dirs()->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    const QStringList lst = KoResourcePaths::findAllResources( "projects", "*.planwork", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates );
     //kDebug(planworkDbg())<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
