@@ -38,6 +38,7 @@
 #include <QFileInfo>
 #include <QGLWidget>
 #include <QUrl>
+#include <QStandardPaths>
 
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -201,7 +202,7 @@ public:
                 touchView->engine()->addImportPath(dir);
             }
         }
-        QString mainqml = KGlobal::dirs()->findResource("data", "calligragemini/calligragemini.qml");
+        QString mainqml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligragemini/calligragemini.qml"));
 #endif
 
         Q_ASSERT(QFile::exists(mainqml));

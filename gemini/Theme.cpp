@@ -31,9 +31,8 @@
 #include <QWidget>
 #include <QQmlComponent>
 #include <QUrl>
+#include <QStandardPaths>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <KIconLoader>
 
 #include "QmlGlobalEngine.h"
@@ -105,8 +104,9 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        QString path = QUrl(KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(d->id))).path();
-        d->basePath = path.left(path.lastIndexOf('/'));
+        const QString qmlFileSubPath = QStringLiteral("calligragemini/themes/") + d->id + QStringLiteral("/theme.qml");
+        const QString qmlFileFullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, qmlFileSubPath);
+        d->basePath = QFileInfo(qmlFileFullPath).dir().absolutePath();
         emit idChanged();
     }
 }
@@ -370,7 +370,8 @@ Theme* Theme::load(const QString& id, QObject* parent)
     appdir.cdUp();
     qml = QString("%1/share/apps/calligragemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
-    qml = KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(id));
+    const QString qmlFileSubPath = QStringLiteral("calligragemini/themes/") + id + QStringLiteral("/theme.qml");
+    qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, qmlFileSubPath);
 #endif
 
     QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
