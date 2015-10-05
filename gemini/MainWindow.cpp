@@ -49,7 +49,6 @@
 #include <kaboutdata.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
-#include <kmenubar.h>
 #include <KConfigGroup>
 
 #include <gemini/ViewModeSwitchEvent.h>

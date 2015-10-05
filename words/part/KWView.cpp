@@ -109,7 +109,6 @@
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <ktoolbar.h>
-#include <kmenubar.h>
 
 #include <limits>
 
