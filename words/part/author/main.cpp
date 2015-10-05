@@ -25,7 +25,7 @@
 
 #include <KAboutData>
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
     QScopedPointer<K4AboutData> aboutData(newAuthorAboutData());
 

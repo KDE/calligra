@@ -137,8 +137,12 @@ if( SHOULD_BUILD_FEATURE_RDF )
     )
 endif()
 
-
 add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
+generate_export_header(wordsprivate
+    BASE_NAME words
+    EXPORT_FILE_NAME words_generated_export.h
+    )
+
 
 target_link_libraries(wordsprivate komain kotextlayout KF5::KDELibs4Support)
 if( SHOULD_BUILD_FEATURE_RDF )
