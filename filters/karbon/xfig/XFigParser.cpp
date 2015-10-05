@@ -538,6 +538,8 @@ XFigParser::parseHeader()
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString magnificationString = m_XFigStreamLineReader.line();
                 const float magnification = magnificationString.toFloat();
+                // TODO
+                Q_UNUSED(magnification);
 // qDebug() << "magnification:"<<magnificationString<<magnification;
             } else {
                 break;
@@ -558,6 +560,8 @@ XFigParser::parseHeader()
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString transparentColorString = m_XFigStreamLineReader.line();
                 const int transparentColor = transparentColorString.toInt();
+                // TODO
+                Q_UNUSED(transparentColor);
 // qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
             } else {
                 break;
