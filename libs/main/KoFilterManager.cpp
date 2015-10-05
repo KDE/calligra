@@ -32,11 +32,11 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QApplication>
 #include <QByteArray>
+#include <QMimeDatabase>
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <klibloader.h>
-#include <kmimetype.h>
 #include <MainDebug.h>
 
 #include <queue>
@@ -82,11 +82,11 @@ QString KoFilterManager::importDocument(const QString& url,
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
     QUrl u(url);
-    KMimeType::Ptr t;
     if (documentMimeType.isEmpty()) {
-        t = KMimeType::findByUrl(u, 0, true);
-        if (t)
-            typeName = t->name();
+        QMimeType t = QMimeDatabase().mimeTypeForUrl(u);
+        if (t.isValid()) {
+            typeName = t.name();
+        }
     }
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
@@ -202,15 +202,15 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
     } else {
         QUrl u;
         u.setPath(m_importUrl);
-        KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
-        if (!t || t->name() == KMimeType::defaultMimeType()) {
+        QMimeType t = QMimeDatabase().mimeTypeForUrl(u);
+        if (!t.isValid() || t.isDefault()) {
             errorFilter << "No mimetype found for" << m_importUrl;
             return KoFilter::BadMimeType;
         }
-        m_graph.setSourceMimeType(t->name().toLatin1());
+        m_graph.setSourceMimeType(t.name().toLatin1());
 
         if (!m_graph.isValid()) {
-            warnFilter << "Can't open" << t->name() << ", trying filter chooser";
+            warnFilter << "Can't open" << t.name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter(), QString(), u);

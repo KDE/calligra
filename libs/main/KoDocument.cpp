@@ -52,7 +52,6 @@
 #include <KoGridData.h>
 #include <KoGuidesData.h>
 
-#include <kmimetype.h>
 #include <kfileitem.h>
 #include <KoNetAccess.h>
 #include <klocalizedstring.h>
@@ -63,6 +62,7 @@
 #include <kdirnotify.h>
 #include <kglobal.h>
 
+#include <QMimeDatabase>
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QtGlobal>
@@ -75,7 +75,6 @@
 #include <KJobWidgets>
 #include <QDBusConnection>
 #endif
-#include <QApplication>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
@@ -287,9 +286,9 @@ public:
         if (mimeType.isEmpty()) {
             // get the mimetype of the file
             // using findByUrl() to avoid another string -> url conversion
-            KMimeType::Ptr mime = KMimeType::findByUrl(m_url, 0, true /* local file*/);
-            if (mime) {
-                mimeType = mime->name().toLocal8Bit();
+            QMimeType mime = QMimeDatabase().mimeTypeForUrl(m_url);
+            if (mime.isValid()) {
+                mimeType = mime.name().toLatin1();
                 m_bAutoDetectedMime = true;
             }
         }
@@ -402,7 +401,7 @@ public:
         Q_ASSERT(job == m_job); Q_UNUSED(job);
         // set the mimetype only if it was not already set (for example, by the host application)
         if (mimeType.isEmpty()) {
-            mimeType = mime.toLocal8Bit();
+            mimeType = mime.toLatin1();
             m_bAutoDetectedMime = true;
         }
     }
@@ -1027,15 +1026,13 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;
 
-    int accuracy = 0;
-
     QFile f(url.toLocalFile());
     f.open(QIODevice::ReadOnly);
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
-    KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
+    QMimeType mime = QMimeDatabase().mimeTypeForData(ba);
     f.close();
 
-    return mime->name();
+    return mime.name();
 }
 
 // Called for embedded documents
@@ -1151,11 +1148,11 @@ QString KoDocument::autoSaveFile(const QString & path) const
     QString retval;
 
     // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
-    if (! mime) {
+    QMimeType mime = QMimeDatabase().mimeTypeForName(nativeFormatMimeType());
+    if (! mime.isValid()) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
-    const QString extension = mime->mainExtension();
+    const QString extension = mime.preferredSuffix();
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1355,11 +1352,11 @@ bool KoDocument::openFile()
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
 
-    QUrl u(localFilePath());
+    QUrl u = QUrl::fromLocalFile(localFilePath());
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
-        typeName = KMimeType::findByUrl(u, 0, true)->name();
+        typeName = QMimeDatabase().mimeTypeForUrl(u).name();
     }
 
     // for images, always check content.
@@ -1416,8 +1413,8 @@ bool KoDocument::openFile()
 
         if (typeName == replacement->typeFromName) {
             //debugMain << "found potential replacement target:" << typeName;
-            int accuracy;
-            QString typeFromContents = KMimeType::findByFileContent(u.path(), &accuracy)->name();
+            // QT5TODO: this needs a new look with the different behaviour of QMimeDatabase
+            QString typeFromContents = QMimeDatabase().mimeTypeForUrl(u).name();
             //debugMain << "found potential replacement:" << typeFromContents;
             if (typeFromContents == replacement->typeFromContents) {
                 typeName = replacement->useThisType;
@@ -1431,8 +1428,9 @@ bool KoDocument::openFile()
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
         QString path = u.path();
-        KMimeType::Ptr mime = KMimeType::mimeType(typeName);
-        const QStringList patterns = mime ? mime->patterns() : QStringList();
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(typeName);
+        const QStringList patterns = mime.isValid() ? mime.globPatterns() : QStringList();
         // Find the extension that makes it a backup file, and remove it
         for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
             QString ext = *it;
@@ -1444,7 +1442,7 @@ bool KoDocument::openFile()
                 }
             }
         }
-        typeName = KMimeType::findByPath(path, 0, true)->name();
+        typeName = db.mimeTypeForFile(path, QMimeDatabase::MatchExtension).name();
     }
 
     // Special case for flat XML files (e.g. using directory store)

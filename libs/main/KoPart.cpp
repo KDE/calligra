@@ -38,13 +38,13 @@
 #include <MainDebug.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
-#include <kmimetype.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
 #include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+#include <QMimeDatabase>
 
 #ifndef QT_NO_DBUS
 #include <QDBusConnection>
@@ -260,7 +260,7 @@ void KoPart::openTemplate(const QUrl &url)
     d->document->undoStack()->clear();
 
     if (ok) {
-        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         d->document->setMimeTypeAfterLoading(mimeType);

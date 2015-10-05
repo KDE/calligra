@@ -25,10 +25,10 @@ Boston, MA 02110-1301, USA.
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QMimeDatabase>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kmimetype.h>
 
 #include <unistd.h>
 
@@ -56,12 +56,13 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     page->setLayout(layout);
 
     Q_ASSERT(!m_mimeTypes.isEmpty());
+    QMimeDatabase db;
     for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
             it != m_mimeTypes.constEnd();
             ++it) {
 
-        KMimeType::Ptr mime = KMimeType::mimeType(*it);
-        const QString name = mime ? mime->comment() : *it;
+        QMimeType mime = db.mimeTypeForName(*it);
+        const QString name = mime.isValid() ? mime.comment() : *it;
         if (! name.isEmpty()) {
             QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
             item->setData(32, *it);

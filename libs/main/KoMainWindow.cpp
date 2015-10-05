@@ -64,7 +64,6 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kmenubar.h>
-#include <kmimetype.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -88,6 +87,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QFontDatabase>
+#include <QMimeDatabase>
 
 #include "MainDebug.h"
 
@@ -154,9 +154,9 @@ public:
         if (title.isEmpty()) {
             title = rootDocument->url().fileName();
             // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-            KMimeType::Ptr mime = KMimeType::mimeType(rootDocument->outputMimeType());
-            if (mime) {
-                const QString extension = mime->mainExtension();
+            QMimeType mime = QMimeDatabase().mimeTypeForName(rootDocument->outputMimeType());
+            if (mime.isValid()) {
+                const QString extension = mime.preferredSuffix();
 
                 if (title.endsWith(extension))
                     title.chop(extension.length());
@@ -732,10 +732,9 @@ bool KoMainWindow::openDocument(KoPart *newPart, const QUrl &url)
         newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc, newPart);
         newdoc->setUrl(url);
-        QString mime = KMimeType::findByUrl(url)->name();
-        if (mime.isEmpty() || mime == KMimeType::defaultMimeType())
-            mime = newdoc->nativeFormatMimeType();
-        newdoc->setMimeTypeAfterLoading(mime);
+        QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
+        QString mimetype = (!mime.isValid() || mime.isDefault()) ? newdoc->nativeFormatMimeType() : mime.name();
+        newdoc->setMimeTypeAfterLoading(mimetype);
         updateCaption();
         return true;
     }
@@ -850,8 +849,8 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
         return true;
     }
 
-    KMimeType::Ptr mime = KMimeType::mimeType(outputFormat);
-    QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(outputFormat));
+    QMimeType mime = QMimeDatabase().mimeTypeForName(outputFormat);
+    QString comment = mime.isValid() ? mime.comment() : i18n("%1 (unknown file type)", QString::fromLatin1(outputFormat));
 
     // Warn the user
     int ret;
@@ -915,11 +914,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     QUrl suggestedURL = d->rootDocument->url();
 
     QStringList mimeFilter;
-    KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-    if (! mime)
-        mime = KMimeType::defaultMimeTypePtr();
+    QMimeType mime = QMimeDatabase().mimeTypeForName(_native_format);
+    if (!mime.isValid())
+        // QT5TODO: find if there is no better way to get an object for the default type
+        mime = QMimeDatabase().mimeTypeForName(QStringLiteral("application/octet-stream"));
     if (specialOutputFlag)
-        mimeFilter = mime->patterns();
+        mimeFilter = mime.globPatterns();
     else
         mimeFilter = KoFilterManager::mimeFilter(_native_format,
                                                  KoFilterManager::Export,
@@ -937,7 +937,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            const QString ext = mime->mainExtension();
+            const QString ext = mime.preferredSuffix();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;
@@ -975,8 +975,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
-                KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-                fn.append(mime->mainExtension());
+                QMimeType mime = QMimeDatabase().mimeTypeForName(_native_format);
+                fn.append(mime.preferredSuffix());
                 newURL = QUrl::fromLocalFile(fn);
             }
         }
@@ -984,9 +984,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         QByteArray outputFormat = _native_format;
 
         if (!specialOutputFlag) {
-            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-            QString outputFormatString = mime->name();
-            outputFormat = outputFormatString.toLatin1();
+            QMimeType mime = QMimeDatabase().mimeTypeForUrl(newURL);
+            outputFormat = mime.name().toLatin1();
         }
 
 
@@ -1013,7 +1012,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             }
             else if (specialOutputFlag == KoDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
-                QString ext = mime->mainExtension();
+                QString ext = mime.preferredSuffix();
                 if (!ext.isEmpty()) {
                     if (dot < 0) fileName += ext;
                     else fileName = fileName.left(dot) + ext;

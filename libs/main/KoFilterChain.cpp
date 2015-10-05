@@ -33,7 +33,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QMetaMethod>
 #include <QTemporaryFile>
-#include <kmimetype.h>
+#include <QMimeDatabase>
+
 #include <MainDebug.h>
 
 #include <limits.h> // UINT_MAX
@@ -503,13 +504,13 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
 {
     QUrl url;
     url.setPath(file);
-    KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
-    if (t->name() == KMimeType::defaultMimeType()) {
+    QMimeType t = QMimeDatabase().mimeTypeForUrl(url);
+    if (t.isDefault()) {
         errorFilter << "No mimetype found for " << file << endl;
         return 0;
     }
 
-    KoDocument *doc = createDocument(t->name().toLatin1());
+    KoDocument *doc = createDocument(t.name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
         errorFilter << "Couldn't load from the file" << endl;

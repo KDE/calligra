@@ -47,7 +47,6 @@
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <MainDebug.h>
-#include <kmimetype.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <krecentdirs.h>
@@ -63,6 +62,7 @@
 #include <QDir>
 #include <QPluginLoader>
 #include <QCommandLineParser>
+#include <QMimeDatabase>
 
 #include <stdlib.h>
 
@@ -317,12 +317,11 @@ bool KoApplication::start()
 
         // get all possible autosave files in the home dir, this is for unsaved document autosave files
         // Using the extension allows to avoid relying on the mime magic when opening
-        QByteArray ba = doc->nativeFormatMimeType();
-        KMimeType::Ptr mime = KMimeType::mimeType(ba);
-        if (!mime) {
+        QMimeType mimeType = QMimeDatabase().mimeTypeForName(doc->nativeFormatMimeType());
+        if (!mimeType.isValid()) {
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }
-        const QString extension = mime->mainExtension();
+        const QString extension = mimeType.preferredSuffix();
 
         QStringList filters;
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
