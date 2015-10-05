@@ -28,7 +28,7 @@
 #include <QFile>
 
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
+extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::init( argc, argv, KPlatoWork::newAboutData());
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
