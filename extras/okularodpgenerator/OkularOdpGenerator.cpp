@@ -26,8 +26,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include <kcomponentdata.h>
-
 #include <CalligraVersionWrapper.h>
 
 #include <KoDocumentEntry.h>
@@ -70,9 +68,6 @@ OkularOdpGenerator::~OkularOdpGenerator()
 
 bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::Page*> &pages )
 {
-    KComponentData cd("OkularOdpGenerator", QByteArray(),
-                      KComponentData::SkipMainComponentRegistration);
-
     const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
     QString error;
