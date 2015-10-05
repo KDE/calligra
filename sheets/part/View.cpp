@@ -56,6 +56,7 @@
 #endif
 #include <QSizePolicy>
 #include <QScrollBar>
+#include <QStatusBar>
 #include <QTimer>
 
 // KDE includes
@@ -67,7 +68,6 @@
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kaction.h>

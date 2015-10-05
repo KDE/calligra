@@ -38,7 +38,6 @@
 
 // KDE + Qt includes
 #include <kdebug.h>
-#include <kstatusbar.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

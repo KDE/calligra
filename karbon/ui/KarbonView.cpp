@@ -128,7 +128,6 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
@@ -140,6 +139,7 @@
 #include <QResizeEvent>
 #include <QDropEvent>
 #include <QGridLayout>
+#include <QStatusBar>
 #include <QLabel>
 #include <QImageReader>
 #include <QPluginLoader>

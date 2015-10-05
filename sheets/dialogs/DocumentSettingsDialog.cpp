@@ -37,7 +37,6 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include <kstatusbar.h>
 #include <KoVBox.h>
 
 #include <sonnet/configwidget.h>

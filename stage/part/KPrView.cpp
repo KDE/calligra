@@ -21,13 +21,14 @@
 */
 #include "KPrView.h"
 
+#include <QStatusBar>
+
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kfiledialog.h>
-#include <kstatusbar.h>
 
 #include <KoIcon.h>
 
@@ -66,7 +67,6 @@
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
 #include "ui/KPrHtmlExportDialog.h"
-#include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
 #include "gemini/ViewModeSwitchEvent.h"

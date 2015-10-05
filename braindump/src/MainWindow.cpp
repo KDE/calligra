@@ -31,7 +31,6 @@
 #include <kactionmenu.h>
 #include <kconfiggroup.h>
 #include <kstandardaction.h>
-#include <kstatusbar.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 

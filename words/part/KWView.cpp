@@ -98,15 +98,16 @@
 // KDE + Qt includes
 #include <QTimer>
 #include <QScrollBar>
+#include <QStatusBar>
 #include <QPushButton>
 #include <QClipboard>
+
 #include <klocalizedstring.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
-#include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
 

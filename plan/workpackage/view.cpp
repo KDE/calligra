@@ -48,7 +48,6 @@
 #include <kdebug.h>
 #include <ktoolbar.h>
 
-#include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <ktoolinvocation.h>
 #include <kactioncollection.h>

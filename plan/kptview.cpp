@@ -51,7 +51,6 @@
 #include <kdebug.h>
 #include <ktoolbar.h>
 #include <kconfigdialogmanager.h>
-#include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 #include <QTemporaryFile>

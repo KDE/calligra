@@ -85,10 +85,11 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <QAction>
-#include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <KoNetAccess.h>
+
+#include <QAction>
+#include <QStatusBar>
 #include <QTemporaryFile>
 #include <QUrl>
 

@@ -24,6 +24,7 @@
 #include <QVariant>
 #include <QToolBar>
 #include <QScrollBar>
+#include <QStatusBar>
 #include <QTimer>
 #include <QApplication>
 #include <QClipboard>
@@ -33,7 +34,6 @@
 #include <QAction>
 
 #include <kactioncollection.h>
-#include <kstatusbar.h>
 #include <KPluginFactory>
 
 #include <KoCanvasControllerWidget.h>
