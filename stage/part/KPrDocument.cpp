@@ -44,12 +44,12 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
 #include <kstandarddirs.h>
 #include <KSharedConfig>
 
 #include <QTimer>
 #include <QCoreApplication>
+#include <QGlobalStatic>
 
 class InitOnce
 {
@@ -63,6 +63,8 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC( InitOnce, s_initOnce );
+
 KPrDocument::KPrDocument(KoPart *part)
 : KoPADocument(part)
 , m_customSlideShows(new KPrCustomSlideShows())
@@ -70,7 +72,7 @@ KPrDocument::KPrDocument(KoPart *part)
 , m_presenterViewEnabled( false )
 , m_declarations( new KPrDeclarations() )
 {
-    K_GLOBAL_STATIC( InitOnce, s_initOnce );
+    // TODO: revisit if this is the place where that initialization should happen
     InitOnce * initOnce = s_initOnce;
     // have this is as otherwise we get a warning from the compiler
     // the variable is used and the way it is done is to only call it once

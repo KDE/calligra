@@ -20,8 +20,8 @@
 #include "KPrPageEffectRegistry.h"
 
 #include <QString>
+#include <QGlobalStatic>
 
-#include <kglobal.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
@@ -45,7 +45,7 @@ struct Q_DECL_HIDDEN KPrPageEffectRegistry::Private
     QHash<QPair<QString, bool>, KPrPageEffectFactory *> tagToFactory;
 };
 
-K_GLOBAL_STATIC( KPrPageEffectRegistry::Singleton, singleton )
+Q_GLOBAL_STATIC( KPrPageEffectRegistry::Singleton, singleton )
 
 KPrPageEffectRegistry * KPrPageEffectRegistry::instance()
 {
