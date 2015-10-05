@@ -28,7 +28,6 @@
 #include <author/CAuDocument.h>
 
 #include <kiconloader.h>
-#include <KAboutData>
 
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
@@ -49,7 +48,7 @@
 #include "pagetool/KWPageToolFactory.h"
 
 KoComponentData *CAuFactory::s_instance = 0;
-K4AboutData *CAuFactory::s_aboutData = 0;
+KAboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory()
     : KPluginFactory()
@@ -79,7 +78,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
     return part;
 }
 
-K4AboutData *CAuFactory::aboutData()
+KAboutData *CAuFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newAuthorAboutData();

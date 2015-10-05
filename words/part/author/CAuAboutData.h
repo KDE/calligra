@@ -21,29 +21,28 @@
 #ifndef CAUABOUTDATA_H
 #define CAUABOUTDATA_H
 
-#include <k4aboutdata.h>
+#include <KAboutData>
 #include <klocalizedstring.h>
+
 #include <calligraversion.h>
 
-static const char AUTHOR_DESCRIPTION[] = I18N_NOOP("Author tool");
-static const char AUTHOR_VERSION[] = CALLIGRA_VERSION_STRING;
-
-K4AboutData * newAuthorAboutData()
+KAboutData * newAuthorAboutData()
 {
-    // The second argument, "words", apparently enables translations.
-    // FIXME: We will probably have to change this when we move into
-    //        our own top level directory.
-    K4AboutData * aboutData = new K4AboutData("author", "words", ki18nc("application name", "Calligra Author"),
-                                            AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), K4AboutData::License_LGPL,
-                                            ki18n("© 2012-%1, The Author Team").subs(CALLIGRA_YEAR),
-                                            KLocalizedString(),
-                                            "http://www.calligra.org/author/");
+    KAboutData *aboutData = new KAboutData(
+        QStringLiteral("author"),
+        i18nc("application name", "Calligra Author"),
+        QStringLiteral(CALLIGRA_VERSION_STRING),
+        i18n("Author tool"),
+        KAboutLicense::LGPL,
+        i18n("Copyright 2012-%1, The Author Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        QString(),
+        QStringLiteral("http://www.calligra.org/author/"));
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
-    aboutData->setProgramIconName(QLatin1String("calligraauthor"));
+    aboutData->setOrganizationDomain( "kde.org" );
     //                          Name             Function               email (if any)
-    aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Co-maintainer"), "");
-    aboutData->addAuthor(ki18n("Gopalakrishna Bhat"), ki18n("Co-maintainer"), "");
-    aboutData->addAuthor(ki18n("Mojtaba Shahi Senobari"), ki18n("EPUB export"), "mojtaba.shahi3000@gmail.com");
+    aboutData->addAuthor(i18n("Inge Wallin"), i18n("Co-maintainer"), "");
+    aboutData->addAuthor(i18n("Gopalakrishna Bhat"), i18n("Co-maintainer"), "");
+    aboutData->addAuthor(i18n("Mojtaba Shahi Senobari"), i18n("EPUB export"), "mojtaba.shahi3000@gmail.com");
     return aboutData;
 }
 

@@ -25,8 +25,6 @@
 
 #include <calligraversion.h>
 
-// static const char WORDS_VERSION[] = CALLIGRA_VERSION_STRING;
-
 KAboutData * newWordsAboutData()
 {
     KAboutData * aboutData = new KAboutData(

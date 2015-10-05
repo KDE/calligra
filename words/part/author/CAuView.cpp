@@ -29,14 +29,12 @@
 #include <KoDockRegistry.h>
 #include <KoComponentData.h>
 
-#include <KStatusBar>
 #include <kactioncollection.h>
-#include <k4aboutdata.h>
 
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
-        setComponentName(CAuFactory::componentData().componentName(), CAuFactory::aboutData()->programName());
+        setComponentName(CAuFactory::componentData().componentName(), CAuFactory::componentData().componentDisplayName());
         setXMLFile("author.rc");
 
         setupActions();

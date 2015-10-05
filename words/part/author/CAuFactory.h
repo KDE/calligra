@@ -24,7 +24,7 @@
 #include <kpluginfactory.h>
 #include "words_export.h"
 
-class K4AboutData;
+class KAboutData;
 class KoComponentData;
 
 /**
@@ -48,11 +48,11 @@ public:
     static const KoComponentData &componentData();
 
     /// Creates a new KAboutData instance
-    static K4AboutData *aboutData();
+    static KAboutData *aboutData();
 
 private:
     static KoComponentData *s_instance;
-    static K4AboutData *s_aboutData;
+    static KAboutData *s_aboutData;
 };
 
 #endif
