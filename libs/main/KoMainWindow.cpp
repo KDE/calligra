@@ -64,10 +64,8 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <QAction>
 #include <kmenubar.h>
 #include <kmimetype.h>
-#include <k4aboutdata.h>
 #include <kglobal.h>
 
 #ifdef HAVE_KACTIVITIES
@@ -2008,7 +2006,7 @@ void KoMainWindow::createMainwindowGUI()
     }
 
     QString f = xmlFile();
-    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc"/*, componentData()*/ ) );
+    setXMLFile( QStandardPaths::locate(QStandardPaths::ConfigLocation, QStringLiteral("ui/ui_standards.rc")) );
     if ( !f.isEmpty() )
         setXMLFile( f, true );
     else
