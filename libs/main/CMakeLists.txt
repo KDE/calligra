@@ -68,6 +68,7 @@ set(komain_LIB_SRCS
 
     KoPart.cpp
 
+    MainDebug.cpp
 )
 
 if( QT_QTDBUS_FOUND )

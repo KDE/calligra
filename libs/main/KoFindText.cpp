@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 
 #include <KoText.h>
@@ -83,7 +83,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     bool findInSelection = false;
 
     if(d->documents.size() == 0) {
-        kWarning() << "No document available for searching!";
+        qWarning() << "No document available for searching!";
         return;
     }
 

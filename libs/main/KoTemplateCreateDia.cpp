@@ -52,7 +52,7 @@
 #include <klocalizedstring.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <KoNetAccess.h>
 #include <kiconloader.h>
 #include <k4aboutdata.h>
@@ -299,7 +299,7 @@ void KoTemplateCreateDia::slotOk() {
     if ( pos > -1 )
         ext = d->m_filePath.mid(pos);
     else
-        kWarning(30004) << "Template extension not found!";
+        qWarning(/*30004*/) << "Template extension not found!";
 
     QUrl dest;
     dest.setPath(templateDir+file+ext);
@@ -313,7 +313,7 @@ void KoTemplateCreateDia::slotOk() {
         while ( KIO::NetAccess::exists( dest, KIO::NetAccess::DestinationSide, this ) );
     }
     bool ignore = false;
-    kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
+    debugMain <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
     KoTemplate *t=new KoTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", "", "", "", false, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
@@ -351,7 +351,7 @@ void KoTemplateCreateDia::slotOk() {
         } else if(!d->m_customPixmap.isNull()) {
             saveAsQuadraticPng(d->m_customPixmap, icon);
         } else {
-            kWarning(30004) << "Could not save the preview picture!";
+            qWarning(/*30004*/) << "Could not save the preview picture!";
         }
     }
 
@@ -506,13 +506,13 @@ void KoTemplateCreateDia::updatePixmap() {
         d->m_preview->setPixmap(d->m_thumbnail);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
-            kDebug(30004) <<"Trying to load picture" << d->m_customFile;
+            debugMain <<"Trying to load picture" << d->m_customFile;
             // use the code in KoTemplate to load the image... hacky, I know :)
             KoTemplate t("foo", "bar", QString(), d->m_customFile);
             d->m_customPixmap=t.loadPicture();
         }
         else
-            kWarning(30004) << "Trying to load picture";
+            qWarning(/*30004*/) << "Trying to load picture";
 
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);

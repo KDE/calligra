@@ -27,7 +27,7 @@
 #include <KoProgressBar.h>
 
 #include <QCoreApplication>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 #include <QPainter>
 #include <QPrinter>
@@ -127,7 +127,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
         }
     }
     if (d->pages.isEmpty()) {
-        kWarning(30004) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";
+        qWarning(/*30004*/) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";
         return;
     }
 

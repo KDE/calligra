@@ -34,7 +34,7 @@
 #include <QToolButton>
 #include <QTreeWidget>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <QTemporaryFile>

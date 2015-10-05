@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include "KoToolDocker.h"
 #include "KoDockRegistry.h"

@@ -38,7 +38,6 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QDebug>
 
 
 struct FileItem {

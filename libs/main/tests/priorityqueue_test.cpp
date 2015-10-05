@@ -20,7 +20,6 @@
 
 #include "priorityqueue_test.h"
 #include <PriorityQueue_p.h>
-#include <kdebug.h>
 #include <QList>
 #include <ctime>
 #include <QTest>
@@ -71,25 +70,25 @@ void PriorityQueue_test::testQueue()
         dict.insert(keys[i], n2);
     }
 
-    kDebug() << "##### Queue 1:";
+    qDebug() << "##### Queue 1:";
     queue.dump();
     QCOMPARE((int) queue.count(), list.count());
     QCOMPARE(queue.isEmpty(), false);
     QCOMPARE(queue.extractMinimum()->index(), 0);
 
 
-    kDebug() << "##### Queue 2:";
+    qDebug() << "##### Queue 2:";
     CalligraFilter::PriorityQueue<Node> queue2(dict);
     //queue2.dump();
 
     Node *n = list.at(6);
-    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    qDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(2);
     queue.keyDecreased(n);
     queue.dump();
 
     n = list.at(2);
-    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    qDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(0);
     queue.keyDecreased(n);
     queue.dump();

@@ -26,7 +26,7 @@
 #include "KoPart.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
-#include <kdebug.h>
+#include <MainDebug.h>
 
 
 KoPartAdaptor::KoPartAdaptor(KoPart *doc)
@@ -108,7 +108,7 @@ QString KoPartAdaptor::documentInfoCompanyName() const
 
 QString KoPartAdaptor::documentInfoTelephone() const
 {
-    kDebug(30003) << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
+    debugMain << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
     return documentInfoTelephoneWork();
 }
 
@@ -210,7 +210,7 @@ void KoPartAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 
 void KoPartAdaptor::setDocumentInfoTelephone(const QString &text)
 {
-    kDebug(30003) << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
+    debugMain << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
     setDocumentInfoTelephoneWork(text);
 }
 

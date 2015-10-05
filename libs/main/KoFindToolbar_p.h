@@ -27,7 +27,6 @@
 #include <QMenu>
 #include <QTimer>
 #include <QApplication>
-#include <QDebug>
 
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>

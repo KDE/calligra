@@ -24,7 +24,6 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QTimer>
-#include <QDebug>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>

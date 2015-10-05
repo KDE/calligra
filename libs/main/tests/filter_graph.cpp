@@ -26,7 +26,7 @@
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
 
-#include <kdebug.h>
+#include <MainDebug.h>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -68,7 +68,7 @@ int main(int /*argc*/, char ** /*argv*/)
     QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for (; it != end; ++it) {
-        kDebug() << "import" << (*it)->import << " export" << (*it)->export_;
+        qDebug() << "import" << (*it)->import << " export" << (*it)->export_;
         // First add the "starting points"
         QStringList::ConstIterator importIt = (*it)->import.constBegin();
         QStringList::ConstIterator importEnd = (*it)->import.constEnd();

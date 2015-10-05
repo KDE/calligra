@@ -35,7 +35,7 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoResourcePaths.h>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
 #include <kmimetype.h>
@@ -204,14 +204,14 @@ QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 void KoPart::addMainWindow(KoMainWindow *mainWindow)
 {
     if (d->mainWindows.indexOf(mainWindow) == -1) {
-        kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+        debugMain <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
         d->mainWindows.append(mainWindow);
     }
 }
 
 void KoPart::removeMainWindow(KoMainWindow *mainWindow)
 {
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
+    debugMain <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
     if (mainWindow) {
         d->mainWindows.removeAll(mainWindow);
     }
@@ -287,7 +287,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {
 #ifndef NDEBUG
     if (d->templatesResourcePath.isEmpty())
-        kDebug(30003) << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
+        debugMain << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
 #endif
 
     if (!alwaysShow) {

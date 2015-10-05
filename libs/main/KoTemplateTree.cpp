@@ -25,7 +25,7 @@
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 

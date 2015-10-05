@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <QMetaMethod>
 #include <QTemporaryFile>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -83,7 +83,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     }
 
     if (!m_chainLinks.current()) {
-        kWarning(30500) << "Huh?? Found a null pointer in the chain";
+        warnFilter << "Huh?? Found a null pointer in the chain";
         return KoFilter::StupidError;
     }
 
@@ -114,7 +114,7 @@ QString KoFilterChain::inputFile()
     if (m_inputQueried == File)
         return m_inputFile;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFilter << "You already asked for some different source.";
         return QString();
     }
     m_inputQueried = File;
@@ -137,12 +137,12 @@ QString KoFilterChain::outputFile()
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain())
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFilter << "An embedded filter has to use storageFile()!";
 
     if (m_outputQueried == File)
         return m_outputFile;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFilter << "You already asked for some different destination.";
         return QString();
     }
     m_outputQueried = File;
@@ -175,7 +175,7 @@ KoStoreDevice* KoFilterChain::storageFile(const QString& name, KoStore::Mode mod
         return storageHelper(outputFile(), name, KoStore::Write,
                              &m_outputStorage, &m_outputStorageDevice);
     else {
-        kWarning(30500) << "Oooops, how did we get here? You already asked for a"
+        warnFilter << "Oooops, how did we get here? You already asked for a"
         << " different source/destination?" << endl;
         return 0;
     }
@@ -186,7 +186,7 @@ KoDocument* KoFilterChain::inputDocument()
     if (m_inputQueried == Document)
         return m_inputDocument;
     else if (m_inputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different source.";
+        warnFilter << "You already asked for some different source.";
         return 0;
     }
 
@@ -206,14 +206,14 @@ KoDocument* KoFilterChain::outputDocument()
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if (filterManagerParentChain()) {
-        kWarning(30500) << "An embedded filter has to use storageFile()!";
+        warnFilter << "An embedded filter has to use storageFile()!";
         return 0;
     }
 
     if (m_outputQueried == Document)
         return m_outputDocument;
     else if (m_outputQueried != Nil) {
-        kWarning(30500) << "You already asked for some different destination.";
+        warnFilter << "You already asked for some different destination.";
         return 0;
     }
 
@@ -230,13 +230,13 @@ KoDocument* KoFilterChain::outputDocument()
 
 void KoFilterChain::dump()
 {
-    kDebug(30500) << "########## KoFilterChain with" << m_chainLinks.count() << " members:";
+    debugFilter << "########## KoFilterChain with" << m_chainLinks.count() << " members:";
     ChainLink* link = m_chainLinks.first();
     while (link) {
         link->dump();
         link = m_chainLinks.next();
     }
-    kDebug(30500) << "########## KoFilterChain (done) ##########";
+    debugFilter << "########## KoFilterChain (done) ##########";
 }
 
 void KoFilterChain::appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
@@ -331,7 +331,7 @@ void KoFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if (m_inputDocument &&
             static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export) {
-        kDebug(30500) << "Saving the output document to the export file " << m_chainLinks.current()->to();
+        debugFilter << "Saving the output document to the export file " << m_chainLinks.current()->to();
         m_inputDocument->setOutputMimeType(m_chainLinks.current()->to());
         m_inputDocument->saveNativeFormat(filterManagerExportFile());
         m_inputFile = filterManagerExportFile();
@@ -341,7 +341,7 @@ void KoFilterChain::finalizeIO()
 bool KoFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
 {
     if (*tempFile) {
-        kError(30500) << "Ooops, why is there already a temp file???" << endl;
+        errorFilter << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
     *tempFile = new QTemporaryFile();
@@ -439,7 +439,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& 
     if (file.isEmpty())
         return 0;
     if (*storage) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up...";
+        debugFilter << "Uh-oh, we forgot to clean up...";
         return 0;
     }
 
@@ -481,7 +481,7 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName
         return 0;
 
     if (*device) {
-        kDebug(30500) << "Uh-oh, we forgot to clean up the storage device!";
+        debugFilter << "Uh-oh, we forgot to clean up the storage device!";
         (*storage)->close();
         return storageCleanupHelper(storage);
     }
@@ -505,14 +505,14 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
     url.setPath(file);
     KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
     if (t->name() == KMimeType::defaultMimeType()) {
-        kError(30500) << "No mimetype found for " << file << endl;
+        errorFilter << "No mimetype found for " << file << endl;
         return 0;
     }
 
     KoDocument *doc = createDocument(t->name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
-        kError(30500) << "Couldn't load from the file" << endl;
+        errorFilter << "Couldn't load from the file" << endl;
         delete doc;
         return 0;
     }
@@ -524,13 +524,13 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
 
     if (entry.isEmpty()) {
-        kError(30500) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
+        errorFilter << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
 
     QString errorMsg;
     KoPart *part = entry.createKoPart(&errorMsg);
     if (!part) {
-        kError(30500) << "Couldn't create the document: " << errorMsg << endl;
+        errorFilter << "Couldn't create the document: " << errorMsg << endl;
         return 0;
     }
     return part->document();

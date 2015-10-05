@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChainLink.h"
 #include <QMetaMethod>
 #include <QPluginLoader>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
 #include "KoProgressUpdater.h"
@@ -66,14 +66,14 @@ namespace CalligraFilter {
     KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
     {
         if (!m_filterEntry) {
-            kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+            errorFilter << "This filter entry is null. Strange stuff going on." << endl;
             return KoFilter::FilterEntryNull;
         }
 
         m_filter = m_filterEntry->createFilter(m_chain);
 
         if (!m_filter) {
-            kError(30500) << "Couldn't create the filter." << endl;
+            errorFilter << "Couldn't create the filter." << endl;
             return KoFilter::FilterCreationError;
         }
 
@@ -97,7 +97,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        kDebug(30500) << "   Link:" << m_filterEntry->loader()->fileName();
+        debugFilter << "   Link:" << m_filterEntry->loader()->fileName();
     }
 
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const

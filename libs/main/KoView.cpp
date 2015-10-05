@@ -45,7 +45,7 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <QUrl>
 #include <kmessagebox.h>
 #include <KoNetAccess.h>
@@ -312,7 +312,7 @@ void KoView::removeStatusBarItem(QWidget *widget)
 
 KoPrintJob * KoView::createPrintJob()
 {
-    kWarning(30003) << "Printing not implemented in this application";
+    warnMain << "Printing not implemented in this application";
     return 0;
 }
 

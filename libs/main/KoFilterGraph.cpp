@@ -30,7 +30,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QPluginLoader>
 #include <QMetaMethod>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -101,12 +101,12 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
 void Graph::dump() const
 {
 #ifndef NDEBUG
-    kDebug(30500) << "+++++++++ Graph::dump +++++++++";
-    kDebug(30500) << "From:" << m_from;
+    debugFilter << "+++++++++ Graph::dump +++++++++";
+    debugFilter << "From:" << m_from;
     foreach(Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
-    kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";
+    debugFilter << "+++++++++ Graph::dump (done) +++++++++";
 #endif
 }
 
@@ -160,7 +160,7 @@ void Graph::buildGraph()
                 }
             }
         } else
-            kDebug(30500) << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
+            debugFilter << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
     }
 }
 

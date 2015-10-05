@@ -20,7 +20,7 @@
 #include "KoFilterChain.h"
 #include "KoFilterManager.h"
 
-#include <kdebug.h>
+#include <MainDebug.h>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -30,22 +30,22 @@ int main(int /*argc*/, char ** /*argv*/)
     g.dump();
 
     KoFilterManager *manager = new KoFilterManager(0);
-    kDebug() << "Trying to build some filter chains...";
+    qDebug() << "Trying to build some filter chains...";
     QByteArray mimeType("foo/bar");
     KoFilterChain::Ptr chain = g.chain(manager, mimeType);
     if (!chain)
-        kDebug() << "Chain for 'foo/bar' is not available, OK";
+        qDebug() << "Chain for 'foo/bar' is not available, OK";
     else {
-        kError() << "Chain for 'foo/bar' is available!" << endl;
+        qCritical() << "Chain for 'foo/bar' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "text/csv";
     chain = g.chain(manager, mimeType);
     if (!chain)
-        kError() << "Chain for 'text/csv' is not available!" << endl;
+        qCritical() << "Chain for 'text/csv' is not available!" << endl;
     else {
-        kDebug() << "Chain for 'text/csv' is available, OK";
+        qDebug() << "Chain for 'text/csv' is available, OK";
         chain->dump();
     }
 
@@ -53,38 +53,38 @@ int main(int /*argc*/, char ** /*argv*/)
     mimeType = "";
     chain = g.chain(manager, mimeType);
     if (!chain)
-        kDebug() << "It was already a Calligra part, OK";
+        qDebug() << "It was already a Calligra part, OK";
     else
-        kError() << "We really got a chain? ugh :}" << endl;
+        qCritical() << "We really got a chain? ugh :}" << endl;
 
     g.setSourceMimeType("text/csv");
     mimeType = "";
     chain = g.chain(manager, mimeType);
     if (!chain)
-        kError() << "Hmm... why didn't we find a chain?" << endl;
+        qCritical() << "Hmm... why didn't we find a chain?" << endl;
     else {
-        kDebug() << "Chain for 'text/csv' -> closest part is available ("
+        qDebug() << "Chain for 'text/csv' -> closest part is available ("
         << mimeType << "), OK" << endl;
         chain->dump();
     }
 
-    kDebug() << "Checking mimeFilter() for Import:";
+    qDebug() << "Checking mimeFilter() for Import:";
     QStringList list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Import);
     Q_FOREACH(const QString& it, list)
-        kDebug() << "" << it;
-    kDebug() << "" << list.count() << " entries.";
+        qDebug() << "" << it;
+    qDebug() << "" << list.count() << " entries.";
 
-    kDebug() << "Checking mimeFilter() for Export:";
+    qDebug() << "Checking mimeFilter() for Export:";
     list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Export);
     Q_FOREACH(const QString& it, list)
-        kDebug() << "" << it;
-    kDebug() << "" << list.count() << " entries.";
+        qDebug() << "" << it;
+    qDebug() << "" << list.count() << " entries.";
 
-    kDebug() << "Checking KoShell's mimeFilter():";
+    qDebug() << "Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
     Q_FOREACH(const QString& it, list)
-        kDebug() << "" << it;
-    kDebug() << "" << list.count() << " entries.";
+        qDebug() << "" << it;
+    qDebug() << "" << list.count() << " entries.";
 
     delete manager;
     return 0;

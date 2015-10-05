@@ -38,7 +38,7 @@
 #include <QUrl>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>

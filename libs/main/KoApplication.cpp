@@ -46,7 +46,7 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <kmimetype.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -488,7 +488,7 @@ bool KoApplication::start()
                     QString templatePath;
                     if (url.isLocalFile() && QFile::exists(url.toLocalFile())) {
                         templatePath = url.toLocalFile();
-                        kDebug(30003) << "using full path...";
+                        debugMain << "using full path...";
                     } else {
                         QString desktopName(fileUrls.at(argNumber));
                         const QString templatesResourcePath = part->templatesResourcePath();
@@ -520,7 +520,7 @@ bool KoApplication::start()
                             doc->resetURL();
                             doc->setEmpty();
                             doc->setTitleModified();
-                            kDebug(30003) << "Template loaded...";
+                            debugMain << "Template loaded...";
                             numberOfOpenDocuments++;
                         } else {
                             KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.toDisplayString()));

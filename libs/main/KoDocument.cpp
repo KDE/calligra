@@ -57,7 +57,7 @@
 #include <KoNetAccess.h>
 #include <klocalizedstring.h>
 #include <ksavefile.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kdirnotify.h>
@@ -398,7 +398,7 @@ public:
 
     void _k_slotGotMimeType(KIO::Job *job, const QString &mime)
     {
-        kDebug(1000) << mime;
+//         kDebug(1000) << mime;
         Q_ASSERT(job == m_job); Q_UNUSED(job);
         // set the mimetype only if it was not already set (for example, by the host application)
         if (mimeType.isEmpty()) {
@@ -513,7 +513,7 @@ bool KoDocument::exportDocument(const QUrl &_url)
     // This is sooooo hacky :(
     // Hopefully we will restore enough state.
     //
-    kDebug(30003) << "Restoring KoDocument state to before export";
+    debugMain << "Restoring KoDocument state to before export";
 
     // always restore url & m_file because KParts has changed them
     // (regardless of failure or success)
@@ -535,7 +535,7 @@ bool KoDocument::exportDocument(const QUrl &_url)
 
 bool KoDocument::saveFile()
 {
-    kDebug(30003) << "doc=" << url().url();
+    debugMain << "doc=" << url().url();
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
@@ -544,7 +544,7 @@ bool KoDocument::saveFile()
     QByteArray outputMimeType = d->outputMimeType;
     if (outputMimeType.isEmpty()) {
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
-        kDebug(30003) << "Empty output mime type, saving to" << outputMimeType;
+        debugMain << "Empty output mime type, saving to" << outputMimeType;
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -577,7 +577,7 @@ bool KoDocument::saveFile()
     bool ret = false;
     bool suppressErrorDialog = false;
     if (!isNativeFormat(outputMimeType)) {
-        kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
+        debugMain << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
@@ -794,16 +794,16 @@ bool KoDocument::saveNativeFormat(const QString & file)
     KoStore::Backend backend = KoStore::Auto;
     if (d->specialOutputFlag == SaveAsDirectoryStore) {
         backend = KoStore::Directory;
-        kDebug(30003) << "Saving as uncompressed XML, using directory store.";
+        debugMain << "Saving as uncompressed XML, using directory store.";
     }
 #ifdef QCA2
     else if (d->specialOutputFlag == SaveEncrypted) {
         backend = KoStore::Encrypted;
-        kDebug(30003) << "Saving using encrypted backend.";
+        debugMain << "Saving using encrypted backend.";
     }
 #endif
     else if (d->specialOutputFlag == SaveAsFlatXML) {
-        kDebug(30003) << "Saving as a flat XML file.";
+        debugMain << "Saving as a flat XML file.";
         QFile f(file);
         if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             bool success = saveToStream(&f);
@@ -813,11 +813,11 @@ bool KoDocument::saveNativeFormat(const QString & file)
             return false;
     }
 
-    kDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
+    debugMain << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
     // OLD: bool oasis = d->specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QByteArray mimeType = d->outputMimeType;
-    kDebug(30003) << "KoDocument::savingTo mimeType=" << mimeType;
+    debugMain << "KoDocument::savingTo mimeType=" << mimeType;
     QByteArray nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" || mimeType.startsWith("application/vnd.oasis.opendocument"));
 
@@ -840,7 +840,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
 
 bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 {
-    kDebug(30003) << "Saving to OASIS format";
+    debugMain << "Saving to OASIS format";
     // Tell KoStore not to touch the file names
 
     KoOdfWriteStore odfStore(store);
@@ -849,7 +849,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!saveOdf(documentContext)) {
-        kDebug(30003) << "saveOdf failed";
+        debugMain << "saveOdf failed";
         odfStore.closeManifestWriter(false);
         delete store;
         return false;
@@ -857,7 +857,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 
     // Save embedded objects
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(30003) << "save embedded documents failed";
+        debugMain << "save embedded documents failed";
         odfStore.closeManifestWriter(false);
         delete store;
         return false;
@@ -949,11 +949,11 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 
 bool KoDocument::saveNativeFormatCalligra(KoStore *store)
 {
-    kDebug(30003) << "Saving root";
+    debugMain << "Saving root";
     if (store->open("root")) {
         KoStoreDevice dev(store);
         if (!saveToStream(&dev) || !store->close()) {
-            kDebug(30003) << "saveToStream failed";
+            debugMain << "saveToStream failed";
             delete store;
             return false;
         }
@@ -984,7 +984,7 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         delete store;
         return false;
     }
-    kDebug(30003) << "Saving done of url:" << url().url();
+    debugMain << "Saving done of url:" << url().url();
     if (!store->finalize()) {
         delete store;
         return false;
@@ -1002,7 +1002,7 @@ bool KoDocument::saveToStream(QIODevice *dev)
     dev->open(QIODevice::WriteOnly);
     int nwritten = dev->write(s.data(), s.size());
     if (nwritten != (int)s.size())
-        kWarning(30003) << "wrote " << nwritten << "- expected" <<  s.size();
+        warnMain << "wrote " << nwritten << "- expected" <<  s.size();
     return nwritten == (int)s.size();
 }
 
@@ -1041,7 +1041,7 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url
 // Called for embedded documents
 bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 {
-    kDebug(30003) << "Saving document to store" << _path;
+    debugMain << "Saving document to store" << _path;
 
     _store->pushDirectory();
     // Use the path as the internal url
@@ -1067,7 +1067,7 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
     // Now that we're done leave the directory again
     _store->popDirectory();
 
-    kDebug(30003) << "Saved document to store";
+    debugMain << "Saved document to store";
 
     return true;
 }
@@ -1185,7 +1185,7 @@ bool KoDocument::importDocument(const QUrl &_url)
 {
     bool ret;
 
-    kDebug(30003) << "url=" << _url.url();
+    debugMain << "url=" << _url.url();
     d->isImporting = true;
 
     // open...
@@ -1194,7 +1194,7 @@ bool KoDocument::importDocument(const QUrl &_url)
     // reset url & m_file (kindly? set by KoParts::openUrl()) to simulate a
     // File --> Import
     if (ret) {
-        kDebug(30003) << "success, resetting url";
+        debugMain << "success, resetting url";
         resetURL();
         setTitleModified();
     }
@@ -1207,7 +1207,7 @@ bool KoDocument::importDocument(const QUrl &_url)
 
 bool KoDocument::openUrl(const QUrl &_url)
 {
-    kDebug(30003) << "url=" << _url.url();
+    debugMain << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
@@ -1225,7 +1225,7 @@ bool KoDocument::openUrl(const QUrl &_url)
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
-            //kDebug(30003) <<"asf=" << asf;
+            //debugMain <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel(0,
                       i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
@@ -1340,7 +1340,7 @@ static const struct MimetypeReplacement {
 
 bool KoDocument::openFile()
 {
-    //kDebug(30003) <<"for" << localFilePath();
+    //debugMain <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
@@ -1406,7 +1406,7 @@ bool KoDocument::openFile()
 
         // Potentially more guesses here...
     }
-    //kDebug(30003) << "mimetypes 3:" << typeName;
+    //debugMain << "mimetypes 3:" << typeName;
 
     // In some cases docx files are saved as doc and similar.  We have
     // a small hardcoded table for those cases.  Check if this is
@@ -1415,18 +1415,18 @@ bool KoDocument::openFile()
         const MimetypeReplacement *replacement = &replacementMimetypes[i];
 
         if (typeName == replacement->typeFromName) {
-            //kDebug(30003) << "found potential replacement target:" << typeName;
+            //debugMain << "found potential replacement target:" << typeName;
             int accuracy;
             QString typeFromContents = KMimeType::findByFileContent(u.path(), &accuracy)->name();
-            //kDebug(30003) << "found potential replacement:" << typeFromContents;
+            //debugMain << "found potential replacement:" << typeFromContents;
             if (typeFromContents == replacement->typeFromContents) {
                 typeName = replacement->useThisType;
-                //kDebug(30003) << "So really use this:" << typeName;
+                //debugMain << "So really use this:" << typeName;
                 break;
             }
         }
     }
-    //kDebug(30003) << "mimetypes 4:" << typeName;
+    //debugMain << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
@@ -1451,9 +1451,9 @@ bool KoDocument::openFile()
     if (u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory") {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->specialOutputFlag = SaveAsDirectoryStore;
-        kDebug(30003) << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
+        debugMain << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
     }
-    kDebug(30003) << localFilePath() << "type:" << typeName;
+    debugMain << localFilePath() << "type:" << typeName;
 
     QString importedFile = localFilePath();
 
@@ -1554,7 +1554,7 @@ bool KoDocument::openFile()
             return false;
         }
         d->isEmpty = false;
-        kDebug(30003) << "importedFile" << importedFile << "status:" << static_cast<int>(status);
+        debugMain << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
     QApplication::restoreOverrideCursor();
@@ -1659,10 +1659,10 @@ void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 // The caller must call store->close() if loadAndParse returns true.
 bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(30003) <<"Trying to open" << filename;
+    //debugMain <<"Trying to open" << filename;
 
     if (!store->open(filename)) {
-        kWarning(30003) << "Entry " << filename << " not found!";
+        warnMain << "Entry " << filename << " not found!";
         d->lastErrorMessage = i18n("Could not find %1", filename);
         return false;
     }
@@ -1672,7 +1672,7 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {
-        kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
+        errorMain << "Parsing error in " << filename << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
@@ -1681,7 +1681,7 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
                                                                QCoreApplication::UnicodeUTF8));
         return false;
     }
-    kDebug(30003) << "File" << filename << " loaded and parsed";
+    debugMain << "File" << filename << " loaded and parsed";
     return true;
 }
 
@@ -1704,7 +1704,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    kDebug(30003) << file;
+    debugMain << file;
 
     QFile in;
     bool isRawXML = false;
@@ -1735,7 +1735,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         if (! isRawXML)
             // also check for broken MathML files, which seem to be rather common
             isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?
-        //kDebug(30003) <<"PATTERN=" << buf;
+        //debugMain <<"PATTERN=" << buf;
     }
     // Is it plain XML?
     if (isRawXML) {
@@ -1750,7 +1750,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
             if (res)
                 res = completeLoading(0);
         } else {
-            kError(30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
+            errorMain << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
             << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
@@ -1858,7 +1858,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         }
 
     } else {
-        kError(30003) << "ERROR: No maindoc.xml" << endl;
+        errorMain << "ERROR: No maindoc.xml" << endl;
         d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
         QApplication::restoreOverrideCursor();
         return false;
@@ -1924,7 +1924,7 @@ bool KoDocument::loadFromStore(KoStore *_store, const QString& url)
         }
         _store->close();
     } else {
-        kWarning() << "couldn't open " << url;
+        qWarning() << "couldn't open " << url;
     }
 
     _store->pushDirectory();
@@ -1955,7 +1955,7 @@ bool KoDocument::loadOasisFromStore(KoStore *store)
 
 bool KoDocument::addVersion(const QString& comment)
 {
-    kDebug(30003) << "Saving the new version....";
+    debugMain << "Saving the new version....";
 
     KoStore::Backend backend = KoStore::Auto;
     if (d->specialOutputFlag != 0)
@@ -1978,7 +1978,7 @@ bool KoDocument::addVersion(const QString& comment)
         return false;
     }
 
-    kDebug(30003) << "Saving to OASIS format";
+    debugMain << "Saving to OASIS format";
     KoOdfWriteStore odfStore(store);
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
@@ -1988,14 +1988,14 @@ bool KoDocument::addVersion(const QString& comment)
     SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!saveOdf(documentContext)) {
-        kDebug(30003) << "saveOdf failed";
+        debugMain << "saveOdf failed";
         delete store;
         return false;
     }
 
     // Save embedded objects
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(30003) << "save embedded documents failed";
+        debugMain << "save embedded documents failed";
         delete store;
         return false;
     }
@@ -2042,12 +2042,12 @@ void KoDocument::setModified(bool mod)
         return;
 
     if ( !d->readwrite && d->modified ) {
-        kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
+        qCritical(/*1000*/) << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }
 
-    //kDebug(30003)<<" url:" << url.path();
-    //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KoParts::ReadWritePart::isModified()<<" isModified="<<isModified();
+    //debugMain<<" url:" << url.path();
+    //debugMain<<" mod="<<mod<<" MParts mod="<<KoParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
     if (mod && !d->modifiedAfterAutosave) {
         // First change since last autosave -> start the autosave timer
@@ -2072,7 +2072,7 @@ void KoDocument::setModified(bool mod)
 
 int KoDocument::queryCloseDia()
 {
-    //kDebug(30003);
+    //debugMain;
 
     QString name;
     if (documentInfo()) {
@@ -2167,7 +2167,7 @@ QDomDocument KoDocument::createDomDocument(const QString& appName, const QString
 
 QDomDocument KoDocument::saveXML()
 {
-    kError(30003) << "not implemented" << endl;
+    errorMain << "not implemented" << endl;
     d->lastErrorMessage = i18n("Internal error: saveXML not implemented");
     return QDomDocument();
 }
@@ -2263,7 +2263,7 @@ bool KoDocument::storeInternal() const
 void KoDocument::setStoreInternal(bool i)
 {
     d->storeInternal = i;
-    //kDebug(30003)<<"="<<d->storeInternal<<" doc:"<<url().url();
+    //debugMain<<"="<<d->storeInternal<<" doc:"<<url().url();
 }
 
 bool KoDocument::hasExternURL() const
@@ -2461,7 +2461,7 @@ bool KoDocument::saveAs( const QUrl &kurl )
 {
     if (!kurl.isValid())
     {
-        kError(1000) << "saveAs: Malformed URL " << kurl.url() << endl;
+        qCritical(/*1000*/) << "saveAs: Malformed URL " << kurl.url() << endl;
         return false;
     }
     d->m_duringSaveAs = true;

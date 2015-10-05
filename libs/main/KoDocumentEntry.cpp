@@ -26,7 +26,7 @@
 
 #include <kservicetype.h>
 #include <kpluginfactory.h>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <KoJsonTrader.h>
 
 #include <QPluginLoader>
@@ -104,7 +104,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     QList<KoDocumentEntry> vec = query(mimetype);
 
     if (vec.isEmpty()) {
-        kWarning(30003) << "Got no results with " << mimetype;
+        warnMain << "Got no results with " << mimetype;
         // Fallback to the old way (which was probably wrong, but better be safe)
         vec = query(mimetype);
 
@@ -112,11 +112,11 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
             if (!KServiceType::serviceType(mimetype)) {
-                kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
-                kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
+                errorMain << "Unknown Calligra MimeType " << mimetype << "." << endl;
+                errorMain << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
-                kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+                errorMain << "Found no Calligra part able to handle " << mimetype << "!" << endl;
+                errorMain << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
             }
             return KoDocumentEntry();
         }
@@ -143,9 +143,9 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
-        kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
+        warnMain << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
         foreach(const KoDocumentEntry &entry, lst) {
-            qDebug() << entry.name();
+            warnMain << entry.name();
         }
     }
 

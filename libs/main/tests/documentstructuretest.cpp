@@ -19,7 +19,6 @@
 
 #include "documentstructuretest.h"
 
-#include <QDebug>
 #include <QTest>
 
 #include <KoDocument.h>

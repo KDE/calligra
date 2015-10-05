@@ -22,7 +22,7 @@
 #include <vector>
 #include <QString>
 #include <QHash>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 // Better put all those internal classes in some namespace to avoid clashes
 // as the names are quite generic
@@ -165,7 +165,7 @@ T* PriorityQueue<T>::extractMinimum()
 template<class T>
 void PriorityQueue<T>::dump() const
 {
-    kDebug(30500) << "++++++++++ PriorityQueue::dump ++++++++++";
+    debugFilter << "++++++++++ PriorityQueue::dump ++++++++++";
     QString out;
     int size = static_cast<int>(m_vector.size());
     for (int i = 0; i < size; ++i) {
@@ -176,8 +176,8 @@ void PriorityQueue<T>::dump() const
     }
     if (out.isEmpty())
         out = "(empty)";
-    kDebug(30500) << out;
-    kDebug(30500) << "++++++++++ PriorityQueue::dump (done) ++++++++++";
+    debugFilter << out;
+    debugFilter << "++++++++++ PriorityQueue::dump (done) ++++++++++";
 }
 
 template<class T>

@@ -29,7 +29,7 @@
 #include <KoUpdater.h>
 
 #include <QCoreApplication>
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 #include <QPainter>
 #include <QPrinter>
@@ -101,14 +101,14 @@ public:
 
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
         if (shapes.isEmpty()) {
-            kDebug(30004) << "Printing page" << pageNumber << "I notice there are no shapes on this page";
+            debugMain << "Printing page" << pageNumber << "I notice there are no shapes on this page";
         } else {
             const int progressPart = 45 / shapes.count();
             foreach(KoShape *shape, shapes) {
-                kDebug(30004) << "Calling waitUntilReady on shape;" << shape;
+                debugMain << "Calling waitUntilReady on shape;" << shape;
                 if(! stop)
                     shape->waitUntilReady(zoomer);
-                kDebug(30004) << "done";
+                debugMain << "done";
                 updater->setProgress(updater->progress() + progressPart);
             }
         }
