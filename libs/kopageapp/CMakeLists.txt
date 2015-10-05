@@ -54,6 +54,8 @@ ki18n_wrap_ui(kopageapp_LIB_SRCS
 )
 
 add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
+generate_export_header(kopageapp
+    EXPORT_FILE_NAME kopageapp_generated_export.h)
 
 target_link_libraries(kopageapp komain kotextlayout ${KDE4_KIO_LIBS})
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
