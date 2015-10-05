@@ -28,7 +28,6 @@
 #include <kactionmenu.h>
 #include <kfiledialog.h>
 #include <kstatusbar.h>
-#include <k4aboutdata.h>
 
 #include <KoIcon.h>
 
@@ -227,7 +226,7 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
-    setComponentName(KPrFactory::componentData().componentName(), KPrFactory::aboutData()->programName());
+    setComponentName(KPrFactory::componentData().componentName(), KPrFactory::componentData().componentDisplayName());
     if (!koDocument()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else

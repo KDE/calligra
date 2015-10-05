@@ -26,10 +26,8 @@
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-#include <KAboutData>
-
 KoComponentData* KPrFactory::s_instance = 0;
-K4AboutData* KPrFactory::s_aboutData = 0;
+KAboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
@@ -71,7 +69,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     return part;
 }
 
-K4AboutData* KPrFactory::aboutData()
+KAboutData* KPrFactory::aboutData()
 {
     if( !s_aboutData )
         s_aboutData = newKPresenterAboutData();

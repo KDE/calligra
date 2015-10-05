@@ -22,14 +22,13 @@
 #include <KoApplication.h>
 #include "KPrDocument.h"
 
-#include <KAboutData>
 #include <klocalizedstring.h>
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
     int state;
-    K4AboutData * aboutData=newKPresenterAboutData();
+    KAboutData *aboutData = newKPresenterAboutData();
 
     KoApplication app(STAGE_MIME_TYPE, *aboutData, argc, argv);
 
