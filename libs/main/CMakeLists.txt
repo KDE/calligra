@@ -19,6 +19,7 @@ endif()
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
     KoApplication.cpp
+    KoComponentData.cpp
     KoDockerManager.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
@@ -123,6 +124,7 @@ endif ()
 if (FALSE)
 install( FILES
     KoApplication.h
+    KoComponentData.h
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentSectionModel.h

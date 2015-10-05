@@ -23,14 +23,12 @@
 #include "kptmaindocument.h"
 #include "kptfactory.h"
 
-#include <kglobal.h>
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
 
 Part::Part(QObject *parent)
-    : KoPart(parent)
+    : KoPart(Factory::global(), parent)
 {
     setTemplatesResourcePath(QLatin1String("plan/templates/"));
-    setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
 }
 
 Part::~Part()

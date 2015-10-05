@@ -46,7 +46,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kcomponentdata.h>
+#include <KSharedConfig>
 
 #include <QTimer>
 #include <QCoreApplication>
@@ -260,7 +260,7 @@ void KPrDocument::removePages(QList<KoPAPageBase *> &pages)
 
 void KPrDocument::loadKPrConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
 
     if ( config->hasGroup( "SlideShow" ) ) {
         KConfigGroup configGroup = config->group( "SlideShow" );
@@ -271,7 +271,7 @@ void KPrDocument::loadKPrConfig()
 
 void KPrDocument::saveKPrConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup configGroup = config->group( "SlideShow" );
 
     configGroup.writeEntry( "PresentationMonitor", m_presentationMonitor );

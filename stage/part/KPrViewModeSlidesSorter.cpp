@@ -54,6 +54,7 @@
 #include <KoCopyController.h>
 #include <KoCutController.h>
 #include <KoViewItemContextBar.h>
+#include <KoComponentData.h>
 
 // KF5 Headers
 #include <klocalizedstring.h>
@@ -62,7 +63,6 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <kcomponentdata.h>
 
 const int DEFAULT_ICON_SIZE = 200;
 

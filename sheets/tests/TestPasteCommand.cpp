@@ -20,7 +20,7 @@
 
 #include <QTest>
 
-#include <KoPart.h>
+#include "MockPart.h"
 
 #include "part/CanvasItem.h"
 #include "part/Doc.h"

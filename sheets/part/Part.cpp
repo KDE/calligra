@@ -32,16 +32,14 @@
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
-
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
 
 using namespace Calligra::Sheets;
 
 Part::Part(QObject *parent)
-    : KoPart(parent)
+    : KoPart(Factory::global(), parent)
 {
     setTemplatesResourcePath(QLatin1String("sheets/templates/"));
-    setComponentData(Factory::global());
 }
 
 Part::~Part()

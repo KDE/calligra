@@ -20,12 +20,17 @@
 #include "ChartPart.h"
 #include "ChartDocument.h"
 
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
+
+#include <calligraversion.h>
+
+#include <KAboutData>
+
 
 ChartPart::ChartPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("kochart"), QStringLiteral("KoChart"),
+                                        QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
 {
-    setComponentData(KComponentData("kchart"));
 }
 
 ChartPart::~ChartPart()

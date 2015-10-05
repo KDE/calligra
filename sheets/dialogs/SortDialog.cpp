@@ -40,8 +40,6 @@
 
 #include <KoIcon.h>
 
-#include <kcomponentdata.h>
-
 // ui
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"

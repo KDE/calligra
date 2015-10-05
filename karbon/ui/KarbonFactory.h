@@ -29,9 +29,11 @@
 #define __KARBON_FACTORY_H__
 
 #include <kpluginfactory.h>
+#include <KSharedConfig>
+
 #include <karbonui_export.h>
-#include <kconfiggroup.h>
-#include <KConfigCore/ksharedconfig.h>
+
+class KoComponentData;
 
 class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 {
@@ -44,6 +46,10 @@ public:
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KSharedConfig::Ptr &karbonConfig();
+    static const KoComponentData &global();
+
+private:
+    static KoComponentData* s_global;
 };
 
 #endif

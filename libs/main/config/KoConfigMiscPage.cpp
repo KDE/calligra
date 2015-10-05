@@ -26,8 +26,8 @@
 #include <KoUnitDoubleSpinBox.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPart.h>
+#include <KoComponentData.h>
 
-#include <kcomponentdata.h>
 #include <kcombobox.h>
 
 #include <kconfig.h>

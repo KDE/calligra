@@ -40,9 +40,9 @@
 #include <KoJsonTrader.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
+#include <KoComponentData.h>
 
 #include <klocalizedstring.h>
-#include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -51,6 +51,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <krecentdirs.h>
+#include <KAboutData>
+#include <KSharedConfig>
 
 #include <QFile>
 #include <QWidget>
@@ -60,6 +62,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QPluginLoader>
+#include <QCommandLineParser>
 
 #include <stdlib.h>
 
@@ -80,12 +83,14 @@ const QTime appStartTime(QTime::currentTime());
 class KoApplicationPrivate
 {
 public:
-    KoApplicationPrivate()
+    KoApplicationPrivate(const KAboutData &aboutData_)
         : splashScreen(0)
+        , aboutData(aboutData_)
     {}
     QByteArray nativeMimeType;
     QWidget *splashScreen;
     QList<KoPart *> partList;
+    KAboutData aboutData;
 };
 
 class KoApplication::ResetStarting
@@ -124,10 +129,13 @@ public:
     QWidget *m_splash;
 };
 
-KoApplication::KoApplication(const QByteArray &nativeMimeType)
-    : KApplication(initHack())
-    , d(new KoApplicationPrivate)
+
+KoApplication::KoApplication(const QByteArray &nativeMimeType, const KAboutData &aboutData, int &argc, char **argv)
+    : QApplication(argc, argv)
+    , d(new KoApplicationPrivate(aboutData))
 {
+    KAboutData::setApplicationData( aboutData );
+
     KoApplication::KoApp = this;
 
     d->nativeMimeType = nativeMimeType;
@@ -152,29 +160,6 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
 
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
-
-    if (applicationName() == "calligragemini" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work oxygen and plastique. Try to set plastique first, then oxygen
-        setStyle("Plastique");
-        setStyle("Oxygen");
-    }
-}
-
-// This gets called before entering KApplication::KApplication
-bool KoApplication::initHack()
-{
-    KCmdLineOptions options;
-    options.add("print", ki18n("Only print and exit"));
-    options.add("template", ki18n("Open a new document with a template"));
-    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    options.add("export-pdf", ki18n("Only export to PDF and exit"));
-    options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
-    options.add("benchmark-loading", ki18n("just load the file and then exit"));
-    options.add("benchmark-loading-show-window", ki18n("load the file, show the window and progressbar and then exit"));
-    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
-    return true;
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -207,6 +192,26 @@ BOOL isWow64()
 bool KoApplication::start()
 {
 
+    // process commandline parameters
+    QCommandLineParser parser;
+    d->aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print"), i18n("Only print and exit")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("template"), i18n("Open a new document with a template")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("dpi"), i18n("Override display DPI"), QStringLiteral("dpiX,dpiY")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-pdf"), i18n("Only export to PDF and exit")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-filename"), i18n("Filename for export-pdf"), QStringLiteral("filename")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("benchmark-loading"), i18n("just load the file and then exit")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("benchmark-loading-show-window"), i18n("load the file, show the window and progressbar and then exit")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("profile-filename"), i18n("Filename to write profiling information into."), QStringLiteral("filename")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("roundtrip-filename"), i18n("Load a file and save it as an ODF file. Meant for debugging."), QStringLiteral("filename")));
+    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("File(s) or URL(s) to open"));
+
+    parser.process(*this);
+
+    d->aboutData.processCommandLine(&parser);
 
 #if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
@@ -259,11 +264,7 @@ bool KoApplication::start()
     }
 
     // Get the command line arguments which we have to parse
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    int argsCount = args->count();
-
-    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("calligra");
-    QString dpiValues = koargs->getOption("dpi");
+    QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {
         int sep = dpiValues.indexOf(QRegExp("[x, ]"));
         int dpiX;
@@ -282,7 +283,9 @@ bool KoApplication::start()
         }
     }
     // No argument -> create an empty document
-    if (!argsCount) {
+    const QStringList fileUrls = parser.positionalArguments();
+
+    if (fileUrls.isEmpty()) {
         // if there's no document, add the current working directory
         // to the recent dirs so the open dialog and open pane show
         // the directory from where the app was started, instead of
@@ -334,7 +337,7 @@ bool KoApplication::start()
 
         QStringList pids;
         QString ourPid;
-        ourPid.setNum(kapp->applicationPid());
+        ourPid.setNum(applicationPid());
 
 #ifndef QT_NO_DBUS
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
@@ -425,23 +428,22 @@ bool KoApplication::start()
 
     }
     else {
-        const bool print = koargs->isSet("print");
-        const bool exportAsPdf = koargs->isSet("export-pdf");
-        const QString pdfFileName = koargs->getOption("export-filename");
-        const QString roundtripFileName = koargs->getOption("roundtrip-filename");
-        const bool doTemplate = koargs->isSet("template");
-        const bool benchmarkLoading = koargs->isSet("benchmark-loading")
-                || koargs->isSet("benchmark-loading-show-window")
+        const bool print = parser.isSet("print");
+        const bool exportAsPdf = parser.isSet("export-pdf");
+        const QString pdfFileName = parser.value("export-filename");
+        const QString roundtripFileName = parser.value("roundtrip-filename");
+        const bool doTemplate = parser.isSet("template");
+        const bool benchmarkLoading = parser.isSet("benchmark-loading")
+                || parser.isSet("benchmark-loading-show-window")
                 || !roundtripFileName.isEmpty();
         // only show the mainWindow when no command-line mode option is passed
         const bool showmainWindow =
-                koargs->isSet("benchmark-loading-show-window") || (
-                    !koargs->isSet("export-pdf")
-                    && !koargs->isSet("benchmark-loading")
-                    && !koargs->isSet("roundtrip-filename")
+                parser.isSet("benchmark-loading-show-window") || (
+                    !parser.isSet("export-pdf")
+                    && !parser.isSet("benchmark-loading")
+                    && !parser.isSet("roundtrip-filename")
                     && roundtripFileName.isEmpty());
-        const QString profileFileName = koargs->getOption("profile-filename");
-        koargs->clear();
+        const QString profileFileName = parser.value("profile-filename");
 
         QTextStream profileoutput;
         QFile profileFile(profileFileName);
@@ -454,7 +456,9 @@ bool KoApplication::start()
 
         short int numberOfOpenDocuments = 0; // number of documents open
         short int nPrinted = 0;
-        for (int argNumber = 0; argNumber < argsCount; argNumber++) {
+        const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
+        for (int argNumber = 0; argNumber < fileUrls.size(); ++argNumber) {
+            const QUrl url = QUrl::fromUserInput(fileUrls.at(argNumber));
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
@@ -482,11 +486,11 @@ bool KoApplication::start()
                 // are we just trying to open a template?
                 if (doTemplate) {
                     QString templatePath;
-                    if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
-                        templatePath = args->url(argNumber).toLocalFile();
+                    if (url.isLocalFile() && QFile::exists(url.toLocalFile())) {
+                        templatePath = url.toLocalFile();
                         kDebug(30003) << "using full path...";
                     } else {
-                        QString desktopName(args->arg(argNumber));
+                        QString desktopName(fileUrls.at(argNumber));
                         const QString templatesResourcePath = part->templatesResourcePath();
 
                         QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
@@ -525,7 +529,7 @@ bool KoApplication::start()
                     }
                     // now try to load
                 }
-                else if (mainWindow->openDocument(part, args->url(argNumber))) {
+                else if (mainWindow->openDocument(part, url)) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
@@ -576,7 +580,6 @@ bool KoApplication::start()
             return false;
     }
 
-    args->clear();
     // not calling this before since the program will quit there.
     return true;
 }

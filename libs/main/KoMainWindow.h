@@ -34,7 +34,7 @@ class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
-class KComponentData;
+class KoComponentData;
 class QDockWidget;
 
 struct KoPageLayout;
@@ -62,7 +62,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &instance);
+    explicit KoMainWindow(const QByteArray &nativeMimeType, const KoComponentData &instance);
 
     /**
      *  Destructor.
@@ -91,8 +91,8 @@ public:
      */
     void updateCaption();
 
-    KComponentData componentData () const;
-    void setComponentData (const KComponentData &componentData);
+    KoComponentData componentData() const;
+    void setComponentData(const KoComponentData &componentData);
 
     /**
      *  Retrieves the document that is displayed in the mainwindow.

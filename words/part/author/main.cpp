@@ -20,9 +20,11 @@
 */
 
 #include <KoApplication.h>
-#include <kcmdlineargs.h>
 #include "CAuAboutData.h"
 #include "KWDocument.h"
+
+#include <KAboutData>
+
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
     QScopedPointer<K4AboutData> aboutData(newAuthorAboutData());
@@ -32,13 +34,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     qApp->setGraphicsSystem( QLatin1String("raster") );
 #endif
 
-    KCmdLineArgs::init(argc, argv, aboutData.data());
-
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions(options);
-
-    KoApplication app(WORDS_MIME_TYPE);
+    KoApplication app(WORDS_MIME_TYPE, *aboutData.data(), argc, argv);
 
     if (!app.start())
         return 1;

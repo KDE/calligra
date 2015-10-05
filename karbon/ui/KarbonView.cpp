@@ -121,13 +121,12 @@
 #include <KoFileDialog.h>
 #include <KoUnit.h>
 #include <KoJsonTrader.h>
+#include <KoComponentData.h>
 
-// kde header
-#include <QAction>
+// KF5 header
 #include <kcolormimedata.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
@@ -137,6 +136,7 @@
 #include <KPluginFactory>
 
 // qt header
+#include <QAction>
 #include <QResizeEvent>
 #include <QDropEvent>
 #include <QGridLayout>
@@ -319,7 +319,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
-        KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
+        KConfigGroup interfaceGroup = KarbonFactory::global().config()->group("Interface");
         if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
             d->horizRuler->setVisible(true);
             d->vertRuler->setVisible(true);
@@ -1265,7 +1265,7 @@ void KarbonView::showRuler()
         updateRuler();
 
     // this will make the last setting of the ruler visibility persistent
-    KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
+    KConfigGroup interfaceGroup = KarbonFactory::global().config()->group("Interface");
     if (!showRuler && !interfaceGroup.hasDefault("ShowRulers"))
         interfaceGroup.revertToDefault("ShowRulers");
     else
@@ -1317,7 +1317,7 @@ void KarbonView::showPalette()
     d->colorBar->setVisible(showPalette);
 
     // this will make the last setting of the ruler visibility persistent
-    KConfigGroup interfaceGroup = KarbonFactory::karbonConfig()->group("Interface");
+    KConfigGroup interfaceGroup = KarbonFactory::global().config()->group("Interface");
     if (showPalette && !interfaceGroup.hasDefault("ShowPalette"))
         interfaceGroup.revertToDefault("ShowPalette");
     else

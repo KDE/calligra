@@ -24,7 +24,9 @@
 
 #include <KoResourcePaths.h>
 
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
+
+#include <KAboutData>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -33,7 +35,7 @@
 namespace KPlato
 {
 
-KComponentData* Factory::s_global = 0L;
+KoComponentData* Factory::s_global = 0L;
 K4AboutData* Factory::s_aboutData = 0L;
 
 Factory::Factory()
@@ -70,11 +72,11 @@ K4AboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if ( !s_global )
     {
-        s_global = new KComponentData( aboutData() );
+        s_global = new KoComponentData( *aboutData() );
 
         // Add any application-specific resource directories here
         KoResourcePaths::addResourceType("plan_taskmodules", "data", "plan/taskmodules/");

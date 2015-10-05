@@ -26,14 +26,15 @@
 
 #include <kdebug.h>
 #include <author/CAuDocument.h>
-#include <kcomponentdata.h>
 
 #include <kiconloader.h>
+#include <KAboutData>
 
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
 #include <KoMainWindow.h>
+#include <KoComponentData.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -47,7 +48,7 @@
 #include "dockers/KWStatisticsDocker.h"
 #include "pagetool/KWPageToolFactory.h"
 
-KComponentData *CAuFactory::s_instance = 0;
+KoComponentData *CAuFactory::s_instance = 0;
 K4AboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory()
@@ -86,10 +87,10 @@ K4AboutData *CAuFactory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &CAuFactory::componentData()
+const KoComponentData &CAuFactory::componentData()
 {
     if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+        s_instance = new KoComponentData(*aboutData());
 
         KIconLoader::global()->addAppDir("calligra");
 

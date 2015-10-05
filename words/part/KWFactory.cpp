@@ -22,7 +22,6 @@
 #include <kdebug.h>
 #include "KWAboutData.h"
 #include "KWDocument.h"
-#include <kcomponentdata.h>
 
 #include <kiconloader.h>
 
@@ -31,6 +30,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
 #include <KoMainWindow.h>
+#include <KoComponentData.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -47,8 +47,7 @@
 #include "dockers/KWDebugDockerFactory.h"
 #endif
 
-KComponentData *KWFactory::s_instance = 0;
-K4AboutData *KWFactory::s_aboutData = 0;
+KoComponentData *KWFactory::s_componentData = 0;
 
 KWFactory::KWFactory()
     : KPluginFactory()
@@ -60,10 +59,8 @@ KWFactory::KWFactory()
 
 KWFactory::~KWFactory()
 {
-    delete s_aboutData;
-    s_aboutData = 0;
-    delete s_instance;
-    s_instance = 0;
+    delete s_componentData;
+    s_componentData = 0;
 }
 
 QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
@@ -78,18 +75,12 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     return part;
 }
 
-K4AboutData *KWFactory::aboutData()
+const KoComponentData &KWFactory::componentData()
 {
-    if (!s_aboutData) {
-        s_aboutData = newWordsAboutData();
-    }
-    return s_aboutData;
-}
-
-const KComponentData &KWFactory::componentData()
-{
-    if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+    if (!s_componentData) {
+        KAboutData *aboutData = newWordsAboutData();
+        s_componentData = new KoComponentData(*aboutData);
+        delete aboutData;
 
         KIconLoader::global()->addAppDir("calligra");
 
@@ -106,5 +97,5 @@ const KComponentData &KWFactory::componentData()
 #endif
 
     }
-    return *s_instance;
+    return *s_componentData;
 }

@@ -24,7 +24,8 @@
 #include <QHideEvent>
 
 #include <KoApplication.h>
-#include <kcmdlineargs.h>
+
+#include <KAboutData>
 
 #include "kptmaindocument.h"
 
@@ -46,12 +47,8 @@ public:
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     K4AboutData * aboutData=KPlato::newAboutData();
 
-    KCmdLineArgs::init( argc, argv, aboutData);
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
 
-    KoApplication app(PLAN_MIME_TYPE);
+    KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the

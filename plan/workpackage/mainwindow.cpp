@@ -39,7 +39,6 @@
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
 
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -48,7 +47,6 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
-#include <kcomponentdata.h>
 #include <ktoolinvocation.h>
 #include <kio/netaccess.h>
 #include <kxmlguiwindow.h>
@@ -66,7 +64,7 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 
     m_part = new KPlatoWork::Part( this, this );
 
-    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStandardAction::quit(qApp, SLOT(quit()), actionCollection());
  
     KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
 

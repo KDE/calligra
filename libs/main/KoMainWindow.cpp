@@ -39,6 +39,7 @@
 #include <KoPageLayout.h>
 #include "KoApplication.h"
 #include <KoIcon.h>
+#include "KoComponentData.h"
 #include <KoConfig.h>
 #include <KoDockRegistry.h>
 #include "calligraversion.h"
@@ -95,7 +96,8 @@
 class KoMainWindowPrivate
 {
 public:
-    KoMainWindowPrivate(const QByteArray &_nativeMimeType, KoMainWindow *w)
+    KoMainWindowPrivate(const QByteArray &_nativeMimeType, const KoComponentData &componentData_, KoMainWindow *w)
+        : componentData(componentData_)
     {
         nativeMimeType = _nativeMimeType;
         parent = w;
@@ -165,9 +167,7 @@ public:
 
         if (title.isEmpty()) {
             // #139905
-            const QString programName = parent->componentData().aboutData() ?
-                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
-            title = i18n("%1 unsaved document (%2)", programName,
+            title = i18n("%1 unsaved document (%2)", parent->componentData().componentDisplayName(),
                          QLocale().toString(QDate::currentDate(), QLocale::ShortFormat));
         }
         printer.setDocName(title);
@@ -240,7 +240,7 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
-    KComponentData componentData;
+    KoComponentData componentData;
 
     KHelpMenu *m_helpMenu;
 
@@ -248,15 +248,14 @@ public:
 
 };
 
-KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &componentData)
+KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentData &componentData)
     : KXmlGuiWindow()
-    , d(new KoMainWindowPrivate(nativeMimeType, this))
+    , d(new KoMainWindowPrivate(nativeMimeType, componentData, this))
 {
 #ifdef Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
     setStandardToolBarMenuEnabled(true);
-    Q_ASSERT(componentData.isValid());
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
@@ -264,13 +263,6 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
 
     // PartManager
     // End
-
-    if (componentData.isValid()) {
-        setComponentData(componentData);   // don't load plugins! we don't want
-        // the part's plugins with this main window, even though we are using the
-        // part's componentData! (Simon)
-        KGlobal::setActiveComponent(componentData);
-    }
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "calligra/calligra_shell.rc");
@@ -375,7 +367,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KComponentDat
     d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
-    KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() :  KSharedConfig::openConfig();
+    KSharedConfigPtr configPtr = componentData.config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
 
@@ -640,7 +632,7 @@ void KoMainWindow::addRecentURL(const QUrl &url)
 void KoMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() :  KSharedConfig::openConfig();
+    KSharedConfigPtr config = componentData().config();
     kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName();
     d->recent->saveEntries(config->group("RecentFiles"));
     config->sync();
@@ -653,7 +645,7 @@ void KoMainWindow::saveRecentFiles()
 
 void KoMainWindow::reloadRecentFileList()
 {
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() :  KSharedConfig::openConfig();
+    KSharedConfigPtr config = componentData().config();
     d->recent->loadEntries(config->group("RecentFiles"));
 }
 
@@ -1803,14 +1795,9 @@ void KoMainWindow::setPartToOpen(KoPart *part)
     d->partToOpen = part;
 }
 
-KComponentData KoMainWindow::componentData() const
+KoComponentData KoMainWindow::componentData() const
 {
     return d->componentData;
-}
-
-void KoMainWindow::setComponentData(const KComponentData &componentData)
-{
-    d->componentData = componentData;
 }
 
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
@@ -1987,7 +1974,7 @@ void KoMainWindow::newView()
 void KoMainWindow::createMainwindowGUI()
 {
     if ( isHelpMenuEnabled() && !d->m_helpMenu ) {
-        d->m_helpMenu = new KHelpMenu( this, *componentData().aboutData(), true );
+        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true );
 
         KActionCollection *actions = actionCollection();
         QAction *helpContentsAction = d->m_helpMenu->action(KHelpMenu::menuHelpContents);
@@ -2078,7 +2065,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
     }
     // Set the new active instance in KGlobal
-    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
+//     KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
 
     // old slot called from part manager
     KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());

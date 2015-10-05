@@ -23,8 +23,7 @@
 #include <kpluginfactory.h>
 #include "words_export.h"
 
-class K4AboutData;
-class KComponentData;
+class KoComponentData;
 
 /**
  * Factory for the Words application.
@@ -43,15 +42,10 @@ public:
     /// overwritten method from superclass
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    /// Return an instance
-    static const KComponentData &componentData();
-
-    /// Creates a new KAboutData instance
-    static K4AboutData *aboutData();
+    static const KoComponentData &componentData();
 
 private:
-    static KComponentData *s_instance;
-    static K4AboutData *s_aboutData;
+    static KoComponentData *s_componentData;
 };
 
 #endif

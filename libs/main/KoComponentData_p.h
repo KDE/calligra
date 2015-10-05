@@ -1,6 +1,5 @@
-// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,34 +14,26 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRFACTORY_H
-#define KPRFACTORY_H
+#ifndef KOCOMPONENTDATA_P_H
+#define KOCOMPONENTDATA_P_H
 
-#include <kpluginfactory.h>
-#include "stage_export.h"
+#include <KSharedConfig>
+#include <KAboutData>
 
-class K4AboutData;
-class KoComponentData;
+#include <QSharedData>
 
-class STAGE_EXPORT KPrFactory : public KPluginFactory
+class KoComponentDataPrivate : public QSharedData
 {
-    Q_OBJECT
 public:
-    explicit KPrFactory();
-    ~KPrFactory();
+    KoComponentDataPrivate(const KAboutData &_aboutData)
+        : aboutData(_aboutData)
+        {}
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
-    static const KoComponentData &componentData();
-
-    // _Creates_ a K4AboutData but doesn't keep ownership
-    static K4AboutData* aboutData();
-
-private:
-    static KoComponentData* s_instance;
-    static K4AboutData* s_aboutData;
+    KAboutData aboutData;
+    KSharedConfig::Ptr sharedConfig;
 };
 
 #endif

@@ -30,9 +30,7 @@
 #include <ksplashscreen.h>
 #include <QHideEvent>
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocalizedstring.h>
+#include <KAboutData>
 #include <KoApplication.h>
 
 #include <KarbonFactory.h>
@@ -55,16 +53,15 @@ public:
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, newKarbonAboutData() );
+    K4AboutData *aboutData = newKarbonAboutData();
 
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n( "File to open" ));
-    KCmdLineArgs::addCmdLineOptions( options );
 
-    KoApplication app(KARBON_MIME_TYPE);
+    KoApplication app(KARBON_MIME_TYPE, *aboutData, argc, argv);
+
+    delete aboutData;
 
 #ifdef MAINTANER_WANTED_SPLASH
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
+    // After creating the KoApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));

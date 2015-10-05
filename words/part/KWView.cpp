@@ -89,6 +89,7 @@
 #include <KoSemanticStylesheetsEditor.h>
 #endif
 
+#include <KoComponentData.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
@@ -108,8 +109,6 @@
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
-#include <k4aboutdata.h>
-#include <kcomponentdata.h>
 
 #include <limits>
 
@@ -134,7 +133,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    setComponentName(KWFactory::componentData().componentName(), KWFactory::aboutData()->programName());
+    setComponentName(KWFactory::componentData().componentName(), KWFactory::componentData().componentDisplayName());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();

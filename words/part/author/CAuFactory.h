@@ -25,7 +25,7 @@
 #include "words_export.h"
 
 class K4AboutData;
-class KComponentData;
+class KoComponentData;
 
 /**
  * Factory for the Author application.
@@ -45,13 +45,13 @@ public:
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     /// Return an instance
-    static const KComponentData &componentData();
+    static const KoComponentData &componentData();
 
     /// Creates a new KAboutData instance
     static K4AboutData *aboutData();
 
 private:
-    static KComponentData *s_instance;
+    static KoComponentData *s_instance;
     static K4AboutData *s_aboutData;
 };
 

@@ -20,7 +20,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include <KoPart.h>
+#include <MockPart.h>
 #include <part/Doc.h>
 #include <Map.h>
 #include <Sheet.h>

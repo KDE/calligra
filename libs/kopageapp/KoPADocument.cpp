@@ -53,10 +53,9 @@
 #include <KoUnit.h>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
+#include <KSharedConfig>
 
 #include <QPainter>
 
@@ -752,7 +751,7 @@ KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const
 
 void KoPADocument::loadConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
 
     if( config->hasGroup( "Grid" ) )
     {
@@ -781,7 +780,7 @@ void KoPADocument::loadConfig()
 
 void KoPADocument::saveConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup configGroup = config->group( "Grid" );
     KoGridData defGrid;
 

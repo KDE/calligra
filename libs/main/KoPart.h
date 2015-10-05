@@ -32,11 +32,10 @@
 
 class KoDocument;
 class KoView;
-class KoView;
+class KoComponentData;
 class KoOpenPane;
 class QGraphicsItem;
 
-class KComponentData;
 
 /**
  * Override this class in your application. It's the main entry point that
@@ -56,10 +55,11 @@ public:
     /**
      * Constructor.
      *
+     * @param componentData data about the component
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
      */
-    explicit KoPart(QObject *parent);
+    explicit KoPart(const KoComponentData &componentData, QObject *parent);
 
     /**
      *  Destructor.
@@ -70,10 +70,10 @@ public:
     virtual ~KoPart();
 
     /**
-     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
+     * @return The componentData ( KoComponentData ) for this GUI client. You set the componentdata
      * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
      */
-    KComponentData componentData() const;
+    KoComponentData componentData() const;
 
     /**
      * @param document the document this part manages
@@ -253,11 +253,6 @@ protected:
      */
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
-protected:
-
-    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
-    virtual void setComponentData(const KComponentData &componentData);
-
 private:
 
     Q_DISABLE_COPY(KoPart)
@@ -265,18 +260,6 @@ private:
     class Private;
     Private *const d;
 
-};
-
-class MockPart : public KoPart
-{
-public:
-    MockPart()
-    : KoPart( 0 )
-    {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    virtual KoMainWindow *createMainWindow() { return 0; }
-protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
 };
 
 #endif

@@ -30,7 +30,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoConfigMiscPage.h>
 
 #include <klocalizedstring.h>
-#include <kcomponentdata.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <knuminput.h>

@@ -35,7 +35,6 @@
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>

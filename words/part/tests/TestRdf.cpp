@@ -67,7 +67,8 @@
 #include <kio/job.h>
 #include <kio/jobclasses.h>
 #include <kurl.h>
-#include <kcomponentdata.h>
+
+#include "MockPart.h"
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()

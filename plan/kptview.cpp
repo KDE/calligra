@@ -66,6 +66,7 @@
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoPart.h>
+#include <KoComponentData.h>
 
 #include "kptviewbase.h"
 #include "kptaccountsview.h"

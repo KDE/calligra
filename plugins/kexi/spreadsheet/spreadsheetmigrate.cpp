@@ -23,6 +23,10 @@
 #include <kexiutils/identifier.h>
 
 #include <sheets/Value.h>
+#include <KoComponentData.h>
+
+#include <KAboutData>
+
 #include <QDebug>
 
 namespace KexiMigration
@@ -35,7 +39,7 @@ class MockPart : public KoPart
 {
 public:
     MockPart()
-    : KoPart( 0 )
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
     {}
     KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
     virtual KoMainWindow *createMainWindow() { return 0; }

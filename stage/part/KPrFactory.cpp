@@ -23,11 +23,12 @@
 #include "KPrAboutData.h"
 #include "KPrPart.h"
 
-#include <kcomponentdata.h>
-
+#include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-KComponentData* KPrFactory::s_instance = 0;
+#include <KAboutData>
+
+KoComponentData* KPrFactory::s_instance = 0;
 K4AboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
@@ -78,11 +79,11 @@ K4AboutData* KPrFactory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &KPrFactory::componentData()
+const KoComponentData &KPrFactory::componentData()
 {
     if ( !s_instance )
     {
-        s_instance = new KComponentData(aboutData());
+        s_instance = new KoComponentData(*aboutData());
     }
     return *s_instance;
 }

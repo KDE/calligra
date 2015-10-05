@@ -29,10 +29,10 @@
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 #include <k4aboutdata.h>
-#include <kcomponentdata.h>
 
 #include <KoIcon.h>
 
+#include <KoComponentData.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>

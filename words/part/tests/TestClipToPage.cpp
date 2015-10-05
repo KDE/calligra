@@ -4,7 +4,8 @@
 #include <KWCanvas.h>
 #include <MockShapes.h>
 #include <KWPage.h>
-#include <KoPart.h>
+
+#include "MockPart.h"
 
 #include <kdebug.h>
 #include <qtest_kde.h>

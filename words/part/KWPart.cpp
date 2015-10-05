@@ -33,16 +33,22 @@
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
+#include <KoComponentData.h>
 
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
 
 KWPart::KWPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KWFactory::componentData(), parent)
     , m_document(0)
 {
     setTemplatesResourcePath(QLatin1String("words/templates/"));
-    setComponentData(KWFactory::componentData());
+}
+
+KWPart::KWPart(const KoComponentData &componentData, QObject *parent)
+    : KoPart(componentData, parent)
+    , m_document(0)
+{
+    setTemplatesResourcePath(QLatin1String("words/templates/"));
 }
 
 KWPart::~KWPart()

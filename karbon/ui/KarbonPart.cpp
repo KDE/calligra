@@ -49,15 +49,14 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
+#include <KoComponentData.h>
 
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 
 KarbonPart::KarbonPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KarbonFactory::global(), parent)
 {
     setTemplatesResourcePath(QLatin1String("karbon/templates/"));
-//QT5TODO    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()

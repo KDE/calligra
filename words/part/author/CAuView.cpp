@@ -27,11 +27,11 @@
 
 #include <KoPart.h>
 #include <KoDockRegistry.h>
+#include <KoComponentData.h>
 
 #include <KStatusBar>
 #include <kactioncollection.h>
 #include <k4aboutdata.h>
-#include <kcomponentdata.h>
 
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)

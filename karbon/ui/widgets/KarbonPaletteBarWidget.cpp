@@ -31,10 +31,9 @@
 #include <KoGradientBackground.h>
 #include <KoShapeStroke.h>
 
+#include <KSharedConfig>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -79,7 +78,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
 
     QList<KoResource*> resources = m_palettes.resources();
     if (resources.count()) {
-        KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
+        KConfigGroup paletteGroup = KSharedConfig::openConfig()->group("PaletteBar");
         QString lastPalette = paletteGroup.readEntry("LastPalette", "SVG Colors");
         KoResource *r = resources.first();
         if (lastPalette == DocumentColorsName) {
@@ -181,7 +180,7 @@ void KarbonPaletteBarWidget::selectPalette()
         }
         if (selectedColorSet) {
             m_colorBar->setPalette(selectedColorSet);
-            KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
+            KConfigGroup paletteGroup = KSharedConfig::openConfig()->group("PaletteBar");
             paletteGroup.writeEntry("LastPalette", selectedColorSet->name());
             updateDocumentColors();
         }

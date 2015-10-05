@@ -62,7 +62,6 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <k4aboutdata.h>
 
@@ -76,6 +75,7 @@
 #include <kservicetypetrader.h>
 
 // Calligra includes
+#include <KoComponentData.h>
 #include <KoGlobal.h>
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>

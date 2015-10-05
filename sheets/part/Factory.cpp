@@ -21,11 +21,12 @@
 #include "Factory.h"
 
 #include <kdebug.h>
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <KAboutData>
 
 #include <KoDockRegistry.h>
+#include <KoComponentData.h>
 
 #include "AboutData.h"
 #include "Doc.h"
@@ -34,7 +35,7 @@
 
 using namespace Calligra::Sheets;
 
-KComponentData* Factory::s_global = 0;
+KoComponentData* Factory::s_global = 0;
 K4AboutData* Factory::s_aboutData = 0;
 
 Factory::Factory()
@@ -72,10 +73,10 @@ K4AboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if (!s_global) {
-        s_global = new KComponentData(aboutData());
+        s_global = new KoComponentData(*aboutData());
 
         KGlobal::dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 

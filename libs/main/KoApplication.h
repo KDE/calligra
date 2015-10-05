@@ -20,12 +20,14 @@
 #ifndef __ko_app_h__
 #define __ko_app_h__
 
-#include <kapplication.h>
+#include <QApplication>
+
 #include "komain_export.h"
 
 class KoPart;
 
 class KoApplicationPrivate;
+class KAboutData;
 
 class QWidget;
 class QStringList;
@@ -46,7 +48,7 @@ class QStringList;
  *  If the last mainwindow becomes closed, KoApplication automatically
  *  calls QApplication::quit.
  */
-class KOMAIN_EXPORT KoApplication : public KApplication
+class KOMAIN_EXPORT KoApplication : public QApplication
 {
     Q_OBJECT
 
@@ -55,9 +57,11 @@ public:
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      *
-     * @param nativeMimeType: the nativeMimeType of the calligra application
+     * @param nativeMimeType: the nativeMimeType of the Calligra application
+     * @param argc number of commandline argument strings in @c argv
+     * @param argv array of commandline argument strings
      */
-    explicit KoApplication(const QByteArray &nativeMimeType);
+    explicit KoApplication(const QByteArray &nativeMimeType, const KAboutData &aboutData, int &argc, char **argv);
 
     /**
      *  Destructor.

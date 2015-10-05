@@ -29,18 +29,18 @@
 #include "KoView.h"
 #include "KoOpenPane.h"
 #include "KoFilterManager.h"
+#include <KoComponentData.h>
 
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoResourcePaths.h>
 
 #include <kdebug.h>
-#include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
 #include <kmimetype.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -54,12 +54,12 @@
 class Q_DECL_HIDDEN KoPart::Private
 {
 public:
-    Private(KoPart *_parent)
+    Private(const KoComponentData &componentData_, KoPart *_parent)
         : parent(_parent)
         , document(0)
         , canvasItem(0)
         , startUpWidget(0)
-        , m_componentData(KGlobal::mainComponent())
+        , componentData(componentData_)
     {
     }
 
@@ -82,14 +82,13 @@ public:
     QPointer<KoOpenPane> startUpWidget;
     QString templatesResourcePath;
 
-    KComponentData m_componentData;
-
+    KoComponentData componentData;
 };
 
 
-KoPart::KoPart(QObject *parent)
+KoPart::KoPart(const KoComponentData &componentData, QObject *parent)
         : QObject(parent)
-        , d(new Private(this))
+        , d(new Private(componentData, this))
 {
 #ifndef QT_NO_DBUS
     new KoPartAdaptor(this);
@@ -115,9 +114,9 @@ KoPart::~KoPart()
     delete d;
 }
 
-KComponentData KoPart::componentData() const
+KoComponentData KoPart::componentData() const
 {
-    return d->m_componentData;
+    return d->componentData;
 }
 
 void KoPart::setDocument(KoDocument *document)
@@ -156,7 +155,7 @@ void KoPart::addView(KoView *view, KoDocument *document)
     view->updateReadWrite(document->isReadWrite());
 
     if (d->views.size() == 1) {
-        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (0 != app) {
             emit app->documentOpened('/'+objectName());
         }
@@ -168,7 +167,7 @@ void KoPart::removeView(KoView *view)
     d->views.removeAll(view);
 
     if (d->views.isEmpty()) {
-        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (0 != app) {
             emit app->documentClosed('/'+objectName());
         }
@@ -386,9 +385,4 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const QString& templatesReso
     connect(openPane, SIGNAL(openTemplate(const QUrl&)), this, SLOT(openTemplate(const QUrl&)));
 
     return openPane;
-}
-
-void KoPart::setComponentData(const KComponentData &componentData)
-{
-    d->m_componentData = componentData;
 }

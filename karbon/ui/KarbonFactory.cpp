@@ -35,19 +35,20 @@
 #include "KarbonDocument.h"
 #include "KarbonAboutData.h"
 
+#include <KoComponentData.h>
+#include <KoPluginLoader.h>
+
 #include <kaboutdata.h>
 #include <kiconloader.h>
 
 #include <kdebug.h>
 
-#include <KoPluginLoader.h>
-#include <kglobal.h>
-
-KSharedConfig::Ptr s_karbonConfig;
+KoComponentData* KarbonFactory::s_global = 0;
 
 KarbonFactory::KarbonFactory()
     : KPluginFactory()
 {
+    (void)global();
 }
 
 KarbonFactory::~KarbonFactory()
@@ -65,10 +66,18 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
     return part;
 }
 
-const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
+const KSharedConfig::Ptr& KarbonFactory::karbonConfig()
 {
-    if (!s_karbonConfig) {
-        s_karbonConfig = KSharedConfig::openConfig(KAboutData::applicationData().componentName() + QLatin1String("rc"));
+    return global().config();
+}
+
+const KoComponentData &KarbonFactory::global()
+{
+    if (!s_global) {
+        K4AboutData *aboutData = newKarbonAboutData();
+        s_global = new KoComponentData(*aboutData);
+        delete aboutData;
+
         // Add any application-specific resource directories here
 
         // Tell the iconloader about share/apps/calligra/icons
@@ -77,7 +86,5 @@ const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
         // Load Karbon specific dockers.
         KoPluginLoader::instance()->load(QString::fromLatin1("Karbon/Dock"));
     }
-    return s_karbonConfig;
+    return *s_global;
 }
-
-

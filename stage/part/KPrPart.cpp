@@ -23,6 +23,7 @@
 #include "KPrDocument.h"
 #include "KPrFactory.h"
 
+#include <KoComponentData.h>
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
 #include <KoShapeRegistry.h>
@@ -32,13 +33,11 @@
 
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
 
 KPrPart::KPrPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KPrFactory::componentData(), parent)
 {
     setTemplatesResourcePath(QLatin1String("stage/templates/"));
-    setComponentData(KPrFactory::componentData());
 }
 
 KPrPart::~KPrPart()

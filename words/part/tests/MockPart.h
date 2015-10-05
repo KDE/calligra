@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,17 +20,13 @@
 #ifndef PAMOCK_H
 #define PAMOCK_H
 
-#include "KPrDocument.h"
 
 #include <KoPart.h>
-#include <KoOdf.h>
 #include <KoComponentData.h>
 
 #include <KAboutData>
 
 #include <QGraphicsItem>
-
-class KoView;
 
 class MockPart : public KoPart
 {
@@ -43,19 +39,5 @@ public:
 protected:
     virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
 };
-
-class MockDocument : public KPrDocument
-{
-public:
-    MockDocument()
-    : KPrDocument(new MockPart)
-    {}
-    KoView *createViewInstance(QWidget * /* parent */) {return 0;}
-    const char *odfTagName(bool b) {return KoOdf::bodyContentElement(KoOdf::Presentation, b);}
-    virtual KoOdf::DocumentType documentType() const {return KoOdf::Presentation;}
-protected:
-    virtual QGraphicsItem *createCanvasItem() {return 0;}
-};
-
 
 #endif // PAMOCK_H

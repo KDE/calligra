@@ -21,7 +21,8 @@
 
 #include <KoApplication.h>
 #include "KPrDocument.h"
-#include <kcmdlineargs.h>
+
+#include <KAboutData>
 #include <klocalizedstring.h>
 
 
@@ -30,13 +31,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
     int state;
     K4AboutData * aboutData=newKPresenterAboutData();
 
-    KCmdLineArgs::init( argc, argv, aboutData );
-
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app(STAGE_MIME_TYPE);
+    KoApplication app(STAGE_MIME_TYPE, *aboutData, argc, argv);
 
     if (!app.start())
         return 1;

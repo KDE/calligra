@@ -18,7 +18,7 @@
 */
 #include "TestSheet.h"
 
-#include <QPainter>
+#include "MockPart.h"
 
 #include <KoViewConverter.h>
 #include <KoShape.h>
@@ -26,7 +26,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoPart.h>
 
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
@@ -34,6 +33,7 @@
 #include <CellStorage.h>
 #include <OdfSavingContext.h>
 
+#include <QPainter>
 #include <QTest>
 
 using namespace Calligra::Sheets;

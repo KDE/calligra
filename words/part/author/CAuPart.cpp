@@ -28,9 +28,8 @@
 #include <kmessagebox.h>
 
 CAuPart::CAuPart(QObject *parent)
-    : KWPart(parent)
+    : KWPart(CAuFactory::componentData(), parent)
 {
-    setComponentData(CAuFactory::componentData());
 }
 
 

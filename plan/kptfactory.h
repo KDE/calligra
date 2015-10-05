@@ -25,7 +25,7 @@
 #include <kpluginfactory.h>
 
 class K4AboutData;
-class KComponentData;
+class KoComponentData;
 
 namespace KPlato
 {
@@ -39,13 +39,13 @@ public:
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &global();
+    static const KoComponentData &global();
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static K4AboutData* aboutData();
 
 private:
-    static KComponentData* s_global;
+    static KoComponentData* s_global;
     static K4AboutData* s_aboutData;
 };
 

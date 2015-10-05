@@ -21,8 +21,6 @@
 #include <QGraphicsScene>
 #include <QDebug>
 
-#include <kcomponentdata.h>
-
 #include <KoGlobal.h>
 #include <KoZoomHandler.h>
 
@@ -35,7 +33,6 @@
 int main(int argc, char** argv)
 {
     QApplication qapp(argc, argv);
-    KComponentData cd("graphicsview-test");
 
     Calligra::Sheets::Part part;
     Calligra::Sheets::Doc doc(&part);

@@ -27,6 +27,7 @@
 #include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
+#include "KoComponentData.h"
 #include "KoPart.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"

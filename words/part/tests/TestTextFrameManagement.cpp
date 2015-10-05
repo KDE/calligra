@@ -6,11 +6,9 @@
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
-#include <kcomponentdata.h>
 
 TestTextFrameManagement::TestTextFrameManagement()
 {
-    new KComponentData("TestTextFrameManagement");
 }
 
 void TestTextFrameManagement::testFrameRemoval()

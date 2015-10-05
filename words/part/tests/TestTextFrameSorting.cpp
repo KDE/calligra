@@ -8,11 +8,9 @@
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
-#include <kcomponentdata.h>
 
 TestTextFrameSorting::TestTextFrameSorting()
 {
-    new KComponentData("TestTextFrameSorting");
 }
 
 void TestTextFrameSorting::testSimpleSorting()

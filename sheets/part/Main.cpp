@@ -18,11 +18,11 @@
 */
 
 #include <KoApplication.h>
-#include <kcmdlineargs.h>
 
-// #include <dcopclient.h>
 #include "AboutData.h"
 #include "DocBase.h"
+
+#include <KAboutData>
 
 using namespace Calligra::Sheets;
 
@@ -30,14 +30,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
     K4AboutData * aboutData = newAboutData();
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    // QT5TODO: support custom options
+//     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
-    KCmdLineArgs::addCmdLineOptions(options);
-
-    KoApplication app(SHEETS_MIME_TYPE);
+    KoApplication app(SHEETS_MIME_TYPE, *aboutData, argc, argv);
 
     if (!app.start())
         return 1;

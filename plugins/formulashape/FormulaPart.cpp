@@ -20,15 +20,16 @@
 #include "FormulaPart.h"
 #include "FormulaDocument.h"
 
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
+
+#include <calligraversion.h>
+
+#include <KAboutData>
 
 FormulaPart::FormulaPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("koformula"), QStringLiteral("KoFormula"),
+                                        QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
 {
-    // Needed by KoDocument::nativeOasisMimeType().
-    // KoEmbeddedDocumentSaver uses that method to
-    // get the mimetype of the embedded document.
-    setComponentData(KComponentData("math"));
 }
 
 FormulaPart::~FormulaPart()

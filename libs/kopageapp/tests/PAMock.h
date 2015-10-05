@@ -24,8 +24,24 @@
 
 #include <KoPart.h>
 #include <KoOdf.h> 
+#include <KoComponentData.h>
+
+#include <KAboutData>
+
 #include <QGraphicsItem>
 
+
+class MockPart : public KoPart
+{
+public:
+    MockPart()
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
+    {}
+    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
+    virtual KoMainWindow *createMainWindow() { return 0; }
+protected:
+    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
+};
 
 class MockDocument : public KoPADocument
 {

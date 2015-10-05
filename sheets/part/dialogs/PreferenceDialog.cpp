@@ -37,6 +37,7 @@
 #include <QScrollBar>
 #include <QPushButton>
 
+#include <KConfigGroup>
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -45,11 +46,11 @@
 
 #include <KoConfigAuthorPage.h>
 #include <KoUnit.h>
+#include <KoComponentData.h>
 
-#include <kcomponentdata.h>
-#include <kplugininfo.h>
+// #include <kplugininfo.h>
 // #include <kpluginselector.h>
-#include <kservicetypetrader.h>
+// #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
 #include <sonnet/configwidget.h>
 

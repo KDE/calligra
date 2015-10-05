@@ -40,7 +40,6 @@
 #include <kiconloader.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kcomponentdata.h>
 #include <kdebug.h>
 
 //Calligra Headers
@@ -49,6 +48,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoViewItemContextBar.h>
+#include <KoComponentData.h>
 
 KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
                                                        QWidget *parent)
