@@ -22,8 +22,9 @@
 
 #include <KoUnit.h>
 #include <KoGlobal.h>
+
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <KSharedConfig>
 
 KWApplicationConfig::KWApplicationConfig()
         : m_viewFrameBorders(true),
@@ -50,7 +51,7 @@ KWApplicationConfig::KWApplicationConfig()
 
 void KWApplicationConfig::load(KWDocument *document)
 {
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup interface = config->group("Interface");
 //    setCursorInProtectedArea(interface.readEntry("cursorInProtectArea", true));
     // Config-file value in mm, default 10 pt
@@ -132,7 +133,7 @@ void KWApplicationConfig::load(KWDocument *document)
 
 void KWApplicationConfig::save()
 {
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup interface = config->group("Interface");
     interface.writeEntry("ViewFormattingChars", m_showFormattingChars);
     interface.writeEntry("ViewFieldShadings", m_showInlineObjectVisualization);
@@ -160,7 +161,7 @@ void KWApplicationConfig::save()
 
 void KWApplicationConfig::setUnit(const KoUnit &unit)
 {
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup misc = config->group("Misc");
     misc.writeEntry("Units", unit.symbol());
     misc.sync();

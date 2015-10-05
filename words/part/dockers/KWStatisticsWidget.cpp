@@ -34,7 +34,7 @@
 #include <KoIcon.h>
 #include <KoTextDocumentLayout.h>
 
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
 
 #include <QLocale>
@@ -91,7 +91,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
     //use to refresh statistics
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
 
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     bool visible = false;
 
     // --- Elements present in short AND full version ---
@@ -506,7 +506,7 @@ int KWStatisticsWidget::countCJKChars(const QString &text)
 
 void KWStatisticsWidget::wordsDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_wordsLabel->show();
@@ -527,7 +527,7 @@ void KWStatisticsWidget::wordsDisplayChanged(int state)
 
 void KWStatisticsWidget::sentencesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_sentencesLabel->show();
@@ -548,7 +548,7 @@ void KWStatisticsWidget::sentencesDisplayChanged(int state)
 
 void KWStatisticsWidget::linesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_linesLabel->show();
@@ -569,7 +569,7 @@ void KWStatisticsWidget::linesDisplayChanged(int state)
 
 void KWStatisticsWidget::syllablesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_syllablesLabel->show();
@@ -590,7 +590,7 @@ void KWStatisticsWidget::syllablesDisplayChanged(int state)
 
 void KWStatisticsWidget::charspaceDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_spacesLabel->show();
@@ -611,7 +611,7 @@ void KWStatisticsWidget::charspaceDisplayChanged(int state)
 
 void KWStatisticsWidget::charnospaceDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_nospacesLabel->show();
@@ -632,7 +632,7 @@ void KWStatisticsWidget::charnospaceDisplayChanged(int state)
 
 void KWStatisticsWidget::eastDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_cjkcharsLabel->show();
@@ -653,7 +653,7 @@ void KWStatisticsWidget::eastDisplayChanged(int state)
 
 void KWStatisticsWidget::fleschDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_fleschLabel->show();

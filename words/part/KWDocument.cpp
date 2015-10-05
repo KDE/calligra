@@ -83,9 +83,10 @@
 
 // KDE + Qt includes
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
+#include <KSharedConfig>
 #include <kdebug.h>
+
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>
@@ -692,7 +693,7 @@ void KWDocument::saveConfig()
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
 
     m_config.save();
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup interface = config->group("Interface");
     interface.writeEntry("ResolutionX", gridData().gridX());
     interface.writeEntry("ResolutionY", gridData().gridY());
