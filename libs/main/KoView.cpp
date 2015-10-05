@@ -46,13 +46,12 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <MainDebug.h>
-#include <QUrl>
 #include <kmessagebox.h>
 #include <KoNetAccess.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
+#include <KSharedConfig>
 #include <kdeprintdialog.h>
-#include <kglobal.h>
 
 #include <QStatusBar>
 #include <QDockWidget>

@@ -23,7 +23,6 @@
 #include "KoDockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

@@ -21,7 +21,6 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kiconloader.h>

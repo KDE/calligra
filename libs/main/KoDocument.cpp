@@ -55,12 +55,11 @@
 #include <kfileitem.h>
 #include <KoNetAccess.h>
 #include <klocalizedstring.h>
-#include <ksavefile.h>
 #include <MainDebug.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kdirnotify.h>
-#include <kglobal.h>
+#include <KBackup>
 
 #include <QMimeDatabase>
 #include <QTemporaryFile>

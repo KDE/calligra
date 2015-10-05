@@ -55,7 +55,6 @@
 #include <MainDebug.h>
 #include <KoNetAccess.h>
 #include <kiconloader.h>
-#include <k4aboutdata.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kio/job.h>
