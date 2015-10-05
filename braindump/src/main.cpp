@@ -23,7 +23,6 @@
 #include <QCommandLineParser>
 
 #include <kiconloader.h>
-#include <memory>
 
 #include "AboutData.h"
 #include "MainWindow.h"
