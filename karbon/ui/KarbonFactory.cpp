@@ -38,7 +38,6 @@
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-#include <kaboutdata.h>
 #include <kiconloader.h>
 
 #include <kdebug.h>
@@ -74,7 +73,7 @@ const KSharedConfig::Ptr& KarbonFactory::karbonConfig()
 const KoComponentData &KarbonFactory::global()
 {
     if (!s_global) {
-        K4AboutData *aboutData = newKarbonAboutData();
+        KAboutData *aboutData = newKarbonAboutData();
         s_global = new KoComponentData(*aboutData);
         delete aboutData;
 

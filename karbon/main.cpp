@@ -30,7 +30,6 @@
 #include <ksplashscreen.h>
 #include <QHideEvent>
 
-#include <KAboutData>
 #include <KoApplication.h>
 
 #include <KarbonFactory.h>
@@ -53,7 +52,7 @@ public:
 
 extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 {
-    K4AboutData *aboutData = newKarbonAboutData();
+    KAboutData *aboutData = newKarbonAboutData();
 
 
     KoApplication app(KARBON_MIME_TYPE, *aboutData, argc, argv);
