@@ -5,6 +5,7 @@ set(braindumpcore_LIB_SRCS
 )
 
 add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
+generate_export_header(braindumpcore)
 target_link_libraries(braindumpcore Qt5::Core Qt5::Xml Qt5::Svg komain)
 
 target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES Qt5::Core)
