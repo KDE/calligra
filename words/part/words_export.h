@@ -25,7 +25,7 @@
 
 /* Now the same for WORDS_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
-#   define WORDS_TEST_EXPORT KDE_EXPORT
+#   define WORDS_TEST_EXPORT WORDS_EXPORT
 #else /* not compiling tests */
 #   define WORDS_TEST_EXPORT
 #endif
