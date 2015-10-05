@@ -31,7 +31,6 @@
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 KPrPart::KPrPart(QObject *parent)
