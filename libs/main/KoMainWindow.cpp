@@ -39,6 +39,7 @@
 #include <KoPageLayout.h>
 #include "KoApplication.h"
 #include <KoIcon.h>
+#include "KoResourcePaths.h"
 #include "KoComponentData.h"
 #include <KoConfig.h>
 #include <KoDockRegistry.h>
@@ -50,7 +51,6 @@
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <KoNetAccess.h>
 #include <kedittoolbar.h>
 #include <QTemporaryFile>
@@ -66,7 +66,6 @@
 #include <kactioncollection.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
-#include <kglobal.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -263,9 +262,9 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
     // End
 
     QString doc;
-    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "calligra/calligra_shell.rc");
+    const QStringList allFiles = KoResourcePaths::findAllResources("data", "calligra/calligra_shell.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "calligra/calligra_shell.rc"));
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "calligra/calligra_shell.rc"));
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
