@@ -33,6 +33,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QToolButton>
+#include <QMenuBar>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>

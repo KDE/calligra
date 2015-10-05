@@ -101,6 +101,7 @@
 #include <QStatusBar>
 #include <QPushButton>
 #include <QClipboard>
+#include <QMenuBar>
 
 #include <klocalizedstring.h>
 #include <kdebug.h>
