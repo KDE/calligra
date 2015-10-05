@@ -51,7 +51,7 @@ public:
 };
 #endif
 
-extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
+extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 {
     K4AboutData *aboutData = newKarbonAboutData();
 
