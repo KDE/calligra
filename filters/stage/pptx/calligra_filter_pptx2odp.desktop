@@ -1,6 +1,14 @@
 [Desktop Entry]
 Type=Service
 Name=MS PowerPoint 2007 Import Filter for Stage
+Name[ca]=Filtre d'importació Microsoft PowerPoint 2007 per a l'Stage
+Name[en_GB]=MS PowerPoint 2007 Import Filter for Stage
+Name[nl]=MS Powerpoint 2007 importfilter voor Stage
+Name[pt]=Filtro de Importação do Microsoft PowerPoint 2007 para o Stage
+Name[pt_BR]=Filtro de importação de Microsoft PowerPoint 2007 para Stage
+Name[sv]=Microsoft PowerPoint 2007-importfilter för Stage
+Name[uk]=Фільтр імпортування даних MS PowerPoint 2007 для Stage
+Name[x-test]=xxMS PowerPoint 2007 Import Filter for Stagexx
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.ms-powerpoint.presentation.macroEnabled.12,application/vnd.ms-powerpoint.template.macroEnabled.12,application/vnd.ms-powerpoint.slideshow.macroEnabled.12
 X-KDE-Weight=1
