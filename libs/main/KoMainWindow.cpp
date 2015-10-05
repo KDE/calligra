@@ -56,14 +56,12 @@
 #include <QTemporaryFile>
 #include <krecentdocument.h>
 #include <klocalizedstring.h>
-#include <kstatusbar.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 #include <kfileitem.h>
 #include <ktoolbar.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kmenubar.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -88,6 +86,8 @@
 #include <QMutexLocker>
 #include <QFontDatabase>
 #include <QMimeDatabase>
+#include <QStatusBar>
+#include <QMenuBar>
 
 #include "MainDebug.h"
 
