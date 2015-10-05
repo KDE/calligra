@@ -87,6 +87,9 @@ ki18n_wrap_ui( komain_LIB_SRCS
 QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
 
 add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
+generate_export_header(komain
+    EXPORT_FILE_NAME komain_generated_export.h
+    )
 
 target_link_libraries(komain
 PUBLIC
