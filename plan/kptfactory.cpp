@@ -26,17 +26,15 @@
 
 #include <KoComponentData.h>
 
-#include <KAboutData>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kglobal.h>
 
 namespace KPlato
 {
 
 KoComponentData* Factory::s_global = 0L;
-K4AboutData* Factory::s_aboutData = 0L;
+KAboutData* Factory::s_aboutData = 0L;
 
 Factory::Factory()
     : KPluginFactory()
@@ -65,7 +63,7 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     return part;
 }
 
-K4AboutData* Factory::aboutData()
+KAboutData* Factory::aboutData()
 {
     if ( !s_aboutData )
         s_aboutData = newAboutData();

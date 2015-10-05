@@ -60,7 +60,6 @@
 #include <krun.h>
 #include <kservicetypetrader.h>
 #include <khelpclient.h>
-#include <k4aboutdata.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -213,7 +212,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     doc->registerView( this );
 
-    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
+    setComponentName(Factory::global().componentName(), Factory::global().componentDisplayName());
     if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else

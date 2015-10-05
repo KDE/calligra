@@ -25,8 +25,6 @@
 
 #include <KoApplication.h>
 
-#include <KAboutData>
-
 #include "kptmaindocument.h"
 
 #ifdef MAINTANER_WANTED_SPLASH
@@ -44,8 +42,7 @@ public:
 #endif
 
 extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
-    K4AboutData * aboutData=KPlato::newAboutData();
-
+    KAboutData *aboutData = KPlato::newAboutData();
 
     KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);
 
