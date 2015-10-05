@@ -43,8 +43,7 @@ public:
 };
 #endif
 
-
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
+extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
     K4AboutData * aboutData=KPlato::newAboutData();
 
 
