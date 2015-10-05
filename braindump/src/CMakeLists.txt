@@ -47,6 +47,6 @@ ecm_add_app_icon( braindump_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(braindump ${braindump_SRCS})
 
-target_link_libraries(braindump flake kotext kowidgets braindumpcore komain)
+target_link_libraries(braindump flake kotext kowidgets braindumpcore komain KF5::KDELibs4Support)
 
 install(TARGETS braindump ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -9,7 +9,7 @@ set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 add_library(calligra_filter_eps2svgai MODULE ${eps2svgai_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_eps2svgai calligra_filter_eps2svgai.desktop)
 
-target_link_libraries(calligra_filter_eps2svgai komain)
+target_link_libraries(calligra_filter_eps2svgai komain KF5::KDELibs4Support)
 
 install(TARGETS calligra_filter_eps2svgai  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

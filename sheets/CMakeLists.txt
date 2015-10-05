@@ -296,8 +296,8 @@ set (calligrasheetsodf_LIB_SRCS
 
 add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
 
-target_link_libraries(calligrasheetsodf komain)
-target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(calligrasheetsodf komain KF5::KDELibs4Support)
+target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
 
 set_target_properties(calligrasheetsodf PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -427,7 +427,7 @@ set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "or
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
 endif ()
 
-target_link_libraries(kdeinit_calligrasheets komain )
+target_link_libraries(kdeinit_calligrasheets komain KF5::KDELibs4Support)
 
 install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -130,7 +130,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan")
 endif ()
 
-target_link_libraries(kdeinit_calligraplan komain)
+target_link_libraries(kdeinit_calligraplan komain KF5::KDELibs4Support)
 
 install(TARGETS kdeinit_calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

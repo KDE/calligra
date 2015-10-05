@@ -149,12 +149,12 @@ ki18n_wrap_ui(calligrastageprivate_LIB_SRCS
 
 add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout KF5::Archive Qt5::Svg Qt5::WebKitWidgets)
+target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout KF5::Archive Qt5::Svg Qt5::WebKitWidgets KF5::KDELibs4Support)
 if(HAVE_OPENGL)
     target_link_libraries(calligrastageprivate Qt5::OpenGL)
 endif()
 
-target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
+target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp KF5::KDELibs4Support)
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -23,7 +23,7 @@ set(TestPAPageMoveCommand_test_SRCS TestPAPageMoveCommand.cpp )
 
 kde4_add_unit_test(TestPAPageMoveCommand TESTNAME libs-kopageapp-TestPAPageMoveCommand ${TestPAPageMoveCommand_test_SRCS})
 
-target_link_libraries(TestPAPageMoveCommand   kopageapp Qt5::Test)
+target_link_libraries(TestPAPageMoveCommand   kopageapp KF5::KDELibs4Support Qt5::Test)
 
 ########### next target ###############
 
@@ -31,6 +31,6 @@ set(TestPACopyPastePage_test_SRCS TestPACopyPastePage.cpp )
 
 kde4_add_unit_test(TestPACopyPastePage TESTNAME libs-kopageapp-TestPACopyPastePage ${TestPACopyPastePage_test_SRCS})
 
-target_link_libraries(TestPACopyPastePage   kopageapp Qt5::Test)
+target_link_libraries(TestPACopyPastePage   kopageapp KF5::KDELibs4Support Qt5::Test)
 
 ########### next target ###############

@@ -140,11 +140,11 @@ endif()
 
 add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain kotextlayout)
+target_link_libraries(wordsprivate komain kotextlayout KF5::KDELibs4Support)
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate kordf)
 endif()
-target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
 
 set_target_properties(wordsprivate
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -224,7 +224,7 @@ if (Q_WS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
 endif ()
 
-target_link_libraries(kdeinit_calligraauthor   komain )
+target_link_libraries(kdeinit_calligraauthor  komain KF5::KDELibs4Support)
 
 install(TARGETS kdeinit_calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

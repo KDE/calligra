@@ -13,6 +13,5 @@ set (pluginshape_LIB_SRCS
 add_library(calligra_shape_plugin MODULE ${pluginshape_LIB_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_plugin calligra_shape_plugin.desktop)
 
-target_link_libraries(calligra_shape_plugin komain
-  )
+target_link_libraries(calligra_shape_plugin komain KF5::KDELibs4Support)
 install(TARGETS calligra_shape_plugin DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

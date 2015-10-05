@@ -12,6 +12,7 @@ target_link_libraries( okularGenerator_odp
     Okular::Core
     komain
     kopageapp
+    KF5::KDELibs4Support
 )
 
 install( TARGETS okularGenerator_odp DESTINATION ${PLUGIN_INSTALL_DIR} )

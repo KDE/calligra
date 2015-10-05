@@ -93,9 +93,10 @@ PUBLIC
     kowidgets
     kotextlayout
     koversion
-    KF5::KDELibs4Support
 PRIVATE
+    KF5::Notifications
     KF5::ItemViews
+    KF5::KIOFileWidgets
 )
 
 if( KF5_Activities_FOUND )

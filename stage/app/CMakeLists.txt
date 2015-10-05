@@ -19,7 +19,7 @@ if (Q_WS_MAC)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
 endif ()
 
-target_link_libraries(kdeinit_calligrastage komain )
+target_link_libraries(kdeinit_calligrastage komain KF5::KDELibs4Support)
 
 install(TARGETS kdeinit_calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 
