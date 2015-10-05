@@ -51,7 +51,6 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <kdeprintdialog.h>
 
 #include <QStatusBar>
 #include <QDockWidget>
@@ -327,8 +326,8 @@ KoPageLayout KoView::pageLayout() const
 
 QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 {
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
-                                printJob->createOptionWidgets(), parent);
+    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), parent);
+    printDialog->setOptionTabs(printJob->createOptionWidgets());
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
     printDialog->setEnabledOptions(printJob->printDialogOptions());
     return printDialog;
