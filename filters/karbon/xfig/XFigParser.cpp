@@ -30,7 +30,7 @@
 #include <QFont>
 #include <QScopedPointer>
 
-#include <kdebug.h>
+#include <QDebug>
 
 
 enum XFig3_2TextFlag {
@@ -447,7 +447,7 @@ XFigParser::XFigParser( QIODevice* device )
             }
         } else {
             // should not occur
-            kDebug() << "unknown object type:" << objectCode;
+            qWarning() << "unknown object type:" << objectCode;
         }
     }
 
@@ -468,7 +468,7 @@ XFigParser::parseHeader()
     const QString versionString = m_XFigStreamLineReader.line();
     if (! versionString.startsWith(QLatin1String("#FIG 3.")) ||
         (versionString.length() < 8)) {
-        kDebug() << "ERROR: no xfig file or wrong header";
+        qWarning() << "ERROR: no xfig file or wrong header";
         return false;
     }
 
@@ -478,7 +478,7 @@ XFigParser::parseHeader()
     } else if (minorVersion == QLatin1Char('1')) {
         m_XFigVersion = 310;
     } else {
-        kDebug() << "ERROR: unsupported xfig version";
+        qWarning() << "ERROR: unsupported xfig version";
         return false;
     }
 
@@ -496,7 +496,7 @@ XFigParser::parseHeader()
                                                                     XFigPageOrientationUnknown;
 // qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (pageOrientation == XFigPageOrientationUnknown)
-                kDebug() << "ERROR: invalid orientation";
+                qWarning() << "ERROR: invalid orientation";
 
             m_Document->setPageOrientation( pageOrientation );
         } else {
@@ -517,7 +517,7 @@ XFigParser::parseHeader()
                                                             XFigUnitTypeUnknown;
 //     qDebug() << "unittype:"<<unitTypeString<<unitType;
             if (unitType == XFigUnitTypeUnknown)
-                kDebug() << "ERROR: invalid units";
+                qWarning() << "ERROR: invalid units";
 
             m_Document->setUnitType( unitType );
         } else {
@@ -631,7 +631,7 @@ void XFigParser::parseColorObject()
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream >> colorNumber;
     if ((colorNumber < 32) || (543 < colorNumber)) {
-        kDebug() << "bad colorNumber:" << colorNumber;
+        qWarning() << "bad colorNumber:" << colorNumber;
         return;
     }
 
@@ -850,7 +850,7 @@ XFigParser::parsePolyline()
     // check box:
     if ((abstractPolylineObject->typeId()==XFigAbstractObject::BoxId) &&
         (points.count()!=5)) {
-        kDebug() << "box object does not have 5 points, but points:" << points.count();
+        qWarning() << "box object does not have 5 points, but points:" << points.count();
         return 0;
     }
     abstractPolylineObject->setPoints(points);
@@ -1115,7 +1115,7 @@ XFigParser::parseCompoundObject()
             }
         } else {
             // should not occur
-            kDebug() << "unknown object type:" << objectCode;
+            qWarning() << "unknown object type:" << objectCode;
         }
     }
 // qDebug()<<"compound end";

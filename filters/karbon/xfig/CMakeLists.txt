@@ -11,7 +11,6 @@ kcoreaddons_desktop_to_json(calligra_filter_xfig2odg calligra_filter_xfig2odg.de
 
 target_link_libraries( calligra_filter_xfig2odg
     komain
-    KF5::KDELibs4Support
 )
 
 install(TARGETS calligra_filter_xfig2odg  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
