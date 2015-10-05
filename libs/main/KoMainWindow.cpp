@@ -604,10 +604,13 @@ void KoMainWindow::addRecentURL(const QUrl &url)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
-                if (path.contains(*it))
+            const QStringList tmpDirs = QStandardPaths::standardLocations(QStandardPaths::TempLocation);
+            foreach (const QString &tmpDir, tmpDirs) {
+                if (path.startsWith(tmpDir)) {
                     ok = false; // it's in the tmp resource
+                    break;
+                }
+            }
             if (ok) {
                 KRecentDocument::add(QUrl::fromLocalFile(path));
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
