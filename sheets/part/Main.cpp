@@ -22,13 +22,11 @@
 #include "AboutData.h"
 #include "DocBase.h"
 
-#include <KAboutData>
-
 using namespace Calligra::Sheets;
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    K4AboutData * aboutData = newAboutData();
+    KAboutData *aboutData = newAboutData();
 
     // QT5TODO: support custom options
 //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));

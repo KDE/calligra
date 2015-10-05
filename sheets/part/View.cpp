@@ -64,7 +64,6 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
-#include <k4aboutdata.h>
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -561,7 +560,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-    setComponentName(Factory::global().componentName(), Factory::aboutData()->programName());
+    setComponentName(Factory::global().componentName(), Factory::global().componentDisplayName());
     setXMLFile("sheets.rc");
 
     // GUI Initializations

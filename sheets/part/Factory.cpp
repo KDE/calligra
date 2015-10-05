@@ -23,7 +23,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
-#include <KAboutData>
 
 #include <KoDockRegistry.h>
 #include <KoComponentData.h>
@@ -36,7 +35,7 @@
 using namespace Calligra::Sheets;
 
 KoComponentData* Factory::s_global = 0;
-K4AboutData* Factory::s_aboutData = 0;
+KAboutData* Factory::s_aboutData = 0;
 
 Factory::Factory()
     : KPluginFactory()
@@ -66,7 +65,7 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
     return part;
 }
 
-K4AboutData* Factory::aboutData()
+KAboutData* Factory::aboutData()
 {
     if (!s_aboutData)
         s_aboutData = newAboutData();
