@@ -23,8 +23,6 @@
 #include "KoPAPageMoveCommand.h"
 #include "KoPAMasterPage.h"
 
-#include <kdebug.h>
-
 #include <QTest>
 
 void TestPAPageMoveCommand::initTestCase()

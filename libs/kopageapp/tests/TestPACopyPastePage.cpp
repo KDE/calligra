@@ -34,7 +34,6 @@
 #include <KoOdf.h>
 
 #include <QTest>
-#include <kdebug.h>
 
 void TestPACopyPastePage::copyAndPaste( MockDocument * doc, QList<KoPAPageBase *> & pages, KoPAPageBase * after )
 {
