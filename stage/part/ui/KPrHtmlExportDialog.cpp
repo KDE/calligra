@@ -46,18 +46,18 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     ui.klineedit_title->setText(m_title);
     ui.klineedit_author->setText(author);
 
-    connect(ui.kpushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
+    connect(ui.pushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
 
     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
     connect(ui.klineedit_title, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.klineedit_author, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.kListBox_slides, SIGNAL(currentRowChanged(int)), this, SLOT(generatePreview(int)));
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
-    connect(ui.kPushButton_selectAll, SIGNAL(clicked()), this, SLOT(checkAllItems()));
-    connect(ui.kPushButton_deselectAll, SIGNAL(clicked()), this, SLOT(uncheckAllItems()));
+    connect(ui.pushButton_selectAll, SIGNAL(clicked()), this, SLOT(checkAllItems()));
+    connect(ui.pushButton_deselectAll, SIGNAL(clicked()), this, SLOT(uncheckAllItems()));
     connect(ui.toolButton_previous, SIGNAL(clicked()), this, SLOT(generatePrevious()));
     connect(ui.toolButton_next, SIGNAL(clicked()), this, SLOT(generateNext()));
-    connect(ui.kPushButton_Favorite, SIGNAL(clicked()), this, SLOT(favoriteAction()));
+    connect(ui.pushButton_Favorite, SIGNAL(clicked()), this, SLOT(favoriteAction()));
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateFavoriteButton()));
 
     this->updateFavoriteButton();
@@ -298,20 +298,20 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
 void KPrHtmlExportDialog::updateFavoriteButton()
 {
     if (this->selectedTemplateIsFavorite() || this->selectedTemplateIsSystemFavorite()) {
-        ui.kPushButton_Favorite->setText(i18n("Delete Template"));
+        ui.pushButton_Favorite->setText(i18n("Delete Template"));
         if (this->selectedTemplateIsSystemFavorite()) {
-            ui.kPushButton_Favorite->setEnabled(false);
-            ui.kPushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
+            ui.pushButton_Favorite->setEnabled(false);
+            ui.pushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
         }
         else {
-            ui.kPushButton_Favorite->setEnabled(true);
-            ui.kPushButton_Favorite->setToolTip("");
+            ui.pushButton_Favorite->setEnabled(true);
+            ui.pushButton_Favorite->setToolTip("");
         }
     }
     else {
-        ui.kPushButton_Favorite->setText(i18n("Add Template"));
-        ui.kPushButton_Favorite->setEnabled(true);
-        ui.kPushButton_Favorite->setToolTip("");
+        ui.pushButton_Favorite->setText(i18n("Add Template"));
+        ui.pushButton_Favorite->setEnabled(true);
+        ui.pushButton_Favorite->setToolTip("");
     }
 }
 

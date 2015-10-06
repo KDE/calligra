@@ -47,7 +47,7 @@
     </spacer>
    </item>
    <item row="7" column="1">
-    <widget class="KPushButton" name="kPushButton_selectAll">
+    <widget class="QPushButton" name="pushButton_selectAll">
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
      </property>
@@ -70,7 +70,7 @@
     </widget>
    </item>
    <item row="7" column="2">
-    <widget class="KPushButton" name="kPushButton_deselectAll">
+    <widget class="QPushButton" name="pushButton_deselectAll">
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
      </property>
@@ -213,7 +213,7 @@
        </widget>
       </item>
       <item>
-       <widget class="KPushButton" name="kpushbuttonBrowseTemplate">
+       <widget class="QPushButton" name="pushbuttonBrowseTemplate">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -250,7 +250,7 @@
    <item row="8" column="5">
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="2">
-      <widget class="KPushButton" name="kPushButton_Favorite">
+      <widget class="QPushButton" name="pushButton_Favorite">
        <property name="locale">
         <locale language="English" country="UnitedStates"/>
        </property>
@@ -297,11 +297,6 @@
    <class>KListWidget</class>
    <extends>QListWidget</extends>
    <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
