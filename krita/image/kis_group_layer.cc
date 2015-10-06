@@ -283,7 +283,7 @@ KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() co
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Pass Through"), koIcon("passthrough-enabled"), koIcon("passthrough-disabled"), passThroughMode());
+    l << KisDocumentSectionModel::Property(i18n("Pass Through"), themedIcon("passthrough-enabled"), themedIcon("passthrough-disabled"), passThroughMode());
     return l;
 }
 
