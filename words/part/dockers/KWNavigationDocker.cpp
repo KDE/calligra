@@ -19,7 +19,6 @@
 
 #include "KWNavigationDocker.h"
 
-#include <kdebug.h>
 #include <KoCanvasResourceManager.h>
 #include <KWCanvas.h>
 

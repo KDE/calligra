@@ -30,7 +30,6 @@
 #include <KoImageCollection.h>
 #include <KoOdfLoadingContext.h>
 
-#include <kdebug.h>
 #include <QBuffer>
 #include <QColor>
 

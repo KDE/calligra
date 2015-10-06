@@ -37,7 +37,6 @@
 #include <KoGridData.h>
 
 // KDE + Qt includes
-#include <kdebug.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

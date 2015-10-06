@@ -44,7 +44,6 @@
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");
 const KLocalizedString i18nSaved = ki18n("Saved");

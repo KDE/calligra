@@ -43,7 +43,6 @@
 #include <QAction>
 #include <QScrollBar>
 #include <KoMainWindow.h>
-#include <kdebug.h>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),

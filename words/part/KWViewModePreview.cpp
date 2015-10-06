@@ -29,7 +29,6 @@
 // #include "KWFrameViewManager.h"
 // #include "KWFrameView.h"
 // #include "KWGUI.h"
-// // #include <kdebug.h>
 
 
 KWViewModePreview::KWViewModePreview()

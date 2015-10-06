@@ -19,7 +19,6 @@
 */
 
 #include "KWFactory.h"
-#include <kdebug.h>
 #include "KWAboutData.h"
 #include "KWDocument.h"
 

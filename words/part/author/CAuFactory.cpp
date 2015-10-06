@@ -24,7 +24,6 @@
 #include "CAuPart.h"
 #include "CAuAboutData.h"
 
-#include <kdebug.h>
 #include <author/CAuDocument.h>
 
 #include <kiconloader.h>

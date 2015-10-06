@@ -23,7 +23,6 @@
 #include "KWFrame.h"
 #include "KWFrameSet.h"
 #include "KWPage.h"
-#include <kdebug.h>
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),

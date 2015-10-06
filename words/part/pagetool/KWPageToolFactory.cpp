@@ -23,7 +23,6 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 KWPageToolFactory::KWPageToolFactory()
     : KoToolFactoryBase("PageToolFactory_ID")
