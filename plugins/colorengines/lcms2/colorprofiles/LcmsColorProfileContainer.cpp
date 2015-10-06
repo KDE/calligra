@@ -49,7 +49,6 @@ public:
     bool suitableForOutput;
     bool hasColorants;
     bool adaptedFromD50;
-    cmsNAMEDCOLORLIST *namedColorList;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
     cmsCIEXYZTRIPLE colorants;
@@ -168,26 +167,7 @@ bool LcmsColorProfileContainer::init()
                 cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
             }
         }
-        
-        //Colorant table tag is for CMYK and other named color profiles. If we use this correctly we can display the full list of named colors
-        //in a named color profile. We retrieve more information elsewhere.
-        if (cmsIsTag(d->profile, cmsSigColorantTableTag)) {
-            d->namedColorList = ((cmsNAMEDCOLORLIST *)cmsReadTag (d->profile, cmsSigColorantTableTag));
-// QT5TODO: check if this does anything, besides failing as stack-buffer-overflow,
-//          due to name, prefix, suffix not being a buffer, just single char
-#if 0
-            for (cmsUInt16Number i=0;i<cmsNamedColorCount(d->namedColorList);i++) {
-                char name;
-                char prefix;
-                char suffix;
-                cmsUInt16Number pcs;
-                cmsUInt16Number col;
-                cmsNamedColorInfo(d->namedColorList, i, &name, &prefix, &suffix, &pcs, &col);
-                //qDebug()<<d->name<<i<<","<< name<<","<< prefix<<","<< suffix;
-                //if (pcs){qDebug()<<pcs;} else {qDebug()<<"no pcs retrieved";}
-            }
-#endif
-        }
+
         //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
         if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
             cmsCIEXYZTRIPLE tempColorants = { -1 };
