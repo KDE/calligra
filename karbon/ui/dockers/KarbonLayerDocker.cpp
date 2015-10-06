@@ -43,11 +43,11 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kmenu.h>
 #include <kconfiggroup.h>
 
+#include <QInputDialog>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QButtonGroup>
@@ -280,9 +280,11 @@ void KarbonLayerDocker::itemClicked(const QModelIndex &index)
 void KarbonLayerDocker::addLayer()
 {
     bool ok = true;
-    QString name = KInputDialog::getText(i18n("New Layer"),
+    QString name = QInputDialog::getText(this,
+                                         i18n("New Layer"),
                                          i18n("Enter the name of the new layer:"),
-                                         i18n("New layer"), &ok, this);
+                                         QLineEdit::Normal,
+                                         i18n("New layer"), &ok);
     if (ok) {
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName(name);

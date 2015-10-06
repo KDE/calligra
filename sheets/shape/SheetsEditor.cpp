@@ -24,8 +24,7 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
-
-#include <kinputdialog.h>
+#include <QInputDialog>
 
 #include "TableShape.h"
 #include "Sheet.h"
@@ -128,7 +127,7 @@ void SheetsEditor::renameClicked()
     Sheet* sheet = map->findSheet(item->text());
     if (! sheet)
         return;
-    QString name = KInputDialog::getText(i18n("Rename"), i18n("Enter Name:"), sheet->sheetName());
+    QString name = QInputDialog::getText(0, i18n("Rename"), i18n("Enter Name:"), QLineEdit::Normal, sheet->sheetName());
     if (name.isEmpty())
         return;
     sheet->setSheetName(name);

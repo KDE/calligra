@@ -47,11 +47,11 @@
 #include <kglobal.h>
 #include <kmenu.h>
 #include <klocalizedstring.h>
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
+#include <QInputDialog>
 #include <QGridLayout>
 #include <QToolButton>
 #include <QButtonGroup>
@@ -309,8 +309,8 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
 void KoPADocumentStructureDocker::addLayer()
 {
     bool ok = true;
-    QString name = KInputDialog::getText(i18n("New Layer"), i18n("Enter the name of the new layer:"),
-                                          i18n("New layer"), &ok, this);
+    QString name = QInputDialog::getText(this, i18n("New Layer"), i18n("Enter the name of the new layer:"),
+                                         QLineEdit::Normal, i18n("New layer"), &ok);
     if (ok) {
         KoShapeLayer* layer = new KoShapeLayer();
         KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());

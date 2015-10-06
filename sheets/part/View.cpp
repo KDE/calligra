@@ -57,6 +57,7 @@
 #include <QSizePolicy>
 #include <QScrollBar>
 #include <QStatusBar>
+#include <QInputDialog>
 #include <QTimer>
 
 // KDE includes
@@ -65,7 +66,6 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
@@ -1774,7 +1774,7 @@ void View::slotRename()
 
     bool ok;
     QString activeName = sheet->sheetName();
-    QString newName = KInputDialog::getText(i18n("Rename Sheet"), i18n("Enter name:"), activeName, &ok, this);
+    QString newName = QInputDialog::getText(this, i18n("Rename Sheet"), i18n("Enter name:"), QLineEdit::Normal, activeName, &ok);
 
     if (!ok) return;
 
