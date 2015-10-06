@@ -41,7 +41,7 @@ static KAboutData * newAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Calligra Spreadsheet Application"),
         KAboutLicense::LGPL,
-        i18n("Copyrigh 1998-%1, The Calligra Sheets Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Calligra Sheets Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("http://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
