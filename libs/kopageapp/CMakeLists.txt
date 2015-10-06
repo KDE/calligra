@@ -7,6 +7,7 @@ add_subdirectory(tools)
 
 ### kopageapp ###
 set( kopageapp_LIB_SRCS
+     PageAppDebug.cpp
      KoPADocument.cpp
      KoShapeTraversal.cpp
      KoPAView.cpp

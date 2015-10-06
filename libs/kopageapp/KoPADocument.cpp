@@ -52,7 +52,7 @@
 #include <KoPart.h>
 #include <KoUnit.h>
 
-#include <kdebug.h>
+#include <PageAppDebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
@@ -151,14 +151,14 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if ( realBody.isNull() ) {
-        kError(30010) << "No body tag found!" << endl;
+        errorPageApp << "No body tag found!" << endl;
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
 
     if ( body.isNull() ) {
-        kError(30010) << "No office:" << odfTagName( false ) << " tag found!" << endl;
+        errorPageApp << "No office:" << odfTagName( false ) << " tag found!" << endl;
         return false;
     }
 

@@ -37,7 +37,7 @@
 #include <KoShapeBackground.h>
 #include <KoZoomHandler.h>
 
-#include <kdebug.h>
+#include <PageAppDebug.h>
 
 #include <QPainter>
 
@@ -99,7 +99,7 @@ void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
         }
         else {
             Q_ASSERT(layer);
-            kWarning(30010) << "Page contains non layer where a layer is expected";
+            warnPageApp << "Page contains non layer where a layer is expected";
         }
     }
     paContext.saveLayerSet(paContext.xmlWriter());
@@ -193,7 +193,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         KoXmlElement child;
         forEachElement( child, element )
         {
-            kDebug(30010) <<"loading shape" << child.localName();
+            debugPageApp <<"loading shape" << child.localName();
 
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
             if ( shape ) {
@@ -276,10 +276,10 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
     if ( !KoPAPixmapCache::instance()->find( key, size, pm ) ) {
         pm = generateThumbnail( size );
         KoPAPixmapCache::instance()->insert( key, pm, size );
-        kDebug(30010) << "create thumbnail" << this << key << size;
+        debugPageApp << "create thumbnail" << this << key << size;
     }
     else {
-        //kDebug(30010) << "thumbnail in cache " << this;
+        //debugPageApp << "thumbnail in cache " << this;
     }
     return pm;
 #else

@@ -20,10 +20,10 @@
 
 #include "KoPageNavigatorButton_p.h"
 
-// KDE
-#include <QIcon>
-#include <kdebug.h>
+// KF5
+#include <PageAppDebug.h>
 // Qt
+#include <QIcon>
 #include <QAction>
 
 
@@ -39,11 +39,11 @@ KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *pare
 void KoPageNavigatorButton::setAction(QAction *action)
 {
     if (! action) {
-        kWarning()<<"Attempt to set a null action";
+        warnPageApp << "Attempt to set a null action";
         return;
     }
     if (m_action) {
-        kWarning()<<"Attempt to set a second action";
+        warnPageApp << "Attempt to set a second action";
         return;
     }
 

@@ -20,7 +20,7 @@
 #include "KoPAPage.h"
 
 #include <QPainter>
-#include <kdebug.h>
+#include <PageAppDebug.h>
 
 #include <KoShapePainter.h>
 #include <KoShapeSavingContext.h>
@@ -88,7 +88,7 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
         setMasterPage(masterPage);
 #ifndef NDEBUG
     else
-        kWarning(30010) << "Loading didn't provide a page under name; " << master;
+        warnPageApp << "Loading didn't provide a page under name; " << master;
 #endif
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
     int pageProperties = UseMasterBackground | DisplayMasterShapes | DisplayMasterBackground;

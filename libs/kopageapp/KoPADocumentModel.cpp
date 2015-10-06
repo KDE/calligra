@@ -42,7 +42,7 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <PageAppDebug.h>
 
 #include <QMimeData>
 #include <QApplication>
@@ -502,11 +502,11 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 return false;
             }
             KoPAPageBase *after = (row != 0) ? m_document->pageByIndex(row - 1, false) : 0;
-            kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
+            debugPageApp << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
             return doDrop(pages, after, action);
         }
         else {
-            kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping non-page as root, returning false";
+            debugPageApp << "KoPADocumentModel::dropMimeData parent = root, dropping non-page as root, returning false";
             return false;
         }
     }
@@ -529,7 +529,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
     if ( container ) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
         if ( group ) {
-            kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = group";
+            debugPageApp <<"KoPADocumentModel::dropMimeData parent = group";
             if ( ! toplevelShapes.count() ) {
                 return false;
             }
@@ -551,7 +551,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             endInsertRows();
             emit layoutChanged();
         } else {
-            kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = container";
+            debugPageApp <<"KoPADocumentModel::dropMimeData parent = container";
             if ( toplevelShapes.count() ) {
                 emit layoutAboutToBeChanged();
                 beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
@@ -590,7 +590,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             }
         }
     } else {
-        kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = shape";
+        debugPageApp <<"KoPADocumentModel::dropMimeData parent = shape";
         if ( ! toplevelShapes.count() ) {
             return false;
         }

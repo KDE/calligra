@@ -20,7 +20,7 @@
 #include "KoPAPageContainerModel.h"
 
 #include "KoPAPageBase.h"
-#include <kdebug.h>
+#include <PageAppDebug.h>
 
 KoPAPageContainerModel::KoPAPageContainerModel()
 {
@@ -33,7 +33,7 @@ KoPAPageContainerModel::~KoPAPageContainerModel()
 void KoPAPageContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
     Q_UNUSED( type );
-    //kDebug(30010) << "page changed" << child->parent();
+    //debugPageApp << "page changed" << child->parent();
     if ( KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( child->parent() ) ) {
         page->pageUpdated();
     }

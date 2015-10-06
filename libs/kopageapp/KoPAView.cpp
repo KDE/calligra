@@ -79,7 +79,7 @@
 #include "dialogs/KoPAConfigureDialog.h"
 #include "widgets/KoPageNavigator.h"
 
-#include <kdebug.h>
+#include <PageAppDebug.h>
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
@@ -195,7 +195,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     // create a factory
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
     if (!factory) {
-        kWarning(30003) << "No picture shape found, cannot drop images.";
+        warnPageApp << "No picture shape found, cannot drop images.";
         return;
     }
 
@@ -209,7 +209,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
 
         if (!shape) {
-            kWarning(30003) << "Could not create a shape from the image";
+            warnPageApp << "Could not create a shape from the image";
             return;
         }
         shape->setPosition(pos);
