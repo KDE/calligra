@@ -20,7 +20,8 @@
 #include "KoPABackgroundToolWidget.h"
 
 #include <QUrl>
-#include <kfiledialog.h>
+#include <QFileDialog>
+
 #include <KoNetAccess.h>
 
 #include <KoImageCollection.h>
@@ -103,7 +104,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
         return;
     }
 
-    QUrl url = KFileDialog::getOpenUrl();
+    QUrl url = QFileDialog::getOpenFileUrl();
     if ( !url.isEmpty() ) {
         QString tmpFile;
         if ( KIO::NetAccess::download(  url, tmpFile, 0 ) ) {

@@ -79,7 +79,6 @@
 #include "dialogs/KoPAConfigureDialog.h"
 #include "widgets/KoPageNavigator.h"
 
-#include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
@@ -88,6 +87,7 @@
 #include <kmessagebox.h>
 #include <KoNetAccess.h>
 
+#include <QFileDialog>
 #include <QAction>
 #include <QStatusBar>
 #include <QTemporaryFile>
@@ -501,9 +501,9 @@ QAction * KoPAView::deleteSelectionAction() const
 
 void KoPAView::importDocument()
 {
-    KFileDialog *dialog = new KFileDialog( QUrl("kfiledialog:///OpenDialog"),QString(), this );
+    QFileDialog *dialog = new QFileDialog( /* QT5TODO: QUrl("kfiledialog:///OpenDialog"),*/ this );
     dialog->setObjectName( "file dialog" );
-    dialog->setMode( KFile::File );
+    dialog->setFileMode( QFileDialog::AnyFile );
     if ( d->doc->pageType() == KoPageApp::Slide ) {
         dialog->setWindowTitle(i18n("Import Slideshow"));
     }
@@ -518,9 +518,9 @@ void KoPAView::importDocument()
 
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
 
-    dialog->setMimeFilter( mimeFilter );
+    dialog->setMimeTypeFilters( mimeFilter );
     if (dialog->exec() == QDialog::Accepted) {
-        QUrl url(dialog->selectedUrl());
+        QUrl url(dialog->selectedUrls().first());
         QString tmpFile;
         if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
             QFile file( tmpFile );
