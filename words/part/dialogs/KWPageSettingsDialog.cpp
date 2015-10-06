@@ -31,7 +31,7 @@
 
 #include <QPushButton>
 #include <QListWidget>
-#include <kinputdialog.h>
+#include <QInputDialog>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
         : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
@@ -221,7 +221,7 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
         KWDocument *m_document;
     };
     Validator validator(m_document);
-    QString name = KInputDialog::getText(i18n("Clone Page Style"), i18n("Add a new page style with the name:"), pagestyle.name(), 0, this, &validator);
+    QString name = QInputDialog::getText(this, i18n("Clone Page Style"), i18n("Add a new page style with the name:"), QLineEdit::Normal, pagestyle.name() ); // QT5TODO: &validator);
     if (name.isEmpty())
         return;
     pagestyle.detach(name);
