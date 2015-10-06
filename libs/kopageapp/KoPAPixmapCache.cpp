@@ -20,7 +20,7 @@
 #include "KoPAPixmapCache.h"
 
 #include <QPixmapCache>
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 class KoPAPixmapCache::Singleton
 {
@@ -28,7 +28,7 @@ public:
     KoPAPixmapCache q;
 };
 
-K_GLOBAL_STATIC( KoPAPixmapCache::Singleton, singleton )
+Q_GLOBAL_STATIC( KoPAPixmapCache::Singleton, singleton )
 
 KoPAPixmapCache * KoPAPixmapCache::instance()
 {
