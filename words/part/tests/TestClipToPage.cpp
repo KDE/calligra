@@ -7,9 +7,7 @@
 
 #include "MockPart.h"
 
-#include <kdebug.h>
-#include <qtest_kde.h>
-
+#include <QtTest>
 
 void TestClipToPage::testClipToPage()
 {
@@ -59,4 +57,4 @@ void TestClipToPage::testClipToPage()
     QCOMPARE(distance, QPointF(-110, -50));
 }
 
-QTEST_KDEMAIN(TestClipToPage, GUI)
+QTEST_MAIN(TestClipToPage)
