@@ -23,10 +23,11 @@
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 
-#include <kdebug.h>
 #include <QMimeDatabase>
 #include <QFile>
 #include <QPair>
+
+#include "AuthorDebug.h"
 
 #define coverPath "Pictures/coverImage."
 
@@ -41,7 +42,7 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
         return true;
 
     if (!store->open(coverPath + coverData.first)) {
-        kDebug(31000) << "Unable to open"<<coverPath + coverData.first;
+        debugAuthor << "Unable to open"<<coverPath + coverData.first;
         return false;
     }
 
@@ -59,7 +60,7 @@ QPair<QString, QByteArray> CoverImage::readCoverImage(QString path)
 {
     QFile file (path);
     if (!file.open(QIODevice::ReadOnly)) {
-        kDebug(31000) << "Unable to open" << path;
+        debugAuthor << "Unable to open" << path;
     }
     QByteArray data = file.readAll();
 

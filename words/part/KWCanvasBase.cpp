@@ -44,7 +44,7 @@
 #include <KoAnnotationLayoutManager.h>
 
 // KDE + Qt includes
-#include <kdebug.h>
+#include <WordsDebug.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -643,7 +643,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
         }
     } else {
         // TODO paint the main-text-flake directly
-        kWarning(32003) << "Non-page painting not implemented yet!";
+        warnWordsUI << "Non-page painting not implemented yet!";
     }
 }
 

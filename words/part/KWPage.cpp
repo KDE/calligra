@@ -26,7 +26,7 @@
 #include <KoShape.h>
 #include <QPainter>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 void KWPage::setVisiblePageNumber(int pageNumber)
 {
@@ -59,7 +59,7 @@ void KWPage::setPageStyle(const KWPageStyle style)
     if (! isValid())
         return;
     if (! style.isValid()) {
-        kWarning(32001) << "Passing invalid style to KWPage::setPageStyle()";
+        warnWords << "Passing invalid style to KWPage::setPageStyle()";
         return;
     }
     if (! priv->pageStyles.contains(style.name()))

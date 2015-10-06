@@ -23,7 +23,7 @@
 #include "KWView.h"
 #include <KoViewConverter.h>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #define GAP 20
 
@@ -190,7 +190,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
 void KWViewModeNormal::updatePageCache()
 {
     if (!m_pageManager) {
-        kWarning(31002) << "Error detected while running KWViewModeNormal::updatePageCache: PageManager not set";
+        warnWords << "Error detected while running KWViewModeNormal::updatePageCache: PageManager not set";
         return;
     }
 

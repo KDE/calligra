@@ -33,7 +33,7 @@
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 KWRootAreaProviderTextBox::KWRootAreaProviderTextBox(KWTextFrameSet *textFrameSet)
     : KWRootAreaProviderBase(textFrameSet)
@@ -102,7 +102,7 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
             data->setRootArea(area);
             area->setAssociatedShape(shape);
         } else {
-            kWarning(32001) << "shape has no KoTextShapeData";
+            warnWords << "shape has no KoTextShapeData";
         }
 
         if ((!shape->anchor()) || shape->anchor()->anchorType() == KoShapeAnchor::AnchorPage) {
@@ -154,7 +154,7 @@ void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, boo
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
-    kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
+    debugWords << "pageNumber=" << page.pageNumber() << "frameSetType=" << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
 
     QRectF updateRect = shape->outlineRect();
 

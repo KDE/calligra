@@ -104,7 +104,7 @@
 #include <QMenuBar>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WordsDebug.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -1077,7 +1077,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
 
     if (!factory) {
-        kWarning(30003) << "No picture shape found, cannot drop images.";
+        warnWords << "No picture shape found, cannot drop images.";
         return;
     }
 
@@ -1099,7 +1099,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         }
 
         if (!shape) {
-            kWarning(30003) << "Could not create a shape from the image";
+            warnWords << "Could not create a shape from the image";
             return;
         }
 

@@ -55,7 +55,7 @@
 
 // KDE + Qt includes
 #include <QTextCursor>
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #include <KoDocumentRdfBase.h>
 
@@ -78,7 +78,7 @@ KWDocument *KWOdfLoader::document() const
 //1.6: KWDocument::loadOasis
 bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 {
-    //kDebug(32001) << "========================> KWOdfLoader::load START";
+    //debugWords << "========================> KWOdfLoader::load START";
 
     QPointer<KoUpdater> updater;
     QPointer<KoUpdater> loadUpdater;
@@ -92,14 +92,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
-        kError(32001) << "No office:body found!" << endl;
+        errorWords << "No office:body found!" << endl;
         m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
     if (body.isNull()) {
-        kError(32001) << "No office:text found!" << endl;
+        errorWords << "No office:text found!" << endl;
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody)
@@ -269,7 +269,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     if (settingsDoc.isNull())
         return;
 
-    kDebug(32001) << "KWOdfLoader::loadSettings";
+    debugWords << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
     if (!viewSettings.isNull()) {
@@ -279,7 +279,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
-        kDebug(32001) << "Ignorelist:" << ignorelist;
+        debugWords << "Ignorelist:" << ignorelist;
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
 
@@ -290,8 +290,8 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
 
 void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context)
 {
-    kDebug(32001) << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
-    kDebug(32001) << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
+    debugWords << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
+    debugWords << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
 
     //TODO probably we should introduce more logic to handle the "standard" even
     //in faulty documents. See also bugreport #129585 as example.
@@ -327,7 +327,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KW
     fs->setPageStyle(pageStyle);
     m_document->addFrameSet(fs);
 
-    kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
+    debugWords << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
 
     // use auto-styles from styles.xml, not those from content.xml
     context.odfLoadingContext().setUseStylesAutoStyles(true);

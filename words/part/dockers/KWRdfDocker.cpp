@@ -38,7 +38,7 @@
 
 #include <kmenu.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #include <QTextDocument>
 

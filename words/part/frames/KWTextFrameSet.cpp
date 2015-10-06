@@ -41,7 +41,7 @@
 
 #include <changetracker/KoChangeTracker.h>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 #include <QTextDocument>
 #include <QTextBlock>
 
@@ -61,12 +61,12 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
     setName(Words::frameSetTypeName(m_textFrameSetType));
     setupDocument();
 
-    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    debugWords << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
 }
 
 KWTextFrameSet::~KWTextFrameSet()
 {
-    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    debugWords << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
     // delete the root area provider first and set to 0 as we don't want relayouting on deletion
     delete m_rootAreaProvider;
     m_rootAreaProvider = 0;
@@ -94,7 +94,7 @@ void KWTextFrameSet::setupShape(KoShape *shape)
         return;
     }
 
-    kDebug(32001) << "frameSet=" << this << "shape=" << shape << "pageNumber=" << page.pageNumber();
+    debugWords << "frameSet=" << this << "shape=" << shape << "pageNumber=" << page.pageNumber();
 
     if (Words::isHeaderFooter(this)) {
         // header and footer are always auto-grow-height independent of whatever
@@ -190,7 +190,7 @@ void KWTextFrameSet::setupDocument()
 
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
-    kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
+    debugWords << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
     m_pageStyle = style;
     // TODO: check if this is really needed here, when KWFrameLayout::layoutFramesOnPage() also
     // ensures the background is set. Especially as the separator data is only set there to the text background shape

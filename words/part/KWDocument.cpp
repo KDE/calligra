@@ -85,7 +85,7 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #include <QIODevice>
 #include <QTimer>
@@ -173,7 +173,7 @@ void KWDocument::setIsMasterDocument(bool isMasterDocument)
 void KWDocument::addShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame;
+    debugWords << "shape=" << shape << "frame=" << frame;
     if (frame == 0) {
         if (shape->shapeId() == TextShape_SHAPEID) {
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
@@ -199,7 +199,7 @@ void KWDocument::addShape(KoShape *shape)
 
 void KWDocument::removeShape(KoShape *shape)
 {
-    kDebug(32001) << "shape=" << shape;
+    debugWords << "shape=" << shape;
     KWFrameSet *fs = KWFrameSet::from(shape);
     if (fs) { // not all shapes have to have to be in a frameset
         if (fs->shapeCount() == 1) // last shape on FrameSet
@@ -274,7 +274,7 @@ void KWDocument::paintContent(QPainter &, const QRect &)
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
-    kDebug(32001) << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
+    debugWords << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
 
     //KWPage prevPage = m_document->pageManager().page(m_afterPageNum);
     KWPageStyle pageStyle = pageManager()->pageStyle(masterPageName);
@@ -291,7 +291,7 @@ KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
         page.setOffsetInDocument(0.0);
     }
 
-    kDebug(32001) << "pageNumber=" << page.pageNumber();
+    debugWords << "pageNumber=" << page.pageNumber();
 
     // Create the KWTextFrame's for the new KWPage
     KWFrameLayout *framelayout = frameLayout();
@@ -314,7 +314,7 @@ KWPage KWDocument::appendPage(const QString &masterPageName)
 
 void KWDocument::firePageSetupChanged()
 {
-    kDebug(32001);
+    debugWords;
     if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
@@ -322,7 +322,7 @@ void KWDocument::firePageSetupChanged()
 
 void KWDocument::removeFrameSet(KWFrameSet *fs)
 {
-    kDebug(32001) << "frameSet=" << fs;
+    debugWords << "frameSet=" << fs;
     m_frameSets.removeAt(m_frameSets.indexOf(fs));
     setModified(true);
     foreach (KoShape *shape, fs->shapes())
@@ -337,7 +337,7 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
     if (framesets.isEmpty())
         framesets = m_frameSets;
 
-    kDebug(32001) << "frameSets=" << framesets;
+    debugWords << "frameSets=" << framesets;
 
 
     // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
@@ -388,7 +388,7 @@ void KWDocument::layoutFinished()
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
 {
-    kDebug(32001) << "frameSet=" << fs;
+    debugWords << "frameSet=" << fs;
 
     Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
@@ -427,14 +427,14 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
 void KWDocument::addSequencedShape(KoShape *shape)
 {
-    kDebug(32001) << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
+    debugWords << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
     //firePageSetupChanged();
     emit shapeAdded(shape, KoShapeManager::AddWithoutRepaint);
 }
 
 void KWDocument::removeSequencedShape(KoShape *shape)
 {
-    kDebug(32001) << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
+    debugWords << "shape=" << shape << "frameSet=" << KWFrameSet::from(shape);
 
     emit shapeRemoved(shape);
     KWPage page = pageManager()->page(shape);
@@ -635,7 +635,7 @@ bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
-    kDebug(32001);
+    debugWords;
 
     // Get the master page name of the first page.
     QString firstPageMasterName;
@@ -648,7 +648,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     relayout();
 
-    kDebug(32001) << "KWDocument::endOfLoading done";
+    debugWords << "KWDocument::endOfLoading done";
 #if 0
     // Note that more stuff will happen in completeLoading
     firePageSetupChanged();
@@ -664,7 +664,7 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
-    kDebug(32001) << "pageStyleName=" << style.name();
+    debugWords << "pageStyleName=" << style.name();
     QList<KWFrameSet*> framesets;
     foreach(KWFrameSet *fs, frameLayout()->getFrameSets(style)) {
         KWTextFrameSet* tfs = dynamic_cast<KWTextFrameSet*>(fs);

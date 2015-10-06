@@ -36,7 +36,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         : KoShape()
@@ -50,12 +50,12 @@ KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
     delegates << m_original;
     setToolDelegates(delegates);
 
-    kDebug(32001) << "originalShape=" << m_original;
+    debugWords << "originalShape=" << m_original;
 }
 
 KWCopyShape::~KWCopyShape()
 {
-    kDebug(32001) << "originalShape=" << m_original;
+    debugWords << "originalShape=" << m_original;
 }
 
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)

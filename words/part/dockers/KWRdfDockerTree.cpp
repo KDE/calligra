@@ -20,7 +20,7 @@
 
 #include "KWRdfDockerTree.h"
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #include <QMimeDatabase>
 #include <QDrag>

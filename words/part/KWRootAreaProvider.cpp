@@ -41,19 +41,19 @@
 #include <KoColumns.h>
 
 #include <QTimer>
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_pageNumber(pageNumber) {
-            //kDebug(32001);
+            //debugWords;
         }
         virtual ~KWTextLayoutRootArea() {
-            //kDebug(32001);
+            //debugWords;
         }
         virtual bool layout(FrameIterator *cursor) {
-            //kDebug(32001) << "pageNumber=" << m_pageNumber << "frameSetType=" << Words::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
+            //debugWords << "pageNumber=" << m_pageNumber << "frameSetType=" << Words::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             bool ok = KoTextLayoutRootArea::layout(cursor);
             return ok;
         }
@@ -104,7 +104,7 @@ void KWRootAreaProvider::clearPages(int pageNumber)
 
 void KWRootAreaProvider::addDependentProvider(KWRootAreaProviderBase *provider, int pageNumber)
 {
-    kDebug(32001);
+    debugWords;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(provider->frameSet()->document()->documentLayout());
     Q_ASSERT(lay);
     lay->setContinuousLayout(false); // to abort the current layout-loop
@@ -198,7 +198,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         m_pages.append(rootAreaPage);
     }
 
-    kDebug(32001) << "pageNumber=" << pageNumber <<  "frameSet=" << Words::frameSetTypeName(frameSet()->textFrameSetType());
+    debugWords << "pageNumber=" << pageNumber <<  "frameSet=" << Words::frameSetTypeName(frameSet()->textFrameSetType());
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         handleDependentProviders(pageNumber);
     }
@@ -266,7 +266,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
             data->setRootArea(area);
             area->setAssociatedShape(shape);
         } else {
-            kWarning(32001) << "shape has no KoTextShapeData";
+            warnWords << "shape has no KoTextShapeData";
         }
         if ((!shape->anchor()) || shape->anchor()->anchorType() == KoShapeAnchor::AnchorPage) {
             area->setPage(new KWPage(rootAreaPage->page));
@@ -391,7 +391,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         }
     }
 
-    kDebug(32001) << "afterPageNumber=" << afterIndex+1;
+    debugWords << "afterPageNumber=" << afterIndex+1;
 
     bool atLeastOnePageRemoved = false;
     KWPageManager *pageManager = frameSet()->wordsDocument()->pageManager();
@@ -459,7 +459,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     Q_ASSERT(data);
     bool isHeaderFooter = Words::isHeaderFooter(frameSet());
 
-    kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << Words::frameSetTypeName(frameSet()->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
+    debugWords << "pageNumber=" << page.pageNumber() << "frameSetType=" << Words::frameSetTypeName(frameSet()->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
 
     QRectF updateRect = shape->outlineRect();
 

@@ -52,7 +52,7 @@
 
 #include <QBuffer>
 #include <QTextCursor>
-#include <kdebug.h>
+#include <WordsDebug.h>
 #include <QTemporaryFile>
 
 static const struct {
@@ -103,7 +103,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
 // rename to save pages ?
 void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
 {
-    //kDebug(32001)<< "START saveHeaderFooter ############################################";
+    //debugWords<< "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
     // this avoids iterating till we drop
     QHash<KWPageStyle, QHash<int, KWTextFrameSet*> > data;
@@ -183,7 +183,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
     //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::ParagraphAutoStyle))
     //    mainStyles.markStyleForStylesXml(s.name);
 
-    //kDebug(32001) << "END saveHeaderFooter ############################################";
+    //debugWords << "END saveHeaderFooter ############################################";
 }
 
 KWOdfWriter::KWOdfWriter(KWDocument *document)
@@ -200,7 +200,7 @@ KWOdfWriter::~KWOdfWriter()
 // 1.6: KWDocument::saveOasisHelper()
 bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
 {
-    //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //debugWords << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
     KoStore *store = odfStore.store();
 

@@ -26,7 +26,7 @@
 
 #include <KoShape.h>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #define DEBUG_PAGES
 
@@ -59,7 +59,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
 #else
     //Q_ASSERT(pageOffsets.contains(pageNum));
     qreal offset = pageOffsets.value(pageNum);
-    //kDebug(32001) << "pageNum=" << pageNum << "offset=" << offset;
+    //debugWords << "pageNum=" << pageNum << "offset=" << offset;
     return offset;
 #endif
 }
@@ -90,7 +90,7 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
     foreach (int id, oldPages.keys()) {
         Page page = oldPages[id];
         if (diff < 0 && page.pageNumber >= from && page.pageNumber < to) {
-            kWarning(32001) << "you requested to change the page number to a number that already exist, all will end soon";
+            warnWords << "you requested to change the page number to a number that already exist, all will end soon";
             return;
         }
 #ifdef DEBUG_PAGES
@@ -99,7 +99,7 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
         if (page.pageNumber >= from)
             page.pageNumber += diff;
 #ifdef DEBUG_PAGES
-        kDebug(32001) << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
+        debugWords << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
 #endif
         if (page.pageSide == KWPage::PageSpread) {
             if (page.pageNumber % 2 == 1) { // pagespreads can only be on even pageNumbers
@@ -127,7 +127,7 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << newPage.pageNumber;
+    debugWords << "pageNumber=" << newPage.pageNumber;
 #endif
 
     // increase the pagenumbers of pages following the pageNumber
@@ -207,7 +207,7 @@ KWPage KWPageManager::page(int pageNum) const
         return KWPage(d, d->pageNumbers.value(pageNum));
 
 #ifdef DEBUG_PAGES
-    kWarning(32001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
+    warnWords << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
 #endif
     return KWPage();
 }
@@ -233,7 +233,7 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
         return appendPage(pageStyle);
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+    debugWords << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     KWPageManagerPrivate::Page newPage;
@@ -298,7 +298,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     d->pageNumbers.insert(page.pageNumber, d->lastId);
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+    debugWords << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     return KWPage(d, d->lastId);
@@ -324,7 +324,7 @@ void KWPageManager::removePage(int pageNumber)
 void KWPageManager::removePage(const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug(32001) << page.pageNumber();
+    debugWords << page.pageNumber();
 
     const int removedPageNumber = page.pageNumber();
     d->pages.remove(d->pageNumbers[removedPageNumber]);
@@ -349,7 +349,7 @@ void KWPageManager::removePage(const KWPage &page)
     }
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
+    debugWords << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
 #endif
 }
 

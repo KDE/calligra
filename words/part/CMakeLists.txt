@@ -9,6 +9,7 @@ include_directories( ${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES}
 
 set(wordsprivate_LIB_SRCS
     KWFactory.cpp
+    WordsDebug.cpp
     Words.cpp
     KWApplicationConfig.cpp
     KWCanvasBase.cpp
@@ -74,6 +75,7 @@ set(wordsprivate_LIB_SRCS
 if (SHOULD_BUILD_APP_AUTHOR)
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
 ##calligra author specific additions
+    author/AuthorDebug.cpp
     author/CAuFactory.cpp
     author/CAuView.cpp
     author/CAuPart.cpp
