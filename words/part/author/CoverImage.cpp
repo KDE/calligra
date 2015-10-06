@@ -24,7 +24,7 @@
 #include <KoStoreDevice.h>
 
 #include <kdebug.h>
-#include <kmimetype.h>
+#include <QMimeDatabase>
 #include <QFile>
 #include <QPair>
 
@@ -49,7 +49,7 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
     device.write(coverData.second, coverData.second.size());
     store->close();
 
-    const QString mimetype(KMimeType::findByPath(coverPath + coverData.first, 0 , true)->name());
+    const QString mimetype(QMimeDatabase().mimeTypeForFile(coverPath + coverData.first).name());
     manifestWriter->addManifestEntry(coverPath + coverData.first, mimetype);
 
     return true;
