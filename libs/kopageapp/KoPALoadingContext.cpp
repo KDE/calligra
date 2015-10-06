@@ -22,7 +22,6 @@
 
 #include <QMap>
 
-#include <kdebug.h>
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 

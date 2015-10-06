@@ -28,7 +28,6 @@
 #include <KoZoomHandler.h>
 
 #include <QPainter>
-#include <kdebug.h>
 
 KoPAPrintJob::KoPAPrintJob(KoPAView * view)
 : KoPrintJob(view)

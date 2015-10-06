@@ -19,8 +19,6 @@
 
 #include "KoPAPageLayoutDialog.h"
 
-#include <kdebug.h>
-
 #include "KoPageLayout.h"
 #include "KoPADocument.h"
 

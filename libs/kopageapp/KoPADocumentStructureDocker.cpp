@@ -48,7 +48,6 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 
 #include <QMimeData>
 #include <QMenu>

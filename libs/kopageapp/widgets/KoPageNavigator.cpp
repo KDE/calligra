@@ -26,8 +26,7 @@
 #include <KoPADocument.h>
 #include <KoPAPage.h>
 #include <KoIcon.h>
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 // Qt

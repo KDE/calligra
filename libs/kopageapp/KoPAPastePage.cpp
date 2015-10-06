@@ -33,8 +33,6 @@
 #include "KoPASavingContext.h"
 #include "commands/KoPAPageInsertCommand.h"
 
-#include <kdebug.h>
-
 KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 : m_doc( doc )
 , m_activePage( activePage )

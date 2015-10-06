@@ -20,7 +20,6 @@
 #include "KoPAChangePageLayoutCommand.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
