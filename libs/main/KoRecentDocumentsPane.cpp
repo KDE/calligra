@@ -31,6 +31,7 @@
 
 #include <KoIcon.h>
 
+
 static const int MAX_RECENTFILES_ENTRIES = 10;
 
 
@@ -116,7 +117,11 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
             continue;
         }
 
-        nameValue = config.readPathEntry(QString("Name%1").arg(i), url.fileName());
+        nameValue = config.readPathEntry(QString("Name%1").arg(i), QString());
+        // handle name entries with empty strings
+        if (nameValue.isEmpty()) {
+            nameValue = url.fileName();
+        }
 
         KFileItem fileItem(url);
         fileList.prepend(fileItem);
