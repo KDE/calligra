@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAMOCK_H
-#define PAMOCK_H
+#ifndef MOCKPART_H
+#define MOCKPART_H
 
 
 #include <KoPart.h>
@@ -40,4 +40,4 @@ protected:
     virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
 };
 
-#endif // PAMOCK_H
+#endif // MOCKPART_H
