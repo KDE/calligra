@@ -42,7 +42,7 @@ public:
     /// How file with Author data in package should be named.
     static const QString AUTHOR_RDF_FILE_NAME;
 
-    CAuMetaDataManager(CAuDocument *caudoc);
+    explicit CAuMetaDataManager(CAuDocument *caudoc);
 
     /// Context for all the Author data.
     static Soprano::Node authorContext();
