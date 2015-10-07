@@ -455,9 +455,14 @@ bool KoApplication::start()
 
         short int numberOfOpenDocuments = 0; // number of documents open
         short int nPrinted = 0;
+        // TODO: remove once Qt has proper handling itself
         const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
         for (int argNumber = 0; argNumber < fileUrls.size(); ++argNumber) {
-            const QUrl url = QUrl::fromUserInput(fileUrls.at(argNumber));
+            const QString fileUrl = fileUrls.at(argNumber);
+            // convert to an url
+            const bool startsWithProtocol = (withProtocolChecker.indexIn(fileUrl) == 0);
+            const QUrl url = startsWithProtocol ? QUrl::fromUserInput(fileUrl) : QUrl::fromLocalFile(fileUrl);
+
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
