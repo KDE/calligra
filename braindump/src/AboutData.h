@@ -20,18 +20,18 @@
 #ifndef BRAINDUMPABOUTDATA_H
 #define BRAINDUMPABOUTDATA_H
 
-#include <kaboutdata.h>
+#include <KAboutData>
 #include <KLocalizedString>
 
-static const char BRAINDUMP_DESCRIPTION[] = "Braindump: directly from your brain to the computer.";
-static const char BRAINDUMP_VERSION[] = "0.10.9";
+#define BRAINDUMP_VERSION "0.10.9"
 
 inline KAboutData newBrainDumpAboutData()
 {
-    KAboutData aboutData("braindump", ki18n("Braindump").toString(), BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION).toString(),
-                         KAboutLicense::LGPL, ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger").toString());
-    aboutData.addAuthor(ki18n("Somsubhra Bairi").toString(), i18n("Maintainer"), "somsubhra.bairi@gmail.com", "https://www.somsubhra.com");
-    aboutData.addAuthor(ki18n("Cyrille Berger").toString(), ki18n("Former Maintainer").toString(), "cberger@cberger.net");
+    KAboutData aboutData(QStringLiteral("braindump"), i18n("Braindump"), QStringLiteral(BRAINDUMP_VERSION),
+                         i18n("Braindump: directly from your brain to the computer."),
+                         KAboutLicense::LGPL, i18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"));
+    aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
+    aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former Maintainer"), QStringLiteral("cberger@cberger.net"));
     return aboutData;
 }
 
