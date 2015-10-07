@@ -229,7 +229,7 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
             }
             break;
         }
-        foreach (QString name, annotationManager->annotationNameList()) {
+        foreach (const QString &name, annotationManager->annotationNameList()) {
             KoAnnotation *annotation = annotationManager->annotation(name);
             if (annotation->annotationShape() == shape) {
                 // Remove From annotation layout manager.
