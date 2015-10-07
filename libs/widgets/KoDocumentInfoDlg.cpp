@@ -31,18 +31,23 @@
 #include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
-
 #include <klocalizedstring.h>
+#include <kiconloader.h>
 
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <KoDialog.h>
-#include <QUrl>
 
+#include <QUrl>
 #include <QLineEdit>
 #include <QDateTime>
 #include <QMimeDatabase>
 #include <QMimeType>
+
+
+// see KoIcon.h
+#define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
+
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {

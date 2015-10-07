@@ -19,7 +19,10 @@
 
 // NOTE: This is copied from kmessagebox.cpp
 
-#include "kmessagebox.h"
+#include <QMessageBox>
+
+#include <KIconLoader>
+
 #include <KoIcon.h>
 
 static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)

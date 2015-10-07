@@ -24,9 +24,6 @@
 // Qt
 #include <QIcon>
 
-// KF5
-#include <kiconloader.h>
-
 /**
  * Macros to support collecting the icons in use.
  *
@@ -44,8 +41,10 @@
 #define koIcon(name) (QIcon::fromTheme(QLatin1String(name)))
 #define koIconName(name) (QLatin1String(name))
 #define koIconNameCStr(name) (name)
-#define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
-#define koDesktopIcon(name) (DesktopIcon(QLatin1String(name)))
+/// Use these definitions in files where needed:
+// #define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
+// #define koDesktopIcon(name) (DesktopIcon(QLatin1String(name)))
+// Also #include <kiconloader.h>
 
 /// Use these macros if there is a proper icon missing
 #define koIconNeeded(comment, neededName) (QIcon::fromTheme(QLatin1String(neededName)))

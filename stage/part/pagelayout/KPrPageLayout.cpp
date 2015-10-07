@@ -31,6 +31,8 @@
 #include "KPrPlaceholder.h"
 #include <KoIcon.h>
 
+#include <KIconLoader>
+
 #include <QSize>
 #include <QPainter>
 #include <QPixmap>
