@@ -347,7 +347,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderRemove()));
     action->setToolTip(i18n("Remove all borders in the selected area"));
 
-    action = new KAction(koIcon(("border_outline")), i18n("Border Outline"), this);
+    action = new KAction(koIcon("border_outline"), i18n("Border Outline"), this);
     action->setIconText(i18n("Outline"));
     addAction("borderOutline", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));
