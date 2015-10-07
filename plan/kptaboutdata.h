@@ -39,7 +39,7 @@ KAboutData * newAboutData()
         KAboutLicense::GPL,
         i18n("Copyright 1998-%1, The Plan Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
-        QStringLiteral("http://www.calligra.org/plan/"));
+        QStringLiteral("https://www.calligra.org/plan/"));
     aboutData->addAuthor(i18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor(i18n("Bo Thorsen"), QString(), "bo@sonofthor.dk");
     aboutData->addAuthor(i18n("Dag Andersen"), QString(), "danders@get2net.dk");

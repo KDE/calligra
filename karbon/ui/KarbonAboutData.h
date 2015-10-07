@@ -37,7 +37,7 @@ KAboutData * newKarbonAboutData()
         KAboutLicense::LGPL,
         i18n("(c) 2001-2013, The Karbon Developers"),
         i18n("You are invited to participate in any way."),
-        QStringLiteral("http://www.calligra.org/karbon/"));
+        QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->addAuthor(
         i18n("Rob Buis"),

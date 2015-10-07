@@ -36,7 +36,7 @@ KAboutData * newKPresenterAboutData()
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Stage Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
-        QStringLiteral("http://www.calligra.org/stage/"));
+        QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setOrganizationDomain( "kde.org" );
     aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Maintainer"), "zachmann@kde.org");

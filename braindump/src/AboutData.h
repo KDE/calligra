@@ -30,7 +30,7 @@ inline KAboutData newBrainDumpAboutData()
 {
     KAboutData aboutData("braindump", ki18n("Braindump").toString(), BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION).toString(),
                          KAboutLicense::LGPL, ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger").toString());
-    aboutData.addAuthor(ki18n("Somsubhra Bairi").toString(), ki18n("Maintainer").toString(), "somsubhra.bairi@gmail.com", "http://somsubhra.com");
+    aboutData.addAuthor(ki18n("Somsubhra Bairi").toString(), i18n("Maintainer"), "somsubhra.bairi@gmail.com", "https://www.somsubhra.com");
     aboutData.addAuthor(ki18n("Cyrille Berger").toString(), ki18n("Former Maintainer").toString(), "cberger@cberger.net");
     return aboutData;
 }

@@ -33,7 +33,7 @@ KAboutData* newFlowAboutData()
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
                                 ki18n("© 2000-%1, The Flow Team").subs(CALLIGRA_YEAR),
                                 KLocalizedString(),
-                                "http://www.calligra.org/flow/");
+                                "https://www.calligra.org/flow/");
   aboutData->setProductName("calligraflow"); // for bugs.kde.org
   aboutData->setProgramIconName(QLatin1String("calligraflow"));
   aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "yue.liu@mail.com");

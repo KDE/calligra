@@ -39,7 +39,7 @@ KexiAboutData::KexiAboutData()
         xi18n("© 2002-%1, The Kexi Team", QLatin1String(CALLIGRA_YEAR)),
         xi18n("This software is developed by Kexi Team - an international group "
               "of independent developers. They form a part of the Calligra Project."),
-        "http://www.calligra.org/kexi",
+        "https://www.calligra.org/kexi",
         "submit@bugs.kde.org"
     )
 {

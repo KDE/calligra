@@ -38,7 +38,7 @@ K4AboutData * newAboutData()
                                            K4AboutData::License_GPL,
                                            ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
-                                           "http://www.calligra.org/plan/" );
+                                           "https://www.calligra.org/plan/" );
 
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
 

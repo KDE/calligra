@@ -64,7 +64,7 @@
 
 const int calligraLogoPixmapInternalWidth = 100;
 const int calligraLogoPixmapInternalHeight = 71;
-const char calligraUrl[] = "http://www.calligra.org";
+const char calligraUrl[] = "https://www.calligra.org";
 
 //! @todo KEXI3 port OxygenHelper
 #if 0

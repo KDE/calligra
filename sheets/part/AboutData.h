@@ -43,7 +43,7 @@ static KAboutData * newAboutData()
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Calligra Sheets Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
-        QStringLiteral("http://www.calligra.org/sheets/"));
+        QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->addAuthor(i18n("Torben Weis"), i18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(i18n("Marijn Kruisselbrink"), i18n("Maintainer"), "mkruisselbrink@kde.org");

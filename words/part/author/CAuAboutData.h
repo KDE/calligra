@@ -36,7 +36,7 @@ KAboutData * newAuthorAboutData()
         KAboutLicense::LGPL,
         i18n("Copyright 2012-%1, The Author Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
-        QStringLiteral("http://www.calligra.org/author/"));
+        QStringLiteral("https://www.calligra.org/author/"));
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
     aboutData->setOrganizationDomain( "kde.org" );
     //                          Name             Function               email (if any)

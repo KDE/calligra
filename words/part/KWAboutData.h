@@ -35,7 +35,7 @@ KAboutData * newWordsAboutData()
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Words Team").arg(QStringLiteral(CALLIGRA_YEAR)),
         QString(),
-        QStringLiteral("http://www.calligra.org/words/"));
+        QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setOrganizationDomain( "kde.org" );
     aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
@@ -75,7 +75,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(i18n("Ewald Snel"), i18n("Filter"), "ewald@rambo.its.tudelft.nl");
     aboutData->addAuthor(i18n("Tomasz Grobelny"), i18n("Filter"), "grotk@poczta.onet.pl");
     aboutData->addAuthor(i18n("Michael Johnson"), i18n("Filter"));
-    aboutData->addAuthor(i18n("Fatcow Web Hosting"), i18n("Page break icon"), "http://www.fatcow.com/free-icons");
+    aboutData->addAuthor(i18n("Fatcow Web Hosting"), i18n("Page break icon"), "https://www.fatcow.com/free-icons");
     return aboutData;
 }
 

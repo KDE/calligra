@@ -55,7 +55,7 @@ int main( int argc, char** argv )
                          K4AboutData::License_GPL,
                          ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CalligraVersionWrapper::versionYear()),
                          KLocalizedString(),
-                         "http://www.calligra.org",
+                         "https://www.calligra.org",
                          "submit@bugs.kde.org");
 
     KCmdLineArgs::init (argc, argv, &aboutData);
