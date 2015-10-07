@@ -181,7 +181,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         m_previewLabel->setPixmap(preview);
 
         if (!fileItem.isNull()) {
-            QString details = QString("<center>%1<br>").arg(fileItem.url().path()) +
+            // TODO: think about not displaying Modified/Accessed if not available
+            QString details = QString("<center>%1<br>").arg(fileItem.url().toDisplayString(QUrl::PreferLocalFile)) +
                 "<table border=\"0\">" +
                 i18nc("File modification date and time. %1 is date time",
                       "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
