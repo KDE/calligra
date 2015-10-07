@@ -29,6 +29,8 @@
 #include <QAction>
 #include <QApplication>
 
+#include <KoIcon.h>
+
 //#include <MNotification>
 
 Controller::Controller(QObject *parent) :
@@ -558,7 +560,7 @@ QAction* Controller::uploadMostRecentAction()
 {
     if(!m_uploadMostRecentAction)
     {
-        m_uploadMostRecentAction = new QAction(QIcon::fromTheme("folder-remote"), "Update DropBox Copy", this);
+        m_uploadMostRecentAction = new QAction(koIcon("folder-remote"), "Update DropBox Copy", this);
         connect(m_uploadMostRecentAction, SIGNAL(triggered(bool)), SLOT(uploadMostRecent()));
     }
     return m_uploadMostRecentAction;

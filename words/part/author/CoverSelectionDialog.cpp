@@ -23,6 +23,8 @@ Boston, MA 02110-1301, USA
 #include "ui_CoverSelectionDialog.h"
 #include "CoverImage.h"
 
+#include <KoIcon.h>
+
 //KDE includes:
 #include <kmessagebox.h>
 
@@ -55,7 +57,7 @@ void CoverSelectionDialog::createActions()
 {
     //need to add that 'open..' button manualy, behaviour is not standard
     QPushButton *b = ui->coverSelectionButtonBox->addButton(i18n("Open..."),QDialogButtonBox::ActionRole);
-    b->setIcon(QIcon::fromTheme("document-open"));
+    b->setIcon(koIcon("document-open"));
     connect(b, SIGNAL(clicked()), this, SLOT(open()));
 
     connect(ui->coverSelectionButtonBox->button(QDialogButtonBox::Reset),

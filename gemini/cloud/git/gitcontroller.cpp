@@ -22,6 +22,8 @@
 #include "gitcontroller.h"
 #include "documentlistmodel.h"
 
+#include <KoIcon.h>
+
 #include <kpassworddialog.h>
 #include <kmessagebox.h>
 #include <kuser.h>
@@ -557,7 +559,7 @@ void GitController::setUserForRemote(QString newUser)
 QAction* GitController::commitAndPushCurrentFileAction()
 {
     if(!d->commitAndPushAction) {
-        d->commitAndPushAction = new QAction(QIcon::fromTheme("folder-remote"), "Update Git Copy", this);
+        d->commitAndPushAction = new QAction(koIcon("folder-remote"), "Update Git Copy", this);
         connect(d->commitAndPushAction, SIGNAL(triggered(bool)), SLOT(commitAndPushCurrentFile()));
     }
     return d->commitAndPushAction;

@@ -256,7 +256,7 @@ public:
         toTouch = new KAction(desktopView);
         toTouch->setEnabled(false);
         toTouch->setText(tr("Switch to Touch"));
-        toTouch->setIcon(QIcon::fromTheme("system-reboot"));
+        toTouch->setIcon(koIcon("system-reboot"));
         toTouch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
         connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToTouch()));
@@ -264,7 +264,7 @@ public:
         switcher = new QToolButton();
         switcher->setEnabled(false);
         switcher->setText(tr("Switch to Touch"));
-        switcher->setIcon(QIcon::fromTheme("system-reboot"));
+        switcher->setIcon(koIcon("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToTouch()));
