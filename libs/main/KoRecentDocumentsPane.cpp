@@ -31,6 +31,8 @@
 
 #include <KoIcon.h>
 
+static const int MAX_RECENTFILES_ENTRIES = 10;
+
 
 enum KoRecentDocumentRoles {
     PreviewRole = Qt::UserRole
@@ -85,36 +87,44 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
 
     model()->setSortRole(0); // Disable sorting
 
+    // load list of recent files from config
     KConfigGroup config(KSharedConfig::openConfig(), "RecentFiles");
 
-    int i = 1;
-    QString path;
+    QString fileKey;
+    QString fileValue;
+    QUrl url;
+    QString nameValue;
     KFileItemList fileList;
     QStandardItem* rootItem = model()->invisibleRootItem();
 
-    do {
-        path = config.readPathEntry(QString("File%1").arg(i), QString());
+    for (int i = 1; i <= MAX_RECENTFILES_ENTRIES; ++i) {
+        fileValue = config.readPathEntry(QString("File%1").arg(i), QString());
 
-        if (!path.isEmpty()) {
-            QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
-
-            QUrl url(path);
-
-            if (name.isEmpty())
-                name = url.fileName();
-
-            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                KFileItem fileItem(url);
-                fileList.prepend(fileItem);
-                const QIcon icon = QIcon::fromTheme(fileItem.iconName());
-                KoFileListItem* item = new KoFileListItem(icon, name, fileItem);
-                item->setEditable(false);
-                rootItem->insertRow(0, item);
-            }
+        // ignore empty entries
+        if (fileValue.isEmpty()) {
+            continue;
         }
 
-        i++;
-    } while (!path.isEmpty() || i <= 10);
+        url = QUrl::fromUserInput(fileValue);
+
+        // ignore entries for files known to no longer exist
+        if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {
+            continue;
+        }
+        // ignore duplicated entries
+        if (!fileList.findByUrl(url).isNull()) {
+            continue;
+        }
+
+        nameValue = config.readPathEntry(QString("Name%1").arg(i), url.fileName());
+
+        KFileItem fileItem(url);
+        fileList.prepend(fileItem);
+        const QIcon icon = QIcon::fromTheme(fileItem.iconName());
+        KoFileListItem* item = new KoFileListItem(icon, nameValue, fileItem);
+        item->setEditable(false);
+        rootItem->insertRow(0, item);
+    }
 
 
     //Select the first file
