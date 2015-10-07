@@ -38,19 +38,19 @@
  */
 
 /// Use these macros for icons without any issues
-#define koIcon(name) (QIcon::fromTheme(QLatin1String(name)))
-#define koIconName(name) (QLatin1String(name))
+#define koIcon(name) (QIcon::fromTheme(QStringLiteral(name)))
+#define koIconName(name) (QStringLiteral(name))
 #define koIconNameCStr(name) (name)
 /// Use these definitions in files where needed:
-// #define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
-// #define koDesktopIcon(name) (DesktopIcon(QLatin1String(name)))
+// #define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
+// #define koDesktopIcon(name) (DesktopIcon(QStringLiteral(name)))
 // Also #include <kiconloader.h>
 
 /// Use these macros if there is a proper icon missing
-#define koIconNeeded(comment, neededName) (QIcon::fromTheme(QLatin1String(neededName)))
-#define koIconNeededWithSubs(comment, neededName, substituteName) (QIcon::fromTheme(QLatin1String(substituteName)))
-#define koIconNameNeeded(comment, neededName) (QLatin1String(neededName))
-#define koIconNameNeededWithSubs(comment, neededName, substituteName) (QLatin1String(substituteName))
+#define koIconNeeded(comment, neededName) (QIcon::fromTheme(QStringLiteral(neededName)))
+#define koIconNeededWithSubs(comment, neededName, substituteName) (QIcon::fromTheme(QStringLiteral(substituteName)))
+#define koIconNameNeeded(comment, neededName) (QStringLiteral(neededName))
+#define koIconNameNeededWithSubs(comment, neededName, substituteName) (QStringLiteral(substituteName))
 #define koIconNameCStrNeeded(comment, neededName) (neededName)
 #define koIconNameCStrNeededWithSubs(comment, neededName, substituteName) (substituteName)
 

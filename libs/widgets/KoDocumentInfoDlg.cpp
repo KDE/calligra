@@ -46,7 +46,7 @@
 
 
 // see KoIcon.h
-#define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
+#define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
 
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
