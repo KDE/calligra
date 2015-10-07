@@ -49,7 +49,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     m_gridPage = new KoConfigGridPage(parent->koDocument());
     item = addPage(m_gridPage, i18n("Grid"));
     item->setHeader(i18n("Grid"));
-    item->setIcon(koIcon("grid"));
+    item->setIcon(koIcon("view-grid"));
 
     connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
 

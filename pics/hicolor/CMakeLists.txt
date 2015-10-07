@@ -25,7 +25,6 @@ ecm_install_icons(
         22-actions-inline_table.png
         22-actions-select.png
         24-actions-insert-pagebreak.png
-        32-actions-grid.png
         32-actions-insert-endnote.png
         32-actions-insert-footnote.png
         32-actions-insert-pagebreak.png
@@ -35,4 +34,3 @@ ecm_install_icons(
         sc-actions-artistictext-tool.svg
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
 )
-

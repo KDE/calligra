@@ -67,7 +67,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     m_gridPage = new KoConfigGridPage(parent->part());
     item = addPage(m_gridPage, i18n("Grid"));
     item->setHeader(i18n("Grid"));
-    item->setIcon(koIcon("grid"));
+    item->setIcon(koIcon("view-grid"));
 
     connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
 
