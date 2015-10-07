@@ -315,8 +315,7 @@ public:
         tempFile.open();
         m_file = tempFile.fileName();
 
-        QUrl destURL;
-        destURL.setPath( m_file );
+        const QUrl destURL = QUrl::fromLocalFile( m_file );
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
