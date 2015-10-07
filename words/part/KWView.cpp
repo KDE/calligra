@@ -934,7 +934,7 @@ bool KWView::event(QEvent* event)
                 m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
 
                 qApp->processEvents();
-                foreach(KoShape* const &shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
+                foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
                     if (qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
                         m_canvas->shapeManager()->selection()->select(shape);
                         break;
