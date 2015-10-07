@@ -25,10 +25,20 @@ set(kostore_LIB_SRCS
 add_library(kostore SHARED ${kostore_LIB_SRCS})
 generate_export_header(kostore BASE_NAME kostore)
 
-target_link_libraries(kostore Qt5::Xml Qt5::Gui KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n KF5::KIOCore)
-#target_link_libraries(kostore LINK_INTERFACE_LIBRARIES KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kostore
+    PUBLIC
+        Qt5::Xml
+        Qt5::Core
+        KF5::KIOCore
+    PRIVATE
+        Qt5::Gui
+        KF5::Archive
+        KF5::Wallet
+        KF5::KIOWidgets
+        KF5::I18n
+)
 if( Qca-qt5_FOUND )
-    target_link_libraries(kostore qca-qt5)
+    target_link_libraries(kostore PRIVATE qca-qt5)
 endif()
 
 set_target_properties(kostore PROPERTIES

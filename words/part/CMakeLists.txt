@@ -151,6 +151,7 @@ target_link_libraries(wordsprivate
         komain
     PRIVATE
         kotextlayout
+        KF5::IconThemes
 )
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate

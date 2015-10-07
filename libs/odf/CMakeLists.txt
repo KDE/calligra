@@ -46,8 +46,15 @@ add_library(koodf SHARED ${koodf_LIB_SRCS})
 add_dependencies(koodf writeodf.h-target)
 generate_export_header(koodf BASE_NAME koodf)
 
-target_link_libraries(koodf koversion kostore KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(koodf
+    PUBLIC
+        kostore
+        Qt5::PrintSupport
+        Qt5::Xml
+    PRIVATE
+        koversion
+        KF5::I18n
+)
 
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

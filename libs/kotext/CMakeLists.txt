@@ -137,18 +137,23 @@ endif()
 add_library(kotext SHARED ${kotext_LIB_SRCS})
 generate_export_header(kotext BASE_NAME kotext)
 
-target_link_libraries(kotext flake KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
+target_link_libraries(kotext
+    PUBLIC
+        flake
+        KF5::TextWidgets
+    PRIVATE
+        KF5::WindowSystem # KoFind to activate the window with content found
+)
 if( SHOULD_BUILD_FEATURE_RDF )
-    target_link_libraries(kotext ${SOPRANO_LIBRARIES})
+    target_link_libraries(kotext PRIVATE ${SOPRANO_LIBRARIES})
 endif()
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake KF5::TextWidgets)
 
 if( FONTCONFIG_FOUND )
-    target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
+    target_link_libraries(kotext PRIVATE ${FONTCONFIG_LIBRARIES})
 endif()
 
 if( FREETYPE_FOUND )
-    target_link_libraries(kotext ${FREETYPE_LIBRARIES})
+    target_link_libraries(kotext PRIVATE ${FREETYPE_LIBRARIES})
 endif()
 
 

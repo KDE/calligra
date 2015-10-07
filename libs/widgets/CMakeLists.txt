@@ -108,18 +108,29 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 generate_export_header(kowidgets BASE_NAME kowidgets)
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
+
+target_link_libraries(kowidgets
+    PUBLIC
+        kotext
+        pigmentcms
+        kowidgetutils
+        KF5::KIOWidgets
+    PRIVATE
+        KF5::GuiAddons
+        KF5::WidgetsAddons
+        KF5::ConfigCore
+        KF5::Codecs
+        KF5::Completion
+        KF5::IconThemes
+)
 
 if(GHNS)
-    target_link_libraries(kowidgets KF5::NewStuff)
+    target_link_libraries(kowidgets PRIVATE KF5::NewStuff)
 endif ()
 
 if(X11_FOUND)
-    target_link_libraries(kowidgets Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(kowidgets PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
 endif()
-
-
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils)
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
