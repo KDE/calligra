@@ -30,7 +30,6 @@
 #include "KoShapeBasedDocumentBase.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 PluginShapeFactory::PluginShapeFactory()
     : KoShapeFactoryBase(PLUGINSHAPEID, i18n("Plugin Placeholder"))

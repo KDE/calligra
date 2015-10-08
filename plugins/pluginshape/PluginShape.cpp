@@ -28,7 +28,6 @@
 #include <KoXmlNS.h>
 
 #include <QPainter>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 
