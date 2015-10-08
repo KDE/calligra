@@ -24,11 +24,10 @@
 #include "VideoData.h"
 
 #include "VideoCollection.h"
+#include "VideoDebug.h"
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-
-#include <kdebug.h>
 
 #include <QApplication>
 #include <QBuffer>
@@ -172,7 +171,7 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
             KoStoreDevice device(store);
             //QByteArray data = device.readAll();
             if (!device.open(QIODevice::ReadOnly)) {
-                kWarning(30006) << "open file from store " << url << "failed";
+                warnVideo << "open file from store " << url << "failed";
                 d->errorCode = OpenFailed;
                 store->close();
                 return;
@@ -182,7 +181,7 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
 
             d->setSuffix(url);
         } else {
-            kWarning(30006) << "Find file in store " << url << "failed";
+            warnVideo << "Find file in store " << url << "failed";
             d->errorCode = OpenFailed;
             return;
         }
@@ -252,7 +251,7 @@ bool VideoData::saveData(QIODevice &device)
         Q_ASSERT(d->temporaryFile); // otherwise the collection should not have called this
         if (d->temporaryFile) {
             if (!d->temporaryFile->open()) {
-                kWarning(30006) << "Read file from temporary store failed";
+                warnVideo << "Read file from temporary store failed";
                 return false;
             }
             char buf[8192];
@@ -279,7 +278,7 @@ bool VideoData::saveData(QIODevice &device)
             QFile file(d->videoLocation.toLocalFile());
 
             if (!file.open(QIODevice::ReadOnly)) {
-                kWarning(30006) << "Read file failed";
+                warnVideo << "Read file failed";
                 return false;
             }
             char buf[8192];
@@ -310,7 +309,7 @@ void VideoData::copyToTemporary(QIODevice &device)
     d->temporaryFile = new QTemporaryFile(QLatin1String("KoVideoData/") + qAppName() + QLatin1String("_XXXXXX") );
     d->refCount.ref();
     if (!d->temporaryFile->open()) {
-        kWarning(30006) << "open temporary file for writing failed";
+        warnVideo << "open temporary file for writing failed";
         d->errorCode = VideoData::StorageFailed;
         delete d;
         d = 0;

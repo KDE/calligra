@@ -21,13 +21,13 @@
 #include "VideoThumbnailer.h"
 
 #include "VideoData.h"
+#include "VideoDebug.h"
 
 #include <phonon/experimental/videoframe2.h>
 #include <QTime>
 #include <QVBoxLayout>
 #include <QVarLengthArray>
 
-#include <kdebug.h>
 
 #define THRESHOLD_FRAME_VARIANCE 40.0
 
@@ -65,11 +65,11 @@ void VideoThumbnailer::slotCreateThumbnail(VideoData *videoData, const QSize &si
             if (retcode == 0) {
                 break;
             }
-            kDebug() << "Seeking to " << (i * 3);
+            debugVideo << "Seeking to " << (i * 3);
             m_media.seek(i * 3);
         }
         if (retcode) {
-               kWarning() << "Unable to generate thumbnail for ";
+               warnVideo << "Unable to generate thumbnail for ";
                m_media.stop();
                return;
         }

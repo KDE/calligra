@@ -30,6 +30,8 @@
 #ifdef SHOULD_BUILD_THUMBNAIL
 #include <VideoThumbnailer.h>
 #endif
+#include "VideoDebug.h"
+
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -38,7 +40,6 @@
 #include <KoStore.h>
 #include <KoIcon.h>
 
-#include <kdebug.h>
 #include <kurl.h>
 
 #include <QPainter>

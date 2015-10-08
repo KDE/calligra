@@ -22,16 +22,16 @@
 
 #include "VideoShape.h"
 #include "VideoShapeConfigWidget.h"
+#include "VideoCollection.h"
+#include "VideoDebug.h"
 
 #include <KoDocumentResourceManager.h>
 #include <KoXmlNS.h>
 #include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
-#include "VideoCollection.h"
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 VideoShapeFactory::VideoShapeFactory()
     : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))

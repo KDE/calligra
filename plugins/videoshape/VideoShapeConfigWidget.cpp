@@ -18,13 +18,14 @@
  */
 
 #include "VideoShapeConfigWidget.h"
+
 #include "VideoShape.h"
+#include "VideoDebug.h"
 
 #include <VideoData.h>
 #include <VideoCollection.h>
 #include <SelectVideoWidget.h>
 
-#include <kdebug.h>
 #include <QGridLayout>
 
 VideoShapeConfigWidget::VideoShapeConfigWidget()

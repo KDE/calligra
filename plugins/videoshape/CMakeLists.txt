@@ -17,6 +17,7 @@ endif()
 ########### Flake Plugin library ###############
 
 set (videoshape_LIB_SRCS
+    VideoDebug.cpp
     VideoData.cpp
     VideoCollection.cpp
     VideoShape.cpp

@@ -19,16 +19,17 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "VideoCollection.h"
-#include "VideoData.h"
-#include "KoShapeSavingContext.h"
 
+#include "VideoData.h"
+#include "VideoDebug.h"
+
+#include "KoShapeSavingContext.h"
 #include <KoStoreDevice.h>
 #include <QCryptographicHash>
 #include <KoXmlWriter.h>
 
 #include <QMap>
 #include <QUrl>
-#include <kdebug.h>
 #include <QMimeDatabase>
 #include <QMimeType>
 
@@ -85,10 +86,10 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                     const QString mimetype(db.mimeTypeForFile(videoData->saveName(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
-                    kWarning(30006) << "saving video failed";
+                    warnVideo << "saving video failed";
                 }
             } else {
-                kWarning(30006) << "saving video failed: open store failed";
+                warnVideo << "saving video failed: open store failed";
             }
             dataIt.value()->setSaveName(QString());
         }
