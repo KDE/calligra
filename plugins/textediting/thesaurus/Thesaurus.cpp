@@ -62,8 +62,8 @@ NOT TODO:
 #include <QUrl>
 #include <QFileDialog>
 #include <QPushButton>
+#include <QTabWidget>
 
-#include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -124,7 +124,7 @@ Thesaurus::Thesaurus()
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
 
-    m_tabWidget = new KTabWidget(page);
+    m_tabWidget = new QTabWidget(page);
     topLayout->addWidget(m_tabWidget);
 
     //
