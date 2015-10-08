@@ -375,12 +375,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(verticalText(bool)));
     action->setToolTip(i18n("Print cell contents vertically"));
 
-    action = new KAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more")), i18n("Increase Indent"), this);
+    action = new KAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconName("format-indent-less") : koIconName("format-indent-more")), i18n("Increase Indent"), this);
     addAction("increaseIndentation", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(increaseIndentation()));
     action->setToolTip(i18n("Increase the indentation"));
 
-    action = new KAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less")), i18n("Decrease Indent"), this);
+    action = new KAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconName("format-indent-more") : koIconName("format-indent-less")), i18n("Decrease Indent"), this);
     addAction("decreaseIndentation", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreaseIndentation()));
     action->setToolTip(i18n("Decrease the indentation"));
