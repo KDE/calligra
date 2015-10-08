@@ -16,18 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "SimpleEntryTool.h"
+
 #include <QPainter>
 #include <QMenu>
 #include <QBuffer>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QInputDialog>
-
-#include "MusicDebug.h"
-#include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <QAction>
-#include <kurl.h>
+#include <QFileDialog>
+#include <QUrl>
+
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -40,8 +42,7 @@
 #include "MusicShape.h"
 #include "Renderer.h"
 #include "MusicCursor.h"
-
-#include "SimpleEntryTool.h"
+#include "MusicDebug.h"
 
 #include "dialogs/SimpleEntryWidget.h"
 
@@ -752,7 +753,7 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff,
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Import"));
+    QString file = QFileDialog::getOpenFileName(0, i18nc("@title:window", "Import"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull()) return;
     QFile f(file);
     f.open(QIODevice::ReadOnly);
@@ -769,7 +770,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Export"));
+    QString file = QFileDialog::getSaveFileName(0, i18nc("@title:window", "Export"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull()) return;
 
     QBuffer b;

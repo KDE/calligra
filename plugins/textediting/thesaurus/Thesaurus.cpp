@@ -59,18 +59,18 @@ NOT TODO:
 #include <QGroupBox>
 #include <QTextBrowser>
 #include <QLineEdit>
+#include <QUrl>
+#include <QFileDialog>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
 #include <krun.h>
 #include <kcombobox.h>
-#include <kurl.h>
 
 Thesaurus::Thesaurus()
 {
@@ -294,8 +294,8 @@ void Thesaurus::dialogClosed()
 
 void Thesaurus::slotChangeLanguage()
 {
-    QString filename = KFileDialog::getOpenFileName(
-            QUrl::fromLocalFile(KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt")));
+    QString filename = QFileDialog::getOpenFileName(0, QString(),
+            KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt"));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();
@@ -304,9 +304,8 @@ void Thesaurus::slotChangeLanguage()
 
 void Thesaurus::setCaption()
 {
-    KUrl url = KUrl();
-    url.setPath(m_dataFile);
-    m_dialog->setCaption(i18n("Related Words - %1" , url.fileName() ) );
+    QFileInfo info(m_dataFile);
+    m_dialog->setCaption(i18n("Related Words - %1" , info.fileName() ) );
 }
 
 // Enable or disable back and forward button
@@ -400,7 +399,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
     if (term.startsWith("http://")) {
-        (void) new KRun(KUrl(term),0L);
+        (void) new KRun(QUrl::fromUserInput(term),0L);
     }
     else {
         if (addToHistory && m_edit->itemText(0) != term) {
