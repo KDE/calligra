@@ -24,7 +24,6 @@
 // Qt
 #include <QWidget>
 #include <QIODevice>
-#include <QDebug>
 #include <QPainter>
 
 // Calligra
@@ -39,11 +38,11 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
-#include <kdebug.h>
 
 // KoChart
 #include "ChartShape.h"
 #include "ChartPart.h"
+#include "ChartDebug.h"
 
 
 namespace KoChart {
@@ -86,17 +85,17 @@ bool ChartDocument::loadOdf(KoOdfReadStore &odfStore)
     KoXmlDocument doc = odfStore.contentDoc();
     KoXmlNode bodyNode = doc.documentElement().namedItemNS(KoXmlNS::office, "body");
     if (bodyNode.isNull()) {
-        kError(35001) << "No <office:body> element found.";
+        errorChart << "No <office:body> element found.";
         return false;
     }
     KoXmlNode chartElementParentNode = bodyNode.namedItemNS(KoXmlNS::office, "chart");
     if (chartElementParentNode.isNull()) {
-        kError(35001) << "No <office:chart> element found.";
+        errorChart << "No <office:chart> element found.";
         return false;
     }
     KoXmlElement chartElement = chartElementParentNode.namedItemNS(KoXmlNS::chart, "chart").toElement();
     if (chartElement.isNull()) {
-        kError(35001) << "No <chart:chart> element found.";
+        errorChart << "No <chart:chart> element found.";
         return false;
     }
     KoOdfLoadingContext odfLoadingContext(odfStore.styles(), odfStore.store());

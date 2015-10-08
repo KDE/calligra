@@ -25,7 +25,6 @@
 #include <QRect>
 #include <QPoint>
 #include <QSize>
-#include <QDebug>
 #include <QString>
 #include <QVariant>
 #include <QTest>

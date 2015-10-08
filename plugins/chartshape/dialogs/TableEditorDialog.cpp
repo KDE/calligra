@@ -23,11 +23,7 @@
 #include "TableEditorDialog.h"
 
 // Qt
-#include <QDebug>
 #include <QAbstractItemModel>
-
-// KDE
-#include <kdebug.h>
 
 // Calligra
 #include <KoIcon.h>
@@ -35,6 +31,7 @@
 // KoChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
+#include "ChartDebug.h"
 
 
 using namespace KoChart;
@@ -154,7 +151,7 @@ void TableEditorDialog::slotUpdateDialog()
         dataSetsInColumns->setChecked( true );
         break;
     default:
-        kWarning(35001) << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
+        warnChart << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
     }
 }
 

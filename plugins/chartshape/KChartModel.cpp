@@ -26,12 +26,10 @@
 // Own
 #include "KChartModel.h"
 
-// KDE
-#include <kdebug.h>
-
 // KoChart
 #include "DataSet.h"
 #include "PlotArea.h"
+#include "ChartDebug.h"
 
 // KChart
 #include <KChartGlobal>
@@ -309,7 +307,7 @@ void KChartModel::dataSetSizeChanged(DataSet *dataSet, int newSize)
 
     int dataSetIndex = d->dataSets.indexOf(dataSet);
     if (dataSetIndex < 0) {
-        qWarning() << "KChartModel::dataSetSizeChanged(): The data set is not assigned to this model.";
+        warnChart << "KChartModel::dataSetSizeChanged(): The data set is not assigned to this model.";
         return;
     }
 
@@ -399,14 +397,14 @@ QVariant KChartModel::headerData(int section,
     }
 
     if (d->dataSets.isEmpty()) {
-        qWarning() << "KChartModel::headerData(): Attempting to request header, but model has no datasets assigned to it.";
+        warnChart << "KChartModel::headerData(): Attempting to request header, but model has no datasets assigned to it.";
         return QVariant();
     }
 
     if (orientation != d->dataDirection) {
         int dataSetNumber = section / d->dataDimensions;
         if (d->dataSets.count() <= dataSetNumber || dataSetNumber < 0) {
-            qWarning() << "KChartModel::headerData(): trying to get more datasets than we have.";
+            warnChart << "KChartModel::headerData(): trying to get more datasets than we have.";
             return QVariant();
         }
 
@@ -505,7 +503,7 @@ int KChartModel::dataDimensions() const
 void KChartModel::addDataSet(DataSet *dataSet)
 {
     if (d->dataSets.contains(dataSet)) {
-        qWarning() << "KChartModel::addDataSet(): Attempting to insert already-contained data set";
+        warnChart << "KChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
     }
     dataSet->setKdChartModel(this);

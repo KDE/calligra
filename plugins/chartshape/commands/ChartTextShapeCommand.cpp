@@ -19,15 +19,16 @@
 
 #include "ChartTextShapeCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
+
+// Calligra
+#include "KoShape.h"
 
 // KoChart
 #include "ChartShape.h"
 #include "ChartLayout.h"
-
-#include "KoShape.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 

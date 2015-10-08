@@ -28,7 +28,6 @@
 #include <QList>
 #include <QImage>
 #include <QPainter>
-#include <kdebug.h>
 
 // Calligra
 #include <KoXmlNS.h>
@@ -76,6 +75,7 @@
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 
@@ -437,12 +437,12 @@ qreal PlotArea::pieAngleOffset() const
 bool PlotArea::addAxis(Axis *axis)
 {
     if (d->axes.contains(axis)) {
-        qWarning() << "PlotArea::addAxis(): Trying to add already added axis.";
+        warnChart << "PlotArea::addAxis(): Trying to add already added axis.";
         return false;
     }
 
     if (!axis) {
-        qWarning() << "PlotArea::addAxis(): Pointer to axis is NULL!";
+        warnChart << "PlotArea::addAxis(): Pointer to axis is NULL!";
         return false;
     }
     d->axes.append(axis);
@@ -463,12 +463,12 @@ bool PlotArea::addAxis(Axis *axis)
 bool PlotArea::removeAxis(Axis *axis)
 {
     if (!d->axes.contains(axis)) {
-        qWarning() << "PlotArea::removeAxis(): Trying to remove non-added axis.";
+        warnChart << "PlotArea::removeAxis(): Trying to remove non-added axis.";
         return false;
     }
 
     if (!axis) {
-        qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
+        warnChart << "PlotArea::removeAxis(): Pointer to axis is NULL!";
         return false;
     }
 
@@ -762,7 +762,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             }
         }
         else if (n.localName() != "axis" && n.localName() != "series") {
-            qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
+            warnChart << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
 

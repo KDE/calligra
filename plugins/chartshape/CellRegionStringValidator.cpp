@@ -21,9 +21,6 @@
 // Own
 #include "CellRegionStringValidator.h"
 
-// Qt
-#include <QDebug>
-
 // KoChart
 #include "CellRegion.h"
 

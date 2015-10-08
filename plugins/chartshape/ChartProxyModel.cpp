@@ -28,9 +28,6 @@
 #include <QRegion>
 #include <QPoint>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
@@ -47,6 +44,7 @@
 #include "DataSet.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 
@@ -447,13 +445,13 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
             (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
     /*
-    kDebug(35001) << "selection=" << selection.toString();
-    kDebug(35001) << "dataDirection=" << (dataDirection == Qt::Horizontal ? "Horizontal" : "Vertical");
-    kDebug(35001) << "firstRowIsLabel=" << firstRowIsLabel;
-    kDebug(35001) << "firstColumnIsLabel=" << firstColumnIsLabel;
-    kDebug(35001) << "overrideCategories=" << overrideCategories;
-    kDebug(35001) << "useCategories=" << useCategories;
-    kDebug(35001) << "dataRegions.count()="<<dataRegions.count();
+    debugChart << "selection=" << selection.toString();
+    debugChart << "dataDirection=" << (dataDirection == Qt::Horizontal ? "Horizontal" : "Vertical");
+    debugChart << "firstRowIsLabel=" << firstRowIsLabel;
+    debugChart << "firstColumnIsLabel=" << firstColumnIsLabel;
+    debugChart << "overrideCategories=" << overrideCategories;
+    debugChart << "useCategories=" << useCategories;
+    debugChart << "dataRegions.count()="<<dataRegions.count();
     */
 
     // Regions shared by all data sets: categories and x-data
@@ -507,11 +505,11 @@ if(overrideCategories) categoryDataRegion = CellRegion();
             dataSet->setCustomDataRegion(CellRegion());
 
         /*
-        kDebug(35001) << "xDataRegion=" << dataSet->xDataRegion().toString();
-        kDebug(35001) << "yDataRegion=" << dataSet->yDataRegion().toString();
-        kDebug(35001) << "categoryDataRegion=" << dataSet->categoryDataRegion().toString();
-        kDebug(35001) << "labelDataRegion=" << dataSet->labelDataRegion().toString();
-        kDebug(35001) << "customDataRegion=" << dataSet->customDataRegion().toString();
+        debugChart << "xDataRegion=" << dataSet->xDataRegion().toString();
+        debugChart << "yDataRegion=" << dataSet->yDataRegion().toString();
+        debugChart << "categoryDataRegion=" << dataSet->categoryDataRegion().toString();
+        debugChart << "labelDataRegion=" << dataSet->labelDataRegion().toString();
+        debugChart << "customDataRegion=" << dataSet->customDataRegion().toString();
         */
 
         createdDataSets.append(dataSet);

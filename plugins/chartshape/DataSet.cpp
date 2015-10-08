@@ -595,7 +595,6 @@ qreal DataSet::upperErrorLimit() const
     return d->upperErrorLimit;
 }
 
-#include <QDebug>
 void DataSet::Private::setAttributesAccordingToType()
 {
     KChart::DataValueAttributes attr = dataValueAttributes;

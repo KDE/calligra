@@ -19,12 +19,12 @@
 
 #include "AxisCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // KoChart
 #include "Axis.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 using namespace KChart;

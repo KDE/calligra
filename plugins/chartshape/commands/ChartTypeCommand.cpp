@@ -19,8 +19,7 @@
 
 #include "ChartTypeCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // KChart
@@ -35,6 +34,7 @@
 // KoChart
 #include "ChartShape.h"
 #include "Legend.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 using namespace KChart;

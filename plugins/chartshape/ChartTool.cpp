@@ -31,9 +31,8 @@
 #include <QBrush>
 #include <QPainter>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -65,6 +64,7 @@
 #include "commands/AxisCommand.h"
 #include "commands/DatasetCommand.h"
 #include "commands/ChartTextShapeCommand.h"
+#include "ChartDebug.h"
 
 
 using namespace KoChart;

@@ -30,14 +30,11 @@
 #include <QPoint>
 #include <QRect>
 #include <QVector>
-#include <QDebug>
 #include <QStringList>
-
-// KDE
-#include <kdebug.h>
 
 // KoChart
 #include "TableSource.h"
+#include "ChartDebug.h"
 
 
 using std::pow;
@@ -102,12 +99,12 @@ void Parser::setTableName(const QString &name)
         m_tableName = strippedName;
     else
         if (strippedName != m_tableName)
-            kDebug() << "More than one sheet referenced, this is currently not supported";
+            debugChart << "More than one sheet referenced, this is currently not supported";
 }
 
 bool Parser::parse()
 {
-    //qDebug() << "Input " << m_input;
+    //debugChart << "Input " << m_input;
     m_pos = m_input.constBegin();
     m_index = 0;
     m_currentToken = parseToken();
@@ -191,22 +188,22 @@ bool Parser::parseRegionList()
 
 bool Parser::parseRegion()
 {
-    //qDebug() << "parseRegion";
+    //debugChart << "parseRegion";
     bool res = true;
     res &= parseRegion2();
     m_currentToken = parseToken();
-    //qDebug() << "CurrentToken " << m_currentToken.m_identifier << m_currentToken.m_type;
+    //debugChart << "CurrentToken " << m_currentToken.m_identifier << m_currentToken.m_type;
     if (m_currentToken.m_type == Token::DoubleDot) {
         const QPoint topLeft = m_currentPoint;
         m_currentToken = parseToken();
         res &= parseRegion2();
         //m_currentToken = parseToken();
         m_result.append(QRect(topLeft, m_currentPoint));
-        //qDebug() << "DoubleDot";
+        //debugChart << "DoubleDot";
     }
     else {
         m_result.append(QRect(m_currentPoint, m_currentPoint));
-        //qDebug() << "NODoubleDot";
+        //debugChart << "NODoubleDot";
     }
     
     if (m_currentToken.m_type == Token::Space)
@@ -221,7 +218,7 @@ bool Parser::parseRegion()
 
 bool Parser::parseRegion2()
 {
-    //qDebug() << "ParseRegion2";
+    //debugChart << "ParseRegion2";
     bool res = true;
 
     if (m_currentToken.m_type != Token::Identifier && m_currentToken.m_type != Token::Dot)
@@ -238,7 +235,7 @@ bool Parser::parseRegion2()
             QRegExp regEx(QString::fromLatin1("([$]*)([A-Z]+)([$]*)([0-9]+)"));
             regEx.exactMatch(m_currentToken.m_identifier);
             m_currentPoint = QPoint(CellRegion::rangeStringToInt(regEx.cap(2)), regEx.cap(4).toInt());
-            //qDebug() << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
+            //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
             setTableName(firstIdentifier);
         }
         else
@@ -248,14 +245,14 @@ bool Parser::parseRegion2()
     {
         QRegExp regEx(QString::fromLatin1("([$]*)([A-Z]+)([$]*)([0-9]+)"));
         regEx.exactMatch(firstIdentifier);
-        //qDebug() << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
+        //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
         m_currentPoint = QPoint(CellRegion::rangeStringToInt(regEx.cap(2)), regEx.cap(4).toInt());
     }
-    //qDebug() << "TableName "<< m_tableName;
-    //qDebug() << firstIdentifier;
-    //qDebug() << "Point" << m_currentPoint;
-    //qDebug() << m_currentToken.m_identifier;
-    //qDebug() << m_currentToken.m_type;
+    //debugChart << "TableName "<< m_tableName;
+    //debugChart << firstIdentifier;
+    //debugChart << "Point" << m_currentPoint;
+    //debugChart << m_currentToken.m_identifier;
+    //debugChart << m_currentToken.m_type;
 
     return res;
 
@@ -271,7 +268,7 @@ bool Parser::parseRegion2()
 //         ++m_index;
 //     }
 //     const QString currentString = m_input.mid(startIndex, m_index - startIndex);
-//     qDebug() << "PointString" << currentString;
+//     debugChart << "PointString" << currentString;
 //     QRegExp regEx(QString::fromLatin1("[A-Z]+[0-9]+"));
 //     regEx.indexIn(currentString);
 //     m_currentPoint = QPoint(CellRegion::rangeStringToInt(regEx.cap(0)), regEx.cap(1).toInt());
@@ -372,7 +369,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
     Parser parser(regions);
     const bool success = parser.parse();
     if (!success)
-        kDebug() << "Parsing cell region failed";
+        debugChart << "Parsing cell region failed";
     d->rects = parser.getResult().toVector();
     d->table = source->get(parser.tableName());
 //     QStringList regionsList = regions.split(' ', QString::SkipEmptyParts);
@@ -628,14 +625,14 @@ void CellRegion::add(const QRect &rect)
 // These checks are obsolete, a CellRegion can be used otherwise as well
 #if 0
     if (!rect.isValid()) {
-        qWarning() << "CellRegion::add() Attempt to add invalid rectangle";
-        qWarning() << "CellRegion::add():" << rect;
+        warnChart << "CellRegion::add() Attempt to add invalid rectangle";
+        warnChart << "CellRegion::add():" << rect;
         return;
     }
 
     if (rect.width() > 1 && rect.height() > 1) {
-        qWarning() << "CellRegion::add() Attempt to add rectangle with height AND width > 1";
-        qWarning() << "CellRegion::add():" << rect;
+        warnChart << "CellRegion::add() Attempt to add rectangle with height AND width > 1";
+        warnChart << "CellRegion::add():" << rect;
         return;
     }
 #endif
@@ -729,10 +726,10 @@ static int rangeStringToInt(const QString &string)
     int result = 0;
     const int size = string.size();
     for (int i = 0; i < size; i++) {
-        //kDebug(350001) << "---" << float(rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1)));
+        //debugChart << "---" << float(rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1)));
         result += rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1));
     }
-    //kDebug(350001) << "+++++ result=" << result;
+    //debugChart << "+++++ result=" << result;
     return result;
 }
 
@@ -743,7 +740,7 @@ static QString rangeIntToString(int i)
         tmp[j] = 'A' + tmp[j].toLatin1() - '1';
     }
 
-    //kDebug(350001) << "tmp=" << tmp;
+    //debugChart << "tmp=" << tmp;
     return tmp;
 }
 #endif

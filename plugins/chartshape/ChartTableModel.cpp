@@ -30,9 +30,6 @@
 #include <QDomNode>
 #include <QDomDocument>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -44,6 +41,7 @@
 // KoChart
 #include "CellRegion.h"
 #include "OdfLoadingHelper.h"
+#include "ChartDebug.h"
 
 
 namespace KoChart {

@@ -34,8 +34,7 @@
 #include <QTextDocument>
 #include <QStandardItemModel>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kmessagebox.h>
 #include <kurl.h>
 
@@ -104,6 +103,7 @@
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
 #include "SingleModelHelper.h"
+#include "ChartDebug.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -819,7 +819,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
                                       const KoOdfLoadingContext &loadingContext)
 {
     if (!objectElement.hasAttributeNS(KoXmlNS::xlink, "href")) {
-        kError() << "Object element has no valid xlink:href attribute";
+        errorChart << "Object element has no valid xlink:href attribute";
         return false;
     }
 
@@ -856,19 +856,19 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         path += '/';
 
     const QString mimeType = loadingContext.mimeTypeForPath(path);
-    //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
+    //debugChart << "path for manifest file=" << path << "mimeType=" << mimeType;
     if (mimeType.isEmpty()) {
-        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
+        //debugChart << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
     const bool isOdf = mimeType.startsWith("application/vnd.oasis.opendocument");
     if (!isOdf) {
         tmpURL += "/maindoc.xml";
-        //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
+        //debugChart << "tmpURL adjusted to" << tmpURL;
     }
 
-    //kDebug(35001) << "tmpURL=" << tmpURL;
+    //debugChart << "tmpURL=" << tmpURL;
     QString errorMsg;
 
 #if 0
@@ -942,7 +942,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 bool ChartShape::loadOdf(const KoXmlElement &element,
                          KoShapeLoadingContext &context)
 {
-    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){qDebug()<<">>>>>"<<t.elapsed();}} timer;
+    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){debugChart<<">>>>>"<<t.elapsed();}} timer;
 
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
@@ -960,7 +960,7 @@ bool ChartShape::loadOdfFrameElement(const KoXmlElement &element,
                                     element,
                                     context.odfLoadingContext());
 
-    qWarning() << "Unknown frame element <" << element.tagName() << ">";
+    warnChart << "Unknown frame element <" << element.tagName() << ">";
     return false;
 }
 
@@ -1018,7 +1018,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // Check if we're loading an embedded document
     if (!chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
-        kDebug(35001) << "Error: Embedded document has no chart:class attribute.";
+        debugChart << "Error: Embedded document has no chart:class attribute.";
         return false;
     }
 
@@ -1032,7 +1032,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     bool  knownType = false;
     for (int type = 0; type < (int)LastChartType; ++type) {
         if (chartClass == ODF_CHARTTYPES[(ChartType)type]) {
-            //kDebug(35001) <<"found chart of type" << chartClass;
+            //debugChart <<"found chart of type" << chartClass;
 
             chartType = (ChartType)type;
             // Set the dimensionality of the data points, we can not call
@@ -1053,9 +1053,9 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 2. Load the data
 //     int dimensions = numDimensions(chartType);
-//     qDebug() << "DIMENSIONS" << dimensions;
+//     debugChart << "DIMENSIONS" << dimensions;
 //     d->proxyModel->setDataDimensions(dimensions);
-//     qDebug() << d->proxyModel->dataSets().count();
+//     debugChart << d->proxyModel->dataSets().count();
     KoXmlElement  dataElem = KoXml::namedItemNS(chartElement, KoXmlNS::table, "table");
     if (!dataElem.isNull()) {
         if (!loadOdfData(dataElem, context))
@@ -1253,7 +1253,7 @@ static void saveOdfDataRow(KoXmlWriter &bodyWriter, QAbstractItemModel *table, i
             valStr  = ""; /* like in saveXML, but why? */
             break;
         default:
-            kDebug(35001) <<"ERROR: cell" << row <<"," << col
+            debugChart <<"ERROR: cell" << row <<"," << col
                           << " has unknown type." << endl;
         }
 

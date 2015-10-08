@@ -78,6 +78,7 @@
 #include "TextLabelDummy.h"
 #include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
+#include "ChartDebug.h"
 
 
 using namespace KoChart;
@@ -1340,7 +1341,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     setTitleText(textElement.text());
                 }
                 else {
-                    qWarning() << "Error: Axis' <chart:title> element contains no <text:p>";
+                    warnChart << "Error: Axis' <chart:title> element contains no <text:p>";
                 }
 
                 if (n.hasAttributeNS(KoXmlNS::svg, "width")
@@ -1362,7 +1363,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     if (className == "major")
                         major = true;
                 } else {
-                    qWarning() << "Error: Axis' <chart:grid> element contains no valid class. It must be either \"major\" or \"minor\".";
+                    warnChart << "Error: Axis' <chart:grid> element contains no valid class. It must be either \"major\" or \"minor\".";
                     continue;
                 }
 

@@ -31,9 +31,8 @@
 #include <QToolButton>
 #include <QMenu>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kfontchooser.h>
 
@@ -72,6 +71,7 @@
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
 #include "TableSource.h"
+#include "ChartDebug.h"
 
 using namespace KoChart;
 

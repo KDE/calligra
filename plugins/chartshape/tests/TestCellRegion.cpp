@@ -25,7 +25,6 @@
 
 // Qt
 #include <QTest>
-#include <QDebug>
 
 // KoChart
 #include "CellRegion.h"
