@@ -12,6 +12,6 @@ set(TestSpellCheck_SRCS
 
 kde4_add_unit_test(TestSpellCheck TESTNAME textedit-TestSpellCheck ${TestSpellCheck_SRCS})
 
-target_link_libraries(TestSpellCheck kotext KF5::SonnetCore Qt5::Test KF5::KDELibs4Support)
+target_link_libraries(TestSpellCheck kotext KF5::SonnetCore Qt5::Test)
 
 ########### last target ###############
