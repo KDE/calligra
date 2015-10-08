@@ -82,18 +82,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
       </widget>
      </item>
      <item row="0" column="0" rowspan="3">
-      <widget class="KListWidget" name="m_sourceRanges"/>
+      <widget class="QListWidget" name="m_sourceRanges"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
   <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
