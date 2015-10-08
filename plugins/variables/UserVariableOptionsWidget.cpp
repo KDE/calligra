@@ -31,10 +31,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
+#include <QInputDialog>
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kinputdialog.h>
 
 UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
     : QWidget(parent)
@@ -158,7 +158,7 @@ void UserVariableOptionsWidget::newClicked()
         KoVariableManager *m_variableManager;
     };
     Validator validator(variableManager());
-    QString name = KInputDialog::getText(i18n("New Variable"), i18n("Name for new variable:"), QString(), 0, this, &validator).trimmed();
+    QString name = QInputDialog::getText(this, i18n("New Variable"), i18n("Name for new variable:")/*QT5TODO:, &validator*/).trimmed();
     if (name.isEmpty()) {
         return;
     }
