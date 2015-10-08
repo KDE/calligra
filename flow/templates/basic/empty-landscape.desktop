@@ -60,5 +60,6 @@ Comment[pt]=Cria um documento no formato de paisagem sem qualquer 'stencil' carr
 Comment[pt_BR]=Cria um documento no formato de paisagem sem qualquer estêncil carregado.
 Comment[sk]=Vytvorí dokument orientovaný na šírku bez načítaných šablón.
 Comment[sv]=Skapar ett dokument med liggande orientering utan att ladda några schabloner.
+Comment[tr]=Şablon yüklenmemiş bir enine belge oluşturur.
 Comment[uk]=Створює порожній документ з альбомною орієнтацією сторінки без завантаження трафаретів.
 Comment[x-test]=xxCreates a landscape-oriented document with no stencils loaded.xx
