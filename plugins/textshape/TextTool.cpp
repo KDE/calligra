@@ -1593,6 +1593,15 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
+void TextTool::shortcutOverrideEvent(QKeyEvent *event)
+{
+    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
+    if (hit(item, KStandardShortcut::Begin) ||
+        hit(item, KStandardShortcut::End)) {
+        event->accept();
+    }
+}
+
 void TextTool::keyPressEvent(QKeyEvent *event)
 {
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
@@ -1653,10 +1662,10 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     } else {
         // check for shortcuts.
         QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
-        if (hit(item, KStandardShortcut::Begin))
+        if (hit(item, KStandardShortcut::Begin)) {
             // Goto beginning of the document. Default: Ctrl-Home
             destinationPosition = 0;
-        else if (hit(item, KStandardShortcut::End)) {
+        } else if (hit(item, KStandardShortcut::End)) {
             // Goto end of the document. Default: Ctrl-End
             if (m_textShapeData) {
                 QTextBlock last = m_textShapeData->document()->lastBlock();
@@ -1684,10 +1693,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordRight;
 #ifdef Q_WS_MAC
         // Don't reject "alt" key, it may be used for typing text on Mac OS
-        else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
+        else if ((event->modifiers() & Qt::ControlModifier)
 #else
-        else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
+        else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier))
 #endif
+            || event->text().length() == 0 || event->key() == Qt::Key_Escape) {
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
@@ -1757,7 +1767,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         ensureCursorVisible();
     else
         m_delayedEnsureVisible = true;
-updateActions();
+    updateActions();
     updateSelectionHandler();
 }
 

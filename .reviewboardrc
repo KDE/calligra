@@ -1,2 +1,3 @@
 REVIEWBOARD_URL = "http://git.reviewboard.kde.org"
+REPOSITORY = 'git://anongit.kde.org/calligra'
 TARGET_GROUPS = "calligra"

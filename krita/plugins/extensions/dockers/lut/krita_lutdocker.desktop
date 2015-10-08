@@ -50,6 +50,7 @@ Comment[pt]=Área de selecção de LUT's
 Comment[pt_BR]=Acoplador para seleção de LUT's
 Comment[sk]=Docker pre výber luts
 Comment[sv]=Dockningsfönster för valda uppslagningstabeller
+Comment[tr]=LUT Araç panosu (arama tablosu)
 Comment[uk]=Бічна панель для вибору таблиць пошуку
 Comment[x-test]=xxDocker for selecting lutsxx
 X-KDE-ServiceTypes=Krita/Dock

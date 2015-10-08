@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+#include <db/expression.h>
 
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
@@ -164,7 +166,7 @@ QByteArray pqxxSqlDriver::drv_escapeIdentifier(const QByteArray& str) const
 //
 QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 {
-    return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
+    return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeByteaHex);
 }
 
 QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant& v) const
@@ -176,6 +178,38 @@ QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant& v) const
         return v.toInt() == 0 ? QString::fromLatin1("FALSE") : QString::fromLatin1("TRUE");
     }
     return Driver::valueToSQL(ftype, v);
+}
+
+QString pqxxSqlDriver::hexFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return QString::fromLatin1("UPPER(ENCODE(%1, 'hex'))").arg(args->arg(0)->toString(this, params));
+}
+
+QString pqxxSqlDriver::ifnullFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("COALESCE"), this, args, params);
+}
+
+QString pqxxSqlDriver::lengthFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    KexiDB::BaseExpr *arg = args->arg(0);
+    if (arg->type() == KexiDB::Field::BLOB) {
+        return KexiDB::FunctionExpr::toString(QLatin1String("OCTET_LENGTH"), this, args, params);
+    }
+    return Driver::lengthFunctionToString(args, params); // default
+}
+
+QString pqxxSqlDriver::greatestOrLeastFunctionToString(const QString &name,
+                                                       KexiDB::NArgExpr *args,
+                                                       QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::greatestOrLeastFunctionUsingCaseToString(name, this, args, params);
+}
+
+QString pqxxSqlDriver::unicodeFunctionToString(KexiDB::NArgExpr *args,
+                                               QuerySchemaParameterValueListIterator* params) const
+{
+    return QString::fromLatin1("ASCII(%1)").arg(args->arg(0)->toString(this, params));
 }
 
 #include "pqxxdriver.moc"

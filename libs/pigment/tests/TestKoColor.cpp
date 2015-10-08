@@ -73,6 +73,18 @@ void TestKoColor::testSerialization()
     //testForModel(YCbCrAColorModelID.id());
 }
 
+void TestKoColor::testConversion()
+{
+    QColor c = Qt::red;
+    const KoColorSpace *csOrig = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *csDst = KoColorSpaceRegistry::instance()->lab16();
+
+    KoColor kc(csOrig);
+    kc.fromQColor(c);
+
+    kc.convertTo(csDst);
+}
+
 QTEST_KDEMAIN(TestKoColor, NoGUI)
 #include <TestKoColor.moc>
 

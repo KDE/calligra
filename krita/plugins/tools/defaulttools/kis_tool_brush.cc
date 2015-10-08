@@ -84,8 +84,6 @@ void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &sha
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
     m_configGroup = KGlobal::config()->group(toolId());
-
-
 }
 
 void KisToolBrush::deactivate()
@@ -167,16 +165,12 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, true);
     }
 
-    m_configGroup.writeEntry("smoothingType", index );
-
-
     emit smoothingTypeChanged();
 }
 
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
     smoothingOptions()->setSmoothnessDistance(distance);
-     m_configGroup.writeEntry("smoothnessDistance", distance);
     emit smoothnessQualityChanged();
 }
 
@@ -190,7 +184,6 @@ void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 void KisToolBrush::setSmoothPressure(bool value)
 {
     smoothingOptions()->setSmoothPressure(value);
-    m_configGroup.writeEntry("weightedSmoothPressure", value);
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -207,7 +200,6 @@ bool KisToolBrush::useScalableDistance() const
 void KisToolBrush::setUseScalableDistance(bool value)
 {
     smoothingOptions()->setUseScalableDistance(value);
-    m_configGroup.writeEntry("weightedUseScalableDistance", value);
 
     emit useScalableDistanceChanged();
 }
@@ -248,7 +240,6 @@ void KisToolBrush::setUseDelayDistance(bool value)
     smoothingOptions()->setUseDelayDistance(value);
     m_sliderDelayDistance->setEnabled(value);
     enableControl(m_chkFinishStabilizedCurve, !value);
-    m_configGroup.writeEntry("stabilizerUseDelay", value);
 
     emit useDelayDistanceChanged();
 }
@@ -256,14 +247,12 @@ void KisToolBrush::setUseDelayDistance(bool value)
 void KisToolBrush::setDelayDistance(qreal value)
 {
     smoothingOptions()->setDelayDistance(value);
-    m_configGroup.writeEntry("stabilizerDelayDistance", value);
     emit delayDistanceChanged();
 }
 
 void KisToolBrush::setFinishStabilizedCurve(bool value)
 {
     smoothingOptions()->setFinishStabilizedCurve(value);
-    m_configGroup.writeEntry("stabilizerSetFinish", value);
 
     emit finishStabilizedCurveChanged();
 }
@@ -276,8 +265,6 @@ bool KisToolBrush::finishStabilizedCurve() const
 void KisToolBrush::setStabilizeSensors(bool value)
 {
     smoothingOptions()->setStabilizeSensors(value);
-    m_configGroup.writeEntry("stabilizerSetSensors", value);
-
     emit stabilizeSensorsChanged();
 }
 
@@ -289,6 +276,7 @@ bool KisToolBrush::stabilizeSensors() const
 void KisToolBrush::updateSettingsViews()
 {
     m_cmbSmoothingType->setCurrentIndex(smoothingOptions()->smoothingType());
+
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
@@ -443,22 +431,8 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, new QLabel(i18n("Snap single:")));
 
-
-    //load settings from configuration kritarc file
-    slotSetSmoothingType((int)m_configGroup.readEntry("smoothingType", 0));
-    m_cmbSmoothingType->setCurrentIndex((int)m_configGroup.readEntry("smoothingType", 0));
-
-        // weighted smoothing options
-    setSmoothPressure((bool)m_configGroup.readEntry("weightedSmoothPressure", 0));
-    setUseScalableDistance((bool)m_configGroup.readEntry("weightedUseScalableDistance", 5));
-
-        // stabilizer smoothing options
-    setFinishStabilizedCurve((bool)m_configGroup.readEntry("stabilizerSetFinish", false));
-    setStabilizeSensors((bool)m_configGroup.readEntry("stabilizerSetSensors", false));
-    setUseDelayDistance((bool)m_configGroup.readEntry("stabilizerUseDelay", false));
-    setDelayDistance(m_configGroup.readEntry("stabilizerDelayDistance", 3));
-    slotSetSmoothnessDistance(m_configGroup.readEntry("smoothnessDistance", 170.0));
-
+    KisConfig cfg;
+    slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;
 }

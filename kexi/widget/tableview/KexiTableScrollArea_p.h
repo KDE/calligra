@@ -125,7 +125,8 @@ public:
     QList<int> maximizeColumnsWidthOnShow;
 
     /*! Used for delayed call of ensureCellVisible() after show().
-     It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */
+     (-1, -1) means "current cell".
+     It's equal to (-17,-17) if ensureCellVisible() shouldn't e called. */
     QPoint ensureCellVisibleOnShow;
 
     /*! @internal Changes bottom margin settings, in pixels.

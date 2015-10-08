@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,9 @@
 */
 
 %{
-#include <field.h>
-#include <expression.h>
+#include <db/field.h>
+#include <db/expression.h>
+#include <db/utils.h>
 
 #include "sqlparser.h"
 #include "sqltypes.h"
@@ -44,6 +45,8 @@ extern void setError(const QString& errName, const QString& errDesc);
 
 whitespace    [ \t\n]
 digit         [0-9]
+hex_digit     [0-9a-fA-F]
+string        (['][^']*[']|["][^\"]*["])
 /*identifier    [a-zA-Z_][a-zA-Z_0-9]* */
 identifier    [a-zA-Z_0-9]+
 /* quoted_identifier (\"[a-zA-Z_0-9]+\") */
@@ -52,8 +55,10 @@ query_parameter    \[[^\[\]]+\]
 integer            {digit}+
 decimal            (({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
-/* todo: support for real numbers */
-
+/* SQL standard */
+hex_x              (X[']{hex_digit}*['])
+/* ODBC standard */
+hex_0x             (0x{hex_digit}+)
 
 %%
 
@@ -89,39 +94,45 @@ real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][
 }
 
 {integer} {
-//TODO: what about hex or octal values?
+//TODO: what about octal values?
     //we're using QString:toLongLong() here because atoll() is not so portable:
     ECOUNT;
     bool ok;
-    yylval.integerValue = QString(yytext).toLongLong( &ok );
+    yylval.integerValue = QByteArray(yytext).toLongLong(&ok);
     if (!ok) {
         setError(i18n("Invalid integer number"),i18n("This integer number may be too large."));
         return SCAN_ERROR;
     }
-//    yylval.integerValue = atol(yytext);
     return INTEGER_CONST;
 }
 
+{hex_x} {
+    // e.g. X'DEADbeef1234'
+    ECOUNT;
+    bool ok;
+    yylval.binaryValue = new QByteArray(KexiDB::xHexToByteArray(yytext, yyleng, &ok));
+    if (!ok) {
+        setError(i18n("Invalid hexadecimal sequence"),i18n("This value should be in format X'HEXADECIMALNUMBERS'."));
+        return SCAN_ERROR;
+    }
+    return HEX_LITERAL;
+}
+
+{hex_0x} {
+    // e.g. 0xDEADbeef1234
+    ECOUNT;
+    bool ok;
+    yylval.binaryValue = new QByteArray(KexiDB::zeroXHexToByteArray(yytext, yyleng, &ok));
+    if (!ok) {
+        setError(i18n("Invalid hexadecimal sequence"),i18n("This value should be in format 0xHEXADECIMALNUMBERS."));
+        return SCAN_ERROR;
+    }
+    return HEX_LITERAL;
+}
+
 {decimal} {
-    char *p = yytext;
-    if (yytext[0]=='.') { /* no integer part */
-        yylval.realValue.integer = 0;
-    }
-    else {
-        yylval.realValue.integer = atoi(p);
-        int i=0;
-        while (p && i < yyleng && *p != '.') {
-            i++;
-            p++;
-        }
-        if (i==0 || !p || *p!='.') {
-            yylval.realValue.fractional = 0;
-            return REAL_CONST;
-        }
-    }
-    /* fractional part */
-    p++;
-    yylval.realValue.fractional = atoi(p);
+    ECOUNT;
+    yylval.binaryValue = new QByteArray(yytext, yyleng);
     return REAL_CONST;
 }
 
@@ -285,7 +296,7 @@ real               ((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][
     return DESC;
 }
 
-(['][^']*[']|["][^\"]*["]) {
+{string} {
     ECOUNT;
     yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
     return CHARACTER_STRING_LITERAL;

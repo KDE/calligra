@@ -2,6 +2,7 @@
 Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
 Daniel Molkentin <molkentin@kde.org>
 Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <db/field.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+#include <db/expression.h>
 
 #include <QVariant>
 #include <QFile>
@@ -64,6 +66,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args)
     beh->QUOTATION_MARKS_FOR_IDENTIFIER = '`';
     //! @todo add configuration option
     beh->TEXT_TYPE_MAX_LENGTH = 255;
+    beh->RANDOM_FUNCTION = "RAND";
     initDriverSpecificKeywords(keywords);
 
     //predefined properties
@@ -200,6 +203,24 @@ QString MySqlDriver::drv_escapeIdentifier(const QString& str) const
 QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray& str) const
 {
     return QByteArray(str).replace('`', '\'');
+}
+
+QString MySqlDriver::lengthFunctionToString(KexiDB::NArgExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::toString(QLatin1String("CHAR_LENGTH"), this, args, params);
+}
+
+QString MySqlDriver::greatestOrLeastFunctionToString(const QString &name,
+                                                     KexiDB::NArgExpr *args,
+                                                     QuerySchemaParameterValueListIterator* params) const
+{
+    return KexiDB::FunctionExpr::greatestOrLeastFunctionUsingCaseToString(name, this, args, params);
+}
+
+QString MySqlDriver::unicodeFunctionToString(KexiDB::NArgExpr *args,
+                                             QuerySchemaParameterValueListIterator* params) const
+{
+    return QString::fromLatin1("ORD(CONVERT(%1 USING UTF16))").arg(args->arg(0)->toString(this, params));
 }
 
 #include "mysqldriver.moc"

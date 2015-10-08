@@ -94,6 +94,8 @@ public:
     /// reimplemented from superclass
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented from superclass
+    virtual void shortcutOverrideEvent(QKeyEvent *event);
+    /// reimplemented from superclass
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
     virtual void keyReleaseEvent(QKeyEvent *event);

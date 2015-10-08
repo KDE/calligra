@@ -311,8 +311,9 @@ public Q_SLOTS:
     void setHighlightedRow(int row);
 
     /*! Ensures that cell at \a row and \a col is visible.
-     If \a col is -1, current column number is used. \a row and \a col, if not -1, must
-     be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
+     If \a col is -1, current column number is used.
+     If \a row is -1, current row number is used.
+     \a row and \a col, if not -1, must be between 0 and rowCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int row, int col);
 
     /*! Ensures that column \a col is visible.
@@ -481,9 +482,7 @@ protected Q_SLOTS:
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
-    virtual void vScrollBarValueChanged(int v) {
-        KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
-    }
+    virtual void verticalScrollBarValueChanged(int v);
 
     //! for navigator
     virtual void moveToRecordRequested(uint row);

@@ -15,6 +15,7 @@ set(kexidb_sqlite3driver_PART_SRCS
    sqliteadmin.cpp
    sqlitevacuum.cpp
    sqlitealter.cpp
+   sqlitefunctions.cpp
 )
 
 kde4_add_plugin(kexidb_sqlite3driver ${kexidb_sqlite3driver_PART_SRCS})

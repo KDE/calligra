@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include "sqliteconnection_p.h"
 #include "sqlitecursor.h"
 #include "sqlitepreparedstatement.h"
+#include "sqlitefunctions.h"
 
 #include <sqlite3.h>
 
@@ -229,6 +230,10 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
         }
         // load ROOT collation for use as default collation
         if (!drv_executeSQL("SELECT icu_load_collation('', '')")) {
+            drv_closeDatabaseSilently();
+            return false;
+        }
+        if (!createCustomSQLiteFunctions(d->data)) {
             drv_closeDatabaseSilently();
             return false;
         }

@@ -1242,12 +1242,12 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
         }
     }
 
-    m_vScrollBarValueChanged_enabled = false;
+    m_verticalScrollBarValueChanged_enabled = false;
 
     // if focus cell changes, repaint
     setCursorPosition(curRow, curCol, DontEnsureCursorVisibleIfPositionUnchanged);
 
-    m_vScrollBarValueChanged_enabled = true;
+    m_verticalScrollBarValueChanged_enabled = true;
 
     e->accept();
 }
@@ -1442,9 +1442,9 @@ void KexiTableScrollArea::showEvent(QShowEvent *e)
     updateGeometries();
 
     //now we can ensure cell's visibility ( if there was such a call before show() )
-    if (d->ensureCellVisibleOnShow != QPoint(-1, -1)) {
+    if (d->ensureCellVisibleOnShow != QPoint(-17, -17)) { // because (-1, -1) means "current cell"
         ensureCellVisible(d->ensureCellVisibleOnShow.y(), d->ensureCellVisibleOnShow.x());
-        d->ensureCellVisibleOnShow = QPoint(-1, -1); //reset the flag
+        d->ensureCellVisibleOnShow = QPoint(-17, -17); //reset the flag
     }
     if (d->firstShowEvent) {
         ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
@@ -1724,10 +1724,19 @@ void KexiTableScrollArea::ensureCellVisible(int row, int col)
         d->ensureCellVisibleOnShow = QPoint(row, col);
         return;
     }
+    if (col == -1) {
+        col = m_curCol;
+    }
+    if (row == -1) {
+        row = m_curRow;
+    }
+    if (col < 0 || row < 0) {
+        return;
+    }
 
     //quite clever: ensure the cell is visible:
-    QRect r(columnPos(col == -1 ? m_curCol : col) - 1, rowPos(row) + (d->appearance.fullRowSelection ? 1 : 0) - 1,
-            columnWidth(col == -1 ? m_curCol : col)  + 2, rowHeight() + 2);
+    QRect r(columnPos(col) - 1, rowPos(row) + (d->appearance.fullRowSelection ? 1 : 0) - 1,
+            columnWidth(col)  + 2, rowHeight() + 2);
 
     if (navPanelWidgetVisible() && horizontalScrollBar()->isHidden()) {
         //a hack: for visible navigator: increase height of the visible rect 'r'
@@ -1827,6 +1836,19 @@ void KexiTableScrollArea::removeEditor()
 void KexiTableScrollArea::slotRowRepaintRequested(KexiDB::RecordData& record)
 {
     updateRow(m_data->indexOf(&record));
+}
+
+void KexiTableScrollArea::verticalScrollBarValueChanged(int v)
+{
+    KexiDataAwareObjectInterface::verticalScrollBarValueChanged(v);
+    const QPoint posInViewport = viewport()->mapFromGlobal(QCursor::pos())
+                                 - QPoint(contentsMargins().left(), contentsMargins().top());
+    //kDebug() << posInViewport << contentsRect().size() - QSize(leftMargin(), topMargin())
+    //         << QRect(QPoint(0, 0), contentsRect().size() - QSize(leftMargin(), topMargin()));
+    const int row = rowAt(posInViewport.y() + verticalScrollBar()->value());
+    if (row >= 0) {
+        setHighlightedRow(row);
+    }
 }
 
 #ifndef KEXI_NO_PRINT

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <db/driver_p.h>
 #include <db/utils.h>
 #include <db/pluginloader.h>
+#include <db/expression.h>
 
 #include "sqlite3.h"
 #include "sqliteconnection.h"
@@ -146,6 +147,68 @@ AdminTools* SQLiteDriver::drv_createAdminTools() const
 QString SQLiteDriver::collationSQL() const
 {
     return dp->collate;
+}
+
+QString SQLiteDriver::greatestOrLeastFunctionToString(const QString &name,
+                                                      KexiDB::NArgExpr *args,
+                                                      QuerySchemaParameterValueListIterator* params) const
+{
+    Q_ASSERT(args->args() >= 2);
+    static QLatin1String greatestString("GREATEST");
+    static QLatin1String maxString("MAX");
+    static QLatin1String minString("MIN");
+    const QString realName(
+        name == greatestString ? maxString : minString);
+    if (args->args() >= 2 && KexiDB::Field::isTextType(args->arg(0)->type())) {
+        QString s;
+        s.reserve(256);
+        foreach(BaseExpr* e, args->list) {
+            if (!s.isEmpty())
+                s += ", ";
+            s += QLatin1Char('(') + e->toString(this, params) + QLatin1String(") ") + collationSQL();
+        }
+        return realName + QLatin1Char('(') + s + QLatin1Char(')');
+    }
+    return FunctionExpr::toString(realName, this, args, params);
+}
+
+QString SQLiteDriver::randomFunctionToString(KexiDB::NArgExpr *args,
+                                             QuerySchemaParameterValueListIterator* params) const
+{
+    if (!args || args->args() < 1 ) {
+        static QLatin1String randomStatic("((RANDOM()+9223372036854775807)/18446744073709551615)");
+        return randomStatic;
+    }
+    Q_ASSERT(args->args() == 2);
+    const QString x(args->arg(0)->toString(this, params));
+    const QString y(args->arg(1)->toString(this, params));
+    static QLatin1String floorRandomStatic("+CAST(((");
+    static QLatin1String floorRandomStatic2("))*(RANDOM()+9223372036854775807)/18446744073709551615 AS INT))");
+    //! (X + CAST((Y - X) * (RANDOM()+9223372036854775807)/18446744073709551615 AS INT)).
+    return QLatin1String("((") + x + QLatin1Char(')') + floorRandomStatic + y + QLatin1Char(')')
+            + QLatin1String("-(") + x + floorRandomStatic2;
+}
+
+QString SQLiteDriver::ceilingOrFloorFunctionToString(const QString &name,
+                                                     KexiDB::NArgExpr *args,
+                                                     QuerySchemaParameterValueListIterator* params) const
+{
+    Q_ASSERT(args->args() == 1);
+    static QLatin1String ceilingString("CEILING");
+    QString x(args->arg(0)->toString(this, params));
+    if (name == ceilingString) {
+        return QLatin1String("(CASE WHEN ")
+            + x + QLatin1String("=CAST(") + x + QLatin1String(" AS INT) THEN CAST(")
+            + x + QLatin1String(" AS INT) WHEN ")
+            + x + QLatin1String(">=0 THEN CAST(")
+            + x + QLatin1String(" AS INT)+1 ELSE CAST(")
+            + x + QLatin1String(" AS INT) END)");
+    }
+    // floor():
+    return QLatin1String("(CASE WHEN ") + x + QLatin1String(">=0 OR ")
+            + x + QLatin1String("=CAST(") + x + QLatin1String(" AS INT) THEN CAST(")
+            + x + QLatin1String(" AS INT) ELSE CAST(")
+            + x + QLatin1String(" AS INT)-1 END)");
 }
 
 #include "sqlitedriver.moc"

@@ -54,6 +54,10 @@ namespace KexiDB
 #define KEXIDB_TOKEN_BETWEEN_AND 0x1001
 #define KEXIDB_TOKEN_NOT_BETWEEN_AND 0x1002
 
+//! Maximum number of arguments in function
+//! Reasonable number, set after https://www.sqlite.org/limits.html#max_function_arg
+#define KEXIDB_MAX_FUNCTION_ARGS 100
+
 //! \return class name of class \a c
 CALLIGRADB_EXPORT QString exprClassName(int c);
 
@@ -361,6 +365,20 @@ public:
 
     static QList<QByteArray> builtInAggregates();
     static bool isBuiltInAggregate(const QByteArray& fname);
+    static QString toString(const QString &name, const Driver *driver, NArgExpr *args, QuerySchemaParameterValueListIterator* params);
+
+    //! @return a native (driver-specific) GREATEST() and LEAST() function calls generated
+    //! to string using CASE WHEN... keywords.
+    //! This is a workaround for cases when LEAST()/GREATEST() function ignores
+    //! NULL values and only returns NULL if all the expressions evaluate to NULL.
+    //! Instead of using F(v0,..,vN), this is used:
+    //! (CASE WHEN (v0) IS NULL OR .. OR (vN) IS NULL THEN NULL ELSE F(v0,..,vN) END)
+    //! where F == GREATEST or LEAST.
+    //! Actually it is needed by MySQL < 5.0.13 and PostgreSQL.
+    static QString greatestOrLeastFunctionUsingCaseToString(const QString &name,
+                                                            const Driver *driver,
+                                                            NArgExpr *args,
+                                                            QuerySchemaParameterValueListIterator* params);
 
     QString name;
     NArgExpr* args;

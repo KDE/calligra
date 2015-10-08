@@ -40,6 +40,7 @@
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
 
+#include <QPointer>
 
 struct KisDisplayColorConverter::Private
 {
@@ -58,7 +59,7 @@ struct KisDisplayColorConverter::Private
     {
     }
 
-    KisDisplayColorConverter * const q;
+    KisDisplayColorConverter *const q;
 
     KoCanvasResourceManager *resourceManager;
 
@@ -140,7 +141,7 @@ struct KisDisplayColorConverter::Private
 
     private:
         KisDisplayColorConverter *m_parent;
-        KoCanvasResourceManager *m_resourceManager;
+        QPointer<KoCanvasResourceManager> m_resourceManager;
     };
 
     QScopedPointer<KoColorDisplayRendererInterface> displayRenderer;

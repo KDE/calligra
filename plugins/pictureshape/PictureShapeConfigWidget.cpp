@@ -25,17 +25,33 @@
 
 #include <kdebug.h>
 #include <kfilewidget.h>
-#include <kjob.h>
+#include <kjobuidelegate.h>
 #include <KIO/Job>
 
 #include <QGridLayout>
 #include <QImageReader>
 
-void LoadWaiter::setImageData(KJob *job)
+void PictureShapeLoadWaiter::setImageData(KJob *job)
 {
+    if (job->error()) { // e.g. file not found
+        job->uiDelegate()->showErrorMessage();
+        if (m_pictureShape && !m_pictureShape->imageData()) {
+            // Don't leave an empty broken shape, the rest of the code isn't ready for null imageData
+            if (m_pictureShape->parent()) {
+                m_pictureShape->parent()->removeShape(m_pictureShape);
+            }
+            delete m_pictureShape;
+        }
+        deleteLater();
+        return;
+    }
+
+    deleteLater();
+
     if (m_pictureShape == 0)
-        return; // ugh, the shape got deleted meanwhile
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+        return; // ugh, the shape got deleted meanwhile (## err, who would set the pointer to null?)
+
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);
 
     if (m_pictureShape->imageCollection()) {
@@ -50,7 +66,6 @@ void LoadWaiter::setImageData(KJob *job)
             m_pictureShape->update();
         }
     }
-    deleteLater();
 }
 
 // ---------------------------------------------------- //
@@ -73,13 +88,14 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
+    // ## this is awful. Qt5: use m_fileWidget->setMimeFilter(QImageReader::supportedMimeTypes()) directly
     foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilters << "image/" + format;
     }
     m_fileWidget->setMimeFilter(imageFilters);
-    //m_fileWidget->setFilter("image/png image/jpeg image/gif");
     layout->addWidget(m_fileWidget);
     setLayout(layout);
     connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));
@@ -93,7 +109,7 @@ void PictureShapeConfigWidget::save()
     KUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        LoadWaiter *waiter = new LoadWaiter(m_shape);
+        PictureShapeLoadWaiter *waiter = new PictureShapeLoadWaiter(m_shape);
         connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
     }
 }

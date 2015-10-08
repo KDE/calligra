@@ -34,6 +34,7 @@
 %token DISTINCT
 %token DOUBLE_QUOTED_STRING
 %token FROM
+%token HEX_LITERAL
 %token JOIN
 %token KEY
 %token LEFT
@@ -368,6 +369,7 @@
 %type <stringValue> QUERY_PARAMETER
 %type <stringValue> CHARACTER_STRING_LITERAL
 %type <stringValue> DOUBLE_QUOTED_STRING
+%type <binaryValue> HEX_LITERAL
 
 /*
 %type <field> ColExpression
@@ -407,7 +409,7 @@
 
 %type <colType> SQL_TYPE
 %type <integerValue> INTEGER_CONST
-%type <realValue> REAL_CONST
+%type <binaryValue> REAL_CONST
 /*%type <integerValue> SIGNED_INTEGER */
 
 %{
@@ -428,7 +430,7 @@
 #ifndef LLONG_MIN
 # define LLONG_MIN     0x8000000000000000LL
 #endif
-#ifndef LLONG_MAX
+#ifndef ULLONG_MAX
 # define ULLONG_MAX    0xffffffffffffffffLL
 #endif
 
@@ -458,6 +460,19 @@
 
 int yylex();
 
+//! @return log2(i)
+inline static int log2int(qulonglong i)
+{
+    int result = 0;
+    while (i >>= 1) {
+        ++result;
+    }
+    return result;
+}
+
+static const int UINT_MAX_BYTES = log2int(UINT_MAX);
+static const int ULLONG_MAX_BYTES = log2int(ULLONG_MAX);
+
 using namespace KexiDB;
 
 #define YY_NO_UNPUT
@@ -476,9 +491,9 @@ extern "C"
 
 %union {
     QString* stringValue;
+    QByteArray* binaryValue;
     qint64 integerValue;
     bool booleanValue;
-    struct realType realValue;
     KexiDB::Field::Type colType;
     KexiDB::Field *field;
     KexiDB::BaseExpr *expr;
@@ -1091,8 +1106,21 @@ aExpr9:
 }
 | REAL_CONST
 {
-    $$ = new ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
-    KexiDBDbg << "  + real constant: " << $1.integer << "." << $1.fractional;
+    $$ = new ConstExpr( REAL_CONST, *$1 );
+    KexiDBDbg << "  + real constant: " << *$1;
+    delete $1;
+}
+| HEX_LITERAL
+{
+    // smaller hex -> integer
+    if ($1->length() <= UINT_MAX_BYTES) {
+    }
+    if ($1->length() <= ULLONG_MAX_BYTES) {
+    }
+    // large hex -> BLOB
+    $$ = new ConstExpr( HEX_LITERAL, *$1 );
+    //KexiDBDbg << "  + constant " << $1;
+    delete $1;
 }
 |
 aExpr10
@@ -1119,10 +1147,10 @@ aExprList:
 ;
 
 aExprList2:
-aExpr ',' aExprList2
+aExprList2 ',' aExpr
 {
-    $$ = $3;
-    $$->prepend( $1 );
+    $$ = $1;
+    $$->add( $3 );
 }
 | aExpr
 {

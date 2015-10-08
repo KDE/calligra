@@ -152,7 +152,7 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode)
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode, bool updateImage)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -176,7 +176,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     int number = masks.count() + 1;
     mask->setName(nodeName + QString(" ") + QString::number(number));
 
-    m_commandsAdapter->addNode(mask, parentLayer, above);
+    m_commandsAdapter->addNode(mask, parentLayer, above, updateImage, updateImage);
     m_commandsAdapter->endMacro();
 
     masksUpdated();
@@ -185,7 +185,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
 void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
 {
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, avoidActiveNode);
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, avoidActiveNode, false);
     mask->setActive(true);
 }
 
