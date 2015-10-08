@@ -5,6 +5,7 @@ include_directories( ${KOWIDGETS_INCLUDES} ${KOTEXT_INCLUDES} )
 ########### next target ###############
 
 set(thesaurustool_SRCS
+    ThesaurusDebug.cpp
     Thesaurus.cpp
     ThesaurusPlugin.cpp
     ThesaurusFactory.cpp

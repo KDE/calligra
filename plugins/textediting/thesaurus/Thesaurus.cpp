@@ -43,7 +43,11 @@ NOT TODO:
 
 #include "Thesaurus.h"
 
+#include "ThesaurusDebug.h"
+
 #include <KoIcon.h>
+#include <KoResourcePaths.h>
+#include <KoDialog.h>
 
 #include <QToolButton>
 #include <QByteArray>
@@ -54,19 +58,16 @@ NOT TODO:
 #include <QListWidget>
 #include <QGroupBox>
 #include <QTextBrowser>
+#include <QLineEdit>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
-#include <KoResourcePaths.h>
 #include <kmessagebox.h>
-#include <KoDialog.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
-#include <QLineEdit>
-#include <kdebug.h>
 #include <krun.h>
 #include <kcombobox.h>
 #include <kurl.h>
@@ -631,7 +632,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if (m_wnProc->state() == QProcess::Running) {
         // should never happen
-        kDebug(31000) <<"Warning: findTerm(): process is already running?!";
+        debugThesaurus <<"Warning: findTerm(): process is already running?!";
         return;
     }
 
@@ -689,7 +690,7 @@ void Thesaurus::findTermWordnet(const QString &term)
         }
         result += "\n</table></qt>\n";
         m_resultTextBrowser->setHtml(result);
-        //kDebug() << result;
+        //debugThesaurus << result;
     }
 }
 
