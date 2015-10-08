@@ -21,10 +21,11 @@
 
 #include <KoIcon.h>
 
+#include <klocalizedstring.h>
+
 #include <QMenu>
 #include <QAction>
-#include <kglobal.h>
-#include <klocalizedstring.h>
+#include <QLocale>
 
 static void createTimeAction(QMenu *parent, const QString &title, const QString &data)
 {
@@ -97,14 +98,10 @@ void FixedDateFormat::listClicked(QListWidgetItem *item)
     // TODO parse out the first two values...
     QString format;
     switch (widget.formatList->row(item)) {
-    case 0: format = KGlobal::locale()->dateFormat(); break;
-    case 1: format = KGlobal::locale()->dateFormatShort(); break;
-    case 2:
-        format = KGlobal::locale()->dateFormat() + ' ' + KGlobal::locale()->timeFormat();
-        break;
-    case 3:
-        format = KGlobal::locale()->dateFormatShort() + ' ' + KGlobal::locale()->timeFormat();
-        break;
+    case 0: format = QLocale().dateFormat(QLocale::LongFormat); break;
+    case 1: format = QLocale().dateFormat(QLocale::ShortFormat); break;
+    case 2: format = QLocale().dateTimeFormat(QLocale::LongFormat); break;
+    case 3: format = QLocale().dateTimeFormat(QLocale::ShortFormat); break;
     default:
         format = item->text();
     }
