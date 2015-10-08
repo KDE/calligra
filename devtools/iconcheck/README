@@ -2,6 +2,8 @@ TODO:
 filter false-positives like "okular" and "this-action"
 
 
-Command used to create the oxygen_icons_4.3.5.list file:
+Command used to create the breeze-icons-5.4.1.list file:
 
-find path_to_oxygen-icons-4.3.5 \( -name "*.png" -o -name "*.svgz" \) -printf "%f\n" | sed -e 's/\.png$//' -e 's/\.svgz$//' | sort -u > tools/iconcheck/oxygen-icons-4.3.5.list
+find path_to_breeze-5.4.1-icons \( -name "*.png" -o -name "*.svgz" -o -name "*.svg" \) -printf "%f\n" | sed -e 's/\.png$//' -e 's/\.svgz$//' -e 's/\.svg$//' | sort -u > devtools/iconcheck/breeze-icons-5.4.1.list
+
+with path_to_breeze-5.4.1-icons e.g. /usr/share/icons/breeze if installed icons at that version

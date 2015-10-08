@@ -54,9 +54,8 @@ def createPotFile():
     return r
     #TODO: use Python pipes and/or clean-up helper files
 
-themePrefixes = (
-    "hi16-", "hi22-", "hi32-", "hi48-", "hi64-", "hi128-", "hisc-",
-    "ox16-", "ox22-", "ox32-", "ox48-", "ox64-", "ox128-", "oxsc-"
+sizePrefixes = (
+    "16-", "22-", "32-", "48-", "64-", "128-", "sc-"
 )
 groupPrefixes = [
     # KDE 3 compatibility
@@ -72,7 +71,7 @@ def readIcons(fileName):
         for line in f:
             iconName = line.strip().lower()
             if iconName:
-                if iconName.startswith(themePrefixes):
+                if iconName.startswith(sizePrefixes):
                     iconName = iconName.split('-',2)[2]
                 iconNames.append(iconName)
     return set(iconNames)
@@ -99,7 +98,7 @@ def main():
         #print >> sys.stderr, "usage: %s directory" % sys.argv[0]
         #sys.exit(1)
 
-    oxygenIcons = readIcons('tools/iconcheck/oxygen-icons-4.6.0.list')
+    oxygenIcons = readIcons('devtools/iconcheck/breeze-icons-5.4.1.list')
 
     r = createCalligraIconFile('calligra-icons.list')
     if r:
