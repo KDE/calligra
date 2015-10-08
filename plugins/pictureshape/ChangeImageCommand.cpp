@@ -19,9 +19,12 @@
 #include "ChangeImageCommand.h"
 
 #include <cmath>
+
 #include <klocalizedstring.h>
+
 #include <KoImageData.h>
-#include <kdebug.h>
+
+#include "PictureDebug.h"
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent):
     KUndo2Command(parent),

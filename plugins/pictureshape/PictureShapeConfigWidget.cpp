@@ -19,11 +19,11 @@
 
 #include "PictureShapeConfigWidget.h"
 #include "PictureShape.h"
+#include "PictureDebug.h"
 
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <kdebug.h>
 #include <kfilewidget.h>
 #include <kjob.h>
 #include <KIO/Job>

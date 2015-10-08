@@ -18,7 +18,8 @@
 */
 #include "ClipCommand.h"
 
-#include <kdebug.h>
+#include "PictureDebug.h"
+
 #include <klocalizedstring.h>
 
 ClipCommand::ClipCommand(PictureShape *shape, bool clip)

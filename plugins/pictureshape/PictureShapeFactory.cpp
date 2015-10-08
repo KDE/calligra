@@ -23,6 +23,7 @@
 
 #include "PictureShape.h"
 #include "PictureShapeConfigWidget.h"
+#include "PictureDebug.h"
 
 #include <QByteArray>
 #include <QBuffer>
@@ -38,7 +39,6 @@
 #include <KoProperties.h>
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))

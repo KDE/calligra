@@ -23,9 +23,11 @@
  */
 
 #include "PictureShape.h"
+
 #include "filters/GreyscaleFilterEffect.h"
 #include "filters/MonoFilterEffect.h"
 #include "filters/WatermarkFilterEffect.h"
+#include "PictureDebug.h"
 
 #include <KoOdfWorkaround.h>
 #include <KoViewConverter.h>
@@ -46,8 +48,6 @@
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 #include <KoPathShape.h>
-
-#include <kdebug.h>
 
 #include <QPainter>
 #include <QTimer>
@@ -230,7 +230,7 @@ ClippingRect PictureShape::parseClippingRectString(const QString &originalString
         const QStringList valueStrings = string.split(QLatin1Char(','));
 
         if (valueStrings.count() != 4) {
-            kWarning() << "Not exactly 4 values for attribute fo:clip=rect(...):" << originalString << ", please report.";
+            warnPicture << "Not exactly 4 values for attribute fo:clip=rect(...):" << originalString << ", please report.";
             // hard to guess which value is for which offset, so just cancel parsing and return with the default rect
             return rect;
         }
@@ -312,11 +312,11 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
         QTransform outputTransform = painter.transform();
         QTransform worldTransform  = QTransform();
 
-        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        //debugPicture << "Flipping" << midpointX << midpointY << scaleX << scaleY;
         worldTransform.translate(midpointX, midpointY);
         worldTransform.scale(scaleX, scaleY);
         worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << worldTransform;
+        //debugPicture << "After flipping for window" << worldTransform;
 
         QTransform newTransform = worldTransform * outputTransform;
         painter.setWorldTransform(newTransform);
@@ -666,7 +666,7 @@ bool PictureShape::saveSvg(SvgSavingContext &context)
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
     if (!imageData) {
-        qWarning() << "Picture has no image data. Omitting.";
+        warnPicture << "Picture has no image data. Omitting.";
         return false;
     }
 
