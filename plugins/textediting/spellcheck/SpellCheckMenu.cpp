@@ -23,9 +23,9 @@
 #include "SpellCheckDebug.h"
 
 #include <kactionmenu.h>
-#include <kmenu.h>
 #include <klocalizedstring.h>
 
+#include <QMenu>
 #include <QAction>
 #include <QSignalMapper>
 

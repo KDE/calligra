@@ -30,8 +30,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootAreaProvider.h>
 
+#include <KSharedConfig>
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
