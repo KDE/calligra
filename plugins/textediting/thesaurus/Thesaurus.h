@@ -26,7 +26,7 @@
 #include <QUrl>
 
 class QLineEdit;
-class KPushButton;
+class QPushButton;
 class KHistoryComboBox;
 class KProcess;
 class KoDialog;
@@ -94,7 +94,7 @@ private:
     KProcess *m_wnProc;
     KoDialog *m_dialog;
     KHistoryComboBox *m_edit;
-    KPushButton *m_search;
+    QPushButton *m_search;
     QLineEdit *m_replaceLineEdit;
 
     QString m_word;

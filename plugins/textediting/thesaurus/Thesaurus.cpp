@@ -61,6 +61,7 @@ NOT TODO:
 #include <QLineEdit>
 #include <QUrl>
 #include <QFileDialog>
+#include <QPushButton>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
@@ -68,7 +69,6 @@ NOT TODO:
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
-#include <kpushbutton.h>
 #include <krun.h>
 #include <kcombobox.h>
 
@@ -103,7 +103,7 @@ Thesaurus::Thesaurus()
     QLabel editLabel(i18n("&Search for:"), page);
     editLabel.setBuddy(m_edit);
 
-    m_search = new KPushButton(i18n("S&earch"), page);
+    m_search = new QPushButton(i18n("S&earch"), page);
     connect(m_search, SIGNAL(clicked()), this, SLOT(slotFindTerm()));
     row1->addWidget(&editLabel, 0);
     row1->addWidget(m_edit, 1);
@@ -117,7 +117,7 @@ Thesaurus::Thesaurus()
     m_forward->setToolTip(i18nc("@action:button Go forward to the next word in history", "Forward"));
     row1->addWidget(m_forward, 0);
 
-    KPushButton *lang = new KPushButton(i18n("Change Language..."), page);
+    QPushButton *lang = new QPushButton(i18n("Change Language..."), page);
     connect(lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
     row1->addWidget(lang, 0);
 
