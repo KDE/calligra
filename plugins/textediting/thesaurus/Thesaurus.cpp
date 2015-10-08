@@ -64,7 +64,7 @@ NOT TODO:
 #include <QPushButton>
 #include <QTabWidget>
 
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
