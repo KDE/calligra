@@ -25,7 +25,7 @@
 #include <KLocalizedString>
 
 #include "richtextdialog.h"
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 # include "editlistviewdialog.h"
 #endif
 
@@ -34,12 +34,12 @@
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "WidgetInfo.h"
-#include "utils.h"
-
 #include "widgetwithsubpropertiesinterface.h"
+#include "utils.h"
+#include <kexiutils/utils.h>
+
 #include <KProperty>
 #include <KPropertySet>
-#include <kexiutils/utils.h>
 
 #include <QDialog>
 #include <QVBoxLayout>
@@ -191,7 +191,7 @@ bool WidgetFactory::editRichText(QWidget *w, QString &text) const
     return false;
 }
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 void
 WidgetFactory::editListWidget(QListWidget *listwidget) const
 {
@@ -238,7 +238,7 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
 {
     Q_UNUSED(w);
 
-#ifdef KEXI_NO_CURSOR_PROPERTY
+#ifndef KEXI_FORM_CURSOR_PROPERTY_SUPPORT
 //! @todo temporary unless cursor works properly in the Designer
     if (property == "cursor")
         return false;

@@ -27,7 +27,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
@@ -50,7 +50,7 @@ static KAboutData createAboutData()
     KAboutData aboutData(
          QStringLiteral("okularGenerator_odt"),
          i18n( "ODT/OTT Backend" ),
-         QStringLiteral(CALLIGRA_VERSION_STRING),
+         CalligraVersionWrapper::versionString(),
          i18n( "ODT/OTT file renderer" ),
          KAboutLicense::GPL,
          i18n( "© 2012 Sven Langkamp" )

@@ -26,7 +26,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoImageData.h>
 #include <KoShape.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kdebug.h>
 
 KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()

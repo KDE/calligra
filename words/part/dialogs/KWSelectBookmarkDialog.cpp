@@ -20,11 +20,12 @@
 #include "KWSelectBookmarkDialog.h"
 
 #include <kmessagebox.h>
-#include <kinputdialog.h>
+
+#include <QInputDialog>
 
 static QString lastBookMarkItem;
 
-KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
+KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
         : QWidget(parent),
         parentWidget(parent)
 {
@@ -76,11 +77,11 @@ void KWSelectBookmark::slotBookmarkRename()
     QString curName = item->text();
     QString newName = item->text();
     while (true) {
-        newName = KInputDialog::getText(i18n("Rename Bookmark"),
+        newName = QInputDialog::getText(parentWidget,
+                                        i18n("Rename Bookmark"),
                                         i18n("Please provide a new name for the bookmark"),
-                                        newName,
-                                        0,
-                                        parentWidget);
+                                        QLineEdit::Normal,
+                                        newName);
         if (curName != newName && ! newName.isNull()) {
             if (newName.isEmpty())
                 continue;
@@ -113,8 +114,8 @@ void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
     emit bookmarkItemDoubleClicked(item);
 }
 
-KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
-        : KDialog(parent)
+KWSelectBookmarkDialog::KWSelectBookmarkDialog(const QStringList &nameList, QWidget *parent)
+        : KoDialog(parent)
 {
     ui = new KWSelectBookmark(nameList, this);
     setMainWidget(ui);

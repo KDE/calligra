@@ -3001,7 +3001,7 @@ void DocumentRemoveCmd::unexecute()
 }
 
 //----------------
-DocumentModifyUrlCmd::DocumentModifyUrlCmd( Document *doc, const KUrl &value, const KUndo2MagicString& name )
+DocumentModifyUrlCmd::DocumentModifyUrlCmd( Document *doc, const QUrl &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {

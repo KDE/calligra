@@ -5,14 +5,6 @@ ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
-# Disable list widget because we need to replace it with QTreeWidget
-# which uses very different API compared to Q3ListView.
-# todo: re-add QTreeWidget?
-add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
-
-# Disable pixmap collections
-add_definitions(-DKEXI_NO_PIXMAPCOLLECTION)
-
 # enable to add signal/slot connections
 # set(KFD_SIGSLOTS true)
 
@@ -37,7 +29,7 @@ set(kformdesigner_LIB_SRCS
    events.cpp
    richtextdialog.cpp
    tabstopdialog.cpp
-#KEXI_FORMS_NO_LIST_WIDGET:   editlistviewdialog.cpp
+#KEXI_LIST_FORM_WIDGET_SUPPORT:   editlistviewdialog.cpp
    utils.cpp
 #todo   kfdpixmapedit.cpp
    widgetwithsubpropertiesinterface.cpp

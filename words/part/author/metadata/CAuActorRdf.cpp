@@ -24,7 +24,7 @@
 #include <QUuid>
 #include <KRichTextWidget>
 #include <KActionCollection>
-#include <kicon.h>
+#include <KoIcon.h>
 
 using namespace Soprano;
 
@@ -87,8 +87,8 @@ QWidget* CAuActorRdf::createEditor(QWidget *parent)
 
     actions->addAction("text_undo", m_editWidgetUI.descrRichTextWidget, SLOT(undo()));
     actions->addAction("text_redo", m_editWidgetUI.descrRichTextWidget, SLOT(redo()));
-    actions->action("text_undo")->setIcon(KIcon("edit-undo"));
-    actions->action("text_redo")->setIcon(KIcon("edit-redo"));
+    actions->action("text_undo")->setIcon(koIcon("edit-undo"));
+    actions->action("text_redo")->setIcon(koIcon("edit-redo"));
     m_editWidgetUI.undoToolButton->setDefaultAction(actions->action("text_undo"));
     m_editWidgetUI.redoToolButton->setDefaultAction(actions->action("text_redo"));
 

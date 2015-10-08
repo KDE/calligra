@@ -23,7 +23,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace KPlato
 {
@@ -36,7 +36,7 @@ class MacroCommand;
 /**
  * The dialog that shows and allows you to alter summary tasks.
  */
-class KPLATOUI_EXPORT SummaryTaskDialog : public KDialog {
+class KPLATOUI_EXPORT SummaryTaskDialog : public KoDialog {
     Q_OBJECT
 public:
     /**

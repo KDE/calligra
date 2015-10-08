@@ -34,7 +34,7 @@
 #include <kguiitem.h>
 #include <kurl.h>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 static void listApplicationNames()
 {
@@ -172,7 +172,7 @@ int main( int argc, char **argv )
 {
     KLocalizedString::setApplicationDomain( "calligra-opener" );
 
-    K4AboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
+    K4AboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CalligraVersionWrapper::versionString().toLatin1(),
                          ki18n("Calligra Document Opener"),
                          K4AboutData::License_GPL,
                          ki18n("(c) 2010-2011 Calligra developers"));

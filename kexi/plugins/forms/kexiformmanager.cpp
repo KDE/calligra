@@ -215,7 +215,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         formActions
             << "edit_pointer"
             << QString() //sep
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
             << "library_widget_KexiDBAutoField"
 #endif
             << "library_widget_KexiDBLabel"
@@ -415,7 +415,7 @@ void KexiFormManager::setDataSourceFieldOrExpression(
 void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                                        const QStringList& fields)
 {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     Q_UNUSED(sourcePartClass);
     Q_UNUSED(sourceName);
     Q_UNUSED(fields);

@@ -41,15 +41,10 @@ Description: If defined, data/project migration support for Kexi
 (available in Tools>Migration menu) will be disabled; else: support will
 be enabled.
 
-* KEXI_NO_SUBFORM
+* KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
 Type: defined/undefined, temporary
-Default: defined
-Description: If defined, subform widget will not be available
-
-* KEXI_NO_AUTOFIELD_WIDGET
-Type: defined/undefined, temporary
-Default: undefined for 1.x, defined for 2.x
-Description: If defined, autofield (KexiDBFieldEdit) widget will not be available,
+Default: undefined
+Description: If defined, autofield (KexiDBFieldEdit) widget will be available,
 nor dragging fields from "data source" will be available
 
 * KEXI_DEBUG_GUI

@@ -1662,7 +1662,7 @@ bool KexiCSVImportDialog::saveRow(bool inGUI)
     bool res = m_importingStatement.execute(m_valuesToInsert);
 //! @todo move
     if (!res) {
-        const QStringList msgList = KexiUtils::convertTypes<QVariant, QString, &QVariant::toString>(m_valuesToInsert);
+        const QStringList msgList = KexiUtils::convertTypesUsingMethod<QVariant, QString, &QVariant::toString>(m_valuesToInsert);
         const KMessageBox::ButtonCode msgRes = KMessageBox::warningContinueCancelList(this,
                     xi18nc("@info", "An error occurred during insert record."),
                     QStringList(msgList.join(";")),

@@ -51,7 +51,7 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     this->m_startDateWidget->setDate(first_day_in_month);
     this->m_endDateWidget->setDate(last_day_in_month);
 
-    const KIcon calendarIcon(koIconName("x-office-calendar"));
+    const QIcon calendarIcon = koIcon("x-office-calendar");
     this->m_selectStartDateButton->setIcon(calendarIcon);
     this->m_selectEndDateButton->setIcon(calendarIcon);
 

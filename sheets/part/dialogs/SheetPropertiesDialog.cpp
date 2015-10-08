@@ -23,7 +23,7 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kvbox.h>
+#include <KoVBox.h>
 
 #include "Sheet.h"
 
@@ -37,7 +37,7 @@ SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
     setModal(true);
     setButtons(Ok | Cancel | Default);
 
-    KVBox* mainWidget = new KVBox();//makeVBoxMainWidget();
+    KoVBox* mainWidget = new KoVBox();//makeVBoxMainWidget();
     setMainWidget(mainWidget);
     m_widget = new SheetPropertiesWidget(mainWidget);
     QWidget* spacer = new QWidget(mainWidget);

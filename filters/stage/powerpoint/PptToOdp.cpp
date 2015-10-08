@@ -43,6 +43,7 @@
 #include <writeodf/helpers.h>
 
 #include <QTime>
+#include <QDir>
 #include <QBuffer>
 #include <qmath.h>
 
@@ -54,6 +55,19 @@
 
 using namespace MSO;
 using namespace writeodf;
+
+
+QUrl urlFromArg(const QString& arg)
+{
+#if QT_VERSION >= 0x050400
+    return QUrl::fromUserInput(arg, QDir::currentPath(), QUrl::AssumeLocalFile);
+#else
+    // Logic from QUrl::fromUserInput(QString, QString, UserInputResolutionOptions)
+    return (QUrl(arg, QUrl::TolerantMode).isRelative() && !QDir::isAbsolutePath(arg))
+           ? QUrl::fromLocalFile(QDir::current().absoluteFilePath(arg))
+           : QUrl::fromUserInput(arg);
+#endif
+}
 
 /**
  * This class represents an opened <text:list> tag with an optionally opened
@@ -1787,7 +1801,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     if (imageBullet) {
         elementName = "text:list-level-style-image";
         text_list_level_style_image image(&out, depth + 1);
-        image.set_xlink_href(bulletPictureNames.value(i.pf.bulletBlipRef()));
+        image.set_xlink_href(urlFromArg(bulletPictureNames.value(i.pf.bulletBlipRef())));
         image.set_xlink_type("simple");
         defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
     }
@@ -2672,7 +2686,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 
     if (meta) {
         if (!href.isNull()) {
-            text_a a(span.add_text_a(href));
+            text_a a(span.add_text_a(urlFromArg(href)));
             text_meta m(a.add_text_meta());
             writeMeta(*meta, m_processingMasters, m);
         } else {
@@ -2683,7 +2697,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
         if (!href.isNull()) {
-            text_a a(span.add_text_a(href));
+            text_a a(span.add_text_a(urlFromArg(href)));
             addTextSpan(a, txt);
         } else {
             addTextSpan(span, txt);

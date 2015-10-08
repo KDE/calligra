@@ -22,14 +22,13 @@
 
 #include <ui_KWSelectBookmark.h>
 
-#include <QWidget>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KWSelectBookmark : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KWSelectBookmark(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmark(const QStringList &nameList, QWidget *parent = 0);
     QString bookmarkName() const;
     int bookmarkRow() const;
 
@@ -50,11 +49,11 @@ private:
     QWidget *parentWidget;
 };
 
-class KWSelectBookmarkDialog : public KDialog
+class KWSelectBookmarkDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmarkDialog(const QStringList &nameList, QWidget *parent = 0);
     QString selectedBookmarkName();
 
 Q_SIGNALS:

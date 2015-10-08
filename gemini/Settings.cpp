@@ -86,7 +86,7 @@ void Settings::setCurrentFile(const QString& fileName)
         }
         else {
             QMimeDatabase db;
-            QMimeType mimeType = db.mimeTypeForUrl(fileName);
+            QMimeType mimeType = db.mimeTypeForUrl(url);
             KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());
             if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
                 d->currentFileClass = WORDS_MIME_TYPE;

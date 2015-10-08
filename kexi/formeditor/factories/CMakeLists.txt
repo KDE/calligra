@@ -1,7 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core)
 
-add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
-
 set(kexiforms_standardwidgetsplugin_SRCS
     KexiStandardFormWidgetsFactory.cpp
     KexiStandardFormWidgets.cpp

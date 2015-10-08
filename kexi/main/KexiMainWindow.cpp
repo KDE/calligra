@@ -20,7 +20,6 @@
 
 #include "KexiMainWindow.h"
 #include "KexiMainWindow_p.h"
-#include <config-kexi.h>
 #include "kexiactionproxy.h"
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -676,7 +675,7 @@ void KexiMainWindow::setupActions()
 //! @todo new QAction(xi18n("From Server..."), "network-server-database", 0,
 //!          this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     ac->addAction("project_print",
                   d->action_project_print = KStandardAction::print(this, SLOT(slotProjectPrint()), this));
     d->action_project_print->setToolTip(futureI18n("Print data from the active table or query"));
@@ -1089,7 +1088,7 @@ void KexiMainWindow::setupActions()
 
     acat->addAction("project_open", Kexi::GlobalActionCategory);
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     //! @todo support this in FormObjectType, ReportObjectType as well as others
     acat->addAction("project_print", Kexi::WindowActionCategory,
                     KexiPart::TableObjectType, KexiPart::QueryObjectType);
@@ -1216,7 +1215,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     if (d->action_edit_paste_special_data_table)
         d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     const bool printingActionsEnabled =
         currentWindow() && currentWindow()->part()->info()->isPrintingSupported()
         && !currentWindow()->neverSaved();
@@ -1243,7 +1242,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     d->action_view_mainarea->setEnabled(d->prj);
     if (d->action_view_propeditor)
         d->action_view_propeditor->setEnabled(d->prj);
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     d->action_show_helper->setEnabled(d->prj);
 #endif
 
@@ -1502,7 +1501,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 QString taskName;
                 if (info->value("action") == "execute")
                     taskName = xi18nc("\"executing object\" action", "executing");
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
                 else if (info->value("action") == "print-preview")
                     taskName = futureI18n("making print preview for");
                 else if (info->value("action") == "print")
@@ -1534,7 +1533,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 }
                 continue;
             }
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
             else if (info->value("action") == "print") {
                 tristate res = printItem(item);
                 if (false == res) {
@@ -1703,7 +1702,7 @@ tristate KexiMainWindow::closeProject()
 
 void KexiMainWindow::setupContextHelp()
 {
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     d->ctxHelp = new KexiContextHelp(d->mainWidget, this);
     //! @todo
     /*
@@ -1877,7 +1876,7 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
                 this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
         connect(d->navigator, SIGNAL(printItem(KexiPart::Item*)),
                 this, SLOT(printItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(pageSetupForItem(KexiPart::Item*)),
@@ -2492,7 +2491,7 @@ KexiMainWindow::slotProjectSaveAs()
 void
 KexiMainWindow::slotProjectPrint()
 {
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     if (currentWindow() && currentWindow()->partItem())
         printItem(currentWindow()->partItem());
 #endif
@@ -2501,7 +2500,7 @@ KexiMainWindow::slotProjectPrint()
 void
 KexiMainWindow::slotProjectPrintPreview()
 {
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     if (currentWindow() && currentWindow()->partItem())
         printPreviewForItem(currentWindow()->partItem());
 #endif
@@ -2510,7 +2509,7 @@ KexiMainWindow::slotProjectPrintPreview()
 void
 KexiMainWindow::slotProjectPageSetup()
 {
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     if (currentWindow() && currentWindow()->partItem())
         showPageSetupForItem(currentWindow()->partItem());
 #endif
@@ -2971,7 +2970,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     d->mainWidget->tabWidget()->removeTab(
         d->mainWidget->tabWidget()->indexOf(windowContainer));
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     //also remove from 'print setup dialogs' cache, if needed
     int printedObjectID = 0;
     if (d->pageSetupWindowItemID2dataItemID_map.contains(window_id))
@@ -3352,7 +3351,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     }
 
     tristate res = true;
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     //also close 'print setup' dialog for this item, if any
     KexiWindow * pageSetupWindow = d->pageSetupWindows[ item->identifier()];
     const bool oldInsideCloseWindow = d->insideCloseWindow;
@@ -3388,7 +3387,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
         }
     }
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     //in case the dialog is a 'print setup' dialog, also update d->pageSetupWindows
     int dataItemID = d->pageSetupWindowItemID2dataItemID_map[item->identifier()];
     d->pageSetupWindowItemID2dataItemID_map.remove(item->identifier());

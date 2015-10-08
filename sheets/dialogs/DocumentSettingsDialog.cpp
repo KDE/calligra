@@ -38,7 +38,7 @@
 #include <QSpinBox>
 
 #include <kstatusbar.h>
-#include <kvbox.h>
+#include <KoVBox.h>
 
 #include <sonnet/configwidget.h>
 
@@ -76,13 +76,13 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
 //     connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
 //     connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
-    KVBox *p1 = new KVBox();
+    KoVBox *p1 = new KoVBox();
     d->page1 = addPage(p1, i18n("Calculation"));
     d->page1->setHeader(QString(""));
     d->page1->setIcon(koIcon("application-vnd.oasis.opendocument.spreadsheet"));
     d->calcPage = new calcSettings(selection, p1);
 
-    KVBox *p2 = new KVBox();
+    KoVBox *p2 = new KoVBox();
     d->page2 = addPage(p2, i18n("Locale"));
     d->page2->setHeader(QString(""));
     d->page2->setIcon(koIcon("preferences-desktop-locale"));
@@ -109,7 +109,7 @@ void DocumentSettingsDialog::slotReset()
 }
 
 
-calcSettings::calcSettings(Selection* selection, KVBox *box)
+calcSettings::calcSettings(Selection* selection, KoVBox *box)
         : QObject(box->parent())
 {
     m_cs = selection->activeSheet()->map()->calculationSettings();
@@ -163,7 +163,7 @@ void calcSettings::apply()
     m_cs->setReferenceYear(m_nullYearEdit->value());
 }
 
-parameterLocale::parameterLocale(Selection* selection, KVBox *box)
+parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
         : QObject(box->parent())
 {
     m_selection = selection;

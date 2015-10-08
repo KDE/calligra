@@ -37,6 +37,7 @@ class QMenu;
 class QPrintDialog;
 class QStackedWidget;
 class QSplitter;
+class QUrl;
 class KUndo2Command;
 
 class KAction;
@@ -44,7 +45,6 @@ class KToggleAction;
 class QLabel;
 class KConfigSkeleton;
 class KConfigSkeletonItem;
-class KUrl;
 
 class KoView;
 
@@ -155,7 +155,7 @@ public:
     virtual void saveContext( QDomElement &context ) const;
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
-    bool loadWorkPackage( Project &project, const KUrl &url );
+    bool loadWorkPackage( Project &project, const QUrl &url );
 
     QWidget *canvas() const;
 
@@ -296,8 +296,8 @@ protected Q_SLOTS:
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void saveTaskModule( const QUrl &url, Project *project );
+    void removeTaskModule( const QUrl &url );
 
 protected:
     virtual void guiActivateEvent( bool activated );

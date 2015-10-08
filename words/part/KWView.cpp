@@ -43,7 +43,7 @@
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -528,7 +528,7 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CALLIGRA_VERSION_STRING));
+    dia->printer().setCreator(QString::fromLatin1("Calligra Words %1").arg(CalligraVersionWrapper::versionString()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

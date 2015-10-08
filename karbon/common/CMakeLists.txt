@@ -1,6 +1,5 @@
 set(karboncommon_LIB_SRCS
     KarbonGlobal.cpp
-    KarbonGradientHelper.cpp
     KarbonCursor.cpp
     KarbonOutlinePaintingStrategy.cpp
 

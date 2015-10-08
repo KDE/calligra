@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 
 namespace KPlato
@@ -33,7 +33,7 @@ class MainProjectPanel;
 class MacroCommand;
 
 
-class KPLATOUI_EXPORT MainProjectDialog : public KDialog {
+class KPLATOUI_EXPORT MainProjectDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);

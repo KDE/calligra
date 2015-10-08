@@ -356,7 +356,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(QTabWidget *tab)
                 SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KDbField::Type)),
                 KexiFormManager::self(),
                 SLOT(setDataSourceFieldOrExpression(QString,QString,KDbField::Type)));
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),
                 KexiFormManager::self(),

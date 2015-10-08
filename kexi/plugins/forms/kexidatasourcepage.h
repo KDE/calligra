@@ -20,6 +20,7 @@
 #define KEXIDATASOURCEPAGE_H
 
 #include "kexiformutils_export.h"
+#include <config-kexi.h>
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 
 #include <KDbField>
@@ -98,10 +99,10 @@ protected:
     QString m_noDataSourceAvailableSingleText;
     QString m_noDataSourceAvailableMultiText;
     bool m_insideClearFormDataSourceSelection;
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-    KDbTableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
-#else
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     KexiFieldListView* m_fieldListView;
+#else
+    KDbTableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #endif
 
     //! Used only in assignPropertySet() to check whether we already have the set assigned

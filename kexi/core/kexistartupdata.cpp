@@ -199,7 +199,7 @@ tristate KexiStartupData::parseOptions()
     ADD_OPTION(editText)
     ADD_OPTION(execute)
     ADD_OPTION(newObject)
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
     ADD_OPTION(print)
     ADD_OPTION(printPreview)
 #endif

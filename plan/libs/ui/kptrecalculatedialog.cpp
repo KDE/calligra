@@ -42,7 +42,7 @@ RecalculateDialogImpl::RecalculateDialogImpl (QWidget *parent)
 //////////////////  ResourceDialog  ////////////////////////
 
 RecalculateDialog::RecalculateDialog( QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Re-calculate Schedule") );
     setButtons( Ok|Cancel );

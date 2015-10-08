@@ -29,9 +29,9 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
 #include "ThumbnailHelperImpl.h"
+
+#include <CalligraVersionWrapper.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -43,16 +43,7 @@ int main( int argc, char** argv )
     SetErrorMode(SEM_NOGPFAULTERRORBOX); 
 #endif
 
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-#else
-    version = calligraVersion;
-#endif
-
+    QString version = CalligraVersionWrapper::versionString(true);
 
     K4AboutData aboutData("calligrageminithumbnailer",
                          "calligrawords",
@@ -60,7 +51,7 @@ int main( int argc, char** argv )
                          version.toLatin1(),
                          ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
                          K4AboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CalligraVersionWrapper::versionYear()),
                          KLocalizedString(),
                          "http://www.calligra.org",
                          "submit@bugs.kde.org");

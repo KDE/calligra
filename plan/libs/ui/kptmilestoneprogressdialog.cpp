@@ -33,7 +33,7 @@ namespace KPlato
 class MacroCommand;
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
-    : KDialog(p),
+    : KoDialog(p),
     m_node( &task )
 {
     setCaption( i18n("Milestone Progress") );

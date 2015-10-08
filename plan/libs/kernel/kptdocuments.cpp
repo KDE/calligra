@@ -31,14 +31,13 @@ namespace KPlato
     
 Document::Document()
     : m_type( Type_None ),
-    m_url( KUrl() ),
     m_sendAs( SendAs_None ),
     parent ( 0 )
 {
     //kDebug(planDbg())<<this;
 }
 
-Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
+Document::Document( const QUrl &url, Document::Type type, Document::SendAs sendAs )
     : m_type( type ),
     m_sendAs( sendAs ),
     parent ( 0 )
@@ -124,7 +123,7 @@ void Document::setSendAs( SendAs snd )
     }
 }
 
-void Document::setUrl( const KUrl &url )
+void Document::setUrl( const QUrl &url )
 {
     if ( m_url != url ) {
         m_url = url;
@@ -150,7 +149,7 @@ void Document::setStatus( const QString &sts )
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
-    m_url = KUrl( element.attribute( "url" ) );
+    m_url = QUrl( element.attribute( "url" ) );
     m_name = element.attribute( "name", m_url.fileName() );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );
@@ -220,7 +219,7 @@ void Documents::addDocument( Document *doc )
     }
 }
 
-void Documents::addDocument( const KUrl &url, Document::Type type )
+void Documents::addDocument( const QUrl &url, Document::Type type )
 {
     addDocument( new Document( url, type ) );
 }
@@ -260,7 +259,7 @@ Document *Documents::findDocument( const Document *doc ) const
     return findDocument( doc->url() );
 }
 
-Document *Documents::findDocument( const KUrl &url ) const
+Document *Documents::findDocument( const QUrl &url ) const
 {
     for ( int i = 0; i < m_docs.count(); ++i ) {
         if ( m_docs.at( i )->url() == url ) {

@@ -436,8 +436,8 @@ void TaskEditor::createDockers()
         e->setDragEnabled ( true );
         ds->setWidget( e );
         connect(this, SIGNAL(loadTaskModules(QStringList)), m, SLOT(loadTaskModules(QStringList)));
-        connect(m, SIGNAL(saveTaskModule(KUrl,Project*)), this, SIGNAL(saveTaskModule(KUrl,Project*)));
-        connect(m, SIGNAL(removeTaskModule(KUrl)), this, SIGNAL(removeTaskModule(KUrl)));
+        connect(m, SIGNAL(saveTaskModule(QUrl,Project*)), this, SIGNAL(saveTaskModule(QUrl,Project*)));
+        connect(m, SIGNAL(removeTaskModule(QUrl)), this, SIGNAL(removeTaskModule(QUrl)));
         addDocker( ds );
     }
 }

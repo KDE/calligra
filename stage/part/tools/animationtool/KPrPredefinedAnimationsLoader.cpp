@@ -288,7 +288,7 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
         name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name);
+            return QIcon::fromTheme(name);
         }
     }
     return koIcon("unrecognized_animation");
@@ -306,7 +306,7 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
     name.append("_animations");
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(name);
+        icon = QIcon::fromTheme(name);
     }
     else {
         // If an specific animation icon does not exist then return a generic
@@ -423,7 +423,7 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
     QIcon icon;
     QString path = KIconLoader::global()->iconPath(iconName, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(iconName);
+        icon = QIcon::fromTheme(iconName);
     }
     else {
         icon = koIcon("unrecognized_animation");

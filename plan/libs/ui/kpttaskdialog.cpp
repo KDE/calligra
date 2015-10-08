@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 
-#include <kvbox.h>
+#include <KoVBox.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -45,26 +45,26 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     setWindowTitle( i18n("Task Settings") );
     setFaceType( KPageDialog::Tabbed );
 
-    KVBox *page;
+    KoVBox *page;
 
     // Create all the tabs.
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&General"));
     m_generalTab = new TaskGeneralPanel(project, task, page);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Resources"));
     m_resourcesTab = new RequestResourcesPanel(page, project, task);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Documents"));
     m_documentsTab = new DocumentsPanel( task, page );
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("D&escription"));
     m_descriptionTab = new TaskDescriptionPanel(task, page);
     m_descriptionTab->namefield->hide();

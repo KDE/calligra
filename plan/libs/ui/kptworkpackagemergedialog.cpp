@@ -87,7 +87,7 @@ WorkPackageMergePanel::WorkPackageMergePanel( QWidget *parent )
 }
 
 WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<KDateTime, Package*> &list, QWidget *parent )
-    : KDialog( parent ),
+    : KoDialog( parent ),
     m_packages( list.values() )
 {
     panel.ui_text->setText( text );
@@ -99,7 +99,7 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
         panel.ui_icon->setPixmap( icon.pixmap( style()->pixelMetric( QStyle::PM_MessageBoxIconSize, &option, this ) ) );
     }
 
-    setButtons( KDialog::Yes | KDialog::No );
+    setButtons( KoDialog::Yes | KoDialog::No );
 
     panel.ui_view->setHeaderHidden( true );
     panel.ui_view->setRootIsDecorated( false );
@@ -184,7 +184,7 @@ QList<int> WorkPackageMergeDialog::checkedList() const
 }
 void WorkPackageMergeDialog::slotChanged()
 {
-    enableButton( KDialog::Yes, m_model->rowCount() > 0 );
+    enableButton( KoDialog::Yes, m_model->rowCount() > 0 );
 }
 
 } // namespace KPlato

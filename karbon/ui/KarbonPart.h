@@ -60,7 +60,7 @@ public:
 protected Q_SLOTS:
 
     /// reimplemented
-    virtual void openTemplate(const KUrl& url);
+    virtual void openTemplate(const QUrl& url);
 
 private Q_SLOTS:
 

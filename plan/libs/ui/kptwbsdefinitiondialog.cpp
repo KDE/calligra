@@ -30,7 +30,7 @@ namespace KPlato
 {
 
 WBSDefinitionDialog::WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *p)
-    : KDialog(p)
+    : KoDialog(p)
 {
     setCaption( i18n("WBS Definition") );
     setButtons( Ok|Cancel );

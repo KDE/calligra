@@ -38,6 +38,7 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/FlowLayout.h>
 #include <kexi_global.h>
+#include <config-kexi.h>
 
 #include <KDb>
 #include <KDbUtils>
@@ -93,7 +94,7 @@ public:
         *openAction, *designAction, *editTextAction,
         *executeAction,
         *dataExportToClipboardAction, *dataExportToFileAction;
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     QAction *printAction, *pageSetupAction;
 #endif
 
@@ -219,7 +220,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    SLOT(slotExportToFileAsDataTable()));
     d->exportActionMenu->addAction(d->dataExportToFileAction);
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     d->printAction = addAction("print_object", koIcon("document-print"), futureI18n("&Print..."),
                               futureI18n("Print data"),
                               futureI18n("Prints data from the currently selected table or query."),
@@ -577,7 +578,7 @@ bool KexiProjectNavigator::actionEnabled(const QString& actionName) const
 
 void KexiProjectNavigator::slotPrintObject()
 {
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     if (!d->printAction)
         return;
     KexiPart::Item* item = selectedPartItem();
@@ -588,7 +589,7 @@ void KexiProjectNavigator::slotPrintObject()
 
 void KexiProjectNavigator::slotPageSetupForObject()
 {
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     if (!d->pageSetupAction)
         return;
     KexiPart::Item* item = selectedPartItem();
@@ -731,7 +732,7 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
     if (addSep)
         addSeparator();
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     if (partItem && partInfo->isPrintingSupported())
         addAction("print_object");
     if (partItem && partInfo->isPrintingSupported())

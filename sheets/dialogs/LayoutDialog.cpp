@@ -2716,7 +2716,7 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
 
 void CellFormatPageBorder::loadIcon(const QString &iconName, BorderButton *_button)
 {
-    _button->setIcon(KIcon(iconName));
+    _button->setIcon(QIcon::fromTheme(iconName));
 }
 
 void CellFormatPageBorder::apply(StyleCommand* obj)

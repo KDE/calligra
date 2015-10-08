@@ -22,9 +22,9 @@
 
 #include "ui_kptinsertfilepanel.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
-class KUrl;
+class QUrl;
 
 namespace KPlato
 {
@@ -33,13 +33,13 @@ class Project;
 class Node;
 class InsertFilePanel;
 
-class InsertFileDialog : public KDialog
+class InsertFileDialog : public KoDialog
 {
     Q_OBJECT
 public:
     InsertFileDialog( Project &project, Node *currentNode, QWidget *parent=0 );
 
-    KUrl url() const;
+    QUrl url() const;
     Node *parentNode() const;
     Node *afterNode() const;
 
@@ -54,7 +54,7 @@ class InsertFilePanel : public QWidget
 public:
     InsertFilePanel( Project &project, Node *currentNode, QWidget *parent );
 
-    KUrl url() const;
+    QUrl url() const;
     Node *parentNode() const;
     Node *afterNode() const;
 

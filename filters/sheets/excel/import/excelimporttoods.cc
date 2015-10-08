@@ -64,6 +64,18 @@ K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 using namespace writeodf;
 
+QUrl urlFromArg(const QString& arg)
+{
+#if QT_VERSION >= 0x050400
+    return QUrl::fromUserInput(arg, QDir::currentPath(), QUrl::AssumeLocalFile);
+#else
+    // Logic from QUrl::fromUserInput(QString, QString, UserInputResolutionOptions)
+    return (QUrl(arg, QUrl::TolerantMode).isRelative() && !QDir::isAbsolutePath(arg))
+           ? QUrl::fromLocalFile(QDir::current().absoluteFilePath(arg))
+           : QUrl::fromUserInput(arg);
+#endif
+}
+
 namespace Swinder
 {
 // qHash function to support hashing by Swinder::FormatFont instances.
@@ -1297,7 +1309,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
         }
 
         if (!cellValue.linkName.isEmpty()) {
-            text_a a(p.add_text_a(cellValue.linkLocation));
+            text_a a(p.add_text_a(urlFromArg(cellValue.linkLocation)));
             const QString targetFrameName = cellValue.link.targetFrameName;
             if (! targetFrameName.isEmpty())
                 a.set_office_target_frame_name(targetFrameName);
@@ -1755,7 +1767,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     //TODO add the manifest entry
     style_background_image bg(&writer);
-    bg.set_xlink_href(sheet->backgroundImage());
+    bg.set_xlink_href(urlFromArg(sheet->backgroundImage()));
     bg.set_xlink_type("simple");
     bg.set_xlink_show("embed");
     bg.set_xlink_actuate("onLoad");

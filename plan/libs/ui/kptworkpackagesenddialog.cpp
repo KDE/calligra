@@ -30,7 +30,7 @@ namespace KPlato
 {
 
 WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *p)
-    : KDialog(p)
+    : KoDialog(p)
 {
     setCaption( i18nc( "@title:window", "Send Work Packages") );
     setButtons( Close );

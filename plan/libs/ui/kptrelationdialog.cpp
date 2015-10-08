@@ -41,7 +41,7 @@ RelationPanel::RelationPanel(QWidget *parent)
 }
     
 AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
-    : KDialog(p),
+    : KoDialog(p),
     m_project( project ),
     m_relation( rel ),
     m_deleterelation( true )
@@ -147,7 +147,7 @@ ModifyRelationDialog::ModifyRelationDialog(Project &project, Relation *rel, QWid
 {
     m_deleterelation = false;
 
-    setButtonText( KDialog::User1, i18nc( "@action:button", "Delete") );
+    setButtonText( KoDialog::User1, i18nc( "@action:button", "Delete") );
     m_deleted = false;
     enableButtonOk(false);
     

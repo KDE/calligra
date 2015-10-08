@@ -32,7 +32,7 @@
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -314,7 +314,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
         xmlWriter->startElement("office:meta");
         xmlWriter->startElement("meta:generator");
-        xmlWriter->addTextNode(QString("Calligra %1").arg(CALLIGRA_VERSION_STRING));
+        xmlWriter->addTextNode(QString("Calligra %1").arg(CalligraVersionWrapper::versionString()));
         xmlWriter->endElement();
         xmlWriter->startElement("meta:creation-date");
         xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));

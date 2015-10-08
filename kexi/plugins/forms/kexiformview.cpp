@@ -99,7 +99,7 @@ public:
     //! Used in setFocusInternal()
     QPointer<QWidget> setFocusInternalOnce;
 
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     /*! Stores geometry of widget recently inserted using insertAutoFields() method.
      having this information, we'r eable to compute position for a newly
      inserted widget in insertAutoFields() is such position has not been specified.
@@ -1064,9 +1064,7 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-    Q_UNUSED(e);
-#else
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
@@ -1080,6 +1078,8 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
         insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());
     }
+#else
+    Q_UNUSED(e);
 #endif
 }
 
@@ -1088,13 +1088,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
                                const QStringList& fields, KFormDesigner::Container* targetContainer,
                                const QPoint& _pos)
 {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-    Q_UNUSED(sourcePartClass);
-    Q_UNUSED(sourceName);
-    Q_UNUSED(fields);
-    Q_UNUSED(targetContainer);
-    Q_UNUSED(_pos);
-#else
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     if (fields.isEmpty())
         return;
 
@@ -1209,6 +1203,12 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         }
     }
     //! @todo eventually, update property pane
+#else
+    Q_UNUSED(sourcePartClass);
+    Q_UNUSED(sourceName);
+    Q_UNUSED(fields);
+    Q_UNUSED(targetContainer);
+    Q_UNUSED(_pos);
 #endif
 }
 

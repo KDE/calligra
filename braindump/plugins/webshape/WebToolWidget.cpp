@@ -101,12 +101,12 @@ void WebToolWidget::save()
     if(!m_shape)
         return;
 
-    QString newUrl = m_widget.urlEdit->text();
+    const QUrl newUrl = QUrl::fromUserInput(m_widget.urlEdit->text());
     bool newCached = m_widget.useCache->isChecked();
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     if(canvasController) {
         KoCanvasBase* canvas = canvasController->canvas();
-        if(newUrl != m_shape->url().url()) {
+        if(newUrl != m_shape->url()) {
             canvas->addCommand(new ChangeUrl(m_shape, newUrl));
         }
         if(newCached != m_shape->isCached()) {

@@ -158,7 +158,7 @@ public:
     QRect popupGeometry(const QWidget *widget) const;
     QRect popupGeometry(int screen = -1) const;
     mutable int ncols : 4; //4 bits is probably plenty
-    int collapsibleSeparators;
+    bool collapsibleSeparators;
 
     bool activationRecursionGuard;
 

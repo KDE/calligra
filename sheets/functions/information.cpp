@@ -22,7 +22,7 @@
 
 #include "InformationModule.h"
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #else
@@ -192,7 +192,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(QDir::currentPath());
 
     if (type == "release")
-        return Value(QString(CALLIGRA_VERSION_STRING));
+        return Value(CalligraVersionWrapper::versionString());
 
     if (type == "numfile") {
         KoApplication *app = qobject_cast<KoApplication*>(qApp);

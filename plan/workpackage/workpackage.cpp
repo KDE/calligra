@@ -36,6 +36,7 @@
 #include <KoStoreDevice.h>
 
 #include <QDir>
+#include <QUrl>
 #include <QTimer>
 
 #include <kglobal.h>
@@ -44,7 +45,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 #include <kdatetime.h>
 
 #include <QDomDocument>
@@ -583,13 +583,13 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
 
 void WorkPackage::openNewDocument( const Document *doc, KoStore *store )
 {
-    KUrl url = extractFile( doc, store );
+    const QUrl url = extractFile( doc, store );
     if ( url.url().isEmpty() ) {
-        KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().path() ) );
         return;
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.path() ) );
         return;
     }
     m_newdocs.insert( doc, url );
@@ -652,29 +652,29 @@ int WorkPackage::queryClose( Part *part )
     return res;
 }
 
-KUrl WorkPackage::extractFile( const Document *doc )
+QUrl WorkPackage::extractFile( const Document *doc )
 {
     KoStore *store = KoStore::createStore( m_filePath, KoStore::Read, "", KoStore::Zip );
     if ( store->bad() )
     {
         KMessageBox::error( 0, i18n( "<p>Work package <b>'%1'</b></p><p>Could not open store:</p><p>%2</p>", node()->name(), m_filePath ) );
         delete store;
-        return KUrl();
+        return QUrl();
     }
-    KUrl url = extractFile( doc, store );
+    const QUrl url = extractFile( doc, store );
     delete store;
     return url;
 }
 
-KUrl WorkPackage::extractFile( const Document *doc, KoStore *store )
+QUrl WorkPackage::extractFile( const Document *doc, KoStore *store )
 {
     //FIXME: should use a special tmp dir
     QString tmp = KStandardDirs::locateLocal( "tmp", QString(), false );
-    KUrl url( tmp + doc->url().fileName() );
-    kDebug(planworkDbg())<<"Extract: "<<doc->url().fileName()<<" -> "<<url.pathOrUrl();
+    const QUrl url = QUrl::fromLocalFile( tmp + doc->url().fileName() );
+    kDebug(planworkDbg())<<"Extract: "<<doc->url().fileName()<<" -> "<<url.path();
     if ( ! store->extractFile( doc->url().fileName(), url.path() ) ) {
         KMessageBox::error( 0, i18n( "<p>Work package <b>'%1'</b></p><p>Could not extract file:</p><p>%2</p>", node()->name(), doc->url().fileName() ) );
-        return KUrl();
+        return QUrl();
     }
     return url;
 }

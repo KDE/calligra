@@ -146,6 +146,7 @@
 
 #include <unistd.h>
 #include <KConfigGroup>
+#include <KGlobal>
 
 class Q_DECL_HIDDEN KarbonView::Private
 {

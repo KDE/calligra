@@ -24,6 +24,7 @@
 #include <kexipartitem.h>
 #include <kexipartmanager.h>
 #include <kexiproject.h>
+#include <config-kexi.h>
 
 #include <KDbTableViewData>
 #include <KDbQuerySchema>
@@ -131,7 +132,7 @@ void KexiFormEventAction::slotTrigger()
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printItem(item);
         }
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifdef KEXI_QUICK_PRINTING_SUPPORT
         else if (d->actionOption == "printPreview") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printPreviewForItem(item);

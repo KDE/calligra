@@ -27,6 +27,7 @@
 
 #include <KPluginFactory>
 
+#include <config-kexi.h>
 #include "kformdesigner_export.h"
 
 class QWidget;
@@ -326,7 +327,7 @@ protected:
      If the user presses "Cancel" false is returned. */
     bool editRichText(QWidget *w, QString &text) const;
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     /*! This function creates a dialog to modify the contents of a list widget. You can modify both
     columns and list items. The list widget is automatically  updated if the user presses "Ok".*/
     void editListWidget(QListWidget *listwidget) const;

@@ -763,7 +763,7 @@ ViewBase *View::createWelcomeView()
     v->htmlPart().setMetaRefreshEnabled(false);
     v->htmlPart().setPluginsEnabled(false);
 
-    slotOpenUrlRequest( v, KUrl( "about:plan/main" ) );
+    slotOpenUrlRequest( v, QUrl( "about:plan/main" ) );
 
     connect( v, SIGNAL(openUrlRequest(HtmlView*,QUrl)), SLOT(slotOpenUrlRequest(HtmlView*,QUrl)) );
 
@@ -888,8 +888,8 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     connect( taskeditor, SIGNAL(indentTask()), SLOT(slotIndentTask()) );
     connect( taskeditor, SIGNAL(unindentTask()), SLOT(slotUnindentTask()) );
 
-    connect(taskeditor, SIGNAL(saveTaskModule(KUrl,Project*)), SLOT(saveTaskModule(KUrl,Project*)));
-    connect(taskeditor, SIGNAL(removeTaskModule(KUrl)), SLOT(removeTaskModule(KUrl)));
+    connect(taskeditor, SIGNAL(saveTaskModule(QUrl,Project*)), SLOT(saveTaskModule(QUrl,Project*)));
+    connect(taskeditor, SIGNAL(removeTaskModule(AUrl)), SLOT(removeTaskModule(QUrl)));
 
     connect( taskeditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     taskeditor->updateReadWrite( m_readWrite );
@@ -2695,7 +2695,7 @@ void View::slotCreateReportView( ReportDesignDialog *dlg )
 
 void View::slotOpenReportFile()
 {
-    KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
+    KFileDialog *dlg = new KFileDialog( QUrl(), QString(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
     dlg->show();
     dlg->raise();
@@ -2917,7 +2917,7 @@ void View::saveContext( QDomElement &me ) const
     m_viewlist->save( me );
 }
 
-bool View::loadWorkPackage( Project &project, const KUrl &url )
+bool View::loadWorkPackage( Project &project, const QUrl &url )
 {
     return getPart()->loadWorkPackage( project, url );
 }
@@ -2949,8 +2949,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
         KMessageBox::error(0, i18n("Failed to open temporary file" ) );
         return;
     }
-    KUrl url;
-    url.setPath( tmpfile.fileName() );
+    QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
     if ( ! getPart()->saveWorkPackageUrl( url, node, activeScheduleId(), resource ) ) {
         kDebug(planDbg())<<"Failed to save to file";
         KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br/> <filename>%1</filename>", url.url() ) );
@@ -2988,8 +2987,7 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
             KMessageBox::error(0, i18n("Failed to open temporary file" ) );
             return;
         }
-        KUrl url;
-        url.setPath( tmpfile.fileName() );
+        QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
         if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
             kDebug(planDbg())<<"Failed to save to file";
             KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
@@ -3030,7 +3028,7 @@ void View::slotCurrencyConfigFinished( int result )
     dlg->deleteLater();
 }
 
-void View::saveTaskModule( const KUrl &url, Project *project )
+void View::saveTaskModule( const QUrl &url, Project *project )
 {
     kDebug(planDbg())<<url<<project;
     QString dir = KGlobal::dirs()->saveLocation( "plan_taskmodules" );
@@ -3048,7 +3046,7 @@ void View::saveTaskModule( const KUrl &url, Project *project )
     }
 }
 
-void View::removeTaskModule( const KUrl &url )
+void View::removeTaskModule( const QUrl &url )
 {
     kDebug(planDbg())<<url;
 }

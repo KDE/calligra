@@ -3917,7 +3917,7 @@ bool NodeItemModel::dropUrlMimeData( const QMimeData *data, Qt::DropAction actio
     return false;
 }
 
-bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*/, int row, int /*column*/, const QModelIndex &parent )
+bool NodeItemModel::importProjectFile( const QUrl &url, Qt::DropAction /*action*/, int row, int /*column*/, const QModelIndex &parent )
 {
     if ( ! url.isLocalFile() ) {
         kDebug(planDbg())<<"TODO: download if url not local";
@@ -3926,13 +3926,13 @@ bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*
     KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
         //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
-        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        kDebug(planDbg())<<"bad store"<<url.toDisplayString();
         delete store;
         //        QApplication::restoreOverrideCursor();
         return false;
     }
     if ( ! store->open( "root" ) ) { // maindoc.xml
-        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        kDebug(planDbg())<<"No root"<<url.toDisplayString();
         delete store;
         return false;
     }
@@ -4964,7 +4964,7 @@ bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction /*acti
     return false;
 }
 
-bool TaskModuleModel::importProject( const KUrl &url, bool emitsignal )
+bool TaskModuleModel::importProject( const QUrl &url, bool emitsignal )
 {
     if ( ! url.isLocalFile() ) {
         kDebug(planDbg())<<"TODO: download if url not local";
@@ -4973,13 +4973,13 @@ bool TaskModuleModel::importProject( const KUrl &url, bool emitsignal )
     KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
         //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
-        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        kDebug(planDbg())<<"bad store"<<url.toDisplayString();
         delete store;
         //        QApplication::restoreOverrideCursor();
         return false;
     }
     if ( ! store->open( "root" ) ) { // maindoc.xml
-        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        kDebug(planDbg())<<"No root"<<url.toDisplayString();
         delete store;
         return false;
     }
@@ -5036,7 +5036,7 @@ void TaskModuleModel::loadTaskModules( const QStringList &files )
 {
     kDebug(planDbg())<<files;
     foreach ( const QString &file, files ) {
-        importProject( KUrl( file ), false );
+        importProject( QUrl::fromLocalFile(file), false );
     }
 }
 

@@ -1732,13 +1732,13 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyUrlCmd : public NamedCommand
 {
 public:
-    DocumentModifyUrlCmd( Document *doc, const KUrl &url, const KUndo2MagicString& name = KUndo2MagicString() );
+    DocumentModifyUrlCmd( Document *doc, const QUrl &url, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
     Document *m_doc;
-    KUrl m_value;
-    KUrl m_oldvalue;
+    QUrl m_value;
+    QUrl m_oldvalue;
 };
 
 class KPLATOKERNEL_EXPORT DocumentModifyNameCmd : public NamedCommand

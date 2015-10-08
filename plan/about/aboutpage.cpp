@@ -26,13 +26,13 @@
 #include <QApplication>
 #include <QDir>
 #include <QString>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 #include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
@@ -231,7 +231,7 @@ QString KPlatoAboutPage::tutorial2()
     );
 }
 
-void KPlatoAboutPage::generatePage( KHTMLPart &part, const KUrl &url)
+void KPlatoAboutPage::generatePage( KHTMLPart &part, const QUrl &url)
 {
     QString html;
     if (url.url() == "about:plan/main")

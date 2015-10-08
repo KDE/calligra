@@ -25,7 +25,7 @@ add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
 kcoreaddons_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon ${KDE4_KFILE_LIBS})
-target_link_libraries(calligra_shape_spreadsheet flake)
+target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
 
 install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(TARGETS calligra_shape_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

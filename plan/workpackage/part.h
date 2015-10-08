@@ -73,7 +73,7 @@ public:
     enum DocType { Type_Unknown = 0, Type_Calligra, Type_KParts, Type_Other };
 
     explicit DocumentChild( WorkPackage *parent );
-//    DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent);
+//    DocumentChild( KParts::ReadWritePart *editor, const QUrl &url, const Document *doc, Part *parent);
     
     ~DocumentChild();
     
@@ -91,12 +91,12 @@ public:
     
     QString fileName() const { return m_fileinfo.fileName(); }
     QString filePath() const { return m_fileinfo.canonicalFilePath(); }
-    void setFileInfo( const KUrl &url );
+    void setFileInfo( const QUrl &url );
     const QFileInfo &fileInfo() const { return m_fileinfo; }
 
-    KUrl url() const { return KUrl( filePath() ); }
+    QUrl url() const { return QUrl::fromLocalFile( filePath() ); }
     KParts::ReadWritePart *editor() const { return m_editor; }
-    bool startProcess( KService::Ptr service, const KUrl &url = KUrl() );
+    bool startProcess( KService::Ptr service, const QUrl &url = QUrl() );
     int type() const { return m_type; }
     void setType( int type ) { m_type = type; }
     
@@ -154,7 +154,7 @@ public:
     virtual bool completeSaving( KoStore* store );
 
     /// Extract document file from the store to disk
-    KUrl extractFile( const Document *doc );
+    QUrl extractFile( const Document *doc );
     
     //Config &config() { return m_config; }
     
@@ -241,7 +241,7 @@ protected:
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore * store);
     
-    bool viewDocument( const KUrl &filename );
+    bool viewDocument( const QUrl &filename );
 
 private:
     XMLLoaderObject m_xmlLoader;

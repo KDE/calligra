@@ -259,7 +259,7 @@ void ScheduleEditor::slotEnableActions()
 
     const char *const actionBaselineScheduleIconName =
         sm->isBaselined() ? koIconNameCStr("view-time-schedule-baselined-remove") : koIconNameCStr("view-time-schedule-baselined-add");
-    actionBaselineSchedule->setIcon(KIcon(QLatin1String(actionBaselineScheduleIconName)));
+    actionBaselineSchedule->setIcon(QIcon::fromTheme(QLatin1String(actionBaselineScheduleIconName)));
 
     // enable if scheduled and no one else is baselined
     bool en = sm->isScheduled() && ( sm->isBaselined() || ! m_view->project()->isBaselined() );

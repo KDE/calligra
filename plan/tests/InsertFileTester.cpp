@@ -26,10 +26,9 @@
 #include "kpttask.h"
 #include "kptnode.h"
 
-#include <kurl.h>
-
 #include <QTest>
 
+#include <QUrl>
 #include <QFileInfo>
 
 namespace KPlato
@@ -42,7 +41,7 @@ void InsertFileTester::testVersion_0_6()
     QFileInfo file( "version-0-6.kplato" );
     QVERIFY( file.exists() );
 
-    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    bool res = part.openUrl( QUrl::fromLocalFile( file.absoluteFilePath() ) );
     QVERIFY( res );
 
     Project &p = part.getProject();
@@ -71,7 +70,7 @@ void InsertFileTester::testProject_stats1()
     QFileInfo file( "project_stats1.kplato" );
     QVERIFY( file.exists() );
 
-    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    bool res = part.openUrl( QUrl::fromLocalFile( file.absoluteFilePath() ) );
     QVERIFY( res );
 
     Project &p = part.getProject();
@@ -96,7 +95,7 @@ void InsertFileTester::testPert1()
     QFileInfo file( "pert1.kplato" );
     QVERIFY( file.exists() );
 
-    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    bool res = part.openUrl( QUrl::fromLocalFile( file.absoluteFilePath() ) );
     QVERIFY( res );
 
     Project &p = part.getProject();

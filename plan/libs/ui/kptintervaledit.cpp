@@ -160,7 +160,7 @@ void IntervalEditImpl::enableButtons() {
 
 //-------------------------------------------------------------
 IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<CalendarDay*> &days, QWidget *parent)
-    : KDialog( parent ),
+    : KoDialog( parent ),
     m_calendar( calendar ),
     m_days( days )
 {
@@ -179,7 +179,7 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<Calendar
 }
 
 IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent)
-    : KDialog( parent ),
+    : KoDialog( parent ),
     m_calendar( calendar ),
     m_dates( dates )
 {

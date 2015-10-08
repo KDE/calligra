@@ -110,7 +110,7 @@ bool Config::checkForWorkPackages() const
     return KPlatoSettings::checkForWorkPackages();
 }
 
-KUrl Config::retrieveUrl() const
+QUrl Config::retrieveUrl() const
 {
     return KPlatoSettings::retrieveUrl();
 }

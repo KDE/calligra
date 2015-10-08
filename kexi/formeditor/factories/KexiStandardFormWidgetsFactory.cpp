@@ -45,7 +45,7 @@
 #include <QSlider>
 #include <QDomDocument>
 #include <QStyle>
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 #include <QTreeWidget>
 #endif
 #include <QPixmap>
@@ -169,7 +169,7 @@ KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory(QObject *parent, 
     wComboBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
     addClass(wComboBox);
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 // Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
 //     KFormDesigner::WidgetInfo *wListBox = new KFormDesigner::WidgetInfo(this);
 //     wListBox->setIconName(koIconName("listbox"));
@@ -393,21 +393,6 @@ KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory(QObject *parent, 
     wFrame->setDescription(/* no i18n needed */ "A simple frame container");
     addClass(wFrame);
 
-//! @todo
-#if 0
-// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
-//     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
-//     wSubForm->setIconName(koIconName("form"));
-//     wSubForm->setClassName("SubForm");
-//     wSubForm->setName(xi18n("Sub Form"));
-//     wSubForm->setNamePrefix(
-//         xi18nc("Widget name. This string will be used to name widgets of this class. "
-//    "It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-//     wSubForm->setDescription(xi18n("A form widget included in another Form"));
-//     wSubForm->setAutoSyncForProperty("formName", false);
-//     addClass(wSubForm);
-#endif
-
     //groupbox
     setPropertyDescription("title", xi18nc("'Title' property for group box", "Title"));
     setPropertyDescription("flat", xi18nc("'Flat' property for group box", "Flat"));
@@ -458,7 +443,7 @@ QWidget* KexiStandardFormWidgetsFactory::createWidget(const QByteArray &c, QWidg
         w = new KComboBox(p);
     } else if (c == "KTextEdit") {
         w = new KTextEdit(text, p);
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     } else if (c == "QTreeWidget") {
         QTreeWidget *tw = new QTreeWidget(p);
         w = tw;
@@ -537,11 +522,6 @@ QWidget* KexiStandardFormWidgetsFactory::createWidget(const QByteArray &c, QWidg
     } else if (c == "VFlow") {
         w = new VFlow(p);
         createContainer = true;
-//! @todo
-#if 0
-    } else if (c == "SubForm") {
-        w = new SubForm(container->form(), p);
-#endif
     }
 
     if (w) {
@@ -582,7 +562,7 @@ bool KexiStandardFormWidgetsFactory::createMenuActions(const QByteArray &classna
         menu->addAction( new EditRichTextAction(container, w, menu, this) );
         return true;
     }
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     else if (classname == "QTreeWidget") {
         menu->addAction(koIcon("document-properties"), xi18n("Edit Contents of List Widget"),
             this, SLOT(editListContents()));
@@ -710,7 +690,7 @@ bool KexiStandardFormWidgetsFactory::clearWidgetContent(const QByteArray &classn
 {
     if (classname == "QLineEdit")
         qobject_cast<QLineEdit*>(w)->clear();
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     else if (classname == "QTreeWidget")
         qobject_cast<QTreeWidget*>(w)->clear();
 #endif
@@ -791,7 +771,7 @@ bool KexiStandardFormWidgetsFactory::saveSpecialProperty(const QByteArray &class
         }
         return true;
     }
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     else if (name == "list_contents" && classname == "QTreeWidget") {
         QTreeWidget *treewidget = qobject_cast<QTreeWidget*>(w);
         // First we save the columns
@@ -837,7 +817,7 @@ bool KexiStandardFormWidgetsFactory::saveSpecialProperty(const QByteArray &class
     return true;
 }
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 void
 KexiStandardFormWidgetsFactory::saveListItem(QListWidgetItem *item,
                                QDomNode &parentNode, QDomDocument &domDoc)
@@ -879,7 +859,7 @@ bool KexiStandardFormWidgetsFactory::readSpecialProperty(const QByteArray &class
             combo->addItem(val.toString());
         return true;
     }
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
     else if (tag == "column" && classname == "QTreeWidget") {
         QTreeWidget *tw = qobject_cast<QTreeWidget*>(w);
         int id = 0;
@@ -925,7 +905,7 @@ bool KexiStandardFormWidgetsFactory::readSpecialProperty(const QByteArray &class
     return false;
 }
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 void
 KexiStandardFormWidgetsFactory::readTreeItem(
     QDomElement &node, QTreeWidgetItem *parent, QTreeWidget *treewidget)
@@ -1041,7 +1021,7 @@ bool KexiStandardFormWidgetsFactory::isPropertyVisibleInternal(const QByteArray 
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
+#ifdef KEXI_LIST_FORM_WIDGET_SUPPORT
 void
 KexiStandardFormWidgetsFactory::editListContents()
 {

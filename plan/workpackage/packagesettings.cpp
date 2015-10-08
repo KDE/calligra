@@ -29,7 +29,7 @@ namespace KPlatoWork
 {
 
 PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Work Package Settings") );
     setButtons( Ok|Cancel );

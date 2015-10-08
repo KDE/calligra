@@ -59,7 +59,7 @@ private:
     QPointer<QObject> m_object;
     QString m_name;
 
-    friend KexiTester& operator<<(KexiTester&, const KexiTestObject &);
+    friend KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester&, const KexiTestObject &);
 };
 
 //! @return global KexiTester object.

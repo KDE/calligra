@@ -144,8 +144,8 @@ Q_SIGNALS:
     void unindentTask();
 
     void loadTaskModules( const QStringList &files );
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void saveTaskModule( const QUrl &url, Project *project );
+    void removeTaskModule( const QUrl &url );
 
 public Q_SLOTS:
     /// Activate/deactivate the gui

@@ -306,7 +306,8 @@ void KexiTableScrollArea::setFont(const QFont &font)
     QScrollArea::setFont(font);
 
 #ifdef Q_OS_WIN
-    d->rowHeight = fontMetrics().lineSpacing() + 4;
+    //! @todo KEXI3 WIN32 test this
+    d->recordHeight = fontMetrics().lineSpacing() + 4;
 #else
     d->recordHeight = fontMetrics().lineSpacing() + 1;
 #endif

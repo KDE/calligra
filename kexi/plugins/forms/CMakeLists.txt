@@ -68,7 +68,6 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbutils.cpp
   widgets/kexidbautofield.cpp
   widgets/kexidbform.cpp
-  #todo widgets/kexidbsubform.cpp
   widgets/kexidblabel.cpp
   widgets/kexidbimagebox.cpp
   widgets/KexiDBPushButton.cpp

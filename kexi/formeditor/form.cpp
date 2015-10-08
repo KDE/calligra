@@ -227,7 +227,7 @@ void Form::setConnectionBuffer(ConnectionBuffer *b)
 }
 #endif
 
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
 PixmapCollection* Form::pixmapCollection() const
 {
     return d->pixcollection;
@@ -283,7 +283,7 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     d->toplevel->setForm(this);
 
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     d->pixcollection = new PixmapCollection(container->objectName(), this);
 #endif
 
@@ -579,7 +579,7 @@ void Form::emitActionSignals()
 void Form::emitUndoActionSignals()
 {
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
@@ -805,7 +805,7 @@ bool Form::addCommand(Command *command, AddCommandOption option)
 void Form::emitUndoEnabled()
 {
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
@@ -815,7 +815,7 @@ void Form::emitUndoEnabled()
 void Form::emitRedoEnabled()
 {
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     QAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
@@ -1973,7 +1973,7 @@ void Form::editFormPixmapCollection()
         return;
     }
 //! @todo pixmapcollection
-#ifndef KEXI_NO_PIXMAPCOLLECTION
+#ifdef KEXI_PIXMAP_COLLECTIONS_SUPPORT
     PixmapCollectionEditor dialog(pixmapCollection(), widget()->topLevelWidget());
     dialog.exec();
 #endif

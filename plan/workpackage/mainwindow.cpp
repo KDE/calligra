@@ -154,8 +154,8 @@ void KPlatoWork_MainWindow::slotFileSave()
 
 void KPlatoWork_MainWindow::slotFileOpen()
 {
-    QString file = KFileDialog::getOpenFileName( KUrl(), "*.planwork" );
+    QString file = KFileDialog::getOpenFileName( QUrl(), "*.planwork" );
     if ( ! file.isEmpty() ) {
-        openDocument( file );
+        openDocument( QUrl::fromUserInput(file) );
     }
 }

@@ -38,6 +38,7 @@
 
 #if defined Q_OS_WIN
 #include <windows.h>
+#include <stdio.h>
 #endif
 
 #if defined HAVE_UNAME
@@ -225,10 +226,10 @@ void KexiUserFeedbackAgent::Private::updateData()
     releaseStr = new char[6]; // "xx.xx\0"
 
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx(&versionInfo);
+    GetVersionEx(&versionInfo); //!< @todo KEXI3 WIN32 port this deprecated function
     GetSystemInfo(&sysInfo);
 
-    snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
+    _snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
     ADD("os_release", releaseStr, SystemInfoArea);
 
     delete [6] releaseStr;

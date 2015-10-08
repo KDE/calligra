@@ -236,7 +236,7 @@ void ResourceDialogImpl::slotChooseResource()
 //////////////////  ResourceDialog  ////////////////////////
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
-    : KDialog(parent),
+    : KoDialog(parent),
       m_project( project ),
       m_original(resource),
       m_resource(resource),
@@ -250,7 +250,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     showButtonSeparator( true );
     dia = new ResourceDialogImpl(project, m_resource, resource->isBaselined(), this);
     setMainWidget(dia);
-    KDialog::enableButtonOk(false);
+    KoDialog::enableButtonOk(false);
 
     if ( resource->parentGroup() == 0 ) {
         //HACK to handle calls from ResourcesPanel
@@ -337,7 +337,7 @@ void ResourceDialog::slotResourceRemoved( const Resource *resource )
 }
 
 void ResourceDialog::enableButtonOk() {
-		KDialog::enableButtonOk(true);
+		KoDialog::enableButtonOk(true);
 }
 
 void ResourceDialog::slotCalculationNeeded() {
@@ -345,10 +345,10 @@ void ResourceDialog::slotCalculationNeeded() {
 }
 
 void ResourceDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
+    if (button == KoDialog::Ok) {
         slotOk();
     } else {
-        KDialog::slotButtonClicked(button);
+        KoDialog::slotButtonClicked(button);
     }
 }
 

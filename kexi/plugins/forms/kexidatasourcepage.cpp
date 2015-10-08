@@ -19,6 +19,7 @@
 
 #include "kexidatasourcepage.h"
 #include <KexiIcon.h>
+#include <config-kexi.h>
 #include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiObjectInfoLabel.h>
 #include <widget/KexiDataSourceComboBox.h>
@@ -47,7 +48,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         , m_noDataSourceAvailableMultiText(
             xi18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearFormDataSourceSelection(false)
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
         , m_tableOrQuerySchema(0)
 #endif
 {
@@ -130,7 +131,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
     m_formDataSourceComboSpacer = addWidgetSpacer();
 
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     m_availableFieldsLabel = 0;
     m_addField = 0;
     mainLayout()->addStretch();
@@ -199,7 +200,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 KexiDataSourcePage::~KexiDataSourcePage()
 {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifndef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     delete m_tableOrQuerySchema;
 #endif
 }
@@ -219,7 +220,7 @@ void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
         m_formDataSourceCombo->setDataSource(QString(), QString());
     m_gotoButton->setEnabled(false);
     m_widgetDataSourceCombo->setFieldOrExpression(QString());
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     m_addField->setEnabled(false);
     m_fieldListView->clear();
 #endif
@@ -250,7 +251,7 @@ void KexiDataSourcePage::slotGotoSelected()
 
 void KexiDataSourcePage::slotInsertSelectedFields()
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     QStringList selectedFieldNames(m_fieldListView->selectedFieldNames());
     if (selectedFieldNames.isEmpty())
         return;
@@ -264,14 +265,14 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePluginId, const QString& sourceName,
         const QString& fieldName)
 {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-    Q_UNUSED(sourcePluginId);
-    Q_UNUSED(sourceName);
-    Q_UNUSED(fieldName);
-#else
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     QStringList selectedFields;
     selectedFields.append(fieldName);
     emit insertAutoFields(sourcePluginId, sourceName, selectedFields);
+#else
+    Q_UNUSED(sourcePluginId);
+    Q_UNUSED(sourceName);
+    Q_UNUSED(fieldName);
 #endif
 }
 
@@ -301,10 +302,10 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
             m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(),
             pluginId == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-            m_tableOrQuerySchema = tableOrQuery;
-#else
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
             m_fieldListView->setSchema(tableOrQuery);
+#else
+            m_tableOrQuerySchema = tableOrQuery;
 #endif
             dataSourceFound = true;
             m_widgetDataSourceCombo->setTableOrQuery(name, pluginId == "org.kexi-project.table");
@@ -319,7 +320,7 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
     if (dataSourceFound) {
         slotFieldListViewSelectionChanged();
     } else {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
         m_addField->setEnabled(false);
 #endif
     }
@@ -330,13 +331,13 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
 void KexiDataSourcePage::slotFieldSelected()
 {
     KDbField::Type dataType = KDbField::InvalidType;
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
+    //! @todo this should also work for expressions
+        KDbField *field = m_fieldListView->schema()->field(
+                                   m_widgetDataSourceCombo->fieldOrExpression());
+#else
     KDbField *field = m_tableOrQuerySchema->field(
                                m_widgetDataSourceCombo->fieldOrExpression());  //temp
-#else
-//! @todo this should also work for expressions
-    KDbField *field = m_fieldListView->schema()->field(
-                               m_widgetDataSourceCombo->fieldOrExpression());
 #endif
     if (field)
         dataType = field->type();
@@ -427,7 +428,7 @@ void KexiDataSourcePage::assignPropertySet(KPropertySet* propertySet)
 
 void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     //update "add field" button's state
     for (Q3ListViewItemIterator it(m_fieldListView); it.current(); ++it) {
         if (it.current()->isSelected()) {
@@ -444,7 +445,7 @@ void KexiDataSourcePage::updateSourceFieldWidgetsAvailability()
     const bool hasDataSource = m_formDataSourceCombo->isSelectionValid();
     m_widgetDataSourceCombo->setEnabled(hasDataSource);
     m_widgetDSLabel->setEnabled(hasDataSource);
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_AUTOFIELD_FORM_WIDGET_SUPPORT
     m_fieldListView->setEnabled(hasDataSource);
     m_availableFieldsLabel->setEnabled(hasDataSource);
     m_mousePointerLabel->setEnabled(hasDataSource);

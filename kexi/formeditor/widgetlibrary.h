@@ -38,6 +38,7 @@ class QWidget;
 class QVariant;
 class QDomDocument;
 class QDomElement;
+class KexiFormWidgetsPluginMetaData;
 
 namespace KFormDesigner
 {
@@ -202,6 +203,8 @@ protected:
      */
     void loadFactories();
 #endif
+
+    void setErrorMessage(KexiFormWidgetsPluginMetaData *pluginMetaData, const QString& errorMessage);
 
     class Private;
     Private * const d;

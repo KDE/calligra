@@ -509,7 +509,7 @@ public:
     KHelpMenu *helpMenu;
     KexiProject *prj;
     KSharedConfig::Ptr config;
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     KexiContextHelp *ctxHelp;
 #endif
     KexiProjectNavigator *navigator;
@@ -540,7 +540,7 @@ public:
     *action_project_properties,
     *action_project_relations, *action_project_import_data_table,
     *action_project_export_data_table;
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     QAction *action_project_print, *action_project_print_preview,
         *action_project_print_setup;
 #endif
@@ -564,7 +564,7 @@ public:
 
     //! view menu
     QAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
-#ifndef KEXI_NO_CTXT_HELP
+#ifdef KEXI_SHOW_CONTEXT_HELP
     KToggleAction *action_show_helper;
 #endif
     //! data menu
@@ -613,7 +613,7 @@ public:
     //! Used for delayed windows closing for 'close all'
     QList<KexiWindow*> windowsToClose;
 
-#ifndef KEXI_NO_QUICK_PRINTING
+#ifndef KEXI_QUICK_PRINTING_SUPPORT
     //! Opened page setup dialogs, used by printOrPrintPreviewForItem().
     QHash<int, KexiWindow*> pageSetupWindows;
 

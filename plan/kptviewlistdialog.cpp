@@ -31,10 +31,10 @@ namespace KPlato
 {
 
 ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Add View") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new AddViewPanel( view, viewlist, this );
@@ -273,10 +273,10 @@ void AddViewPanel::changed()
 
 //------------------------
 ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Configure View" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new EditViewPanel( viewlist, item, this );
@@ -387,10 +387,10 @@ void EditViewPanel::fillAfter( ViewListItem *cat )
 
 //------------------------
 ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Configure Category" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new EditCategoryPanel( viewlist, item, this );
@@ -475,10 +475,10 @@ void EditCategoryPanel::fillAfter()
 
 //------ Reports
 ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Add Report" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new AddReportsViewPanel( view, viewlist, this );

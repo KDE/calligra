@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 
 namespace KPlato
@@ -32,7 +32,7 @@ class WorkPackageSendPanel;
 class Node;
 class ScheduleManager;
 
-class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
+class KPLATOUI_EXPORT WorkPackageSendDialog : public KoDialog
 {
     Q_OBJECT
 public:

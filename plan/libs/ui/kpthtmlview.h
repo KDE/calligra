@@ -28,7 +28,7 @@
 
 class KoDocument;
 
-class KUrl;
+class QUrl;
 class QPoint;
 
 
@@ -42,7 +42,7 @@ class KPLATOUI_EXPORT HtmlView : public ViewBase
 public:
     HtmlView(KoPart *part, KoDocument *doc, QWidget *parent);
 
-    bool openHtml( const KUrl &url );
+    bool openHtml( const QUrl &url );
 
     void setupGui();
 

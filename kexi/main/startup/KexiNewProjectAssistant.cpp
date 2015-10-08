@@ -210,8 +210,6 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
     connect(fileHandler, SIGNAL(askForOverwriting(KexiContextMessage)),
             this, SLOT(askForOverwriting(KexiContextMessage)));
 
-    contents->file_requester->fileDialog()->setWindowTitle(
-        xi18nc("@window:title", "Save New Project As"));
     updateUrl();
 
     setContents(contents);
@@ -535,9 +533,7 @@ public:
 
     ~Private()
     {
-        KDbMessageHandler *h = q->messageHandler();
         q->setMessageHandler(0);
-        delete h;
     }
 
     KexiTemplateSelectionPage* templateSelectionPage() {

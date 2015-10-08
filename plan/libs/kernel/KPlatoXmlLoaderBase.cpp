@@ -1106,7 +1106,7 @@ bool KPlatoXmlLoaderBase::load( Document *document, const KoXmlElement &element,
 {
     kDebug(kplatoXmlDebugArea())<<"document";
     Q_UNUSED(status);
-    document->setUrl( KUrl( element.attribute( "url" ) ) );
+    document->setUrl( QUrl( element.attribute( "url" ) ) );
     document->setType( ( Document::Type )( element.attribute( "type" ).toInt() ) );
     document->setStatus( element.attribute( "status" ) );
     document->setSendAs( ( Document::SendAs )( element.attribute( "sendas" ).toInt() ) );

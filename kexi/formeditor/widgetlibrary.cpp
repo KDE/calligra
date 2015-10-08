@@ -233,7 +233,7 @@ private:
             q->m_result = KDbResult(ERR_OBJECT_NOT_FOUND,
                                     xi18nc("@info", "Could not load Kexi Form Widgets plugin file \"%1\".",
                                     pluginMetaData->fileName()));
-            pluginMetaData->setErrorMessage(q->result().message());
+            q->setErrorMessage(pluginMetaData, q->result().message());
             qWarning() << q->result().message();
             return 0;
         }
@@ -761,3 +761,8 @@ ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem* item)
     return wi->factory()->selectableItem(item);
 }
 
+
+void WidgetLibrary::setErrorMessage(KexiFormWidgetsPluginMetaData *pluginMetaData, const QString& errorMessage)
+{
+    pluginMetaData->setErrorMessage(errorMessage);
+}

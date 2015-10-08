@@ -89,7 +89,7 @@ KoMainWindow *KarbonPart::createMainWindow()
     return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
-void KarbonPart::openTemplate(const KUrl& url)
+void KarbonPart::openTemplate(const QUrl& url)
 {
     KoPart::openTemplate(url);
 
