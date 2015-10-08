@@ -21,8 +21,8 @@
 #include "VectorShapeConfigWidget.h"
 
 #include "VectorShape.h"
-// KDE
-#include <kdebug.h>
+#include "VectorDebug.h"
+// KF5
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <KIO/Job>

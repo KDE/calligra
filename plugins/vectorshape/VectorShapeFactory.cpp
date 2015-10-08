@@ -24,6 +24,7 @@
 // VectorShape
 #include "VectorShape.h"
 #include "VectorShapeConfigWidget.h"
+#include "VectorDebug.h"
 
 // Calligra
 #include <KoXmlNS.h>
@@ -31,9 +32,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 
 VectorShapeFactory::VectorShapeFactory()

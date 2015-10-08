@@ -36,9 +36,6 @@
 #include <QThreadPool>
 #include <QSvgRenderer>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
@@ -55,6 +52,7 @@
 #include "WmfPainterBackend.h"
 
 // Vector shape
+#include "VectorDebug.h"
 #include "EmfParser.h"
 #include "EmfOutputPainterStrategy.h"
 #include "EmfOutputDebugStrategy.h"
@@ -129,7 +127,7 @@ void RenderThread::run()
     image->fill(0);
     QPainter painter;
     if (!painter.begin(image)) {
-        kWarning(31000) << "Failed to create image-cache";
+        warnVector << "Failed to create image-cache";
         delete image;
         image = 0;
     } else {
@@ -199,10 +197,10 @@ void RenderThread::drawEmf(QPainter &painter) const
 {
     // FIXME: Make emfOutput use QSizeF
     QSize  shapeSizeInt( m_size.width(), m_size.height() );
-    //kDebug(31000) << "-------------------------------------------";
-    //kDebug(31000) << "size:     " << shapeSizeInt << m_size;
-    //kDebug(31000) << "position: " << position();
-    //kDebug(31000) << "-------------------------------------------";
+    //debugVector << "-------------------------------------------";
+    //debugVector << "size:     " << shapeSizeInt << m_size;
+    //debugVector << "position: " << position();
+    //debugVector << "-------------------------------------------";
 
     Libemf::Parser  emfParser;
 
@@ -311,7 +309,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
 bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    //kDebug(31000) <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
+    //debugVector <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -332,7 +330,7 @@ inline static int read32(const char *buffer, const int offset)
 bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
                                       KoShapeLoadingContext &context)
 {
-    //kDebug(31000) <<"Loading ODF element: " << element.tagName();
+    //debugVector <<"Loading ODF element: " << element.tagName();
     QMutexLocker locker(&m_mutex);
 
     // Get the reference to the vector file.  If there is no href, then just return.
@@ -357,7 +355,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     m_contents = store->read(size);
     store->close();
     if (m_contents.count() < size) {
-        kDebug(31000) << "Too few bytes read: " << m_contents.count() << " instead of " << size;
+        debugVector << "Too few bytes read: " << m_contents.count() << " instead of " << size;
         return false;
     }
 
@@ -430,7 +428,7 @@ VectorShape::VectorType VectorShape::vectorType(const QByteArray &newContents)
 
 bool VectorShape::isWmf(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for WMF";
+    debugVector << "Check for WMF";
 
     const char *data = bytes.constData();
     const int   size = bytes.count();
@@ -442,19 +440,19 @@ bool VectorShape::isWmf(const QByteArray &bytes)
     if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232')
     {
         // FIXME: Is this a compressed wmf?  Check it up.
-        kDebug(31000) << "WMF identified: header 1";
+        debugVector << "WMF identified: header 1";
         return true;
     }
 
     if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
-        kDebug(31000) << "WMF identified: header 2";
+        debugVector << "WMF identified: header 2";
         return true;
     }
 
     if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
-        kDebug(31000) << "WMF identified: header 3";
+        debugVector << "WMF identified: header 3";
         return true;
     }
 
@@ -463,7 +461,7 @@ bool VectorShape::isWmf(const QByteArray &bytes)
 
 bool VectorShape::isEmf(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for EMF";
+    debugVector << "Check for EMF";
 
     const char *data = bytes.constData();
     const int   size = bytes.count();
@@ -472,7 +470,7 @@ bool VectorShape::isEmf(const QByteArray &bytes)
     // 1. Check type
     qint32 mark = read32(data, 0);
     if (mark != 0x00000001) {
-        //kDebug(31000) << "Not an EMF: mark = " << mark << " instead of 0x00000001";
+        //debugVector << "Not an EMF: mark = " << mark << " instead of 0x00000001";
         return false;
     }
 
@@ -480,7 +478,7 @@ bool VectorShape::isEmf(const QByteArray &bytes)
     if (size > 44
         && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
-        kDebug(31000) << "EMF identified";
+        debugVector << "EMF identified";
         return true;
     }
 
@@ -489,11 +487,11 @@ bool VectorShape::isEmf(const QByteArray &bytes)
 
 bool VectorShape::isSvm(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for SVM";
+    debugVector << "Check for SVM";
 
     // Check the SVM signature.
     if (bytes.startsWith("VCLMTF")) {
-        kDebug(31000) << "SVM identified";
+        debugVector << "SVM identified";
         return true;
     }
 
@@ -502,6 +500,6 @@ bool VectorShape::isSvm(const QByteArray &bytes)
 
 bool VectorShape::isSvg(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for SVG";
+    debugVector << "Check for SVG";
     return (bytes.contains("svg"));
 }
