@@ -7,6 +7,7 @@ add_subdirectory( data )
 include_directories(   ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
 
 set(autocorrect_SRCS
+    AutocorrectDebug.cpp
     AutocorrectPlugin.cpp
     Autocorrect.cpp
     AutocorrectFactory.cpp

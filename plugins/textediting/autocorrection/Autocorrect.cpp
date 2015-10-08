@@ -19,6 +19,7 @@
  */
 #include "Autocorrect.h"
 #include "AutocorrectConfigDialog.h"
+#include "AutocorrectDebug.h"
 
 #include <QTextBlock>
 #include <QAction>
@@ -30,7 +31,6 @@
 #include <kconfiggroup.h>
 #include <kcalendarsystem.h>
 #include <KoResourcePaths.h>
-#include <kdebug.h>
 
 Autocorrect::Autocorrect()
 {
@@ -563,7 +563,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     QString word = _word;
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from Calligra 1.x branch */
-    //kDebug() << "link:" << word;
+    //debugAutocorrect << "link:" << word;
 
     // we start by iterating through a list of schemes, and if no match is found,
     // we proceed to 3 special cases
@@ -668,7 +668,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
         } else if (linkType == FTP) {
             word.prepend(QLatin1String("ftp://"));
         }
-        //kDebug() << "modified word:" << word;
+        //debugAutocorrect << "modified word:" << word;
         return word;
     }
 
@@ -881,7 +881,7 @@ void Autocorrect::writeAutocorrectXmlEntry()
     const QString fname = KoResourcePaths::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
-        qDebug()<<"We can't save in file :"<<fname;
+        debugAutocorrect << "We can't save in file :" << fname;
         return;
     }
     QDomDocument root(QLatin1String("autocorrection"));
