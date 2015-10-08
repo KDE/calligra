@@ -35,6 +35,7 @@ set( musiccore_SRCS
 )
 
 set (musicshape_LIB_SRCS
+    MusicDebug.cpp
     MusicShape.cpp
     MusicShapeFactory.cpp
     MusicTool.cpp

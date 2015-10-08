@@ -39,7 +39,7 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
+#include "MusicDebug.h"
 #include <klocalizedstring.h>
 
 #include <QKeyEvent>

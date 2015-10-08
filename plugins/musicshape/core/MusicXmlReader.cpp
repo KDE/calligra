@@ -30,7 +30,7 @@
 
 #include <KoXmlReader.h>
 
-#include <kdebug.h>
+#include "MusicDebug.h"
 
 #include <QHash>
 
@@ -78,7 +78,7 @@ Sheet* MusicXmlReader::loadSheet(const KoXmlElement& scoreElement)
     
     KoXmlElement partList = namedItem(scoreElement, "part-list");
     if (partList.isNull()) {
-        //kDebug() << "no part list found";
+        //debugMusic << "no part list found";
         return 0;
     }
     KoXmlElement elem;

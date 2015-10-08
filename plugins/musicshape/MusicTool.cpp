@@ -19,7 +19,7 @@
 #include <QPainter>
 #include <QTabWidget>
 
-#include <kdebug.h>
+#include "MusicDebug.h"
 #include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
@@ -44,7 +44,7 @@ MusicTool::~MusicTool()
 void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
-    //kDebug() ;
+    //debugMusic ;
 
     foreach (KoShape *shape, shapes) {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
@@ -62,7 +62,7 @@ void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
 
 void MusicTool::deactivate()
 {
-  //kDebug()<<"MusicTool::deactivate";
+  //debugMusic<<"MusicTool::deactivate";
   m_musicshape = 0;
 }
 

@@ -56,7 +56,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool doE
         firstBar = sheet->staffSystem(firstSystem)->firstBar();
     }
 
-    //kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
+    //debugMusic << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
 
     if (doEngraveBars || true) {
         // engrave all bars in the sheet
@@ -544,10 +544,10 @@ void Engraver::engraveBar(Bar* bar, qreal sizeFactor)
                         qreal k = (stemEnds[b].y() - stemEnds[a].y()) / (stemEnds[b].x() - stemEnds[a].x());
                         qreal l = stemEnds[a].y() - (stemEnds[a].x() * k);
 
-                        //kDebug() << "a:" << stemEnds[a] << ", b:" << stemEnds[b] << ", k:" << k << ", l:" << l;
+                        //debugMusic << "a:" << stemEnds[a] << ", b:" << stemEnds[b] << ", k:" << k << ", l:" << l;
 
                         //for (int j = 0; j < stemEnds.size(); j++) {
-                        //    kDebug() << "    " << stemEnds[j] << "; " << (k * stemEnds[j].x() + l);
+                        //    debugMusic << "    " << stemEnds[j] << "; " << (k * stemEnds[j].x() + l);
                         //}
                         // check if it is entirely above all stemEnds, and calculate sum of distances to stemEnds
                         bool validLine = true;
@@ -571,12 +571,12 @@ void Engraver::engraveBar(Bar* bar, qreal sizeFactor)
                     }
                 }
 
-                //kDebug() << "bestError:" << bestError << "bestK:" << bestK << "bestL:" << bestL;
+                //debugMusic << "bestError:" << bestError << "bestK:" << bestK << "bestL:" << bestL;
 
                 c->setStemLength(c->desiredStemLength() + bestL / c->staff()->lineSpacing());
                 Chord* endChord = c->beamEnd(0);
                 qreal endY = stemEnds[stemEnds.size()-1].x() * bestK + bestL;
-                //kDebug() << "old y:" << stemEnds[stemEnds.size()-1].y() << "new y:" << endY;
+                //debugMusic << "old y:" << stemEnds[stemEnds.size()-1].y() << "new y:" << endY;
                 qreal extra = endY - stemEnds[stemEnds.size()-1].y();
                 endChord->setStemLength(endChord->desiredStemLength() + extra / endChord->staff()->lineSpacing());
             }

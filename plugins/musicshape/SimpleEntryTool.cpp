@@ -23,7 +23,7 @@
 #include <QXmlStreamReader>
 #include <QInputDialog>
 
-#include <kdebug.h>
+#include "MusicDebug.h"
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <QAction>
@@ -332,7 +332,7 @@ void SimpleEntryTool::activate(ToolActivation toolActivation, const QSet<KoShape
 
 void SimpleEntryTool::deactivate()
 {
-    //kDebug()<<"SimpleEntryTool::deactivate";
+    //debugMusic<<"SimpleEntryTool::deactivate";
     m_musicshape = 0;
     m_cursor = 0;
 }
@@ -434,18 +434,18 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
     p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
 
-    //kDebug() << "pos:" << p;
+    //debugMusic << "pos:" << p;
     // find closest staff system
     StaffSystem* system = 0;
     for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
         StaffSystem* ss = sheet->staffSystem(i);
-        //kDebug() << "system" << i << "has top" << ss->top();
+        //debugMusic << "system" << i << "has top" << ss->top();
         if (ss->top() > p.y()) break;
         system = ss;
     }
 
     if(system == 0) {
-        //kDebug() << "no staff system found";
+        //debugMusic << "no staff system found";
         return;
     }
 
@@ -471,7 +471,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
 //    int line = closestStaff->line(yrel - closestStaff->top());
-//    kDebug() << "line: " << line;
+//    debugMusic << "line: " << line;
 
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -579,7 +579,7 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
         }
         
         //    int line = closestStaff->line(yrel - closestStaff->top());
-        //    kDebug() << "line: " << line;
+        //    debugMusic << "line: " << line;
         
         Part* part = closestStaff->part();
         for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -716,7 +716,7 @@ int SimpleEntryTool::voice()
 
 void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff, Staff* endStaff)
 {
-    //kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
+    //debugMusic << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
     m_selectionStaffStart = startStaff;
@@ -759,7 +759,7 @@ void SimpleEntryTool::importSheet()
     KoXmlDocument doc;
     KoXml::setDocument(doc, &f, true);
     KoXmlElement e = doc.documentElement();
-    //kDebug() << e.localName() << e.nodeName();
+    //debugMusic << e.localName() << e.nodeName();
     Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
     if (sheet) {
         m_musicshape->setSheet(sheet, 0);
@@ -782,7 +782,7 @@ void SimpleEntryTool::exportSheet()
 
     b.seek(0);
 
-    //kDebug() << b.data();
+    //debugMusic << b.data();
     QFile f(file);
     f.open(QIODevice::WriteOnly);
     QXmlStreamWriter w(&f);
@@ -790,8 +790,8 @@ void SimpleEntryTool::exportSheet()
     QXmlStreamReader xml(&b);
     while (!xml.atEnd()) {
         xml.readNext();
-        //kDebug() << xml.tokenType() << xml.tokenString();
-        //kDebug() << xml.error() << xml.errorString();
+        //debugMusic << xml.tokenType() << xml.tokenString();
+        //debugMusic << xml.error() << xml.errorString();
         if (xml.isCDATA()) {
             w.writeCDATA(xml.text().toString());
         } else if (xml.isCharacters()) {
