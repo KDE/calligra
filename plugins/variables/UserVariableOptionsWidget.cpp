@@ -18,9 +18,12 @@
  */
 
 #include "UserVariableOptionsWidget.h"
+
 #include "UserVariable.h"
+#include "VariablesDebug.h"
 
 #include <KoVariableManager.h>
+
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -28,10 +31,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
-#include <kdebug.h>
 
 UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
     : QWidget(parent)

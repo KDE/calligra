@@ -18,13 +18,14 @@
  */
 
 #include "UserVariableFactory.h"
+
 #include "UserVariable.h"
+#include "VariablesDebug.h"
 
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 UserVariableFactory::UserVariableFactory()
     : KoInlineObjectFactoryBase("user", TextVariable)

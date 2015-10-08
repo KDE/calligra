@@ -18,7 +18,9 @@
  */
 
 #include "UserVariable.h"
+
 #include "UserVariableOptionsWidget.h"
+#include "VariablesDebug.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -31,9 +33,9 @@
 #include <KoVariableManager.h>
 #include <KoTextDocument.h>
 
-#include <QTextInlineObject>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+
+#include <QTextInlineObject>
 
 UserVariable::UserVariable()
     : KoVariable(true)
@@ -105,7 +107,7 @@ void UserVariable::readProperties(const KoProperties *props)
 {
     m_property = props->intProperty("varproperty");
     //m_name = props->stringProperty("varname");
-    //kDebug() << m_property << m_name;
+    //debugVariables << m_property << m_name;
     //valueChanged();
 }
 

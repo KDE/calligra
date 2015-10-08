@@ -20,14 +20,15 @@
 
 #include "InfoVariableFactory.h"
 
+#include "VariablesDebug.h"
+#include "InfoVariable.h"
+
 #include <KoProperties.h>
 #include <KoXmlNS.h>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <QStringList>
 
-#include "InfoVariable.h"
 
 InfoVariableFactory::InfoVariableFactory()
         : KoInlineObjectFactoryBase("info", TextVariable)

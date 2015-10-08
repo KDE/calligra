@@ -10,6 +10,7 @@ include_directories(
 )
 
 set(textvariables_SRCS
+    VariablesDebug.cpp
     VariablesPlugin.cpp
     UserVariable.cpp
     UserVariableFactory.cpp

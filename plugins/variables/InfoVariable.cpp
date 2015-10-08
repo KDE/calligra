@@ -20,8 +20,9 @@
 
 #include "InfoVariable.h"
 
+#include "VariablesDebug.h"
+
 #include <KoProperties.h>
-#include <kdebug.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
