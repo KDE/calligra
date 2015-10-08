@@ -20,13 +20,13 @@
 
 #include "SpellCheckMenu.h"
 #include "SpellCheck.h"
+#include "SpellCheckDebug.h"
 
-#include <kdebug.h>
 #include <kactionmenu.h>
-#include <QAction>
 #include <kmenu.h>
 #include <klocalizedstring.h>
 
+#include <QAction>
 #include <QSignalMapper>
 
 SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck)

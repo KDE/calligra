@@ -23,6 +23,7 @@
 #include "SpellCheck.h"
 #include "BgSpellCheck.h"
 #include "SpellCheckMenu.h"
+#include "SpellCheckDebug.h"
 
 #include <KoCharacterStyle.h>
 #include <KoTextBlockData.h>
@@ -32,8 +33,6 @@
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
-#include <QAction>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
@@ -42,6 +41,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QTextCharFormat>
+#include <QAction>
 
 SpellCheck::SpellCheck()
     : m_document(0)

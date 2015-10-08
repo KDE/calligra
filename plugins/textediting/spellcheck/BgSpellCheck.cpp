@@ -20,13 +20,13 @@
 
 #include "BgSpellCheck.h"
 #include "SpellCheck.h"
+#include "SpellCheckDebug.h"
 
 #include <KoCharacterStyle.h>
 
 #include <QTextDocument>
 #include <QCoreApplication>
 #include <QTextBlock>
-#include <kdebug.h>
 
 #define MaxCharsPerRun 1000
 
@@ -72,7 +72,7 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
         }
     }
     if (m_currentPosition < m_endPosition) {
-        kDebug(31000) << "Starting:" << m_currentPosition << m_endPosition;
+        debugSpellCheck << "Starting:" << m_currentPosition << m_endPosition;
         start();
     } else {
         emit done();
@@ -120,10 +120,10 @@ QString BgSpellCheck::fetchMoreText()
     else
         country = m_defaultCountry;
 
-    // qDebug() << "init" << language << country << "/" << iter.fragment().position();
+    // debugSpellCheck << "init" << language << country << "/" << iter.fragment().position();
     while(true) {
         end = iter.fragment().position() + iter.fragment().length();
-        // qDebug() << " + " << iter.fragment().position() << "-" << iter.fragment().position() + iter.fragment().length()
+        // debugSpellCheck << " + " << iter.fragment().position() << "-" << iter.fragment().position() + iter.fragment().length()
             // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
         if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun)) {
             break;
@@ -136,9 +136,9 @@ QString BgSpellCheck::fetchMoreText()
             break;
         }
         Q_ASSERT(iter.fragment().isValid());
-        // qDebug() << "Checking for viability forwarding to " << iter.fragment().position();
+        // debugSpellCheck << "Checking for viability forwarding to " << iter.fragment().position();
         cf = iter.fragment().charFormat();
-        // qDebug() << " new fragment language;"
+        // debugSpellCheck << " new fragment language;"
             // << (cf.hasProperty(KoCharacterStyle::Language) ?  cf.property(KoCharacterStyle::Language).toString() : "unset");
 
         if ((cf.hasProperty(KoCharacterStyle::Language)
@@ -157,7 +157,7 @@ QString BgSpellCheck::fetchMoreText()
     }
 
     if (m_currentLanguage != language || m_currentCountry != country) {
-        kDebug(31000) << "switching to language" << language << country;
+        debugSpellCheck << "switching to language" << language << country;
         m_currentLanguage = language;
         m_currentCountry = country;
 #if 0
@@ -181,7 +181,7 @@ QString BgSpellCheck::fetchMoreText()
 
 void BgSpellCheck::foundMisspelling(const QString &word, int start)
 {
-    // kDebug(31000) << "Mispelling: " << word << " : " << start;
+    // debugSpellCheck << "Mispelling: " << word << " : " << start;
     emit misspelledWord(word, m_currentPosition + start, true);
     BackgroundChecker::continueChecking();
 }

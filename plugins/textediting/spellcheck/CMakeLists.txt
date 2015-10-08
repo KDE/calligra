@@ -7,6 +7,7 @@ add_subdirectory( tests )
 include_directories(   ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(spellcheck_SRCS
+    SpellCheckDebug.cpp
     SpellCheckPlugin.cpp
     SpellCheck.cpp
     SpellCheckFactory.cpp
