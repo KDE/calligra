@@ -24,10 +24,10 @@
 #include "VectorDebug.h"
 // KF5
 #include <kfilewidget.h>
-#include <kurl.h>
 #include <KIO/Job>
 // Qt
 #include <QVBoxLayout>
+#include <QUrl>
 
 void LoadWaiter::setImageData(KJob *job)
 {
@@ -63,7 +63,7 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget = new KFileWidget(QUrl(/*QT5TODO:"kfiledialog:///OpenDialog"*/), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     const QStringList mimetypes = QStringList()
         << QLatin1String("image/x-wmf")
@@ -81,7 +81,7 @@ void VectorShapeConfigWidget::save()
     if (!m_shape)
         return;
     m_fileWidget->accept();
-    KUrl url = m_fileWidget->selectedUrl();
+    QUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         LoadWaiter *waiter = new LoadWaiter(m_shape);

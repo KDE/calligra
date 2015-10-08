@@ -24,9 +24,10 @@
 
 #include <QToolButton>
 #include <QGridLayout>
+#include <QUrl>
+#include <QFileDialog>
+
 #include <klocalizedstring.h>
-#include <kurl.h>
-#include <kfiledialog.h>
 #include <KIO/Job>
 
 #include <KoIcon.h>
@@ -84,7 +85,7 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml"));
+    const QUrl url = QFileDialog::getOpenFileUrl(/*QT5TODO: QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml")*/);
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

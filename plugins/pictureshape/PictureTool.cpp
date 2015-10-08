@@ -24,9 +24,10 @@
 #include "ClipCommand.h"
 #include "CropWidget.h"
 
+#include <QUrl>
+#include <QFileDialog>
+
 #include <klocalizedstring.h>
-#include <kurl.h>
-#include <kfiledialog.h>
 #include <KIO/Job>
 
 #include <KoIcon.h>
@@ -159,7 +160,7 @@ void PictureTool::changeUrlPressed()
 {
     if (m_pictureshape == 0)
         return;
-    KUrl url = KFileDialog::getOpenUrl();
+    QUrl url = QFileDialog::getOpenFileUrl();
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

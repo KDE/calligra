@@ -23,7 +23,7 @@
 #include <QWidget>
 
 class KFileWidget;
-class KUrl;
+class QUrl;
 class QCheckBox;
 
 class SelectVideoWidget : public QWidget
@@ -32,7 +32,7 @@ public:
     explicit SelectVideoWidget(QWidget *parent = 0);
     ~SelectVideoWidget();
 
-    KUrl selectedUrl() const;
+    QUrl selectedUrl() const;
     bool saveEmbedded();
 
     void accept();
