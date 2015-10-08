@@ -25,11 +25,11 @@
 #include <QAction>
 #include <QFile>
 #include <QDomDocument>
+#include <QLocale>
 
+#include <KConfig>
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kcalendarsystem.h>
 #include <KoResourcePaths.h>
 
 Autocorrect::Autocorrect()
@@ -69,9 +69,9 @@ Autocorrect::Autocorrect()
 
     readConfig();
 
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     for (int i = 1; i <=7; i++)
-        m_cacheNameOfDays.append(locale->calendar()->weekDayName(i).toLower());
+        m_cacheNameOfDays.append(locale.dayName(i).toLower()); // TODO: what about QLocale::standaloneDayName?
 }
 
 Autocorrect::~Autocorrect()
@@ -734,8 +734,7 @@ void Autocorrect::readAutocorrectXmlEntries()
     //
     // in any case we load the custom-* files on top, just in case the user has edited them
     // These costum files is only the kde shared one, as that is where we save too
-    KLocale *locale = KLocale::global();
-    QString kdelang = locale->languageList().first();
+    QString kdelang = QLocale().uiLanguages().first();
     kdelang.remove(QRegExp("@.*"));
 
     QStringList folders;
