@@ -208,8 +208,7 @@ protected:
     void setToolType(const QString &toolType);
     /**
      * Set an icon to be used in the toolBox.
-     * @param iconName the basename (without extension) of the icon
-     * @see KIconLoader
+     * @param iconName the name of the icon per icon theme spec
      */
     void setIconName(const QString &iconName);
     /**
