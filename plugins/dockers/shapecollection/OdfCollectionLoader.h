@@ -31,8 +31,6 @@ class KoShapeLoadingContext;
 class QTimer;
 class KoShape;
 
-class KUrl;
-
 class OdfCollectionLoader : public QObject
 {
     Q_OBJECT
@@ -48,7 +46,6 @@ class OdfCollectionLoader : public QObject
     protected:
         void nextFile();
         void loadNativeFile(const QString& path);
-        QString findMimeTypeByUrl(const KUrl& url);
 
     protected Q_SLOTS:
         void loadShape();
