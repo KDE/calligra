@@ -33,6 +33,8 @@
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 
+#include <klocalizedstring.h>
+
 #include <QFontMetricsF>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
@@ -40,8 +42,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>
-#include <knuminput.h>
-#include <klocalizedstring.h>
+#include <QSpinBox>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)
@@ -223,7 +224,7 @@ QWidget* ChapterVariable::createOptionsWidget()
     QLabel *levelLabel = new QLabel(i18n("Level:"), widget);
     levelLabel->setAlignment(Qt::AlignRight);
     layout->addWidget(levelLabel, 1, 0);
-    KIntNumInput *levelEdit = new KIntNumInput(widget);
+    QSpinBox *levelEdit = new QSpinBox(widget);
     levelLabel->setBuddy(levelEdit);
     levelEdit->setMinimum(1);
     levelEdit->setValue(m_level);
