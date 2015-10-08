@@ -29,7 +29,7 @@ KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory()
         : KoShapeFactoryBase(KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
 {
     setToolTip(i18n("Calligraphic Shape"));
-    setIconName(koIconNameCStr("calligraphy"));
+    setIconName(koIconName("calligraphy"));
     setLoadingPriority(1);
     setHidden(true);
 }

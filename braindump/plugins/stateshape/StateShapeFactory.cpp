@@ -31,7 +31,7 @@ StateShapeFactory::StateShapeFactory()
                          i18n("State Shape"))
 {
     setToolTip(i18n("A state shape"));
-    setIconName(koIconNameCStr("stateshape"));
+    setIconName(koIconName("stateshape"));
     setXmlElementNames("http://kde.org/braindump", QStringList("state"));
 }
 

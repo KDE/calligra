@@ -49,7 +49,7 @@ MusicShapeFactory::MusicShapeFactory()
     : KoShapeFactoryBase(MusicShapeId, i18n( "Music Shape" ) )
 {
     setToolTip( i18n( "A shape which provides a music editor" ) );
-    setIconName(koIconNameCStrNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
+    setIconName(koIconNameNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
     setXmlElementNames( "http://www.calligra.org/music", QStringList("shape") );
     setLoadingPriority( 1 );
 }

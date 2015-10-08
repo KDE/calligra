@@ -50,7 +50,7 @@ TableShapeFactory::TableShapeFactory()
     : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "spreadsheetshape-deferred")
 {
     setToolTip(i18n("Spreadsheet Shape"));
-    setIconName(koIconNameCStr("spreadsheetshape"));
+    setIconName(koIconName("spreadsheetshape"));
     setXmlElementNames(KoXmlNS::table, QStringList() << "table");
 }
 

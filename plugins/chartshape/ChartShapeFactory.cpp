@@ -71,7 +71,7 @@ ChartShapeFactory::ChartShapeFactory()
     setToolTip(i18n("Business charts"));
 
     KIconLoader::global()->addAppDir("kchart");
-    setIconName(koIconNameCStr("kchart"));
+    setIconName(koIconName("kchart"));
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.

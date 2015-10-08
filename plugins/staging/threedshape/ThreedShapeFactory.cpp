@@ -49,7 +49,7 @@ ThreedShapeFactory::ThreedShapeFactory()
 {
     setToolTip(i18n("Shape that displays a simple 3D scene."));
     //KIconLoader::global()->addAppDir("kchart");
-    setIconName(koIconNameCStr("x-shape-3d"));
+    setIconName(koIconName("x-shape-3d"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store

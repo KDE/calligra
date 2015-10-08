@@ -101,11 +101,6 @@ void KoToolFactoryBase::setToolType(const QString & toolType)
     d->toolType = toolType;
 }
 
-void KoToolFactoryBase::setIconName(const char *iconName)
-{
-    d->iconName = QLatin1String(iconName);
-}
-
 void KoToolFactoryBase::setIconName(const QString &iconName)
 {
     d->iconName = iconName;

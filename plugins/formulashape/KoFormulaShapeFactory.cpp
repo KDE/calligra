@@ -34,7 +34,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
     : KoShapeFactoryBase(KoFormulaShapeId, i18n( "Formula" ) )
 {
     setToolTip(i18n( "A formula"));
-    setIconName(koIconNameCStr("x-shape-formula"));
+    setIconName(koIconName("x-shape-formula"));
 
     // The following lines let the formula shape load both embedded and
     // inline formulas.

@@ -30,7 +30,7 @@ KoZoomToolFactory::KoZoomToolFactory()
     setToolTip(i18n("Zoom"));
     setToolType(navigationToolType());
     setPriority(5);
-    setIconName(koIconNameCStr("zoom-original"));
+    setIconName(koIconName("zoom-original"));
     setActivationShapeId("flake/always");
 }
 

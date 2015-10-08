@@ -33,7 +33,7 @@ KoPABackgroundToolFactory::KoPABackgroundToolFactory()
 {
     setToolType("calligraflow, calligrastage");
     setActivationShapeId("flake/always");
-    setIconName(koIconNameCStr("backgroundtool"));
+    setIconName(koIconName("backgroundtool"));
     setPriority(3);
 }
 

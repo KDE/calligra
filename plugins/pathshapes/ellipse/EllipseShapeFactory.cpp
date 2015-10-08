@@ -34,7 +34,7 @@ EllipseShapeFactory::EllipseShapeFactory()
     : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
     setToolTip(i18n( "An ellipse"));
-    setIconName(koIconNameCStr("ellipse-shape"));
+    setIconName(koIconName("ellipse-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 

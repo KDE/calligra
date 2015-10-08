@@ -35,7 +35,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
         : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
-    setIconName(koIconNameCStr("x-shape-connection"));
+    setIconName(koIconName("x-shape-connection"));
     setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
     setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create

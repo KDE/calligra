@@ -41,7 +41,7 @@ ChartToolFactory::ChartToolFactory()
 {
     setToolTip (i18n("Chart editing"));
     setToolType (dynamicToolType());
-    setIconName(koIconNameCStr("kchart"));
+    setIconName(koIconName("kchart"));
     setPriority (1);
     setActivationShapeId (ChartShapeId);
 }

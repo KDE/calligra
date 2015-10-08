@@ -36,7 +36,7 @@ ReviewToolFactory::ReviewToolFactory()
 {
     setToolTip(i18n("Review"));
     setToolType(dynamicToolType()+",calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool_review"));
+    setIconName(koIconName("tool_review"));
     setPriority(30);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }

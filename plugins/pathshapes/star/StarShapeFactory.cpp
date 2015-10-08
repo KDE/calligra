@@ -37,7 +37,7 @@ StarShapeFactory::StarShapeFactory()
     : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))
 {
     setToolTip(i18n("A star"));
-    setIconName(koIconNameCStr("star-shape"));
+    setIconName(koIconName("star-shape"));
     QStringList elementNames;
     elementNames << "regular-polygon" << "custom-shape";
     setXmlElementNames(KoXmlNS::draw, elementNames);

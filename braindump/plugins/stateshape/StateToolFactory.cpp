@@ -31,7 +31,7 @@ StateToolFactory::StateToolFactory()
 {
     setToolTip(i18n("State editing"));
     setToolType(dynamicToolType());
-    setIconName(koIconNameCStr("statetool"));
+    setIconName(koIconName("statetool"));
     setPriority(1);
     setActivationShapeId(STATESHAPEID);
 }

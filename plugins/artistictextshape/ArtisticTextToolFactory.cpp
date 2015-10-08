@@ -29,7 +29,7 @@ ArtisticTextToolFactory::ArtisticTextToolFactory()
 {
     setToolTip( i18n("Artistic text editing") );
     setToolType( dynamicToolType() );
-    setIconName(koIconNameCStr("artistictext-tool"));
+    setIconName(koIconName("artistictext-tool"));
     setPriority( 1 );
     setActivationShapeId( ArtisticTextShapeID );
 }

@@ -29,7 +29,7 @@ KoFormulaToolFactory::KoFormulaToolFactory()
 {
     setToolTip( i18n( "Formula editing" ) );
     setToolType( dynamicToolType() );
-    setIconName(koIconNameCStr("edittext"));
+    setIconName(koIconName("edittext"));
     setPriority( 1 );
     setActivationShapeId( KoFormulaShapeId );
 }

@@ -45,7 +45,7 @@ TemplateShapeFactory::TemplateShapeFactory()
     : KoShapeFactoryBase(TEMPLATESHAPEID, i18n("Template shape")) // Template: Change to your own description
 {
     setToolTip(i18n("Simple shape that is used as a template for developing other shapes."));
-    setIconName(koIconNameCStr("x-shape-template"));
+    setIconName(koIconName("x-shape-template"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store

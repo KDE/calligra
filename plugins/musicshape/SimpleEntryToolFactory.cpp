@@ -29,7 +29,7 @@ SimpleEntryToolFactory::SimpleEntryToolFactory()
     : KoToolFactoryBase("SimpleEntryToolFactoryId")
 {
     setToolTip( i18n( "Music editing" ) );
-    setIconName(koIconNameCStr("music-note-16th"));
+    setIconName(koIconName("music-note-16th"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( MusicShapeId );

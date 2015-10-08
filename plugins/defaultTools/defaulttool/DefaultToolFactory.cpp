@@ -30,7 +30,7 @@ DefaultToolFactory::DefaultToolFactory()
     setToolTip(i18n("Shape handling"));
     setToolType(mainToolType());
     setPriority(0);
-    setIconName(koIconNameCStr("select"));
+    setIconName(koIconName("select"));
     setActivationShapeId("flake/always");
 }
 

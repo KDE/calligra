@@ -34,7 +34,7 @@ WebShapeFactory::WebShapeFactory()
                          i18n("Web Shape"))
 {
     setToolTip(i18n("A web shape"));
-    setIconName(koIconNameCStr("applications-internet"));
+    setIconName(koIconName("applications-internet"));
     setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 

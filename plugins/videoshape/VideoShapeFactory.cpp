@@ -37,7 +37,7 @@ VideoShapeFactory::VideoShapeFactory()
     : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
-    setIconName(koIconNameCStr("video-x-generic"));
+    setIconName(koIconName("video-x-generic"));
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(2);
 }

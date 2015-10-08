@@ -129,9 +129,9 @@ void KoShapeFactoryBase::setToolTip(const QString & tooltip)
     d->tooltip = tooltip;
 }
 
-void KoShapeFactoryBase::setIconName(const char *iconName)
+void KoShapeFactoryBase::setIconName(const QString &iconName)
 {
-    d->iconName = QLatin1String(iconName);
+    d->iconName = iconName;
 }
 
 void KoShapeFactoryBase::setFamily(const QString & family)

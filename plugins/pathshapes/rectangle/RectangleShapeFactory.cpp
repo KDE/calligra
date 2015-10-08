@@ -33,7 +33,7 @@ RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
 {
     setToolTip(i18n("A rectangle"));
-    setIconName(koIconNameCStr("rectangle-shape"));
+    setIconName(koIconName("rectangle-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 

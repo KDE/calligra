@@ -217,7 +217,7 @@ KoM2MMLFormulaToolFactory::KoM2MMLFormulaToolFactory()
     setToolTip( i18n( "Edit formula with LaTeX syntax" ) );
 #endif
     setToolType( dynamicToolType() );
-    setIconName(koIconNameCStr("edittext"));
+    setIconName(koIconName("edittext"));
     setPriority( 1 );
     setActivationShapeId( KoFormulaShapeId );
 }

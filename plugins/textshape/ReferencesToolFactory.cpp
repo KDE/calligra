@@ -31,7 +31,7 @@ ReferencesToolFactory::ReferencesToolFactory()
 {
     setToolTip(i18n("References"));
     setToolType("calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool_references"));
+    setIconName(koIconName("tool_references"));
     setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);
 }

@@ -32,7 +32,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory()
     setToolTip(i18n("Animation"));
     setToolType("calligrastage");
     setPriority(40);
-    setIconName(koIconNameCStr("animation-stage"));
+    setIconName(koIconName("animation-stage"));
     setActivationShapeId("flake/edit");
 }
 

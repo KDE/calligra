@@ -264,7 +264,7 @@ protected:
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIconName(const char *iconName);
+    void setIconName(const QString &iconName);
 
     /**
      * Set the family name of the default shape

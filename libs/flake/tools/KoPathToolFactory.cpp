@@ -29,7 +29,7 @@ KoPathToolFactory::KoPathToolFactory()
 {
     setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());
-    setIconName(koIconNameCStr("editpath"));
+    setIconName(koIconName("editpath"));
     setPriority(2);
     setActivationShapeId(KoPathShapeId);
 }

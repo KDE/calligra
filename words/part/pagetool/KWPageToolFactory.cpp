@@ -29,7 +29,7 @@ KWPageToolFactory::KWPageToolFactory()
 {
     setToolTip(i18n("Page layout"));
     setToolType(dynamicToolType()+",calligrawords, calligraauthor");
-    setIconName(koIconNameCStr("tool_pagelayout"));
+    setIconName(koIconName("tool_pagelayout"));
     setPriority(25);
     setActivationShapeId("flake/always");
 }

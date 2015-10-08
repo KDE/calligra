@@ -30,7 +30,7 @@ WebToolFactory::WebToolFactory()
 {
     setToolTip(i18n("Web shape editing"));
     setToolType(dynamicToolType());
-    setIconName(koIconNameCStr("applications-internet"));
+    setIconName(koIconName("applications-internet"));
     setPriority(1);
     setActivationShapeId(WEBSHAPEID);
 }

@@ -28,7 +28,7 @@ KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
 {
     setToolTip(i18n("Filter effects editing"));
     setToolType("karbon");
-    setIconName(koIconNameCStr("tool_imageeffects")); // TODO: better icon, e.g. black Fx bad on dark UI
+    setIconName(koIconName("tool_imageeffects")); // TODO: better icon, e.g. black Fx bad on dark UI
     setPriority(3);
 }
 
