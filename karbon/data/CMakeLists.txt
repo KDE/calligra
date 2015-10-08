@@ -1,8 +1,0 @@
-install( FILES  simple.kgr allcolors.kgr  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/gradients)
-install( FILES  palettes/svg-colors.gpl DESTINATION ${KDE_INSTALL_DATADIR}/karbon/palettes)
-install( FILES  karbon_viewplugin.desktop  DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
-install( FILES  karbon_dock.desktop  DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
-install( FILES  karbon.rc karbon_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/karbon)
-install( PROGRAMS  karbon.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install( FILES karbon.appdata.xml DESTINATION ${KDE_INSTALL_DATAROOTDIR}/appdata/)
-install( FILES  karbonrc DESTINATION ${KDE_INSTALL_CONFDIR} )

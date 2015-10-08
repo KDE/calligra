@@ -1,7 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartgui name="planwork_mainwindow" version="2" translationDomain="planwork">
-  <MenuBar>
-    <Menu name="edit"><text>&amp;Edit</text>
-    </Menu>
-  </MenuBar>
-</kpartgui>
