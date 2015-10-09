@@ -31,9 +31,12 @@
 #include "KPrView.h"
 #include <kdebug.h>
 #include <kio/job.h>
-#include <kfiledialog.h>
 #include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
+
+#include <QFileDialog>
+#include <QUrl>
+
 
 KPrPicturesImport::KPrPicturesImport()
 {
@@ -44,7 +47,11 @@ void KPrPicturesImport::import(KPrView *view)
     m_factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(m_factory);
     if (m_factory) {
-        m_urls = KFileDialog::getOpenUrls(KUrl(), "image/png image/jpeg image/gif");
+         //QT5TODO: used mimetypes "image/png image/jpeg image/gif") but why that restriction?
+        // PictureTool::changeUrlPressed does not limit the mimetypes as well,
+        // after all QImage::loadFromData is used which supports a lot more of formats
+        // TODO: find how to query formats that QImage::loadFromData supports, so the mimetype can be set
+        m_urls = QFileDialog::getOpenFileUrls();
 
         // TODO there should be a progress bar
         // instead of the progress bar opening for each loaded picture
@@ -71,7 +78,7 @@ void KPrPicturesImport::import()
         // TODO activate first added page doUpdateActivePage(page);
     }
     else {
-        KUrl url(m_urls.takeAt(0));
+        QUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
         connect(job, SIGNAL(result(KJob*)), this, SLOT(pictureImported(KJob*)));

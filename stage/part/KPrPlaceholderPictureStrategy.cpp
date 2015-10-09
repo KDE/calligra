@@ -20,8 +20,9 @@
 #include "KPrPlaceholderPictureStrategy.h"
 
 #include <QString>
-#include <kfiledialog.h>
-#include <kurl.h>
+#include <QFileDialog>
+#include <QUrl>
+
 #include <KoImageCollection.h>
 #include <KoDocumentResourceManager.h>
 #include <KoImageData.h>
@@ -42,7 +43,7 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
 {
     KoShape * shape = 0;
 
-    KUrl url = KFileDialog::getOpenUrl();
+    QUrl url = QFileDialog::getOpenFileUrl();
     if ( !url.isEmpty() ) {
         shape = KPrPlaceholderStrategy::createShape(rm);
 

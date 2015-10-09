@@ -21,10 +21,10 @@
 
 #include <QComboBox>
 #include <QVBoxLayout>
+#include <QFileDialog>
+#include <QUrl>
 
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
-#include <kurl.h>
 
 #include <KoEventActionAddCommand.h>
 #include <KoEventActionRemoveCommand.h>
@@ -80,7 +80,7 @@ void KPrSoundEventActionWidget::soundComboChanged()
         soundData = new KPrSoundData(*m_soundCollection->findSound( m_soundCombo->currentText() ) );
     }
     else if ( m_soundCombo->currentIndex() == 1 ) { // "Import..." was chosen
-        KUrl url = KFileDialog::getOpenUrl();
+        QUrl url = QFileDialog::getOpenFileUrl();
         if ( !url.isEmpty() ) {
             soundData = new KPrSoundData( m_soundCollection, url.toLocalFile() );
             // TODO shouldn't that come from the sound collection

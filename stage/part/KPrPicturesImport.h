@@ -21,7 +21,7 @@
 #define KPRPICTURESIMPORT_H
 
 #include <QObject>
-#include <kurl.h>
+#include <QList>
 
 class KoShapeFactoryBase;
 class KoPAPageBase;
@@ -30,6 +30,7 @@ class KPrDocument;
 class KPrView;
 class KJob;
 class KUndo2Command;
+class QUrl;
 
 class KPrPicturesImport : public QObject
 {
@@ -46,7 +47,7 @@ private Q_SLOTS:
 
 private:
     KPrDocument *m_doc;
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
     KoPAPageBase *m_currentPage;
     KoPAMasterPage *m_masterPage;
     KoShapeFactoryBase *m_factory;

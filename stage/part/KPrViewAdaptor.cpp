@@ -26,8 +26,7 @@
 #include "KPrPage.h"
 #include <KoTextShapeData.h>
 
-#include <kurl.h>
-
+#include <QUrl>
 #include <QTextDocument>
 
 KPrViewAdaptor::KPrViewAdaptor( KPrView* view )
@@ -130,7 +129,7 @@ bool KPrViewAdaptor::exportPageThumbnail( int page, int width, int height,
     if ( page >= 0 && page < slideShow.size() ) {
         KoPAPageBase *pageObject = slideShow[page];
         Q_ASSERT( pageObject );
-        return m_view->exportPageThumbnail( pageObject, KUrl( filename ),
+        return m_view->exportPageThumbnail( pageObject, QUrl::fromLocalFile( filename ),
                                             QSize( qMax( 0, width ), qMax( 0, height ) ),
                                             format.isEmpty() ? "PNG" : format.toLatin1(),
                                             qBound( -1, quality, 100 ) );
