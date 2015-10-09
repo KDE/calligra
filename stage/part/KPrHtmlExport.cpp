@@ -22,8 +22,10 @@
 
 #include <QTextStream>
 #include <QDir>
-#include <kio/copyjob.h>
+#include <QUrl>
 #include <QTemporaryDir>
+
+#include <kio/copyjob.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <krun.h>
@@ -63,7 +65,7 @@ void KPrHtmlExport::extractStyle()
     zip.directory()->copyTo(m_tmpDirPath, true);
 }
 
-KUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
+QUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
 {
     m_parameters = parameters;
 
@@ -75,19 +77,16 @@ KUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
     exportImageToTmpDir();
     generateHtml();
 
-    KUrl previewUrl;
-    previewUrl.setPath(tmpDir.path());
-    previewUrl.addPath("slide0.html");
+    QUrl previewUrl = QUrl::fromLocalFile(tmpDir.path()+QLatin1String("/slide0.html"));
     return previewUrl;
 }
 
 void KPrHtmlExport::exportImageToTmpDir()
 {
     // Export slides as image into the temporary export directory
-    KUrl fileUrl;
+    QUrl fileUrl;
     for(int i=0; i < m_parameters.slides.size(); ++i){
-        fileUrl = m_tmpDirPath;
-        fileUrl.addPath(QString("slide%1.png").arg(i));
+        fileUrl = QUrl::fromLocalFile(m_tmpDirPath+QString::fromLatin1("/slide%1.png").arg(i));
         KoPAPageBase *slide = m_parameters.slides.at(i);
         m_parameters.kprView->exportPageThumbnail(slide,fileUrl, slide->size().toSize(), "PNG", -1);
     }
@@ -136,8 +135,8 @@ void KPrHtmlExport::generateToc()
 
 void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString &htmlBody)
 {
-    KUrl fileUrl(m_tmpDirPath, fileName);
-    QFile file(fileUrl.toLocalFile());
+    const QString filePath = m_tmpDirPath + QLatin1Char('/') + fileName;
+    QFile file(filePath);
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
     stream << htmlBody;
@@ -160,7 +159,8 @@ void KPrHtmlExport::moveResult(KJob *job)
     }
     else {
         if(m_parameters.openBrowser){
-            KUrl url(m_parameters.destination, "index.html");
+            QUrl url = m_parameters.destination;
+            url.setPath(url.path() + QLatin1String("/index.html"));
             KRun::runUrl(url, "text/html", m_parameters.kprView);
         }
     }

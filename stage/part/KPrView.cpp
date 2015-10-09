@@ -22,13 +22,14 @@
 #include "KPrView.h"
 
 #include <QStatusBar>
+#include <QFileDialog>
+#include <QUrl>
 
 #include <KSharedConfig>
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kfiledialog.h>
 
 #include <KoIcon.h>
 
@@ -499,9 +500,8 @@ void KPrView::exportToHtml()
                                                           koDocument()->documentInfo()->authorInfo("creator"), this);
     if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
         // Get the export directory
-        KUrl directoryUrl = KFileDialog::getExistingDirectoryUrl();
+        QUrl directoryUrl = QFileDialog::getExistingDirectoryUrl();
         if (directoryUrl.isValid()) {
-            directoryUrl.adjustPath(KUrl::AddTrailingSlash);
             KPrHtmlExport exportHtml;
             exportHtml.exportHtml(KPrHtmlExport::Parameter(dialog->templateUrl(), this, dialog->checkedSlides(),
                                                            directoryUrl, dialog->author(),

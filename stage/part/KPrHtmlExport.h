@@ -21,8 +21,9 @@
 #ifndef KPRHTMLEXPORT_H
 #define KPRHTMLEXPORT_H
 
-#include <kurl.h>
+#include <QUrl>
 #include <QStringList>
+#include <QObject>
 
 class KPrView;
 class KoPAPageBase;
@@ -35,7 +36,7 @@ public:
     struct Parameter {
         Parameter() {}
 
-        Parameter(const KUrl &styleUrl, KPrView *kprView, const QList<KoPAPageBase*> &slides, const KUrl &destination,
+        Parameter(const QUrl &styleUrl, KPrView *kprView, const QList<KoPAPageBase*> &slides, const QUrl &destination,
                   const QString &author, const QString &title, const QStringList &slidesNames, bool openBrowser)
                       : styleUrl(styleUrl)
                       , kprView(kprView)
@@ -48,10 +49,10 @@ public:
         {
         }
 
-        KUrl styleUrl;
+        QUrl styleUrl;
         KPrView *kprView;
         QList<KoPAPageBase*> slides;
-        KUrl destination;
+        QUrl destination;
         QString author;
         QString title;
         QStringList slidesNames;
@@ -67,7 +68,7 @@ public:
      * @param parameters Presentation data (only 1 slide should be provided in "slides" filed)
      * @param previewUrl  URL of output html
      */
-    KUrl exportPreview(const Parameter &parameters);
+    QUrl exportPreview(const Parameter &parameters);
 
 protected:
     void extractStyle();

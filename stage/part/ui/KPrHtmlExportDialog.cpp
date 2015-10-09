@@ -24,12 +24,15 @@
 #include <QPainter>
 #include <QDir>
 #include <QWebFrame>
+#include <QUrl>
+#include <QFileDialog>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kfiledialog.h>
 #include <kzip.h>
-#include <kurl.h>
+
+#include <KPrView.h>
 
 #include "KPrHtmlExport.h"
 
@@ -106,9 +109,9 @@ QStringList KPrHtmlExportDialog::slidesNames(){
     return names;
 }
 
-KUrl KPrHtmlExportDialog::templateUrl()
+QUrl KPrHtmlExportDialog::templateUrl()
 {
-    return KUrl(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
+    return QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
 }
 
 void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides)
@@ -152,7 +155,7 @@ void KPrHtmlExportDialog::loadTemplatesList()
 void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
 {
     QString savePath = KStandardDirs::locateLocal("data", "stage/templates/exportHTML/templates/");
-    KUrl templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
+    QUrl templatePath = QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     savePath += templatePath.fileName();
     if(!(QFile::copy(templatePath.toLocalFile(), savePath))){
         QMessageBox::information(this, i18n("Error"), i18n("There is already a favorite file with this name"));
@@ -180,14 +183,16 @@ void KPrHtmlExportDialog::delSelectedTemplateFromFavorite()
 
 void KPrHtmlExportDialog::browserAction()
 {
-    KFileDialog dialog(KUrl(), QString("*.zip"), this);
+    QFileDialog dialog(this);
+    dialog.setMimeTypeFilters(QStringList(QStringLiteral("application/zip")));
     if (dialog.exec() == QDialog::Accepted) {
-        if (verifyZipFile(dialog.selectedFile())) {
-            QString name (dialog.selectedUrl().fileName());
+        const QString filePath = dialog.selectedFiles().first();
+        if (verifyZipFile(filePath)) {
+            QString name = QFileInfo(filePath).fileName();
             if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
                 name.chop(4);
             }
-            ui.kcombobox->addItem(name, dialog.selectedFile());
+            ui.kcombobox->addItem(name, filePath);
             ui.kcombobox->setCurrentIndex(ui.kcombobox->count() - 1);
         }
         this->updateFavoriteButton();
@@ -254,7 +259,7 @@ void KPrHtmlExportDialog::generatePreview(int item)
     slides.append(this->m_allSlides.at(frameToRender));
     slidesNames.append(ui.kListBox_slides->item(frameToRender)->text());
 
-    KUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(this->templateUrl(), (KPrView*)this->parentWidget(), slides, KUrl(),
+    QUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
                                               this->author(), ui.klineedit_title->text(), slidesNames, false));
     preview.mainFrame()->load(url);
 }
