@@ -284,12 +284,12 @@ void KPrView::initActions()
     action->setShortcut(QKeySequence("Shift+F5"));
     actionStartPresentation->addAction( action );
     connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
-    action = new KAction( i18n( "From First Slide" ), this );
+    action = new QAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     actionStartPresentation->addAction( action );
     connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
-    m_actionStopPresentation = new KAction( i18n( "Stop presentation" ), this );
+    m_actionStopPresentation = new QAction( i18n( "Stop presentation" ), this );
     actionCollection()->addAction( "slideshow_stop", m_actionStopPresentation );
     m_actionStopPresentation->setShortcut(Qt::Key_Escape);
     connect(m_actionStopPresentation, SIGNAL(activated()), this, SLOT(stopPresentation()));
