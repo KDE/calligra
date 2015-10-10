@@ -25,8 +25,7 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
-#include <kmimetype.h>
-
+#include <QMimeDatabase>
 #include <QList>
 
 
@@ -108,7 +107,8 @@ bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWr
             store->close();
             if(! ok)
                 return false;
-            const QString mimetype( KMimeType::findByPath( sound->storeHref(), 0 ,true )->name() );
+            // TODO: can't we get the mimetype from elsewhere? e.g. already when loading? or from data?
+            const QString mimetype( QMimeDatabase().mimeTypesForFileName(sound->storeHref()).first().name() );
             manifestWriter->addManifestEntry( sound->storeHref(), mimetype );
         }
     }
