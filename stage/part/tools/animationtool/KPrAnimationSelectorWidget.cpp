@@ -35,12 +35,12 @@
 #include <QListView>
 #include <QFont>
 #include <QToolButton>
+#include <QFontDatabase>
 
 //KF5 Headers
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 
 //Calligra Headers
 #include <KoXmlReader.h>
@@ -68,8 +68,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_previewCheckBox->setChecked(loadPreviewConfig());
     m_showAutomaticPreview = m_previewCheckBox->isChecked();
 
-    QFont viewWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    QFont viewWidgetFont  = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
     viewWidgetFont.setPointSizeF(pointSize);
 
     m_collectionChooser = new QListWidget;
