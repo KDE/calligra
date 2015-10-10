@@ -28,7 +28,8 @@ kcoreaddons_desktop_to_json(calligrastagetoolanimation calligrastagetoolanimatio
 target_link_libraries(
     calligrastagetoolanimation
     calligrastageprivate
-    )
+    KF5::IconThemes
+)
 
 install(TARGETS calligrastagetoolanimation  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
