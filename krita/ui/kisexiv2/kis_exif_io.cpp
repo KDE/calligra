@@ -437,8 +437,8 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                         v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
                         v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
-                    }
 #endif
+                    }
                 } else if (exivKey == "Exif.Photo.OECF") {
                     v = kmdOECFStructureToExifOECF(entry.value());
                 } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {
