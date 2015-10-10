@@ -24,9 +24,9 @@
 #include <QDir>
 #include <QUrl>
 #include <QTemporaryDir>
+#include <QStandardPaths>
 
 #include <kio/copyjob.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <kzip.h>
@@ -94,7 +94,7 @@ void KPrHtmlExport::exportImageToTmpDir()
 
 void KPrHtmlExport::generateHtml()
 {
-    QFile file(KStandardDirs::locate("data", "stage/templates/exportHTML/slides.html"));
+    QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("stage/templates/exportHTML/slides.html")));
     file.open(QIODevice::ReadOnly);
     QString slideContent = file.readAll();
     file.close();
@@ -123,7 +123,7 @@ void KPrHtmlExport::generateToc()
         toc.append(QString("<li><a href=\"slide%1.html\">%2</a></li>").arg(i).arg(m_parameters.slidesNames.at(i)));
     }
     toc.append("</ul>");
-    QFile file(KStandardDirs::locate("data", "stage/templates/exportHTML/toc.html"));
+    QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("stage/templates/exportHTML/toc.html")));
     file.open(QIODevice::ReadOnly);
     QString content = file.readAll();
     file.close();

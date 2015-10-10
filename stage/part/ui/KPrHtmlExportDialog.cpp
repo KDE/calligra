@@ -27,9 +27,9 @@
 #include <QUrl>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 #include <kzip.h>
 
 #include <KPrView.h>
@@ -133,8 +133,9 @@ void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides
 
 void KPrHtmlExportDialog::loadTemplatesList()
 {
-    KStandardDirs std;
-    QStringList dirs = std.findDirs("data", "stage/templates/exportHTML/templates");
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                       QStringLiteral("stage/templates/exportHTML/templates"),
+                                                       QStandardPaths::LocateDirectory);
     for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
         QDir dir(*path);
         dir.setFilter(QDir::Files);
@@ -154,7 +155,7 @@ void KPrHtmlExportDialog::loadTemplatesList()
 
 void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
 {
-    QString savePath = KStandardDirs::locateLocal("data", "stage/templates/exportHTML/templates/");
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/stage/templates/exportHTML/templates/");
     QUrl templatePath = QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     savePath += templatePath.fileName();
     if(!(QFile::copy(templatePath.toLocalFile(), savePath))){
@@ -282,7 +283,7 @@ void KPrHtmlExportDialog::renderPreview()
 bool KPrHtmlExportDialog::selectedTemplateIsFavorite()
 {
     QString templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
-    return templatePath.contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"));
+    return templatePath.startsWith(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation));
 }
 
 bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
@@ -290,10 +291,13 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
     QString templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     QString dir;
 
-    QStringList dirs(KStandardDirs().findDirs("data", "stage/templates/exportHTML"));
-    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
-        if (!path->contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"))) {
-            dir = *path;
+    const QString writablePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                        QStringLiteral("stage/templates/exportHTML"),
+                                                        QStandardPaths::LocateDirectory);
+    foreach (const QString &path, paths) {
+        if (!path.startsWith(writablePath)) {
+            dir = path;
         }
     }
 
