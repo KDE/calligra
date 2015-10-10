@@ -44,12 +44,12 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 #include <KSharedConfig>
 
 #include <QTimer>
 #include <QCoreApplication>
 #include <QGlobalStatic>
+#include <QStandardPaths>
 
 class InitOnce
 {
@@ -287,7 +287,7 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    QString fileName(KStandardDirs::locate( "data", "stage/templates/Screen/.source/emptyLandscape.otp"));
+    QString fileName(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("stage/templates/Screen/.source/emptyLandscape.otp")));
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {
