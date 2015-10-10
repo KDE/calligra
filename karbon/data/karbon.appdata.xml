@@ -169,7 +169,7 @@
       <li xml:lang="bs">Sloj lučki radnik za jednostavno rukovanje složenim dokumentima , uključujući pregled sličica , podršku za grupiranje oblika putem drag and drop , kontroliranje vidljivost oblika ili zaključavanje</li>
       <li xml:lang="ca">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig.</li>
       <li xml:lang="en-GB">Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or locking</li>
-      <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas, soporte para la agrupación de figuras mediante la operación de arrastrar y soltar, control de la visibilidad de las figuras o bloqueo.</li>
+      <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas y agrupación de figuras mediante la operación de arrastrar y soltar, controlando la visibilidad de las figuras o su bloqueo.</li>
       <li xml:lang="et">Kihtide dokk keerukamate dokumentide hõlpsaks töötlemiseks, kaasa arvatud pisipiltide eelvaatlus, kujundite rühmitamise toetamine ainult lohistamisega, kujundite nähtavuse ja lukustamise määramine</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
@@ -207,7 +207,7 @@
       <li xml:lang="bs">Razni alati za crtanje za kreiranje put oblike uključujući i put alat nacrtati ,olovka alat , kao i kaligrafija alat za crtanje</li>
       <li xml:lang="ca">Diverses eines de dibuix per crear formes de camí incloent una eina de dibuix de camins, una eina de llapis i també una eina de dibuix de cal·ligrafia.</li>
       <li xml:lang="en-GB">Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool</li>
-      <li xml:lang="es">Varias herramientas de dibujo para crear figuras con rutas, entre otras una herramienta de dibujo de rutas, una herramienta de pincel y una herramienta de dibujo caligráfico.</li>
+      <li xml:lang="es">Diversas herramientas de dibujo para crear figuras con rutas, entre las que se incluyen una herramienta de dibujo de rutas, una herramienta de pincel y una herramienta de dibujo caligráfico.</li>
       <li xml:lang="et">Mitmesugused kompleksjoontest kujundite loomise vahendid, sealhulgas kompleksjoone joonistamise tööriist, pliiatsitööriist ning kalligraafia loomise tööriist</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
       <li xml:lang="fr">Outils de dessin variés incluant un outil de création de chemin, un crayon ainsi qu'un outil pour la calligraphie</li>
@@ -246,7 +246,7 @@
       <li xml:lang="bs">Vrhunska snapping objekti za vođene crtanje i uređivanje ( npr snapping na mrežu , vodič linije , staze čvorova , granični kutije , okomita pozicija , preplitanja put oblikuje ili proširenja linija i staze )</li>
       <li xml:lang="ca">Capacitats òptimes d'ajust per dibuix guiat i edició (p.e. ajust a graella, línies de guia, nodes de camins, caixes contenidores, posicions ortogonals, interseccions de formes de camí o extensions de línies i camins)</li>
       <li xml:lang="en-GB">Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)</li>
-      <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
+      <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo, ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
       <li xml:lang="et">Äärmiselt tulusad haardetööriistad juhtjoonte järgi joonistamiseks ja redigeerimiseks (nt tõmme alusvõrgule, juhtjooned, kompleksjoone sõlmed, piirdekastid, kompleksjoontest kujundite lõikekohad jms)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
       <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, chemin nodal, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
@@ -285,7 +285,7 @@
       <li xml:lang="bs">Umjetnički oblik tekst s podrškom za sljedeći put naglašava ( tj tekst na putu )</li>
       <li xml:lang="ca">Formes de text artístic que permeten camins de contorns de seguiment (p.e. text en camins)</li>
       <li xml:lang="en-GB">Artistic text shape with support for following path outlines (i.e. text on path)</li>
-      <li xml:lang="es">Forma de texto artístico con soporte para contornos de seguimiento de rutas (es decir texto sobre una ruta)</li>
+      <li xml:lang="es">Forma de texto artístico con soporte para contornos de seguimiento de rutas (es decir, texto sobre una ruta)</li>
       <li xml:lang="et">Kunstiline tekstikujund, mis toetab kompleksjooni, st võimaldab asetada teksti kompleksjoonele</li>
       <li xml:lang="fi">Taiteelliset tekstimuodot polunseurantatuella</li>
       <li xml:lang="fr">Formes de texte artistiques prenant par exemple en charge la création de texte le long d'une courbe</li>
