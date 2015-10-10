@@ -21,7 +21,6 @@
 
 #include <QWidget>
 #include <QPainter>
-#include <kdebug.h>
 
 static const int squaresPerRow = 15;
 static const int squaresPerCol = 11;

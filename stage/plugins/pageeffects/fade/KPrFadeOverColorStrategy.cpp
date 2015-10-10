@@ -30,7 +30,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
-#include <kdebug.h>
+
 
 KPrFadeOverColorStrategy::KPrFadeOverColorStrategy()
 : KPrPageEffectStrategy(KPrFadeEffectFactory::FadeOverColor, "fade", "fadeOverColor", false, true)

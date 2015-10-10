@@ -29,7 +29,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoProperties.h>
-#include <kdebug.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
