@@ -59,7 +59,6 @@
 // KF5 Headers
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
