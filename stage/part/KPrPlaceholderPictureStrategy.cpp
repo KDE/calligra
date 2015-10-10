@@ -28,7 +28,9 @@
 #include <KoImageData.h>
 #include <KoShape.h>
 #include <KoNetAccess.h>
-#include <kdebug.h>
+
+#include "StageDebug.h"
+
 
 KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()
 : KPrPlaceholderStrategy( "graphic" )
@@ -64,7 +66,7 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
             }
             KIO::NetAccess::removeTempFile(tmpFile);
         } else {
-            kWarning() << "open image" << url << "failed";
+            warnStage << "open image" << url << "failed";
         }
     }
     return shape;

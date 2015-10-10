@@ -28,8 +28,7 @@
 #include "KPrCustomSlideShows.h"
 #include "KPrSlidesSorterItemDelegate.h"
 #include "KPrView.h"
-
-#include <KoIcon.h>
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QMenu>
@@ -55,10 +54,10 @@
 #include <KoCutController.h>
 #include <KoViewItemContextBar.h>
 #include <KoComponentData.h>
+#include <KoIcon.h>
 
 // KF5 Headers
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>

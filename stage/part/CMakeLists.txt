@@ -9,6 +9,7 @@ add_subdirectory(tools)
 
 ### calligrastageprivate ###
 set( calligrastageprivate_LIB_SRCS
+     StageDebug.cpp
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp

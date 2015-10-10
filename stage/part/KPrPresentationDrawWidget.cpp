@@ -31,10 +31,12 @@
 #include <QIcon>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 #include <KoPACanvasBase.h>
 #include <KoPointerEvent.h>
+
+#include "StageDebug.h"
+
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase * canvas)
 : KPrPresentationToolEventForwarder(canvas)

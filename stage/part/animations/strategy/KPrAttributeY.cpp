@@ -18,12 +18,15 @@
  */
 
 #include "KPrAttributeY.h"
+
 #include "../KPrAnimationCache.h"
-#include "KoShape.h"
 #include "../KPrShapeAnimation.h"
+#include "StageDebug.h"
+
+#include "KoShape.h"
+
 #include <QTransform>
 
-#include "kdebug.h"
 
 KPrAttributeY::KPrAttributeY() : KPrAnimationAttribute("y")
 {

@@ -19,13 +19,14 @@
  */
 
 #include "KPrAnimationDirector.h"
+
 #include <QList>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QWidget>
 #include <QVariant>
 #include <QApplication>
-#include <kdebug.h>
+
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
 #include <KoShapeManagerPaintingStrategy.h>
@@ -36,6 +37,9 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 #include <KoPAUtil.h>
+#include <KoShapeLayer.h>
+#include <KoPAMasterPage.h>
+#include <KoSelection.h>
 
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrPage.h"
@@ -46,11 +50,9 @@
 #include "KPrPageSelectStrategyActive.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
-
-#include <KoShapeLayer.h>
-#include <KoPAMasterPage.h>
-#include <KoSelection.h>
 #include "KPrShapeAnimations.h"
+#include "StageDebug.h"
+
 #include "animations/KPrAnimationCache.h"
 
 KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )

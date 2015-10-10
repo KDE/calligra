@@ -16,15 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KPrSoundCollection.h"
+
 #include "KPrSoundData.h"
+#include "StageDebug.h"
 
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
-#include <QList>
-#include <kdebug.h>
 #include <kmimetype.h>
+
+#include <QList>
+
 
 class Q_DECL_HIDDEN KPrSoundCollection::Private
 {

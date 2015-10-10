@@ -37,6 +37,7 @@
 #include <KoEventAction.h>
 #include <KoEventActionFactoryBase.h>
 #include <KoEventActionRegistry.h>
+
 #include <KPrEventActionWidget.h>
 #include "KPrSoundData.h"
 #include <KPresenter.h>
@@ -44,8 +45,7 @@
 #include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrEventActionData.h"
-
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags flags )
 : QWidget( parent, flags )

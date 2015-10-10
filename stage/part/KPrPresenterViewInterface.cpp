@@ -27,7 +27,6 @@
 #include <QTextEdit>
 #include <QToolButton>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
@@ -35,6 +34,7 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
+#include "StageDebug.h"
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"

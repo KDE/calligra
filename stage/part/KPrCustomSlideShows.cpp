@@ -20,7 +20,6 @@
 
 #include "KPrCustomSlideShows.h"
 
-#include <kdebug.h>
 //Calligra includes
 #include <KoPAPageBase.h>
 #include <KoPAPage.h>
@@ -32,6 +31,7 @@
 
 //Stage includes
 #include <KPrDocument.h>
+#include "StageDebug.h"
 
 KPrCustomSlideShows::KPrCustomSlideShows()
 {
@@ -184,18 +184,18 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
                         slideShow.append( page );
                     }
                     else {
-                        kWarning(33001) << "missing attributes is presentation:show";
+                        warnStage << "missing attributes is presentation:show";
                     }
                 }
                 if ( !m_customSlideShows.contains( name ) ) {
                     m_customSlideShows.insert( name, slideShow );
                 }
                 else {
-                    kWarning(33001) << "slide show with name" << name << "already existing. It will not be inserted.";
+                    warnStage << "slide show with name" << name << "already existing. It will not be inserted.";
                 }
             }
             else {
-                kWarning(33001) << "missing attributes is presentation:show";
+                warnStage << "missing attributes is presentation:show";
             }
         }
     }

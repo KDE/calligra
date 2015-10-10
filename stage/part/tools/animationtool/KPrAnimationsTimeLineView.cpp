@@ -36,7 +36,6 @@
 #include <QScrollArea>
 #include <QPainter>
 #include <QFontMetrics>
-#include <QDebug>
 #include <QScrollBar>
 
 

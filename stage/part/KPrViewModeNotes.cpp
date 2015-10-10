@@ -24,8 +24,6 @@
 #include <QPainter>
 #include <QGraphicsWidget>
 
-#include <kdebug.h>
-
 #include <KoDocumentResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
@@ -41,6 +39,7 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 
+#include "StageDebug.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
 

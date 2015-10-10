@@ -25,8 +25,9 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
+
 #include <pageeffects/KPrPageEffectFactory.h>
-#include <kdebug.h>
+#include "StageDebug.h"
 
 class KPrPageEffectRegistry::Singleton
 {
@@ -76,7 +77,7 @@ KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & el
             pageEffect = it.value()->createPageEffect( element );
         }
         else {
-            kWarning(33002) << "page effect of smil:type" << smilType << "not supported";
+            warnStagePageEffect << "page effect of smil:type" << smilType << "not supported";
         }
     }
     // return it

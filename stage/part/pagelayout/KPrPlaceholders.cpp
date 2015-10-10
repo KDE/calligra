@@ -19,6 +19,12 @@
 
 #include "KPrPlaceholders.h"
 
+#include "KPrPageLayout.h"
+#include "KPrPlaceholder.h"
+#include "KPrPlaceholderShape.h"
+#include "commands/KPrPageLayoutCommand.h"
+#include "StageDebug.h"
+
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
@@ -28,18 +34,13 @@
 #include <KoShapeCreateCommand.h>
 #include <KoPADocument.h>
 #include <KoTextShapeData.h>
-#include "KPrPageLayout.h"
-#include "KPrPlaceholder.h"
-#include "KPrPlaceholderShape.h"
-#include "commands/KPrPageLayoutCommand.h"
-
-#include <QTextCursor>
-#include <QTextDocument>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
 
-#include <kdebug.h>
+#include <QTextCursor>
+#include <QTextDocument>
+
 
 KPrPlaceholders::KPrPlaceholders()
 :m_layout( 0 )
@@ -194,10 +195,10 @@ void KPrPlaceholders::add( const QList<KoShape *> & shapes )
 
 void KPrPlaceholders::debug() const
 {
-    kDebug(33001) << "size" << m_placeholders.size() << "init:" << m_initialized;
+    debugStage << "size" << m_placeholders.size() << "init:" << m_initialized;
     Placeholders::iterator it( m_placeholders.begin() );
     for ( ; it != m_placeholders.end(); ++it ) {
-        kDebug(33001) << "placeholder" << it->presentationClass << it->shape << it->shape->shapeId() << it->isPlaceholder;
+        debugStage << "placeholder" << it->presentationClass << it->shape << it->shape->shapeId() << it->isPlaceholder;
     }
 }
 
@@ -229,9 +230,9 @@ void KPrPlaceholders::applyStyle( KPrPlaceholderShape * shape, const QString & p
         data = styles.value( "outline", 0 );
     }
     KoTextShapeData * newData = qobject_cast<KoTextShapeData*>( shape->userData() );
-    kDebug(33001) << "data" << data << "newData:" << newData << shape->userData();
+    debugStage << "data" << data << "newData:" << newData << shape->userData();
     if ( data && newData ) {
-        kDebug(33001) << "apply";
+        debugStage << "apply";
         QTextCursor cursor( data->document() );
         QTextCursor newCursor( newData->document() );
         newCursor.select( QTextCursor::Document );

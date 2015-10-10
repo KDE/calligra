@@ -37,6 +37,7 @@
 #include <commands/KPrAnimationEditNodeTypeCommand.h>
 #include <commands/KPrReplaceAnimationCommand.h>
 #include <commands/KPrAnimationCreateCommand.h>
+#include "StageDebug.h"
 
 //Calligra Headers
 #include <KoShape.h>
@@ -48,7 +49,6 @@
 //KF5 Headers
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 const int COLUMN_COUNT = 10;
 const int INVALID = -1;
@@ -207,24 +207,24 @@ QVariant KPrShapeAnimations::headerData(int section, Qt::Orientation orientation
 
 void KPrShapeAnimations::dump() const
 {
-    kDebug() << "Share animations:";
+    debugStageAnimation << "Share animations:";
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
-        kDebug() << "  Step:";
+        debugStageAnimation << "  Step:";
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-                kDebug() << "    Substep" << a;
+                debugStageAnimation << "    Substep" << a;
                 for (int sub=0; sub < a->animationCount(); ++sub) {
                     QAbstractAnimation *baseAnim = a->animationAt(sub);
                     KPrShapeAnimation *anim = dynamic_cast<KPrShapeAnimation *>(baseAnim);
                     if (anim) {
-                        kDebug() << "      Animation" << anim << getAnimationName(anim);
+                        debugStageAnimation << "      Animation" << anim << getAnimationName(anim);
                     } else {
-                        kDebug() << "      NOT a KPrShapeAnimation!" << anim;
+                        debugStageAnimation << "      NOT a KPrShapeAnimation!" << anim;
                     }
                 }
             } else {
-                kDebug() << "    NOT a KPrAnimationSubStep!" << animation;
+                debugStageAnimation << "    NOT a KPrAnimationSubStep!" << animation;
             }
         }
     }

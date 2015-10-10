@@ -29,7 +29,7 @@
 #include "KPrPlaceholderShape.h"
 #include "animations/KPrAnimationCache.h"
 #include "KPrPageSelectStrategyBase.h"
-#include "kdebug.h"
+#include "StageDebug.h"
 
 KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager *shapeManager, KPrAnimationCache* animationCache,
                                                                     KPrPageSelectStrategyBase * strategy )

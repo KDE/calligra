@@ -18,11 +18,14 @@
  */
 
 #include "KPrSmilValues.h"
-#include <QStringList>
-#include "KoXmlWriter.h"
+
 #include "KPrShapeAnimations.h"
-#include "kdebug.h"
 #include "KPrFormulaParser.h"
+#include "StageDebug.h"
+
+#include "KoXmlWriter.h"
+
+#include <QStringList>
 
 KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation)
     : KPrAnimationValue(shapeAnimation)
@@ -112,7 +115,7 @@ bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, c
 
     // keySplines
     if (m_calcMode ==  KPrAnimationValue::spline) {
-        kWarning(33003) << "keySpline not yes supported";
+        warnStageAnimation << "keySpline not yes supported";
 //         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;

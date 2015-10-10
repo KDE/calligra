@@ -31,6 +31,7 @@
 #include <KoPALoadingContext.h>
 #include <KoPASavingContext.h>
 
+#include "StageDebug.h"
 #include "KPrDocument.h"
 #include "KPrDeclarations.h"
 #include "KPresenter.h"
@@ -47,8 +48,6 @@
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "animations/KPrAnimationLoader.h"
-
-#include <kdebug.h>
 
 class Q_DECL_HIDDEN KPrPage::Private
 {
@@ -112,7 +111,7 @@ void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
     KPrMasterPage * master = dynamic_cast<KPrMasterPage *>( masterPage() );
     Q_ASSERT( master );
     placeholders().setLayout( layout, document, shapes(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
-    kDebug(33001) << "master placeholders";
+    debugStage << "master placeholders";
     master->placeholders().debug();
 }
 
@@ -141,7 +140,7 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
                     if (begin.endsWith(QLatin1String("begin"))) {
                         KoXmlElement transitionElement(KoXml::namedItemNS(animationElement, KoXmlNS::anim, "transitionFilter" ));
                         data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( transitionElement ) );
-                        kDebug() << "XXXXXXX found page transition";
+                        debugStage << "XXXXXXX found page transition";
                         loadOldTransition = false;
                     }
                     // check that the id is the correct one.
@@ -278,7 +277,7 @@ void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext 
             QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
             QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
             layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
-            kDebug(33001) << "page layout" << layoutName << layout;
+            debugStage << "page layout" << layoutName << layout;
         }
     }
     placeholders().init( layout, shapes() );

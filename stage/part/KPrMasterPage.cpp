@@ -20,13 +20,14 @@
 #include "KPrMasterPage.h"
 
 #include "pagelayout/KPrPageLayouts.h"
+#include "KPresenter.h"
+#include "StageDebug.h"
+
 #include <KoXmlNS.h>
 //#include <KoDocumentResourceManager.h>
-#include "KPresenter.h"
 #include <KoPALoadingContext.h>
 #include <KoOdfWorkaround.h>
 #include <KoXmlReader.h>
-#include <kdebug.h>
 
 KPrMasterPage::KPrMasterPage(KPrDocument *document)
     : KPrPageData(document)
@@ -65,7 +66,7 @@ void KPrMasterPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingCo
             QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
             QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
             layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
-            kDebug(33001) << "page layout" << layoutName << layout;
+            debugStage << "page layout" << layoutName << layout;
         }
     }
     placeholders().init( layout, shapes() );

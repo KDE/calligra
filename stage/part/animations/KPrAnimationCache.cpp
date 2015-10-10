@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KPrAnimationCache.h"
+
 #include <QList>
 #include <QMap>
 #include <QString>
@@ -26,7 +27,7 @@
 
 #include <KoShape.h>
 
-#include "kdebug.h"
+#include "StageDebug.h"
 
 KPrAnimationCache::KPrAnimationCache()
 {

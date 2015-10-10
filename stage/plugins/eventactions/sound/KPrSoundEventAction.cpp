@@ -29,7 +29,7 @@
 #include <KPrSoundCollection.h>
 #include <KPresenter.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 KPrSoundEventAction::KPrSoundEventAction()
 : QObject()
@@ -63,7 +63,7 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
             }
         }
         else {
-            kWarning(33000) << "sound collection could not be found";
+            qWarning(/*QT5TODO: 33000*/) << "sound collection could not be found";
             Q_ASSERT( soundCollection );
         }
     }

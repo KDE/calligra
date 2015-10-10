@@ -19,13 +19,16 @@
 
 #include "KPrAttributeRotate.h"
 #include "../KPrAnimationCache.h"
-#include "KoShape.h"
 #include "KPrShapeAnimations.h"
+#include "StageDebug.h"
+
+#include "KoShape.h"
 #include "KoTextBlockData.h"
 #include "KoTextShapeData.h"
+
 #include <QTextDocument>
 #include <QTextLayout>
-#include "kdebug.h"
+
 
 KPrAttributeRotate::KPrAttributeRotate() : KPrAnimationAttribute("rotate")
 {

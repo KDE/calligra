@@ -39,7 +39,6 @@
 #include <QMenu>
 #include <QActionGroup>
 #include <QTimer>
-#include <QDebug>
 
 //KF5 Headers
 #include <klocalizedstring.h>

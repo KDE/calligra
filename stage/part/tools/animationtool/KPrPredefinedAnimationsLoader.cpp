@@ -25,6 +25,7 @@
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationFactory.h"
 #include "KPrFactory.h"
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QListWidget>
@@ -38,7 +39,6 @@
 //KF5 Headers
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 
 //Calligra Headers
 #include <KoIcon.h>
@@ -83,7 +83,7 @@ KPrCollectionItemModel *KPrPredefinedAnimationsLoader::modelById(const QString &
        return m_modelMap[id];
     }
     else {
-        kWarning(31000) << "Didn't find a model with id ==" << id;
+        warnStageAnimation << "Didn't find a model with id ==" << id;
     }
     return 0;
 }
@@ -254,11 +254,11 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
             }
         }
         else {
-            kWarning(30006) << "reading of" << filePath << "failed:" << errorMessage;
+            warnStageAnimation << "reading of" << filePath << "failed:" << errorMessage;
         }
     }
     else {
-        kDebug(30006) << "animations.xml not found";
+        debugStageAnimation << "animations.xml not found";
     }
 }
 

@@ -23,7 +23,6 @@
 #include <QKeyEvent>
 #include <QStackedLayout>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
@@ -31,6 +30,7 @@
 #include <KoPAViewBase.h>
 #include <KoShape.h>
 
+#include "StageDebug.h"
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
 #include "KPrPresenterViewSlidesInterface.h"

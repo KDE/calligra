@@ -26,14 +26,13 @@
 #include <QPainter>
 #include <QDesktopWidget>
 
-#include <kdebug.h>
-
 #include <KoPointerEvent.h>
 #include <KoPageApp.h>
 #include <KoPACanvasBase.h>
 #include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 
+#include "StageDebug.h"
 #include "KPrDocument.h"
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrPage.h"

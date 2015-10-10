@@ -23,10 +23,10 @@
 
 #include <KoXmlNS.h>
 #include <KoOdfWorkaround.h>
-#include "KPrPlaceholderShape.h"
 #include <KoShapeLoadingContext.h>
 
-#include <kdebug.h>
+#include "KPrPlaceholderShape.h"
+#include "StageDebug.h"
 
 KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory()
 : KoShapeFactoryBase(KPrPlaceholderShapeId, i18n( "Placeholder shape" ) )
@@ -57,11 +57,11 @@ bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e, KoShapeLoading
         KoXmlElement element = parent.toElement();
         if ( !element.isNull() ) {
             bool supported =  element.attributeNS( KoXmlNS::presentation, "placeholder", "false" ) == "true";
-            kDebug(33001) << "placeholder:" << supported;
+            debugStage << "placeholder:" << supported;
 #ifndef NWORKAROUND_ODF_BUGS
             if (!supported && KoOdfWorkaround::fixPresentationPlaceholder() && element.hasAttributeNS(KoXmlNS::presentation, "class")) {
                 supported = true;
-                kDebug(33001) << "workaround OO placeholder bug" << supported;
+                debugStage << "workaround OO placeholder bug" << supported;
             }
 #endif
             return supported;

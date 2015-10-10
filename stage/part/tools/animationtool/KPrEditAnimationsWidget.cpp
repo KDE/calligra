@@ -29,6 +29,7 @@
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationSelectorWidget.h"
 #include "KPrShapeAnimations.h"
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -37,7 +38,6 @@
 #include <QTreeView>
 #include <QMenu>
 #include <QModelIndex>
-#include <QDebug>
 #include <QComboBox>
 #include <QTimeEdit>
 #include <QTime>
@@ -46,7 +46,6 @@
 
 //KF5 Headers
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 //Calligra Headers
 #include <KoIcon.h>

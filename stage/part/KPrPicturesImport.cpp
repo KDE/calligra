@@ -27,9 +27,11 @@
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 #include <KoPAPageInsertCommand.h>
+
 #include "KPrDocument.h"
 #include "KPrView.h"
-#include <kdebug.h>
+#include "StageDebug.h"
+
 #include <kio/job.h>
 #include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
@@ -66,7 +68,7 @@ void KPrPicturesImport::import(KPrView *view)
         }
     }
     else {
-        kWarning(33001) << "picture shape factory not found";
+        warnStage << "picture shape factory not found";
     }
 }
 
@@ -124,12 +126,12 @@ void KPrPicturesImport::pictureImported(KJob *job)
             }
         }
         else {
-            kWarning(33001) << "imageData not valid";
+            warnStage << "imageData not valid";
             delete shape;
         }
     }
     else {
-        kWarning(33001) << "shape not created";
+        warnStage << "shape not created";
     }
     import();
 }

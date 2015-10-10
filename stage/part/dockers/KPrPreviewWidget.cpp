@@ -25,11 +25,11 @@
 #include <KoShapeContainer.h>
 #include <KoZoomHandler.h>
 
+#include "StageDebug.h"
 #include "KPrPage.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 
-#include <kdebug.h>
 
 KPrPreviewWidget::KPrPreviewWidget( QWidget* parent )
 : QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)

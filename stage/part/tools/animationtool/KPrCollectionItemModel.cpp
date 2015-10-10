@@ -21,7 +21,7 @@
 
 #include "KPrCollectionItemModel.h"
 
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
     : QAbstractListModel(parent)

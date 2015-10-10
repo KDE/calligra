@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
-#include <QDebug>
+
 
 KPrAnimateMotion::KPrAnimateMotion(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)

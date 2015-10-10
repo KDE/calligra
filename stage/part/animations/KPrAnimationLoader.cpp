@@ -30,8 +30,7 @@
 #include <QDomDocument>
 #include <QDomNode>
 
-#include <kdebug.h>
-
+#include "StageDebug.h"
 #include "KPrShapeAnimation.h"
 #include "KPrAnimationBase.h"
 #include "KPrAnimationFactory.h"
@@ -54,7 +53,7 @@ void debugXml(const QString & pos, const KoXmlElement &element)
     QTextStream st(&array);
     KoXml::asQDomElement( doc, element);
     st << doc.documentElement();
-    kDebug() << pos << array;
+    debugStageAnimation << pos << array;
 }
 
 bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -92,7 +91,7 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
 void KPrAnimationLoader::debug()
 {
     foreach(KPrAnimationStep *step, m_animations) {
-        kDebug() << "step";
+        debugStageAnimation << "step";
         debug(step, 1);
     }
 }
@@ -105,19 +104,19 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
     }
     if (KPrAnimationStep *a = dynamic_cast<KPrAnimationStep*>(animation)) {
         Q_UNUSED(a);
-        kDebug() << indent + "animation step";
+        debugStageAnimation << indent + "animation step";
     }
     else if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
         Q_UNUSED(a);
-        kDebug() << indent + "animation sub step";
+        debugStageAnimation << indent + "animation sub step";
     }
     else if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
         Q_UNUSED(a);
-        kDebug() << indent + "shape animation";
+        debugStageAnimation << indent + "shape animation";
     }
     else if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase*>(animation)) {
         Q_UNUSED(a);
-        kDebug() << indent + "animation base";
+        debugStageAnimation << indent + "animation base";
     }
 
     if (QAnimationGroup *group = dynamic_cast<QAnimationGroup*>(animation)) {
@@ -130,7 +129,7 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
 bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
-    kDebug() << "nodeType:" << nodeType;
+    debugStageAnimation << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
         // if there is already an animation create a new step
@@ -151,7 +150,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     }
     else {
         if (nodeType != "with-previous") {
-            kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
+            warnStageAnimation << "unsupported node-type" << nodeType << "found. Using with-previous";
         }
         // use the current substep
         if ((*animationStep)->animationCount()) {

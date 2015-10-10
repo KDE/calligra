@@ -30,7 +30,6 @@
 #include <QEvent>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QDebug>
 #include <QStyle>
 #include <QStyleOptionHeader>
 

@@ -20,13 +20,15 @@
 #include "KPrTextBlockPaintStrategy.h"
 
 #include <QBrush>
-#include "KPrAnimationCache.h"
 #include <QTransform>
 #include <QMatrix>
 #include <QPainter>
 
-#include "kdebug.h"
 #include "KoTextBlockData.h"
+
+#include "StageDebug.h"
+#include "KPrAnimationCache.h"
+
 KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(QTextBlockUserData *blockUserData, KPrAnimationCache *animationCache)
     : m_animationCache(animationCache)
     , m_textBlockData(blockUserData)

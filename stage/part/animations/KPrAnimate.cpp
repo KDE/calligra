@@ -26,9 +26,11 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextBlockData.h>
+#include "KoShape.h"
 
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
+#include "StageDebug.h"
 
 #include "strategy/KPrSmilValues.h"
 #include "strategy/KPrAnimationValue.h"
@@ -39,8 +41,6 @@
 #include "strategy/KPrAttributeHeight.h"
 #include "strategy/KPrAttributeRotate.h"
 
-#include "KoShape.h"
-#include <kdebug.h>
 
 KPrAnimate::KPrAnimate(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
@@ -79,7 +79,7 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         m_attribute = new KPrAttributeRotate();
     }
     else {
-        kWarning(33003) << "attributeName" << attributeName << "not yet supported";
+        warnStageAnimation << "attributeName" << attributeName << "not yet supported";
         retval = false;
     }
 
@@ -94,15 +94,15 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         smilCalcMode = KPrAnimationValue::linear;
     } else if (calcMode == "discrete") {
         smilCalcMode = KPrAnimationValue::discrete;
-        kWarning(33003) << "calcMode discrete not yet supported";
+        warnStageAnimation << "calcMode discrete not yet supported";
         retval = false;
     } else if (calcMode == "paced") {
         smilCalcMode = KPrAnimationValue::paced;
-        kWarning(33003) << "calcMode paced not yet supported";
+        warnStageAnimation << "calcMode paced not yet supported";
         retval = false;
     } else if (calcMode == "spline") {
         smilCalcMode = KPrAnimationValue::spline;
-        kWarning(33003) << "calcMode spline not yet supported";
+        warnStageAnimation << "calcMode spline not yet supported";
         retval = false;
     }
 
@@ -130,7 +130,7 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
             QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
             QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
-            kWarning(33003) << "from to by not yes supported";
+            warnStageAnimation << "from to by not yes supported";
             retval = false;
         }
     }

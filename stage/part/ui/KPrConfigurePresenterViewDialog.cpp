@@ -22,8 +22,8 @@
 #include <QDesktopWidget>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
+#include "StageDebug.h"
 #include "KPrDocument.h"
 
 KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )

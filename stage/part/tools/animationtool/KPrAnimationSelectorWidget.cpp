@@ -26,6 +26,7 @@
 #include <KPrPredefinedAnimationsLoader.h>
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "KPrFactory.h"
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QCheckBox>
@@ -40,7 +41,6 @@
 #include <kiconloader.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 
 //Calligra Headers
 #include <KoXmlReader.h>
@@ -260,7 +260,7 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
-        kWarning(31000) << "No shape found";
+        warnStageAnimation << "No shape found";
         return;
     }
 

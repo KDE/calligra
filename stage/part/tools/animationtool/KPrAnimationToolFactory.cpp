@@ -19,12 +19,14 @@
  */
 
 #include "KPrAnimationToolFactory.h"
+
 #include "KPrAnimationTool.h"
 #include "KPrView.h"
+#include "StageDebug.h"
+
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 KPrAnimationToolFactory::KPrAnimationToolFactory()
     : KoToolFactoryBase("Animation Tool")

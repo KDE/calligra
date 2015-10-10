@@ -19,8 +19,8 @@
 
 #include "KPrPageLayout.h"
 
-#include <QBuffer>
-#include <kdebug.h>
+#include "KPrPlaceholder.h"
+#include "StageDebug.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -28,15 +28,15 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoPASavingContext.h>
-#include "KPrPlaceholder.h"
 #include <KoIcon.h>
-
 #include <KIconLoader>
 
+#include <QBuffer>
 #include <QSize>
 #include <QPainter>
 #include <QPixmap>
 #include <QSvgRenderer>
+
 
 KPrPageLayout::KPrPageLayout()
 : m_layoutType( Page )
@@ -68,18 +68,18 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
                 }
             }
             else {
-                kWarning(33000) << "loading placeholder failed";
+                warnStage << "loading placeholder failed";
                 delete placeholder;
             }
         }
         else {
-            kWarning(33000) << "unknown tag" << child.namespaceURI() << child.tagName() << "when loading page layout";
+            warnStage << "unknown tag" << child.namespaceURI() << child.tagName() << "when loading page layout";
         }
     }
 
     bool retval = true;
     if ( m_placeholders.isEmpty() ) {
-        kWarning(33000) << "no placeholder for page layout" << m_name << "found";
+        warnStage << "no placeholder for page layout" << m_name << "found";
         retval = false;
     }
     else {
@@ -145,12 +145,12 @@ QPixmap KPrPageLayout::thumbnail() const
     if ( renderer.load( file ) ) {
         QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
         for ( ; it != m_placeholders.end(); ++it ) {
-            kDebug(33001) << "-----------------" <<( *it )->presentationObject() << ( *it )->rect( size );
+            debugStage << "-----------------" <<( *it )->presentationObject() << ( *it )->rect( size );
             renderer.render( &p, ( *it )->presentationObject(), ( *it )->rect( size ) );
         }
     }
     else {
-        kWarning(33001) << "could not load" << file;
+        warnStage << "could not load" << file;
     }
 
     return pic;
@@ -176,22 +176,22 @@ bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
 
         QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
         QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );
-        kDebug(33001) << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+        debugStage << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
 
         for ( ; it != placeholders.end(); ++it, ++otherIt ) {
-            kDebug(33001) << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+            debugStage << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
             if ( *( *it ) == *( *otherIt ) ) {
-                kDebug(33001) << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );
+                debugStage << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );
                 continue;
             }
-            kDebug(33001) << "KPrPageLayout::operator< 1" << ( *( *it ) < *( *otherIt ) );
+            debugStage << "KPrPageLayout::operator< 1" << ( *( *it ) < *( *otherIt ) );
             return *( *it ) < *( *otherIt );
         }
-        kDebug(33001) << "KPrPageLayout::operator< 2" << false;
+        debugStage << "KPrPageLayout::operator< 2" << false;
         return false;
         // sort of the different placeholders by position and type
     }
-    kDebug(33001) << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
+    debugStage << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
     return m_placeholders.size() < other.m_placeholders.size();
 }
 
