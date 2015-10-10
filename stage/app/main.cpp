@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" STAGE_EXPORT int kdemain( int argc, char **argv )
 {
     int state;
     KAboutData *aboutData = newKPresenterAboutData();

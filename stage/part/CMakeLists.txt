@@ -148,6 +148,10 @@ ki18n_wrap_ui(calligrastageprivate_LIB_SRCS
    )
 
 add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
+generate_export_header(calligrastageprivate
+    BASE_NAME stage
+    EXPORT_FILE_NAME stage_generated_export.h
+)
 
 target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout KF5::Archive Qt5::Svg Qt5::WebKitWidgets KF5::KDELibs4Support)
 if(HAVE_OPENGL)

@@ -19,6 +19,8 @@
 
 #include "KPrEventActionData.h"
 
+#include <QtGlobal>
+
 class Q_DECL_HIDDEN KPrEventActionData::Private
 {
 public:
