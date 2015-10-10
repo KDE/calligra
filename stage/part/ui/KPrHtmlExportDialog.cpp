@@ -37,7 +37,7 @@
 #include "KPrHtmlExport.h"
 
 KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, const QString &title, const QString &author, QWidget *parent)
-: KDialog(parent)
+: KoDialog(parent)
 , m_allSlides(slides)
 , m_title(title)
 {

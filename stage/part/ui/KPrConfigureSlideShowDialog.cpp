@@ -30,7 +30,7 @@
 #include "KPrViewModeSlidesSorter.h"
 
 KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent )
-    : KDialog( parent )
+    : KoDialog( parent )
     , m_document( document )
     , m_view(parent)
 {

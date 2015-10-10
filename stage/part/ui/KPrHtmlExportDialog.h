@@ -26,11 +26,11 @@
 #include <QWebPage>
 
 #include <KoPAPageBase.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QUrl;
 
-class KPrHtmlExportDialog  : public KDialog
+class KPrHtmlExportDialog  : public KoDialog
 {
     Q_OBJECT
 public:

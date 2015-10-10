@@ -27,7 +27,7 @@
 #include "KPrDocument.h"
 
 KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )
-    : KDialog( parent )
+    : KoDialog( parent )
     , m_document( document )
 {
     QWidget *widget = new QWidget( this );
