@@ -48,9 +48,7 @@
 #include <QMap>
 #include <QString>
 #include <QPalette>
-
-// KDE
-#include <kglobal.h>  // for K_GLOBAL_STATIC
+#include <QGlobalStatic>
 
 
 class DefaultIndexedColors : public QList< QColor >
@@ -129,9 +127,10 @@ public:
      }
 };
 
+Q_GLOBAL_STATIC( DefaultIndexedColors, s_defaultIndexedColors )
+
 QColor MSO::defaultIndexedColor( int index )
 {
-    K_GLOBAL_STATIC( DefaultIndexedColors, s_defaultIndexedColors )
     if( index < 0 || s_defaultIndexedColors->count() <= index )
         return QColor();
     return s_defaultIndexedColors->at( index );
@@ -355,8 +354,9 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC( LangIdToLocaleMapping, s_LangIdToLocaleMapping )
+
 QLocale MSO::localeForLangId( int langid )
 {
-    K_GLOBAL_STATIC( LangIdToLocaleMapping, s_LangIdToLocaleMapping )
     return QLocale( s_LangIdToLocaleMapping->value( langid ) );
 }
