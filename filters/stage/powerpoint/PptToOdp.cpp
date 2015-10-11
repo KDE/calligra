@@ -3221,12 +3221,12 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
             colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
         }
         if (!colorScheme) {
-            qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+            warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
             return ret;
         }
     }
     if (colorScheme->size() <= color.index) {
-        qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
+        warnPpt << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
     } else {
         const ColorStruct cs = colorScheme->at(color.index);
         ret = QColor(cs.red, cs.green, cs.blue);
@@ -3262,7 +3262,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
             } else if ((tmc = dynamic_cast<MSO::SlideContainer*>(m))) {
                 colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else {
-                qWarning() << "Warning: Incorrect container!";
+                warnPpt << "Warning: Incorrect container!";
             }
         }
         // Get the color scheme of the current presentation slide or notes
@@ -3278,7 +3278,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                     colorScheme = &nc->slideSchemeColorSchemeAtom.rgSchemeColor;
                 }
 	    } else {
-                qWarning() << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
+                warnPpt << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
             }
         }
         if (!colorScheme) {
@@ -3292,13 +3292,13 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                 colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             }
             if (!colorScheme) {
-                qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+                warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
                 return ret;
             }
         }
         // Use the red color channel's value as index according to MS-ODRAW
         if (colorScheme->size() <= c.red) {
-            qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
+            warnPpt << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
             return ret;
         } else {
             const ColorStruct cs = colorScheme->value(c.red);
