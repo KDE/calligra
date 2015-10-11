@@ -13,11 +13,11 @@ else()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
 endif()
 
-add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
-target_link_libraries(ppttoodplib koodf mso KF5::KDELibs4Support ${ZLIB_LIBRARIES})
+add_library(ppttoodplib STATIC PptDebug.cpp PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
+target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 
 add_executable(ppttoodp ppttoodpmain.cpp)
-target_link_libraries(ppttoodp ppttoodplib KF5::KDELibs4Support)
+target_link_libraries(ppttoodp ppttoodplib)
 
 add_library(calligra_filter_ppt2odp MODULE PowerPointImport.cpp)
 kcoreaddons_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.desktop)
