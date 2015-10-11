@@ -28,4 +28,9 @@ add_library(mso STATIC
     MsoUtils.cpp
     NumberFormatParser.cpp
 )
-target_link_libraries(mso koodf KF5::KDELibs4Support Qt5::Core Qt5::Gui)
+target_link_libraries(mso
+    PUBLIC
+        koodf
+    PRIVATE
+        Qt5::Gui
+)

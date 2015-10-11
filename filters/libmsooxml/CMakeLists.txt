@@ -42,7 +42,7 @@ set(msooxml_LIB_SRCS
 add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 generate_export_header(komsooxml BASE_NAME komsooxml)
 
-target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive)
+target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive KF5::KDELibs4Support)
 if(Qca-qt5_FOUND)
    target_link_libraries(komsooxml qca-qt5)
 endif()

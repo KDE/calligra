@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
 endif()
 
 add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
-target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
+target_link_libraries(ppttoodplib koodf mso KF5::KDELibs4Support ${ZLIB_LIBRARIES})
 
 add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib KF5::KDELibs4Support)
