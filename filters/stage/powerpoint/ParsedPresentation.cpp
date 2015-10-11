@@ -18,6 +18,8 @@
 */
 #include "ParsedPresentation.h"
 #include "generated/leinputstream.h"
+#include "PptDebug.h"
+
 #include <QBuffer>
 
 using namespace MSO;
@@ -27,12 +29,12 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 {
     std::string path(streampath);
     if (storage.isDirectory("PP97_DUALSTORAGE")) {
-        qDebug() << "PP97_DUALSTORAGE";
+        debugPpt << "PP97_DUALSTORAGE";
         path = "PP97_DUALSTORAGE" + path;
     }
     POLE::Stream stream(&storage, path);
     if (stream.fail()) {
-        qDebug() << "Unable to construct " << streampath << "stream";
+        debugPpt << "Unable to construct " << streampath << "stream";
         return false;
     }
 
@@ -40,7 +42,7 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
     array.resize(stream.size());
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
     if (r != stream.size()) {
-        qDebug() << "Error while reading from " << streampath << "stream";
+        debugPpt << "Error while reading from " << streampath << "stream";
         return false;
     }
     buffer.setData(array);
@@ -58,15 +60,15 @@ parseCurrentUserStream(POLE::Storage& storage, CurrentUserStream& cus)
     try {
         parseCurrentUserStream(stream, cus);
     } catch (const IOException& e) {
-        qDebug() << "caught IOException while parsing CurrentUserStream: " << " " << e.msg;
-        qDebug() << "stream position: " << stream.getPosition();
+        debugPpt << "caught IOException while parsing CurrentUserStream: " << " " << e.msg;
+        debugPpt << "stream position: " << stream.getPosition();
         return false;
     } catch (...) {
-        qDebug() << "caught unknown exception while parsing CurrentUserStream";
+        debugPpt << "caught unknown exception while parsing CurrentUserStream";
         return false;
     }
     if (stream.getPosition() != buffer.size()) {
-        qDebug() << (buffer.size() - stream.getPosition())
+        debugPpt << (buffer.size() - stream.getPosition())
         << "bytes left at the end of CurrentUserStream";
         return false;
     }
@@ -83,15 +85,15 @@ parsePowerPointStructs(POLE::Storage& storage, PowerPointStructs& pps)
     try {
         parsePowerPointStructs(stream, pps);
     } catch (const IOException& e) {
-        qDebug() << "caught IOException while parsing PowerPointStructs " << " " << e.msg;
-        qDebug() << "stream position: " << stream.getPosition();
+        debugPpt << "caught IOException while parsing PowerPointStructs " << " " << e.msg;
+        debugPpt << "stream position: " << stream.getPosition();
         return false;
     } catch (...) {
-        qDebug() << "caught unknown exception while parsing PowerPointStructs";
+        debugPpt << "caught unknown exception while parsing PowerPointStructs";
         return false;
     }
     if (stream.getPosition() != buffer.size()) {
-        qDebug() << (buffer.size() - stream.getPosition())
+        debugPpt << (buffer.size() - stream.getPosition())
         << "bytes left at the end of PowerPointStructs, so probably an error at position " << stream.getMaxPosition();
         return false;
     }
@@ -102,22 +104,22 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
 {
     QBuffer buffer;
     if (!readStream(storage, "/Pictures", buffer)) {
-        qDebug() << "Failed to open /Pictures stream, no big deal (OPTIONAL).";
+        debugPpt << "Failed to open /Pictures stream, no big deal (OPTIONAL).";
         return true;
     }
     LEInputStream stream(&buffer);
     try {
         parsePicturesStream(stream, pps);
     } catch (const IOException& e) {
-        qDebug() << "caught IOException while parsing Pictures " << " " << e.msg;
-        qDebug() << "stream position: " << stream.getPosition();
+        debugPpt << "caught IOException while parsing Pictures " << " " << e.msg;
+        debugPpt << "stream position: " << stream.getPosition();
         return false;
     } catch (...) {
-        qDebug() << "caught unknown exception while parsing Pictures";
+        debugPpt << "caught unknown exception while parsing Pictures";
         return false;
     }
     if (stream.getPosition() != buffer.size()) {
-        qDebug() << (buffer.size() - stream.getPosition())
+        debugPpt << (buffer.size() - stream.getPosition())
         << "bytes left at the end of PicturesStream, so probably an error at position " << stream.getMaxPosition();
         return false;
     }
@@ -129,18 +131,18 @@ parseSummaryInformationStream(POLE::Storage& storage, SummaryInformationProperty
 {
     QBuffer buffer;
     if (!readStream(storage, "/SummaryInformation", buffer)) {
-        qDebug() << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
+        debugPpt << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
         return true;
     }
     LEInputStream stream(&buffer);
     try {
         parseSummaryInformationPropertySetStream(stream, sis);
     } catch (const IOException& e) {
-        qDebug() << "caught IOException while parsing SummaryInformation" << " " << e.msg;
-        qDebug() << "stream position: " << stream.getPosition();
+        debugPpt << "caught IOException while parsing SummaryInformation" << " " << e.msg;
+        debugPpt << "stream position: " << stream.getPosition();
         return false;
     } catch (...) {
-        qDebug() << "caught unknown exception while parsing SummaryInformation";
+        debugPpt << "caught unknown exception while parsing SummaryInformation";
         return false;
     }
     return true;
@@ -196,19 +198,19 @@ ParsedPresentation::parse(POLE::Storage& storage)
 
 // read the CurrentUserStream and PowerPointStructs
     if (!parsePowerPointStructs(storage, presentation)) {
-        qDebug() << "error parsing PowerPointStructs";
+        debugPpt << "error parsing PowerPointStructs";
         return false;
     }
     if (!parseCurrentUserStream(storage, currentUserStream)) {
-        qDebug() << "error parsing CurrentUserStream";
+        debugPpt << "error parsing CurrentUserStream";
         return false;
     }
     if (!parsePictures(storage, pictures)) {
-        qDebug() << "error parsing PicturesStream";
+        debugPpt << "error parsing PicturesStream";
         return false;
     }
     if (!parseSummaryInformationStream(storage, summaryInfo)) {
-        qDebug() << "error parsing SummaryInformationStream";
+        debugPpt << "error parsing SummaryInformationStream";
         return false;
     }
 
@@ -216,7 +218,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
     const UserEditAtom* userEditAtom = get<UserEditAtom>(presentation,
                                        currentUserStream.anon1.offsetToCurrentEdit);
     if (!userEditAtom) {
-        qDebug() << "no userEditAtom";
+        debugPpt << "no userEditAtom";
         return false;
     }
     parsePersistDirectory(presentation, userEditAtom, persistDirectory);
@@ -226,19 +228,19 @@ ParsedPresentation::parse(POLE::Storage& storage)
                             persistDirectory[userEditAtom->docPersistIdRef]);
     }
     if (!documentContainer) {
-        qDebug() << "no documentContainer";
+        debugPpt << "no documentContainer";
         return false;
     }
 // Part 3: identify the note master slide persist object
     quint32 persistId = documentContainer->documentAtom.notesMasterPersistIdRef;
     if (persistId) {
         if (!persistDirectory.contains(persistId)) {
-            qDebug() << "no notesMaster";
+            debugPpt << "no notesMaster";
             return false;
         }
         notesMaster = get<NotesContainer>(presentation, persistDirectory[persistId]);
         if (!notesMaster) {
-            qDebug() << "no notesMaster";
+            debugPpt << "no notesMaster";
             return false;
         }
     }
@@ -246,31 +248,31 @@ ParsedPresentation::parse(POLE::Storage& storage)
     persistId = documentContainer->documentAtom.handoutMasterPersistIdRef;
     if (persistId) {
         if (!persistDirectory.contains(persistId)) {
-            qDebug() << "no handoutMaster";
+            debugPpt << "no handoutMaster";
             return false;
         }
         handoutMaster = get<HandoutContainer>(presentation, persistDirectory[persistId]);
         if (!handoutMaster) {
-            qDebug() << "no handoutMaster";
+            debugPpt << "no handoutMaster";
             return false;
         }
     }
 // Part 5: Identify the main master slide and title master slide persist objects
     int size = documentContainer->masterList.rgMasterPersistAtom.size();
     if (size == 0) {
-        qDebug() << "no master slides";
+        debugPpt << "no master slides";
         return false;
     }
     masters.resize(size);
     for (int i = 0; i < size;++i) {
         persistId = documentContainer->masterList.rgMasterPersistAtom[i].persistIdRef;
         if (!persistDirectory.contains(persistId)) {
-            qDebug() << "cannot load master " << i;
+            debugPpt << "cannot load master " << i;
             return false;
         }
         masters[i] = get<MasterOrSlideContainer>(presentation, persistDirectory[persistId]);
         if (!masters[i]) {
-            qDebug() << "cannot load master " << i;
+            debugPpt << "cannot load master " << i;
             return false;
         }
     }
@@ -283,12 +285,12 @@ ParsedPresentation::parse(POLE::Storage& storage)
         for (int i = 0; i < size;++i) {
             persistId = documentContainer->slideList->rgChildRec[i].slidePersistAtom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
-                qDebug() << "cannot find persistId " << persistId << " for slide " << i;
+                debugPpt << "cannot find persistId " << persistId << " for slide " << i;
                 return false;
             }
             slides[i] = get<SlideContainer>(presentation, persistDirectory[persistId]);
             if (!slides[i]) {
-                qDebug() << "cannot find slide " << i << " at offset "
+                debugPpt << "cannot find slide " << i << " at offset "
                 << persistDirectory[persistId];
                 return false;
             }
@@ -306,13 +308,13 @@ ParsedPresentation::parse(POLE::Storage& storage)
                     = documentContainer->notesList->rgNotesPersistAtom[i];
             persistId = atom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
-                qDebug() << "Invalid persistIdRef: cannot load notes";
+                debugPpt << "Invalid persistIdRef: cannot load notes";
                 continue;
             }
             const NotesContainer* nc
                = get<NotesContainer>(presentation, persistDirectory[persistId]);
             if (!nc) {
-                qDebug() << "NotesContainer missing: cannot load notes" << i;
+                debugPpt << "NotesContainer missing: cannot load notes" << i;
                 continue;
             }
             // find the slide the note belongs to
@@ -320,14 +322,14 @@ ParsedPresentation::parse(POLE::Storage& storage)
             for (int j=0; j < slides.size(); ++j) {
                 if (slides[j]->slideAtom.notesIdRef == atom.notesId) {
                     if (notes[j] != 0) {
-                        qDebug() << "Invalid NotesContainer: slide " << j << " has already notes";
+                        debugPpt << "Invalid NotesContainer: slide " << j << " has already notes";
                         continue;
                     }
                     pos = j;
                 }
             }
             if (pos == -1) {
-                qDebug() << "Invalid NotesContainer: notes " << i << " do not belong to a slide";
+                debugPpt << "Invalid NotesContainer: notes " << i << " do not belong to a slide";
                 continue;
             }
             notes[pos] = nc;

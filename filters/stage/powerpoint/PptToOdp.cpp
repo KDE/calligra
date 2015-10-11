@@ -23,6 +23,7 @@
 
 #include "PptToOdp.h"
 
+#include "PptDebug.h"
 #include "PowerPointImport.h"
 #include "globalobjectcollectors.h"
 #include "pictures.h"
@@ -31,7 +32,6 @@
 #include "msppt.h"
 #include "msoleps.h"
 
-#include <kdebug.h>
 #include <KoOdf.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
@@ -889,12 +889,12 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
     // open inputFile
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
-        qDebug() << "Cannot open " << inputFile;
+        debugPpt << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
 
     if (!parse(storage)) {
-        qDebug() << "Parsing and setup failed.";
+        debugPpt << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
 
@@ -907,7 +907,7 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
     KoStore* storeout = KoStore::createStore(to, KoStore::Write,
                         KoOdf::mimeType(KoOdf::Presentation), storeType);
     if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
+        warnPpt << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
 
@@ -925,7 +925,7 @@ KoFilter::ConversionStatus
 PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
 {
     if (!parse(storage)) {
-        qDebug() << "Parsing and setup failed.";
+        debugPpt << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
     return doConversion(storeout);
@@ -953,7 +953,7 @@ PptToOdp::doConversion(KoStore* storeout)
 
     // store document content
     if (!storeout->open("content.xml")) {
-        kWarning() << "Couldn't open the file 'content.xml'.";
+        warnPpt << "Couldn't open the file 'content.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -970,7 +970,7 @@ PptToOdp::doConversion(KoStore* storeout)
     styles.saveOdfStylesDotXml(storeout, manifest);
 
     if (!storeout->open("meta.xml")) {
-        kWarning() << "Couldn't open the file 'meta.xml'.";
+        warnPpt << "Couldn't open the file 'meta.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -984,7 +984,7 @@ PptToOdp::doConversion(KoStore* storeout)
     manifest->addManifestEntry("meta.xml", "text/xml");
 
     if (!storeout->open("settings.xml")) {
-        kWarning() << "Couldn't open the file 'settings.xml'.";
+        warnPpt << "Couldn't open the file 'settings.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -1217,7 +1217,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
         if (pictureNames.contains(rgbUid)) {
             return "Pictures/" + pictureNames[rgbUid];
         } else {
-            qDebug() << "UNKNOWN picture reference:" << rgbUid.toHex();
+            debugPpt << "UNKNOWN picture reference:" << rgbUid.toHex();
             use_offset = true;
             rgbUid.clear();
         }
@@ -1239,7 +1239,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
 
                     if (!rgbUid.isEmpty()) {
                         if (pictureNames.contains(rgbUid)) {
-                            qDebug() << "Reusing OfficeArtBlip offset:" << offset;
+                            debugPpt << "Reusing OfficeArtBlip offset:" << offset;
                             return "Pictures/" + pictureNames[rgbUid];
                         }
                     }
@@ -1284,14 +1284,14 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     if (font) {
 #ifdef DEBUG_PPTTOODP_FONTS
-        qDebug() << "DEBUG: FontEntityAtom";
-        qDebug() << "> IfCharSet:" << font->lfCharSet;
-        qDebug() << "> fEmbedSubsetted:" << font->fEmbedSubsetted;
-        qDebug() << "> rasterFontType:" << font->rasterFontType;
-        qDebug() << "> deviceFontType:" << font->deviceFontType;
-        qDebug() << "> truetypeFontType:" << font->truetypeFontType;
-        qDebug() << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
-        qDebug() << "DEBUG END: FontEntityAtom";
+        debugPpt << "DEBUG: FontEntityAtom";
+        debugPpt << "> IfCharSet:" << font->lfCharSet;
+        debugPpt << "> fEmbedSubsetted:" << font->fEmbedSubsetted;
+        debugPpt << "> rasterFontType:" << font->rasterFontType;
+        debugPpt << "> deviceFontType:" << font->deviceFontType;
+        debugPpt << "> truetypeFontType:" << font->truetypeFontType;
+        debugPpt << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
+        debugPpt << "DEBUG END: FontEntityAtom";
 #endif
         const QString name = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
         style.addProperty("fo:font-family", name, text);
@@ -1701,7 +1701,7 @@ void PptToOdp::defineListStyleProperties(KoXmlWriter& out, bool imageBullet, con
             bool ok = false;
             qreal size = pictureSize.toDouble(&ok);
             if (!ok) {
-                qDebug() << "defineBulletStyle: error converting" << pictureSize << "to double";
+                debugPpt << "defineBulletStyle: error converting" << pictureSize << "to double";
             }
             size = m_firstChunkFontSize * size / 100.0;
             pictureSize = pt(size);
@@ -1889,7 +1889,7 @@ public:
                     const TextContainer* tc = a.anon.get<TextContainer>();
                     if (tc && tc->textHeaderAtom.textType == wanted) {
                         if (sp) {
-                            qDebug() << "Already found a placeholder with the right type " << wanted;
+                            debugPpt << "Already found a placeholder with the right type " << wanted;
                         } else {
                             sp = &o;
                         }
@@ -2465,7 +2465,7 @@ void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
     if (!listStyle.isEmpty()) {
         list.set_text_style_name(listStyle);
     } else {
-        qDebug() << "Warning: list style name not provided!";
+        debugPpt << "Warning: list style name not provided!";
     }
     if (pf.fBulletHasAutoNumber()) {
         QString xmlId = QString("lvl%1").arg(level);
@@ -2500,7 +2500,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                               const QString& text, const int start, int end, quint16* p_fs)
 {
     if (!tc) {
-        qDebug() << "processTextSpan: TextContainer missing!";
+        debugPpt << "processTextSpan: TextContainer missing!";
         return -1;
     }
 
@@ -2511,10 +2511,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
-    qDebug() << "(TextCFRun) num. of characters:" << count;
-    qDebug() << "(TextCFRun) formatted characters:" << num;
-    qDebug() << "(Text position) start:" << start << "| end:" << end;
-    qDebug() << "font size:" << *p_fs;
+    debugPpt << "(TextCFRun) num. of characters:" << count;
+    debugPpt << "(TextCFRun) formatted characters:" << num;
+    debugPpt << "(Text position) start:" << start << "| end:" << end;
+    debugPpt << "font size:" << *p_fs;
 #endif
 
     bool isSymbol = false;
@@ -2722,7 +2722,7 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextCon
         }
         if (r < pos) {
             // some error
-            qDebug() << "pos: " << pos << "| end: " << end << " r: " << r;
+            debugPpt << "pos: " << pos << "| end: " << end << " r: " << r;
             return -2;
         }
         pos = r;
@@ -2754,8 +2754,8 @@ PptToOdp::processParagraph(Writer& out,
 
     const QString substr = text.mid(start, (end - start));
 #ifdef DEBUG_PPTTOODP
-    qDebug() << "> current paragraph:" << substr;
-    qDebug() << "> (hex):" << hex << substr.toUcs4() << dec;
+    debugPpt << "> current paragraph:" << substr;
+    debugPpt << "> (hex):" << hex << substr.toUcs4() << dec;
 #endif
 
     const PptOfficeArtClientData* pcd = 0;
@@ -2898,7 +2898,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // used.  Common shapes should not refer to a color scheme.
 
     if (!tc) {
-        qDebug() << "MISSING TextContainer, big mess-up!";
+        debugPpt << "MISSING TextContainer, big mess-up!";
         return -1;
     }
 
@@ -2911,8 +2911,8 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "\n> textType:" << txt_type;
-    qDebug() << "> current text:" << txt << "| length:" << len;
+    debugPpt << "\n> textType:" << txt_type;
+    debugPpt << "> current text:" << txt << "| length:" << len;
 #endif
 
     // Let's assume text stored in paragraphs.

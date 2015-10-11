@@ -38,7 +38,6 @@
 #include <QPair>
 #include <QRectF>
 #include <QColor>
-#include <QDebug>
 
 class KoGenStyles;
 class KoGenStyle;
