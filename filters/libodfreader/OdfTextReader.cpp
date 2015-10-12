@@ -26,8 +26,7 @@
 #include <QStringList>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra, libodf{,2}
@@ -40,6 +39,7 @@
 #include "OdfTextReaderBackend.h"
 #include "OdfReaderContext.h"
 #include "OdfDrawReader.h"
+#include "OdfReaderDebug.h"
 
 
 #if 1
@@ -51,7 +51,7 @@ static int debugIndent = 0;
     DEBUG_READING("exiting"); \
     --debugIndent
 #define DEBUG_READING(param) \
-    kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
     << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
@@ -280,7 +280,7 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         QString tagName = reader.qualifiedName().toString();
-        //kDebug() << "list child:" << tagName;
+        //debugOdfReader << "list child:" << tagName;
         if (tagName == "text:list-item") {
             readElementTextListItem(reader);
         }
@@ -685,7 +685,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         if (reader.isCharacters()) {
-            //kDebug(30503) << "Found character data";
+            //debugOdfReader << "Found character data";
             m_backend->characterData(reader, m_context);
             reader.readNext();
             continue;
@@ -1081,7 +1081,7 @@ void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         QString tagName = reader.qualifiedName().toString();
-        kDebug() <<tagName;
+        debugOdfReader <<tagName;
 	if (tagName == "text:h") {
 	    readElementTextH(reader);
 	}

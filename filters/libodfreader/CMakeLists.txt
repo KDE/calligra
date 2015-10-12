@@ -7,6 +7,7 @@ include_directories(
 ########### libodfreader ###############
 
 set(odfreader_LIB_SRCS
+    OdfReaderDebug.cpp
     OdfReader.cpp
     OdfReaderContext.cpp
     OdfReaderBackend.cpp

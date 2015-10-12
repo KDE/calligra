@@ -26,8 +26,7 @@
 #include <QStringList>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra
@@ -39,6 +38,7 @@
 #include "OdtReaderBackend.h"
 #include "OdfReaderContext.h"
 #include "OdfTextReader.h"
+#include "OdfReaderDebug.h"
 
 
 #if 0
@@ -50,7 +50,7 @@ static int debugIndent = 0;
     DEBUG_READING("exiting"); \
     --debugIndent
 #define DEBUG_READING(param) \
-    kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
     << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else

@@ -26,8 +26,7 @@
 #include <QStringList>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra
@@ -42,6 +41,7 @@
 #include "OdfReaderContext.h"
 #include "OdfTextReader.h"
 #include "OdfDrawReader.h"
+#include "OdfReaderDebug.h"
 
 
 static void prepareForOdfInternal(KoXmlStreamReader &reader);
@@ -56,7 +56,7 @@ static int debugIndent = 0;
     DEBUG_READING("exiting"); \
     --debugIndent
 #define DEBUG_READING(param) \
-    kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
     << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
@@ -114,13 +114,13 @@ bool OdfReader::analyzeContent(OdfReaderContext *context)
     if (context->analyzeOdfFile() != KoFilter::OK) {
         return false;
     }
-    kDebug(30503) << "analyze ok";
+    debugOdfReader << "analyze ok";
     return true;
 }
 
 bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context)
 {
-    kDebug(30503) << "entering";
+    debugOdfReader << "entering";
 
     m_backend = backend;
     m_context = context;
@@ -135,10 +135,10 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
     KoStore *odfStore = m_context->odfStore();
 
     if (!odfStore->open("content.xml")) {
-        kError(30503) << "Unable to open input file content.xml" << endl;
+        errorOdfReader << "Unable to open input file content.xml" << endl;
         return false;
     }
-    kDebug(30503) << "open content.xml ok";
+    debugOdfReader << "open content.xml ok";
 
     KoXmlStreamReader reader;
     prepareForOdfInternal(reader);
@@ -154,7 +154,7 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
         }
     }
     if (!foundContent) {
-        kError(30503) << "Couldn't find the content in content.xml" << endl;
+        errorOdfReader << "Couldn't find the content in content.xml" << endl;
     }
 
     m_backend->elementOfficeDocumentcontent(reader, m_context);
@@ -278,7 +278,7 @@ void OdfReader::readElementOfficeText(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
-    kError() << "Unimplemented function";
+    errorOdfReader << "Unimplemented function";
     reader.skipCurrentElement();  
 
     DEBUGEND();
@@ -288,7 +288,7 @@ void OdfReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
-    kError() << "Unimplemented function";
+    errorOdfReader << "Unimplemented function";
     reader.skipCurrentElement();  
 
     DEBUGEND();
@@ -298,7 +298,7 @@ void OdfReader::readElementOfficePresentation(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
-    kError() << "Unimplemented function";
+    errorOdfReader << "Unimplemented function";
     reader.skipCurrentElement();  
 
     DEBUGEND();
