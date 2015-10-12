@@ -27,14 +27,28 @@
 #include <QByteArray>
 #include <QColor>
 #include <QBuffer>
-#include <kdebug.h>
-#include <KoFilterChain.h>
+#include <QDebug>
+#include <QLoggingCategory>
+
 #include <kpluginfactory.h>
+
+#include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
 #include <CalligraVersionWrapper.h>
+
+const QLoggingCategory &AW_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.applixword2odt");
+    return category;
+}
+
+#define debugAw qCDebug(AW_LOG)
+#define warnAw qCWarning(AW_LOG)
+#define errorAw qCCritical(AW_LOG)
+
 
 K_PLUGIN_FACTORY_WITH_JSON(APPLIXWORDImportFactory, "calligra_filter_applixword2odt.json",
                            registerPlugin<APPLIXWORDImport>();)
@@ -90,13 +104,13 @@ static int nextDoubleQuote(const QString& mystr, int startPos)
     int y = startPos;
     do {
         const int pos = mystr.indexOf('"', y);
-        //kDebug(30517) << "POS:" << pos << " length:" << mystr.length() << " y:" << y;
-        //kDebug(30517) << "<" << mystr << " >";
+        //debugAw << "POS:" << pos << " length:" << mystr.length() << " y:" << y;
+        //debugAw << "<" << mystr << " >";
         if ((pos > 0) && (mystr[pos-1] == '\\')) {
-            //kDebug(30517) << " escape character, keep going";
+            //debugAw << " escape character, keep going";
             y = pos + 1;
         } else {
-            //kDebug(30517) << " String end //";
+            //debugAw << " String end //";
             return pos;
         }
     } while (true);
@@ -136,7 +150,7 @@ bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style)
         QString colname = type.mid(7, type.length() - 7 - 1);
         QMap<QString, QColor>::const_iterator it = m_colorMap.find(colname);
         if (it != m_colorMap.end()) {
-            kDebug(30517) << "  Color:" << colname << (*it).name();
+            debugAw << "  Color:" << colname << (*it).name();
             style.addProperty("style:fo-color", (*it).name(), KoGenStyle::TextType);
         }
         return true;
@@ -160,7 +174,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        kError(30517) << "Unable to open input file!" << endl;
+        errorAw << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -169,7 +183,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     //create output files
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
-        kWarning(30517) << "Unable to open output file!";
+        warnAw << "Unable to open output file!";
         delete store;
         return KoFilter::FileNotFound;
     }
@@ -217,7 +231,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         mystr = readTagLine(stream);
         ok = true;
 
-        //kDebug() << "mystr=" << mystr;
+        //debugAw << "mystr=" << mystr;
 
         /**********************************************************************
          * jump over start_styles if it exists                                *
@@ -229,7 +243,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                 mystr = readTagLine(stream);
                 if (mystr == "<end_styles>") {
                     ok = false;
-                    kDebug(30517) << "End styles";
+                    debugAw << "End styles";
                 } else {
                     if (mystr.startsWith("<color ")) {
                         mystr.remove(0, 8);
@@ -240,7 +254,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                         sscanf((const char *) mystr.toLatin1() ,
                                        ":%d:%d:%d:%d>",
                                        &c, &m, &y, &k);
-                        kDebug(30517) << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
+                        debugAw << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
 
                         m_colorMap.insert(coltxt, QColor::fromCmyk(c, m, y, k));
                     } //end if ...<col...
@@ -253,30 +267,30 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
          * jump over embedded Applix docs                                      *
          ***********************************************************************/
         else if (mystr == "<start_data Applix>") {
-            kDebug(30517) << "\nEmbedded Applix object starts:";
+            debugAw << "\nEmbedded Applix object starts:";
             do {
                 mystr = readTagLine(stream);
                 if (mystr == "<end_data>") ok = false;
                 else {
-                    kDebug(30517) << "" << mystr;
+                    debugAw << "" << mystr;
                 }
             } while (ok == true);
-            kDebug(30517) << "Embedded Applix object ends";
+            debugAw << "Embedded Applix object ends";
 
         }
         /**********************************************************************
          * jump over header footer                                            *
          **********************************************************************/
         else if (mystr.startsWith("<start_hdrftr ")) {
-            kDebug(30517) << "\nHeader/Footer starts:";
+            debugAw << "\nHeader/Footer starts:";
             do {
                 mystr = readTagLine(stream);
                 if (mystr == "<end_hdrftr>") ok = false;
                 else {
-                    kDebug(30517) << "" << mystr;
+                    debugAw << "" << mystr;
                 }
             } while (ok == true);
-            kDebug(30517) << "\nHeader/Footer ends";
+            debugAw << "\nHeader/Footer ends";
         }
         /**********************************************************************
          * found an "end of paragraph" marker, with the parag style
@@ -289,8 +303,8 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             mystr.remove(0, pos + 1);
             mystr.chop(1); // Remove ending >
 
-            kDebug(30517) << " Para  Name:" << stylename;
-            kDebug(30517) << "       Rest:" << mystr;
+            debugAw << " Para  Name:" << stylename;
+            debugAw << "       Rest:" << mystr;
 
             // TODO use paragraph style name 'stylename'
 
@@ -308,7 +322,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                 } else if (type == "justifyRight") {
                     paragStyle.addAttribute("fo:text-align", "right");
                 } else if (!parseFontProperty(type, paragStyle)) {
-                    kDebug() << "Unsupported paragraph formatting attribute" << type;
+                    debugAw << "Unsupported paragraph formatting attribute" << type;
                 }
             }
 
@@ -376,7 +390,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             textstr = mystr.left(pos);
             mystr.remove(0, pos + 1);
             mystr = mystr.trimmed();
-            kDebug(30517) << "Text:<" << textstr << " >" << pos << "  Rest:<" << mystr << ">";
+            debugAw << "Text:<" << textstr << " >" << pos << "  Rest:<" << mystr << ">";
 
             KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
             //style.addAttribute("style:display-name", styleName);
@@ -384,9 +398,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             // split format
             const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
             Q_FOREACH(const QString& type, typeList) {
-                //kDebug(30517) << "Text formatting:" << type;
+                //debugAw << "Text formatting:" << type;
                 if (!parseFontProperty(type, style)) {
-                    kDebug(30517) << "Unhandled text format:" << type;
+                    debugAw << "Unhandled text format:" << type;
                 }
             }
 
@@ -399,7 +413,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             paragraphWriter->addTextSpan(textstr);
             paragraphWriter->endElement(); // span
         } else {
-            kDebug() << "Unhandled tag:" << mystr;
+            debugAw << "Unhandled tag:" << mystr;
         }
     }
 
@@ -418,13 +432,13 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         return KoFilter::CreationError;
     }
     if (!createMeta(odfStore)) {
-        kWarning() << "Error while trying to write 'meta.xml'. Partition full?";
+        warnAw << "Error while trying to write 'meta.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }
 
     if ( !odfStore.closeManifestWriter() ) {
-        kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
+        warnAw << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }
