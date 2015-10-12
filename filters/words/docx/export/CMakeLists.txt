@@ -20,7 +20,7 @@ set(Odt2Docx_PART_SRCS
     OpcRelSetManager.cpp
 )
 add_library(calligra_filter_odt2docx MODULE ${Odt2Docx_PART_SRCS})
-target_link_libraries(calligra_filter_odt2docx koodfreader komain koodf koodf2)
+target_link_libraries(calligra_filter_odt2docx koodfreader komain koodf koodf2 KF5::KDELibs4Support)
 install(TARGETS calligra_filter_odt2docx DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 #install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

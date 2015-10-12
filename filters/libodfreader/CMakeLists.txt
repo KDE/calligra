@@ -30,8 +30,12 @@ set(odfreader_LIB_SRCS
 add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
 generate_export_header(koodfreader)
 
-target_link_libraries(koodfreader koodf koodf2 KF5::KDELibs4Support Qt5::Xml)
-
+target_link_libraries(koodfreader
+    PUBLIC
+        koodf2
+    PRIVATE
+        KF5::I18n
+)
 set_target_properties(koodfreader PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}
     SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

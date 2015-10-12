@@ -60,7 +60,6 @@ target_link_libraries(koodf2
         koodf
     PRIVATE
         mso
-        Qt5::Xml
 )
 
 set_target_properties(koodf2 PROPERTIES
