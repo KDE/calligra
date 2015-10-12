@@ -34,7 +34,7 @@
 #include <ui_ImportDialogUI.h>
 
 AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
-: KDialog(parent)
+: KoDialog(parent)
 {
     QWidget *widget = new QWidget();
     m_ui.setupUi(widget);

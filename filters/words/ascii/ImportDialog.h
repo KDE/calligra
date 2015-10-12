@@ -24,10 +24,10 @@
 #include <QWidget>
 #include <QButtonGroup>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <ui_ImportDialogUI.h>
 
-class AsciiImportDialog : public KDialog
+class AsciiImportDialog : public KoDialog
 {
     Q_OBJECT
 public:
