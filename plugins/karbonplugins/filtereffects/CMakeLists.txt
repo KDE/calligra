@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"KarbonFilterEffects\")
+
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(karbon_filtereffects_PART_SRCS
