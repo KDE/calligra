@@ -1,5 +1,3 @@
-# plugin/tools have their own catalog
-remove_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
 add_definitions(-DTRANSLATION_DOMAIN=\"KarbonTools\")
 
 include_directories(
