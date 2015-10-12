@@ -28,7 +28,6 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
 
@@ -51,6 +50,7 @@
 #include <KoUpdater.h>
 #include <KoTextDocumentLayout.h>
 
+#include "AsciiImportDebug.h"
 #include "ImportDialog.h"
 
 #include <KWDocument.h>
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
+        errorAsciiImport << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -124,7 +124,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     if (!checkEncoding(codec, data)) {
         KEncodingProber prober(KEncodingProber::Universal);
         prober.feed(data);
-        kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+        debugAsciiImport << "guessed" << prober.encoding() << prober.confidence();
         if (prober.confidence() > 0.5)
             codec = QTextCodec::codecForName(prober.encoding());
         if (!codec || !checkEncoding(codec, data )) {
@@ -143,17 +143,17 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         paragraphStrategy = dialog->getParagraphStrategy();
     }
     if (!codec) return KoFilter::StupidError;
-    kDebug(30502) << "Charset used:" << codec->name();
+    debugAsciiImport << "Charset used:" << codec->name();
 
 #ifdef OUTPUT_AS_ODT_FILE
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
-        kWarning(30502) << "Unable to open output file!";
+        warnAsciiImport << "Unable to open output file!";
         delete store;
         return KoFilter::FileNotFound;
     }
     
-    kDebug(30502) << "created store.";
+    debugAsciiImport << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
@@ -327,7 +327,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
             odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
     }
     if (!odfStore.closeManifestWriter()) {
-        kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
+        warnAsciiImport << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }

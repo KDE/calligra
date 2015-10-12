@@ -27,10 +27,10 @@
 #include <klocalizedstring.h>
 #include <kcharsets.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kcombobox.h>
 #include <kmessagebox.h>
 
+#include "AsciiImportDebug.h"
 #include <ui_ImportDialogUI.h>
 
 AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
@@ -71,7 +71,7 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
                 codec = 0;
             }
         }
-        //kDebug(30502) << "Data:" << strCodec << (codec ? codec->name(): "");
+        //debugAsciiImport << "Data:" << strCodec << (codec ? codec->name(): "");
         if ((codec && encoding == codec->name()) || strCodec == encoding) {
             m_ui.comboBoxEncoding->setCurrentIndex(i);
             break;
@@ -88,7 +88,7 @@ AsciiImportDialog::~AsciiImportDialog()
 QTextCodec* AsciiImportDialog::getCodec() const
 {
     const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
-    kDebug(30502) << "Encoding:" << strCodec << m_ui.comboBoxEncoding->currentText();
+    debugAsciiImport << "Encoding:" << strCodec << m_ui.comboBoxEncoding->currentText();
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
@@ -103,7 +103,7 @@ QTextCodec* AsciiImportDialog::getCodec() const
     // Still nothing?
     if (!codec || !ok) {
         // Default: UTF-8
-        kWarning(30502) << "Cannot find encoding:" << strCodec;
+        warnAsciiImport << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
         KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
         return 0;

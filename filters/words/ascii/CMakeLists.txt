@@ -6,6 +6,7 @@ include_directories(
 
 
 set(ascii2words_PART_SRCS
+    AsciiImportDebug.cpp
     AsciiImport.cpp
     ImportDialog.cc
 )
