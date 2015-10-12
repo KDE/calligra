@@ -35,7 +35,7 @@ void readCharacterData(KoXmlStreamReader &reader, QString &result)
 	reader.readNext();
 
         if (reader.isCharacters()) {
-            //kDebug(30503) << "Found character data";
+            //debugOdf2 << "Found character data";
 	    result.append(reader.text());
         }
 	else if (reader.isStartElement()) {

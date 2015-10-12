@@ -24,8 +24,9 @@
 #include <QString>
 #include <QRect>
 #include <QMap>
+#include <QHash>
+#include <QVector>
 #include <QColor>
-#include <QDebug>
 
 
 namespace KoChart

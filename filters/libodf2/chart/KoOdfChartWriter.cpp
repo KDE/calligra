@@ -24,9 +24,6 @@
 // libstdc++
 #include <algorithm> // For std:find()
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -35,7 +32,7 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 
-
+#include "Odf2Debug.h"
 #include <Charting.h>
 #include "NumberFormatParser.h"
 
@@ -686,7 +683,7 @@ bool KoOdfChartWriter::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // office:body
 
 #ifdef CONTENTXML_DEBUG
-    qDebug() << bodyWriter->toString();
+    debugOdf2 << bodyWriter->toString();
 #endif
 
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
@@ -1038,7 +1035,7 @@ void KoOdfChartWriter::writeInternalTable(KoXmlWriter* bodyWriter)
             for (int c = 1; c <= columnCount; ++c) {
                 bodyWriter->startElement("table:table-cell");
                 if (Cell* cell = chart()->m_internalTable.cell(c, r, false)) {
-                    //kDebug() << "cell->m_value " << cell->m_value;
+                    //debugOdf2 << "cell->m_value " << cell->m_value;
                     if (!cell->m_value.isEmpty()) {
                         if (!cell->m_valueType.isEmpty()) {
                             bodyWriter->addAttribute("office:value-type", cell->m_valueType);

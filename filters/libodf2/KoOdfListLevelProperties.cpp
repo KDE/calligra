@@ -25,13 +25,11 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // odflib
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
+#include "Odf2Debug.h"
 
 // ----------------------------------------------------------------
 //                         private class
@@ -80,7 +78,7 @@ bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
     foreach (const KoXmlStreamAttribute &attr, attrs) {
         d->propertiesAttributes.insert(attr.qualifiedName().toString(), attr.value().toString());
     }
-    kDebug() << "level properties attributes:" << d->propertiesAttributes;
+    debugOdf2 << "level properties attributes:" << d->propertiesAttributes;
 
     while (reader.readNextStartElement()) {
         QString child = reader.qualifiedName().toString();
@@ -96,7 +94,7 @@ bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
             foreach (const KoXmlStreamAttribute &attr, attrs) {
                 d->labelAlignmentAttributes.insert(attr.qualifiedName().toString(), attr.value().toString());
             }
-            kDebug() << "Label alignment attributes:" << d->labelAlignmentAttributes;
+            debugOdf2 << "Label alignment attributes:" << d->labelAlignmentAttributes;
         }
     }
     reader.skipCurrentElement();

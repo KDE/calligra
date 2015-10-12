@@ -13,6 +13,8 @@ include_directories(${KOODF_INCLUDES}
 ########### libkoodf2 ###############
 
 set(koodf2_LIB_SRCS
+    Odf2Debug.cpp
+
     # Storage objects, using old DOM based loading
     KoXmlStreamReader.cpp
     KoXmlUtils.cpp

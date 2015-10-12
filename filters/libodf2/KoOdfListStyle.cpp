@@ -25,15 +25,14 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Odflib
 #include "KoXmlStreamReader.h"
 #include "KoXmlWriter.h"
 #include "KoOdfStyleProperties.h"
 #include "KoOdfTextProperties.h"
 #include "KoOdfListLevelProperties.h"
+
+#include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfListStyle
@@ -148,7 +147,7 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
 
         // So far we only have support for text-properties and list-level-properties.
         QString propertiesType = reader.qualifiedName().toString();
-        kDebug() << "properties type: " << propertiesType;
+        debugOdf2 << "properties type: " << propertiesType;
 
         // Create a new propertyset variable depending on the type of properties.
         KoOdfStyleProperties *properties;
@@ -159,7 +158,7 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
             properties = new KoOdfListLevelProperties();
         } else {
             // FIXME: support office:binary-data
-            // kDebug() << "Unsupported property type: " << propertiesType;
+            // debugOdf2 << "Unsupported property type: " << propertiesType;
             reader.skipCurrentElement();
             continue;
         }
@@ -184,7 +183,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
     dummy = attrs.value("style:display-name").toString();
     setDisplayName(dummy);
 
-    kDebug() << "Style:" << name() << displayName();
+    debugOdf2 << "Style:" << name() << displayName();
 
     // Load child elements: list-level-style-bullet, text:list-level-style-number, text:list-level-style-image
     while (reader.readNextStartElement()) {
@@ -197,7 +196,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
                 || listLevelType == "text:list-level-style-number"
                 || listLevelType == "text:list-level-style-image")
         {
-            kDebug() << "List Level style type" << listLevelType;
+            debugOdf2 << "List Level style type" << listLevelType;
             if (!readProperties(reader)) {
                 return false;
             }

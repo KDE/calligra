@@ -23,8 +23,6 @@
 
 #include <KoXmlWriter.h>
 
-#include <QDebug>
-
 KoTable::KoTable()
 : m_columns()
 , m_rows()
