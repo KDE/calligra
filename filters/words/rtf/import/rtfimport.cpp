@@ -13,7 +13,6 @@
 */
 #include "rtfimport.h"
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
