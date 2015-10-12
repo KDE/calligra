@@ -26,7 +26,8 @@ target_link_libraries(
     Qt5::Core
     Qt5::Svg
     braindumpcore
-    KF5::KDELibs4Support
+    KF5::ItemViews
+    KF5::CoreAddons
     )
 install(TARGETS braindump_shape_state DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
