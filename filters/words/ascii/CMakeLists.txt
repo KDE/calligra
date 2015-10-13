@@ -33,7 +33,7 @@ set(odt2ascii_PART_SRCS
     OdfReaderAsciiContext.cpp
 )
 add_library(calligra_filter_odt2ascii MODULE ${odt2ascii_PART_SRCS})
-target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2 KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2)
 install(TARGETS calligra_filter_odt2ascii DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 kcoreaddons_desktop_to_json(calligra_filter_odt2ascii calligra_filter_odt2ascii.desktop)
