@@ -669,8 +669,10 @@ void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &conte
 
     endnotesConfiguration->setDefaultNoteParagraphStyle(d->paragraphStylesDotXmlStyles.value(endnotesConfiguration->defaultNoteParagraphStyleName()));
 
-    styleManager->setNotesConfiguration(footnotesConfiguration);
-    styleManager->setNotesConfiguration(endnotesConfiguration);
+    if (styleManager) {
+        styleManager->setNotesConfiguration(footnotesConfiguration);
+        styleManager->setNotesConfiguration(endnotesConfiguration);
+    }
 }
 
 void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)
