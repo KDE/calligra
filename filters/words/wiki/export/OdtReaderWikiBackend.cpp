@@ -23,9 +23,6 @@
 // Own
 #include "OdtReaderWikiBackend.h"
 
-// KDE
-#include "kdebug.h"
-
 // Calligra
 #include <KoXmlReader.h>
 
@@ -36,11 +33,12 @@
 
 // This filter
 #include "OdfReaderWikiContext.h"
+#include "WikiExportDebug.h"
 
 
 #if 1
 #define DEBUG_BACKEND() \
-    kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    debugWiki << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \

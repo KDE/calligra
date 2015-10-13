@@ -5,6 +5,7 @@ include_directories(
 )
 
 set(odt2wiki_PART_SRCS
+    WikiExportDebug.cpp
     WikiExport.cpp
     OdtReaderWikiBackend.cpp
     OdfReaderWikiContext.cpp
