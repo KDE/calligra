@@ -27,6 +27,7 @@ include_directories(
 )
 
 set(odt2ascii_PART_SRCS
+    AsciiExportDebug.cpp
     AsciiExport.cpp
     OdtReaderAsciiBackend.cpp
     OdfReaderAsciiContext.cpp

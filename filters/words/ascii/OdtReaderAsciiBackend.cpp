@@ -22,19 +22,17 @@
 // Own
 #include "OdtReaderAsciiBackend.h"
 
-// KDE
-#include "kdebug.h"
-
 // Calligra
 #include <KoXmlReader.h>
 
 // This filter
 #include "OdfReaderAsciiContext.h"
+#include "AsciiExportDebug.h"
 
 
 #if 0
 #define DEBUG_BACKEND() \
-    kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    debugAsciiExport << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \
