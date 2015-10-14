@@ -20,7 +20,6 @@
 #include "PalmDocCompression.h"
 #include "MobiFile.h"
 
-#include <kdebug.h>
 #include <QBuffer>
 #include <QDataStream>
 #include <string.h>

@@ -24,7 +24,6 @@
 #include <QBuffer>
 #include <QIODevice>
 #include <QDataStream>
-#include <kdebug.h>
 #include <QHash>
 
 palmDBHeader::palmDBHeader():

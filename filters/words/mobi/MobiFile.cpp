@@ -19,10 +19,10 @@
 #include "MobiFile.h"
 
 #include "MobiHeaderGenerator.h"
+#include "MobiExportDebug.h"
 
 #include <QFile>
 #include <QDataStream>
-#include <kdebug.h>
 
 MobiFile::MobiFile()
 {
@@ -43,7 +43,7 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeade
 {
     QFile mobi(outputFile);
     if (!mobi.open(QIODevice::WriteOnly)) {
-        kDebug(31000) << "Can not create the file";
+        debugMobi << "Can not create the file";
         return KoFilter::CreationError;
     }
 

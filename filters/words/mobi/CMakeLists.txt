@@ -2,6 +2,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/filters/words/epub
 )
 set(odt2mobi_PART_SRCS
+  MobiExportDebug.cpp
   exportmobi.cpp
   MobiHeaderGenerator.cpp
   MobiFile.cpp
@@ -14,6 +15,8 @@ set(odt2mobi_PART_SRCS
 
 
 add_library(calligra_filter_odt2mobi MODULE ${odt2mobi_PART_SRCS})
+set_target_properties(calligra_filter_odt2mobi PROPERTIES COMPILE_DEFINITIONS "DEBUG_MOBI=1")
+
 target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg KF5::KDELibs4Support)
 
 install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

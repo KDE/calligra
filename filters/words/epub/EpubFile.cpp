@@ -28,13 +28,12 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+
+#include "EpubExportDebug.h"
 
 
 // ================================================================
@@ -57,7 +56,7 @@ KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName,
     KoStore *epubStore = KoStore::createStore(fileName, KoStore::Write,
                                               appIdentification, KoStore::Auto);
     if (!epubStore || epubStore->bad()) {
-        kWarning(30003) << "Unable to create output file!";
+        warnEpub << "Unable to create output file!";
         delete epubStore;
         return KoFilter::FileNotFound;
     }
@@ -101,7 +100,7 @@ KoFilter::ConversionStatus EpubFile::writeMetaInf(KoStore *epubStore)
 {
     // We can hardcode this one.
     if (!epubStore->open("META-INF/container.xml")) {
-        kDebug(30503) << "Can not to open META-INF/container.xml.";
+        debugEpub << "Can not to open META-INF/container.xml.";
         return KoFilter::CreationError;
     }
 
@@ -130,7 +129,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
     if (!epubStore->open(pathPrefix() + "content.opf")) {
-        kDebug(30503) << "Can not create content.opf .";
+        debugEpub << "Can not create content.opf .";
         return KoFilter::CreationError;
     }
 
@@ -294,7 +293,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
     if (!epubStore->open(pathPrefix() + "toc.ncx")) {
-        kDebug(30503) << "Can not create toc.ncx.";
+        debugEpub << "Can not create toc.ncx.";
         return KoFilter::CreationError;
     }
 

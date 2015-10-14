@@ -28,12 +28,10 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 
+#include "SharedExportDebug.h"
 
 // ================================================================
 //                     class FileCollectorPrivate
@@ -152,7 +150,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     // Write contents of added files.
     foreach(FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
-            kDebug(30503) << "Can not create" << file->m_fileName;
+            debugSharedExport << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
         }
         store->write(file->m_fileContents);

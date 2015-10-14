@@ -19,12 +19,12 @@
 
 #include "exportmobi.h"
 
-#include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "MobiExportDebug.h"
 #include "OdtMobiHtmlConverter.h"
 #include "FileCollector.h"
 #include "MobiFile.h"
@@ -61,7 +61,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        kError(31000) << "Unable to open input file!" << endl;
+        errorMobi << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -162,12 +162,12 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     int imgId = 1;
     foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->hasFile(imgSrc)) {
-            kWarning(30503) << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            warnMobi << "Can not to extract this image, image "<< imgSrc<< "is an external image";
             // Ignore the external image.
             continue;
         }
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(30503) << "Can not to extract file";
+            debugMobi << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
         m_imagesSize << imgContent.size();

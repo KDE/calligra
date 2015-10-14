@@ -8,6 +8,7 @@ include_directories(
 if(SHOULD_BUILD_FILTER_ODT_TO_EPUB2)
 
 set(odt2epub2_PART_SRCS
+    EpubExportDebug.cpp
     exportepub2.cpp
     OdfParser.cpp
     OdtHtmlConverter.cpp
@@ -17,6 +18,7 @@ set(odt2epub2_PART_SRCS
 )
 
 add_library(calligra_filter_odt2epub2 MODULE ${odt2epub2_PART_SRCS})
+set_target_properties(calligra_filter_odt2epub2 PROPERTIES COMPILE_DEFINITIONS "DEBUG_EPUB=1")
 
 target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain Qt5::Svg KF5::KDELibs4Support)
 
@@ -29,6 +31,7 @@ endif()
 if(SHOULD_BUILD_FILTER_ODT_TO_HTML)
 
 set(odt2html_PART_SRCS
+    HtmlExportDebug.cpp
     exporthtml.cpp
     OdfParser.cpp
     OdtHtmlConverter.cpp
@@ -38,6 +41,7 @@ set(odt2html_PART_SRCS
 )
 
 add_library(calligra_filter_odt2html MODULE ${odt2html_PART_SRCS})
+set_target_properties(calligra_filter_odt2html PROPERTIES COMPILE_DEFINITIONS "DEBUG_HTML=1")
 
 target_link_libraries(calligra_filter_odt2html kovectorimage komain Qt5::Svg KF5::KDELibs4Support)
 
