@@ -48,6 +48,8 @@ private Q_SLOTS:
     void testAsComplex();
     void testAsNumeric_data();
     void testAsNumeric();
+    void testAsString_data();
+    void testAsString();
 
 private:
     CalculationSettings* m_calcsettings;
