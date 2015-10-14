@@ -20,7 +20,7 @@ set(odt2epub2_PART_SRCS
 add_library(calligra_filter_odt2epub2 MODULE ${odt2epub2_PART_SRCS})
 set_target_properties(calligra_filter_odt2epub2 PROPERTIES COMPILE_DEFINITIONS "DEBUG_EPUB=1")
 
-target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain Qt5::Svg KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2epub2  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_odt2epub2 calligra_filter_odt2epub2.desktop)
@@ -43,7 +43,7 @@ set(odt2html_PART_SRCS
 add_library(calligra_filter_odt2html MODULE ${odt2html_PART_SRCS})
 set_target_properties(calligra_filter_odt2html PROPERTIES COMPILE_DEFINITIONS "DEBUG_HTML=1")
 
-target_link_libraries(calligra_filter_odt2html kovectorimage komain Qt5::Svg KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_odt2html kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2html  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_odt2html calligra_filter_odt2html.desktop)

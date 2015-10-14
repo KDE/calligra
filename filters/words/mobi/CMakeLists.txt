@@ -17,7 +17,7 @@ set(odt2mobi_PART_SRCS
 add_library(calligra_filter_odt2mobi MODULE ${odt2mobi_PART_SRCS})
 set_target_properties(calligra_filter_odt2mobi PROPERTIES COMPILE_DEFINITIONS "DEBUG_MOBI=1")
 
-target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_odt2mobi calligra_filter_odt2mobi.desktop)
