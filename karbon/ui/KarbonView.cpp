@@ -479,8 +479,8 @@ void KarbonView::fileImportGraphic()
 
     QStringList imageFilter;
     // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilter << QString("image/") + format;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageFilter << QLatin1String(mimeType);
     }
     filter.append(imageFilter);
 

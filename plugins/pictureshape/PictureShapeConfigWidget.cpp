@@ -92,9 +92,8 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
-    // ## this is awful. Qt5: use m_fileWidget->setMimeFilter(QImageReader::supportedMimeTypes()) directly
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilters << QString("image/") + format;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageFilters << QLatin1String(mimeType);
     }
     m_fileWidget->setMimeFilter(imageFilters);
     layout->addWidget(m_fileWidget);

@@ -134,12 +134,11 @@ void KoFileDialog::setOverrideDir(const QString &overrideDir)
 
 void KoFileDialog::setImageFilters()
 {
-    QStringList imageFilters;
-    // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilters << QLatin1String("image/") + format;
+    QStringList imageMimeTypes;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageMimeTypes << QLatin1String(mimeType);
     }
-    setMimeTypeFilters(imageFilters);
+    setMimeTypeFilters(imageMimeTypes);
 }
 
 void KoFileDialog::setNameFilter(const QString &filter)
