@@ -27,9 +27,6 @@
 #include <QPixmapCache>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -44,6 +41,7 @@
 
 // 3D shape
 #include "Objects.h"
+#include "ThreedDebug.h"
 
 
 SceneObject::SceneObject(Object3D *parent, bool topLevel)
@@ -87,8 +85,8 @@ void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
     QRectF rect = converter.documentToView(QRectF(QPoint(0, 0), size()));
     painter.drawRect(rect);
 #endif
-    kDebug(31000) << "boundingRect: " << boundingRect();
-    kDebug(31000) << "outlineRect: " << outlineRect();
+    debugThreed << "boundingRect: " << boundingRect();
+    debugThreed << "outlineRect: " << outlineRect();
 
 #if 0 // Taken from the vector shape
     QRectF  rect(QPointF(0,0), m_size);
@@ -218,9 +216,9 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
         }
     }
 
-    kDebug(31000) << "Objects:" << m_objects.size();
+    debugThreed << "Objects:" << m_objects.size();
 #if IMPLEMENT_AS_SHAPECONTAINER
-    kDebug(31000) << "Objects in shape container:" << shapeCount();
+    debugThreed << "Objects in shape container:" << shapeCount();
 #endif
 
     return true;

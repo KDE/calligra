@@ -26,9 +26,8 @@
 #include <QBuffer>
 #include <QImage>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 // Calligra
 #include <KoXmlNS.h>
@@ -42,6 +41,7 @@
 // 3D Shape
 #include "SceneObject.h"
 //#include "ThreedShapeConfigWidget.h"
+#include "ThreedDebug.h"
 
 
 ThreedShapeFactory::ThreedShapeFactory()
@@ -73,7 +73,7 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 {
     Q_UNUSED(documentResources);
 
-    kDebug(31000) << "Creating a 3d shape";
+    debugThreed << "Creating a 3d shape";
 
     SceneObject *defaultShape = new SceneObject(0, true);
     defaultShape->setShapeId(THREEDSHAPEID);

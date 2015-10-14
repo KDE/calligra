@@ -5,6 +5,7 @@ include_directories( ${FLAKE_INCLUDES} )
 ########### Flake Plugin library ###############
 
 set (threedshape_LIB_SRCS
+    ThreedDebug.cpp
     ThreedShapePlugin.cpp
     ThreedShapeFactory.cpp
     #ThreedToolFactory.cpp
