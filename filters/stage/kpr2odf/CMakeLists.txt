@@ -9,7 +9,7 @@ add_library(calligra_filter_kpr2odp MODULE ${kpr2odp_PART_SRCS})
 
 kcoreaddons_desktop_to_json(calligra_filter_kpr2odp calligra_filter_kpr2odp.desktop)
 
-target_link_libraries(calligra_filter_kpr2odp komain KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_kpr2odp komain)
 
 install(TARGETS calligra_filter_kpr2odp DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
