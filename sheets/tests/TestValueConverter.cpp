@@ -28,8 +28,7 @@
 
 #include <QTest>
 
-//Q_DECLARE_METATYPE(Calligra::Sheets::Format::Type)
-//Q_DECLARE_METATYPE(Calligra::Sheets::Style::FloatFormat)
+Q_DECLARE_METATYPE(complex<Number>)
 
 using namespace Calligra::Sheets;
 
@@ -79,50 +78,50 @@ void TestValueConverter::testAsBoolean_data()
     QTest::addColumn<QString>("locale");
     QTest::addColumn<Value>("value");
     QTest::addColumn<bool>("expectedOk");
-    QTest::addColumn<Value>("expected");
+    QTest::addColumn<bool>("expected");
 
-    QTest::newRow("empty") << "C" << Value() << true << Value(false);
+    QTest::newRow("empty") << "C" << Value() << true << false;
 
-    QTest::newRow("bool true") << "C" << Value(true) << true << Value(true);
-    QTest::newRow("bool false") << "C" << Value(false) << true << Value(false);
+    QTest::newRow("bool true") << "C" << Value(true) << true << true;
+    QTest::newRow("bool false") << "C" << Value(false) << true << false;
 
-    QTest::newRow("integer <0") << "C" << Value(-5) << true << Value(true);
-    QTest::newRow("integer =0") << "C" << Value(0) << true << Value(false);
-    QTest::newRow("integer >0") << "C" << Value(1) << true << Value(true);
+    QTest::newRow("integer <0") << "C" << Value(-5) << true << true;
+    QTest::newRow("integer =0") << "C" << Value(0) << true << false;
+    QTest::newRow("integer >0") << "C" << Value(1) << true << true;
 
-    QTest::newRow("float <0") << "C" << Value(-0.00001) << true << Value(true);
-    QTest::newRow("float =0") << "C" << Value(0.0) << true << Value(false);
-    QTest::newRow("float >0") << "C" << Value(1e-99) << true << Value(true);
+    QTest::newRow("float <0") << "C" << Value(-0.00001) << true << true;
+    QTest::newRow("float =0") << "C" << Value(0.0) << true << false;
+    QTest::newRow("float >0") << "C" << Value(1e-99) << true << true;
 
-    QTest::newRow("complex -1 0i") << "C" << Value(complex<Number>(-1, 0)) << true << Value(true);
-    QTest::newRow("complex  0 0i") << "C" << Value(complex<Number>(0, 0)) << true << Value(false);
-    QTest::newRow("complex +1 0i") << "C" << Value(complex<Number>(1, 0)) << true << Value(true);
-    QTest::newRow("complex -1 1i") << "C" << Value(complex<Number>(-1, 1)) << true << Value(true);
-    QTest::newRow("complex  0 1i") << "C" << Value(complex<Number>(0, 1)) << true << Value(false);
-    QTest::newRow("complex +1 1i") << "C" << Value(complex<Number>(1, 1)) << true << Value(true);
+    QTest::newRow("complex -1 0i") << "C" << Value(complex<Number>(-1, 0)) << true << true;
+    QTest::newRow("complex  0 0i") << "C" << Value(complex<Number>(0, 0)) << true << false;
+    QTest::newRow("complex +1 0i") << "C" << Value(complex<Number>(1, 0)) << true << true;
+    QTest::newRow("complex -1 1i") << "C" << Value(complex<Number>(-1, 1)) << true << true;
+    QTest::newRow("complex  0 1i") << "C" << Value(complex<Number>(0, 1)) << true << false;
+    QTest::newRow("complex +1 1i") << "C" << Value(complex<Number>(1, 1)) << true << true;
 
-    QTest::newRow("string en true") << "C" << Value("true") << true << Value(true);
-    QTest::newRow("string en false") << "C" << Value("false") << true << Value(false);
-    QTest::newRow("string en foobar") << "C" << Value("foobar") << false << Value(false);
-    QTest::newRow("string en TruE") << "C" << Value("TruE") << true << Value(true);
-    QTest::newRow("string en fAlSe") << "C" << Value("fAlSe") << true << Value(false);
-    QTest::newRow("string en xxtruexx") << "C" << Value("xxtruexx") << false << Value(false);
-    QTest::newRow("string xx true") << "nl" << Value("true") << true << Value(true);
-    QTest::newRow("string xx false") << "nl" << Value("false") << true << Value(false);
-    QTest::newRow("string xx foobar") << "nl" << Value("foobar") << false << Value(false);
-    QTest::newRow("string xx TruE") << "nl" << Value("TruE") << true << Value(true);
-    QTest::newRow("string xx fAlSe") << "nl" << Value("fAlSe") << true << Value(false);
-    QTest::newRow("string xx xxtruexx") << "nl" << Value("xxtruexx") << true << Value(true);
-    QTest::newRow("string xx xxtRuexx") << "nl" << Value("xxtRuexx") << true << Value(true);
-    QTest::newRow("string xx xxfalSexx") << "nl" << Value("xxfalSexx") << true << Value(false);
+    QTest::newRow("string en true") << "C" << Value("true") << true << true;
+    QTest::newRow("string en false") << "C" << Value("false") << true << false;
+    QTest::newRow("string en foobar") << "C" << Value("foobar") << false << false;
+    QTest::newRow("string en TruE") << "C" << Value("TruE") << true << true;
+    QTest::newRow("string en fAlSe") << "C" << Value("fAlSe") << true << false;
+    QTest::newRow("string en xxtruexx") << "C" << Value("xxtruexx") << false << false;
+    QTest::newRow("string xx true") << "nl" << Value("true") << true << true;
+    QTest::newRow("string xx false") << "nl" << Value("false") << true << false;
+    QTest::newRow("string xx foobar") << "nl" << Value("foobar") << false << false;
+    QTest::newRow("string xx TruE") << "nl" << Value("TruE") << true << true;
+    QTest::newRow("string xx fAlSe") << "nl" << Value("fAlSe") << true << false;
+    QTest::newRow("string xx xxtruexx") << "nl" << Value("xxtruexx") << true << true;
+    QTest::newRow("string xx xxtRuexx") << "nl" << Value("xxtRuexx") << true << true;
+    QTest::newRow("string xx xxfalSexx") << "nl" << Value("xxfalSexx") << true << false;
 
     ValueStorage array;
-    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value(false);
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << false;
     array.insert(1, 1, Value(true));
-    QTest::newRow("array true") << "C" << Value(array, QSize(1, 1)) << true << Value(true);
+    QTest::newRow("array true") << "C" << Value(array, QSize(1, 1)) << true << true;
 
-    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value(false);
-    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value(false);
+    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << false;
+    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << false;
 }
 
 void TestValueConverter::testAsBoolean()
@@ -130,7 +129,7 @@ void TestValueConverter::testAsBoolean()
     QFETCH(QString, locale);
     QFETCH(Value, value);
     QFETCH(bool, expectedOk);
-    QFETCH(Value, expected);
+    QFETCH(bool, expected);
 
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
@@ -138,7 +137,8 @@ void TestValueConverter::testAsBoolean()
     bool ok;
     Value result = m_converter->asBoolean(value, &ok);
     QCOMPARE(ok, expectedOk);
-    QCOMPARE(result, expected);
+    QCOMPARE(result, Value(expected));
+    QCOMPARE(m_converter->toBoolean(value), expected);
 }
 
 void TestValueConverter::testAsInteger_data()
@@ -146,48 +146,48 @@ void TestValueConverter::testAsInteger_data()
     QTest::addColumn<QString>("locale");
     QTest::addColumn<Value>("value");
     QTest::addColumn<bool>("expectedOk");
-    QTest::addColumn<Value>("expected");
+    QTest::addColumn<int>("expected");
 
-    QTest::newRow("empty") << "C" << Value() << true << Value(0);
+    QTest::newRow("empty") << "C" << Value() << true << 0;
 
-    QTest::newRow("bool true") << "C" << Value(true) << true << Value(1);
-    QTest::newRow("bool false") << "C" << Value(false) << true << Value(0);
+    QTest::newRow("bool true") << "C" << Value(true) << true << 1;
+    QTest::newRow("bool false") << "C" << Value(false) << true << 0;
 
-    QTest::newRow("integer") << "C" << Value(94610) << true << Value(94610);
+    QTest::newRow("integer") << "C" << Value(94610) << true << 94610;
 
-    QTest::newRow("float 0") << "C" << Value(0.0) << true << Value(0);
-    QTest::newRow("float 3.3") << "C" << Value(3.3) << true << Value(3);
-    QTest::newRow("float 123.9999") << "C" << Value(123.9999) << true << Value(123);
-    QTest::newRow("float -45.65") << "C" << Value(-45.65) << true << Value(-46);
+    QTest::newRow("float 0") << "C" << Value(0.0) << true << 0;
+    QTest::newRow("float 3.3") << "C" << Value(3.3) << true << 3;
+    QTest::newRow("float 123.9999") << "C" << Value(123.9999) << true << 123;
+    QTest::newRow("float -45.65") << "C" << Value(-45.65) << true << -46;
 
-    QTest::newRow("complex 0 0i") << "C" << Value(complex<Number>(0, 0)) << true << Value(0);
-    QTest::newRow("complex 1.6 -3i") << "C" << Value(complex<Number>(1.6, -3)) << true << Value(1);
-    QTest::newRow("complex 2 4.6i") << "C" << Value(complex<Number>(2, 4.6)) << true << Value(2);
-    QTest::newRow("complex -3.14 1i") << "C" << Value(complex<Number>(-3.14, 1)) << true << Value(-4);
+    QTest::newRow("complex 0 0i") << "C" << Value(complex<Number>(0, 0)) << true << 0;
+    QTest::newRow("complex 1.6 -3i") << "C" << Value(complex<Number>(1.6, -3)) << true << 1;
+    QTest::newRow("complex 2 4.6i") << "C" << Value(complex<Number>(2, 4.6)) << true << 2;
+    QTest::newRow("complex -3.14 1i") << "C" << Value(complex<Number>(-3.14, 1)) << true << -4;
 
-    QTest::newRow("string 123") << "C" << Value("123") << true << Value(123);
-    QTest::newRow("string -456") << "C" << Value("-456") << true << Value(-456);
-    QTest::newRow("string +5") << "C" << Value("+5") << true << Value(5);
-    QTest::newRow("string 1501%") << "C" << Value("1501%") << true << Value(15);
-    QTest::newRow("string 5+3i") << "C" << Value("5+3i") << true << Value(5);
-    QTest::newRow("string 2.4 + 3j") << "C" << Value("2.4 + 3j") << true << Value(2);
-    QTest::newRow("string 6 - 3i") << "C" << Value("6 - 3i") << true << Value(6);
-    QTest::newRow("string 2.4i") << "C" << Value("2.4i") << true << Value(0);
-    QTest::newRow("string 1,4") << "C" << Value("1,4") << false << Value(0);
-    QTest::newRow("string 1,400") << "C" << Value("1,400") << true << Value(1400);
-    QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << Value(5);
-    QTest::newRow("string 3e2") << "C" << Value("3e2") << true << Value(300);
-    QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << Value(12);
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << Value(1);
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << Value(1);
+    QTest::newRow("string 123") << "C" << Value("123") << true << 123;
+    QTest::newRow("string -456") << "C" << Value("-456") << true << -456;
+    QTest::newRow("string +5") << "C" << Value("+5") << true << 5;
+    QTest::newRow("string 1501%") << "C" << Value("1501%") << true << 15;
+    QTest::newRow("string 5+3i") << "C" << Value("5+3i") << true << 5;
+    QTest::newRow("string 2.4 + 3j") << "C" << Value("2.4 + 3j") << true << 2;
+    QTest::newRow("string 6 - 3i") << "C" << Value("6 - 3i") << true << 6;
+    QTest::newRow("string 2.4i") << "C" << Value("2.4i") << true << 0;
+    QTest::newRow("string 1,4") << "C" << Value("1,4") << false << 0;
+    QTest::newRow("string 1,400") << "C" << Value("1,400") << true << 1400;
+    QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << 5;
+    QTest::newRow("string 3e2") << "C" << Value("3e2") << true << 300;
+    QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << 12;
+    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << 1;
+    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << 1;
 
     ValueStorage array;
-    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value(0);
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << 0;
     array.insert(1, 1, Value(543));
-    QTest::newRow("array 543") << "C" << Value(array, QSize(1, 1)) << true << Value(543);
+    QTest::newRow("array 543") << "C" << Value(array, QSize(1, 1)) << true << 543;
 
-    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value(0);
-    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value(0);
+    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << 0;
+    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << 0;
 }
 
 void TestValueConverter::testAsInteger()
@@ -195,7 +195,7 @@ void TestValueConverter::testAsInteger()
     QFETCH(QString, locale);
     QFETCH(Value, value);
     QFETCH(bool, expectedOk);
-    QFETCH(Value, expected);
+    QFETCH(int, expected);
 
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
@@ -203,7 +203,8 @@ void TestValueConverter::testAsInteger()
     bool ok;
     Value result = m_converter->asInteger(value, &ok);
     QCOMPARE(ok, expectedOk);
-    QCOMPARE(result, expected);
+    QCOMPARE(result, Value(expected));
+    QCOMPARE(m_converter->toInteger(value), expected);
 }
 
 void TestValueConverter::testAsFloat_data()
@@ -211,48 +212,48 @@ void TestValueConverter::testAsFloat_data()
     QTest::addColumn<QString>("locale");
     QTest::addColumn<Value>("value");
     QTest::addColumn<bool>("expectedOk");
-    QTest::addColumn<Value>("expected");
+    QTest::addColumn<double>("expected");
 
-    QTest::newRow("empty") << "C" << Value() << true << Value(0.0);
+    QTest::newRow("empty") << "C" << Value() << true << 0.0;
 
-    QTest::newRow("bool true") << "C" << Value(true) << true << Value(1.0);
-    QTest::newRow("bool false") << "C" << Value(false) << true << Value(0.0);
+    QTest::newRow("bool true") << "C" << Value(true) << true << 1.0;
+    QTest::newRow("bool false") << "C" << Value(false) << true << 0.0;
 
-    QTest::newRow("integer") << "C" << Value(94610) << true << Value(94610.0);
+    QTest::newRow("integer") << "C" << Value(94610) << true << 94610.0;
 
-    QTest::newRow("float 0") << "C" << Value(0.0) << true << Value(0.0);
-    QTest::newRow("float 3.3") << "C" << Value(3.3) << true << Value(3.3);
-    QTest::newRow("float 123.9999") << "C" << Value(123.9999) << true << Value(123.9999);
-    QTest::newRow("float -45.65") << "C" << Value(-45.65) << true << Value(-45.65);
+    QTest::newRow("float 0") << "C" << Value(0.0) << true << 0.0;
+    QTest::newRow("float 3.3") << "C" << Value(3.3) << true << 3.3;
+    QTest::newRow("float 123.9999") << "C" << Value(123.9999) << true << 123.9999;
+    QTest::newRow("float -45.65") << "C" << Value(-45.65) << true << -45.65;
 
-    QTest::newRow("complex 0 0i") << "C" << Value(complex<Number>(0, 0)) << true << Value(0.0);
-    QTest::newRow("complex 1.6 -3i") << "C" << Value(complex<Number>(1.6, -3)) << true << Value(1.6);
-    QTest::newRow("complex 2 4.6i") << "C" << Value(complex<Number>(2, 4.6)) << true << Value(2.0);
-    QTest::newRow("complex -3.14 1i") << "C" << Value(complex<Number>(-3.14, 1)) << true << Value(-3.14);
+    QTest::newRow("complex 0 0i") << "C" << Value(complex<Number>(0, 0)) << true << 0.0;
+    QTest::newRow("complex 1.6 -3i") << "C" << Value(complex<Number>(1.6, -3)) << true << 1.6;
+    QTest::newRow("complex 2 4.6i") << "C" << Value(complex<Number>(2, 4.6)) << true << 2.0;
+    QTest::newRow("complex -3.14 1i") << "C" << Value(complex<Number>(-3.14, 1)) << true << -3.14;
 
-    QTest::newRow("string 123") << "C" << Value("123") << true << Value(123.0);
-    QTest::newRow("string -456") << "C" << Value("-456") << true << Value(-456.0);
-    QTest::newRow("string +5") << "C" << Value("+5") << true << Value(5.0);
-    QTest::newRow("string 1525%") << "C" << Value("1525%") << true << Value(15.25);
-    QTest::newRow("string 5+3i") << "C" << Value("5+3i") << true << Value(5.0);
-    QTest::newRow("string 2.4 + 3j") << "C" << Value("2.4 + 3j") << true << Value(2.4);
-    QTest::newRow("string 6 - 3i") << "C" << Value("6 - 3i") << true << Value(6.0);
-    QTest::newRow("string 2.4i") << "C" << Value("2.4i") << true << Value(0.0);
-    QTest::newRow("string 1,4") << "C" << Value("1,4") << false << Value(0.0);
-    QTest::newRow("string 1,400") << "C" << Value("1,400") << true << Value(1400.0);
-    QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << Value(5.5);
-    QTest::newRow("string 3e2") << "C" << Value("3e2") << true << Value(300.0);
-    QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << Value(12.34);
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << Value(1.4);
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << Value(1.4);
+    QTest::newRow("string 123") << "C" << Value("123") << true << 123.0;
+    QTest::newRow("string -456") << "C" << Value("-456") << true << -456.0;
+    QTest::newRow("string +5") << "C" << Value("+5") << true << 5.0;
+    QTest::newRow("string 1525%") << "C" << Value("1525%") << true << 15.25;
+    QTest::newRow("string 5+3i") << "C" << Value("5+3i") << true << 5.0;
+    QTest::newRow("string 2.4 + 3j") << "C" << Value("2.4 + 3j") << true << 2.4;
+    QTest::newRow("string 6 - 3i") << "C" << Value("6 - 3i") << true << 6.0;
+    QTest::newRow("string 2.4i") << "C" << Value("2.4i") << true << 0.0;
+    QTest::newRow("string 1,4") << "C" << Value("1,4") << false << 0.0;
+    QTest::newRow("string 1,400") << "C" << Value("1,400") << true << 1400.0;
+    QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << 5.5;
+    QTest::newRow("string 3e2") << "C" << Value("3e2") << true << 300.0;
+    QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << 12.34;
+    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << 1.4;
+    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << 1.4;
 
     ValueStorage array;
-    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value(0.0);
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << 0.0;
     array.insert(1, 1, Value(543.4));
-    QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1)) << true << Value(543.4);
+    QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1)) << true << 543.4;
 
-    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value(0.0);
-    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value(0.0);
+    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << 0.0;
+    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << 0.0;
 }
 
 void TestValueConverter::testAsFloat()
@@ -260,7 +261,7 @@ void TestValueConverter::testAsFloat()
     QFETCH(QString, locale);
     QFETCH(Value, value);
     QFETCH(bool, expectedOk);
-    QFETCH(Value, expected);
+    QFETCH(double, expected);
 
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
@@ -268,7 +269,8 @@ void TestValueConverter::testAsFloat()
     bool ok;
     Value result = m_converter->asFloat(value, &ok);
     QCOMPARE(ok, expectedOk);
-    QCOMPARE(result, expected);
+    QCOMPARE(result, Value(expected));
+    QCOMPARE(m_converter->toFloat(value), Number(expected));
 }
 
 void TestValueConverter::testAsComplex_data()
@@ -276,83 +278,81 @@ void TestValueConverter::testAsComplex_data()
     QTest::addColumn<QString>("locale");
     QTest::addColumn<Value>("value");
     QTest::addColumn<bool>("expectedOk");
-    QTest::addColumn<Value>("expected");
+    QTest::addColumn<complex<Number>>("expected");
 
-    QTest::newRow("empty") << "C" << Value() << true << Value(complex<Number>(0, 0));
+    QTest::newRow("empty") << "C" << Value() << true << complex<Number>(0, 0);
 
-    QTest::newRow("bool true") << "C" << Value(true) << true << Value(complex<Number>(1, 0));
-    QTest::newRow("bool false") << "C" << Value(false) << true << Value(complex<Number>(0, 0));
+    QTest::newRow("bool true") << "C" << Value(true) << true << complex<Number>(1, 0);
+    QTest::newRow("bool false") << "C" << Value(false) << true << complex<Number>(0, 0);
 
-    QTest::newRow("integer") << "C" << Value(94610) << true << Value(complex<Number>(94610, 0));
+    QTest::newRow("integer") << "C" << Value(94610) << true << complex<Number>(94610, 0);
 
-    QTest::newRow("float 0") << "C" << Value(0.0)
-        << true << Value(complex<Number>(0, 0));
-    QTest::newRow("float 3.3") << "C" << Value(3.3)
-        << true << Value(complex<Number>(3.3, 0));
+    QTest::newRow("float 0") << "C" << Value(0.0) << true << complex<Number>(0, 0);
+    QTest::newRow("float 3.3") << "C" << Value(3.3) << true << complex<Number>(3.3, 0);
     QTest::newRow("float 123.9999") << "C" << Value(123.9999)
-        << true << Value(complex<Number>(123.9999, 0));
+        << true << complex<Number>(123.9999, 0);
     QTest::newRow("float -45.65") << "C" << Value(-45.65)
-        << true << Value(complex<Number>(-45.65, 0));
+        << true << complex<Number>(-45.65, 0);
 
     QTest::newRow("complex 0 0i") << "C" << Value(complex<Number>(0, 0))
-        << true << Value(complex<Number>(0, 0));
+        << true << complex<Number>(0, 0);
     QTest::newRow("complex 1.6 -3i") << "C" << Value(complex<Number>(1.6, -3))
-        << true << Value(complex<Number>(1.6, -3));
+        << true << complex<Number>(1.6, -3);
     QTest::newRow("complex 2 4.6i") << "C" << Value(complex<Number>(2, 4.6))
-        << true << Value(complex<Number>(2, 4.6));
+        << true << complex<Number>(2, 4.6);
     QTest::newRow("complex -3.14 1i") << "C" << Value(complex<Number>(-3.14, 1))
-        << true << Value(complex<Number>(-3.14, 1));
+        << true << complex<Number>(-3.14, 1);
 
     QTest::newRow("string 123") << "C" << Value("123")
-        << true << Value(complex<Number>(123, 0));
+        << true << complex<Number>(123, 0);
     QTest::newRow("string -456") << "C" << Value("-456")
-        << true << Value(complex<Number>(-456, 0));
+        << true << complex<Number>(-456, 0);
     QTest::newRow("string +5") << "C" << Value("+5")
-        << true << Value(complex<Number>(5, 0));
+        << true << complex<Number>(5, 0);
     QTest::newRow("string 1525%") << "C" << Value("1525%")
-        << true << Value(complex<Number>(15.25, 0));
+        << true << complex<Number>(15.25, 0);
     QTest::newRow("string 5+3i") << "C" << Value("5+3i")
-        << true << Value(complex<Number>(5, 3));
+        << true << complex<Number>(5, 3);
     QTest::newRow("string 2.4 + 3j") << "C" << Value("2.4 + 3j")
-        << true << Value(complex<Number>(2.4, 3));
+        << true << complex<Number>(2.4, 3);
     QTest::newRow("string 6 - 3i") << "C" << Value("6 - 3i")
-        << true << Value(complex<Number>(6, -3));
+        << true << complex<Number>(6, -3);
     QTest::newRow("string 2.4i") << "C" << Value("2.4i")
-        << true << Value(complex<Number>(0, 2.4));
+        << true << complex<Number>(0, 2.4);
     QTest::newRow("string 1,4") << "C" << Value("1,4")
-        << false << Value(complex<Number>(0, 0));
+        << false << complex<Number>(0, 0);
     QTest::newRow("string 1,400") << "C" << Value("1,400")
-        << true << Value(complex<Number>(1400, 0));
+        << true << complex<Number>(1400, 0);
     QTest::newRow("string 3 5/2") << "C" << Value("3 5/2")
-        << true << Value(complex<Number>(5.5, 0));
+        << true << complex<Number>(5.5, 0);
     QTest::newRow("string 3e2") << "C" << Value("3e2")
-        << true << Value(complex<Number>(300.0, 0));
+        << true << complex<Number>(300.0, 0);
     QTest::newRow("string 1234E-2") << "C" << Value("1234E-2")
-        << true << Value(complex<Number>(12.34, 0));
+        << true << complex<Number>(12.34, 0);
     QTest::newRow("string 12.34e5 + 4.2e2i") << "C" << Value("12.34e5 + 4.2e2i")
-        << true << Value(complex<Number>(12.34e5, 4.2e2));
+        << true << complex<Number>(12.34e5, 4.2e2);
     QTest::newRow("string 12.34e5 + 4.2e+2i") << "C" << Value("12.34e5 + 4.2e+2i")
-        << true << Value(complex<Number>(12.34e5, 4.2e2));
+        << true << complex<Number>(12.34e5, 4.2e2);
     //QTest::newRow("string 12.34e+5 + 4.2e2i") << "C" << Value("12.34e+5 + 4.2e2i")
-    //    << true << Value(complex<Number>(12.34e5, 4.2e2));
+    //    << true << complex<Number>(12.34e5, 4.2e2);
     //QTest::newRow("string 12.34e+5 + 4.2e+2i") << "C" << Value("12.34e+5 + 4.2e+2i")
-    //    << true << Value(complex<Number>(12.34e5, 4.2e2));
+    //    << true << complex<Number>(12.34e5, 4.2e2);
     QTest::newRow("string nl 1,4") << "nl" << Value("1,4")
-        << true << Value(complex<Number>(1.4, 0));
+        << true << complex<Number>(1.4, 0);
     QTest::newRow("string nl 1,400") << "nl" << Value("1,400")
-        << true << Value(complex<Number>(1.4, 0));
+        << true << complex<Number>(1.4, 0);
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1))
-        << true << Value(complex<Number>(0, 0));
+        << true << complex<Number>(0, 0);
     array.insert(1, 1, Value(543.4));
     QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1))
-        << true << Value(complex<Number>(543.4, 0));
+        << true << complex<Number>(543.4, 0);
 
     QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE()
-        << true << Value(complex<Number>(0, 0));
+        << true << complex<Number>(0, 0);
     QTest::newRow("errorNA") << "C" << Value::errorNA()
-        << true << Value(complex<Number>(0, 0));
+        << true << complex<Number>(0, 0);
 }
 
 void TestValueConverter::testAsComplex()
@@ -360,7 +360,7 @@ void TestValueConverter::testAsComplex()
     QFETCH(QString, locale);
     QFETCH(Value, value);
     QFETCH(bool, expectedOk);
-    QFETCH(Value, expected);
+    QFETCH(complex<Number>, expected);
 
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
@@ -368,7 +368,8 @@ void TestValueConverter::testAsComplex()
     bool ok;
     Value result = m_converter->asComplex(value, &ok);
     QCOMPARE(ok, expectedOk);
-    QCOMPARE(result, expected);
+    QCOMPARE(result, Value(expected));
+    QCOMPARE(m_converter->toComplex(value), expected);
 }
 
 void TestValueConverter::testAsNumeric_data()
@@ -446,191 +447,186 @@ void TestValueConverter::testAsString_data()
 {
     QTest::addColumn<QString>("locale");
     QTest::addColumn<Value>("value");
-    QTest::addColumn<Value>("expected");
+    QTest::addColumn<QString>("expected");
 
-    QTest::newRow("empty") << "C" << Value() << Value("");
+    QTest::newRow("empty") << "C" << Value() << "";
 
-    QTest::newRow("bool true") << "C" << Value(true) << Value("True");
-    QTest::newRow("bool false") << "C" << Value(false) << Value("False");
-    QTest::newRow("bool true xx") << "nl" << Value(true) << Value("xxTruexx");
-    QTest::newRow("bool false xx") << "nl" << Value(false) << Value("xxFalsexx");
+    QTest::newRow("bool true") << "C" << Value(true) << "True";
+    QTest::newRow("bool false") << "C" << Value(false) << "False";
+    QTest::newRow("bool true xx") << "nl" << Value(true) << "xxTruexx";
+    QTest::newRow("bool false xx") << "nl" << Value(false) << "xxFalsexx";
 
-    QTest::newRow("integer plain") << "C" << Value(123) << Value("123");
+    QTest::newRow("integer plain") << "C" << Value(123) << "123";
     QTest::newRow("integer percent") << "C" << ValueWithFormat(3, Value::fmt_Percent)
-        << Value("300 %");
-    QTest::newRow("integer time") << "C" << ValueWithFormat(4, Value::fmt_Time) << Value("00:00");
+        << "300 %";
+    QTest::newRow("integer time") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00";
     QTest::newRow("integer time us") << "us" << ValueWithFormat(4, Value::fmt_Time)
-        << Value("12:00 AM");
+        << "12:00 AM";
     // TODO(mek): These next ones should almost certainly be using short date format.
     QTest::newRow("integer date 1") << "C" << ValueWithFormat(0, Value::fmt_Date)
-        << Value("Saturday 01 January 2000");
+        << "Saturday 01 January 2000";
     QTest::newRow("integer date 2") << "C" << ValueWithFormat(2000, Value::fmt_Date)
-        << Value("Thursday 23 June 2005");
+        << "Thursday 23 June 2005";
     QTest::newRow("integer date 3") << "C" << ValueWithFormat(-10, Value::fmt_Date)
-        << Value("Wednesday 22 December 1999");
+        << "Wednesday 22 December 1999";
     // TODO(mek): KLocale doesn't take its language into account when formatting dates...
     //QTest::newRow("integer date 1 nl") << "nl" << ValueWithFormat(0, Value::fmt_Date)
-    //    << Value("xxSaturdayxx 01 xxJanuaryxx 2000");
+    //    << "xxSaturdayxx 01 xxJanuaryxx 2000";
     //QTest::newRow("integer date 2 nl") << "nl" << ValueWithFormat(2000, Value::fmt_Date)
-    //    << Value("xxThursdayxx 23 xxJunexx 2005");
+    //    << "xxThursdayxx 23 xxJunexx 2005";
     //QTest::newRow("integer date 3 nl") << "nl" << ValueWithFormat(-10, Value::fmt_Date)
-    //    << Value("xxWednesdayxx 22 xxDecemberxx 1999");
+    //    << "xxWednesdayxx 22 xxDecemberxx 1999";
     QTest::newRow("integer datetime 1") << "C" << ValueWithFormat(4, Value::fmt_DateTime)
-        << Value("2000-01-05 00:00");
+        << "2000-01-05 00:00";
     QTest::newRow("integer datetime 1 us") << "us" << ValueWithFormat(4, Value::fmt_DateTime)
-        << Value("01/05/00 12:00 AM");
+        << "01/05/00 12:00 AM";
     QTest::newRow("integer datetime 1 nl") << "nl" << ValueWithFormat(4, Value::fmt_DateTime)
-        << Value("05/01/00 00:00");
+        << "05/01/00 00:00";
     QTest::newRow("integer datetime 2") << "C" << ValueWithFormat(-10, Value::fmt_DateTime)
-        << Value("1999-12-22 00:00");
+        << "1999-12-22 00:00";
     QTest::newRow("integer datetime 2 us") << "us" << ValueWithFormat(-10, Value::fmt_DateTime)
-        << Value("12/22/99 12:00 AM");
+        << "12/22/99 12:00 AM";
     QTest::newRow("integer datetime 2 nl") << "nl" << ValueWithFormat(-10, Value::fmt_DateTime)
-        << Value("22/12/99 00:00");
+        << "22/12/99 00:00";
 
-    QTest::newRow("float 123") << "C" << Value(123.0) << Value("123");
-    QTest::newRow("float -3.14") << "C" << Value(-3.14) << Value("-3.14");
-    QTest::newRow("float 1.5e99") << "C" << Value(1.5e99) << Value("1.5e+99");
-    QTest::newRow("float 0.43e-12") << "C" << Value(0.43e-12) << Value("4.3e-13");
-    QTest::newRow("float 123 nl") << "nl" << Value(123.0) << Value("123");
-    QTest::newRow("float -3.14 nl") << "nl" << Value(-3.14) << Value("-3,14");
-    QTest::newRow("float 1.5e99 nl") << "nl" << Value(1.5e99) << Value("1,5e+99");
-    QTest::newRow("float 0.43e-12 nl") << "nl" << Value(0.43e-12) << Value("4,3e-13");
+    QTest::newRow("float 123") << "C" << Value(123.0) << "123";
+    QTest::newRow("float -3.14") << "C" << Value(-3.14) << "-3.14";
+    QTest::newRow("float 1.5e99") << "C" << Value(1.5e99) << "1.5e+99";
+    QTest::newRow("float 0.43e-12") << "C" << Value(0.43e-12) << "4.3e-13";
+    QTest::newRow("float 123 nl") << "nl" << Value(123.0) << "123";
+    QTest::newRow("float -3.14 nl") << "nl" << Value(-3.14) << "-3,14";
+    QTest::newRow("float 1.5e99 nl") << "nl" << Value(1.5e99) << "1,5e+99";
+    QTest::newRow("float 0.43e-12 nl") << "nl" << Value(0.43e-12) << "4,3e-13";
     // TODO(mek): Currently buggy/inconsistent in implementation.
     //QTest::newRow("float percent") << "C" << ValueWithFormat(3.45, Value::fmt_Percent)
-    //    << Value("345 %");
-    QTest::newRow("float time 0") << "C" << ValueWithFormat(4, Value::fmt_Time) << Value("00:00");
-    QTest::newRow("float time 1") << "C" << ValueWithFormat(0.5, Value::fmt_Time) << Value("12:00");
-    QTest::newRow("float time 2") << "C" << ValueWithFormat(3.675, Value::fmt_Time)
-        << Value("16:12");
-    QTest::newRow("float time 0 us") << "us" << ValueWithFormat(4.0, Value::fmt_Time)
-        << Value("12:00 AM");
-    QTest::newRow("float time 1 us") << "us" << ValueWithFormat(0.5, Value::fmt_Time)
-        << Value("12:00 PM");
+    //    << "345 %";
+    QTest::newRow("float time 0") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00";
+    QTest::newRow("float time 1") << "C" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00";
+    QTest::newRow("float time 2") << "C" << ValueWithFormat(3.675, Value::fmt_Time) << "16:12";
+    QTest::newRow("float time 0 us") << "us" << ValueWithFormat(4.0, Value::fmt_Time) << "12:00 AM";
+    QTest::newRow("float time 1 us") << "us" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00 PM";
     QTest::newRow("float time 2 us") << "us" << ValueWithFormat(3.675, Value::fmt_Time)
-        << Value("04:12 PM");
-    QTest::newRow("float date 1") << "C" << ValueWithFormat(0.5, Value::fmt_Date)
-        << Value("2000-01-01");
+        << "04:12 PM";
+    QTest::newRow("float date 1") << "C" << ValueWithFormat(0.5, Value::fmt_Date) << "2000-01-01";
     QTest::newRow("float date 2") << "C" << ValueWithFormat(2000.324, Value::fmt_Date)
-        << Value("2005-06-23");
+        << "2005-06-23";
     QTest::newRow("float date 3") << "C" << ValueWithFormat(-9.234, Value::fmt_Date)
-        << Value("1999-12-22");
+        << "1999-12-22";
     QTest::newRow("float date 1 nl") << "nl" << ValueWithFormat(0.5, Value::fmt_Date)
-        << Value("01/01/00");
+        << "01/01/00";
     QTest::newRow("float date 2 nl") << "nl" << ValueWithFormat(2000.324, Value::fmt_Date)
-        << Value("23/06/05");
+        << "23/06/05";
     QTest::newRow("float date 3 us") << "us" << ValueWithFormat(-9.234, Value::fmt_Date)
-        << Value("12/22/99");
+        << "12/22/99";
     QTest::newRow("float datetime 0") << "C" << ValueWithFormat(4.0, Value::fmt_DateTime)
-        << Value("2000-01-05 00:00");
+        << "2000-01-05 00:00";
     QTest::newRow("float datetime 1") << "C" << ValueWithFormat(2000.5, Value::fmt_DateTime)
-        << Value("2005-06-23 12:00");
+        << "2005-06-23 12:00";
     QTest::newRow("float datetime 2") << "C" << ValueWithFormat(-9.325, Value::fmt_DateTime)
-        << Value("1999-12-22 16:12");
+        << "1999-12-22 16:12";
     QTest::newRow("float datetime 0 us") << "us" << ValueWithFormat(4.0, Value::fmt_DateTime)
-        << Value("01/05/00 12:00 AM");
+        << "01/05/00 12:00 AM";
     QTest::newRow("float datetime 1 us") << "us" << ValueWithFormat(2000.5, Value::fmt_DateTime)
-        << Value("06/23/05 12:00 PM");
+        << "06/23/05 12:00 PM";
     QTest::newRow("float datetime 2 us") << "us" << ValueWithFormat(-9.325, Value::fmt_DateTime)
-        << Value("12/22/99 04:12 PM");
+        << "12/22/99 04:12 PM";
     QTest::newRow("float datetime 0 nl") << "nl" << ValueWithFormat(4.0, Value::fmt_DateTime)
-        << Value("05/01/00 00:00");
+        << "05/01/00 00:00";
     QTest::newRow("float datetime 1 nl") << "nl" << ValueWithFormat(2000.5, Value::fmt_DateTime)
-        << Value("23/06/05 12:00");
+        << "23/06/05 12:00";
     QTest::newRow("float datetime 2 nl") << "nl" << ValueWithFormat(-9.325, Value::fmt_DateTime)
-        << Value("22/12/99 16:12");
+        << "22/12/99 16:12";
 
-    QTest::newRow("complex 0+0i") << "C" << Value(complex<Number>(0, 0)) << Value("0+0i");
-    QTest::newRow("complex 3.14-2.7i") << "C" << Value(complex<Number>(3.14, -2.7))
-        << Value("3.14-2.7i");
+    QTest::newRow("complex 0+0i") << "C" << Value(complex<Number>(0, 0)) << "0+0i";
+    QTest::newRow("complex 3.14-2.7i") << "C" << Value(complex<Number>(3.14, -2.7)) << "3.14-2.7i";
     QTest::newRow("complex 2.2e99+3.3e88i") << "C" << Value(complex<Number>(2.2e99, 3.3e88))
-        << Value("2.2e+99+3.3e+88i");
+        << "2.2e+99+3.3e+88i";
     QTest::newRow("complex time 0") << "C"
         << ValueWithFormat(complex<Number>(4, 3), Value::fmt_Time)
-        << Value("00:00");
+        << "00:00";
     QTest::newRow("complex time 1") << "C"
         << ValueWithFormat(complex<Number>(0.5, -3), Value::fmt_Time)
-        << Value("12:00");
+        << "12:00";
     QTest::newRow("complex time 2") << "C"
         << ValueWithFormat(complex<Number>(3.675, 653), Value::fmt_Time)
-        << Value("16:12");
+        << "16:12";
     QTest::newRow("complex time 0 us") << "us"
         << ValueWithFormat(complex<Number>(4, 634), Value::fmt_Time)
-        << Value("12:00 AM");
+        << "12:00 AM";
     QTest::newRow("complex time 1 us") << "us"
         << ValueWithFormat(complex<Number>(0.5, 2.3), Value::fmt_Time)
-        << Value("12:00 PM");
+        << "12:00 PM";
     QTest::newRow("complex time 2 us") << "us"
         << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time)
-        << Value("04:12 PM");
+        << "04:12 PM";
     QTest::newRow("complex date 1") << "C"
         << ValueWithFormat(complex<Number>(0.5, 0), Value::fmt_Date)
-        << Value("2000-01-01");
+        << "2000-01-01";
     QTest::newRow("complex date 2") << "C"
         << ValueWithFormat(complex<Number>(2000.324, 0), Value::fmt_Date)
-        << Value("2005-06-23");
+        << "2005-06-23";
     QTest::newRow("complex date 3") << "C"
         << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date)
-        << Value("1999-12-22");
+        << "1999-12-22";
     QTest::newRow("complex date 1 nl") << "nl"
         << ValueWithFormat(complex<Number>(0.5, 0), Value::fmt_Date)
-        << Value("01/01/00");
+        << "01/01/00";
     QTest::newRow("complex date 2 nl") << "nl"
         << ValueWithFormat(complex<Number>(2000.324, 0), Value::fmt_Date)
-        << Value("23/06/05");
+        << "23/06/05";
     QTest::newRow("complex date 3 us") << "us"
         << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date)
-        << Value("12/22/99");
+        << "12/22/99";
     QTest::newRow("complex datetime 0") << "C"
         << ValueWithFormat(complex<Number>(4.0, 0), Value::fmt_DateTime)
-        << Value("2000-01-05 00:00");
+        << "2000-01-05 00:00";
     QTest::newRow("complex datetime 1") << "C"
         << ValueWithFormat(complex<Number>(2000.5, 0), Value::fmt_DateTime)
-        << Value("2005-06-23 12:00");
+        << "2005-06-23 12:00";
     QTest::newRow("complex datetime 2") << "C"
         << ValueWithFormat(complex<Number>(-9.325, 0), Value::fmt_DateTime)
-        << Value("1999-12-22 16:12");
+        << "1999-12-22 16:12";
     QTest::newRow("complex datetime 0 us") << "us"
         << ValueWithFormat(complex<Number>(4.0, 0), Value::fmt_DateTime)
-        << Value("01/05/00 12:00 AM");
+        << "01/05/00 12:00 AM";
     QTest::newRow("complex datetime 1 us") << "us"
         << ValueWithFormat(complex<Number>(2000.5, 0), Value::fmt_DateTime)
-        << Value("06/23/05 12:00 PM");
+        << "06/23/05 12:00 PM";
     QTest::newRow("complex datetime 2 us") << "us"
         << ValueWithFormat(complex<Number>(-9.325, 0), Value::fmt_DateTime)
-        << Value("12/22/99 04:12 PM");
+        << "12/22/99 04:12 PM";
 
-    QTest::newRow("string") << "C" << Value("foobar") << Value("foobar");
+    QTest::newRow("string") << "C" << Value("foobar") << "foobar";
 
     ValueStorage array;
-    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << Value("");
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << "";
     array.insert(1, 1, Value(123));
-    QTest::newRow("array 123") << "C" << Value(array, QSize(1, 1)) << Value("123");
+    QTest::newRow("array 123") << "C" << Value(array, QSize(1, 1)) << "123";
 
-    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << Value("#CIRCLE!");
-    QTest::newRow("errorDEPEND") << "C" << Value::errorDEPEND() << Value("#DEPEND!");
-    QTest::newRow("errorDIV0") << "C" << Value::errorDIV0() << Value("#DIV/0!");
-    QTest::newRow("errorNA") << "C" << Value::errorNA() << Value("#N/A");
-    QTest::newRow("errorNAME") << "C" << Value::errorNAME() << Value("#NAME?");
-    QTest::newRow("errorNUM") << "C" << Value::errorNUM() << Value("#NUM!");
-    QTest::newRow("errorNULL") << "C" << Value::errorNULL() << Value("#NULL!");
-    QTest::newRow("errorPARSE") << "C" << Value::errorPARSE() << Value("#PARSE!");
-    QTest::newRow("errorREF") << "C" << Value::errorREF() << Value("#REF!");
-    QTest::newRow("errorVALUE") << "C" << Value::errorVALUE() << Value("#VALUE!");
+    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << "#CIRCLE!";
+    QTest::newRow("errorDEPEND") << "C" << Value::errorDEPEND() << "#DEPEND!";
+    QTest::newRow("errorDIV0") << "C" << Value::errorDIV0() << "#DIV/0!";
+    QTest::newRow("errorNA") << "C" << Value::errorNA() << "#N/A";
+    QTest::newRow("errorNAME") << "C" << Value::errorNAME() << "#NAME?";
+    QTest::newRow("errorNUM") << "C" << Value::errorNUM() << "#NUM!";
+    QTest::newRow("errorNULL") << "C" << Value::errorNULL() << "#NULL!";
+    QTest::newRow("errorPARSE") << "C" << Value::errorPARSE() << "#PARSE!";
+    QTest::newRow("errorREF") << "C" << Value::errorREF() << "#REF!";
+    QTest::newRow("errorVALUE") << "C" << Value::errorVALUE() << "#VALUE!";
 }
 
 void TestValueConverter::testAsString()
 {
     QFETCH(QString, locale);
     QFETCH(Value, value);
-    QFETCH(Value, expected);
+    QFETCH(QString, expected);
 
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     Value result = m_converter->asString(value);
-    if (result != expected) kDebug() << result << " != " << expected;
-    QCOMPARE(result, expected);
+    QCOMPARE(result, Value(expected));
+    QCOMPARE(m_converter->toString(value), expected);
 }
 
 QTEST_MAIN(TestValueConverter)
