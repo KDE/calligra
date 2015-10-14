@@ -156,6 +156,13 @@ target_link_libraries(TestValueFormatter calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 
+set(TestValueConverter_SRCS TestValueConverter.cpp)
+kde4_add_unit_test(TestValueConverter TESTNAME sheets-ValueConverter ${TestValueConverter_SRCS})
+macro_add_compile_flags(TestValueConverter "-DCALLIGRA_SHEETS_UNIT_TEST")
+target_link_libraries(TestValueConverter calligrasheetscommon Qt5::Test)
+
+########### next target ###############
+
 set(TestSheet_SRCS TestSheet.cpp)
 kde4_add_unit_test(TestSheet TESTNAME sheets-Sheet  ${TestSheet_SRCS})
 macro_add_compile_flags(TestSheet "-DCALLIGRA_SHEETS_UNIT_TEST")

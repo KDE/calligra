@@ -1,0 +1,11 @@
+msgid "true"
+msgstr "xxtruexx"
+
+msgid "false"
+msgstr "xxfalsexx"
+
+msgid "True"
+msgstr "xxTruexx"
+
+msgid "False"
+msgstr "xxFalsexx"
