@@ -20,8 +20,8 @@
 #include "CollectionTreeWidget.h"
 #include "StencilListView.h"
 #include "CollectionItemModel.h"
+#include "StencilBoxDebug.h"
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>

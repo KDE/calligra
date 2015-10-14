@@ -18,10 +18,10 @@
  */
 #include "CollectionItemModel.h"
 
+#include "StencilBoxDebug.h"
+
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
-
-#include <kdebug.h>
 
 #include <QMimeData>
 

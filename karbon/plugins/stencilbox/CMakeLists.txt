@@ -1,6 +1,7 @@
 include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES})
 
 set(karbon_stencilbox_PART_SRCS
+    StencilBoxDebug.cpp
     StencilBoxPlugin.cpp
     StencilBoxDocker.cpp
     StencilListView.cpp

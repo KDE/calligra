@@ -45,7 +45,7 @@ StencilListView::StencilListView(QWidget* parent) :
 
 void StencilListView::dragEnterEvent(QDragEnterEvent* event)
 {
-    //qDebug() << event->mimeData()->formats();
+    //debugStencilBox << event->mimeData()->formats();
     // TODO
     if (event->mimeData()->hasText())
         event->acceptProposedAction();

@@ -20,6 +20,8 @@
 
 #include "StencilShapeFactory.h"
 
+#include "StencilBoxDebug.h"
+
 #include <KoShape.h>
 #include <KoDrag.h>
 #include <KoShapeOdfSaveHelper.h>
@@ -35,8 +37,6 @@
 #include <KoProperties.h>
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
-
-#include <kdebug.h>
 
 #include <QMimeData>
 #include <QIODevice>
@@ -63,26 +63,26 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     KoOdfReadStore odfStore(store);
     QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
-        kError() << "loading and parsing failed:" << errorMessage << endl;
+        errorStencilBox << "loading and parsing failed:" << errorMessage << endl;
         return 0;
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
-        kError() << "No body tag found!" << endl;
+        errorStencilBox << "No body tag found!" << endl;
         return 0;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
     if (body.isNull()) {
-        kError() << "No office:drawing tag found!" << endl;
+        errorStencilBox << "No office:drawing tag found!" << endl;
         return 0;
     }
 
     KoXmlElement page = KoXml::namedItemNS(body, KoXmlNS::draw, "page");
     if (page.isNull()) {
-        kError() << "No page found!" << endl;
+        errorStencilBox << "No page found!" << endl;
         return 0;
     }
 
@@ -90,7 +90,7 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     if (shapeElement.isNull()) {
         shapeElement = KoXml::namedItemNS(page, KoXmlNS::draw, "custom-shape");
         if (shapeElement.isNull()) {
-            kError() << "draw:g or draw:custom-shape element not found!" << endl;
+            errorStencilBox << "draw:g or draw:custom-shape element not found!" << endl;
             return 0;
         }
     }
@@ -111,7 +111,7 @@ KoShape* StencilShapeFactory::
 createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
 {
     if (!in->open(QIODevice::ReadOnly)) {
-        qDebug() << "svg file open error";
+        debugStencilBox << "svg file open error";
         return 0;
     }
 
@@ -122,7 +122,7 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
     in->close();
 
     if (!parsed) {
-        qDebug() << "Error while parsing file: "
+        debugStencilBox << "Error while parsing file: "
         << "at line " << line << " column: " << col
         << " message: " << errormessage << endl;
         return 0;
@@ -165,7 +165,7 @@ createDefaultShape(KoDocumentResourceManager* documentResources) const
         shape = createFromSvg(in, documentResources);
         delete in;
     } else {
-        qDebug() << "stencil format" << ext << "unsupported";
+        debugStencilBox << "stencil format" << ext << "unsupported";
     }
 
     if (shape) {

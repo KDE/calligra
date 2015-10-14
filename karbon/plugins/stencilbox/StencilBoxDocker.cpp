@@ -18,9 +18,11 @@
  */
 
 #include "StencilBoxDocker.h"
+
 #include "StencilShapeFactory.h"
 #include "CollectionItemModel.h"
 #include "CollectionTreeWidget.h"
+#include "StencilBoxDebug.h"
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
@@ -34,7 +36,6 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
@@ -144,7 +145,7 @@ void StencilBoxDocker::manageStencilsFolder()
     QString destination = KStandardDirs::locateLocal("data", "karbon/stencils/", true);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "could not open" << destination + "/readme.txt" << "for writing";
+        debugStencilBox << "could not open" << destination + "/readme.txt" << "for writing";
     } else {
         QTextStream out(&file);
         out << i18n("\
@@ -210,12 +211,12 @@ void StencilBoxDocker::loadShapeCollections()
     QStringList dirs = KGlobal::dirs()->resourceDirs("app_shape_collections");
     foreach(const QString& path, dirs)
     {
-        qDebug() << path;
+        debugStencilBox << path;
         QDir dir(path);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         foreach(const QString & collectionDirName, collectionDirs) {
             addCollection(path + collectionDirName);
-            qDebug() << path + collectionDirName;
+            debugStencilBox << path + collectionDirName;
         }
     }
 }
@@ -262,7 +263,7 @@ bool StencilBoxDocker::addCollection(const QString& path)
         else if (QFile(filename+"svg").exists())
             source += "svg";
         else {
-            qDebug() << filename << "not found";
+            debugStencilBox << filename << "not found";
             continue;
         }
 
