@@ -28,13 +28,12 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
+// This filter
+#include "DocxExportDebug.h"
 
 // ================================================================
 //                     class FileCollector::FileInfo
@@ -159,7 +158,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
             fileName.remove(0, 1);
         }
         if (!store->open(fileName)) {
-            kDebug(30503) << "Can not create" << file->fileName;
+            debugDocx << "Can not create" << file->fileName;
             return KoFilter::CreationError;
         }
 

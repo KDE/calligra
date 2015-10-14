@@ -25,13 +25,13 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+
+// This filter
+#include "DocxExportDebug.h"
 
 
 // ================================================================
@@ -61,7 +61,7 @@ KoFilter::ConversionStatus OpcContentTypes::writeToStore(KoStore *opcStore)
 {
     // We can hardcode this one.
     if (!opcStore->open("[Content_Types].xml")) {
-        kDebug(30503) << "Can not to open [Content_Types].xml.";
+        debugDocx << "Can not to open [Content_Types].xml.";
         return KoFilter::CreationError;
     }
 

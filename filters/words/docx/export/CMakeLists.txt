@@ -6,6 +6,7 @@ include_directories(
 )
 
 set(Odt2Docx_PART_SRCS
+    DocxExportDebug.cpp
     DocxExport.cpp
     DocxStyleWriter.cpp
     DocxStyleHelper.cpp
