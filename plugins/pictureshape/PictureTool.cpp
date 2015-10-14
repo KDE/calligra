@@ -26,6 +26,7 @@
 
 #include <QUrl>
 #include <QFileDialog>
+#include <QImageReader>
 
 #include <klocalizedstring.h>
 #include <KIO/Job>
@@ -160,7 +161,18 @@ void PictureTool::changeUrlPressed()
 {
     if (m_pictureshape == 0)
         return;
-    QUrl url = QFileDialog::getOpenFileUrl();
+    // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
+    QFileDialog *dialog = new QFileDialog();
+    QStringList imageMimeTypes;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageMimeTypes << QLatin1String(mimeType);
+    }
+    dialog->setMimeTypeFilters(imageMimeTypes);
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->exec();
+    QUrl url = dialog->selectedUrls().value(0);
+
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

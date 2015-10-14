@@ -38,6 +38,7 @@
 
 #include <QFileDialog>
 #include <QUrl>
+#include <QImageReader>
 
 
 KPrPicturesImport::KPrPicturesImport()
@@ -49,11 +50,19 @@ void KPrPicturesImport::import(KPrView *view)
     m_factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(m_factory);
     if (m_factory) {
-         //QT5TODO: used mimetypes "image/png image/jpeg image/gif") but why that restriction?
-        // PictureTool::changeUrlPressed does not limit the mimetypes as well,
-        // after all QImage::loadFromData is used which supports a lot more of formats
-        // TODO: find how to query formats that QImage::loadFromData supports, so the mimetype can be set
-        m_urls = QFileDialog::getOpenFileUrls();
+        // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
+        QFileDialog *dialog = new QFileDialog();
+        QStringList imageMimeTypes;
+        foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+            imageMimeTypes << QLatin1String(mimeType);
+        }
+        dialog->setMimeTypeFilters(imageMimeTypes);
+        dialog->setFileMode(QFileDialog::ExistingFiles);
+        dialog->setAcceptMode(QFileDialog::AcceptOpen);
+        if (dialog->exec() != QFileDialog::Accepted) {
+            return;
+        }
+        m_urls = dialog->selectedUrls();
 
         // TODO there should be a progress bar
         // instead of the progress bar opening for each loaded picture
