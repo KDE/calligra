@@ -63,12 +63,6 @@ void ImageEffectConfigWidget::selectImage()
     if (!m_effect)
         return;
 
-    QStringList imageFilter;
-    // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilter << QString("image/") + format;
-    }
-
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select image"));
     dialog.setImageFilters();
