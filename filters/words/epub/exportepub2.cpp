@@ -27,10 +27,10 @@
 #include <QSvgGenerator>
 #include <QBuffer>
 #include <QPainter>
+#include <QMimeDatabase>
 
 // KF5
 #include <kpluginfactory.h>
-#include <kmimetype.h>
 
 // Calligra
 #include <KoFilterChain.h>
@@ -425,7 +425,7 @@ KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
         }
         mediaContent = file.readAll();
 
-        const QString mimetype(KMimeType::findByPath(mediaSrc.section("/", -1), 0 , true)->name());
+        const QString mimetype = QMimeDatabase().mimeTypeForFileNameAndData(mediaSrc.section("/", -1), mediaContent).name();
         epubFile->addContentFile(mediaId.section("#", -1), epubFile->pathPrefix() + mediaSrc.section("/", -1),
                                  mimetype.toUtf8(), mediaContent);
     }
