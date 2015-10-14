@@ -23,7 +23,6 @@
 #include "olestream.h"
 
 #include "wvlog.h"
-#include "kdebug.h"
 #include <QList>
 
 using namespace wvWare;

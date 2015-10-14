@@ -55,6 +55,7 @@ set( wv2_SOURCES
     utilities.cpp
     crc32.c
     graphics.cpp
+    wvlog.cpp
     )
 
 set( wv2_HEADERS

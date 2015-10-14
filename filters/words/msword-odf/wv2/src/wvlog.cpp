@@ -16,14 +16,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef WVLOG_H
-#define WVLOG_H
+#include "wvlog.h"
 
-#include <QDebug>
-#include <QLoggingCategory>
-
-extern const QLoggingCategory &WV_LOG();
-
-#define wvlog qCDebug(WV_LOG)
-
-#endif // WVLOG_H
+const QLoggingCategory &WV_LOG()
+{
+    static const QLoggingCategory category("calligra.lib.wv2");
+    return category;
+}
