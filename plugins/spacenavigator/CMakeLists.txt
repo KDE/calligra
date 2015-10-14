@@ -6,6 +6,7 @@ include_directories( ${FLAKE_INCLUDES}  ${SPNAV_INCLUDE_DIR})
 ########### Flake Plugin library ###############
 
 set ( spacenavigator_SRCS
+    SpaceNavigatorDebug.cpp
     Plugin.cpp
     SpaceNavigatorDevice.cpp
     SpaceNavigatorPollingThread.cpp

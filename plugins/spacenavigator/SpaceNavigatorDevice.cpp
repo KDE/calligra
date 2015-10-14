@@ -20,9 +20,11 @@
 #include "SpaceNavigatorDevice.h"
 #include "SpaceNavigatorPollingThread.h"
 #include "SpaceNavigatorEvent.h"
+#include "SpaceNavigatorDebug.h"
+
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
-#include <kdebug.h>
+
 #include <spnav.h>
 #include <math.h>
 

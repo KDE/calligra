@@ -19,8 +19,11 @@
  */
 
 #include "SpaceNavigatorPollingThread.h"
+
+#include "SpaceNavigatorDebug.h"
+
 #include <KoInputDeviceHandlerEvent.h>
-#include <kdebug.h>
+
 #include <spnav.h>
 
 SpaceNavigatorPollingThread::SpaceNavigatorPollingThread( QObject * parent )
@@ -43,7 +46,7 @@ void SpaceNavigatorPollingThread::run()
     int currRX = 0, currRY = 0, currRZ = 0;
     Qt::MouseButtons buttons = Qt::NoButton;
 
-    kDebug() << "started spacenavigator polling thread";
+    debugSpaceNavigator << "started spacenavigator polling thread";
     while( ! m_stopped )
     {
         spnav_event event;
@@ -64,7 +67,7 @@ void SpaceNavigatorPollingThread::run()
                  * The z-axis would then go from up to down in a right handed coordinate system.
                  * z-axis : from up to down
                  */
-                //kDebug() << "got motion event: t("<< event.motion.x << event.motion.y << event.motion.z << ") r(" << event.motion.rx << event.motion.ry << event.motion.rz << ")";
+                //debugSpaceNavigator << "got motion event: t("<< event.motion.x << event.motion.y << event.motion.z << ") r(" << event.motion.rx << event.motion.ry << event.motion.rz << ")";
                 currX = static_cast<int>( posfactor * event.motion.x );
                 currY = -static_cast<int>( posfactor * event.motion.z );
                 currZ = -static_cast<int>( posfactor * event.motion.y );
@@ -80,13 +83,13 @@ void SpaceNavigatorPollingThread::run()
                 KoInputDeviceHandlerEvent::Type type;
                 if( event.button.press )
                 {
-                    //kDebug() << "got button press event b(" << event.button.bnum << ")";
+                    //debugSpaceNavigator << "got button press event b(" << event.button.bnum << ")";
                     buttons |= button;
                     type = KoInputDeviceHandlerEvent::ButtonPressed;
                 }
                 else
                 {
-                    //kDebug() << "got button release event b(" << event.button.bnum << ")";
+                    //debugSpaceNavigator << "got button release event b(" << event.button.bnum << ")";
                     buttons &= ~button;
                     type = KoInputDeviceHandlerEvent::ButtonReleased;
                 }
@@ -97,7 +100,7 @@ void SpaceNavigatorPollingThread::run()
         msleep(10);
     }
 
-    kDebug() << "finished spacenavigator polling thread";
+    debugSpaceNavigator << "finished spacenavigator polling thread";
 }
 
 void SpaceNavigatorPollingThread::stop()
