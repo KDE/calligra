@@ -22,7 +22,6 @@
 #include <QTime>
 #include <QColor>
 
-#include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
     KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
