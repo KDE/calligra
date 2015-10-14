@@ -87,6 +87,7 @@ public:
             , busyProgressIndicator(0)
             , projectionLeaf(new KisProjectionLeaf(node))
             , animated(false)
+            , useInTimeline(false)
     {
     }
 
@@ -98,6 +99,7 @@ public:
     QReadWriteLock nodeSubgraphLock;
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
     bool animated;
+    bool useInTimeline;
 
     KisProjectionLeafSP projectionLeaf;
 
@@ -262,9 +264,20 @@ bool KisNode::isAnimated() const
 
 void KisNode::enableAnimation()
 {
-    emit animatedAboutToChange(true);
     m_d->animated = true;
-    emit animatedChanged(true);
+}
+
+bool KisNode::useInTimeline() const
+{
+    return m_d->useInTimeline;
+}
+
+void KisNode::setUseInTimeline(bool value)
+{
+    if (value == m_d->useInTimeline) return;
+
+    m_d->useInTimeline = value;
+    baseNodeChangedCallback();
 }
 
 void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
