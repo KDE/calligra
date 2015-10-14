@@ -47,6 +47,7 @@
 
 #include <kstandarddirs.h>
 
+#include <QStandardPaths>
 #include <QVBoxLayout>
 #include <QListView>
 #include <QStandardItemModel>
@@ -142,7 +143,8 @@ void StencilBoxDocker::getHotNewStuff()
 
 void StencilBoxDocker::manageStencilsFolder()
 {
-    QString destination = KStandardDirs::locateLocal("data", "karbon/stencils/", true);
+    const QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/karbon/stencils");
+    QDir().mkpath(destination);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         debugStencilBox << "could not open" << destination + "/readme.txt" << "for writing";

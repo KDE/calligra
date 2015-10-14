@@ -42,9 +42,9 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <QAction>
-#include <kstandarddirs.h>
 
+#include <QAction>
+#include <QStandardPaths>
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -59,7 +59,7 @@ K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbon_flattenpath.json",
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/FlattenPathPlugin.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/FlattenPathPlugin.rc"), true);
 
 
     QAction *actionFlattenPath  = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);

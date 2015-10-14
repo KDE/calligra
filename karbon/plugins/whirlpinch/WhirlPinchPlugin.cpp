@@ -48,8 +48,8 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
+#include <QStandardPaths>
 #include <QAction>
 #include <QGroupBox>
 #include <QLabel>
@@ -65,7 +65,7 @@ K_PLUGIN_FACTORY_WITH_JSON(WhirlPinchPluginFactory, "karbon_whirlpinch.json",
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/WhirlPinchPlugin.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/WhirlPinchPlugin.rc"), true);
     QAction *a = new QAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));

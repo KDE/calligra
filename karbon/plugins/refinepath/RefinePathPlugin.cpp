@@ -44,8 +44,8 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
+#include <QStandardPaths>
 #include <QAction>
 #include <QGroupBox>
 #include <QLabel>
@@ -61,7 +61,7 @@ K_PLUGIN_FACTORY_WITH_JSON(RefinePathPluginFactory, "karbon_refinepath.json",
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/RefinePathPlugin.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/RefinePathPlugin.rc"), true);
     QAction *actionRefinePath  = new QAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));

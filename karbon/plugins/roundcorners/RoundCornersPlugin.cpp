@@ -46,8 +46,8 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kstandarddirs.h>
 
+#include <QStandardPaths>
 #include <QAction>
 #include <QGroupBox>
 #include <QLabel>
@@ -62,7 +62,7 @@ K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbon_roundcorners.json"
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/RoundCornersPlugin.rc"));
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/RoundCornersPlugin.rc"));
 
     QAction *actionRoundCorners  = new QAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
