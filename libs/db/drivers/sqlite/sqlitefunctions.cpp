@@ -92,12 +92,16 @@ static void soundexFunc(
 
 bool createCustomSQLiteFunctions(sqlite3 *db)
 {
+    int eTextRep = SQLITE_UTF8;
+#if SQLITE_VERSION_NUMBER >= 3008003
+    eTextRep |= SQLITE_DETERMINISTIC;
+#endif
     if (!tryExec(db, "SELECT SOUNDEX()")) {
         int res = sqlite3_create_function_v2(
             db,
             "SOUNDEX",
             1, //nArg
-            SQLITE_UTF8 | SQLITE_DETERMINISTIC, // eTextRep
+            eTextRep,
             0, // pApp
             soundexFunc,
             0, // xStep
