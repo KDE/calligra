@@ -27,12 +27,18 @@
 
 using namespace Calligra::Sheets;
 
+namespace {
+  static const int kCutOff = 65535;
+  static const int kStepSize = 1238;
+}
+
 void TestRowRepeatStorage::testEmptyStorage()
 {
     RowRepeatStorage s;
     for (int i = 1; i <= KS_rowMax; i++) {
         QCOMPARE(s.rowRepeat(i), 1);
         QCOMPARE(s.firstIdenticalRow(i), i);
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -49,6 +55,7 @@ void TestRowRepeatStorage::testSimpleSetRowRepeat()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
     s.setRowRepeat(44, 7);
     for (int i = 1; i <= KS_rowMax; i++) {
@@ -62,6 +69,7 @@ void TestRowRepeatStorage::testSimpleSetRowRepeat()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
     s.setRowRepeat(15, 4);
     for (int i = 1; i <= KS_rowMax; i++) {
@@ -78,6 +86,7 @@ void TestRowRepeatStorage::testSimpleSetRowRepeat()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -125,6 +134,7 @@ void TestRowRepeatStorage::testOverlappingRanges()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -161,6 +171,7 @@ void TestRowRepeatStorage::testComplexSetRowRepeat()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -177,6 +188,7 @@ void TestRowRepeatStorage::testInsertRowsEmpty()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -208,6 +220,7 @@ void TestRowRepeatStorage::testInsertRowsBetween()
             QCOMPARE(s.rowRepeat(i), 10);
             QCOMPARE(s.firstIdenticalRow(i), 50);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -231,6 +244,7 @@ void TestRowRepeatStorage::testInsertRowsMiddle()
             QCOMPARE(s.rowRepeat(i), 10);
             QCOMPARE(s.firstIdenticalRow(i), 27);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -242,6 +256,7 @@ void TestRowRepeatStorage::testRemoveRowsEmpty()
     for (int i = 1; i <= KS_rowMax; i++) {
         QCOMPARE(s.rowRepeat(i), 1);
         QCOMPARE(s.firstIdenticalRow(i), i);
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -266,6 +281,7 @@ void TestRowRepeatStorage::testRemoveRowsBetween()
             QCOMPARE(s.rowRepeat(i), 20);
             QCOMPARE(s.firstIdenticalRow(i), 45);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -288,6 +304,7 @@ void TestRowRepeatStorage::testRemoveRowsOverlap()
             QCOMPARE(s.rowRepeat(i), 8);
             QCOMPARE(s.firstIdenticalRow(i), 10);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -323,6 +340,7 @@ void TestRowRepeatStorage::testInsertShiftDown1()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -355,6 +373,7 @@ void TestRowRepeatStorage::testInsertShiftDown2()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -390,6 +409,7 @@ void TestRowRepeatStorage::testInsertShiftDown3()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -438,6 +458,7 @@ void TestRowRepeatStorage::testInsertShiftDown4()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -470,6 +491,7 @@ void TestRowRepeatStorage::testRemoveShiftUp1()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -499,6 +521,7 @@ void TestRowRepeatStorage::testRemoveShiftUp2()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -528,6 +551,7 @@ void TestRowRepeatStorage::testRemoveShiftUp3()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -567,6 +591,7 @@ void TestRowRepeatStorage::testRemoveShiftUp4()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -607,6 +632,7 @@ void TestRowRepeatStorage::testInsertShiftRight()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
@@ -647,6 +673,7 @@ void TestRowRepeatStorage::testRemoveShiftLeft()
             QCOMPARE(s.rowRepeat(i), 1);
             QCOMPARE(s.firstIdenticalRow(i), i);
         }
+        if (i > kCutOff) i += kStepSize;
     }
 }
 
