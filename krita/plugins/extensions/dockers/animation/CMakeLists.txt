@@ -19,6 +19,8 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
 
     timeline_frames_index_converter.cpp
     timeline_node_list_keeper.cpp
+
+    kis_draggable_tool_button.cpp
 )
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS
