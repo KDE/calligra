@@ -38,6 +38,7 @@
   <summary xml:lang="nl">Visuele database van bouwer van apps</summary>
   <summary xml:lang="pt">Construtor visual de aplicações de bases de dados</summary>
   <summary xml:lang="pt-BR">Construtor visual de aplicativos de banco de dados</summary>
+  <summary xml:lang="sk">Vizuálny tvorca databázových aplikácií</summary>
   <summary xml:lang="sv">Visuellt byggverktyg för databasprogram</summary>
   <summary xml:lang="uk">Програма для побудови візуальних обробників баз даних</summary>
   <summary xml:lang="x-test">xxVisual database apps builderxx</summary>
@@ -56,6 +57,7 @@
     <p xml:lang="nl">Kexi is een bouwer van toepassingen met een database op een visuele manier. Het kan gebruikt worden voor het ontwerpen van toepassingen met een database, gegevens invoeren en bewerken, zoekopdrachten uitvoeren en gegevens verwerken. Formulieren kunnen gemaakt worden om een aangepast interface naar uw gegevens te bieden. Alle database-objecten - tabellen, zoekopdrachten, formulieren, rapporten, etc. - worden opgeslagen in de database, waarmee het gemakkelijk wordt gegevens en ontwerp te delen.</p>
     <p xml:lang="pt">O Kexi é um criador de bases de dados visuais, que pode ser usado para desenhar aplicações de bases de dados, inserir e editar dados, executar pesquisas e processar os dados. Poderá criar formulários para oferecer uma interface personalizada para os seus dados. Todos os objectos da base de dados - tabelas, pesquisas, formulários, relatórios, etc. - são guardados na base de dados, tornando simples a partilha e o desenho dos dados.</p>
     <p xml:lang="pt-BR">Kexi é um construtor de aplicativos visuais de banco de dados. Pode ser usado para desenhar aplicativos de banco de dados, inserir e editar dados, executar pesquisas e processar dados. Podem ser criados formulários para oferecer uma interface personalizada para seus dados. Todos os objetos do banco de dados - tabelas, pesquisas, formulários, relatórios, etc. - são armazenados no próprio banco de dados, tornando simples o compartilhamento de dados e o visual.</p>
+    <p xml:lang="sk">Kexi je vizuálny tvorca databáz, súčasť Calligra Suite. Dá sa použiť na návrh databázových aplikácií, vkladanie a úpravu údajov, vykonávanie dotazov a spracúvanie údajov. Formuláre sa dajú vytvoriť na poskytnutie vlastného rozhrania pre vaše údaje. Všetky databázové objekty - tabuľky, dotazy, formuláre, správy - sú uložené v databáze, čo uľahčuje zdieľanie dát a dizajn.</p>
     <p xml:lang="sv">Kexi är ett visuell byggverktyg för databasprogram, en del av Calligra-sviten. Den kan användas för att skapa databasprogram, infoga och redigera data, ställa frågor och behandla data. Formulär kan skapas för att tillhandahålla ett anpassat gränssnitt för data. Alla databasobjekt (tabeller, frågor, formulär, rapporter, etc.) lagras i databasen, vilket gör det enkelt att dela data och konstruktion.</p>
     <p xml:lang="uk">Kexi — програма для створення обробників баз даних у візуальному режимі. Цією програмою можна скористатися для створень мініпрограм для роботи з базами даних, додавання та редагування даних, виконання запитів та обробки даних. За допомогою створених програмою форм ви можете отримати потрібний вам режим доступу до ваших даних. Всі об’єкти баз даних — таблиці, запити, форми, звіти тощо, — зберігаються у самій базі даних, що спрощує поширення даних та представлення даних.</p>
     <p xml:lang="x-test">xxKexi is a visual database applications builder. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports, etc. - are stored in the database, making it easy to share data and design.xx</p>
@@ -133,6 +135,7 @@
       <li xml:lang="nl">Ondersteunt databases SQLite, MySQL, PostgreSQL, xBase en Sybase/MS SQL Server</li>
       <li xml:lang="pt">Suporta bases de dados SQLite, MySQL, PostgreSQL, xBase e Sybase/MS SQL Server</li>
       <li xml:lang="pt-BR">Suporte aos banco de dados SQLite, MySQL, PostgreSQL, xBase e Sybase/MS SQL Server</li>
+      <li xml:lang="sk">Podporuje serverové databázy SQLite, MySQL, PostgreSQL, xBase a Sybase/MS SQL</li>
       <li xml:lang="sv">Stöder databaserna SQLite, MySQL, PostgreSQL, xBase och Sybase/MS SQL Server</li>
       <li xml:lang="uk">Підтримка баз даних SQLite, MySQL, PostgreSQL, xBase та Sybase/MS SQL.</li>
       <li xml:lang="x-test">xxSupports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databasesxx</li>
@@ -145,6 +148,7 @@
       <li xml:lang="nl">Het enige multiplatform visuele hulpmiddel die gemakkelijk gegevens kan importeren uit MS Access databases</li>
       <li xml:lang="pt">A única ferramenta gráfica multi-plataforma que consegue importar facilmente bases de dados MS Access</li>
       <li xml:lang="pt-BR">Única ferramenta visual e multiplataforma que consegue importar facilmente um banco de dados do MS Access</li>
+      <li xml:lang="sk">Jediný mnohoplatformový grafický nástroj importujúci údaje z databáz MS Access</li>
       <li xml:lang="sv">Det enda visuella verktyget för flera plattformar som enkelt kan importera data från MS Access-databaser</li>
       <li xml:lang="uk">Єдиний візуальний багатоплатформовий інструмент, здатний без проблем імпортувати дані з баз даних MS Access.</li>
       <li xml:lang="x-test">xxThe only multiplatform visual tool that can easily import data from MS Access databasesxx</li>
@@ -157,6 +161,7 @@
       <li xml:lang="nl">Ondersteuning voor ontwerp van zoekopdrachten in een gerichte SQL-weergave</li>
       <li xml:lang="pt">Suporta o desenho de pesquisas numa área de SQL dedicada</li>
       <li xml:lang="pt-BR">Suporte para desenho de pesquisas em uma área de SQL dedicada</li>
+      <li xml:lang="sk">Podporuje návrh dotazov vo vyhradenom SQL pohľade</li>
       <li xml:lang="sv">Stöd för frågekonstruktion i en dedicerad SQL-vy</li>
       <li xml:lang="uk">Підтримка створення запитів за допомогою спеціальної панелі SQL.</li>
       <li xml:lang="x-test">xxSupport for query design in dedicated SQL viewxx</li>
