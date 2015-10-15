@@ -629,4 +629,205 @@ void TestValueConverter::testAsString()
     QCOMPARE(m_converter->toString(value), expected);
 }
 
+void TestValueConverter::testAsDateTime_data()
+{
+    QTest::addColumn<QString>("locale");
+    QTest::addColumn<Value>("value");
+    QTest::addColumn<bool>("expectedOk");
+    QTest::addColumn<Value>("expected");
+
+    // ok = true and empty value is treated as current date/time
+    QTest::newRow("empty") << "C" << Value() << true << Value();
+
+    QTest::newRow("bool true") << "C" << Value(true) << true
+        << Value();
+    QTest::newRow("bool false") << "C" << Value(false) << true
+        << Value();
+
+    QTest::newRow("integer") << "C" << Value(123) << true
+        << ValueWithFormat(123.0, Value::fmt_DateTime);
+    QTest::newRow("float") << "C" << Value(10.3) << true
+        << ValueWithFormat(10.3, Value::fmt_DateTime);
+    QTest::newRow("complex") << "C" << Value(complex<Number>(10.3, 12.5)) << true
+        << ValueWithFormat(10.3, Value::fmt_DateTime);
+
+    QTest::newRow("string valid") << "C" << Value("1999-11-23") << true
+        << ValueWithFormat(-39, Value::fmt_DateTime);
+    // TODO(mek): This should probably not have a format.
+    QTest::newRow("string invalid") << "C" << Value("invalid") << false
+        << ValueWithFormat(Value::errorVALUE(), Value::fmt_DateTime);
+
+    ValueStorage array;
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value();
+    array.insert(1, 1, Value(543.4));
+    QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1)) << true
+        << ValueWithFormat(543.4, Value::fmt_DateTime);
+    // TODO(mek): Should this one return false for ok?
+    array.insert(1, 1, Value("invalid"));
+    // TODO(mek): This should probably not have a format.
+    QTest::newRow("array invalid string") << "C" << Value(array, QSize(1, 1)) << true
+        << ValueWithFormat(Value::errorVALUE(), Value::fmt_DateTime);
+
+    // TODO(mek): Are these correct?
+    //QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value();
+    //QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value();
+}
+
+void TestValueConverter::testAsDateTime()
+{
+    QFETCH(QString, locale);
+    QFETCH(Value, value);
+    QFETCH(bool, expectedOk);
+    QFETCH(Value, expected);
+
+    *m_calcsettings->locale() = KLocale(locale, locale);
+    QCOMPARE(m_calcsettings->locale()->country(), locale);
+
+    bool ok;
+    Value result = m_converter->asDateTime(value, &ok);
+    QCOMPARE(ok, expectedOk);
+    if (expected.isEmpty()) {
+        QDateTime current = QDateTime::currentDateTime();
+        expected = Value(current, m_calcsettings);
+        QVERIFY(result.isFloat());
+        QVERIFY(result.asFloat() <= expected.asFloat());
+        QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));
+        QCOMPARE(result.format(), expected.format());
+    } else {
+      kDebug() << result << " != " << expected;
+        QCOMPARE(result, expected);
+        QCOMPARE(result.format(), expected.format());
+    }
+}
+
+void TestValueConverter::testAsDate_data()
+{
+    QTest::addColumn<QString>("locale");
+    QTest::addColumn<Value>("value");
+    QTest::addColumn<bool>("expectedOk");
+    QTest::addColumn<Value>("expected");
+
+    QTest::newRow("empty") << "C" << Value() << true
+        << Value(QDate::currentDate(), m_calcsettings);
+
+    QTest::newRow("bool true") << "C" << Value(true) << true
+        << Value(QDate::currentDate(), m_calcsettings);
+    QTest::newRow("bool false") << "C" << Value(false) << true
+        << Value(QDate::currentDate(), m_calcsettings);
+
+    QTest::newRow("integer") << "C" << Value(123) << true
+        << ValueWithFormat(123.0, Value::fmt_Date);
+    QTest::newRow("float") << "C" << Value(10.3) << true
+        << ValueWithFormat(10.3, Value::fmt_Date);
+    QTest::newRow("complex") << "C" << Value(complex<Number>(10.3, 12.5)) << true
+        << ValueWithFormat(10.3, Value::fmt_Date);
+
+    QTest::newRow("string valid") << "C" << Value("2005-06-23") << true
+        << Value(QDate(2005, 6, 23), m_calcsettings);
+    QTest::newRow("string invalid") << "C" << Value("2005-26-23") << false
+        << Value::errorVALUE();
+
+    ValueStorage array;
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true
+        << Value(QDate::currentDate(), m_calcsettings);
+    array.insert(1, 1, Value(543.4));
+    QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1)) << true
+        << ValueWithFormat(543.4, Value::fmt_Date);
+    // TODO(mek): Should this one return false for ok?
+    array.insert(1, 1, Value("invalid"));
+    QTest::newRow("array invalid string") << "C" << Value(array, QSize(1, 1)) << true
+        << Value::errorVALUE();
+
+    // TODO(mek): Are these correct?
+    QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value();
+    QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value();
+}
+
+void TestValueConverter::testAsDate()
+{
+    QFETCH(QString, locale);
+    QFETCH(Value, value);
+    QFETCH(bool, expectedOk);
+    QFETCH(Value, expected);
+
+    *m_calcsettings->locale() = KLocale(locale, locale);
+    QCOMPARE(m_calcsettings->locale()->country(), locale);
+
+    bool ok;
+    Value result = m_converter->asDate(value, &ok);
+    QCOMPARE(ok, expectedOk);
+    QCOMPARE(result, expected);
+    QCOMPARE(result.format(), expected.format());
+}
+
+void TestValueConverter::testAsTime_data()
+{
+    QTest::addColumn<QString>("locale");
+    QTest::addColumn<Value>("value");
+    QTest::addColumn<bool>("expectedOk");
+    QTest::addColumn<Value>("expected");
+
+    // ok = true and empty value is treated as current time
+    QTest::newRow("empty") << "C" << Value() << true << Value();
+
+    QTest::newRow("bool true") << "C" << Value(true) << true
+        << Value();
+    QTest::newRow("bool false") << "C" << Value(false) << true
+        << Value();
+
+    QTest::newRow("integer") << "C" << Value(123) << true
+        << ValueWithFormat(123.0, Value::fmt_Time);
+    QTest::newRow("float") << "C" << Value(10.3) << true
+        << ValueWithFormat(10.3, Value::fmt_Time);
+    QTest::newRow("complex") << "C" << Value(complex<Number>(10.3, 12.5)) << true
+        << ValueWithFormat(10.3, Value::fmt_Time);
+
+    QTest::newRow("string valid 1") << "C" << Value("13:45") << true
+        << Value(QTime(13, 45), m_calcsettings);
+    QTest::newRow("string valid 2") << "C" << Value("13:45:33") << true
+        << Value(QTime(13, 45, 33), m_calcsettings);
+    QTest::newRow("string invalid") << "C" << Value("13:66:99") << false
+        << Value::errorVALUE();
+
+    ValueStorage array;
+    QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value();
+    array.insert(1, 1, Value(543.4));
+    QTest::newRow("array 543.4") << "C" << Value(array, QSize(1, 1)) << true
+        << ValueWithFormat(543.4, Value::fmt_Time);
+    // TODO(mek): Should this one return false for ok?
+    array.insert(1, 1, Value("invalid"));
+    QTest::newRow("array invalid string") << "C" << Value(array, QSize(1, 1)) << true
+        << Value::errorVALUE();
+
+    // TODO(mek): Are these correct?
+    //QTest::newRow("errorCIRCLE") << "C" << Value::errorCIRCLE() << true << Value();
+    //QTest::newRow("errorNA") << "C" << Value::errorNA() << true << Value();
+}
+
+void TestValueConverter::testAsTime()
+{
+    QFETCH(QString, locale);
+    QFETCH(Value, value);
+    QFETCH(bool, expectedOk);
+    QFETCH(Value, expected);
+
+    *m_calcsettings->locale() = KLocale(locale, locale);
+    QCOMPARE(m_calcsettings->locale()->country(), locale);
+
+    bool ok;
+    Value result = m_converter->asTime(value, &ok);
+    QCOMPARE(ok, expectedOk);
+    if (expected.isEmpty()) {
+        QTime currentTime = QTime::currentTime();
+        expected = Value(currentTime, m_calcsettings);
+        QVERIFY(result.isFloat());
+        QVERIFY(result.asFloat() <= expected.asFloat());
+        QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));
+        QCOMPARE(result.format(), expected.format());
+    } else {
+        QCOMPARE(result, expected);
+        QCOMPARE(result.format(), expected.format());
+    }
+}
+
 QTEST_MAIN(TestValueConverter)

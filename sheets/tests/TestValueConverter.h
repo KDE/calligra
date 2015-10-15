@@ -50,6 +50,12 @@ private Q_SLOTS:
     void testAsNumeric();
     void testAsString_data();
     void testAsString();
+    void testAsDateTime_data();
+    void testAsDateTime();
+    void testAsDate_data();
+    void testAsDate();
+    void testAsTime_data();
+    void testAsTime();
 
 private:
     CalculationSettings* m_calcsettings;
