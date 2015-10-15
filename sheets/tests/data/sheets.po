@@ -9,3 +9,9 @@ msgstr "xxTruexx"
 
 msgid "False"
 msgstr "xxFalsexx"
+
+msgid "am"
+msgstr "xxamxx"
+
+msgid "pm"
+msgstr "xxpmxx"
