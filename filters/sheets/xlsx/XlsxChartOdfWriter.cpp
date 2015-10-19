@@ -21,9 +21,6 @@
 // Own
 #include "XlsxChartOdfWriter.h"
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 #include <KoXmlWriter.h>
