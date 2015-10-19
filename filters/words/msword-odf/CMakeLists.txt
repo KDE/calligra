@@ -3,8 +3,6 @@ add_subdirectory(wv2)
 include_directories(
     ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
     ../../libmso
-    ../../libmsooxml
-    ../../sheets/xlsx/
 )
 
 set(doc2odt_PART_SRCS
