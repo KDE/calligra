@@ -33,9 +33,10 @@
 #include "conversion.h"
 #include "document.h"
 #include "msdoc.h"
+#include "MsDocDebug.h"
 
 #include <KoGenStyle.h>
-#include <kdebug.h>
+
 #include <QColor>
 #include <QByteArray>
 
@@ -179,7 +180,7 @@ WordsGraphicsHandler::WordsGraphicsHandler(Document* doc,
 , m_picf(0)
 , m_pSpa(0)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     init();
 }
 
@@ -194,7 +195,7 @@ WordsGraphicsHandler::~WordsGraphicsHandler()
  */
 void WordsGraphicsHandler::init()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     parseOfficeArtContainers();
 
@@ -206,7 +207,7 @@ void WordsGraphicsHandler::init()
 
     if (!blipStore) {
 #ifdef DEBUG_GHANDLER
-        kDebug(30513) << "Container of BLIPs not present.";
+        debugMsDoc << "Container of BLIPs not present.";
 #endif
         return;
     }
@@ -242,12 +243,12 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
     //the index into plcfSpa.  However the border information for inline
     //msosptPictureFrame shapes is stored in the PICF struture.
 
-    kDebug(30513) ;
+    debugMsDoc ;
     QString ret;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "\nPICF DEBUG:"
+    debugMsDoc << "\nPICF DEBUG:"
                   << "\nPICF size: 0x" << hex << data.picf->cbHeader
                   << "\nOfficeArtInlineSpContainer size:" << dec << size
                   << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
@@ -267,16 +268,16 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
     if (!in) {
-        kDebug(30513) << "Data stream not provided, no access to inline shapes!";
+        debugMsDoc << "Data stream not provided, no access to inline shapes!";
         return ret;
     }
     if (data.fcPic > in->getSize()) {
-        kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
+        debugMsDoc << "OfficeArtInlineSpContainer offset out of range, skipping!";
         return ret;
     }
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "\nCurrent stream position:" << in->getPosition()
+    debugMsDoc << "\nCurrent stream position:" << in->getPosition()
                   << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
 #endif
 
@@ -289,11 +290,11 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
     try {
         parseOfficeArtInlineSpContainer(*in, co);
     } catch (const IOException& e) {
-        kDebug(30513) << e.msg;
+        debugMsDoc << e.msg;
         in->rewind(_zero);
         return ret;
     } catch (...) {
-        kWarning(30513) << "Warning: Caught an unknown exception!";
+        warnMsDoc << "Warning: Caught an unknown exception!";
         in->rewind(_zero);
         return ret;
     }
@@ -301,7 +302,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
 
     int n = (data.fcPic + size) - in->getPosition();
     if (n) {
-        kDebug(30513) << n << "bytes left while parsing OfficeArtInlineSpContainer";
+        debugMsDoc << n << "bytes left while parsing OfficeArtInlineSpContainer";
     }
 
     PictureReference ref;
@@ -310,7 +311,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
     foreach (const OfficeArtBStoreContainerFileBlock& block, co.rgfb) {
         const OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
         if (!fbse) {
-            kDebug(30513) << "Warning: FBSE container not found, skipping ";
+            debugMsDoc << "Warning: FBSE container not found, skipping ";
         } else {
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
@@ -320,7 +321,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
             } else {
                 ref = savePicture(block, m_store);
                 if (ref.name.length() == 0) {
-                    kDebug(30513) << "empty name in picture reference";
+                    debugMsDoc << "empty name in picture reference";
                     break;
                 }
                 m_manifestWriter->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
@@ -351,7 +352,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
 void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "globalCP" << globalCP ;
+    debugMsDoc << "globalCP" << globalCP ;
 #endif
     if (!m_drawings) {
         return;
@@ -371,19 +372,19 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
     }
 
     if (!plcfSpa) {
-        kDebug(30513) << "MISSING plcfSpa!";
+        debugMsDoc << "MISSING plcfSpa!";
         return;
     }
     if (!dg) {
-        kDebug(30513) << "MISSING OfficeArtDgContainer!";
+        debugMsDoc << "MISSING OfficeArtDgContainer!";
         return;
     }
 
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(0));
     for (size_t i = 0; i < plcfSpa->count(); i++, ++it) {
 #ifdef DEBUG_GHANDLER
-        kDebug(30513) << "FSPA start:" << it.currentStart();
-        kDebug(30513) << "FSPA spid:" << it.current()->spid;
+        debugMsDoc << "FSPA start:" << it.currentStart();
+        debugMsDoc << "FSPA spid:" << it.current()->spid;
 #endif
 
         if ((it.currentStart() + threshold) == globalCP) {
@@ -423,7 +424,7 @@ void WordsGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
     const OfficeArtSpContainer* sp = spgr->rgfb[0].anon.get<OfficeArtSpContainer>();
     if (sp && (sp->shapeProp.spid == spid)) {
-        kDebug(30513) << "An unprocessed shape referred from text, ignoring!";
+        debugMsDoc << "An unprocessed shape referred from text, ignoring!";
         return;
     }
 
@@ -528,30 +529,30 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
 
 void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     DrawStyle ds(0, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "shapeType: 0x" << hex << o.shapeProp.rh.recInstance;
-    kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
-    kDebug(30513) << "Selected properties: ";
-    kDebug(30513) << "pib: " << ds.pib();
+    debugMsDoc << "shapeType: 0x" << hex << o.shapeProp.rh.recInstance;
+    debugMsDoc << "grupShape: " << o.shapeProp.fGroup;
+    debugMsDoc << "Selected properties: ";
+    debugMsDoc << "pib: " << ds.pib();
 #endif
 
     switch (o.shapeProp.rh.recInstance) {
     case msosptTextBox:
 #ifdef DEBUG_GHANDLER
-        kDebug(30513)<< "processing TextBox";
+        debugMsDoc<< "processing TextBox";
 #endif
         processTextBox(o, out);
         break;
     case msosptRectangle:
         if (ds.fHorizRule()) {
 #ifdef DEBUG_GHANDLER
-            kDebug(30513)<< "processing Line";
+            debugMsDoc<< "processing Line";
 #endif
             processLineShape(o, out);
         } else {
@@ -560,7 +561,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         break;
     case msosptPictureFrame:
 #ifdef DEBUG_GHANDLER
-        kDebug(30513)<< "processing PictureFrame";
+        debugMsDoc<< "processing PictureFrame";
 #endif
         if (m_objectType == Inline) {
             processInlinePictureFrame(o, out);
@@ -570,7 +571,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         break;
     case msosptHostControl:
 #ifdef DEBUG_GHANDLER
-        kDebug(30513)<< "processing Host Control";
+        debugMsDoc<< "processing Host Control";
 #endif
         processTextBox(o, out);
         break;
@@ -582,13 +583,13 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
 
 void WordsGraphicsHandler::parseOfficeArtContainers()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     if (!m_fib.lcbDggInfo) return;
 
     POLE::Stream& stream = m_document->poleTableStream();
     if (stream.fail()) {
-        kDebug(30513) << "Table stream not provided, no access to OfficeArt file records!";
+        debugMsDoc << "Table stream not provided, no access to OfficeArt file records!";
         return;
     }
 
@@ -598,7 +599,7 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
     stream.seek(m_fib.fcDggInfo);
     unsigned long n = stream.read((unsigned char*) array.data(), m_fib.lcbDggInfo);
     if (n != m_fib.lcbDggInfo) {
-        kError(30513) << "Error while reading from " << stream.fullName().data() << "stream";
+        errorMsDoc << "Error while reading from " << stream.fullName().data() << "stream";
         return;
     }
 
@@ -611,16 +612,16 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
         parseOfficeArtDggContainer(in, m_officeArtDggContainer);
     }
     catch (const IOException& e) {
-        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
-        kDebug(30513) << e.msg;
+        debugMsDoc << "Caught IOException while parsing OfficeArtDggContainer.";
+        debugMsDoc << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
+        debugMsDoc << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
         return;
     }
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
+    debugMsDoc << "OfficeArtDggContainer [ OK ]" ;
 #endif
 
     // parse drawingsVariable from msdoc
@@ -631,12 +632,12 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
         drawingsVariable = in.readuint8();
     }
     catch (const IOException& e) {
-        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
-        kDebug(30513) << e.msg;
+        debugMsDoc << "Caught IOException while parsing DrawingsVariable.";
+        debugMsDoc << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
+        debugMsDoc << "Caught UNKNOWN exception while parsing DrawingsVariable.";
         return;
     }
 
@@ -652,16 +653,16 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (const IOException& e) {
-        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
-        kDebug(30513) << e.msg;
+        debugMsDoc << "Caught IOException while parsing OfficeArtDgContainer.";
+        debugMsDoc << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
+        debugMsDoc << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
         return;
     }
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+    debugMsDoc << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
 #endif
 
     // parse drawingsVariable from msdoc
@@ -671,12 +672,12 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
         drawingsVariable = in.readuint8();
     }
     catch (const IOException& e) {
-        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
-        kDebug(30513) << e.msg;
+        debugMsDoc << "Caught IOException while parsing the 2nd DrawingsVariable.";
+        debugMsDoc << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
+        debugMsDoc << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
         return;
     }
 
@@ -698,28 +699,28 @@ void WordsGraphicsHandler::parseOfficeArtContainers()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (const IOException& e) {
-        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
-        kDebug(30513) << e.msg;
+        debugMsDoc << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
+        debugMsDoc << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
+        debugMsDoc << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
         return;
     }
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+    debugMsDoc << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
 #endif
 
     quint32 r = buffer.size() - in.getPosition();
     if (r > 0) {
-        kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
+        errorMsDoc << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
 }
 
 int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     if (!blipStore) return(1);
 
@@ -744,13 +745,13 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
 
                 if (fbse->foDelay == 0xffffffff) {
 #ifdef DEBUG_GHANDLER
-                    kDebug(30513) << "File not in the delay stream, continuing.";
+                    debugMsDoc << "File not in the delay stream, continuing.";
 #endif
                     continue;
                 }
                 if (!fbse->cRef) {
 #ifdef DEBUG_GHANDLER
-                    kDebug(30513) << "Empty slot, continuing.";
+                    debugMsDoc << "Empty slot, continuing.";
 #endif
                     continue;
                 }
@@ -765,11 +766,11 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
                 try {
                     parseOfficeArtRecordHeader(in, rh);
                 } catch (const IOException& e) {
-                    kDebug(30513) << e.msg;
+                    debugMsDoc << e.msg;
                     in.rewind(_zero);
                     continue;
                 } catch (...) {
-                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    warnMsDoc << "Warning: Caught an unknown exception!";
                     in.rewind(_zero);
                     continue;
                 }
@@ -781,11 +782,11 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
                 try {
                     parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
                 } catch (const IOException& e) {
-                    kDebug(30513) << e.msg;
+                    debugMsDoc << e.msg;
                     in.rewind(_zero);
                     continue;
                 } catch (...) {
-                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    warnMsDoc << "Warning: Caught an unknown exception!";
                     in.rewind(_zero);
                     continue;
                 }
@@ -805,7 +806,7 @@ QString WordsGraphicsHandler::getPicturePath(quint32 pib) const
         if (m_picNames.contains(rgbUid)) {
             return "Pictures/" + m_picNames[rgbUid];
         } else {
-            qDebug() << "UNKNOWN picture reference!";
+            debugMsDoc << "UNKNOWN picture reference!";
         }
     }
     return QString();
@@ -1004,11 +1005,11 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             textId = tb->clientTextBox;
             textIdValid = true;
         } else {
-            kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+            debugMsDoc << "DocOfficeArtClientTextBox missing!";
         }
     } else {
         if (ds.iTxid() < 0) {
-            kDebug(30513) << "lTxid property - negative text identifier!";
+            debugMsDoc << "lTxid property - negative text identifier!";
         } else {
             textId = (quint32)ds.iTxid();
             textIdValid = true;
@@ -1023,7 +1024,7 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
 void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     // Shape instance contained in OfficeArtInlineSpContainer.  BLIP properties
     // contained in o.shapePrimaryOptions or o.shapeTertiaryOptions1 are stored
@@ -1097,7 +1098,7 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
 
 void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     const MSO::OfficeArtDggContainer *dgg = 0;
 #ifdef USE_OFFICEARTDGG_CONTAINER
@@ -1179,7 +1180,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 
 void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");

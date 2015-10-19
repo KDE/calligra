@@ -6,6 +6,7 @@ include_directories(
 )
 
 set(doc2odt_PART_SRCS
+   MsDocDebug.cpp
    mswordodfimport.cpp
    document.cpp
    conversion.cpp

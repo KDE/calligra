@@ -29,8 +29,8 @@
 #include "document.h"
 #include "conversion.h"
 #include "msdoc.h"
+#include "MsDocDebug.h"
 
-#include <kdebug.h>
 #include <QList>
 #include <QRectF>
 #include <KoGenStyle.h>
@@ -59,7 +59,7 @@ KoXmlWriter * WordsTableHandler::currentWriter() const
 // Called by Document before invoking the table-row-functors
 void WordsTableHandler::tableStart(Words::Table* table)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     Q_ASSERT(table);
     Q_ASSERT(!table->name.isEmpty());
@@ -74,7 +74,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
 
 #ifdef DEBUG_TABLEHANDLER
     for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++) {
-        kDebug(30513) << table->m_cellEdges[i];
+        debugMsDoc << table->m_cellEdges[i];
     }
 #endif
 
@@ -233,7 +233,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
 
 void WordsTableHandler::tableEnd()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     KoXmlWriter*  writer = currentWriter();
     writer->endElement(); //table:table
@@ -249,9 +249,9 @@ void WordsTableHandler::tableEnd()
 
 void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     if (m_row == -2) {
-        kWarning(30513) << "tableRowStart: tableStart not called previously!";
+        warnMsDoc << "tableRowStart: tableStart not called previously!";
         return;
     }
     Q_ASSERT(m_currentTable);
@@ -260,7 +260,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     m_column = -1;
     m_tap = tap;
     KoXmlWriter*  writer = currentWriter();
-    //kDebug(30513) << "tableRowStart row=" << m_row
+    //debugMsDoc << "tableRowStart row=" << m_row
     //            << ", number of cells: " << tap->itcMac;
 
     KoGenStyle rowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
@@ -274,7 +274,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     // insidehorizontal, insidevertical (default values).
     for (int i = 0; i < 6; i++) {
         const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
-        //kDebug(30513) << "default border" << brc.brcType << (brc.dptLineWidth / 8.0);
+        //debugMsDoc << "default border" << brc.brcType << (brc.dptLineWidth / 8.0);
         m_borderStyle[i] = Conversion::setBorderAttributes(brc);
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
@@ -300,7 +300,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
 
 void WordsTableHandler::tableRowEnd()
 {
-    kDebug(30513);
+    debugMsDoc;
     m_currentY += rowHeight();
     KoXmlWriter*  writer = currentWriter();
     //end table row in content
@@ -324,7 +324,7 @@ static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, con
 
 void WordsTableHandler::tableCellStart()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     if (!m_tap) {
         return;
@@ -367,7 +367,7 @@ void WordsTableHandler::tableCellStart()
     int rowSpan = 1;
     //if this is the first of some vertically merged cells...
     if (tc.fVertRestart) {
-//         kDebug(30513) <<"fVertRestart is set!";
+//         debugMsDoc <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
         QList<Words::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
@@ -379,7 +379,7 @@ void WordsTableHandler::tableCellStart()
                 if (qAbs(tapBelow->rgdxaCenter[ c ] - leftEdgePos) <= 3
                         && qAbs(tapBelow->rgdxaCenter[ c + 1 ] - rightEdgePos) <= 3) {
                     tcBelow = &tapBelow->rgtc[ c ];
-//                     kDebug(30513) <<"found cell below, at (Word) column" << c
+//                     debugMsDoc <<"found cell below, at (Word) column" << c
 //                                   <<" fVertMerge:" << tcBelow->fVertMerge;
                 }
             }
@@ -389,7 +389,7 @@ void WordsTableHandler::tableCellStart()
                 break;
             }
         }
-        //kDebug(30513) <<"rowSpan=" << rowSpan;
+        //debugMsDoc <<"rowSpan=" << rowSpan;
     }
 
     // Check how many cells that means, according to our cell edge array.
@@ -406,8 +406,8 @@ void WordsTableHandler::tableCellStart()
     }
 
 #ifdef DEBUG_TABLEHANDLER
-    kDebug(30513) << "left edge = " << leftEdgePos << ", right edge = " << rightEdgePos;
-    kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = " << rightCellNumber;
+    debugMsDoc << "left edge = " << leftEdgePos << ", right edge = " << rightEdgePos;
+    debugMsDoc << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = " << rightCellNumber;
 #endif
 
     //NOTE: The cacheCellEdge f. took care of unsorted tap->rgdxaCenter values.
@@ -434,7 +434,7 @@ void WordsTableHandler::tableCellStart()
                     rowHeight());  // height
     // I can pass these sizes to ODF now...
 #ifdef DEBUG_TABLEHANDLER
-    kDebug(30513) << " tableCellStart row=" << m_row << ", column=" << m_column <<
+    debugMsDoc << " tableCellStart row=" << m_row << ", column=" << m_column <<
                      " colSpan=" << colSpan <<
                      " (from" << leftCellNumber << " to" << rightCellNumber << " for Words)" <<
                      " rowSpan=" << rowSpan <<
@@ -460,7 +460,7 @@ void WordsTableHandler::tableCellStart()
     //  - Well then a winner with the table wide definitions is also found.
     //
 #ifdef DEBUG_TABLEHANDLER
-    kDebug(30513) << "CellBorders=" << m_row << m_column
+    debugMsDoc << "CellBorders=" << m_row << m_column
                   << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth
                   << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth
                   << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth
@@ -623,10 +623,10 @@ void WordsTableHandler::tableCellStart()
 
 void WordsTableHandler::tableCellEnd()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     if (!m_cellOpen) {
-        kDebug(30513) << "BUG: !m_cellOpen";
+        debugMsDoc << "BUG: !m_cellOpen";
         return;
     }
 
@@ -641,7 +641,7 @@ void WordsTableHandler::tableCellEnd()
 
     QList<const char*> openTags = writer->tagHierarchy();
     for (int i = 0; i < openTags.size(); ++i) {
-        kDebug(30513) << openTags[i];
+        debugMsDoc << openTags[i];
     }
     writer->endElement();//table:table-cell
     m_cellOpen = false;
@@ -686,41 +686,41 @@ Words::Table::Table()
 
 void Words::Table::cacheCellEdge(int cellEdge)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     uint size = m_cellEdges.size();
     // Do we already know about this edge?
     for (unsigned int i = 0; i < size; i++) {
         if (m_cellEdges[i] == cellEdge)  {
-            kDebug(30513) << cellEdge << " -> found";
+            debugMsDoc << cellEdge << " -> found";
             return;
         }
         //insert it in the right place if necessary
         if (m_cellEdges[i] > cellEdge) {
             m_cellEdges.insert(i, cellEdge);
-            kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
+            debugMsDoc << cellEdge << " -> added. Size=" << size + 1;
             return;
         }
     }
     //add it at the end if this edge is larger than all the rest
     m_cellEdges.append(cellEdge);
-    kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
+    debugMsDoc << cellEdge << " -> added. Size=" << size + 1;
 }
 
 int Words::Table::columnNumber(int cellEdge) const
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     for (unsigned int i = 0; i < (unsigned int)m_cellEdges.size(); i++) {
         if (m_cellEdges[i] == cellEdge) {
             return i;
         }
     }
     // This can't happen, if cacheCellEdge has been properly called
-    kWarning(30513) << "Column not found for cellEdge x=" << cellEdge << " - BUG.";
+    warnMsDoc << "Column not found for cellEdge x=" << cellEdge << " - BUG.";
     return 0;
 }
 
 double WordsTableHandler::rowHeight() const
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     return qMax(m_tap->dyaRowHeight / 20.0, 20.0);
 }

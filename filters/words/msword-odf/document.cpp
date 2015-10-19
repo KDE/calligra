@@ -36,9 +36,7 @@
 #include "msodraw.h"
 #include "msoleps.h"
 #include "msdoc.h"
-
-#include <KoPageLayout.h>
-#include <kdebug.h>
+#include "MsDocDebug.h"
 
 #include <wv2/src/styles.h>
 #include <wv2/src/ustring.h>
@@ -49,6 +47,7 @@
 #include <wv2/src/associatedstrings.h>
 
 #include <KoStore.h>
+#include <KoPageLayout.h>
 #include <KoFontFace.h>
 
 #include <QBuffer>
@@ -91,7 +90,7 @@ Document::Document(const std::string& fileName,
         , m_sistm(si)
         , m_tblstm_pole(table)
 {
-    kDebug(30513);
+    debugMsDoc;
     addBgColor("#ffffff"); //initialize the background-colors stack
 
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
@@ -162,7 +161,7 @@ Document::~Document()
 
 void Document::finishDocument()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     const wvWare::Word97::DOP& dop = m_parser->dop();
 
@@ -214,7 +213,7 @@ void Document::finishDocument()
 //write document info, author, fullname, title, about
 void Document::processAssociatedStrings()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     MSO::SummaryInformationPropertySetStream *si = 0;
     if (m_sistm) {
@@ -222,9 +221,9 @@ void Document::processAssociatedStrings()
         try {
             parseSummaryInformationPropertySetStream(*m_sistm, *si);
         } catch (const IOException &e) {
-            kError(30513) << e.msg;
+            errorMsDoc << e.msg;
         } catch (...) {
-            kWarning(30513) << "Warning: Caught an unknown exception!";
+            warnMsDoc << "Warning: Caught an unknown exception!";
         }
     }
 
@@ -345,11 +344,11 @@ void Document::processAssociatedStrings()
 
 void Document::processStyles()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    kDebug(30513) << "styles count=" << count;
+    debugMsDoc << "styles count=" << count;
 
     //loop through each style
     for (unsigned int i = 0; i < count ; ++i) {
@@ -367,7 +366,7 @@ void Document::processStyles()
         // Process paragraph styles.
         if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
-            kDebug(30513) << "creating ODT paragraphstyle" << name;
+            debugMsDoc << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
@@ -396,7 +395,7 @@ void Document::processStyles()
             // Add style to main collection, using the name that it
             // had in the .doc.
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
-            kDebug(30513) << "added style " << actualName;
+            debugMsDoc << "added style " << actualName;
 
             //save names of TOC related styles
             if (actualName.contains("TOC")) {
@@ -404,7 +403,7 @@ void Document::processStyles()
             }
         } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
-            kDebug(30513) << "creating ODT textstyle" << name;
+            debugMsDoc << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::TextStyle, "text");
             userStyle.addAttribute("style:display-name", displayName);
 
@@ -425,7 +424,7 @@ void Document::processStyles()
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
-            kDebug(30513) << "added style " << actualName;
+            debugMsDoc << "added style " << actualName;
         }
     }
     //also create a default style which is needed to store the default tab spacing
@@ -444,7 +443,7 @@ quint8 Document::parse()
     }
     //make sure texthandler is fine after parsing
     if (!m_textHandler->stateOk()) {
-        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        errorMsDoc << "TextHandler state after parsing NOT Ok!";
         return 2;
     }
     return 0;
@@ -458,7 +457,7 @@ void Document::setProgress(const int percent)
 //connects firstSectionFound signal & slot together; sets flag to true
 void Document::bodyStart()
 {
-    kDebug(30513);
+    debugMsDoc;
     connect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
             this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
     connect(m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
@@ -471,7 +470,7 @@ void Document::bodyEnd()
 {
     //close a list if we need to
     if (m_textHandler->listIsOpen()) {
-        kDebug(30513) << "closing the final list in the document body";
+        debugMsDoc << "closing the final list in the document body";
         m_textHandler->closeList();
     }
 
@@ -482,7 +481,7 @@ void Document::bodyEnd()
 //create page-layout and master-page
 void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     m_omittMasterPage = false;
     m_useLastMasterPage = false;
 
@@ -492,7 +491,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     // *******************************
     // page-layout style
     // *******************************
-    kDebug(30513) << "preparing page-layout styles";
+    debugMsDoc << "preparing page-layout styles";
     KoGenStyle* pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
 
     //set page-layout attributes
@@ -518,18 +517,18 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
         switch (sep->bkc) {
         case bkcContinuous:
-            kDebug(30513) << "omitting page-layout & master-page creation";
+            debugMsDoc << "omitting page-layout & master-page creation";
             m_omittMasterPage = true;
             break;
         case bkcNewPage:
         case bkcEvenPage:
         case bkcOddPage:
-            kDebug(30513) << "using the last defined master-page";
+            debugMsDoc << "using the last defined master-page";
             m_useLastMasterPage = true;
             m_writeMasterPageName = true;
             break;
         default:
-            kWarning(30513) << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
+            warnMsDoc << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
             m_omittMasterPage = true;
             break;
         }
@@ -612,13 +611,13 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     m_lastMasterPageName = m_masterPageName_list.first();
 
     for (int i = 0; i < m_masterPageName_list.size(); i++) {
-        kDebug(30513) << "prepared master-page style:" << m_masterPageName_list[i];
+        debugMsDoc << "prepared master-page style:" << m_masterPageName_list[i];
     }
 }
 
 void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
-    kDebug(30513);
+    debugMsDoc;
     KoGenStyle* masterPageStyle = 0;
     KoGenStyle* pageLayoutStyle = 0;
     QString pageLayoutName;
@@ -714,14 +713,14 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 
 void Document::headersMask(QList<bool> mask)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     m_headersMask = mask;
 }
 
 //creates a frameset element with the header info
 void Document::headerStart(wvWare::HeaderData::Type type)
 {
-    kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName(type) << ")";
+    debugMsDoc << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName(type) << ")";
     // NOTE: According to "Word Binary File Format (.doc) Structure
     // Specification", headers are stored and therefore emitted in the
     // following order: Header Even, Header Odd, Footer Even, Footer Odd,
@@ -790,10 +789,10 @@ void Document::headerStart(wvWare::HeaderData::Type type)
 //creates empty frameset element?
 void Document::headerEnd()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     //close a list if we need to (you can have a list inside a header)
     if (m_textHandler->listIsOpen()) {
-        kDebug(30513) << "closing a list in a header/footer";
+        debugMsDoc << "closing a list in a header/footer";
         m_textHandler->closeList();
     }
     // NOTE: We are assuming in the parser code that odd header/footer is
@@ -833,7 +832,7 @@ void Document::headerEnd()
         }
         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
         masterPageStyle->addChildElement(QString::number(m_headerCount), contents);
-        kDebug(30513) << "updating master-page style:" << name;
+        debugMsDoc << "updating master-page style:" << name;
 
         delete m_buffer;
         m_buffer = 0;
@@ -848,12 +847,12 @@ void Document::headerEnd()
 
 void Document::footnoteStart()
 {
-    kDebug(30513);
+    debugMsDoc;
 }
 
 void Document::footnoteEnd()
 {
-    kDebug(30513);
+    debugMsDoc;
 }
 
 
@@ -868,14 +867,14 @@ void Document::annotationEnd()
 //create SubDocument object & add it to the queue
 void Document::slotSubDocFound(const wvWare::FunctorBase* functor, int data)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     SubDocument subdoc(functor, data, QString(), QString());
     m_subdocQueue.push(subdoc);
 }
 
 void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
@@ -883,7 +882,7 @@ void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
 
 void Document::slotAnnotationFound(const wvWare::FunctorBase* functor, int data)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
@@ -891,7 +890,7 @@ void Document::slotAnnotationFound(const wvWare::FunctorBase* functor, int data)
 
 void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
@@ -900,7 +899,7 @@ void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 //add Words::Table object to the table queue
 void Document::slotTableFound(Words::Table* table)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     m_tableHandler->tableStart(table);
     QList<Words::Row> &rows = table->rows;
@@ -921,7 +920,7 @@ void Document::slotTableFound(Words::Table* table)
 
 void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     Q_UNUSED(writer);
     m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleInlineObject(data);
@@ -930,7 +929,7 @@ void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWrite
 
 void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     Q_UNUSED(writer);
     m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleFloatingObject(globalCP);
@@ -939,14 +938,14 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
 
 void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     m_parser->parseTextBox(index, stylesxml);
 }
 
 //process through all the subDocs and the tables
 void Document::processSubDocQueue()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
     // This is why we need to repeat until there's nothing more do to (#79024)

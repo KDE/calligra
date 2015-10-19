@@ -25,6 +25,7 @@
 #include "conversion.h"
 
 #include "msdoc.h"
+#include "MsDocDebug.h"
 
 #include <wv2/src/word97_generated.h>
 #include <wv2/src/functordata.h>
@@ -35,7 +36,6 @@
 #include <QString>
 #include <QMap>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 //#define CONVERSION_DEBUG_SHD
@@ -151,7 +151,7 @@ QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
         return QString("#D3D3D3");
 
     default:
-        kDebug(30513) << " unknown color:" << number;
+        debugMsDoc << " unknown color:" << number;
         if (defaultcolor == -1) //return black
             return QString("#000000");
         else //call this function again with the default color value
@@ -233,7 +233,7 @@ int Conversion::fillPatternStyle(int ipat)
     case 25: // Diagonal Cross
         return Qt::DiagCrossPattern;
     default:
-        kWarning(30513) << "Unhandled undocumented SHD ipat value: " << ipat;
+        warnMsDoc << "Unhandled undocumented SHD ipat value: " << ipat;
         return Qt::NoBrush;
     }
 }
@@ -281,12 +281,12 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
 
 #ifdef CONVERSION_DEBUG_SHD
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "bgColor:" << bgColor;
-    qDebug() << "fontColor:" << fontColor;
-    qDebug() << "ipat:" << shd.ipat;
-    qDebug() << "cvBack:" << hex << shd.cvBack;
-    qDebug() << "cvFore:" << hex << shd.cvFore;
+    debugMsDoc << Q_FUNC_INFO;
+    debugMsDoc << "bgColor:" << bgColor;
+    debugMsDoc << "fontColor:" << fontColor;
+    debugMsDoc << "ipat:" << shd.ipat;
+    debugMsDoc << "cvBack:" << hex << shd.cvBack;
+    debugMsDoc << "cvFore:" << hex << shd.cvFore;
 #endif
 
     if (shd.isShdAuto() || shd.isShdNil()) {
@@ -337,14 +337,14 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     }
 
 #ifdef CONVERSION_DEBUG_SHD
-    qDebug() << "ooooooooooooooooooooooooooooooo    chp: oooooooooooooooo bgColor:" << bgColor;
-    qDebug() << "fontColor:" << fontColor;
-    qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
-    qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
-    qDebug() << "ipat" << shd.ipat;
-    qDebug() << "fore" << QString::number(shd.cvFore | 0xff000000, 16).right(6) << foreColor.name();
-    qDebug() << "back" << QString::number(shd.cvBack | 0xff000000, 16).right(6) << backColor.name();
-    qDebug() << "luminosity " << luminosity;
+    debugMsDoc << "ooooooooooooooooooooooooooooooo    chp: oooooooooooooooo bgColor:" << bgColor;
+    debugMsDoc << "fontColor:" << fontColor;
+    debugMsDoc << (shd.cvFore == wvWare::Word97::cvAuto);
+    debugMsDoc << (shd.cvBack == wvWare::Word97::cvAuto);
+    debugMsDoc << "ipat" << shd.ipat;
+    debugMsDoc << "fore" << QString::number(shd.cvFore | 0xff000000, 16).right(6) << foreColor.name();
+    debugMsDoc << "back" << QString::number(shd.cvBack | 0xff000000, 16).right(6) << backColor.name();
+    debugMsDoc << "luminosity " << luminosity;
 #endif
 
     if (luminosity <= 60) { // it is dark color
@@ -360,12 +360,12 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
 #ifdef CONVERSION_DEBUG_SHD
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "bgColor:" << bgColor;
-    qDebug() << "fontColor:" << fontColor;
-    qDebug() << "ipat:" << shd.ipat;
-    qDebug() << "cvBack:" << hex << shd.cvBack;
-    qDebug() << "cvFore:" << hex << shd.cvFore;
+    debugMsDoc << Q_FUNC_INFO;
+    debugMsDoc << "bgColor:" << bgColor;
+    debugMsDoc << "fontColor:" << fontColor;
+    debugMsDoc << "ipat:" << shd.ipat;
+    debugMsDoc << "cvBack:" << hex << shd.cvBack;
+    debugMsDoc << "cvFore:" << hex << shd.cvFore;
 #endif
 
     QString ret;
@@ -413,22 +413,22 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             QColor backColor;
             if (shd.cvFore == wvWare::Word97::cvAuto) {
                 foreColor = QColor(contrastColor(bgColor));
-                //qDebug() << "fr auto" << foreColor.name() << "bgColor" << bgColor;
+                //debugMsDoc << "fr auto" << foreColor.name() << "bgColor" << bgColor;
             } else {
                 foreColor = QColor(shd.cvFore);
-                //qDebug() << "fr  set" << foreColor.name();
+                //debugMsDoc << "fr  set" << foreColor.name();
             }
 
             if (shd.cvBack == wvWare::Word97::cvAuto) {
                 // it's not autocolor, it's probably background color
                 backColor = contrastColor(foreColor.name());
-                //qDebug() << "bg auto" << backColor.name();
+                //debugMsDoc << "bg auto" << backColor.name();
             } else {
                 backColor = QColor(shd.cvBack);
-                //qDebug() << "bg  set" << backColor.name();
+                //debugMsDoc << "bg  set" << backColor.name();
             }
             qreal pct = QColor(ret).red() / 255.0;
-            //qDebug() << shd.ipat << "pct" << pct;
+            //debugMsDoc << shd.ipat << "pct" << pct;
             QColor result;
             result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
             result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
@@ -503,7 +503,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
     case ipatBackDiag:
     case ipatCross:
     case ipatDiagCross:
-        kDebug(30513) << "Unsupported shading pattern (0x" << hex << ipat << ")";
+        debugMsDoc << "Unsupported shading pattern (0x" << hex << ipat << ")";
         return (255 - qRound(0.3 * 255));
 
     case ipatPctNew2:
@@ -561,7 +561,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
     case ipatPctNew97:
         return (255 - qRound(0.975 * 255));
     default:
-        kDebug(30513) << "Unsupported shading pattern (0x" << hex << ipat << ")";
+        debugMsDoc << "Unsupported shading pattern (0x" << hex << ipat << ")";
         *ok = false;
         return 0;
     }
@@ -631,9 +631,9 @@ QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
 //color = six-digit hexadecimal color value
 QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 {
-    kDebug(30153) << "brc.brcType      = " << brc.brcType;
-    kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
-    kDebug(30153) << "brc.cv           = " << brc.cv;
+    debugMsDoc << "brc.brcType      = " << brc.brcType;
+    debugMsDoc << "brc.dptLineWidth = " << brc.dptLineWidth;
+    debugMsDoc << "brc.cv           = " << brc.cv;
 
 
     //set the border width
@@ -728,9 +728,9 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 //get a  calligra:borderspecial value "style"
 QString Conversion::borderCalligraAttributes(const wvWare::Word97::BRC& brc)
 {
-    kDebug(30153) << "brc.brcType      = " << brc.brcType;
-    kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
-    kDebug(30153) << "brc.cv           = " << brc.cv;
+    debugMsDoc << "brc.brcType      = " << brc.brcType;
+    debugMsDoc << "brc.dptLineWidth = " << brc.dptLineWidth;
+    debugMsDoc << "brc.cv           = " << brc.cv;
 
 
     QString style;   //empty if nothing special is neededreasonable default
@@ -799,7 +799,7 @@ QString Conversion::numberFormatCode(int nfc)
         value = '1';
         break;
     default:
-        kWarning(30513) << "Unknown NFC: " << nfc;
+        warnMsDoc << "Unknown NFC: " << nfc;
         value = '1';
     }
     return value;
@@ -859,7 +859,7 @@ int Conversion::headerMaskToHType(unsigned char mask)
     bool hasFirst = (mask & wvWare::HeaderData::HeaderFirst);
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = (mask & wvWare::HeaderData::HeaderEven);
-    //kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
+    //debugMsDoc <<" hasEvenOdd=" << hasEvenOdd;
     if (hasFirst)
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -870,7 +870,7 @@ int Conversion::headerMaskToFType(unsigned char mask)
     bool hasFirst = (mask & wvWare::HeaderData::FooterFirst);
     bool hasEvenOdd = (mask & wvWare::HeaderData::FooterEven);
     // Odd is always there. We have even!=odd only if Even is there too.
-    kDebug(30513) << " hasEvenOdd=" << hasEvenOdd;
+    debugMsDoc << " hasEvenOdd=" << hasEvenOdd;
     if (hasFirst)
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -902,7 +902,7 @@ int Conversion::fldToFieldType(const wvWare::FLD* fld)
     }
 
     if (m_fieldType < 0)
-        kDebug(30513) << "unhandled field: fld.ftl:" << (int)fld->flt;
+        debugMsDoc << "unhandled field: fld.ftl:" << (int)fld->flt;
 
     return m_fieldType;
 }

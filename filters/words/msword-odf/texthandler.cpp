@@ -40,7 +40,6 @@
 #include <QBuffer>
 #include <QFontInfo>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <KoGenStyle.h>
@@ -48,6 +47,7 @@
 
 #include "document.h"
 #include "msdoc.h"
+#include "MsDocDebug.h"
 
 wvWare::U8 WordsReplacementHandler::hardLineBreak()
 {
@@ -100,13 +100,13 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     if (bodyWriter) {
         m_bodyWriter = bodyWriter;
     } else {
-        kWarning() << "No bodyWriter!";
+        warnMsDoc << "No bodyWriter!";
     }
     //for collecting most of the styles
     if (mainStyles) {
         m_mainStyles = mainStyles;
     } else {
-        kWarning() << "No mainStyles!";
+        warnMsDoc << "No mainStyles!";
     }
 
     //[MS-DOC] — v20101219 - 2.7.2 DopBase
@@ -183,13 +183,13 @@ QString WordsTextHandler::paragraphBaseFontColor() const
 //increment m_sectionNumber
 void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     m_sectionNumber++;
     m_sep = sep; //store sep for section end
 
     //type of the section break
-    kDebug(30513) << "section" << m_sectionNumber << "| sep->bkc:" << sep->bkc;
+    debugMsDoc << "section" << m_sectionNumber << "| sep->bkc:" << sep->bkc;
 
     //page layout could change
     if (sep->bkc != bkcNewColumn) {
@@ -220,10 +220,10 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         KoXmlWriter writer(&buf);
         writer.startElement("style:columns");
         //ccolM1 = number of columns in section
-        kDebug(30513) << "ccolM1 = " << sep->ccolM1;
+        debugMsDoc << "ccolM1 = " << sep->ccolM1;
         writer.addAttribute("fo:column-count", numColumns);
         //dxaColumns = distance that will be maintained between columns
-        kDebug(30513) << "dxaColumns = " << sep->dxaColumns;
+        debugMsDoc << "dxaColumns = " << sep->dxaColumns;
         writer.addAttributePt("fo:column-gap", sep->dxaColumns / 20.0);
         //check for vertical separator
         if (sep->fLBetween) {
@@ -290,7 +290,7 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
                 normalStyle->addProperty(QString("text:number-lines"), QString("true"));
                 normalStyle->addProperty(QString("text:line-number"), QString("0"));
             } else {
-                kWarning() << "Could not find Normal style, numbering not added!";
+                warnMsDoc << "Could not find Normal style, numbering not added!";
             }
         }
     }
@@ -298,11 +298,11 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 
 void WordsTextHandler::sectionEnd()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     //check for a table to be parsed and processed
     if (m_currentTable) {
-        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
+        warnMsDoc << "==> WOW, unprocessed table: ignoring";
     }
 
     if (m_sep->bkc != bkcNewColumn) {
@@ -321,10 +321,10 @@ void WordsTextHandler::pageBreak(void)
 //signal that there's another subDoc to parse
 void WordsTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     if (m_document->omittMasterPage() || m_document->useLastMasterPage()) {
-        kDebug(30513) << "Processing of headers/footers cancelled, master-page creation omitted.";
+        debugMsDoc << "Processing of headers/footers cancelled, master-page creation omitted.";
         return;
     }
     //NOTE: only parse headers if we're in a section that can have new headers
@@ -368,7 +368,7 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
     //value of 1.  Let's be a bit more relaxed and follow the behavior of OOo
     //and MS Office 2007.
     if (!chp->fSpec || !(characters[0].unicode() == 2)) {
-        kWarning(30513) << "Warning: Trying to process a broken footnote/endnote!";
+        warnMsDoc << "Warning: Trying to process a broken footnote/endnote!";
     }
 
     if ( data.autoNumbered ) {
@@ -504,7 +504,7 @@ void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            kWarning(30513) << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interfers with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;
@@ -545,7 +545,7 @@ void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            kWarning(30513) << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interfers with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;
@@ -618,7 +618,7 @@ void WordsTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
 
 void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     //odf doesn't support tables in annotations
     if (m_insideAnnotation) {
@@ -637,7 +637,7 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
             m_currentTable->floating = true;
         }
     }
-//     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
+//     debugMsDoc << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
     // NOTE: Number of columns MUST be at least zero, and MUST NOT exceed 63.
     // The rgdxaCenter vector MUST contain exactly one value for every column,
@@ -653,7 +653,7 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     }
     for (uint i = 0; i < (quint16) tap->itcMac; i++) {
         if (tap->rgdxaCenter[i] > tap->rgdxaCenter[i + 1]) {
-            kWarning(30513) << "Warning: tap->rgdxaCenter INVALID, tablehandler will try to fix!";
+            warnMsDoc << "Warning: tap->rgdxaCenter INVALID, tablehandler will try to fix!";
             break;
         }
     }
@@ -667,18 +667,18 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 
 void WordsTextHandler::tableEndFound()
 {
-    kDebug(30513) ;
+    debugMsDoc ;
 
     //odf doesn't support tables in annotations
     if (m_insideAnnotation) {
         return;
     }
     if (!m_currentTable) {
-        kWarning(30513) << "Looks like we lost a table somewhere: return";
+        warnMsDoc << "Looks like we lost a table somewhere: return";
         return;
     }
 //     if (listIsOpen()) {
-//         //kDebug(30513) << "closing list " << m_currentListID;
+//         //debugMsDoc << "closing list " << m_currentListID;
 //         closeList();
 //     }
     bool floating = m_currentTable->floating;
@@ -704,13 +704,13 @@ void WordsTextHandler::tableEndFound()
 
 void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data)
 {
-    kDebug(30513);
+    debugMsDoc;
     //inline object should be inside of a pragraph
     Q_ASSERT(m_paragraph);
 
     //ignore if field instructions are processed
     if (m_fld->m_insideField && !m_fld->m_afterSeparator) {
-        kWarning(30513) << "Warning: Object located in field instructions, Ignoring!";
+        warnMsDoc << "Warning: Object located in field instructions, Ignoring!";
         return;
     }
 
@@ -762,7 +762,7 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
 void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
-    kDebug(30513) << "**********************************************";
+    debugMsDoc << "**********************************************";
 
     //TODO: what has to be done in this situation
     Q_ASSERT(paragraphProperties);
@@ -770,7 +770,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     //check for a table to be parsed and processed
 //     if (m_currentTable) {
-//         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
+//         warnMsDoc << "==> WOW, unprocessed table: ignoring";
 //     }
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
@@ -790,7 +790,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     paragraphStyle = styles.styleByIndex(istd);
     if (!paragraphStyle) {
         paragraphStyle = styles.styleByID(stiNormal);
-        kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
+        debugMsDoc << "Invalid reference to paragraph style, reusing Normal";
     }
     Q_ASSERT(paragraphStyle);
 
@@ -812,7 +812,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         const wvWare::Style* ps = paragraphStyle;
         while (!ps->isEmpty()) {
             istdBase = ps->m_std->istdBase;
-//             kDebug(30513) << "istd:" << hex << istd << "| istdBase:" << istdBase;
+//             debugMsDoc << "istd:" << hex << istd << "| istdBase:" << istdBase;
             if (istdBase == 0x0fff) {
                 break;
             } else if ( (istdBase >= 0x1) && (istdBase <= 0x9) ) {
@@ -833,7 +833,7 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 //     if (ilfo == 0) {
 //         //This paragraph is not in a list.
 //         if (listIsOpen()) {
-//             //kDebug(30513) << "closing list " << m_currentListID;
+//             //debugMsDoc << "closing list " << m_currentListID;
 //             closeList();
 //         }
 //     }
@@ -842,19 +842,19 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //
         // At the moment <text:numbered-paragraph> is not supported, we process
         // the paragraph as an list-item instead.
-        kDebug(30513) << "Paragraph in a list or a numbered paragraph";
+        debugMsDoc << "Paragraph in a list or a numbered paragraph";
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
 
         //error (or currently unknown case)
         if (!listInfo) {
-            kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
+            warnMsDoc << "pap.ilfo is non-zero but there's no listInfo!";
             // Try to make it a heading for now.
             outlineLevel = paragraphProperties->pap().ilvl + 1;
             isHeading = true;
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
-            kDebug(30513) << "Found a heading, pap().ilvl=" << paragraphProperties->pap().ilvl;
+            debugMsDoc << "Found a heading, pap().ilvl=" << paragraphProperties->pap().ilvl;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
             isHeading = true;
         } else {
@@ -867,12 +867,12 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         }
     } else if (ilfo < 0) {
         //TODO: support required
-        kDebug(30513) << "Unable to determine which list contains the paragraph";
+        debugMsDoc << "Unable to determine which list contains the paragraph";
     }
 
     // Now that the bookkeeping is taken care of for old paragraphs,
     // then actually create the new one.
-    kDebug(30513) << "create new Paragraph";
+    debugMsDoc << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, m_document->currentBgColor(), inStylesDotXml, isHeading,
                                 m_document->writingHeader(), outlineLevel);
 
@@ -909,28 +909,28 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
 void WordsTextHandler::paragraphEnd()
 {
-    kDebug(30513) << "-----------------------------------------------";
+    debugMsDoc << "-----------------------------------------------";
 
     bool chck_dropcaps = false;
 
     // If the last paragraph was a drop cap paragraph, combine with this one.
     if (m_hasStoredDropCap) {
-        kDebug(30513) << "combine paragraphs for drop cap" << m_dropCapString;
+        debugMsDoc << "combine paragraphs for drop cap" << m_dropCapString;
         m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance, m_dropCapStyleName);
     }
 
     //write some debug messages
     if (m_insideFootnote) {
-        kDebug(30513) << "writing a footnote";
+        debugMsDoc << "writing a footnote";
     } else if (m_insideAnnotation) {
-        kDebug(30513) << "writing an annotation";
+        debugMsDoc << "writing an annotation";
     } else if (m_insideDrawing) {
-        kDebug(30513) << "writing a drawing";
+        debugMsDoc << "writing a drawing";
     } else if (!document()->writingHeader()) {
-        kDebug(30513) << "writing to body";
+        debugMsDoc << "writing to body";
         chck_dropcaps = true;
     } else {
-        kDebug(30513) << "writing a header/footer";
+        debugMsDoc << "writing a header/footer";
     }
 
     //set correct writer and style location
@@ -982,7 +982,7 @@ void WordsTextHandler::paragraphEnd()
             m_paragraph->getDropCapData(&m_dropCapString, &m_dcs_fdct, &m_dcs_lines,
                                         &m_dropCapDistance, &m_dropCapStyleName);
             m_hasStoredDropCap = true;
-            kDebug(30513) << "saving drop cap data in texthandler" << m_dropCapString;
+            debugMsDoc << "saving drop cap data in texthandler" << m_dropCapString;
         }
         else {
             // Remove the traces of the drop cap for the next round.
@@ -1010,7 +1010,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    kDebug(30513) << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
+    debugMsDoc << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -1025,7 +1025,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
     switch (m_fld->m_type) {
     case EQ:
-        kDebug(30513) << "processing field... EQ (Combined Characters)";
+        debugMsDoc << "processing field... EQ (Combined Characters)";
         break;
     case REF:
     case CREATEDATE:
@@ -1035,21 +1035,21 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case SAVEDATE:
     case TIME:
     case TOC:
-        kDebug(30513) << "Processing only a subset of field instructions!";
-        kDebug(30513) << "Processing field result.";
+        debugMsDoc << "Processing only a subset of field instructions!";
+        debugMsDoc << "Processing field result.";
         break;
     case LAST_REVISED_BY:
     case NUMPAGES:
     case PAGE:
     case SUBJECT:
     case TITLE:
-        kWarning(30513) << "Warning: field instructions not supported, storing as ODF field!";
-        kWarning(30513) << "Warning: ignoring field result!";
+        warnMsDoc << "Warning: field instructions not supported, storing as ODF field!";
+        warnMsDoc << "Warning: ignoring field result!";
         break;
     case MACROBUTTON:
     case SYMBOL:
-        kWarning(30513) << "Warning: processing only a subset of field instructions!";
-        kWarning(30513) << "Warning: ignoring field result!";
+        warnMsDoc << "Warning: processing only a subset of field instructions!";
+        warnMsDoc << "Warning: ignoring field result!";
         break;
     case AUTHOR:
     case AUTOTEXTLIST:
@@ -1059,13 +1059,13 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case REF_WITHOUT_KEYWORD:
     case SEQ:
     case SHAPE:
-        kWarning(30513) << "Warning: field instructions not supported!";
-        kWarning(30513) << "Warning: processing only field result!";
+        warnMsDoc << "Warning: field instructions not supported!";
+        warnMsDoc << "Warning: processing only field result!";
         break;
     case UNSUPPORTED:
-        kWarning(30513) << "Warning: Fld data missing, ignoring!";
+        warnMsDoc << "Warning: Fld data missing, ignoring!";
     default:
-        kWarning(30513) << "Warning: unrecognized field type, ignoring!";
+        warnMsDoc << "Warning: unrecognized field type, ignoring!";
         m_fld->m_type = UNSUPPORTED;
         break;
     }
@@ -1085,7 +1085,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
 void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     m_fld->m_afterSeparator = true;
     QString* inst = &m_fld->m_instructions;
 
@@ -1219,7 +1219,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
 {
     Q_UNUSED(fld);
 
-//     kDebug(30513) << "fDiffer:" << fld->flags.fDiffer <<
+//     debugMsDoc << "fDiffer:" << fld->flags.fDiffer <<
 //     "fZombieEmbed:" << fld->flags.fZombieEmbed <<
 //     "fResultDirty:" << fld->flags.fResultDirty <<
 //     "fResultEdited:" << fld->flags.fResultEdited <<
@@ -1229,7 +1229,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
 //     "fHasSep:"<< fld->flags.fHasSep;
 
     if (!m_fld->m_insideField) {
-        kDebug(30513) << "End of a broken field detected!";
+        debugMsDoc << "End of a broken field detected!";
         return;
     }
 
@@ -1383,7 +1383,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
             }
             //unicode
             if (inst->contains("\\u")) {
-                qDebug() << "Warning: unicode symbols not supported!";
+                debugMsDoc << "Warning: unicode symbols not supported!";
             }
         }
         //default value (check the corresponding test)
@@ -1466,7 +1466,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         if (m_fld->m_styleName.contains('T')) {
             hlinkStyleName = m_mainStyles->style(m_fld->m_styleName, "text")->parentName();
         } else {
-            kDebug(30513) << "TOC: Missing text style to format the hyperlink!";
+            debugMsDoc << "TOC: Missing text style to format the hyperlink!";
         }
 
         // \n field-argument - Without field-argument, omits page numbers from
@@ -1562,15 +1562,15 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
                     bool ok = false;
                     uint n = rx.cap(1).toUInt(&ok, 10);
                     if (!ok) {
-                        kDebug(30513) << "Conversion of QString to uint failed!";
+                        debugMsDoc << "Conversion of QString to uint failed!";
                     } else {
                         for (uint i = 1; i < n; i++) {
                             styleNames.prepend("Normal");
                         }
                     }
                 } else {
-                    kDebug(30513) << "Missing TOC related style with level info.";
-                    kDebug(30513) << "Not that bad actually.";
+                    debugMsDoc << "Missing TOC related style with level info.";
+                    debugMsDoc << "Not that bad actually.";
                 }
                 while (styleNames.size() < levels) {
                     styleNames.append("Normal");
@@ -1726,7 +1726,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 {
     bool common_flag = false;
     QString newText(Conversion::string(text));
-    kDebug(30513) << newText;
+    debugMsDoc << newText;
 
     if (newText.isEmpty()) {
         return;
@@ -1751,7 +1751,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 m_fld->m_instructions.append(newText);
                 break;
             default:
-                kDebug(30513) << "Ignoring field instructions!";
+                debugMsDoc << "Ignoring field instructions!";
                 break;
             }
         }
@@ -1783,11 +1783,11 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case SHAPE:
             case TOC:
                 //NOTE: Ignoring bookmarks in the field result!
-                kDebug(30513) << "Processing field result as vanilla text string.";
+                debugMsDoc << "Processing field result as vanilla text string.";
                 common_flag = true;
                 break;
             default:
-                kDebug(30513) << "Ignoring the field result.";
+                debugMsDoc << "Ignoring the field result.";
                 break;
             }
             if (!m_fldChp.data()) {
@@ -1826,7 +1826,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 // something that might just be present under X11.
 QString WordsTextHandler::getFont(unsigned ftc) const
 {
-    kDebug(30513) ;
+    debugMsDoc ;
     Q_ASSERT(m_parser);
 
     if (!m_parser) {
@@ -1837,7 +1837,7 @@ QString WordsTextHandler::getFont(unsigned ftc) const
     return fontName;
 
 // #ifdef FONT_DEBUG
-//     kDebug(30513) <<"    MS-FONT:" << font;
+//     debugMsDoc <<"    MS-FONT:" << font;
 // #endif
 
 //     static const unsigned ENTRIES = 6;
@@ -1869,7 +1869,7 @@ QString WordsTextHandler::getFont(unsigned ftc) const
 //     }
 
 // #ifdef FONT_DEBUG
-//     kDebug(30513) <<"    FUZZY-FONT:" << font;
+//     debugMsDoc <<"    FUZZY-FONT:" << font;
 // #endif
 
 //     // Use Qt to look up our canonical equivalent of the font name.
@@ -1877,7 +1877,7 @@ QString WordsTextHandler::getFont(unsigned ftc) const
 //     QFontInfo info( xFont );
 
 // #ifdef FONT_DEBUG
-//     kDebug(30513) <<"    QT-FONT:" << info.family();
+//     debugMsDoc <<"    QT-FONT:" << info.family();
 // #endif
 //     return info.family();
 
@@ -1886,7 +1886,7 @@ QString WordsTextHandler::getFont(unsigned ftc) const
 bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap,
                                      const wvWare::ListInfo* listInfo)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     int nfc = listInfo->numberFormat();
 
@@ -2035,7 +2035,7 @@ void setListLevelProperties(KoXmlWriter& out,
             out.addAttribute("fo:width", fontSizePt);
             out.addAttribute("fo:height", fontSizePt);
         } else {
-            kDebug(30513) << "Can NOT set automatic size of the bullet picture, fontSize empty!";
+            debugMsDoc << "Can NOT set automatic size of the bullet picture, fontSize empty!";
         }
     }
 
@@ -2090,7 +2090,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
             // With bullets, text can only be one character, which tells us
             // what kind of bullet to use
             unsigned int code = text[0].unicode();
-//             kDebug(30513) << "Bullet code: 0x" << hex << code << "id:" << code%256;
+//             debugMsDoc << "Bullet code: 0x" << hex << code << "id:" << code%256;
 
             // NOTE: What does the next comment mean, private use area is in
             // <0xE000, 0xF8FF>, disabled the conversion code.
@@ -2100,7 +2100,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
 //                 if (code >= 0x20) {
 //                     // microsoft symbol charset shall apply here.
 //                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
-//             kDebug(30513) << "Changed the symbol encoding: new code: 0x" << hex << code <<
+//             debugMsDoc << "Changed the symbol encoding: new code: 0x" << hex << code <<
 //                                       dec << "("<< code << ")";
 //                 } else {
 //                     code &= 0x00FF;
@@ -2108,7 +2108,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
 //             }
             out.addAttribute("text:bullet-char", QChar(code));
         } else {
-            kWarning(30513) << "Bullet with more than one character, not supported";
+            warnMsDoc << "Bullet with more than one character, not supported";
         }
     }
     else if (listInfo->type() == wvWare::ListInfo::PictureType) {
@@ -2137,11 +2137,11 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
         // sets depthFound & displayLevels & the suffix & prefix
         for (int i = 0 ; i < text.length() ; ++i) {
             short ch = text[i].unicode();
-            //kDebug(30513) << i <<":" << ch;
+            //debugMsDoc << i <<":" << ch;
             if (ch < 10) {   // List level place holder
                 if (ch == pap.ilvl) {
                     if (depthFound) {
-                        kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text...";
+                        warnMsDoc << "ilvl " << pap.ilvl << " found twice in listInfo text...";
                     }
                     else {
                         depthFound = true;
@@ -2178,7 +2178,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
             if (depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix) {
                  // it's already the parent's suffix -> remove it
                 prefix.clear();
-                kDebug(30513) << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
+                debugMsDoc << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
             }
         }
         // Heading styles don't set the ilvl, but must have a depth coming from
@@ -2196,7 +2196,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
             if (nfc == 5 && suffix.isEmpty()) {
                 suffix = '.';
             }
-            kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
+            debugMsDoc << " prefix=" << prefix << " suffix=" << suffix;
             out.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
             if (!prefix.isEmpty()) {
                 out.addAttribute("style:num-prefix", prefix);
@@ -2207,10 +2207,10 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
             if (displayLevels > 1) {
                 out.addAttribute("text:display-levels", displayLevels);
             }
-            kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
+            debugMsDoc << "storing suffix" << suffix << " for depth" << depth;
             m_listSuffixes[ depth ] = suffix;
         } else {
-            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
+            warnMsDoc << "Not supported: counter text without the depth in it:" << Conversion::string(text);
         }
     } //end numbered list
 
@@ -2229,7 +2229,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
         }
         m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
     } else {
-        kDebug(30513) << "Missing CHPs for the label!";
+        debugMsDoc << "Missing CHPs for the label!";
     }
     if (listInfo->type() != wvWare::ListInfo::PictureType) {
         out.addAttribute("text:style-name", m_mainStyles->insert(textStyle, "T"));
@@ -2251,7 +2251,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
 
 void WordsTextHandler::closeList()
 {
-    kDebug(30513);
+    debugMsDoc;
     // Set the correct XML writer, get the last used writer from stack
     KoXmlWriter *writer = m_usedListWriters.pop();
 
@@ -2275,7 +2275,7 @@ bool WordsTextHandler::listIsOpen()
 
 void WordsTextHandler::saveState()
 {
-    kDebug(30513);
+    debugMsDoc;
     m_oldStates.push(State(m_currentTable, m_paragraph,
                            m_currentListLevel, m_currentListID,
                            m_drawingWriter, m_insideDrawing));
@@ -2290,10 +2290,10 @@ void WordsTextHandler::saveState()
 
 void WordsTextHandler::restoreState()
 {
-    kDebug(30513);
+    debugMsDoc;
     //if the stack is corrupt, we won't even try to set it correctly
     if (m_oldStates.empty()) {
-        kWarning() << "Error: save/restore stack is corrupt!";
+        warnMsDoc << "Error: save/restore stack is corrupt!";
         return;
     }
     State s(m_oldStates.top());
@@ -2301,13 +2301,13 @@ void WordsTextHandler::restoreState()
 
     //warn if pointers weren't reset properly, but restore state anyway
     if (m_paragraph != 0) {
-        kWarning() << "Warning: m_paragraph pointer wasn't reset!";
+        warnMsDoc << "Warning: m_paragraph pointer wasn't reset!";
     }
     if (m_currentTable != 0) {
-        kWarning() << "Warning: m_currentTable pointer wasn't reset!";
+        warnMsDoc << "Warning: m_currentTable pointer wasn't reset!";
     }
     if (m_drawingWriter != 0) {
-        kWarning() << "Warning: m_drawingWriter pointer wasn't reset!";
+        warnMsDoc << "Warning: m_drawingWriter pointer wasn't reset!";
     }
 
     m_paragraph = s.paragraph;
@@ -2331,16 +2331,16 @@ void WordsTextHandler::fld_restoreState()
 {
     //if the stack is corrupt, we won't even try to set it correctly
     if (m_fldStates.empty()) {
-        kWarning() << "Error: save/restore stack is corrupt!";
+        warnMsDoc << "Error: save/restore stack is corrupt!";
         return;
     }
 
     //warn if pointers weren't reset properly, but restore state anyway
     if (m_fld && m_fld->m_writer != 0) {
-        kWarning() << "m_fld->m_writer pointer wasn't reset";
+        warnMsDoc << "m_fld->m_writer pointer wasn't reset";
     }
     if (m_fld && m_fld->m_buffer != 0) {
-        kWarning() << "m_fld->m_buffer pointer wasn't reset";
+        warnMsDoc << "m_fld->m_buffer pointer wasn't reset";
     }
 
     m_fld = m_fldStates.top();
@@ -2358,7 +2358,7 @@ QDomElement WordsTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
 {
     Q_UNUSED(chp);
 
-    kDebug(30513) ;
+    debugMsDoc ;
     //m_paragraph += '#';
 
     QDomElement formatElem;
@@ -2379,7 +2379,7 @@ QDomElement WordsTextHandler::insertAnchor(const QString& fsname)
 {
     Q_UNUSED(fsname);
 
-    kDebug(30513) ;
+    debugMsDoc ;
     //m_paragraph += '#';
 
     // Can't call writeFormat, we have no chp.

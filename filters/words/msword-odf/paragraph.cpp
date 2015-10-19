@@ -24,10 +24,10 @@
 #include "paragraph.h"
 
 #include <math.h>
-#include <kdebug.h>
 
 #include "conversion.h"
 #include "msdoc.h"
+#include "MsDocDebug.h"
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
@@ -58,18 +58,18 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
         m_containsPageNumberField(false),
         m_combinedCharacters(false)
 {
-    kDebug(30513);
+    debugMsDoc;
     m_mainStyles = mainStyles;
     m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
     if (inStylesDotXml) {
-        kDebug(30513) << "this paragraph is in styles.xml";
+        debugMsDoc << "this paragraph is in styles.xml";
         m_odfParagraphStyle->setAutoStyleInStylesDotXml(true);
         m_inStylesDotXml = true;
     }
 
     if (isHeading)     {
-        kDebug(30513) << "this paragraph is a heading";
+        debugMsDoc << "this paragraph is a heading";
         m_outlineLevel = (outlineLevel > 0 ? outlineLevel : 1);
     } else {
         m_outlineLevel = -1;
@@ -77,14 +77,14 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
 
     //init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
-        kWarning(30513) << "BUG: m_bgColors stack NOT empty, clearing!";
+        warnMsDoc << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
     }
 
     if (!bgColor.isEmpty()) {
         pushBgColor(bgColor);
     } else {
-        kWarning(30513) << "Warning: page background-color information missing!";
+        warnMsDoc << "Warning: page background-color information missing!";
     }
 }
 
@@ -146,7 +146,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
 void Paragraph::popBgColor(void)
 {
     if (m_bgColors.isEmpty()) {
-        kWarning(30513) << "Warning: m_bgColors stack already empty!";
+        warnMsDoc << "Warning: m_bgColors stack already empty!";
     } else {
         m_bgColors.pop();
     }
@@ -200,12 +200,12 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
-        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+        debugMsDoc << "Invalid reference to text style, reusing NormalChar";
     }
     Q_ASSERT(msTextStyle);
 
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
-    kDebug(30513) << "text based on characterstyle " << msTextStyleName;
+    debugMsDoc << "text based on characterstyle " << msTextStyleName;
 
     KoGenStyle *textStyle = 0;
 
@@ -256,7 +256,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
 
 QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tabLeader)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     //TODO: The paragraph-properties might have to be set before
     //text-properties to have proper automatic colors.
@@ -280,7 +280,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
         if (m_characterProperties) {
             applyCharacterProperties(m_characterProperties, m_odfParagraphStyle, m_paragraphStyle);
         } else {
-            kDebug(30513) << "Missing CHPs for an empty paragraph!";
+            debugMsDoc << "Missing CHPs for an empty paragraph!";
         }
     }
 
@@ -294,7 +294,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
     // that the next call to writeToFile() they will be in the same
     // paragraph.
     if (m_dropCapStatus == IsDropCapPara) {
-        kDebug(30513) << "returning with drop cap paragraph";
+        debugMsDoc << "returning with drop cap paragraph";
         if (m_textStrings.size()) {
             if (m_textStyles[0] != 0) {
                 m_dropCapStyleName= m_textStyles[0]->parentName();
@@ -305,7 +305,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
 
     // If there is a dropcap defined, then write it to the style.
     if (m_dropCapStatus == HasDropCapIntegrated) {
-        kDebug(30513) << "Creating drop cap style";
+        debugMsDoc << "Creating drop cap style";
 
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
@@ -330,7 +330,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
 
     QString textStyleName;
     //add paragraph style to the collection and its name to the content
-    kDebug(30513) << "adding paragraphStyle";
+    debugMsDoc << "adding paragraphStyle";
     //add the attribute for our style in <text:p>
     textStyleName = "P";
     textStyleName = m_mainStyles->insert(*m_odfParagraphStyle, textStyleName);
@@ -390,7 +390,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
         if ( pap.brcLeft.brcType || pap.brcTop.brcType ||
              pap.brcRight.brcType || pap.brcBottom.brcType )
         {
-            kDebug(30513) << "Frame bordes not fully supported!";
+            debugMsDoc << "Frame bordes not fully supported!";
         }
         gs.addProperty("draw:stroke", getStrokeValue(pap.brcLeft.brcType), gt);
 
@@ -427,7 +427,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
     if (!m_textStrings.isEmpty()) {
         //Loop through each text strings and styles (equal # of both) and write
         //them to the file.
-        kDebug(30513) << "writing text spans now";
+        debugMsDoc << "writing text spans now";
         QString oldStyleName;
         bool startedSpan = false;
         for (int i = 0; i < m_textStrings.size(); i++) {
@@ -440,14 +440,14 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
                 //if style is null, we have an inner paragraph and add the
                 //complete paragraph element to writer need to get const char*
                 //from the QString
-                kDebug(30513) << "complete element: " <<
+                debugMsDoc << "complete element: " <<
                                  m_textStrings[i].toLocal8Bit().constData();
                 writer->addCompleteElement(m_textStrings[i].toUtf8().constData());
             } else {
                 //put style into m_mainStyles & get its name
                 textStyleName = 'T';
                 textStyleName = m_mainStyles->insert(*m_textStyles[i], textStyleName);
-                //kDebug(30513) << m_textStyles[i]->type();
+                //debugMsDoc << m_textStyles[i]->type();
 
                 if (oldStyleName != textStyleName) {
                     if (startedSpan) {
@@ -463,7 +463,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
                 }
                 //Write text string to writer.  Now I just need to write the
                 //text:span to the header tag.
-                kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
+                debugMsDoc << "Writing \"" << m_textStrings[i] << "\"";
                 if (m_addCompleteElement[i] == false) {
                     writer->addTextSpan(m_textStrings[i]);
                 }
@@ -497,7 +497,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
 // writer (eg. m_footnoteWriter).
 void Paragraph::openInnerParagraph()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     //copy parent and paragraph styles
     m_odfParagraphStyle2 = m_odfParagraphStyle;
@@ -518,7 +518,7 @@ void Paragraph::openInnerParagraph()
 
 void Paragraph::closeInnerParagraph()
 {
-    kDebug(30513);
+    debugMsDoc;
 
     //clear temp variables and restore originals
     delete m_odfParagraphStyle;
@@ -544,7 +544,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                                          bool setDefaultAlign, Paragraph *paragraph,
                                          QChar* tabLeader, const QString& bgColor)
 {
-    kDebug(30513);
+    debugMsDoc;
 
     const wvWare::Word97::PAP* refPap;
     if (parentStyle) {
@@ -577,7 +577,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("fo:text-align", "start", pt);
     } else if (setDefaultAlign) {
         // Set default align for page number field in header or footer
-        kDebug(30513) << "setting default align for page number field in header or footer";
+        debugMsDoc << "setting default align for page number field in header or footer";
         style->addProperty("fo:text-align", "center", pt);
     }
 
@@ -670,7 +670,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
                 style->addPropertyPt("fo:line-height", value, pt);
         } else
-            kWarning(30513) << "Unhandled LSPD::fMultLinespace value: "
+            warnMsDoc << "Unhandled LSPD::fMultLinespace value: "
             << pap.lspd.fMultLinespace;
     }
 
@@ -738,11 +738,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     // Drop Cap Style (DCS)
     if (!refPap || refPap->dcs.fdct != pap.dcs.fdct || refPap->dcs.lines != pap.dcs.lines) {
         if (paragraph) {
-            kDebug(30513) << "Processing drop cap";
+            debugMsDoc << "Processing drop cap";
             if (paragraph->m_textStrings.size() > 0)
-                kDebug(30513) << "String = """ << paragraph->m_textStrings[0] << """";
+                debugMsDoc << "String = """ << paragraph->m_textStrings[0] << """";
             else
-                kDebug(30513) << "No drop cap string";
+                debugMsDoc << "No drop cap string";
 
             paragraph->m_dropCapStatus = IsDropCapPara;
             paragraph->m_dcs_fdct  = pap.dcs.fdct;
@@ -798,7 +798,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             case jcBar:
                 //bar -> just creates a vertical bar at that point that's always visible
-                kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
+                warnMsDoc << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
             default:
                 //ODF: The default value for this attribute is left.
@@ -1055,9 +1055,9 @@ void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *di
 
 void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, QString style)
 {
-    kDebug(30513) << "combining drop cap paragraph: " << string;
+    debugMsDoc << "combining drop cap paragraph: " << string;
     if (m_dropCapStatus == IsDropCapPara)
-        kDebug(30513) << "This paragraph already has a dropcap set!";
+        debugMsDoc << "This paragraph already has a dropcap set!";
 
     m_dropCapStatus = HasDropCapIntegrated;
 
@@ -1072,7 +1072,7 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
 #if 1
 
 #if 1
-    kDebug(30513) << "size: " << m_textStrings.size();
+    debugMsDoc << "size: " << m_textStrings.size();
     if (m_textStrings.isEmpty()) {
         m_textStrings.append(string);
         KoGenStyle* style = 0;
@@ -1124,12 +1124,12 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
-        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+        debugMsDoc << "Invalid reference to text style, reusing NormalChar";
     }
     Q_ASSERT(msTextStyle);
 
     QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
-    kDebug(30513) << "text based on characterstyle " << msTextStyleName;
+    debugMsDoc << "text based on characterstyle " << msTextStyleName;
 
     bool suppresFontSize = false;
     if (m_paragraphProperties->pap().dcs.lines > 1) {
@@ -1210,7 +1210,7 @@ const char* getTextUnderlineStyle(const uint kul)
     case 5: // hidden - This makes no sense as an underline property!
     case 8:
         //NOTE: Styles of underline not specified in [MS-DOC] - v20101219
-        kDebug(30513) << "Unknown style of underline detected!";
+        debugMsDoc << "Unknown style of underline detected!";
         return "";
     case kulNone:
     default:
