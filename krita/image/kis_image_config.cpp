@@ -28,6 +28,9 @@
 #include <QThread>
 #include <QApplication>
 
+#ifdef Q_OS_MAC
+#include <errno.h>
+#endif
 
 KisImageConfig::KisImageConfig()
     : m_config(KGlobal::config()->group(""))
@@ -225,7 +228,7 @@ void KisImageConfig::setSwapDir(const QString &swapDir)
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
-#elif defined Q_OS_MAC64
+#elif defined Q_OS_MAC
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
@@ -267,15 +270,20 @@ int KisImageConfig::totalRAM()
 #   if defined ENV32BIT
     totalMemory = qMin(totalMemory, 2000);
 #   endif
-#elif defined Q_OS_MAC64
+#elif defined Q_OS_MAC
     int mib[2] = { CTL_HW, HW_MEMSIZE };
     u_int namelen = sizeof(mib) / sizeof(mib[0]);
     uint64_t size;
     size_t len = sizeof(size);
 
-    if (sysctl(mib, namelen, &size, &len, NULL, 0) > 0) {
-        totalMemory = size;
+    errno = 0;
+    if (sysctl(mib, namelen, &size, &len, NULL, 0) >= 0) {
+        totalMemory = size >> 20;
+        kDebug() << "sysctl(\"hw.memsize\") returned size=" << size << " =>" << totalMemory << "MiB";
         error = 0;
+    }
+    else {
+        kDebug() << "sysctl(\"hw.memsize\") raised error" << strerror(errno);
     }
 #endif
 
