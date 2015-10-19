@@ -23,9 +23,7 @@ kde_enable_exceptions()
 add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_doc2odt calligra_filter_doc2odt.desktop)
 
-#TODO cause of NumberFormatParser we depend on komsooxml. Fix that!
-#target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES})
-target_link_libraries(calligra_filter_doc2odt kowv2 komain mso komsooxml ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES} KF5::KDELibs4Support)
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
