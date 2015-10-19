@@ -397,7 +397,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(scrgbClr)
@@ -450,7 +450,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)

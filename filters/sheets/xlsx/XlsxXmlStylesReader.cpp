@@ -39,6 +39,7 @@
 #include <MsooXmlReader_p.h>
 
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <QMap>
 

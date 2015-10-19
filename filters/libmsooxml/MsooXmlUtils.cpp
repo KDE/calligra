@@ -66,7 +66,7 @@
 #include <QRegExp>
 #include <QtXml>
 
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 #include <kzip.h>
 
 #include <memory>
@@ -175,14 +175,14 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
     int errorLine, errorColumn;
     bool ok = doc.setContent(io, true, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
-        kError() << "Parsing error in " << fileName << ", aborting!" << endl
+        errorMsooXml << "Parsing error in " << fileName << ", aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2.\n"
                             "Error message: %3", errorLine , errorColumn , i18n("QXml", errorMsg));
         return KoFilter::ParsingError;
     }
-    kDebug() << "File" << fileName << "loaded and parsed.";
+    debugMsooXml << "File" << fileName << "loaded and parsed.";
     return KoFilter::OK;
 }
 
@@ -217,30 +217,30 @@ KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
         errorMessage = reader->errorString();
         return status;
     }
-    kDebug() << "File" << fileName << "loaded and parsed.";
+    debugMsooXml << "File" << fileName << "loaded and parsed.";
     return KoFilter::OK;
 }
 
 QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, const QString& fileName,
                                     KoFilter::ConversionStatus& status)
 {
-    kDebug() << "Trying to open" << fileName;
+    debugMsooXml << "Trying to open" << fileName;
     errorMessage.clear();
     const KArchiveEntry* entry = zip->directory()->entry(fileName);
     if (!entry) {
         errorMessage = i18n("Entry '%1' not found.", fileName);
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
         status = KoFilter::FileNotFound;
         return 0;
     }
     if (!entry->isFile()) {
         errorMessage = i18n("Entry '%1' is not a file.", fileName);
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
         status = KoFilter::WrongFormat;
         return 0;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    kDebug() << "Entry" << fileName << "has size" << f->size();
+    debugMsooXml << "Entry" << fileName << "has size" << f->size();
     status = KoFilter::OK;
     // There seem to be some problems with kde/zlib when trying to read
     // multiple streams, this functionality is needed in the filter
@@ -268,7 +268,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
 
     OOXML_POLE::Storage storage(inputDevice);
     if (!storage.open()) {
-        kDebug(30513) << "Cannot open " << sourceName;
+        debugMsooXml << "Cannot open " << sourceName;
         return KoFilter::WrongFormat;
     }
 
@@ -276,7 +276,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     std::string oleType = "Contents";
 
     for (std::list<std::string>::iterator it = lista.begin(); it != lista.end(); ++it)  {
-        //qDebug() << "ENTRY " << (*it).c_str();
+        //debugMsooXml << "ENTRY " << (*it).c_str();
         if (QString((*it).c_str()).contains("Ole10Native")) {
             oleType = "Ole10Native";
         }
@@ -291,7 +291,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
 
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
     if (r != stream.size()) {
-        kError(30513) << "Error while reading from stream";
+        errorMsooXml << "Error while reading from stream";
         return KoFilter::WrongFormat;
     }
 
@@ -310,7 +310,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     //QDataStream out(&file);
     //out.writeRawData(arrayTemp.data(), arrayTemp.length());
 
-    kDebug() << "mode:" << outputStore->mode();
+    debugMsooXml << "mode:" << outputStore->mode();
     if (!outputStore->open(destinationName)) {
         errorMessage = i18n("Could not open entry \"%1\" for writing.", destinationName);
         return KoFilter::CreationError;
@@ -397,7 +397,7 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
         return status;
     }
 
-    kDebug() << "mode:" << outputStore->mode();
+    debugMsooXml << "mode:" << outputStore->mode();
     if (!outputStore->open(destinationName)) {
         errorMessage = i18n("Could not open entry \"%1\" for writing.", destinationName);
         return KoFilter::CreationError;
@@ -406,7 +406,7 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
     char block[BLOCK_SIZE];
     while (true) {
         const qint64 in = inputDevice->read(block, BLOCK_SIZE);
-//        kDebug() << "in:" << in;
+//        debugMsooXml << "in:" << in;
         if (in <= 0)
             break;
         if (in != outputStore->write(block, in)) {
@@ -433,7 +433,7 @@ KoFilter::ConversionStatus Utils::imageSize(const KZip* zip, QString& errorMessa
     if (!r.canRead())
         return KoFilter::WrongFormat;
     *size = r.size();
-    kDebug() << *size;
+    debugMsooXml << *size;
     return KoFilter::OK;
 }
 
@@ -450,7 +450,7 @@ KoFilter::ConversionStatus Utils::loadThumbnail(QImage& thumbnail, KZip* zip)
 static bool checkTag(const KoXmlElement& el, const char* expectedTag, const char* warningPrefix = 0)
 {
     if (el.tagName() != expectedTag) {
-        kWarning()
+        warnMsooXml
         << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString())
         << "tag name=" << el.tagName() << " expected:" << expectedTag;
         return false;
@@ -462,7 +462,7 @@ static bool checkTag(const KoXmlElement& el, const char* expectedTag, const char
 static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
 {
     if (el.namespaceURI() != expectedNsUri) {
-        kWarning() << "Invalid namespace URI" << el.namespaceURI() << " expected:" << expectedNsUri;
+        warnMsooXml << "Invalid namespace URI" << el.namespaceURI() << " expected:" << expectedNsUri;
         return false;
     }
     return true;
@@ -474,7 +474,7 @@ bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
     if (val.isEmpty()) {
         return defaultValue;
     }
-    kDebug() << val;
+    debugMsooXml << val;
 
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
@@ -501,11 +501,11 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
             const QByteArray atrPartName(e.attribute("PartName").toLatin1());
             const QByteArray atrContentType(e.attribute("ContentType").toLatin1());
             if (atrPartName.isEmpty() || atrContentType.isEmpty()) {
-                kWarning() << "Invalid data for" << tagName
+                warnMsooXml << "Invalid data for" << tagName
                 << "element: PartName=" << atrPartName << "ContentType=" << atrContentType;
                 return KoFilter::WrongFormat;
             }
-//kDebug() << atrContentType << "->" << atrPartName;
+//debugMsooXml << atrContentType << "->" << atrPartName;
             contentTypes.insert(atrContentType, atrPartName);
         } else if (tagName == "Default") {
 //! @todo
@@ -1094,13 +1094,13 @@ static bool splitNumberAndUnit(const QString& _string, qreal *number, QString* u
     *unit = string.mid(unitIndex);
     string.truncate(unitIndex);
     if (string.isEmpty()) {
-        kWarning() << "No unit found in" << _string;
+        warnMsooXml << "No unit found in" << _string;
         return false;
     }
     bool ok;
     *number = string.toFloat(&ok);
     if (!ok)
-        kWarning() << "Invalid number in" << _string;
+        warnMsooXml << "Invalid number in" << _string;
     return ok;
 }
 
@@ -1165,7 +1165,7 @@ KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString
         return QString::number(number) + QLatin1String("pi");
     }
     if (!isUnitAcceptable(unit)) {
-        kWarning() << "Unit" << unit << "not supported. Expected cm/mm/in/pt/pc/pi.";
+        warnMsooXml << "Unit" << unit << "not supported. Expected cm/mm/in/pt/pc/pi.";
         return QString();
     }
     return value; // the original is OK
@@ -1314,7 +1314,7 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
             bulletSize.chop(2);
             m_bulletSize = bulletSize;
         } else {
-            kDebug() << "Unit of font-size NOT supported!";
+            debugMsooXml << "Unit of font-size NOT supported!";
         }
     }
 }
@@ -1542,13 +1542,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     if (m_margin != UNUSED) {
         margin = m_margin.toDouble(&ok);
         if (!ok) {
-            kDebug() << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
+            debugMsooXml << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
         }
     }
     if (m_indent != UNUSED) {
         indent = m_indent.toDouble(&ok);
         if (!ok) {
-            kDebug() << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
+            debugMsooXml << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
         }
     }
     out.startElement("style:list-level-label-alignment");

@@ -80,7 +80,7 @@ void MsooXmlCommonReader::setupParagraphStyle()
     }
     body->addAttribute("text:style-name", currentParagraphStyleName);
     m_paragraphStyleNameWritten = true;
-//kDebug() << "currentParagraphStyleName:" << currentParagraphStyleName;
+//debugMsooXml << "currentParagraphStyleName:" << currentParagraphStyleName;
 }
 
 class MediaTypeMap : public QMap<QByteArray, QByteArray>

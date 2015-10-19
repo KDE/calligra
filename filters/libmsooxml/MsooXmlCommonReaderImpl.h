@@ -76,7 +76,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 
     while (!atEnd()) {
         readNext();
-        //kDebug() << *this;
+        //debugMsooXml << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -89,7 +89,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
             BREAK_IF_END_OF(CURRENT_EL)
         }
     }
-//kDebug() << "{1}";
+//debugMsooXml << "{1}";
 
     if (m_read_t_args) {
         m_read_t_args = false;

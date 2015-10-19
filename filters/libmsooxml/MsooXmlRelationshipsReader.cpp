@@ -80,7 +80,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlRead
 
 KoFilter::ConversionStatus MsooXmlRelationshipsReader::readInternal()
 {
-    kDebug() << "=============================";
+    debugMsooXml << "=============================";
 
     d->pathAndFile = MsooXmlRelationshipsReader::relKey(m_context->path, m_context->file, QString());
 
@@ -91,7 +91,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::readInternal()
 
     // Relationships
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugMsooXml << *this << namespaceUri();
 
     if (!expectEl("Relationships")) {
         return KoFilter::WrongFormat;
@@ -102,16 +102,16 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::readInternal()
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            debugMsooXml << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugMsooXml << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
     TRY_READ(Relationships)
-    kDebug() << "===========finished============";
+    debugMsooXml << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -129,7 +129,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationships()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(Relationship)
@@ -157,17 +157,17 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     READ_ATTR_WITHOUT_NS(Target)
     QString fixedPath(m_context->path);
     while (Target.startsWith("../")) {
-        //kDebug() << "- Target:" << Target << "fixedPath:" << fixedPath;
+        //debugMsooXml << "- Target:" << Target << "fixedPath:" << fixedPath;
         Target.remove(0, 3);
         fixedPath.truncate(fixedPath.lastIndexOf('/'));
-        //kDebug() << "= Target:" << Target << "fixedPath:" << fixedPath;
+        //debugMsooXml << "= Target:" << Target << "fixedPath:" << fixedPath;
     }
-    //kDebug() << "adding rel:";
-    //kDebug() << d->pathAndFile + Id;
-    //kDebug() << fixedPath + '/' + Target;
+    //debugMsooXml << "adding rel:";
+    //debugMsooXml << d->pathAndFile + Id;
+    //debugMsooXml << fixedPath + '/' + Target;
 
     m_context->rels->insert(d->pathAndFile + Id, fixedPath + '/' + Target);
-    //kDebug() << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file, Type);
+    //debugMsooXml << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file, Type);
     m_context->targetsForTypes->insert(targetKey(m_context->path + '/' + m_context->file, Type), fixedPath + '/' + Target);
 
     readNext();

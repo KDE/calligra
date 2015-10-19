@@ -33,6 +33,8 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
 // -------------------------------------------------------------
 
 XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,

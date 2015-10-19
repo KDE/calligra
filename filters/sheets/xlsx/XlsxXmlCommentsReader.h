@@ -27,6 +27,8 @@
 #include "XlsxXmlCommonReader.h"
 #include <MsooXmlTheme.h>
 
+#include <kdebug.h>
+
 class XlsxComments;
 class XlsxComment
 {

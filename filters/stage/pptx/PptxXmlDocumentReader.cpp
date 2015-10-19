@@ -48,6 +48,8 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
 PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
     MSOOXML::MsooXmlRelationships& _relationships)

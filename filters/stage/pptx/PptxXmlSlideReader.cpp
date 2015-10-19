@@ -63,6 +63,8 @@
 #include <KoCell.h>
 #include <KoRawCellChild.h>
 
+#include <kdebug.h>
+
 PptxShapeProperties::PptxShapeProperties()
 {
     x = 0;

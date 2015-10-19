@@ -246,7 +246,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS(a, spPr)
@@ -259,7 +259,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(spPr)
@@ -444,7 +444,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS(a, cNvPicPr)
@@ -455,7 +455,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(cNvPicPr)
@@ -509,7 +509,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPicPr()
 
 //     while (!atEnd()) {
 //         readNext();
-//         kDebug() << *this;
+//         debugMsooXml << *this;
 //         BREAK_IF_END_OF(CURRENT_EL)
 //         if (isStartElement()) {
 // //! @todo add ELSE_WRONG_FORMAT
@@ -573,18 +573,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
     // for sanity, p:nvGrpSpPr can be also the caller
     if (caller == cNvPr_nvSpPr || caller == cNvPr_nvPicPr) {
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
-        kDebug() << "id:" << m_cNvPrId;
+        debugMsooXml << "id:" << m_cNvPrId;
         TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_cNvPrName)
-        kDebug() << "name:" << m_cNvPrName;
+        debugMsooXml << "name:" << m_cNvPrName;
         TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_cNvPrDescr)
-        kDebug() << "descr:" << m_cNvPrDescr;
+        debugMsooXml << "descr:" << m_cNvPrDescr;
     }
 
     SKIP_EVERYTHING
 
     // while (!atEnd()) {
     //     readNext();
-    //     kDebug() << *this;
+    //     debugMsooXml << *this;
     //     BREAK_IF_END_OF(CURRENT_EL)
     //     if (isStartElement()) {
     //         TRY_READ_IF(...)
@@ -642,7 +642,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, cNvPr)
@@ -653,7 +653,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_IN_CONTEXT(cNvPr)
@@ -757,7 +757,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             while (!atEnd()) {
                 readNext();
                 BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
-                kDebug() << *this;
+                debugMsooXml << *this;
                 if (isStartElement()) {
                     TRY_READ_IF_NS(a, grpSp)
                     ELSE_TRY_READ_IF_NS(a, grpSpPr)
@@ -774,7 +774,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             while (!atEnd()) {
                 readNext();
                 BREAK_IF_END_OF(CURRENT_EL)
-                kDebug() << *this;
+                debugMsooXml << *this;
                 if (isStartElement()) {
                     TRY_READ_IF(grpSp)
                     ELSE_TRY_READ_IF(grpSpPr)
@@ -817,7 +817,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     if (!m_svgProp.isEmpty()) {
         m_svgProp.pop_back();
     } else {
-        qWarning() << "Element grpSpPr not processed, empty graphic style assigned to draw:g";
+        warnMsooXml << "Element grpSpPr not processed, empty graphic style assigned to draw:g";
     }
 
     popCurrentDrawStyle();
@@ -869,7 +869,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         if (m_isLockedCanvas) {
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
         } else {
@@ -979,7 +979,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, cNvPr)
@@ -989,7 +989,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_IN_CONTEXT(cNvPr)
@@ -1044,7 +1044,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
 
     // while (!atEnd()) {
     //     readNext();
-    //     kDebug() << *this;
+    //     debugMsooXml << *this;
     //     BREAK_IF_END_OF(CURRENT_EL)
     //     if (isStartElement()) {
     //         TRY_READ_IF(...)
@@ -1099,7 +1099,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
+    debugMsooXml << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     // Properties may or may not override default ones.
     inheritBodyProperties();
@@ -1214,8 +1214,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->addAttribute("draw:id", id);
         body->addAttribute("xml:id", id);
         body->addAttribute("presentation:class", presentationClass);
-        kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
-        kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
+        debugMsooXml << "presentationClass:" << d->phType << "->" << presentationClass;
+        debugMsooXml << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
                  << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
     }
 #endif
@@ -1420,7 +1420,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS(a, nvCxnSpPr)
@@ -1432,7 +1432,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(nvCxnSpPr)
@@ -1538,7 +1538,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     if (m_isLockedCanvas) {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF_NS(a, nvSpPr)
@@ -1552,7 +1552,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     } else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugMsooXml << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(nvSpPr)
@@ -1637,7 +1637,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         if (m_isLockedCanvas) {
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
         } else {
@@ -1729,7 +1729,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         if (m_isLockedCanvas) {
             BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
         } else {
@@ -2015,7 +2015,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lockedCanvas()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(cxnSp)
@@ -2083,7 +2083,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
@@ -2222,7 +2222,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
@@ -2318,7 +2318,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << "isStartElement:" << isStartElement();
+        debugMsooXml << "isStartElement:" << isStartElement();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 // CASE #400.1
@@ -3605,11 +3605,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     const QXmlStreamAttributes attrs(attributes());
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
-    kDebug() << "embed:" << r_embed;
+    debugMsooXml << "embed:" << r_embed;
     if (!r_embed.isEmpty() && m_context->relationships) {
         const QString sourceName(m_context->relationships->target(m_context->path,
                                                                   m_context->file, r_embed));
-        kDebug() << "sourceName:" << sourceName;
+        debugMsooXml << "sourceName:" << sourceName;
 
         //A test file is attached to Bug 286700.
         if (sourceName.endsWith("NULL")) {
@@ -3634,7 +3634,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     // Read child elements
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(biLevel)
@@ -3676,7 +3676,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fillRect)
@@ -4171,7 +4171,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller caller)
 {
-    kDebug() << "Blip Caller:" << (char)caller;
+    debugMsooXml << "Blip Caller:" << (char)caller;
     QString qn;
 
     if (m_isLockedCanvas) {
@@ -4205,7 +4205,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         if (m_isLockedCanvas) {
             BREAK_IF_END_OF(CURRENT_EL)
         } else {
@@ -4227,7 +4227,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         POP_NAME_INTERNAL
 
         if (!expectElEnd(qn)) {
-            kDebug() << "READ_EPILOGUE:" << qn << "not found!";
+            debugMsooXml << "READ_EPILOGUE:" << qn << "not found!";
             return KoFilter::WrongFormat;
         }
         return KoFilter::OK;
@@ -4259,7 +4259,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txSp()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 #if defined PPTXXMLSLIDEREADER_CPP
@@ -4380,7 +4380,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
@@ -5105,7 +5105,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
             break;
         }
@@ -6034,7 +6034,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
@@ -6294,7 +6294,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody(txBodyCa
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugMsooXml << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)

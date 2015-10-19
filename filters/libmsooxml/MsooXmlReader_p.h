@@ -78,12 +78,12 @@
 # define PUSH_NAME
 //! put at beginning of each read_*() method on call stack, only in debug mode
 # define PUSH_NAME_INTERNAL \
-    /*kDebug() << CALL_STACK_TOP_NAME << "==>" << QUALIFIED_NAME(CURRENT_EL); */\
+    /*debugMsooXml << CALL_STACK_TOP_NAME << "==>" << QUALIFIED_NAME(CURRENT_EL); */\
     m_callsNamesDebug.push(STRINGIFY(CURRENT_EL));
 //! put at the end of each read_*() method on call stack, only in debug mode
 # define POP_NAME_INTERNAL \
     m_callsNamesDebug.pop(); \
-    /*kDebug() << CALL_STACK_TOP_NAME << "<==" << QUALIFIED_NAME(CURRENT_EL); */
+    /*debugMsooXml << CALL_STACK_TOP_NAME << "<==" << QUALIFIED_NAME(CURRENT_EL); */
 #endif
 
 #define READ_PROLOGUE2(method) \
@@ -104,13 +104,13 @@
 #define READ_EPILOGUE_WITHOUT_RETURN \
     POP_NAME_INTERNAL \
     if (!expectElEnd(QUALIFIED_NAME(CURRENT_EL))) { \
-        /*kDebug() << "READ_EPILOGUE:" << QUALIFIED_NAME(CURRENT_EL) << "not found!"; */\
+        /*debugMsooXml << "READ_EPILOGUE:" << QUALIFIED_NAME(CURRENT_EL) << "not found!"; */\
         return KoFilter::WrongFormat; \
     } \
-    /*kDebug() << "/READ_EPILOGUE_WITHOUT_RETURN";*/
+    /*debugMsooXml << "/READ_EPILOGUE_WITHOUT_RETURN";*/
 
 #define READ_EPILOGUE \
-    /*kDebug() << "READ_EPILOGUE";*/ \
+    /*debugMsooXml << "READ_EPILOGUE";*/ \
     READ_EPILOGUE_WITHOUT_RETURN \
     return KoFilter::OK;
 
@@ -122,7 +122,7 @@
     return KoFilter::OK;
 
 #define BREAK_IF_END_OF_QSTRING(name) \
-    /*kDebug() << "BREAK_IF_END_OF" << name << "found:" << qualifiedName();*/ \
+    /*debugMsooXml << "BREAK_IF_END_OF" << name << "found:" << qualifiedName();*/ \
     if (isEndElement() && qualifiedName() == name) { \
         break; \
     }
@@ -133,7 +133,7 @@
 #define BREAK_IF_END_OF_WITH_NS(ns, name) \
     BREAK_IF_END_OF_QSTRING(QLatin1String(JOIN(STRINGIFY(ns) ":",name)))
 
-//inline bool aaaa(const char * aa) { kDebug() << "aa" << aa; return true; }
+//inline bool aaaa(const char * aa) { debugMsooXml << "aa" << aa; return true; }
 
 #define QUALIFIED_NAME_IS(name) \
     (qualifiedName() == QLatin1String(QUALIFIED_NAME(name)))
@@ -145,9 +145,9 @@
                        QLatin1String(STRINGIFY(name)), tokenString())); \
             return KoFilter::WrongFormat; \
         } \
-        /*kDebug() << "TRY_READ_IF " STRINGIFY(name) " started";*/ \
+        /*debugMsooXml << "TRY_READ_IF " STRINGIFY(name) " started";*/ \
         TRY_READ_WITH_ARGS_INTERNAL(name, , context) \
-        /*kDebug() << "TRY_READ_IF " STRINGIFY(name) " finished";*/ \
+        /*debugMsooXml << "TRY_READ_IF " STRINGIFY(name) " finished";*/ \
     }
 
 #define TRY_READ_IF_IN_CONTEXT_INTERNAL(name, context) \
@@ -178,9 +178,9 @@
 
 #define TRY_READ_IF_NS_INTERNAL(ns, name) \
     if (qualifiedName() == QLatin1String(JOIN(STRINGIFY(ns) ":", name))) { \
-        /*kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " started";*/ \
+        /*debugMsooXml << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " started";*/ \
         TRY_READ(name); \
-        /*kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " finished";*/ \
+        /*debugMsooXml << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " finished";*/ \
     }
 
 //! Like TRY_READ_IF() but namespace for explicit namespace @a ns.
@@ -201,7 +201,7 @@
 
 #define ELSE_WRONG_FORMAT_DEBUG(dbg) \
     else { \
-        kDebug() << dbg; \
+        debugMsooXml << dbg; \
         return KoFilter::WrongFormat; \
     }
 
@@ -222,7 +222,7 @@
 */
 #define TRY_READ_ATTR_INTO(atrname, destination) \
     destination = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
-    /*kDebug() << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;*/
+    /*debugMsooXml << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
 //! Reads optional attribute of name @a atrname with explicitly specified namespace @a ns.
 /*! Creates QString variable with name \<ns\>_\<atrame\>
@@ -244,7 +244,7 @@
 */
 #define TRY_READ_ATTR_WITH_NS_INTO(ns, atrname, destination) \
     destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
-    /*kDebug() << "TRY_READ_ATTR_WITH_NS_INTO: " STRINGIFY(destination) << "=" << destination;*/
+    /*debugMsooXml << "TRY_READ_ATTR_WITH_NS_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
 inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrname)
 {
@@ -359,7 +359,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         bool ok; \
         const int val_tmp = string.toInt(&ok); \
         if (!ok) { \
-            kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
+            debugMsooXml << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val_tmp; \
@@ -372,7 +372,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         bool ok; \
         const quint64 val_tmp = string.toLongLong(&ok); \
         if (!ok) { \
-            kDebug() << "STRING_TO_LONGLONG: error converting" << string << "to LONGLONG (attribute" << debugElement << ")"; \
+            debugMsooXml << "STRING_TO_LONGLONG: error converting" << string << "to LONGLONG (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val_tmp; \
@@ -385,7 +385,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         bool ok; \
         const qreal val_tmp = string.toDouble(&ok); \
         if (!ok) { \
-            kDebug() << "STRING_TO_DOUBLE: error converting" << string << "to qreal (attribute" << debugElement << ")"; \
+            debugMsooXml << "STRING_TO_DOUBLE: error converting" << string << "to qreal (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val_tmp; \
@@ -393,9 +393,9 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 
 //! Skips everything until end of CURRENT_EL is pulled
 #define SKIP_EVERYTHING \
-    /*kDebug() << "Skipping everything in element" << qualifiedName() << "...";*/ \
+    /*debugMsooXml << "Skipping everything in element" << qualifiedName() << "...";*/ \
     const QString qn(qualifiedName().toString()); \
-    /*kDebug() << *this; */\
+    /*debugMsooXml << *this; */\
     while (true) { \
         readNext(); \
         if (atEnd()) \

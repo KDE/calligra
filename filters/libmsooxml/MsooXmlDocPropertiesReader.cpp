@@ -50,7 +50,7 @@ MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : 
 
 KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext*)
 {
-    kDebug() << "=============================";
+    debugMsooXml << "=============================";
 
     readNext();
     if (!isStartDocument()) {
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugMsooXml << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -77,10 +77,10 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
     }
 //! @todo expect other namespaces too...
 
-    kDebug() << qualifiedName();
+    debugMsooXml << qualifiedName();
     TRY_READ(coreProperties)
 
-    kDebug() << "===========finished============";
+    debugMsooXml << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -100,12 +100,12 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
 
             const QMap<QString,QString>::ConstIterator it = elemMap.constFind(qn);
             if (it == elemMap.constEnd()) {
-                kDebug() << "Unknown metadata ignored:" << qn;
+                debugMsooXml << "Unknown metadata ignored:" << qn;
                 while (!isEndElement())
                     readNext();
                 continue;
             }
-            kDebug() << "Found:" << it.key() << "Mapped to:" << it.value();
+            debugMsooXml << "Found:" << it.key() << "Mapped to:" << it.value();
             const QString t = text().toString();
             //can't use qPrintable() the string has to remain valid until endElement is called
             //which we can't do if we call qPrintable, the QByteArray falls out of scope after

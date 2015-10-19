@@ -30,7 +30,7 @@
 #include <QStack>
 #include <QUrl>
 
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 #include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoOdfExporter.h>
@@ -150,7 +150,7 @@ private:
 
 } // namespace MSOOXML
 
-//! kDebug() stream operator. Writes this reader to the debug output in a nicely formatted way.
+//! debugMsooXml stream operator. Writes this reader to the debug output in a nicely formatted way.
 //! @todo add the same for QXmlStreamWriter
 KOMSOOXML_EXPORT QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader);
 

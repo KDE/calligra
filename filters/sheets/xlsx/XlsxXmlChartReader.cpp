@@ -44,6 +44,8 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
+#include <kdebug.h>
+
 #include <QFontMetricsF>
 #include <QDateTime>
 

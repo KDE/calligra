@@ -33,7 +33,7 @@
 #include <QBuffer>
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 #include <KoGenStyle.h>
 
 class KZip;

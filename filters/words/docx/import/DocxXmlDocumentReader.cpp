@@ -55,6 +55,8 @@
 #include <KoColumn.h>
 #include <KoRawCellChild.h>
 
+#include <kdebug.h>
+
 #include <QTime>
 
 namespace {

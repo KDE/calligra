@@ -51,7 +51,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
             value.remove(0, 1).chop(1);
         }
 #ifdef VMLREADER_DEBUG
-        kDebug() << "name:" << name << "value:" << value;
+        debugMsooXml << "name:" << name << "value:" << value;
 #endif
         m_currentVMLProperties.vmlStyle.insert(name, value);
     }
@@ -310,7 +310,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         bool ok;
         const int n = z_index.toInt(&ok);
         if (!ok) {
-            kDebug() << "error converting" << z_index << "to int (attribute z-index)";
+            debugMsooXml << "error converting" << z_index << "to int (attribute z-index)";
         }
         else if (n >= 0) {
             body->addAttribute("draw:z-index", n);
@@ -497,7 +497,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         bool ok;
         int p = offset.toInt(&ok);
         if (!ok) {
-            kDebug() << "error converting" << offset << "to int (shadow x-offset)";
+            debugMsooXml << "error converting" << offset << "to int (shadow x-offset)";
         } else {
             offset = QString::number(p * widthValue / 100.0,'f').append(widthString.right(2));
         }
@@ -510,7 +510,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         bool ok;
         int p = offset.toInt(&ok);
         if (!ok) {
-            kDebug() << "error converting" << offset << "to int (shadow y-offset)";
+            debugMsooXml << "error converting" << offset << "to int (shadow y-offset)";
         } else {
             offset = QString::number(p * heightValue / 100.0,'f').append(heightString.right(2));
         }
@@ -547,10 +547,10 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     // padding
     // --------------------
 #ifdef VMLREADER_DEBUG
-    kDebug() << this << "padding-left:" << m_currentVMLProperties.internalMarginLeft;
-    kDebug() << this << "padding-top:" << m_currentVMLProperties.internalMarginTop;
-    kDebug() << this << "padding-right:" << m_currentVMLProperties.internalMarginRight;
-    kDebug() << this << "padding-bottom:" << m_currentVMLProperties.internalMarginBottom;
+    debugMsooXml << this << "padding-left:" << m_currentVMLProperties.internalMarginLeft;
+    debugMsooXml << this << "padding-top:" << m_currentVMLProperties.internalMarginTop;
+    debugMsooXml << this << "padding-right:" << m_currentVMLProperties.internalMarginRight;
+    debugMsooXml << this << "padding-bottom:" << m_currentVMLProperties.internalMarginBottom;
 #endif
     m_currentDrawStyle->addProperty("fo:padding-left", m_currentVMLProperties.internalMarginLeft);
     m_currentDrawStyle->addProperty("fo:padding-right", m_currentVMLProperties.internalMarginRight);
@@ -1753,7 +1753,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
     const QString rId(m_currentVMLProperties.vmlStyle.value("v:fill@r:id"));
     if (!rId.isEmpty()) {
         const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
-        kDebug() << "sourceName:" << sourceName;
+        debugMsooXml << "sourceName:" << sourceName;
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
@@ -2483,7 +2483,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
-    kDebug() << "m_vmlStyle:" << m_currentVMLProperties.vmlStyle;
+    debugMsooXml << "m_vmlStyle:" << m_currentVMLProperties.vmlStyle;
 
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
@@ -2628,7 +2628,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
         }
     }
 
-    kDebug() << "imagedata:" << imagedata;
+    debugMsooXml << "imagedata:" << imagedata;
     if (!imagedata.isEmpty()) {
         m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);
         KoFilter::ConversionStatus status = m_context->import->copyFile(imagedata, m_currentVMLProperties.imagedataPath, false);

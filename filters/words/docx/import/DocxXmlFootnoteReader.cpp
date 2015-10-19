@@ -33,6 +33,8 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
 class DocxXmlFootnoteReader::Private
 {
 public:

@@ -34,6 +34,8 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlDrawingTableStyle.h>
 
+#include <kdebug.h>
+
 //#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
 
 DocxXmlStylesReader::DocxXmlStylesReader(KoOdfWriters *writers)

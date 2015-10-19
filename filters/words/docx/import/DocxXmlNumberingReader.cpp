@@ -32,6 +32,8 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
 class DocxXmlNumberingReader::Private
 {
 public:

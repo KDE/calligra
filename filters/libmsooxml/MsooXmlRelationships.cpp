@@ -30,7 +30,7 @@
 #include <klocalizedstring.h>
 
 #include <QSet>
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 
 using namespace MSOOXML;
 
@@ -54,7 +54,7 @@ public:
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
 {
-    kDebug() << (path + '/' + file) << "...";
+    debugMsooXml << (path + '/' + file) << "...";
     loadedFiles.insert(path + '/' + file);
     MsooXmlRelationshipsReaderContext context(path, file, rels, targetsForTypes);
     MsooXmlRelationshipsReader reader(writers);
@@ -111,7 +111,7 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
 QString MsooXmlRelationships::targetForType(const QString& path, const QString& file, const QString& relType)
 {
     const QString key(MsooXmlRelationshipsReader::targetKey(path + "/" + file, relType));
-    //kDebug() << key;
+    //debugMsooXml << key;
     const QString target(d->targetsForTypes.value(key));
     if (!target.isEmpty())
         return target;

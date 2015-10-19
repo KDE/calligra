@@ -1,9 +1,8 @@
 #include "MsooXmlDrawingTableStyle.h"
-#include <QDebug>
 
 //#define MSOOXMLDRAWING_DEBUG_TABLES
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 #endif
 
 using namespace MSOOXML;
@@ -91,18 +90,18 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     const int lastColumn = m_properties.columnCount() - 1;
 
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "==> [styles.xml] TABLE-level:";
+    debugMsooXml << "==> [styles.xml] TABLE-level:";
 #endif
     applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "<== [END] [styles.xml] TABLE-level:";
+    debugMsooXml << "<== [END] [styles.xml] TABLE-level:";
 #endif
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "==> [local] TABLE-level:";
+    debugMsooXml << "==> [local] TABLE-level:";
 #endif
     TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "<== [END] [local] TABLE-level:";
+    debugMsooXml << "<== [END] [local] TABLE-level:";
 #endif
 
     if (role & DrawingTableStyleConverterProperties::ColumnBanded) {
@@ -111,7 +110,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
             // First column active means that the banding is shifted by one
             if (role & DrawingTableStyleConverterProperties::FirstCol) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-                kDebug() << "====> [ColumnBanded] FirstCol:";
+                debugMsooXml << "====> [ColumnBanded] FirstCol:";
 #endif
                 // Banding not applied if it's the first column
                 if (column != 0) {
@@ -126,7 +125,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
             }
             else {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-                kDebug() << "====> [ColumnBanded] Other:";
+                debugMsooXml << "====> [ColumnBanded] Other:";
 #endif
                 //Is the column in the even band?
                 if ((column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
@@ -145,7 +144,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
             // First row active means that the banding is shifted by one
             if (role & DrawingTableStyleConverterProperties::FirstRow) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-                kDebug() << "====> [RowBanded] FirstRow:";
+                debugMsooXml << "====> [RowBanded] FirstRow:";
 #endif
                 // Banding not applied if it's the first row
                 if (row != 0) {
@@ -160,7 +159,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
             }
             else {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-                kDebug() << "====> [RowBanded] Other:";
+                debugMsooXml << "====> [RowBanded] Other:";
 #endif
                 //Is the row in the even band?
                 if( (row % (m_properties.rowBandSize() * 2)) < m_properties.rowBandSize()) {
@@ -180,7 +179,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::FirstCol) {
         if(column == 0) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> FirstCol:";
+            debugMsooXml << "====> FirstCol:";
 #endif
             applyStyle(DrawingTableStyle::FirstCol, cellStyle, row, column, spans);
         }
@@ -189,7 +188,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if (role & DrawingTableStyleConverterProperties::FirstRow) {
         if(row == 0) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> FirstRow:";
+            debugMsooXml << "====> FirstRow:";
 #endif
             applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column, spans);
         }
@@ -198,7 +197,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if (role & DrawingTableStyleConverterProperties::LastRow) {
         if(row == lastRow) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> LastRow:";
+            debugMsooXml << "====> LastRow:";
 #endif
             applyStyle(DrawingTableStyle::LastRow, cellStyle, row, column, spans);
         }
@@ -209,7 +208,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::LastCol) {
         if(column == lastColumn) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> LastCol:";
+            debugMsooXml << "====> LastCol:";
 #endif
             applyStyle(DrawingTableStyle::LastCol, cellStyle, row, column, spans);
         }
@@ -218,7 +217,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::NeCell) {
         if(row == 0 && column == 0) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> NeCell:";
+            debugMsooXml << "====> NeCell:";
 #endif
             applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column, spans);
         }
@@ -227,7 +226,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::NwCell) {
         if(row == 0 && column == lastColumn) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> NwCell:";
+            debugMsooXml << "====> NwCell:";
 #endif
             applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column, spans);
         }
@@ -236,7 +235,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::SeCell) {
         if(row == lastRow && column == 0) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> SeCell:";
+            debugMsooXml << "====> SeCell:";
 #endif
             applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column, spans);
         }
@@ -245,7 +244,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     if(role & DrawingTableStyleConverterProperties::SwCell) {
         if(row == lastRow && column == lastColumn) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> SwCell:";
+            debugMsooXml << "====> SwCell:";
 #endif
             applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column, spans);
         }
@@ -254,30 +253,30 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     TableStyleProperties* localProperties = m_properties.localStyles().localStyle(row, -1);
     if (localProperties) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "==> ROW-level:";
+        debugMsooXml << "==> ROW-level:";
 #endif
         TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
         localProperties = 0;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "<== [END] ROW-level:";
+        debugMsooXml << "<== [END] ROW-level:";
 #endif
     }
 
     localProperties = m_properties.localStyles().localStyle(row, column);
     if (localProperties) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "==> CELL-level:";
+        debugMsooXml << "==> CELL-level:";
 #endif
         TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
         localProperties = 0;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "<== [END] CELL-level:";
+        debugMsooXml << "<== [END] CELL-level:";
 #endif
     }
 
     //RE-APPLY table-level border properties from tblBorders
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "==> [REAPPLY]: TABLE/ROW-level properties";
+    debugMsooXml << "==> [REAPPLY]: TABLE/ROW-level properties";
 #endif
     TableStyleProperties* tableProperties = 0;
     if (m_style) {
@@ -288,7 +287,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
                                   m_properties.localStyles().localStyle(row, -1),
                                   cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "<== [END] [REAPPLY]: TABLE/ROW-level properties";
+    debugMsooXml << "<== [END] [REAPPLY]: TABLE/ROW-level properties";
 #endif
 
     return cellStyle;

@@ -26,13 +26,12 @@
 
 #include <typeinfo>
 #include <iterator>
-#include <QDebug>
 #include <QXmlStreamReader>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
-
+#include "MsooXmlDebug.h"
 
 #define MSOOXML_CURRENT_NS "dgm"
 #define MSOOXML_CURRENT_CLASS MsooXmlDiagramReader
@@ -52,9 +51,9 @@ namespace MSOOXML { namespace Diagram {
 
 //#define ASSERT_X(condition, errormessage) Q_ASSERT_X(condition, __FUNCTION__, errormessage)
 #define ASSERT_X(condition, errormessage) 
-#define DEBUG_DUMP qDebug() << QString("%1%2").arg(QString(' ').repeated(level*2)).arg(m_tagName)
-//#define DEBUG_DUMP qDebug() << QString("%1Dgm::%2::%3").arg(QString(' ').repeated(level)).arg(typeid(this).name()).arg(__FUNCTION__) << this << "atom=" << m_tagName
-#define DEBUG_WRITE qDebug() << QString("Dgm::%1::%2").arg(typeid(this).name()).arg(__FUNCTION__) << "atom=" << m_tagName
+#define DEBUG_DUMP debugMsooXml << QString("%1%2").arg(QString(' ').repeated(level*2)).arg(m_tagName)
+//#define DEBUG_DUMP debugMsooXml << QString("%1Dgm::%2::%3").arg(QString(' ').repeated(level)).arg(typeid(this).name()).arg(__FUNCTION__) << this << "atom=" << m_tagName
+#define DEBUG_WRITE debugMsooXml << QString("Dgm::%1::%2").arg(typeid(this).name()).arg(__FUNCTION__) << "atom=" << m_tagName
 
 }}
 
@@ -519,7 +518,7 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
                 }
             }
         } else {
-            kDebug()<<"TODO atom="<<m_tagName<<"qualifiedName="<<reader->qualifiedName();
+            debugMsooXml<<"TODO atom="<<m_tagName<<"qualifiedName="<<reader->qualifiedName();
         }
         
         if (node) {
@@ -666,10 +665,10 @@ QList<AbstractNode*> AbstractAtom::fetchAxis(Context* context, QList<AbstractNod
             if (AbstractNode* n = node->parent())
                 result.append(n);
         } else if(axis == QLatin1String("preced")) { // Preceding
-            kWarning()<<"TODO preced";
+            warnMsooXml<<"TODO preced";
             //TODO
         } else if(axis == QLatin1String("precedSib")) { // Preceding Sibling
-            kWarning()<<"TODO precedSib";
+            warnMsooXml<<"TODO precedSib";
             //TODO
         } else if(axis == QLatin1String("root")) { // Root
             result.append(context->m_rootPoint);
@@ -871,7 +870,7 @@ void LayoutNodeAtom::finishBuild(Context* context) {
     QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm();
     switch(alg ? alg->m_type : AlgorithmAtom::UnknownAlg) {
         case AlgorithmAtom::UnknownAlg:
-            kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
+            warnMsooXml << "Layout with name=" << m_name << "defines an unknown algorithm.";
             // fall through and use the composite-algorithm
         case AlgorithmAtom::CompositeAlg: m_algorithmImpl = new CompositeAlgorithm; break;
         case AlgorithmAtom::ConnectorAlg: m_algorithmImpl = new ConnectorAlgorithm; break;
@@ -1029,16 +1028,16 @@ void LayoutNodeAtom::setVariable(const QString &name, const QString &value) { m_
 
 QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     //TODO cache
-    //kDebug() << m_name;
+    //debugMsooXml << m_name;
     ValueCache result = m_values;
 	//QMap< QString, qreal > print = m_values;
-	//kDebug() << "prefinal: " << print;
-	//kDebug() << "final values";
+	//debugMsooXml << "prefinal: " << print;
+	//debugMsooXml << "final values";
     for( QMap< QString, qreal>::const_iterator it = m_factors.constBegin(); it != m_factors.constEnd(); ++it ) {
         result[ it.key() ] = result[ it.key() ] * it.value() / qreal ( m_countFactors[ it.key() ] );        
-		//kDebug() << "key " << it.key() << " value: " << it.value() << " count: " << m_countFactors[ it.key() ];
+		//debugMsooXml << "key " << it.key() << " value: " << it.value() << " count: " << m_countFactors[ it.key() ];
     }
-    //kDebug() << "end of final values";
+    //debugMsooXml << "end of final values";
     return result;
 }
 
@@ -1447,15 +1446,15 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
 
     ASSERT_X(!applyLayouts.isEmpty(), QString("Failed to determinate the layouts for the constraint %1").arg( dump() ).toLocal8Bit());
     ASSERT_X(!referencedLayouts.isEmpty(), QString("Failed to determinate the referenced layouts for the constraint %1").arg( dump() ).toLocal8Bit());
-	kDebug() << dump();
+	debugMsooXml << dump();
 
     foreach(const QExplicitlySharedDataPointer<LayoutNodeAtom> &applyLayout, applyLayouts) {
-		kDebug() << "AppLayout: " << applyLayout->m_name;
+		debugMsooXml << "AppLayout: " << applyLayout->m_name;
         if( !m_value.isEmpty() ) {
             bool ok;
             qreal value = m_value.toDouble( &ok );
             ASSERT_X(ok, QString("Layout with name=%1 defines none-double value=%2").arg( atom->m_name ).arg( m_value ).toLocal8Bit());
-			kDebug() << "applyValue: " << value;
+			debugMsooXml << "applyValue: " << value;
             if (ok) {
                 //applyLayout->m_factors.clear();
                 //applyLayout->m_countFactors.clear();
@@ -1476,12 +1475,12 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
             qreal value = -1.0;
             if( values.contains( type ) ) {
                 value = values[ type ];
-				kDebug() << "finalValue: " << value;
+				debugMsooXml << "finalValue: " << value;
             } else {
                 value = r ? r->defaultValue( type, values ) : -1.0;
                 ASSERT_X(value >= 0.0, QString("algorithm=%1 value=%2 constraint='%3'").arg( r ? r->name() : "NULL" ).arg( value ).arg( dump() ).toLocal8Bit());
                 if (value < 0.0) continue;
-				kDebug() << "default Value: " << value;
+				debugMsooXml << "default Value: " << value;
             }
             applyLayout->m_values[ m_type ] = value;
             applyLayout->setNeedsRelayout( true );
@@ -1492,7 +1491,7 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
             bool ok;
             qreal v = m_fact.toDouble( &ok );
             ASSERT_X(ok, QString("Layout with name=%1 defines none-double factor=%2").arg( atom->m_name ).arg( m_fact ).toLocal8Bit());
-			kDebug() << "fact: " << v;
+			debugMsooXml << "fact: " << v;
             if (ok) {
                 applyLayout->m_factors[ m_type ] += v;
                 applyLayout->m_countFactors[ m_type ] += 1;
@@ -1658,7 +1657,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     if(m_type.isEmpty() || m_hideGeom) return;
     QMap<QString,QString> params = context->m_parentLayout->algorithmParams();
     QMap<QString, qreal> values = context->m_parentLayout->finalValues();
-	kDebug() << values;
+	debugMsooXml << values;
     //Q_ASSERT(values.contains("l"));
     //Q_ASSERT(values.contains("t"));
     //if(!values.contains("w")) values["w"]=100;
@@ -1707,7 +1706,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
             w -= sibSp;
             h -= sibSp;
         } else {
-            kWarning()<<"Sibling spacing is bigger then width/height! Skipping sibSp-value! width="<<w<<"height="<<h<<"sibSp="<<sibSp;
+            warnMsooXml<<"Sibling spacing is bigger then width/height! Skipping sibSp-value! width="<<w<<"height="<<h<<"sibSp="<<sibSp;
             context->m_parentLayout->dump(context, 10);
         }
     }
@@ -1995,12 +1994,12 @@ void PresentationOfAtom::build(Context* context) {
         /*
         PointNode* ppp = dynamic_cast<PointNode*>(context->currentNode());
         Q_ASSERT(ppp);
-        kDebug()<<QString("modelId=%2 type=%3").arg(ppp->m_modelId).arg(ppp->m_type);
+        debugMsooXml<<QString("modelId=%2 type=%3").arg(ppp->m_modelId).arg(ppp->m_type);
         */
         ASSERT_X(isEmpty(), QString("Failed to proper apply the non-empty presOf %1").arg(dump()).toLocal8Bit());
     } else {
         //ASSERT_X(nodes.count() == 1, "Oha. The axis contains more then one note. It's not clear what to do in such cases...");
-        if (nodes.count() >= 2) kWarning() << "TODO The axis contains more then one note. It's not clear what to do in such cases...";
+        if (nodes.count() >= 2) warnMsooXml << "TODO The axis contains more then one note. It's not clear what to do in such cases...";
         context->setCurrentNode( nodes.first() );
     }
 }
@@ -2056,7 +2055,7 @@ bool IfAtom::testAtom(Context* context) {
 	{
 		PointNode* node = dynamic_cast<PointNode* >( context->currentNode() );
 		Q_ASSERT( node );
-		kDebug() << "RULE21: " << m_axis.count() << " nodeId: " << node->m_modelId;
+		debugMsooXml << "RULE21: " << m_axis.count() << " nodeId: " << node->m_modelId;
 	}
     if(m_function == "cnt") { // Specifies a count.
         funcValue = QString::number(axis.count());
@@ -2065,40 +2064,40 @@ bool IfAtom::testAtom(Context* context) {
         //for(AbstractNode* n = context->currentNode(); n; n = n->parent(), ++depth);
         //funcValue = depth;
         //TODO
-        kWarning()<<"TODO func=depth";
+        warnMsooXml<<"TODO func=depth";
     } else if(m_function == "maxDepth") { // Defines the maximum depth.
         //int depth = 0;
         //for(AbstractNode* n = context->currentNode(); n; n = n->parent(), ++depth);
         //funcValue = depth;
         //TODO
-        kWarning()<<"TODO func=maxDepth";
+        warnMsooXml<<"TODO func=maxDepth";
     } else if(m_function == "pos") { // Retrieves the position of the node in the specified set of nodes.
         const int position = axis.indexOf(context->currentNode()) + 1;
         funcValue = QString::number(position);
         //TODO 1-based? what index for not-found?
-        kWarning()<<"TODO func=pos funcValue="<<funcValue;
+        warnMsooXml<<"TODO func=pos funcValue="<<funcValue;
     } else if(m_function == "posEven") { // Returns 1 if the specified node is at an even numbered position in the data model.
         //const int position = axis.indexOf(context->currentNode())+1;
         //funcValue = position>=1 && position % 2 == 0 ? 1 : 0;
         //TODO
-        kWarning()<<"TODO func=posEven";
+        warnMsooXml<<"TODO func=posEven";
     } else if(m_function == "posOdd") { // Returns 1 if the specified node is in an odd position in the data model.
         //const int position = axis.indexOf(context->currentNode())+1;
         //funcValue = position>=1 && position % 2 != 0 = 1 : 0;
         //TODO
-        kWarning()<<"TODO func=posOdd";
+        warnMsooXml<<"TODO func=posOdd";
     } else if(m_function == "revPos") { // Reverse position function.
         const int position = axis.indexOf(context->currentNode()) + 1;
         funcValue = axis.count()-position;
         //TODO lastIndexOf? 1-based? what index for not-found?
-        kWarning()<<"TODO func=revPos";
+        warnMsooXml<<"TODO func=revPos";
     } else if(m_function == "var") { // Used to reference a variable.
         funcValue = context->m_parentLayout->variable(m_argument, true /* check parents */);
         if(funcValue.isEmpty()) { // if not defined then use default variable-values
             if(m_argument == QLatin1String("dir")) { // Specifies the direction of the diagram.
                 funcValue = "norm";
             } else {
-                kWarning()<<"TODO figure out default for variable="<<m_argument;
+                warnMsooXml<<"TODO figure out default for variable="<<m_argument;
             }
         }
     }
@@ -2114,7 +2113,7 @@ bool IfAtom::testAtom(Context* context) {
             if(!isInt) {
                 // right, that's untested atm since I didn't found a single document that does it and the specs don't cover
                 // such "details" anyways so it seems. So, if you run into this then it's up to you to fix it :)
-                kWarning()<<"TODO figure out how non-integer comparison is expected to work";
+                warnMsooXml<<"TODO figure out how non-integer comparison is expected to work";
             }
             if(m_operator == QLatin1String("gt")) {
                 istrue = isInt ? funcValueInt > valueInt : funcValue > m_value;
@@ -2127,11 +2126,11 @@ bool IfAtom::testAtom(Context* context) {
             } else if(m_operator == QLatin1String("neq")) {
                 istrue = isInt ? funcValueInt != valueInt : funcValue != m_value;
             } else {
-                kWarning()<<"Unexpected operator="<<m_operator<<"name="<<m_name;
+                warnMsooXml<<"Unexpected operator="<<m_operator<<"name="<<m_name;
             }
         }
     }
-    //kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
+    //debugMsooXml<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
     return istrue;
 }
 
@@ -2215,7 +2214,7 @@ void ChooseAtom::build(Context* context) {
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
 		IfAtom * ifAtom = dynamic_cast< IfAtom* >( atom.data() );
 		if ( ifAtom )
-			kDebug() << "atomNameChosen" << ifAtom->m_name;
+			debugMsooXml << "atomNameChosen" << ifAtom->m_name;
         foreach( QExplicitlySharedDataPointer<AbstractAtom> a, atom->children() ) {
             atom->removeChild( a );
             m_parent->insertChild( ++index, a );
@@ -2453,7 +2452,7 @@ void AbstractAlgorithm::virtualDoLayout() {
     Q_ASSERT( layout() );
     Q_ASSERT( !name().isEmpty() );
     const QString __name = name();
-    kDebug() << "layout=" << layout()->m_name << "algorithm=" << __name;//name();
+    debugMsooXml << "layout=" << layout()->m_name << "algorithm=" << __name;//name();
 
     // Specifies the aspect ratio (width to height) of the composite node to use when determining child constraints. A value of 0 specifies to
     // leave the width and height constraints unaltered. The algorithm may temporarily shrink one dimension to achieve the specified ratio.
@@ -2567,7 +2566,7 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     // * tR         Specifies that the top right connection site is to be used.
     QString begPts = layout()->algorithmParam("begPts");
     QString endPts = layout()->algorithmParam("endPts");
-    //if (!begPts.isEmpty() && !endPts.isEmpty()) kDebug()<<"begPts="<<begPts<<"endPts="<<endPts;
+    //if (!begPts.isEmpty() && !endPts.isEmpty()) debugMsooXml<<"begPts="<<begPts<<"endPts="<<endPts;
 
     QMap<QString, qreal> srcValues = srcAtom->finalValues();
     QMap<QString, qreal> dstValues = dstAtom->finalValues();
@@ -2688,33 +2687,33 @@ void LinearAlgorithm::virtualDoLayout() {
         return;
     LayoutNodeAtom *firstNSpaceNode = NULL;
     LayoutNodeAtom *lastNSpaceNode = NULL;
-    kDebug() << values;
+    debugMsooXml << values;
     for ( int i = 0; i < childs.count(); ++ i )
     {
         if ( direction  == "fromL" )
         {
             childs[ i ]->m_values[ "l" ] = x;        
-            kDebug() << "XVAL: " << x;
+            debugMsooXml << "XVAL: " << x;
             x = childs[ i ]->finalValues()[ "r" ];
         }
         else if ( direction == "fromR" )
         {
             childs[ i ]->m_values[ "r" ] = x;
-            kDebug() << "XVAL: " << x;
+            debugMsooXml << "XVAL: " << x;
             x = childs[ i ]->finalValues()[ "l" ];
         }
         else if ( direction == "fromT" )
         {
-            kDebug() << "TVAL: " << childs[ i ]->finalValues()[ "t" ];
-            kDebug() << "BVAL: " << childs[ i ]->finalValues()[ "b" ];
+            debugMsooXml << "TVAL: " << childs[ i ]->finalValues()[ "t" ];
+            debugMsooXml << "BVAL: " << childs[ i ]->finalValues()[ "b" ];
             childs[ i ]->m_values[ "t" ] = y;
-            kDebug() << "YVAL: " << y;
+            debugMsooXml << "YVAL: " << y;
             y = childs[ i ]->finalValues()[ "b" ];
         }
         else if ( direction == "fromB" )
         {
             childs[ i ]->m_values[ "b" ] = y;
-            kDebug() << "YVAL: " << y;
+            debugMsooXml << "YVAL: " << y;
             y = childs[ i ]->finalValues()[ "t" ];
         }
         if (childs[ i ]->algorithm()->m_type != AlgorithmAtom::SpaceAlg) {
@@ -2731,9 +2730,9 @@ void LinearAlgorithm::virtualDoLayout() {
     const qreal yOffset = firstNSpaceNode->finalValues()[ "t" ]  < 0 ? -firstNSpaceNode->finalValues()[ "t" ] : 0;
     const qreal xOffsetRect = values[ "l" ];
     const qreal yOffsetRect = values[ "t" ];
-    kDebug() << width;
-    kDebug() << widthStretchFactor;
-    kDebug() << xOffset;
+    debugMsooXml << width;
+    debugMsooXml << widthStretchFactor;
+    debugMsooXml << xOffset;
 
     for ( int i = 0; i < childs.count(); ++i )
     {
@@ -2778,7 +2777,7 @@ void LinearAlgorithm::virtualDoLayout() {
     if (childs.isEmpty()) return;
 
     const qreal childsCount = childs.count();
-	qDebug() << "REAL CHILD COUNTERRRRRRRRRRRRRR " << childsCount;
+	debugMsooXml << "REAL CHILD COUNTERRRRRRRRRRRRRR " << childsCount;
     const QSizeF usedSize = layout()->childrenUsedSize();
     const QSizeF totalSize = layout()->childrenTotalSize();
 
@@ -2807,7 +2806,7 @@ void LinearAlgorithm::virtualDoLayout() {
     foreach(LayoutNodeAtom* l, childs) {		
         QMap< QString, qreal > values = l->finalValues();
         if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
-			qDebug() << "NODETYPE: SPACE";
+			debugMsooXml << "NODETYPE: SPACE";
             currentWidth = l->finalValues()[ "w" ] / usedSize.width() * w;
             currentHeight = l->finalValues()[ "h" ] / usedSize.height() * h;
             setNodePosition(l, currentX, currentY, currentWidth, currentHeight);
@@ -2816,7 +2815,7 @@ void LinearAlgorithm::virtualDoLayout() {
             else
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
-			qDebug() << "NODETYPE: ELSE";
+			debugMsooXml << "NODETYPE: ELSE";
             currentWidth = l->finalValues()[ "w" ] / totalSize.width() * w;
             currentHeight = l->finalValues()[ "h" ] / totalSize.height() * h;
             if ( direction == "fromR" || direction == "fromL" )
@@ -2923,7 +2922,7 @@ qreal HierarchyAlgorithm::virtualGetDefaultValue(const QString& type, const QMap
 // http://msdn.microsoft.com/en-us/library/dd439442(v=office.12).aspx
 // http://msdn.microsoft.com/en-us/library/dd439449(v=office.12).aspx
 void HierarchyAlgorithm::virtualDoLayout() {
-    kDebug()<<"TODO Implement algorithm isRoot="<<m_isRoot;
+    debugMsooXml<<"TODO Implement algorithm isRoot="<<m_isRoot;
     AbstractAlgorithm::virtualDoLayout();
 }
 
@@ -2940,7 +2939,7 @@ qreal PyramidAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<Q
 }
 
 void PyramidAlgorithm::virtualDoLayout() {
-    kDebug()<<"TODO Implement algorithm";
+    debugMsooXml<<"TODO Implement algorithm";
     AbstractAlgorithm::virtualDoLayout();
 }
 
@@ -2953,10 +2952,10 @@ qreal SpaceAlg::virtualGetDefaultValue(const QString& type, const QMap<QString, 
     Q_UNUSED(values);
     qreal value = -1.0;
     if (type == "w" || type == "h") {
-        kDebug()<<"TODO type="<<type;
+        debugMsooXml<<"TODO type="<<type;
         value = 100; //TODO what default value is expected here?
     } else if (type == "sibSp") {
-        kDebug()<<"TODO type="<<type;
+        debugMsooXml<<"TODO type="<<type;
         value = 0; //TODO what default value is expected here?
     }
     return value;

@@ -30,6 +30,8 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
 
+#include <kdebug.h>
+
 XlsxXmlTableReaderContext::XlsxXmlTableReaderContext()
     : headerStyleIndex(-1),
       dataStyleIndex(-1),

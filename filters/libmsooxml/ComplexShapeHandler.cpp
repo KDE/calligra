@@ -23,7 +23,7 @@
 
 #include "ComplexShapeHandler.h"
 
-#include <QDebug>
+#include "MsooXmlDebug.h"
 
 QString ComplexShapeHandler::defaultEquations()
 {
@@ -220,7 +220,7 @@ QString ComplexShapeHandler::createEquation(QString& function)
         return QString("if(max(%1-%2,0),%1,if(max(%2-%3,0),%3,%2))").arg(first).arg(second).arg(third);
     }
     else {
-        qDebug() << "implement UNHANDLED element" << operation;
+        debugMsooXml << "implement UNHANDLED element" << operation;
         return "";
     }
 }
@@ -601,7 +601,7 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
             returnString += handle_arcTo(reader);
         }
 	else if (reader->isStartElement()) {
-            qDebug() << "UNHANDLED path sub element" << reader->name().toString();
+            debugMsooXml << "UNHANDLED path sub element" << reader->name().toString();
         }
     }
 

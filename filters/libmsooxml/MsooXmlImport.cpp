@@ -42,7 +42,7 @@
 #include <QImageReader>
 #include <QFileInfo>
 
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 #include <kzip.h>
 #include <QTemporaryFile>
 
@@ -100,20 +100,20 @@ void MsooXmlImport::writeConfigurationSettings(KoXmlWriter* settings) const
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
                                                          KoOdfWriters *writers)
 {
-    kDebug() << "######################## start ####################";
+    debugMsooXml << "######################## start ####################";
     KoFilter::ConversionStatus status = OK;
 //! @todo show this message in error details in the GUI:
     QString errorMessage;
 
     KZip* zip = new KZip(m_chain->inputFile());
-    kDebug() << "Store created";
+    debugMsooXml << "Store created";
 
     QTemporaryFile* tempFile = 0;
 
     if (!zip->open(QIODevice::ReadOnly)) {
         errorMessage = i18n("Could not open the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
         delete zip;
 
         // If the file can't be opened by the zip, it may be a
@@ -136,7 +136,7 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     if (!zip->directory()) {
         errorMessage = i18n("Could not read ZIP directory of the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
         delete zip;
         return KoFilter::FileNotFound;
     }
@@ -154,9 +154,9 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
         // We do not care about the failure
         Utils::loadThumbnail(thumbnail, zip);
     } else {
-        kDebug() << "openFile() != OK";
+        debugMsooXml << "openFile() != OK";
 //! @todo transmit the error to the GUI...
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
         delete tempFile;
         delete zip;
         return status;
@@ -170,9 +170,9 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
 
     if (status != KoFilter::OK) {
 //! @todo transmit the error to the GUI...
-        kDebug() << errorMessage;
+        debugMsooXml << errorMessage;
     }
-    kDebug() << "######################## done ####################";
+    debugMsooXml << "######################## done ####################";
     delete tempFile;
     delete zip;
     return status;
@@ -209,19 +209,19 @@ bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
     // Open the file.
     QFile  file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        //kDebug() << "Cannot open " << filename;
+        //debugMsooXml << "Cannot open " << filename;
         return false;
     }
 
     // Open the OLE storage.
     OOXML_POLE::Storage storage(&file);
     if (!storage.open()) {
-        //kDebug() << "Cannot open" << filename << "as storage";
+        //debugMsooXml << "Cannot open" << filename << "as storage";
         file.close();
         return false;
     }
 
-    //kDebug() << "This seems to be an OLE file";
+    //debugMsooXml << "This seems to be an OLE file";
 
     // Loop through the streams in the file and if one of them is named
     // "EncryptionInfo", then we probably have a password protected file.
@@ -229,7 +229,7 @@ bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
     std::list<std::string> entries = storage.entries();
     std::list<std::string>::iterator it;
     for (it = entries.begin(); it != entries.end(); ++it) {
-        kDebug() << it->c_str();
+        debugMsooXml << it->c_str();
         if (*it == "EncryptionInfo") {
             result = true;
             break;
@@ -266,10 +266,10 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 {
 #ifdef HAVE_QCA2
     QCA::Initializer qcainit;
-    kDebug() << QCA::isSupported("sha1") << QCA::isSupported("aes128-ecb") << QCA::supportedFeatures();
+    debugMsooXml << QCA::isSupported("sha1") << QCA::isSupported("aes128-ecb") << QCA::supportedFeatures();
     if (!QCA::isSupported("sha1") || !QCA::isSupported("aes128-ecb")) {
 #endif
-        kDebug() << "sha1 or aes128_ecb are not supported";
+        debugMsooXml << "sha1 or aes128_ecb are not supported";
         return 0;
 #ifdef HAVE_QCA2
     }
@@ -277,21 +277,21 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
     // Open the file.
     QFile  file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        //kDebug() << "Cannot open " << filename;
+        //debugMsooXml << "Cannot open " << filename;
         return 0;
     }
 
     // Open the OLE storage.
     OOXML_POLE::Storage storage(&file);
     if (!storage.open()) {
-        //kDebug() << "Cannot open" << filename << "as storage";
+        //debugMsooXml << "Cannot open" << filename << "as storage";
         file.close();
         return 0;
     }
 
     OOXML_POLE::Stream infoStream(&storage, "/EncryptionInfo");
     if (infoStream.size() < 50) {
-        kDebug() << "Invalid encryption info";
+        debugMsooXml << "Invalid encryption info";
         return 0;
     }
 
@@ -301,21 +301,21 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
     unsigned vMajor = readU16(buffer + 0);
     unsigned vMinor = readU16(buffer + 2);
     unsigned flags = readU32(buffer + 4);
-    kDebug() << "major:" << vMajor << "minor:" << vMinor << "flags:" << flags;
+    debugMsooXml << "major:" << vMajor << "minor:" << vMinor << "flags:" << flags;
     if ((vMajor != 3 && vMajor != 4) || (vMinor != 2 && vMinor != 4)) {
-        kDebug() << "unsupported encryption version";
+        debugMsooXml << "unsupported encryption version";
         return 0;
     }
 
     if (vMinor == 2) {
         bytes_read = infoStream.read(buffer, 4);
         unsigned headerSize = readU32(buffer);
-        kDebug() << "headersize:" << headerSize;
+        debugMsooXml << "headersize:" << headerSize;
 
         bytes_read = infoStream.read(buffer, qMin(4096u, headerSize));
         unsigned flags2 = readU32(buffer + 0);
         if (bytes_read != headerSize || flags != flags2) {
-            kDebug() << "corrupt encrypted file";
+            debugMsooXml << "corrupt encrypted file";
             return 0;
         }
 
@@ -330,12 +330,12 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
                 cspName += QChar(c);
             } else break;
         }
-        kDebug() << QString::number(algId, 16) << QString::number(algIdHash, 16) << keySize << QString::number(providerType, 16) << cspName;
+        debugMsooXml << QString::number(algId, 16) << QString::number(algIdHash, 16) << keySize << QString::number(providerType, 16) << cspName;
 
         // now read verifier info
         bytes_read = infoStream.read(buffer, 40);
         if (bytes_read != 40 || readU32(buffer) != 16) {
-            kDebug() << "Invalid verifier info";
+            debugMsooXml << "Invalid verifier info";
             return 0;
         }
 
@@ -370,7 +370,7 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             }
             QByteArray block(4, '\0');
             QByteArray hfinal = sha1sum(hn + block);
-            //kDebug() << hfinal;
+            //debugMsooXml << hfinal;
             QByteArray x1(64, 0x36);
             QByteArray x2(64, 0x5C);
             for (int i = 0; i < hfinal.size(); i++) {
@@ -385,15 +385,15 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             QCA::Cipher aes("aes128", QCA::Cipher::ECB, QCA::Cipher::DefaultPadding, QCA::Decode, key);
             QByteArray verifier = aes.update(encryptedVerifier).toByteArray();
             verifier += aes.final().toByteArray();
-            kDebug() << verifier.size() << QCA::arrayToHex(verifier);
+            debugMsooXml << verifier.size() << QCA::arrayToHex(verifier);
             QByteArray hashedVerifier = sha1sum(verifier);
             aes.clear();
             QByteArray verifierHash = aes.update(encryptedVerifierHash).toByteArray();
-            kDebug() << verifierHash.size() << QCA::arrayToHex(verifierHash);
+            debugMsooXml << verifierHash.size() << QCA::arrayToHex(verifierHash);
             verifierHash += aes.final().toByteArray();
-            kDebug() << QCA::arrayToHex(hashedVerifier) << QCA::arrayToHex(verifierHash) << verifierHash.size();
+            debugMsooXml << QCA::arrayToHex(hashedVerifier) << QCA::arrayToHex(verifierHash) << verifierHash.size();
             bool passwordCorrect = hashedVerifier.left(verifierHashSize) == verifierHash.left(verifierHashSize);
-            kDebug() << "Correct?" << passwordCorrect;
+            debugMsooXml << "Correct?" << passwordCorrect;
 
             if (!passwordCorrect) {
                 continue;
@@ -405,10 +405,10 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 
             aes.clear();
             bytes_read = dataStream->read(buffer, 8);
-            kDebug() << readU32(buffer);
+            debugMsooXml << readU32(buffer);
             while (bytes_read > 0) {
                 bytes_read = dataStream->read(buffer, 4096);
-                kDebug() << bytes_read;
+                debugMsooXml << bytes_read;
                 outf->write(aes.update(QByteArray::fromRawData(reinterpret_cast<const char*>(buffer), bytes_read)).toByteArray());
             }
             outf->write(aes.final().toByteArray());
@@ -426,12 +426,12 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         // bah, seems there is some random garbage at the end
         int lastIdx = xmlData.lastIndexOf('>');
         if (lastIdx >= 0) xmlData = xmlData.left(lastIdx+1);
-        kDebug() << xmlData;
+        debugMsooXml << xmlData;
         QBuffer b(&xmlData);
         KoXmlDocument doc;
         QString errorMsg; int errorLine, errorColumn;
         if (!doc.setContent(&b, true, &errorMsg, &errorLine, &errorColumn)) {
-            kDebug() << errorMsg << errorLine << errorColumn;
+            debugMsooXml << errorMsg << errorLine << errorColumn;
             return 0;
         }
         const QString encNS = QString::fromLatin1("http://schemas.microsoft.com/office/2006/encryption");
@@ -440,16 +440,16 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         KoXmlElement keyEncryptors = KoXml::namedItemNS(doc.documentElement(), encNS, "keyEncryptors");
         KoXmlElement keyEncryptor = keyEncryptors.firstChild().toElement();
         if (keyEncryptor.namespaceURI() != encNS || keyEncryptor.localName() != "keyEncryptor") {
-            kDebug() << "can't parse encryption xml";
+            debugMsooXml << "can't parse encryption xml";
             return 0;
         }
         if (keyEncryptor.attribute("uri") != "http://schemas.microsoft.com/office/2006/keyEncryptor/password") {
-            kDebug() << "unsupported key encryptor " << keyEncryptor.attribute("uri");
+            debugMsooXml << "unsupported key encryptor " << keyEncryptor.attribute("uri");
             return 0;
         }
         KoXmlElement encryptedKey = keyEncryptor.firstChild().toElement();
         if (encryptedKey.namespaceURI() != pNS || encryptedKey.localName() != "encryptedKey") {
-            kDebug() << "unexpected element in key encryptor";
+            debugMsooXml << "unexpected element in key encryptor";
             return 0;
         }
         const int spinCount = encryptedKey.attribute("spinCount").toInt();
@@ -458,8 +458,8 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         QByteArray encryptedVerifierHashInput = QByteArray::fromBase64(encryptedKey.attribute("encryptedVerifierHashInput").toLatin1());
         QByteArray encryptedVerifierHashValue = QByteArray::fromBase64(encryptedKey.attribute("encryptedVerifierHashValue").toLatin1());
         QByteArray encryptedKeyValue = QByteArray::fromBase64(encryptedKey.attribute("encryptedKeyValue").toLatin1());
-        kDebug() << spinCount << QCA::arrayToHex(salt) << QCA::arrayToHex(encryptedVerifierHashInput) << QCA::arrayToHex(encryptedVerifierHashValue) << QCA::arrayToHex(encryptedKeyValue);
-        kDebug() << QCA::arrayToHex(keyDataSalt) << keyDataSalt.length();
+        debugMsooXml << spinCount << QCA::arrayToHex(salt) << QCA::arrayToHex(encryptedVerifierHashInput) << QCA::arrayToHex(encryptedVerifierHashValue) << QCA::arrayToHex(encryptedKeyValue);
+        debugMsooXml << QCA::arrayToHex(keyDataSalt) << keyDataSalt.length();
 
         bool first = true;
         while (true) {
@@ -490,9 +490,9 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             verifierHashInput.append(aes1.final().toByteArray());
             verifierHashInput = verifierHashInput.left(16);
 
-            kDebug() << "verifier hash input:" << QCA::arrayToHex(verifierHashInput);
+            debugMsooXml << "verifier hash input:" << QCA::arrayToHex(verifierHashInput);
             QByteArray hashedVerifierHashInput = sha1sum(verifierHashInput);
-            kDebug() << "hashed verifier hash input:" << QCA::arrayToHex(hashedVerifierHashInput);
+            debugMsooXml << "hashed verifier hash input:" << QCA::arrayToHex(hashedVerifierHashInput);
 
             const char blockKeyData2[] = "\xd7\xaa\x0f\x6d\x30\x61\x34\x4e";
             QByteArray blockKey2(blockKeyData2, sizeof(blockKeyData2) - 1);
@@ -500,7 +500,7 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             QByteArray verifierHashValue = aes2.update(encryptedVerifierHashValue.append(QByteArray(12, 0))).toByteArray();
             verifierHashValue.append(aes2.final().toByteArray());
 
-            kDebug() << "verifier hash value:" << QCA::arrayToHex(verifierHashValue);
+            debugMsooXml << "verifier hash value:" << QCA::arrayToHex(verifierHashValue);
             bool passwordCorrect = hashedVerifierHashInput == verifierHashValue.left(20);
             if (!passwordCorrect) {
                 continue;
@@ -512,7 +512,7 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             QByteArray keyValue = aes3.update(encryptedKeyValue.append(QByteArray(4, 0))).toByteArray();
             keyValue.append(aes3.final().toByteArray());
             keyValue = keyValue.left(128/8);
-            kDebug() << "key value:" << QCA::arrayToHex(keyValue);
+            debugMsooXml << "key value:" << QCA::arrayToHex(keyValue);
 
             OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
             QTemporaryFile* outf = new QTemporaryFile;
@@ -520,7 +520,7 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 
             bytes_read = dataStream->read(buffer, 8);
             quint64 totSize = readU64(buffer);
-            kDebug() << totSize;
+            debugMsooXml << totSize;
             quint64 sizeRead = 0;
             unsigned segment = 0;
             while (bytes_read > 0) {
@@ -565,7 +565,7 @@ KoFilter::ConversionStatus MsooXmlImport::createImage(const QImage& source,
     QString errorMessage;
     const KoFilter::ConversionStatus status = Utils::createImage(errorMessage, source, m_outputStore, destinationName);
     if (status != KoFilter::OK) {
-        kWarning() << "Failed to createImage:" << errorMessage;
+        warnMsooXml << "Failed to createImage:" << errorMessage;
     }
     return status;
 }
@@ -581,7 +581,7 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
                 m_zip, errorMessage, sourceName, m_outputStore, destinationName, oleFile);
 //! @todo transmit the error to the GUI...
     if(status != KoFilter::OK)
-        kWarning() << "Failed to copyFile:" << errorMessage;
+        warnMsooXml << "Failed to copyFile:" << errorMessage;
     return status;
 }
 
@@ -629,7 +629,7 @@ KoFilter::ConversionStatus MsooXmlImport::imageSize(const QString& sourceName, Q
     }
 
 //! @todo transmit the error to the GUI...
-    kDebug() << errorMessage;
+    debugMsooXml << errorMessage;
     return status;
 }
 
@@ -640,10 +640,10 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
 {
     *pathFound = false;
     const QString fileName = m_contentTypes.value(contentType);
-    kDebug() << contentType << "fileName=" << fileName;
+    debugMsooXml << contentType << "fileName=" << fileName;
     if (fileName.isEmpty()) {
         errorMessage = i18n("Could not find path for type %1", QString(contentType));
-        kWarning() << errorMessage;
+        warnMsooXml << errorMessage;
         return KoFilter::FileNotFound;
     }
     KoFilter::ConversionStatus status = loadAndParseDocumentFromFileInternal(
@@ -757,7 +757,7 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
     static const char Content_Types_xml[] = "[Content_Types].xml";
     KoFilter::ConversionStatus status = loadAndParse(Content_Types_xml, m_contentTypesXML, errorMessage);
     if (status != KoFilter::OK) {
-        kDebug() << Content_Types_xml << "could not be parsed correctly! Aborting!";
+        debugMsooXml << Content_Types_xml << "could not be parsed correctly! Aborting!";
         return status;
     }
     RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )

@@ -15,6 +15,7 @@ include_directories(
 ########### next target ###############
 
 set(msooxml_LIB_SRCS
+    MsooXmlDebug.cpp
     MsooXmlGlobal.cpp
     MsooXmlUtils.cpp
     MsooXmlReader.cpp

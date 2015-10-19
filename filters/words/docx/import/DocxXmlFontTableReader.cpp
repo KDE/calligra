@@ -32,6 +32,9 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
+
 DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles& _styles)
         : styles(&_styles)
 {
