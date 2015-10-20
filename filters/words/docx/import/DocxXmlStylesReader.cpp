@@ -22,7 +22,10 @@
  */
 
 #include "DocxXmlStylesReader.h"
+
 #include "DocxImport.h"
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
@@ -34,7 +37,6 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlDrawingTableStyle.h>
 
-#include <kdebug.h>
 
 //#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
 
@@ -66,7 +68,7 @@ void DocxXmlStylesReader::createDefaultStyle(KoGenStyle::Type type, const char* 
 KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -74,7 +76,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 
     //w:document
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
 
     if (!expectEl("w:styles")) {
         return KoFilter::WrongFormat;
@@ -85,12 +87,12 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            debugDocx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -113,7 +115,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(styles)
         if (isStartElement()) {
             TRY_READ_IF(docDefaults)
@@ -131,13 +133,13 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     for (QMap<QByteArray, KoGenStyle*>::ConstIterator it(m_defaultStyles.constBegin());
          it != m_defaultStyles.constEnd(); ++it)
     {
-        kDebug() << it.key();
+        debugDocx << it.key();
         mainStyles->insert(*it.value());
     }
     qDeleteAll(m_defaultStyles);
     m_defaultStyles.clear();
 
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -174,7 +176,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPrDefault)
@@ -235,7 +237,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_pPrDefault()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pPr)
@@ -261,7 +263,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
@@ -365,7 +367,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
     QString styleName;
     READ_ATTR_INTO(styleId, styleName)
 
-    kDebug() << "Reading style of family:" << odfType << "[" << styleName << "]";
+    debugDocx << "Reading style of family:" << odfType << "[" << styleName << "]";
 
     // Specifies that this style is the default for this style type.  This
     // property is used in conjunction with the type attribute to determine the

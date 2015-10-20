@@ -22,8 +22,12 @@
  */
 
 #include "DocxXmlCommentsReader.h"
+
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+
 #include <KoXmlWriter.h>
 #include <limits.h>
 
@@ -33,7 +37,6 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <kdebug.h>
 
 class DocxXmlCommentReader::Private
 {
@@ -68,14 +71,14 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read(MSOOXML::MsooXmlReaderCont
 {
     m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
 
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
     readNext();
 
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:comments")) {
         return KoFilter::WrongFormat;
     }
@@ -99,7 +102,7 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read(MSOOXML::MsooXmlReaderCont
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
 
     return KoFilter::OK;
 }

@@ -37,6 +37,7 @@
 #include "DocxXmlEndnoteReader.h"
 #include "DocxXmlFontTableReader.h"
 #include "DocxXmlSettingsReader.h"
+#include "DocxDebug.h"
 
 #include <QColor>
 #include <QFile>
@@ -45,7 +46,6 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoEmbeddedDocumentSaver.h>
@@ -105,7 +105,7 @@ QVariant DocxImport::documentSetting(const QString& name) const
 
 bool DocxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering DOCX Import filter: from " << mime;
+    debugDocx << "Entering DOCX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
         d->type = DocxDocument;
         d->macrosEnabled = false;
@@ -129,7 +129,7 @@ bool DocxImport::acceptsSourceMimeType(const QByteArray& mime) const
 
 bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering DOCX Import filter: to " << mime;
+    debugDocx << "Entering DOCX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.text";
 }
 
@@ -173,7 +173,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         documentPath, documentFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
     if (!docThemePathAndFile.isEmpty()) {
-        kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+        debugDocx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
         // prepare the themes-reader
         QString docThemePath, docThemeFile;
@@ -186,7 +186,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         KoFilter::ConversionStatus status
             = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
 
-        kDebug() << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
+        debugDocx << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
     }
 
     reportProgress(15);

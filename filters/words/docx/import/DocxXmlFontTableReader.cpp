@@ -22,8 +22,12 @@
  */
 
 #include "DocxXmlFontTableReader.h"
+
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+
 #include <KoGenStyles.h>
 
 #define MSOOXML_CURRENT_NS "w"
@@ -31,8 +35,6 @@
 #define MSOOXML_CURRENT_CLASS DocxXmlFontTableReader
 
 #include <MsooXmlReader_p.h>
-
-#include <kdebug.h>
 
 
 DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles& _styles)
@@ -59,7 +61,7 @@ DocxXmlFontTableReader::~DocxXmlFontTableReader()
 KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = dynamic_cast<DocxXmlFontTableReaderContext*>(context);
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -67,7 +69,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
 
     //w:document
     readNext();
-    kDebug() << namespaceUri();
+    debugDocx << namespaceUri();
 
     if (!expectEl("w:fonts")) {
         return KoFilter::WrongFormat;
@@ -78,12 +80,12 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            debugDocx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -99,7 +101,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
         return KoFilter::WrongFormat;
     }
 
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -123,14 +125,14 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
                 TRY_READ(font)
                 if (m_currentFontFace.isNull())
                     return KoFilter::WrongFormat;
-                kDebug() << "added font face:" << m_currentFontFace.name();
+                debugDocx << "added font face:" << m_currentFontFace.name();
                 m_context->styles->insertFontFace(m_currentFontFace);
                 m_currentFontFace = KoFontFace();
             }
@@ -180,7 +182,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(family)

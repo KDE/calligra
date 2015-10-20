@@ -23,6 +23,8 @@
 
 #include "DocxXmlSettingsReader.h"
 
+#include "DocxDebug.h"
+
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS MsooXmlSettingsReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
@@ -30,7 +32,6 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlReader_p.h>
 
-#include <kdebug.h>
 
 DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings)
     : documentSettings(_documentSettings)
@@ -66,14 +67,14 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read(MSOOXML::MsooXmlReaderCon
 {
     m_context = static_cast<DocxXmlSettingsReaderContext*>(context);
 
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
     readNext();
 
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:settings")) {
         return KoFilter::WrongFormat;
     }
@@ -97,7 +98,7 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read(MSOOXML::MsooXmlReaderCon
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
 
     return KoFilter::OK;
 }

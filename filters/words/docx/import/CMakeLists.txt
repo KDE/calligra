@@ -11,6 +11,7 @@ include_directories(
 ########### next target ###############
 
 set(docx2odt_PART_SRCS
+    DocxDebug.cpp
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
     DocxXmlCommentsReader.cpp
