@@ -32,7 +32,6 @@ target_link_libraries(
     koodf2
     koodf
     komain
-    KF5::KDELibs4Support
 )
 
 install(TARGETS calligra_filter_pptx2odp DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
