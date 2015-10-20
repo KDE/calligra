@@ -280,20 +280,20 @@ void KPrView::initActions()
 
     KActionMenu *actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", actionStartPresentation );
-    connect( actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) ); // for the toolbar button
+    connect( actionStartPresentation, SIGNAL(triggered()), this, SLOT(startPresentation()) ); // for the toolbar button
     QAction* action = new QAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
+    connect( action, SIGNAL(triggered()), this, SLOT(startPresentation()) );
     action = new QAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
+    connect( action, SIGNAL(triggered()), this, SLOT(startPresentationFromBeginning()) );
 
     m_actionStopPresentation = new QAction( i18n( "Stop presentation" ), this );
     actionCollection()->addAction( "slideshow_stop", m_actionStopPresentation );
     m_actionStopPresentation->setShortcut(Qt::Key_Escape);
-    connect(m_actionStopPresentation, SIGNAL(activated()), this, SLOT(stopPresentation()));
+    connect(m_actionStopPresentation, SIGNAL(triggered()), this, SLOT(stopPresentation()));
     m_actionStopPresentation->setEnabled(false);
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
