@@ -22,14 +22,18 @@
  */
 
 #include "PptxXmlDocumentReader.h"
+
 #include "PptxXmlCommentAuthorsReader.h"
 #include "PptxImport.h"
+#include "PptxDebug.h"
+
 #include <VmlDrawingReader.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyleReader.h>
+
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
@@ -48,7 +52,6 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <kdebug.h>
 
 PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
@@ -123,7 +126,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
 KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 {
-    kDebug() << "=============================";
+    debugPptx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -131,7 +134,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 
     // p:presentation
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugPptx << *this << namespaceUri();
 
     if (!expectEl("p:presentation")) {
         return KoFilter::WrongFormat;
@@ -141,11 +144,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 //     const QXmlStreamAttributes attrs( attributes() );
 //     for (int i=0; i<attrs.count(); i++) {
-//         kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+//         debugPptx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugPptx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -164,7 +167,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 
     TRY_READ(presentation)
-    kDebug() << "===========finished============";
+    debugPptx << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -173,8 +176,8 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
         slidePath, slideFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout";
-    kDebug() << "slideLayoutPathAndFile:" << slideLayoutPathAndFile;
+    debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout";
+    debugPptx << "slideLayoutPathAndFile:" << slideLayoutPathAndFile;
     if (slideLayoutPathAndFile.isEmpty())
         return 0;
 
@@ -237,7 +240,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
         &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideLayoutReader.errorString();
+        debugPptx << slideLayoutReader.errorString();
         return 0;
     }
 
@@ -248,7 +251,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
     status = m_context->import->loadAndParseDocument(
         &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideLayoutReader.errorString();
+        debugPptx << slideLayoutReader.errorString();
         return 0;
     }
 
@@ -277,11 +280,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
-    kDebug() << "id:" << id << "r:id:" << r_id;
+    debugPptx << "id:" << id << "r:id:" << r_id;
 
     // locate this slide
     const QString slidePathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
-    kDebug() << "slidePathAndFile:" << slidePathAndFile;
+    debugPptx << "slidePathAndFile:" << slidePathAndFile;
 
     QString slidePath, slideFile;
     MSOOXML::Utils::splitPathAndFile(slidePathAndFile, &slidePath, &slideFile);
@@ -351,7 +354,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
         &slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideReader.errorString();
+        debugPptx << slideReader.errorString();
         return status;
     }
 
@@ -362,7 +365,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     context.firstReadingRound = false;
     status = m_context->import->loadAndParseDocument(&slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideReader.errorString();
+        debugPptx << slideReader.errorString();
         return status;
     }
 
@@ -389,7 +392,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     READ_ATTR_WITH_NS(r, id)
 
     const QString notesMasterPathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
-    kDebug() << "notesMasterPathAndFile:" << notesMasterPathAndFile;
+    debugPptx << "notesMasterPathAndFile:" << notesMasterPathAndFile;
 
     QString notesMasterPath, notesMasterFile;
     MSOOXML::Utils::splitPathAndFile(notesMasterPathAndFile, &notesMasterPath, &notesMasterFile);
@@ -400,8 +403,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     const QString notesThemePathAndFile(m_context->relationships->targetForType(
         notesMasterPath, notesMasterFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
-    kDebug() << "notesThemePathAndFile:" << notesThemePathAndFile;
+    debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    debugPptx << "notesThemePathAndFile:" << notesThemePathAndFile;
 
     QString notesThemePath, notesThemeFile;
     MSOOXML::Utils::splitPathAndFile(notesThemePathAndFile, &notesThemePath, &notesThemeFile);
@@ -459,7 +462,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     status = m_context->import->loadAndParseDocument(
         &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << notesMasterReader.errorString();
+        debugPptx << notesMasterReader.errorString();
         return status;
     }
 
@@ -472,7 +475,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     status = m_context->import->loadAndParseDocument(
         &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << notesMasterReader.errorString();
+        debugPptx << notesMasterReader.errorString();
         return status;
     }
 
@@ -500,10 +503,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
-    kDebug() << "id:" << id << "r:id:" << r_id;
+    debugPptx << "id:" << id << "r:id:" << r_id;
 
     const QString slideMasterPathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
-    kDebug() << "slideMasterPathAndFile:" << slideMasterPathAndFile;
+    debugPptx << "slideMasterPathAndFile:" << slideMasterPathAndFile;
 
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(slideMasterPathAndFile, &slideMasterPath, &slideMasterFile);
@@ -515,8 +518,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     const QString slideThemePathAndFile(m_context->relationships->targetForType(
         slideMasterPath, slideMasterFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
-    kDebug() << "slideThemePathAndFile:" << slideThemePathAndFile;
+    debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    debugPptx << "slideThemePathAndFile:" << slideThemePathAndFile;
 
     QString slideThemePath, slideThemeFile;
     MSOOXML::Utils::splitPathAndFile(slideThemePathAndFile, &slideThemePath, &slideThemeFile);
@@ -574,7 +577,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideMasterReader.errorString();
+        debugPptx << slideMasterReader.errorString();
         return status;
     }
 
@@ -587,14 +590,14 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
-        kDebug() << slideMasterReader.errorString();
+        debugPptx << slideMasterReader.errorString();
         return status;
     }
 
     d->slideMasterPageProperties.insert(slideMasterPathAndFile, masterPageProperties);
     d->masterPageDrawStyleNames.push_back(context.pageDrawStyleName);
     d->masterPageFrames += context.pageFrames;
-    kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleNames.back();
+    debugPptx << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleNames.back();
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -613,7 +616,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "sldId") {
@@ -806,7 +809,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // Initializing the default style for the level.  At the end, there
@@ -870,14 +873,14 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
 
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugPptx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
     if (!m_context->firstReadRound) {
-        kDebug() << "======> Second reading round <======";
+        debugPptx << "======> Second reading round <======";
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
+            debugPptx << *this;
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(sldMasterIdLst)
@@ -933,7 +936,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
                 pageLayoutStyle.setAutoStyleInStylesDotXml(true);
                 const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-                kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
+                debugPptx << "pageLayoutStyleName:" << pageLayoutStyleName;
 
                 d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
             }

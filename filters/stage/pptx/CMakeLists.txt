@@ -11,6 +11,7 @@ include_directories(
 ########### next target ###############
 
 set(pptx2odp_PART_SRCS
+    PptxDebug.cpp
     PptxImport.cpp
     PptxXmlDocumentReader.cpp
     PptxXmlSlideReader.cpp

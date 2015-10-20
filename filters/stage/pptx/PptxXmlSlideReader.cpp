@@ -22,7 +22,9 @@
  */
 
 #include "PptxXmlSlideReader.h"
+
 #include "PptxImport.h"
+#include "PptxDebug.h"
 
 #include "Charting.h"
 #include "KoOdfChartWriter.h"
@@ -63,7 +65,6 @@
 #include <KoCell.h>
 #include <KoRawCellChild.h>
 
-#include <kdebug.h>
 
 PptxShapeProperties::PptxShapeProperties()
 {
@@ -98,7 +99,7 @@ PptxPlaceholder::PptxPlaceholder()
 PptxPlaceholder::PptxPlaceholder(const PptxShapeProperties &other)
  : x(other.x), y(other.y), width(other.width), height(other.height), rot(other.rot)
 {
-    kDebug() << x << y << width << height;
+    debugPptx << x << y << width << height;
 }
 
 PptxPlaceholder::~PptxPlaceholder()
@@ -286,7 +287,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 
 KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 {
-    kDebug() << "=============================";
+    debugPptx << "=============================";
     QBuffer masterBuffer;
     if (m_context->type == SlideMaster) {
         //! Clear body pointer for SlideMaster mode: avoid writing to body by mistake in this mode
@@ -308,7 +309,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 
     // p:sld{Master}
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugPptx << *this << namespaceUri();
 
     if (!expectEl(d->qualifiedNameOfMainElement)) {
         return KoFilter::WrongFormat;
@@ -319,12 +320,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            debugPptx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugPptx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -365,7 +366,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
         body = d->body;
     }
 
-    kDebug() << "===========finished============";
+    debugPptx << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -487,7 +488,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 {
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugPptx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
     // m_currentDrawStyle defined in "MsooXmlCommonReader.h"
@@ -631,11 +632,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
-        kDebug() << "currentPageStyleName:" << currentPageStyleName;
+        debugPptx << "currentPageStyleName:" << currentPageStyleName;
 
         if (!m_context->slideLayoutProperties->pageLayoutStyleName.isEmpty()) {
             // CASE #P308
-            kDebug() << "presentation:presentation-page-layout-name=" <<
+            debugPptx << "presentation:presentation-page-layout-name=" <<
                         m_context->slideLayoutProperties->pageLayoutStyleName;
 
             body->addAttribute("presentation:presentation-page-layout-name",
@@ -697,7 +698,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
                 KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&slideReader, notesTarget, &context);
                 if (status != KoFilter::OK) {
-                    kDebug() << slideReader.errorString();
+                    debugPptx << slideReader.errorString();
                     return status;
                 }
 
@@ -709,7 +710,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 context.firstReadingRound = false;
                 status = m_context->import->loadAndParseDocument(&slideReader, notesTarget, &context);
                 if (status != KoFilter::OK) {
-                    kDebug() << slideReader.errorString();
+                    debugPptx << slideReader.errorString();
                     return status;
                 }
                 body->endElement(); // presentation:notes
@@ -735,7 +736,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
             m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
 
-            kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName <<
+            debugPptx << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName <<
                         "m_context->type:" << m_context->type;
         }
     }
@@ -750,7 +751,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         m_context->slideLayoutProperties->pageLayoutStyleName =
             mainStyles->insert(m_currentPresentationPageLayoutStyle);
 
-        kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
+        debugPptx << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
     }
 
     delete m_currentDrawStyle;
@@ -779,7 +780,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bodyStyle)
@@ -823,7 +824,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
@@ -877,7 +878,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
@@ -1065,7 +1066,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
@@ -1128,7 +1129,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
@@ -1180,7 +1181,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bg)
@@ -1285,7 +1286,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgPr)
@@ -1335,7 +1336,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
     m_currentColor = QColor();
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, schemeClr)
@@ -1387,7 +1388,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:solidFill")) {
@@ -1485,7 +1486,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (m_context->type == SlideLayout) {
@@ -1583,17 +1584,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // Specifies the placeholder index. This is used when applying templates or changing
     // layouts to match a placeholder on one template/master to another.
     TRY_READ_ATTR_WITHOUT_NS_INTO(idx, d->phIdx)
-    kDebug() << "idx:" << d->phIdx;
+    debugPptx << "idx:" << d->phIdx;
 
     // Specifies the size of a placeholder.
     // The possible values for this attribute are defined by the ST_PlaceholderSize simple type (§19.7.9), p.2987.
     TRY_READ_ATTR_WITHOUT_NS(size)
-    kDebug() << "size:" << size;
+    debugPptx << "size:" << size;
 
     // Specifies what content type a placeholder is intended to contain.
     // The possible values for this attribute are defined by the ST_PlaceholderType simple type (§19.7.10), p.2988.
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, d->phType)
-    kDebug() << "type:" << d->phType;
+    debugPptx << "type:" << d->phType;
     // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to
     // "title".
     if (d->phType == "ctrTitle") {
@@ -1646,7 +1647,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 {
     READ_PROLOGUE
-    kDebug() << "m_context->type:" << m_context->type;
+    debugPptx << "m_context->type:" << m_context->type;
 
     m_prevListLevel = 0;
     m_currentListLevel = 0;
@@ -1659,7 +1660,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
@@ -1855,7 +1856,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
     d->phIdx.clear();
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(ph)
@@ -2179,10 +2180,10 @@ void PptxXmlSlideReader::inheritDefaultListStyles()
     int index = 0;
     while (index <  m_context->defaultListStyles.size()) {
 #ifdef PPTX_DEBUG_LIST_STYLES
-        kDebug() << "==>Inheriting defaultListStyles!";
-        kDebug() << "marL:" << m_context->defaultListStyles.at(index).margin();
-        kDebug() << "indent:" << m_context->defaultListStyles.at(index).indent();
-        kDebug() << "bulletChar" << m_context->defaultListStyles.at(index).bulletChar();
+        debugPptx << "==>Inheriting defaultListStyles!";
+        debugPptx << "marL:" << m_context->defaultListStyles.at(index).margin();
+        debugPptx << "indent:" << m_context->defaultListStyles.at(index).indent();
+        debugPptx << "bulletChar" << m_context->defaultListStyles.at(index).bulletChar();
 #endif
         m_currentCombinedBulletProperties.insert(index + 1, m_context->defaultListStyles.at(index));
         ++index;
@@ -2329,7 +2330,7 @@ void PptxXmlSlideReader::inheritListStyles()
     }
 
 #ifdef PPTX_DEBUG_LIST_STYLES
-    kDebug() << "==> id:" << id << "| type:" << type;
+    debugPptx << "==> id:" << id << "| type:" << type;
 #endif
 
     if (m_context->type == NotesMaster || m_context->type == Notes) {
@@ -2384,7 +2385,7 @@ void PptxXmlSlideReader::inheritListStyles()
         m_context->slideMasterProperties->listStyles.contains(type))
     {
 #ifdef PPTX_DEBUG_LIST_STYLES
-        kDebug() << "==> [MasterSlide] type:" << type << "| contains:" <<
+        debugPptx << "==> [MasterSlide] type:" << type << "| contains:" <<
                     m_context->slideMasterProperties->listStyles.contains(type);
 #endif
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[type]);
@@ -2392,11 +2393,11 @@ void PptxXmlSlideReader::inheritListStyles()
             i.next();
             m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "==>inheriting! | key:" << i.key();
-            kDebug() << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
-            kDebug() << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
-            kDebug() << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
-            kDebug() << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
+            debugPptx << "==>inheriting! | key:" << i.key();
+            debugPptx << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
+            debugPptx << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
+            debugPptx << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
+            debugPptx << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
 #endif
         }
     }
@@ -2404,7 +2405,7 @@ void PptxXmlSlideReader::inheritListStyles()
         m_context->slideMasterProperties->listStyles.contains(id))
     {
 #ifdef PPTX_DEBUG_LIST_STYLES
-        kDebug() << "==> [MasterSlide] id:" <<  id << "| contains:" <<
+        debugPptx << "==> [MasterSlide] id:" <<  id << "| contains:" <<
                     m_context->slideMasterProperties->listStyles.contains(id);
 #endif
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[id]);
@@ -2412,11 +2413,11 @@ void PptxXmlSlideReader::inheritListStyles()
             i.next();
             m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "==>inheriting!" << "| key:" << i.key();
-            kDebug() << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
-            kDebug() << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
-            kDebug() << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
-            kDebug() << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
+            debugPptx << "==>inheriting!" << "| key:" << i.key();
+            debugPptx << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
+            debugPptx << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
+            debugPptx << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
+            debugPptx << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
 #endif
         }
     }
@@ -2426,7 +2427,7 @@ void PptxXmlSlideReader::inheritListStyles()
             m_context->slideLayoutProperties->listStyles.contains(type))
         {
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "=====> [SlideLayout] type:" << type << "| contains:" <<
+            debugPptx << "=====> [SlideLayout] type:" << type << "| contains:" <<
                         m_context->slideLayoutProperties->listStyles.contains(type);
 #endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[type]);
@@ -2434,11 +2435,11 @@ void PptxXmlSlideReader::inheritListStyles()
                 i.next();
                 m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
 #ifdef PPTX_DEBUG_LIST_STYLES
-                kDebug() << "====>inheriting!" << "| key:" << i.key();
-                kDebug() << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
-                kDebug() << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
-                kDebug() << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
-                kDebug() << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
+                debugPptx << "====>inheriting!" << "| key:" << i.key();
+                debugPptx << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
+                debugPptx << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
+                debugPptx << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
+                debugPptx << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
 #endif
             }
         }
@@ -2448,7 +2449,7 @@ void PptxXmlSlideReader::inheritListStyles()
             m_context->slideLayoutProperties->listStyles.contains(id))
         {
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "====> [SlideLayout] id:" << id << "| contains:" <<
+            debugPptx << "====> [SlideLayout] id:" << id << "| contains:" <<
                         m_context->slideLayoutProperties->listStyles.contains(id);
 #endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[id]);
@@ -2456,11 +2457,11 @@ void PptxXmlSlideReader::inheritListStyles()
                 i.next();
                 m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
 #ifdef PPTX_DEBUG_LIST_STYLES
-                kDebug() << "====>inheriting!" << "| key:" << i.key();
-                kDebug() << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
-                kDebug() << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
-                kDebug() << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
-                kDebug() << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
+                debugPptx << "====>inheriting!" << "| key:" << i.key();
+                debugPptx << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
+                debugPptx << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
+                debugPptx << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
+                debugPptx << "| bulletColor" << m_currentCombinedBulletProperties[i.key()].bulletColor();
 #endif
             }
         }
@@ -2473,17 +2474,17 @@ void PptxXmlSlideReader::inheritListStyles()
         // Slide layer
         if (!slideIdentifier.isEmpty() && map->contains(slideIdentifier)) {
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "==> [Slide] identifier:" << slideIdentifier;
+            debugPptx << "==> [Slide] identifier:" << slideIdentifier;
 #endif
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(map->value(slideIdentifier));
             while (i.hasNext()) {
                 i.next();
                 m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
 #ifdef PPTX_DEBUG_LIST_STYLES
-                kDebug() << "====>inheriting!" << "| key:" << i.key();
-                kDebug() << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
-                kDebug() << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
-                kDebug() << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
+                debugPptx << "====>inheriting!" << "| key:" << i.key();
+                debugPptx << "| marL:" << m_currentCombinedBulletProperties[i.key()].margin();
+                debugPptx << "| indent:" << m_currentCombinedBulletProperties[i.key()].indent();
+                debugPptx << "| bulletChar" << m_currentCombinedBulletProperties[i.key()].bulletChar();
 #endif
             }
         }
@@ -2521,14 +2522,14 @@ void PptxXmlSlideReader::inheritShapePosition()
         if (m_context->type == Slide) {
             map = &m_context->slideLayoutProperties->shapesMap;
 #ifdef PPTX_DEBUG_LIST_STYLES
-            kDebug() << "==> [SlideLayout] type:" << d->phType << "| contains:" << map->contains(d->phType);
+            debugPptx << "==> [SlideLayout] type:" << d->phType << "| contains:" << map->contains(d->phType);
 #endif
             if (map->contains(d->phType)) {
                 props = map->value(d->phType);
             }
             if (!props) {
 #ifdef PPTX_DEBUG_LIST_STYLES
-                kDebug() << "==> [SlideLayout] id:" << d->phIdx << "| contains:" << map->contains(d->phIdx);
+                debugPptx << "==> [SlideLayout] id:" << d->phIdx << "| contains:" << map->contains(d->phIdx);
 #endif
                 if (map->contains(d->phIdx)) {
                     props = map->value(d->phIdx);
@@ -2540,14 +2541,14 @@ void PptxXmlSlideReader::inheritShapePosition()
             map = &m_context->slideMasterProperties->shapesMap;
             if (!props) {
 #ifdef PPTX_DEBUG_LIST_STYLES
-                kDebug() << "==> [MasterSlide] type:" << d->phType << "| contains:" << map->contains(d->phType);
+                debugPptx << "==> [MasterSlide] type:" << d->phType << "| contains:" << map->contains(d->phType);
 #endif
                 if (map->contains(d->phType)) {
                     props = map->value(d->phType);
                 }
                 if (!props) {
 #ifdef PPTX_DEBUG_LIST_STYLES
-                    kDebug() << "==> [MasterSlide] id:" << d->phIdx << "| contains:" << map->contains(d->phIdx);
+                    debugPptx << "==> [MasterSlide] id:" << d->phIdx << "| contains:" << map->contains(d->phIdx);
 #endif
                     if (map->contains(d->phIdx)) {
                         props = map->value(d->phIdx);
@@ -2561,7 +2562,7 @@ void PptxXmlSlideReader::inheritShapePosition()
             m_svgWidth = props->width;
             m_svgHeight = props->height;
             m_rot = props->rot;
-            kDebug() << "Copied from PptxShapeProperties:"
+            debugPptx << "Copied from PptxShapeProperties:"
                      << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
                      << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
         }
@@ -2708,12 +2709,12 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 
     if (!type.isEmpty()) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-	kDebug() << "==> [MasterSlide] type:" << type << "| contains:" <<
+	debugPptx << "==> [MasterSlide] type:" << type << "| contains:" <<
                     m_context->slideMasterProperties->textStyles.contains(type);
 #endif
         if (m_context->slideMasterProperties->textStyles.contains(type)) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-            kDebug() << "listLevel:" << listLevel << "| contains:" <<
+            debugPptx << "listLevel:" << listLevel << "| contains:" <<
                         m_context->slideMasterProperties->textStyles[type].contains(listLevel);
 #endif
             if (m_context->slideMasterProperties->textStyles[type].contains(listLevel)) {
@@ -2721,22 +2722,22 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                                 targetStyle, KoGenStyle::TextType);
 #ifdef PPTX_DEBUG_TEXT_STYLES
                 KoGenStyle* style = &targetStyle;
-                kDebug() << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-                kDebug() << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
-                kDebug() << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
-                kDebug() << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
+                debugPptx << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
+                debugPptx << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
+                debugPptx << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
+                debugPptx << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
 #endif
 	    }
         }
     }
     if (!id.isEmpty()) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-	kDebug() << "==> [MasterSlide] id:" << id << "| contains:" <<
+	debugPptx << "==> [MasterSlide] id:" << id << "| contains:" <<
                     m_context->slideMasterProperties->textStyles.contains(id);
 #endif
         if (m_context->slideMasterProperties->textStyles.contains(id)) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-            kDebug() << "listLevel:" << listLevel << "| contains:" <<
+            debugPptx << "listLevel:" << listLevel << "| contains:" <<
                         m_context->slideMasterProperties->textStyles[id].contains(listLevel);
 #endif
             if (m_context->slideMasterProperties->textStyles[id].contains(listLevel)) {
@@ -2744,10 +2745,10 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                                 targetStyle, KoGenStyle::TextType);
 #ifdef PPTX_DEBUG_TEXT_STYLES
                 KoGenStyle* style = &targetStyle;
-                kDebug() << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-                kDebug() << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
-                kDebug() << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
-                kDebug() << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
+                debugPptx << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
+                debugPptx << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
+                debugPptx << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
+                debugPptx << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
 #endif
 	    }
         }
@@ -2777,12 +2778,12 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
     if (!type.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-            kDebug() << "==> [SlideLayout] type:" << type << "| contains:" <<
+            debugPptx << "==> [SlideLayout] type:" << type << "| contains:" <<
                         m_context->slideLayoutProperties->textStyles.contains(type);
 #endif
             if (m_context->slideLayoutProperties->textStyles.contains(type)) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-                kDebug() << "listLevel:" << listLevel << "| contains:" <<
+                debugPptx << "listLevel:" << listLevel << "| contains:" <<
                             m_context->slideLayoutProperties->textStyles[type].contains(listLevel);
 #endif
                 if (m_context->slideLayoutProperties->textStyles[type].contains(listLevel)) {
@@ -2790,10 +2791,10 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                                     targetStyle, KoGenStyle::TextType);
 #ifdef PPTX_DEBUG_TEXT_STYLES
                     KoGenStyle* style = &targetStyle;
-                    kDebug() << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-                    kDebug() << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
-                    kDebug() << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
-                    kDebug() << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
+                    debugPptx << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
+                    debugPptx << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
+                    debugPptx << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
+                    debugPptx << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
 #endif
                 }
             }
@@ -2804,12 +2805,12 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                     targetStyle = m_context->slideMasterProperties->textStyles[type][listLevel];
 
 #ifdef PPTX_DEBUG_TEXT_STYLES
-                    kDebug() << "==> [RESET/SlideMaster] type:" << type;
+                    debugPptx << "==> [RESET/SlideMaster] type:" << type;
                     KoGenStyle* style = &targetStyle;
-                    kDebug() << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-                    kDebug() << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
-                    kDebug() << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
-                    kDebug() << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
+                    debugPptx << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
+                    debugPptx << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
+                    debugPptx << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
+                    debugPptx << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
 #endif
                 }
             }
@@ -2819,12 +2820,12 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
     if (!id.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-            kDebug() << "==> [SlideLayout] id:" << id << "| contains:" <<
+            debugPptx << "==> [SlideLayout] id:" << id << "| contains:" <<
                         m_context->slideLayoutProperties->textStyles.contains(id);
 #endif
             if (m_context->slideLayoutProperties->textStyles.contains(id)) {
 #ifdef PPTX_DEBUG_TEXT_STYLES
-                kDebug() << "listLevel:" << listLevel << "| contains:" <<
+                debugPptx << "listLevel:" << listLevel << "| contains:" <<
                             m_context->slideLayoutProperties->textStyles[id].contains(listLevel);
 #endif
                 if (m_context->slideLayoutProperties->textStyles[id].contains(listLevel)) {
@@ -2832,10 +2833,10 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                             targetStyle, KoGenStyle::TextType);
 #ifdef PPTX_DEBUG_TEXT_STYLES
                     KoGenStyle* style = &targetStyle;
-                    kDebug() << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
-                    kDebug() << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
-                    kDebug() << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
-                    kDebug() << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
+                    debugPptx << "font-size:" << style->property("fo:font-size", KoGenStyle::TextType);
+                    debugPptx << "font-style:" << style->property("fo:font-style", KoGenStyle::TextType);
+                    debugPptx << "font-variant:" << style->property("fo:font-variant", KoGenStyle::TextType);
+                    debugPptx << "font-weight:" << style->property("fo:font-weight", KoGenStyle::TextType);
 #endif
                 }
             }
@@ -2874,7 +2875,7 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 
 KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
 {
-    kDebug() << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
+    debugPptx << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
 
     if (m_context->type == SlideLayout) {
         PptxShapeProperties* masterShapeProperties = 0;
@@ -2882,7 +2883,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         if (!masterShapeProperties) {
             masterShapeProperties = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
         }
-        kDebug() << "masterShapeProperties:" << masterShapeProperties;
+        debugPptx << "masterShapeProperties:" << masterShapeProperties;
 
         if (masterShapeProperties) {
             m_currentShapeProperties = new PptxShapeProperties(*masterShapeProperties);
