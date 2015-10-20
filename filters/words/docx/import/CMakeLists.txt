@@ -1,5 +1,3 @@
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
-
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml

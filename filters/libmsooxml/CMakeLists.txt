@@ -1,5 +1,3 @@
-#add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
-
 if(Qca-qt5_FOUND)
     add_definitions( -DHAVE_QCA2 )
 endif()
