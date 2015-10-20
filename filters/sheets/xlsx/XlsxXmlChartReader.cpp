@@ -44,8 +44,8 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
-#include <kdebug.h>
-
+// QT5TODO: shared debug definition for all filters using this source file
+#include <QDebug>
 #include <QFontMetricsF>
 #include <QDateTime>
 
@@ -3398,7 +3398,7 @@ QString convertToFormat( KoGenStyle::Type formatType )
         case KoGenStyle::NumericScientificStyle:
             return "float";
         default:
-            kWarning() << "Unhandled format-type=" << formatType;
+            qWarning() << "Unhandled format-type=" << formatType;
             break;
     }
     return "string";
@@ -3431,7 +3431,7 @@ QString convertToFormat( KoGenStyle::Type formatType, const QString& formatStrin
         case KoGenStyle::NumericTextStyle:
             return value;
         default:
-            kWarning() << "Unhandled format-type=" << formatType;
+            qWarning() << "Unhandled format-type=" << formatType;
             break;
     }
     return value;
