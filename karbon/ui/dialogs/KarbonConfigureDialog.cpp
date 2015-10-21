@@ -69,7 +69,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(koIcon("view-grid"));
 
-    connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
+    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
 
     m_defaultDocPage = new KoConfigDocumentPage(parent->part());
     item = addPage(m_defaultDocPage, i18nc("@title:tab Document settings page", "Document"));
