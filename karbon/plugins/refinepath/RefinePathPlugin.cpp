@@ -40,11 +40,11 @@
 #include <KoIcon.h>
 
 #include <kpluginfactory.h>
-#include <knuminput.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
+#include <QSpinBox>
 #include <QStandardPaths>
 #include <QAction>
 #include <QGroupBox>
@@ -112,7 +112,7 @@ RefinePathDlg::RefinePathDlg(QWidget* parent, const char* name)
     QHBoxLayout * hbox = new QHBoxLayout(group);
     hbox->addWidget(new QLabel(i18n("Subdivisions:"), group));
 
-    m_knots = new KIntSpinBox(group);
+    m_knots = new QSpinBox(group);
     mainLayout->addWidget(m_knots);
     m_knots->setMinimum(1);
     hbox->addWidget(m_knots);

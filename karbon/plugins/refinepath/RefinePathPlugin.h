@@ -43,7 +43,7 @@ private:
     RefinePathDlg * m_RefinePathDlg;
 };
 
-class KIntSpinBox;
+class QSpinBox;
 
 class RefinePathDlg : public QDialog
 {
@@ -56,7 +56,7 @@ public:
     void setKnots(uint value);
 
 private:
-    KIntSpinBox * m_knots;
+    QSpinBox * m_knots;
 };
 
 #endif // REFINEPATHPLUGIN_H
