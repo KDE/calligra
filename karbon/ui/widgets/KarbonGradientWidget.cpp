@@ -30,8 +30,7 @@
 #include "KarbonCursor.h"
 #include <KoGradientHelper.h>
 
-#include <kcolordialog.h>
-
+#include <QColorDialog>
 #include <QBitmap>
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -198,8 +197,9 @@ void KarbonGradientWidget::mouseDoubleClickEvent(QMouseEvent* e)
 
     if (m_currentStop >= 0) {
         // color stop hit -> change color
-        int result = KColorDialog::getColor(m_stops[m_currentStop].second, this);
-        if (result == KColorDialog::Accepted) {
+        const QColor color = QColorDialog::getColor(m_stops[m_currentStop].second, this);
+        if (color.isValid()) {
+            m_stops[m_currentStop].second = color;
             update();
             emit changed();
         }
@@ -207,8 +207,8 @@ void KarbonGradientWidget::mouseDoubleClickEvent(QMouseEvent* e)
         // no color stop hit -> new color stop
         qreal newStopPosition = static_cast<qreal>(e->x() - m_pntArea.left()) / m_pntArea.width();
         QColor newStopColor = KoGradientHelper::colorAt(newStopPosition, m_stops);
-        int result = KColorDialog::getColor(newStopColor, this);
-        if (result == KColorDialog::Accepted) {
+        newStopColor = QColorDialog::getColor(newStopColor, this);
+        if (newStopColor.isValid()) {
             m_stops.append(QGradientStop(newStopPosition, newStopColor));
             update();
             emit changed();
