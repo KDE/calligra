@@ -25,8 +25,8 @@
 #include <ksharedconfig.h>
 
 class KarbonView;
-class KIntNumInput;
 class KColorButton;
+class QSpinBox;
 class QCheckBox;
 
 class KarbonConfigInterfacePage : public KoVBox
@@ -45,12 +45,12 @@ private:
     KarbonView* m_view;
     KSharedConfigPtr m_config;
 
-    KIntNumInput* m_recentFiles;
+    QSpinBox* m_recentFiles;
     int m_oldRecentFiles;
 
     QCheckBox* m_showStatusBar;
 
-    KIntNumInput* m_dockerFontSize;
+    QSpinBox* m_dockerFontSize;
     int m_oldDockerFontSize;
 
     KColorButton* m_canvasColor;
