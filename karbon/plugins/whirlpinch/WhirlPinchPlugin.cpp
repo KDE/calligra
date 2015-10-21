@@ -45,10 +45,10 @@
 
 #include <kpluginfactory.h>
 #include <kdebug.h>
-#include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
+#include <QDoubleSpinBox>
 #include <QStandardPaths>
 #include <QAction>
 #include <QGroupBox>
@@ -133,12 +133,14 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     QGridLayout* layout = new QGridLayout(group);
 
     layout->addWidget(new QLabel(i18n("Angle:")), 0, 0);
-    m_angle = new KDoubleNumInput(group);
+    m_angle = new QDoubleSpinBox(group);
     layout->addWidget(m_angle, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Pinch:")), 1, 0);
-    m_pinch = new KDoubleNumInput(group);
-    m_pinch->setRange(-1, 1, 0.01, true);
+    m_pinch = new QDoubleSpinBox(group);
+    m_pinch->setRange(-1, 1);
+    m_pinch->setSingleStep(0.01);
+    //QT5TODO: m_pinch had slider util when it was a KDoubleNumInput
     layout->addWidget(m_pinch, 1, 1);
 
 

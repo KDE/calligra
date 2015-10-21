@@ -39,10 +39,10 @@
 #include <KoIcon.h>
 
 #include <kpluginfactory.h>
-#include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
+#include <QDoubleSpinBox>
 #include <QAction>
 #include <QStandardPaths>
 #include <QGroupBox>
@@ -117,7 +117,7 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     QHBoxLayout* layout = new QHBoxLayout;
 
     layout->addWidget(new QLabel(i18n("Flatness:")));
-    m_flatness = new KDoubleNumInput(group);
+    m_flatness = new QDoubleSpinBox(group);
     layout->addWidget(m_flatness);
 
     group->setLayout(layout);

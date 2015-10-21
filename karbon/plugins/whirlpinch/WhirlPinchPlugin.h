@@ -45,7 +45,7 @@ private:
     WhirlPinchDlg *m_whirlPinchDlg;
 };
 
-class KDoubleNumInput;
+class QDoubleSpinBox;
 class KoUnitDoubleSpinBox;
 class KoUnit;
 
@@ -65,8 +65,8 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    KDoubleNumInput* m_angle;
-    KDoubleNumInput* m_pinch;
+    QDoubleSpinBox* m_angle;
+    QDoubleSpinBox* m_pinch;
     KoUnitDoubleSpinBox* m_radius;
 };
 

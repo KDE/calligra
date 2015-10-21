@@ -42,7 +42,7 @@ private:
     FlattenDlg *m_flattenPathDlg;
 };
 
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
 class FlattenDlg : public QDialog
 {
@@ -55,7 +55,7 @@ public:
     void setFlatness(qreal value);
 
 private:
-    KDoubleNumInput* m_flatness;
+    QDoubleSpinBox* m_flatness;
 };
 
 #endif
