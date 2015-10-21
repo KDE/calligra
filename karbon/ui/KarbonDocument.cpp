@@ -88,9 +88,9 @@
 #include <klocalizedstring.h>
 #include <kundo2stack.h>
 
+#include <QLocale>
 #include <QRectF>
 #include <QPainter>
-#include <kglobal.h>
 
 // Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -418,7 +418,7 @@ void KarbonDocument::initConfig()
     int undos = 30;
 
     QString defaultUnitSymbol =
-        QLatin1String((KGlobal::locale()->measureSystem() == KLocale::Imperial)?"in":"cm");
+        QLatin1String((QLocale().measurementSystem() == QLocale::ImperialSystem)?"in":"cm");
 
     if (config->hasGroup("Misc")) {
         KConfigGroup miscGroup = config->group("Misc");

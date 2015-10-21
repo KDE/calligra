@@ -143,10 +143,10 @@
 #include <QLabel>
 #include <QImageReader>
 #include <QPluginLoader>
+#include <QLocale>
 
 #include <unistd.h>
 #include <KConfigGroup>
-#include <KGlobal>
 
 class Q_DECL_HIDDEN KarbonView::Private
 {
@@ -1235,8 +1235,10 @@ void KarbonView::mousePositionChanged(const QPoint &position)
     qreal x = part()->unit().toUserValue(documentPos.x());
     qreal y = part()->unit().toUserValue(documentPos.y());
 
-    if (statusBar() && statusBar()->isVisible())
-        d->cursorCoords->setText(QString("%1, %2").arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)));
+    if (statusBar() && statusBar()->isVisible()) {
+        QLocale locale;
+        d->cursorCoords->setText(QString::fromLatin1("%1, %2").arg(locale.toString(x, 'f', 2), locale.toString(y, 'f', 2)));
+    }
 }
 
 void KarbonView::reorganizeGUI()
