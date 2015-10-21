@@ -27,7 +27,7 @@
 */
 
 #include "ui/splash/hi256-app-calligrakarbon.xpm"
-#include <ksplashscreen.h>
+#include <QSplashScreen>
 #include <QHideEvent>
 
 #include <KoApplication.h>
@@ -37,10 +37,10 @@
 #include <ui/KarbonAboutData.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
-class KoSplashScreen : public KSplashScreen
+class KoSplashScreen : public QSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
 
     void hideEvent(QHideEvent *event)
     {

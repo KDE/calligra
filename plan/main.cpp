@@ -20,7 +20,7 @@
 #include "kptaboutdata.h"
 
 #include "about/hi256-app-calligraplan.xpm"
-#include <ksplashscreen.h>
+#include <QSplashScreen>
 #include <QHideEvent>
 
 #include <KoApplication.h>
@@ -28,10 +28,10 @@
 #include "kptmaindocument.h"
 
 #ifdef MAINTANER_WANTED_SPLASH
-class KoSplashScreen : public KSplashScreen
+class KoSplashScreen : public QSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
 
     void hideEvent(QHideEvent *event)
     {
