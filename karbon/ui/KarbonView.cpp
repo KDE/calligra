@@ -131,10 +131,10 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kmimetype.h>
 #include <KPluginFactory>
 
 // qt header
+#include <QMimeDatabase>
 #include <QAction>
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -506,13 +506,14 @@ void KarbonView::fileImportGraphic()
     // filter was active)
     QString currentMimeFilter;
     // get mime type from file
-    KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
-    if (mimeType) {
-        if (mimeType->is(nativeMimeType)) {
+    QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fname);
+    if (mimeType.isValid()) {
+        const QString mime = mimeType.name();
+        if (mime == nativeMimeType) {
             currentMimeFilter = nativeMimeType;
         } else {
             foreach(const QString &filter, imageFilter) {
-                if (mimeType->is(filter)) {
+                if (mime == filter) {
                     currentMimeFilter = filter;
                     break;
                 }
