@@ -35,8 +35,8 @@
 #include <KoViewConverter.h>
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
+#include <QFontDatabase>
 #include <QPushButton>
 #include <QLabel>
 #include <QPainter>
@@ -88,7 +88,7 @@ protected:
                 m_fill->paint(painter, converter, context, p);
             }
         } else {
-            painter.setFont(KGlobalSettings::smallestReadableFont());
+            painter.setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
             painter.setBrush(Qt::black);
             painter.setPen(Qt::black);
             painter.drawText(rect(), Qt::AlignCenter, i18nc("The style has no fill", "None"));
@@ -151,13 +151,13 @@ protected:
                     painter.fillRect(rect(), QBrush(line->color()));
                 }
             } else {
-                painter.setFont(KGlobalSettings::smallestReadableFont());
+                painter.setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
                 painter.setBrush(Qt::black);
                 painter.setPen(Qt::black);
                 painter.drawText(rect(), Qt::AlignCenter, i18nc("The style has a custom stroking", "Custom"));
             }
         } else {
-            painter.setFont(KGlobalSettings::smallestReadableFont());
+            painter.setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
             painter.setBrush(Qt::black);
             painter.setPen(Qt::black);
             painter.drawText(rect(), Qt::AlignCenter, i18nc("The style has no stroking", "None"));
@@ -176,7 +176,7 @@ private:
 KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
         : QWidget(parent)
 {
-    setFont(KGlobalSettings::smallestReadableFont());
+    setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     /* Create widget layout */
     QHBoxLayout *layout = new QHBoxLayout(this);
