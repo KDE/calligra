@@ -27,7 +27,7 @@ if(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
 set(karbon2wmf_PART_SRCS WmfExport.cpp)
 
 add_library(calligra_filter_karbon2wmf MODULE ${karbon2wmf_PART_SRCS})
-target_link_libraries(calligra_filter_karbon2wmf  kovectorimage karboncommon karbonui)
+target_link_libraries(calligra_filter_karbon2wmf  kovectorimage karboncommon karbonui KF5::KDELibs4Support)
 
 install(TARGETS calligra_filter_karbon2wmf DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_karbon2wmf calligra_filter_karbon2wmf.desktop)

@@ -37,8 +37,15 @@ set(karbonui_SRCS
 add_library( karbonui SHARED ${karbonui_SRCS} )
 generate_export_header(karbonui BASE_NAME karbonui)
 
-target_link_libraries(karbonui karboncommon flake kowidgets koodf)
-target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES flake karboncommon)
+target_link_libraries(karbonui
+    PUBLIC
+        karboncommon
+        flake
+    PRIVATE
+        kowidgets
+        koodf
+        KF5::KDELibs4Support
+)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
