@@ -45,8 +45,6 @@
 #include <knewstuff3/downloaddialog.h>
 #endif
 
-#include <kstandarddirs.h>
-
 #include <QStandardPaths>
 #include <QVBoxLayout>
 #include <QListView>
@@ -62,7 +60,6 @@
 #include <QPainter>
 #include <QDesktopServices>
 #include <QPixmapCache>
-#include <kglobal.h>
 
 #define StencilShapeId "StencilShape"
 
@@ -115,10 +112,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout = new QVBoxLayout(mainWidget);
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
-    
-    if(! KGlobal::dirs()->resourceDirs("app_shape_collections").empty()) {
-        loadShapeCollections();
-    }
+
+    loadShapeCollections();
 
     m_treeWidget->setFamilyMap(m_modelMap);
     m_treeWidget->regenerateFilteredMap();
@@ -210,14 +205,14 @@ void StencilBoxDocker::reapplyFilter()
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
 void StencilBoxDocker::loadShapeCollections()
 {
-    QStringList dirs = KGlobal::dirs()->resourceDirs("app_shape_collections");
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("karbon/stencils"), QStandardPaths::LocateDirectory);
     foreach(const QString& path, dirs)
     {
         debugStencilBox << path;
         QDir dir(path);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         foreach(const QString & collectionDirName, collectionDirs) {
-            addCollection(path + collectionDirName);
+            addCollection(path + QLatin1Char('/') + collectionDirName);
             debugStencilBox << path + collectionDirName;
         }
     }
