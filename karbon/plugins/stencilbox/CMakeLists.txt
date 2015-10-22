@@ -14,7 +14,7 @@ add_library(karbon_stencilbox MODULE ${karbon_stencilbox_PART_SRCS})
 
 kcoreaddons_desktop_to_json(karbon_stencilbox karbon_stencilbox.desktop)
 
-target_link_libraries(karbon_stencilbox komain kowidgets flake KF5::Archive KF5::KDELibs4Support)
+target_link_libraries(karbon_stencilbox komain kowidgets flake KF5::Archive)
 
 if(GHNS)
     target_link_libraries(karbon_stencilbox KF5::NewStuff)
