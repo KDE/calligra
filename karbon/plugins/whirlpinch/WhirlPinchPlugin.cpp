@@ -44,7 +44,6 @@
 #include <KoUnit.h>
 
 #include <kpluginfactory.h>
-#include <kdebug.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 

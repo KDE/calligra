@@ -22,7 +22,7 @@
 #include <KoPathPointData.h>
 #include <KoPathPointInsertCommand.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+
 
 class KarbonPathRefineCommand::Private {
 public:

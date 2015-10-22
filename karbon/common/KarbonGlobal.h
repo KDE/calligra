@@ -26,7 +26,6 @@
 
 #include <karboncommon_export.h>
 
-#include <kglobal.h>
 #include <QPointF>
 
 // define some often used mathematical constants et al:

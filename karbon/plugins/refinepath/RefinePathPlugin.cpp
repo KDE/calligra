@@ -41,7 +41,6 @@
 
 #include <kpluginfactory.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <QSpinBox>

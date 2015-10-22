@@ -43,7 +43,6 @@
 #include <kundo2command.h>
 
 #include <kpluginfactory.h>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
