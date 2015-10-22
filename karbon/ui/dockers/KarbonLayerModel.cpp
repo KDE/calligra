@@ -19,6 +19,8 @@
 
 #include "KarbonLayerModel.h"
 
+#include "KarbonUiDebug.h"
+
 #include <KarbonDocument.h>
 #include <KoShapePainter.h>
 
@@ -37,7 +39,6 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 #include <QMimeData>
 #include <QPainter>
@@ -438,7 +439,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
     }
 
     if (! parent.isValid()) {
-        kDebug(38000) << "KarbonLayerModel::dropMimeData parent = root";
+        debugKarbonUi << "KarbonLayerModel::dropMimeData parent = root";
         return false;
     }
     KoShape *shape = static_cast<KoShape*>(parent.internalPointer());
@@ -447,11 +448,11 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(container);
         KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
         if (layer && layers.count()) {
-            kDebug(38000) << "dropping layer on a layer (not implemented yet)";
+            debugKarbonUi << "dropping layer on a layer (not implemented yet)";
             // TODO layers are dropped on a layer, so change layer ordering
             return false;
         } else if (group || layer) {
-            kDebug(38000) << "dropping on group or layer";
+            debugKarbonUi << "dropping on group or layer";
             if (! toplevelShapes.count())
                 return false;
 
@@ -481,12 +482,12 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
 
             emit layoutChanged();
         } else {
-            kDebug(38000) << "dropping on unhandled container (" << container->shapeId() << ")";
+            debugKarbonUi << "dropping on unhandled container (" << container->shapeId() << ")";
             // every other container we don't want to handle
             return false;
         }
     } else {
-        kDebug(38000) << "KarbonLayerModel::dropMimeData parent = shape";
+        debugKarbonUi << "KarbonLayerModel::dropMimeData parent = shape";
         if (! toplevelShapes.count())
             return false;
 

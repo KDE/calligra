@@ -45,8 +45,6 @@
 #include <KoSelection.h>
 #include <KoUnit.h>
 
-#include <kdebug.h>
-
 #include <QPainter>
 #include <QPaintEvent>
 #include <QResizeEvent>

@@ -46,6 +46,7 @@
 #include "KarbonFactory.h"
 #include "KarbonView.h"
 #include <KarbonCanvas.h>
+#include "KarbonUiDebug.h"
 
 #include <KoApplication.h>
 #include <KoImageCollection.h>
@@ -84,7 +85,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kundo2stack.h>
 
@@ -184,30 +184,30 @@ bool KarbonDocument::loadXML(const KoXmlDocument&, KoStore*)
 
 bool KarbonDocument::loadOdf(KoOdfReadStore & odfStore)
 {
-    kDebug(38000) << "Start loading OASIS document..." /*<< doc.toString()*/;
+    debugKarbonUi << "Start loading OASIS document..." /*<< doc.toString()*/;
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
-    kDebug(38000) << "Start loading OASIS document..." << contents.text();
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName();
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement();
+    debugKarbonUi << "Start loading OASIS document..." << contents.text();
+    debugKarbonUi << "Start loading OASIS contents..." << contents.lastChild().localName();
+    debugKarbonUi << "Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    debugKarbonUi << "Start loading OASIS contents..." << contents.lastChild().isElement();
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
     if (body.isNull()) {
-        kDebug(38000) << "No office:body found!";
+        debugKarbonUi << "No office:body found!";
         setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
         return false;
     }
 
     body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
     if (body.isNull()) {
-        kDebug(38000) << "No office:drawing found!";
+        debugKarbonUi << "No office:drawing found!";
         setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
         return false;
     }
 
     KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
     if (page.isNull()) {
-        kDebug(38000) << "No office:drawing found!";
+        debugKarbonUi << "No office:drawing found!";
         setErrorMessage(i18n("Invalid OASIS document. No draw:page tag found."));
         return false;
     }
@@ -229,7 +229,7 @@ bool KarbonDocument::loadOdf(KoOdfReadStore & odfStore)
             setPageLayout(layout);
         }
     } else {
-        kWarning() << "No master page found!";
+        warnKarbonUi << "No master page found!";
         return false;
     }
 
@@ -463,7 +463,7 @@ void KarbonDocument::addShape(KoShape* shape)
     } else {
         // only add shape to active layer if it has no parent yet
         if (! shape->parent()) {
-            kDebug(38000) << "shape has no parent, adding to the active layer!";
+            debugKarbonUi << "shape has no parent, adding to the active layer!";
             KoShapeLayer *activeLayer = 0;
             if (canvasController)
                 activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
@@ -637,7 +637,7 @@ bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContex
 
     KoXmlElement child;
     forEachElement(child, element) {
-        kDebug(38000) << "loading shape" << child.localName();
+        debugKarbonUi << "loading shape" << child.localName();
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
         if (shape)
@@ -674,7 +674,7 @@ bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContex
         QList<KoShape*> masterPageShapes;
         KoXmlElement child;
         forEachElement(child, (*master)) {
-            kDebug(38000) <<"loading master page shape" << child.localName();
+            debugKarbonUi <<"loading master page shape" << child.localName();
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
             if( shape )
                 masterPageShapes.append( shape );

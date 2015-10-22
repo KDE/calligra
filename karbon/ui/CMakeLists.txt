@@ -10,6 +10,7 @@ include_directories(
 )
 
 set(karbonui_SRCS
+    KarbonUiDebug.cpp
     KarbonFactory.cpp
     KarbonDocument.cpp
     KarbonPart.cpp

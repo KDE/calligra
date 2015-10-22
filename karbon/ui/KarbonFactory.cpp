@@ -40,7 +40,6 @@
 
 #include <kiconloader.h>
 
-#include <kdebug.h>
 
 KoComponentData* KarbonFactory::s_global = 0;
 

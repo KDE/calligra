@@ -62,6 +62,7 @@
 #include "KarbonSmallStylePreview.h"
 #include "KarbonDocumentMergeCommand.h"
 #include "KarbonPaletteBarWidget.h"
+#include "KarbonUiDebug.h"
 
 #include <KoMainWindow.h>
 #include <KoShapeStroke.h>
@@ -130,7 +131,6 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kdebug.h>
 #include <kmimetype.h>
 #include <KPluginFactory>
 
@@ -440,7 +440,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
     // create a factory
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
     if (!factory) {
-        kWarning(30003) << "No picture shape found, cannot drop images.";
+        warnKarbonUi << "No picture shape found, cannot drop images.";
         return;
     }
 
@@ -454,7 +454,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         KoShape *shape = factory->createShape(&params, part()->resourceManager());
 
         if (!shape) {
-            kWarning(30003) << "Could not create a shape from the image";
+            warnKarbonUi << "Could not create a shape from the image";
             return;
         }
         shape->setPosition(pos);
@@ -609,7 +609,7 @@ void KarbonView::editSelectAll()
         return;
 
     QList<KoShape*> shapes = part()->shapes();
-    kDebug(38000) << "shapes.size() =" << shapes.size();
+    debugKarbonUi << "shapes.size() =" << shapes.size();
 
     foreach(KoShape* shape, shapes) {
         selection->select(shape);
@@ -1371,7 +1371,7 @@ void KarbonView::selectionChanged()
     d->flipHorizontal->setEnabled(count > 0);
     d->flipVertical->setEnabled(count > 0);
 
-    kDebug(38000) << count << " shapes selected";
+    debugKarbonUi << count << " shapes selected";
 
     if (count > 0) {
         uint selectedPaths = 0;
@@ -1386,8 +1386,8 @@ void KarbonView::selectionChanged()
                     selectedPaths++;
             }
         }
-        kDebug(38000) << selectedPaths << " path shapes selected";
-        kDebug(38000) << selectedParametrics << " parameter shapes selected";
+        debugKarbonUi << selectedPaths << " path shapes selected";
+        debugKarbonUi << selectedParametrics << " parameter shapes selected";
         //TODO enable action when the ClosePath command is ported
         //d->closePath->setEnabled( selectedPaths > 0 );
         d->combinePath->setEnabled(selectedPaths > 1);
