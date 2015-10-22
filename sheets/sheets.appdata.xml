@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Sheets</name>
+  <name xml:lang="ast">Fueyes</name>
   <name xml:lang="bs">Listovi</name>
   <name xml:lang="ca">Sheets</name>
   <name xml:lang="cs">Sheets</name>
@@ -28,6 +29,7 @@
   <name xml:lang="x-test">xxSheetsxx</name>
   <name xml:lang="zh-CN">Sheets</name>
   <summary>Spreadsheet</summary>
+  <summary xml:lang="ast">Fueyes de cálculu</summary>
   <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
   <summary xml:lang="cs">Sešit</summary>
@@ -98,6 +100,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
+      <li xml:lang="ast">Usa formes pa tomar notes o mapes mentales</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
       <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>
@@ -117,6 +120,7 @@
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
       <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li>Large range of pre-defined templates</li>
+      <li xml:lang="ast">Rangu grande de plantíes predefiníes</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
       <li xml:lang="de">Viele vordefinierte Vorlagen aus vielen Bereichen</li>
@@ -137,6 +141,7 @@
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
       <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li>Powerful and comprehensive formula list</li>
+      <li xml:lang="ast">Llistáu de fórmules poderosu y comprensible</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
       <li xml:lang="de">Leistungsfähige und umfassende Liste von Formeln</li>
