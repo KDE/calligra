@@ -45,7 +45,8 @@ target_link_libraries(karbonui
     PRIVATE
         kowidgets
         koodf
-        KF5::KDELibs4Support
+        KF5::IconThemes
+        KF5::GuiAddons
 )
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
