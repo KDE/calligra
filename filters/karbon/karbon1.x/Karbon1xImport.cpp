@@ -27,7 +27,6 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <QBuffer>
@@ -35,11 +34,23 @@
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>
+#include <QDebug>
+#include <QLoggingCategory>
 
 #include <math.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KarbonImportFactory, "calligra_filter_karbon1x2karbon.json",
                            registerPlugin<KarbonImport>();)
+
+const QLoggingCategory &KARBON1_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.karbon1x2karbon");
+    return category;
+}
+
+#define debugKarbon1 qCDebug(KARBON1_LOG)
+#define warnKarbon1 qCWarning(KARBON1_LOG)
+#define errorKarbon1 qCCritical(KARBON1_LOG)
 
 KarbonImport::KarbonImport(QObject*parent, const QVariantList&)
     : KoFilter(parent), m_svgWriter(0)
@@ -59,7 +70,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
 
     const QString fileName(m_chain->inputFile());
     if (fileName.isEmpty()) {
-        kError() << "No input file name!";
+        errorKarbon1 << "No input file name!";
         return KoFilter::StupidError;
     }
 
@@ -75,21 +86,21 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
     if (store && store->hasFile("maindoc.xml")) {
 
         if (! store->open("maindoc.xml")) {
-            kError() << "Opening root has failed";
+            errorKarbon1 << "Opening root has failed";
             delete store;
             return KoFilter::StupidError;
         }
         KoStoreDevice ioMain(store);
         ioMain.open(QIODevice::ReadOnly);
         if (! parseRoot(&ioMain)) {
-            kWarning() << "Parsing maindoc.xml has failed! Aborting!";
+            warnKarbon1 << "Parsing maindoc.xml has failed! Aborting!";
             delete store;
             return KoFilter::StupidError;
         }
         ioMain.close();
         store->close();
     } else {
-        kWarning() << "Opening store has failed. Trying raw XML file!";
+        warnKarbon1 << "Opening store has failed. Trying raw XML file!";
         // Be sure to undefine store
         delete store;
         store = 0;
@@ -97,7 +108,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
         QFile file(fileName);
         file.open(QIODevice::ReadOnly);
         if (! parseRoot(&file)) {
-            kError() << "Could not process document! Aborting!";
+            errorKarbon1 << "Could not process document! Aborting!";
             file.close();
             return KoFilter::StupidError;
         }
@@ -122,7 +133,7 @@ bool KarbonImport::parseRoot(QIODevice* io)
     const bool parsed = inputDoc.setContent(io, &errormessage, &line, &col);
 
     if (! parsed) {
-        kError() << "Error while parsing file: "
+        errorKarbon1 << "Error while parsing file: "
         << "at line " << line << " column: " << col
         << " message: " << errormessage;
         // ### TODO: feedback to the user
@@ -419,7 +430,7 @@ QString KarbonImport::loadPattern(const KoXmlElement &element)
 
     QImage image;
     if (! image.load(fname)) {
-        kWarning() << "Failed to load pattern image" << fname;
+        warnKarbon1 << "Failed to load pattern image" << fname;
         return QString();
     }
 
@@ -1146,7 +1157,7 @@ void KarbonImport::loadImage(const KoXmlElement &element)
 
     QImage image;
     if (!image.load(fname)) {
-        kWarning() << "Could not load image " << fname;
+        warnKarbon1 << "Could not load image " << fname;
         return;
     }
 
