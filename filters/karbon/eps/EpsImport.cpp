@@ -22,21 +22,32 @@
 
 #include <QString>
 #include <QFile>
+#include <QDebug>
+#include <QLoggingCategory>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
 #include <kpluginfactory.h>
 #include <kshell.h>
-#include <kdebug.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(EpsImportFactory, "calligra_filter_eps2svgai.json",
                            registerPlugin<EpsImport>();)
 
+const QLoggingCategory &EPS_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.eps2svgai");
+    return category;
+}
+
+#define debugEps qCDebug(EPS_LOG)
+#define warnEps qCWarning(EPS_LOG)
+#define errorEps qCCritical(EPS_LOG)
+
 EpsImport::EpsImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
-    kDebug() << "###   ###   EPS Import Filter";
+    debugEps << "###   ###   EPS Import Filter";
 }
 
 EpsImport::~EpsImport()
@@ -62,7 +73,7 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
                 KShell::quoteArg(input) + QLatin1Char(' ') +
                 KShell::quoteArg(output);
 
-        kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data() ;
+        debugEps << "command to execute is (%s)" << QFile::encodeName(command).data() ;
 
         // Execute it:
         if (! system(QFile::encodeName(command)))
@@ -89,7 +100,7 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
             ury = extractor.ury();
             file.close();
         } else
-            qDebug("file could not be opened");
+            debugEps << "file could not be opened";
 
         // sed filter
         QString sedFilter = QString("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
@@ -104,7 +115,7 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
             " > " +
             KShell::quoteArg(m_chain->outputFile());
 
-        qDebug("command to execute is (%s)", QFile::encodeName(command).data());
+        debugEps << "command to execute is: " << QFile::encodeName(command);
 
         // Execute it:
         if (!system(QFile::encodeName(command)))
