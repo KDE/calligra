@@ -44,9 +44,9 @@ SplitterView::SplitterView(KoPart *part, KoDocument *doc, QWidget *parent)
     b->addWidget( m_splitter );
 }
     
-KTabWidget *SplitterView::addTabWidget(  )
+QTabWidget *SplitterView::addTabWidget(  )
 {
-    KTabWidget *w = new KTabWidget( m_splitter );
+    QTabWidget *w = new QTabWidget( m_splitter );
     m_splitter->addWidget( w );
     connect( w, SIGNAL(currentChanged(int)), SLOT(currentTabChanged(int)) );
     return w;
@@ -54,7 +54,7 @@ KTabWidget *SplitterView::addTabWidget(  )
 
 void SplitterView::currentTabChanged( int )
 {
-    ViewBase *v = qobject_cast<ViewBase*>( qobject_cast<KTabWidget*>( sender() )->currentWidget() );
+    ViewBase *v = qobject_cast<ViewBase*>( qobject_cast<QTabWidget*>( sender() )->currentWidget() );
     if ( v && v != m_activeview ) {
         if ( m_activeview ) {
             m_activeview->setGuiActive( false );
