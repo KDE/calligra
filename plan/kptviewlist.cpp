@@ -25,8 +25,8 @@
 #include <QStyle>
 #include <QBrush>
 #include <QContextMenuEvent>
+#include <QMenu>
 
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kcombobox.h>
 
@@ -775,7 +775,7 @@ void ViewListWidget::renameCategory()
 
 void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 {
-    KMenu menu;
+    QMenu menu;
     QList<QAction*> lst;
     m_contextitem = static_cast<ViewListItem*>(m_viewlist->itemAt( event->pos() ) );
     if ( m_contextitem == 0 ) {

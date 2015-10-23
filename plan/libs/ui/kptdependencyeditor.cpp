@@ -42,8 +42,8 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QAction>
+#include <QMenu>
 
-#include <kmenu.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactionmenu.h>
@@ -2181,7 +2181,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             DependencyConnectorItem *c = static_cast<DependencyConnectorItem*>( item );
             QList<DependencyLinkItem*> items;
             QList<QAction*> actions;
-            KMenu menu;
+            QMenu menu;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
                 actions << menu.addAction(koIcon("document-properties"), i->predItem->text());

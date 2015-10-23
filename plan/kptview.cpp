@@ -42,10 +42,10 @@
 #include <kundo2command.h>
 #include <QTimer>
 #include <QDockWidget>
+#include <QMenu>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
 #include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>

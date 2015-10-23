@@ -46,9 +46,9 @@
 #include <kshortcut.h>
 #include <kstandardshortcut.h>
 #include "kdatepicker.h"
-#include "kmenu.h"
 #include "kactioncollection.h"
 
+#include <QMenu>
 #include <QDate>
 #include <QCharRef>
 #include <QPen>
@@ -817,11 +817,11 @@ KDateTable::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Menu:
         if (  d->popupMenuEnabled )
         {
-            KMenu *menu = new KMenu();
+            QMenu *menu = new QMenu();
             if ( d->m_selectionmode == ExtendedSelection ) {
                 emit aboutToShowContextMenu( menu, d->m_selectedDates );
             } else {
-                menu->addTitle( KLocale::global()->formatDate(d->mDate) );
+                menu->setTitle( KLocale::global()->formatDate(d->mDate) );
                 emit aboutToShowContextMenu( menu, d->mDate );
             }
             if ( menu->isEmpty() ) {
@@ -998,11 +998,11 @@ KDateTable::mousePressEvent(QMouseEvent *e)
 
   if (  e->button() == Qt::RightButton && d->popupMenuEnabled )
   {
-        KMenu *menu = new KMenu();
+        QMenu *menu = new QMenu();
         if ( d->m_selectionmode == ExtendedSelection ) {
             emit aboutToShowContextMenu( menu, d->m_selectedDates );
         } else {
-            menu->addTitle( KLocale::global()->formatDate(clickedDate) );
+            menu->setTitle( KLocale::global()->formatDate(clickedDate) );
             emit aboutToShowContextMenu( menu, clickedDate );
         }
         menu->popup(e->globalPos());

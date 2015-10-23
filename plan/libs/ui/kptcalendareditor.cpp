@@ -41,10 +41,10 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QAction>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kmenu.h>
 
 #include <KoDocument.h>
 
@@ -330,7 +330,7 @@ void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
     if ( ! isReadWrite() ) {
         return;
     }
-    KMenu menu;
+    QMenu menu;
     menu.addAction( actionSetWork );
     menu.addAction( actionSetVacation );
     menu.addAction( actionSetUndefined );
@@ -433,8 +433,8 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     m_calendarview->setAcceptDrops( true );
     m_calendarview->setAcceptDropsOnView( true );
 
-    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(KMenu*,QDate)), SLOT(slotContextMenuDate(KMenu*,QDate)) );
-    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(KMenu*,QList<QDate>)), SLOT(slotContextMenuDate(KMenu*,QList<QDate>)) );
+    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(QMenu*,QDate)), SLOT(slotContextMenuDate(QMenu*,QDate)) );
+    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(QMenu*,QList<QDate>)), SLOT(slotContextMenuDate(QMenu*,QList<QDate>)) );
 
 /*    const QDate date(2007,7,19);
     const QColor fgColor(Qt::darkGray);
@@ -494,7 +494,7 @@ void CalendarEditor::setGuiActive( bool activate )
     }
 }
 
-void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates )
+void CalendarEditor::slotContextMenuDate( QMenu *menu, const QList<QDate> &dates )
 {
     if ( ! isReadWrite() ) {
         return;
@@ -509,7 +509,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates
     menu->addAction( actionSetUndefined );
 }
 
-void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
+void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
 {
     kDebug(planDbg())<<menu<<date;
     if ( ! isReadWrite() || ! date.isValid() ) {

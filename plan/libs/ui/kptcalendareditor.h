@@ -171,8 +171,8 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
-    void slotContextMenuDate( KMenu*, const QDate& );
-    void slotContextMenuDate( KMenu*, const QList<QDate>& );
+    void slotContextMenuDate( QMenu*, const QDate& );
+    void slotContextMenuDate( QMenu*, const QList<QDate>& );
     
     void slotCalendarSelectionChanged( const QModelIndexList& );
     void slotCurrentCalendarChanged( const QModelIndex& );

@@ -42,12 +42,12 @@
 #include <QClipboard>
 #include <QContextMenuEvent>
 #include <QAction>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <ktabwidget.h>
 
-#include <kmenu.h>
 #include <ktoggleaction.h>
 
 
@@ -506,7 +506,7 @@ void ScheduleLogTreeView::contextMenuEvent ( QContextMenuEvent *e )
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 {
     //kDebug(planDbg())<<header()->logicalIndexAt(pos)<<" at"<<pos;
-    KMenu *m = new KMenu( this );
+    QMenu *m = new QMenu( this );
     m->addAction( actionShowDebug );
     m->exec( mapToGlobal( pos ) );
     delete m;
@@ -625,7 +625,7 @@ void ScheduleLogView::slotContextMenuRequested( const QModelIndex &index, const 
     if ( ! isReadWrite() || ! index.isValid() ) {
         return;
     }
-    KMenu *m = new KMenu( this );
+    QMenu *m = new QMenu( this );
     QString id = index.data( ScheduleLogItemModel::IdentityRole ).toString();
     if ( id.isEmpty() ) {
         return;
