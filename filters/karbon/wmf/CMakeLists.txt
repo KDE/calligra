@@ -5,6 +5,7 @@ include_directories( ${VECTORIMAGE_INCLUDES} )
 if(SHOULD_BUILD_FILTER_WMF_TO_SVG)
 
 set(wmf2svg_PART_SRCS
+    WmfImportDebug.cpp
     WmfImport.cpp
     WmfImportParser.cpp
 )

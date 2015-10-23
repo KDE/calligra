@@ -18,12 +18,17 @@
 */
 
 #include "WmfImportParser.h"
+
+#include "WmfImportDebug.h"
+
 #include <WmfEnums.h>
 #include <WmfDeviceContext.h>
+
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
-#include <kdebug.h>
+
 #include <QBuffer>
+
 #include <math.h>
 
 /*
@@ -74,10 +79,10 @@ bool WMFImportParser::begin(const QRect &boundingBox)
     m_svgWriter.addAttribute("width", m_pageSize.width());
     m_svgWriter.addAttribute("height", m_pageSize.height());
 
-    kDebug(30504) << "bounding rect =" << boundingBox;
-    kDebug(30504) << "page size =" << m_pageSize;
-    kDebug(30504) << "scale x =" << m_scaleX;
-    kDebug(30504) << "scale y =" << m_scaleY;
+    debugWmf << "bounding rect =" << boundingBox;
+    debugWmf << "page size =" << m_pageSize;
+    debugWmf << "scale x =" << m_scaleX;
+    debugWmf << "scale y =" << m_scaleY;
 
     m_window.org = boundingBox.topLeft();
     //m_viewport.org = boundingBox.topLeft();
@@ -107,7 +112,7 @@ void WMFImportParser::restore()
 
 void WMFImportParser::setWindowOrg(int left, int top)
 {
-    kDebug(30504) << left << top;
+    debugWmf << left << top;
     if (QPoint(left, top) != m_window.org) {
         m_window.org.setX(left);
         m_window.org.setY(top);
@@ -117,7 +122,7 @@ void WMFImportParser::setWindowOrg(int left, int top)
 
 void WMFImportParser::setWindowExt(int width, int height)
 {
-    kDebug(30504) << width << height;
+    debugWmf << width << height;
     // the wmf file can change width/height during the drawing
     if (QSize(width, height) != m_window.ext) {
         m_window.ext = QSizeF(width, height);
@@ -128,7 +133,7 @@ void WMFImportParser::setWindowExt(int width, int height)
 
 void WMFImportParser::setViewportOrg(int left, int top)
 {
-    kDebug(30504) << left << top;
+    debugWmf << left << top;
     if (QPoint(left, top) != m_viewport.org) {
         m_viewport.org.setX(left);
         m_viewport.org.setY(top);
@@ -138,7 +143,7 @@ void WMFImportParser::setViewportOrg(int left, int top)
 
 void WMFImportParser::setViewportExt(int width, int height)
 {
-    kDebug(30504) << width << height;
+    debugWmf << width << height;
     if ((width != 0) && (height != 0)) {
         m_viewport.ext = QSizeF(width, height);
         m_viewport.extIsValid = true;
@@ -154,8 +159,8 @@ void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMa
     else
         m_matrix = matrix;
 
-    kDebug(30504) << "matrix =" << matrix;
-    kDebug(30504) << "combine =" << combine;
+    debugWmf << "matrix =" << matrix;
+    debugWmf << "combine =" << combine;
 }
 
 void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color)
@@ -707,7 +712,7 @@ QString WMFImportParser::saveFill(Libwmf::WmfDeviceContext &context)
         m_svgWriter.endElement(); // pattern
         break;
     default:
-        kDebug(30504) << "unsupported brush style:" << context.brush.style();
+        debugWmf << "unsupported brush style:" << context.brush.style();
         return QString();
     }
 
@@ -754,7 +759,7 @@ void WMFImportParser::updateTransform()
         m_scaleX = m_viewport.ext.width() / m_window.ext.width();
         m_scaleY = m_viewport.ext.height() / m_window.ext.height();
     }
-    kDebug(30504) << "window:" << QRectF(m_window.org, m_window.ext);
-    kDebug(30504) << "viewport:" << QRectF(m_viewport.org, m_viewport.ext);
-    kDebug(30504) << "scale:" << m_scaleX << m_scaleY;
+    debugWmf << "window:" << QRectF(m_window.org, m_window.ext);
+    debugWmf << "viewport:" << QRectF(m_viewport.org, m_viewport.ext);
+    debugWmf << "scale:" << m_scaleX << m_scaleY;
 }
