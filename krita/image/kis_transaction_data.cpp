@@ -28,9 +28,9 @@
 //#define DEBUG_TRANSACTIONS
 
 #ifdef DEBUG_TRANSACTIONS
-    #define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
+#    define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
 #else
-    #define DEBUG_ACTION(action)
+#    define DEBUG_ACTION(action)
 #endif
 
 
@@ -53,9 +53,13 @@ public:
     int transactionFrameId;
     KisDataManagerSP savedDataManager;
 
+    KUndo2Command newFrameCommand;
+
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
     void moveDevice(const QPoint newOffset);
+
+    void tryCreateNewFrame(KisPaintDeviceSP device, int time);
 };
 
 
@@ -70,6 +74,23 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
     saveSelectionOutlineCache();
 }
 
+#include "kis_raster_keyframe_channel.h"
+
+void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
+{
+    if (!device->framesInterface()) return;
+
+    KisRasterKeyframeChannel *channel = device->keyframeChannel();
+    KIS_ASSERT_RECOVER(channel) { return; }
+
+    KisKeyframe *keyframe = channel->keyframeAt(time);
+
+    if (!keyframe) {
+        keyframe = channel->activeKeyframeAt(time).data();
+        channel->copyKeyframe(keyframe, time, &newFrameCommand);
+    }
+}
+
 void KisTransactionData::init(KisPaintDeviceSP device)
 {
     m_d->device = device;
@@ -81,6 +102,9 @@ void KisTransactionData::init(KisPaintDeviceSP device)
     m_d->flattenUndoCommand = 0;
 
     m_d->transactionTime = device->defaultBounds()->currentTime();
+
+    m_d->tryCreateNewFrame(m_d->device, m_d->transactionTime);
+
     m_d->transactionFrameId = device->framesInterface() ? device->framesInterface()->currentFrameId() : -1;
     m_d->savedDataManager = m_d->transactionFrameId >= 0 ?
         m_d->device->framesInterface()->frameDataManager(m_d->transactionFrameId) :
@@ -190,6 +214,8 @@ void KisTransactionData::redo()
 
     restoreSelectionOutlineCache(false);
 
+    m_d->newFrameCommand.redo();
+
     DEBUG_ACTION("Redo()");
 
     Q_ASSERT(m_d->memento);
@@ -219,6 +245,8 @@ void KisTransactionData::undo()
     m_d->possiblySwitchCurrentTime();
     startUpdates();
     possiblyNotifySelectionChanged();
+
+    m_d->newFrameCommand.undo();
 }
 
 void KisTransactionData::saveSelectionOutlineCache()
