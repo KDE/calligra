@@ -35,6 +35,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_animation_player.h"
+#include <commands/kis_node_property_list_command.h>
 
 
 struct TimelineFramesModel::Private
@@ -127,7 +128,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        dummy->node()->setSectionModelProperties(props);
+        KisNodePropertyListCommand::setNodePropertiesNoUndo(dummy->node(), image, props);
         return true;
     }
 

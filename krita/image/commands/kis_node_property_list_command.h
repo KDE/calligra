@@ -37,6 +37,10 @@ public:
     virtual void redo();
     virtual void undo();
 
+
+    typedef KisDocumentSectionModel::PropertyList PropertyList;
+    static void setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);
+
 private:
     void doUpdate(const KisDocumentSectionModel::PropertyList &oldPropertyList,
                   const KisDocumentSectionModel::PropertyList &newPropertyList);
