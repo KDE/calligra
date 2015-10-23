@@ -888,7 +888,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     connect( taskeditor, SIGNAL(unindentTask()), SLOT(slotUnindentTask()) );
 
     connect(taskeditor, SIGNAL(saveTaskModule(QUrl,Project*)), SLOT(saveTaskModule(QUrl,Project*)));
-    connect(taskeditor, SIGNAL(removeTaskModule(AUrl)), SLOT(removeTaskModule(QUrl)));
+    connect(taskeditor, SIGNAL(removeTaskModule(QUrl)), SLOT(removeTaskModule(QUrl)));
 
     connect( taskeditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     taskeditor->updateReadWrite( m_readWrite );
