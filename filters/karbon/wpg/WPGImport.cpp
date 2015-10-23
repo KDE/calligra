@@ -22,11 +22,11 @@
 #include <KoFilterChain.h>
 
 #include <kpluginfactory.h>
-#include <kdebug.h>
-
 
 #include <QString>
 #include <QFile>
+#include <QDebug>
+#include <QLoggingCategory>
 
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
@@ -37,6 +37,17 @@
 #include <iostream>
 
 K_PLUGIN_FACTORY_WITH_JSON(WPGImportFactory, "calligra_filter_wpg2svg.json", registerPlugin<WPGImport>();)
+
+const QLoggingCategory &WPG_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.wpg2svg");
+    return category;
+}
+
+#define debugWpg qCDebug(WPG_LOG)
+#define warnWpg qCWarning(WPG_LOG)
+#define errorWpg qCCritical(WPG_LOG)
+
 
 WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -65,7 +76,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
         }
      }
     if (!libwpg::WPGraphics::isSupported(input)) {
-        kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
+        warnWpg << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
         delete input;
         return KoFilter::NotImplemented;
     }
@@ -74,7 +85,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
      librevenge::RVNGSVGDrawingGenerator generator(output, "");
 
     if (!libwpg::WPGraphics::parse(input, &generator)) {
-        kWarning() << "ERROR: SVG Generation failed!";
+        warnWpg << "ERROR: SVG Generation failed!";
         delete input;
         return KoFilter::ParsingError;
     }
@@ -84,7 +95,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
 
     QFile outputFile(m_chain->outputFile());
     if(!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        kWarning() << "ERROR: Could not open output file" << m_chain->outputFile();
+        warnWpg << "ERROR: Could not open output file" << m_chain->outputFile();
         return KoFilter::InternalError;
     }
     outputFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
