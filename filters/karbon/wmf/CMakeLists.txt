@@ -11,7 +11,7 @@ set(wmf2svg_PART_SRCS
 )
 
 add_library(calligra_filter_wmf2svg MODULE ${wmf2svg_PART_SRCS})
-target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 
 install(TARGETS calligra_filter_wmf2svg DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_wmf2svg calligra_filter_wmf2svg.desktop)
