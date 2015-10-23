@@ -29,13 +29,16 @@
 #include <QApplication>
 
 
-KisImageConfig::KisImageConfig()
-    : m_config(KGlobal::config()->group(""))
+KisImageConfig::KisImageConfig(bool readOnly)
+    : m_config(KGlobal::config()->group("")),
+      m_readOnly(readOnly)
 {
 }
 
 KisImageConfig::~KisImageConfig()
 {
+    if (m_readOnly) return;
+
     if (qApp->thread() != QThread::currentThread()) {
         qDebug() << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
         return;
@@ -266,6 +269,17 @@ QColor KisImageConfig::onionSkinTintColorForward() const
 void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
 {
     m_config.writeEntry("oninSkinTintColorForward", value);
+}
+
+bool KisImageConfig::lazyFrameCreationEnabled(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("lazyFrameCreationEnabled", true) : true;
+}
+
+void KisImageConfig::setLazyFrameCreationEnabled(bool value)
+{
+    m_config.writeEntry("lazyFrameCreationEnabled", value);
 }
 
 
