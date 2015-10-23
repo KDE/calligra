@@ -30,7 +30,7 @@ set(svg2karbon_PART_SRCS
 add_library(calligra_filter_svg2karbon MODULE ${svg2karbon_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_svg2karbon calligra_filter_svg2karbon.desktop)
 
-target_link_libraries(calligra_filter_svg2karbon karbonui KF5::Archive KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_svg2karbon karbonui KF5::Archive)
 
 install(TARGETS calligra_filter_svg2karbon  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
