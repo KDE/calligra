@@ -33,10 +33,10 @@
 #include <QSizeF>
 #include <QTextDocument>
 #include <QStandardItemModel>
+#include <QUrl>
 
 // KF5
 #include <kmessagebox.h>
-#include <kurl.h>
 
 // KChart
 #include <KChartChart>
@@ -835,7 +835,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     if (url[0] == '#')
         url.remove(0, 1);
 
-    if (KUrl::isRelativeUrl(url)) {
+    if (QUrl::fromUserInput(url).isRelative()) {
         if (url.startsWith("./"))
             tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url.mid(2);
         else
@@ -849,7 +849,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         path = store->currentPath();
         if (!path.isEmpty() && !path.endsWith('/'))
             path += '/';
-        QString relPath = KUrl(tmpURL).path();
+        QString relPath = QUrl::fromUserInput(tmpURL).path();
         path += relPath.mid(1); // remove leading '/'
     }
     if (!path.endsWith('/'))
@@ -884,18 +884,18 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     bool res = true;
     if (tmpURL.startsWith(STORE_PROTOCOL)
          || tmpURL.startsWith(INTERNAL_PROTOCOL)
-         || KUrl::isRelativeUrl(tmpURL))
+         || QUrl::fromUserInput(tmpURL).isRelative())
     {
         if (isOdf) {
             store->pushDirectory();
             Q_ASSERT(tmpURL.startsWith(INTERNAL_PROTOCOL));
-            QString relPath = KUrl(tmpURL).path().mid(1);
+            QString relPath = QUrl::fromUserInput(tmpURL).path().mid(1);
             store->enterDirectory(relPath);
             res = d->document->loadOasisFromStore(store);
             store->popDirectory();
         } else {
             if (tmpURL.startsWith(INTERNAL_PROTOCOL))
-                tmpURL = KUrl(tmpURL).path().mid(1);
+                tmpURL = QUrl::fromUserInput(tmpURL).path().mid(1);
             res = d->document->loadFromStore(store, tmpURL);
         }
         d->document->setStoreInternal(true);
@@ -903,7 +903,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     else {
         // Reference to an external document. Hmmm...
         d->document->setStoreInternal(false);
-        KUrl url(tmpURL);
+        QUrl url = QUrl::fromUserInput(tmpURL);
         if (!url.isLocalFile()) {
             //QApplication::restoreOverrideCursor();
 
