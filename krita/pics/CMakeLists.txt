@@ -39,8 +39,8 @@ width.png
 workspace-chooser.png
 onionA.png
 onionB.png
-onionOn.png
-onionOff.png
+light_onionOn.svg
+light_onionOff.svg
 
 dark_prevframe.png
 dark_nextframe.png
@@ -50,6 +50,8 @@ dark_addduplicateframe.png
 dark_deletekeyframe.png
 dark_timeline_keyframe.png
 dark_onion_skin_options.png
+dark_onionOn.svg
+dark_onionOff.svg
 
 light_prevframe.png
 light_nextframe.png
@@ -59,6 +61,8 @@ light_addduplicateframe.png
 light_deletekeyframe.png
 light_timeline_keyframe.png
 light_onion_skin_options.png
+light_onionOn.svg
+light_onionOff.svg
 
 mirrorAxis-HorizontalMove.png
 mirrorAxis-VerticalMove.png

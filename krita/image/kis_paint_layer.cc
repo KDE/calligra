@@ -167,7 +167,7 @@ KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() co
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
 
     if (isAnimated()) {
-        l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+        l << KisDocumentSectionModel::Property(i18n("Onion skin"), themedIcon("onionOn"), themedIcon("onionOff"), onionSkinEnabled());
     }
 
     return l;
