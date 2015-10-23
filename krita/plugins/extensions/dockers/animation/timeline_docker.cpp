@@ -62,6 +62,22 @@ TimelineDocker::TimelineDocker()
     setWidget(m_d->view);
 }
 
+struct NodeManagerInterface : TimelineFramesModel::NodeManipulationInterface
+{
+    NodeManagerInterface(KisNodeManager *manager) : m_manager(manager) {}
+
+    KisLayerSP addPaintLayer() const {
+        return m_manager->createPaintLayer();
+    }
+
+    void removeNode(KisNodeSP node) const {
+        m_manager->removeSingleNode(node);
+    }
+
+private:
+    KisNodeManager *m_manager;
+};
+
 void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;
@@ -71,6 +87,7 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->model->setDummiesFacade(0, 0);
         m_d->model->setFrameCache(0);
         m_d->model->setAnimationPlayer(0);
+        m_d->model->setNodeManipulationInterface(0);
         m_d->canvas->disconnectCanvasObserver(this);
     }
 
@@ -83,6 +100,9 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->model->setDummiesFacade(kritaShapeController, m_d->canvas->image());
         m_d->model->setFrameCache(m_d->canvas->frameCache());
         m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
+
+        m_d->model->setNodeManipulationInterface(
+            new NodeManagerInterface(m_d->canvas->viewManager()->nodeManager()));
 
         m_d->canvasConnections.addConnection(
             m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
