@@ -38,7 +38,6 @@
 #include <kconfig.h>
 #include <kcolorscheme.h>
 #include <kglobal.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <knotification.h>
@@ -48,6 +47,7 @@
 #include "kdatepicker.h"
 #include "kactioncollection.h"
 
+#include <QFontDatabase>
 #include <QMenu>
 #include <QDate>
 #include <QCharRef>
@@ -57,6 +57,7 @@
 #include <QActionEvent>
 #include <QHash>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QToolTip>
 #include <qdrawutil.h>
 
@@ -1123,7 +1124,7 @@ KDateInternalYearSelector::KDateInternalYearSelector
 {
   QFont font;
   // -----
-  font=KGlobalSettings::generalFont();
+  font=QFontDatabase::systemFont(QFontDatabase::GeneralFont);
   setFont(font);
   setFrame(false);
   // we have to respect the limits of QDate here, I fear:
@@ -1231,7 +1232,7 @@ void
 KPopupFrame::popup(const QPoint &pos)
 {
   // Make sure the whole popup is visible.
-  QRect d = KGlobalSettings::desktopGeometry(pos);
+  QRect d = QApplication::desktop()->screenGeometry(pos);
 
   int x = pos.x();
   int y = pos.y();
@@ -1519,7 +1520,7 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
         palette.setCurrentColorGroup( QPalette::Inactive );
     }
     QRectF rect;
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 //    font.setBold(true);
     painter->setFont(font);
 
@@ -1568,7 +1569,7 @@ QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOption
     //kDebug(planDbg());
     painter->save();
     QRectF result;
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     painter->setFont(font);
 
     QColor titleColor( option.palette.button().color() );

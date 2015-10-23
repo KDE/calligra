@@ -34,6 +34,7 @@
 #include <QDoubleValidator>
 #include <QWidget>
 #include <QPushButton>
+#include <QFontDatabase>
 #include <qdrawutil.h>
 
 #include <kcalendarsystem.h>
@@ -43,7 +44,6 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>
-#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 #include "kptdebug.h"
@@ -212,9 +212,10 @@ void KDatePicker::init( const QDate &dt )
   f->setFocusProxy( d->table );
   d->table->installEventFilter( this );
 
-  d->fontsize = KGlobalSettings::generalFont().pointSize();
+  QFont generalFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+  d->fontsize = generalFont.pointSize();
   if (d->fontsize == -1)
-     d->fontsize = QFontInfo(KGlobalSettings::generalFont()).pointSize();
+     d->fontsize = QFontInfo(generalFont).pointSize();
 
   d->fontsize++; // Make a little bigger
 
