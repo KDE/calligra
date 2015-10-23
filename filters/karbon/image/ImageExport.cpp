@@ -39,9 +39,10 @@
 #include <KoFilterManager.h>
 #include <KoZoomHandler.h>
 #include <KoUnit.h>
+#include <KoDialog.h>
 
 #include <kpluginfactory.h>
-#include <kdialog.h>
+
 #include <QImage>
 
 K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2image.json",
@@ -94,9 +95,9 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
             widget->setBackgroundColor(backgroundColor);
             widget->enableBackgroundOpacity(format == "PNG");
 
-            KDialog dlg;
+            KoDialog dlg;
             dlg.setCaption(i18n("PNG Export Options"));
-            dlg.setButtons(KDialog::Ok | KDialog::Cancel);
+            dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             dlg.setMainWidget(widget);
             if (dlg.exec() != QDialog::Accepted)
                 return KoFilter::UserCancelled;
