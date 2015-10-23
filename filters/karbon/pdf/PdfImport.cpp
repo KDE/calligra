@@ -18,6 +18,8 @@
  */
 
 #include "PdfImport.h"
+
+#include "PdfImportDebug.h"
 #include "SvgOutputDev.h"
 
 #include <QString>
@@ -27,7 +29,6 @@
 #include <KoFilterChain.h>
 
 #include <kpluginfactory.h>
-#include <kdebug.h>
 
 // Don't show this warning: it's an issue in poppler
 #ifdef __GNUC__
@@ -43,7 +44,7 @@ K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json",
 PdfImport::PdfImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
-    kDebug(30516) << "PDF Import Filter";
+    debugPdf << "PDF Import Filter";
 }
 
 PdfImport::~PdfImport()
@@ -52,7 +53,7 @@ PdfImport::~PdfImport()
 
 KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(30516) << "to:" << to << " from:" << from;
+    debugPdf << "to:" << to << " from:" << from;
 
     if (from != "application/pdf" || to != "image/svg+xml") {
         return KoFilter::NotImplemented;
@@ -82,7 +83,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     int firstPage = 1;
     int lastPage = pdfDoc->getNumPages();
 
-    kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
+    debugPdf << "converting pages" << firstPage << "-" << lastPage;
 
     SvgOutputDev * dev = new SvgOutputDev(m_chain->outputFile());
     if (dev->isOk()) {
@@ -94,7 +95,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
         dev->dumpContent();
     }
 
-    kDebug(30516) << "wrote file to" << m_chain->outputFile();
+    debugPdf << "wrote file to" << m_chain->outputFile();
 
     delete dev;
     delete pdfDoc;

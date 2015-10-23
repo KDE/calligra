@@ -18,12 +18,14 @@
  */
 
 #include "SvgOutputDev.h"
+
+#include "PdfImportDebug.h"
+
 #include <poppler/Object.h>
 #include <poppler/GfxState.h>
 #include <poppler/Stream.h>
 #include <poppler/GfxFont.h>
 
-#include <kdebug.h>
 #include <QFile>
 #include <QTextStream>
 #include <QSizeF>
@@ -95,9 +97,9 @@ GBool SvgOutputDev::interpretType3Chars()
 
 void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
 {
-    kDebug(30516) << "starting page" << pageNum;
+    debugPdf << "starting page" << pageNum;
     d->pageSize = QSizeF(state->getPageWidth(), state->getPageHeight());
-    kDebug(30516) << "page size =" << d->pageSize;
+    debugPdf << "page size =" << d->pageSize;
 
     *d->body << "<g id=\"" << QString("%1").arg(pageNum, (int)3, (int)10, QLatin1Char('0')) << "\"" << endl;
     if (pageNum != 1)
@@ -107,13 +109,13 @@ void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
 
 void SvgOutputDev::endPage()
 {
-    kDebug(30516) << "ending page";
+    debugPdf << "ending page";
     *d->body << "</g>" << endl;
 }
 
 void SvgOutputDev::dumpContent()
 {
-    kDebug(30516) << "dumping pages";
+    debugPdf << "dumping pages";
 
     QTextStream stream(&d->svgFile);
 
@@ -220,7 +222,7 @@ QString SvgOutputDev::convertMatrix(double * matrix)
 
 void SvgOutputDev::updateAll(GfxState *state)
 {
-    kDebug(30516) << "update complete state";
+    debugPdf << "update complete state";
 
     //updateLineDash(state);
     updateLineJoin(state);
@@ -243,7 +245,7 @@ void SvgOutputDev::updateFillColor(GfxState *state)
     brushColour.setRgbF(colToDbl(rgb.r), colToDbl(rgb.g), colToDbl(rgb.b), brushColour.alphaF());
     d->brush.setColor(brushColour);
 
-    kDebug(30516) << "update fill color" << brushColour;
+    debugPdf << "update fill color" << brushColour;
 }
 
 void SvgOutputDev::updateStrokeColor(GfxState *state)
@@ -255,7 +257,7 @@ void SvgOutputDev::updateStrokeColor(GfxState *state)
     penColour.setRgbF(colToDbl(rgb.r), colToDbl(rgb.g), colToDbl(rgb.b), penColour.alphaF());
     d->pen.setColor(penColour);
 
-    kDebug(30516) << "update stroke color" << penColour;
+    debugPdf << "update stroke color" << penColour;
 }
 
 void SvgOutputDev::updateFillOpacity(GfxState *state)
@@ -264,7 +266,7 @@ void SvgOutputDev::updateFillOpacity(GfxState *state)
     brushColour.setAlphaF(state->getFillOpacity());
     d->brush.setColor(brushColour);
 
-    kDebug(30516) << "update fill opacity" << state->getFillOpacity();
+    debugPdf << "update fill opacity" << state->getFillOpacity();
 }
 
 void SvgOutputDev::updateStrokeOpacity(GfxState *state)
@@ -273,7 +275,7 @@ void SvgOutputDev::updateStrokeOpacity(GfxState *state)
     penColour.setAlphaF(state->getStrokeOpacity());
     d->pen.setColor(penColour);
 
-    kDebug(30516) << "update stroke opacity" << state->getStrokeOpacity();
+    debugPdf << "update stroke opacity" << state->getStrokeOpacity();
 }
 
 void SvgOutputDev::updateLineJoin(GfxState *state)
@@ -330,7 +332,7 @@ QString SvgOutputDev::printFill()
         fill += d->brush.color().name();
         break;
     default:
-        kDebug() << "unhandled fill style (" << d->brush.style() << ")";
+        debugPdf << "unhandled fill style (" << d->brush.style() << ")";
         return QString();
         break;
     }
@@ -450,10 +452,10 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
 
     if (font && font->getFamily()) {
         *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->getCString()) << "\"";
-        //kDebug(30516) << "font family:" << QString::fromLatin1( font->getFamily()->getCString() );
+        //debugPdf << "font family:" << QString::fromLatin1( font->getFamily()->getCString() );
     } else if (font && font->getName()) {
         *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->getCString()) << "\"";
-        //kDebug(30516) << "font name:" << QString::fromLatin1( font->getName()->getCString() );
+        //debugPdf << "font name:" << QString::fromLatin1( font->getName()->getCString() );
     }
     *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
 
@@ -513,7 +515,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     }
 
     if (image == NULL || image->isNull()) {
-        kDebug(30516) << "Null image";
+        debugPdf << "Null image";
         delete imgStr;
         delete[] buffer;
         delete image;

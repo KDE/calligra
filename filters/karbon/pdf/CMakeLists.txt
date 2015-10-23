@@ -4,7 +4,7 @@ include_directories( ${POPPLER_INCLUDE_DIR} )
 macro_optional_find_package(OpenJPEG)
 macro_optional_find_package(JPEG)
 
-set(pdf2svg_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
+set(pdf2svg_PART_SRCS PdfImportDebug.cpp PdfImport.cpp SvgOutputDev.cpp )
 
 add_library(calligra_filter_pdf2svg MODULE ${pdf2svg_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_pdf2svg calligra_filter_pdf2svg.desktop)
