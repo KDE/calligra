@@ -23,8 +23,8 @@
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
+
 #include <KoFilterChain.h>
 #include <KoShapeStroke.h>
 #include <KoShape.h>
