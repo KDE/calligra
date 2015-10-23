@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KIntNumInput" name="m_inMonFraDig"/>
+      <widget class="QSpinBox" name="m_inMonFraDig"/>
      </item>
     </layout>
    </item>
@@ -198,13 +198,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -72,7 +72,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KIntSpinBox" name="ui_selector">
+    <widget class="QSpinBox" name="ui_selector">
      <property name="toolTip">
       <string>Show page</string>
      </property>
@@ -193,13 +193,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

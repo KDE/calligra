@@ -87,8 +87,8 @@ LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
 //   connect( m_cmbMonDigSet, SIGNAL(activated(int)),
 //            SLOT(slotMonDigSetChanged(int)) );
 
-  m_inMonFraDig->setRange(0, 10, 1);
-  m_inMonFraDig->setSliderEnabled(false);
+  m_inMonFraDig->setRange(0, 10);
+  m_inMonFraDig->setSingleStep(1);
 
   slotTranslate();
   slotLocaleChanged();
