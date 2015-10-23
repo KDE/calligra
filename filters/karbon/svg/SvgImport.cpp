@@ -37,13 +37,24 @@
 #include <KoXmlReader.h>
 
 #include <kpluginfactory.h>
-#include <kdebug.h>
 #include <kfilterdev.h>
 
 #include <QFileInfo>
+#include <QDebug>
+#include <QLoggingCategory>
 
 K_PLUGIN_FACTORY_WITH_JSON(SvgImportFactory, "calligra_filter_svg2karbon.json",
                            registerPlugin<SvgImport>();)
+
+const QLoggingCategory &SVG_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.svg2karbon");
+    return category;
+}
+
+#define debugSvg qCDebug(SVG_LOG)
+#define warnSvg qCWarning(SVG_LOG)
+#define errorSvg qCCritical(SVG_LOG)
 
 
 SvgImport::SvgImport(QObject*parent, const QVariantList&)
@@ -79,12 +90,12 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     else
         strMime = "text/plain";
 
-    /*kDebug(30514) <<"File extension: -" << strExt <<"- Compression:" << strMime;*/
+    /*debugSvg <<"File extension: -" << strExt <<"- Compression:" << strMime;*/
 
     QIODevice* in = KFilterDev::deviceForFile(fileIn, strMime);
 
     if (!in->open(QIODevice::ReadOnly)) {
-        kError(30514) << "Cannot open file! Aborting!" << endl;
+        errorSvg << "Cannot open file! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -100,7 +111,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     delete in;
 
     if (! parsed) {
-        kError(30514) << "Error while parsing file: "
+        errorSvg << "Error while parsing file: "
         << "at line " << line << " column: " << col
         << " message: " << errormessage << endl;
         // ### TODO: feedback to the user
