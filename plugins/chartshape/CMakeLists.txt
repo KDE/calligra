@@ -69,7 +69,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapecore  komain kotextlayout KChart KF5::KDELibs4Support)
+target_link_libraries(chartshapecore  komain kotextlayout KChart)
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
         set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-KPIC")
@@ -82,5 +82,5 @@ endif()
 add_library(calligra_shape_chart MODULE ChartShapeFactory.cpp )
 kcoreaddons_desktop_to_json(calligra_shape_chart calligra_shape_chart.desktop)
 
-target_link_libraries(calligra_shape_chart chartshapecore KChart flake)
+target_link_libraries(calligra_shape_chart chartshapecore KChart flake KF5::IconThemes)
 install(TARGETS calligra_shape_chart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
