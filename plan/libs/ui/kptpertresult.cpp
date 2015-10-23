@@ -30,8 +30,8 @@
 
 #include <QAbstractItemView>
 #include <QMenu>
+#include <QAction>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 

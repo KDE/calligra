@@ -36,9 +36,8 @@
 
 #include <QList>
 #include <QVBoxLayout>
+#include <QAction>
 
-
-#include <kaction.h>
 #include <klocale.h>
 
 namespace KPlato

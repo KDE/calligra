@@ -37,8 +37,6 @@
 #include <QList>
 #include <QDockWidget>
 
-class KAction;
-
 class QMetaEnum;
 class QAbstractItemModel;
 
@@ -214,7 +212,7 @@ protected:
     QList<QAction*> m_contextActionList;
     
     // View options context menu
-    KAction *actionOptions;
+    QAction *actionOptions;
 };
 
 /** 
@@ -564,7 +562,7 @@ public:
     
     void setViewSplitMode( bool split );
     bool isViewSplit() const { return m_mode; }
-    KAction *actionSplitView() const { return m_actionSplitView; }
+    QAction *actionSplitView() const { return m_actionSplitView; }
     
     void setRootIsDecorated ( bool show );
 
@@ -634,7 +632,7 @@ protected:
     bool m_readWrite;
     bool m_mode;
     
-    KAction *m_actionSplitView;
+    QAction *m_actionSplitView;
 
 };
 

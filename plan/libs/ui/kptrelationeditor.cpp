@@ -33,8 +33,8 @@
 #include <QModelIndex>
 #include <QVBoxLayout>
 #include <QMenu>
+#include <QAction>
 
-#include <kaction.h>
 #include <klocale.h>
 
 

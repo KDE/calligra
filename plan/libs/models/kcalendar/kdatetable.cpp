@@ -48,7 +48,6 @@
 #include "kdatepicker.h"
 #include "kmenu.h"
 #include "kactioncollection.h"
-#include "kaction.h"
 
 #include <QDate>
 #include <QCharRef>

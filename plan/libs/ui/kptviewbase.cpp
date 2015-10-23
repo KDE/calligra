@@ -22,7 +22,6 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-#include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -48,6 +47,7 @@
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
 #include <QPainter>
+#include <QAction>
 #include <QMenu>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -607,7 +607,7 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void ViewBase::createOptionAction()
 {
-    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -1836,7 +1836,7 @@ void DoubleTreeViewBase::init()
     connect( m_leftview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
     connect( m_rightview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 
-    m_actionSplitView = new KAction(koIcon("view-split-left-right"), QString(), this);
+    m_actionSplitView = new QAction(koIcon("view-split-left-right"), QString(), this);
     setViewSplitMode( true );
 
     connect( m_leftview->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), SLOT(slotLeftSortIndicatorChanged(int,Qt::SortOrder)) );

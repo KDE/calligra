@@ -40,8 +40,8 @@
 #include <QApplication>
 #include <QResizeEvent>
 #include <QTimer>
+#include <QAction>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>

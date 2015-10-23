@@ -30,7 +30,6 @@
 
 class KoDocument;
 
-class KAction;
 class KActionMenu;
 
 namespace KPlato
@@ -189,15 +188,15 @@ private:
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
-    KAction *actionAddTask;
-    KAction *actionAddMilestone;
-    KAction *actionAddSubtask;
-    KAction *actionAddSubMilestone;
-    KAction *actionDeleteTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
+    QAction *actionAddTask;
+    QAction *actionAddMilestone;
+    QAction *actionAddSubtask;
+    QAction *actionAddSubMilestone;
+    QAction *actionDeleteTask;
+    QAction *actionMoveTaskUp;
+    QAction *actionMoveTaskDown;
+    QAction *actionIndentTask;
+    QAction *actionUnindentTask;
 
     QAction *actionShowProject;
 };
@@ -345,7 +344,7 @@ private:
     WorkPackageTreeView *m_view;
     MacroCommand *m_cmd;
 
-    KAction *actionMailWorkpackage;
+    QAction *actionMailWorkpackage;
 
 };
 

@@ -43,7 +43,6 @@ class KoPageLayoutWidget;
 
 class QModelIndex;
 
-class KAction;
 
 namespace KPlato
 {
@@ -576,11 +575,11 @@ private:
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
-    KAction *actionAddTask;
-    KAction *actionAddMilestone;
-    KAction *actionAddSubtask;
-    KAction *actionAddSubMilestone;
-    KAction *actionDeleteTask;
+    QAction *actionAddTask;
+    QAction *actionAddMilestone;
+    QAction *actionAddSubtask;
+    QAction *actionAddSubMilestone;
+    QAction *actionDeleteTask;
 };
 
 

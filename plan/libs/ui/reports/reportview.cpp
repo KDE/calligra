@@ -55,7 +55,6 @@
 #include "KoIcon.h"
 #include <KoXmlReader.h>
 
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
@@ -82,6 +81,7 @@
 #include <QStandardItemModel>
 #include <QActionGroup>
 #include <QStackedWidget>
+#include <QAction>
 #include <qpushbutton.h>
 
 
@@ -481,16 +481,16 @@ void ReportWidget::exportToXHtml( KoReportRendererContext &context )
 void ReportWidget::setupGui()
 {
     /*KActionCollection *coll = actionCollection();*/
-    KAction *a = 0;
+    QAction *a = 0;
     QString name = "reportview_list";
 
-    a = new KAction(koIcon("go-next-view"), i18n("Edit Report"), this);
+    a = new QAction(koIcon("go-next-view"), i18n("Edit Report"), this);
     a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
     a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
     connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
-    a = new KAction(koIcon("document-export"), i18n("Export"), this);
+    a = new QAction(koIcon("document-export"), i18n("Export"), this);
     a->setToolTip( i18nc( "@info:tooltip", "Export to file" ) );
     a->setWhatsThis( i18nc( "@info:whatsthis", "Exports the report to a supported file format." ) );
     connect(a, SIGNAL(triggered()), this, SLOT(slotExport()));
@@ -875,7 +875,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     tb->addAction( a );
 
     const KGuiItem del = KStandardGuiItem::del();
-    a = new KAction( del.icon(), del.text(), this );
+    a = new QAction( del.icon(), del.text(), this );
     a->setToolTip( del.toolTip() );
     a->setShortcut( QKeySequence::Delete );
     connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotEditDelete()));
@@ -883,16 +883,16 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     tb->addSeparator();
 
-    a = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
+    a = new QAction(koIcon("arrow-up"), i18n("Raise"), this);
     connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotRaiseSelected()));
     tb->addAction( a );
-    a = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
+    a = new QAction(koIcon("arrow-down"), i18n("Lower"), this);
     connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotLowerSelected()));
     tb->addAction( a );
 
     tb->addSeparator();
 
-    a = new KAction(koIcon("document-properties"), i18n("Section Editor"), this);
+    a = new QAction(koIcon("document-properties"), i18n("Section Editor"), this);
     a->setObjectName("sectionedit");
     tb->addAction( a );
 
@@ -1063,7 +1063,7 @@ void ReportDesigner::setupGui()
     addAction( name, a );
 
     const KGuiItem del = KStandardGuiItem::del();
-    a = new KAction(del.icon(), del.text(), this);
+    a = new QAction(del.icon(), del.text(), this);
     a->setObjectName( "edit_delete" );
     a->setToolTip(del.toolTip());
     a->setShortcut( QKeySequence::Delete );
@@ -1071,12 +1071,12 @@ void ReportDesigner::setupGui()
     addAction( name, a );
 
     name = "reportdesigner_list";
-    a = new KAction(koIcon("go-previous-view"), i18n("View report"), this);
+    a = new QAction(koIcon("go-previous-view"), i18n("View report"), this);
     a->setObjectName( "view_report" );
     connect(a, SIGNAL(triggered(bool)), SIGNAL(viewReport()));
     addAction( name, a );
 
-    m_undoaction = new KAction(koIcon("edit-undo"), i18n("Undo all changes"), this);
+    m_undoaction = new QAction(koIcon("edit-undo"), i18n("Undo all changes"), this);
     m_undoaction->setObjectName( "undo_all_changes" );
     m_undoaction->setEnabled( false );
     connect(m_undoaction, SIGNAL(triggered(bool)), SLOT(undoAllChanges()));

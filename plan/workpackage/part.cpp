@@ -63,7 +63,6 @@
 //#include <kserviceoffer.h>
 #include <krun.h>
 #include <kprocess.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 
 #include "debugarea.h"

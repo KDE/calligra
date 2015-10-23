@@ -138,9 +138,9 @@ private Q_SLOTS:
 private:
     AccountTreeView *m_view;
 
-    KAction *actionAddAccount;
-    KAction *actionAddSubAccount;
-    KAction *actionDeleteSelection;
+    QAction *actionAddAccount;
+    QAction *actionAddSubAccount;
+    QAction *actionDeleteSelection;
 
 };
 
