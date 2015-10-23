@@ -40,8 +40,7 @@
 #include <KoStore.h>
 #include <KoIcon.h>
 
-#include <kurl.h>
-
+#include <QUrl>
 #include <QPainter>
 
 VideoShape::VideoShape()
@@ -144,9 +143,14 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
 
             if(href.startsWith("../")) {
                 // file is outside store
-                KUrl storePath = context.odfLoadingContext().store()->urlOfStore();
-                KUrl extName(storePath, href.mid(3));
-                data = m_videoCollection->createExternalVideoData(extName, false);
+                QUrl url = context.odfLoadingContext().store()->urlOfStore();
+                QString path = url.path();
+                if (!path.endsWith(QLatin1Char('/'))) {
+                    path.append(QLatin1Char('/'));
+                }
+                path.append(href.mid(3));
+                url.setPath(path);
+                data = m_videoCollection->createExternalVideoData(url, false);
             } else if(!url.isRelative()) {
                 // file is outside store and absolute
                 data = m_videoCollection->createExternalVideoData(QUrl::fromUserInput(href), false);
