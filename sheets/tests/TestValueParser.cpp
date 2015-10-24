@@ -41,7 +41,7 @@ void TestValueParser::initTestCase()
     QString localePath = dataPath + "/locale/nl/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
     m_translationsFile = localePath + "/sheets.mo";
-    QFile::copy(KDESRCDIR "/data/sheets.mo", m_translationsFile);
+    QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile);
 }
 
 void TestValueParser::cleanupTestCase()

@@ -60,17 +60,11 @@ void TestLoadingBase::initTestCase()
 {
     ChartDocument document(m_chart);
 
-    QString srcdirname(KDESRCDIR);
-    QVERIFY(!srcdirname.isEmpty());
-
-    QDir srcdir(srcdirname);
+    QDir srcdir(QFINDTESTDATA("doc"));
     QVERIFY(srcdir.exists());
 
-    bool hasDocDirInSrcDir = srcdir.cd("doc");
-    QVERIFY(hasDocDirInSrcDir);
     // Go back up, we only used the cd as a test.
-    if (hasDocDirInSrcDir)
-        srcdir.cd("..");
+    srcdir.cdUp();
 
     KoStore *store = KoStore::createStore(srcdir.absolutePath(), KoStore::Read);
     QVERIFY(store->enterDirectory("doc"));

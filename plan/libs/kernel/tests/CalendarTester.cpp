@@ -60,17 +60,17 @@ void CalendarTester::initTestCase()
     QVERIFY(QFile::exists( dataDir + QLatin1String("/zone.tab")));
     QDir dir(dataDir);
     QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Cairo"), dataDir + QLatin1String("/Africa/Cairo"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Cairo"), dataDir + QLatin1String("/Africa/Cairo"));
     QVERIFY(QFile::exists( dataDir + QLatin1String("/Africa/Cairo")));
     QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Los_Angeles"), dataDir + QLatin1String("/America/Los_Angeles"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Los_Angeles"), dataDir + QLatin1String("/America/Los_Angeles"));
     QVERIFY(QFile::exists( dataDir + QLatin1String("/America/Los_Angeles")));
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Berlin"), dataDir + QLatin1String("/Europe/Berlin"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Berlin"), dataDir + QLatin1String("/Europe/Berlin"));
     QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Berlin")));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/London"),dataDir + QLatin1String("/Europe/London"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/London"),dataDir + QLatin1String("/Europe/London"));
     QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/London")));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Paris"), dataDir + QLatin1String("/Europe/Paris"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Paris"), dataDir + QLatin1String("/Europe/Paris"));
     QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Paris")));
 
     // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"

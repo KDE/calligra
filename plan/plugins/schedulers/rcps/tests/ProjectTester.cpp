@@ -59,13 +59,13 @@ void ProjectTester::initTimezone()
     f.close();
     QDir dir(m_tmp.name());
     QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), m_tmp.name() + QLatin1String("Africa/Cairo"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Cairo"), m_tmp.name() + QLatin1String("Africa/Cairo"));
     QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), m_tmp.name() + QLatin1String("America/Los_Angeles"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Los_Angeles"), m_tmp.name() + QLatin1String("America/Los_Angeles"));
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), m_tmp.name() + QLatin1String("Europe/London"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), m_tmp.name() + QLatin1String("Europe/Paris"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/London"), m_tmp.name() + QLatin1String("Europe/London"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Paris"), m_tmp.name() + QLatin1String("Europe/Paris"));
 
     // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
     //       and hence, this is common to all unit tests

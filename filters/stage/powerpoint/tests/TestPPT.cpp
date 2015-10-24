@@ -26,10 +26,6 @@
 #include <QBuffer>
 #include <QTest>
 
-// KDESRCDIR is defined by KDE build system
-#ifndef KDESRCDIR
-#define KDESRCDIR
-#endif
 
 namespace {
 
@@ -94,8 +90,8 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
 
 void
 TestRun::test() {
-    inputFilePath = KDESRCDIR "data/diagram.ppt";
-    referenceDirPath = KDESRCDIR "data/diagram_odp/";
+    inputFilePath = QFINDTESTDATA("data/diagram.ppt");
+    referenceDirPath = QFINDTESTDATA("data/diagram_odp/");
     const KoStore::Backend backend = KoStore::Tar;
     QBuffer buffer;
     convert(buffer, backend);

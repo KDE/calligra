@@ -58,7 +58,7 @@ void ProjectTester::initTestCase()
     f.close();
     QDir dir(m_tmp.name());
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
+    QFile::copy(QFINDTESTDATA("zoneinfo/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
 
     // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
     //       and hence, this is common to all unit tests
