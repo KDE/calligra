@@ -51,5 +51,5 @@ target_link_libraries(karbonui
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS karbonui  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS karbonui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
