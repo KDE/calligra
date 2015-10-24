@@ -1,4 +1,3 @@
-include(MacroAddCompileFlags)
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_SOURCE_DIR}/sheets  ${EIGEN3_INCLUDE_DIR} ${KOMAIN_INCLUDES} )
 
@@ -151,28 +150,28 @@ target_link_libraries(TestTrigFunctions calligrasheetscommon Qt5::Test)
 
 set(TestValueFormatter_SRCS TestValueFormatter.cpp)
 kde4_add_unit_test(TestValueFormatter TESTNAME sheets-ValueFormatter  ${TestValueFormatter_SRCS})
-macro_add_compile_flags(TestValueFormatter "-DCALLIGRA_SHEETS_UNIT_TEST")
+set_target_properties(TestValueFormatter PROPERTIES COMPILE_FLAGS "-DCALLIGRA_SHEETS_UNIT_TEST")
 target_link_libraries(TestValueFormatter calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 
 set(TestValueConverter_SRCS TestValueConverter.cpp)
 kde4_add_unit_test(TestValueConverter TESTNAME sheets-ValueConverter ${TestValueConverter_SRCS})
-macro_add_compile_flags(TestValueConverter "-DCALLIGRA_SHEETS_UNIT_TEST")
+set_target_properties(TestValueConverter PROPERTIES COMPILE_FLAGS "-DCALLIGRA_SHEETS_UNIT_TEST")
 target_link_libraries(TestValueConverter calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 
 set(TestValueParser_SRCS TestValueParser.cpp)
 kde4_add_unit_test(TestValueParser TESTNAME sheets-ValueParser ${TestValueParser_SRCS})
-macro_add_compile_flags(TestValueParser "-DCALLIGRA_SHEETS_UNIT_TEST")
+set_target_properties(TestValueParser PROPERTIES COMPILE_FLAGS "-DCALLIGRA_SHEETS_UNIT_TEST")
 target_link_libraries(TestValueParser calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 
 set(TestSheet_SRCS TestSheet.cpp)
 kde4_add_unit_test(TestSheet TESTNAME sheets-Sheet  ${TestSheet_SRCS})
-macro_add_compile_flags(TestSheet "-DCALLIGRA_SHEETS_UNIT_TEST")
+set_target_properties(TestSheet PROPERTIES COMPILE_FLAGS "-DCALLIGRA_SHEETS_UNIT_TEST")
 target_link_libraries(TestSheet calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
