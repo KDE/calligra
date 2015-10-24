@@ -43,7 +43,6 @@ generate_export_header(plantjscheduler BASE_NAME kplatotj)
 target_link_libraries(
     plantjscheduler
     kplatokernel
-    ${KDE4_KDECORE_LIBS}
     ${QT_QTXML_LIBRARY}
 )
 

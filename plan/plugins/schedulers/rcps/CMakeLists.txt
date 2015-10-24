@@ -18,7 +18,6 @@ target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
     rcps_plan
-    ${KDE4_KDECORE_LIBS}
 #    ${LIBRCPS_LIBRARIES}
 )
 
