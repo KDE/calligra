@@ -23,7 +23,7 @@ set(components_SRCS
     impl/ComponentsKoCanvasController.cpp
 )
 
-kde4_add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
+add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
 target_include_directories(CalligraComponentsPlugin
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}

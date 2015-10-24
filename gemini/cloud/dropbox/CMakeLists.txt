@@ -13,7 +13,7 @@ set(dropbox_plugin_SRCS
     controller.cc
     dropboxplugin.cpp)
 
-kde4_add_library(calligrageminidropboxplugin SHARED ${dropbox_plugin_SRCS} ${dropbox_lib_SRCS})
+add_library(calligrageminidropboxplugin SHARED ${dropbox_plugin_SRCS} ${dropbox_lib_SRCS})
 
 target_link_libraries(calligrageminidropboxplugin
     Qt5::Core
