@@ -1,6 +1,6 @@
 include(MacroAddCompileFlags)
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/sheets  ${EIGEN3_INCLUDE_DIR} ${KOMAIN_INCLUDES} ${KDE4_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/sheets  ${EIGEN3_INCLUDE_DIR} ${KOMAIN_INCLUDES} )
 
 ########### Core Functionality ###############
 
@@ -215,7 +215,7 @@ target_link_libraries(TestPasteCommand calligrasheetscommon Qt5::Test)
 
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
 kde4_add_executable(BenchmarkPointStorage TEST ${BenchmarkPointStorage_SRCS})
-target_link_libraries(BenchmarkPointStorage Qt5::Test)
+target_link_libraries(BenchmarkPointStorage Qt5::Test KF5::KDELibs4Support)
 
 ########### next target ###############
 
