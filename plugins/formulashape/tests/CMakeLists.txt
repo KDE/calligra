@@ -44,7 +44,7 @@ set(TestCursor_SRCS
     ../FormulaCursor.cpp)
 endif()
 
-kde4_add_ui_files( TestCursor_SRCS
+qt5_wrap_ui( TestCursor_SRCS
     ../FormulaToolWidget.ui
 )
 
