@@ -8,8 +8,6 @@ if (WIN32)
     endif ()
 endif ()
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
 include_directories(${KOMAIN_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
