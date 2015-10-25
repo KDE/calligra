@@ -24,10 +24,10 @@
 #include <QMimeType>
 #include <QCommandLineParser>
 #include <QApplication>
+#include <QDebug>
 
 #include <KAboutData>
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <KoNetAccess.h>
 #include <kio/job.h>
 
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
     const QStringList files = parser.positionalArguments();
     if (files.count() != 2) {
-        kError() << i18n("Two arguments required");
+        qCritical() << i18n("Two arguments required");
         return 3;
     }
 
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
         // Code form koDocument.cc
         KIO::UDSEntry entry;
         if (KIO::NetAccess::stat(urlOut, entry, 0L)) {   // this file exists => backup
-            kDebug() << "Making backup...";
+            qDebug() << "Making backup...";
             QUrl backup(urlOut);
             backup.setPath(urlOut.path() + '~');
             KIO::FileCopyJob *job = KIO::file_copy(urlOut, backup, -1, KIO::Overwrite | KIO::HideProgressInfo);
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
     QMimeDatabase db;
     QMimeType inputMimetype = db.mimeTypeForUrl(urlIn);
     if (!inputMimetype.isValid() || inputMimetype.isDefault()) {
-        kError() << i18n("Mimetype for input file %1 not found!", urlIn.toDisplayString()) << endl;
+        qCritical() << i18n("Mimetype for input file %1 not found!", urlIn.toDisplayString());
         return 1;
     }
 
@@ -224,13 +224,13 @@ int main(int argc, char **argv)
         QString mime = parser.value("mimetype");
         outputMimetype = db.mimeTypeForName(mime);
         if (! outputMimetype.isValid()) {
-            kError() << i18n("Mimetype not found %1", mime) << endl;
+            qCritical() << i18n("Mimetype not found %1", mime);
             return 1;
         }
     } else {
         outputMimetype = db.mimeTypeForUrl(urlOut);
         if (!outputMimetype.isValid() || outputMimetype.isDefault()) {
-            kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+            qCritical() << i18n("Mimetype not found, try using the -mimetype option");
             return 1;
         }
     }
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
     QApplication::restoreOverrideCursor();
 
     if (!ok) {
-        kError() << i18n("*** The conversion failed! ***") << endl;
+        qCritical() << i18n("*** The conversion failed! ***");
         return 2;
     }
 
