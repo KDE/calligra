@@ -18,15 +18,14 @@
 */
 
 #include <QTextStream>
+#include <QCommandLineParser>
+#include <QApplication>
 
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
+#include <KAboutData>
 #include <klocalizedstring.h>
-#include <kglobal.h>
 #include <kmimetype.h>
 #include <KoServiceLocator.h>
 #include <kmimetypetrader.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <krun.h>
 #include <ktoolinvocation.h>
@@ -34,7 +33,7 @@
 #include <kguiitem.h>
 #include <kurl.h>
 
-#include <CalligraVersionWrapper.h>
+#include <calligraversion.h>
 
 static void listApplicationNames()
 {
@@ -69,12 +68,15 @@ static bool startService(KService::Ptr service, const KUrl& url)
     return res == 0;
 }
 
-static int handleUrls(const KCmdLineArgs *args)
+static int handleUrls(const QStringList& files)
 {
     KMimeTypeTrader* mimeTrader = KMimeTypeTrader::self();
     KUrl::List notHandledUrls;
-    for (int i = 0; i < args->count(); i++) {
-        KUrl url = args->url(i);
+    const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
+    foreach(const QString& file, files) {
+        // convert to an url
+        const bool startsWithProtocol = (withProtocolChecker.indexIn(file) == 0);
+        KUrl url = startsWithProtocol ? QUrl::fromUserInput(file) : QUrl::fromLocalFile(file);
         KMimeType::Ptr mimetype = KMimeType::findByUrl(url);
         if (mimetype->name() == KMimeType::defaultMimeType()) {
             KMessageBox::error(0, i18nc("@info", "Mimetype for <filename>%1</filename> not found!",
@@ -172,31 +174,38 @@ int main( int argc, char **argv )
 {
     KLocalizedString::setApplicationDomain( "calligra-opener" );
 
-    K4AboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CalligraVersionWrapper::versionString().toLatin1(),
-                         ki18n("Calligra Document Opener"),
-                         K4AboutData::License_GPL,
-                         ki18n("(c) 2010-2011 Calligra developers"));
-    aboutData.addAuthor(ki18n("Jarosław Staniek"),KLocalizedString(), "staniek@kde.org");
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    KAboutData aboutData("calligra", i18n("Calligra Opener"),
+                         QStringLiteral(CALLIGRA_VERSION_STRING),
+                         i18n("Calligra Document Opener"),
+                         KAboutLicense::GPL,
+                         i18n("Copyright 2010-%1 Calligra developers").arg(CALLIGRA_YEAR));
+    aboutData.addAuthor(i18n("Jarosław Staniek"), QString(), "staniek@kde.org");
 
-    KCmdLineOptions options;
-    options.add("apps", ki18n("Lists names of all available Calligra applications"));
-    options.add("+FILES", ki18n("Files to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-    KApplication app;
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("apps")) {
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("apps"), i18n("Lists names of all available Calligra applications")));
+    parser.addPositionalArgument(QStringLiteral("[FILE(S)]"), i18n("Files to open"));
+
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    if (parser.isSet("apps")) {
         listApplicationNames();
         return 0;
     }
-    if (args->count() == 0) {
+    const QStringList files = parser.positionalArguments();
+    if (files.isEmpty()) {
         //! @todo show cool Welcome window for app selection
         showWelcomeWindow();
     }
     else {
-        return handleUrls(args);
+        return handleUrls(files);
     }
     return 0;
 }
